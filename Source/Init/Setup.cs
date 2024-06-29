@@ -69,8 +69,6 @@ namespace Source.Init
             }
         }
 
-
-
         public static void SetupTeams()
         {
 

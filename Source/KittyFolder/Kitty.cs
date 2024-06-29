@@ -11,26 +11,43 @@ using static WCSharp.Api.Common;
 public class Kitty
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
-    public player p;
-    public unit u;
+    private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
+    private player Player { get; }
+    private unit Unit { get; set; }
+    private effect Effect { get; set; }
 
 
-    public Kitty(player p)
+    public Kitty(player player)
     {
-        this.p = p;
-        effect.Create("Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl", RegionList.SpawnRegions[p.Id].Center.X, RegionList.SpawnRegions[p.Id].Center.Y);
+        Player = player;
+
         Globals.KittyIDs.Add(this);
+        Globals.ALL_PLAYERS.Add(player);
+        SpawnEffect();
+        DelayCreateKitty();
+    }
+
+    private void DelayCreateKitty()
+    {
         timer t = CreateTimer();
         TimerStart(t, 0.25f, false, () =>
         {
-            CreateKitty(p);
+            CreateKitty();
             t.Dispose();
+            Effect.Dispose();
         });
     }
 
-    private void CreateKitty (player p)
+    private void SpawnEffect()
     {
-        this.u = unit.Create(p, KITTY_HERO_TYPE, RegionList.SpawnRegions[p.Id].Center.X, RegionList.SpawnRegions[p.Id].Center.Y, 360);
+        var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
+        Effect = effect.Create(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
+    }
+
+    private void CreateKitty()
+    {
+        var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
+        Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
     }
 
 }

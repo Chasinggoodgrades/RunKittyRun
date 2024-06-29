@@ -13,6 +13,7 @@ public static class Globals
 {
     public static List<Kitty> KittyIDs = new List<Kitty>();
     public static int ROUND = 0;
+    public static force ALL_PLAYERS = CreateForce();
     public static group ALL_WOLVES = CreateGroup();
     public static timer GAME_TIMER = CreateTimer();
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);

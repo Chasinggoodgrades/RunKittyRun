@@ -17,53 +17,59 @@ namespace Source.Game
         private const float WANDER_UPPER_BOUND = 0.85f;
         private const string OVERHEAD_EFFECT = "Abilities\\Spells\\Other\\TalkToMe\\TalkToMe.mdl";
 
-        public int regionIndex;
-        private unit u;
-        private effect e;
-        private timer t;
+        public int RegionIndex { get; private set; }
+        private unit Unit {  get; set; }
+        private effect OverheadEffect { get; set; }
+        private timer WanderTimer { get; set; }
 
         public Wolf(int regionIndex)
         {
-            this.regionIndex = regionIndex;
-
-            var randomInt = GetRandomInt(21, 24);
-            var p = Player(randomInt);
-            var randomX = GetRandomReal(RegionList.WolfRegions[regionIndex].Rect.MinX, RegionList.WolfRegions[regionIndex].Rect.MaxX);
-            var randomY = GetRandomReal(RegionList.WolfRegions[regionIndex].Rect.MinY, RegionList.WolfRegions[regionIndex].Rect.MaxY);
-            
-            u = unit.Create(p, WOLF_MODEL, randomX, randomY, 360);
-            Globals.ALL_WOLVES.Add(u);
-            u.Name = "Lane: " + regionIndex+1;
-            
-            t = CreateTimer();
+            RegionIndex = regionIndex;
+            InitializeWolf();
             Wander();
+        }
+
+        private void InitializeWolf()
+        {
+            var player = Player(GetRandomInt(21, 24));
+            var randomX = GetRandomReal(RegionList.WolfRegions[RegionIndex].Rect.MinX, RegionList.WolfRegions[RegionIndex].Rect.MaxX);
+            var randomY = GetRandomReal(RegionList.WolfRegions[RegionIndex].Rect.MinY, RegionList.WolfRegions[RegionIndex].Rect.MaxY);
+
+            Unit = unit.Create(player, WOLF_MODEL, randomX, randomY, 360);
+            Globals.ALL_WOLVES.Add(Unit);
+            Unit.Name = $"Lane: {RegionIndex + 1}";
+
+            WanderTimer = CreateTimer();
         }
 
         private void WolfMove()
         {
-            var randomX = GetRandomReal(RegionList.WolfRegions[regionIndex].Rect.MinX, RegionList.WolfRegions[regionIndex].Rect.MaxX);
-            var randomY = GetRandomReal(RegionList.WolfRegions[regionIndex].Rect.MinY, RegionList.WolfRegions[regionIndex].Rect.MaxY);
-            u.IssueOrder("move", (float)randomX, (float)randomY);
+            var randomX = GetRandomReal(RegionList.WolfRegions[RegionIndex].Rect.MinX, RegionList.WolfRegions[RegionIndex].Rect.MaxX);
+            var randomY = GetRandomReal(RegionList.WolfRegions[RegionIndex].Rect.MinY, RegionList.WolfRegions[RegionIndex].Rect.MaxY);
+            Unit.IssueOrder("move", (float)randomX, (float)randomY);
+        }
+
+        private bool StartEffect()
+        {
+            return GetRandomInt(0, 9 - Globals.ROUND) == 1 && GetRandomInt(1, Globals.ROUND) == 1;
         }
 
         private void Wander()
         {
-            var moveInt = GetRandomInt(0, (9 - Globals.ROUND));
-            var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
-            var moveWhileActive = GetRandomInt(1, Globals.ROUND);
-
-            if (moveInt == 1 && moveWhileActive == 1)
+            if (StartEffect())
             {
-                timer tEffect = CreateTimer();
-                e = effect.Create(OVERHEAD_EFFECT, this.u, "overhead");
-                TimerStart(tEffect, (float)effectDuration, false, () =>
+                var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
+                timer t = CreateTimer();
+                OverheadEffect = effect.Create(OVERHEAD_EFFECT, Unit, "overhead");
+
+                TimerStart(t, (float)effectDuration, false, () =>
                 {
                     WolfMove();
-                    e.Dispose();
-                    tEffect.Dispose();
+                    OverheadEffect.Dispose();
+                    t.Dispose();
                 });
             }
-            TimerStart(this.t, 1.05f, false, () =>
+            TimerStart(WanderTimer, 1.05f, false, () =>
             {
                 Wander();
             });
@@ -82,8 +88,6 @@ namespace Source.Game
                         new Wolf(lane);
                 }
             }
-            else
-                Console.WriteLine("Peek Wolves.SpawnWolves()");
         }
     }
 
