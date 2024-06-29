@@ -15,6 +15,9 @@ public static class Globals
     public static int ROUND = 0;
     public static group ALL_WOLVES = CreateGroup();
     public static timer GAME_TIMER = CreateTimer();
+    public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+    public static bool GAME_ACTIVE = false;
+    public static float GAME_SECONDS = 0.0f;
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
     {
         { 1, new Dictionary<int, int> { { 0, 20 }, { 1, 20 }, { 2, 20 }, { 3, 20 }, { 4, 12 }, { 5, 13 }, { 6, 13 }, { 7, 13 }, { 8, 10 }, { 9, 10 }, { 10, 10 }, { 11, 6 }, { 12, 6 }, { 13, 4 }, { 14, 4 }, { 15, 1 }, { 16, 1 } } },

@@ -132,7 +132,7 @@ public static class CustomStatFrame
 
     // Mock methods to replace undefined methods from JASS (placeholders for actual implementations)
     private static string GetPlayerTeamName(unit u) => "TeamName"; // Placeholder
-    private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold; // Placeholder
+    private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold; // 
     private static string GetPlayerProgress(unit u) => "50"; // Placeholder
     private static int GetPlayerSaves(unit u) => 5; // Placeholder
     private static int GetPlayerDeaths(unit u) => 2; // Placeholder

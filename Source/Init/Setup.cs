@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Source.Game;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using WCSharp.Api;
@@ -42,17 +43,33 @@ namespace Source.Init
             {
                 i = 0;
                 t.Dispose();
+                SetupTimers();
                 Game.RoundStart.RoundActions();
             }
         }
 
         public static void SetupTimers()
         {
-            timerdialog timerdialog = CreateTimerDialog(Globals.GAME_TIMER);
-            TimerDialogSetTitle(timerdialog, "Game Time");
-            TimerDialogSetTitleColor(timerdialog, 255, 255, 255, 255);
-            TimerDialogDisplay(timerdialog, true);
+            TimerDialogSetTitle(Globals.GAME_TIMER_DIALOG, "Elapsed Game Time");
+            TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
+            timer t = CreateTimer();
+            TimerStart(t, 1.0f, true, () =>
+            {
+                GameTimer();
+            });
         }
+
+        private static void GameTimer()
+        {
+            if (Globals.GAME_ACTIVE)
+            {
+                Globals.GAME_SECONDS += 1.0f;
+                Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
+                Globals.GAME_TIMER.Pause();
+            }
+        }
+
+
 
         public static void SetupTeams()
         {

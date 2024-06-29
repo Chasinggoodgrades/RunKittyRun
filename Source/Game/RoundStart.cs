@@ -17,8 +17,8 @@ namespace Source.Game
         public static void RoundActions()
         {
             Globals.ROUND += 1;
+            Globals.GAME_ACTIVE = true;
             Wolf.SpawnWolves();
-            Globals.GAME_TIMER.
         }
 
     }
