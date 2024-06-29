@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\artifacts\war3map.lua" Link="war3map.lua" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="WCSharp.Api" Version="3.0.1" />
+		<PackageReference Include="WCSharp.Buffs" Version="3.0.1" />
+		<PackageReference Include="WCSharp.DateTime" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Dummies" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Effects" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Events" Version="3.0.3" />
+		<PackageReference Include="WCSharp.Json" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Knockbacks" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Lightnings" Version="3.0.0" />
+		<PackageReference Include="WCSharp.Missiles" Version="3.0.0" />
+		<PackageReference Include="WCSharp.SaveLoad" Version="3.0.1" />
+		<PackageReference Include="WCSharp.Shared" Version="3.0.1" />
+		<PackageReference Include="WCSharp.Sync" Version="3.0.1" />
+		<PackageReference Include="WCSharp.W3MMD" Version="3.0.0" />
+	</ItemGroup>
+</Project>

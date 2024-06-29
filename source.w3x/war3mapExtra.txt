@@ -1,0 +1,4 @@
+[MapExtraInfo]
+EnableJassHelper=true
+TimeOfDay=2
+

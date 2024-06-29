@@ -1,0 +1,10 @@
+[Misc]
+AgiMoveBonus=0.0
+IntManaBonus=15.0
+IntRegenBonus=0.07
+InvisibleUnitsBestowAuras=1
+MaxHeroLevel=10
+MaxUnitLevel=10
+MaxUnitSpeed=522.0
+MinUnitSpeed=150.0
+

@@ -1,0 +1,2597 @@
+﻿STRING 1
+{
+|cff8080ffRKR |rTeam Tournament 1.01
+}
+
+STRING 2
+{
+1-12
+}
+
+STRING 3
+{
+Run Kitty Run Team Tournament 1.01
+
+- This map is entirely dynamic, and can be ran with 2/3/4/5/6 players per team
+- Works based on slots. Teams of 2 = [Red, Blue]
+- Tournament date: TBA. (August 2024)?
+|cff00ffff
+- https://discord.gg/GSu6zkNvx5 |r
+}
+
+STRING 4
+{
+Aches
+}
+
+STRING 8
+{
+Player 1
+}
+
+STRING 10
+// Units: E000 (Kitty), Name (Name)
+{
+Kitty
+}
+
+STRING 12
+// Units: ngme (Kitty Vendor), Name (Name)
+{
+Kitty Vendor
+}
+
+STRING 20
+// Units: nwwg (DOG), Name (Name)
+{
+DOG
+}
+
+STRING 424
+// Items: gobm (Anti-Block-Bomb), Name (Name)
+{
+Anti-Block-Bomb
+}
+
+STRING 425
+// Items: gobm (Anti-Block-Bomb), Tip (Tooltip - Basic)
+{
+Purchase Anti-Block-Bomb
+}
+
+STRING 673
+// Abilities: A000 (Book of Advanced Rewards Astral), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 674
+// Abilities: A004 (Reset), Name (Name)
+{
+Reset
+}
+
+STRING 690
+// Abilities: A002 (Set Color), Name (Name)
+{
+Set Color
+}
+
+STRING 698
+// Abilities: A002 (Set Color), Tip (Tooltip - Normal)
+{
+Set Color
+}
+
+STRING 714
+// Abilities: A003 (Set Wings 2:02), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 715
+// Abilities: A005 (Set Wings 1:01), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 716
+// Abilities: A003 (Set Wings 2:02), Name (Name)
+{
+Set Wings 2:02
+}
+
+STRING 718
+// Abilities: A004 (Reset), Tip (Tooltip - Normal)
+{
+Reset
+}
+
+STRING 721
+// Abilities: A005 (Set Wings 1:01), Name (Name)
+{
+Set Wings 1:01
+}
+
+STRING 723
+// Abilities: A006 (Set Wings 1:02), Name (Name)
+{
+Set Wings 1:02
+}
+
+STRING 724
+// Abilities: A006 (Set Wings 1:02), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 725
+// Abilities: A00E (Set Wings 1:03), Name (Name)
+{
+Set Wings 1:03
+}
+
+STRING 726
+// Abilities: A001 (Set Wings 1:04), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 727
+// Abilities: A007 (Set Wings 2:01), Name (Name)
+{
+Set Wings 2:01
+}
+
+STRING 728
+// Abilities: A007 (Set Wings 2:01), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 772
+// Units: N00C (Super Panda), Name (Name)
+{
+Super Panda
+}
+
+STRING 774
+// Abilities: A01M (Set Fire), Name (Name)
+{
+Set Fire
+}
+
+STRING 783
+// Units: nvl2 (Old Kitty Runner), Name (Name)
+{
+Old Kitty Runner
+}
+
+STRING 784
+// Abilities: A009 (Spectator Camera), Name (Name)
+{
+Spectator Camera
+}
+
+STRING 785
+// Abilities: A009 (Spectator Camera), Tip (Tooltip - Normal)
+{
+Spectator camera
+}
+
+STRING 786
+// Abilities: A009 (Spectator Camera), Ubertip (Tooltip - Normal - Extended)
+{
+Camera spectator
+}
+
+STRING 792
+{
+|n
+}
+
+STRING 798
+{
+|n
+}
+
+STRING 799
+{
+|c22222222
+}
+
+STRING 881
+// Abilities: A00A (Protection of the Ancients), Researchhotkey (Hotkey - Learn)
+{
+A
+}
+
+STRING 882
+// Abilities: A00A (Protection of the Ancients), Hotkey (Hotkey - Normal)
+{
+A
+}
+
+STRING 896
+// Destructibles: B000 (Mysterious Statue), Name (Name)
+{
+Mysterious Statue
+}
+
+STRING 897
+// Doodads: D001 (Unknown Gateway), Name (Name)
+{
+Unknown Gateway
+}
+
+STRING 931
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive your Kitty after 3 seconds. Use it before dying!
+}
+
+STRING 932
+// Abilities: A00A (Protection of the Ancients), Untip (Tooltip - Turn Off)
+{
+Revive your Kitty after 3 seconds. Use it before dying!
+}
+
+STRING 934
+// Abilities: A00A (Protection of the Ancients), Untip (Tooltip - Turn Off)
+{
+Revive all Kitties in a small area after 3 seconds. Use it before dying!
+}
+
+STRING 938
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. Use it before dying!
+}
+
+STRING 943
+// Items: bspd (Pegasus Boots), Name (Name)
+{
+Pegasus Boots
+}
+
+STRING 948
+// Items: rwiz (Ritual Mask), Name (Name)
+{
+Ritual Mask
+}
+
+STRING 956
+// Abilities: A001 (Set Wings 1:04), Name (Name)
+{
+Set Wings 1:04
+}
+
+STRING 957
+// Abilities: A01N (Set Nitro), Name (Name)
+{
+Set Nitro
+}
+
+STRING 959
+// Abilities: A017 (Book of Rewards Pandaren), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Nitro|r to pass everyone!
+}
+
+STRING 960
+// Abilities: A00E (Set Wings 1:03), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 962
+// Abilities: A00F (Set Wings 2:03), Name (Name)
+{
+Set Wings 2:03
+}
+
+STRING 963
+// Abilities: A00F (Set Wings 2:03), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 964
+// Abilities: A00G (Set Wings 2:04), Name (Name)
+{
+Set Wings 2:04
+}
+
+STRING 965
+// Abilities: A00G (Set Wings 2:04), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 967
+// Abilities: A00J (Set Hats 1:03), Name (Name)
+{
+Set Hats 1:03
+}
+
+STRING 968
+// Abilities: A00J (Set Hats 1:03), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 970
+// Abilities: A00K (Set Hats 1:01), Name (Name)
+{
+Set Hats 1:01
+}
+
+STRING 971
+// Abilities: A00K (Set Hats 1:01), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 973
+// Abilities: A00H (Set Hats 1:02), Name (Name)
+{
+Set Hats 1:02
+}
+
+STRING 974
+// Abilities: A00H (Set Hats 1:02), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 976
+// Abilities: A00I (Set Hats 1:04), Name (Name)
+{
+Set Hats 1:04
+}
+
+STRING 977
+// Abilities: A00I (Set Hats 1:04), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 979
+// Abilities: A00L (Set Hats 1:05), Name (Name)
+{
+Set Hats 1:05
+}
+
+STRING 980
+// Abilities: A00L (Set Hats 1:05), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 984
+// Abilities: A000 (Book of Advanced Rewards Astral), Tip (Tooltip - Normal)
+{
+Book of Advanced Rewards
+}
+
+STRING 985
+// Abilities: A00S (Book of Advanced Rewards Undead), Tip (Tooltip - Normal)
+{
+Book of Advanced Rewards
+}
+
+STRING 987
+// Abilities: A00A (Protection of the Ancients), Name (Name)
+{
+Protection of the Ancients
+}
+
+STRING 988
+// Abilities: A00M (Book of Basic Rewards Astral), Tip (Tooltip - Normal)
+{
+Book of Basic Rewards
+}
+
+STRING 989
+// Abilities: A00T (Book of Basic Rewards Kitty), Tip (Tooltip - Normal)
+{
+Book of Basic Rewards
+}
+
+STRING 990
+// Abilities: A00M (Book of Basic Rewards Astral), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 991
+// Abilities: A00Y (Set Kitty 1), Name (Name)
+{
+Set Kitty 1
+}
+
+STRING 992
+// Abilities: A00Q (Set Astral from normal), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 994
+// Abilities: A00Z (Set Kitty 2), Name (Name)
+{
+Set Kitty 2
+}
+
+STRING 995
+// Abilities: A00P (Set Highelf from normal), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 997
+// Abilities: A00R (Set Kitty 3), Name (Name)
+{
+Set Kitty 3
+}
+
+STRING 998
+// Abilities: A00N (Set Kitty from Panda), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1004
+// Abilities: A004 (Reset), Ubertip (Tooltip - Normal - Extended)
+{
+Remove all rewards
+}
+
+STRING 1015
+// Units: E001 (Undead Kitty), Name (Name)
+{
+Undead Kitty
+}
+
+STRING 1016
+// Units: E003 (Highelf Kitty), Name (Name)
+{
+Highelf Kitty
+}
+
+STRING 1017
+// Units: E002 (Astral Kitty), Name (Name)
+{
+Astral Kitty
+}
+
+STRING 1023
+// Items: bspd (Pegasus Boots), Hotkey (Hotkey)
+{
+B
+}
+
+STRING 1024
+// Items: penr (Meditation Cloak), Name (Name)
+{
+Meditation Cloak
+}
+
+STRING 1028
+// Items: penr (Meditation Cloak), Hotkey (Hotkey)
+{
+C
+}
+
+STRING 1034
+// Items: rwiz (Ritual Mask), Hotkey (Hotkey)
+{
+M
+}
+
+STRING 1051
+// Items: tkno (Ancient Tome), Hotkey (Hotkey)
+{
+T
+}
+
+STRING 1055
+// Items: pspd (Adrenaline Potion), Name (Name)
+{
+Adrenaline Potion
+}
+
+STRING 1057
+// Items: pman (Healing Water), Name (Name)
+{
+Healing Water
+}
+
+STRING 1061
+// Items: pman (Healing Water), Hotkey (Hotkey)
+{
+W
+}
+
+STRING 1063
+// Items: mnst (Energy Stone), Name (Name)
+{
+Energy Stone
+}
+
+STRING 1066
+// Items: mnst (Energy Stone), Hotkey (Hotkey)
+{
+S
+}
+
+STRING 1080
+// Abilities: A00U (Book of Advanced Rewards Highelf), Tip (Tooltip - Normal)
+{
+Book of Advanced Rewards
+}
+
+STRING 1081
+// Abilities: A00S (Book of Advanced Rewards Undead), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1083
+// Abilities: A00W (Book of Basic Rewards Undead), Tip (Tooltip - Normal)
+{
+Book of Basic Rewards
+}
+
+STRING 1084
+// Abilities: A00T (Book of Basic Rewards Kitty), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1085
+// Abilities: A00V (Book of Advanced Rewards Kitty), Tip (Tooltip - Normal)
+{
+Book of Advanced Rewards
+}
+
+STRING 1086
+// Abilities: A00X (Book of Basic Rewards Highelf), Tip (Tooltip - Normal)
+{
+Book of Basic Rewards
+}
+
+STRING 1089
+// Abilities: A00U (Book of Advanced Rewards Highelf), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1092
+// Abilities: A00V (Book of Advanced Rewards Kitty), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1095
+// Abilities: A00W (Book of Basic Rewards Undead), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1098
+// Abilities: A00X (Book of Basic Rewards Highelf), Ubertip (Tooltip - Normal - Extended)
+{
+Change Custom effect
+}
+
+STRING 1099
+// Abilities: A000 (Book of Advanced Rewards Astral), Name (Name)
+{
+Book of Advanced Rewards Astral
+}
+
+STRING 1100
+// Abilities: A00M (Book of Basic Rewards Astral), Name (Name)
+{
+Book of Basic Rewards Astral
+}
+
+STRING 1102
+// Abilities: A00S (Book of Advanced Rewards Undead), Name (Name)
+{
+Book of Advanced Rewards Undead
+}
+
+STRING 1103
+// Abilities: A00T (Book of Basic Rewards Kitty), Name (Name)
+{
+Book of Basic Rewards Kitty
+}
+
+STRING 1104
+// Abilities: A00U (Book of Advanced Rewards Highelf), Name (Name)
+{
+Book of Advanced Rewards Highelf
+}
+
+STRING 1105
+// Abilities: A00V (Book of Advanced Rewards Kitty), Name (Name)
+{
+Book of Advanced Rewards Kitty
+}
+
+STRING 1106
+// Abilities: A00W (Book of Basic Rewards Undead), Name (Name)
+{
+Book of Basic Rewards Undead
+}
+
+STRING 1107
+// Abilities: A00X (Book of Basic Rewards Highelf), Name (Name)
+{
+Book of Basic Rewards Highelf
+}
+
+STRING 1115
+// Units: npn5 (Old Legend), Name (Name)
+{
+Old Legend
+}
+
+STRING 1118
+// Abilities: A00O (Set Undead from Normal), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1119
+// Abilities: A00R (Set Kitty 3), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1120
+// Abilities: A00N (Set Kitty from Panda), Ubertip (Tooltip - Normal - Extended)
+{
+Bring your |cffd45e19Kitty|r back!
+}
+
+STRING 1126
+// Units: N00C (Super Panda), Propernames (Proper Names)
+{
+Chen Stormstout
+}
+
+STRING 1127
+// Abilities: A017 (Book of Rewards Pandaren), Name (Name)
+{
+Book of Rewards Pandaren
+}
+
+STRING 1128
+// Abilities: A017 (Book of Rewards Pandaren), Tip (Tooltip - Normal)
+{
+Book of Rewards Pandaren
+}
+
+STRING 1133
+// Items: tkno (Ancient Tome), Name (Name)
+{
+Ancient Tome
+}
+
+STRING 1150
+// Items: pgma (Elixir), Name (Name)
+{
+Elixir
+}
+
+STRING 1151
+// Items: pgma (Elixir), Hotkey (Hotkey)
+{
+E
+}
+
+STRING 1196
+// Abilities: A002 (Set Color), Ubertip (Tooltip - Normal - Extended)
+{
+Enable your |cffd45e19custom color|r.
+}
+
+STRING 1197
+// Abilities: A005 (Set Wings 1:01), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Phoenix|r wings.
+}
+
+STRING 1198
+// Abilities: A006 (Set Wings 1:02), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Fairy|r wings.
+}
+
+STRING 1199
+// Abilities: A001 (Set Wings 1:04), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Archangel|r wings.
+}
+
+STRING 1201
+// Abilities: A01H (Set Panda Lightning), Tip (Tooltip - Normal)
+{
+Set Effect
+}
+
+STRING 1202
+// Abilities: A01M (Set Fire), Ubertip (Tooltip - Normal - Extended)
+{
+Put your Kitty on |cffd45e19Fire|r!
+}
+
+STRING 1205
+// Abilities: A01M (Set Fire), Tip (Tooltip - Normal)
+{
+Set Effect
+}
+
+STRING 1206
+// Abilities: A00E (Set Wings 1:03), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Nightmare|r wings.
+}
+
+STRING 1209
+// Abilities: A00J (Set Hats 1:03), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the |cffd45e19Pirate|r Hat.
+}
+
+STRING 1210
+// Abilities: A00H (Set Hats 1:02), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the |cffd45e19Chef|r hat.
+}
+
+STRING 1211
+// Abilities: A00I (Set Hats 1:04), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the |cffd45e19Headdress|r.
+}
+
+STRING 1212
+// Abilities: A00L (Set Hats 1:05), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the |cffd45e19Samurai|r Helmet.
+}
+
+STRING 1218
+// Abilities: A01N (Set Nitro), Tip (Tooltip - Normal)
+{
+Set Effect
+}
+
+STRING 1220
+// Doodads: D000 (Mysterious Statue), Name (Name)
+{
+Mysterious Statue
+}
+
+STRING 1249
+// Items: tret (Book of Oblivion), Name (Name)
+{
+Book of Oblivion
+}
+
+STRING 1250
+// Items: tret (Book of Oblivion), Tip (Tooltip - Basic)
+{
+Pursache a book of |cffffff00O|rblivion
+}
+
+STRING 1287
+// Abilities: A00B (Agility aura), Name (Name)
+{
+Agility aura
+}
+
+STRING 1308
+// Abilities: A01O (Set Lightning), Name (Name)
+{
+Set Lightning
+}
+
+STRING 1329
+// Abilities: A019 (Energy aura), Name (Name)
+{
+Energy aura
+}
+
+STRING 1334
+// Abilities: A01A (Wind Walk), Name (Name)
+{
+Wind Walk
+}
+
+STRING 1365
+// Abilities: A019 (Energy aura), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 1|r]
+}
+
+STRING 1366
+// Abilities: A019 (Energy aura), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 1367
+// Abilities: A019 (Energy aura), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 1368
+// Abilities: A019 (Energy aura), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 1373
+// Abilities: A003 (Set Wings 2:02), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Cosmic|r essence on your wings.
+}
+
+STRING 1374
+// Abilities: A007 (Set Wings 2:01), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Void|r essence on your wings.
+}
+
+STRING 1375
+// Abilities: A00F (Set Wings 2:03), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Chaos|r essence on your wings.
+}
+
+STRING 1376
+// Abilities: A00G (Set Wings 2:04), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Holy|r essence on your wings.
+}
+
+STRING 1387
+// Abilities: A00K (Set Hats 1:01), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the|cffd45e19 bandana|r.
+}
+
+STRING 1404
+// Items: tret (Book of Oblivion), Ubertip (Tooltip - Extended)
+{
+Sacrifice your knowledge to obtain a new one.       |cffd45e19Reset your abilities.|r
+}
+
+STRING 1405
+// Items: tret (Book of Oblivion), Description (Description)
+{
+Sacrifice your knowledge to obtain a new one.       |cffd45e19Reset your abilities.|r
+}
+
+STRING 1407
+// Abilities: A00Q (Set Astral from normal), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Astral|r Kitty.
+}
+
+STRING 1410
+// Abilities: A00Y (Set Kitty 1), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1411
+// Abilities: A00P (Set Highelf from normal), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Highelf|r Kitty.
+}
+
+STRING 1412
+// Abilities: A00O (Set Undead from Normal), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Undead|r Kitty.
+}
+
+STRING 1413
+// Abilities: A00Q (Set Astral from normal), Name (Name)
+{
+Set Astral from normal
+}
+
+STRING 1414
+// Abilities: A00P (Set Highelf from normal), Name (Name)
+{
+Set Highelf from normal
+}
+
+STRING 1415
+// Abilities: A00N (Set Kitty from Panda), Name (Name)
+{
+Set Kitty from Panda
+}
+
+STRING 1416
+// Abilities: A00O (Set Undead from Normal), Name (Name)
+{
+Set Undead from Normal
+}
+
+STRING 1424
+// Abilities: A00R (Set Kitty 3), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Astral|r Kitty.
+}
+
+STRING 1425
+// Abilities: A00Y (Set Kitty 1), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Undead|r Kitty.
+}
+
+STRING 1426
+// Abilities: A00Z (Set Kitty 2), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1427
+// Abilities: A00Z (Set Kitty 2), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Highelf|r Kitty.
+}
+
+STRING 1430
+// Abilities: A010 (Set Astral from Undead), Name (Name)
+{
+Set Astral from Undead
+}
+
+STRING 1431
+// Abilities: A010 (Set Astral from Undead), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Astral|r Kitty.
+}
+
+STRING 1432
+// Abilities: A010 (Set Astral from Undead), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1433
+// Abilities: A011 (Set Astral from Highelf), Name (Name)
+{
+Set Astral from Highelf
+}
+
+STRING 1434
+// Abilities: A011 (Set Astral from Highelf), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Astral|r Kitty.
+}
+
+STRING 1435
+// Abilities: A011 (Set Astral from Highelf), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1436
+// Abilities: A012 (Set Highelf from Undead), Name (Name)
+{
+Set Highelf from Undead
+}
+
+STRING 1437
+// Abilities: A012 (Set Highelf from Undead), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Highelf|r Kitty.
+}
+
+STRING 1438
+// Abilities: A012 (Set Highelf from Undead), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1439
+// Abilities: A013 (Set Highelf from Astral), Name (Name)
+{
+Set Highelf from Astral
+}
+
+STRING 1440
+// Abilities: A013 (Set Highelf from Astral), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Highelf|r Kitty.
+}
+
+STRING 1441
+// Abilities: A013 (Set Highelf from Astral), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1442
+// Abilities: A014 (Set Undead from Highelf), Name (Name)
+{
+Set Undead from Highelf
+}
+
+STRING 1443
+// Abilities: A014 (Set Undead from Highelf), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Undead|r Kitty.
+}
+
+STRING 1444
+// Abilities: A014 (Set Undead from Highelf), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1445
+// Abilities: A016 (Set Undead from Astral), Name (Name)
+{
+Set Undead from Astral
+}
+
+STRING 1446
+// Abilities: A016 (Set Undead from Astral), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the |cffd45e19Undead|r Kitty.
+}
+
+STRING 1447
+// Abilities: A016 (Set Undead from Astral), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1448
+// Abilities: A01C (Set Normal from Undead), Name (Name)
+{
+Set Normal from Undead
+}
+
+STRING 1449
+// Abilities: A01C (Set Normal from Undead), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the normal Kitty.
+}
+
+STRING 1450
+// Abilities: A01C (Set Normal from Undead), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1451
+// Abilities: A01D (Set Normal from Highelf), Name (Name)
+{
+Set Normal from Highelf
+}
+
+STRING 1452
+// Abilities: A01D (Set Normal from Highelf), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the normal Kitty.
+}
+
+STRING 1453
+// Abilities: A01D (Set Normal from Highelf), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1454
+// Abilities: A01E (Set Normal from Astral), Name (Name)
+{
+Set Normal from Astral
+}
+
+STRING 1455
+// Abilities: A01E (Set Normal from Astral), Ubertip (Tooltip - Normal - Extended)
+{
+Play as the normal Kitty.
+}
+
+STRING 1456
+// Abilities: A01E (Set Normal from Astral), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1457
+// Abilities: A01H (Set Panda Lightning), Ubertip (Tooltip - Normal - Extended)
+{
+The might of a thunder and the speed of a|cffd45e19 Lightning|r!
+}
+
+STRING 1458
+// Abilities: A00B (Agility aura), Ubertip (Tooltip - Normal - Extended)
+{
++10% movement speed.
+}
+
+STRING 1459
+// Abilities: A00B (Agility aura), Ubertip (Tooltip - Normal - Extended)
+{
++20% movement speed.
+}
+
+STRING 1463
+// Abilities: A00B (Agility aura), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 1|r]
+}
+
+STRING 1464
+// Abilities: A00B (Agility aura), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 2|r]
+}
+
+STRING 1465
+// Abilities: A00B (Agility aura), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 3|r]
+}
+
+STRING 1466
+// Abilities: A00B (Agility aura), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 4|r]
+}
+
+STRING 1468
+// Abilities: A019 (Energy aura), Ubertip (Tooltip - Normal - Extended)
+{
++12.5% mana regeneration.
+}
+
+STRING 1469
+// Abilities: A019 (Energy aura), Ubertip (Tooltip - Normal - Extended)
+{
++25% mana regeneration.
+}
+
+STRING 1470
+// Abilities: A019 (Energy aura), Ubertip (Tooltip - Normal - Extended)
+{
++37.5% mana regeneration.
+}
+
+STRING 1471
+// Abilities: A019 (Energy aura), Ubertip (Tooltip - Normal - Extended)
+{
++50% mana regeneration.
+}
+
+STRING 1472
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 1|r]
+}
+
+STRING 1473
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 2|r]
+}
+
+STRING 1474
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 3|r]
+}
+
+STRING 1475
+// Abilities: A019 (Energy aura), Researchubertip (Tooltip - Learn - Extended)
+{
+You feel the energy surrounding you, going through your pores and flowing inside you.  |n|n|cffffcc00Level 1:|r +12.5% mana regeneration. |n|cffffcc00Level 2:|r +25% mana regeneration. |n|cffffcc00Level 3:|r +37.5% mana regeneration. |n|cffffcc00Level 4:|r +50% mana regeneration.
+}
+
+STRING 1480
+// Abilities: A01A (Wind Walk), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 1|r]
+}
+
+STRING 1481
+// Abilities: A01A (Wind Walk), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 2|r]
+}
+
+STRING 1482
+// Abilities: A01A (Wind Walk), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 3|r]
+}
+
+STRING 1483
+// Abilities: A00A (Protection of the Ancients), Researchubertip (Tooltip - Learn - Extended)
+{
+Summon the Ancient Kitties to aid you. |n|n|cffffcc00Level 1:|r Revive your Kitty after 3s. |n|cffffcc00Level 2:|r Revive all Kitties in area after 3s |n|cffffcc00Level 3:|r Revive all Kitties in area after 3s. Improved AeO
+}
+
+STRING 1484
+// Abilities: A00A (Protection of the Ancients), Untip (Tooltip - Turn Off)
+{
+Revive all Kitties in a small area after 3 seconds.  Improved AeO.
+}
+
+STRING 1485
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds.  Improved AeO.
+}
+
+STRING 1489
+// Abilities: A01F (Set Kitty), Name (Name)
+{
+Set Kitty
+}
+
+STRING 1490
+// Abilities: A01F (Set Kitty), Tip (Tooltip - Normal)
+{
+Set Kitty
+}
+
+STRING 1491
+// Abilities: A01F (Set Kitty), Ubertip (Tooltip - Normal - Extended)
+{
+Bring your |cffd45e19Kitty|r back!.
+}
+
+STRING 1527
+// Abilities: A01K (Set Panda Wings), Name (Name)
+{
+Set Panda Wings
+}
+
+STRING 1528
+// Abilities: A01K (Set Panda Wings), Tip (Tooltip - Normal)
+{
+Set Wings 
+}
+
+STRING 1529
+// Abilities: A01K (Set Panda Wings), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Void|r essence on your wings.
+}
+
+STRING 1531
+// Abilities: A01H (Set Panda Lightning), Name (Name)
+{
+Set Panda Lightning
+}
+
+STRING 1532
+// Abilities: A01O (Set Lightning), Tip (Tooltip - Normal)
+{
+Set Effect
+}
+
+STRING 1533
+// Abilities: A01O (Set Lightning), Ubertip (Tooltip - Normal - Extended)
+{
+The might of a thunder and the speed of a|cffd45e19 Lightning|r!
+}
+
+STRING 1534
+// Abilities: A01I (Set Panda Hat), Name (Name)
+{
+Set Panda Hat
+}
+
+STRING 1535
+// Abilities: A01I (Set Panda Hat), Tip (Tooltip - Normal)
+{
+Set Hats
+}
+
+STRING 1536
+// Abilities: A01I (Set Panda Hat), Ubertip (Tooltip - Normal - Extended)
+{
+Wear the |cffd45e19Chef|r hat.
+}
+
+STRING 1539
+{
+Food
+}
+
+STRING 1541
+{
+Gold.
+}
+
+STRING 1559
+// Abilities: A00A (Protection of the Ancients), Researchtip (Tooltip - Learn)
+{
+Learn Protection of the Ancients (|cffffcc00A|r) - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1560
+// Abilities: A00B (Agility aura), Researchtip (Tooltip - Learn)
+{
+Learn Agility aura (|cffffff00E|r) - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1561
+// Abilities: A019 (Energy aura), Researchtip (Tooltip - Learn)
+{
+Learn Energy aura (|cffffff00S|r)  - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1562
+// Abilities: A019 (Energy aura), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 1609
+// Abilities: A00C (Protection of the Ancients with Relic), Researchhotkey (Hotkey - Learn)
+{
+A
+}
+
+STRING 1610
+// Abilities: A00C (Protection of the Ancients with Relic), Hotkey (Hotkey - Normal)
+{
+A
+}
+
+STRING 1611
+// Abilities: A00C (Protection of the Ancients with Relic), Researchtip (Tooltip - Learn)
+{
+Learn Protection of the Ancients (|cffffcc00A|r) - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1612
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 1|r]
+}
+
+STRING 1613
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive your Kitty after 3 seconds. Use it before dying!
+}
+
+STRING 1614
+// Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
+{
+Revive your Kitty after 3 seconds. Use it before dying!
+}
+
+STRING 1615
+// Abilities: A00C (Protection of the Ancients with Relic), Researchubertip (Tooltip - Learn - Extended)
+{
+Summon the Ancient Kitties to aid you. |n|n|cffffcc00Level 1:|r Revive your Kitty after 3s. |n|cffffcc00Level 2:|r Revive all Kitties in area after 3s |n|cffffcc00Level 3:|r Revive all Kitties in area after 3s. Improved AeO
+}
+
+STRING 1616
+// Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
+{
+Revive all Kitties in a small area after 3 seconds. Use it before dying!
+}
+
+STRING 1617
+// Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
+{
+Revive all Kitties in a small area after 3 seconds.  Improved AeO.
+}
+
+STRING 1618
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 2|r]
+}
+
+STRING 1619
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the |cffffcc00A|rncients - [|cffffcc00Nivel 3|r]
+}
+
+STRING 1620
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. Use it before dying!
+}
+
+STRING 1621
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds.  Improved AeO.
+}
+
+STRING 1627
+// Items: rhth (One of Nine), Hotkey (Hotkey)
+{
+H
+}
+
+STRING 1649
+// Abilities: A00C (Protection of the Ancients with Relic), Name (Name)
+{
+Protection of the Ancients with Relic
+}
+
+STRING 1667
+// Abilities: A00B (Agility aura), Ubertip (Tooltip - Normal - Extended)
+{
++35% movement speed.
+}
+
+STRING 1668
+// Abilities: A00B (Agility aura), Ubertip (Tooltip - Normal - Extended)
+{
++50% movement speed.
+}
+
+STRING 1669
+// Abilities: A01J (Energy aura with relic), Name (Name)
+{
+Energy aura with relic
+}
+
+STRING 1670
+// Abilities: A01J (Energy aura with relic), Researchtip (Tooltip - Learn)
+{
+Learn Energy aura (|cffffff00S|r)  - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1671
+// Abilities: A01J (Energy aura with relic), Researchubertip (Tooltip - Learn - Extended)
+{
+You feel the energy surrounding you, going through your pores and flowing inside you.  |n|n|cffffcc00Level 1:|r +12.5% mana regeneration. |n|cffffcc00Level 2:|r +25% mana regeneration. |n|cffffcc00Level 3:|r +37.5% mana regeneration. |n|cffffcc00Level 4:|r +50% mana regeneration.
+}
+
+STRING 1672
+// Abilities: A01J (Energy aura with relic), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 1|r]
+}
+
+STRING 1673
+// Abilities: A01J (Energy aura with relic), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 1674
+// Abilities: A01J (Energy aura with relic), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 1675
+// Abilities: A01J (Energy aura with relic), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 1676
+// Abilities: A01J (Energy aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++12.5% mana regeneration.
+}
+
+STRING 1677
+// Abilities: A01J (Energy aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++25% mana regeneration.
+}
+
+STRING 1678
+// Abilities: A01J (Energy aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++37.5% mana regeneration.
+}
+
+STRING 1679
+// Abilities: A01J (Energy aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++50% mana regeneration.
+}
+
+STRING 1680
+// Abilities: A01J (Energy aura with relic), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 1681
+// Abilities: A01L (Agility aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++10% movement speed.
+}
+
+STRING 1682
+// Abilities: A01L (Agility aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++20% movement speed.
+}
+
+STRING 1683
+// Abilities: A01L (Agility aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++35% movement speed.
+}
+
+STRING 1685
+// Abilities: A01L (Agility aura with relic), Name (Name)
+{
+Agility aura with relic
+}
+
+STRING 1686
+// Abilities: A01L (Agility aura with relic), Ubertip (Tooltip - Normal - Extended)
+{
++50% movement speed.
+}
+
+STRING 1687
+// Abilities: A01L (Agility aura with relic), Researchtip (Tooltip - Learn)
+{
+Learn Agility aura (|cffffff00E|r) - [|cffffcc00Nivel %d|r]
+}
+
+STRING 1688
+// Abilities: A01L (Agility aura with relic), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 1|r]
+}
+
+STRING 1689
+// Abilities: A01L (Agility aura with relic), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 2|r]
+}
+
+STRING 1690
+// Abilities: A01L (Agility aura with relic), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 3|r]
+}
+
+STRING 1691
+// Abilities: A01L (Agility aura with relic), Tip (Tooltip - Normal)
+{
+Agility aura - [|cffffcc00Level 4|r]
+}
+
+STRING 1717
+// Abilities: A01N (Set Nitro), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Nitro|r to pass everyone!
+}
+
+STRING 1718
+// Abilities: A021 (Fire I), Name (Name)
+{
+Fire I
+}
+
+STRING 1719
+// Abilities: A021 (Fire I), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Fire in the |cffd45e19first round|r! GG :)
+}
+
+STRING 1720
+// Abilities: A021 (Fire I), Tip (Tooltip - Normal)
+{
+Fire I
+}
+
+STRING 1721
+// Abilities: A018 (Fire V), Name (Name)
+{
+Fire V
+}
+
+STRING 1722
+// Abilities: A018 (Fire V), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Fire in the |cffd45e19fifth round|r! GG :)
+}
+
+STRING 1723
+// Abilities: A018 (Fire V), Tip (Tooltip - Normal)
+{
+Fire V
+}
+
+STRING 1724
+// Abilities: A01P (Fire IV), Name (Name)
+{
+Fire IV
+}
+
+STRING 1725
+// Abilities: A01P (Fire IV), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Fire in the |cffd45e19fourth round|r! GG :)
+}
+
+STRING 1726
+// Abilities: A01P (Fire IV), Tip (Tooltip - Normal)
+{
+Fire IV
+}
+
+STRING 1727
+// Abilities: A01Q (Fire III), Name (Name)
+{
+Fire III
+}
+
+STRING 1728
+// Abilities: A01Q (Fire III), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Fire in the |cffd45e19third round|r! GG :)
+}
+
+STRING 1729
+// Abilities: A01Q (Fire III), Tip (Tooltip - Normal)
+{
+Fire III
+}
+
+STRING 1730
+// Abilities: A008 (Fire II), Name (Name)
+{
+Fire II
+}
+
+STRING 1731
+// Abilities: A008 (Fire II), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Fire in the |cffd45e19second round|r! GG :)
+}
+
+STRING 1732
+// Abilities: A008 (Fire II), Tip (Tooltip - Normal)
+{
+Fire II
+}
+
+STRING 1734
+// Abilities: A00D (Nitro I), Name (Name)
+{
+Nitro I
+}
+
+STRING 1735
+// Abilities: A00D (Nitro I), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Nitro in the |cffd45e19first round|r! GG :)
+}
+
+STRING 1736
+// Abilities: A00D (Nitro I), Tip (Tooltip - Normal)
+{
+Nitro I
+}
+
+STRING 1737
+// Abilities: A01T (Nitro V), Name (Name)
+{
+Nitro V
+}
+
+STRING 1739
+// Abilities: A01T (Nitro V), Tip (Tooltip - Normal)
+{
+Nitro V
+}
+
+STRING 1740
+// Abilities: A01V (Nitro IV), Name (Name)
+{
+Nitro IV
+}
+
+STRING 1741
+// Abilities: A01V (Nitro IV), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Nitro in the |cffd45e19fourth round|r! GG :)
+}
+
+STRING 1742
+// Abilities: A01V (Nitro IV), Tip (Tooltip - Normal)
+{
+Nitro IV
+}
+
+STRING 1743
+// Abilities: A01R (Nitro III), Name (Name)
+{
+Nitro III
+}
+
+STRING 1744
+// Abilities: A01R (Nitro III), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Nitro in the |cffd45e19third round|r! GG :)
+}
+
+STRING 1745
+// Abilities: A01R (Nitro III), Tip (Tooltip - Normal)
+{
+Nitro III
+}
+
+STRING 1746
+// Abilities: A022 (Nitro II), Name (Name)
+{
+Nitro II
+}
+
+STRING 1747
+// Abilities: A022 (Nitro II), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Nitro in the |cffd45e19second round|r! GG :)
+}
+
+STRING 1748
+// Abilities: A022 (Nitro II), Tip (Tooltip - Normal)
+{
+Nitro II
+}
+
+STRING 1749
+// Abilities: A01S (Lightning I), Name (Name)
+{
+Lightning I
+}
+
+STRING 1751
+// Abilities: A01S (Lightning I), Tip (Tooltip - Normal)
+{
+Lightning I
+}
+
+STRING 1752
+// Abilities: A01U (Lightning II), Name (Name)
+{
+Lightning II
+}
+
+STRING 1754
+// Abilities: A01U (Lightning II), Tip (Tooltip - Normal)
+{
+Lightning II
+}
+
+STRING 1755
+// Abilities: A023 (Lightning III), Name (Name)
+{
+Lightning III
+}
+
+STRING 1757
+// Abilities: A023 (Lightning III), Tip (Tooltip - Normal)
+{
+Lightning III
+}
+
+STRING 1758
+// Abilities: A01X (Lightning V), Name (Name)
+{
+Lightning V
+}
+
+STRING 1760
+// Abilities: A01X (Lightning V), Tip (Tooltip - Normal)
+{
+Lightning V
+}
+
+STRING 1761
+// Abilities: A01W (Lightning IV), Name (Name)
+{
+Lightning IV
+}
+
+STRING 1763
+// Abilities: A01W (Lightning IV), Tip (Tooltip - Normal)
+{
+Lightning IV
+}
+
+STRING 1770
+// Abilities: A01T (Nitro V), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 5|r! GG :)
+}
+
+STRING 1771
+// Abilities: A01S (Lightning I), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 1|r! GG :)
+}
+
+STRING 1772
+// Abilities: A01U (Lightning II), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 2|r! GG :)
+}
+
+STRING 1773
+// Abilities: A023 (Lightning III), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 3|r! GG :)
+}
+
+STRING 1774
+// Abilities: A01W (Lightning IV), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 4|r! GG :)
+}
+
+STRING 1775
+// Abilities: A01X (Lightning V), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained the Lightning |cffd45e19level 5|r! GG :)
+}
+
+STRING 1832
+// Units: n000 (Kitty Circle), Name (Name)
+{
+Kitty Circle
+}
+
+STRING 1860
+// Units: n001 (CUSTOM DOG), Name (Name)
+{
+CUSTOM DOG
+}
+
+STRING 1891
+// Units: h001 (DUMMY 1), Name (Name)
+{
+DUMMY 1
+}
+
+STRING 1899
+// Abilities: A01A (Wind Walk), Researchtip (Tooltip - Learn)
+{
+Learn Wind Walk - [|cffffcc00Level %d|r]
+}
+
+STRING 1923
+// Items: tkno (Ancient Tome), Tip (Tooltip - Basic)
+{
+Pursache an ancient |cffffff00T|rome. |cff8080ff[Consumable]|r
+}
+
+STRING 1925
+// Items: pspd (Adrenaline Potion), Tip (Tooltip - Basic)
+{
+Purchase an adrenaline |cffffff00V|rial |cff8080ff[Potion] [Consumable]|r
+}
+
+STRING 1926
+// Items: pspd (Adrenaline Potion), Ubertip (Tooltip - Extended)
+{
+The adrenaline fills your veins for a short time, boosting your muscles to the limit.|n|cffd45e19+60% ms, last 45s.|r
+}
+
+STRING 1927
+// Items: pspd (Adrenaline Potion), Description (Description)
+{
+The adrenaline fills your veins for a short time, boosting your muscles to the limit.|n|cffd45e19+60% ms, last 45s.|r
+}
+
+STRING 1928
+// Items: pman (Healing Water), Tip (Tooltip - Basic)
+{
+Purchase a healing |cffffff00W|rater |cff8080ff[Potion] [Consumable]|r
+}
+
+STRING 1932
+// Items: pgma (Elixir), Tip (Tooltip - Basic)
+{
+Pursache an |cffffff00E|rlixir |cff8080ff[Potion] [Consumable]|r
+}
+
+STRING 1940
+// Items: pman (Healing Water), Ubertip (Tooltip - Extended)
+{
+This vial contains water from the Moonwells. Use it to recover your energy. |n|cffd45e19+150 mana.|r
+}
+
+STRING 1941
+// Items: pman (Healing Water), Description (Description)
+{
+This vial contains water from the Moonwells. Use it to recover your energy. |n|cffd45e19+150 mana.|r
+}
+
+STRING 1948
+// Items: pgma (Elixir), Ubertip (Tooltip - Extended)
+{
+This bottle contains a rare water with miraculous properties from a secret fountain in Ashenvale. |n|cffd45e19+300 mana.|r
+}
+
+STRING 1949
+// Items: pgma (Elixir), Description (Description)
+{
+This bottle contains a rare water with miraculous properties from a secret fountain in Ashenvale. |n|cffd45e19+300 mana.|r
+}
+
+STRING 1952
+// Abilities: A01A (Wind Walk), Ubertip (Tooltip - Normal - Extended)
+{
++12% movement speed, last for 20 seconds.
+}
+
+STRING 1953
+// Abilities: A01A (Wind Walk), Ubertip (Tooltip - Normal - Extended)
+{
++24% movement speed, last for 35 seconds.
+}
+
+STRING 1954
+// Abilities: A01A (Wind Walk), Ubertip (Tooltip - Normal - Extended)
+{
++36% movement speed, last for 50 seconds.
+}
+
+STRING 1955
+// Items: tkno (Ancient Tome), Ubertip (Tooltip - Extended)
+{
+This tome is filled with tales of old runners. Learn from your ancestors and don't repeat their mistakes. |n|cffd45e19+500 Experience.|r
+}
+
+STRING 1956
+// Items: tkno (Ancient Tome), Description (Description)
+{
+This tome is filled with tales of old runners. Learn from your ancestors and don't repeat their mistakes. |n|cffd45e19+500 Experience.|r
+}
+
+STRING 1957
+// Units: h000 (DUMMY 3), Name (Name)
+{
+DUMMY 3
+}
+
+STRING 1958
+// Units: h002 (DUMMY 2), Name (Name)
+{
+DUMMY 2
+}
+
+STRING 1959
+// Items: bspd (Pegasus Boots), Ubertip (Tooltip - Extended)
+{
+These elven boots make you feel quicker and lighter.  |n|cffd45e19+60 ms. |nYou can only carry one of this item.|r
+}
+
+STRING 1960
+// Items: bspd (Pegasus Boots), Description (Description)
+{
+These elven boots make you feel quicker and lighter.  |n|cffd45e19+60 ms.|nYou can only carry one of this item.|r
+}
+
+STRING 1961
+// Items: penr (Meditation Cloak), Ubertip (Tooltip - Extended)
+{
+This elven cloak absorves the moonbeams, calming and focusing your mind which allows you to control more energy.|n |cffd45e19+150 max mana.|nYou can only carry one of this item.|r         
+}
+
+STRING 1962
+// Items: penr (Meditation Cloak), Description (Description)
+{
+This elven cloak absorves the moonbeams, calming and focusing your mind which allows you to control more energy.|n |cffd45e19+150 max mana.|nYou can only carry one of this item.|r         
+}
+
+STRING 1963
+// Items: mnst (Energy Stone), Ubertip (Tooltip - Extended)
+{
+This  moonstone gathers the energy and gives it to the bearer.   |n|cffd45e19+25% mana regeneration. |nYou can only carry one of this item.|r
+}
+
+STRING 1964
+// Items: mnst (Energy Stone), Description (Description)
+{
+This  moonstone gathers the energy and gives it to the bearer.   |n|cffd45e19+25% mana regeneration.|nYou can only carry one of this item.|r
+}
+
+STRING 1965
+// Items: rwiz (Ritual Mask), Ubertip (Tooltip - Extended)
+{
+The priestesses wear this mask during the most important rituals to channel more energy.                                    |cffd45e19+50% mana regeneration.|nYou can only carry one of this item.|r
+}
+
+STRING 1966
+// Items: rwiz (Ritual Mask), Description (Description)
+{
+The priestesses wear this mask during the most important rituals to channel more energy.                                    |cffd45e19+50% mana regeneration.|nYou can only carry one of this item.|r
+}
+
+STRING 1972
+// Abilities: A01A (Wind Walk), Researchubertip (Tooltip - Learn - Extended)
+{
+Your body turns ethereal allowing you to use the air currents to move faster. |n|n|cffffcc00Level 1:|r +12%ms, last 20s |n|cffffcc00Level 2:|r +24%ms, last 35s |n|cffffcc00Level 3:|r +36%ms, last 50s   
+}
+
+STRING 1973
+// Items: I000 (Sacred Ring of Reviving), Name (Name)
+{
+Sacred Ring of Reviving
+}
+
+STRING 1974
+// Items: I000 (Sacred Ring of Reviving), Hotkey (Hotkey)
+{
+R
+}
+
+STRING 1976
+// Items: I000 (Sacred Ring of Reviving), Ubertip (Tooltip - Extended)
+{
+A Relic fit for the leader of the pack. The skill and grace of the wearer is only surpassed by their care for others. |n|cffd45e19Revive range slightly increased. When revived you receive an extra 15% of missing mana. Players you revive receive an extra 7% of missing mana.  (Relic).|r
+}
+
+STRING 1977
+// Items: I000 (Sacred Ring of Reviving), Description (Description)
+{
+A Relic fit for the leader of the pack. The skill and grace of the wearer is only surpassed by their care for others. |n|cffd45e19Revive range slightly increased. When revived you receive an extra 15% of missing mana. Players you revive receive an extra 7% of missing mana.  (Relic).|r
+}
+
+STRING 1978
+// Items: pspd (Adrenaline Potion), Hotkey (Hotkey)
+{
+V
+}
+
+STRING 1979
+// Items: I001 (Beacon of United Lifeforce), Name (Name)
+{
+Beacon of United Lifeforce
+}
+
+STRING 1980
+// Items: I001 (Beacon of United Lifeforce), Hotkey (Hotkey)
+{
+B
+}
+
+STRING 1987
+// Items: bspd (Pegasus Boots), Tip (Tooltip - Basic)
+{
+Purchase the Pegasus |cffffff00B|roots |cff8080ff   [Unique]|r
+}
+
+STRING 1988
+// Items: penr (Meditation Cloak), Tip (Tooltip - Basic)
+{
+Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
+}
+
+STRING 1989
+// Items: mnst (Energy Stone), Tip (Tooltip - Basic)
+{
+Pursache the Energy |cffffff00S|rtone |cff8080ff   [Unique]|r
+}
+
+STRING 1990
+// Items: rwiz (Ritual Mask), Tip (Tooltip - Basic)
+{
+Pursache the Ritual |cffffcc00M|rask |cff8080ff   [Unique]|r
+}
+
+STRING 1991
+// Items: I000 (Sacred Ring of Reviving), Tip (Tooltip - Basic)
+{
+Pursache the Sacred |cffffff00R|ring of Reviving|cff8080ff   [Relic] [Max 1] [level 10]|r
+}
+
+STRING 1992
+// Items: I001 (Beacon of United Lifeforce), Tip (Tooltip - Basic)
+{
+Pursache the |cffffff00B|reacon of United Lifeforce|cff8080ff   [Relic] [Max 1] [level 10]|r
+}
+
+STRING 1993
+// Items: I001 (Beacon of United Lifeforce), Ubertip (Tooltip - Extended)
+{
+The owner of this beacon has a chance to go above and beyond for their fallen brothers and sisters. |n|cffd45e19Gives the owner a chance to revive an extra Kitty whenever they revive someone (Relic).|r
+}
+
+STRING 1994
+// Items: I001 (Beacon of United Lifeforce), Description (Description)
+{
+The owner of this beacon has a chance to go above and beyond for their fallen brothers and sisters. |n|cffd45e19Gives the owner a chance to revive an extra Kitty whenever they revive someone (Relic).|r
+}
+
+STRING 2013
+// Items: rhth (One of Nine), Name (Name)
+{
+One of Nine
+}
+
+STRING 2014
+// Items: rhth (One of Nine), Tip (Tooltip - Basic)
+{
+Pursache the One of |cffffff00N|rine |cff8080ff  [Relic] [Max 1] [level 10]|r
+}
+
+STRING 2015
+// Items: rhth (One of Nine), Ubertip (Tooltip - Extended)
+{
+Reserved only for the greatest of players who justify their claim of having nine lives. |n|cffd45e19Autocasts Protection of the Ancients if it is available. Your collision with wolves is slightly reduced |nYou can only carry one Relic. |nRelics cannot be dropped!|r
+}
+
+STRING 2016
+// Items: rhth (One of Nine), Description (Description)
+{
+Reserved only for the greatest of players who justify their claim of having nine lives. |n|cffd45e19Autocasts Protection of the Ancients if it is available. Your collision with wolves is slightly reduced |nYou can only carry one Relic. |nRelics cannot be dropped!|r
+}
+
+STRING 2017
+{
+by Aches
+}
+
+STRING 2018
+{
+Run Kitty Run - Team Tournament 1.01
+}
+
+STRING 2033
+// Units: nmrk (Cosmetics Shop), Name (Name)
+{
+Cosmetics Shop
+}
+
+STRING 2035
+// Abilities: A015 (Set Relic Effect), Name (Name)
+{
+Set Relic Effect
+}
+
+STRING 2036
+// Abilities: A015 (Set Relic Effect), Tip (Tooltip - Normal)
+{
+Set Relic Effect
+}
+
+STRING 2037
+// Abilities: A015 (Set Relic Effect), Ubertip (Tooltip - Normal - Extended)
+{
+Enable your |cffd45e19Relic Effect|r.
+}
+
+STRING 2346
+// Abilities: A026 (Set panda wings void), Name (Name)
+{
+Set panda wings void
+}
+
+STRING 2347
+// Abilities: A026 (Set panda wings void), Tip (Tooltip - Normal)
+{
+Set void wings
+}
+
+STRING 2348
+// Abilities: A026 (Set panda wings void), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Void|r essence on your wings.
+}
+
+STRING 2349
+// Abilities: A024 (Set panda wings nature), Name (Name)
+{
+Set panda wings nature
+}
+
+STRING 2350
+// Abilities: A024 (Set panda wings nature), Tip (Tooltip - Normal)
+{
+Set nature wings
+}
+
+STRING 2351
+// Abilities: A024 (Set panda wings nature), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Nature|r essence on your wings.
+}
+
+STRING 2352
+// Abilities: A025 (Set panda wings divine), Name (Name)
+{
+Set panda wings divine
+}
+
+STRING 2353
+// Abilities: A025 (Set panda wings divine), Tip (Tooltip - Normal)
+{
+Set divine wings
+}
+
+STRING 2354
+// Abilities: A025 (Set panda wings divine), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Divine|r essence on your wings.
+}
+
+STRING 2357
+// Abilities: S000 (The Aura of the Ring), Name (Name)
+{
+The Aura of the Ring
+}
+
+STRING 2358
+// Abilities: S000 (The Aura of the Ring), Ubertip (Tooltip - Normal - Extended)
+{
+Its magical..
+}
+
+STRING 2359
+// Abilities: S000 (The Aura of the Ring), Tip (Tooltip - Normal)
+{
+The Aura of the Ring
+}
+
+STRING 2364
+// Abilities: A020 (Set panda wings Chaos), Name (Name)
+{
+Set panda wings Chaos
+}
+
+STRING 2365
+// Abilities: A020 (Set panda wings Chaos), Tip (Tooltip - Normal)
+{
+Set chaos wings
+}
+
+STRING 2366
+// Abilities: A020 (Set panda wings Chaos), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19Chaos|r essence on your wings.
+}
+
+STRING 2367
+// Abilities: A027 (Set panda wings Cosmic), Name (Name)
+{
+Set panda wings Cosmic
+}
+
+STRING 2368
+// Abilities: A027 (Set panda wings Cosmic), Tip (Tooltip - Normal)
+{
+Set cosmic wings
+}
+
+STRING 2369
+// Abilities: A027 (Set panda wings Cosmic), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cffd45e19cosmic|r essence on your wings.
+}
+
+STRING 2391
+// Items: I003 (The Ring of the Panda test v), Name (Name)
+{
+The Ring of the Panda test v
+}
+
+STRING 2392
+// Items: I003 (The Ring of the Panda test v), Tip (Tooltip - Basic)
+{
+Pursache the |cffffff00B|reacon of United Lifeforce|cff8080ff   [Relic] [Max 1] [level 10]|r
+}
+
+STRING 2393
+// Items: I003 (The Ring of the Panda test v), Ubertip (Tooltip - Extended)
+{
+The owner of this beacon has a chance to go above and beyond for their fallen brothers and sisters. |n|cffd45e19Gives the owner a chance to revive an extra Kitty whenever they revive someone (Relic).|r
+}
+
+STRING 2394
+// Items: I003 (The Ring of the Panda test v), Description (Description)
+{
+The owner of this beacon has a chance to go above and beyond for their fallen brothers and sisters. |n|cffd45e19Gives the owner a chance to revive an extra Kitty whenever they revive someone (Relic).|r
+}
+
+STRING 2413
+// Abilities: A00B (Agility aura), Researchubertip (Tooltip - Learn - Extended)
+{
+A warming sensation go through your body, you feel full of vitality and the time seems to move slower. |n|n|cffffcc00Level 1:|r +10% ms |n|cffffcc00Level 2:|r +20% ms |n|cffffcc00Level 3:|r +35% ms |n|cffffcc00Level 4:|r +50% ms
+}
+
+STRING 2414
+// Abilities: A01L (Agility aura with relic), Researchubertip (Tooltip - Learn - Extended)
+{
+A warming sensation go through your body, you feel full of vitality and the time seems to move slower. |n|n|cffffcc00Level 1:|r +10% ms |n|cffffcc00Level 2:|r +20% ms |n|cffffcc00Level 3:|r +35% ms |n|cffffcc00Level 4:|r +50% ms
+}
+
+STRING 2506
+{
+Observers
+}
+
+STRING 2510
+{
+- Team Tournament v1.01
+
+- Supports up to 20 players, teams of 2-10
+
+https://discord.gg/GSu6zkNvx5
+Discord is in F9, please submit any bugs and requests through there. Join our tournaments if interested!
+}
+
+STRING 2549
+// Items: I002 (|cffff0000Ring|r |cff00ff00of|r |cff00ffffChampions|r), Name (Name)
+{
+|cffff0000Ring|r |cff00ff00of|r |cff00ffffChampions|r
+}
+
+STRING 2550
+// Items: I002 (|cffff0000Ring|r |cff00ff00of|r |cff00ffffChampions|r), Tip (Tooltip - Basic)
+{
+One of the best, a |cffff00fflegend |rto the |cff00ff00RKR |rCommunity.
+}
+
+STRING 2551
+// Items: I002 (|cffff0000Ring|r |cff00ff00of|r |cff00ffffChampions|r), Ubertip (Tooltip - Extended)
+{
+One of the best, a |cffff00fflegend |rto the |cff00ff00RKR |rCommunity.
+}
+
+STRING 2552
+// Items: I002 (|cffff0000Ring|r |cff00ff00of|r |cff00ffffChampions|r), Description (Description)
+{
+|cffe55070this ring..|r |nBelongs to those who've been able to complete the tournament in an excendingly fast time. A special gift to those who succeed over others. Congratulations.
+}
+
+STRING 2557
+{
+Fieryfox
+}
+
+STRING 2561
+// Abilities: A028 (Turquoise Wings), Name (Name)
+{
+Turquoise Wings
+}
+
+STRING 2565
+// Abilities: A028 (Turquoise Wings), Tip (Tooltip - Normal)
+{
+|cff30d5c8Turquoise Wings|r
+}
+
+STRING 2566
+// Abilities: A028 (Turquoise Wings), Ubertip (Tooltip - Normal - Extended)
+{
+Use the |cff30d5c8Turqouise |ressence on your wings.
+}
+
+STRING 2568
+// Abilities: A050 (Turqouise Nitro), Ubertip (Tooltip - Normal - Extended)
+{
+You have obtained |cff30d5c8Turquoise |rNitro. Congratulations on winning the tournament.
+}
+
+STRING 2569
+// Abilities: A050 (Turqouise Nitro), Name (Name)
+{
+Turqouise Nitro
+}
+
+STRING 2570
+// Abilities: A050 (Turqouise Nitro), Tip (Tooltip - Normal)
+{
+|cff30d5c8Turqouise Nitro|r
+}
+
+STRING 2597
+{
+|cffd45e19Kyutah|r|n|cffff0000Leyenda|r|n|cffff6699Geek.|r|n|cff6496ffAches|r
+}
+
+STRING 2598
+{
+By|cffd45e19 K.|r|c00FF0000L.|r|cffff6699G.|r|cff6496ffA|r
+}
+
+STRING 2599
+{
+Team 1 (Red)
+}
+
+STRING 2606
+{
+Gheed
+}
+
+STRING 2607
+{
+Qoz
+}
+
+STRING 2608
+{
+Pizzahut
+}
+
+STRING 2609
+{
+Stan
+}
+
+STRING 2610
+{
+Geek
+}
+
+STRING 2611
+{
+Clownlord24
+}
+
+STRING 2612
+{
+LooseKanon
+}
+
+STRING 2613
+{
+Rose
+}
+
+STRING 2614
+{
+Marco
+}
+
+STRING 2615
+// Units: E004 (|cffebff00Solo Tournament Champion|r), Propernames (Proper Names)
+{
+Fieryfox
+}
+
+STRING 2621
+// Abilities: A02A (Send'Em Back!), Name (Name)
+{
+Send'Em Back!
+}
+
+STRING 2622
+// Units: h003 (DUMMYSPELL), Name (Name)
+{
+DUMMYSPELL
+}
+
+STRING 2623
+// Abilities: A02A (Send'Em Back!), EditorSuffix (Editor Suffix)
+{
+|cffff0000ULTIMATE|r
+}
+
+STRING 2624
+// Abilities: A02A (Send'Em Back!), Tip (Tooltip - Normal)
+{
+Send'Em Back!
+}
+
+STRING 2627
+// Abilities: A02A (Send'Em Back!), Untip (Tooltip - Turn Off)
+{
+Send'Em Back!
+}
+
+STRING 2628
+// Abilities: A02A (Send'Em Back!), Researchtip (Tooltip - Learn)
+{
+Send'Em Back!
+}
+
+STRING 2659
+// Abilities: A02A (Send'Em Back!), Hotkey (Hotkey - Normal)
+{
+R
+}
+
+STRING 2660
+// Abilities: A02A (Send'Em Back!), Researchhotkey (Hotkey - Learn)
+{
+R
+}
+
+STRING 2661
+{
+Cait
+}
+
+STRING 2662
+// Abilities: A02A (Send'Em Back!), Ubertip (Tooltip - Normal - Extended)
+{
+Area of Effect|cffd45e19(150yd)|r ability that sends all non-teammates back to their last individual safezone!|n|cff00ffff(10 min cooldown)(Unlimited Range)|r
+}
+
+STRING 2663
+// Abilities: A02A (Send'Em Back!), Unubertip (Tooltip - Turn Off - Extended)
+{
+Area of Effect|cffd45e19(150yd)|r ability that sends all non-teammates back to their last individual safezone!|n|cff00ffff(10 min cooldown)(Unlimited Range)|r
+}
+
+STRING 2664
+// Abilities: A02A (Send'Em Back!), Researchubertip (Tooltip - Learn - Extended)
+{
+Area of Effect|cffd45e19(150yd)|r ability that sends all non-teammates back to their last individual safezone!|n|cff00ffff(10 min cooldown)(Unlimited Range)|r
+}
+
+STRING 2670
+// Units: E000 (Kitty), Propernames (Proper Names)
+{
+LooseKanon,Rose,Marco,Leyenda,Farm-noob,killua54,Lysta,Maasth,Subsonic,Geisha,Aches,Cait,MrGheed,Omniology,Girthquake,Anarkist,Keyz,Bran,Purple,goatpc,hatoblue,Itela,itsTrixyB11TCH,JacobJacobJacob,K4r4b4s4N,kaliyuga,kurushii,MiloKitty,Mumu_cz,mvq,nathanserpo,NewBnetSucksDlC,p0cah0ntas,Paarrrp,PartyTrain,Pudding,Rand00mUser,The-GOOD_PlaYer,XyllZ,Qbinze_13,Geek.
+}
+
+STRING 2671
+// Units: E001 (Undead Kitty), Propernames (Proper Names)
+{
+LooseKanon,Rose,Marco,Leyenda,Farm-noob,killua54,Lysta,Maasth,Subsonic,Geisha,Aches,Cait,MrGheed,Omniology,Girthquake,Anarkist,Keyz,Bran,Purple,goatpc,hatoblue,Itela,itsTrixyB11TCH,JacobJacobJacob,K4r4b4s4N,kaliyuga,kurushii,MiloKitty,Mumu_cz,mvq,nathanserpo,NewBnetSucksDlC,p0cah0ntas,Paarrrp,PartyTrain,Pudding,Rand00mUser,The-GOOD_PlaYer,XyllZ,Qbinze_13,Geek.
+}
+
+STRING 2672
+// Units: E003 (Highelf Kitty), Propernames (Proper Names)
+{
+LooseKanon,Rose,Marco,Leyenda,Farm-noob,killua54,Lysta,Maasth,Subsonic,Geisha,Aches,Cait,MrGheed,Omniology,Girthquake,Anarkist,Keyz,Bran,Purple,goatpc,hatoblue,Itela,itsTrixyB11TCH,JacobJacobJacob,K4r4b4s4N,kaliyuga,kurushii,MiloKitty,Mumu_cz,mvq,nathanserpo,NewBnetSucksDlC,p0cah0ntas,Paarrrp,PartyTrain,Pudding,Rand00mUser,The-GOOD_PlaYer,XyllZ,Qbinze_13,Geek.
+}
+
+STRING 2673
+// Units: E002 (Astral Kitty), Propernames (Proper Names)
+{
+LooseKanon,Rose,Marco,Leyenda,Farm-noob,killua54,Lysta,Maasth,Subsonic,Geisha,Aches,Cait,MrGheed,Omniology,Girthquake,Anarkist,Keyz,Bran,Purple,goatpc,hatoblue,Itela,itsTrixyB11TCH,JacobJacobJacob,K4r4b4s4N,kaliyuga,kurushii,MiloKitty,Mumu_cz,mvq,nathanserpo,NewBnetSucksDlC,p0cah0ntas,Paarrrp,PartyTrain,Pudding,Rand00mUser,The-GOOD_PlaYer,XyllZ,Qbinze_13,Geek.
+}
+
+STRING 2674
+// Units: E004 (|cffebff00Solo Tournament Champion|r), Name (Name)
+{
+|cffebff00Solo Tournament Champion|r
+}
+
+STRING 2704
+{
+Player 19
+}
+
+STRING 2705
+{
+Player 20
+}
+
+STRING 2718
+// Abilities: AIbk (Blink (Item Version)), Hotkey (Hotkey - Normal)
+{
+B
+}
+
+STRING 2727
+// Units: n003 (Dummy), Name (Name)
+{
+Dummy
+}
+
