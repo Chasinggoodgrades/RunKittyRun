@@ -39,11 +39,12 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
+                Setup.Initialize();
+                BarrierSetup.Initialize();
+                DebugCmd.Initialize();
 
-				Setup.Initialize();
 
-
-			}
+            }
 			catch (Exception ex)
 			{
 				DisplayTextToPlayer(GetLocalPlayer(), 0, 0, ex.Message);

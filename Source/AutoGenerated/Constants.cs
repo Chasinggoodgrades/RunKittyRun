@@ -7,7 +7,6 @@
 /// </summary>
 public static class Constants
 {
-	public const int NUMBER_OF_PLAYERS = 20;
 	public const int ABILITY_BOOK_OF_ADVANCED_REWARDS_ASTRAL = 1093677104;
 	public const int ABILITY_RESET = 1093677108;
 	public const int ABILITY_SET_COLOR = 1093677106;

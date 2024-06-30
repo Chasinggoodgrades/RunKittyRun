@@ -1,40 +1,10 @@
+udg_UnitStatIcon = __jarray("")
 gg_rct_BoA_Revive_Area = nil
 gg_rct_Bronze_medal = nil
 gg_rct_Circle_Area = nil
 gg_rct_Clan_RD = nil
 gg_rct_Clan_RD2 = nil
 gg_rct_PodiumDeathsScore = nil
-gg_rct_DebugWolf01 = nil
-gg_rct_DebugWolf02 = nil
-gg_rct_DebugWolf03 = nil
-gg_rct_DebugWolf04 = nil
-gg_rct_DebugWolfLane00 = nil
-gg_rct_DebugWolfLane01 = nil
-gg_rct_DebugWolfLane02 = nil
-gg_rct_DebugWolfLane02Bis = nil
-gg_rct_DebugWolfLane03 = nil
-gg_rct_DebugWolfLane03Bis = nil
-gg_rct_DebugWolfLane04 = nil
-gg_rct_DebugWolfLane04Bis = nil
-gg_rct_DebugWolfLane05 = nil
-gg_rct_DebugWolfLane05Bis = nil
-gg_rct_DebugWolfLane06 = nil
-gg_rct_DebugWolfLane06Bis = nil
-gg_rct_DebugWolfLane07 = nil
-gg_rct_DebugWolfLane07Bis = nil
-gg_rct_DebugWolfLane08 = nil
-gg_rct_DebugWolfLane08Bis = nil
-gg_rct_DebugWolfLane09 = nil
-gg_rct_DebugWolfLane09Bis = nil
-gg_rct_DebugWolfLane10 = nil
-gg_rct_DebugWolfLane10Bis = nil
-gg_rct_DebugWolfLane11 = nil
-gg_rct_DebugWolfLane11Bis = nil
-gg_rct_DebugWolfLane12 = nil
-gg_rct_DebugWolfLane12Bis = nil
-gg_rct_DebugWolfLane13 = nil
-gg_rct_DebugWolfLane13Bis = nil
-gg_rct_DebugWolfLane14 = nil
 gg_rct_Gold_Medal = nil
 gg_rct_InitialSpawn = nil
 gg_rct_PandaArea = nil
@@ -99,8 +69,6 @@ gg_rct_Wolf_Area_15 = nil
 gg_rct_Wolf_Area_16 = nil
 gg_rct_Wolf_Area_17 = nil
 gg_rct_ClearLaneArea12 = nil
-gg_rct_HintTextRegion = nil
-gg_rct_HintTextRegion2 = nil
 gg_rct_Region_050 = nil
 gg_rct_safe_Area_00 = nil
 gg_rct_Fieryfox = nil
@@ -163,9 +131,178 @@ gg_snd_Remember_The_Name___Fort_Minor = nil
 gg_snd_linkin_park_numb = nil
 gg_snd_linkin_park_numb01 = ""
 gg_snd_Mix = nil
+gg_trg_Start = nil
+gg_rct_BarrierRegion = nil
+gg_rct_Dummy1Region = nil
+gg_rct_Dummy2Region = nil
+gg_rct_Dummy3Region = nil
 function InitGlobals()
+local i = 0
+
+i = 0
+while (true) do
+if ((i > 1)) then break end
+udg_UnitStatIcon[i] = ""
+i = i + 1
+end
 end
 
+--[[
+CustomStatFrame 1.3
+By Tasyen
+That are the stuff one uses to access the customstat frames.
+	CustomStatFrames.BoxS a parent for simpleframes hide it to easyly hide all of them
+	CustomStatFrames.BoxF parent of the frames
+	CustomStatFrames[index].Frame
+	CustomStatFrames[index].FrameIcon = The icon of that CustomStat
+	CustomStatFrames[index].FrameText = The Text of that CustomStat
+	CustomStatFrames[index].FrameHover = Handle the mousehovering
+	CustomStatFrames[index].ToolTipBox = The box of the tooltip
+	CustomStatFrames[index].ToolTipTitle = The Title of the tooltip
+	CustomStatFrames[index].ToolTipText = The text of the tooltip
+
+--]]
+
+CustomStatFrames = {Count = 0}
+CustomStatSelectedUnit = {}
+function CustomStatAdd(icon, text)
+	CustomStatFrames.Count = CustomStatFrames.Count + 1
+	
+	local fh = BlzCreateSimpleFrame("CustomStat", CustomStatFrames.BoxS, CustomStatFrames.Count)
+	local tooltipBox = BlzCreateFrame("BoxedText", CustomStatFrames.BoxF,0, CustomStatFrames.Count)
+	local fhHover = BlzGetFrameByName("CustomStatToolTip", CustomStatFrames.Count)
+	BlzFrameSetTooltip(fh, fhHover)
+	BlzFrameSetVisible(fhHover, false)
+	
+	BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_BOTTOM, 0.6, 0.2)
+	BlzFrameSetSize(tooltipBox, 0.15, 0.08)
+
+	BlzFrameSetText(BlzGetFrameByName("CustomStatText", CustomStatFrames.Count), text)
+	BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle", CustomStatFrames.Count), "TooltipTitle")
+	BlzFrameSetText(BlzGetFrameByName("BoxedTextValue", CustomStatFrames.Count), text)
+	BlzFrameSetTexture(BlzGetFrameByName("CustomStatIcon", CustomStatFrames.Count), icon, 0, true)
+	
+	
+	--Dissallow having the TEXT-Tooltip-Frames gaining mouse control. This might produce problems, if the TEXT Frame has an disabled Color.
+	BlzFrameSetEnable(BlzGetFrameByName("BoxedTextValue", CustomStatFrames.Count), false)
+	BlzFrameSetEnable(BlzGetFrameByName("BoxedTextTitle", CustomStatFrames.Count), false)
+
+	--[[ 4x3
+	if CustomStatFrames.Count == 1 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.31, 0.08)
+	elseif CustomStatFrames.Count == 5 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.375, 0.08)
+	elseif CustomStatFrames.Count == 9 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.435, 0.08)
+	else
+		BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName("CustomStat", CustomStatFrames.Count - 1), FRAMEPOINT_BOTTOMLEFT, 0, 0)
+	end
+	--]]
+	--[[ 4x4
+	if CustomStatFrames.Count == 1 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.31, 0.08)
+	elseif CustomStatFrames.Count == 5 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.36, 0.08)
+	elseif CustomStatFrames.Count == 9 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.41, 0.08)
+	elseif CustomStatFrames.Count == 13 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.46, 0.08)
+	else
+		BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName("CustomStat", CustomStatFrames.Count - 1), FRAMEPOINT_BOTTOMLEFT, 0, 0)
+	end
+	--]]
+
+	--3x3
+	if CustomStatFrames.Count == 1 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.31, 0.08)
+	elseif CustomStatFrames.Count == 4 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.375, 0.08)
+	elseif CustomStatFrames.Count == 7 then
+		BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.435, 0.08)
+	else
+		BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName("CustomStat", CustomStatFrames.Count - 1), FRAMEPOINT_BOTTOMLEFT, 0, -0.005)
+	end
+	
+	--save into table
+	CustomStatFrames[CustomStatFrames.Count] = {}
+	CustomStatFrames[CustomStatFrames.Count].Frame = fh
+	CustomStatFrames[CustomStatFrames.Count].FrameIcon = BlzGetFrameByName("CustomStatIcon", CustomStatFrames.Count)
+	CustomStatFrames[CustomStatFrames.Count].FrameText = BlzGetFrameByName("CustomStatText", CustomStatFrames.Count)
+	CustomStatFrames[CustomStatFrames.Count].FrameHover = fhHover
+	CustomStatFrames[CustomStatFrames.Count].ToolTipBox = tooltipBox
+	CustomStatFrames[CustomStatFrames.Count].ToolTipTitle = BlzGetFrameByName("BoxedTextTitle", CustomStatFrames.Count)
+	CustomStatFrames[CustomStatFrames.Count].ToolTipText = BlzGetFrameByName("BoxedTextValue", CustomStatFrames.Count)
+end
+
+function CustomStatUpdate()
+	local isVisible = BlzFrameIsVisible(CustomStatFrames.BoxS)
+	
+	BlzFrameSetText(CustomStatFrames[1].FrameText, BlzFrameGetText(BlzGetFrameByName("InfoPanelIconValue", 0))) --copy normal damage text
+	BlzFrameSetText(CustomStatFrames[2].FrameText, BlzFrameGetText(BlzGetFrameByName("InfoPanelIconValue", 2))) --copy normal armor field
+	
+	BlzFrameSetText(CustomStatFrames[6].FrameText, GetUnitMoveSpeed(CustomStatSelectedUnit[GetLocalPlayer()]))
+	BlzFrameSetVisible(CustomStatFrames.BoxF, BlzFrameIsVisible(CustomStatFrames.BoxS))
+	-- show the current hovered
+	for i = 1, CustomStatFrames.Count do
+		BlzFrameSetVisible(CustomStatFrames[i].ToolTipBox, BlzFrameIsVisible(CustomStatFrames[i].FrameHover))
+	end
+end
+
+function CustomStatInit()
+
+    --move the default unit infos out of the screen and scale it down
+    local function CustomStatMoveOutOfScreen(frame)
+        BlzFrameClearAllPoints(frame)
+        BlzFrameSetAbsPoint(frame, FRAMEPOINT_CENTER, 3, 0)
+    end
+    for index = 0, 5, 1 do
+        CustomStatMoveOutOfScreen(BlzGetFrameByName("InfoPanelIconBackdrop", index))		
+    end
+    CustomStatMoveOutOfScreen(BlzGetFrameByName("InfoPanelIconHeroIcon", 6))
+	CustomStatMoveOutOfScreen(BlzGetFrameByName("InfoPanelIconAllyTitle", 7))
+	CustomStatMoveOutOfScreen(BlzGetFrameByName("InfoPanelIconAllyGoldIcon", 7))
+
+	--Create a Selection Trigger thats a pretty naive approach.
+	local trig = CreateTrigger()
+	TriggerAddAction(trig, function () CustomStatSelectedUnit[GetTriggerPlayer()] = GetTriggerUnit() end)
+	
+	local index = 0
+	repeat
+		TriggerRegisterPlayerSelectionEventBJ(trig, Player(index), true)
+		--TriggerRegisterPlayerSelectionEventBJ(trig, Player(index), false)
+		index = index + 1
+	until index == bj_MAX_PLAYER_SLOTS
+
+
+	--create a Parent for the Stats so you can easyly hide/show them-
+	--Stats use SimpleUnitStatsPanel as parent that way they are only shown when an unit is selected which does not build.
+	CustomStatFrames.BoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrames.BoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel",0), "", 0) 
+	CustomStatFrames.BoxF = BlzCreateFrameByType("FRAME", "CustomStatFrames.BoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0) 
+	
+	
+	BlzLoadTOCFile("war3mapimported\\CustomStat.toc")
+	
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test1")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test2")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test3")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test4")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test5")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test6")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test7")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test8")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test9")
+	--[[
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test10")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test11")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test12")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test13")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test14")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test15")
+	CustomStatAdd(udg_UnitStatIcon[CustomStatFrames.Count + 1],"Test16")
+	--]]
+	TimerStart(CreateTimer(), 0.1, true, CustomStatUpdate)
+	print("Done")
+end
 function InitSounds()
 gg_snd_Round01 = CreateSound("war3mapImported\\Round01.mp3", false, false, false, 10, 10, "DefaultEAXON")
 SetSoundDuration(gg_snd_Round01, 2063)
@@ -336,27 +473,6 @@ SetSoundVolume(gg_snd_Mix, 127)
 SetSoundPitch(gg_snd_Mix, 1.0)
 end
 
-function CreateUnitsForPlayer0()
-local p = Player(0)
-local u
-local unitID
-local t
-local life
-
-u = BlzCreateUnitWithSkin(p, FourCC("h001"), -2593.9, 2646.3, 0.000, FourCC("h001"))
-u = BlzCreateUnitWithSkin(p, FourCC("h002"), -2589.3, 2896.1, 0.000, FourCC("h002"))
-end
-
-function CreateUnitsForPlayer12()
-local p = Player(12)
-local u
-local unitID
-local t
-local life
-
-u = BlzCreateUnitWithSkin(p, FourCC("h000"), -2598.3, 2405.4, 180.000, FourCC("h000"))
-end
-
 function CreateNeutralPassiveBuildings()
 local p = Player(PLAYER_NEUTRAL_PASSIVE)
 local u
@@ -385,8 +501,6 @@ function CreatePlayerBuildings()
 end
 
 function CreatePlayerUnits()
-CreateUnitsForPlayer0()
-CreateUnitsForPlayer12()
 end
 
 function CreateAllUnits()
@@ -405,37 +519,6 @@ gg_rct_Circle_Area = Rect(-1184.0, -1536.0, -992.0, 0.0)
 gg_rct_Clan_RD = Rect(-384.0, -896.0, -352.0, -864.0)
 gg_rct_Clan_RD2 = Rect(-320.0, -896.0, -288.0, -864.0)
 gg_rct_PodiumDeathsScore = Rect(-576.0, -480.0, -512.0, -448.0)
-gg_rct_DebugWolf01 = Rect(608.0, -1024.0, 1056.0, -928.0)
-gg_rct_DebugWolf02 = Rect(-928.0, -1024.0, -480.0, -928.0)
-gg_rct_DebugWolf03 = Rect(-928.0, -480.0, -480.0, -384.0)
-gg_rct_DebugWolf04 = Rect(-96.0, -448.0, -32.0, 32.0)
-gg_rct_DebugWolfLane00 = Rect(-2624.0, 2304.0, -2464.0, 3072.0)
-gg_rct_DebugWolfLane01 = Rect(2496.0, 2304.0, 2592.0, 3072.0)
-gg_rct_DebugWolfLane02 = Rect(2560.0, 2112.0, 3296.0, 2208.0)
-gg_rct_DebugWolfLane02Bis = Rect(2624.0, -3008.0, 3264.0, -2912.0)
-gg_rct_DebugWolfLane03 = Rect(2528.0, -3584.0, 2624.0, -2976.0)
-gg_rct_DebugWolfLane03Bis = Rect(-2592.0, -3584.0, -2496.0, -2976.0)
-gg_rct_DebugWolfLane04 = Rect(-3360.0, -2976.0, -2528.0, -2848.0)
-gg_rct_DebugWolfLane04Bis = Rect(-3328.0, 1472.0, -2624.0, 1568.0)
-gg_rct_DebugWolfLane05 = Rect(-2656.0, 1536.0, -2560.0, 2176.0)
-gg_rct_DebugWolfLane05Bis = Rect(1856.0, 1504.0, 1952.0, 2176.0)
-gg_rct_DebugWolfLane06 = Rect(1920.0, 1472.0, 2464.0, 1568.0)
-gg_rct_DebugWolfLane06Bis = Rect(1888.0, -2304.0, 2464.0, -2208.0)
-gg_rct_DebugWolfLane07 = Rect(1824.0, -2848.0, 1920.0, -2272.0)
-gg_rct_DebugWolfLane07Bis = Rect(-1920.0, -2848.0, -1824.0, -2272.0)
-gg_rct_DebugWolfLane08 = Rect(-2464.0, -2304.0, -1888.0, -2208.0)
-gg_rct_DebugWolfLane08Bis = Rect(-2464.0, 832.0, -1888.0, 928.0)
-gg_rct_DebugWolfLane09 = Rect(-1920.0, 864.0, -1824.0, 1312.0)
-gg_rct_DebugWolfLane09Bis = Rect(1152.0, 864.0, 1280.0, 1312.0)
-gg_rct_DebugWolfLane10 = Rect(1248.0, 800.0, 1696.0, 928.0)
-gg_rct_DebugWolfLane10Bis = Rect(1248.0, -1696.0, 1696.0, -1600.0)
-gg_rct_DebugWolfLane11 = Rect(1184.0, -2080.0, 1280.0, -1664.0)
-gg_rct_DebugWolfLane11Bis = Rect(-1312.0, -2080.0, -1216.0, -1696.0)
-gg_rct_DebugWolfLane12 = Rect(-1696.0, -1664.0, -1248.0, -1568.0)
-gg_rct_DebugWolfLane12Bis = Rect(-1696.0, 160.0, -1248.0, 256.0)
-gg_rct_DebugWolfLane13 = Rect(-1280.0, 224.0, -1184.0, 640.0)
-gg_rct_DebugWolfLane13Bis = Rect(576.0, 224.0, 672.0, 640.0)
-gg_rct_DebugWolfLane14 = Rect(608.0, 128.0, 1056.0, 224.0)
 gg_rct_Gold_Medal = Rect(-224.0, -448.0, -192.0, -384.0)
 gg_rct_InitialSpawn = Rect(-3328.0, 2720.0, -2816.0, 3072.0)
 gg_rct_PandaArea = Rect(3136.0, 2816.0, 3328.0, 3104.0)
@@ -450,7 +533,7 @@ gg_rct_PodiumSaves = Rect(-224.0, -832.0, -160.0, -768.0)
 gg_rct_Podium_cinematic = Rect(-384.0, -896.0, -64.0, -544.0)
 gg_rct_safe_Area_01 = Rect(2496.0, 2112.0, 3360.0, 3072.0)
 gg_rct_safe_Area_02 = Rect(2528.0, -3616.0, 3296.0, -2912.0)
-gg_rct_safe_Area_03 = Rect(-3328.0, -3584.0, -2496.0, -2848.0)
+gg_rct_safe_Area_03 = Rect(-2880.0, -3360.0, -2048.0, -2624.0)
 gg_rct_safe_Area_04 = Rect(-3328.0, 1472.0, -2560.0, 2016.0)
 gg_rct_safe_Area_05 = Rect(1856.0, 1472.0, 2464.0, 2176.0)
 gg_rct_safe_Area_06 = Rect(1856.0, -2848.0, 2464.0, -2240.0)
@@ -500,8 +583,6 @@ gg_rct_Wolf_Area_15 = Rect(-928.0, -1440.0, 1056.0, -1024.0)
 gg_rct_Wolf_Area_16 = Rect(-928.0, -928.0, -480.0, -480.0)
 gg_rct_Wolf_Area_17 = Rect(-928.0, -416.0, -64.0, 32.0)
 gg_rct_ClearLaneArea12 = Rect(-1696.0, 288.0, -1312.0, 640.0)
-gg_rct_HintTextRegion = Rect(-2848.0, 2656.0, -2304.0, 3072.0)
-gg_rct_HintTextRegion2 = Rect(-2848.0, 2272.0, -2304.0, 2656.0)
 gg_rct_Region_050 = Rect(-1344.0, 2368.0, -1312.0, 2400.0)
 gg_rct_safe_Area_00 = Rect(-3200.0, 2464.0, -2656.0, 2976.0)
 gg_rct_Fieryfox = Rect(-3424.0, 3104.0, -3200.0, 3296.0)
@@ -529,6 +610,40 @@ gg_rct_LightningBRight = Rect(-96.0, -960.0, -64.0, -928.0)
 gg_rct_TRegion1 = Rect(736.0, -1312.0, 896.0, -1184.0)
 gg_rct_TRegion2 = Rect(-800.0, -1312.0, -576.0, -1184.0)
 gg_rct_TRegion3 = Rect(-800.0, -288.0, -608.0, -128.0)
+gg_rct_BarrierRegion = Rect(-2624.0, 2304.0, -2592.0, 3072.0)
+gg_rct_Dummy1Region = Rect(-2624.0, 2880.0, -2592.0, 2912.0)
+gg_rct_Dummy2Region = Rect(-2624.0, 2656.0, -2592.0, 2688.0)
+gg_rct_Dummy3Region = Rect(-2624.0, 2432.0, -2592.0, 2464.0)
+end
+
+function Trig_Start_Actions()
+udg_UnitStatIcon[1] = "ReplaceableTextures\\CommandButtons\\BTNSteelMelee.blp"
+udg_UnitStatIcon[2] = "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp"
+udg_UnitStatIcon[3] = "ReplaceableTextures\\PassiveButtons\\PASBTNThickFur.blp"
+udg_UnitStatIcon[4] = "ReplaceableTextures\\CommandButtons\\BTNEvasion.blp"
+udg_UnitStatIcon[5] = "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp"
+udg_UnitStatIcon[6] = "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp"
+udg_UnitStatIcon[7] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
+udg_UnitStatIcon[8] = "UI\\Widgets\\Console\\Human\\infocard-gold.blp"
+udg_UnitStatIcon[9] = "UI\\Widgets\\Console\\Human\\infocard-supply.blp"
+udg_UnitStatIcon[10] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-str.blp"
+udg_UnitStatIcon[11] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-agi.blp"
+udg_UnitStatIcon[12] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-int.blp"
+udg_UnitStatIcon[13] = "ReplaceableTextures\\CommandButtons\\BTNSorceressAdept.blp"
+udg_UnitStatIcon[14] = "ReplaceableTextures\\CommandButtons\\BTNPriestAdept.blp"
+udg_UnitStatIcon[15] = "ReplaceableTextures\\CommandButtons\\BTNCirclet.blp"
+udg_UnitStatIcon[16] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
+    CustomStatInit()
+end
+
+function InitTrig_Start()
+gg_trg_Start = CreateTrigger()
+TriggerRegisterTimerEventSingle(gg_trg_Start, 0.00)
+TriggerAddAction(gg_trg_Start, Trig_Start_Actions)
+end
+
+function InitCustomTriggers()
+InitTrig_Start()
 end
 
 function InitCustomPlayerSlots()
@@ -1703,6 +1818,7 @@ CreateRegions()
 CreateAllUnits()
 InitBlizzard()
 InitGlobals()
+InitCustomTriggers()
 end
 
 function config()

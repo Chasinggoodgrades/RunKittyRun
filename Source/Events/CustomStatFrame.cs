@@ -65,7 +65,7 @@ public static class CustomStatFrame
 
         BlzFrameSetText(Stats[0].Text, $"Team: {GetPlayerTeamName(selectedUnit)}");
         BlzFrameSetText(Stats[1].Text, $"Gold: {GetPlayerGold(selectedUnit)}");
-        BlzFrameSetText(Stats[2].Text, $"MS: {GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
         BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
         BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
         BlzFrameSetText(Stats[5].Text, $"Deaths: {GetPlayerDeaths(selectedUnit)}");
@@ -97,7 +97,7 @@ public static class CustomStatFrame
             SelectedUnit[GetPlayerId(GetTriggerPlayer())] = GetTriggerUnit();
         });
 
-        for (int i = 0; i < Constants.NUMBER_OF_PLAYERS; i++)
+        for (int i = 0; i < Globals.NUMBER_OF_PLAYERS; i++)
         {
             if(GetPlayerSlotState(Player(i)) == playerslotstate.Playing) TriggerRegisterPlayerUnitEvent(trig, Player(i), EVENT_PLAYER_UNIT_SELECTED, null);
         }
@@ -129,11 +129,9 @@ public static class CustomStatFrame
         public framehandle ToolTipTitle { get; set; }
         public framehandle ToolTipText { get; set; }
     }
-
-    // Mock methods to replace undefined methods from JASS (placeholders for actual implementations)
     private static string GetPlayerTeamName(unit u) => "TeamName"; // Placeholder
-    private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold; // 
+    private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
     private static string GetPlayerProgress(unit u) => "50"; // Placeholder
-    private static int GetPlayerSaves(unit u) => 5; // Placeholder
-    private static int GetPlayerDeaths(unit u) => 2; // Placeholder
+    private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Saves;
+    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Deaths;
 }

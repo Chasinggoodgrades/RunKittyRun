@@ -1,5 +1,4 @@
-﻿using Source.Game;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using WCSharp.Api;
@@ -16,62 +15,29 @@ namespace Source.Init
         private static int i = 0;
         public static void Initialize()
         {
-            Console.WriteLine("Setting up the game...");
+            GetActivePlayers();
             FogEnable(false);
             FogMaskEnable(false);
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
             SuspendTimeOfDay(true);
+
             CustomStatFrame.Init();
-
-
-            timer t = CreateTimer();
-            TimerStart(t, 0.2f, true, () =>
-            {
-                BeginSpawning(t);
-            });
+            Kitty.BeginSpawning();
+            GameTimer.SetupTimers();
+            Safezone.SetupSafezones();
+            RoundManager.RoundSetup();
         }
 
-        public static void BeginSpawning(timer t)
+
+        private static void GetActivePlayers()
         {
-            player p = Player(i);
-            if (GetPlayerSlotState(p) == playerslotstate.Playing)
+            for (int i = 0; i < Globals.NUMBER_OF_PLAYERS; i++)
             {
-                Kitty k = new Kitty(p);
+                if (GetPlayerSlotState(Player(i)) == playerslotstate.Playing)
+                {
+                    Globals.ALL_PLAYERS.Add(Player(i));
+                }
             }
-            i += 1;
-            if (i == Constants.NUMBER_OF_PLAYERS)
-            {
-                i = 0;
-                t.Dispose();
-                SetupTimers();
-                Game.RoundStart.RoundActions();
-            }
-        }
-
-        public static void SetupTimers()
-        {
-            TimerDialogSetTitle(Globals.GAME_TIMER_DIALOG, "Elapsed Game Time");
-            TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
-            timer t = CreateTimer();
-            TimerStart(t, 1.0f, true, () =>
-            {
-                GameTimer();
-            });
-        }
-
-        private static void GameTimer()
-        {
-            if (Globals.GAME_ACTIVE)
-            {
-                Globals.GAME_SECONDS += 1.0f;
-                Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
-                Globals.GAME_TIMER.Pause();
-            }
-        }
-
-        public static void SetupTeams()
-        {
-
         }
     }
 }

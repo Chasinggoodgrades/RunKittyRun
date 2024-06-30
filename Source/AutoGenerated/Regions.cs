@@ -11,37 +11,6 @@ public static class Regions
 	public static Rectangle Clan_RD { get; set; } = new Rectangle(-384f, -896f, -352f, -864f);
 	public static Rectangle Clan_RD2 { get; set; } = new Rectangle(-320f, -896f, -288f, -864f);
 	public static Rectangle PodiumDeathsScore { get; set; } = new Rectangle(-576f, -480f, -512f, -448f);
-	public static Rectangle DebugWolf01 { get; set; } = new Rectangle(608f, -1024f, 1056f, -928f);
-	public static Rectangle DebugWolf02 { get; set; } = new Rectangle(-928f, -1024f, -480f, -928f);
-	public static Rectangle DebugWolf03 { get; set; } = new Rectangle(-928f, -480f, -480f, -384f);
-	public static Rectangle DebugWolf04 { get; set; } = new Rectangle(-96f, -448f, -32f, 32f);
-	public static Rectangle DebugWolfLane00 { get; set; } = new Rectangle(-2624f, 2304f, -2464f, 3072f);
-	public static Rectangle DebugWolfLane01 { get; set; } = new Rectangle(2496f, 2304f, 2592f, 3072f);
-	public static Rectangle DebugWolfLane02 { get; set; } = new Rectangle(2560f, 2112f, 3296f, 2208f);
-	public static Rectangle DebugWolfLane02Bis { get; set; } = new Rectangle(2624f, -3008f, 3264f, -2912f);
-	public static Rectangle DebugWolfLane03 { get; set; } = new Rectangle(2528f, -3584f, 2624f, -2976f);
-	public static Rectangle DebugWolfLane03Bis { get; set; } = new Rectangle(-2592f, -3584f, -2496f, -2976f);
-	public static Rectangle DebugWolfLane04 { get; set; } = new Rectangle(-3360f, -2976f, -2528f, -2848f);
-	public static Rectangle DebugWolfLane04Bis { get; set; } = new Rectangle(-3328f, 1472f, -2624f, 1568f);
-	public static Rectangle DebugWolfLane05 { get; set; } = new Rectangle(-2656f, 1536f, -2560f, 2176f);
-	public static Rectangle DebugWolfLane05Bis { get; set; } = new Rectangle(1856f, 1504f, 1952f, 2176f);
-	public static Rectangle DebugWolfLane06 { get; set; } = new Rectangle(1920f, 1472f, 2464f, 1568f);
-	public static Rectangle DebugWolfLane06Bis { get; set; } = new Rectangle(1888f, -2304f, 2464f, -2208f);
-	public static Rectangle DebugWolfLane07 { get; set; } = new Rectangle(1824f, -2848f, 1920f, -2272f);
-	public static Rectangle DebugWolfLane07Bis { get; set; } = new Rectangle(-1920f, -2848f, -1824f, -2272f);
-	public static Rectangle DebugWolfLane08 { get; set; } = new Rectangle(-2464f, -2304f, -1888f, -2208f);
-	public static Rectangle DebugWolfLane08Bis { get; set; } = new Rectangle(-2464f, 832f, -1888f, 928f);
-	public static Rectangle DebugWolfLane09 { get; set; } = new Rectangle(-1920f, 864f, -1824f, 1312f);
-	public static Rectangle DebugWolfLane09Bis { get; set; } = new Rectangle(1152f, 864f, 1280f, 1312f);
-	public static Rectangle DebugWolfLane10 { get; set; } = new Rectangle(1248f, 800f, 1696f, 928f);
-	public static Rectangle DebugWolfLane10Bis { get; set; } = new Rectangle(1248f, -1696f, 1696f, -1600f);
-	public static Rectangle DebugWolfLane11 { get; set; } = new Rectangle(1184f, -2080f, 1280f, -1664f);
-	public static Rectangle DebugWolfLane11Bis { get; set; } = new Rectangle(-1312f, -2080f, -1216f, -1696f);
-	public static Rectangle DebugWolfLane12 { get; set; } = new Rectangle(-1696f, -1664f, -1248f, -1568f);
-	public static Rectangle DebugWolfLane12Bis { get; set; } = new Rectangle(-1696f, 160f, -1248f, 256f);
-	public static Rectangle DebugWolfLane13 { get; set; } = new Rectangle(-1280f, 224f, -1184f, 640f);
-	public static Rectangle DebugWolfLane13Bis { get; set; } = new Rectangle(576f, 224f, 672f, 640f);
-	public static Rectangle DebugWolfLane14 { get; set; } = new Rectangle(608f, 128f, 1056f, 224f);
 	public static Rectangle Gold_Medal { get; set; } = new Rectangle(-224f, -448f, -192f, -384f);
 	public static Rectangle InitialSpawn { get; set; } = new Rectangle(-3328f, 2720f, -2816f, 3072f);
 	public static Rectangle PandaArea { get; set; } = new Rectangle(3136f, 2816f, 3328f, 3104f);
@@ -56,7 +25,7 @@ public static class Regions
 	public static Rectangle Podium_cinematic { get; set; } = new Rectangle(-384f, -896f, -64f, -544f);
 	public static Rectangle safe_Area_01 { get; set; } = new Rectangle(2496f, 2112f, 3360f, 3072f);
 	public static Rectangle safe_Area_02 { get; set; } = new Rectangle(2528f, -3616f, 3296f, -2912f);
-	public static Rectangle safe_Area_03 { get; set; } = new Rectangle(-3328f, -3584f, -2496f, -2848f);
+	public static Rectangle safe_Area_03 { get; set; } = new Rectangle(-2880f, -3360f, -2048f, -2624f);
 	public static Rectangle safe_Area_04 { get; set; } = new Rectangle(-3328f, 1472f, -2560f, 2016f);
 	public static Rectangle safe_Area_05 { get; set; } = new Rectangle(1856f, 1472f, 2464f, 2176f);
 	public static Rectangle safe_Area_06 { get; set; } = new Rectangle(1856f, -2848f, 2464f, -2240f);
@@ -106,8 +75,6 @@ public static class Regions
 	public static Rectangle Wolf_Area_16 { get; set; } = new Rectangle(-928f, -928f, -480f, -480f);
 	public static Rectangle Wolf_Area_17 { get; set; } = new Rectangle(-928f, -416f, -64f, 32f);
 	public static Rectangle ClearLaneArea12 { get; set; } = new Rectangle(-1696f, 288f, -1312f, 640f);
-	public static Rectangle HintTextRegion { get; set; } = new Rectangle(-2848f, 2656f, -2304f, 3072f);
-	public static Rectangle HintTextRegion2 { get; set; } = new Rectangle(-2848f, 2272f, -2304f, 2656f);
 	public static Rectangle Region_050 { get; set; } = new Rectangle(-1344f, 2368f, -1312f, 2400f);
 	public static Rectangle safe_Area_00 { get; set; } = new Rectangle(-3200f, 2464f, -2656f, 2976f);
 	public static Rectangle Fieryfox { get; set; } = new Rectangle(-3424f, 3104f, -3200f, 3296f);
@@ -135,5 +102,9 @@ public static class Regions
 	public static Rectangle TRegion1 { get; set; } = new Rectangle(736f, -1312f, 896f, -1184f);
 	public static Rectangle TRegion2 { get; set; } = new Rectangle(-800f, -1312f, -576f, -1184f);
 	public static Rectangle TRegion3 { get; set; } = new Rectangle(-800f, -288f, -608f, -128f);
+	public static Rectangle BarrierRegion { get; set; } = new Rectangle(-2624f, 2304f, -2592f, 3072f);
+	public static Rectangle Dummy1Region { get; set; } = new Rectangle(-2624f, 2880f, -2592f, 2912f);
+	public static Rectangle Dummy2Region { get; set; } = new Rectangle(-2624f, 2656f, -2592f, 2688f);
+	public static Rectangle Dummy3Region { get; set; } = new Rectangle(-2624f, 2432f, -2592f, 2464f);
 
 }
