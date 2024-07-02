@@ -10,14 +10,12 @@ using static WCSharp.Api.Common;
 
 public static class GameTimer
 {
-    public static void SetupTimers()
+
+    public static void Initialize()
     {
         TimerDialogSetTitle(Globals.GAME_TIMER_DIALOG, "Elapsed Game Time");
         timer t = CreateTimer();
-        TimerStart(t, 1.0f, true, () =>
-        {
-            StartGameTimer();
-        });
+        TimerStart(t, 1.0f, true, () => { StartGameTimer(); });
     }
 
     private static void StartGameTimer()

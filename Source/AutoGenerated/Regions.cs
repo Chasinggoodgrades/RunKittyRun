@@ -25,8 +25,8 @@ public static class Regions
 	public static Rectangle Podium_cinematic { get; set; } = new Rectangle(-384f, -896f, -64f, -544f);
 	public static Rectangle safe_Area_01 { get; set; } = new Rectangle(2496f, 2112f, 3360f, 3072f);
 	public static Rectangle safe_Area_02 { get; set; } = new Rectangle(2528f, -3616f, 3296f, -2912f);
-	public static Rectangle safe_Area_03 { get; set; } = new Rectangle(-2880f, -3360f, -2048f, -2624f);
-	public static Rectangle safe_Area_04 { get; set; } = new Rectangle(-3328f, 1472f, -2560f, 2016f);
+	public static Rectangle safe_Area_03 { get; set; } = new Rectangle(-3360f, -3616f, -2528f, -2880f);
+	public static Rectangle safe_Area_04 { get; set; } = new Rectangle(-3392f, 1472f, -2560f, 2176f);
 	public static Rectangle safe_Area_05 { get; set; } = new Rectangle(1856f, 1472f, 2464f, 2176f);
 	public static Rectangle safe_Area_06 { get; set; } = new Rectangle(1856f, -2848f, 2464f, -2240f);
 	public static Rectangle safe_Area_07 { get; set; } = new Rectangle(-2496f, -2848f, -1856f, -2208f);
@@ -63,7 +63,7 @@ public static class Regions
 	public static Rectangle Wolf_Area_04 { get; set; } = new Rectangle(-3392f, -2912f, -2560f, 1472f);
 	public static Rectangle Wolf_Area_05 { get; set; } = new Rectangle(-2592f, 1440f, 1920f, 2208f);
 	public static Rectangle Wolf_Area_06 { get; set; } = new Rectangle(1888f, -2240f, 2496f, 1472f);
-	public static Rectangle Wolf_Area_07 { get; set; } = new Rectangle(-1888f, -2912f, 1824f, -2240f);
+	public static Rectangle Wolf_Area_07 { get; set; } = new Rectangle(-1888f, -2912f, 1856f, -2240f);
 	public static Rectangle Wolf_Area_08 { get; set; } = new Rectangle(-2496f, -2240f, -1856f, 864f);
 	public static Rectangle Wolf_Area_09 { get; set; } = new Rectangle(-1856f, 864f, 1216f, 1344f);
 	public static Rectangle Wolf_Area_10 { get; set; } = new Rectangle(1216f, -1632f, 1728f, 864f);
@@ -74,9 +74,8 @@ public static class Regions
 	public static Rectangle Wolf_Area_15 { get; set; } = new Rectangle(-928f, -1440f, 1056f, -1024f);
 	public static Rectangle Wolf_Area_16 { get; set; } = new Rectangle(-928f, -928f, -480f, -480f);
 	public static Rectangle Wolf_Area_17 { get; set; } = new Rectangle(-928f, -416f, -64f, 32f);
-	public static Rectangle ClearLaneArea12 { get; set; } = new Rectangle(-1696f, 288f, -1312f, 640f);
 	public static Rectangle Region_050 { get; set; } = new Rectangle(-1344f, 2368f, -1312f, 2400f);
-	public static Rectangle safe_Area_00 { get; set; } = new Rectangle(-3200f, 2464f, -2656f, 2976f);
+	public static Rectangle safe_Area_00 { get; set; } = new Rectangle(-3296f, 2304f, -2624f, 3072f);
 	public static Rectangle Fieryfox { get; set; } = new Rectangle(-3424f, 3104f, -3200f, 3296f);
 	public static Rectangle FinishZone { get; set; } = new Rectangle(-64f, -832f, 416f, 32f);
 	public static Rectangle TeamRed { get; set; } = new Rectangle(-2784f, 3648f, -2144f, 3840f);

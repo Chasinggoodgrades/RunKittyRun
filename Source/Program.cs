@@ -40,8 +40,9 @@ namespace Source
 				Delay.EnableDebug();
 #endif
                 Setup.Initialize();
+                CommandHandler.Initialize();
+				CommandManager.InitializeCommands();
                 BarrierSetup.Initialize();
-                DebugCmd.Initialize();
 
 
             }

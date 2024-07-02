@@ -22,6 +22,21 @@ public class Safezone
         Trigger = CreateTrigger();
     }
 
+    public static void Initialize()
+    {
+        int count = 0;
+        foreach (var safeZone in RegionList.SafeZones)
+        {
+            var safezone = new Safezone(count, safeZone.Region);
+            Globals.SAFE_ZONES.Add(safezone);
+            count++;
+        }
+        foreach (var safeZone in Globals.SAFE_ZONES)
+        {
+            safeZone.EnterSafezoneEvents();
+        }
+    }
+
     private void EnterSafezoneEvents()
     {
         TriggerRegisterEnterRegion(Trigger, Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
@@ -41,21 +56,6 @@ public class Safezone
         player.Gold += 20;
         unit.Experience += 150;
         Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
-    }
-
-    public static void SetupSafezones()
-    {
-        int count = 0;
-        foreach(var safeZone in RegionList.SafeZones)
-        {
-            var safezone = new Safezone(count, safeZone.Region);
-            Globals.SAFE_ZONES.Add(safezone);
-            count++;
-        }
-        foreach (var safeZone in Globals.SAFE_ZONES)
-        {
-            safeZone.EnterSafezoneEvents();
-        }
     }
 
     public static void ResetPlayerSafezones()

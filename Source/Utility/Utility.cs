@@ -11,6 +11,8 @@ using static WCSharp.Api.Common;
 
 public static class Utility
 {
+
+
     public static void Print(string message)
     {
         Console.WriteLine(message);
@@ -22,5 +24,26 @@ public static class Utility
         ShowUnit(u, false);
         u.RemoveAbility(FourCC("Aloc"));
         ShowUnit(u, true);
+    }
+
+    public static void SelectUnitForPlayer(player p, unit u)
+    {
+        if (p == player.LocalPlayer)
+        {
+            ClearSelection();
+            SelectUnit(u, true);
+        }
+    }
+
+    public static bool IsDeveloper(player p)
+    {
+        foreach (var player in Globals.DEVELOPERS)
+        {
+            if (p.Name == player)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

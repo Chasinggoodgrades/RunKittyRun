@@ -13,16 +13,14 @@ public class Wolf
     private const int WOLF_MODEL = Constants.UNIT_CUSTOM_DOG;
     private const float WANDER_LOWER_BOUND = 0.80f;
     private const float WANDER_UPPER_BOUND = 0.85f;
-    private const float WOLF_COLLISION_RADIUS = 75.0f;
     private const string OVERHEAD_EFFECT = "Abilities\\Spells\\Other\\TalkToMe\\TalkToMe.mdl";
 
-
     private int RegionIndex { get; set; }
-    private unit Unit {  get; set; }
     private effect OverheadEffect { get; set; }
     private timer WanderTimer { get; set; }
     private rect Lane { get; set; }
-    private trigger Collision { get; set; }
+    public unit Unit { get; private set; }
+    public trigger Collision { get; set; }
 
     public Wolf(int regionIndex)
     {
@@ -35,31 +33,28 @@ public class Wolf
 
     private void InitializeWolf()
     {
-        var player = Player(((RegionIndex) % 3) + 22);
+        var players = new[]
+        {
+        player.NeutralExtra,
+        player.NeutralPassive,
+        player.NeutralVictim,
+        player.NeutralAggressive
+        };
+
+        var randomPlayer = players[GetRandomInt(0, players.Length - 1)];
+
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
 
-        Unit = unit.Create(player, WOLF_MODEL, randomX, randomY, 360);
+        Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, 360);
         Globals.ALL_WOLVES.Add(Unit);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
         WanderTimer = CreateTimer();
-        CollisionDetection();
+        CollisionDetection.WolfCollision(this);
     }
 
-    private void CollisionDetection()
-    {
-        TriggerRegisterUnitInRange(Collision, Unit, WOLF_COLLISION_RADIUS, Filter (() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
-        TriggerAddAction(Collision, () =>
-        {
-            var kitty = GetFilterUnit();
-            var player = GetOwningPlayer(kitty);
-
-            Console.WriteLine("Wolf collided with " + player.Name);
-            Globals.ALL_KITTIES[player].Deaths++;
-        });
-    }
 
     private void WolfMove()
     {

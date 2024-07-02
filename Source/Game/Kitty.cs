@@ -12,11 +12,13 @@ public class Kitty
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
+    private effect Effect { get; set; }
     public player Player { get; }
     public unit Unit { get; set; }
-    private effect Effect { get; set; }
+
     public int Saves { get; set; }
     public int Deaths { get; set; }
+    public bool Alive { get; set; } = true;
 
     public Kitty(player player)
     {
@@ -26,6 +28,16 @@ public class Kitty
 
         SpawnEffect();
         DelayCreateKitty();
+    }
+
+    public static void Initialize()
+    {
+
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            new Kitty(player);
+            new Circle(player);
+        }
     }
     private void DelayCreateKitty()
     {
@@ -47,21 +59,34 @@ public class Kitty
     {
         var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
-        Globals.ALL_KITTIES.Add(Player, this);
         Utility.MakeUnitLocust(Unit);
-
+        Globals.ALL_KITTIES.Add(Player, this);
     }
-    public static void BeginSpawning()
+
+    public void Dispose()
     {
+        Unit.Dispose();
+    }
+
+    public void ReviveKitty(Kitty savior)
+    {
+        var circle = Globals.ALL_CIRCLES[Player];
+        circle.HideCircle();
+        Unit.Revive(Unit.X, Unit.Y, false);
+        Utility.SelectUnitForPlayer(Player, Unit);
+        savior.Saves += 1;
+        savior.Unit.Experience += 50;
         var t = CreateTimer();
-        TimerStart(t, 3.0f, false, () =>
-        {
-            foreach (var player in Globals.ALL_PLAYERS)
-            {
-                new Kitty(player);
-                t.Dispose();
-            }
-        });
+        TimerStart(t, .45f, false, () => { Alive = true; });
+    }
+
+    public void KillKitty()
+    {
+        var circle = Globals.ALL_CIRCLES[Player];
+        Unit.Kill();
+        Alive = false;
+        Deaths += 1;
+        circle.KittyDied(this);
     }
 
 }

@@ -63,12 +63,8 @@ public static class CustomStatFrame
         var localPlayer = GetLocalPlayer();
         var selectedUnit = SelectedUnit[GetPlayerId(localPlayer)];
 
-        BlzFrameSetText(Stats[0].Text, $"Team: {GetPlayerTeamName(selectedUnit)}");
-        BlzFrameSetText(Stats[1].Text, $"Gold: {GetPlayerGold(selectedUnit)}");
-        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
-        BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
-        BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
-        BlzFrameSetText(Stats[5].Text, $"Deaths: {GetPlayerDeaths(selectedUnit)}");
+        SetGamemodeFrameText(selectedUnit);
+        SetCommonFrameText(selectedUnit);
 
         BlzFrameSetVisible(CustomStatFrameBoxF, BlzFrameIsVisible(CustomStatFrameBoxS));
     }
@@ -108,12 +104,12 @@ public static class CustomStatFrame
         BlzLoadTOCFile("war3mapimported\\CustomStat.toc");
         BlzLoadTOCFile("war3mapimported\\BoxedText.toc");
 
-        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "The current revive-streak of this player", "Streak");
-        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "The gold owned by this Kitty", "Gold");
-        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "The movement-speed of this Kitty", "Speed");
-        Add("war3mapImported\\BTNStopwatch.blp", "Round timer for your team", "Score");
-        Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "The total Revives made by this player", "Revives");
-        Add("ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp", "The total Deaths of this Player", "Deaths");
+        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "s_Streak", "Streak");
+        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "s_Gold", "Gold");
+        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "s_Speed", "Speed");
+        Add("war3mapImported\\BTNStopwatch.blp", "s_Score", "Score");
+        Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "s_Revives", "Revives");
+        Add("ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp", "s_Deaths", "Deaths");
 
         t = CreateTimer();
         TimerStart(t, 0.1f, true, Update);
@@ -129,9 +125,40 @@ public static class CustomStatFrame
         public framehandle ToolTipTitle { get; set; }
         public framehandle ToolTipText { get; set; }
     }
+    private static void SetGamemodeFrameText(unit selectedUnit)
+    {
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0])
+        {
+            BlzFrameSetText(Stats[0].Text, $"Streak: {GetPlayerSaveStreak(selectedUnit)}");
+            BlzFrameSetText(Stats[3].Text, $"Games: {GetPlayerGames(selectedUnit)}");
+            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+        }
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1])
+        {
+            BlzFrameSetText(Stats[0].Text, $"Time: 0:00");
+            BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+        }
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        {
+            BlzFrameSetText(Stats[0].Text, $"Team: {GetPlayerTeamName(selectedUnit)}");
+            BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+        }
+    }
+
+    private static void SetCommonFrameText(unit selectedUnit)
+    {
+        BlzFrameSetText(Stats[1].Text, $"Gold: {GetPlayerGold(selectedUnit)}");
+        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[5].Text, $"Deaths: {GetPlayerDeaths(selectedUnit)}");
+    }
     private static string GetPlayerTeamName(unit u) => "TeamName"; // Placeholder
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
     private static string GetPlayerProgress(unit u) => "50"; // Placeholder
     private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Saves;
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Deaths;
+    private static int GetPlayerSaveStreak(unit u) => 0; // Placeholder
+    private static int GetPlayerGames(unit u) => 0; // Placeholder
+    private static float GetPlayerTime(unit u) => 0.00f; // Placeholder
 }

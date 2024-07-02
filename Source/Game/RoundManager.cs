@@ -20,18 +20,17 @@ public static class RoundManager
     public static void RoundSetup()
     {
 
-
+        // Setup
         Globals.ROUND += 1;
         Safezone.ResetPlayerSafezones();
         Wolf.SpawnWolves();
+
+        // Timer for round intermission
         TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, false);
         Console.WriteLine($"Round {Globals.ROUND} will begin in {ROUND_INTERMISSION} seconds");
         TimerDialogSetTitle(RoundTimerDialog, "Starts in:");
         TimerDialogDisplay(RoundTimerDialog, true);
-        StartRoundTimer.Start(ROUND_INTERMISSION, false, () =>
-        {
-            StartRound();
-        });
+        StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
     }
 
     private static void StartRound()
@@ -40,7 +39,13 @@ public static class RoundManager
         TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
         BarrierSetup.DeactivateBarrier();
         Globals.GAME_ACTIVE = true;
-            
+    }
+
+    public static void RoundEnd()
+    {
+        Globals.GAME_ACTIVE = false;
+
+
     }
 
 

@@ -1,0 +1,160 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using WCSharp.Api;
+using WCSharp.Events;
+using WCSharp.Shared.Data;
+using static WCSharp.Api.Common;
+
+public static class GamemodeCmd
+{
+    private static CommandInfo CmdInfo;
+    public static void Handle(player player, string command)
+    {
+
+        if (Globals.GAME_ACTIVE)
+        {
+            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Game is already active. Cannot change gamemode.");
+            return;
+        }
+        if (player != Gamemode.HostPlayer)
+        {
+            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Only " + Color.PlayerNameColored(Gamemode.HostPlayer) + Color.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
+            return;
+        }
+        var parts = command.Split(' ');
+        CommandInfoCheck(parts);
+
+        switch (parts[0])
+        {
+            case "-s":
+                HandleStandardMode(player);
+                break;
+            case "-t":
+                HandleTeamOrSoloMode(player, parts);
+                break;
+            default:
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "Use: -s, -t solo, -t team");
+                break;
+        }
+    }
+
+    private static void CommandInfoCheck(string[] parts)
+    {
+        if (parts[0] == "-s")
+        {
+            CmdInfo = CommandManager.GetCommandInfo(parts[0]);
+            return;
+        }
+        else if (parts.Length < 2)
+            return;
+        else
+        {
+            var commandXD = parts[0] + " " + parts[1];
+            CmdInfo = CommandManager.GetCommandInfo(commandXD);
+        }
+    }
+
+    private static void HandleStandardMode(player player)
+    {
+        Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+    }
+
+
+    private static void HandleTeamOrSoloMode(player player, string[] parts)
+    {
+        if (parts.Length < 2)
+        {
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
+            return;
+        }
+
+        switch (parts[1])
+        {
+            case "solo":
+                HandleSoloMode(player, parts);
+                break;
+            case "team":
+                HandleTeamMode(player, parts);
+                break;
+            default:
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
+                break;
+        }
+    }
+
+    private static void HandleSoloMode(player player, string[] parts)
+    {
+        // var = parts [1] and 2
+
+        if (parts.Length != 3)
+        {
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+            return;
+        }
+
+        var mode = parts[2];
+        switch (mode)
+        {
+            case "progression":
+            case "progress":
+            case "prog":
+                Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[0]);
+                break;
+            case "race":
+                Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[1]);
+                break;
+            default:
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+                break;
+        }
+    }
+
+    private static void HandleTeamMode(player player, string[] parts)
+    {
+        if (parts.Length < 3)
+        {
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+            return;
+        }
+
+        var mode = parts[2];
+        int teamSize = Globals.DEFAULT_TEAM_SIZE;
+
+        if (parts.Length == 4 && !int.TryParse(parts[3], out int parsedTeamSize))
+        {
+            var maxTeamSize = Globals.MAX_TEAM_SIZE.ToString();
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+            return;
+        }
+        else if (parts.Length == 4 && int.TryParse(parts[3], out parsedTeamSize))
+        {
+            if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0)
+            {
+                teamSize = parsedTeamSize;
+            }
+            else
+            {
+                var maxTeamSize = Globals.MAX_TEAM_SIZE.ToString();
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+                return;
+            }
+        }
+
+        switch (mode)
+        {
+            case "fp":
+            case "freepick":
+                Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[0], teamSize);
+                break;
+            case "r":
+            case "random":
+                Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[1], teamSize);
+                break;
+            default:
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
+                break;
+        }
+    }
+}
+

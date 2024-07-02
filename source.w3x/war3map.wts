@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|cff8080ffRKR |rTeam Tournament 1.01
+|cff8080ffRKR |r v0.0.1
 }
 
 STRING 2
@@ -10,12 +10,8 @@ STRING 2
 
 STRING 3
 {
-Run Kitty Run Team Tournament 1.01
+Run Kitty Run v0.0.1
 
-- This map is entirely dynamic, and can be ran with 2/3/4/5/6 players per team
-- Works based on slots. Teams of 2 = [Red, Blue]
-- Tournament date: TBA. (August 2024)?
-|cff00ffff
 - https://discord.gg/GSu6zkNvx5 |r
 }
 
@@ -2155,7 +2151,7 @@ by Aches
 
 STRING 2018
 {
-Run Kitty Run - Team Tournament 1.01
+Run Kitty Run
 }
 
 STRING 2033
@@ -2333,12 +2329,8 @@ Observers
 
 STRING 2510
 {
-- Team Tournament v1.01
-
-- Supports up to 20 players, teams of 2-10
-
 https://discord.gg/GSu6zkNvx5
-Discord is in F9, please submit any bugs and requests through there. Join our tournaments if interested!
+
 }
 
 STRING 2549
@@ -2593,5 +2585,11 @@ STRING 2727
 // Units: n003 (Dummy), Name (Name)
 {
 Dummy
+}
+
+STRING 2728
+// Doodads: D002 (Pathing Blocker (Doodad)), Name (Name)
+{
+Pathing Blocker (Doodad)
 }
 

@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using WCSharp.Api;
+using WCSharp.Events;
+using WCSharp.Shared;
+using WCSharp.Shared.Data;
+using WCSharp.Sync;
+using static WCSharp.Api.Common;
+
+public class Team
+{
+    public int TeamID {  get; private set; }
+    public string TeamColor {  get; private set; }
+    public List<player> Teammembers { get; private set; }
+
+    public Team(int id)
+    {
+        TeamID = id;
+        Teammembers = new List<player>();
+        Globals.ALL_TEAMS.Add(TeamID, this);
+    }
+    public static void Initialize()
+    {
+        SetupTeams();
+    }
+
+    public void AddMember(player player)
+    {
+        Teammembers.Add(player);
+        Globals.PLAYERS_TEAMS.Add(player, this);
+    }
+
+    public void RemoveMember(player player)
+    {
+        Teammembers.Remove(player);
+        Globals.PLAYERS_TEAMS.Remove(player);
+        if (Teammembers.Count == 0)
+            Globals.ALL_TEAMS.Remove(TeamID);
+    }
+
+    public int GetMemberCount()
+    {
+        return Teammembers.Count;
+    }
+
+    public void Cleanup()
+    {
+
+    }
+
+    public static void SetupTeams()
+    {
+
+    }
+}
+
