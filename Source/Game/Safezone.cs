@@ -49,12 +49,9 @@ public class Safezone
         var player = GetOwningPlayer(unit);
         var currentSafezone = Globals.PLAYER_REACHED_SAFEZONES[player];
         if(Source.Program.Debug) Console.WriteLine(player.Name + " entered safezone " + ID + " from safezone " + currentSafezone);
-        if(currentSafezone != ID)
-        {
-            return;
-        }
-        player.Gold += 20;
-        unit.Experience += 150;
+        if(currentSafezone != ID) { return; }
+        player.Gold += Resources.SafezoneGold;
+        unit.Experience += Resources.SafezoneExperience;
         Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
     }
 

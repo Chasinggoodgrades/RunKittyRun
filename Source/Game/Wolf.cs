@@ -5,6 +5,7 @@ using WCSharp.Api;
 using WCSharp.Events;
 using WCSharp.Shared;
 using WCSharp.Shared.Data;
+using WCSharp.Shared.Extensions;
 using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
@@ -20,13 +21,10 @@ public class Wolf
     private timer WanderTimer { get; set; }
     private rect Lane { get; set; }
     public unit Unit { get; private set; }
-    public trigger Collision { get; set; }
-
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
         Lane = RegionList.WolfRegions[RegionIndex].Rect;
-        Collision = CreateTrigger();
         InitializeWolf();
         Wander();
     }
@@ -47,14 +45,13 @@ public class Wolf
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
 
         Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, 360);
-        Globals.ALL_WOLVES.Add(Unit);
+        Globals.ALL_WOLVES.Add(this);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
         WanderTimer = CreateTimer();
-        CollisionDetection.WolfCollision(this);
-    }
 
+    }
 
     private void WolfMove()
     {
@@ -92,8 +89,7 @@ public class Wolf
     {
         Unit.Dispose();
         OverheadEffect.Dispose();
-        DestroyTimer(WanderTimer);
-        DestroyTrigger(Collision);
+        WanderTimer.Dispose();
     }
 
     public static void SpawnWolves()
@@ -109,5 +105,14 @@ public class Wolf
                     new Wolf(lane);
             }
         }
+    }
+
+    public static void RemoveAllWolves()
+    {
+        foreach (var wolf in Globals.ALL_WOLVES)
+            wolf.Dispose();
+
+        Globals.ALL_WOLVES.Clear();
+
     }
 }

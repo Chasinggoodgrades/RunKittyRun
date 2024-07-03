@@ -19,6 +19,7 @@ public static class Gamemode
     public static int PlayersPerTeam { get; private set; } = 0;
 
 
+
     public static void Initialize()
     {
         ChoosingGameMode();
@@ -34,10 +35,6 @@ public static class Gamemode
 
     private static void HostOptions()
     {
-        // Gamemodes: Standard, Tournament (-s, -t)
-        // If Standard, then all players will choose difficulty
-        // If Tournament, host gets more options (Solo, Team) (-t solo) (-t -team -tc #)
-        // If Team, pick team size
         var gamemodes = Globals.GAME_MODES;
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "=====================================" + Color.COLOR_RESET);
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "Please choose a gamemode." + Color.COLOR_RESET);
@@ -57,13 +54,13 @@ public static class Gamemode
         // Team Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
             Color.COLOR_YELLOW_ORANGE + gamemodes[2] + // Team
-            Color.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize=3>)" +
+            Color.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize>)" +
             Color.COLOR_RESET);
 
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "=====================================" + Color.COLOR_RESET);
     }
 
-    public static void SetGameMode(string mode, string modeType = "", int teamSize = 0)
+    public static void SetGameMode(string mode, string modeType = "", int teamSize = Globals.DEFAULT_TEAM_SIZE)
     {
         CurrentGameMode = mode;
         CurrentGameModeType = modeType;
@@ -106,6 +103,7 @@ public static class Gamemode
         else if (CurrentGameMode == Globals.GAME_MODES[2])
         {
             Team.Initialize();
+            Multiboard.TeamsMultiboard();
         }
     }
 

@@ -11,13 +11,6 @@ using static WCSharp.Api.Common;
 
 public static class Utility
 {
-
-
-    public static void Print(string message)
-    {
-        Console.WriteLine(message);
-    }
-
     public static void MakeUnitLocust(unit u)
     {
         u.AddAbility(FourCC("Aloc"));

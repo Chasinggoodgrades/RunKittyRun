@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using WCSharp.Api;
 using WCSharp.Events;
@@ -14,50 +15,44 @@ public static class CollisionDetection
     private const float WOLF_COLLISION_RADIUS = 75.0f;
     private const float CIRCLE_COLLISION_RADIUS = 77.0f;
 
-    private static bool WolfCollisionFilter()
+    private static Func<bool> WolfCollisionFilter(Kitty k)
     {
-        if (GetUnitTypeId(GetFilterUnit()) != Constants.UNIT_KITTY)
-            return false;
-        return true;
+        return () => (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG);
     }
 
-    private static bool CircleCollisionFilter()
+    private static Func<bool> CircleCollisionFilter(Kitty k)
     {
-        if (GetUnitTypeId(GetFilterUnit()) != Constants.UNIT_KITTY)
-            return false;
-        // if unit not on same team return false as well
-        return true;
-    }
-
-    public static void WolfCollision(Wolf wolf)
-    {
-        TriggerRegisterTimerEvent(wolf.Collision, 0.10f, true);
-        TriggerAddAction(wolf.Collision, () =>
+        return () =>
         {
-            var g = CreateGroup();
-            GroupEnumUnitsInRange(g, GetUnitX(wolf.Unit), GetUnitY(wolf.Unit), WOLF_COLLISION_RADIUS,
-                Filter(() => WolfCollisionFilter() && Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())].Alive));
-            while (FirstOfGroup(g) != null)
-            {
-                var kitty = Globals.ALL_KITTIES[GetOwningPlayer(FirstOfGroup(g))];
-                kitty.KillKitty();
-                GroupRemoveUnit(g, FirstOfGroup(g));
-            }
-            DestroyGroup(g);
-            g.Dispose();
-        });
+            return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
+                    && GetOwningPlayer(GetFilterUnit()) != k.Player)
+                    && Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())].TeamID == Globals.ALL_KITTIES[k.Player].TeamID
+                    && Gamemode.CurrentGameMode != Globals.GAME_MODES[1];
+        };
     }
 
-    public static void CircleCollision(Circle circle)
+    public static void KittyRegisterCollisions(Kitty k)
     {
-        TriggerRegisterUnitInRange(circle.Collision, circle.Unit, CIRCLE_COLLISION_RADIUS, Filter(() => CircleCollisionFilter()));
-        TriggerAddCondition(circle.Collision, Condition(() => !Globals.ALL_KITTIES[circle.Player].Alive && circle.Player != GetOwningPlayer(GetFilterUnit())));
-        TriggerAddAction(circle.Collision, () =>
-        {
-            var savior = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
-            var circleKitty = Globals.ALL_KITTIES[circle.Player];
+        UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, WOLF_COLLISION_RADIUS, WolfCollisionFilter(k), WolfCollisionTrigger(k));
+        UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, CIRCLE_COLLISION_RADIUS, CircleCollisionFilter(k), CircleCollisionTrigger(k));
+    }
 
-            circleKitty.ReviveKitty(savior);
+    private static trigger WolfCollisionTrigger(Kitty k)
+    {
+        TriggerAddAction(k.w_Collision, () =>
+        {
+            k.KillKitty();
         });
+        return k.w_Collision;
+    }
+
+    private static trigger CircleCollisionTrigger(Kitty k)
+    {
+        TriggerAddAction(k.c_Collision, () =>
+        {
+            var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
+            circle.ReviveKitty(k);
+        });
+        return k.c_Collision;
     }
 }

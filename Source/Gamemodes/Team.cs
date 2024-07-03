@@ -18,40 +18,37 @@ public class Team
     {
         TeamID = id;
         Teammembers = new List<player>();
+        TeamColor = Color.playerColors[TeamID] + "Team " + TeamID;
         Globals.ALL_TEAMS.Add(TeamID, this);
     }
     public static void Initialize()
     {
-        SetupTeams();
+
     }
 
     public void AddMember(player player)
     {
         Teammembers.Add(player);
         Globals.PLAYERS_TEAMS.Add(player, this);
+        Globals.ALL_KITTIES[player].TeamID = TeamID;
+        Multiboard.UpdateTeamsMultiboard();
     }
 
     public void RemoveMember(player player)
     {
         Teammembers.Remove(player);
         Globals.PLAYERS_TEAMS.Remove(player);
+        Globals.ALL_KITTIES[player].TeamID = 0;
         if (Teammembers.Count == 0)
+        {
             Globals.ALL_TEAMS.Remove(TeamID);
+        }
+        Multiboard.UpdateTeamsMultiboard();
     }
 
     public int GetMemberCount()
     {
         return Teammembers.Count;
-    }
-
-    public void Cleanup()
-    {
-
-    }
-
-    public static void SetupTeams()
-    {
-
     }
 }
 

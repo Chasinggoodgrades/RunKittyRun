@@ -10,10 +10,7 @@ using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 
-public static class Standard
-{
-    public static void Initialize()
-    {
-        Console.WriteLine("Standard gamemode initialized");
-    }
-}
+
+
+
+

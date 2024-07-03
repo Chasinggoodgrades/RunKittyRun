@@ -21,8 +21,8 @@ public static class Globals
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
-    public static readonly string[] DEVELOPERS = { "Aches#1817" };
-    public static group ALL_WOLVES = CreateGroup();
+    public static readonly string[] DEVELOPERS = { "Aches#1817", "Local Player", "Local"};
+    public static List<Wolf> ALL_WOLVES = new List<Wolf>();
     public static timer GAME_TIMER = CreateTimer();
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();

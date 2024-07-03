@@ -12,34 +12,29 @@ public static class DebugCmd
     {
         switch (command)
         {
-            case "-ab":
+            case "?ab":
                 Console.WriteLine("Activating Barrier");
                 BarrierSetup.ActivateBarrier();
                 break;
-            case "-db":
+            case "?db":
                 Console.WriteLine("Deactivating Barrier");
                 BarrierSetup.DeactivateBarrier();
                 break;
-            case "-testing":
-                var commandName = "-t sr";
-                CommandInfo xd = CommandManager.GetCommandInfo(commandName);
-                if(commandName != null)
-                {
-                    Console.WriteLine($"Command: {xd.Cmd}");
-                    Console.WriteLine($"Description: {xd.Desc}");
-                    Console.WriteLine($"Usage: {xd.Usage}");
-                    Console.WriteLine($"Error: {xd.Error}");
-                }
-                else
-                    Console.WriteLine($"Command '{commandName}' not found.");
+            case "?testing":
+                Console.WriteLine("testing");
+                var someTeam = new Team(2);
+                someTeam.AddMember(Player(1));
+                someTeam.AddMember(Player(5));
+                Multiboard.UpdateTeamsMultiboard();
                 break;
-            case "-gold":
+            case "?gold":
                 player.Gold += 1000;
                 break;
-            case "-mb":
-                Team.SetupTeams();
+            case "?blink":
+                var kitty = Globals.ALL_KITTIES[player];
+                kitty.Unit.AddItem(FourCC("desc"));
                 break;
-            case "-share":
+            case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)
                 {
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);

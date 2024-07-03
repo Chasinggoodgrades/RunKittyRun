@@ -52,6 +52,8 @@ namespace Source.Init
             Kitty.Initialize();
             GameTimer.Initialize();
             Safezone.Initialize();
+            Resources.Initialize();
+            VictoryZone.Initialize();
             RoundManager.RoundSetup();
         }
 

@@ -15,17 +15,20 @@ public class Kitty
     private effect Effect { get; set; }
     public player Player { get; }
     public unit Unit { get; set; }
-
+    public int TeamID { get; set; } = 0;
     public int Saves { get; set; }
     public int Deaths { get; set; }
     public bool Alive { get; set; } = true;
+    public trigger w_Collision { get; set; }
+    public trigger c_Collision { get; set; }
 
     public Kitty(player player)
     {
         Player = player;
         Saves = 0;
         Deaths = 0;
-
+        w_Collision = CreateTrigger();
+        c_Collision = CreateTrigger();
         SpawnEffect();
         DelayCreateKitty();
     }
@@ -46,8 +49,8 @@ public class Kitty
         TimerStart(t, delayTime, false, () =>
         {
             CreateKitty();
-            t.Dispose();
             Effect.Dispose();
+            t.Dispose();
         });
     }
     private void SpawnEffect()
@@ -61,11 +64,14 @@ public class Kitty
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
         Globals.ALL_KITTIES.Add(Player, this);
+        CollisionDetection.KittyRegisterCollisions(this);
     }
 
     public void Dispose()
     {
         Unit.Dispose();
+        w_Collision.Dispose();
+        c_Collision.Dispose();
     }
 
     public void ReviveKitty(Kitty savior)
@@ -73,11 +79,10 @@ public class Kitty
         var circle = Globals.ALL_CIRCLES[Player];
         circle.HideCircle();
         Unit.Revive(Unit.X, Unit.Y, false);
+        Alive = true;
         Utility.SelectUnitForPlayer(Player, Unit);
         savior.Saves += 1;
         savior.Unit.Experience += 50;
-        var t = CreateTimer();
-        TimerStart(t, .45f, false, () => { Alive = true; });
     }
 
     public void KillKitty()
@@ -87,6 +92,7 @@ public class Kitty
         Alive = false;
         Deaths += 1;
         circle.KittyDied(this);
+
     }
 
 }

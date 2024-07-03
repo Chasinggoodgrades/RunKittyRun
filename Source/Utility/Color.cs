@@ -14,7 +14,7 @@ public static class Color
     public static string COLOR_GOLD = "|c00FFCC00";
     public static string COLOR_YELLOW_ORANGE = "|c00FF9900";
     public static string COLOR_RESET = "|r";
-    private static readonly Dictionary<int, string> playerColors = new Dictionary<int, string>
+    public static readonly Dictionary<int, string> playerColors = new Dictionary<int, string>
     {
         { 1, "|cffff0303" },  // Red
         { 2, "|cff0042ff" },  // Blue

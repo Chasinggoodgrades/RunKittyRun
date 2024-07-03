@@ -69,7 +69,7 @@ public static class Regions
 	public static Rectangle Wolf_Area_10 { get; set; } = new Rectangle(1216f, -1632f, 1728f, 864f);
 	public static Rectangle Wolf_Area_11 { get; set; } = new Rectangle(-1248f, -2080f, 1248f, -1600f);
 	public static Rectangle Wolf_Area_12 { get; set; } = new Rectangle(-1696f, -1600f, -1216f, 224f);
-	public static Rectangle Wolf_Area_13 { get; set; } = new Rectangle(-1216f, 160f, 640f, 640f);
+	public static Rectangle Wolf_Area_13 { get; set; } = new Rectangle(-1248f, 256f, 608f, 640f);
 	public static Rectangle Wolf_Area_14 { get; set; } = new Rectangle(608f, -928f, 1088f, 160f);
 	public static Rectangle Wolf_Area_15 { get; set; } = new Rectangle(-928f, -1440f, 1056f, -1024f);
 	public static Rectangle Wolf_Area_16 { get; set; } = new Rectangle(-928f, -928f, -480f, -480f);

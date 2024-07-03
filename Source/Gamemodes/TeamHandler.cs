@@ -22,7 +22,7 @@ public static class TeamHandler
         }
         else
         {
-            Player.DisplayTextTo("Unknown gamemode: " + Gamemode.CurrentGameModeType + " please report bug to developer.");
+            Player.DisplayTextTo("TeamHandler: Unknown gamemode: " + Gamemode.CurrentGameModeType + " please report bug to a developer.");
         }
     }
 
@@ -50,8 +50,16 @@ public static class TeamHandler
         {
             if (team.GetMemberCount() >= Gamemode.PlayersPerTeam)
             {
-                Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "Team " + TeamNumber + " is full.");
+                Player.DisplayTextTo(team.TeamColor + Color.COLOR_YELLOW_ORANGE + " is full.");
                 return false;
+            }
+            if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team currentTeam))
+            {
+                if (currentTeam.TeamID == TeamNumber)
+                {
+                    Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You are already on " + team.TeamColor);
+                    return false;
+                }
             }
         }
         else

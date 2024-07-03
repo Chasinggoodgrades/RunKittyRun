@@ -15,6 +15,7 @@ public static class CommandHandler
         foreach (var player in Globals.ALL_PLAYERS)
         {
             TriggerRegisterPlayerChatEvent(DebugCmdTrigger, player, "-", false);
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, player, "?", false);
         }
         TriggerAddAction(DebugCmdTrigger, HandleCommand);
     }

@@ -10,7 +10,9 @@ using static WCSharp.Api.Common;
 
 public static class GameTimer
 {
-
+    /// <summary>
+    /// Sets up the game timer for the game lambdas the next function.
+    /// </summary>
     public static void Initialize()
     {
         TimerDialogSetTitle(Globals.GAME_TIMER_DIALOG, "Elapsed Game Time");
@@ -18,6 +20,9 @@ public static class GameTimer
         TimerStart(t, 1.0f, true, () => { StartGameTimer(); });
     }
 
+    /// <summary>
+    /// Ticks up the game timer every second while the game is active.
+    /// </summary>
     private static void StartGameTimer()
     {
         if (Globals.GAME_ACTIVE)

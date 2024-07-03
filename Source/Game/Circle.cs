@@ -23,14 +23,12 @@ public class Circle
         ID = player.Id;
         Collision = CreateTrigger();
         CreateCircle();
-
     }
 
     private void CreateCircle()
     {
         Unit = unit.Create(Player, CIRCLE_UNIT_MODEL, CIRCLE_SPAWN_REGION.CenterX, CIRCLE_SPAWN_REGION.CenterY);
         Utility.MakeUnitLocust(Unit);
-        CollisionDetection.CircleCollision(this);
         Globals.ALL_CIRCLES.Add(Player, this);
         ShowUnit(Unit, false);
     }
