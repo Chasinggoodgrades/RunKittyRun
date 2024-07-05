@@ -21,7 +21,9 @@ namespace Source.Init
         {
             GetActivePlayers();
             Gamemode.Initialize();
+            Safezone.Initialize();
             StartGameModeTimer();
+
         }
 
         private static void StartGameModeTimer()
@@ -38,6 +40,7 @@ namespace Source.Init
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();
+                gameModeTimer.Pause();
                 gameModeTimer.Dispose();
             }
         }
@@ -51,7 +54,6 @@ namespace Source.Init
             CustomStatFrame.Init();
             Kitty.Initialize();
             GameTimer.Initialize();
-            Safezone.Initialize();
             Resources.Initialize();
             VictoryZone.Initialize();
             RoundManager.RoundSetup();

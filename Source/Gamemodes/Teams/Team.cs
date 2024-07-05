@@ -10,8 +10,8 @@ using static WCSharp.Api.Common;
 
 public class Team
 {
-    public int TeamID {  get; private set; }
-    public string TeamColor {  get; private set; }
+    public int TeamID { get; private set; }
+    public string TeamColor { get; private set; }
     public List<player> Teammembers { get; private set; }
 
     public Team(int id)
@@ -23,7 +23,8 @@ public class Team
     }
     public static void Initialize()
     {
-
+        Globals.ALL_TEAMS = new Dictionary<int, Team>();
+        Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
     }
 
     public void AddMember(player player)
@@ -44,11 +45,6 @@ public class Team
             Globals.ALL_TEAMS.Remove(TeamID);
         }
         Multiboard.UpdateTeamsMultiboard();
-    }
-
-    public int GetMemberCount()
-    {
-        return Teammembers.Count;
     }
 }
 

@@ -8,15 +8,39 @@ using static WCSharp.Api.Common;
 
 public static class UnitWithinRange
 {
+    private static int currentUnitId = 1;
+    private static int currentTriggerId = 1;
+    private static readonly Dictionary<unit, int> unitIds = new();
+    private static readonly Dictionary<trigger, int> triggerIds = new();
     private static readonly Dictionary<int, Dictionary<int, trigger>> unitRangeTriggers = new();
     private static readonly Dictionary<int, trigger> unitCleanupTriggers = new();
     private static readonly Dictionary<int, unit> unitRangeUnits = new();
     private static readonly Dictionary<int, (float eventValue, trigger execution)> udg_WithinRangeHash = new();
     private static readonly HashSet<unit> withinRangeUsers = new();
 
+    private static int GetUniqueUnitId(unit u)
+    {
+        if (!unitIds.TryGetValue(u, out int id))
+        {
+            id = currentUnitId++;
+            unitIds[u] = id;
+        }
+        return id;
+    }
+
+    private static int GetUniqueTriggerId(trigger trig)
+    {
+        if (!triggerIds.TryGetValue(trig, out int id))
+        {
+            id = currentTriggerId++;
+            triggerIds[trig] = id;
+        }
+        return id;
+    }
+
     private static bool RegisterUnitWithinRangeSuper(unit u, float range, bool cleanOnKilled, Func<bool> filter, trigger execution, float eventValue, bool destroyFilterWhenDone)
     {
-        int unitId = GetHandleId(u);
+        int unitId = GetUniqueUnitId(u);
         int rangeAsInt = (int)range;
 
         if (range <= 0)
@@ -40,7 +64,7 @@ public static class UnitWithinRange
 
         TriggerAddAction(trig, () =>
         {
-            ActionUnitWithinRange(GetTriggeringTrigger());
+            ActionUnitWithinRange(trig);
         });
 
         if (cleanOnKilled && !unitCleanupTriggers.ContainsKey(unitId))
@@ -58,17 +82,18 @@ public static class UnitWithinRange
 
         TriggerRegisterUnitInRange(trig, u, range, Condition(() => filter()));
 
-        unitRangeUnits[GetHandleId(trig)] = u;
+        int trigId = GetUniqueTriggerId(trig);
+        unitRangeUnits[trigId] = u;
         withinRangeUsers.Add(u);
 
-        udg_WithinRangeHash[GetHandleId(trig)] = (eventValue, execution);
+        udg_WithinRangeHash[trigId] = (eventValue, execution);
 
         return true;
     }
 
     private static void ActionUnitWithinRange(trigger trig)
     {
-        int trigId = GetHandleId(trig);
+        int trigId = GetUniqueTriggerId(trig);
         var (eventValue, execution) = udg_WithinRangeHash[trigId];
 
         unit registeredUnit = unitRangeUnits[trigId];
@@ -76,7 +101,7 @@ public static class UnitWithinRange
 
         if (eventValue != 0.0f)
         {
-            // Do something with eventValue if needed
+
         }
 
         if (execution != null)
@@ -88,12 +113,11 @@ public static class UnitWithinRange
     private static void ActionUnitWithinCleanOnKilled(unit unit)
     {
         DeRegisterUnitWithinRangeUnit(unit);
-        // Set udg_WithinRangeUnit and udg_WithinRangeEvent to appropriate values if needed
     }
 
     private static void DeRegisterUnitWithinRangeUnit(unit u)
     {
-        int unitId = GetHandleId(u);
+        int unitId = GetUniqueUnitId(u);
 
         if (unitRangeTriggers.ContainsKey(unitId))
         {
@@ -115,7 +139,7 @@ public static class UnitWithinRange
 
     private static void DestroyTrigger(trigger trig)
     {
-        int trigId = GetHandleId(trig);
+        int trigId = GetUniqueTriggerId(trig);
         // Remove saved handles and cleanup
         unitRangeUnits.Remove(trigId);
         udg_WithinRangeHash.Remove(trigId);

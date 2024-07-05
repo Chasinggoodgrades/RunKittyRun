@@ -25,7 +25,7 @@ public static class CollisionDetection
         return () =>
         {
             return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
-                    && GetOwningPlayer(GetFilterUnit()) != k.Player)
+                    && GetOwningPlayer(GetFilterUnit()) != k.Player) && k.Alive
                     && Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())].TeamID == Globals.ALL_KITTIES[k.Player].TeamID
                     && Gamemode.CurrentGameMode != Globals.GAME_MODES[1];
         };

@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
-
 
 public class Safezone
 {
-    private int ID { get; set; }
-    private region Region{ get; set; }
+
+    public region Region{ get; set; }
     private trigger Trigger { get; set; }
+    public int ID { get; set; }
+    public rect r_Rect { get; set; }
 
     public Safezone(int id, region region) { 
         ID = id;
@@ -29,11 +23,9 @@ public class Safezone
         {
             var safezone = new Safezone(count, safeZone.Region);
             Globals.SAFE_ZONES.Add(safezone);
+            safezone.EnterSafezoneEvents();
+            safezone.r_Rect = safeZone.Rect;
             count++;
-        }
-        foreach (var safeZone in Globals.SAFE_ZONES)
-        {
-            safeZone.EnterSafezoneEvents();
         }
     }
 
@@ -48,6 +40,7 @@ public class Safezone
         var unit = GetTriggerUnit();
         var player = GetOwningPlayer(unit);
         var currentSafezone = Globals.PLAYER_REACHED_SAFEZONES[player];
+        Globals.ALL_KITTIES[player].CurrentSafeZone = ID;
         if(Source.Program.Debug) Console.WriteLine(player.Name + " entered safezone " + ID + " from safezone " + currentSafezone);
         if(currentSafezone != ID) { return; }
         player.Gold += Resources.SafezoneGold;
@@ -59,6 +52,7 @@ public class Safezone
     {
         foreach(var player in Globals.ALL_PLAYERS)
         {
+            Globals.ALL_KITTIES[player].CurrentSafeZone = 0;
             Globals.PLAYER_REACHED_SAFEZONES[player] = 1;
         }
     }

@@ -54,4 +54,8 @@ public static class Color
     {
         return GetPlayerColor(p) + p.Name + COLOR_RESET;
     }
+
+    public static string ColorString(string text, int playerColorID) {
+        return playerColors.TryGetValue(playerColorID, out var color) ? color + text + COLOR_RESET : text;
+    }
 }

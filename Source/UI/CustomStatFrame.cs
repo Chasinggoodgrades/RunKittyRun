@@ -136,13 +136,13 @@ public static class CustomStatFrame
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1])
         {
             BlzFrameSetText(Stats[0].Text, $"Time: 0:00");
-            BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
         }
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
-            BlzFrameSetText(Stats[3].Text, $"Progress: {GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
         }
     }
@@ -159,7 +159,7 @@ public static class CustomStatFrame
         return "No Team";
     }
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
-    private static string GetPlayerProgress(unit u) => "50"; // Placeholder
+    private static string GetPlayerProgress(unit u) => Globals.PLAYER_PROGRESS[GetOwningPlayer(u)].ToString("F2");
     private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Saves;
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Deaths;
     private static int GetPlayerSaveStreak(unit u) => 0; // Placeholder

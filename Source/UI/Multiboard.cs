@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Source.Init;
 using WCSharp.Api;
 using WCSharp.Events;
@@ -9,7 +10,7 @@ using static WCSharp.Api.Common;
 
 public static class Multiboard
 {
-    private static multiboard TeamsMB = CreateMultiboard();
+    private static multiboard TeamsMB;
     public static void Initialize()
     {
         multiboard mb = CreateMultiboard();
@@ -24,7 +25,8 @@ public static class Multiboard
 
     public static void TeamsMultiboard()
     {
-        TeamsMB.Title = "Current Teams";
+        TeamsMB = CreateMultiboard();
+        TeamsMB.Title = $"Current Teams {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]";
         TeamsMB.IsDisplayed = true;
         TeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
         TeamsMB.Columns = Gamemode.PlayersPerTeam;
@@ -32,51 +34,40 @@ public static class Multiboard
         TeamsMB.GetItem(0, 0).SetVisibility(true, false);
         TeamsMB.GetItem(0, 1).SetText("Player 1");
         TeamsMB.GetItem(0, 1).SetVisibility(true, false);
-
+        var timer = CreateTimer();
+        timer.Start(1.0f, false, TeamHandler.RandomHandler);
     }
 
     public static void UpdateTeamsMultiboard()
     {
         TeamsMB.Rows = Globals.ALL_TEAMS.Count;
-        TeamsMB.Columns = Gamemode.PlayersPerTeam + 1;
+        TeamsMB.Columns = 2;
+        var widthSize = 0.05f * Gamemode.PlayersPerTeam;
 
         int rowIndex = 0;
-        foreach (var team in Globals.ALL_TEAMS )
+        foreach (var team in Globals.ALL_TEAMS)
         {
-            // Set team ID in the first column of the current row
+            string teamMembers = string.Join(", ", team.Value.Teammembers
+                .Where(member => member != null && member.Name != null)
+                .Select(member =>
+                {
+                    string name = member.Name.Split('#')[0];
+                    if (name.Length > 7) name = name.Substring(0, 7);
+                    return Color.ColorString(name, member.Id + 1);
+                }));
+
+
             TeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
-            TeamsMB.GetItem(rowIndex, 0).SetText(team.Value.TeamColor);
+            TeamsMB.GetItem(rowIndex, 0).SetText($"{team.Value.TeamColor}:");
             TeamsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
+            TeamsMB.GetItem(rowIndex, 1).SetWidth(widthSize);
+            TeamsMB.GetItem(rowIndex, 1).SetText($"{teamMembers}");
+            TeamsMB.GetItem(rowIndex, 1).SetVisibility(true, false);
 
-            int colIndex = 1; // Start from the second column for team members
-            foreach (var member in team.Value.Teammembers)
-            {
-                if (member != null && member.Name != null)
-                {
-                    TeamsMB.GetItem(rowIndex, colIndex).SetWidth(0.05f);
-                    TeamsMB.GetItem(rowIndex, colIndex).SetText(Color.PlayerNameColored(member));
-                    TeamsMB.GetItem(rowIndex, colIndex).SetVisibility(true, false);
-                }
-                colIndex++;
-                if (colIndex >= Gamemode.PlayersPerTeam + 1)
-                {
-                    break; // Just incase ... i guess 
-                }
-            }
-
-            // Fills the remaining columns with empty strings
-            for (int j = colIndex; j < Gamemode.PlayersPerTeam + 1; j++)
-            {
-                TeamsMB.GetItem(rowIndex, colIndex).SetWidth(0.05f);
-                TeamsMB.GetItem(rowIndex, j).SetText("");
-                TeamsMB.GetItem(rowIndex, j).SetVisibility(true, false);
-            }
 
             rowIndex++;
         }
     }
-
-
 
     public static void Update()
     {

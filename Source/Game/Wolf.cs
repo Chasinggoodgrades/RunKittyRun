@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Shared.Extensions;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Wolf
 {
     private const int WOLF_MODEL = Constants.UNIT_CUSTOM_DOG;
     private const float WANDER_LOWER_BOUND = 0.80f;
-    private const float WANDER_UPPER_BOUND = 0.85f;
+    private const float WANDER_UPPER_BOUND = 0.87f;
     private const string OVERHEAD_EFFECT = "Abilities\\Spells\\Other\\TalkToMe\\TalkToMe.mdl";
 
     private int RegionIndex { get; set; }
@@ -80,7 +72,8 @@ public class Wolf
                 t.Dispose();
             });
         }
-        TimerStart(WanderTimer, 1.05f, false, () =>
+        var realTime = GetRandomReal(1.00f, 1.12f);
+        TimerStart(WanderTimer, realTime, false, () =>
         {
             Wander();
         });

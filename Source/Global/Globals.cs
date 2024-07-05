@@ -29,9 +29,12 @@ public static class Globals
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
-    public static Dictionary<int, Team> ALL_TEAMS = new Dictionary<int, Team>();
-    public static Dictionary<player, Team> PLAYERS_TEAMS = new Dictionary<player, Team>();
     public static Dictionary<player, int> PLAYER_REACHED_SAFEZONES = new Dictionary<player, int>();
+
+    public static Dictionary<int, Team> ALL_TEAMS;
+    public static Dictionary<player, Team> PLAYERS_TEAMS;
+    public static Dictionary<Team, float> TEAM_PROGRESS;
+    public static Dictionary<player, float> PLAYER_PROGRESS;
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
     {
         // Round                         // Lane ,  // # Wolves

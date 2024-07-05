@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Kitty
@@ -16,8 +9,10 @@ public class Kitty
     public player Player { get; }
     public unit Unit { get; set; }
     public int TeamID { get; set; } = 0;
-    public int Saves { get; set; }
-    public int Deaths { get; set; }
+    public int Saves { get; set; } = 0;
+    public int SaveStreak { get; set; } = 0;
+    public int Deaths { get; set; } = 0;
+    public int CurrentSafeZone { get; set; } = 0;
     public bool Alive { get; set; } = true;
     public trigger w_Collision { get; set; }
     public trigger c_Collision { get; set; }
@@ -25,12 +20,10 @@ public class Kitty
     public Kitty(player player)
     {
         Player = player;
-        Saves = 0;
-        Deaths = 0;
         w_Collision = CreateTrigger();
         c_Collision = CreateTrigger();
         SpawnEffect();
-        DelayCreateKitty();
+        CreateKitty();
     }
 
     public static void Initialize()
@@ -49,7 +42,6 @@ public class Kitty
         TimerStart(t, delayTime, false, () =>
         {
             CreateKitty();
-            Effect.Dispose();
             t.Dispose();
         });
     }
@@ -57,6 +49,7 @@ public class Kitty
     {
         var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Effect = effect.Create(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
+        Effect.Dispose();
     }
     private void CreateKitty()
     {
@@ -78,10 +71,11 @@ public class Kitty
     {
         var circle = Globals.ALL_CIRCLES[Player];
         circle.HideCircle();
-        Unit.Revive(Unit.X, Unit.Y, false);
         Alive = true;
+        Unit.Revive(Unit.X, Unit.Y, false);
         Utility.SelectUnitForPlayer(Player, Unit);
         savior.Saves += 1;
+        savior.SaveStreak += 1;
         savior.Unit.Experience += 50;
     }
 
@@ -91,6 +85,7 @@ public class Kitty
         Unit.Kill();
         Alive = false;
         Deaths += 1;
+        SaveStreak = 0;
         circle.KittyDied(this);
 
     }

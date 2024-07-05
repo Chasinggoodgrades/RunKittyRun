@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
-
-
 
 public static class RoundManager
 {
@@ -37,10 +28,10 @@ public static class RoundManager
 
     private static void StartRound()
     {
+        Globals.GAME_ACTIVE = true;
         TimerDialogDisplay(RoundTimerDialog, false);
         TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
         BarrierSetup.DeactivateBarrier();
-        Globals.GAME_ACTIVE = true;
     }
 
     public static void RoundEnd()

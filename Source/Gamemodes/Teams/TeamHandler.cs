@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using WCSharp.Api;
 using WCSharp.Events;
 using WCSharp.Shared;
@@ -16,13 +17,9 @@ public static class TeamHandler
         {
             FreepickHandler(Player, TeamNumber);
         }
-        else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1])
-        {
-            RandomHandler(Player);
-        }
         else
         {
-            Player.DisplayTextTo("TeamHandler: Unknown gamemode: " + Gamemode.CurrentGameModeType + " please report bug to a developer.");
+            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "The -team command is not available for this gamemode.");
         }
     }
 
@@ -34,21 +31,50 @@ public static class TeamHandler
             {
                 RemoveFromCurrentTeam(Player);
                 team.AddMember(Player);
-                Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You have joined team " + TeamNumber);
+                Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You have joined team " + team.TeamColor);
             }
         }
     }
 
-    private static void RandomHandler(player Player)
+    public static void RandomHandler()
     {
+        var random = new Random();
+        List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
 
+        shuffled = shuffled.OrderBy(x => random.Next()).ToList();
+        var teamNumber = 1;
+
+        foreach (var player in shuffled)
+        {
+            // Check if the team exists
+            if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out Team team))
+            {
+                team = new Team(teamNumber);
+                Globals.ALL_TEAMS[teamNumber] = team;
+            }
+
+            // Check if the team is full
+            if (team.Teammembers.Count >= Gamemode.PlayersPerTeam)
+            {
+                // If the team is full, increment the team number and create a new team
+                teamNumber++;
+                if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out team))
+                {
+                    team = new Team(teamNumber);
+                    Globals.ALL_TEAMS[teamNumber] = team;
+                }
+            }
+
+            // Add the player to the team
+            team.AddMember(player);
+        }
     }
 
     private static bool CanPlayerJoinTeam(player Player, int TeamNumber)
     {
         if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
         {
-            if (team.GetMemberCount() >= Gamemode.PlayersPerTeam)
+            if (team.Teammembers.Count >= Gamemode.PlayersPerTeam)
             {
                 Player.DisplayTextTo(team.TeamColor + Color.COLOR_YELLOW_ORANGE + " is full.");
                 return false;
