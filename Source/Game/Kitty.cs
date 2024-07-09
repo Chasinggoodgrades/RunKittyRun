@@ -12,8 +12,9 @@ public class Kitty
     public int Saves { get; set; } = 0;
     public int SaveStreak { get; set; } = 0;
     public int Deaths { get; set; } = 0;
-    public int CurrentSafeZone { get; set; } = 0;
+    public int ProgressZone { get; set; } = 0;
     public bool Alive { get; set; } = true;
+    public bool Finished { get; set; } = false;
     public trigger w_Collision { get; set; }
     public trigger c_Collision { get; set; }
 
@@ -60,11 +61,17 @@ public class Kitty
         CollisionDetection.KittyRegisterCollisions(this);
     }
 
+    public void RemoveKitty()
+    {
+        Dispose();
+    }
+
     public void Dispose()
     {
         Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
+        Globals.ALL_KITTIES.Remove(Player);
     }
 
     public void ReviveKitty(Kitty savior)
@@ -76,7 +83,8 @@ public class Kitty
         Utility.SelectUnitForPlayer(Player, Unit);
         savior.Saves += 1;
         savior.SaveStreak += 1;
-        savior.Unit.Experience += 50;
+        savior.Player.Gold += Resources.SaveGold;
+        savior.Unit.Experience += Resources.SaveExperience;
     }
 
     public void KillKitty()
@@ -87,6 +95,16 @@ public class Kitty
         Deaths += 1;
         SaveStreak = 0;
         circle.KittyDied(this);
+    }
+
+    public static void RoundResetAll()
+    {
+        foreach(var kitty in Globals.ALL_KITTIES.Values)
+        {
+            kitty.Alive = true;
+            kitty.ProgressZone = 0;
+            kitty.Finished = false;
+        }
 
     }
 

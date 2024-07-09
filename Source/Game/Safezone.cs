@@ -40,8 +40,6 @@ public class Safezone
         var unit = GetTriggerUnit();
         var player = GetOwningPlayer(unit);
         var currentSafezone = Globals.PLAYER_REACHED_SAFEZONES[player];
-        Globals.ALL_KITTIES[player].CurrentSafeZone = ID;
-        if(Source.Program.Debug) Console.WriteLine(player.Name + " entered safezone " + ID + " from safezone " + currentSafezone);
         if(currentSafezone != ID) { return; }
         player.Gold += Resources.SafezoneGold;
         unit.Experience += Resources.SafezoneExperience;
@@ -52,7 +50,7 @@ public class Safezone
     {
         foreach(var player in Globals.ALL_PLAYERS)
         {
-            Globals.ALL_KITTIES[player].CurrentSafeZone = 0;
+            Globals.ALL_KITTIES[player].ProgressZone = 0;
             Globals.PLAYER_REACHED_SAFEZONES[player] = 1;
         }
     }

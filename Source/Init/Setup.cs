@@ -52,9 +52,14 @@ namespace Source.Init
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
             SuspendTimeOfDay(true);
             CustomStatFrame.Init();
-            Kitty.Initialize();
-            GameTimer.Initialize();
             Resources.Initialize();
+            Multiboard.Initialize();
+            Shops.Initialize();
+            Kitty.Initialize();
+            WolfArea.Initialize();
+            PlayerLeaves.Initialize();
+            FloatingNameTag.Initialize();
+            GameTimer.Initialize();
             VictoryZone.Initialize();
             RoundManager.RoundSetup();
         }
@@ -67,9 +72,6 @@ namespace Source.Init
                     Globals.ALL_PLAYERS.Add(Player(i));
             }
         }
-
-
-
 
     }
 }

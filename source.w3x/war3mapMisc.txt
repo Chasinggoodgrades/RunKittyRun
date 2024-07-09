@@ -1,10 +1,11 @@
 [Misc]
 AgiMoveBonus=0.0
-IntManaBonus=15.0
-IntRegenBonus=0.07
-InvisibleUnitsBestowAuras=1
-MaxHeroLevel=10
-MaxUnitLevel=10
+AttackNotifyDelay=4000.0
+AttackNotifyRange=5000.0
+IntManaBonus=25.0
+IntRegenBonus=0.08
+MaxHeroLevel=100
+MaxUnitLevel=100
 MaxUnitSpeed=522.0
-MinUnitSpeed=150.0
+MinUnitSpeed=15.0
 

@@ -10,40 +10,94 @@ using static WCSharp.Api.Common;
 
 public static class Multiboard
 {
-    private static multiboard TeamsMB;
+    private static multiboard CurrentTeamsMB;
+    private static multiboard TeamsStatsMB;
+    private static multiboard StandardOverallStatsMB;
+    private static multiboard StandardCurrentStatsMB;
+    private static multiboard SoloOverallStatsMB;
+    private static multiboard SoloBestTimesMB;
+    private static trigger ESCTrigger;
     public static void Initialize()
     {
-        multiboard mb = CreateMultiboard();
-        mb.Title = "Teams";
-        mb.SetChildText("Team 1");
-        mb.Rows = 5;
-        mb.Columns = 2;
-        mb.IsDisplayed = true;
-        mb.GetItem(1, 1).SetWidth(4.0f);
-        mb.GetItem(1, 1).SetText("Team 1");
+        ESCTrigger = CreateTrigger();
+        CreateMultiboards();
+        ESCInit();
     }
 
-    public static void TeamsMultiboard()
+    private static void CreateMultiboards()
     {
-        TeamsMB = CreateMultiboard();
-        TeamsMB.Title = $"Current Teams {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]";
-        TeamsMB.IsDisplayed = true;
-        TeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
-        TeamsMB.Columns = Gamemode.PlayersPerTeam;
-        TeamsMB.GetItem(0, 0).SetText("Team 1");
-        TeamsMB.GetItem(0, 0).SetVisibility(true, false);
-        TeamsMB.GetItem(0, 1).SetText("Player 1");
-        TeamsMB.GetItem(0, 1).SetVisibility(true, false);
-        var timer = CreateTimer();
-        timer.Start(1.0f, false, TeamHandler.RandomHandler);
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        {
+            TeamsStatsMultiboard();
+            CurrentTeamsMultiboard();
+        }
     }
 
-    public static void UpdateTeamsMultiboard()
+    #region Teams Multiboards
+    private static void TeamsStatsMultiboard()
     {
-        TeamsMB.Rows = Globals.ALL_TEAMS.Count;
-        TeamsMB.Columns = 2;
+        TeamsStatsMB = CreateMultiboard();
+        TeamsStatsMB.Title = $"[ESC FOR CURRENT TEAMS] Teams Stats {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]";
+        TeamsStatsMB.IsDisplayed = false;
+    }
+    public static void CurrentTeamsMultiboard()
+    {
+        CurrentTeamsMB = CreateMultiboard();
+        CurrentTeamsMB.Title = $"Current Teams {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]";
+        CurrentTeamsMB.IsDisplayed = true;
+        CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
+        CurrentTeamsMB.Columns = Gamemode.PlayersPerTeam;
+        CurrentTeamsMB.GetItem(0, 0).SetText("Team 1");
+        CurrentTeamsMB.GetItem(0, 0).SetVisibility(true, false);
+        CurrentTeamsMB.GetItem(0, 1).SetText("Player 1");
+        CurrentTeamsMB.GetItem(0, 1).SetVisibility(true, false);
+    }
+
+    public static void UpdateTeamStatsMB()
+    {
+        // Top Portion Setup
+        TeamsStatsMB.Rows = Globals.ALL_TEAMS.Count + 1;
+        TeamsStatsMB.Columns = 2 + Gamemode.NumberOfRounds;
+        TeamsStatsMB.GetItem(0, 0).SetText("Team");
+        TeamsStatsMB.GetItem(0, 0).SetVisibility(true, false);
+        TeamsStatsMB.GetItem(0, 0).SetWidth(0.05f);
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        {
+            TeamsStatsMB.GetItem(0, i).SetText($"Round {i}");
+            TeamsStatsMB.GetItem(0, i).SetVisibility(true, false);
+            TeamsStatsMB.GetItem(0, i).SetWidth(0.05f);
+        }
+        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetText("Overall");
+        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
+        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetWidth(0.05f);
+
+
+        // Actual Stats
+        int rowIndex = 1;
+        foreach (var team in Globals.ALL_TEAMS)
+        {
+            TeamsStatsMB.GetItem(rowIndex, 0).SetText(team.Value.TeamColor);
+            TeamsStatsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
+            TeamsStatsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
+            for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+            {
+                TeamsStatsMB.GetItem(rowIndex, i).SetText($"{Globals.TEAM_PROGRESS[team.Value]}");
+                TeamsStatsMB.GetItem(rowIndex, i).SetVisibility(true, false);
+                TeamsStatsMB.GetItem(rowIndex, i).SetWidth(0.05f);
+            }
+            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetText("0");
+            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
+            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetWidth(0.05f);
+            rowIndex++;
+        }
+    }
+
+    public static void UpdateCurrentTeamsMB()
+    {
+        CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count;
+        CurrentTeamsMB.Columns = 2;
+
         var widthSize = 0.05f * Gamemode.PlayersPerTeam;
-
         int rowIndex = 0;
         foreach (var team in Globals.ALL_TEAMS)
         {
@@ -55,22 +109,53 @@ public static class Multiboard
                     if (name.Length > 7) name = name.Substring(0, 7);
                     return Color.ColorString(name, member.Id + 1);
                 }));
-
-
-            TeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
-            TeamsMB.GetItem(rowIndex, 0).SetText($"{team.Value.TeamColor}:");
-            TeamsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
-            TeamsMB.GetItem(rowIndex, 1).SetWidth(widthSize);
-            TeamsMB.GetItem(rowIndex, 1).SetText($"{teamMembers}");
-            TeamsMB.GetItem(rowIndex, 1).SetVisibility(true, false);
-
+            CurrentTeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
+            CurrentTeamsMB.GetItem(rowIndex, 0).SetText($"{team.Value.TeamColor}:");
+            CurrentTeamsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
+            CurrentTeamsMB.GetItem(rowIndex, 1).SetWidth(widthSize);
+            CurrentTeamsMB.GetItem(rowIndex, 1).SetText($"{teamMembers}");
+            CurrentTeamsMB.GetItem(rowIndex, 1).SetVisibility(true, false);
 
             rowIndex++;
         }
     }
+    #endregion
 
-    public static void Update()
+    #region ESC Key Event & Actions
+    private static void ESCInit()
     {
+        foreach(var player in Globals.ALL_PLAYERS)
+        {
+            ESCTrigger.RegisterPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC);
+        }
+        ESCTrigger.AddAction(ESCPressed);
 
     }
+
+    private static void ESCPressed()
+    {
+        var player = GetTriggerPlayer();
+        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        {
+            ESCPressTeams(player);
+        }
+    }
+
+    private static void ESCPressTeams(player Player)
+    {
+        var localPlayer = GetLocalPlayer();
+        if (localPlayer != Player) return;
+        // Swap multiboards
+        if(CurrentTeamsMB.IsDisplayed)
+        {
+            CurrentTeamsMB.IsDisplayed = false;
+            TeamsStatsMB.IsDisplayed = true;
+        }
+        else
+        {
+            TeamsStatsMB.IsDisplayed = false;
+            CurrentTeamsMB.IsDisplayed = true;
+        }
+    }
+    #endregion
 }

@@ -33,6 +33,13 @@ public class Circle
         ShowUnit(Unit, false);
     }
 
+    public void RemoveCircle()
+    {
+        Unit.Dispose();
+        Collision.Dispose();
+        Globals.ALL_CIRCLES.Remove(Player);
+    }
+
     public void KittyDied(Kitty kitty)
     {
         Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);

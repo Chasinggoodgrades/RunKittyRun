@@ -72,4 +72,26 @@ public static class RegionList
         Regions.safe_Area_13,
         Regions.safe_Area_14
     };
+
+    public static readonly Rectangle[] PathingPoints = new Rectangle[] // Nitro and Progress classes
+    {
+        Regions.safe_Area_00,
+        Regions.safe_Area_01,
+        Regions.safe_Area_02,
+        Regions.safe_Area_03,
+        Regions.safe_Area_04,
+        Regions.safe_Area_05,
+        Regions.safe_Area_06,
+        Regions.safe_Area_07,
+        Regions.safe_Area_08,
+        Regions.safe_Area_09,
+        Regions.safe_Area_10,
+        Regions.safe_Area_11,
+        Regions.safe_Area_12,
+        Regions.safe_Area_13,
+        Regions.ProgressPoint1,
+        Regions.ProgressPoint2,
+        Regions.ProgressPoint3,
+        Regions.safe_Area_14
+    };
 }

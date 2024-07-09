@@ -30,9 +30,9 @@ public static class Utility
 
     public static bool IsDeveloper(player p)
     {
-        foreach (var player in Globals.DEVELOPERS)
+        foreach (var player in Globals.VIPLIST)
         {
-            if (p.Name == player)
+            if (p.Name == Base64.FromBase64(player))
             {
                 return true;
             }

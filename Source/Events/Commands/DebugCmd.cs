@@ -5,6 +5,8 @@ using WCSharp.Events;
 using WCSharp.Json;
 using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
+using static WCSharp.Api.texttag;
+using static WCSharp.Shared.Util;
 
 public static class DebugCmd
 {
@@ -21,11 +23,6 @@ public static class DebugCmd
                 BarrierSetup.DeactivateBarrier();
                 break;
             case "?testing":
-                Console.WriteLine("testing");
-                var someTeam = new Team(2);
-                someTeam.AddMember(Player(1));
-                someTeam.AddMember(Player(5));
-                Multiboard.UpdateTeamsMultiboard();
                 break;
             case "?gold":
                 player.Gold += 1000;

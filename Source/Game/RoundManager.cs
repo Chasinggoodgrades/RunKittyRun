@@ -4,8 +4,9 @@ using static WCSharp.Api.Common;
 
 public static class RoundManager
 {
-    private static float ROUND_INTERMISSION = 30.0f;
+    public static float ROUND_INTERMISSION = 30.0f;
     private static float END_ROUND_DELAY = 3.0f;
+    public static bool GAME_STARTED = false;
     private static timer StartRoundTimer = CreateTimer();
     private static timerdialog RoundTimerDialog = CreateTimerDialog(StartRoundTimer);
 
@@ -15,7 +16,8 @@ public static class RoundManager
         // Setup
         Globals.ROUND += 1;
         Safezone.ResetPlayerSafezones();
-        Wolf.SpawnWolves();
+        Kitty.RoundResetAll();
+        //Wolf.SpawnWolves();
 
         // Timer for round intermission
         TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, false);
@@ -28,6 +30,7 @@ public static class RoundManager
 
     private static void StartRound()
     {
+        GAME_STARTED = true;
         Globals.GAME_ACTIVE = true;
         TimerDialogDisplay(RoundTimerDialog, false);
         TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
@@ -81,5 +84,12 @@ public static class RoundManager
         {
             if(player == GetLocalPlayer()) PanCameraToTimed(x, y, END_ROUND_DELAY);
         }
+    }
+
+    public static void RoundEndCheck()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+            if (!kitty.Finished) return;
+        RoundEnd();
     }
 }

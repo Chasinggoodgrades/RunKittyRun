@@ -33,7 +33,7 @@ public static class CommandHandler
         {
             DebugCmd.Handle(player, command);
         }
-        else
+        else if (command.StartsWith("-"))
         {
             GeneralCmds.Handle(player, command);
         }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Threading;
 using WCSharp.Api;
 using WCSharp.Events;
 using WCSharp.Shared;
@@ -13,26 +15,31 @@ public static class TeamHandler
 {
     public static void Handler(player Player, int TeamNumber)
     {
-        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0])
+        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && !RoundManager.GAME_STARTED)
         {
             FreepickHandler(Player, TeamNumber);
         }
         else
         {
-            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "The -team command is not available for this gamemode.");
+            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "The -team command is not available for this gamemode or the time to pick has expired.");
         }
     }
 
     private static void FreepickHandler(player Player, int TeamNumber)
     {
-        if(CanPlayerJoinTeam(Player, TeamNumber))
+        if (CanPlayerJoinTeam(Player, TeamNumber))
         {
-            if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
-            {
-                RemoveFromCurrentTeam(Player);
-                team.AddMember(Player);
-                Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You have joined team " + team.TeamColor);
-            }
+            var timer = CreateTimer();
+            TimerStart(timer, 0.05f, false, () => { ApplyPlayerToTeam(Player, TeamNumber); DestroyTimer(timer); });
+        }
+    }
+
+    private static void ApplyPlayerToTeam(player Player, int TeamNumber)
+    {
+        if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
+        {
+            team.AddMember(Player);
+            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You have joined team " + team.TeamColor);
         }
     }
 
@@ -46,29 +53,47 @@ public static class TeamHandler
 
         foreach (var player in shuffled)
         {
-            // Check if the team exists
-            if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out Team team))
+            if (Globals.PLAYERS_TEAMS.TryGetValue(player, out Team currentTeam))
             {
-                team = new Team(teamNumber);
-                Globals.ALL_TEAMS[teamNumber] = team;
+                continue;
             }
 
-            // Check if the team is full
-            if (team.Teammembers.Count >= Gamemode.PlayersPerTeam)
+            bool addedToExistingTeam = false;
+
+            // Attempt to add player to an existing team
+            foreach (var team in Globals.ALL_TEAMS.Values)
             {
-                // If the team is full, increment the team number and create a new team
-                teamNumber++;
-                if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out team))
+                if (team.Teammembers.Count < Gamemode.PlayersPerTeam)
+                {
+                    team.AddMember(player);
+                    addedToExistingTeam = true;
+                    break;
+                }
+            }
+
+            if (!addedToExistingTeam)
+            {
+                // Create new teams as needed
+                while (Globals.ALL_TEAMS.ContainsKey(teamNumber) &&
+                       Globals.ALL_TEAMS[teamNumber].Teammembers.Count >= Gamemode.PlayersPerTeam)
+                {
+                    teamNumber++;
+                }
+
+                // Check if the team exists, if not create it
+                if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out Team team))
                 {
                     team = new Team(teamNumber);
                     Globals.ALL_TEAMS[teamNumber] = team;
                 }
-            }
 
-            // Add the player to the team
-            team.AddMember(player);
+                // Add the player to the new team
+                team.AddMember(player);
+            }
         }
     }
+
+
 
     private static bool CanPlayerJoinTeam(player Player, int TeamNumber)
     {
@@ -89,8 +114,12 @@ public static class TeamHandler
             }
         }
         else
+        {
+            RemoveFromCurrentTeam(Player);
             new Team(TeamNumber);
+        }
         return true;
+
     }
 
     private static void RemoveFromCurrentTeam(player Player)
