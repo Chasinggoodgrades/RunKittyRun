@@ -15,6 +15,6 @@ public static class Solo
 {
     public static void Initialize()
     {
-       Console.WriteLine("Solo gamemode initialized");
+       Console.WriteLine("Solo Mode is a work in progress.");
     }
 }

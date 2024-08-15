@@ -112,6 +112,7 @@ public static class Shops
 
     private static void RegisterVendorSellingEvent()
     {
+        // Registers all Kitty Vendors and Panda Vendor for on sell event.
         foreach (var vendor in KittyVendorsList)
             TriggerRegisterUnitEvent(Trigger, vendor, EVENT_UNIT_SELL_ITEM);
         TriggerAddAction(Trigger, () => OnVendorSell());
@@ -122,7 +123,6 @@ public static class Shops
         var item = GetSoldItem();
         var vendor = GetSellingUnit();
         var player = GetOwningPlayer(GetBuyingUnit());
-
         var itemID = GetItemTypeId(item);
 
         var vendorItems = VendorsItemList[vendor];

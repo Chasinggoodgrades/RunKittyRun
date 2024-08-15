@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|cffff0000RKR|r - v4.2.9
+|cffff0000RKR|r - v0.0.1
 }
 
 STRING 2
@@ -10,10 +10,8 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v4.2.9
+|cff00ffffRun Kitty Run|r v0.0.1
 
-- |cfffffc00CODE WIPE, NEW SYSTEM, SUPPORT 4.2.0v and ABOVE|r
-- |cfffffc00New Mechanic added to impossible mode :O|r
 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 }
 
@@ -1535,7 +1533,7 @@ Pursache the Ritual |cffffcc00M|rask |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Standard Edition 4.2.9
+Run Kitty Run 0.0.1
 }
 
 STRING 2035
@@ -5297,41 +5295,6 @@ STRING 3417
 Pathing Blocker (Air) (Doodad)
 }
 
-STRING 3418
-{
-B_Cait
-}
-
-STRING 3419
-{
-B_Spermkagen
-}
-
-STRING 3420
-{
-B_Gheed
-}
-
-STRING 3421
-{
-B_Qoz
-}
-
-STRING 3422
-{
-B_Pizzahut
-}
-
-STRING 3423
-{
-B_Dominos
-}
-
-STRING 3424
-{
-B_Fieryfox
-}
-
 STRING 3425
 {
 Leyenda
@@ -5372,11 +5335,6 @@ STRING 3432
 Player 16
 }
 
-STRING 3433
-{
-SomeCompPlayer
-}
-
 STRING 3434
 {
 Player 18
@@ -5410,5 +5368,45 @@ Player 23
 STRING 3440
 {
 Player 24
+}
+
+STRING 3441
+{
+Cait
+}
+
+STRING 3442
+{
+Spermkagen
+}
+
+STRING 3443
+{
+Gheed
+}
+
+STRING 3444
+{
+Qoz
+}
+
+STRING 3445
+{
+Pizzahut
+}
+
+STRING 3446
+{
+Dominos
+}
+
+STRING 3447
+{
+Fieryfox
+}
+
+STRING 3448
+{
+RandomHoe
 }
 

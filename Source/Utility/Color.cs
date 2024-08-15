@@ -13,6 +13,22 @@ public static class Color
 {
     public static string COLOR_GOLD = "|c00FFCC00";
     public static string COLOR_YELLOW_ORANGE = "|c00FF9900";
+    public static string COLOR_RED = "|c00FF0000";
+    public static string COLOR_GREEN = "|c0000FF00";
+    public static string COLOR_BLUE = "|c0000FF";
+    public static string COLOR_PURPLE = "|c00CC00FF";
+    public static string COLOR_CYAN = "|c000FFFFF";
+    public static string COLOR_ORANGE = "|c00FF9900";
+    public static string COLOR_VIOLET = "|c00EE82EE";
+    public static string COLOR_PINK = "|c00FFC0CB";
+    public static string COLOR_BLACK = "|c00000000";
+    public static string COLOR_WHITE = "|c00FFFFFF";
+    public static string COLOR_GREY = "|c00808080";
+    public static string COLOR_BROWN = "|c008B4513";
+    public static string COLOR_LIME = "|c0000FF00";
+    public static string COLOR_TEAL = "|c0000FF";
+    public static string COLOR_YELLOW = "|c00FFFF00";
+    public static string COLOR_DARK_RED = "|c008B0000";
     public static string COLOR_RESET = "|r";
     public static readonly Dictionary<int, string> playerColors = new Dictionary<int, string>
     {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 namespace Source.Init
@@ -54,9 +47,12 @@ namespace Source.Init
             CustomStatFrame.Init();
             Resources.Initialize();
             Multiboard.Initialize();
-            Shops.Initialize();
-            Kitty.Initialize();
+            Shops.Initialize(); 
             WolfArea.Initialize();
+            SoundManager.Initialize();
+            Kitty.Initialize();
+            RelicManager.Initialize();
+            ProtectionOfAncients.Initialize();
             PlayerLeaves.Initialize();
             FloatingNameTag.Initialize();
             GameTimer.Initialize();
@@ -66,7 +62,7 @@ namespace Source.Init
 
         private static void GetActivePlayers()
         {
-            for (int i = 0; i < Globals.NUMBER_OF_PLAYERS; i++)
+            for (int i = 0; i < GetBJMaxPlayers(); i++)
             {
                 if (GetPlayerSlotState(Player(i)) == playerslotstate.Playing)
                     Globals.ALL_PLAYERS.Add(Player(i));

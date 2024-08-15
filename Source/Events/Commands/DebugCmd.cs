@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Json;
-using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
-using static WCSharp.Api.texttag;
-using static WCSharp.Shared.Util;
 
 public static class DebugCmd
 {
@@ -22,14 +16,26 @@ public static class DebugCmd
                 Console.WriteLine("Deactivating Barrier");
                 BarrierSetup.DeactivateBarrier();
                 break;
-            case "?testing":
+            case "?endround":
+                RoundManager.RoundEnd();
                 break;
             case "?gold":
-                player.Gold += 1000;
+                player.Gold += 100000;
+                break;
+            case "?level":
+                var playerUnit = Globals.ALL_KITTIES[player].Unit;
+                playerUnit.HeroLevel = 6;
                 break;
             case "?blink":
                 var kitty = Globals.ALL_KITTIES[player];
                 kitty.Unit.AddItem(FourCC("desc"));
+                break;
+            case "?test1":
+                Wolf w = Globals.ALL_WOLVES[GetRandomInt(0, Globals.ALL_WOLVES.Count - 1)];
+                AffixFactory.ApplyRandomAffix(w);
+                Console.WriteLine("Applied random affix");
+                break;
+            case "?test2":
                 break;
             case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)

@@ -6,15 +6,25 @@ using System.Threading.Tasks;
 
 public static class Resources
 {
-    public static int StartingGold { get; set; } = 100;
+    private static int StartingGold { get; set; } = 100;
     public static int SaveExperience { get; set; } = 80;
     public static int SaveGold { get; set; } = 25;
     public static int SafezoneExperience { get; set; } = 100;
     public static int SafezoneGold { get; set; } = 20;
+    private static int EndRoundBonusGold { get; set; } = 150 + (50*Globals.ROUND);
+    private static int EndRoundBonusXP { get; set; } = (550*Globals.ROUND);
     public static void Initialize()
     {
         SetResourcesForGamemode();
         AdjustStartingGold();
+    }
+
+    public static void BonusResources()
+    {
+        foreach(var player in Globals.ALL_PLAYERS)
+            player.Gold += EndRoundBonusGold;
+        foreach(var kitty in Globals.ALL_KITTIES.Values)
+            kitty.Unit.Experience += EndRoundBonusXP;
     }
 
     private static void AdjustStartingGold()
@@ -42,11 +52,13 @@ public static class Resources
     {
         SaveExperience = 0;
         SaveGold = 0;
+        EndRoundBonusXP = 0;
     }
 
     private static void TeamResources()
     {
         SaveExperience = 15;
-        SaveGold = 0;
+        SaveGold = 5;
+        EndRoundBonusXP = 0;
     }
 }

@@ -68,6 +68,7 @@ public static class Gamemode
         IsGameModeChosen = true;
         PlayersPerTeam = teamSize;
 
+        ClearTextMessages();
         NotifyGamemodeChosen();
         SetupChosenGamemode();
     }
@@ -76,7 +77,8 @@ public static class Gamemode
     {
         foreach(var player in Globals.ALL_PLAYERS)
         {
-            if(player != HostPlayer)
+            var localplayer = GetLocalPlayer();
+            if(GetLocalPlayer() != HostPlayer)
             {
                 player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_YELLOW_ORANGE + "Please wait for " + Color.PlayerNameColored(HostPlayer) + Color.COLOR_YELLOW_ORANGE + " to pick the gamemode.");
             }
@@ -87,7 +89,7 @@ public static class Gamemode
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_YELLOW_ORANGE + "Gamemode chosen: " + Color.COLOR_GOLD + CurrentGameMode + " " + CurrentGameModeType);
+            player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE/3.0f, Color.COLOR_YELLOW_ORANGE + "Gamemode chosen: " + Color.COLOR_GOLD + CurrentGameMode + " " + CurrentGameModeType);
         }
     }
 

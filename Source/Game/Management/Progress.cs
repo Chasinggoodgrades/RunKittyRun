@@ -9,13 +9,13 @@ public static class Progress
     private static Dictionary<int, float> DistancesFromStart;
     private static trigger ProgressEvent;
     private static timer PeriodicTimer;
+    private const float PROGRESS_INTERVAL = 0.2f;
     public static Dictionary<player, rect> PlayerProgressPoints = new Dictionary<player, rect>();
     public static void Initialize()
     {
         Globals.TEAM_PROGRESS = new Dictionary<Team, string>();
         Globals.PLAYER_PROGRESS = new Dictionary<player, float>();
         DistancesFromStart = new Dictionary<int, float>();
-        InitializePlayerProgress();
         PeriodicTimer = CreateTimer();
         ProgressEvent = CreateTrigger();
         CalculateTotalDistance();
@@ -23,21 +23,9 @@ public static class Progress
         StartProgressTracker();
     }
 
-    private static void InitializePlayerProgress()
-    {
-        foreach(var player in Globals.ALL_PLAYERS)
-        {
-            Globals.PLAYER_PROGRESS.Add(player, 0.0f);
-        }
-        foreach(var team in Globals.ALL_TEAMS.Values)
-        {
-            Globals.TEAM_PROGRESS.Add(team, "0.0");
-        }
-    }
-
     private static void StartProgressTracker()
     {
-        TimerStart(PeriodicTimer, 0.2f, true, PeriodicProgressTracker);
+        TimerStart(PeriodicTimer, PROGRESS_INTERVAL, true, PeriodicProgressTracker);
     }
 
     private static void PeriodicProgressTracker()
@@ -46,24 +34,25 @@ public static class Progress
         {
             if (!Globals.GAME_ACTIVE) return;
             foreach (var Player in Globals.ALL_PLAYERS)
-            {   
-                Globals.PLAYER_PROGRESS[Player] = CalculatePlayerProgress(Player);
+            {
+                if (!Globals.ALL_KITTIES[Player].Finished)
+                    Globals.ALL_KITTIES[Player].Progress = CalculatePlayerProgress(Player);
             }
             foreach (var Team in Globals.ALL_TEAMS.Values)
             {
-                Globals.TEAM_PROGRESS[Team] = CalculateTeamProgress(Team);
+                Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
             }
             Multiboard.UpdateTeamStatsMB();
         }
        catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            //Console.WriteLine(e.Message);
         }
     }
 
     private static string CalculateTeamProgress(Team Team)
     {
-        return (Team.Teammembers.Sum(player => Globals.PLAYER_PROGRESS[player]) / Team.Teammembers.Count).ToString("F2");
+        return (Team.Teammembers.Sum(player => Globals.ALL_KITTIES[player].Progress) / Team.Teammembers.Count).ToString("F2");
     }
 
     private static float CalculatePlayerProgress(player Player)
@@ -85,7 +74,7 @@ public static class Progress
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            //Console.WriteLine(e.Message);
             return 0.0f;
         }
     }
@@ -108,7 +97,7 @@ public static class Progress
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            //Console.WriteLine(e.Message);
         }
     }
 

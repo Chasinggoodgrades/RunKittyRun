@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 
@@ -17,7 +10,11 @@ public static class CollisionDetection
 
     private static Func<bool> WolfCollisionFilter(Kitty k)
     {
-        return () => (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG);
+        return () =>
+        {
+            return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG) 
+                    && k.Alive;
+        };
     }
 
     private static Func<bool> CircleCollisionFilter(Kitty k)
@@ -25,9 +22,10 @@ public static class CollisionDetection
         return () =>
         {
             return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
-                    && GetOwningPlayer(GetFilterUnit()) != k.Player) && k.Alive
-                    && Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())].TeamID == Globals.ALL_KITTIES[k.Player].TeamID
-                    && Gamemode.CurrentGameMode != Globals.GAME_MODES[1];
+                    && GetOwningPlayer(GetFilterUnit()) != k.Player) // Not Same Player
+                    && k.Alive // Has to Be Alive
+                    && Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())].TeamID == Globals.ALL_KITTIES[k.Player].TeamID // Must be same team
+                    && Gamemode.CurrentGameMode != Globals.GAME_MODES[1]; // Not Solo Mode
         };
     }
 
@@ -42,6 +40,7 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             k.KillKitty();
+            Team.CheckTeamDead(k);
         });
         return k.w_Collision;
     }

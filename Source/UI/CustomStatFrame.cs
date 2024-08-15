@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 
 
@@ -62,9 +60,8 @@ public static class CustomStatFrame
     {
         var localPlayer = GetLocalPlayer();
         var selectedUnit = SelectedUnit[GetPlayerId(localPlayer)];
-
-        SetGamemodeFrameText(selectedUnit);
-        SetCommonFrameText(selectedUnit);
+        
+        HandleFrameText(selectedUnit);
 
         BlzFrameSetVisible(CustomStatFrameBoxF, BlzFrameIsVisible(CustomStatFrameBoxS));
     }
@@ -125,21 +122,79 @@ public static class CustomStatFrame
         public framehandle ToolTipTitle { get; set; }
         public framehandle ToolTipText { get; set; }
     }
+
+    private static void HandleFrameText(unit selectedUnit)
+    {
+        if (GetUnitTypeId(selectedUnit) == Constants.UNIT_CUSTOM_DOG) SetWolfFrameText(selectedUnit);
+        else if (SetChampionFrameText(selectedUnit)) { }
+        else
+        {
+            SetGamemodeFrameText(selectedUnit);
+            SetCommonFrameText(selectedUnit);
+        }
+    }
+
+    private static bool SetChampionFrameText(unit selectedUnit)
+    {
+        var b = false;
+        if (selectedUnit.Name == "|cffffff00Solo Tournament 2023|r")
+        {
+            BlzFrameSetText(Stats[1].Text, ("|cffff0000Fieryfox|r"));
+            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r EU"));
+            BlzFrameSetText(Stats[0].Text, ("|cffffff00Time:|r 13:25"));
+            BlzFrameSetText(Stats[4].Text, ("|cffffff00Qoz|r"));
+            BlzFrameSetText(Stats[5].Text, ("|cffffff00Region:|r US"));
+            BlzFrameSetText(Stats[3].Text, ("|cffffff00Time:|r 15:36"));
+            b = true;
+        }
+        else if (selectedUnit.Name == "|cffffff00Team Tournament 2023|r")
+        {
+            BlzFrameSetText(Stats[1].Text, ("|cffffff00Region:|r US"));
+            BlzFrameSetText(Stats[2].Text, ("|cff00ffffAches|r"));
+            BlzFrameSetText(Stats[3].Text, ("|cff00ffffBranFlake|r"));
+            BlzFrameSetText(Stats[4].Text, ("|cffffff00Time:|r 23:12"));
+            BlzFrameSetText(Stats[5].Text, ("|cff00ffffBalmydrop|r"));
+            BlzFrameSetText(Stats[0].Text, ("|cff00ffffUdo|r"));
+            b = true;
+        }
+        else if (selectedUnit.Name == "|cffffff00Solo Tournament 2024|r")
+        {
+            BlzFrameSetText(Stats[1].Text, ("|cffff0000Fieryfox|r"));
+            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r EU"));
+            BlzFrameSetText(Stats[0].Text, ("|cffffff00Time:|r 13:23"));
+            BlzFrameSetText(Stats[4].Text, ("|cff964bc8MrGheed|r"));
+            BlzFrameSetText(Stats[5].Text, ("|cffffff00Region:|r US"));
+            BlzFrameSetText(Stats[3].Text, ("|cffffff00Time:|r 16:31"));
+            b = true;
+        }
+        return b;
+    }
+
+
+    private static void SetWolfFrameText(unit selectedUnit)
+    {
+        BlzFrameSetText(Stats[0].Text, "");
+        BlzFrameSetText(Stats[1].Text, "");
+        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[3].Text, "");
+        BlzFrameSetText(Stats[4].Text, "");
+        BlzFrameSetText(Stats[5].Text, "");
+    }
     private static void SetGamemodeFrameText(unit selectedUnit)
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0])
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {
             BlzFrameSetText(Stats[0].Text, $"Streak: {GetPlayerSaveStreak(selectedUnit)}");
             BlzFrameSetText(Stats[3].Text, $"Games: {GetPlayerGames(selectedUnit)}");
             BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1])
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
             BlzFrameSetText(Stats[0].Text, $"Time: 0:00");
             BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
             BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
@@ -156,13 +211,13 @@ public static class CustomStatFrame
     private static string GetPlayerTeamName(unit u)
     {
         if(Globals.PLAYERS_TEAMS.TryGetValue(GetOwningPlayer(u), out Team team)) return team.TeamColor;
-        return "No Team";
+        return $"{ Color.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
-    private static string GetPlayerProgress(unit u) => Globals.PLAYER_PROGRESS[GetOwningPlayer(u)].ToString("F2");
+    private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Progress.ToString("F2");
     private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Saves;
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Deaths;
-    private static int GetPlayerSaveStreak(unit u) => 0; // Placeholder
-    private static int GetPlayerGames(unit u) => 0; // Placeholder
-    private static float GetPlayerTime(unit u) => 0.00f; // Placeholder
+    private static int GetPlayerSaveStreak(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveStreak;
+    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Games;
+    private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Time[Globals.ROUND];
 }

@@ -11,15 +11,14 @@ public static class GamemodeCmd
     private static CommandInfo CmdInfo;
     public static void Handle(player player, string command)
     {
-
-        if (Globals.GAME_ACTIVE)
-        {
-            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Game is already active. Cannot change gamemode.");
-            return;
-        }
         if (player != Gamemode.HostPlayer)
         {
             player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Only " + Color.PlayerNameColored(Gamemode.HostPlayer) + Color.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
+            return;
+        }
+        if (Gamemode.IsGameModeChosen)
+        {
+            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Gamemode has already been chosen. Cannot change gamemode.");
             return;
         }
         var parts = command.Split(' ');

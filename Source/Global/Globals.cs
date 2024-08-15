@@ -11,13 +11,14 @@ using static WCSharp.Api.Common;
 
 public static class Globals
 {
-    public const int NUMBER_OF_PLAYERS = 24;
+    public const int NUMBER_OF_PLAYERS = 23;
     public const int MAX_TEAM_SIZE = 12;
     public const float TIME_TO_PICK_GAMEMODE = 30.0f;
     public const int DEFAULT_TEAM_SIZE = 3;
     public static int ROUND = 0;
     public static bool GAME_ACTIVE = false;
     public static float GAME_SECONDS = 0.0f;
+    public static int GAME_SEED = GetRandomInt(1, 10000);
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };

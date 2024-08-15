@@ -21,11 +21,29 @@ public static class Utility
 
     public static void SelectUnitForPlayer(player p, unit u)
     {
-        if (p == player.LocalPlayer)
+        var localplayer = GetLocalPlayer();
+        if (p == localplayer)
         {
             ClearSelection();
             SelectUnit(u, true);
         }
+    }
+
+    public static void TimedTextToAllPlayers(float duration, string message)
+    {
+        foreach (var p in Globals.ALL_PLAYERS)
+        {
+            p.DisplayTimedTextTo(duration, message);
+        }
+    }
+
+    public static string ConvertFloatToTime(float time, int teamID)
+    {
+        if (time <= 0.0f) return "0:00";
+        var minutes = (int)time / 60;
+        var seconds = (int)time % 60;
+        if (seconds < 10) return Color.ColorString($"{minutes}:0{seconds}", teamID);
+        return Color.ColorString($"{minutes}:{seconds}", teamID);
     }
 
     public static bool IsDeveloper(player p)

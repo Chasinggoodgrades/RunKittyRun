@@ -22,6 +22,9 @@ public static class GeneralCmds
                 if (Gamemode.CurrentGameModeType != Globals.TEAM_MODES[0]) return;
                 HandleTeamCommand(p, args);
                 break;
+            case "-clear":
+                if(p == GetLocalPlayer()) ClearTextMessages();
+                break;
             default:
                 p.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "Unknown command: " + Color.COLOR_GOLD + args[0]);
                 break;

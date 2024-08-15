@@ -31,6 +31,9 @@ public static class RegionList
         Regions.Spawn_Area_09,
         Regions.Spawn_Area_10,
         Regions.Spawn_Area_11,
+        Regions.Spawn_Area_01,
+        Regions.Spawn_Area_02,
+        Regions.Spawn_Area_03,
     };
 
     public static readonly Rectangle[] WolfRegions = new Rectangle[]

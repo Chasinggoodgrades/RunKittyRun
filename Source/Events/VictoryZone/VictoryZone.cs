@@ -12,43 +12,48 @@ using static WCSharp.Api.Common;
 public static class VictoryZone
 {
     private static trigger InVictoryArea;
+    private static unit currentUnit;
     public static void Initialize()
     {
         InVictoryArea = CreateTrigger();
         VictoryAreaTrigger();
     }
 
-    private static void VictoryAreaEntered()
+    private static bool VictoryAreaConditions(unit u)
     {
-        VictoryAreaActions();
-    }
-
-    private static bool VictoryAreaConditions()
-    {
-        var u = GetEnteringUnit();
         return VictoryAreaConditionsStandard(u) || VictoryAreaConditionsTeam(u) || VictoryAreaConditionsSolo(u);
     }
 
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        TriggerRegisterEnterRegion(InVictoryArea, VictoryArea, Filter(() => VictoryAreaConditions()));
-        TriggerAddAction(InVictoryArea, VictoryAreaEntered);
+        TriggerRegisterEnterRegion(InVictoryArea, VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
+        TriggerAddAction(InVictoryArea, VictoryAreaActions);
     }
 
     private static void VictoryAreaActions()
     {
-        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[0])
+        var u = currentUnit;
+        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {
             RoundManager.RoundEnd();
         }
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1])
+        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
+            MoveAndFinish(GetOwningPlayer(u));
+            RoundManager.RoundEndCheck();
         }
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             // Move all team members to the start, save their time. Wait for all teams to finish.
+            foreach(var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID].Teammembers)
+            {
+                MoveAndFinish(teamMember);
+            }
+            Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID].Finished = true;
+            BarrierSetup.ActivateBarrier();
+            RoundManager.RoundEndCheck();
         }
     }
 
@@ -63,6 +68,7 @@ public static class VictoryZone
     {
         // If solo player enters.. Great. Done.
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return false;
+        currentUnit = u;
         return true;
     }
 
@@ -73,8 +79,22 @@ public static class VictoryZone
         var team = Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID;
         foreach (var player in Globals.ALL_TEAMS[team].Teammembers)
         {
-            if (!Regions.Victory_Area.Region.Contains(Globals.ALL_KITTIES[player].Unit)) return false;
+            if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false;
         }
+        currentUnit = u;
+        return true;
+    }
+
+    private static void MoveAndFinish(player player)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+        kitty.Finished = true;
+        kitty.Unit.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y);
+    }
+
+    private static bool VictoryContainerConditions(unit u)
+    {
+        if(!Regions.Victory_Area.Region.Contains(u) || !Regions.safe_Area_14.Region.Contains(u)) return false;
         return true;
     }
 }

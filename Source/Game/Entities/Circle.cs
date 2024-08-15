@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Circle
@@ -49,6 +42,13 @@ public class Circle
     public void HideCircle()
     {
         ShowUnit(Unit, false);
+    }
+
+    public void SetMana(float mana, int maxMana, float regenRate)
+    {
+        Unit.Mana = mana;
+        Unit.MaxMana = maxMana;
+        Unit.ManaRegeneration = regenRate;
     }
 
     private void ShowCircle()

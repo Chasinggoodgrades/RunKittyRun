@@ -12,14 +12,20 @@ public class Team
 {
     public int TeamID { get; private set; }
     public string TeamColor { get; private set; }
+    public Dictionary<int, float> TeamTimes { get; set; }
     public List<player> Teammembers { get; private set; }
+    public Dictionary<int, string> RoundProgress { get; private set; }
+    public bool Finished { get; set; }
     private static timer TeamTimer { get; set; }
 
     public Team(int id)
     {
         TeamID = id;
         Teammembers = new List<player>();
+        RoundProgress = new Dictionary<int, string>();
+        TeamTimes = new Dictionary<int, float>();
         TeamColor = Color.playerColors[TeamID] + "Team " + TeamID;
+        InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
     }
     public static void Initialize()
@@ -45,11 +51,42 @@ public class Team
         Globals.PLAYERS_TEAMS.Remove(player);
         Teammembers.Remove(player);
         Globals.ALL_KITTIES[player].TeamID = 0;
-        if (Teammembers.Count == 0)
-        {
-            Globals.ALL_TEAMS.Remove(TeamID);
-        }
+        if (Teammembers.Count == 0) Globals.ALL_TEAMS.Remove(TeamID);
         UpdateTeamsMB();
+    }
+
+    public static void CheckTeamDead(Kitty k)
+    {
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        var team = Globals.ALL_TEAMS[k.TeamID];
+        foreach(var player in team.Teammembers)
+            if (Globals.ALL_KITTIES[player].Alive) return;
+        team.TeamIsDeadActions();
+    }
+
+    private void TeamIsDeadActions()
+    {
+        foreach(var player in Teammembers)
+        {
+            var kitty = Globals.ALL_KITTIES[player];
+            kitty.Finished = true;
+        }
+        Finished = true;
+        RoundManager.RoundEndCheck();
+    }
+
+    public void UpdateRoundProgress(int round, string progress)
+    {
+        RoundProgress[round] = progress;
+    }
+
+    public static void RoundResetAllTeams()
+    {
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        foreach(var team in Globals.ALL_TEAMS.Values)
+        {
+            team.Finished = false;
+        }
     }
 
     private static void TeamSetup()
@@ -71,7 +108,21 @@ public class Team
         }
         else if(Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
         {
-            TeamHandler.RandomHandler();
+            var timer = CreateTimer();
+            TimerStart(timer, 1.0f, false, () =>
+            {
+                TeamHandler.RandomHandler();
+                DestroyTimer(timer);
+            });
+        }
+    }
+
+    private void InitRoundStats()
+    {
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        {
+            RoundProgress.Add(i, "0.0");
+            TeamTimes.Add(i, 0.0f);
         }
     }
 
@@ -84,7 +135,6 @@ public class Team
             Multiboard.UpdateTeamStatsMB();
             timer.Dispose();
         });
-
     }
 }
 

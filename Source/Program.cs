@@ -31,7 +31,7 @@ namespace Source
 #if DEBUG
 				// This part of the code will only run if the map is compiled in Debug mode
 				Debug = true;
-				Console.WriteLine("Debug Mode Activated");
+				Console.WriteLine("Map Created By: Aches, Debugging Enabled");
 				// By calling these methods, whenever these systems call external code (i.e. your code),
 				// they will wrap the call in a try-catch and output any errors to the chat for easier debugging
 				PeriodicEvents.EnableDebug();

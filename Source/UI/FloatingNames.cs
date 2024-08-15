@@ -8,8 +8,9 @@ using static WCSharp.Api.Common;
 
 public class FloatingNameTag
 {
-    private static Dictionary<player, FloatingNameTag> PlayerNameTags;
+    public static Dictionary<player, FloatingNameTag> PlayerNameTags;
     private static float NAME_TAG_HEIGHT = 0.015f;
+    private static float NAME_TAG_UPDATE_INTERVAL = 0.02f;
     private static timer NamePosUpdater;
     private player Player;
     public texttag NameTag;
@@ -39,11 +40,17 @@ public class FloatingNameTag
         }
     }
 
+    public void Dispose()
+    {
+        NameTag.SetVisibility(false);
+        NameTag.Dispose();
+    }
+
     private static void SetNameTagAttributes()
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            // Name should be up till the #
+            // Splitting at the #
             var name = player.Name.Split('#')[0];
             PlayerNameTags[player].NameTag.SetText(name, NAME_TAG_HEIGHT);
             PlayerNameTags[player].NameTag.SetPermanent(true);
@@ -54,11 +61,13 @@ public class FloatingNameTag
 
     private static void NamePosTimer()
     {
-        NamePosUpdater.Start(0.02f, true, () =>
+        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
         {
             foreach (var player in Globals.ALL_PLAYERS)
             {
+                var kitty = Globals.ALL_KITTIES[player].Unit;
                 PlayerNameTags[player].UpdateNameTag();
+                if (player == GetLocalPlayer()) SetCameraQuickPosition(kitty.X, kitty.Y); 
             }
         });
     }
@@ -66,5 +75,6 @@ public class FloatingNameTag
     private void UpdateNameTag()
     {
         NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
+        
     }
 }
