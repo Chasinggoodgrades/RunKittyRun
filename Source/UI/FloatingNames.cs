@@ -67,7 +67,7 @@ public class FloatingNameTag
             {
                 var kitty = Globals.ALL_KITTIES[player].Unit;
                 PlayerNameTags[player].UpdateNameTag();
-                if (player == GetLocalPlayer()) SetCameraQuickPosition(kitty.X, kitty.Y); 
+                if (player == GetLocalPlayer()) SetCameraQuickPosition(kitty.X, kitty.Y); // Spacebar 
             }
         });
     }
@@ -75,6 +75,5 @@ public class FloatingNameTag
     private void UpdateNameTag()
     {
         NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
-        
     }
 }

@@ -57,6 +57,8 @@ namespace Source.Init
             FloatingNameTag.Initialize();
             GameTimer.Initialize();
             VictoryZone.Initialize();
+            AffixFactory.Initialize();
+            Difficulty.Initialize();
             RoundManager.RoundSetup();
         }
 

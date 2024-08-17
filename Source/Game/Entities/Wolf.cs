@@ -59,7 +59,10 @@ public class Wolf
 
     private bool ShouldStartEffect()
     {
-        return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);
+        if (Gamemode.CurrentGameMode != "Standard")
+            return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);
+        else
+            return GetRandomInt(1, (18 - (Difficulty.DifficultyValue + Globals.ROUND))) == 1 && GetRandomInt(1, Globals.ROUND) == 1;
     }
 
     private void StartWandering()

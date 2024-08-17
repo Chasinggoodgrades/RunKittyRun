@@ -6,7 +6,9 @@ public static class DebugCmd
 {
     public static void Handle(player player, string command)
     {
-        switch (command)
+        string[] cmd = command.Split(" ");
+        var startswith = cmd[0];
+        switch (startswith)
         {
             case "?ab":
                 Console.WriteLine("Activating Barrier");
@@ -20,11 +22,12 @@ public static class DebugCmd
                 RoundManager.RoundEnd();
                 break;
             case "?gold":
-                player.Gold += 100000;
+                var amount = cmd.Length > 1 ? int.Parse(cmd[1]) : 10000;
+                player.Gold += amount;
                 break;
             case "?level":
                 var playerUnit = Globals.ALL_KITTIES[player].Unit;
-                playerUnit.HeroLevel = 6;
+                playerUnit.HeroLevel = cmd.Length > 1 ? int.Parse(cmd[1]) : 10;
                 break;
             case "?blink":
                 var kitty = Globals.ALL_KITTIES[player];
@@ -35,7 +38,8 @@ public static class DebugCmd
                 AffixFactory.ApplyRandomAffix(w);
                 Console.WriteLine("Applied random affix");
                 break;
-            case "?test2":
+            case "?diff":
+                Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");
                 break;
             case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)
