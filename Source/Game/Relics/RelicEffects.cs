@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using WCSharp.Api;
+using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
 public static class RelicEffects
@@ -83,17 +84,10 @@ public static class RelicEffects
                     break;
                 case Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE:
                     var freezeLocation = GetSpellTargetLoc();
-                    FrostbiteRing(freezeLocation);
+                    RelicOnUse.FrostbiteRing(freezeLocation);
                     break;
             }
         };
-    }
-
-    private static void FrostbiteRing(location freezeLocation)
-    {
-        Console.WriteLine("Frostbite");
-
-        freezeLocation.Dispose();
     }
 
     private static void SacredRingOfSummoning(player Player, location targetedPoint)

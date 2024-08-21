@@ -15,7 +15,7 @@ public class Wolf
     private int RegionIndex { get; set; }
     private effect OverheadEffect { get; set; }
     private timer WanderTimer { get; set; }
-    private rect Lane { get; set; }
+    public rect Lane { get; private set; }
     public unit Unit { get; private set; }
     private List<Affix> Affixes { get; set; }
 
@@ -85,7 +85,6 @@ public class Wolf
         {
             WolfMove();
             OverheadEffect.Dispose();
-            OverheadEffect = null;
             effectTimer.Dispose();
         });
     }
@@ -95,6 +94,7 @@ public class Wolf
         Unit.Dispose();
         OverheadEffect?.Dispose();
         WanderTimer.Dispose();
+        RemoveAllWolfAffixes();
     }
 
     public static void SpawnWolves()
@@ -123,12 +123,14 @@ public class Wolf
     public void AddAffix(Affix affix)
     {
         Affixes.Add(affix);
+        AffixFactory.AllAffixes.Add(affix);
         affix.Apply();
     }
 
     public void RemoveAffix(Affix affix)
     {
         Affixes.Remove(affix);
+        AffixFactory.AllAffixes.Remove(affix);
         affix.Remove();
     }
 
@@ -137,6 +139,17 @@ public class Wolf
         foreach (var affix in Affixes)
             if (affix.GetType().Name == affixName) return true;
         return false;
+    }
+
+    private void RemoveAllWolfAffixes()
+    {
+        if(AffixCount() == 0) return;
+        foreach (var affix in Affixes)
+        {
+            affix.Remove();
+            AffixFactory.AllAffixes.Remove(affix);
+        }
+        Affixes.Clear();
     }
 
     public bool IsAffixed()

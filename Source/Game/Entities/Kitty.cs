@@ -47,17 +47,6 @@ public class Kitty
             Console.WriteLine(e.Message);
         }
     }
-    private void DelayCreateKitty()
-    {
-        timer t = CreateTimer();
-        var delayTime = 2.0f;
-        TimerStart(t, delayTime, false, () =>
-        {
-            CreateKitty();
-            t.Dispose();
-        });
-    }
-
     private void InitRoundStats()
     {
         for(int i = 1; i <= Gamemode.NumberOfRounds; i++)

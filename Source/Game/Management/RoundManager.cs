@@ -16,7 +16,12 @@ public static class RoundManager
     private static List<float> ROUND_ENDTIMES = ROUND_ENDTIMES = new List<float>();
     private static string RoundStartingString;
 
-    public static void RoundSetup()
+    public static void Initialize()
+    {
+        if(Gamemode.CurrentGameMode == "Standard") HasDifficultyBeenChosen();
+        else RoundSetup();
+    }
+    private static void RoundSetup()
     {
 
         // Setup
@@ -54,6 +59,19 @@ public static class RoundManager
 
         TimerDialogSetTitle(EndRoundTimerDialog, "Round Time Remaining");
         SetEndRoundTimes();
+    }
+
+    private static void HasDifficultyBeenChosen()
+    {
+        var timer = CreateTimer();
+        TimerStart(timer, 0.35f, true, () =>
+        {
+            if (Difficulty.IsDifficultyChosen)
+            {
+                RoundSetup();
+                timer.Dispose();
+            }
+        });
     }
 
     private static void StartEndRoundTimer()

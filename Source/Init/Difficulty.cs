@@ -17,9 +17,9 @@ public static class Difficulty
     private static button ImpossibleButton;
     private static Dictionary<button, int> ButtonTallys;
     private static Dictionary<button, string> ButtonNames;
-    private const string s_NORMAL = $"{Color.COLOR_YELLOW}Normal|r";
-    private const string s_HARD = $"{Color.COLOR_RED}Hard|r";
-    private const string s_IMPOSSIBLE = $"{Color.COLOR_DARK_RED}Impossible|r";
+    public const string s_NORMAL = $"{Color.COLOR_YELLOW}Normal|r";
+    public const string s_HARD = $"{Color.COLOR_RED}Hard|r";
+    public const string s_IMPOSSIBLE = $"{Color.COLOR_DARK_RED}Impossible|r";
     private static trigger Trigger;
 
     public static bool IsDifficultyChosen { get; set; } = false;
@@ -30,18 +30,13 @@ public static class Difficulty
         CreateDialog();
         RegisterSelectionEvent();
 
-        var timer = CreateTimer();
-        TimerStart(timer, 3.0f, false, () =>
-        {
-            ChooseDifficulty();
-            timer.Dispose();
-        });
+        Utility.SimpleTimer(2.0f, () => ChooseDifficulty());
     }
 
     private static void CreateDialog()
     {
         DifficultyChoosing = DialogCreate();
-        DifficultyChoosing.SetMessage($"{Color.COLOR_GOLD}Please choose a difficulty.{Color.COLOR_RESET}");
+        DifficultyChoosing.SetMessage($"{Color.COLOR_GOLD}Please choose a difficulty{Color.COLOR_RESET}");
         NormalButton = DifficultyChoosing.AddButton(s_NORMAL, 1);
         HardButton = DifficultyChoosing.AddButton(s_HARD, 2);
         ImpossibleButton = DifficultyChoosing.AddButton(s_IMPOSSIBLE, 3);
@@ -65,7 +60,7 @@ public static class Difficulty
             if(!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;
             DialogDisplay(player, DifficultyChoosing, false);
-            Utility.TimedTextToAllPlayers(5.0f, $"{Color.playerColors[player.Id+1]}{player.Name}|r has chosen {ButtonNames[button]} difficulty.");
+            Utility.TimedTextToAllPlayers(3.0f, $"{Color.playerColors[player.Id+1]}{player.Name}|r has chosen {ButtonNames[button]} difficulty.");
         });
     }
 
@@ -73,20 +68,20 @@ public static class Difficulty
     {
         foreach(var player in Globals.ALL_PLAYERS)
             DialogDisplay(player, DifficultyChoosing, true);
-        var timer = CreateTimer();
-        timer.Start(TIME_TO_CHOOSE_DIFFICULTY, false, () =>
-        {
-            var highestTally = 0;
-            button chosenButton = null;
-            foreach (var button in ButtonTallys.Keys)
-                if (ButtonTallys[button] > highestTally)
-                {
-                    highestTally = ButtonTallys[button];
-                    chosenButton = button;
-                }
-            if(chosenButton != null) SetDifficulty(ButtonNames[chosenButton]);
-            timer.Dispose();
-        });
+        Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, () => TallyingVotes());
+    }
+
+    private static void TallyingVotes()
+    {
+        var highestTally = 0;
+        button chosenButton = null;
+        foreach (var button in ButtonTallys.Keys)
+            if (ButtonTallys[button] > highestTally)
+            {
+                highestTally = ButtonTallys[button];
+                chosenButton = button;
+            }
+        if (chosenButton != null) SetDifficulty(ButtonNames[chosenButton]);
     }
 
     private static void SetDifficulty(string difficulty)
@@ -107,7 +102,8 @@ public static class Difficulty
                 break;
         }
         IsDifficultyChosen = true;
-        Console.WriteLine($"{difficulty} has been chosen.");
+        Utility.SimpleTimer(0.75f, () => AffixFactory.DistributeAffixes());
+        Console.WriteLine($"{Color.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
     }
 
     /* summary

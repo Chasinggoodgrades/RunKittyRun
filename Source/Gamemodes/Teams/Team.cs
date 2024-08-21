@@ -84,9 +84,7 @@ public class Team
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         foreach(var team in Globals.ALL_TEAMS.Values)
-        {
             team.Finished = false;
-        }
     }
 
     private static void TeamSetup()
@@ -99,22 +97,10 @@ public class Team
                 player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Color.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
                     " has been enabled. Use " + Color.COLOR_GOLD + "-team <#> " + Color.COLOR_YELLOW_ORANGE + "to join a team");
             }
-            var timer = CreateTimer();
-            TimerStart(timer, RoundManager.ROUND_INTERMISSION - 15.0f, false, () =>
-            {
-                TeamHandler.RandomHandler();
-                DestroyTimer(timer);
-            });
+            Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, () => TeamHandler.RandomHandler());
         }
         else if(Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
-        {
-            var timer = CreateTimer();
-            TimerStart(timer, 1.0f, false, () =>
-            {
-                TeamHandler.RandomHandler();
-                DestroyTimer(timer);
-            });
-        }
+            Utility.SimpleTimer(1.0f, () => TeamHandler.RandomHandler());
     }
 
     private void InitRoundStats()

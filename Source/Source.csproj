@@ -15,7 +15,7 @@
 		<PackageReference Include="WCSharp.Events" Version="3.0.3" />
 		<PackageReference Include="WCSharp.Json" Version="3.0.0" />
 		<PackageReference Include="WCSharp.SaveLoad" Version="3.0.1" />
-		<PackageReference Include="WCSharp.Shared" Version="3.0.1" />
+		<PackageReference Include="WCSharp.Shared" Version="3.0.3" />
 		<PackageReference Include="WCSharp.Sync" Version="3.0.1" />
 	</ItemGroup>
 </Project>

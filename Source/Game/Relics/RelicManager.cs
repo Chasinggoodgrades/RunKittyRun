@@ -31,13 +31,12 @@ public static class RelicManager
         TriggerAddAction(DROP_EVENT_TRIGGER, HandleDrop);
 
         // REGISTER RELICS
-        RelicRegisteration();
+        RelicIDs = RelicRegisteration();
     }
 
-    private static void RelicRegisteration()
+    private static List<int> RelicRegisteration()
     {
-        // If more relics are created, add them to this list. 
-        RelicIDs = new List<int>
+        return new List<int>
         {
             Constants.ITEM_AMULET_OF_EVASIVENESS,
             Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE,

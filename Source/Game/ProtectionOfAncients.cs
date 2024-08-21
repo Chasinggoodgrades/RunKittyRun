@@ -78,7 +78,4 @@ public static class ProtectionOfAncients
         }
         tempGroup.Dispose();
     }
-
-
-
 }

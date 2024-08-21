@@ -52,7 +52,6 @@ public static class VictoryZone
                 MoveAndFinish(teamMember);
             }
             Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID].Finished = true;
-            BarrierSetup.ActivateBarrier();
             RoundManager.RoundEndCheck();
         }
     }
@@ -90,6 +89,7 @@ public static class VictoryZone
         var kitty = Globals.ALL_KITTIES[player];
         kitty.Finished = true;
         kitty.Unit.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y);
+        BarrierSetup.ActivateBarrier();
     }
 
     private static bool VictoryContainerConditions(unit u)

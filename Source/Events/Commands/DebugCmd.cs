@@ -34,9 +34,12 @@ public static class DebugCmd
                 kitty.Unit.AddItem(FourCC("desc"));
                 break;
             case "?test1":
-                Wolf w = Globals.ALL_WOLVES[GetRandomInt(0, Globals.ALL_WOLVES.Count - 1)];
-                AffixFactory.ApplyRandomAffix(w);
-                Console.WriteLine("Applied random affix");
+                Console.WriteLine("Test 1");
+                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_SATYR_KITTY);
+                break;
+            case "?test2":
+                Console.WriteLine("Test 2");
+                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_ASTRAL_KITTY);
                 break;
             case "?diff":
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");

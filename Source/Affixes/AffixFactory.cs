@@ -5,14 +5,17 @@ using static WCSharp.Api.Common;
 
 public static class AffixFactory
 {
+    public static List<Affix> AllAffixes;
     private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable" };
-    private static int[] LaneWeights;
-    private static int NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+    private static float[] LaneWeights;
+    private static int NUMBER_OF_AFFIXED_WOLVES; // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
+    private static int MAX_AFFIXED_PER_LANE = 3;
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;
         if(Program.Debug) Console.WriteLine("Initializing AffixFactory");
+        AllAffixes = new List<Affix>();
         InitLaneWeights();
     }
     private static Affix CreateAffix(Wolf unit, string affixName)
@@ -32,14 +35,26 @@ public static class AffixFactory
     }
 
     /* summary
-     * Weights each lane, where wider lanes have higher weights.
+     * Weighs each lane, where lanes with more area have higher weights.
      */
     private static void InitLaneWeights()
     {
-        LaneWeights = new int[RegionList.WolfRegions.Length];
-        for (int i = 0; i < RegionList.WolfRegions.Length; i++)
+        var regionCount = RegionList.WolfRegions.Length;
+        var totalArea = 0.0f;
+        LaneWeights = new float[regionCount];
+
+        for (int i = 0; i < regionCount; i++)
         {
-            // Finish Weights
+            var region = RegionList.WolfRegions[i];
+            var area = region.Width * region.Height;
+            totalArea += area;
+            LaneWeights[i] = area;
+        }
+        // Normalizing Weights
+        for (int i = 0; i < regionCount; i++)
+        {
+            LaneWeights[i] = LaneWeights[i] / totalArea * 100;
+            if(Program.Debug) Console.WriteLine($"Lane {i + 1} weight: {LaneWeights[i]}");
         }
     }
     
@@ -48,31 +63,65 @@ public static class AffixFactory
      * @parm unit: Wolf
      * @optional affixName: string
      */
-    private static bool CanApplyAffix(Wolf unit, string affixName = "")
+    private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
         if (unit.AffixCount() > MAX_NUMBER_OF_AFFIXES) return false;
         if (unit.HasAffix(affixName)) return false;
         return true;
     }
 
-    public static void ApplyAffix(Wolf unit, string affixName)
+    private static void ApplyAffix(Wolf unit, string affixName)
     {
         if(!CanApplyAffix(unit, affixName)) return; 
         var affix = CreateAffix(unit, affixName);
         unit.AddAffix(affix);
     }
 
-    public static void ApplyRandomAffix(Wolf unit)
+    private static void ApplyRandomAffix(Wolf unit)
     {
         var index = GetRandomInt(0, AffixTypes.Count - 1);
         var randomAffix = AffixTypes[index];
         ApplyAffix(unit, randomAffix);
     }
 
-    public static void ApplyAffixes()
+    public static void DistributeAffixes()
     {
-        // 
+        if(!CanDistributeAffixes()) return;
+
+        NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+
+        var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
+        for (int i = 0; i < NUMBER_OF_AFFIXED_WOLVES; i++)
+        {
+            for (int j = 0; j < LaneWeights.Length; j++)
+            {
+                if (GetRandomReal(0, 100) <= LaneWeights[j])
+                {
+                    if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
+                    {
+                        affixedWolvesInLane[j]++;
+                        var wolvesInLane = Globals.ALL_WOLVES.FindAll(wolf => RegionList.WolfRegions[j].Region.Contains(wolf.Unit));
+                        var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
+                        ApplyRandomAffix(wolf);
+                    }
+                }
+            }
+        }
     }
 
-
+    private static bool CanDistributeAffixes()
+    {
+        if(Difficulty.DifficultyChosen != Difficulty.s_IMPOSSIBLE)
+        {
+            RemoveAllAffixes();
+            return false;
+        }
+        return true;
+    }
+    private static void RemoveAllAffixes()
+    {
+        foreach (var affix in AllAffixes)
+            affix.Remove();
+        AllAffixes.Clear();
+    }   
 }

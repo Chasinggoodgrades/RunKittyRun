@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 
@@ -20,15 +11,14 @@ public static class Standard
     public static void Initialize()
     {
         RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
-        Console.WriteLine($"{Color.COLOR_YELLOW_ORANGE}Standard Mode is a work in progress|r");
+        Difficulty.Initialize();
+        Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
+    }
 
-        var timer = CreateTimer();
-        timer.Start(2.0f, false, () =>
-        {
-            RegisterLevelSixTrigger();
-            RegisterLevelTenTrigger();
-            timer.Dispose();
-        });
+    private static void RegisterLevelTriggers()
+    {
+        RegisterLevelSixTrigger();
+        RegisterLevelTenTrigger();
     }
 
     private static void RegisterLevelSixTrigger()

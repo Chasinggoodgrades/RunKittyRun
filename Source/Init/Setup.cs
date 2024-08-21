@@ -58,8 +58,8 @@ namespace Source.Init
             GameTimer.Initialize();
             VictoryZone.Initialize();
             AffixFactory.Initialize();
-            Difficulty.Initialize();
-            RoundManager.RoundSetup();
+            ItemSpawner.Initialize();
+            RoundManager.Initialize();
         }
 
         private static void GetActivePlayers()

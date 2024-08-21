@@ -16,6 +16,4 @@ public class Unpredictable : Affix
         Unit.Unit.RemoveAbility(Constants.ABILITY_UNPREDICTABLE);
     }
 
-
-
 }

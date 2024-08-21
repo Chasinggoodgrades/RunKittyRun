@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared.Data;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
-
-
-
 public static class GeneralCmds
 {
     private static CommandInfo CmdInfo = null;

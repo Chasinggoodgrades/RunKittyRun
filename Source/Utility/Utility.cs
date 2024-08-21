@@ -57,4 +57,14 @@ public static class Utility
         }
         return false;
     }
+
+    public static void SimpleTimer(float duration, Action action)
+    {
+        var t = CreateTimer();
+        TimerStart(t, duration, false, () =>
+        {
+            action();
+            t.Dispose();
+        });
+    }
 }
