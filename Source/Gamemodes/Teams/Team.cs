@@ -24,7 +24,7 @@ public class Team
         Teammembers = new List<player>();
         RoundProgress = new Dictionary<int, string>();
         TeamTimes = new Dictionary<int, float>();
-        TeamColor = Color.playerColors[TeamID] + "Team " + TeamID;
+        TeamColor = Colors.GetPlayerColor(TeamID) + "Team " + TeamID;
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
     }
@@ -48,6 +48,7 @@ public class Team
 
     public void RemoveMember(player player)
     {
+        if(Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         Globals.PLAYERS_TEAMS.Remove(player);
         Teammembers.Remove(player);
         Globals.ALL_KITTIES[player].TeamID = 0;
@@ -94,8 +95,8 @@ public class Team
             RoundManager.ROUND_INTERMISSION += 15.0f;
             foreach(var player in Globals.ALL_PLAYERS)
             {
-                player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Color.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
-                    " has been enabled. Use " + Color.COLOR_GOLD + "-team <#> " + Color.COLOR_YELLOW_ORANGE + "to join a team");
+                player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Colors.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
+                    " has been enabled. Use " + Colors.COLOR_GOLD + "-team <#> " + Colors.COLOR_YELLOW_ORANGE + "to join a team");
             }
             Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, () => TeamHandler.RandomHandler());
         }

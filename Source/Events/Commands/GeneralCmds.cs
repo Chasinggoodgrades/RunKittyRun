@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class GeneralCmds
 {
@@ -15,11 +16,18 @@ public static class GeneralCmds
                 if (Gamemode.CurrentGameModeType != Globals.TEAM_MODES[0]) return;
                 HandleTeamCommand(p, args);
                 break;
+            case "-save":
+                SaveManager.Save(p);
+                p.DisplayTextTo(Colors.COLOR_GOLD + "Stats have been saved.");
+                break;
             case "-clear":
                 if(p == GetLocalPlayer()) ClearTextMessages();
                 break;
+            case "-color":
+
+                break;
             default:
-                p.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "Unknown command: " + Color.COLOR_GOLD + args[0]);
+                p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
         }
     }

@@ -6,11 +6,15 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes;
-    private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable" };
+    private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES; // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 3;
+
+    /// <summary>
+    /// Only works in Standard mode. Initializes lane weights for affix distribution.
+    /// </summary>
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;
@@ -28,15 +32,17 @@ public static class AffixFactory
             case "Unpredictable":
                 if(Program.Debug) Console.WriteLine("Creating Unpredictable");
                 return new Unpredictable(unit);
+            case "Fixation":
+                if(Program.Debug) Console.WriteLine("Creating Fixation");
+                return new Fixation(unit);
             default:
-                if(Program.Debug) Console.WriteLine($"{Color.COLOR_YELLOW_ORANGE}Invalid affix|r");
+                if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
         }
     }
-
-    /* summary
-     * Weighs each lane, where lanes with more area have higher weights.
-     */
+    /// <summary>
+    /// Initializes the lane weights for affix distribution.
+    /// </summary>
     private static void InitLaneWeights()
     {
         var regionCount = RegionList.WolfRegions.Length;
@@ -84,6 +90,9 @@ public static class AffixFactory
         ApplyAffix(unit, randomAffix);
     }
 
+    /// <summary>
+    /// Distributes affixed wolves weighted by region area, difficulty, and round.
+    /// </summary>
     public static void DistributeAffixes()
     {
         if(!CanDistributeAffixes()) return;

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
-
-
 
 public static class Gamemode
 {
@@ -18,8 +9,6 @@ public static class Gamemode
     public static bool IsGameModeChosen { get; private set; } = false;
     public static int PlayersPerTeam { get; private set; } = 0;
     public static int NumberOfRounds { get; private set; } = 5;
-
-
 
     public static void Initialize()
     {
@@ -31,34 +20,33 @@ public static class Gamemode
         HostPlayer = Globals.ALL_PLAYERS[0];
         HostOptions();
         HostPickingGamemode();
-
     }
 
     private static void HostOptions()
     {
         var gamemodes = Globals.GAME_MODES;
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "=====================================" + Color.COLOR_RESET);
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "Please choose a gamemode." + Color.COLOR_RESET);
+        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);
+        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "Please choose a gamemode." + Colors.COLOR_RESET);
 
         // Standard Mode
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Color.COLOR_YELLOW_ORANGE + gamemodes[0] + // Standard
-            Color.COLOR_GOLD + " (-s)" +
-            Color.COLOR_RESET);
+            Colors.COLOR_YELLOW_ORANGE + gamemodes[0] + // Standard
+            Colors.COLOR_GOLD + " (-s)" +
+            Colors.COLOR_RESET);
 
         // Solo Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Color.COLOR_YELLOW_ORANGE + gamemodes[1] + // Solo
-            Color.COLOR_GOLD + " (-t solo <prog | race>)" +
-            Color.COLOR_RESET);
+            Colors.COLOR_YELLOW_ORANGE + gamemodes[1] + // Solo
+            Colors.COLOR_GOLD + " (-t solo <prog | race>)" +
+            Colors.COLOR_RESET);
 
         // Team Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Color.COLOR_YELLOW_ORANGE + gamemodes[2] + // Team
-            Color.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize>)" +
-            Color.COLOR_RESET);
+            Colors.COLOR_YELLOW_ORANGE + gamemodes[2] + // Team
+            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize>)" +
+            Colors.COLOR_RESET);
 
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_GOLD + "=====================================" + Color.COLOR_RESET);
+        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);
     }
 
     public static void SetGameMode(string mode, string modeType = "", int teamSize = Globals.DEFAULT_TEAM_SIZE)
@@ -80,7 +68,7 @@ public static class Gamemode
             var localplayer = GetLocalPlayer();
             if(GetLocalPlayer() != HostPlayer)
             {
-                player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Color.COLOR_YELLOW_ORANGE + "Please wait for " + Color.PlayerNameColored(HostPlayer) + Color.COLOR_YELLOW_ORANGE + " to pick the gamemode.");
+                player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_YELLOW_ORANGE + "Please wait for " + Colors.PlayerNameColored(HostPlayer) + Colors.COLOR_YELLOW_ORANGE + " to pick the gamemode.");
             }
         }
     }
@@ -89,7 +77,7 @@ public static class Gamemode
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE/3.0f, Color.COLOR_YELLOW_ORANGE + "Gamemode chosen: " + Color.COLOR_GOLD + CurrentGameMode + " " + CurrentGameModeType);
+            player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE/3.0f, Colors.COLOR_YELLOW_ORANGE + "Gamemode chosen: " + Colors.COLOR_GOLD + CurrentGameMode + " " + CurrentGameModeType);
         }
     }
 

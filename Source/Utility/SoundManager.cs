@@ -71,6 +71,10 @@ public static class SoundManager
         }
     }
 
+    /// <summary>
+    /// Plays the POTM death sound ontop of the passed unit.
+    /// While playing team mode, only team members of the passed unit will hear the sound.
+    /// </summary>
     public static void PlayKittyDeathSound(unit Kitty)
     {
 
@@ -83,6 +87,10 @@ public static class SoundManager
         }
     }
 
+    /// <summary>
+    /// Plays the round starting sound based on current round.
+    /// Only rounds 1-5 are setup.
+    /// </summary>
     public static void PlayRoundSound()
     {
         var currRound = Globals.ROUND;

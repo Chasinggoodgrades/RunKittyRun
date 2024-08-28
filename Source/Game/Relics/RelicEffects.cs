@@ -9,11 +9,14 @@ public static class RelicEffects
 {
     private static trigger RelicUsageTrigger;
     private static List<int> RelicAbilities;
+    private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
+    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
+    private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        RelicAbilities = RegisterAbilities();
         RegisterEvents();
-        RegisterAbilities();
     }
 
     private static void RegisterEvents()
@@ -21,13 +24,12 @@ public static class RelicEffects
         RelicUsageTrigger = CreateTrigger();
         foreach (var player in Globals.ALL_PLAYERS)
             TriggerRegisterPlayerUnitEvent(RelicUsageTrigger, player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
-        TriggerAddAction(RelicUsageTrigger, HandleRelicUsage(GetTriggerPlayer()));
+        TriggerAddAction(RelicUsageTrigger, HandleRelicUsage());
     }
 
-    private static void RegisterAbilities()
+    private static List<int> RegisterAbilities()
     {
-        // Active Ability Relics, add to this list.
-        RelicAbilities = new List<int>
+        return new List<int>
         {
             Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE,
             Constants.ABILITY_SUMMON_SHADOW_KITTY,
@@ -35,18 +37,18 @@ public static class RelicEffects
         };
     }
 
-    public static void ApplyRelicEffect(player Player, item Item)
+    public static void HandleRelicEffect(player Player, item Item, bool Active)
     {
         switch (Item.TypeId)
         {
             case Constants.ITEM_AMULET_OF_EVASIVENESS:
-                AmuletOfEvasiveness(Player, false);
+                AmuletOfEvasiveness(Player, Active);
                 break;
             case Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE:
-                BeaconOfUnitedLifeforce(Player, false);
+                BeaconOfUnitedLifeforce(Player, Active);
                 break;
             case Constants.ITEM_ONE_OF_NINE:
-                OneOfNine(Player, false);
+                OneOfNineSetup(Player, Active);
                 break;
         }
     }
@@ -62,25 +64,27 @@ public static class RelicEffects
                 BeaconOfUnitedLifeforce(Player, true);
                 break;
             case Constants.ITEM_ONE_OF_NINE:
-                OneOfNine(Player, true);
+                OneOfNineSetup(Player, true);
                 break;
         }
     }
 
-    private static Action HandleRelicUsage(player Player)
+    private static Action HandleRelicUsage()
     {
         return () =>
         {
             var spellCast = GetSpellAbilityId();
+            var unit = GetTriggerUnit();
+            var Player = GetOwningPlayer(unit);
             if (!RelicAbilities.Contains(spellCast)) return;
             switch (spellCast)
             {
                 case Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE:
                     var pointedLocation = GetSpellTargetLoc();
-                    SacredRingOfSummoning(Player, pointedLocation);
+                    RelicOnUse.SacredRingOfSummoning(Player, pointedLocation);
                     break;
                 case Constants.ABILITY_SUMMON_SHADOW_KITTY:
-                    FangOfShadows(Player);
+                    RelicOnUse.FangOfShadows(Player);
                     break;
                 case Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE:
                     var freezeLocation = GetSpellTargetLoc();
@@ -90,53 +94,73 @@ public static class RelicEffects
         };
     }
 
-    private static void SacredRingOfSummoning(player Player, location targetedPoint)
+    private static void BeaconOfUnitedLifeforce(player Player, bool Active)
     {
-
-
-        targetedPoint.Dispose();
+        var kitty = Globals.ALL_KITTIES[Player];
+        if (Active)
+            kitty.ExtraRevive = true;
+        else
+            kitty.ExtraRevive = false;
     }
 
-    private static void FangOfShadows(player Player)
+    public static void BeaconOfUnitedLifeforceEffect(Kitty kitty)
     {
-
-    }
-
-    private static void BeaconOfUnitedLifeforce(player Player, bool remove)
-    {
-        if (!remove)
+        if (!kitty.ExtraRevive) return;
+        var chance = GetRandomReal(0.00f, 1.00f);
+        if (chance > EXTRA_REVIVE_CHANCE_SINGLE) return;
+        foreach (var k in Globals.ALL_KITTIES.Values)
         {
-            // Apply Effects
+            if (k.Alive) continue;
+            k.ReviveKitty(kitty);
+            if (chance > EXTRA_REVIVE_CHANCE_ALL) break;
+        }
+    }
+
+    private static void AmuletOfEvasiveness(player Player, bool Active)
+    {
+        var kitty = Globals.ALL_KITTIES[Player];
+
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
+
+        if (Active)
+        {
+            var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
+            CollisionDetection.KITTY_COLLISION_RADIUS[Player] = newCollisionRadius;
+            kitty.Unit.ScalingValue = 0.48f;
         }
         else
         {
-            // Remove Effects
+            CollisionDetection.KITTY_COLLISION_RADIUS[Player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
+            kitty.Unit.ScalingValue = 0.60f;
         }
+        CollisionDetection.KittyRegisterCollisions(kitty);
     }
 
-    private static void AmuletOfEvasiveness(player Player, bool remove)
+    private static void OneOfNineSetup(player Player, bool Active)
     {
-        if (!remove)
+        if(Program.Debug) Console.WriteLine("One of Nine is Active: " + Active);
+        var kitty = Globals.ALL_KITTIES[Player];
+        if (Active)
         {
-            // Apply Effects
+            kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+            kitty.Unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
+            kitty.OneOfNine = true;
         }
         else
         {
-            // Remove Effects
+            kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
+            kitty.Unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+            kitty.OneOfNine = false;
         }
     }
 
-    private static void OneOfNine(player Player, bool remove)
+    public static void OneOfNineEffect(player Player)
     {
-        if(Program.Debug) Console.WriteLine("One of Nine");
-        if(!remove)
-        {
-            // Apply Effects
-        }
-        else
-        {
-            // Remove Effects
-        }
+        var kitty = Globals.ALL_KITTIES[Player];
+        if (!kitty.OneOfNine) return;
+        if (Program.Debug) Console.WriteLine("One of Nine Effect");
+        if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
+            IssueImmediateOrder(kitty.Unit, "divineshield");
     }
 
 }

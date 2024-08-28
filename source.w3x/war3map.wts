@@ -1131,11 +1131,6 @@ STRING 1536
 Wear the |cffd45e19Chef|r hat.
 }
 
-STRING 1539
-{
-Food
-}
-
 STRING 1541
 {
 Gold.
@@ -1732,11 +1727,6 @@ STRING 2163
 // Abilities: A01T (NitroRed), Name (Name)
 {
 NitroRed
-}
-
-STRING 2164
-{
-By|cffd45e19 K.|r|c00FF0000L.|r|cffff6699G.|r|cff8080ffA.|r
 }
 
 STRING 2165
@@ -5408,5 +5398,35 @@ Fieryfox
 STRING 3448
 {
 RandomHoe
+}
+
+STRING 3449
+{
+By: |cff3296ffAches|r
+}
+
+STRING 3450
+{
+|cffffff00Game Time:|r
+}
+
+STRING 3452
+{
+|cff00dcffKibble:|r
+}
+
+STRING 3453
+{
+|cffffff00Total Collected Kibble. This can be used in the shop!|r
+}
+
+STRING 3455
+{
+|cffffff00The elasped active gametime.|r
+}
+
+STRING 3456
+{
+Built with C# to Lua transpiler. Special thanks to Orden4, Leyenda, Geek. Stan, Omniology, and any creators of assets used in this map.
 }
 

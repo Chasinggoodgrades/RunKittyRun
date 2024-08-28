@@ -22,7 +22,7 @@ public static class TeamHandler
         }
         else
         {
-            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "The -team command is not available for this gamemode or the time to pick has expired.");
+            Player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "The -team command is not available for this gamemode or the time to pick has expired.");
         }
     }
 
@@ -42,7 +42,7 @@ public static class TeamHandler
         if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
         {
             team.AddMember(Player);
-            Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You have joined team " + team.TeamColor);
+            Player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "You have joined team " + team.TeamColor);
         }
     }
 
@@ -110,14 +110,14 @@ public static class TeamHandler
         {
             if (team.Teammembers.Count >= Gamemode.PlayersPerTeam)
             {
-                Player.DisplayTextTo(team.TeamColor + Color.COLOR_YELLOW_ORANGE + " is full.");
+                Player.DisplayTextTo(team.TeamColor + Colors.COLOR_YELLOW_ORANGE + " is full.");
                 return false;
             }
             if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team currentTeam))
             {
                 if (currentTeam.TeamID == TeamNumber)
                 {
-                    Player.DisplayTextTo(Color.COLOR_YELLOW_ORANGE + "You are already on " + team.TeamColor);
+                    Player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "You are already on " + team.TeamColor);
                     return false;
                 }
             }

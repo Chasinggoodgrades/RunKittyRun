@@ -301,16 +301,6 @@ SetSoundVolume(gg_snd_Sappheiros___Embrace___Chillstep_AUChJfgaAQs, 127)
 SetSoundPitch(gg_snd_Sappheiros___Embrace___Chillstep_AUChJfgaAQs, 1.0)
 end
 
-function CreateUnitsForPlayer11()
-local p = Player(11)
-local u
-local unitID
-local t
-local life
-
-u = BlzCreateUnitWithSkin(p, FourCC("h003"), 3398.6, -3663.8, 63.890, FourCC("h003"))
-end
-
 function CreateNeutralPassiveBuildings()
 local p = Player(PLAYER_NEUTRAL_PASSIVE)
 local u
@@ -331,6 +321,7 @@ local unitID
 local t
 local life
 
+u = BlzCreateUnitWithSkin(p, FourCC("h003"), -260.9, -708.5, 63.890, FourCC("h003"))
 u = BlzCreateUnitWithSkin(p, FourCC("E007"), 3216.0, -3484.8, 122.029, FourCC("E007"))
 u = BlzCreateUnitWithSkin(p, FourCC("E008"), -3212.3, -3481.1, 50.000, FourCC("E008"))
 u = BlzCreateUnitWithSkin(p, FourCC("E00A"), -3344.0, 2061.9, 315.000, FourCC("E00A"))
@@ -340,7 +331,6 @@ function CreatePlayerBuildings()
 end
 
 function CreatePlayerUnits()
-CreateUnitsForPlayer11()
 end
 
 function CreateAllUnits()

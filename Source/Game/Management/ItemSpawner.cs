@@ -19,6 +19,7 @@ public static class ItemSpawner
         Kibbles = KibbleItems();
         TrackItems = new List<item>();
         RegisterEvent();
+        SpawnItems();
     }
 
     private static void RegisterEvent()

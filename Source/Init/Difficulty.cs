@@ -17,9 +17,9 @@ public static class Difficulty
     private static button ImpossibleButton;
     private static Dictionary<button, int> ButtonTallys;
     private static Dictionary<button, string> ButtonNames;
-    public const string s_NORMAL = $"{Color.COLOR_YELLOW}Normal|r";
-    public const string s_HARD = $"{Color.COLOR_RED}Hard|r";
-    public const string s_IMPOSSIBLE = $"{Color.COLOR_DARK_RED}Impossible|r";
+    public const string s_NORMAL = $"{Colors.COLOR_YELLOW}Normal|r";
+    public const string s_HARD = $"{Colors.COLOR_RED}Hard|r";
+    public const string s_IMPOSSIBLE = $"{Colors.COLOR_DARK_RED}Impossible|r";
     private static trigger Trigger;
 
     public static bool IsDifficultyChosen { get; set; } = false;
@@ -36,7 +36,7 @@ public static class Difficulty
     private static void CreateDialog()
     {
         DifficultyChoosing = DialogCreate();
-        DifficultyChoosing.SetMessage($"{Color.COLOR_GOLD}Please choose a difficulty{Color.COLOR_RESET}");
+        DifficultyChoosing.SetMessage($"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}");
         NormalButton = DifficultyChoosing.AddButton(s_NORMAL, 1);
         HardButton = DifficultyChoosing.AddButton(s_HARD, 2);
         ImpossibleButton = DifficultyChoosing.AddButton(s_IMPOSSIBLE, 3);
@@ -60,7 +60,7 @@ public static class Difficulty
             if(!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;
             DialogDisplay(player, DifficultyChoosing, false);
-            Utility.TimedTextToAllPlayers(3.0f, $"{Color.playerColors[player.Id+1]}{player.Name}|r has chosen {ButtonNames[button]} difficulty.");
+            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.");
         });
     }
 
@@ -103,7 +103,7 @@ public static class Difficulty
         }
         IsDifficultyChosen = true;
         Utility.SimpleTimer(0.75f, () => AffixFactory.DistributeAffixes());
-        Console.WriteLine($"{Color.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
+        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
     }
 
     /* summary

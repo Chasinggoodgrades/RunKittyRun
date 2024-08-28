@@ -46,7 +46,7 @@ public static class Standard
                 var player = GetOwningPlayer(GetTriggerUnit());
                 var kitty = Globals.ALL_KITTIES[player];
                 kitty.CanBuyRelic = true;
-                player.DisplayTimedTextTo(ALERT_DURATION, $"{Color.COLOR_YELLOW_ORANGE}Your skills have grown. Visit my shop at the top right for some special wares.|r");
+                player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your skills have grown. Visit my shop at the top right for some special wares.|r");
             }
         });
     }
@@ -56,7 +56,7 @@ public static class Standard
         var player = GetOwningPlayer(GetTriggerUnit());
         var kitty = GetTriggerUnit();
         kitty.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        player.DisplayTimedTextTo(ALERT_DURATION, $"{Color.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
+        player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
 
     }
 }

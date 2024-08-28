@@ -38,7 +38,7 @@ public static class PlayerLeaves
         circle.RemoveCircle();
         nameTag.Dispose();
         Globals.ALL_PLAYERS.Remove(leavingPlayer);
-        Console.WriteLine(Color.PlayerNameColored(leavingPlayer) + Color.COLOR_YELLOW_ORANGE + " has left the game.");
+        Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
         RoundManager.RoundEndCheck();
     }
 }

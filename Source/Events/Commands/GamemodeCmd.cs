@@ -13,12 +13,12 @@ public static class GamemodeCmd
     {
         if (player != Gamemode.HostPlayer)
         {
-            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Only " + Color.PlayerNameColored(Gamemode.HostPlayer) + Color.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
+            player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Only " + Colors.PlayerNameColored(Gamemode.HostPlayer) + Colors.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
             return;
         }
         if (Gamemode.IsGameModeChosen)
         {
-            player.DisplayTimedTextTo(10.0f, Color.COLOR_YELLOW_ORANGE + "Gamemode has already been chosen. Cannot change gamemode.");
+            player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Gamemode has already been chosen. Cannot change gamemode.");
             return;
         }
         var parts = command.Split(' ');
@@ -33,7 +33,7 @@ public static class GamemodeCmd
                 HandleTeamOrSoloMode(player, parts);
                 break;
             default:
-                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "Use: -s, -t solo, -t team");
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Use: -s, -t solo, -t team");
                 break;
         }
     }
@@ -64,7 +64,7 @@ public static class GamemodeCmd
     {
         if (parts.Length < 2)
         {
-            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
             return;
         }
 
@@ -77,7 +77,7 @@ public static class GamemodeCmd
                 HandleTeamMode(player, parts);
                 break;
             default:
-                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Color.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
                 break;
         }
     }

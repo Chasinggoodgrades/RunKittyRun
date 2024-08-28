@@ -45,12 +45,12 @@ public static class RoundManager
         GAME_STARTED = true;
         Globals.GAME_ACTIVE = true;
         TimerDialogDisplay(RoundTimerDialog, false);
-        TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
+        //TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
         StartEndRoundTimer();
 
         BarrierSetup.DeactivateBarrier();
         SoundManager.PlayRoundSound();
-        Utility.TimedTextToAllPlayers(2.0f, $"{Color.COLOR_CYAN}Run Kitty Run!!|r");
+        Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
     }
 
     private static void InitEndRoundTimer()
@@ -91,7 +91,7 @@ public static class RoundManager
             var t = CreateTimer();
             t.Start(1.0f, false, () =>
             {
-                RoundStartingString = $"{Color.COLOR_YELLOW_ORANGE}Round |r{Color.COLOR_GREEN}{Globals.ROUND}|r{Color.COLOR_YELLOW_ORANGE} will begin in |r{Color.COLOR_RED}{(int)StartRoundTimer.Remaining}|r{Color.COLOR_YELLOW_ORANGE} seconds.|r";
+                RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
                 if (StartRoundTimer.Remaining % 5 <= 0.1 && StartRoundTimer.Remaining > 5) Utility.TimedTextToAllPlayers(5.0f, RoundStartingString);
                 if (StartRoundTimer.Remaining <= 5 && StartRoundTimer.Remaining > 0) Utility.TimedTextToAllPlayers(1.0f, RoundStartingString);
                 CountDown();
@@ -109,7 +109,7 @@ public static class RoundManager
         Resources.BonusResources();
         MovedTimedCameraToStart();
         MoveAllPlayersToStart();
-        Kitty.RoundResetAll();
+        RoundResetAll();
         Team.RoundResetAllTeams();
 
 
@@ -161,6 +161,20 @@ public static class RoundManager
         foreach(var kitty in Globals.ALL_KITTIES.Values)
         {
             MovePlayerToStart(kitty.Player);
+        }
+    }
+
+    private static void RoundResetAll()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        {
+            kitty.Unit.Revive(RegionList.SpawnRegions[kitty.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Player.Id].Center.Y, false);
+            Globals.ALL_CIRCLES[kitty.Player].HideCircle();
+            kitty.Alive = true;
+            kitty.ProgressZone = 0;
+            kitty.Progress = 0.0f;
+            kitty.Finished = false;
+            kitty.Unit.Mana = kitty.Unit.MaxMana;
         }
     }
 

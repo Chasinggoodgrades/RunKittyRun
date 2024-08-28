@@ -43,13 +43,13 @@ public static class Multiboard
     private static void TeamsStatsMultiboard()
     {
         TeamsStatsMB = CreateMultiboard();
-        TeamsStatsMB.Title = $"Teams Stats {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Color.COLOR_RED}[Press ESC]|r";
+        TeamsStatsMB.Title = $"Teams Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         TeamsStatsMB.IsDisplayed = false;
     }
     public static void CurrentTeamsMultiboard()
     {
         CurrentTeamsMB = CreateMultiboard();
-        CurrentTeamsMB.Title = $"Current Teams {Color.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Color.COLOR_RED}[Press ESC]|r";
+        CurrentTeamsMB.Title = $"Current Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         CurrentTeamsMB.IsDisplayed = true;
         CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
         CurrentTeamsMB.Columns = Gamemode.PlayersPerTeam;
@@ -76,10 +76,10 @@ public static class Multiboard
             TeamsStatsMB.GetItem(0, i).SetVisibility(true, false);
             TeamsStatsMB.GetItem(0, i).SetWidth(0.05f);
         }
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetText(Color.COLOR_GOLD + "Overall");
+        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetText(Colors.COLOR_GOLD + "Overall");
         TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
         TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetWidth(0.05f);
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetText(Color.COLOR_GOLD + "Time");
+        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetText(Colors.COLOR_GOLD + "Time");
         TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetVisibility(true, false);
         TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetWidth(0.05f);
 
@@ -88,7 +88,7 @@ public static class Multiboard
         float overallProgress;
         foreach (var team in Globals.ALL_TEAMS)
         {
-            // Team Name / Color
+            // Team Name / Colors
             overallProgress = 0.0f;
             TeamsStatsMB.GetItem(rowIndex, 0).SetText(team.Value.TeamColor);
             TeamsStatsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
@@ -133,7 +133,7 @@ public static class Multiboard
                 {
                     string name = member.Name.Split('#')[0];
                     if (name.Length > 7) name = name.Substring(0, 7);
-                    return Color.ColorString(name, member.Id + 1);
+                    return Colors.ColorString(name, member.Id + 1);
                 }));
             CurrentTeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
             CurrentTeamsMB.GetItem(rowIndex, 0).SetText($"{team.Value.TeamColor}:");

@@ -37,13 +37,30 @@ public static class Utility
         }
     }
 
+    /// <summary>
+    /// Converts a float to time string.
+    /// Used for colorizing the time string in Teams mode.
+    /// </summary>
     public static string ConvertFloatToTime(float time, int teamID)
     {
         if (time <= 0.0f) return "0:00";
         var minutes = (int)time / 60;
         var seconds = (int)time % 60;
-        if (seconds < 10) return Color.ColorString($"{minutes}:0{seconds}", teamID);
-        return Color.ColorString($"{minutes}:{seconds}", teamID);
+        if (seconds < 10) return Colors.ColorString($"{minutes}:0{seconds}", teamID);
+        return Colors.ColorString($"{minutes}:{seconds}", teamID);
+    }
+
+    /// <summary>
+    /// Converts a float to time string
+    /// No colorization.
+    /// </summary>
+    public static string ConvertFloatToTime(float time)
+    {
+        if (time <= 0.0f) return "0:00";
+        var minutes = (int)time / 60;
+        var seconds = (int)time % 60;
+        if (seconds < 10) return $"{minutes}:0{seconds}";
+        return $"{minutes}:{seconds}";
     }
 
     public static bool IsDeveloper(player p)

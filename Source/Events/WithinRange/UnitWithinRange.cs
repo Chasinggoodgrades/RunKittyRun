@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 
 public static class UnitWithinRange
@@ -115,36 +112,36 @@ public static class UnitWithinRange
         DeRegisterUnitWithinRangeUnit(unit);
     }
 
-    private static void DeRegisterUnitWithinRangeUnit(unit u)
+    public static void DeRegisterUnitWithinRangeUnit(unit u)
     {
         int unitId = GetUniqueUnitId(u);
-
+        Console.WriteLine("Begin");
         if (unitRangeTriggers.ContainsKey(unitId))
         {
             foreach (var kvp in unitRangeTriggers[unitId])
             {
-                DestroyTrigger(kvp.Value);
+                RemoveTrigger(kvp.Value);
             }
             unitRangeTriggers.Remove(unitId);
         }
 
         if (unitCleanupTriggers.ContainsKey(unitId))
         {
-            DestroyTrigger(unitCleanupTriggers[unitId]);
+            RemoveTrigger(unitCleanupTriggers[unitId]);
             unitCleanupTriggers.Remove(unitId);
         }
 
         withinRangeUsers.Remove(u);
     }
 
-    private static void DestroyTrigger(trigger trig)
+    private static void RemoveTrigger(trigger trig)
     {
         int trigId = GetUniqueTriggerId(trig);
         // Remove saved handles and cleanup
         unitRangeUnits.Remove(trigId);
         udg_WithinRangeHash.Remove(trigId);
         // Destroy the trigger
-        WCSharp.Api.Common.DestroyTrigger(trig);
+        DestroyTrigger(trig);
     }
 
     public static bool RegisterUnitWithinRangeEvent(unit u, float range, Func<bool> filter, float eventValue)

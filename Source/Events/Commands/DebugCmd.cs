@@ -6,7 +6,7 @@ public static class DebugCmd
 {
     public static void Handle(player player, string command)
     {
-        string[] cmd = command.Split(" ");
+        var cmd = command.Split(" ");
         var startswith = cmd[0];
         switch (startswith)
         {
@@ -35,7 +35,8 @@ public static class DebugCmd
                 break;
             case "?test1":
                 Console.WriteLine("Test 1");
-                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_SATYR_KITTY);
+                var kittyxd = Globals.ALL_KITTIES[player].Unit;
+                unit.Create(player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kittyxd.X, kittyxd.Y); 
                 break;
             case "?test2":
                 Console.WriteLine("Test 2");

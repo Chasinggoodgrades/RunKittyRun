@@ -12,7 +12,7 @@ public class Wolf
     private const float WANDER_UPPER_BOUND = 0.83f;
     private const string OVERHEAD_EFFECT = "TalkToMe.mdx";
 
-    private int RegionIndex { get; set; }
+    public int RegionIndex { get; set; }
     private effect OverheadEffect { get; set; }
     private timer WanderTimer { get; set; }
     public rect Lane { get; private set; }
@@ -97,6 +97,9 @@ public class Wolf
         RemoveAllWolfAffixes();
     }
 
+    /// <summary>
+    /// Spawns wolves based on round and lane according to the Globals.WolvesPerRound dictionary.
+    /// </summary>
     public static void SpawnWolves()
     {
         if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
@@ -111,6 +114,9 @@ public class Wolf
             }
         }
     }
+    /// <summary>
+    /// Removes all wolves from the game and clears wolf list.
+    /// </summary>
     public static void RemoveAllWolves()
     {
         foreach (var wolf in Globals.ALL_WOLVES)
@@ -152,14 +158,7 @@ public class Wolf
         Affixes.Clear();
     }
 
-    public bool IsAffixed()
-    {
-        return Affixes.Count > 0;
-    }
-
-    public int AffixCount()
-    {
-        return Affixes.Count;
-    }
+    public bool IsAffixed() => Affixes.Count > 0;
+    public int AffixCount() => Affixes.Count;
     #endregion
 }

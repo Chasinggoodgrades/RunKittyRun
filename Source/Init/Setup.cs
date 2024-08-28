@@ -12,6 +12,7 @@ namespace Source.Init
 
         public static void Initialize()
         {
+            Colors.Initialize();
             GetActivePlayers();
             Gamemode.Initialize();
             Safezone.Initialize();
@@ -47,7 +48,7 @@ namespace Source.Init
             CustomStatFrame.Init();
             Resources.Initialize();
             Multiboard.Initialize();
-            Shops.Initialize(); 
+            Shops.Initialize();
             WolfArea.Initialize();
             SoundManager.Initialize();
             Kitty.Initialize();
@@ -58,6 +59,7 @@ namespace Source.Init
             GameTimer.Initialize();
             VictoryZone.Initialize();
             AffixFactory.Initialize();
+            ShadowKitty.Initialize();
             ItemSpawner.Initialize();
             RoundManager.Initialize();
         }

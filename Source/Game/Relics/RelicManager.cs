@@ -64,7 +64,7 @@ public static class RelicManager
             return;
         }
         kitty.Relics.Add(item);
-        RelicEffects.ApplyRelicEffect(player, item);
+        RelicEffects.HandleRelicEffect(player, item, true);
     }
 
     private static void HandleDrop()
@@ -74,6 +74,7 @@ public static class RelicManager
         var kitty = Globals.ALL_KITTIES[player];
         if (!RelicIDs.Contains(item.TypeId)) return;
         if (kitty.Relics.Count == 0) return;
+        RelicEffects.HandleRelicEffect(player, item, false);
         kitty.Relics.Remove(item);
     }
     private static void RefundHandler(player Player, item Item)
@@ -81,11 +82,11 @@ public static class RelicManager
         var kitty = Globals.ALL_KITTIES[Player];
         var itemCost = 650; // Theres no built in function to determine item cost, so it's just gonna be set at 650. 
         if (kitty.Unit.Level < 10)
-            Player.DisplayTextTo($"{Color.COLOR_YELLOW_ORANGE}You must have reached level 10 to purchase a relic.|r");
+            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You must have reached level 10 to purchase a relic.|r");
         else if (kitty.Relics.Count != 0)
-            Player.DisplayTextTo($"{Color.COLOR_YELLOW_ORANGE}You already have a relic!|r");
+            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You already have a relic!|r");
         else
-            Console.WriteLine($"{Color.COLOR_RED}Error Refunding, report to developer.|r {Color.COLOR_GOLD}Relic Manager: {Item.Name}|r");
+            Console.WriteLine($"{Colors.COLOR_RED}Error Refunding, report to developer.|r {Colors.COLOR_GOLD}Relic Manager: {Item.Name}|r");
         Player.Gold += itemCost;
         kitty.Unit.RemoveItem(Item);
         Item.Dispose();

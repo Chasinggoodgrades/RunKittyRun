@@ -3,6 +3,7 @@ using System.Globalization;
 using Source.Init;
 using WCSharp.Api;
 using WCSharp.Events;
+using WCSharp.SaveLoad;
 using WCSharp.Shared;
 using WCSharp.Sync;
 using static WCSharp.Api.Common;
@@ -39,10 +40,12 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
+				FrameManager.Initialize();
                 Setup.Initialize();
                 CommandHandler.Initialize();
 				CommandManager.InitializeCommands();
                 BarrierSetup.Initialize();
+				SaveManager.Initialize();
 
 
             }

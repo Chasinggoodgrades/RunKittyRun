@@ -46,6 +46,9 @@ public class Safezone
         Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
     }
 
+    /// <summary>
+    /// Resets progress zones and reached safezones to initial state.
+    /// </summary>
     public static void ResetPlayerSafezones()
     {
         foreach(var player in Globals.ALL_PLAYERS)

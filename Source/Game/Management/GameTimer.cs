@@ -25,6 +25,7 @@ public static class GameTimer
             Globals.GAME_SECONDS += 1.0f;
             Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
             Globals.GAME_TIMER.Pause();
+            BlzFrameSetText(BlzGetFrameByName("ResourceBarSupplyText", 0), $"{Utility.ConvertFloatToTime(Globals.GAME_SECONDS)}");
             UpdatingTimes();
         }
     }
@@ -54,6 +55,11 @@ public static class GameTimer
         }
     }
 
+    /// <summary>
+    /// Returns a team's total time in seconds.
+    /// </summary>
+    /// <param name="team"></param>
+    /// <returns></returns>
     public static float TeamTotalTime(Team team)
     {
         var totalTime = 0.0f;

@@ -28,8 +28,8 @@ public static class CommandManager
 
     private static void AddCommand(string cmd, string desc, string usage)
     {
-        desc = Color.COLOR_YELLOW_ORANGE + desc;
-        usage = Color.COLOR_GOLD + usage;
+        desc = Colors.COLOR_YELLOW_ORANGE + desc;
+        usage = Colors.COLOR_GOLD + usage;
         CommandInfo command = new CommandInfo(cmd, desc, usage);
         commands.Add(cmd.ToLower(), command);
     }
@@ -52,7 +52,7 @@ public class CommandInfo
     public string Cmd { get; }
     public string Desc { get; }
     public string Usage { get; }
-    public string Error = Color.COLOR_YELLOW_ORANGE + "Invalid command or usage " + Color.COLOR_RESET;
+    public string Error = Colors.COLOR_YELLOW_ORANGE + "Invalid command or usage " + Colors.COLOR_RESET;
 
     public CommandInfo(string cmd, string desc, string usage)
     {

@@ -43,7 +43,7 @@ public static class CustomStatFrame
             BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.435f, 0.08f);
         else
             BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName("CustomStat", Count - 1), FRAMEPOINT_BOTTOMLEFT, 0, -0.005f);
-
+         
         Stats.Add(new CustomStat
         {
             Frame = fh,
@@ -211,13 +211,13 @@ public static class CustomStatFrame
     private static string GetPlayerTeamName(unit u)
     {
         if(Globals.PLAYERS_TEAMS.TryGetValue(GetOwningPlayer(u), out Team team)) return team.TeamColor;
-        return $"{ Color.COLOR_YELLOW_ORANGE}Team Aches|r";
+        return $"{ Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Progress.ToString("F2");
-    private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Saves;
-    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Deaths;
-    private static int GetPlayerSaveStreak(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveStreak;
-    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Games;
+    private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.Saves;
+    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.Deaths;
+    private static int GetPlayerSaveStreak(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.SaveStreak;
+    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.NormalGames;
     private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Time[Globals.ROUND];
 }

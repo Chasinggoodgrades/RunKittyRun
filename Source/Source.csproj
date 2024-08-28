@@ -4,9 +4,6 @@
 		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Include="..\artifacts\war3map.lua" Link="war3map.lua" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="WCSharp.Api" Version="3.0.2" />
 		<PackageReference Include="WCSharp.Buffs" Version="3.0.2" />
 		<PackageReference Include="WCSharp.DateTime" Version="3.0.0" />

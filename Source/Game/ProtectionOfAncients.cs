@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Source;
 using WCSharp.Api;
 using WCSharp.Effects;
+using WCSharp.Events;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public static class ProtectionOfAncients
@@ -24,7 +26,8 @@ public static class ProtectionOfAncients
         foreach(var player in Globals.ALL_PLAYERS)
             TriggerRegisterPlayerUnitEvent(Trigger, player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
         TriggerAddAction(Trigger, ActivationEvent);
-        TriggerAddCondition(Trigger, Condition(() => GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS));
+        TriggerAddCondition(Trigger, Condition(() => 
+        GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
     }
 
     private static void ActivationEvent()
@@ -56,7 +59,7 @@ public static class ProtectionOfAncients
     {
         // Append units only if they're dead and a kitty circle. 
         var unit = GetFilterUnit();
-        if (GetUnitTypeId(GetFilterUnit()) != Constants.UNIT_KITTY_CIRCLE) return false;
+        if (GetUnitTypeId(unit) != Constants.UNIT_KITTY_CIRCLE) return false;
 
         var kitty = Globals.ALL_KITTIES[GetOwningPlayer(unit)].Unit;
         if (kitty.Alive) return false; 
@@ -69,9 +72,9 @@ public static class ProtectionOfAncients
         // Get all units within range of the player unit (kitty) and revive them
         var tempGroup = CreateGroup();
         var kitty = Globals.ALL_KITTIES[Player];
+        var levelOfAbility = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         GroupEnumUnitsInRange(tempGroup, GetUnitX(kitty.Unit), GetUnitY(kitty.Unit), EFFECT_RADIUS, Filter(() => AoEEffectFilter()));
-        var l_UnitsInRange = tempGroup.ToList();
-        foreach (var unit in l_UnitsInRange)
+        foreach (var unit in tempGroup.ToList())
         {
             var playerToRevive = Globals.ALL_KITTIES[GetOwningPlayer(unit)];
             playerToRevive.ReviveKitty(kitty);
