@@ -90,9 +90,9 @@ public static class CustomStatFrame
             SelectedUnit[GetPlayerId(GetTriggerPlayer())] = GetTriggerUnit();
         });
 
-        for (int i = 0; i < Globals.NUMBER_OF_PLAYERS; i++)
+        foreach(var player in Globals.ALL_PLAYERS)
         {
-            if(GetPlayerSlotState(Player(i)) == playerslotstate.Playing) TriggerRegisterPlayerUnitEvent(trig, Player(i), EVENT_PLAYER_UNIT_SELECTED, null);
+            if(player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SELECTED, null);
         }
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);

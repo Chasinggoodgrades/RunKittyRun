@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System;
 public class ShadowKitty
 {
-    public unit Unit;
-    public player Player;
+    public unit Unit { get; set; }
+    public player Player { get; }
     public int ID;
     public trigger w_Collision;
     public trigger c_Collision;
@@ -20,7 +20,7 @@ public class ShadowKitty
 
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         ALL_SHADOWKITTIES = new Dictionary<player, ShadowKitty>();
         CreateShadowKitties();
     }

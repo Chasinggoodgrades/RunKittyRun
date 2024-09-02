@@ -10,7 +10,6 @@ public static class Difficulty
     public static string DifficultyChosen { get; private set; }
     public static int DifficultyValue { get; private set; }
     private static float TIME_TO_CHOOSE_DIFFICULTY = 10.0f;
-    private static int[] DifficultyValues = { 4, 6, 9 };
     private static dialog DifficultyChoosing;
     private static button NormalButton;
     private static button HardButton;
@@ -21,7 +20,12 @@ public static class Difficulty
     public const string s_HARD = $"{Colors.COLOR_RED}Hard|r";
     public const string s_IMPOSSIBLE = $"{Colors.COLOR_DARK_RED}Impossible|r";
     private static trigger Trigger;
-
+    private enum DifficultyLevel
+    {
+        Normal = 4,
+        Hard = 6,
+        Impossible = 9
+    }
     public static bool IsDifficultyChosen { get; set; } = false;
     public static void Initialize()
     {
@@ -90,15 +94,15 @@ public static class Difficulty
         {
             case s_NORMAL:
                 DifficultyChosen = s_NORMAL;
-                DifficultyValue = DifficultyValues[0];
+                DifficultyValue = (int)DifficultyLevel.Normal;
                 break;
             case s_HARD:
                 DifficultyChosen = s_HARD;
-                DifficultyValue = DifficultyValues[1];
+                DifficultyValue = (int)DifficultyLevel.Hard;
                 break;
             case s_IMPOSSIBLE:
                 DifficultyChosen = s_IMPOSSIBLE;
-                DifficultyValue = DifficultyValues[2];
+                DifficultyValue = (int)DifficultyLevel.Impossible;
                 break;
         }
         IsDifficultyChosen = true;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.SaveLoad;
 public class KittyData : Saveable
 {
@@ -28,4 +29,14 @@ public class SaveData : Saveable
 public enum KittyType
 {
     Kitty = 1,
+}
+
+
+public class Testingxd
+{
+
+    private static void Testlolol()
+    {
+        var xd = new Dictionary<string, int>();
+    }
 }

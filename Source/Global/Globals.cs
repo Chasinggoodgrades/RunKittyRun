@@ -11,7 +11,6 @@ using static WCSharp.Api.Common;
 
 public static class Globals
 {
-    public const int NUMBER_OF_PLAYERS = 23;
     public const int MAX_TEAM_SIZE = 12;
     public const float TIME_TO_PICK_GAMEMODE = 30.0f;
     public const int DEFAULT_TEAM_SIZE = 3;

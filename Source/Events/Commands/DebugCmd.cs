@@ -35,12 +35,12 @@ public static class DebugCmd
                 break;
             case "?test1":
                 Console.WriteLine("Test 1");
-                var kittyxd = Globals.ALL_KITTIES[player].Unit;
-                unit.Create(player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kittyxd.X, kittyxd.Y); 
+                StatsFrame.RefreshStatsFrameData();
                 break;
             case "?test2":
                 Console.WriteLine("Test 2");
-                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_ASTRAL_KITTY);
+                PlayerLeaves.PlayerLeavesEvent(Player(8));
+                //BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_ASTRAL_KITTY);
                 break;
             case "?diff":
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");

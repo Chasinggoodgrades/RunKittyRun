@@ -83,11 +83,15 @@ public static class AffixFactory
         unit.AddAffix(affix);
     }
 
-    private static void ApplyRandomAffix(Wolf unit)
+    private static void ApplyRandomAffix(Wolf unit, int laneNumber)
     {
-        var index = GetRandomInt(0, AffixTypes.Count - 1);
+        // if above lane 8.. exclude fixation
+        var affixes = new List<string>(AffixTypes);
+        if (laneNumber > 7) affixes.Remove("Fixation");
+        var index = GetRandomInt(0, affixes.Count - 1);
         var randomAffix = AffixTypes[index];
         ApplyAffix(unit, randomAffix);
+        affixes.Clear();
     }
 
     /// <summary>
@@ -110,8 +114,8 @@ public static class AffixFactory
                     {
                         affixedWolvesInLane[j]++;
                         var wolvesInLane = Globals.ALL_WOLVES.FindAll(wolf => RegionList.WolfRegions[j].Region.Contains(wolf.Unit));
-                        var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                        ApplyRandomAffix(wolf);
+
+                        //var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
                     }
                 }
             }

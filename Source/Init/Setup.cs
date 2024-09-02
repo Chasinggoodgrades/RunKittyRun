@@ -61,6 +61,7 @@ namespace Source.Init
             AffixFactory.Initialize();
             ShadowKitty.Initialize();
             ItemSpawner.Initialize();
+            StatsFrame.PopulateStatsFrameData();
             RoundManager.Initialize();
         }
 

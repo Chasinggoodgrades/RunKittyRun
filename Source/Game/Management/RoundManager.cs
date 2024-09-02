@@ -111,6 +111,7 @@ public static class RoundManager
         MoveAllPlayersToStart();
         RoundResetAll();
         Team.RoundResetAllTeams();
+        SaveManager.SaveAll();
 
 
         var timer = CreateTimer();
