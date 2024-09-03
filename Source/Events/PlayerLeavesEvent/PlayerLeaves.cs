@@ -48,6 +48,10 @@ public static class PlayerLeaves
         RoundManager.RoundEndCheck();
     }
 
+    /// <summary>
+    /// Test function to simulate a player leaving the game. Remove later.
+    /// </summary>
+    /// <param name="player"></param>
     public static void PlayerLeavesEvent(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];

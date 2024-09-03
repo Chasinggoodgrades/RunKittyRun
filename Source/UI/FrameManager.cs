@@ -143,7 +143,7 @@ public static class StatsFrame
         }
     }
     /// <summary>
-    /// Updates the specificed players stats on the stats frame.
+    /// Updates the specified players stats on the stats frame.
     /// </summary>
     /// <param name="player"></param>
     public static void RefreshStatsFrameData(player player)

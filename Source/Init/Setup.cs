@@ -59,6 +59,7 @@ namespace Source.Init
             GameTimer.Initialize();
             VictoryZone.Initialize();
             AffixFactory.Initialize();
+            RewardsManager.Initialize();
             ShadowKitty.Initialize();
             ItemSpawner.Initialize();
             StatsFrame.PopulateStatsFrameData();

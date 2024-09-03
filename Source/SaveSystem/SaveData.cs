@@ -17,6 +17,7 @@ public class KittyData : Saveable
     public int Round3Time { get; set; } = 600;
     public int Round4Time { get; set; } = 600;
     public int Round5Time { get; set; } = 600;
+    public int Cosmic_Wings { get; set; } = 0;
 
 }
 
@@ -29,14 +30,4 @@ public class SaveData : Saveable
 public enum KittyType
 {
     Kitty = 1,
-}
-
-
-public class Testingxd
-{
-
-    private static void Testlolol()
-    {
-        var xd = new Dictionary<string, int>();
-    }
 }
