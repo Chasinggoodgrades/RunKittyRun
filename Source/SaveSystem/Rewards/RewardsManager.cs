@@ -5,6 +5,7 @@ using static WCSharp.Api.Common;
 public static class RewardsManager
 {
     public static List<Reward> Rewards = new List<Reward>();
+    public static List<Reward> GameStatRewards = new List<Reward>();
     private static trigger Trigger = CreateTrigger();
     public static Dictionary<player, effect> ActiveWings = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveAuras = new Dictionary<player, effect>();
@@ -29,7 +30,7 @@ public static class RewardsManager
 
     private static void RegisterTrigger()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
         }
@@ -55,29 +56,29 @@ public static class RewardsManager
 
     private static bool IsResetSpell(int spellID)
     {
-        if(spellID == Constants.ABILITY_RESET) return true;
+        if (spellID == Constants.ABILITY_RESET) return true;
         return false;
     }
 
     private static void ResetRewardSettings(unit Unit)
     {
         var player = GetOwningPlayer(Unit);
-        if(ActiveWings[player] != null)
+        if (ActiveWings[player] != null)
         {
             ActiveWings[player].Dispose();
             ActiveWings[player] = null;
         }
-        if(ActiveAuras[player] != null)
+        if (ActiveAuras[player] != null)
         {
             ActiveAuras[player].Dispose();
             ActiveAuras[player] = null;
         }
-        if(ActiveHats[player] != null)
+        if (ActiveHats[player] != null)
         {
             ActiveHats[player].Dispose();
             ActiveHats[player] = null;
         }
-        if(ActiveTrails[player] != null)
+        if (ActiveTrails[player] != null)
         {
             ActiveTrails[player].Dispose();
             ActiveTrails[player] = null;
@@ -91,19 +92,19 @@ public static class RewardsManager
         Console.WriteLine(player.Name + " has casted " + reward.GetRewardName() + "!");
         reward.ApplyReward(player);
     }
-    public static void AddReward(Reward reward)
+    public static Reward AddReward(Reward reward)
     {
         Rewards.Add(reward);
         Console.WriteLine(reward.GetRewardName() + " has been added to the rewards list.");
+        return reward;
     }
 
-    public static void AddReward(string name, int abilityID, string originPoint, string modelPath, RewardType rewardType)
+    public static Reward AddReward(string name, int abilityID, string originPoint, string modelPath, RewardType rewardType, bool gameStatsAward)
     {
         switch (rewardType)
         {
             case RewardType.Wings:
-                AddReward(new Wings(name, abilityID, originPoint, modelPath, rewardType));
-                break;
+                return AddReward(new Wings(name, abilityID, originPoint, modelPath, rewardType, gameStatsAward));
             case RewardType.Hat:
                 //AddReward(new Hat(name, originPoint, modelPath, rewardType));
                 break;
@@ -114,12 +115,15 @@ public static class RewardsManager
                 //AddReward(new Trail(name, originPoint, modelPath, rewardType));
                 break;
         }
+        return null;
     }
 
     public static void TestReward()
     {
-        AddReward("Cosmic Wings", Constants.ABILITY_SET_WINGS_2_02, "chest", "war3mapImported\\Cosmic Wings.mdx", RewardType.Wings);
+        var reward = AddReward(Awards.Cosmic_Wings.ToString(), Constants.ABILITY_SET_WINGS_2_02, "chest", "war3mapImported\\Cosmic Wings.mdx", RewardType.Wings, true);
+
     }
+
 
 
 }

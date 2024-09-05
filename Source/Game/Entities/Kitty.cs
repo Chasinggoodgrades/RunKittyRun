@@ -110,8 +110,8 @@ public class Kitty
 
     private void UpdateSaviorStats(Kitty savior)
     {
-        savior.SaveData.Saves += 1;
-        savior.SaveData.SaveStreak += 1;
+        savior.SaveData.GameStats[StatTypes.Saves] += 1;
+        savior.SaveData.GameStats[StatTypes.SaveStreak] += 1;
         savior.Player.Gold += Resources.SaveGold;
         savior.Unit.Experience += Resources.SaveExperience;
     }
@@ -124,8 +124,8 @@ public class Kitty
         var circle = Globals.ALL_CIRCLES[Player];
         Unit.Kill();
         Alive = false;
-        SaveData.Deaths += 1;
-        SaveData.SaveStreak = 0;
+        SaveData.GameStats[StatTypes.Deaths] += 1;
+        SaveData.GameStats[StatTypes.SaveStreak] = 0;
         circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
         circle.KittyDied(this);
         SoundManager.PlayKittyDeathSound(Unit);

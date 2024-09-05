@@ -29,17 +29,14 @@ public static class Shops
     private static void SetupAllItems()
     {
         ConstantItems();
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0])
-        {
-            StandardModeItems();
-            SpawnPandaVendor();
-        }
+
+        if (Gamemode.CurrentGameMode != "Standard") return;
+
+        StandardModeItems();
+        SpawnPandaVendor();
     }
 
-    private static void SpawnPandaVendor()
-    {
-        PandaVendor = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);
-    }
+    private static void SpawnPandaVendor() => PandaVendor = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);
 
     private static void ApplyItemListToVendor()
     {
@@ -88,16 +85,7 @@ public static class Shops
         KittyVendorItemList.Add(Constants.ITEM_URN_OF_A_BROKEN_SOUL);
         KittyVendorItemList.Add(Constants.ITEM_CAT_FIGURINE);
 
-        // Panda Vendor
-/*      PandaVendorItemList.Add(Constants.ITEM_GREEN_TENDRILS);
-        PandaVendorItemList.Add(Constants.ITEM_AMULET_OF_EVASIVENESS);
-        PandaVendorItemList.Add(Constants.ITEM_FANG_OF_SHADOWS);
-        PandaVendorItemList.Add(Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE);
-        PandaVendorItemList.Add(Constants.ITEM_SACRED_RING_OF_SUMMONING);
-        PandaVendorItemList.Add(Constants.ITEM_ONE_OF_NINE);
-        PandaVendorItemList.Add(Constants.ITEM_FROSTBITE_RING);
-        PandaVendorItemList.Add(Constants.ITEM_ANTI_BLOCK_WAND);
-*/
+        // Panda Vendor is only spawned in Standard Mode, items are in the editor.
     }
 
     private static void CollectAllVendors()
@@ -144,7 +132,7 @@ public static class Shops
             Vendor = vendor;
             Item = item;
             Stock = stock;
-            RestockTime = restockTime;
+            RestockTime = restockTime; // doesnt work as intended.
         }
     }
 }

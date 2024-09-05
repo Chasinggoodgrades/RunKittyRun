@@ -1,42 +1,36 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class RewardChecker
 {
-
-
     private static void RewardCheckGameStats(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
         var stats = kitty.SaveData;
-        var saves = stats.Saves;
-        var saveStreak = stats.SaveStreak;
-        var games = stats.NormalGames + stats.HardGames + stats.ImpossibleGames;
-        var wins = stats.Wins;
-        var winStreak = stats.WinStreak;
     }
 
     /// <summary>
-    /// Checks if the player has reached a certain save / savestreak threshold.
-    /// Use <typeparamref name="Kitty"/> or <typeparamref name="player"/>. 
+    /// Checks if <typeparamref name="player"/> has earned any rewards for their saves or save streaks.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <param name="player"></param>
-    public static void RewardCheckSaves<T>(T player)
+    public static void RewardCheckSaves(player player)
     {
-        if(player is player)
+        var kitty = Globals.ALL_KITTIES[player];
+        var stats = kitty.SaveData;
+
+    }
+
+    public static void CheckAllGameAwards(player player)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+        var awards = kitty.SaveData.GameAwards;
+
+        foreach(var award in awards)
         {
-            var kitty = Globals.ALL_KITTIES[player as player];
-            var stats = kitty.SaveData;
-            var saves = stats.Saves;
-            var saveStreak = stats.SaveStreak;
+            Console.WriteLine(award.Key.ToString());
         }
-        else if(player is Kitty)
-        {
-            var kitty = player as Kitty;
-            var stats = kitty.SaveData;
-            var saves = stats.Saves;
-            var saveStreak = stats.SaveStreak;
-        }
+
+
     }
 
 }

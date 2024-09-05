@@ -46,7 +46,7 @@ public static class Progress
         }
        catch (Exception e)
         {
-            //Console.WriteLine(e.Message);
+            var error = e.Message;
         }
     }
 
@@ -74,7 +74,7 @@ public static class Progress
         }
         catch (Exception e)
         {
-            //Console.WriteLine(e.Message);
+            var error = e.Message;
             return 0.0f;
         }
     }
@@ -98,6 +98,7 @@ public static class Progress
         catch (Exception e)
         {
             //Console.WriteLine(e.Message);
+            var error = e.Message;
         }
     }
 

@@ -215,9 +215,9 @@ public static class CustomStatFrame
     }
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Progress.ToString("F2");
-    private static int GetPlayerSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.Saves;
-    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.Deaths;
-    private static int GetPlayerSaveStreak(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.SaveStreak;
-    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.NormalGames;
+    private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.Saves];
+    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.Deaths];
+    private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.SaveStreak];
+    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.NormalGames];
     private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Time[Globals.ROUND];
 }

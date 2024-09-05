@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
-using static WCSharp.Api.Common;
 
 public static class TeamHandler
 {
@@ -46,6 +37,9 @@ public static class TeamHandler
         }
     }
 
+    /// <summary>
+    /// Throws all players who are currently not on a team into a random team. Prioritizing already made teams before creating new ones.
+    /// </summary>
     public static void RandomHandler()
     {
         var random = new Random(Globals.GAME_SEED); // Must Set To Specific Seed to avoid desyncs.
@@ -100,7 +94,7 @@ public static class TeamHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error: " + e.Message);
+            Console.WriteLine("TeamHandler, RandomHandler: " + e.Message);
         }
     }
 

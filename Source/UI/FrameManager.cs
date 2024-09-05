@@ -188,12 +188,12 @@ public static class StatsFrame
         Console.WriteLine("Updating for Player: " + Player.Name);
         // Header Order... (Name, Saves, Deaths, Ratio, Games, Wins, Challenges)
         stats.Add(Colors.PlayerNameColored(Player));
-        stats.Add(data.Saves.ToString());
+/*        stats.Add(data.Saves.ToString());
         stats.Add(data.Deaths.ToString());
-        stats.Add(data.Saves == 0 ? "0.00" : (data.Saves / data.Deaths).ToString("F2"));
+        stats.Add(data.Saves == 0 ? "0.00" : ((int)data.Saves / data.Deaths).ToString("F2"));
         stats.Add((data.NormalGames + data.HardGames + data.ImpossibleGames).ToString());
         stats.Add(data.Wins.ToString());
-        stats.Add(data.Saves.ToString());
+        stats.Add(data.Saves.ToString());*/
         return stats;
     }
 

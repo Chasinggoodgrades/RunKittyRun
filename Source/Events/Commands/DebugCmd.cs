@@ -35,11 +35,11 @@ public static class DebugCmd
                 break;
             case "?test1":
                 Console.WriteLine("Test 1");
-                StatsFrame.RefreshStatsFrameData();
+                RewardChecker.CheckAllGameAwards(player);
                 break;
             case "?test2":
                 Console.WriteLine("Test 2");
-                PlayerLeaves.PlayerLeavesEvent(Player(8));
+                var playerTest2 = Globals.ALL_KITTIES[player];
                 //BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, Constants.UNIT_ASTRAL_KITTY);
                 break;
             case "?diff":

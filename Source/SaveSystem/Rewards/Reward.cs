@@ -6,11 +6,13 @@ public abstract class Reward
     string OriginPoint { get; }
     string ModelPath { get; }
     RewardType Type { get; }
+    bool GameStatsReward { get; }
 
     public abstract void ApplyReward(player player);
 
     public abstract string GetRewardName();
     public abstract int GetAbilityID();
+    public abstract bool IsGameStatsReward();
 
 }
 

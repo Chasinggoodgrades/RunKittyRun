@@ -12,13 +12,16 @@ public class Wings : Reward
     public string OriginPoint { get; }
     public string ModelPath { get; }
     public RewardType Type { get; }
-    public Wings(string name, int abilityID, string originPoint, string modelPath, RewardType type)
+    public bool GameStatsReward { get; }
+    public Wings(string name, int abilityID, string originPoint, string modelPath, RewardType type, bool gameStatsReward)
     {
         Name = name;
         AbilityID = abilityID;
         OriginPoint = originPoint;
         ModelPath = modelPath;
         Type = type;
+        GameStatsReward = gameStatsReward;
+        if(GameStatsReward) RewardsManager.GameStatRewards.Add(this);
     }
 
     public override void ApplyReward(player player)
@@ -29,14 +32,9 @@ public class Wings : Reward
         RewardsManager.ActiveWings[player] = effect;
     }
 
-    public override string GetRewardName()
-    {
-        return Name;
-    }
+    public override string GetRewardName() => Name;
+    public override int GetAbilityID() => AbilityID;
+    public override bool IsGameStatsReward() => GameStatsReward;
 
-    public override int GetAbilityID()
-    {
-        return AbilityID;
-    }
 
 }
