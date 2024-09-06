@@ -105,7 +105,6 @@ public static class StatsFrame
                 for (int i = 0; i < stats.Count; i++)
                 {
                     var name = $"StatsFrameDataInfo{kittyCount}";
-                    Console.WriteLine(name);
                     var dataFrame = BlzCreateFrameByType("TEXT", name, StatsFramehandle, "", 0);
                     dataFrame.Text = stats[i];
                     dataFrame.SetAbsPoint(FRAMEPOINT_CENTER, StatsHeaderX + (i * 0.075f), StatsHeaderY - (0.02f * (kittyCount + 1)));
@@ -185,7 +184,6 @@ public static class StatsFrame
         var kitty = Globals.ALL_KITTIES[Player];
         var data = kitty.SaveData;
 
-        Console.WriteLine("Updating for Player: " + Player.Name);
         // Header Order... (Name, Saves, Deaths, Ratio, Games, Wins, Challenges)
         stats.Add(Colors.PlayerNameColored(Player));
 /*        stats.Add(data.Saves.ToString());

@@ -20,6 +20,25 @@ public static class RewardChecker
 
     }
 
+    public static void DisableALlRewards()
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            var kitty = Globals.ALL_KITTIES[player];
+            var awards = kitty.SaveData.GameAwards;
+            foreach (var award in awards)
+            {
+                if (RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.Key.ToString()) is { } reward)
+                {
+                    var abilityID = reward.GetAbilityID();
+                    if (abilityID != 0) kitty.Unit.DisableAbility(abilityID, true, true);
+                    else Console.WriteLine($"Ability ID not found for {award.Key.ToString()}");
+                }
+                else Console.WriteLine($"Reward not fully added/found for {Colors.COLOR_YELLOW}{award.Key.ToString()}|r");
+            }
+        }
+    }
+
     public static void CheckAllGameAwards(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
@@ -27,7 +46,13 @@ public static class RewardChecker
 
         foreach(var award in awards)
         {
-            Console.WriteLine(award.Key.ToString());
+            Console.WriteLine($"{award.Key.ToString()} has a value of : {award.Value}");
+            if(award.Value == 1)
+            {
+                Console.WriteLine($"{award.Key.ToString()} has been Awarded!");
+                var abilityID = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.Key.ToString()).GetAbilityID();
+                kitty.Unit.DisableAbility(abilityID, false, false);
+            }
         }
 
 

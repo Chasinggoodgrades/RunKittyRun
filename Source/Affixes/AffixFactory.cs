@@ -60,7 +60,7 @@ public static class AffixFactory
         for (int i = 0; i < regionCount; i++)
         {
             LaneWeights[i] = LaneWeights[i] / totalArea * 100;
-            if(Program.Debug) Console.WriteLine($"Lane {i + 1} weight: {LaneWeights[i]}");
+            //if(Program.Debug) Console.WriteLine($"Lane {i + 1} weight: {LaneWeights[i]}");
         }
     }
     

@@ -31,7 +31,6 @@ public class ShadowKitty
         {
             var shadowKitty = new ShadowKitty(player);
             ALL_SHADOWKITTIES.Add(player, shadowKitty);
-            Console.WriteLine(player.Name + " has a shadow kitty");
         }
     }
     private void RegisterTriggers()

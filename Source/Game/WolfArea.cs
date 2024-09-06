@@ -45,4 +45,5 @@ public class WolfArea
             if (ID == 16) progressPointDict[player] = Regions.ProgressPoint3.Rect;
         });
     }
+
 }

@@ -53,7 +53,6 @@ public static class CollisionDetection
     public static void KittyRegisterCollisions(Kitty k)
     {
         var WOLF_COLL_RADIUS = KITTY_COLLISION_RADIUS[k.Player];
-        Console.WriteLine("Collision Radius: " + WOLF_COLL_RADIUS);
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, WOLF_COLL_RADIUS, WolfCollisionFilter(k), WolfCollisionTrigger(k));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, CIRCLE_COLLISION_RADIUS, CircleCollisionFilter(k), CircleCollisionTrigger(k));
     }

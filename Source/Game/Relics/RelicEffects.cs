@@ -126,12 +126,12 @@ public static class RelicEffects
         {
             var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
             CollisionDetection.KITTY_COLLISION_RADIUS[Player] = newCollisionRadius;
-            kitty.Unit.ScalingValue = 0.48f;
+            kitty.Unit.SetScale(0.48f, 0.48f, 0.48f);
         }
         else
         {
             CollisionDetection.KITTY_COLLISION_RADIUS[Player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
-            kitty.Unit.ScalingValue = 0.60f;
+            kitty.Unit.SetScale(0.60f, 0.60f, 0.60f);
         }
         CollisionDetection.KittyRegisterCollisions(kitty);
     }

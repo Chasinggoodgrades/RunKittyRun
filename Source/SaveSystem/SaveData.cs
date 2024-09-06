@@ -50,6 +50,80 @@ public enum StatTypes
 
 public enum Awards
 {
+    // Hats
+    Bandana,
+    Pirate_Hat,
+    Chef_Hat,
+    Tiki_Mask,
+    Samurai_Helm,
+    Santa_Hat,
+
+    // Wings
+    Phoenix_Wings,
+    Fairy_Wings,
+    Nightmare_Wings,
+    Archangel_Wings,
+
+    Void_Wings,
     Cosmic_Wings,
-    Divine_Wings
+    Chaos_Wings,
+    Pink_Wings,
+    Nature_Wings,
+
+    // Tendrils Wings
+    Red_Tendrils,
+    White_Tendrils,
+    Divinity_Tendrils,
+    Green_Tendrils,
+    Patriotic_Tendrils,
+
+    // Auras
+    Special_Aura,
+    Starlight_Aura,
+    Mana_Aura,
+    Spectacular_Aura,
+    Butterfly_Aura,
+
+    // Skins
+    Undead_Kitty,
+    Highelf_Kitty,
+    Astral_Kitty,
+    Satyr_Kitty,
+    Ancient_Kitty,
+
+    // Windwalks
+    WW_Blood,
+    WW_Blue,
+    WW_Fire,
+    WW_Necro,
+    WW_Swift,
+
+    // Fire
+    Purple_Fire,
+    Blue_Fire,
+    Turquoise_Fire,
+    Pink_Fire,
+    White_Fire,
+
+    // Nitro
+    Nitro_1,
+    Nitro_Blue,
+    Nitro_Red,
+    Nitro_Green,
+    Nitro_Purple,
+    Divine_Light,
+
+    // Lightning
+    Blue_Lightning,
+    Red_Lightning,
+    Purple_Lightning,
+    Yellow_Lightning,
+    Green_Lightning,
+
+    //Deathless
+    Deathless_1,
+    Deathless_2,
+    Deathless_3,
+    Deathless_4,
+    Deathless_5,
 }
