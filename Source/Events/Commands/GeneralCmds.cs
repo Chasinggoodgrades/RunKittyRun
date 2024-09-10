@@ -24,7 +24,13 @@ public static class GeneralCmds
                 if(p == GetLocalPlayer()) ClearTextMessages();
                 break;
             case "-color":
-
+                Colors.SetPlayerColor(p, args[1]);
+                break;
+            case "-sc":
+                Colors.SetPlayerVertexColor(p, args);
+                break;
+            case "-wild":
+                Colors.SetPlayerRandomVertexColor(p);
                 break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);

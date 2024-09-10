@@ -20,6 +20,9 @@ public static class RewardChecker
 
     }
 
+    /// <summary>
+    /// Disables all rewards that have yet to be earned by the player.
+    /// </summary>
     public static void DisableALlRewards()
     {
         foreach (var player in Globals.ALL_PLAYERS)
@@ -31,8 +34,7 @@ public static class RewardChecker
                 if (RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.Key.ToString()) is { } reward)
                 {
                     var abilityID = reward.GetAbilityID();
-                    if (abilityID != 0) kitty.Unit.DisableAbility(abilityID, true, true);
-                    else Console.WriteLine($"Ability ID not found for {award.Key.ToString()}");
+                    if (abilityID != 0 && award.Value == 0) kitty.Unit.DisableAbility(abilityID, true, true);
                 }
                 else Console.WriteLine($"Reward not fully added/found for {Colors.COLOR_YELLOW}{award.Key.ToString()}|r");
             }
@@ -54,7 +56,6 @@ public static class RewardChecker
                 kitty.Unit.DisableAbility(abilityID, false, false);
             }
         }
-
 
     }
 
