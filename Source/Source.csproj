@@ -15,4 +15,7 @@
 		<PackageReference Include="WCSharp.Shared" Version="3.0.3" />
 		<PackageReference Include="WCSharp.Sync" Version="3.0.1" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="SaveSystem\Challenges\" />
+	</ItemGroup>
 </Project>

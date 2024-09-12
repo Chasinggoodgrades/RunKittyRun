@@ -13,19 +13,12 @@ public static class AwardManager
     }
     public static void GiveReward(player player, Awards award)
     {
-        try
-        {
-            if (Awarded[player].Contains(award)) return;
-            var saveData = Globals.ALL_KITTIES[player].SaveData;
-            saveData.GameAwards[award] = 1;
-            EnableAbility(player, award);
-            Awarded[player].Add(award);
-            Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        if (Awarded[player].Contains(award)) return;
+        var saveData = Globals.ALL_KITTIES[player].SaveData;
+        saveData.GameAwards[award] = 1;
+        EnableAbility(player, award);
+        Awarded[player].Add(award);
+        Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
     }
 
     private static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;

@@ -129,5 +129,6 @@ public class Kitty
         circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
         circle.KittyDied(this);
         SoundManager.PlayKittyDeathSound(Unit);
+        Gameover.GameOver();
     }
 }

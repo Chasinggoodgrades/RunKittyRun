@@ -191,6 +191,7 @@ public static class RoundManager
 
     public static void RoundEndCheck()
     {
+        if (Gameover.GameOver()) return;
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             if (!kitty.Finished) return;
         RoundEnd();
