@@ -13,7 +13,7 @@ public static class AwardManager
     }
     public static void GiveReward(player player, Awards award)
     {
-        if (Awarded[player].Contains(award)) return;
+        if(Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
         var saveData = Globals.ALL_KITTIES[player].SaveData;
         saveData.GameAwards[award] = 1;
         EnableAbility(player, award);

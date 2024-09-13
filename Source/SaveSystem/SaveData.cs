@@ -106,7 +106,7 @@ public enum Awards
     White_Fire,
 
     // Nitro
-    Nitro_1,
+    Nitro,
     Nitro_Blue,
     Nitro_Red,
     Nitro_Green,

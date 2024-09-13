@@ -16,6 +16,7 @@ public static class SoundManager
     private const string ROUND_3_PATH = "war3mapImported\\Round03.mp3";
     private const string ROUND_4_PATH = "war3mapImported\\Round04.mp3";
     private const string ROUND_5_PATH = "war3mapImported\\FinalRound.mp3";
+    private const string SPEED_PATH = "war3mapImported\\Speed.mp3";
 
     private static sound KITTY_DEATH_SOUND;
     private static sound ROUND_1_SOUND;
@@ -23,6 +24,7 @@ public static class SoundManager
     private static sound ROUND_3_SOUND;
     private static sound ROUND_4_SOUND;
     private static sound ROUND_5_SOUND;
+    private static sound SPEED_SOUND;
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -34,7 +36,8 @@ public static class SoundManager
             { "Round2Sound", CreateSound(ROUND_2_PATH, false, false, false, 10, 10, "") },
             { "Round3Sound", CreateSound(ROUND_3_PATH, false, false, false, 10, 10, "") },
             { "Round4Sound", CreateSound(ROUND_4_PATH, false, false, false, 10, 10, "") },
-            { "Round5Sound", CreateSound(ROUND_5_PATH, false, false, false, 10, 10, "") }
+            { "Round5Sound", CreateSound(ROUND_5_PATH, false, false, false, 10, 10, "") },
+            { "SpeedSound", CreateSound(SPEED_PATH, false, false, false, 10, 10, "") }
         };
         SetSoundAttributes();
         AssignSounds();
@@ -58,6 +61,7 @@ public static class SoundManager
         ROUND_3_SOUND = sounds["Round3Sound"];
         ROUND_4_SOUND = sounds["Round4Sound"];
         ROUND_5_SOUND = sounds["Round5Sound"];
+        SPEED_SOUND = sounds["SpeedSound"];
     }
 
     private static void TeamKittyDeathSound(unit Kitty)
@@ -86,6 +90,8 @@ public static class SoundManager
             s.Start();
         }
     }
+
+    public static void PlaySpeedSound() => SPEED_SOUND.Start();
 
     /// <summary>
     /// Plays the round starting sound based on current round.

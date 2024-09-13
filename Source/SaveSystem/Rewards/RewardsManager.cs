@@ -188,7 +188,7 @@ public static class RewardsManager
         AddReward(Awards.White_Fire, Constants.ABILITY_TRAIL_FIREWHITE, "origin", "war3mapImported\\WhiteFire.mdx", RewardType.Trail);
 
         // Nitros
-        AddReward(Awards.Nitro_1, Constants.ABILITY_NITRO, "origin", "war3mapImported\\Nitro.mdx", RewardType.Trail);
+        AddReward(Awards.Nitro, Constants.ABILITY_NITRO, "origin", "war3mapImported\\Nitro.mdx", RewardType.Trail);
         AddReward(Awards.Nitro_Blue, Constants.ABILITY_NITROBLUE, "origin", "war3mapImported\\NitroBlue.mdx", RewardType.Trail);
         AddReward(Awards.Nitro_Red, Constants.ABILITY_NITRORED, "origin", "war3mapImported\\NitroRed.mdx", RewardType.Trail);
         AddReward(Awards.Nitro_Green, Constants.ABILITY_NITROGREEN, "origin", "war3mapImported\\NitroGreen.mdx", RewardType.Trail);

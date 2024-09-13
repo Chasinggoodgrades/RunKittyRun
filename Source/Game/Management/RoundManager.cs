@@ -45,11 +45,11 @@ public static class RoundManager
         GAME_STARTED = true;
         Globals.GAME_ACTIVE = true;
         TimerDialogDisplay(RoundTimerDialog, false);
-        //TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, true);
         StartEndRoundTimer();
 
         BarrierSetup.DeactivateBarrier();
         SoundManager.PlayRoundSound();
+        Nitros.StartNitroTimer();
         Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
     }
 
@@ -104,6 +104,7 @@ public static class RoundManager
     {
         Globals.GAME_ACTIVE = false;
         EndRoundTimer.Pause();
+        Nitros.StopNitroTimer();
         Wolf.RemoveAllWolves();
         BarrierSetup.ActivateBarrier();
         Resources.BonusResources();
@@ -112,7 +113,7 @@ public static class RoundManager
         RoundResetAll();
         Team.RoundResetAllTeams();
         SaveManager.SaveAll();
-
+        if (Gameover.GameOver()) return;
 
         var timer = CreateTimer();
         TimerStart(timer, END_ROUND_DELAY, false, () => 
@@ -191,7 +192,6 @@ public static class RoundManager
 
     public static void RoundEndCheck()
     {
-        if (Gameover.GameOver()) return;
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             if (!kitty.Finished) return;
         RoundEnd();

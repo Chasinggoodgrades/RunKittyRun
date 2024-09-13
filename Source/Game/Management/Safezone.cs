@@ -27,6 +27,7 @@ public class Safezone
             safezone.r_Rect = safeZone.Rect;
             count++;
         }
+        FinalSafezone.Initialize();
     }
 
     private void EnterSafezoneEvents()

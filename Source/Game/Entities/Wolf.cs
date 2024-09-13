@@ -41,8 +41,9 @@ public class Wolf
         var randomPlayer = players[GetRandomInt(0, players.Length - 1)];
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        var facing = GetRandomReal(0, 360);
 
-        Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, 360);
+        Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
         Globals.ALL_WOLVES.Add(this);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";

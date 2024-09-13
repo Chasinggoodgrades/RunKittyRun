@@ -34,9 +34,9 @@ public static class VictoryZone
     private static void VictoryAreaActions()
     {
         var u = currentUnit;
-        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
+        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {
-            if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             RoundManager.RoundEnd();
         }
         else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo

@@ -12,8 +12,9 @@ public static class ProtectionOfAncients
     private static trigger Trigger;
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
     private const string APPLY_EFFECT = "war3mapImported\\Divine Edict.mdx";
-    private const float EFFECT_DELAY = 3.0f;
+    public const float EFFECT_DELAY = 3.0f;
     private const float EFFECT_RADIUS = 150.0f;
+    private const float EFFECT_RADIUS_INCREASE = 50.0f;
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;
@@ -35,6 +36,7 @@ public static class ProtectionOfAncients
         var Unit = GetTriggerUnit();
         var player = GetTriggerPlayer();
 
+        Globals.ALL_KITTIES[player].ProtectionActive = true;
         if(Program.Debug) Console.WriteLine("Player: " + player.Name + " activated Protection of the Ancients!");
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
@@ -73,12 +75,17 @@ public static class ProtectionOfAncients
         var tempGroup = CreateGroup();
         var kitty = Globals.ALL_KITTIES[Player];
         var levelOfAbility = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        GroupEnumUnitsInRange(tempGroup, GetUnitX(kitty.Unit), GetUnitY(kitty.Unit), EFFECT_RADIUS, Filter(() => AoEEffectFilter()));
+        var levelOfRelic = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
+        if(levelOfRelic > 0) levelOfAbility = levelOfRelic;
+        var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
+        kitty.ProtectionActive = false;
+        GroupEnumUnitsInRange(tempGroup, GetUnitX(kitty.Unit), GetUnitY(kitty.Unit), effectRadius, Filter(() => AoEEffectFilter()));
         foreach (var unit in tempGroup.ToList())
         {
             var playerToRevive = Globals.ALL_KITTIES[GetOwningPlayer(unit)];
             playerToRevive.ReviveKitty(kitty);
         }
         tempGroup.Dispose();
+
     }
 }

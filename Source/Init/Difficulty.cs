@@ -4,6 +4,12 @@ using System.Drawing;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
+public enum DifficultyLevel
+{
+    Normal = 4,
+    Hard = 6,
+    Impossible = 9
+}
 
 public static class Difficulty
 {
@@ -19,14 +25,10 @@ public static class Difficulty
     public const string s_NORMAL = $"{Colors.COLOR_YELLOW}Normal|r";
     public const string s_HARD = $"{Colors.COLOR_RED}Hard|r";
     public const string s_IMPOSSIBLE = $"{Colors.COLOR_DARK_RED}Impossible|r";
-    private static trigger Trigger;
-    private enum DifficultyLevel
-    {
-        Normal = 4,
-        Hard = 6,
-        Impossible = 9
-    }
     public static bool IsDifficultyChosen { get; set; } = false;
+
+    private static trigger Trigger;
+
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;

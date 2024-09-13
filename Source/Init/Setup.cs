@@ -60,10 +60,11 @@ namespace Source.Init
             VictoryZone.Initialize();
             AffixFactory.Initialize();
             RewardsManager.Initialize();
-            Utility.SimpleTimer(1.0f, RewardChecker.DisableALlRewards);
+            RewardChecker.DisableALlRewards();
             ShadowKitty.Initialize();
             ItemSpawner.Initialize();
             StatsFrame.PopulateStatsFrameData();
+            Nitros.Initialize();
             RoundManager.Initialize();
         }
 
