@@ -71,7 +71,7 @@ public static class AffixFactory
      */
     private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
-        if (unit.AffixCount() > MAX_NUMBER_OF_AFFIXES) return false;
+        if (unit.AffixCount() >= MAX_NUMBER_OF_AFFIXES) return false;
         if (unit.HasAffix(affixName)) return false;
         return true;
     }
@@ -83,11 +83,22 @@ public static class AffixFactory
         unit.AddAffix(affix);
     }
 
+    private static List<string> AvailableAffixes(int laneNumber)
+    {
+        var affixes = new List<string>(AffixTypes);
+        if (laneNumber > 7 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
+            affixes.Remove("Fixation");
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
+        {
+            //affixes.Remove("Frostbite");
+        }
+        return affixes;
+    }
+
     private static void ApplyRandomAffix(Wolf unit, int laneNumber)
     {
         // if above lane 8.. exclude fixation
-        var affixes = new List<string>(AffixTypes);
-        if (laneNumber > 7) affixes.Remove("Fixation");
+        var affixes = AvailableAffixes(laneNumber);
         var index = GetRandomInt(0, affixes.Count - 1);
         var randomAffix = AffixTypes[index];
         ApplyAffix(unit, randomAffix);
@@ -99,37 +110,46 @@ public static class AffixFactory
     /// </summary>
     public static void DistributeAffixes()
     {
-        if(!CanDistributeAffixes()) return;
-
-        NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
-
-        var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
-        for (int i = 0; i < NUMBER_OF_AFFIXED_WOLVES; i++)
+        try
         {
-            for (int j = 0; j < LaneWeights.Length; j++)
-            {
-                if (GetRandomReal(0, 100) <= LaneWeights[j])
-                {
-                    if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
-                    {
-                        affixedWolvesInLane[j]++;
-                        var wolvesInLane = Globals.ALL_WOLVES.FindAll(wolf => RegionList.WolfRegions[j].Region.Contains(wolf.Unit));
+            if (!CanDistributeAffixes()) return;
 
-                        //var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
+
+            NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+
+            var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
+            for (int i = 0; i < NUMBER_OF_AFFIXED_WOLVES; i++)
+            {
+                for (int j = 0; j < LaneWeights.Length; j++)
+                {
+                    if (GetRandomReal(0, 100) <= LaneWeights[j])
+                    {
+                        if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
+                        {
+                            affixedWolvesInLane[j]++;
+                            var wolvesInLane = Globals.ALL_WOLVES.FindAll(wolf => RegionList.WolfRegions[j].Region.Contains(wolf.Unit));
+
+                            var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
+                            ApplyRandomAffix(wolf, j);
+                        }
                     }
                 }
             }
+        }
+        catch (Exception e)
+        {
+            if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Error in DistributeAffixes: {e.Message}|r");
         }
     }
 
     private static bool CanDistributeAffixes()
     {
-        if(Difficulty.DifficultyChosen != Difficulty.s_IMPOSSIBLE)
+        if(Difficulty.DifficultyValue >= (int)DifficultyLevel.Hard)
         {
             RemoveAllAffixes();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
     private static void RemoveAllAffixes()
     {

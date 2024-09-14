@@ -28,6 +28,7 @@ public static class RoundManager
         Globals.ROUND += 1;
         Safezone.ResetPlayerSafezones();
         Wolf.SpawnWolves();
+        AffixFactory.DistributeAffixes();
 
         InitEndRoundTimer();
         // Timer for round intermission
@@ -55,7 +56,7 @@ public static class RoundManager
 
     private static void InitEndRoundTimer()
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) return;
+        if (Gamemode.CurrentGameMode == "Standard") return;
 
         TimerDialogSetTitle(EndRoundTimerDialog, "Round Time Remaining");
         SetEndRoundTimes();
@@ -76,7 +77,7 @@ public static class RoundManager
 
     private static void StartEndRoundTimer()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[0])
+        if (Gamemode.CurrentGameMode != "Standard")
         {
             TimerDialogDisplay(EndRoundTimerDialog, true);
             EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, () => { RoundEnd(); });

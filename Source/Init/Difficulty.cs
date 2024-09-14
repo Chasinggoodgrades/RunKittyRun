@@ -108,7 +108,6 @@ public static class Difficulty
                 break;
         }
         IsDifficultyChosen = true;
-        Utility.SimpleTimer(0.75f, () => AffixFactory.DistributeAffixes());
         Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
     }
 

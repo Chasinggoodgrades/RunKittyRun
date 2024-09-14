@@ -34,6 +34,7 @@ public static class VictoryZone
     private static void VictoryAreaActions()
     {
         var u = currentUnit;
+        if(GetUnitTypeId(u) != Constants.UNIT_KITTY) return;
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {

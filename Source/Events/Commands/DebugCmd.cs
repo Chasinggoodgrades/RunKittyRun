@@ -7,6 +7,7 @@ public static class DebugCmd
     public static void Handle(player player, string command)
     {
         var cmd = command.Split(" ");
+        var minValue = int.MinValue;
         var kitty = Globals.ALL_KITTIES[player];
         var startswith = cmd[0];
         switch (startswith)
@@ -41,6 +42,7 @@ public static class DebugCmd
                 break;
             case "?diff":
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");
+                AffixFactory.DistributeAffixes();
                 break;
             case "?rpos":
                 kitty.ReviveKitty();
