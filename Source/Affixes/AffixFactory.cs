@@ -6,7 +6,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes;
-    private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation" };
+    private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES; // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -35,6 +35,9 @@ public static class AffixFactory
             case "Fixation":
                 if(Program.Debug) Console.WriteLine("Creating Fixation");
                 return new Fixation(unit);
+            case "Frostbite":
+                if(Program.Debug) Console.WriteLine("Creating Frostbite");
+                return new Frostbite(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
@@ -90,7 +93,7 @@ public static class AffixFactory
             affixes.Remove("Fixation");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
-            //affixes.Remove("Frostbite");
+            affixes.Remove("Frostbite");
         }
         return affixes;
     }

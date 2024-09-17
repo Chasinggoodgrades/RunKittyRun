@@ -40,23 +40,4 @@ public static class RewardChecker
             }
         }
     }
-
-    public static void CheckAllGameAwards(player player)
-    {
-        var kitty = Globals.ALL_KITTIES[player];
-        var awards = kitty.SaveData.GameAwards;
-
-        foreach(var award in awards)
-        {
-            Console.WriteLine($"{award.Key.ToString()} has a value of : {award.Value}");
-            if(award.Value == 1)
-            {
-                Console.WriteLine($"{award.Key.ToString()} has been Awarded!");
-                var abilityID = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.Key.ToString()).GetAbilityID();
-                kitty.Unit.DisableAbility(abilityID, false, false);
-            }
-        }
-
-    }
-
 }

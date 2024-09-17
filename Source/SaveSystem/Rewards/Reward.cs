@@ -49,6 +49,7 @@ public class Reward
         Type = type;
         GameStat = gameStat;
         GameStatValue = gameStatValue;
+        RewardsManager.GameStatRewards.Add(this);
     }
 
     public Reward(Awards name, int abilityID, string originPoint, string modelPath, RewardType type, StatTypes gameStat, int gameStatValue)
@@ -60,6 +61,7 @@ public class Reward
         Type = type;
         GameStat = gameStat;
         GameStatValue = gameStatValue;
+        RewardsManager.GameStatRewards.Add(this);
     }
 
     public void ApplyReward(player player)
@@ -110,12 +112,24 @@ public class Reward
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if (Type == RewardType.Skin)
         {
-            if(SkinID != 0) BlzSetUnitSkin(kitty, SkinID);
+            //if(SkinID != 0) BlzSetUnitSkin(kitty, SkinID);
+            if(SkinID != 0) kitty.Skin = SkinID;
             else Console.WriteLine($"Skin ID invalid for {Name}");
+            SetSelectedSkin(player, SkinID);
             return true;
         }
         return false;
-    }   
+    }
+
+    private static void SetSelectedSkin(player player, int skinID)
+    {
+        var saveData = Globals.ALL_KITTIES[player].SaveData;
+        if(skinID == Constants.UNIT_ASTRAL_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 1;
+        else if(skinID == Constants.UNIT_HIGHELF_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 2;
+        else if(skinID == Constants.UNIT_UNDEAD_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 3;
+        else if(skinID == Constants.UNIT_SATYR_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 4;
+        else if(skinID == Constants.UNIT_ANCIENT_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 5;    
+    }
 
     public string SystemRewardName() => Name.ToString();
     public string GetRewardName() => Name.ToString().Replace("_", " ");

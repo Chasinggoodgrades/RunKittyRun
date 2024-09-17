@@ -29,10 +29,10 @@ public class Kitty
     public Kitty(player player)
     {
         Player = player;
+        SetupSaveData();
         SpawnEffect();
         CreateKitty();
         InitRoundStats();
-        SetupSaveData();
     }
 
     public static void Initialize()
@@ -66,6 +66,7 @@ public class Kitty
         var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
+        AwardManager.SetStartingSkin(this);
         Globals.ALL_KITTIES.Add(Player, this);
         
         // Set Collision to Default

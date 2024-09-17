@@ -7,7 +7,6 @@ public static class DebugCmd
     public static void Handle(player player, string command)
     {
         var cmd = command.Split(" ");
-        var minValue = int.MinValue;
         var kitty = Globals.ALL_KITTIES[player];
         var startswith = cmd[0];
         switch (startswith)
@@ -35,7 +34,6 @@ public static class DebugCmd
                 break;
             case "?test1":
                 Console.WriteLine("Test 1");
-                RewardChecker.CheckAllGameAwards(player);
                 break;
             case "?test2":
                 Console.WriteLine("Test 2");
@@ -50,6 +48,16 @@ public static class DebugCmd
             case "?rposall":
                 foreach (var p in Globals.ALL_PLAYERS)
                     Globals.ALL_KITTIES[p].ReviveKitty();
+                break;
+            case "?data":
+                try
+                {
+                    Console.WriteLine(kitty.SaveData.SelectedData[SelectedData.SelectedSkin]);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 break;
             case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)

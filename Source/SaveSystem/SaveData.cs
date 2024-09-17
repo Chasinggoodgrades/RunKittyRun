@@ -7,6 +7,7 @@ public class KittyData : Saveable
     public Dictionary<StatTypes, int> GameStats { get; set; } = new Dictionary<StatTypes, int>();
     public Dictionary<Awards, int> GameAwards { get; set; } = new Dictionary<Awards, int>();
     public Dictionary<RoundTimes, int> GameTimes { get; set; } = new Dictionary<RoundTimes, int>();
+    public Dictionary<SelectedData, int> SelectedData { get; set; } = new Dictionary<SelectedData, int>();
     public KittyData()
     {
         foreach (StatTypes type in Enum.GetValues(typeof(StatTypes)))
@@ -15,6 +16,8 @@ public class KittyData : Saveable
             GameAwards[award] = 0;
         foreach (RoundTimes round in Enum.GetValues(typeof(RoundTimes)))
             GameTimes[round] = 0;
+        foreach (SelectedData data in Enum.GetValues(typeof(SelectedData)))
+            SelectedData[data] = 0;
     }
 }
 
@@ -26,6 +29,10 @@ public class SaveData : Saveable
 public enum KittyType
 {
     Kitty = 1,
+}
+public enum SelectedData
+{
+    SelectedSkin
 }
 public enum RoundTimes
 {
