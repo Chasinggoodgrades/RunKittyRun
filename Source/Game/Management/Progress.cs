@@ -70,7 +70,7 @@ public static class Progress
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
 
-            return (totalProgress / DistancesFromStart[Globals.SAFE_ZONES.Count - 1]) * 100;
+            return (totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1]) * 100;
         }
         catch (Exception e)
         {
@@ -87,7 +87,7 @@ public static class Progress
             DistancesFromStart.Add(0, 0.0f);
             foreach (var pathPoint in RegionList.PathingPoints)
             {
-                if (count > RegionList.PathingPoints.Length - 2) break;
+                if (count > RegionList.PathingPoints.Count() - 1) break;
                 var nextPathPoint = RegionList.PathingPoints[count+1];
                 totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY,
                     nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);

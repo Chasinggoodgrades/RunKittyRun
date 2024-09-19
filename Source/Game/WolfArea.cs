@@ -40,9 +40,12 @@ public class WolfArea
                 progressPointDict[player] = Globals.SAFE_ZONES[ID].r_Rect;
                 Globals.ALL_KITTIES[player].ProgressZone = ID;
             }
-            if (ID == 14) progressPointDict[player] = Regions.ProgressPoint1.Rect;
-            if (ID == 15) progressPointDict[player] = Regions.ProgressPoint2.Rect;
-            if (ID == 16) progressPointDict[player] = Regions.ProgressPoint3.Rect;
+            else {
+                if (ID == 14) progressPointDict[player] = Regions.ProgressPoint1.Rect;
+                if (ID == 15) progressPointDict[player] = Regions.ProgressPoint2.Rect;
+                if (ID == 16) progressPointDict[player] = Regions.ProgressPoint3.Rect;
+                Globals.ALL_KITTIES[player].ProgressZone = ID;
+            }
         });
     }
 
