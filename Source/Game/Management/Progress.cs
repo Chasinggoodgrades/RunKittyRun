@@ -6,8 +6,7 @@ using static WCSharp.Api.Common;
 
 public static class Progress
 {
-    private static Dictionary<int, float> DistancesFromStart;
-    private static trigger ProgressEvent;
+    public static Dictionary<int, float> DistancesFromStart = new Dictionary<int, float>();
     private static timer PeriodicTimer;
     private const float PROGRESS_INTERVAL = 0.2f;
     public static Dictionary<player, rect> PlayerProgressPoints = new Dictionary<player, rect>();
@@ -15,16 +14,14 @@ public static class Progress
     {
         Globals.TEAM_PROGRESS = new Dictionary<Team, string>();
         Globals.PLAYER_PROGRESS = new Dictionary<player, float>();
-        DistancesFromStart = new Dictionary<int, float>();
-        PeriodicTimer = CreateTimer();
-        ProgressEvent = CreateTrigger();
         CalculateTotalDistance();
-        PeriodicProgressTracker();
         StartProgressTracker();
     }
 
     private static void StartProgressTracker()
     {
+        if (Gamemode.CurrentGameMode == "Standard") return;
+        PeriodicTimer = CreateTimer();
         TimerStart(PeriodicTimer, PROGRESS_INTERVAL, true, PeriodicProgressTracker);
     }
 
@@ -44,7 +41,7 @@ public static class Progress
             }
             Multiboard.UpdateTeamStatsMB();
         }
-       catch (Exception e)
+        catch (Exception e)
         {
             var error = e.Message;
         }
@@ -77,6 +74,19 @@ public static class Progress
             var error = e.Message;
             return 0.0f;
         }
+    }
+
+    public static float CalculateNitroPacerProgress()
+    {
+        var nitroKitty = NitroPacer.Unit;
+        var currentSafezone = NitroPacer.GetCurrentCheckpoint();
+        if (Globals.SAFE_ZONES[0].Region.Contains(nitroKitty)) return 0.0f; // if at start, 0 progress
+        if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Region.Contains(nitroKitty)) return 100.0f; // if at end.. 100 progress
+        var currentProgress = DistanceBetweenPoints(nitroKitty.X, nitroKitty.Y,
+            RegionList.PathingPoints[currentSafezone].Rect.CenterX, RegionList.PathingPoints[currentSafezone].Rect.CenterY);
+        var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
+
+        return totalProgress;
     }
 
     private static void CalculateTotalDistance() {

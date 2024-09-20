@@ -47,6 +47,7 @@ namespace Source.Init
             SuspendTimeOfDay(true);
             CustomStatFrame.Init();
             Resources.Initialize();
+            Progress.Initialize();
             Multiboard.Initialize();
             Shops.Initialize();
             WolfArea.Initialize();
@@ -65,6 +66,7 @@ namespace Source.Init
             ItemSpawner.Initialize();
             StatsFrame.PopulateStatsFrameData();
             Nitros.Initialize();
+            NitroPacer.Initialize();
             RoundManager.Initialize();
         }
 

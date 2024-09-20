@@ -90,12 +90,10 @@ public static class Gamemode
         else if (CurrentGameMode == Globals.GAME_MODES[1])
         {
             Solo.Initialize();
-            Progress.Initialize();
         }
         else if (CurrentGameMode == Globals.GAME_MODES[2])
         {
             Team.Initialize();
-            Progress.Initialize();
         }
     }
 

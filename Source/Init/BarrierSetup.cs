@@ -11,7 +11,7 @@ using static WCSharp.Api.Common;
 
 public static class BarrierSetup
 {
-    public static bool BarrierActive { get; private set; }
+    private static bool BarrierActive { get; set; }
     private static unit DummyUnitOne;
     private static unit DummyUnitTwo;
     private static unit DummyUnitThree;
@@ -65,6 +65,7 @@ public static class BarrierSetup
         {
             des.Dispose();
         }
+        destructables.Clear();
         BarrierActive = false;
     }
 }

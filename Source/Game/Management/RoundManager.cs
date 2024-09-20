@@ -49,6 +49,7 @@ public static class RoundManager
         StartEndRoundTimer();
 
         BarrierSetup.DeactivateBarrier();
+        NitroPacer.StartNitroPacer();
         SoundManager.PlayRoundSound();
         Nitros.StartNitroTimer();
         Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
@@ -113,6 +114,7 @@ public static class RoundManager
         MoveAllPlayersToStart();
         RoundResetAll();
         Team.RoundResetAllTeams();
+        NitroPacer.ResetNitroPacer();
         SaveManager.SaveAll();
         if (Gameover.GameOver()) return;
 

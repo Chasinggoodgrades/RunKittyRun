@@ -13,6 +13,8 @@ public static class Nitros
         SetNitroRoundTimes();
     }
 
+    public static float GetNitroTimeRemaining() => NitroTimer.Remaining;
+
     private static void SetNitroRoundTimes()
     {
         // Only has rounds up to 5.

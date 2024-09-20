@@ -67,6 +67,7 @@ public class Kitty
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
         AwardManager.SetStartingSkin(this);
+        Utility.SelectUnitForPlayer(Player, Unit);
         Globals.ALL_KITTIES.Add(Player, this);
         
         // Set Collision to Default
@@ -77,7 +78,7 @@ public class Kitty
     private void SetupSaveData()
     {
         if(Player.Controller == MAP_CONTROL_USER) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
-        else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this is possibly related
+        else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this may be related.
     }
 
     public void RemoveKitty()

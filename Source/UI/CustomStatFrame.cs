@@ -125,7 +125,7 @@ public static class CustomStatFrame
 
     private static void HandleFrameText(unit selectedUnit)
     {
-        if (GetUnitTypeId(selectedUnit) == Constants.UNIT_CUSTOM_DOG) SetWolfFrameText(selectedUnit);
+        if (GetUnitTypeId(selectedUnit) == Constants.UNIT_CUSTOM_DOG || GetUnitTypeId(selectedUnit) == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
         else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
