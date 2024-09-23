@@ -4,12 +4,14 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class Nitros
 {
-    private static Dictionary<int, int> NitroRoundTimes = new Dictionary<int, int>();
+    private static Dictionary<int, int> NitroRoundTimes;
     private static timer NitroTimer = CreateTimer();
     private static timerdialog NitroDialog = CreateTimerDialog(NitroTimer);
-    private static Dictionary<player, int> NitroCount = new Dictionary<player, int>();
+    private static Dictionary<player, int> NitroCount;
     public static void Initialize()
     {
+        NitroRoundTimes = new Dictionary<int, int>();
+        NitroCount = new Dictionary<player, int>();
         SetNitroRoundTimes();
     }
 
@@ -43,12 +45,13 @@ public static class Nitros
     {
         if (NitroTimer.Remaining == 0.00) return;
 
-        AwardingNitro(unit.Owner);
+        AwardingNitroEvents(unit.Owner);
         AwardingDivineLight(unit.Owner);
     }
 
-    private static void AwardingNitro(player player)
+    private static void AwardingNitroEvents(player player)
     {
+        if(NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
         var round = Globals.ROUND;
         switch(round)
         {
@@ -63,6 +66,7 @@ public static class Nitros
                 break;
             case 4:
                 AwardManager.GiveReward(player, Awards.Nitro_Green);
+                Challenges.ButterflyAura(player);
                 break;
             case 5:
                 AwardManager.GiveReward(player, Awards.Nitro_Purple);

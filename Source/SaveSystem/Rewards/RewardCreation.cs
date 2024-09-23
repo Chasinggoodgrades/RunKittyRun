@@ -93,7 +93,7 @@ public static class RewardCreation
 
         // Lightning
         AddReward(Awards.Blue_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGBLUE, "origin", "war3mapImported\\GreatElderHydraLightningOrbV3.mdx", RewardType.Trail, StatTypes.Saves, 2000);
-        AddReward(Awards.Red_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGRED, "origin", "war3mapImported\\RedLightning.mdx", RewardType.Trail);
+        AddReward(Awards.Red_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGRED, "origin", "war3mapImported\\RedLightning.mdx", RewardType.Trail, StatTypes.SaveStreak, 15);
         AddReward(Awards.Purple_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGPURPLE, "origin", "war3mapImported\\PurpleLightning.mdx", RewardType.Trail);
         AddReward(Awards.Yellow_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGYELLOW, "origin", "war3mapImported\\YellowLightning.mdx", RewardType.Trail);
         AddReward(Awards.Green_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGGREEN, "origin", "war3mapImported\\GreenLightning.mdx", RewardType.Trail);

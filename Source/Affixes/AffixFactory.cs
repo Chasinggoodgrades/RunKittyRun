@@ -52,13 +52,12 @@ public static class AffixFactory
         var totalArea = 0.0f;
         LaneWeights = new float[regionCount];
 
-        for (int i = 0; i < regionCount; i++)
+        foreach(var lane in WolfArea.WolfAreas)
         {
-            var region = RegionList.WolfRegions[i];
-            var area = region.Width * region.Height;
-            totalArea += area;
-            LaneWeights[i] = area;
+            totalArea += lane.Value.Area;
+            LaneWeights[lane.Value.ID] = lane.Value.Area;
         }
+
         // Normalizing Weights
         for (int i = 0; i < regionCount; i++)
         {

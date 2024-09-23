@@ -56,9 +56,9 @@ public static class Regions
 	public static Rectangle Spawn_Camera { get; set; } = new Rectangle(-2848f, 2336f, -2688f, 3040f);
 	public static Rectangle Survivor_Medal { get; set; } = new Rectangle(-224f, -448f, -192f, -352f);
 	public static Rectangle Victory_Area { get; set; } = new Rectangle(-32f, -800f, 416f, -480f);
-	public static Rectangle Wolf_Area_01 { get; set; } = new Rectangle(-2560f, 2272f, 2560f, 3072f);
-	public static Rectangle Wolf_Area_02 { get; set; } = new Rectangle(2496f, -2944f, 3328f, 2208f);
-	public static Rectangle Wolf_Area_03 { get; set; } = new Rectangle(-2592f, -3616f, 2560f, -2944f);
+	public static Rectangle Wolf_Area_01 { get; set; } = new Rectangle(-2560f, 2304f, 2560f, 3072f);
+	public static Rectangle Wolf_Area_02 { get; set; } = new Rectangle(2560f, -2944f, 3328f, 2208f);
+	public static Rectangle Wolf_Area_03 { get; set; } = new Rectangle(-2592f, -3584f, 2560f, -2944f);
 	public static Rectangle Wolf_Area_04 { get; set; } = new Rectangle(-3392f, -2912f, -2560f, 1504f);
 	public static Rectangle Wolf_Area_05 { get; set; } = new Rectangle(-2624f, 1504f, 1920f, 2176f);
 	public static Rectangle Wolf_Area_06 { get; set; } = new Rectangle(1888f, -2272f, 2464f, 1504f);

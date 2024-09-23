@@ -1,17 +1,23 @@
-﻿using WCSharp.Api;
+﻿using System.Collections.Generic;
+using WCSharp.Api;
+using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 
 
 public class WolfArea
 {
+    public static Dictionary<int, WolfArea> WolfAreas = new Dictionary<int, WolfArea>();
+    public static float TotalArea { get; private set; } = 0.0f;
     public int ID { get; set; }
-    public rect WolfRect { get; set; }
-    public region WolfRegion { get; set; }
+    public rect Rect { get; set; }
+    public region Region { get; set; }
+    public Rectangle Rectangle { get; set; }
+    public float Area { get; set; }
     private trigger Trigger;
     public WolfArea(int areaID, region wolfRegion)
     {
         ID = areaID;
-        WolfRegion = wolfRegion;
+        Region = wolfRegion;
     }
 
     public static void Initialize()
@@ -20,8 +26,11 @@ public class WolfArea
         foreach (var wolfArea in RegionList.WolfRegions)
         {
             var wolfarea = new WolfArea(count, wolfArea.Region);
-            wolfarea.WolfRect = wolfArea.Rect;
+            wolfarea.Rect = wolfArea.Rect;
+            wolfarea.Rectangle = wolfArea;
+            wolfarea.CalculateArea();
             wolfarea.EnterWolfAreaEvents();
+            WolfAreas.Add(count, wolfarea);
             count++;
         }
     }
@@ -29,7 +38,7 @@ public class WolfArea
     private void EnterWolfAreaEvents()
     {
         Trigger = CreateTrigger();
-        TriggerRegisterEnterRegion(Trigger, WolfRegion, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        TriggerRegisterEnterRegion(Trigger, Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
         TriggerAddAction(Trigger, () =>
         {
             var unit = GetTriggerUnit();
@@ -47,6 +56,12 @@ public class WolfArea
                 Globals.ALL_KITTIES[player].ProgressZone = ID;
             }
         });
+    }
+
+    private void CalculateArea()
+    {
+        Area = Rectangle.Width * Rectangle.Height;
+        TotalArea += Area;
     }
 
 }

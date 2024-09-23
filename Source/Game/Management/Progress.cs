@@ -99,8 +99,7 @@ public static class Progress
             {
                 if (count > RegionList.PathingPoints.Count() - 1) break;
                 var nextPathPoint = RegionList.PathingPoints[count+1];
-                totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY,
-                    nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);
+                totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY, nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);
                 DistancesFromStart.Add(count+1, totalDistance);
                 count++;
             }

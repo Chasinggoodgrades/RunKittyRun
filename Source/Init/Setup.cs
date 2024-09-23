@@ -65,7 +65,7 @@ namespace Source.Init
             ShadowKitty.Initialize();
             ItemSpawner.Initialize();
             StatsFrame.PopulateStatsFrameData();
-            Nitros.Initialize();
+            Challenges.Initialize();
             NitroPacer.Initialize();
             RoundManager.Initialize();
         }

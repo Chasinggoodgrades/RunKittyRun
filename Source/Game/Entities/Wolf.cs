@@ -63,7 +63,14 @@ public class Wolf
         if (Gamemode.CurrentGameMode != "Standard")
             return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);
         else
-            return GetRandomInt(1, (18 - (Difficulty.DifficultyValue + Globals.ROUND))) == 1 && GetRandomInt(1, Globals.ROUND) == 1;
+            return GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1 && ImpossibleChance();
+    }
+
+    private bool ImpossibleChance()
+    {
+        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return true;
+        if (GetRandomInt(1, Globals.ROUND) == 1) return true;
+        return false;
     }
 
     private void StartWandering()

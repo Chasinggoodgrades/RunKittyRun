@@ -23,6 +23,12 @@ public static class AwardManager
         Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
     }
 
+    public static void GiveRewardAll(Awards award)
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+            GiveReward(player, award);
+    }
+
     private static void EnableAbility(player player, Awards award)
     {
         var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.ToString());

@@ -45,6 +45,7 @@ public class Safezone
         player.Gold += Resources.SafezoneGold;
         unit.Experience += Resources.SafezoneExperience;
         Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
+        Deathless.DeathlessCheck(player);
     }
 
     /// <summary>

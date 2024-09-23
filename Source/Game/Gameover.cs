@@ -15,7 +15,21 @@ public static class Gameover
     {
         if(!WinGame) return false;
         Console.WriteLine("You won!!!");
+        StandardWinChallenges();
+        ImpossibleChallenges();
         return true;
+    }
+
+    private static void StandardWinChallenges()
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        Challenges.NecroWindwalk();
+    }
+
+    private static void ImpossibleChallenges()
+    {
+        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
+        Challenges.WhiteTendrils();
     }
 
     private static void LosingGame()
