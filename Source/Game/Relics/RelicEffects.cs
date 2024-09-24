@@ -44,9 +44,6 @@ public static class RelicEffects
             case Constants.ITEM_AMULET_OF_EVASIVENESS:
                 AmuletOfEvasiveness(Player, Active);
                 break;
-            case Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE:
-                BeaconOfUnitedLifeforce(Player, Active);
-                break;
             case Constants.ITEM_ONE_OF_NINE:
                 OneOfNineSetup(Player, Active);
                 break;
@@ -59,9 +56,6 @@ public static class RelicEffects
         {
             case Constants.ITEM_AMULET_OF_EVASIVENESS:
                 AmuletOfEvasiveness(Player, true);
-                break;
-            case Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE:
-                BeaconOfUnitedLifeforce(Player, true);
                 break;
             case Constants.ITEM_ONE_OF_NINE:
                 OneOfNineSetup(Player, true);
@@ -94,18 +88,9 @@ public static class RelicEffects
         };
     }
 
-    private static void BeaconOfUnitedLifeforce(player Player, bool Active)
-    {
-        var kitty = Globals.ALL_KITTIES[Player];
-        if (Active)
-            kitty.ExtraRevive = true;
-        else
-            kitty.ExtraRevive = false;
-    }
-
     public static void BeaconOfUnitedLifeforceEffect(Kitty kitty)
     {
-        if (!kitty.ExtraRevive) return;
+        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return;
         var chance = GetRandomReal(0.00f, 1.00f);
         if (chance > EXTRA_REVIVE_CHANCE_SINGLE) return;
         foreach (var k in Globals.ALL_KITTIES.Values)
@@ -140,24 +125,36 @@ public static class RelicEffects
     {
         if(Program.Debug) Console.WriteLine("One of Nine is Active: " + Active);
         var kitty = Globals.ALL_KITTIES[Player];
+        var cooldown = GetOneOfNineCooldown(Player);
         if (Active)
         {
             kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
             kitty.Unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
-            kitty.OneOfNine = true;
+            kitty.Unit.SetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC, cooldown);
         }
         else
         {
             kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
             kitty.Unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-            kitty.OneOfNine = false;
+            kitty.Unit.SetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS, cooldown);
         }
+
+    }
+
+    private static float GetOneOfNineCooldown(player Player)
+    {
+        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+        var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+        if(kitty.GetAbilityCooldownRemaining(noRelic) > 0.0f) 
+            return kitty.GetAbilityCooldownRemaining(noRelic);
+        return kitty.GetAbilityCooldownRemaining(relic);
     }
 
     public static void OneOfNineEffect(player Player)
     {
         var kitty = Globals.ALL_KITTIES[Player];
-        if (!kitty.OneOfNine) return;
+        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return;
         if (Program.Debug) Console.WriteLine("One of Nine Effect");
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
             IssueImmediateOrder(kitty.Unit, "divineshield");

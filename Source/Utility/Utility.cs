@@ -11,6 +11,10 @@ using static WCSharp.Api.Common;
 
 public static class Utility
 {
+    /// <summary>
+    /// Makes the unit unclickable while remaining selectable.
+    /// </summary>
+    /// <param name="u"></param>
     public static void MakeUnitLocust(unit u)
     {
         u.AddAbility(FourCC("Aloc"));
@@ -83,5 +87,15 @@ public static class Utility
             action();
             t.Dispose();
         });
+    }
+
+    public static bool UnitHasItem(unit u, int itemId)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+                return true;
+        }
+        return false;
     }
 }

@@ -39,6 +39,8 @@ public static class RoundUtilities
             kitty.Progress = 0.0f;
             kitty.Finished = false;
             kitty.Unit.Mana = kitty.Unit.MaxMana;
+            kitty.CurrentStats.RoundSaves = 0;
+            kitty.CurrentStats.RoundDeaths = 0;
         }
     }
 

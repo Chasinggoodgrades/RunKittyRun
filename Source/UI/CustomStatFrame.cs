@@ -12,6 +12,13 @@ public static class CustomStatFrame
 
     private static List<CustomStat> Stats = new List<CustomStat>();
     private static Dictionary<int, unit> SelectedUnit = new Dictionary<int, unit>();
+    private static string MoveSpeed = $"{Colors.COLOR_YELLOW_ORANGE}MS:|r";
+    private static string Time = $"{Colors.COLOR_YELLOW_ORANGE}Time:|r";
+    private static string Saves = $"{Colors.COLOR_YELLOW_ORANGE}Saves:|r";
+    private static string Deaths = $"{Colors.COLOR_YELLOW_ORANGE}Deaths:|r";
+    private static string Streak = $"{Colors.COLOR_YELLOW_ORANGE}Streak:|r";
+    private static string Gold = $"{Colors.COLOR_YELLOW_ORANGE}Gold:|r";
+    private static string Ratio = $"{Colors.COLOR_YELLOW_ORANGE}S/D:|r";
 
     private static timer t;
 
@@ -101,12 +108,12 @@ public static class CustomStatFrame
         BlzLoadTOCFile("war3mapimported\\CustomStat.toc");
         BlzLoadTOCFile("war3mapimported\\BoxedText.toc");
 
-        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "s_Streak", "Streak");
-        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "s_Gold", "Gold");
-        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "s_Speed", "Speed");
         Add("war3mapImported\\BTNStopwatch.blp", "s_Score", "Score");
         Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "s_Revives", "Revives");
         Add("ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp", "s_Deaths", "Deaths");
+        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "s_Streak", "Streak");
+        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "s_Gold", "Gold");
+        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "s_Speed", "Speed");
 
         t = CreateTimer();
         TimerStart(t, 0.1f, true, Update);
@@ -149,11 +156,11 @@ public static class CustomStatFrame
         }
         else if (selectedUnit.Name == "|cffffff00Team Tournament 2023|r")
         {
-            BlzFrameSetText(Stats[1].Text, ("|cffffff00Region:|r US"));
-            BlzFrameSetText(Stats[2].Text, ("|cff00ffffAches|r"));
+            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r US"));
+            BlzFrameSetText(Stats[1].Text, ("|cff00ffffAches|r"));
             BlzFrameSetText(Stats[3].Text, ("|cff00ffffBranFlake|r"));
-            BlzFrameSetText(Stats[4].Text, ("|cffffff00Time:|r 23:12"));
-            BlzFrameSetText(Stats[5].Text, ("|cff00ffffBalmydrop|r"));
+            BlzFrameSetText(Stats[5].Text, ("|cffffff00Time:|r 23:12"));
+            BlzFrameSetText(Stats[4].Text, ("|cff00ffffBalmydrop|r"));
             BlzFrameSetText(Stats[0].Text, ("|cff00ffffUdo|r"));
             b = true;
         }
@@ -175,38 +182,38 @@ public static class CustomStatFrame
     {
         BlzFrameSetText(Stats[0].Text, "");
         BlzFrameSetText(Stats[1].Text, "");
-        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
         BlzFrameSetText(Stats[3].Text, "");
         BlzFrameSetText(Stats[4].Text, "");
-        BlzFrameSetText(Stats[5].Text, "");
+        BlzFrameSetText(Stats[2].Text, "");
     }
     private static void SetGamemodeFrameText(unit selectedUnit)
     {
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {
-            BlzFrameSetText(Stats[0].Text, $"Streak: {GetPlayerSaveStreak(selectedUnit)}");
-            BlzFrameSetText(Stats[3].Text, $"Games: {GetPlayerGames(selectedUnit)}");
-            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[3].Text, $"{Streak} {GetPlayerSaveStreak(selectedUnit)}");
+            BlzFrameSetText(Stats[0].Text, $"{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r");
+            BlzFrameSetText(Stats[1].Text, $"{Saves} {Colors.COLOR_GREEN}{GetPlayerSaves(selectedUnit)}|r");
         }
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
-            BlzFrameSetText(Stats[0].Text, $"Time: 0:00");
-            BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
-            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[0].Text, $"{Time} 0:00");
+            BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[2].Text, $"{Saves} {GetPlayerSaves(selectedUnit)}");
         }
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
-            BlzFrameSetText(Stats[3].Text, $"{GetPlayerProgress(selectedUnit)}%");
-            BlzFrameSetText(Stats[4].Text, $"Saves: {GetPlayerSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[2].Text, $"{Saves} {GetPlayerSaves(selectedUnit)}");
         }
     }
 
     private static void SetCommonFrameText(unit selectedUnit)
     {
-        BlzFrameSetText(Stats[1].Text, $"Gold: {GetPlayerGold(selectedUnit)}");
-        BlzFrameSetText(Stats[2].Text, $"MS: {(int)GetUnitMoveSpeed(selectedUnit)}");
-        BlzFrameSetText(Stats[5].Text, $"Deaths: {GetPlayerDeaths(selectedUnit)}");
+        BlzFrameSetText(Stats[4].Text, $"{Gold} {GetPlayerGold(selectedUnit)}");
+        BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[2].Text, $"{Deaths} {Colors.COLOR_RED}{GetPlayerDeaths(selectedUnit)}|r");
     }
     private static string GetPlayerTeamName(unit u)
     {
@@ -220,4 +227,7 @@ public static class CustomStatFrame
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.SaveStreak];
     private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.NormalGames];
     private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Time[Globals.ROUND];
+    private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].CurrentStats.RoundSaves;
+    private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].CurrentStats.RoundDeaths;
+    
 }

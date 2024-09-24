@@ -46,7 +46,6 @@ public static class RelicManager
             Constants.ITEM_FROSTBITE_RING,
         };
     }
-
     private static void HandlePickup()
     {
         var item = GetManipulatedItem();
