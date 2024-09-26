@@ -10,10 +10,10 @@ public class Kitty
     private const float MANA_DEATH_PENALTY = 65.0f;
     public KittyData SaveData { get; set; }
     public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
+    public YellowLightning YellowLightning { get; set; }
     private effect Effect { get; set; }
     public player Player { get; }
     public unit Unit { get; set; }
-    public bool ExtraRevive { get; set; } = false;
     public bool ProtectionActive { get; set; } = false;
     public int TeamID { get; set; } = 0;
     public int ProgressZone { get; set; } = 0;
@@ -29,10 +29,9 @@ public class Kitty
     public Kitty(player player)
     {
         Player = player;
-        SetupSaveData();
         SpawnEffect();
         CreateKitty();
-        InitRoundStats();
+        InitData();
     }
 
     /// <summary>
@@ -82,11 +81,23 @@ public class Kitty
         if (savior == null) return;
         UpdateSaviorStats(savior);
     }
-    private void InitRoundStats()
+    private void InitData()
     {
-        for(int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        // Save Data
+        if (Player.Controller == MAP_CONTROL_USER) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
+        else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this may be related.
+
+        // Round Times
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
             Time.Add(i, 0.0f);
-        if(Gamemode.CurrentGameMode == "Standard") Relics = new List<item>();
+
+        // Challenges, Relics, etc for Standard.
+        if (Gamemode.CurrentGameMode == "Standard")
+        {
+            Relics = new List<item>();
+            YellowLightning = new YellowLightning(Player);
+        }
+
     }
     private void SpawnEffect()
     {
@@ -109,17 +120,13 @@ public class Kitty
         CollisionDetection.KittyRegisterCollisions(this);
     }
 
-    private void SetupSaveData()
-    {
-        if(Player.Controller == MAP_CONTROL_USER) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
-        else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this may be related.
-    }
-
     private void Dispose()
     {
         Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
+        YellowLightning.Dispose();
+        Relics.Clear();
         Globals.ALL_KITTIES.Remove(Player);
     }
 
@@ -146,5 +153,7 @@ public class Kitty
         savior.SaveData.GameStats[StatTypes.SaveStreak] += 1;
         if(savior.SaveData.GameStats[StatTypes.SaveStreak] > savior.SaveData.GameStats[StatTypes.HighestSaveStreak])
             savior.SaveData.GameStats[StatTypes.HighestSaveStreak] = savior.SaveData.GameStats[StatTypes.SaveStreak];
+        Challenges.PurpleLighting(savior);
+        savior.YellowLightning.SaveIncrement();
     }
 }

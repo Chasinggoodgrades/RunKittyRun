@@ -1,10 +1,15 @@
 ﻿using System;
+
+/// <summary>
+/// This class is the primary location for adding rewards to the Reward System.
+/// * Follow the AddReward functions below to determine what you wish to do.
+/// </summary>
 public static class RewardCreation
 {
     public static Reward AddReward(Reward reward)
     {
         RewardsManager.Rewards.Add(reward);
-        Console.WriteLine(reward.SystemRewardName() + " has been added to the rewards list.");
+        // Console.WriteLine(reward.SystemRewardName() + " has been added to the rewards list.");
         return reward;
     }
 

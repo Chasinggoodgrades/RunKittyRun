@@ -4,6 +4,11 @@ using System.Runtime.InteropServices;
 using WCSharp.Api;
 using WCSharp.SaveLoad;
 using static WCSharp.Api.Common;
+/// <summary>
+/// Reward Class and Enums
+/// * Enums are the different types of rewards. They help designate which category the reward should be in.
+/// * The Reward class simply helps define what the Reward is ; ie name, ability, model.. etc.
+/// </summary>
 public enum RewardType
 {
     Wings,

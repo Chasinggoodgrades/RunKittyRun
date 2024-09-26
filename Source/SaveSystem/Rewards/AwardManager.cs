@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+/// <summary>
+/// This class handles Awarding functionality. 
+/// * If you add more skins, they'll need to go in the Set StartingSkin function
+/// </summary>
 public static class AwardManager
 {
     private static Dictionary<player, List<Awards>> Awarded = new Dictionary<player, List<Awards>>();

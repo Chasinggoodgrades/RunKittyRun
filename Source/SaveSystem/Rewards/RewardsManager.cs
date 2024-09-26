@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
+/// <summary>
+/// This class handles:
+/// * Activation / Deactivation of Rewards (Based on Spell Cast Event)
+/// * Any activated reward including the Reset ability so long as it's added within the RewardCreation class.
+/// </summary>
 public static class RewardsManager
 {
     public static List<Reward> Rewards = new List<Reward>();

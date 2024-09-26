@@ -17,6 +17,7 @@ public static class Gameover
         Console.WriteLine("You won!!!");
         StandardWinChallenges();
         ImpossibleChallenges();
+        SaveManager.SaveAll();
         return true;
     }
 
@@ -24,6 +25,8 @@ public static class Gameover
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         Challenges.NecroWindwalk();
+        Challenges.BlueFire();
+        Challenges.PinkFire();
     }
 
     private static void ImpossibleChallenges()
@@ -35,6 +38,8 @@ public static class Gameover
     private static void LosingGame()
     {
         Console.WriteLine("Game will end... eventually..");
+        Wolf.RemoveAllWolves();
+        SaveManager.SaveAll();
     }
 
     private static bool LosingGameCheck()

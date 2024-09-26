@@ -2,6 +2,7 @@
 using WCSharp.SaveLoad;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+using WCSharp.Json;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
@@ -28,6 +29,7 @@ public static class SaveManager
             if(p.Controller != MAP_CONTROL_USER) continue;
             saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
             saveSystem.Load(p);
+            JsonConvert.Deserialize<SaveData>(saveSystem.ToString());
             if(Program.Debug) Console.WriteLine("Loading... " + p.Name);
         }
     }
