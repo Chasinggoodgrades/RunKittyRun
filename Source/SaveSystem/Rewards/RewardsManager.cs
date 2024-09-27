@@ -72,17 +72,9 @@ public static class RewardsManager
         }
     }
 
-    private static bool IsRewardAbility(int spellID)
-    {
-        if (RewardAbilities.Contains(spellID)) return true;
-        return false;
-    }
+    private static bool IsRewardAbility(int spellID) => RewardAbilities.Contains(spellID);
 
-    private static bool IsResetSpell(int spellID)
-    {
-        if (spellID == Constants.ABILITY_RESET) return true;
-        return false;
-    }
+    private static bool IsResetSpell(int spellID) => spellID == Constants.ABILITY_RESET;
 
     private static void ResetRewardSettings(unit Unit)
     {

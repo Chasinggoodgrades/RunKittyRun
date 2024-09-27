@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public static class Challenges
 {
     private static Dictionary<player, timer> YellowLightningPairs = new Dictionary<player, timer>();
-    private const int DIVINITY_TENDRILS_COUNT = 4;
+    public const int DIVINITY_TENDRILS_COUNT = 4;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
     private const int PURPLE_FIRE_DEATH_REQUIREMENT = 0;

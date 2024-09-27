@@ -12,6 +12,7 @@ public static class Standard
     {
         RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
         Difficulty.Initialize();
+        Windwalk.Initialize();
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
     }
 

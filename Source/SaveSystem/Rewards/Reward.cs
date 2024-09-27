@@ -73,6 +73,7 @@ public class Reward
     {
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if(SetSkin(player)) return;
+        if (SetWindwalk(player)) return;
         var effect = AddSpecialEffectTarget(ModelPath, kitty, OriginPoint);
         SetEffect(player, effect);
     }
@@ -88,8 +89,6 @@ public class Reward
             RewardsManager.ActiveAuras[player] = effect;
         else if (Type == RewardType.Trail)
             RewardsManager.ActiveTrails[player] = effect;
-        else if (Type == RewardType.Windwalk)
-            DestroyWindWalkEffect(player, effect);
     }
 
     private void DestroyCurrentEffect(player player)
@@ -104,12 +103,12 @@ public class Reward
             DestroyEffect(RewardsManager.ActiveTrails[player]);
     }
 
-    private void DestroyWindWalkEffect(player player, effect effect)
+    private bool SetWindwalk(player player)
     {
-        var kitty = Globals.ALL_KITTIES[player].Unit;
-        var wwLevel = GetUnitAbilityLevel(kitty, Constants.ABILITY_WIND_WALK);
-        var WWTime = 2.0f + (2.0f * wwLevel);
-        Utility.SimpleTimer(WWTime, effect.Dispose);
+        if (Type != RewardType.Windwalk) return false;
+        var kitty = Globals.ALL_KITTIES[player];
+        kitty.WindwalkID = AbilityID;
+        return true;
     }
 
     private bool SetSkin(player player)

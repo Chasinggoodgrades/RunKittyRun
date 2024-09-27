@@ -11,6 +11,7 @@ public class Kitty
     public KittyData SaveData { get; set; }
     public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
     public YellowLightning YellowLightning { get; set; }
+    public int WindwalkID { get; set; } = 0;
     private effect Effect { get; set; }
     public player Player { get; }
     public unit Unit { get; set; }
@@ -29,9 +30,9 @@ public class Kitty
     public Kitty(player player)
     {
         Player = player;
+        InitData();
         SpawnEffect();
         CreateKitty();
-        InitData();
     }
 
     /// <summary>

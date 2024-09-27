@@ -29,7 +29,6 @@ public static class SaveManager
             if(p.Controller != MAP_CONTROL_USER) continue;
             saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
             saveSystem.Load(p);
-            JsonConvert.Deserialize<SaveData>(saveSystem.ToString());
             if(Program.Debug) Console.WriteLine("Loading... " + p.Name);
         }
     }

@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 namespace Source.Init
@@ -41,33 +42,40 @@ namespace Source.Init
 
         private static void StartGame()
         {
-            FogEnable(false);
-            FogMaskEnable(false);
-            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
-            SuspendTimeOfDay(true);
-            CustomStatFrame.Init();
-            Resources.Initialize();
-            Progress.Initialize();
-            Multiboard.Initialize();
-            Shops.Initialize();
-            WolfArea.Initialize();
-            SoundManager.Initialize();
-            Kitty.Initialize();
-            RelicManager.Initialize();
-            ProtectionOfAncients.Initialize();
-            PlayerLeaves.Initialize();
-            FloatingNameTag.Initialize();
-            GameTimer.Initialize();
-            VictoryZone.Initialize();
-            AffixFactory.Initialize();
-            RewardsManager.Initialize();
-            RewardChecker.DisableALlRewards();
-            ShadowKitty.Initialize();
-            ItemSpawner.Initialize();
-            StatsFrame.PopulateStatsFrameData();
-            Challenges.Initialize();
-            NitroPacer.Initialize();
-            RoundManager.Initialize();
+            try
+            {
+                FogEnable(false);
+                FogMaskEnable(false);
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
+                SuspendTimeOfDay(true);
+                CustomStatFrame.Init();
+                Resources.Initialize();
+                Progress.Initialize();
+                Multiboard.Initialize();
+                Shops.Initialize();
+                WolfArea.Initialize();
+                SoundManager.Initialize();
+                Kitty.Initialize();
+                RelicManager.Initialize();
+                ProtectionOfAncients.Initialize();
+                PlayerLeaves.Initialize();
+                FloatingNameTag.Initialize();
+                GameTimer.Initialize();
+                VictoryZone.Initialize();
+                AffixFactory.Initialize();
+                RewardsManager.Initialize();
+                RewardChecker.DisableALlRewards();
+                ShadowKitty.Initialize();
+                ItemSpawner.Initialize();
+                StatsFrame.PopulateStatsFrameData();
+                Challenges.Initialize();
+                NitroPacer.Initialize();
+                RoundManager.Initialize();
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine("Error in StartGame: " + e.Message);
+            }
         }
 
         private static void GetActivePlayers()
