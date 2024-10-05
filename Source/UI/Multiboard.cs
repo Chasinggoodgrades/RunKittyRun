@@ -26,6 +26,10 @@ public static class Multiboard
 
     private static void CreateMultiboards()
     {
+        if (Gamemode.CurrentGameMode == "Standard")
+        {
+
+        }
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
         {
             TeamsStatsMultiboard();
@@ -35,7 +39,20 @@ public static class Multiboard
 
     #region Standard Multiboards
 
+    private static void CurrentGameStatsMultiboard()
+    {
 
+    }
+
+    private static void OverallGameStatsMultiboard()
+    {
+
+    }
+
+    private static void BestTimesMultiboard()
+    {
+
+    }
 
     #endregion
 

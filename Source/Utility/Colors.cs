@@ -149,4 +149,10 @@ public class Colors
         return false;
     }
 
+    public static string HighlightString(string text)
+    {
+        if(text != null && text.Length > 0) return COLOR_YELLOW + text + COLOR_RESET;
+        else return $"{COLOR_RED}ERROR{COLOR_RESET}";
+    }
+
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -31,7 +32,7 @@ public static class Windwalk
         var wwID = kitty.WindwalkID;
         if (wwID != 0)
         {
-            var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == GetSpellAbilityId());
+            var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
             var visual = reward.ModelPath;
             var effect = caster.AddSpecialEffect(visual, "origin");
             Utility.SimpleTimer(duration, () => effect.Dispose());

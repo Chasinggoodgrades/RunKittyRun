@@ -69,17 +69,6 @@ public static class SoundManager
     }
     public static void PlaySpeedSound() => SPEED_SOUND.Start();
     public static void PlayInvulnerableSound() => INVULNERABLE_SOUND.Start();
-    private static void TeamKittyDeathSound(unit Kitty)
-    {
-        var s = KITTY_DEATH_SOUND;
-        s.AttachToUnit(Kitty);
-        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(Kitty)].TeamID].Teammembers)
-        {
-            if(player == GetLocalPlayer())
-                s.Start();
-        }
-    }
-
     /// <summary>
     /// Plays the POTM death sound ontop of the passed unit.
     /// While playing team mode, only team members of the passed unit will hear the sound.
@@ -91,11 +80,22 @@ public static class SoundManager
         else
         {
             var s = KITTY_DEATH_SOUND;
+            s.Stop(false, false);
             s.AttachToUnit(Kitty);
             s.Start();
         }
     }
-
+    private static void TeamKittyDeathSound(unit Kitty)
+    {
+        var s = KITTY_DEATH_SOUND;
+        s.AttachToUnit(Kitty);
+        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(Kitty)].TeamID].Teammembers)
+        {
+            if (player == GetLocalPlayer())
+                s.Stop(false, false);
+                s.Start();
+        }
+    }
 
     /// <summary>
     /// Plays the round starting sound based on current round.

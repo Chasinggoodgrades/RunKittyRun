@@ -10,8 +10,8 @@ public static class CustomStatFrame
     private static framehandle CustomStatFrameBoxS;
     private static framehandle CustomStatFrameBoxF;
 
+    public static Dictionary<int, unit> SelectedUnit = new Dictionary<int, unit>();
     private static List<CustomStat> Stats = new List<CustomStat>();
-    private static Dictionary<int, unit> SelectedUnit = new Dictionary<int, unit>();
     private static string MoveSpeed = $"{Colors.COLOR_YELLOW_ORANGE}MS:|r";
     private static string Time = $"{Colors.COLOR_YELLOW_ORANGE}Time:|r";
     private static string Saves = $"{Colors.COLOR_YELLOW_ORANGE}Saves:|r";

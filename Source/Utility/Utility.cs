@@ -33,6 +33,11 @@ public static class Utility
         }
     }
 
+    /// <summary>
+    /// Display a timed text message to all players.
+    /// </summary>
+    /// <param name="duration">How long to show the message.</param>
+    /// <param name="message">Whats the message?</param>
     public static void TimedTextToAllPlayers(float duration, string message)
     {
         foreach (var p in Globals.ALL_PLAYERS)
@@ -79,6 +84,11 @@ public static class Utility
         return false;
     }
 
+    /// <summary>
+    /// Creates a disposable timer for a specific duration to do a simple action.
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
         var t = CreateTimer();
@@ -89,6 +99,12 @@ public static class Utility
         });
     }
 
+    /// <summary>
+    /// Determines if the specified unit has an item with the given itemId.
+    /// </summary>
+    /// <param name="u">The unit to check for the item.</param>
+    /// <param name="itemId">The ID of the item to check for.</param>
+    /// <returns>True if the unit has the item, otherwise false.</returns>
     public static bool UnitHasItem(unit u, int itemId)
     {
         for (int i = 0; i < 6; i++)

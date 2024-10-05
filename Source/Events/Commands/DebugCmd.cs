@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -63,8 +64,11 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 break;
-            case "?awardtest":
-                AwardManager.GiveReward(player, Awards.Nitro_Red);
+            case "?award":
+                AwardingCmds.Awarding(player, command);
+                break;
+            case "?stat":
+                AwardingCmds.SettingGameStats(player, command);
                 break;
             default:
                 player.DisplayTimedTextTo(10.0f, "Unknown command.");

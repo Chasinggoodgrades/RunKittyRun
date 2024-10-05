@@ -42,7 +42,6 @@ public static class PlayerLeaves
         kitty.RemoveKitty();
         circle.RemoveCircle();
         nameTag.Dispose();
-        StatsFrame.RemovePlayerFromStatsFrame(leavingPlayer);
         Globals.ALL_PLAYERS.Remove(leavingPlayer);
         Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
         RoundManager.RoundEndCheck();
@@ -61,7 +60,6 @@ public static class PlayerLeaves
         kitty.RemoveKitty();
         circle.RemoveCircle();
         nameTag.Dispose();
-        StatsFrame.RemovePlayerFromStatsFrame(player);
         Globals.ALL_PLAYERS.Remove(player);
         Console.WriteLine(Colors.PlayerNameColored(player) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
         RoundManager.RoundEndCheck();

@@ -18,6 +18,7 @@ namespace Source.Init
             Gamemode.Initialize();
             Safezone.Initialize();
             StartGameModeTimer();
+            StopMusic(false);
 
         }
 
@@ -67,7 +68,6 @@ namespace Source.Init
                 RewardChecker.DisableALlRewards();
                 ShadowKitty.Initialize();
                 ItemSpawner.Initialize();
-                StatsFrame.PopulateStatsFrameData();
                 Challenges.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();

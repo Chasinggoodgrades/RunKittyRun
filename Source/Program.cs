@@ -40,6 +40,7 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
+				MusicManager.Initialize();
 				FrameManager.Initialize();
                 Setup.Initialize();
                 CommandHandler.Initialize();
