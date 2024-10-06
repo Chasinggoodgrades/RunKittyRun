@@ -1,0 +1,53 @@
+﻿using Source;
+using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
+public class OneOfNine : Relic
+{
+    public const int RelicItemID = Constants.ITEM_ONE_OF_NINE;
+    private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+    private const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    public OneOfNine() : base(
+        "One of Nine",
+        "A relic that grants the user a chance to dodge attacks.",
+        RelicItemID
+        ) 
+    { }
+
+    public override void ApplyEffect(unit Unit)
+    {
+        var player = GetOwningPlayer(Unit);
+        var cooldown = GetOneOfNineCooldown(player);
+        Unit.RemoveAbility(PreviousAbilityID);
+        Unit.AddAbility(RelicAbilityID);
+        Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
+    }
+
+    public override void RemoveEffect(unit Unit)
+    {
+        var player = GetOwningPlayer(Unit);
+        var cooldown = GetOneOfNineCooldown(player);
+        Unit.RemoveAbility(RelicAbilityID);
+        Unit.AddAbility(PreviousAbilityID);
+        Unit.SetAbilityCooldownRemaining(PreviousAbilityID, cooldown);
+    }
+
+    private static float GetOneOfNineCooldown(player Player)
+    {
+        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+        var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+        if (kitty.GetAbilityCooldownRemaining(noRelic) > 0.0f)
+            return kitty.GetAbilityCooldownRemaining(noRelic);
+        return kitty.GetAbilityCooldownRemaining(relic);
+    }
+
+    public static void OneOfNineEffect(player Player)
+    {
+        var kitty = Globals.ALL_KITTIES[Player];
+        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return;
+        if (Program.Debug) Console.WriteLine("One of Nine Effect");
+        if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
+            IssueImmediateOrder(kitty.Unit, "divineshield");
+    }
+}

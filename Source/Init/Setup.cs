@@ -57,7 +57,7 @@ namespace Source.Init
                 WolfArea.Initialize();
                 SoundManager.Initialize();
                 Kitty.Initialize();
-                RelicManager.Initialize();
+                //RelicManager.Initialize();
                 ProtectionOfAncients.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
@@ -72,7 +72,7 @@ namespace Source.Init
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Error in StartGame: " + e.Message);
             }

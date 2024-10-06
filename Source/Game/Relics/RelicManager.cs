@@ -11,9 +11,8 @@ public static class RelicManager
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[0]) return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         RegisterEvents();
-        RelicEffects.Initialize();
     }
 
     private static void RegisterEvents()
@@ -57,13 +56,12 @@ public static class RelicManager
         if (!RelicIDs.Contains(item.TypeId)) return;
 
         // Theres the ability to have more than 1 relic, but i'm creating this with the intention of 1 relic
-        if (kitty.Relics.Count != 0 || !kitty.CanBuyRelic)
+        //if (kitty.Relics.Count != 0 || !kitty.CanBuyRelic)
         {
-            RefundHandler(player, item);
-            return;
+            //RefundHandler(player, item);
+            //return;
         }
-        kitty.Relics.Add(item);
-        RelicEffects.HandleRelicEffect(player, item, true);
+        //kitty.Relics.Add(item);
     }
 
     private static void HandleDrop()
@@ -72,9 +70,6 @@ public static class RelicManager
         var player = GetTriggerPlayer();
         var kitty = Globals.ALL_KITTIES[player];
         if (!RelicIDs.Contains(item.TypeId)) return;
-        if (kitty.Relics.Count == 0) return;
-        RelicEffects.HandleRelicEffect(player, item, false);
-        kitty.Relics.Remove(item);
     }
     private static void RefundHandler(player Player, item Item)
     {
@@ -82,8 +77,8 @@ public static class RelicManager
         var itemCost = 650; // Theres no built in function to determine item cost, so it's just gonna be set at 650. 
         if (kitty.Unit.Level < 10)
             Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You must have reached level 10 to purchase a relic.|r");
-        else if (kitty.Relics.Count != 0)
-            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You already have a relic!|r");
+        //else if (kitty.Relics.Count != 0)
+            //Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You already have a relic!|r");
         else
             Console.WriteLine($"{Colors.COLOR_RED}Error Refunding, report to developer.|r {Colors.COLOR_GOLD}Relic Manager: {Item.Name}|r");
         Player.Gold += itemCost;

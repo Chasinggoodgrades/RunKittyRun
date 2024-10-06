@@ -20,7 +20,6 @@ public class Kitty
     public int ProgressZone { get; set; } = 0;
     public bool Alive { get; set; } = true;
     public bool Finished { get; set; } = false;
-    public List<item> Relics { get; set; }
     public bool CanBuyRelic { get; set; } = false;
     public trigger w_Collision { get; set; } = CreateTrigger();
     public trigger c_Collision { get; set; } = CreateTrigger();
@@ -40,10 +39,17 @@ public class Kitty
     /// </summary>
     public static void Initialize()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            new Kitty(player);
-            new Circle(player);
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                new Kitty(player);
+                new Circle(player);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
     /// <summary>
@@ -95,7 +101,6 @@ public class Kitty
         // Challenges, Relics, etc for Standard.
         if (Gamemode.CurrentGameMode == "Standard")
         {
-            Relics = new List<item>();
             YellowLightning = new YellowLightning(Player);
         }
 
@@ -115,6 +120,7 @@ public class Kitty
         AwardManager.SetStartingSkin(this);
         Utility.SelectUnitForPlayer(Player, Unit);
         Globals.ALL_KITTIES.Add(Player, this);
+        Resources.StartingItems(this);
         
         // Set Collision to Default
         CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
@@ -127,7 +133,6 @@ public class Kitty
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
-        Relics.Clear();
         Globals.ALL_KITTIES.Remove(Player);
     }
 

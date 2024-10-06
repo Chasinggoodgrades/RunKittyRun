@@ -47,6 +47,10 @@ public class Safezone
         Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
         Deathless.DeathlessCheck(player);
     }
+    private void WolfEntersZoneActions()
+    {
+
+    }
 
     /// <summary>
     /// Resets progress zones and reached safezones to initial state.

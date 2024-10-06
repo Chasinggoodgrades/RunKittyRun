@@ -23,13 +23,14 @@ public static class MusicManager
         return new List<Music>
         {
             new Music("Stop All Music", ""),
-            new Music("Linkin Park - Numb", "war3mapImported\\LP-Numb.mp3"),
-            new Music("Linkin Park - In The End", "war3mapImported\\LP_InTheEnd.mp3"),
-            new Music("Linkin Park - Faint", "war3mapImported\\LP-Faint.mp3"),
-            new Music("Skillet - Whispers in Dark", "war3mapImported\\Skillet-WhispersInDark.mp3"),
-            new Music("Sum 41 - The Hell Song", "war3mapImported\\Sum41-HellSong.mp3"),
-            new Music("DJ Sammy - Heaven", "war3mapImported\\DJSammy-Heaven.mp3"),
-            new Music("Invulnerable", "war3mapImported\\Invulnerable.mp3")
+            new Music("Linkin Park - Numb", "Music\\LP-Numb.mp3"),
+            new Music("Linkin Park - In The End", "Music\\LP-InTheEnd.mp3"),
+            new Music("Linkin Park - Faint", "Music\\LP-Faint.mp3"),
+            new Music("Skillet - Whispers in Dark", "Music\\Skillet-WhispersInDark.mp3"),
+            new Music("Sum 41 - The Hell Song", "Music\\Sum41-HellSong.mp3"),
+            new Music("DJ Sammy - Heaven", "Music\\DJSammy-Heaven.mp3"),
+            new Music("Cascada - Everytime We Touch", "Music\\Cascada-Touch.mp3"),
+            new Music("Cascada - Everytime We Touch(Fast)", "Music\\Cascada-Touch(fast).mp3")
         };
     }
 }

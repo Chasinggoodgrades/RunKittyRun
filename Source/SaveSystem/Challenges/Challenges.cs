@@ -83,9 +83,9 @@ public class YellowLightning
 {
     private const int YELLOW_LIGHTNING_SAVE_REQUIREMENT = 6;
     private const float YELLOW_LIGHTNING_TIMER = 3.0f;
-    public player Player { get; set; }
+    public player Player { get; private set; }
     public timer Timer { get; private set; }
-    public int SaveCount { get; set; }
+    public int SaveCount { get; private set; }
     public YellowLightning(player player)
     {
         Timer = CreateTimer();

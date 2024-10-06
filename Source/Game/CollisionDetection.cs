@@ -67,7 +67,7 @@ public static class CollisionDetection
     {
         TriggerAddAction(k.w_Collision, () =>
         {
-            RelicEffects.OneOfNineEffect(k.Player);
+            OneOfNine.OneOfNineEffect(k.Player);
             k.KillKitty();
             Team.CheckTeamDead(k);
         });
@@ -80,7 +80,7 @@ public static class CollisionDetection
         {
             var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
             circle.ReviveKitty(k);
-            RelicEffects.BeaconOfUnitedLifeforceEffect(k);
+            BeaconOfUnitedLifeforce.BeaconOfUnitedLifeforceEffect(k);
         });
         return k.c_Collision;
     }

@@ -114,4 +114,15 @@ public static class Utility
         }
         return false;
     }
+
+    public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
+    {
+        var tt = CreateTextTag();
+        tt.SetText(text, height);
+        tt.SetColor(red, green, blue, 255);
+        tt.SetPosition(u.X, u.Y, 0);
+        tt.SetVelocity(0, 0.02f);
+        tt.SetVisibility(true);
+        SimpleTimer(duration, () => tt.Dispose());
+    }
 }

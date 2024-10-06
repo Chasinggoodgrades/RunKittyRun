@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Numerics;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
@@ -30,6 +31,7 @@ public class WolfArea
             wolfarea.Rectangle = wolfArea;
             wolfarea.CalculateArea();
             wolfarea.EnterWolfAreaEvents();
+            wolfarea.LeaveAreaEvents();
             WolfAreas.Add(count, wolfarea);
             count++;
         }
@@ -55,6 +57,22 @@ public class WolfArea
                 if (ID == 16) progressPointDict[player] = Regions.ProgressPoint3.Rect;
                 Globals.ALL_KITTIES[player].ProgressZone = ID;
             }
+        });
+    }
+
+    /// <summary>
+    /// Prevents wolves from leaving the area with wander.
+    /// </summary>
+    private void LeaveAreaEvents()
+    {
+        Trigger = CreateTrigger();
+        Trigger.RegisterLeaveRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
+        Trigger.AddAction(() =>
+        {
+            var unit = GetTriggerUnit();
+            var randomX = GetRandomReal(Rect.MinX, Rect.MaxX);
+            var randomY = GetRandomReal(Rect.MinY, Rect.MaxY);
+            unit.IssueOrder("move", randomX, randomY);
         });
     }
 

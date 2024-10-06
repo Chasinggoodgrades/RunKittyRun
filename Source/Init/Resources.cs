@@ -26,6 +26,11 @@ public static class Resources
         foreach(var kitty in Globals.ALL_KITTIES.Values)
             kitty.Unit.Experience += EndRoundBonusXP;
     }
+    public static void StartingItems(Kitty kitty)
+    {
+        var unit = kitty.Unit;
+        if (Gamemode.CurrentGameMode == "Standard") unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
+    }
 
     private static void AdjustStartingGold()
     {
@@ -44,6 +49,7 @@ public static class Resources
 
     private static void StandardResources()
     {
+        StartingGold = 200;
         SaveExperience = 80;
         SaveGold = 25;
     }

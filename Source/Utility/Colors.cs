@@ -149,6 +149,11 @@ public class Colors
         return false;
     }
 
+    /// <summary>
+    /// Highlights a string with yellow color.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     public static string HighlightString(string text)
     {
         if(text != null && text.Length > 0) return COLOR_YELLOW + text + COLOR_RESET;
