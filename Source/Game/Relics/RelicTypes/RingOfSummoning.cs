@@ -5,13 +5,16 @@ public class RingOfSummoning : Relic
 {
     public const int RelicItemID = Constants.ITEM_SACRED_RING_OF_SUMMONING;
     private const int RelicAbilityID = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
+    private const int RelicCost = 650;
     private static float SUMMONING_RING_RADIUS = 300.0f;
     private trigger Trigger;
 
     public RingOfSummoning() : base(
         "Ring of Summoning",
         "Summons friendly allies",
-        RelicItemID)
+        RelicItemID,
+        RelicCost
+        )
     {}
 
     public override void ApplyEffect(unit Unit)

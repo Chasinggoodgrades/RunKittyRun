@@ -5,11 +5,13 @@ public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
     private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
+    private const int RelicCost = 650;
 
     public AmuletOfEvasiveness() : base(
         "Amulet of Evasiveness",
         "A relic that grants the user a chance to dodge attacks.",
-        RelicItemID
+        RelicItemID,
+        RelicCost
         ) 
     { }
 

@@ -6,11 +6,13 @@ public class BeaconOfUnitedLifeforce : Relic
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
     private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
     private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
+    private const int RelicCost = 650;
 
     public BeaconOfUnitedLifeforce() : base(
         "Beacon of United Lifeforce",
         "A relic that has chance to revive other kitties",
-        RelicItemID
+        RelicItemID,
+        RelicCost
         )
     { }
 

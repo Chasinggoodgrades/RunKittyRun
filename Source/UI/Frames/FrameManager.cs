@@ -15,6 +15,7 @@ public static class FrameManager
         CreateMusicButton();
         CreateShopButton();
         MusicFrame.Initialize();
+        ShopFrame.Initialize();
     }
 
     private static void RemoveUnwantedFrames()

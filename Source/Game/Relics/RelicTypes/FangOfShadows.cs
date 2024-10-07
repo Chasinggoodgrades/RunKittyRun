@@ -5,12 +5,15 @@ public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
     private const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    private const int RelicCost = 650;
     private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
     private trigger Trigger;
     public FangOfShadows() : base(
         "Fang of Shadows",
         "Summons a shadow kitty that deals damage to enemies.",
-        RelicItemID)
+        RelicItemID,
+        RelicCost
+        )
     {
     }
 
@@ -26,6 +29,7 @@ public class FangOfShadows : Relic
     public override void RemoveEffect(unit Unit)
     {
         Unit.RemoveAbility(RelicAbilityID);
+        Trigger.Dispose();
     }
 
     private static void SummonShadowKitty(player Player)

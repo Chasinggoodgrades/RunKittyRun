@@ -21,7 +21,7 @@ public static class MusicFrame
     {
         try
         {
-            MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonDisabledBackdropTemplate", 0);
+            MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
             BlzFrameSetAbsPoint(MusicFramehandle, FRAMEPOINT_CENTER, 0.40f, 0.42f);
             var ySize = MusicManager.MusicList.Count * 0.03f;
             BlzFrameSetSize(MusicFramehandle, 0.20f, ySize);
@@ -122,7 +122,7 @@ public static class MusicFrame
         // Retrieve the scroll value for the player
         var value = MusicSliderValues[player];
         int maxSongs = MusicManager.MusicList.Count;
-        int visibleButtons = 8;
+        int visibleButtons = 9;
 
         // Ensure the value stays within valid bounds
         if (value < 0) value = 0;

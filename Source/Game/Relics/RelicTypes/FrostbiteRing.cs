@@ -6,13 +6,16 @@ public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
     private static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_RING_EFFECT = "Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathTargetArt.mdl";
     private static float FROSTBITE_FREEZE_DURATION = 5.0f; private trigger Trigger;
     public FrostbiteRing() : base(
         "Frostbite Ring",
         "Freezes enemies on hit",
-        RelicItemID)
+        RelicItemID,
+        RelicCost
+        )
     {}
 
     public override void ApplyEffect(unit Unit)

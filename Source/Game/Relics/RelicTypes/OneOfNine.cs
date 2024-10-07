@@ -7,10 +7,12 @@ public class OneOfNine : Relic
     public const int RelicItemID = Constants.ITEM_ONE_OF_NINE;
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    private const int RelicCost = 650;
     public OneOfNine() : base(
         "One of Nine",
         "A relic that grants the user a chance to dodge attacks.",
-        RelicItemID
+        RelicItemID,
+        RelicCost
         ) 
     { }
 
