@@ -14,13 +14,13 @@ public static class ShopFrame
     private static framehandle descriptionLabel;
     private static framehandle costLabel;
     private static framehandle buyButton;
-    private const float buttonWidth = 0.05f;
-    private const float buttonHeight = 0.05f;
+    private const float buttonWidth = 0.02f;
+    private const float buttonHeight = 0.02f;
     private const float panelPadding = 0.015f;
-    private const float frameX = 0.5f;
-    private const float frameY = 0.3f;
-    private const float panelX = (frameX/2) - panelPadding*2;
-    private const float panelY = (frameY/3) - panelPadding*6;
+    private const float frameX = 0.4f;
+    private const float frameY = 0.25f;
+    private const float panelX = (frameX/2) - panelPadding;
+    private const float panelY = (frameY/3) - panelPadding*2;
     private static Relic selectedItem;
 
     public static void Initialize()
@@ -28,6 +28,7 @@ public static class ShopFrame
         InitializeShopFrame();
         InitializePanels();
         InitializeDetailsPanel();
+        InitializePanelTitles();
         LoadItemsIntoPanels();
         shopFrame.Visible = false;
     }
@@ -48,6 +49,22 @@ public static class ShopFrame
         miscPanel = CreatePanel(rewardsPanel, 0, -panelPadding);
     }
 
+    private static void InitializePanelTitles()
+    {
+        CreatePanelTitle(relicsPanel, "Relics");
+        CreatePanelTitle(rewardsPanel, "Rewards");
+        CreatePanelTitle(miscPanel, "Miscellaneous");
+    }
+
+    private static void CreatePanelTitle(framehandle panel, string title)
+    {
+        var titleFrame = BlzCreateFrameByType("TEXT", "titleFrame", panel, "", 0);
+        BlzFrameSetPoint(titleFrame, FRAMEPOINT_TOP, panel, FRAMEPOINT_TOP, 0, 0.01f);
+        BlzFrameSetText(titleFrame, title);
+        BlzFrameSetTextColor(titleFrame, BlzConvertColor(255, 255, 255, 0));
+        BlzFrameSetScale(titleFrame, 1.2f);
+    }
+
     private static framehandle CreatePanel(framehandle parent, float x, float y)
     {
         var panel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", parent, 0, 0);
@@ -59,14 +76,16 @@ public static class ShopFrame
     private static void InitializeDetailsPanel()
     {
         detailsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
+        var detailsPanelX = frameX - (panelX + panelPadding*2);
+        var detailsPanelY = frameY - (panelPadding * 2);
         BlzFrameSetPoint(detailsPanel, FRAMEPOINT_TOPRIGHT, shopFrame, FRAMEPOINT_TOPRIGHT, -panelPadding, -panelPadding);
-        BlzFrameSetSize(detailsPanel, frameX / 2.5f, frameY - (panelPadding * 2));
+        BlzFrameSetSize(detailsPanel, detailsPanelX, detailsPanelY);
 
         nameLabel = BlzCreateFrameByType("TEXT", "nameLabel", detailsPanel, "", 0);
         costLabel = BlzCreateFrameByType("TEXT", "costLabel", detailsPanel, "", 0);
         descriptionLabel = BlzCreateFrameByType("TEXT", "descriptionLabel", detailsPanel, "", 0);
         buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
-        buyButton.SetSize(0.1f, 0.03f);
+        buyButton.SetSize(detailsPanelX/3, detailsPanelY/6);
 
         BlzFrameSetPoint(nameLabel, FRAMEPOINT_TOPLEFT, detailsPanel, FRAMEPOINT_TOPLEFT, 0, -panelPadding);
         BlzFrameSetPoint(costLabel, FRAMEPOINT_TOPLEFT, nameLabel, FRAMEPOINT_BOTTOMLEFT, 0, -panelPadding);
@@ -130,7 +149,9 @@ public static class ShopFrame
     }
 
     // Placeholder methods for item retrieval
-    private static List<Relic> GetRelicItems() => new List<Relic> { /* your relic items */ };
+    private static List<Relic> GetRelicItems() => new List<Relic> {
+        new OneOfNine(),
+    };
     private static List<Relic> GetRewardItems() => new List<Relic> { /* your reward items */ };
     private static List<Relic> GetMiscItems() => new List<Relic> { /* your misc items */ };
 
