@@ -60,8 +60,8 @@ public static class Difficulty
         Trigger.RegisterDialogEvent(DifficultyChoosing);
         Trigger.AddAction(() =>
         {
-            var player = GetTriggerPlayer();
-            var button = GetClickedButton();
+            var player = @event.Player;
+            var button = @event.ClickedButton;
 
             if(!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;

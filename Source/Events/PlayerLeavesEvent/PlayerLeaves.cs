@@ -34,7 +34,7 @@ public static class PlayerLeaves
 
     private static void PlayerLeavesActions()
     {
-        var leavingPlayer = GetTriggerPlayer();
+        var leavingPlayer = @event.Player;
         var kitty = Globals.ALL_KITTIES[leavingPlayer];
         var circle = Globals.ALL_CIRCLES[leavingPlayer];
         var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];

@@ -65,7 +65,7 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        var localPlayer = GetLocalPlayer();
+        var localPlayer = player.LocalPlayer;
         var selectedUnit = SelectedUnit[GetPlayerId(localPlayer)];
         
         HandleFrameText(selectedUnit);
@@ -94,7 +94,9 @@ public static class CustomStatFrame
         trigger trig = CreateTrigger();
         TriggerAddAction(trig, () =>
         {
-            SelectedUnit[GetPlayerId(GetTriggerPlayer())] = GetTriggerUnit();
+            var player = @event.Player;
+            var unit = @event.Unit;
+            SelectedUnit[player.Id] = unit;
         });
 
         foreach(var player in Globals.ALL_PLAYERS)
@@ -217,17 +219,17 @@ public static class CustomStatFrame
     }
     private static string GetPlayerTeamName(unit u)
     {
-        if(Globals.PLAYERS_TEAMS.TryGetValue(GetOwningPlayer(u), out Team team)) return team.TeamColor;
+        if (Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team)) return team.TeamColor;
         return $"{ Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
     private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
-    private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Progress.ToString("F2");
-    private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.Saves];
-    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.Deaths];
-    private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.SaveStreak];
-    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].SaveData.GameStats[StatTypes.NormalGames];
-    private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].Time[Globals.ROUND];
-    private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].CurrentStats.RoundSaves;
-    private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[GetOwningPlayer(u)].CurrentStats.RoundDeaths;
+    private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[u.Owner].Progress.ToString("F2");
+    private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Saves];
+    private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Deaths];
+    private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.SaveStreak];
+    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.NormalGames];
+    private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[u.Owner].Time[Globals.ROUND];
+    private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
+    private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths;
     
 }

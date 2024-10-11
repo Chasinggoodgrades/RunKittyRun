@@ -37,17 +37,29 @@ public static class MusicManager
 
 public class Music
 {
+    private static int Count = 1;
     public string Name { get; }
     public string Path { get; }
-    public sound Sound { get; }
+    public sound Sound { get; set; }
     private button Button { get; set; }
 
     public Music(string name, string path)
     {
         Name = name;
         Path = path;
-        Sound = CreateSound(Path, true, true, false, 10, 10, "");
+        CreatingSound();
         Attributes();
+    }
+
+    private void CreatingSound()
+    {
+        Utility.SimpleTimer(Count * 0.08f, SoundCreate);
+        Count += 1;
+    }
+
+    private void SoundCreate()
+    {
+        Sound = CreateSound(Path, true, true, false, 10, 10, "");
     }
 
     public void Play()

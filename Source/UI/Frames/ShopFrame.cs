@@ -23,7 +23,7 @@ public static class ShopFrame
     private const float panelY = (frameY/3) - panelPadding*2;
     private const float detailsPanelX = frameX - (panelX + panelPadding * 2);
     private const float detailsPanelY = frameY - (panelPadding * 2);
-    private static Relic selectedItem;
+    private static Dictionary<player, Relic> SelectedItems = new Dictionary<player, Relic>();
 
     public static void Initialize()
     {
@@ -71,7 +71,7 @@ public static class ShopFrame
     {
         var panel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", parent, 0, 0);
         BlzFrameSetPoint(panel, FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_BOTTOMLEFT, x, y);
-        BlzFrameSetSize(panel, panelX, panelY);
+        panel.SetSize(panelX, panelY);
         return panel;
     }
 
@@ -99,7 +99,7 @@ public static class ShopFrame
         BlzFrameSetPoint(descriptionLabel, FRAMEPOINT_TOPLEFT, costLabel, FRAMEPOINT_BOTTOMLEFT, 0, -panelPadding);
         BlzFrameSetPoint(buyButton, FRAMEPOINT_BOTTOMRIGHT, detailsPanel, FRAMEPOINT_BOTTOMRIGHT, -panelPadding, panelPadding);
 
-        BlzFrameSetText(buyButton, "Buy");
+        buyButton.Text = "Buy";
 
         var trigger = CreateTrigger();
         trigger.RegisterFrameEvent(buyButton, FRAMEEVENT_CONTROL_CLICK);
@@ -133,50 +133,51 @@ public static class ShopFrame
             x += panelPadding / 2;
             y -= panelPadding / 2;
 
-            //BlzFrameSetText(button, items[i].Name);
-            BlzFrameSetTexture(icon, items[i].IconPath, 0, false);
-            BlzFrameSetSize(button, buttonWidth, buttonHeight);
-            BlzFrameSetPoint(button, FRAMEPOINT_TOPLEFT, panel, FRAMEPOINT_TOPLEFT, x, y);
-            BlzFrameSetAllPoints(icon, button);
+            button.SetSize(buttonWidth, buttonHeight);
+            button.SetPoint(FRAMEPOINT_TOPLEFT, x, y, panel, FRAMEPOINT_TOPLEFT);
+            icon.SetTexture(items[i].IconPath, 0, false);
+            icon.SetPoints(button);
 
             var trigger = CreateTrigger();
             var relic = items[i];
             trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
-            trigger.AddAction( () => ShowItemDetails(relic));
+            trigger.AddAction(() => ShowItemDetails(relic));
         }
 
         float panelHeight = rows * (buttonHeight) + panelPadding;
-        BlzFrameSetSize(panel, columns * (buttonWidth) + panelPadding, panelHeight);
-        if(panelHeight > panelY)
+        panel.SetSize(columns * (buttonWidth) + panelPadding, panelHeight);
+        if (panelHeight > panelY)
         {
-            BlzFrameSetSize(shopFrame, frameX, frameY + (panelHeight - panelY));
-            BlzFrameSetSize(detailsPanel, detailsPanelX, detailsPanelY + (panelHeight - panelY));
+            shopFrame.SetSize(frameX, frameY + (panelHeight - panelY));
+            detailsPanel.SetSize(detailsPanelX, detailsPanelY + (panelHeight - panelY));
         }
     }
 
 
     private static void ShowItemDetails(Relic relic)
     {
+        var player = @event.Player;
+        if (!player.IsLocal) return;
         BlzFrameSetText(nameLabel, $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {relic.Name}");
         BlzFrameSetText(costLabel, $"{Colors.COLOR_YELLOW}Cost:|r {relic.Cost}");
         BlzFrameSetText(descriptionLabel, $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {relic.Description}");
-        selectedItem = relic;
+
+        if(SelectedItems.ContainsKey(player))
+            SelectedItems[player] = relic;
+        else
+            SelectedItems.Add(player, relic);
     }
 
     private static void BuySelectedItem()
     {
-        Console.WriteLine("Test Buy");
-        if (selectedItem != null)
+        var player = @event.Player;
+        if (SelectedItems[player] != null)
         {
-            if (HasEnoughGold(selectedItem.Cost))
-            {
-                ReduceGold(selectedItem.Cost);
-                BlzDisplayChatMessage(GetLocalPlayer(), 0, $"Purchased {selectedItem.Name}!");
-            }
-            else
-            {
-                BlzDisplayChatMessage(GetLocalPlayer(), 0, "Not enough gold!");
-            }
+            if (!HasEnoughGold(player, SelectedItems[player].Cost)) return;
+
+            ReduceGold(player, SelectedItems[player].Cost);
+            AddItem(player, SelectedItems[player].ItemID);
+            BlzDisplayChatMessage(player, 0, $"Purchased {SelectedItems[player].Name}!");
         }
     }
 
@@ -208,14 +209,18 @@ public static class ShopFrame
     };
 
     // Placeholder methods for player interaction
-    private static bool HasEnoughGold(int cost) => true; // implement your logic
-    private static void ReduceGold(int amount) { /* implement your logic */ }
-    private static void AddItem(item newItem) { /* implement your logic */ }
+    private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
+    private static void ReduceGold(player player, int amount) => player.Gold -= amount;
+    private static void RelicMaxedOut(player player) => BlzDisplayChatMessage(player, 0, "You already have the maximum amount of this relic!");
+    private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
     public static void ShopFrameActions()
     {
-        var player = GetTriggerPlayer();
+        var player = @event.Player;
         if (!player.IsLocal) return;
+        FrameManager.ShopButton.Visible = false;
+        FrameManager.ShopButton.Visible = true;
         shopFrame.Visible = !shopFrame.Visible;
+
     }
 }

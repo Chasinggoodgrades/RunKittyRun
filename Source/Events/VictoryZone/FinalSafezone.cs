@@ -15,7 +15,8 @@ public static class FinalSafezone
         Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
         Trigger.AddAction(() =>
         {
-            var player = GetOwningPlayer(GetTriggerUnit());
+            var unit = @event.Unit;
+            var player = unit.Owner;
             Nitros.CompletedNitro(GetTriggerUnit());
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);

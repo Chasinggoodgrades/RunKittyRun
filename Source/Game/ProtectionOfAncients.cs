@@ -33,8 +33,8 @@ public static class ProtectionOfAncients
 
     private static void ActivationEvent()
     {
-        var Unit = GetTriggerUnit();
-        var player = GetTriggerPlayer();
+        var Unit = @event.Unit;
+        var player = @event.Player;
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
         if(Program.Debug) Console.WriteLine("Player: " + player.Name + " activated Protection of the Ancients!");
@@ -51,7 +51,7 @@ public static class ProtectionOfAncients
 
     private static void ApplyEffect(unit Unit)
     {
-        var owningPlayer = GetOwningPlayer(Unit);
+        var owningPlayer = Unit.Owner;
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
         actiEffect.Dispose();
         EndEffectActions(owningPlayer);
@@ -61,9 +61,10 @@ public static class ProtectionOfAncients
     {
         // Append units only if they're dead and a kitty circle. 
         var unit = GetFilterUnit();
+        var player = unit.Owner;
         if (GetUnitTypeId(unit) != Constants.UNIT_KITTY_CIRCLE) return false;
 
-        var kitty = Globals.ALL_KITTIES[GetOwningPlayer(unit)].Unit;
+        var kitty = Globals.ALL_KITTIES[player].Unit;
         if (kitty.Alive) return false; 
 
         return true;

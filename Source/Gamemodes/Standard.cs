@@ -30,7 +30,7 @@ public static class Standard
             TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
         KittyReachedLevelSix.AddAction(() =>
         {
-            if (GetHeroLevel(GetTriggerUnit()) == 6) AddProtectionOfAncients();
+            if (GetHeroLevel(@event.Unit) == 6) AddProtectionOfAncients();
         });
     }
 
@@ -42,11 +42,11 @@ public static class Standard
             TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
         KittyReachedLevelTen.AddAction(() =>
         {
-            if (GetHeroLevel(GetTriggerUnit()) == 10)
+            var unit = @event.Unit;
+            if (GetHeroLevel(unit) == 10)
             {
-                var player = GetOwningPlayer(GetTriggerUnit());
+                var player = unit.Owner;
                 var kitty = Globals.ALL_KITTIES[player];
-                kitty.CanBuyRelic = true;
                 player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your skills have grown. Visit my shop at the top right for some special wares.|r");
             }
         });
@@ -54,8 +54,8 @@ public static class Standard
 
     private static void AddProtectionOfAncients()
     {
-        var player = GetOwningPlayer(GetTriggerUnit());
-        var kitty = GetTriggerUnit();
+        var kitty = @event.Unit;
+        var player = kitty.Owner;
         kitty.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
 

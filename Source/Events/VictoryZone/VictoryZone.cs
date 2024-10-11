@@ -27,14 +27,15 @@ public static class VictoryZone
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        TriggerRegisterEnterRegion(InVictoryArea, VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
-        TriggerAddAction(InVictoryArea, VictoryAreaActions);
+        InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryContainerConditions(GetFilterUnit())));
+        InVictoryArea.AddAction(VictoryAreaActions);
     }
 
     private static void VictoryAreaActions()
     {
-        var u = GetTriggerUnit();
-        if(GetUnitTypeId(u) != Constants.UNIT_KITTY) return;
+        var u = @event.Unit;
+        var player = u.Owner;
+        if(u.UnitType != Constants.UNIT_KITTY) return;
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
         {
@@ -43,17 +44,17 @@ public static class VictoryZone
         else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
-            MoveAndFinish(GetOwningPlayer(u));
+            MoveAndFinish(player);
             RoundManager.RoundEndCheck();
         }
         else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             // Move all team members to the start, save their time. Wait for all teams to finish.
-            foreach(var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID].Teammembers)
+            foreach(var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
             {
                 MoveAndFinish(teamMember);
             }
-            Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID].Finished = true;
+            Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
             RoundManager.RoundEndCheck();
         }
     }
@@ -77,7 +78,7 @@ public static class VictoryZone
     {
         // If a team enters the area, check if all the members of the team are in the area.
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return false;
-        var team = Globals.ALL_KITTIES[GetOwningPlayer(u)].TeamID;
+        var team = Globals.ALL_KITTIES[u.Owner].TeamID;
         foreach (var player in Globals.ALL_TEAMS[team].Teammembers)
         {
             if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false;
