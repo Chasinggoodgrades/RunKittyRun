@@ -7,13 +7,15 @@ public abstract class Relic
     public string Description;
     public int ItemID;
     public int Cost;
+    public string IconPath;
 
-    public Relic(string name, string desc, int itemID, int cost)
+    public Relic(string name, string desc, int itemID, int cost, string iconPath)
     {
         Name = name;
         Description = desc;
         ItemID = itemID;
         Cost = cost;
+        IconPath = iconPath;
     }
 
     public abstract void ApplyEffect(unit Unit);

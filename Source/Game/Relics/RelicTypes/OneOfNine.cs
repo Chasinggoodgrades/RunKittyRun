@@ -8,11 +8,13 @@ public class OneOfNine : Relic
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
     private const int RelicCost = 650;
+    public const string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
     public OneOfNine() : base(
         "One of Nine",
         "A relic that grants the user a chance to dodge attacks.",
         RelicItemID,
-        RelicCost
+        RelicCost,
+        IconPath
         ) 
     { }
 

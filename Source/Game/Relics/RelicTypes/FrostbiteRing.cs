@@ -10,11 +10,14 @@ public class FrostbiteRing : Relic
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_RING_EFFECT = "Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathTargetArt.mdl";
     private static float FROSTBITE_FREEZE_DURATION = 5.0f; private trigger Trigger;
+    private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+
     public FrostbiteRing() : base(
         "Frostbite Ring",
         "Freezes enemies on hit",
         RelicItemID,
-        RelicCost
+        RelicCost,
+        IconPath
         )
     {}
 
