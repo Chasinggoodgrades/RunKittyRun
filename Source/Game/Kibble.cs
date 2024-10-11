@@ -48,7 +48,7 @@ public class Kibble
         }
         trig.AddAction (() =>
         {
-            if (GetManipulatedItem() != Item) return;
+            if (@event.ManipulatedItem != Item) return;
             KibblePickup();
         });
         return trig;
@@ -57,8 +57,8 @@ public class Kibble
     private void KibblePickup()
     {
         // either some gold, or xp... jack pot.. or a reward
-        var unit = GetTriggerUnit();
-        var player = GetOwningPlayer(unit);
+        var unit = @event.Unit;
+        var player = unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
 
         var randomChance = GetRandomInt(0, 500);

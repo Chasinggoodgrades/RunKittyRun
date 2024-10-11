@@ -41,7 +41,7 @@ public class Circle
 
     public void HideCircle()
     {
-        ShowUnit(Unit, false);
+        Unit.IsVisible = false;
     }
 
     public void SetMana(float mana, int maxMana, float regenRate)
@@ -53,7 +53,7 @@ public class Circle
 
     private void ShowCircle()
     {
-        ShowUnit(Unit, true);
+        Unit.IsVisible = true;
     }
 
 

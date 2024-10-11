@@ -22,8 +22,8 @@ public static class CommandHandler
 
     private static void HandleCommand()
     {
-        var player = GetTriggerPlayer();
-        var command = GetEventPlayerChatString().ToLower(); // all commands are sent to lower case
+        var player = @event.Player;
+        var command = @event.PlayerChatString.ToLower();
 
         if (command.StartsWith("-t ") || command == "-s")
         {

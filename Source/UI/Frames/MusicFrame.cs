@@ -22,16 +22,8 @@ public static class MusicFrame
         try
         {
             MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
-            BlzFrameSetAbsPoint(MusicFramehandle, FRAMEPOINT_CENTER, 0.40f, 0.42f);
-            var ySize = MusicManager.MusicList.Count * 0.03f;
-            BlzFrameSetSize(MusicFramehandle, 0.20f, ySize);
-
-            // Slider
-            RegisterMusicSlider();
-
-            InitializeMusicButtons();
-            //PopulateMusicFrame();
-            MusicFramehandle.Visible = false;
+            MusicFramehandle.SetAbsPoint(FRAMEPOINT_CENTER, 0.40f, 0.42f);
+            Utility.SimpleTimer(2.0f, CreateMusicFrames);
         }
         catch (Exception e)
         {
@@ -39,38 +31,52 @@ public static class MusicFrame
         }
     }
 
+    private static void CreateMusicFrames()
+    {
+        var ySize = MusicManager.MusicList.Count * 0.03f;
+        MusicFramehandle.SetSize(0.20f, ySize);
+
+        // Slider
+        RegisterMusicSlider();
+
+        InitializeMusicButtons();
+        MusicFramehandle.Visible = false;
+    }
+
     private static void RegisterMusicSlider()
     {
         MusicSlider = BlzCreateFrameByType("SLIDER", "SliderFrame", MusicFramehandle, "QuestMainListScrollBar", 0);
         var numberOfSongs = MusicManager.MusicList.Count;
-        BlzFrameClearAllPoints(MusicSlider);
-        BlzFrameSetAbsPoint(MusicSlider, FRAMEPOINT_TOPLEFT, 0.485f, 0.475f);
-        BlzFrameSetSize(MusicSlider, 0.01f, 0.125f);
-        BlzFrameSetMinMaxValue(MusicSlider, 0, numberOfSongs);
-        BlzFrameSetStepSize(MusicSlider, 1);
+        MusicSlider.ClearPoints();
+        MusicSlider.SetAbsPoint(FRAMEPOINT_TOPLEFT, 0.485f, 0.475f);
+        MusicSlider.SetSize(0.01f, 0.125f);
+        MusicSlider.SetMinMaxValue(0, numberOfSongs);
+        MusicSlider.SetStepSize(1);
 
         foreach (var player in Globals.ALL_PLAYERS)
             MusicSliderValues.Add(player, 0);
 
         var trigger = CreateTrigger();
         var mousewheel = CreateTrigger();
-        BlzTriggerRegisterFrameEvent(trigger, MusicSlider, FRAMEEVENT_SLIDER_VALUE_CHANGED);
-        BlzTriggerRegisterFrameEvent(mousewheel, MusicSlider, FRAMEEVENT_MOUSE_WHEEL);
-        TriggerAddAction(trigger, () =>
+        trigger.RegisterFrameEvent(MusicSlider, FRAMEEVENT_SLIDER_VALUE_CHANGED);
+        mousewheel.RegisterFrameEvent(MusicSlider, FRAMEEVENT_MOUSE_WHEEL);
+        trigger.AddAction(() =>
         {
-            var frame = BlzGetTriggerFrame();
-            MusicSliderValues[GetTriggerPlayer()] = (int)BlzGetTriggerFrameValue();
-            if (GetTriggerPlayer() == GetLocalPlayer()) PopulateMusicFrame(GetTriggerPlayer()); // possible desync... Evaluate if issues arise from this.
+            var frame = @event.Frame;
+            var player = @event.Player;
+            MusicSliderValues[player] = (int)@event.FrameValue;
+            if (player.IsLocal) PopulateMusicFrame(player);
         });
-        TriggerAddAction(mousewheel, () =>
+        mousewheel.AddAction(() =>
         {
-            var frame = BlzGetTriggerFrame();
-            var player = GetTriggerPlayer();
+            var frame = @event.Frame;
+            var player = @event.Player;
+            var frameValue = @event.FrameValue;
             if (!player.IsLocal) return;
-            if (BlzGetTriggerFrameValue() > 0) BlzFrameSetValue(MusicSlider, BlzGetTriggerFrameValue() + 1);
-            else BlzFrameSetValue(MusicSlider, BlzGetTriggerFrameValue() - 1);
+            if (frameValue > 0) MusicSlider.Value = frameValue + 1.0f;
+            else MusicSlider.Value = frameValue - 1.0f;
             var value = MusicSliderValues[player];
-            if (GetTriggerPlayer() == GetLocalPlayer()) PopulateMusicFrame(GetTriggerPlayer());
+            if (player.IsLocal) PopulateMusicFrame(player);
         });
     }
 
@@ -83,19 +89,18 @@ public static class MusicFrame
         {
             var name = MusicManager.MusicList[i].Name;
             MusicButtons[i] = BlzCreateFrameByType("GLUETEXTBUTTON", name, MusicFramehandle, "DebugButton", 0);
-            BlzFrameSetSize(MusicButtons[i], ButtonWidth, ButtonHeight);
+            MusicButtons[i].SetSize(ButtonWidth, ButtonHeight);
             MusicButtons[i].Text = MusicManager.MusicList[i].Name;
 
             // Set the position of the button, using a formula based on index
-            BlzFrameSetAbsPoint(MusicButtons[i], FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - (i * ButtonSpacing));
+            MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - (i * ButtonSpacing));
 
             var trigger = CreateTrigger();
             trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
-
-            TriggerAddAction(trigger, () =>
+            trigger.AddAction(() =>
             {
-                var frame = BlzGetTriggerFrame();
-                var player = GetTriggerPlayer();
+                var frame = @event.Frame;
+                var player = @event.Player;
 
                 if (!player.IsLocal) return;
 
@@ -105,9 +110,7 @@ public static class MusicFrame
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
                 if (music != null) music.Play();
                 MusicFramehandle.Visible = !MusicFramehandle.Visible;
-
             });
-
         }
     }
 
@@ -117,7 +120,7 @@ public static class MusicFrame
     public static void PopulateMusicFrame(player player)
     {
         // Ensure this code runs only for the local player
-        if (GetLocalPlayer() != player) return;
+        if (!player.IsLocal) return;
 
         // Retrieve the scroll value for the player
         var value = MusicSliderValues[player];
@@ -147,12 +150,12 @@ public static class MusicFrame
                 else
                     positionY = ButtonStartY - ((i - start) * ButtonSpacing);
 
-                BlzFrameSetAbsPoint(MusicButtons[i], FRAMEPOINT_CENTER, ButtonStartX, positionY);
-                BlzFrameSetVisible(MusicButtons[i], true);
+                MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, positionY);
+                MusicButtons[i].Visible = true;
             }
             else
             {
-                BlzFrameSetVisible(MusicButtons[i], false);
+                MusicButtons[i].Visible = false;
             }
         }
     }
@@ -162,7 +165,7 @@ public static class MusicFrame
     /// </summary>
     public static void MusicFrameActions()
     {
-        var player = GetTriggerPlayer();
+        var player = @event.Player;
         if (player.IsLocal)
         {
             FrameManager.MusicButton.Visible = false;

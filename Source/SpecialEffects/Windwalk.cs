@@ -24,10 +24,10 @@ public static class Windwalk
 
     private static void ApplyWindwalkEffect()
     {
-        var caster = GetTriggerUnit();
-        var player = GetOwningPlayer(caster);
+        var caster = @event.Unit;
+        var player = caster.Owner;
         var kitty = Globals.ALL_KITTIES[player];
-        var abilityLevel = GetUnitAbilityLevel(caster, Constants.ABILITY_WIND_WALK);
+        var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
         var duration = 3.0f + (2.0f * abilityLevel);
         var wwID = kitty.WindwalkID;
         if (wwID != 0)
