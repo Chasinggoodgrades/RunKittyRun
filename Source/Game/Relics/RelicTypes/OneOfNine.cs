@@ -20,11 +20,13 @@ public class OneOfNine : Relic
 
     public override void ApplyEffect(unit Unit)
     {
+        Console.WriteLine("Starting Apply Effect");
         var player = GetOwningPlayer(Unit);
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(PreviousAbilityID);
         Unit.AddAbility(RelicAbilityID);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
+        Console.WriteLine("End Apply Effect");
     }
 
     public override void RemoveEffect(unit Unit)

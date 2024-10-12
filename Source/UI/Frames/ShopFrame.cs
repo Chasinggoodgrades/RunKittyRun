@@ -23,11 +23,16 @@ public static class ShopFrame
     private const float panelY = (frameY/3) - panelPadding*2;
     private const float detailsPanelX = frameX - (panelX + panelPadding * 2);
     private const float detailsPanelY = frameY - (panelPadding * 2);
-    private static Dictionary<player, Relic> SelectedItems = new Dictionary<player, Relic>();
+    private static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
 
     public static void Initialize()
     {
         InitializeShopFrame();
+        shopFrame.Visible = false;
+    }
+
+    public static void FinishInitialization()
+    {
         InitializePanels();
         InitializeDetailsPanel();
         InitializePanelTitles();
@@ -111,10 +116,10 @@ public static class ShopFrame
     {
         AddItemsToPanel(relicsPanel, GetRelicItems());
         AddItemsToPanel(rewardsPanel, GetRewardItems());
-        AddItemsToPanel(miscPanel, GetMiscItems());
+        //AddItemsToPanel(miscPanel, GetMiscItems());
     }
 
-    private static void AddItemsToPanel(framehandle panel, List<Relic> items)
+    private static void AddItemsToPanel(framehandle panel, List<ShopItem> items)
     {
         int columns = 6;
         int rows = (int)Math.Ceiling((double)items.Count / columns);
@@ -154,18 +159,17 @@ public static class ShopFrame
     }
 
 
-    private static void ShowItemDetails(Relic relic)
+    private static void ShowItemDetails(ShopItem relic)
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
-        BlzFrameSetText(nameLabel, $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {relic.Name}");
-        BlzFrameSetText(costLabel, $"{Colors.COLOR_YELLOW}Cost:|r {relic.Cost}");
-        BlzFrameSetText(descriptionLabel, $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {relic.Description}");
 
-        if(SelectedItems.ContainsKey(player))
-            SelectedItems[player] = relic;
-        else
-            SelectedItems.Add(player, relic);
+        nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {relic.Name}";
+        costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:|r {relic.Cost}";
+        descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {relic.Description}";
+
+        if(SelectedItems.ContainsKey(player)) SelectedItems[player] = relic;
+        else SelectedItems.Add(player, relic);
     }
 
     private static void BuySelectedItem()
@@ -173,32 +177,28 @@ public static class ShopFrame
         var player = @event.Player;
         if (SelectedItems[player] != null)
         {
-            if (!HasEnoughGold(player, SelectedItems[player].Cost)) return;
+            var type = SelectedItems[player].Type;
+            var cost = SelectedItems[player].Cost;
+            var itemID = SelectedItems[player].ItemID;
+            var kitty = Globals.ALL_KITTIES[player];
+            if (!HasEnoughGold(player, cost)) return;
 
-            ReduceGold(player, SelectedItems[player].Cost);
-            AddItem(player, SelectedItems[player].ItemID);
-            BlzDisplayChatMessage(player, 0, $"Purchased {SelectedItems[player].Name}!");
+            ReduceGold(player, cost);
+            if (type != ShopItemType.Reward)
+                AddItem(player, itemID);
+            if (type == ShopItemType.Relic)
+            {
+                Console.WriteLine($"Selected relic: {SelectedItems[player].Relic.Name}");
+                SelectedItems[player].Relic.ApplyEffect(kitty.Unit);
+            }
+            if(type == ShopItemType.Reward)
+                AwardManager.GiveReward(player, SelectedItems[player].Award);
         }
     }
 
     // Placeholder methods for item retrieval
-    private static List<Relic> GetRelicItems() => new List<Relic> {
-        new OneOfNine(),
-        new FangOfShadows(),
-        new RingOfSummoning(),
-        new AmuletOfEvasiveness(),
-        new FrostbiteRing(),
-        new BeaconOfUnitedLifeforce(),
-        new OneOfNine(),
-    };
-    private static List<Relic> GetRewardItems() => new List<Relic> {
-        new OneOfNine(),
-        new FangOfShadows(),
-        new RingOfSummoning(),
-        new AmuletOfEvasiveness(),
-        new FrostbiteRing(),
-        new BeaconOfUnitedLifeforce(),
-    };
+    private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
+    private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
     private static List<Relic> GetMiscItems() => new List<Relic> {
         new OneOfNine(),
         new FangOfShadows(),

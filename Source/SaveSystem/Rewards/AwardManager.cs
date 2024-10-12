@@ -11,7 +11,7 @@ public static class AwardManager
 {
     private static Dictionary<player, List<Awards>> Awarded = new Dictionary<player, List<Awards>>();
     private static trigger AwardTrigger = CreateTrigger();
-    private static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
+    public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)

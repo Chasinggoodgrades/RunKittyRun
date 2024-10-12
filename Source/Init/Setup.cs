@@ -71,6 +71,7 @@ namespace Source.Init
                 Challenges.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
+                ShopFrame.FinishInitialization();
             }
             catch (Exception e)
             {

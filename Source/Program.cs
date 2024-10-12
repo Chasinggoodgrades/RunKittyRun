@@ -40,17 +40,16 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
-				MusicManager.Initialize();
-				FrameManager.Initialize();
+                FrameManager.Initialize();
+                MusicManager.Initialize();
                 Setup.Initialize();
                 CommandHandler.Initialize();
 				CommandManager.InitializeCommands();
                 BarrierSetup.Initialize();
 				SaveManager.Initialize();
 
-
             }
-			catch (Exception ex)
+            catch (Exception ex)
 			{
 				DisplayTextToPlayer(GetLocalPlayer(), 0, 0, ex.Message);
 			}

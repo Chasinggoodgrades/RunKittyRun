@@ -3,11 +3,11 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public abstract class Relic
 {
-    public string Name;
-    public string Description;
-    public int ItemID;
-    public int Cost;
-    public string IconPath;
+    public string Name { get; }
+    public string Description { get; }
+    public int ItemID { get; }
+    public int Cost { get; }
+    public string IconPath { get; }
 
     public Relic(string name, string desc, int itemID, int cost, string iconPath)
     {
