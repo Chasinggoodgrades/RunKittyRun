@@ -1,57 +1,37 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
-using Source.Init;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Sync;
-using static WCSharp.Api.Common;
 
-public static class Multiboard
+public static class TeamsMultiboard
 {
     private static multiboard CurrentTeamsMB;
     private static multiboard TeamsStatsMB;
-    private static multiboard StandardOverallStatsMB;
-    private static multiboard StandardCurrentStatsMB;
-    private static multiboard SoloOverallStatsMB;
-    private static multiboard SoloBestTimesMB;
     private static trigger ESCTrigger;
+
     public static void Initialize()
     {
-        ESCTrigger = CreateTrigger();
-        InitMultiboards();
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        ESCTrigger = trigger.Create();
+        TeamsMultiboardInit();
         ESCInit();
-    }
-
-    private static void InitMultiboards()
-    {
-        if (Gamemode.CurrentGameMode == "Standard")
-            StandardMultiboardInit();
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
-            TeamsMultiboardInit();
     }
 
     private static void TeamsMultiboardInit()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         TeamsStatsMultiboard();
         CurrentTeamsMultiboard();
     }
 
-
-
     #region Teams Multiboards
     private static void TeamsStatsMultiboard()
     {
-        TeamsStatsMB = CreateMultiboard();
+        TeamsStatsMB = multiboard.Create();
         TeamsStatsMB.Title = $"Teams Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         TeamsStatsMB.IsDisplayed = false;
     }
     public static void CurrentTeamsMultiboard()
     {
-        CurrentTeamsMB = CreateMultiboard();
+        CurrentTeamsMB = multiboard.Create();
         CurrentTeamsMB.Title = $"Current Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         CurrentTeamsMB.IsDisplayed = true;
         CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
@@ -73,7 +53,7 @@ public static class Multiboard
         TeamsStatsMB.GetItem(0, 0).SetWidth(0.05f);
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
         {
-            if(Globals.ROUND == i)
+            if (Globals.ROUND == i)
                 TeamsStatsMB.GetItem(0, i).SetText($"|c0000FF00Round {i}|r");
             else
                 TeamsStatsMB.GetItem(0, i).SetText($"Round {i}");
@@ -154,9 +134,9 @@ public static class Multiboard
     #region ESC Key Event & Actions
     private static void ESCInit()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
-            ESCTrigger.RegisterPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC);
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
         ESCTrigger.AddAction(ESCPressed);
 
@@ -165,23 +145,10 @@ public static class Multiboard
     private static void ESCPressed()
     {
         var player = @event.Player;
-        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
-            ESCPressTeams(player);
-        if(Gamemode.CurrentGameMode == "Standard")
-            ESCPressStandard(player);
-    }
-
-    private static void ESCPressStandard(player player)
-    {
-
-    }
-
-    private static void ESCPressTeams(player player)
-    {
         var localPlayer = player.LocalPlayer;
         if (localPlayer != player) return;
         // Swap multiboards
-        if(CurrentTeamsMB.IsDisplayed)
+        if (CurrentTeamsMB.IsDisplayed)
         {
             CurrentTeamsMB.IsDisplayed = false;
             TeamsStatsMB.IsDisplayed = true;
@@ -193,4 +160,5 @@ public static class Multiboard
         }
     }
     #endregion
+
 }

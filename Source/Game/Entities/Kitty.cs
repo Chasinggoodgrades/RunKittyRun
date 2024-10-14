@@ -9,6 +9,7 @@ public class Kitty
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
     private const float MANA_DEATH_PENALTY = 65.0f;
     public KittyData SaveData { get; set; }
+    public List<Relic> Relics { get; set; }
     public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
@@ -101,6 +102,7 @@ public class Kitty
         // Challenges, Relics, etc for Standard.
         if (Gamemode.CurrentGameMode == "Standard")
         {
+            Relics = new List<Relic>();
             YellowLightning = new YellowLightning(Player);
         }
 

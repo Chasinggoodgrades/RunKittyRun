@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
-
+﻿using WCSharp.Api;
 public static class GameTimer
 {
-
+    public static float[] RoundTime { get; set; }
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>
     public static void Initialize()
     {
-        TimerDialogSetTitle(Globals.GAME_TIMER_DIALOG, "Elapsed Game Time");
-        timer t = CreateTimer();
-        TimerStart(t, 1.0f, true, () => { StartGameTimer(); });
+        Globals.GAME_TIMER_DIALOG.SetTitle("Elapsed Game Time");
+        RoundTime = new float[Gamemode.NumberOfRounds + 1];
+        var t = timer.Create();
+        t.Start(1.0f, true, () => { StartGameTimer(); });
     }
 
     /// <summary>
@@ -25,7 +23,9 @@ public static class GameTimer
             Globals.GAME_SECONDS += 1.0f;
             Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
             Globals.GAME_TIMER.Pause();
-            BlzFrameSetText(BlzGetFrameByName("ResourceBarSupplyText", 0), $"{Utility.ConvertFloatToTime(Globals.GAME_SECONDS)}");
+            RoundTime[Globals.ROUND] += 1.0f;
+            var resourcebar = framehandle.Get("ResourceBarSupplyText", 0);
+            resourcebar.Text = $"{Utility.ConvertFloatToTime(Globals.GAME_SECONDS)}";
             UpdatingTimes();
         }
     }

@@ -50,6 +50,7 @@ namespace Source.Init
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
                 SuspendTimeOfDay(true);
                 CustomStatFrame.Init();
+                GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();
                 Multiboard.Initialize();
@@ -61,7 +62,6 @@ namespace Source.Init
                 ProtectionOfAncients.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
-                GameTimer.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();

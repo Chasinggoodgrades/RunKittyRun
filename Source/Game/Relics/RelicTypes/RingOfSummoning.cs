@@ -22,9 +22,9 @@ public class RingOfSummoning : Relic
     public override void ApplyEffect(unit Unit)
     {
         Trigger = CreateTrigger();
-        TriggerRegisterUnitEvent(Trigger, Unit, EVENT_UNIT_SPELL_EFFECT);
-        TriggerAddCondition(Trigger, Condition(() => GetSpellAbilityId() == RelicAbilityID));
-        TriggerAddAction(Trigger, () => SacredRingOfSummoning(GetOwningPlayer(Unit), GetSpellTargetLoc()));
+        Trigger.RegisterUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => SacredRingOfSummoning(Unit.Owner, @event.SpellTargetLoc));
         Unit.AddAbility(RelicAbilityID);
     }
 
@@ -47,7 +47,7 @@ public class RingOfSummoning : Relic
         foreach (var unit in tempGroup.ToList())
         {
             // TO DO... Do a check on safezone stuff.
-            var kitty = Globals.ALL_KITTIES[GetOwningPlayer(unit)];
+            var kitty = Globals.ALL_KITTIES[unit.Owner];
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
         }

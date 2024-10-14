@@ -88,6 +88,7 @@ public class YellowLightning
     public int SaveCount { get; private set; }
     public YellowLightning(player player)
     {
+        Player = player;
         Timer = CreateTimer();
     }
 

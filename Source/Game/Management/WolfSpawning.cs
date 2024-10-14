@@ -1,4 +1,5 @@
 ﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 using System.Collections.Generic;
 /*

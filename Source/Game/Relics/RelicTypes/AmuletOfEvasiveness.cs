@@ -19,7 +19,7 @@ public class AmuletOfEvasiveness : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        var player = GetOwningPlayer(Unit);
+        var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
@@ -30,7 +30,7 @@ public class AmuletOfEvasiveness : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        var player = GetOwningPlayer(Unit);
+        var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;

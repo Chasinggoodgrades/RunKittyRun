@@ -19,16 +19,9 @@ public static class MusicFrame
     private const float ButtonStartY = 0.505f;  // Starting Y coordinate for the first button
     public static void Initialize()
     {
-        try
-        {
-            MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
-            MusicFramehandle.SetAbsPoint(FRAMEPOINT_CENTER, 0.40f, 0.42f);
-            Utility.SimpleTimer(2.0f, CreateMusicFrames);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
+        MusicFramehandle.SetAbsPoint(FRAMEPOINT_CENTER, 0.40f, 0.42f);
+        Utility.SimpleTimer(2.0f, CreateMusicFrames);
     }
 
     private static void CreateMusicFrames()

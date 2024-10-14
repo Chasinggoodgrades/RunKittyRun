@@ -24,9 +24,9 @@ public class FrostbiteRing : Relic
     public override void ApplyEffect(unit Unit)
     {
         Trigger = CreateTrigger();
-        TriggerRegisterUnitEvent(Trigger, Unit, EVENT_UNIT_SPELL_EFFECT);
-        TriggerAddCondition(Trigger, Condition(() => GetSpellAbilityId() == RelicAbilityID));
-        TriggerAddAction(Trigger, () => FrostbiteCast(GetSpellTargetLoc()));
+        Trigger.RegisterUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
         Unit.AddAbility(RelicAbilityID);
     }
 

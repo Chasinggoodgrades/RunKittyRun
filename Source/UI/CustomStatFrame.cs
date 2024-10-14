@@ -227,9 +227,10 @@ public static class CustomStatFrame
     private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Saves];
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Deaths];
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.SaveStreak];
-    private static int GetPlayerGames(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.NormalGames];
     private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[u.Owner].Time[Globals.ROUND];
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
     private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths;
-    
+
+
+
 }

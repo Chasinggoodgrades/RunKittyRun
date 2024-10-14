@@ -36,11 +36,22 @@ public enum SelectedData
 }
 public enum RoundTimes
 {
-    Round1Time,
-    Round2Time,
-    Round3Time,
-    Round4Time,
-    Round5Time,
+    R1Normal,
+    R2Normal,
+    R3Normal,
+    R4Normal,
+    R5Normal,
+    R1Hard,
+    R2Hard,
+    R3Hard,
+    R4Hard,
+    R5Hard,
+    R1Impossible,
+    R2Impossible,
+    R3Impossible,
+    R4Impossible,
+    R5Impossible,
+    SoloTotal
 }
 public enum StatTypes
 {
@@ -50,6 +61,9 @@ public enum StatTypes
     Deaths,
     Wins,
     WinStreak,
+    WinsNormal,
+    WinsHard,
+    WinsImpossible,
     NormalGames,
     HardGames,
     ImpossibleGames,

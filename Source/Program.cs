@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq.Expressions;
 using Source.Init;
 using WCSharp.Api;
 using WCSharp.Events;
@@ -40,13 +41,20 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
-                FrameManager.Initialize();
-                MusicManager.Initialize();
-                Setup.Initialize();
-                CommandHandler.Initialize();
-				CommandManager.InitializeCommands();
-                BarrierSetup.Initialize();
-				SaveManager.Initialize();
+				try
+				{
+					FrameManager.Initialize();
+					MusicManager.Initialize();
+					Setup.Initialize();
+					CommandHandler.Initialize();
+					CommandManager.InitializeCommands();
+					BarrierSetup.Initialize();
+					SaveManager.Initialize();
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
 
             }
             catch (Exception ex)
