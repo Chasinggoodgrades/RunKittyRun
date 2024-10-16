@@ -13,7 +13,7 @@ public class Safezone
     public Safezone(int id, region region) { 
         ID = id;
         Region = region;
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
     }
 
     public static void Initialize()
@@ -32,14 +32,14 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        TriggerRegisterEnterRegion(Trigger, Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
-        TriggerAddAction(Trigger, EnterSafezoneActions);
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        Trigger.AddAction(EnterSafezoneActions);
     }
 
     private void EnterSafezoneActions()
     {
-        var unit = GetTriggerUnit();
-        var player = GetOwningPlayer(unit);
+        var unit = @event.Unit;
+        var player = unit.Owner;
         var currentSafezone = Globals.PLAYER_REACHED_SAFEZONES[player];
         if(currentSafezone != ID) { return; }
         player.Gold += Resources.SafezoneGold;

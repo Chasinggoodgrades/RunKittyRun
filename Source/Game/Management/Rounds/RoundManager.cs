@@ -5,9 +5,9 @@ using static WCSharp.Api.Common;
 
 public static class RoundManager
 {
-    public static float ROUND_INTERMISSION = 30.0f;
-    public static float END_ROUND_DELAY = 3.0f;
-    public static bool GAME_STARTED = false;
+    public static float ROUND_INTERMISSION { get; set; } = 30.0f;
+    public static float END_ROUND_DELAY { get; set; } = 3.0f;
+    public static bool GAME_STARTED { get; private set; } = false;
 
     public static void Initialize()
     {
@@ -50,6 +50,7 @@ public static class RoundManager
             if (Difficulty.IsDifficultyChosen)
             {
                 RoundSetup();
+                StandardMultiboard.Initialize();
                 timer.Dispose();
             }
         });

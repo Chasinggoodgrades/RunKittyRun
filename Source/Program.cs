@@ -34,6 +34,7 @@ namespace Source
 				// This part of the code will only run if the map is compiled in Debug mode
 				Debug = true;
 				Console.WriteLine("Map Created By: Aches, Debugging Enabled");
+				Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Loading... Please Wait.{Colors.COLOR_RESET}");
 				// By calling these methods, whenever these systems call external code (i.e. your code),
 				// they will wrap the call in a try-catch and output any errors to the chat for easier debugging
 				PeriodicEvents.EnableDebug();
@@ -44,8 +45,8 @@ namespace Source
 				try
 				{
 					FrameManager.Initialize();
-					MusicManager.Initialize();
-					Setup.Initialize();
+                    MusicManager.Initialize();
+                    Setup.Initialize();
 					CommandHandler.Initialize();
 					CommandManager.InitializeCommands();
 					BarrierSetup.Initialize();

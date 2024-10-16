@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public static class Deathless
 {
@@ -53,9 +52,9 @@ public static class Deathless
                 break;
         }
         SoundManager.PlayInvulnerableSound();
-        var textTag = CreateTextTag();
+        var textTag = texttag.Create();
         textTag.SetText($"Deathless {Globals.ROUND}!", 0.015f);
-        SetTextTagVelocity(textTag, 120.0f, 90f);
+        textTag.SetVelocity(120.0f, 90f);
         textTag.SetLifespan(1.0f);
         Utility.SimpleTimer(1.50f, () => textTag.Dispose());
     }

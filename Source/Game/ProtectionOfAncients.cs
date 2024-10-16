@@ -25,10 +25,10 @@ public static class ProtectionOfAncients
     {
         Trigger = CreateTrigger();
         foreach(var player in Globals.ALL_PLAYERS)
-            TriggerRegisterPlayerUnitEvent(Trigger, player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
-        TriggerAddAction(Trigger, ActivationEvent);
-        TriggerAddCondition(Trigger, Condition(() => 
-        GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
+            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+        Trigger.AddAction(ActivationEvent);
+        Trigger.AddCondition(Condition(() => 
+        @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
     }
 
     private static void ActivationEvent()
@@ -62,7 +62,7 @@ public static class ProtectionOfAncients
         // Append units only if they're dead and a kitty circle. 
         var unit = GetFilterUnit();
         var player = unit.Owner;
-        if (GetUnitTypeId(unit) != Constants.UNIT_KITTY_CIRCLE) return false;
+        if (unit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if (kitty.Alive) return false; 
@@ -73,10 +73,10 @@ public static class ProtectionOfAncients
     private static void EndEffectActions(player Player)
     {
         // Get all units within range of the player unit (kitty) and revive them
-        var tempGroup = CreateGroup();
+        var tempGroup = group.Create();
         var kitty = Globals.ALL_KITTIES[Player];
-        var levelOfAbility = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        var levelOfRelic = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
+        var levelOfAbility = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        var levelOfRelic = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
         if(levelOfRelic > 0) levelOfAbility = levelOfRelic;
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
@@ -84,7 +84,7 @@ public static class ProtectionOfAncients
         GroupEnumUnitsInRange(tempGroup, GetUnitX(kitty.Unit), GetUnitY(kitty.Unit), effectRadius, Filter(() => AoEEffectFilter()));
         foreach (var unit in tempGroup.ToList())
         {
-            var playerToRevive = Globals.ALL_KITTIES[GetOwningPlayer(unit)];
+            var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
             playerToRevive.ReviveKitty(kitty);
             reviveCount++;
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);

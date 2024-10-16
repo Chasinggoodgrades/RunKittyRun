@@ -70,6 +70,11 @@ public static class DebugCmd
             case "?stat":
                 AwardingCmds.SettingGameStats(player, command);
                 break;
+            case "?oldcode":
+                var code = cmd.Length > 1 ? cmd[1] : "0";
+                var x = Savecode.Create();
+                x.Load(player, "%NH!nYNRX^0DzW'.RscD(7jC", 1);
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, "Unknown command.");
                 break;

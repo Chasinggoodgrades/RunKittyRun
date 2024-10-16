@@ -21,8 +21,8 @@ public class RingOfSummoning : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger = CreateTrigger();
-        Trigger.RegisterUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT);
+        Trigger = trigger.Create();
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SacredRingOfSummoning(Unit.Owner, @event.SpellTargetLoc));
         Unit.AddAbility(RelicAbilityID);
@@ -40,7 +40,7 @@ public class RingOfSummoning : Relic
     public static void SacredRingOfSummoning(player Player, location targetedPoint)
     {
         // select all people within targeted point
-        var tempGroup = CreateGroup();
+        var tempGroup = group.Create();
         var summoningKitty = Globals.ALL_KITTIES[Player];
         var summoningKittyUnit = summoningKitty.Unit;
         GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));

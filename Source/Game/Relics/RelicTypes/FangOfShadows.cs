@@ -21,8 +21,8 @@ public class FangOfShadows : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger = CreateTrigger();
-        Trigger.RegisterUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT);
+        Trigger = trigger.Create();
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SummonShadowKitty(Unit.Owner));
         Unit.AddAbility(RelicAbilityID);

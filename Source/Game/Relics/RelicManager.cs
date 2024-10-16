@@ -17,17 +17,17 @@ public static class RelicManager
 
     private static void RegisterEvents()
     {
-        PICKUP_EVENT_TRIGGER = CreateTrigger();
-        DROP_EVENT_TRIGGER = CreateTrigger();
+        PICKUP_EVENT_TRIGGER = trigger.Create();
+        DROP_EVENT_TRIGGER = trigger.Create();
 
         // REGISTER PICKUP EVENT
         foreach (var player in Globals.ALL_PLAYERS)
-            TriggerRegisterPlayerUnitEvent(PICKUP_EVENT_TRIGGER, player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
-        TriggerAddAction(PICKUP_EVENT_TRIGGER, HandlePickup);
+            PICKUP_EVENT_TRIGGER.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem, null);
+        PICKUP_EVENT_TRIGGER.AddAction(HandlePickup);
         // REGISTER DROP EVENT
         foreach(var player in Globals.ALL_PLAYERS)
-            TriggerRegisterPlayerUnitEvent(DROP_EVENT_TRIGGER, player, EVENT_PLAYER_UNIT_DROP_ITEM, null);
-        TriggerAddAction(DROP_EVENT_TRIGGER, HandleDrop);
+            DROP_EVENT_TRIGGER.RegisterPlayerUnitEvent(player, playerunitevent.DropItem, null);
+        DROP_EVENT_TRIGGER.AddAction(HandleDrop);
 
         // REGISTER RELICS
         RelicIDs = RelicRegisteration();

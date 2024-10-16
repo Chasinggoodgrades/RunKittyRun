@@ -26,7 +26,7 @@ public static class SaveManager
         //GetStats(Player(0
         foreach (var p in Globals.ALL_PLAYERS)
         {
-            if(p.Controller != MAP_CONTROL_USER) continue;
+            if(p.Controller != mapcontrol.User) continue;
             saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
             saveSystem.Load(p);
             if(Program.Debug) Console.WriteLine("Loading... " + p.Name);

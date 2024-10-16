@@ -39,12 +39,12 @@ public class WolfArea
 
     private void EnterWolfAreaEvents()
     {
-        Trigger = CreateTrigger();
-        TriggerRegisterEnterRegion(Trigger, Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
-        TriggerAddAction(Trigger, () =>
+        Trigger = trigger.Create();
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        Trigger.AddAction(() =>
         {
             var unit = @event.Unit;
-            var player = GetOwningPlayer(unit);
+            var player = unit.Owner;
             var progressPointDict = Progress.PlayerProgressPoints;
             if (ID <= 13)
             {
@@ -65,7 +65,7 @@ public class WolfArea
     /// </summary>
     private void LeaveAreaEvents()
     {
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
         Trigger.RegisterLeaveRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
         Trigger.AddAction(() =>
         {

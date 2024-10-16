@@ -1,5 +1,4 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using System.Collections.Generic;
 public static class Challenges
 {
@@ -89,7 +88,7 @@ public class YellowLightning
     public YellowLightning(player player)
     {
         Player = player;
-        Timer = CreateTimer();
+        Timer = timer.Create();
     }
 
     public void SaveIncrement()

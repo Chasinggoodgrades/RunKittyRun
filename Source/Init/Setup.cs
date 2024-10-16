@@ -14,6 +14,7 @@ namespace Source.Init
         public static void Initialize()
         {
             Colors.Initialize();
+            Utility.SimpleTimer(1.0f, MusicManager.CreateMusicList);
             GetActivePlayers();
             Gamemode.Initialize();
             Safezone.Initialize();
@@ -24,7 +25,7 @@ namespace Source.Init
 
         private static void StartGameModeTimer()
         {
-            gameModeTimer = CreateTimer();
+            gameModeTimer = timer.Create();
             gameModeTimer.Start(1.0f, true, ChoosingGameMode);
         }
 

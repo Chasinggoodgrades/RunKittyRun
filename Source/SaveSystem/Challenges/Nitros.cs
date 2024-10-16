@@ -5,8 +5,8 @@ using static WCSharp.Api.Common;
 public static class Nitros
 {
     private static Dictionary<int, int> NitroRoundTimes;
-    private static timer NitroTimer = CreateTimer();
-    private static timerdialog NitroDialog = CreateTimerDialog(NitroTimer);
+    private static timer NitroTimer = timer.Create();
+    private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
     private static Dictionary<player, int> NitroCount;
     public static void Initialize()
     {

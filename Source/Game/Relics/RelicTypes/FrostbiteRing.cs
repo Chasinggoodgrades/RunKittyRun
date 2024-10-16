@@ -23,8 +23,8 @@ public class FrostbiteRing : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger = CreateTrigger();
-        Trigger.RegisterUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT);
+        Trigger = trigger.Create();
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
         Unit.AddAbility(RelicAbilityID);
@@ -40,7 +40,7 @@ public class FrostbiteRing : Relic
     private static void FrostbiteCast(location freezeLocation)
     {
         Console.WriteLine("Frostbite");
-        var tempGroup = CreateGroup();
+        var tempGroup = group.Create();
         GroupEnumUnitsInRange(tempGroup, GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, Filter(() => WolvesFilter()));
         foreach (var unit in tempGroup.ToList())
             FrostbiteEffect(unit);
@@ -50,14 +50,14 @@ public class FrostbiteRing : Relic
 
     private static void FrostbiteEffect(unit Unit)
     {
-        var timer = CreateTimer();
+        var t = timer.Create();
         Unit.SetPausedEx(true);
         var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
-        TimerStart(timer, FROSTBITE_FREEZE_DURATION, false, () =>
+        TimerStart(t, FROSTBITE_FREEZE_DURATION, false, () =>
         {
             Unit.SetPausedEx(false);
             effect.Dispose();
-            timer.Dispose();
+            t.Dispose();
         });
     }
 

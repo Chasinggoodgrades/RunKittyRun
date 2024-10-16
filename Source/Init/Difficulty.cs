@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public enum DifficultyLevel
 {
@@ -41,7 +40,7 @@ public static class Difficulty
 
     private static void CreateDialog()
     {
-        DifficultyChoosing = DialogCreate();
+        DifficultyChoosing = dialog.Create();
         DifficultyChoosing.SetMessage($"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}");
         NormalButton = DifficultyChoosing.AddButton(s_NORMAL, 1);
         HardButton = DifficultyChoosing.AddButton(s_HARD, 2);
@@ -56,7 +55,7 @@ public static class Difficulty
 
     private static void RegisterSelectionEvent()
     {
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
         Trigger.RegisterDialogEvent(DifficultyChoosing);
         Trigger.AddAction(() =>
         {
@@ -65,7 +64,7 @@ public static class Difficulty
 
             if(!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;
-            DialogDisplay(player, DifficultyChoosing, false);
+            DifficultyChoosing.SetVisibility(player, false);
             Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.");
         });
     }
@@ -73,7 +72,7 @@ public static class Difficulty
     private static void ChooseDifficulty()
     {
         foreach(var player in Globals.ALL_PLAYERS)
-            DialogDisplay(player, DifficultyChoosing, true);
+            DifficultyChoosing.SetVisibility(player, true);
         Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, () => TallyingVotes());
     }
 

@@ -16,7 +16,7 @@ public static class Shops
     private static trigger Trigger;
     public static void Initialize()
     {
-        KittyVendors = CreateGroup();
+        KittyVendors = group.Create();
         Trigger = CreateTrigger();
         KittyVendorsList = new List<unit>();
         KittyVendorItemList = new List<int>();
@@ -36,7 +36,7 @@ public static class Shops
         SpawnPandaVendor();
     }
 
-    private static void SpawnPandaVendor() => PandaVendor = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);
+    private static void SpawnPandaVendor() => PandaVendor = unit.Create(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);
 
     private static void ApplyItemListToVendor()
     {
@@ -102,16 +102,16 @@ public static class Shops
     {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         foreach (var vendor in KittyVendorsList)
-            TriggerRegisterUnitEvent(Trigger, vendor, EVENT_UNIT_SELL_ITEM);
-        TriggerAddAction(Trigger, () => OnVendorSell());
+            Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
+        Trigger.AddAction( () => OnVendorSell());
     }
 
     private static void OnVendorSell()
     {
-        var item = GetSoldItem();
-        var vendor = GetSellingUnit();
-        var player = GetOwningPlayer(GetBuyingUnit());
-        var itemID = GetItemTypeId(item);
+        var item = @event.SoldItem;
+        var vendor = @event.SellingUnit;
+        var player = @event.BuyingUnit.Owner;
+        var itemID = item.TypeId;
 
         var vendorItems = VendorsItemList[vendor];
         var vendorItem = vendorItems.Find(vi => vi.Item == itemID);

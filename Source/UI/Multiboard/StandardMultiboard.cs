@@ -9,12 +9,13 @@ public static class StandardMultiboard
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        StandardCurrentStatsMB = multiboard.Create();
+
         CurrentGameStatsMultiboard();
     }
 
     private static void CurrentGameStatsMultiboard()
     {
-        StandardCurrentStatsMB = multiboard.Create();
         StandardCurrentStatsMB.Title = $"Current Game Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
         StandardCurrentStatsMB.Rows = Globals.ALL_PLAYERS.Count + 2;
         StandardCurrentStatsMB.Columns = 5;
@@ -31,6 +32,8 @@ public static class StandardMultiboard
         StandardCurrentStatsMB.GetItem(1, 4).SetVisibility(true, false);
         StandardCurrentStatsMB.GetItem(0, 0).SetText("Round Time");
         StandardCurrentStatsMB.GetItem(0, 0).SetVisibility(true, false);
+
+        StandardCurrentStatsMB.SetChildVisibility(true, false);
 
         StandardCurrentStatsMB.IsDisplayed = true;
     }

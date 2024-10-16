@@ -33,6 +33,15 @@ public static class MusicManager
             new Music("Cascada - Everytime We Touch(Fast)", "Music\\Cascada-Touch(fast).mp3")
         };
     }
+
+    public static void CreateMusicList()
+    {
+        foreach(var musicItem in MusicList)
+        {
+            musicItem.SoundCreate();
+            musicItem.SetAttributes();
+        }
+    }
 }
 
 public class Music
@@ -47,8 +56,6 @@ public class Music
     {
         Name = name;
         Path = path;
-        CreatingSound();
-        Attributes();
     }
 
     private void CreatingSound()
@@ -57,9 +64,9 @@ public class Music
         Count += 1;
     }
 
-    private void SoundCreate()
+    public void SoundCreate()
     {
-        Sound = CreateSound(Path, true, true, false, 10, 10, "");
+        Sound = sound.CreateFromFile(Path, true, true, false, 10, 10, "");
     }
 
     public void Play()
@@ -73,12 +80,13 @@ public class Music
     }
     public void Stop() => Sound.Stop(false, false);
 
-    private void Attributes()
+    public void SetAttributes()
     {
         Sound.SetChannel(0);
         Sound.SetVolume(127);
         Sound.SetPitch(1.0f);
         Sound.SetPosition(0, 0, 0);
+        Sound.SetDistances(0, 50000);
         Sound.SetDistanceCutoff(200000f);
     }
 }

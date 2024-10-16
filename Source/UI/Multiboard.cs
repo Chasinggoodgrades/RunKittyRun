@@ -28,7 +28,6 @@ public static class Multiboard
     private static void InitMultiboards()
     {
         if (Gamemode.CurrentGameMode == "Standard")
-            StandardMultiboardInit();
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
             TeamsMultiboardInit();
     }
