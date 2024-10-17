@@ -3,6 +3,9 @@ using System;
 using static WCSharp.Api.Common;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.Collections;
 
 public class Savecode
 {
@@ -101,8 +104,8 @@ public class Savecode
     {
         try
         {
-            int key = SCommHash(p.Name) + loadtype * 73;
-            int inputhash;
+            int key = SCommHash("Aches#1817") + loadtype * 73;
+            int inputhash = 0;
 
             Console.WriteLine("Key: " + key);
 
@@ -114,7 +117,7 @@ public class Savecode
 
             if(inputhash == Hash())
             {
-                DecodingBegin();
+                DecodingBegin(Player(0));
             }
 
             return inputhash == Hash();
@@ -126,10 +129,24 @@ public class Savecode
         }
     }
 
-    private void DecodingBegin()
+    private void DecodingBegin(player player)
     {
-        foreach (var value in DecodeOldsave.decodeValues.Values)
-            Console.WriteLine(Decode(value));
+        foreach (var value in DecodeOldsave.decodeValues)
+        {
+            if(value.Key is Awards)
+            {
+                AwardManager.GiveReward(player, (Awards)value.Key);
+            }
+            else if(value.Key is string)
+            {
+                if (Enum.TryParse(value.Key.ToString(), true, out RoundTimes roundtime))
+                    Console.WriteLine($"Setting {value.Key.ToString()} to {value.Value}");
+                else if (Enum.TryParse(value.Key.ToString(), true, out StatTypes stattype))
+                    Console.WriteLine($"Setting {value.Key.ToString()} to {value.Value}");
+                else
+                    Console.WriteLine($"Invalid key value: {value.Key.ToString()}");
+            }
+        }
     }
 
     private static int SCommHash(string name)
@@ -137,7 +154,6 @@ public class Savecode
         var charlen = player_charset.Length;
         var count = new List<int>(new int[charlen]);
         var x = 0;
-        name = "Aches#1817";
         foreach (var c in name.ToUpper())
         {
             x = OldSavesHelper.Player_CharToInt(c);

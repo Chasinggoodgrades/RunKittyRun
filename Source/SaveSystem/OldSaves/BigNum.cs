@@ -191,8 +191,6 @@ public class BigNumL
         quotient = num / denom;
         remainder = num - quotient * denom;
         Leaf = quotient;
-        Console.WriteLine("Leaf Q: " + Leaf);
-        Console.WriteLine("Remainder Q: " + remainder);
         return remainder;
     }
 

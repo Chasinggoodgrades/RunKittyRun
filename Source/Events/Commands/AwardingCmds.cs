@@ -57,7 +57,7 @@ public static class AwardingCmds
     {
         var stats = command.Split(" ")[1];
         var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
-        var selectedPlayer = GetOwningPlayer(selectedUnit);
+        var selectedPlayer = selectedUnit.Owner;
 
         if (stats.ToLower() == "help")
         {
