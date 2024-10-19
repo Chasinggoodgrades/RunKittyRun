@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 public static class OldSavesHelper
@@ -15,7 +16,6 @@ public static class OldSavesHelper
         }
         return -1; // Return -1 if character not found
     }
-    public static int PlayerCharSetLength => PlayerCharSet.Length;
     public static int ModuloInteger(int x, int n) => ((x % n) + n) % n;
 
     public static int CharToInt(char c)
@@ -28,5 +28,17 @@ public static class OldSavesHelper
         return i;
     }
 
+    public static int[] AbilityList = {
+        1097690227, // Amls
+		1098018659, // Aroc
+		1097689443, // Amic
+		1097689452, // Amil
+		1097034854, // Aclf
+		1097035111, // Acmg
+		1097098598, // Adef
+		1097099635, // Adis
+		1097228916, // Afbt
+		1097228907, // Afbk
+    };
 }
 

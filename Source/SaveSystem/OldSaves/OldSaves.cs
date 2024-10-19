@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Collections;
+using WCSharp.SaveLoad;
+using System.Text;
+using System.Runtime.CompilerServices;
 
 public class Savecode
 {
@@ -13,6 +16,20 @@ public class Savecode
     private static string player_charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public double Digits { get; private set; } // logarithmic approximation
     public BigNum Bignum { get; private set; }
+    private static List<string> OriginalToolTips { get; set; } = new();
+
+    public static void Initialize()
+    {
+        for (int i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
+        {
+            var ability = OldSavesHelper.AbilityList[i];
+            var tooltip = BlzGetAbilityTooltip(ability, 0);
+            if (tooltip != "Tool tip missing!")
+                OriginalToolTips.Add(tooltip);
+            else
+                throw new ArgumentException($"Error, tooltip not available: {ability}");
+        }
+    }
     public Savecode()
     {
         Digits = 0.0;
@@ -20,7 +37,6 @@ public class Savecode
     }
     public static Savecode Create() => new Savecode();
     public int Decode(int max) => Bignum.DivSmall(max + 1);
-    public double Length() => Digits;
     public void Clean() => Bignum.Clean();
     public void FromString(string s)
     {
@@ -31,7 +47,6 @@ public class Savecode
         while (true)
         {
             cur.Leaf = OldSavesHelper.CharToInt(s[i]);
-            Console.WriteLine("cur.Leaf: " + cur.Leaf);
             if (i <= 0) break;
             cur.Next = BigNumL.Create();
             cur = cur.Next;
@@ -104,49 +119,82 @@ public class Savecode
     {
         try
         {
-            int key = SCommHash("Aches#1817") + loadtype * 73;
+            int key = SCommHash(p.Name) + loadtype * 73;
             int inputhash = 0;
-
-            Console.WriteLine("Key: " + key);
+            string code = LoadString(p).ToString();
 
             FromString(s);
             Obfuscate(key, -1);
             inputhash = Decode(HASHN());
-            Console.WriteLine(inputhash);
             Clean();
 
             if(inputhash == Hash())
-            {
-                DecodingBegin(Player(0));
-            }
+                SetRewardValues(p);
 
             return inputhash == Hash();
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
             return false;
         }
     }
 
-    private void DecodingBegin(player player)
+    private StringBuilder LoadString(player p)
+    {
+        var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
+        var sb = new StringBuilder();
+
+        Preloader(filePath);
+
+        for(var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
+        {
+            var abilityID = OldSavesHelper.AbilityList[i];
+            var originalTooltip = OriginalToolTips[i];
+
+            var packet = BlzGetAbilityTooltip(abilityID, 0);
+            if (packet == originalTooltip)
+                break;
+            else
+            {
+                BlzSetAbilityTooltip(abilityID, originalTooltip, 0);
+                sb.Append(packet);
+            }
+        }
+        // remove the hero title from string for just code itself
+        var result = sb.ToString();
+        var newLineStart = result.IndexOf('\n');
+        if(newLineStart >= 0)
+            result = result.Substring(newLineStart + 1);
+
+        sb.Clear().Append(result);
+        return sb;
+    }
+
+    private void SetRewardValues(player player)
     {
         foreach (var value in DecodeOldsave.decodeValues)
         {
-            if(value.Key is Awards)
+            var decodedValue = Decode(value.Value);
+            if(value.Key is Awards && decodedValue == 1)
             {
                 AwardManager.GiveReward(player, (Awards)value.Key);
             }
-            else if(value.Key is string)
+            if (value.Key is string key)
             {
-                if (Enum.TryParse(value.Key.ToString(), true, out RoundTimes roundtime))
-                    Console.WriteLine($"Setting {value.Key.ToString()} to {value.Value}");
-                else if (Enum.TryParse(value.Key.ToString(), true, out StatTypes stattype))
-                    Console.WriteLine($"Setting {value.Key.ToString()} to {value.Value}");
-                else
-                    Console.WriteLine($"Invalid key value: {value.Key.ToString()}");
+                if (Enum.TryParse<RoundTimes>(key, true, out RoundTimes roundtime))
+                {
+                    var roundstats = Globals.ALL_KITTIES[player].SaveData.GameTimes;
+                    roundstats[roundtime] = decodedValue;
+                }
+                else if(Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
+                {
+                    var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
+                    kittyStats[stats] = decodedValue;
+                }
             }
         }
+
     }
 
     private static int SCommHash(string name)

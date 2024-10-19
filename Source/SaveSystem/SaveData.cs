@@ -36,21 +36,21 @@ public enum SelectedData
 }
 public enum RoundTimes
 {
-    R1Normal,
-    R2Normal,
-    R3Normal,
-    R4Normal,
-    R5Normal,
-    R1Hard,
-    R2Hard,
-    R3Hard,
-    R4Hard,
-    R5Hard,
-    R1Impossible,
-    R2Impossible,
-    R3Impossible,
-    R4Impossible,
-    R5Impossible,
+    ROneNormal,
+    RTwoNormal,
+    RThreeNormal,
+    RFourNormal,
+    RFiveNormal,
+    ROneHard,
+    RTwoHard,
+    RThreeHard,
+    RFourHard,
+    RFiveHard,
+    ROneImpossible,
+    RTwoImpossible,
+    RThreeImpossible,
+    RFourImpossible,
+    RFiveImpossible,
     SoloTotal
 }
 public enum StatTypes

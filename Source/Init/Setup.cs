@@ -18,6 +18,7 @@ namespace Source.Init
             GetActivePlayers();
             Gamemode.Initialize();
             Safezone.Initialize();
+            Savecode.Initialize();
             StartGameModeTimer();
             StopMusic(false);
 
