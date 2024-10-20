@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class MusicManager
@@ -46,7 +47,6 @@ public static class MusicManager
 
 public class Music
 {
-    private static int Count = 1;
     public string Name { get; }
     public string Path { get; }
     public sound Sound { get; set; }
@@ -56,17 +56,14 @@ public class Music
     {
         Name = name;
         Path = path;
+        Sound = SoundCreate();
+        Stop();
+        SetAttributes();
     }
 
-    private void CreatingSound()
+    public sound SoundCreate()
     {
-        Utility.SimpleTimer(Count * 0.08f, SoundCreate);
-        Count += 1;
-    }
-
-    public void SoundCreate()
-    {
-        Sound = sound.CreateFromFile(Path, true, true, false, 10, 10, "");
+        return sound.CreateFromFile(Path, true, true, false, 10, 10, "");
     }
 
     public void Play()

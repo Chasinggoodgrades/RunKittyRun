@@ -1,14 +1,9 @@
-gg_rct_BoA_Revive_Area = nil
 gg_rct_Bronze_medal = nil
 gg_rct_Circle_Area = nil
-gg_rct_Clan_RD = nil
-gg_rct_Clan_RD2 = nil
 gg_rct_Deaths = nil
 gg_rct_Gold_Medal = nil
 gg_rct_PandaArea = nil
 gg_rct_PandaText = nil
-gg_rct_PoA2_ReviveArea = nil
-gg_rct_PoA3_Revive_Area = nil
 gg_rct_Podium_1 = nil
 gg_rct_Podium_2 = nil
 gg_rct_Podium_3 = nil
@@ -81,6 +76,10 @@ gg_rct_Dummy1Region = nil
 gg_rct_Dummy2Region = nil
 gg_rct_Dummy3Region = nil
 gg_rct_BarrierRegion = nil
+gg_rct_Solo2023 = nil
+gg_rct_Team2023 = nil
+gg_rct_Solo2024 = nil
+gg_rct_Team2024 = nil
 function InitGlobals()
 end
 
@@ -105,9 +104,6 @@ local t
 local life
 
 u = BlzCreateUnitWithSkin(p, FourCC("h003"), -260.9, -708.5, 63.890, FourCC("h003"))
-u = BlzCreateUnitWithSkin(p, FourCC("E007"), 3216.0, -3484.8, 122.029, FourCC("E007"))
-u = BlzCreateUnitWithSkin(p, FourCC("E008"), -3212.3, -3481.1, 50.000, FourCC("E008"))
-u = BlzCreateUnitWithSkin(p, FourCC("E00A"), -3344.0, 2061.9, 315.000, FourCC("E00A"))
 end
 
 function CreatePlayerBuildings()
@@ -126,17 +122,12 @@ end
 function CreateRegions()
 local we
 
-gg_rct_BoA_Revive_Area = Rect(-3296.0, 2304.0, -2944.0, 2656.0)
 gg_rct_Bronze_medal = Rect(-224.0, -800.0, -192.0, -736.0)
 gg_rct_Circle_Area = Rect(-1184.0, -1536.0, -992.0, 0.0)
-gg_rct_Clan_RD = Rect(-384.0, -896.0, -352.0, -864.0)
-gg_rct_Clan_RD2 = Rect(-320.0, -896.0, -288.0, -864.0)
 gg_rct_Deaths = Rect(-224.0, -608.0, -160.0, -576.0)
 gg_rct_Gold_Medal = Rect(-320.0, -640.0, -288.0, -576.0)
 gg_rct_PandaArea = Rect(3136.0, 2816.0, 3328.0, 3104.0)
 gg_rct_PandaText = Rect(2368.0, 3392.0, 2464.0, 3488.0)
-gg_rct_PoA2_ReviveArea = Rect(-3264.0, 2368.0, -3008.0, 2592.0)
-gg_rct_PoA3_Revive_Area = Rect(-3296.0, 2336.0, -2976.0, 2624.0)
 gg_rct_Podium_1 = Rect(-288.0, -704.0, -224.0, -640.0)
 gg_rct_Podium_2 = Rect(-384.0, -832.0, -320.0, -768.0)
 gg_rct_Podium_3 = Rect(-192.0, -864.0, -128.0, -800.0)
@@ -190,10 +181,10 @@ gg_rct_Wolf_Area_10 = Rect(1248.0, -1632.0, 1696.0, 864.0)
 gg_rct_Wolf_Area_11 = Rect(-1280.0, -2080.0, 1248.0, -1632.0)
 gg_rct_Wolf_Area_12 = Rect(-1696.0, -1632.0, -1248.0, 224.0)
 gg_rct_Wolf_Area_13 = Rect(-1248.0, 224.0, 640.0, 640.0)
-gg_rct_Wolf_Area_14 = Rect(608.0, -1024.0, 1056.0, 224.0)
+gg_rct_Wolf_Area_14 = Rect(608.0, -992.0, 1056.0, 224.0)
 gg_rct_Wolf_Area_15 = Rect(-928.0, -1440.0, 1056.0, -1024.0)
-gg_rct_Wolf_Area_16 = Rect(-928.0, -1024.0, -480.0, -416.0)
-gg_rct_Wolf_Area_17 = Rect(-928.0, -416.0, -64.0, 32.0)
+gg_rct_Wolf_Area_16 = Rect(-928.0, -992.0, -480.0, -416.0)
+gg_rct_Wolf_Area_17 = Rect(-928.0, -384.0, -64.0, 32.0)
 gg_rct_ProgressPoint1 = Rect(672.0, -1344.0, 928.0, -1120.0)
 gg_rct_ProgressPoint2 = Rect(-800.0, -1344.0, -608.0, -1152.0)
 gg_rct_SPELLDUMMYISLAND = Rect(3936.0, 3968.0, 4096.0, 4096.0)
@@ -209,6 +200,10 @@ gg_rct_Dummy1Region = Rect(-2624.0, 2880.0, -2592.0, 2912.0)
 gg_rct_Dummy2Region = Rect(-2624.0, 2656.0, -2592.0, 2688.0)
 gg_rct_Dummy3Region = Rect(-2624.0, 2432.0, -2592.0, 2464.0)
 gg_rct_BarrierRegion = Rect(-2656.0, 2304.0, -2560.0, 3072.0)
+gg_rct_Solo2023 = Rect(3232.0, -3520.0, 3264.0, -3488.0)
+gg_rct_Team2023 = Rect(-3264.0, -3520.0, -3232.0, -3488.0)
+gg_rct_Solo2024 = Rect(-3392.0, 2080.0, -3360.0, 2112.0)
+gg_rct_Team2024 = Rect(2368.0, 2080.0, 2400.0, 2112.0)
 end
 
 function InitCustomPlayerSlots()

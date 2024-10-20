@@ -12,11 +12,10 @@ using System.Runtime.CompilerServices;
 
 public class Savecode
 {
-    public static string charset = "!$%&'()*+,-.0123456789:;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}`";
     private static string player_charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public double Digits { get; private set; } // logarithmic approximation
-    public BigNum Bignum { get; private set; }
     private static List<string> OriginalToolTips { get; set; } = new();
+    public double Digits { get; private set; }
+    public BigNum Bignum { get; private set; }
 
     public static void Initialize()
     {
@@ -219,7 +218,7 @@ public class Savecode
         return x;
     }
 
-    private static int BASE() => charset.Length;
+    private static int BASE() => OldSavesHelper.charset.Length;
     private static int HASHN() => 5000;
 
     private static int Modb(int x)

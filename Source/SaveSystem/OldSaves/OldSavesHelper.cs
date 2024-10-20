@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 public static class OldSavesHelper
 {
+    public static string charset { get; } = "!$%&'()*+,-.0123456789:;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}`";
     private static string PlayerCharSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static int Player_CharToInt(char c)
     {
@@ -21,7 +22,7 @@ public static class OldSavesHelper
     public static int CharToInt(char c)
     {
         int i = 0;
-        while (i < Savecode.charset.Length && c != Savecode.charset[i])
+        while (i < charset.Length && c != charset[i])
         {
             i++;
         }

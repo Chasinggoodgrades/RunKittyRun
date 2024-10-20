@@ -25,7 +25,7 @@ public static class Standard
     private static void RegisterLevelSixTrigger()
     {
         // Ultimate, Protection of the Ancients
-        KittyReachedLevelSix = CreateTrigger();
+        KittyReachedLevelSix = trigger.Create();
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
         KittyReachedLevelSix.AddAction(() =>
@@ -37,7 +37,7 @@ public static class Standard
     private static void RegisterLevelTenTrigger()
     {
         // Ability to Purchase Relics
-        KittyReachedLevelTen = CreateTrigger();
+        KittyReachedLevelTen = trigger.Create();
         foreach(var kitty in Globals.ALL_KITTIES.Values)
             TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
         KittyReachedLevelTen.AddAction(() =>
