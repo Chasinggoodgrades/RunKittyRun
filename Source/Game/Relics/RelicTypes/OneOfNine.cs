@@ -48,12 +48,16 @@ public class OneOfNine : Relic
         return kitty.GetAbilityCooldownRemaining(relic);
     }
 
-    public static void OneOfNineEffect(player Player)
+    public static bool OneOfNineEffect(player Player)
     {
         var kitty = Globals.ALL_KITTIES[Player];
-        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return;
+        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false;
         if (Program.Debug) Console.WriteLine("One of Nine Effect");
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
+        {
             IssueImmediateOrder(kitty.Unit, "divineshield");
+            return true;
+        }
+        return false;
     }
 }

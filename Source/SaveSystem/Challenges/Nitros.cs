@@ -32,7 +32,7 @@ public static class Nitros
         NitroDialog.SetTitle("Nitro: ");
         NitroDialog.SetTitleColor(0, 255, 50);
         NitroDialog.IsDisplayed = true;
-        NitroTimer.Start(NitroRoundTimes[Globals.ROUND], false, null);
+        NitroTimer.Start(NitroRoundTimes[Globals.ROUND], false, StopNitroTimer);
     }
 
     public static void StopNitroTimer()

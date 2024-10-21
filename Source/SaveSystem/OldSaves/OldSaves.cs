@@ -9,6 +9,7 @@ using System.Collections;
 using WCSharp.SaveLoad;
 using System.Text;
 using System.Runtime.CompilerServices;
+using WCSharp.Sync;
 
 public class Savecode
 {
@@ -16,6 +17,7 @@ public class Savecode
     private static List<string> OriginalToolTips { get; set; } = new();
     public double Digits { get; private set; }
     public BigNum Bignum { get; private set; }
+    public BigNumL BigNumL { get; private set; }
 
     public static void Initialize()
     {
@@ -39,8 +41,8 @@ public class Savecode
     public void Clean() => Bignum.Clean();
     public void FromString(string s)
     {
-        int i = s.Length - 1;
-        BigNumL cur = BigNumL.Create();
+        var i = s.Length - 1;
+        var cur = BigNumL.Create();
         Bignum.List = cur;
 
         while (true)
@@ -54,7 +56,7 @@ public class Savecode
     }
     public int Hash()
     {
-        int hash = 0;
+        var hash = 0;
         int x;
         BigNumL current = Bignum.List;
 
@@ -77,12 +79,10 @@ public class Savecode
 
         if (sign == -1)
         {
-            Console.WriteLine(Bignum.LastDigit());
             SetRandomSeed(Bignum.LastDigit());
             current.Leaf = Modb(current.Leaf + sign * GetRandomInt(0, BASE() - 1));
             x = current.Leaf;
         }
-
         SetRandomSeed(key);
 
         while (current != null)
@@ -114,28 +114,32 @@ public class Savecode
 
         SetRandomSeed(seed);
     }
-    public bool Load(player p, string s, int loadtype)
+    public void Load(player p, int loadtype)
     {
         try
         {
+            SyncSystem.EnableDebug();
+            Console.WriteLine("Starting Load...");
             int key = SCommHash(p.Name) + loadtype * 73;
             int inputhash = 0;
             string code = LoadString(p).ToString();
 
-            FromString(s);
-            Obfuscate(key, -1);
+            FromString(code);
+            //Obfuscate(key, -1);
             inputhash = Decode(HASHN());
             Clean();
 
-            if(inputhash == Hash())
+            Console.WriteLine(code);
+            SyncSystem.Send(code);
+
+            if (inputhash == Hash())
                 SetRewardValues(p);
 
-            return inputhash == Hash();
+
         }
         catch (Exception e)
         {
             Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
-            return false;
         }
     }
 
@@ -143,7 +147,7 @@ public class Savecode
     {
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
-
+        if (!p.IsLocal) return sb;
         Preloader(filePath);
 
         for(var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
@@ -199,8 +203,9 @@ public class Savecode
     private static int SCommHash(string name)
     {
         var charlen = player_charset.Length;
-        var count = new List<int>(new int[charlen]);
+        var count = new int[charlen];
         var x = 0;
+
         foreach (var c in name.ToUpper())
         {
             x = OldSavesHelper.Player_CharToInt(c);
@@ -208,7 +213,6 @@ public class Savecode
         }
 
         x = 0;
-
         for (var i = 0; i < charlen; i++)
             x = count[i] * count[i] * i + count[i] * x + x + 199;
 

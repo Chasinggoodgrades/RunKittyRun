@@ -65,7 +65,6 @@ public class Kitty
     {
         var circle = Globals.ALL_CIRCLES[Player];
         Unit.Kill();
-        if (!ProtectionActive) Alive = false;
         DeathStatUpdate();
         circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
         circle.KittyDied(this);
@@ -149,6 +148,7 @@ public class Kitty
     {
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
+        CurrentStats.SaveStreak = 0;
         SaveData.GameStats[StatTypes.Deaths] += 1;
         SaveData.GameStats[StatTypes.SaveStreak] = 0;
     }
@@ -157,6 +157,9 @@ public class Kitty
     {
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
+        savior.CurrentStats.SaveStreak += 1;
+        if(savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
+            savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
         savior.SaveData.GameStats[StatTypes.Saves] += 1;
         savior.SaveData.GameStats[StatTypes.SaveStreak] += 1;
         if(savior.SaveData.GameStats[StatTypes.SaveStreak] > savior.SaveData.GameStats[StatTypes.HighestSaveStreak])

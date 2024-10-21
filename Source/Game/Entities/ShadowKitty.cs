@@ -52,6 +52,8 @@ public class ShadowKitty
             Utility.MakeUnitLocust(Unit);
             Utility.SelectUnitForPlayer(Player, Unit);
             CollisionDetection.ShadowKittyRegisterCollision(this);
+            Unit.BaseMovementSpeed = 522;
+            Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
         }
         catch (Exception e)
         {

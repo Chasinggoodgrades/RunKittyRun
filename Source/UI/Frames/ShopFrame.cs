@@ -143,10 +143,10 @@ public static class ShopFrame
             icon.SetTexture(items[i].IconPath, 0, false);
             icon.SetPoints(button);
 
-            var trigger = CreateTrigger();
+            var itemDetails = trigger.Create();
             var relic = items[i];
-            trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
-            trigger.AddAction(() => ShowItemDetails(relic));
+            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
+            itemDetails.AddAction(() => ShowItemDetails(relic));
         }
 
         float panelHeight = rows * (buttonHeight) + panelPadding;
@@ -162,39 +162,53 @@ public static class ShopFrame
     private static void ShowItemDetails(ShopItem relic)
     {
         var player = @event.Player;
-        if (!player.IsLocal) return;
 
+        if (SelectedItems.ContainsKey(player)) SelectedItems[player] = relic;
+        else SelectedItems.Add(player, relic);
+
+        if (!player.IsLocal) return;
         nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {relic.Name}";
         costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:|r {relic.Cost}";
         descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {relic.Description}";
-
-        if(SelectedItems.ContainsKey(player)) SelectedItems[player] = relic;
-        else SelectedItems.Add(player, relic);
     }
 
     private static void BuySelectedItem()
     {
         var player = @event.Player;
-        if (SelectedItems[player] != null)
+
+        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
-            var type = SelectedItems[player].Type;
-            var cost = SelectedItems[player].Cost;
-            var itemID = SelectedItems[player].ItemID;
+            var type = selectedItem.Type;
+            var cost = selectedItem.Cost;
+            var itemID = selectedItem.ItemID;
             var kitty = Globals.ALL_KITTIES[player];
+
             if (!HasEnoughGold(player, cost)) return;
 
             ReduceGold(player, cost);
+
             if (type != ShopItemType.Reward)
+            {
                 AddItem(player, itemID);
+            }
+
             if (type == ShopItemType.Relic)
             {
-                Console.WriteLine($"Selected relic: {SelectedItems[player].Relic.Name}");
-                SelectedItems[player].Relic.ApplyEffect(kitty.Unit);
+                Console.WriteLine($"Selected relic: {selectedItem.Relic.Name}");
+                selectedItem.Relic.ApplyEffect(kitty.Unit);
             }
-            if(type == ShopItemType.Reward)
-                AwardManager.GiveReward(player, SelectedItems[player].Award);
+
+            if (type == ShopItemType.Reward)
+            {
+                AwardManager.GiveReward(player, selectedItem.Award);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"No selected item found for player: {player}");
         }
     }
+
 
     // Placeholder methods for item retrieval
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;

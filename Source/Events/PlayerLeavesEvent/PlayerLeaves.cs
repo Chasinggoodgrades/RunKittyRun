@@ -46,23 +46,4 @@ public static class PlayerLeaves
         Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
         RoundManager.RoundEndCheck();
     }
-
-    /// <summary>
-    /// Test function to simulate a player leaving the game. Remove later.
-    /// </summary>
-    /// <param name="player"></param>
-    public static void PlayerLeavesEvent(player player)
-    {
-        var kitty = Globals.ALL_KITTIES[player];
-        var circle = Globals.ALL_CIRCLES[player];
-        var nameTag = FloatingNameTag.PlayerNameTags[player];
-        TeamRemovePlayer(player);
-        kitty.RemoveKitty();
-        circle.RemoveCircle();
-        nameTag.Dispose();
-        Globals.ALL_PLAYERS.Remove(player);
-        Console.WriteLine(Colors.PlayerNameColored(player) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
-        RoundManager.RoundEndCheck();
-
-    }
 }

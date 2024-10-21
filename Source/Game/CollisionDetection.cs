@@ -67,7 +67,8 @@ public static class CollisionDetection
     {
         TriggerAddAction(k.w_Collision, () =>
         {
-            OneOfNine.OneOfNineEffect(k.Player);
+            if (!k.Unit.Alive) return;
+            if (OneOfNine.OneOfNineEffect(k.Player)) return;
             k.KillKitty();
             Team.CheckTeamDead(k);
         });

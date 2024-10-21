@@ -8,6 +8,8 @@ public class PlayerCurrentStats
     public int TotalDeaths { get; set; }
     public int RoundSaves { get; set; }
     public int RoundDeaths { get; set; }
+    public int SaveStreak { get; set; }
+    public int MaxSaveStreak { get; set; }
 
     public PlayerCurrentStats()
     {

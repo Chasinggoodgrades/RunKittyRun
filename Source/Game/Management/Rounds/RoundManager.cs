@@ -60,7 +60,6 @@ public static class RoundManager
     {
         Globals.GAME_ACTIVE = false;
         RoundTimer.EndRoundTimer.Pause();
-        GameTimer.RoundTime[Globals.ROUND] = 0.0f;
         Nitros.StopNitroTimer();
         Wolf.RemoveAllWolves();
         BarrierSetup.ActivateBarrier();
