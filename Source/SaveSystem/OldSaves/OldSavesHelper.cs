@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using WCSharp.Api;
 
 public static class OldSavesHelper
 {
@@ -41,5 +42,15 @@ public static class OldSavesHelper
 		1097228916, // Afbt
 		1097228907, // Afbk
     };
+
+    public static void SyncHelperInit()
+    {
+        var Trigger = trigger.Create();
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            Trigger.RegisterPlayerSyncEvent(player, "S", false);
+        }
+
+    }
 }
 
