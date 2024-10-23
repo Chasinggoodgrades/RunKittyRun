@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
-using static WCSharp.Api.Common;
 
 public static class PlayerLeaves
 {
     private static trigger Trigger;
     public static void Initialize()
     {
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
         RegisterTrigger();
     }
 
@@ -21,7 +14,7 @@ public static class PlayerLeaves
     {
         foreach(var player in Globals.ALL_PLAYERS)
         {
-            Trigger.RegisterPlayerEvent(player, EVENT_PLAYER_LEAVE);
+            Trigger.RegisterPlayerEvent(player, playerevent.Leave);
         }
         Trigger.AddAction(PlayerLeavesActions);
     }
@@ -44,6 +37,7 @@ public static class PlayerLeaves
         nameTag.Dispose();
         Globals.ALL_PLAYERS.Remove(leavingPlayer);
         Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
+        MultiboardUtil.RefreshMultiboards();
         RoundManager.RoundEndCheck();
     }
 }

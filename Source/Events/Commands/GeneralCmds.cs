@@ -21,7 +21,7 @@ public static class GeneralCmds
                 p.DisplayTextTo(Colors.COLOR_GOLD + "Stats have been saved.");
                 break;
             case "-clear":
-                if(p == GetLocalPlayer()) ClearTextMessages();
+                if(p.IsLocal) ClearTextMessages();
                 break;
             case "-color":
                 Colors.SetPlayerColor(p, args[1]);
@@ -31,6 +31,27 @@ public static class GeneralCmds
                 break;
             case "-wild":
                 Colors.SetPlayerRandomVertexColor(p);
+                break;
+            case "-hidenames":
+            case "-hn":
+                FloatingNameTag.HideAllNameTags(p);
+                break;
+            case "-shownames":
+            case "-sn":
+                FloatingNameTag.ShowAllNameTags(p);
+                break;
+            case "-zoom":
+            case "-cam":
+                var zoom = 2000f;
+                if (args.Length < 2)
+                {
+                    p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Incorrect usage: -zoom (xxxx) or -cam (xxxx)|r");
+                    return;
+                }
+                else {
+                    zoom = float.Parse(args[1]);
+                    SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
+                }
                 break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);

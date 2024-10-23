@@ -10,27 +10,36 @@ using static WCSharp.Api.Common;
 public static class AwardManager
 {
     private static Dictionary<player, List<Awards>> Awarded = new Dictionary<player, List<Awards>>();
-    private static trigger AwardTrigger = CreateTrigger();
+    private static trigger AwardTrigger = trigger.Create();
     public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)
             Awarded.Add(player, new List<Awards>());
     }
-    public static void GiveReward(player player, Awards award)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player">The Player</param>
+    /// <param name="award">The Awards.{award} that you're handing out.</param>
+    /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
+    public static void GiveReward(player player, Awards award, bool earnedPrompt = true)
     {
         if(Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
         var saveData = Globals.ALL_KITTIES[player].SaveData;
         saveData.GameAwards[award] = 1;
         EnableAbility(player, award);
         Awarded[player].Add(award);
-        Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
+        if(earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
     }
 
     public static void GiveRewardAll(Awards award)
     {
+        var color = Colors.COLOR_YELLOW_ORANGE;
+        var rewardColor = Colors.COLOR_YELLOW;
         foreach (var player in Globals.ALL_PLAYERS)
-            GiveReward(player, award);
+            GiveReward(player, award, false);
+        Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{GetRewardName(award)}");
     }
 
     private static void EnableAbility(player player, Awards award)

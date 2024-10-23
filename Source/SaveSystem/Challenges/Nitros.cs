@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 public static class Nitros
 {
     private static Dictionary<int, int> NitroRoundTimes;

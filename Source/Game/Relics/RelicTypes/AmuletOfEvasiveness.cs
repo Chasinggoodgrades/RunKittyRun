@@ -7,6 +7,7 @@ public class AmuletOfEvasiveness : Relic
     private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
     private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
     private const int RelicCost = 650;
+    private static float UnitScale = 0.60f - (0.60f * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0f);
 
     public AmuletOfEvasiveness() : base(
         "Amulet of Evasiveness",
@@ -17,6 +18,11 @@ public class AmuletOfEvasiveness : Relic
         ) 
     { }
 
+    public static void SetUnitScale (unit Unit)
+    {
+        if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
+        Unit.SetScale(UnitScale, UnitScale, UnitScale);
+    }
     public override void ApplyEffect(unit Unit)
     {
         var player = Unit.Owner;
@@ -24,7 +30,7 @@ public class AmuletOfEvasiveness : Relic
         var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
-        Unit.SetScale(0.48f, 0.48f, 0.48f);
+        SetUnitScale(Unit);
         CollisionDetection.KittyRegisterCollisions(kitty);
     }
 

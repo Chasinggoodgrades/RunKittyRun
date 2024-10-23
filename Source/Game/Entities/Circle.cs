@@ -1,5 +1,4 @@
 ﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public class Circle
 {
@@ -14,7 +13,7 @@ public class Circle
     {
         Player = player;
         ID = player.Id;
-        Collision = CreateTrigger();
+        Collision = trigger.Create();
         CreateCircle();
     }
 
@@ -23,7 +22,7 @@ public class Circle
         Unit = unit.Create(Player, CIRCLE_UNIT_MODEL, CIRCLE_SPAWN_REGION.CenterX, CIRCLE_SPAWN_REGION.CenterY);
         Utility.MakeUnitLocust(Unit);
         Globals.ALL_CIRCLES.Add(Player, this);
-        ShowUnit(Unit, false);
+        Unit.IsVisible = false;
     }
 
     public void RemoveCircle()

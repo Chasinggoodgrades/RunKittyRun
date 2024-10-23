@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public class Kitty
 {
@@ -22,8 +21,8 @@ public class Kitty
     public bool Alive { get; set; } = true;
     public bool Finished { get; set; } = false;
     public bool CanBuyRelic { get; set; } = false;
-    public trigger w_Collision { get; set; } = CreateTrigger();
-    public trigger c_Collision { get; set; } = CreateTrigger();
+    public trigger w_Collision { get; set; } = trigger.Create();
+    public trigger c_Collision { get; set; } = trigger.Create();
     public float Progress { get; set; } = 0.0f;
     public Dictionary<int, float> Time { get; set; } = new Dictionary<int, float>();
 
@@ -91,7 +90,7 @@ public class Kitty
     private void InitData()
     {
         // Save Data
-        if (Player.Controller == MAP_CONTROL_USER) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
+        if (Player.Controller == mapcontrol.User) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
         else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this may be related.
 
         // Round Times
@@ -130,6 +129,7 @@ public class Kitty
 
     private void Dispose()
     {
+        Alive = false;
         Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();

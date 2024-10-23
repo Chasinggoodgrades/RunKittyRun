@@ -1,6 +1,5 @@
 ﻿using System;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 public static class RewardChecker
 {
     private static void RewardCheckGameStats(player player)

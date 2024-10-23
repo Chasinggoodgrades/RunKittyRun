@@ -17,7 +17,7 @@ public static class RewardsManager
     public static Dictionary<player, effect> ActiveAuras = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveHats = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveTrails = new Dictionary<player, effect>();
-    private static trigger Trigger = CreateTrigger();
+    private static trigger Trigger = trigger.Create();
     private static List<int> RewardAbilities = new List<int>();
     public static void Initialize()
     {
@@ -50,7 +50,7 @@ public static class RewardsManager
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
+            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         }
         Trigger.AddAction(() => CastedReward());
     }

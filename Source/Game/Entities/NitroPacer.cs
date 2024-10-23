@@ -1,5 +1,4 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Data;
 using System.Linq;
 public static class NitroPacer
@@ -23,14 +22,14 @@ public static class NitroPacer
         nitroEffect = effect.Create("war3mapImported\\Nitro.mdx", Unit, "origin");
         VisionShare();
 
-        pacerTimer = CreateTimer();
+        pacerTimer = timer.Create();
     }
 
     public static void StartNitroPacer()
     {
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
-        TimerStart(pacerTimer, 0.20f, true, UpdateNitroPacer);
+        pacerTimer.Start(0.20f, true, UpdateNitroPacer);
     }
 
     public static void ResetNitroPacer()
@@ -72,7 +71,7 @@ public static class NitroPacer
     private static void VisionShare()
     {
         foreach(var player in Globals.ALL_PLAYERS)
-            player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_VISION_FORCED, true);
+            player.NeutralPassive.SetAlliance(player, alliancetype.SharedVisionForced, true);
     }
 
     private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;

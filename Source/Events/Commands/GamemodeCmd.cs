@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared.Data;
-using static WCSharp.Api.Common;
+﻿using WCSharp.Api;
 
 public static class GamemodeCmd
 {

@@ -1,5 +1,4 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using System.Collections.Generic;
 using System;
 public class ShadowKitty
@@ -35,8 +34,8 @@ public class ShadowKitty
     }
     private void RegisterTriggers()
     {
-        w_Collision = CreateTrigger();
-        c_Collision = CreateTrigger();
+        w_Collision = trigger.Create();
+        c_Collision = trigger.Create();
     }
 
     /// <summary>

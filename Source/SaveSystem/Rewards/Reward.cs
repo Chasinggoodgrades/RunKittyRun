@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using WCSharp.Api;
-using WCSharp.SaveLoad;
-using static WCSharp.Api.Common;
 /// <summary>
 /// Reward Class and Enums
 /// * Enums are the different types of rewards. They help designate which category the reward should be in.
@@ -74,8 +70,8 @@ public class Reward
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if(SetSkin(player)) return;
         if (SetWindwalk(player)) return;
-        var effect = AddSpecialEffectTarget(ModelPath, kitty, OriginPoint);
-        SetEffect(player, effect);
+        var Effect = effect.Create(ModelPath, kitty, OriginPoint);
+        SetEffect(player, Effect);
     }
 
     private void SetEffect(player player, effect effect)
@@ -94,13 +90,13 @@ public class Reward
     private void DestroyCurrentEffect(player player)
     {
         if (Type == RewardType.Wings)
-            DestroyEffect(RewardsManager.ActiveWings[player]);
+            RewardsManager.ActiveWings[player].Dispose();
         else if (Type == RewardType.Hat)
-            DestroyEffect(RewardsManager.ActiveHats[player]);
+            RewardsManager.ActiveHats[player].Dispose();
         else if (Type == RewardType.Aura)
-            DestroyEffect(RewardsManager.ActiveAuras[player]);
+            RewardsManager.ActiveAuras[player].Dispose();
         else if (Type == RewardType.Trail)
-            DestroyEffect(RewardsManager.ActiveTrails[player]);
+            RewardsManager.ActiveTrails[player].Dispose();
     }
 
     private bool SetWindwalk(player player)
@@ -116,10 +112,10 @@ public class Reward
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if (Type == RewardType.Skin)
         {
-            //if(SkinID != 0) BlzSetUnitSkin(kitty, SkinID);
             if(SkinID != 0) kitty.Skin = SkinID;
             else Console.WriteLine($"Skin ID invalid for {Name}");
             SetSelectedSkin(player, SkinID);
+
             return true;
         }
         return false;
