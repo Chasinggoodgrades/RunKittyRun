@@ -110,11 +110,11 @@ public static class Difficulty
         Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
     }
 
-    /* summary
-     * Changes the difficulty of the game.
-     * 
-     * param string={difficulty} The difficulty to change to.
-     */
+
+    /// <summary>
+    /// Changes the difficulty of the game to the specified difficulty.
+    /// </summary>
+    /// <param name="difficulty">"normal", "hard", "impossible"</param>
     public static void ChangeDifficulty(string difficulty)
     {
         switch (difficulty)
@@ -130,4 +130,5 @@ public static class Difficulty
                 break;
         }
     }
+
 }

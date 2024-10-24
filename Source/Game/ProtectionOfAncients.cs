@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Source;
 using WCSharp.Api;
-using WCSharp.Effects;
-using WCSharp.Events;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public static class ProtectionOfAncients
@@ -23,7 +20,7 @@ public static class ProtectionOfAncients
 
     private static void RegisterEvents()
     {
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
         foreach(var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         Trigger.AddAction(ActivationEvent);
@@ -40,12 +37,11 @@ public static class ProtectionOfAncients
         if(Program.Debug) Console.WriteLine("Player: " + player.Name + " activated Protection of the Ancients!");
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
-        var timer = CreateTimer();
-        TimerStart(timer, EFFECT_DELAY, false, () =>
+        var t = timer.Create();
+        t.Start(EFFECT_DELAY, false, () =>
         {
-            ApplyEffect(Unit);
             actiEffect.Dispose();
-            timer.Dispose();
+            t.Dispose();
         });
     }
 
@@ -81,7 +77,7 @@ public static class ProtectionOfAncients
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
         kitty.ProtectionActive = false;
-        GroupEnumUnitsInRange(tempGroup, GetUnitX(kitty.Unit), GetUnitY(kitty.Unit), effectRadius, Filter(() => AoEEffectFilter()));
+        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, Filter(() => AoEEffectFilter()));
         foreach (var unit in tempGroup.ToList())
         {
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];

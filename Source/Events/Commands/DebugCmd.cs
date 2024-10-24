@@ -74,6 +74,9 @@ public static class DebugCmd
                 var x = Savecode.Create();
                 x.Load(player, 1);
                 break;
+            case "?discord":
+                DiscordFrame.Initialize();
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, "Unknown command.");
                 break;

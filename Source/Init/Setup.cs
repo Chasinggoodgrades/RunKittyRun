@@ -58,9 +58,7 @@ namespace Source.Init
                 Multiboard.Initialize();
                 Shops.Initialize();
                 WolfArea.Initialize();
-                SoundManager.Initialize();
                 Kitty.Initialize();
-                //RelicManager.Initialize();
                 ProtectionOfAncients.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
@@ -68,17 +66,26 @@ namespace Source.Init
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
                 RewardChecker.DisableALlRewards();
-                ShadowKitty.Initialize();
-                ItemSpawner.Initialize();
                 Challenges.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
-                ShopFrame.FinishInitialization();
+                Utility.SimpleTimer(2.0f, DelayedStartItems);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error in StartGame: " + e.Message);
             }
+        }
+
+        /// <summary>
+        /// Helps lighten the load at the start.
+        /// </summary>
+        private static void DelayedStartItems()
+        {
+            SoundManager.Initialize();
+            ShopFrame.FinishInitialization();
+            ShadowKitty.Initialize();
+            ItemSpawner.Initialize();
         }
 
         private static void GetActivePlayers()
