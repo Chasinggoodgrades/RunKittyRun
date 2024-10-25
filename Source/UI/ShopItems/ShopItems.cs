@@ -30,6 +30,11 @@ public class ShopItem
         IconPath = BlzGetAbilityIcon(abilityID);
     }
 
+    public ShopItem(string name, int cost, int itemID, string iconPath, string description)
+    {
+        InitializeShopItem(name, cost, itemID, description, iconPath, ShopItemType.Misc);
+    }
+
     private void InitializeShopItem(string name, int cost, int itemID, string description, string iconPath, ShopItemType type)
     {
         Name = name;
@@ -53,8 +58,20 @@ public class ShopItem
     public static List<ShopItem> ShopItemsReward()
     {
         var shopItems = new List<ShopItem>();
+
         var reward = RewardsManager.Rewards.Find(x => x.Name == Awards.Green_Tendrils);
         shopItems.Add(new ShopItem(Awards.Green_Tendrils, 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
+        
         return shopItems;
+    }
+
+    public static List<ShopItem> ShopItemsMisc()
+    {
+        var shopItems = new List<ShopItem>();
+
+        shopItems.Add(new ShopItem("Anti-Block-Wand", 100, Constants.ITEM_ANTI_BLOCK_WAND, BlzGetAbilityIcon(Constants.ABILITY_ANTI_BLOCK_WAND_ITEM), "Wolves in the way? Buy this to make them move. Dang pesky wolves."));
+
+        return shopItems;
+
     }
 }

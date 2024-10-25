@@ -116,7 +116,7 @@ public static class ShopFrame
     {
         AddItemsToPanel(relicsPanel, GetRelicItems());
         AddItemsToPanel(rewardsPanel, GetRewardItems());
-        //AddItemsToPanel(miscPanel, GetMiscItems());
+        AddItemsToPanel(miscPanel, GetMiscItems());
     }
 
     private static void AddItemsToPanel(framehandle panel, List<ShopItem> items)
@@ -157,7 +157,6 @@ public static class ShopFrame
             detailsPanel.SetSize(detailsPanelX, detailsPanelY + (panelHeight - panelY));
         }
     }
-
 
     private static void ShowItemDetails(ShopItem relic)
     {
@@ -209,20 +208,10 @@ public static class ShopFrame
         }
     }
 
-
-    // Placeholder methods for item retrieval
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
     private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
-    private static List<Relic> GetMiscItems() => new List<Relic> {
-        new OneOfNine(),
-        new FangOfShadows(),
-        new RingOfSummoning(),
-        new AmuletOfEvasiveness(),
-        new FrostbiteRing(),
-        new BeaconOfUnitedLifeforce(),
-    };
+    private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
-    // Placeholder methods for player interaction
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     private static void RelicMaxedOut(player player) => BlzDisplayChatMessage(player, 0, "You already have the maximum amount of this relic!");

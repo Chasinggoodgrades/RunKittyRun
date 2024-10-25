@@ -20,7 +20,7 @@ public static class MusicFrame
     public static void Initialize()
     {
         MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
-        MusicFramehandle.SetAbsPoint(FRAMEPOINT_CENTER, 0.40f, 0.42f);
+        MusicFramehandle.SetAbsPoint(framepointtype.Center, 0.40f, 0.42f);
         Utility.SimpleTimer(5.0f, CreateMusicFrames);
     }
 
@@ -41,7 +41,7 @@ public static class MusicFrame
         MusicSlider = BlzCreateFrameByType("SLIDER", "SliderFrame", MusicFramehandle, "QuestMainListScrollBar", 0);
         var numberOfSongs = MusicManager.MusicList.Count;
         MusicSlider.ClearPoints();
-        MusicSlider.SetAbsPoint(FRAMEPOINT_TOPLEFT, 0.485f, 0.475f);
+        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.485f, 0.475f);
         MusicSlider.SetSize(0.01f, 0.125f);
         MusicSlider.SetMinMaxValue(0, numberOfSongs);
         MusicSlider.SetStepSize(1);
@@ -51,8 +51,8 @@ public static class MusicFrame
 
         var trigger = CreateTrigger();
         var mousewheel = CreateTrigger();
-        trigger.RegisterFrameEvent(MusicSlider, FRAMEEVENT_SLIDER_VALUE_CHANGED);
-        mousewheel.RegisterFrameEvent(MusicSlider, FRAMEEVENT_MOUSE_WHEEL);
+        trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
+        mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
         trigger.AddAction(() =>
         {
             var frame = @event.Frame;
@@ -85,11 +85,10 @@ public static class MusicFrame
             MusicButtons[i].SetSize(ButtonWidth, ButtonHeight);
             MusicButtons[i].Text = MusicManager.MusicList[i].Name;
 
-            // Set the position of the button, using a formula based on index
             MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - (i * ButtonSpacing));
 
             var trigger = CreateTrigger();
-            trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
+            trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
             trigger.AddAction(() =>
             {
                 var frame = @event.Frame;
@@ -97,9 +96,8 @@ public static class MusicFrame
 
                 if (!player.IsLocal) return;
 
-                // Stop All Current Music
                 MusicManager.StopAllMusic();
-                // Play the music
+
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
                 if (music != null) music.Play();
                 MusicFramehandle.Visible = !MusicFramehandle.Visible;
@@ -124,7 +122,7 @@ public static class MusicFrame
         if (value < 0) value = 0;
         if (value > maxSongs - 1) value = maxSongs - 1;
 
-        // Calculate the start and end indices for the visible buttons
+        // Calculates the start and end indexes for the visible buttons
         int start = value - (visibleButtons / 2);
         if (start < 0) start = 0;
         int end = Math.Min(start + visibleButtons, maxSongs);
@@ -143,7 +141,7 @@ public static class MusicFrame
                 else
                     positionY = ButtonStartY - ((i - start) * ButtonSpacing);
 
-                MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, positionY);
+                MusicButtons[i].SetAbsPoint(framepointtype.Center, ButtonStartX, positionY);
                 MusicButtons[i].Visible = true;
             }
             else

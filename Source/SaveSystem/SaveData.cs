@@ -51,7 +51,11 @@ public enum RoundTimes
     RThreeImpossible,
     RFourImpossible,
     RFiveImpossible,
-    SoloTotal
+    SoloRoundOne,
+    SoloRoundTwo,
+    SoloRoundThree,
+    SoloRoundFour,
+    SoloRoundFive,
 }
 public enum StatTypes
 {
@@ -61,6 +65,7 @@ public enum StatTypes
     Deaths,
     Wins,
     WinStreak,
+    HighestWinStreak,
     WinsNormal,
     WinsHard,
     WinsImpossible,
