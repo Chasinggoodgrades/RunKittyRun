@@ -5,6 +5,7 @@
     public static void RefreshMultiboards()
     {
         StandardMultiboard.UpdateOverallStatsMB();
+        StandardMultiboard.UpdateBestTimesMB();
     }
 
 }

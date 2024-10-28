@@ -77,6 +77,8 @@ public static class DebugCmd
             case "?discord":
                 DiscordFrame.Initialize();
                 break;
+            case "?test4":
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, "Unknown command.");
                 break;

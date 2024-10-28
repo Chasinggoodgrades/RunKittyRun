@@ -38,9 +38,9 @@ public static class StandardMultiboard
 
     private static void CreateMultiboards()
     {
-        CurrentGameStatsMultiboard();
         OverallGamesStatsMultiboard();
         BestTimesMultiboard();
+        CurrentGameStatsMultiboard();
     }
 
     /// <summary>
@@ -50,7 +50,6 @@ public static class StandardMultiboard
     /// <param name="rowIndex"></param>
     private static void FillPlayers(multiboard mb, int rowIndex = 2)
     {
-        mb.Rows = Globals.ALL_PLAYERS.Count + 2;
         foreach (var player in Globals.ALL_PLAYERS)
         {
             mb.GetItem(rowIndex, 0).SetText(Colors.PlayerNameColored(player));
@@ -63,42 +62,57 @@ public static class StandardMultiboard
     {
         CurrentStats.Title = CurrentTitle;
         CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
-        CurrentStats.Columns = 6;
+        CurrentStats.Columns = 7;
         CurrentStats.GetItem(0, 0).SetText($"{color}Round Time|r");
         CurrentStats.GetItem(1, 0).SetText($"{color}Player|r");
-        CurrentStats.GetItem(1, 1).SetText($"{color}Saves|r");
-        CurrentStats.GetItem(1, 2).SetText($"{color}Deaths|r");
-        CurrentStats.GetItem(1, 3).SetText($"{color}Streak|r");
-        CurrentStats.GetItem(1, 4).SetText($"{color}Ratio|r");
-        CurrentStats.GetItem(1, 5).SetText($"{color}S / D|r");
+        CurrentStats.GetItem(1, 1).SetText($"{color}Score|r");
+        CurrentStats.GetItem(1, 2).SetText($"{color}Saves|r");
+        CurrentStats.GetItem(1, 3).SetText($"{color}Deaths|r");
+        CurrentStats.GetItem(1, 4).SetText($"{color}Streak|r");
+        CurrentStats.GetItem(1, 5).SetText($"{color}Ratio|r");
+        CurrentStats.GetItem(1, 6).SetText($"{color}S / D|r");
         CurrentStats.SetChildVisibility(true, false);
-        CurrentStats.SetChildWidth(0.05f);
-        CurrentStats.GetItem(1, 0).SetWidth(0.08f);
+        CurrentStats.SetChildWidth(0.052f);
+        CurrentStats.GetItem(1, 0).SetWidth(0.07f);
         CurrentStats.IsDisplayed = true;
     }
 
     private static void OverallGamesStatsMultiboard()
     {
         OverallStats.Title = OverallTitle;
-        OverallStats.Rows = Globals.ALL_PLAYERS.Count + 2;
-        OverallStats.Columns = 6;
+        OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
+        OverallStats.Columns = 8;
         OverallStats.GetItem(0, 0).SetText($"{color}Player|r");
-        OverallStats.GetItem(0, 1).SetText($"{color}Saves|r");
-        OverallStats.GetItem(0, 2).SetText($"{color}Deaths|r");
-        OverallStats.GetItem(0, 3).SetText($"{color}MaxStreak|r");
-        OverallStats.GetItem(0, 4).SetText($"{color}Ratio|r");
-        OverallStats.GetItem(0, 5).SetText($"{color}Games|r");
-        OverallStats.GetItem(0, 6).SetText($"{color}Wins|r");
+        OverallStats.GetItem(0, 1).SetText($"{color}Score:|r");
+        OverallStats.GetItem(0, 2).SetText($"{color}Saves|r");
+        OverallStats.GetItem(0, 3).SetText($"{color}Deaths|r");
+        OverallStats.GetItem(0, 4).SetText($"{color}MaxStreak|r");
+        OverallStats.GetItem(0, 5).SetText($"{color}  Ratio|r");
+        OverallStats.GetItem(0, 6).SetText($"{color}Games|r");
+        OverallStats.GetItem(0, 7).SetText($"{color}Wins|r");
         OverallStats.SetChildVisibility(true, false);
-        OverallStats.SetChildWidth(0.05f);
-        OverallStats.GetItem(0, 0).SetWidth(0.08f);
+        OverallStats.SetChildWidth(0.052f);
+        OverallStats.GetItem(0, 0).SetWidth(0.07f);
         OverallStats.IsDisplayed = false;
         UpdateOverallStatsMB();
     }
 
     private static void BestTimesMultiboard()
     {
-
+        BestTimes.Title = BestTimesTitle;
+        BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
+        BestTimes.Columns = 6;
+        BestTimes.GetItem(0, 0).SetText($"{color}Player|r");
+        BestTimes.GetItem(0, 1).SetText($"{color}Round 1|r");
+        BestTimes.GetItem(0, 2).SetText($"{color}Round 2|r");
+        BestTimes.GetItem(0, 3).SetText($"{color}Round 3|r");
+        BestTimes.GetItem(0, 4).SetText($"{color}Round 4|r");
+        BestTimes.GetItem(0, 5).SetText($"{color}Round 5|r");
+        BestTimes.SetChildVisibility(true, false);
+        BestTimes.SetChildWidth(0.04f);
+        BestTimes.GetItem(0, 0).SetWidth(0.07f);
+        BestTimes.IsDisplayed = false;
+        UpdateBestTimesMB();
     }
 
     private static void CurrentStatsRoundTimes()
@@ -110,6 +124,7 @@ public static class StandardMultiboard
 
     private static void CurrentGameStats()
     {
+        CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
         var rowIndex = 2;
 
         foreach (var player in Globals.ALL_PLAYERS)
@@ -119,9 +134,11 @@ public static class StandardMultiboard
 
             var totalSaves = currentStats.TotalSaves;
             var totalDeaths = currentStats.TotalDeaths;
+            var score = totalSaves - totalDeaths;
             var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
 
             var stats = new[] {
+                score.ToString(),
                 totalSaves.ToString(),
                 totalDeaths.ToString(),
                 currentStats.SaveStreak.ToString(),
@@ -147,11 +164,13 @@ public static class StandardMultiboard
 
             var allSaves = saveData.GameStats[StatTypes.Saves];
             var allDeaths = saveData.GameStats[StatTypes.Deaths];
+            var score = allSaves - allDeaths;
             var kda = allDeaths == 0 ? allSaves.ToString("F2") : (allSaves / (double)allDeaths).ToString("F2");
             var (games, wins) = GetGameStatData(saveData);
 
             var stats = new[]
             {
+                score.ToString(),
                 allSaves.ToString(),
                 allDeaths.ToString(),
                 saveData.GameStats[StatTypes.HighestSaveStreak].ToString(),
@@ -163,6 +182,28 @@ public static class StandardMultiboard
             for (int i = 0; i < stats.Length; i++)
                 OverallStats.GetItem(rowIndex, i + 1).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
 
+            rowIndex++;
+        }
+    }
+
+    private static void BestTimesStats()
+    {
+        var rowIndex = 1;
+
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            var saveData = Globals.ALL_KITTIES[player].SaveData;
+            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+
+            var roundTimes = GetGameRoundTime(saveData);
+
+            for (int i = 0; i < roundTimes.Length; i++)
+            {
+                if(roundTimes[i] != 0)
+                    BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}");
+                else
+                    BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
+            }
             rowIndex++;
         }
     }
@@ -181,6 +222,13 @@ public static class StandardMultiboard
         FillPlayers(CurrentStats);
         CurrentStatsRoundTimes();
         CurrentGameStats();
+    }
+
+    public static void UpdateBestTimesMB()
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        FillPlayers(BestTimes, 1);
+        BestTimesStats();
     }
 
     private static (int gameCount, int winCount) GetGameStatData(KittyData data)
@@ -209,6 +257,42 @@ public static class StandardMultiboard
                 return (0, 0);
         }
         return (numberOfGames, numberOfWins);
+    }
+
+    private static int[] GetGameRoundTime(KittyData data)
+    {
+        var gameData = data.GameTimes;
+        var roundTimes = new int[5];
+
+        switch (Difficulty.DifficultyValue)
+        {
+            case (int)DifficultyLevel.Normal:
+                roundTimes[0] = gameData[RoundTimes.ROneNormal];
+                roundTimes[1] = gameData[RoundTimes.RTwoNormal];
+                roundTimes[2] = gameData[RoundTimes.RThreeNormal];
+                roundTimes[3] = gameData[RoundTimes.RFourNormal];
+                roundTimes[4] = gameData[RoundTimes.RFiveNormal];
+                break;
+            case (int)DifficultyLevel.Hard:
+                roundTimes[0] = gameData[RoundTimes.ROneHard];
+                roundTimes[1] = gameData[RoundTimes.RTwoHard];
+                roundTimes[2] = gameData[RoundTimes.RThreeHard];
+                roundTimes[3] = gameData[RoundTimes.RFourHard];
+                roundTimes[4] = gameData[RoundTimes.RFiveHard];
+                break;
+            case (int)DifficultyLevel.Impossible:
+                roundTimes[0] = gameData[RoundTimes.ROneImpossible];
+                roundTimes[1] = gameData[RoundTimes.RTwoImpossible];
+                roundTimes[2] = gameData[RoundTimes.RThreeImpossible];
+                roundTimes[3] = gameData[RoundTimes.RFourImpossible];
+                roundTimes[4] = gameData[RoundTimes.RFiveImpossible];
+                break;
+            default:
+                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
+                return new int[5];
+        }
+        return roundTimes;
+
     }
 
     private static void ESCPressed()

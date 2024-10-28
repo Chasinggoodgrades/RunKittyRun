@@ -40,7 +40,7 @@ public class Kibble
     
     private trigger KibblePickupEvents()
     {
-        var trig = CreateTrigger();
+        var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
             trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
@@ -101,7 +101,7 @@ public class Kibble
     {
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
-
+        
         // Use PositionWithPolarOffset to calculate new point
         var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, JackPotIndex * 36.0f);
         var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, JackPotIndex * 36.0f);

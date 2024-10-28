@@ -13,9 +13,13 @@ public static class NitroPacer
     private static effect nitroEffect;
     private static item ghostBoots;
 
+    /// <summary>
+    /// Initializes the Nitro Pacer unit and effect, only applies to the standard gamemode.
+    /// </summary>
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;
+
         Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, SPAWN_RECT.CenterX, SPAWN_RECT.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);

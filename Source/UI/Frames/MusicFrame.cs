@@ -49,11 +49,11 @@ public static class MusicFrame
         foreach (var player in Globals.ALL_PLAYERS)
             MusicSliderValues.Add(player, 0);
 
-        var trigger = CreateTrigger();
-        var mousewheel = CreateTrigger();
-        trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
+        var Trigger = trigger.Create();
+        var mousewheel = trigger.Create();
+        Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
         mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        trigger.AddAction(() =>
+        Trigger.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;

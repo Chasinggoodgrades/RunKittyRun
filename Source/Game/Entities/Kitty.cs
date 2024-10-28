@@ -69,6 +69,7 @@ public class Kitty
         circle.KittyDied(this);
         SoundManager.PlayKittyDeathSound(Unit);
         Gameover.GameOver();
+        MultiboardUtil.RefreshMultiboards();
     }
 
     /// <summary>
@@ -86,6 +87,7 @@ public class Kitty
 
         if (savior == null) return;
         UpdateSaviorStats(savior);
+        MultiboardUtil.RefreshMultiboards();
     }
     private void InitData()
     {

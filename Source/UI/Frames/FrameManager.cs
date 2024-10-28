@@ -50,7 +50,7 @@ public static class FrameManager
 
     private static void TopCenterBackdrop()
     {
-        var backdrop = BlzCreateFrameByType("BACKDROP", "TopCenterBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
+        var backdrop = framehandle.Create("BACKDROP", "TopCenterBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
         backdrop.SetAbsPoint(framepointtype.Center, 0.40f, 0.59f);
         backdrop.SetSize(0.1f, 0.05f);
     }

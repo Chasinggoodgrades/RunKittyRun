@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 
@@ -15,7 +11,7 @@ public static class VictoryZone
     private static unit currentUnit;
     public static void Initialize()
     {
-        InVictoryArea = CreateTrigger();
+        InVictoryArea = trigger.Create();
         VictoryAreaTrigger();
     }
 

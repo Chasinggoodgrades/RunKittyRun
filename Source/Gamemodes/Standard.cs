@@ -27,7 +27,7 @@ public static class Standard
         // Ultimate, Protection of the Ancients
         KittyReachedLevelSix = trigger.Create();
         foreach (var kitty in Globals.ALL_KITTIES.Values)
-            TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
+            TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, unitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
         {
             if (GetHeroLevel(@event.Unit) == 6) AddProtectionOfAncients();
@@ -39,11 +39,11 @@ public static class Standard
         // Ability to Purchase Relics
         KittyReachedLevelTen = trigger.Create();
         foreach(var kitty in Globals.ALL_KITTIES.Values)
-            TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, EVENT_UNIT_HERO_LEVEL);
+            TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, unitevent.HeroLevel);
         KittyReachedLevelTen.AddAction(() =>
         {
             var unit = @event.Unit;
-            if (GetHeroLevel(unit) == 10)
+            if (unit.HeroLevel == 10)
             {
                 var player = unit.Owner;
                 var kitty = Globals.ALL_KITTIES[player];
