@@ -59,6 +59,7 @@ namespace Source.Init
                 Shops.Initialize();
                 WolfArea.Initialize();
                 Kitty.Initialize();
+                ItemSpawner.Initialize();
                 ProtectionOfAncients.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
@@ -67,9 +68,11 @@ namespace Source.Init
                 RewardsManager.Initialize();
                 RewardChecker.DisableALlRewards();
                 Challenges.Initialize();
+                SoundManager.Initialize();
+                ShopFrame.FinishInitialization();
+                ShadowKitty.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
-                Utility.SimpleTimer(2.0f, DelayedStartItems);
             }
             catch (Exception e)
             {
@@ -77,16 +80,6 @@ namespace Source.Init
             }
         }
 
-        /// <summary>
-        /// Helps lighten the load at the start.
-        /// </summary>
-        private static void DelayedStartItems()
-        {
-            SoundManager.Initialize();
-            ShopFrame.FinishInitialization();
-            ShadowKitty.Initialize();
-            ItemSpawner.Initialize();
-        }
 
         private static void GetActivePlayers()
         {

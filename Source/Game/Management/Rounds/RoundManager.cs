@@ -17,15 +17,23 @@ public static class RoundManager
 
     private static void RoundSetup()
     {
-        Globals.ROUND += 1;
-        Safezone.ResetPlayerSafezones();
-        Wolf.SpawnWolves();
-        AffixFactory.DistributeAffixes();
+        try
+        {
+            Globals.ROUND += 1;
+            Safezone.ResetPlayerSafezones();
+            Wolf.SpawnWolves();
+            AffixFactory.DistributeAffixes();
 
-        RoundTimer.InitEndRoundTimer();
+            RoundTimer.InitEndRoundTimer();
 
-        RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
-        RoundTimer.CountDown();
+            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
+            RoundTimer.CountDown();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private static void StartRound()
@@ -44,14 +52,15 @@ public static class RoundManager
 
     private static void HasDifficultyBeenChosen()
     {
-        var timer = CreateTimer();
-        TimerStart(timer, 0.35f, true, () =>
+        var Timer = timer.Create();
+        TimerStart(Timer, 0.35f, true, () =>
         {
-            if (Difficulty.IsDifficultyChosen)
+            if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
                 StandardMultiboard.Initialize();
-                timer.Dispose();
+                Console.WriteLine("RoundSetup Begin");
+                Timer.Dispose();
             }
         });
     }

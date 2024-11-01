@@ -3,9 +3,9 @@ using WCSharp.Api;
 
 public static class StandardMultiboard
 {
-    private static multiboard OverallStats;
-    private static multiboard CurrentStats;
-    private static multiboard BestTimes;
+    public static multiboard OverallStats;
+    public static multiboard CurrentStats;
+    public static multiboard BestTimes;
     private static trigger Updater;
     private static trigger ESCTrigger;
 

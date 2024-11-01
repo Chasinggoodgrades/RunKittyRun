@@ -11,14 +11,15 @@ using static WCSharp.Api.Common;
 /// </summary>
 public static class RewardsManager
 {
+    private static trigger Trigger = trigger.Create();
+    private static List<int> RewardAbilities = new List<int>();
     public static List<Reward> Rewards = new List<Reward>();
     public static List<Reward> GameStatRewards = new List<Reward>();
     public static Dictionary<player, effect> ActiveWings = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveAuras = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveHats = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveTrails = new Dictionary<player, effect>();
-    private static trigger Trigger = trigger.Create();
-    private static List<int> RewardAbilities = new List<int>();
+
     public static void Initialize()
     {
         InitializeRewardState();
@@ -57,8 +58,8 @@ public static class RewardsManager
 
     private static void CastedReward()
     {
-        var spellID = GetSpellAbilityId();
-        var unit = GetTriggerUnit();
+        var spellID = @event.SpellAbilityId;
+        var unit = @event.Unit;
         if (IsResetSpell(spellID))
         {
             ResetRewardSettings(unit);
@@ -66,7 +67,7 @@ public static class RewardsManager
         }
         else if (IsRewardAbility(spellID))
         {
-            var player = GetOwningPlayer(unit);
+            var player = unit.Owner;
             var reward = Rewards.Find(r => r.GetAbilityID() == GetSpellAbilityId());
             reward.ApplyReward(player);
         }

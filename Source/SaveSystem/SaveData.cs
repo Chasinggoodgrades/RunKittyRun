@@ -131,7 +131,7 @@ public enum Awards
     Pink_Fire,
     White_Fire,
 
-    // Nitro
+    // Nitros
     Nitro,
     Nitro_Blue,
     Nitro_Red,

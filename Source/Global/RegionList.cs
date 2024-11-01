@@ -76,7 +76,7 @@ public static class RegionList
         Regions.safe_Area_14
     };
 
-    public static readonly Rectangle[] PathingPoints = new Rectangle[] // Nitro and Progress classes
+    public static readonly Rectangle[] PathingPoints = new Rectangle[] // Nitros and Progress classes
     {
         Regions.safe_Area_00,
         Regions.safe_Area_01,

@@ -10,17 +10,17 @@ public static class MusicFrame
     private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
     private static Dictionary<int, framehandle> MusicButtons = new Dictionary<int, framehandle>();
     private static string[] Headers;
-    private static float MusicHeaderX = 0.175f;
-    private static float MusicHeaderY = 0.48f;
+    private static float MusicFrameX = 0.40f;
+    private static float MusicFrameY = 0.36f;
     private const float ButtonWidth = 0.17f;
     private const float ButtonHeight = 0.023f;
     private const float ButtonSpacing = 0.025f; // Space between buttons
     private const float ButtonStartX = 0.40f;  // X coordinate for button positions
-    private const float ButtonStartY = 0.505f;  // Starting Y coordinate for the first button
+    private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
     public static void Initialize()
     {
         MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
-        MusicFramehandle.SetAbsPoint(framepointtype.Center, 0.40f, 0.42f);
+        MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
         Utility.SimpleTimer(5.0f, CreateMusicFrames);
     }
 
@@ -41,7 +41,7 @@ public static class MusicFrame
         MusicSlider = BlzCreateFrameByType("SLIDER", "SliderFrame", MusicFramehandle, "QuestMainListScrollBar", 0);
         var numberOfSongs = MusicManager.MusicList.Count;
         MusicSlider.ClearPoints();
-        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.485f, 0.475f);
+        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.485f, 0.455f);
         MusicSlider.SetSize(0.01f, 0.125f);
         MusicSlider.SetMinMaxValue(0, numberOfSongs);
         MusicSlider.SetStepSize(1);
@@ -157,12 +157,12 @@ public static class MusicFrame
     public static void MusicFrameActions()
     {
         var player = @event.Player;
-        if (player.IsLocal)
-        {
-            FrameManager.MusicButton.Visible = false;
-            FrameManager.MusicButton.Visible = true;
-            MusicFramehandle.Visible = !MusicFramehandle.Visible;
-            PopulateMusicFrame(player);
-        }
+        if (!player.IsLocal) return;
+        FrameManager.MusicButton.Visible = false;
+        FrameManager.MusicButton.Visible = true;
+        MusicFramehandle.Visible = !MusicFramehandle.Visible;
+        if (MusicFramehandle.Visible) MultiboardUtil.MinMultiboards(player, true);
+        else MultiboardUtil.MinMultiboards(player, false);
+        PopulateMusicFrame(player);
     }
 }

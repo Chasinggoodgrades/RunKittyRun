@@ -8,11 +8,13 @@ using WCSharp.Api;
 public enum RewardType
 {
     Wings,
-    Hat,
-    Aura,
-    Trail,
-    Windwalk,
-    Skin
+    Hats,
+    Auras,
+    Trails,
+    Deathless,
+    Nitros,
+    Windwalks,
+    Skins,
 }
 public class Reward
 {
@@ -79,11 +81,11 @@ public class Reward
         DestroyCurrentEffect(player);
         if (Type == RewardType.Wings)
             RewardsManager.ActiveWings[player] = effect;
-        else if (Type == RewardType.Hat)
+        else if (Type == RewardType.Hats)
             RewardsManager.ActiveHats[player] = effect;
-        else if (Type == RewardType.Aura)
+        else if (Type == RewardType.Auras)
             RewardsManager.ActiveAuras[player] = effect;
-        else if (Type == RewardType.Trail)
+        else if (Type == RewardType.Trails || Type == RewardType.Nitros || Type == RewardType.Deathless)
             RewardsManager.ActiveTrails[player] = effect;
     }
 
@@ -91,17 +93,17 @@ public class Reward
     {
         if (Type == RewardType.Wings)
             RewardsManager.ActiveWings[player].Dispose();
-        else if (Type == RewardType.Hat)
+        else if (Type == RewardType.Hats)
             RewardsManager.ActiveHats[player].Dispose();
-        else if (Type == RewardType.Aura)
+        else if (Type == RewardType.Auras)
             RewardsManager.ActiveAuras[player].Dispose();
-        else if (Type == RewardType.Trail)
+        else if (Type == RewardType.Trails || Type == RewardType.Nitros || Type == RewardType.Deathless)
             RewardsManager.ActiveTrails[player].Dispose();
     }
 
     private bool SetWindwalk(player player)
     {
-        if (Type != RewardType.Windwalk) return false;
+        if (Type != RewardType.Windwalks) return false;
         var kitty = Globals.ALL_KITTIES[player];
         kitty.WindwalkID = AbilityID;
         return true;
@@ -110,10 +112,10 @@ public class Reward
     private bool SetSkin(player player)
     {
         var kitty = Globals.ALL_KITTIES[player].Unit;
-        if (Type == RewardType.Skin)
+        if (Type == RewardType.Skins)
         {
             if(SkinID != 0) kitty.Skin = SkinID;
-            else Console.WriteLine($"Skin ID invalid for {Name}");
+            else Console.WriteLine($"Skins ID invalid for {Name}");
             SetSelectedSkin(player, SkinID);
 
             return true;

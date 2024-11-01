@@ -106,9 +106,9 @@ public static class ShopFrame
 
         buyButton.Text = "Buy";
 
-        var trigger = CreateTrigger();
-        trigger.RegisterFrameEvent(buyButton, FRAMEEVENT_CONTROL_CLICK);
-        trigger.AddAction( () => BuySelectedItem() );
+        var Trigger = trigger.Create();
+        Trigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
+        Trigger.AddAction( () => BuySelectedItem() );
 
     }
 
@@ -139,13 +139,13 @@ public static class ShopFrame
             y -= panelPadding / 2;
 
             button.SetSize(buttonWidth, buttonHeight);
-            button.SetPoint(FRAMEPOINT_TOPLEFT, x, y, panel, FRAMEPOINT_TOPLEFT);
+            button.SetPoint(framepointtype.TopLeft, x, y, panel, framepointtype.TopLeft);
             icon.SetTexture(items[i].IconPath, 0, false);
             icon.SetPoints(button);
 
             var itemDetails = trigger.Create();
             var relic = items[i];
-            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK);
+            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
             itemDetails.AddAction(() => ShowItemDetails(relic));
         }
 
@@ -224,6 +224,8 @@ public static class ShopFrame
         FrameManager.ShopButton.Visible = false;
         FrameManager.ShopButton.Visible = true;
         shopFrame.Visible = !shopFrame.Visible;
+        if (shopFrame.Visible) MultiboardUtil.MinMultiboards(player, true);
+        else MultiboardUtil.MinMultiboards(player, false);
 
     }
 }
