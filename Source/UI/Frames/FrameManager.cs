@@ -21,7 +21,6 @@ public static class FrameManager
         CreateRewardsButton();
         MusicFrame.Initialize();
         ShopFrame.Initialize();
-        RewardsFrame.Initialize();
     }
 
     private static void RemoveUnwantedFrames()

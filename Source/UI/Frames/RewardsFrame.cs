@@ -58,7 +58,8 @@ public static class RewardsFrame
             InitializePanels(Enum.GetName(typeof(RewardType), type), colCount);
             count += colCount;
         }
-        RewardFrame.SetSize(FrameWidth, FrameHeight + (count * 0.03f));
+        Console.WriteLine($"There are {count} types");
+        RewardFrame.SetSize(FrameWidth, FrameHeight + (count * 0.02f));
     }
 
     private static int CountNumberOfRewards(RewardType type)
@@ -68,20 +69,23 @@ public static class RewardsFrame
         {
             if (reward.Type == type) count++;
         }
+        Console.WriteLine($"There are {count} rewards of type {type}");
         return count;
     }
     private static void InitializePanels(string name, float colHeight)
     {
-        var x = 0.0f;
         var panelWidth = FrameWidth - Padding * 2;
-        if(TempHandle == RewardFrame) x = Padding;
-        CreatePanel(TempHandle, x, -Padding*3, FrameWidth - Padding * 2, colHeight * 0.03f, name);
+        CreatePanel(TempHandle, 0, -Padding*2, FrameWidth - Padding * 2, colHeight * 0.04f, name);
     }
 
     private static framehandle CreatePanel(framehandle parent, float x, float y, float width, float height, string title)
     {
-        var panel = framehandle.Create("BACKDROP", "RewardPanel", parent, "QuestButtonDisabledBackdropTemplate", 0);
-        panel.SetPoint(framepointtype.TopLeft, x, y, parent, framepointtype.TopLeft);
+        var framePoint = framepointtype.BottomLeft;
+        if(parent == RewardFrame) framePoint = framepointtype.TopLeft;
+        if (parent == RewardFrame) x = Padding;
+
+        var panel = framehandle.Create("BACKDROP", $"{title}", parent, "QuestButtonDisabledBackdropTemplate", 0);
+        panel.SetPoint(framePoint, x, y, parent, framePoint);
         panel.SetSize(width, height);
 
         // title above each panel 
