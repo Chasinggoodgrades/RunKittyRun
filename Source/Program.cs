@@ -42,20 +42,14 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
-				try
-				{
-					FrameManager.Initialize();
-                    MusicManager.Initialize();
-                    Setup.Initialize();
-					CommandHandler.Initialize();
-					CommandManager.InitializeCommands();
-					BarrierSetup.Initialize();
-					SaveManager.Initialize();
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
+
+				FrameManager.Initialize();
+				MusicManager.Initialize();
+				Setup.Initialize();
+				CommandHandler.Initialize();
+				CommandManager.InitializeCommands();
+				BarrierSetup.Initialize();
+				SaveManager.Initialize();
 
             }
             catch (Exception ex)

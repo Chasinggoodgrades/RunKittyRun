@@ -89,7 +89,7 @@ public static class RewardCreation
         AddReward(Awards.White_Fire, Constants.ABILITY_TRAIL_FIREWHITE, "origin", "war3mapImported\\WhiteFire.mdx", RewardType.Trails);
 
         // Nitros
-        AddReward(Awards.Nitro, Constants.ABILITY_NITRO, "origin", "war3mapImported\\Nitros.mdx", RewardType.Nitros);
+        AddReward(Awards.Nitro, Constants.ABILITY_NITRO, "origin", "war3mapImported\\Nitro.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Blue, Constants.ABILITY_NITROBLUE, "origin", "war3mapImported\\NitroBlue.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Red, Constants.ABILITY_NITRORED, "origin", "war3mapImported\\NitroRed.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Green, Constants.ABILITY_NITROGREEN, "origin", "war3mapImported\\NitroGreen.mdx", RewardType.Nitros);
@@ -104,11 +104,11 @@ public static class RewardCreation
         AddReward(Awards.Green_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGGREEN, "origin", "war3mapImported\\GreenLightning.mdx", RewardType.Trails);
 
         // WindWalks
-        AddReward(Awards.WW_Blood, Constants.ABILITY_WW_BLOOD, "chest", "war3mapImported\\Windwalks Blood.mdx", RewardType.Windwalks);
-        AddReward(Awards.WW_Blue, Constants.ABILITY_WW_BLUE, "chest", "war3mapImported\\Windwalks Blue Soul.mdx", RewardType.Windwalks);
-        AddReward(Awards.WW_Fire, Constants.ABILITY_WW_FIRE, "chest", "war3mapImported\\Windwalks Fire.mdx", RewardType.Windwalks);
-        AddReward(Awards.WW_Necro, Constants.ABILITY_WW_NECRO, "chest", "war3mapImported\\Windwalks Necro Soul.mdx", RewardType.Windwalks);
-        AddReward(Awards.WW_Swift, Constants.ABILITY_WW_SWIFT, "chest", "war3mapImported\\Windwalks.mdx", RewardType.Windwalks);
+        AddReward(Awards.WW_Blood, Constants.ABILITY_WW_BLOOD, "chest", "war3mapImported\\Windwalk Blood.mdx", RewardType.Windwalks);
+        AddReward(Awards.WW_Blue, Constants.ABILITY_WW_BLUE, "chest", "war3mapImported\\Windwalk Blue Soul.mdx", RewardType.Windwalks);
+        AddReward(Awards.WW_Fire, Constants.ABILITY_WW_FIRE, "chest", "war3mapImported\\Windwalk Fire.mdx", RewardType.Windwalks);
+        AddReward(Awards.WW_Necro, Constants.ABILITY_WW_NECRO, "chest", "war3mapImported\\Windwalk Necro Soul.mdx", RewardType.Windwalks);
+        AddReward(Awards.WW_Swift, Constants.ABILITY_WW_SWIFT, "chest", "war3mapImported\\Windwalk.mdx", RewardType.Windwalks);
 
         // Deathless
         AddReward(Awards.Deathless_1, Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl", RewardType.Deathless);

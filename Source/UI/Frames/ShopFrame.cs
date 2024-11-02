@@ -202,6 +202,9 @@ public static class ShopFrame
                 AwardManager.GiveReward(player, selectedItem.Award);
             }
         }
+
+        if (player.IsLocal) shopFrame.Visible = !shopFrame.Visible;
+
         else
         {
             Console.WriteLine($"No selected item found for player: {player}");

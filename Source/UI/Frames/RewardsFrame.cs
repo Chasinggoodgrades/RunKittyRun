@@ -10,6 +10,7 @@ public static class RewardsFrame
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static framehandle TempHandle;
     private static Dictionary<string, framehandle> FrameByName = new Dictionary<string, framehandle>();
+    private static Dictionary<framehandle, Reward> RewardIcons = new Dictionary<framehandle, Reward>();
     private static int RewardsPerRow = 6;
     private static float FrameX = 0.4f;
     private static float FrameY = 0.35f;
@@ -141,9 +142,11 @@ public static class RewardsFrame
 
             var icon = framehandle.Create("BACKDROP", reward.Name.ToString() + "icon", rewardButton, "", 0);
             var iconPath = BlzGetAbilityIcon(reward.AbilityID);
-            icon.SetTexture(iconPath, 0, false);
+            //icon.SetTexture(iconPath, 0, false);
             icon.SetPoints(rewardButton);
             RewardTooltip(rewardButton, reward);
+
+            RewardIcons.Add(icon, reward);
 
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
@@ -181,15 +184,14 @@ public static class RewardsFrame
 
     private static void UnavilableRewardIcons(player player)
     {
-        if(!player.IsLocal) return;
         var stats = Globals.ALL_KITTIES[player].SaveData;
-        foreach (var reward in RewardsManager.Rewards)
+        var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
+        foreach(var reward in RewardIcons)
         {
-            if (stats.GameAwards[reward.Name] >= 1) return;
-
-            var icon = BlzGetFrameByName(reward.Name.ToString() + "icon", 0);
-            // Replacing with ?
-            icon.SetTexture("ReplaceableTextures\\CommandButtons\\BTNQuestion.blp", 0, false);
+            if (stats.GameAwards[reward.Value.Name] == 0)
+                reward.Key.SetTexture(unavailablePath, 0, false);
+            else
+                reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);
         }
     }
 
@@ -198,6 +200,8 @@ public static class RewardsFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
+        FrameManager.RewardsButton.Visible = false;
+        FrameManager.RewardsButton.Visible = true;
         RewardFrame.Visible = !RewardFrame.Visible;
         if (RewardFrame.Visible)
         {

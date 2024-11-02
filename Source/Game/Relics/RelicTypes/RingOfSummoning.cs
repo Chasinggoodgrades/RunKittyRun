@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public class RingOfSummoning : Relic
@@ -26,6 +27,9 @@ public class RingOfSummoning : Relic
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SacredRingOfSummoning(Unit.Owner, @event.SpellTargetLoc));
         Unit.AddAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, false, false);
+        Unit.HideAbility(RelicAbilityID, false);
+        Console.WriteLine("Apply Effect Summonin Ring");
     }
 
     public override void RemoveEffect(unit Unit)
