@@ -93,7 +93,7 @@ public static class RewardCreation
         AddReward(Awards.Nitro_Blue, Constants.ABILITY_NITROBLUE, "origin", "war3mapImported\\NitroBlue.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Red, Constants.ABILITY_NITRORED, "origin", "war3mapImported\\NitroRed.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Green, Constants.ABILITY_NITROGREEN, "origin", "war3mapImported\\NitroGreen.mdx", RewardType.Nitros);
-        AddReward(Awards.Nitro_Purple, Constants.ABILITY_NITROPURPLE, "origin", "war3mapImported\\NitroPurple.mdx", RewardType.Trails);
+        AddReward(Awards.Nitro_Purple, Constants.ABILITY_NITROPURPLE, "origin", "war3mapImported\\NitroPurple.mdx", RewardType.Nitros);
         AddReward(Awards.Divine_Light, Constants.ABILITY_TRAIL_DIVINELIGHT, "origin", "DivineLight.mdx", RewardType.Nitros);
 
         // Lightning

@@ -7,14 +7,14 @@ using WCSharp.Api;
 /// </summary>
 public enum RewardType
 {
-    Wings,
-    Hats,
     Auras,
+    Windwalks,
+    Skins,
     Trails,
     Deathless,
     Nitros,
-    Windwalks,
-    Skins,
+    Hats,
+    Wings,
 }
 public class Reward
 {

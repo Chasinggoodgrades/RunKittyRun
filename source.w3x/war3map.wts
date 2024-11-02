@@ -471,58 +471,16 @@ STRING 1151
 E
 }
 
-STRING 1197
-// Abilities: A005 (Wings_Phoenix), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Phoenix|r wings.
-}
-
-STRING 1198
-// Abilities: A006 (Wings_Fairy), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Fairy|r wings.
-}
-
-STRING 1199
-// Abilities: A001 (Wings_Archangel), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Archangel|r wings.
-}
-
 STRING 1201
 // Abilities: A01H (Set Panda Lightning), Tip (Tooltip - Normal)
 {
 Set Effect
 }
 
-STRING 1206
-// Abilities: A00E (Wings_Nightmare), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Nightmare|r wings.
-}
-
-STRING 1209
-// Abilities: A00J (Hat_Pirate), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the |cffd45e19Pirate|r Hat.
-}
-
 STRING 1210
-// Abilities: A00H (Hat_Chef), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01I (Set Panda Hat), Ubertip (Tooltip - Normal - Extended)
 {
 Wear the |cffd45e19Chef|r hat.
-}
-
-STRING 1211
-// Abilities: A00I (Hat_Tiki), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the |cffd45e19Headdress|r.
-}
-
-STRING 1212
-// Abilities: A00L (Hat_Samurai), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the |cffd45e19Samurai|r Helmet.
 }
 
 STRING 1220
@@ -591,28 +549,10 @@ STRING 1368
 Energy aura - [|cffffcc00Level 4|r]
 }
 
-STRING 1373
-// Abilities: A003 (Wings_Cosmic), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Cosmic|r essence on your wings.
-}
-
 STRING 1374
-// Abilities: A007 (Wings_Void), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01K (Set Panda Wings), Ubertip (Tooltip - Normal - Extended)
 {
 Use the |cffd45e19Void|r essence on your wings.
-}
-
-STRING 1375
-// Abilities: A00F (Wings_Chaos), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Chaos|r essence on your wings.
-}
-
-STRING 1387
-// Abilities: A00K (Hat_Bandana), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the|cffd45e19 bandana|r.
 }
 
 STRING 1404
@@ -625,24 +565,6 @@ STRING 1405
 // Items: tret (Book of Oblivion), Description (Description)
 {
 Sacrifice your knowledge to obtain a new one.       |cffd45e19Reset your abilities.|r
-}
-
-STRING 1407
-// Abilities: A00R (Skin_KittyAstral), Ubertip (Tooltip - Normal - Extended)
-{
-Play as the |cffd45e19Astral|r Kitty.
-}
-
-STRING 1411
-// Abilities: A00Z (Skin_KittyHighelf), Ubertip (Tooltip - Normal - Extended)
-{
-Play as the |cffd45e19Highelf|r Kitty.
-}
-
-STRING 1412
-// Abilities: A00Y (Skin_KittyUndead), Ubertip (Tooltip - Normal - Extended)
-{
-Play as the |cffd45e19Undead|r Kitty.
 }
 
 STRING 1457
@@ -771,12 +693,6 @@ STRING 1527
 Set Panda Wings
 }
 
-STRING 1529
-// Abilities: A01K (Set Panda Wings), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Void|r essence on your wings.
-}
-
 STRING 1531
 // Abilities: A01H (Set Panda Lightning), Name (Name)
 {
@@ -787,12 +703,6 @@ STRING 1534
 // Abilities: A01I (Set Panda Hat), Name (Name)
 {
 Set Panda Hat
-}
-
-STRING 1536
-// Abilities: A01I (Set Panda Hat), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the |cffd45e19Chef|r hat.
 }
 
 STRING 1541
@@ -956,44 +866,20 @@ STRING 1691
 Agility aura - [|cffffcc00Level 4|r]
 }
 
-STRING 1749
-// Abilities: A01S (Trail_LightningBlue), Tip (Tooltip - Normal)
-{
-Lightning I
-}
-
-STRING 1752
-// Abilities: A01U (Trail_LightningRed), Tip (Tooltip - Normal)
-{
-Lightning II
-}
-
-STRING 1755
-// Abilities: A023 (Trail_LightningPurple), Tip (Tooltip - Normal)
-{
-Lightning III
-}
-
-STRING 1761
-// Abilities: A01W (Trail_LightningYellow), Tip (Tooltip - Normal)
-{
-Lightning IV
-}
-
 STRING 1778
-// Abilities: A008 (Trail_FireBlue), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A008 (Trail_FireBlue), Tip (Tooltip - Normal)
 {
 |cff8080ffBlue Fire|r
 }
 
 STRING 1779
-// Abilities: A01Q (Trail_FireTurquoise), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01Q (Trail_FireTurquoise), Tip (Tooltip - Normal)
 {
 |cff40d8ceTurquoise Fire|r
 }
 
 STRING 1780
-// Abilities: A01P (Trail_FirePink), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01P (Trail_FirePink), Tip (Tooltip - Normal)
 {
 |cffff00ffPink Fire|r
 }
@@ -1285,12 +1171,6 @@ STRING 2110
 M
 }
 
-STRING 2119
-// Abilities: A002 (Aura_Special), Ubertip (Tooltip - Normal - Extended)
-{
-Enable your |cff0000ffSpecial Aura|r.
-}
-
 STRING 2122
 // Abilities: ACst (Shockwave), Hotkey (Hotkey - Normal)
 {
@@ -1337,18 +1217,6 @@ STRING 2131
 // Abilities: ACst (Shockwave), Tip (Tooltip - Normal)
 {
 |cffff0000Paw of Force|r(Rank 2)
-}
-
-STRING 2149
-// Abilities: A020 (Wings_Nature), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Nature|r essence on your wings.
-}
-
-STRING 2158
-// Abilities: A00G (Wings_Pink), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffff8080pink|r essence on your wings.
 }
 
 STRING 2159
@@ -1415,18 +1283,6 @@ STRING 2193
 // Abilities: A025 (Set Hats), Tip (Tooltip - Normal)
 {
 Set Hats!
-}
-
-STRING 2195
-// Abilities: A00K (Hat_Bandana), Tip (Tooltip - Normal)
-{
-Bandana
-}
-
-STRING 2196
-// Abilities: A00K (Hat_Bandana), Unubertip (Tooltip - Turn Off - Extended)
-{
-Wear the|cffd45e19 bandana|r.
 }
 
 STRING 2197
@@ -1567,22 +1423,10 @@ STRING 2246
 Set Lightning
 }
 
-STRING 2273
-// Abilities: A00D (Nitro), Ubertip (Tooltip - Normal - Extended)
-{
-You have obtained Nitro! GG :)
-}
-
 STRING 2274
 // Abilities: A022 (NitroGreen), Tip (Tooltip - Normal)
 {
 |cff00ff00Nitro Green|r
-}
-
-STRING 2275
-// Abilities: A022 (NitroGreen), Ubertip (Tooltip - Normal - Extended)
-{
-You have obtained Nitro! GG :)
 }
 
 STRING 2276
@@ -1591,22 +1435,10 @@ STRING 2276
 |cff6f2583Nitro Purple|r
 }
 
-STRING 2277
-// Abilities: A01R (NitroPurple), Ubertip (Tooltip - Normal - Extended)
-{
-You have obtained Nitro! GG :)
-}
-
 STRING 2278
 // Abilities: A01V (NitroBlue), Tip (Tooltip - Normal)
 {
 |cff0064ffNitro Blue|r
-}
-
-STRING 2279
-// Abilities: A01V (NitroBlue), Ubertip (Tooltip - Normal - Extended)
-{
-You have obtained Nitro! GG :)
 }
 
 STRING 2280
@@ -1615,172 +1447,46 @@ STRING 2280
 |cffff0000Nitro Red|r
 }
 
-STRING 2281
-// Abilities: A01T (NitroRed), Ubertip (Tooltip - Normal - Extended)
-{
-You have obtained Nitro! GG :)
-}
-
 STRING 2282
-// Abilities: A003 (Wings_Cosmic), Tip (Tooltip - Normal)
-{
-Cosmic Wings
-}
-
-STRING 2283
 // Abilities: A003 (Wings_Cosmic), Untip (Tooltip - Turn Off)
 {
 Cosmic Wings
 }
 
 STRING 2284
-// Abilities: A002 (Aura_Special), Tip (Tooltip - Normal)
-{
-Prismatic Orb
-}
-
-STRING 2285
 // Abilities: A002 (Aura_Special), Untip (Tooltip - Turn Off)
 {
 Prismatic Orb
 }
 
 STRING 2286
-// Abilities: A005 (Wings_Phoenix), Tip (Tooltip - Normal)
-{
-Phoenix Wings
-}
-
-STRING 2287
-// Abilities: A005 (Wings_Phoenix), Untip (Tooltip - Turn Off)
-{
-Phoenix Wings
-}
-
-STRING 2288
-// Abilities: A006 (Wings_Fairy), Tip (Tooltip - Normal)
-{
-Fairy Wings
-}
-
-STRING 2289
 // Abilities: A006 (Wings_Fairy), Untip (Tooltip - Turn Off)
 {
 Phoenix Wings
 }
 
-STRING 2290
-// Abilities: A001 (Wings_Archangel), Tip (Tooltip - Normal)
-{
-Archangel Wings
-}
-
 STRING 2291
-// Abilities: A001 (Wings_Archangel), Untip (Tooltip - Turn Off)
-{
-Nightmare Wings
-}
-
-STRING 2292
-// Abilities: A007 (Wings_Void), Tip (Tooltip - Normal)
-{
-Void Wings
-}
-
-STRING 2293
-// Abilities: A007 (Wings_Void), Untip (Tooltip - Turn Off)
-{
-Void Wings
-}
-
-STRING 2294
-// Abilities: A00E (Wings_Nightmare), Tip (Tooltip - Normal)
-{
-Nightmare Wings
-}
-
-STRING 2295
 // Abilities: A00E (Wings_Nightmare), Untip (Tooltip - Turn Off)
 {
 Nightmare Wings
 }
 
-STRING 2296
-// Abilities: A00F (Wings_Chaos), Tip (Tooltip - Normal)
+STRING 2292
+// Abilities: A007 (Wings_Void), Untip (Tooltip - Turn Off)
 {
-Chaos Wings
-}
-
-STRING 2297
-// Abilities: A00F (Wings_Chaos), Untip (Tooltip - Turn Off)
-{
-Chaos Wings
+Void Wings
 }
 
 STRING 2298
-// Abilities: A00G (Wings_Pink), Tip (Tooltip - Normal)
-{
-Pink Wings
-}
-
-STRING 2299
 // Abilities: A00G (Wings_Pink), Untip (Tooltip - Turn Off)
 {
 Pink Wings
-}
-
-STRING 2300
-// Abilities: A00J (Hat_Pirate), Tip (Tooltip - Normal)
-{
-Pirate Hat
-}
-
-STRING 2301
-// Abilities: A00J (Hat_Pirate), Untip (Tooltip - Turn Off)
-{
-Pirate Hat
-}
-
-STRING 2302
-// Abilities: A00K (Hat_Bandana), Untip (Tooltip - Turn Off)
-{
-Bandana
 }
 
 STRING 2303
 // Abilities: A00H (Hat_Chef), Tip (Tooltip - Normal)
 {
 Chef Hat
-}
-
-STRING 2304
-// Abilities: A00H (Hat_Chef), Untip (Tooltip - Turn Off)
-{
-Chef Hat
-}
-
-STRING 2305
-// Abilities: A00I (Hat_Tiki), Tip (Tooltip - Normal)
-{
-Headdress
-}
-
-STRING 2306
-// Abilities: A00I (Hat_Tiki), Untip (Tooltip - Turn Off)
-{
-Headdress
-}
-
-STRING 2307
-// Abilities: A00L (Hat_Samurai), Tip (Tooltip - Normal)
-{
-Samuari Mask
-}
-
-STRING 2308
-// Abilities: A00L (Hat_Samurai), Untip (Tooltip - Turn Off)
-{
-Samuari Mask
 }
 
 STRING 2309
@@ -1817,18 +1523,6 @@ STRING 2314
 // Abilities: A00Z (Skin_KittyHighelf), Untip (Tooltip - Turn Off)
 {
 Highelf Kitty
-}
-
-STRING 2315
-// Abilities: A020 (Wings_Nature), Tip (Tooltip - Normal)
-{
-Nature Wings
-}
-
-STRING 2316
-// Abilities: A020 (Wings_Nature), Untip (Tooltip - Turn Off)
-{
-Nature Wings
 }
 
 STRING 2421
@@ -1885,78 +1579,6 @@ STRING 2429
 Move those pesky wolves.
 }
 
-STRING 2434
-// Abilities: A02C (Aura_Starlight), Tip (Tooltip - Normal)
-{
-Starlight Aura
-}
-
-STRING 2435
-// Abilities: A02C (Aura_Starlight), Untip (Tooltip - Turn Off)
-{
-Starlight Aura
-}
-
-STRING 2436
-// Abilities: A02C (Aura_Starlight), Ubertip (Tooltip - Normal - Extended)
-{
-Enable your |cffff00ffStarlight Aura.|r
-}
-
-STRING 2438
-// Abilities: A02C (Aura_Starlight), Unubertip (Tooltip - Turn Off - Extended)
-{
-Enable your |cffff00ffStarlight Aura.|r
-}
-
-STRING 2444
-// Abilities: A02E (Aura_Manatap), Tip (Tooltip - Normal)
-{
-Manatap Aura
-}
-
-STRING 2445
-// Abilities: A02E (Aura_Manatap), Untip (Tooltip - Turn Off)
-{
-Manatap Aura
-}
-
-STRING 2446
-// Abilities: A02E (Aura_Manatap), Ubertip (Tooltip - Normal - Extended)
-{
-Enable your |cff8080ffMana Aura.|r
-}
-
-STRING 2448
-// Abilities: A02E (Aura_Manatap), Unubertip (Tooltip - Turn Off - Extended)
-{
-Enable your |cff8080ffMana Aura.|r
-}
-
-STRING 2449
-// Abilities: A02D (Aura_Spectacular), Tip (Tooltip - Normal)
-{
-Spectacular Aura
-}
-
-STRING 2450
-// Abilities: A02D (Aura_Spectacular), Untip (Tooltip - Turn Off)
-{
-Spectacular Aura
-}
-
-STRING 2451
-// Abilities: A02D (Aura_Spectacular), Ubertip (Tooltip - Normal - Extended)
-{
-Enable your |cff8080ffSpectacular Aura.|r
-}
-
-STRING 2453
-// Abilities: A02D (Aura_Spectacular), Unubertip (Tooltip - Turn Off - Extended)
-{
-Enable your |cff8080ffSpectacular Aura.|r
-}
-
 STRING 2464
 // Abilities: A00A (Protection of the Ancients), Researchtip (Tooltip - Learn)
 {
@@ -1970,19 +1592,19 @@ You're on|cffd45e19 fire|r!! Congratulations!
 }
 
 STRING 2469
-// Abilities: A01S (Trail_LightningBlue), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01S (Trail_LightningBlue), Tip (Tooltip - Normal)
 {
 |cff8080ffBlue Lightning!|r
 }
 
 STRING 2471
-// Abilities: A01U (Trail_LightningRed), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01U (Trail_LightningRed), Tip (Tooltip - Normal)
 {
 |cffff0000Red Lightning|r
 }
 
 STRING 2473
-// Abilities: A023 (Trail_LightningPurple), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A023 (Trail_LightningPurple), Tip (Tooltip - Normal)
 {
 |cff6f2583Purple Lightning|r
 }
@@ -1991,12 +1613,6 @@ STRING 2474
 // Units: E005 (Satyr Kitty), Name (Name)
 {
 Satyr Kitty
-}
-
-STRING 2477
-// Abilities: A02G (Skin_KittySatyr), Ubertip (Tooltip - Normal - Extended)
-{
-Play as the |cffd45e19Satyr|r Kitty.
 }
 
 STRING 2483
@@ -2012,19 +1628,13 @@ Satyr Kitty
 }
 
 STRING 2507
-// Abilities: A01W (Trail_LightningYellow), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01W (Trail_LightningYellow), Tip (Tooltip - Normal)
 {
 |cffffff00Yellow Lightning|r
 }
 
-STRING 2508
-// Abilities: A01X (Trail_LightningGreen), Tip (Tooltip - Normal)
-{
-Green Lightning
-}
-
 STRING 2509
-// Abilities: A01X (Trail_LightningGreen), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A01X (Trail_LightningGreen), Tip (Tooltip - Normal)
 {
 |cff00ff00Green Lightning|r
 }
@@ -2035,28 +1645,10 @@ STRING 2511
 Fire
 }
 
-STRING 2513
-// Abilities: A008 (Trail_FireBlue), Tip (Tooltip - Normal)
-{
-Blue Fire
-}
-
-STRING 2519
-// Abilities: A01P (Trail_FirePink), Tip (Tooltip - Normal)
-{
-Pink Fire
-}
-
 STRING 2522
 // Abilities: A018 (Trail_FireWhite), Tip (Tooltip - Normal)
 {
 White Fire
-}
-
-STRING 2524
-// Abilities: A018 (Trail_FireWhite), Ubertip (Tooltip - Normal - Extended)
-{
-Congratulations! White Fire
 }
 
 STRING 2525
@@ -2069,12 +1661,6 @@ STRING 2528
 // Abilities: A02O (Skin_KittyAncient), Tip (Tooltip - Normal)
 {
 Ancient Kitty
-}
-
-STRING 2529
-// Abilities: A02O (Skin_KittyAncient), Ubertip (Tooltip - Normal - Extended)
-{
-Play as the |cffd45e19Ancient|r Kitty.
 }
 
 STRING 2530
@@ -2455,58 +2041,10 @@ STRING 2770
 |cffd45e19[Team Tournament]|r |cff00ffffFast and Furriest|r
 }
 
-STRING 2776
-// Abilities: A039 (Wings_TRed), Tip (Tooltip - Normal)
-{
-Red Tendrils
-}
-
-STRING 2777
-// Abilities: A039 (Wings_TRed), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cffff0000Red Void Tendrils|r
-}
-
-STRING 2778
-// Abilities: A039 (Wings_TRed), Untip (Tooltip - Turn Off)
-{
-Red Tendrils
-}
-
-STRING 2779
-// Abilities: A039 (Wings_TRed), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cffff0000Red Void Tendrils|r
-}
-
 STRING 2780
 // Items: I004 (|cffff0000Fieryfoxes's Missing Shoe|r), Name (Name)
 {
 |cffff0000Fieryfoxes's Missing Shoe|r
-}
-
-STRING 2798
-// Abilities: A03A (Hat_Santa), Tip (Tooltip - Normal)
-{
-Santa Hat
-}
-
-STRING 2799
-// Abilities: A03A (Hat_Santa), Ubertip (Tooltip - Normal - Extended)
-{
-Wear the |cffd45e19Santa|r Hat. :)
-}
-
-STRING 2800
-// Abilities: A03A (Hat_Santa), Untip (Tooltip - Turn Off)
-{
-Santa Hat
-}
-
-STRING 2803
-// Abilities: A01Q (Trail_FireTurquoise), Tip (Tooltip - Normal)
-{
-Turquoise Fire
 }
 
 STRING 2808
@@ -2605,46 +2143,10 @@ STRING 2855
 |cffc80000Blood Windwalk|r
 }
 
-STRING 2856
-// Abilities: A03D (WW_Blood), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cffc80000Bloody Windwalk|r
-}
-
-STRING 2857
-// Abilities: A03D (WW_Blood), Untip (Tooltip - Turn Off)
-{
-|cffc80000Blood Windwalk|r
-}
-
-STRING 2858
-// Abilities: A03D (WW_Blood), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cffc80000Bloody Windwalk|r
-}
-
 STRING 2860
 // Abilities: A03E (WW_Blue), Tip (Tooltip - Normal)
 {
 |cff0096c8Bluesoul Windwalk|r
-}
-
-STRING 2861
-// Abilities: A03E (WW_Blue), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cff0096c8Bluesoul Windwalk|r
-}
-
-STRING 2862
-// Abilities: A03E (WW_Blue), Untip (Tooltip - Turn Off)
-{
-|cff0096c8Bluesoul Windwalk|r
-}
-
-STRING 2863
-// Abilities: A03E (WW_Blue), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cff0096c8Bluesoul Windwalk|r
 }
 
 STRING 2865
@@ -2653,70 +2155,16 @@ STRING 2865
 |cffffaa1eFire Windwalk|r
 }
 
-STRING 2866
-// Abilities: A03F (WW_Fire), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cffffaa1eFire Windwalk|r
-}
-
-STRING 2867
-// Abilities: A03F (WW_Fire), Untip (Tooltip - Turn Off)
-{
-|cffffaa1eFire Windwalk|r
-}
-
-STRING 2868
-// Abilities: A03F (WW_Fire), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cffffaa1eFire Windwalk|r
-}
-
 STRING 2870
 // Abilities: A03G (WW_Necro), Tip (Tooltip - Normal)
 {
 |cff78fa5aNecro Windwalk|r
 }
 
-STRING 2871
-// Abilities: A03G (WW_Necro), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cff78fa5aNecro Windwalk|r
-}
-
-STRING 2872
-// Abilities: A03G (WW_Necro), Untip (Tooltip - Turn Off)
-{
-|cff78fa5aNecro Windwalk|r
-}
-
-STRING 2873
-// Abilities: A03G (WW_Necro), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cff78fa5aNecro Windwalk|r
-}
-
 STRING 2875
 // Abilities: A03H (WW_Swift), Tip (Tooltip - Normal)
 {
 |cffdcdcffSwift Windwalk|r
-}
-
-STRING 2876
-// Abilities: A03H (WW_Swift), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cffdcdcffSwift Windwalk|r
-}
-
-STRING 2877
-// Abilities: A03H (WW_Swift), Untip (Tooltip - Turn Off)
-{
-|cffdcdcffSwift Windwalk|r
-}
-
-STRING 2878
-// Abilities: A03H (WW_Swift), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cffdcdcffSwift Windwalk|r
 }
 
 STRING 2881
@@ -2845,48 +2293,6 @@ STRING 2943
 Green Tendrils
 }
 
-STRING 2944
-// Abilities: A03I (Wings_TGreen), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cff00ff00Green Void Tendrils|r
-}
-
-STRING 2945
-// Abilities: A03I (Wings_TGreen), Tip (Tooltip - Normal)
-{
-Green Tendrils
-}
-
-STRING 2946
-// Abilities: A03I (Wings_TGreen), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cff00ff00Green Void Tendrils|r
-}
-
-STRING 2948
-// Abilities: A03J (Wings_TYellow), Tip (Tooltip - Normal)
-{
-Holy Tendrils
-}
-
-STRING 2949
-// Abilities: A03J (Wings_TYellow), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cfffae100Divinity Tendrils|r
-}
-
-STRING 2950
-// Abilities: A03J (Wings_TYellow), Untip (Tooltip - Turn Off)
-{
-Holy Tendrils
-}
-
-STRING 2951
-// Abilities: A03J (Wings_TYellow), Unubertip (Tooltip - Turn Off - Extended)
-{
-Embrace the |cfffae100Divinity Tendrils|r
-}
-
 STRING 2958
 // Items: I00B (|cffff0000Crystal of Fire|r), Name (Name)
 {
@@ -2909,12 +2315,6 @@ STRING 2961
 // Items: I00C (Green Tendrils), Tip (Tooltip - Basic)
 {
 Purchase |cff00ff00Green Tendrils|r
-}
-
-STRING 2963
-// Abilities: A03I (Wings_TGreen), Untip (Tooltip - Turn Off)
-{
-Green Tendrils
 }
 
 STRING 2964
@@ -2959,12 +2359,6 @@ STRING 2984
 |cffd45e19Deathless Fire I|r
 }
 
-STRING 2985
-// Abilities: A03K (Deathless Fire 1:01), Ubertip (Tooltip - Normal - Extended)
-{
-You're on|cffd45e19 Fire|r!!
-}
-
 STRING 2986
 // Abilities: A03K (Deathless Fire 1:01), Name (Name)
 {
@@ -2983,12 +2377,6 @@ STRING 2990
 |cffffff00Deathless Fire III|r
 }
 
-STRING 2991
-// Abilities: A03M (Deathless Fire 1:03), Ubertip (Tooltip - Normal - Extended)
-{
-You're on |cffffff00Fire!!|r
-}
-
 STRING 2992
 // Abilities: A03M (Deathless Fire 1:03), Name (Name)
 {
@@ -3001,12 +2389,6 @@ STRING 2993
 |cffff0000Deathless Fire IV|r
 }
 
-STRING 2994
-// Abilities: A03N (Deathless Fire 1:04), Ubertip (Tooltip - Normal - Extended)
-{
-You're on |cffff0000Fire!!|r
-}
-
 STRING 2995
 // Abilities: A03N (Deathless Fire 1:04), Name (Name)
 {
@@ -3017,12 +2399,6 @@ STRING 2996
 // Abilities: A03O (Deathless Fire 1:05), Tip (Tooltip - Normal)
 {
 |cff00ff00Deathless Fire V|r
-}
-
-STRING 2997
-// Abilities: A03O (Deathless Fire 1:05), Ubertip (Tooltip - Normal - Extended)
-{
-You're on |cff00ff00Fire!!|r
 }
 
 STRING 2998
@@ -3041,12 +2417,6 @@ STRING 3000
 // Abilities: A03P (Set Deathless Fire), Tip (Tooltip - Normal)
 {
 Set Deathless Fire
-}
-
-STRING 3018
-// Abilities: A03L (Deathless Fire 1:02), Ubertip (Tooltip - Normal - Extended)
-{
-You're on |cff008000Fire!!|r
 }
 
 STRING 3023
@@ -3427,24 +2797,6 @@ STRING 3177
 White Tendrils
 }
 
-STRING 3178
-// Abilities: A03V (Wings_TWhite), Ubertip (Tooltip - Normal - Extended)
-{
-Perseverance, dedication, and willpower allowed you to gain this pair of wings.
-}
-
-STRING 3179
-// Abilities: A03V (Wings_TWhite), Untip (Tooltip - Turn Off)
-{
-White Tendrils
-}
-
-STRING 3180
-// Abilities: A03V (Wings_TWhite), Unubertip (Tooltip - Turn Off - Extended)
-{
-Perseverance, dedication, and willpower allowed you to gain this pair of wings.
-}
-
 STRING 3183
 // Abilities: A029 (Set Aura), Ubertip (Tooltip - Normal - Extended)
 {
@@ -3455,30 +2807,6 @@ STRING 3184
 // Abilities: A029 (Set Aura), Unubertip (Tooltip - Turn Off - Extended)
 {
 |cFFFF7F50[5 Wins]|r |cFF00FFFFPrismatic Orb Aura|r|n|cFFFF7F50[65 Games]|r |cFF00FFFFStarlight Aura|r|n|cFFFF7F50[20 Wins]|r |cFF00FFFFMana Aura|r|n|cFFFF7F50[30 Wins]|r |cFF00FFFFSpectacular Aura|r|n|cFFFF7F50[Impossible R4 Nitro]|r |cFF00FF00Butterfly Aura|r|n
-}
-
-STRING 3185
-// Abilities: A03W (Aura_Butterfly), Tip (Tooltip - Normal)
-{
-Butterfly Aura
-}
-
-STRING 3186
-// Abilities: A03W (Aura_Butterfly), Untip (Tooltip - Turn Off)
-{
-Butterfly Aura
-}
-
-STRING 3187
-// Abilities: A03W (Aura_Butterfly), Ubertip (Tooltip - Normal - Extended)
-{
-Enable your |cff80ff80Butterfly Aura|r
-}
-
-STRING 3189
-// Abilities: A03W (Aura_Butterfly), Unubertip (Tooltip - Turn Off - Extended)
-{
-Enable your |cff80ff80Butterfly Aura|r
 }
 
 STRING 3190
@@ -3883,14 +3211,8 @@ STRING 3266
 Fixated
 }
 
-STRING 3272
-// Abilities: A040 (Trail_FirePurple), Tip (Tooltip - Normal)
-{
-Purple Fire
-}
-
 STRING 3274
-// Abilities: A040 (Trail_FirePurple), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A040 (Trail_FirePurple), Tip (Tooltip - Normal)
 {
 |cffc832ffPurple Fire|r
 }
@@ -4129,12 +3451,6 @@ STRING 3359
 
 }
 
-STRING 3360
-// Abilities: A043 (Wings_Patriotic), Ubertip (Tooltip - Normal - Extended)
-{
-Embrace the |cfffa3232P|r|cffef3540a|r|cffe4394et|r|cffda3c5dr|r|cffcf406bi|r|cffc4437ao|r|cffba4789t|r|cffaf4a97i|r|cffa54ea6c|r|cff9a51b4 |r|cff8f55c3W|r|cff8459d2i|r|cff7a5ce0n|r|cff6f60eeg|r|cff6463fes|r
-}
-
 STRING 3361
 // Abilities: A043 (Wings_Patriotic), Tip (Tooltip - Normal)
 {
@@ -4157,12 +3473,6 @@ STRING 3370
 // Abilities: A044 (Trail_DivineLight), Tip (Tooltip - Normal)
 {
 |cffe1e100Divine Light|r
-}
-
-STRING 3371
-// Abilities: A044 (Trail_DivineLight), Ubertip (Tooltip - Normal - Extended)
-{
-|cffe1e100Divine Light|r is a feat that the majority of players won't ever see. Congratulations!
 }
 
 STRING 3374
@@ -4870,5 +4180,473 @@ STRING 3511
 // Abilities: A02O (Skin_KittyAncient), Name (Name)
 {
 Skin_KittyAncient
+}
+
+STRING 3512
+// Abilities: A003 (Wings_Cosmic), Tip (Tooltip - Normal)
+{
+|cff8a2be2Cosmic Wings|r
+}
+
+STRING 3514
+// Abilities: A005 (Wings_Phoenix), Tip (Tooltip - Normal)
+{
+|cffff6347Phoenix Wings|r
+}
+
+STRING 3516
+// Abilities: A006 (Wings_Fairy), Tip (Tooltip - Normal)
+{
+|cff66ccffFairy|r |cffcc66ffWings|r
+}
+
+STRING 3518
+// Abilities: A001 (Wings_Archangel), Tip (Tooltip - Normal)
+{
+|cffffd700Archangel Wings|r
+}
+
+STRING 3520
+// Abilities: A007 (Wings_Void), Tip (Tooltip - Normal)
+{
+|cffff69b4Void Wings|r
+}
+
+STRING 3522
+// Abilities: A00E (Wings_Nightmare), Tip (Tooltip - Normal)
+{
+|cffff4500Nightmare Wings|r
+}
+
+STRING 3524
+// Abilities: A00F (Wings_Chaos), Tip (Tooltip - Normal)
+{
+|cffc71585Chaos Wings|r
+}
+
+STRING 3526
+// Abilities: A00G (Wings_Pink), Tip (Tooltip - Normal)
+{
+|cffff1493Pink Wings|r
+}
+
+STRING 3528
+// Abilities: A020 (Wings_Nature), Tip (Tooltip - Normal)
+{
+|cff32cd32Nature Wings|r
+}
+
+STRING 3530
+// Abilities: A039 (Wings_TRed), Tip (Tooltip - Normal)
+{
+|cffdc143cRed Tendrils|r
+}
+
+STRING 3532
+// Abilities: A03I (Wings_TGreen), Tip (Tooltip - Normal)
+{
+|cff32cd32Green Tendrils|r
+}
+
+STRING 3533
+// Abilities: A03I (Wings_TGreen), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by purchasing from the shop.
+}
+
+STRING 3534
+// Abilities: A03J (Wings_TYellow), Tip (Tooltip - Normal)
+{
+|cfffae100Divinity Tendrils|r
+}
+
+STRING 3535
+// Abilities: A03J (Wings_TYellow), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff004|r revives using your ultimate's AoE effect.
+}
+
+STRING 3536
+// Abilities: A03V (Wings_TWhite), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by simply winning the game on Impossible difficulty.
+}
+
+STRING 3538
+// Abilities: A039 (Wings_TRed), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by returning |cffff0000Fieryfox|r his missing shoe.
+}
+
+STRING 3539
+// Abilities: A03D (WW_Blood), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by completing the Blood Vial easter egg.
+}
+
+STRING 3540
+// Abilities: A03E (WW_Blue), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by completing the Urn of a Broken Soul easter egg.
+}
+
+STRING 3541
+// Abilities: A03F (WW_Fire), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by completeing the Crystal of Fire easter egg.
+}
+
+STRING 3542
+// Abilities: A03G (WW_Necro), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by winning the game in under 25 mins.
+}
+
+STRING 3543
+// Abilities: A03H (WW_Swift), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by completing the Cat Figurine easter egg.
+}
+
+STRING 3544
+// Abilities: A00R (Skin_KittyAstral), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by playing atleast |cffffff0055 Normal+|r games.
+}
+
+STRING 3545
+// Abilities: A00Y (Skin_KittyUndead), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff0030 Normal+|r wins
+}
+
+STRING 3546
+// Abilities: A00Z (Skin_KittyHighelf), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by playing atleast |cffffff0040 Normal+|r games.
+}
+
+STRING 3547
+// Abilities: A00D (Nitro), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 1|r nitro timer.
+}
+
+STRING 3548
+// Abilities: A022 (NitroGreen), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 4|r nitro timer.
+}
+
+STRING 3549
+// Abilities: A01R (NitroPurple), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 5|r nitro timer.
+}
+
+STRING 3550
+// Abilities: A01V (NitroBlue), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 2|r nitro timer.
+}
+
+STRING 3551
+// Abilities: A01T (NitroRed), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 3|r nitro timer.
+}
+
+STRING 3552
+// Abilities: A02G (Skin_KittySatyr), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff0025 Normal+|r wins
+}
+
+STRING 3553
+// Abilities: A02O (Skin_KittyAncient), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff0040 Normal+|r wins
+}
+
+STRING 3554
+// Abilities: A044 (Trail_DivineLight), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the nitro timer for |cffffff00ALL|r rounds in a single game.
+}
+
+STRING 3555
+// Abilities: A003 (Wings_Cosmic), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00550|r saves.
+}
+
+STRING 3556
+// Abilities: A002 (Aura_Special), Tip (Tooltip - Normal)
+{
+|cff00c8c8Prismatic Orb|r
+}
+
+STRING 3557
+// Abilities: A002 (Aura_Special), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffff00005 Hard+|r wins
+}
+
+STRING 3558
+// Abilities: A005 (Wings_Phoenix), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00375|r saves.
+}
+
+STRING 3559
+// Abilities: A006 (Wings_Fairy), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00275|r saves.
+}
+
+STRING 3560
+// Abilities: A001 (Wings_Archangel), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00425|r saves.
+}
+
+STRING 3561
+// Abilities: A007 (Wings_Void), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00500|r saves.
+}
+
+STRING 3562
+// Abilities: A00E (Wings_Nightmare), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00325|r saves.
+}
+
+STRING 3563
+// Abilities: A00F (Wings_Chaos), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00450|r saves.
+}
+
+STRING 3564
+// Abilities: A00G (Wings_Pink), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00600|r saves.
+}
+
+STRING 3566
+// Abilities: A00J (Hat_Pirate), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00250|r saves.
+}
+
+STRING 3567
+// Abilities: A00K (Hat_Bandana), Tip (Tooltip - Normal)
+{
+|cffff0000Bandana|r
+}
+
+STRING 3568
+// Abilities: A00K (Hat_Bandana), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00200|r saves.
+}
+
+STRING 3569
+// Abilities: A00H (Hat_Chef), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00300|r saves.
+}
+
+STRING 3570
+// Abilities: A00I (Hat_Tiki), Tip (Tooltip - Normal)
+{
+|cff8a2be2Tiki Headress|r
+}
+
+STRING 3571
+// Abilities: A00I (Hat_Tiki), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00350|r saves.
+}
+
+STRING 3572
+// Abilities: A00L (Hat_Samurai), Tip (Tooltip - Normal)
+{
+|cff696969Samuari Mask
+}
+
+STRING 3573
+// Abilities: A00L (Hat_Samurai), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00400|r saves.
+}
+
+STRING 3574
+// Abilities: A008 (Trail_FireBlue), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by winning the game on |cffffff00Normal+|r with less than |cffffff0025|r total deaths.
+}
+
+STRING 3575
+// Abilities: A01Q (Trail_FireTurquoise), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating |cffffff00Round 5|r on |cffffff00Normal+|r with |cffffff0010 or less|r round deaths.
+}
+
+STRING 3576
+// Abilities: A01P (Trail_FirePink), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by winning a |cffffff00Normal+|r game with a |cffffff003:1|r Ratio or better.
+}
+
+STRING 3577
+// Abilities: A018 (Trail_FireWhite), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating |cffffff00Round 3|r nitro on |cffffff00Normal+ |rwith |cffffff003 or less|r deaths.
+}
+
+STRING 3578
+// Abilities: A01S (Trail_LightningBlue), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff002000|r saves.
+}
+
+STRING 3579
+// Abilities: A01U (Trail_LightningRed), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching a save streak of |cffffff0050|r without dying.
+}
+
+STRING 3580
+// Abilities: A023 (Trail_LightningPurple), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff00175|r saves within one game.
+}
+
+STRING 3581
+// Abilities: A01W (Trail_LightningYellow), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff006|r saves within |cffffff003 seconds|r.
+}
+
+STRING 3582
+// Abilities: A01X (Trail_LightningGreen), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by finishing a round with a save streak of |cffffff0010|r and |cffffff000|r deaths.
+}
+
+STRING 3583
+// Abilities: A020 (Wings_Nature), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00750|r saves.
+}
+
+STRING 3584
+// Abilities: A02C (Aura_Starlight), Tip (Tooltip - Normal)
+{
+|cffff00ffStarlight Aura|r
+}
+
+STRING 3585
+// Abilities: A02C (Aura_Starlight), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by playing atleast |cffffff0065 Normal+|r games.
+}
+
+STRING 3586
+// Abilities: A02D (Aura_Spectacular), Tip (Tooltip - Normal)
+{
+|cff8080ffSpectacular Aura|r
+}
+
+STRING 3587
+// Abilities: A02D (Aura_Spectacular), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff0030 Normal+|r wins.
+}
+
+STRING 3588
+// Abilities: A02E (Aura_Manatap), Tip (Tooltip - Normal)
+{
+|cff00b4faMana Aura|r
+}
+
+STRING 3589
+// Abilities: A02E (Aura_Manatap), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by getting |cffffff0020 Normal+|r wins.
+}
+
+STRING 3590
+// Abilities: A03A (Hat_Santa), Tip (Tooltip - Normal)
+{
+|cffff0000Santa Hat|r
+}
+
+STRING 3591
+// Abilities: A03A (Hat_Santa), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff00800|r saves.
+}
+
+STRING 3592
+// Abilities: A03K (Deathless Fire 1:01), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching all |cffffff0014 safezones|r on |cffffff00Normal+|r for |cffffff00Round 1|r without dying.
+}
+
+STRING 3593
+// Abilities: A03L (Deathless Fire 1:02), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching all |cffffff0014 safezones|r on |cffffff00Normal+|r for |cffffff00Round 2|r without dying.
+}
+
+STRING 3594
+// Abilities: A03M (Deathless Fire 1:03), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching all |cffffff0014 safezones|r on |cffffff00Normal+|r for |cffffff00Round 3|r without dying.
+}
+
+STRING 3595
+// Abilities: A03N (Deathless Fire 1:04), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff0010 safezones|r on |cffffff00Normal+|r for |cffffff00Round 4|r without dying.
+}
+
+STRING 3596
+// Abilities: A03O (Deathless Fire 1:05), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching |cffffff006 safezones|r on |cffffff00Normal+|r for |cffffff00Round 5|r without dying.
+}
+
+STRING 3597
+// Abilities: A03W (Aura_Butterfly), Tip (Tooltip - Normal)
+{
+|cff80ff80Butterfly Aura|r
+}
+
+STRING 3598
+// Abilities: A03W (Aura_Butterfly), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 4|r nitro on |cff960000Impossible|r.
+}
+
+STRING 3599
+// Abilities: A040 (Trail_FirePurple), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating |cffffff00Round 2|r on |cff960000Impossible|r with |cffffff000|r deaths.
+}
+
+STRING 3600
+// Abilities: A043 (Wings_Patriotic), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching a save streak of |cffffff0050|r without dying.
+}
+
+STRING 3601
+// Abilities: A00J (Hat_Pirate), Tip (Tooltip - Normal)
+{
+|cffa56f34Pirate Hat|r
 }
 
