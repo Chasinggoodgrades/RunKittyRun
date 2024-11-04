@@ -74,6 +74,7 @@ public class Reward
         if (SetWindwalk(player)) return;
         var Effect = effect.Create(ModelPath, kitty, OriginPoint);
         SetEffect(player, Effect);
+        player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Applying {GetRewardName()}|r");
     }
 
     private void SetEffect(player player, effect effect)

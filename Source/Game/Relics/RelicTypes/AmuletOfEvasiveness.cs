@@ -10,8 +10,8 @@ public class AmuletOfEvasiveness : Relic
     private static float UnitScale = 0.60f - (0.60f * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0f);
 
     public AmuletOfEvasiveness() : base(
-        "Amulet of Evasiveness",
-        "A relic that grants the user a chance to dodge attacks.",
+        $"{Colors.COLOR_LAVENDER}Amulet of Evasiveness|r",
+        $"Makes you smaller and reduces collision range by {Colors.COLOR_ORANGE}{(int)(AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 100)}%|r{Colors.COLOR_LIGHTBLUE} (Passive)|r",
         RelicItemID,
         RelicCost,
         IconPath

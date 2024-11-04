@@ -10,8 +10,8 @@ public class BeaconOfUnitedLifeforce : Relic
     private const int RelicCost = 650;
 
     public BeaconOfUnitedLifeforce() : base(
-        "Beacon of United Lifeforce",
-        "A relic that has chance to revive other kitties",
+        "|cff1e90ffBeacon of United Lifeforce|r",
+        $"Gives the owner a chance to revive an extra Kitty whenever they revive someone. {Colors.COLOR_LIGHTBLUE}(Passive)|r",
         RelicItemID,
         RelicCost,
         IconPath

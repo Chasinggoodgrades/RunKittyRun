@@ -43,21 +43,24 @@ public class ShadowKitty
     /// </summary>
     public void SummonShadowKitty()
     {
-        try
-        {
-            var kitty = Globals.ALL_KITTIES[Player].Unit;
-            Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
-            Unit.SetVertexColor(0, 0, 0, 255);
-            Utility.MakeUnitLocust(Unit);
-            Utility.SelectUnitForPlayer(Player, Unit);
-            CollisionDetection.ShadowKittyRegisterCollision(this);
-            Unit.BaseMovementSpeed = 522;
-            Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
+        Unit.SetVertexColor(0, 0, 0, 255);
+        Utility.MakeUnitLocust(Unit);
+        Utility.SelectUnitForPlayer(Player, Unit);
+        CollisionDetection.ShadowKittyRegisterCollision(this);
+        Unit.BaseMovementSpeed = 522;
+        Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
+        PauseKitty(Player, true);
+    }
+
+    /// <summary>
+    /// Teleports the player's kitty to the shadow kitty's position.
+    /// </summary>
+    public void TeleportToShadowKitty()
+    {
+        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        kitty.SetPosition(Unit.X, Unit.Y);
     }
 
     /// <summary>
@@ -70,6 +73,13 @@ public class ShadowKitty
         Unit.Kill();
         Unit.Dispose();
         Unit = null;
+        PauseKitty(Player, false);
+    }
+
+    private static void PauseKitty(player player, bool paused)
+    {
+        var kitty = Globals.ALL_KITTIES[player].Unit;
+        kitty.IsPaused = paused;
     }
 
 

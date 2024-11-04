@@ -12,8 +12,9 @@ public class RingOfSummoning : Relic
     private trigger Trigger;
 
     public RingOfSummoning() : base(
-        "Ring of Summoning",
-        "Summons friendly allies",
+        $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
+        $"On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you." +
+        $" {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r",
         RelicItemID,
         RelicCost,
         IconPath
@@ -26,9 +27,7 @@ public class RingOfSummoning : Relic
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SacredRingOfSummoning(Unit.Owner, @event.SpellTargetLoc));
-        Unit.AddAbility(RelicAbilityID);
         Unit.DisableAbility(RelicAbilityID, false, false);
-        Unit.HideAbility(RelicAbilityID, false);
         Console.WriteLine("Apply Effect Summonin Ring");
     }
 
@@ -41,12 +40,18 @@ public class RingOfSummoning : Relic
     private static bool KittyFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY;
     private static bool CircleFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE;
 
+    private static void SetAbilityData(player player, ability ability)
+    {
+        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
+    }
+
     public static void SacredRingOfSummoning(player Player, location targetedPoint)
     {
         // select all people within targeted point
         var tempGroup = group.Create();
         var summoningKitty = Globals.ALL_KITTIES[Player];
         var summoningKittyUnit = summoningKitty.Unit;
+        SetAbilityData(@event.Player, @event.SpellAbility);
         GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));
         foreach (var unit in tempGroup.ToList())
         {

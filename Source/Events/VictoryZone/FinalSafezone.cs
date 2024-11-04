@@ -3,7 +3,7 @@ using static WCSharp.Api.Common;
 using System;
 public static class FinalSafezone
 {
-    private static trigger Trigger = CreateTrigger();
+    private static trigger Trigger = trigger.Create();
     private static region Region = RegionList.SafeZones[RegionList.SafeZones.Length-1].Region;
     public static void Initialize()
     {
@@ -18,10 +18,11 @@ public static class FinalSafezone
             var unit = @event.Unit;
             var player = unit.Owner;
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
-            Nitros.CompletedNitro(GetTriggerUnit());
+            Nitros.CompletedNitro(unit);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
+            NoKittyLeftBehind.CheckChallenge();
         });
     }
 }

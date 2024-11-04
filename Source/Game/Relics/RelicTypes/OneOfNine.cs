@@ -10,8 +10,8 @@ public class OneOfNine : Relic
     private const int RelicCost = 650;
     public const string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
     public OneOfNine() : base(
-        "One of Nine",
-        "A relic that grants the user a chance to dodge attacks.",
+        $"|cffff4500One of Nine|r",
+        $"Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r",
         RelicItemID,
         RelicCost,
         IconPath

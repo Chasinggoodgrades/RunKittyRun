@@ -17,8 +17,9 @@ public static class AwardManager
         foreach (var player in Globals.ALL_PLAYERS)
             Awarded.Add(player, new List<Awards>());
     }
+
     /// <summary>
-    /// 
+    /// Gives the player an award and enables the ability for them to use.
     /// </summary>
     /// <param name="player">The Player</param>
     /// <param name="award">The Awards.{award} that you're handing out.</param>
@@ -33,6 +34,10 @@ public static class AwardManager
         if(earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
     }
 
+    /// <summary>
+    /// Gives reward to all players.
+    /// </summary>
+    /// <param name="award"></param>
     public static void GiveRewardAll(Awards award)
     {
         var color = Colors.COLOR_YELLOW_ORANGE;
@@ -82,6 +87,7 @@ public static class AwardManager
         }
         AwardTrigger.RegisterTimerEvent(1.0f, true);
     }
+
     /// <summary>
     /// Sets the players skin to the last skin they used previously.
     /// </summary>

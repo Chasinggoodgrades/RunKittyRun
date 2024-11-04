@@ -48,7 +48,7 @@ public class Wolf
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
-        WanderTimer = CreateTimer();
+        WanderTimer = timer.Create();
     }
 
     private void WolfMove()
@@ -80,7 +80,7 @@ public class Wolf
             ApplyEffect();
         }
         var realTime = GetRandomReal(1.00f, 1.12f);
-        TimerStart(WanderTimer, realTime, false, StartWandering);
+        WanderTimer.Start(realTime, false, StartWandering);
     }
 
     private void ApplyEffect()
@@ -88,8 +88,8 @@ public class Wolf
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
         OverheadEffect = effect.Create(OVERHEAD_EFFECT, Unit, "overhead");
 
-        var effectTimer = CreateTimer();
-        TimerStart(effectTimer, effectDuration, false, () =>
+        var effectTimer = timer.Create();
+        effectTimer.Start(effectDuration, false, () =>
         {
             WolfMove();
             OverheadEffect.Dispose();

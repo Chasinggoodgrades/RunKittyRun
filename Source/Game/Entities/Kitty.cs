@@ -50,6 +50,7 @@ public class Kitty
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            throw;
         }
     }
     /// <summary>
@@ -123,6 +124,7 @@ public class Kitty
         Utility.SelectUnitForPlayer(Player, Unit);
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
+        Relic.DisableRelicBook(Unit);
         
         // Set Collision to Default
         CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);

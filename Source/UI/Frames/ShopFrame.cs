@@ -5,7 +5,7 @@ using System;
 
 public static class ShopFrame
 {
-    private static framehandle shopFrame;
+    public static framehandle shopFrame;
     private static framehandle relicsPanel;
     private static framehandle rewardsPanel;
     private static framehandle miscPanel;
@@ -42,9 +42,10 @@ public static class ShopFrame
 
     private static void InitializeShopFrame()
     {
-        shopFrame = BlzCreateFrameByType("BACKDROP", "ShopFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
+        shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
         BlzFrameSetAbsPoint(shopFrame, FRAMEPOINT_CENTER, 0.40f, 0.375f);
         BlzFrameSetSize(shopFrame, frameX, frameY);
+        FrameManager.CreateHeaderFrame(shopFrame);
     }
 
     private static void InitializePanels()
@@ -94,7 +95,7 @@ public static class ShopFrame
 
         nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
         costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
-        descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
+        descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 4);
 
         buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         buyButton.SetSize(detailsPanelX/3, detailsPanelY/6);

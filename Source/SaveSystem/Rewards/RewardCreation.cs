@@ -49,12 +49,12 @@ public static class RewardCreation
     public static void SetupRewards()
     {
         // Hats
-        AddReward(Awards.Bandana, Constants.ABILITY_HAT_BANDANA, "head", "war3mapImported\\Bandana2.MDX", RewardType.Hats, StatTypes.Saves, 200); // 200
-        AddReward(Awards.Chef_Hat, Constants.ABILITY_HAT_CHEF, "head", "war3mapImported\\ChefsHat.mdx", RewardType.Hats, StatTypes.Saves, 250); // 250
-        AddReward(Awards.Santa_Hat, Constants.ABILITY_HAT_SANTA, "head", "war3mapImported\\SantaHat.mdx", RewardType.Hats, StatTypes.Saves, 300); // 300
-        AddReward(Awards.Samurai_Helm, Constants.ABILITY_HAT_SAMURAI, "head", "war3mapImported\\SamuraiHelmet2.mdx", RewardType.Hats, StatTypes.Saves, 350);
-        AddReward(Awards.Pirate_Hat, Constants.ABILITY_HAT_PIRATE, "head", "war3mapImported\\PirateHat.MDX", RewardType.Hats, StatTypes.Saves, 400);
-        AddReward(Awards.Tiki_Mask, Constants.ABILITY_HAT_TIKI, "head", "war3mapImported\\TikiMask.mdx", RewardType.Hats, StatTypes.Saves, 800);
+        AddReward(Awards.Bandana, Constants.ABILITY_HAT_BANDANA, "head", "war3mapImported\\Bandana2.MDX", RewardType.Hats, StatTypes.Saves, 200);
+        AddReward(Awards.Pirate_Hat, Constants.ABILITY_HAT_PIRATE, "head", "war3mapImported\\PirateHat.MDX", RewardType.Hats, StatTypes.Saves, 250);
+        AddReward(Awards.Chef_Hat, Constants.ABILITY_HAT_CHEF, "head", "war3mapImported\\ChefsHat.mdx", RewardType.Hats, StatTypes.Saves, 300);
+        AddReward(Awards.Tiki_Mask, Constants.ABILITY_HAT_TIKI, "head", "war3mapImported\\TikiMask.mdx", RewardType.Hats, StatTypes.Saves, 350);
+        AddReward(Awards.Samurai_Helm, Constants.ABILITY_HAT_SAMURAI, "head", "war3mapImported\\SamuraiHelmet2.mdx", RewardType.Hats, StatTypes.Saves, 400);
+        AddReward(Awards.Santa_Hat, Constants.ABILITY_HAT_SANTA, "head", "war3mapImported\\SantaHat.mdx", RewardType.Hats, StatTypes.Saves, 800);
 
         // Auras
         AddReward(Awards.Special_Aura, Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, StatTypes.Wins, 5);

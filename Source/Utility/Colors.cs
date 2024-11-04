@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
-
 
 public class Colors
 {
@@ -21,6 +14,7 @@ public class Colors
     public const string COLOR_ORANGE = "|c00FF9900";
     public const string COLOR_VIOLET = "|c00EE82EE";
     public const string COLOR_PINK = "|c00FFC0CB";
+    public const string COLOR_LAVENDER = "|cffdbb8eb";
     public const string COLOR_BLACK = "|c00000000";
     public const string COLOR_WHITE = "|c00FFFFFF";
     public const string COLOR_GREY = "|c00808080";
@@ -29,6 +23,7 @@ public class Colors
     public const string COLOR_TEAL = "|c0000FF";
     public const string COLOR_YELLOW = "|c00FFFF00";
     public const string COLOR_DARK_RED = "|c008B0000";
+    public const string COLOR_LIGHTBLUE = "|c006969FF";
     public const string COLOR_RESET = "|r";
     private static List<Colors> ColorManager = new List<Colors>();
     private string colorname;

@@ -22,5 +22,8 @@ public abstract class Relic
 
     public abstract void RemoveEffect(unit Unit);
 
-    public void Equip(unit Unit) => Unit.AddItem(ItemID);
+    public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true);
+
+    public static void EnableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false);
+
 }

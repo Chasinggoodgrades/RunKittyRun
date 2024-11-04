@@ -12,6 +12,7 @@ public static class FrameManager
     public static framehandle ShopButton;
     public static framehandle RewardsButton;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
+    private static trigger ESCTrigger = trigger.Create();
     public static void Initialize()
     {
         RemoveUnwantedFrames();
@@ -21,6 +22,37 @@ public static class FrameManager
         CreateRewardsButton();
         MusicFrame.Initialize();
         ShopFrame.Initialize();
+        Utility.SimpleTimer(1.0f, ESCHideFrames);
+    }
+
+    public static framehandle CreateHeaderFrame(framehandle parent)
+    {
+        // Header Bar
+        var header = framehandle.Create("BACKDROP", $"{parent.Name}Header", parent, "QuestButtonDisabledBackdropTemplate", 0);
+        var width = parent.Width;
+        var height = 0.0225f;
+        header.SetPoint(framepointtype.TopLeft, 0, 0.0125f, parent, framepointtype.TopLeft);
+        header.SetSize(width, height);
+
+        // Title
+        var title = framehandle.Create("TEXT", $"{parent.Name}Title", header, "ScriptDialogText", 0);
+        title.SetPoint(framepointtype.Center, 0, 0, header, framepointtype.Center);
+        title.SetSize(width, height);
+        title.Text = $"{Colors.COLOR_YELLOW}{parent.Name}{Colors.COLOR_RESET}";
+        title.SetTextAlignment(textaligntype.Center, textaligntype.Center);
+
+        // Close Button
+        var closeButton = framehandle.Create("GLUETEXTBUTTON", $"{parent.Name}CloseButton", header, "ScriptDialogButton", 0);
+        closeButton.SetPoint(framepointtype.TopRight, -0.0025f, -0.0025f, header, framepointtype.TopRight);
+        closeButton.SetSize(height-0.005f, height-0.005f);
+        closeButton.Text = "X";
+
+        // Close Actions
+        var closeTrigger = trigger.Create();
+        closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
+        closeTrigger.AddAction(() => parent.Visible = false);
+
+        return header;
     }
 
     private static void RemoveUnwantedFrames()
@@ -66,6 +98,24 @@ public static class FrameManager
         var backdrop = framehandle.Create("BACKDROP", "TopCenterBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
         backdrop.SetAbsPoint(framepointtype.Center, 0.40f, 0.59f);
         backdrop.SetSize(0.1f, 0.05f);
+    }
+
+    private static void ESCHideFrames()
+    {
+        foreach(var player in Globals.ALL_PLAYERS)
+        {
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        }
+        ESCTrigger.AddAction(ESCActions);
+    }
+
+    private static void ESCActions()
+    {
+        var player = @event.Player;
+        if (!player.IsLocal) return;
+        RewardsFrame.RewardFrame.Visible = false;
+        ShopFrame.shopFrame.Visible = false;
+        MusicFrame.MusicFramehandle.Visible = false;
     }
 }
 

@@ -22,8 +22,9 @@ public static class NitroPacer
 
         Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, SPAWN_RECT.CenterX, SPAWN_RECT.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
+        Unit.IsInvulnerable = true;
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);
-        nitroEffect = effect.Create("war3mapImported\\Nitros.mdx", Unit, "origin");
+        nitroEffect = effect.Create("war3mapImported\\Nitro.mdx", Unit, "origin");
         VisionShare();
 
         pacerTimer = timer.Create();
@@ -33,12 +34,13 @@ public static class NitroPacer
     {
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
-        pacerTimer.Start(0.20f, true, UpdateNitroPacer);
+        pacerTimer.Start(0.15f, true, UpdateNitroPacer);
     }
 
     public static void ResetNitroPacer()
     {
         pacerTimer.Pause();
+        Unit.IsPaused = false;
         Unit.SetPosition(SPAWN_RECT.CenterX, SPAWN_RECT.CenterY);
         currentCheckpoint = 0;
         currentDistance = 0;
@@ -49,7 +51,9 @@ public static class NitroPacer
         currentDistance = Progress.CalculateNitroPacerProgress();
         var remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
         var remainingTime = Nitros.GetNitroTimeRemaining();
-        var speed = remainingDistance / remainingTime;
+        var speed = 0.0f;
+        if (remainingTime != 0.0f) speed = remainingDistance / remainingTime;
+        else speed = 350.0f;
 
         SetSpeed(speed);
 
@@ -57,9 +61,10 @@ public static class NitroPacer
         if (PathingPoints[currentCheckpoint+1].Contains(Unit.X, Unit.Y))
         {
             currentCheckpoint++;
-            if(currentCheckpoint == PathingPoints.Length)
+            if(currentCheckpoint >= PathingPoints.Count())
             {
                 pacerTimer.Pause();
+                Unit.IsPaused = true;
                 return;
             }
             MoveNextZone();

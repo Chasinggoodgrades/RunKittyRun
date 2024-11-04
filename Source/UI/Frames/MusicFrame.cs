@@ -4,7 +4,7 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class MusicFrame
 {
-    private static framehandle MusicFramehandle;
+    public static framehandle MusicFramehandle;
     private static framehandle MusicFrameTitle;
     private static framehandle MusicSlider;
     private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
@@ -19,7 +19,7 @@ public static class MusicFrame
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
     public static void Initialize()
     {
-        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "MusicFrame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
+        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
         MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
         Utility.SimpleTimer(5.0f, CreateMusicFrames);
     }
@@ -28,6 +28,8 @@ public static class MusicFrame
     {
         var ySize = MusicManager.MusicList.Count * 0.03f;
         MusicFramehandle.SetSize(0.20f, ySize);
+
+        FrameManager.CreateHeaderFrame(MusicFramehandle);
 
         // Slider
         RegisterMusicSlider();

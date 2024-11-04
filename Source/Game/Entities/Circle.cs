@@ -38,11 +38,6 @@ public class Circle
         ShowCircle();
     }
 
-    public void HideCircle()
-    {
-        Unit.IsVisible = false;
-    }
-
     public void SetMana(float mana, int maxMana, float regenRate)
     {
         Unit.Mana = mana;
@@ -50,10 +45,9 @@ public class Circle
         Unit.ManaRegeneration = regenRate;
     }
 
-    private void ShowCircle()
-    {
-        Unit.IsVisible = true;
-    }
+    public void HideCircle() => Unit.IsVisible = false;
 
+
+    private void ShowCircle() => Unit.IsVisible = true;
 
 }

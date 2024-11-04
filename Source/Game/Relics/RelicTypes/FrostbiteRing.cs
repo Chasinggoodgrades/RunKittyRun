@@ -13,8 +13,8 @@ public class FrostbiteRing : Relic
     private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
 
     public FrostbiteRing() : base(
-        "Frostbite Ring",
-        "Freezes enemies on hit",
+        $"{Colors.COLOR_BLUE}Frostbite Ring",
+        $"Freezes wolves in place for {Colors.COLOR_CYAN}{(int)FROSTBITE_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r",
         RelicItemID,
         RelicCost,
         IconPath

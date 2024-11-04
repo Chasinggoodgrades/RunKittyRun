@@ -18,6 +18,7 @@ public static class DiscordFrame
         EditBox.SetSize(0.20f, 0.03f);
         EditBox.TextSizeLimit = Link.Length;
         EditBox.Text = Link;
+        EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center);
         RegisterTrigger();
         SetupDiscordIcon();
         ApplyTextFrame();
@@ -42,6 +43,7 @@ public static class DiscordFrame
         DiscordText.SetAbsPoint(framepointtype.Center, 0.4f, 0.20f);
         DiscordText.SetSize(0.20f, 0.03f);
         DiscordText.Text = JoinDiscord;
+        DiscordText.SetTextAlignment(textaligntype.Center, textaligntype.Center);
     }
 
     private static void RegisterTrigger()

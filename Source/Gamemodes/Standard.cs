@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 
@@ -13,6 +14,16 @@ public static class Standard
         RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
         Difficulty.Initialize();
         Windwalk.Initialize();
+        try
+        {
+            SpawnChampions.Initialize();
+            MissingShoe.Initialize();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
     }
 
@@ -30,7 +41,7 @@ public static class Standard
             TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, unitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
         {
-            if (GetHeroLevel(@event.Unit) == 6) AddProtectionOfAncients();
+            if (@event.Unit.HeroLevel == 6) AddProtectionOfAncients();
         });
     }
 
@@ -46,8 +57,8 @@ public static class Standard
             if (unit.HeroLevel == 10)
             {
                 var player = unit.Owner;
-                var kitty = Globals.ALL_KITTIES[player];
-                player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your skills have grown. Visit my shop at the top right for some special wares.|r");
+                Relic.EnableRelicBook(unit);
+                player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
             }
         });
     }

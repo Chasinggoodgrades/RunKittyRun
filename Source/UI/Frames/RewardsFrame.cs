@@ -6,7 +6,7 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class RewardsFrame
 {
-    private static framehandle RewardFrame;
+    public static framehandle RewardFrame;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static framehandle TempHandle;
     private static Dictionary<string, framehandle> FrameByName = new Dictionary<string, framehandle>();
@@ -26,11 +26,12 @@ public static class RewardsFrame
         TempHandle = RewardFrame;
         CountRewardFrames();
         AppendRewardsToFrames();
+        FrameManager.CreateHeaderFrame(RewardFrame);
     }
 
     private static framehandle CreateRewardFrame()
     {
-        RewardFrame = framehandle.Create("BACKDROP", "RewardFrame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
+        RewardFrame = framehandle.Create("BACKDROP", "Reward Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         RewardFrame.SetAbsPoint(framepointtype.Center, FrameX, FrameY);
         RewardFrame.SetSize(FrameWidth, FrameHeight);
 
