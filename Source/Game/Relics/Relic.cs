@@ -3,6 +3,7 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public abstract class Relic
 {
+    public static int RequiredLevel = 10;
     public string Name { get; }
     public string Description { get; }
     public int ItemID { get; }
@@ -22,8 +23,8 @@ public abstract class Relic
 
     public abstract void RemoveEffect(unit Unit);
 
-    public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true);
+    public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_REWARDS, true, true);
 
-    public static void EnableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false);
+    public static void EnableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_REWARDS, false, false);
 
 }

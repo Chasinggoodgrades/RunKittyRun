@@ -194,7 +194,7 @@ public static class ShopFrame
 
             if (type == ShopItemType.Relic)
             {
-                Console.WriteLine($"Selected relic: {selectedItem.Relic.Name}");
+                if (!RelicLevel(kitty.Unit)) return;
                 selectedItem.Relic.ApplyEffect(kitty.Unit);
             }
 
@@ -213,6 +213,7 @@ public static class ShopFrame
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
+    private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
     private static void RelicMaxedOut(player player) => BlzDisplayChatMessage(player, 0, "You already have the maximum amount of this relic!");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
