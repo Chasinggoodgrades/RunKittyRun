@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -9,6 +10,8 @@ public static class Standard
     private static trigger KittyReachedLevelTen;
     private const float ROUND_INTERMISSION = 10.0f;
     private const float ALERT_DURATION = 7.0f;
+    private static List<player> HitLevel6;
+    private static List<player> HitLevel10;
     public static void Initialize()
     {
         RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
@@ -16,11 +19,14 @@ public static class Standard
         Windwalk.Initialize();
         SpawnChampions.Initialize();
         EasterEggManager.LoadEasterEggs();
+        AntiblockWand.Initialize();
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
     }
 
     private static void RegisterLevelTriggers()
     {
+        HitLevel6 = new List<player>();
+        HitLevel10 = new List<player>();
         RegisterLevelSixTrigger();
         RegisterLevelTenTrigger();
     }
@@ -33,7 +39,10 @@ public static class Standard
             TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, unitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
         {
-            if (@event.Unit.HeroLevel == 6) AddProtectionOfAncients();
+            if (HitLevel6.Contains(@event.Unit.Owner)) return;
+            if (@event.Unit.HeroLevel < 6) return;
+            HitLevel6.Add(@event.Unit.Owner);
+            ProtectionOfAncients.AddProtectionOfAncients(@event.Unit);
         });
     }
 
@@ -45,22 +54,11 @@ public static class Standard
             TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, unitevent.HeroLevel);
         KittyReachedLevelTen.AddAction(() =>
         {
-            var unit = @event.Unit;
-            if (unit.HeroLevel == 10)
-            {
-                var player = unit.Owner;
-                Relic.EnableRelicBook(unit);
-                player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
-            }
+            if (HitLevel10.Contains(@event.Unit.Owner)) return;
+            if (@event.Unit.HeroLevel < 10) return;
+            HitLevel10.Add(@event.Unit.Owner);
+            Relic.EnableRelicBook(@event.Unit);
+            @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
         });
-    }
-
-    private static void AddProtectionOfAncients()
-    {
-        var kitty = @event.Unit;
-        var player = kitty.Owner;
-        kitty.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        player.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
-
     }
 }

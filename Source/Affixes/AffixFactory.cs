@@ -1,6 +1,7 @@
 ﻿using Source;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static WCSharp.Api.Common;
 
 public static class AffixFactory
@@ -116,23 +117,27 @@ public static class AffixFactory
         {
             if (!CanDistributeAffixes()) return;
 
-
             NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
 
             var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
             for (int i = 0; i < NUMBER_OF_AFFIXED_WOLVES; i++)
             {
-                for (int j = 0; j < LaneWeights.Length; j++)
+                foreach (var j in Enumerable.Range(0, LaneWeights.Length))
                 {
                     if (GetRandomReal(0, 100) <= LaneWeights[j])
                     {
                         if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
                         {
                             affixedWolvesInLane[j]++;
-                            var wolvesInLane = Globals.ALL_WOLVES.FindAll(wolf => RegionList.WolfRegions[j].Region.Contains(wolf.Unit));
+                            var wolvesInLane = Globals.ALL_WOLVES.Values
+                                .Where(wolf => wolf.RegionIndex == j)
+                                .ToList();
 
-                            var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                            ApplyRandomAffix(wolf, j);
+                            if (wolvesInLane.Any())
+                            {
+                                var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
+                                ApplyRandomAffix(wolf, j);
+                            }
                         }
                     }
                 }
@@ -143,6 +148,7 @@ public static class AffixFactory
             if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Error in DistributeAffixes: {e.Message}|r");
         }
     }
+
 
     private static bool CanDistributeAffixes()
     {

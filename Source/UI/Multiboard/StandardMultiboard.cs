@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq.Expressions;
 using WCSharp.Api;
 
 public static class StandardMultiboard
@@ -16,11 +18,20 @@ public static class StandardMultiboard
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        BestTimes = multiboard.Create();
-        OverallStats = multiboard.Create();
-        CurrentStats = multiboard.Create();
-        CreateMultiboards();
-        RegisterTriggers();
+        try
+        {
+            BestTimes = multiboard.Create();
+            OverallStats = multiboard.Create();
+            CurrentStats = multiboard.Create();
+            CreateMultiboards();
+            RegisterTriggers();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            Console.WriteLine(e.StackTrace);
+            throw;
+        }
     }
 
     private static void RegisterTriggers()

@@ -22,7 +22,7 @@ public static class Globals
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==" };
-    public static List<Wolf> ALL_WOLVES = new List<Wolf>();
+    public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
     public static timer GAME_TIMER = CreateTimer();
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();

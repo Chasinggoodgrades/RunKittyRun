@@ -65,12 +65,12 @@ public static class RewardsManager
             ResetRewardSettings(unit);
             return;
         }
-        else if (IsRewardAbility(spellID))
+/*        else if (IsRewardAbility(spellID))
         {
             var player = unit.Owner;
             var reward = Rewards.Find(r => r.GetAbilityID() == GetSpellAbilityId());
             reward.ApplyReward(player);
-        }
+        }*/
     }
 
     private static bool IsRewardAbility(int spellID) => RewardAbilities.Contains(spellID);

@@ -18,6 +18,17 @@ public static class ProtectionOfAncients
         RegisterEvents();
     }
 
+    /// <summary>
+    /// Gives the unit the ProtectionOfAncients Ability. 
+    /// </summary>
+    /// <param name="unit"></param>
+    public static void AddProtectionOfAncients(unit unit)
+    {
+        var player = unit.Owner;
+        unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
+    }
+
     private static void RegisterEvents()
     {
         Trigger = trigger.Create();

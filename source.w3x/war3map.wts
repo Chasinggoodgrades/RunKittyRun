@@ -183,12 +183,6 @@ STRING 992
 Set Kitty
 }
 
-STRING 1004
-// Abilities: A004 (Reset), Ubertip (Tooltip - Normal - Extended)
-{
-Remove all rewards
-}
-
 STRING 1015
 // Units: E001 (Undead Kitty), Name (Name)
 {
@@ -931,12 +925,6 @@ STRING 2037
 Enable your |cffd45e19Relic Effect|r.
 }
 
-STRING 2038
-// Abilities: A01B (Book of Rewards), Name (Name)
-{
-Book of Rewards
-}
-
 STRING 2098
 // Units: nmrk (Panda), Name (Name)
 {
@@ -1160,36 +1148,18 @@ Chef Hat
 }
 
 STRING 2309
-// Abilities: A00R (Skin_KittyAstral), Tip (Tooltip - Normal)
-{
-Astral Kitty
-}
-
-STRING 2310
 // Abilities: A00R (Skin_KittyAstral), Untip (Tooltip - Turn Off)
 {
 Astral Kitty
 }
 
 STRING 2311
-// Abilities: A00Y (Skin_KittyUndead), Tip (Tooltip - Normal)
-{
-Undead Kitty
-}
-
-STRING 2312
 // Abilities: A00Y (Skin_KittyUndead), Untip (Tooltip - Turn Off)
 {
 Undead Kitty
 }
 
 STRING 2313
-// Abilities: A00Z (Skin_KittyHighelf), Tip (Tooltip - Normal)
-{
-Highelf Kitty
-}
-
-STRING 2314
 // Abilities: A00Z (Skin_KittyHighelf), Untip (Tooltip - Turn Off)
 {
 Highelf Kitty
@@ -1286,12 +1256,6 @@ Satyr Kitty
 }
 
 STRING 2483
-// Abilities: A02G (Skin_KittySatyr), Tip (Tooltip - Normal)
-{
-Satyr Kitty
-}
-
-STRING 2484
 // Abilities: A02G (Skin_KittySatyr), Untip (Tooltip - Turn Off)
 {
 Satyr Kitty
@@ -1328,12 +1292,6 @@ Ancient Kitty
 }
 
 STRING 2528
-// Abilities: A02O (Skin_KittyAncient), Tip (Tooltip - Normal)
-{
-Ancient Kitty
-}
-
-STRING 2530
 // Abilities: A02O (Skin_KittyAncient), Untip (Tooltip - Turn Off)
 {
 Ancient Kitty
@@ -3656,12 +3614,6 @@ STRING 3535
 Obtained by getting |cffffff004|r revives using your ultimate's AoE effect.
 }
 
-STRING 3536
-// Abilities: A03V (Wings_TWhite), Ubertip (Tooltip - Normal - Extended)
-{
-Obtained by simply winning the game on Impossible difficulty.
-}
-
 STRING 3538
 // Abilities: A039 (Wings_TRed), Ubertip (Tooltip - Normal - Extended)
 {
@@ -4041,15 +3993,9 @@ STRING 3601
 }
 
 STRING 3602
-// Abilities: A01B (Book of Rewards), Tip (Tooltip - Normal)
+// Abilities: A01B (Book of Relics), Name (Name)
 {
 Book of Relics
-}
-
-STRING 3603
-// Abilities: A01B (Book of Rewards), Ubertip (Tooltip - Normal - Extended)
-{
-Book with all learned relic abilities.
 }
 
 STRING 3604
@@ -4074,5 +4020,59 @@ STRING 3607
 // Buffs/Effects: B003 (Frostbite), EditorName (Name (Editor Only))
 {
 Frostbite
+}
+
+STRING 3608
+// Abilities: A00R (Skin_KittyAstral), Tip (Tooltip - Normal)
+{
+|cff466effAstral Kitty|r
+}
+
+STRING 3609
+// Abilities: A00Y (Skin_KittyUndead), Tip (Tooltip - Normal)
+{
+|cff404040Undead Kitty|r
+}
+
+STRING 3610
+// Abilities: A00Z (Skin_KittyHighelf), Tip (Tooltip - Normal)
+{
+|cffd48c57Highelf Kitty|r
+}
+
+STRING 3611
+// Abilities: A02G (Skin_KittySatyr), Tip (Tooltip - Normal)
+{
+|cffb15050Satyr Kitty|r
+}
+
+STRING 3612
+// Abilities: A02O (Skin_KittyAncient), Tip (Tooltip - Normal)
+{
+|cff008000Ancient Kitty|r
+}
+
+STRING 3613
+// Abilities: A03V (Wings_TWhite), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by simply winning the game on |cff960000Impossible|r difficulty.
+}
+
+STRING 3614
+// Abilities: A004 (Reset), Ubertip (Tooltip - Normal - Extended)
+{
+Using this ability will hide all currently used cosmetic rewards including skin.
+}
+
+STRING 3615
+// Abilities: A01B (Book of Relics), Tip (Tooltip - Normal)
+{
+Book of Relics
+}
+
+STRING 3616
+// Abilities: A01B (Book of Relics), Ubertip (Tooltip - Normal - Extended)
+{
+Contains all of the relic abilities you've learned from the shop.
 }
 

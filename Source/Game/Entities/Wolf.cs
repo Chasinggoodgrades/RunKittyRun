@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 
 public class Wolf
 {
-    private const int WOLF_MODEL = Constants.UNIT_CUSTOM_DOG;
+    public const int WOLF_MODEL = Constants.UNIT_CUSTOM_DOG;
     private const float WANDER_LOWER_BOUND = 0.70f;
     private const float WANDER_UPPER_BOUND = 0.83f;
     private const string OVERHEAD_EFFECT = "TalkToMe.mdx";
@@ -44,14 +44,17 @@ public class Wolf
         var facing = GetRandomReal(0, 360);
 
         Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
-        Globals.ALL_WOLVES.Add(this);
+        Globals.ALL_WOLVES.Add(Unit, this);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
         WanderTimer = timer.Create();
     }
 
-    private void WolfMove()
+    /// <summary>
+    /// Wolf moves to a random location within its lane.
+    /// </summary>
+    public void WolfMove()
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
@@ -127,7 +130,7 @@ public class Wolf
     /// </summary>
     public static void RemoveAllWolves()
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
+        foreach (var wolf in Globals.ALL_WOLVES.Keys)
             wolf.Dispose();
 
         Globals.ALL_WOLVES.Clear();

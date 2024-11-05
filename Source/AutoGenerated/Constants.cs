@@ -26,7 +26,6 @@ public static class Constants
 	public const int ABILITY_TRAIL_FIREPINK = 1093677392;
 	public const int ABILITY_NITRO = 1093677124;
 	public const int ABILITY_SET_RELIC_EFFECT = 1093677365;
-	public const int ABILITY_BOOK_OF_REWARDS = 1093677378;
 	public const int ABILITY_THE_AURA_OF_THE_RING = 1395666992;
 	public const int ABILITY_SHOCKWAVE = 1094939508;
 	public const int ABILITY_NITROGREEN = 1093677618;
@@ -104,6 +103,7 @@ public static class Constants
 	public const int ABILITY_WINGS_TGREEN = 1093677897;
 	public const int ABILITY_WINGS_TYELLOW = 1093677898;
 	public const int ABILITY_AURA_BUTTERFLY = 1093677911;
+	public const int ABILITY_BOOK_OF_RELICS = 1093677378;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
