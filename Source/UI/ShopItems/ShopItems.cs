@@ -70,6 +70,7 @@ public class ShopItem
         var shopItems = new List<ShopItem>();
 
         shopItems.Add(new ShopItem("Anti-Block-Wand", 100, Constants.ITEM_ANTI_BLOCK_WAND, BlzGetAbilityIcon(Constants.ABILITY_ANTI_BLOCK_WAND_ITEM), "Wolves in the way? Buy this to make them move. Dang pesky wolves."));
+        shopItems.Add(new ShopItem("Mysterious Orb", 50, Constants.ITEM_ORB_OF_MYSTERIES, Utility.GetItemIconPath(Constants.ITEM_ORB_OF_MYSTERIES), "A mysterious orb that has mysterious usefulness!"));
 
         return shopItems;
 

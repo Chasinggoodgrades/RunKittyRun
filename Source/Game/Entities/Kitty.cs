@@ -66,6 +66,7 @@ public class Kitty
         var circle = Globals.ALL_CIRCLES[Player];
         Unit.Kill();
         DeathStatUpdate();
+        CrystalOfFire.CrystalOfFireDeath(this);
         circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
         circle.KittyDied(this);
         SoundManager.PlayKittyDeathSound(Unit);

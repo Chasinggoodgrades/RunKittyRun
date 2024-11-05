@@ -1,6 +1,5 @@
 ﻿using static WCSharp.Api.Common;
 using WCSharp.Api;
-using System;
 public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;

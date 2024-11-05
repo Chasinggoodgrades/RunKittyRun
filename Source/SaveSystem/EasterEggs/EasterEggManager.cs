@@ -4,6 +4,7 @@
     {
         MissingShoe.Initialize();
         NoKittyLeftBehind.Initialize();
+        CrystalOfFire.Initialize();
     }
 
 }

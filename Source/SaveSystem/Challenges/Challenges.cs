@@ -12,6 +12,7 @@ public static class Challenges
     private const int PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175;
     public static void Initialize()
     {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         Deathless.Initialize();
         Nitros.Initialize();
     }
@@ -26,7 +27,8 @@ public static class Challenges
     public static void PurpleFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 2 && currentDeaths > PURPLE_FIRE_DEATH_REQUIREMENT) return;
+        if (Globals.ROUND != 2 || currentDeaths > PURPLE_FIRE_DEATH_REQUIREMENT) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
         AwardManager.GiveReward(player, Awards.Purple_Fire);
     }
     public static void BlueFire()
@@ -41,24 +43,28 @@ public static class Challenges
     public static void TurquoiseFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 5 && currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return;
+        if (Globals.ROUND != 5 || currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return;
+        AwardManager.GiveReward(player, Awards.Turquoise_Fire);
     }
     public static void PinkFire()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             var stats = Globals.ALL_KITTIES[player].CurrentStats;
             var currentSaves = stats.TotalSaves;
             var currentDeaths = stats.TotalDeaths;
-            if ((float)currentSaves / currentDeaths < PINK_FIRE_SD_REQUIREMENT) return;
+
+            if (currentDeaths == 0 ? currentSaves < PINK_FIRE_SD_REQUIREMENT : (float)(currentSaves / currentDeaths) < PINK_FIRE_SD_REQUIREMENT) return;
+
             AwardManager.GiveReward(player, Awards.Pink_Fire);
         }
     }
+
     public static void WhiteFire(player player)
     {
         if (Nitros.GetNitroTimeRemaining() <= 0) return;
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 3 && currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return;
+        if (Globals.ROUND != 3 || currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return;
         AwardManager.GiveReward(player, Awards.White_Fire);
     }
 
@@ -73,7 +79,7 @@ public static class Challenges
         var kitty = Globals.ALL_KITTIES[player];
         var currentDeaths = kitty.CurrentStats.RoundDeaths;
         var saveStreak = kitty.SaveData.GameStats[StatTypes.SaveStreak];
-        if (saveStreak < 10 && currentDeaths > 0) return;
+        if (saveStreak < 10 || currentDeaths > 0) return;
         AwardManager.GiveReward(player, Awards.Green_Lightning);
     }
 }

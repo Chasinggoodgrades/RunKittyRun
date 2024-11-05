@@ -12,15 +12,15 @@ public static class MissingShoe
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;
-        RegisterEvent();
+        RegisterSpawnEvent();
         ItemID = Constants.ITEM_FIERYFOXES_S_MISSING_SHOE;
         TurnInRange = 200.0f;
     }
 
-    private static void RegisterEvent()
+    private static void RegisterSpawnEvent()
     {
         // Between 10 mins - 15mins currently.
-        var randomTime = GetRandomReal(20.0f, 50.0f);
+        var randomTime = GetRandomReal(600.0f, 900.0f);
         TimerEvent = trigger.Create();
         TimerEvent.RegisterTimerEvent(randomTime, false);
         TimerEvent.AddAction(EventStart);

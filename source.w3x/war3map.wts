@@ -43,12 +43,6 @@ STRING 43
 Kittys
 }
 
-STRING 673
-// Abilities: A000 (Book of Advanced Rewards Astral), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
 STRING 674
 // Abilities: A004 (Reset), Name (Name)
 {
@@ -71,12 +65,6 @@ STRING 772
 // Units: N00C (Super Panda), Name (Name)
 {
 Super Panda
-}
-
-STRING 774
-// Abilities: A01M (Set Fire), Name (Name)
-{
-Set Fire
 }
 
 STRING 783
@@ -171,12 +159,6 @@ STRING 948
 Ritual Mask
 }
 
-STRING 957
-// Abilities: A01N (Set Nitro), Name (Name)
-{
-Set Nitro
-}
-
 STRING 959
 // Abilities: A017 (Book of Rewards Pandaren), Ubertip (Tooltip - Normal - Extended)
 {
@@ -189,46 +171,10 @@ STRING 968
 Set Hats
 }
 
-STRING 971
-// Abilities: A025 (Set Hats), Name (Name)
-{
-Set Hats
-}
-
-STRING 984
-// Abilities: A000 (Book of Advanced Rewards Astral), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
-STRING 985
-// Abilities: A00S (Book of Advanced Rewards Undead), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
 STRING 987
 // Abilities: A00A (Protection of the Ancients), Name (Name)
 {
 Protection of the Ancients
-}
-
-STRING 988
-// Abilities: A00M (Book of Basic Rewards Astral), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 989
-// Abilities: A00T (Book of Basic Rewards Kitty), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 990
-// Abilities: A00M (Book of Basic Rewards Astral), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
 }
 
 STRING 992
@@ -321,114 +267,6 @@ STRING 1066
 S
 }
 
-STRING 1080
-// Abilities: A00U (Book of Advanced Rewards Highelf), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
-STRING 1081
-// Abilities: A00S (Book of Advanced Rewards Undead), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1083
-// Abilities: A00W (Book of Basic Rewards Undead), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 1084
-// Abilities: A00T (Book of Basic Rewards Kitty), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1085
-// Abilities: A00V (Book of Advanced Rewards Kitty), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
-STRING 1086
-// Abilities: A00X (Book of Basic Rewards Highelf), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 1089
-// Abilities: A00U (Book of Advanced Rewards Highelf), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1092
-// Abilities: A00V (Book of Advanced Rewards Kitty), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1095
-// Abilities: A00W (Book of Basic Rewards Undead), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1098
-// Abilities: A00X (Book of Basic Rewards Highelf), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 1099
-// Abilities: A000 (Book of Advanced Rewards Astral), Name (Name)
-{
-Book of Advanced Rewards Astral
-}
-
-STRING 1100
-// Abilities: A00M (Book of Basic Rewards Astral), Name (Name)
-{
-Book of Basic Rewards Astral
-}
-
-STRING 1102
-// Abilities: A00S (Book of Advanced Rewards Undead), Name (Name)
-{
-Book of Advanced Rewards Undead
-}
-
-STRING 1103
-// Abilities: A00T (Book of Basic Rewards Kitty), Name (Name)
-{
-Book of Basic Rewards Kitty
-}
-
-STRING 1104
-// Abilities: A00U (Book of Advanced Rewards Highelf), Name (Name)
-{
-Book of Advanced Rewards Highelf
-}
-
-STRING 1105
-// Abilities: A00V (Book of Advanced Rewards Kitty), Name (Name)
-{
-Book of Advanced Rewards Kitty
-}
-
-STRING 1106
-// Abilities: A00W (Book of Basic Rewards Undead), Name (Name)
-{
-Book of Basic Rewards Undead
-}
-
-STRING 1107
-// Abilities: A00X (Book of Basic Rewards Highelf), Name (Name)
-{
-Book of Basic Rewards Highelf
-}
-
 STRING 1115
 // Units: npn5 (Old Legend), Name (Name)
 {
@@ -505,12 +343,6 @@ STRING 1287
 // Abilities: A00B (Agility aura), Name (Name)
 {
 Agility aura
-}
-
-STRING 1308
-// Abilities: A01O (Set Lightning), Name (Name)
-{
-Set Lightning
 }
 
 STRING 1329
@@ -1105,36 +937,6 @@ STRING 2038
 Book of Rewards
 }
 
-STRING 2039
-// Abilities: A01B (Book of Rewards), Tip (Tooltip - Normal)
-{
-Book of Rewards
-}
-
-STRING 2040
-// Abilities: A01B (Book of Rewards), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 2043
-// Abilities: A02Z (Book of Basic Rewards Satyr), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 2046
-// Abilities: A030 (Book of Basic Rewards Ancient), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 2049
-// Abilities: A031 (Book of Advanced Rewards Satyr), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
 STRING 2098
 // Units: nmrk (Panda), Name (Name)
 {
@@ -1279,148 +1081,16 @@ STRING 2169
 SPELLDUMMY
 }
 
-STRING 2193
-// Abilities: A025 (Set Hats), Tip (Tooltip - Normal)
-{
-Set Hats!
-}
-
-STRING 2197
-// Abilities: A025 (Set Hats), Untip (Tooltip - Turn Off)
-{
-Set Hats!
-}
-
 STRING 2199
-// Abilities: A025 (Set Hats), Hotkey (Hotkey - Normal)
+// Abilities: A034 (Champion Spoils), Hotkey (Hotkey - Normal)
 {
 H
-}
-
-STRING 2200
-// Abilities: A026 (Set Wings 1), Name (Name)
-{
-Set Wings 1
 }
 
 STRING 2205
-// Abilities: A026 (Set Wings 1), Hotkey (Hotkey - Normal)
+// Abilities: A03R (Holiday Rewards), Hotkey (Hotkey - Normal)
 {
 H
-}
-
-STRING 2206
-// Abilities: A027 (Set Wings 2), Name (Name)
-{
-Set Wings 2
-}
-
-STRING 2211
-// Abilities: A027 (Set Wings 2), Hotkey (Hotkey - Normal)
-{
-H
-}
-
-STRING 2212
-// Abilities: A028 (Set Skins 1), Name (Name)
-{
-Set Skins 1
-}
-
-STRING 2217
-// Abilities: A028 (Set Skins 1), Hotkey (Hotkey - Normal)
-{
-H
-}
-
-STRING 2218
-// Abilities: A029 (Set Aura), Name (Name)
-{
-Set Aura
-}
-
-STRING 2223
-// Abilities: A029 (Set Aura), Hotkey (Hotkey - Normal)
-{
-H
-}
-
-STRING 2224
-// Abilities: A027 (Set Wings 2), Tip (Tooltip - Normal)
-{
-Set Wings 2!
-}
-
-STRING 2226
-// Abilities: A027 (Set Wings 2), Untip (Tooltip - Turn Off)
-{
-Set Wings 2!
-}
-
-STRING 2228
-// Abilities: A01N (Set Nitro), Tip (Tooltip - Normal)
-{
-Set Nitro
-}
-
-STRING 2229
-// Abilities: A01N (Set Nitro), Untip (Tooltip - Turn Off)
-{
-Set Nitro
-}
-
-STRING 2230
-// Abilities: A026 (Set Wings 1), Tip (Tooltip - Normal)
-{
-Set Wings 1!
-}
-
-STRING 2231
-// Abilities: A026 (Set Wings 1), Untip (Tooltip - Turn Off)
-{
-Set Wings 1!
-}
-
-STRING 2234
-// Abilities: A028 (Set Skins 1), Tip (Tooltip - Normal)
-{
-Set Skins!
-}
-
-STRING 2236
-// Abilities: A028 (Set Skins 1), Untip (Tooltip - Turn Off)
-{
-Set Skins!
-}
-
-STRING 2238
-// Abilities: A029 (Set Aura), Tip (Tooltip - Normal)
-{
-Set Aura!
-}
-
-STRING 2240
-// Abilities: A029 (Set Aura), Untip (Tooltip - Turn Off)
-{
-Set Aura!
-}
-
-STRING 2242
-// Abilities: A01M (Set Fire), Tip (Tooltip - Normal)
-{
-Set Fire
-}
-
-STRING 2244
-// Abilities: A01O (Set Lightning), Tip (Tooltip - Normal)
-{
-Set Lightning
-}
-
-STRING 2246
-// Abilities: A01O (Set Lightning), Untip (Tooltip - Turn Off)
-{
-Set Lightning
 }
 
 STRING 2274
@@ -1669,60 +1339,6 @@ STRING 2530
 Ancient Kitty
 }
 
-STRING 2561
-// Abilities: A02Z (Book of Basic Rewards Satyr), Name (Name)
-{
-Book of Basic Rewards Satyr
-}
-
-STRING 2562
-// Abilities: A02Z (Book of Basic Rewards Satyr), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 2563
-// Abilities: A032 (Book of Advanced Rewards Ancient), Ubertip (Tooltip - Normal - Extended)
-{
-Change Custom effect
-}
-
-STRING 2564
-// Abilities: A030 (Book of Basic Rewards Ancient), Name (Name)
-{
-Book of Basic Rewards Ancient
-}
-
-STRING 2565
-// Abilities: A030 (Book of Basic Rewards Ancient), Tip (Tooltip - Normal)
-{
-Book of Basic Rewards
-}
-
-STRING 2567
-// Abilities: A031 (Book of Advanced Rewards Satyr), Name (Name)
-{
-Book of Advanced Rewards Satyr
-}
-
-STRING 2568
-// Abilities: A031 (Book of Advanced Rewards Satyr), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
-STRING 2570
-// Abilities: A032 (Book of Advanced Rewards Ancient), Name (Name)
-{
-Book of Advanced Rewards Ancient
-}
-
-STRING 2571
-// Abilities: A032 (Book of Advanced Rewards Ancient), Tip (Tooltip - Normal)
-{
-Book of Advanced Rewards
-}
-
 STRING 2578
 // Items: I003 (Ghost Kitty Boots), Name (Name)
 {
@@ -1789,18 +1405,6 @@ STRING 2589
 Wind Walk - [|cffffcc00Level 3|r]
 }
 
-STRING 2594
-// Abilities: A028 (Set Skins 1), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[30 Games] |cff00ffffUndead Kitty |r|n|cffd45e19[40 Games]|r |cff00ffffHighelf Kitty|r|n|cffd45e19[55 Games]|r |cff00ffffAstral Kitty|r |r|n|cffd45e19[25 Wins]|r |cff00ffffSatyr Kitty|r |r|n|cffd45e19[40 Wins]|r |cff00ffffAncient Kitty|r |r
-}
-
-STRING 2597
-// Abilities: A028 (Set Skins 1), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[30 Games] |cff00ffffUndead Kitty |r|n|cffd45e19[40 Games]|r |cff00ffffHighelf Kitty|r|n|cffd45e19[55 Games]|r |cff00ffffAstral Kitty|r |r|n|cffd45e19[25 Wins]|r |cff00ffffSatyr Kitty|r |r|n|cffd45e19[40 Wins]|r |cff00ffffAncient Kitty|r |r
-}
-
 STRING 2604
 // Units: E002 (Nitro Pacer), Name (Name)
 {
@@ -1823,12 +1427,6 @@ STRING 2720
 // Abilities: A034 (Champion Spoils), Untip (Tooltip - Turn Off)
 {
 Champion Spoils
-}
-
-STRING 2722
-// Abilities: A034 (Champion Spoils), Hotkey (Hotkey - Normal)
-{
-H
 }
 
 STRING 2723
@@ -2113,30 +1711,6 @@ STRING 2843
 Blood Filled Vial
 }
 
-STRING 2844
-// Abilities: A03C (Set WindWalk), Name (Name)
-{
-Set WindWalk
-}
-
-STRING 2845
-// Abilities: A03C (Set WindWalk), Tip (Tooltip - Normal)
-{
-Set WindWalk
-}
-
-STRING 2847
-// Abilities: A03C (Set WindWalk), Untip (Tooltip - Turn Off)
-{
-Set WindWalk
-}
-
-STRING 2849
-// Abilities: A03C (Set WindWalk), Hotkey (Hotkey - Normal)
-{
-H
-}
-
 STRING 2855
 // Abilities: A03D (WW_Blood), Tip (Tooltip - Normal)
 {
@@ -2407,18 +1981,6 @@ STRING 2998
 Deathless Fire 1:05
 }
 
-STRING 2999
-// Abilities: A03P (Set Deathless Fire), Name (Name)
-{
-Set Deathless Fire
-}
-
-STRING 3000
-// Abilities: A03P (Set Deathless Fire), Tip (Tooltip - Normal)
-{
-Set Deathless Fire
-}
-
 STRING 3023
 // Abilities: A03L (Deathless Fire 1:02), Tip (Tooltip - Normal)
 {
@@ -2473,18 +2035,6 @@ STRING 3036
 Revive all Kitties in a small area after 3 seconds.  Improved AeO. |cff8080ff(55 second cooldown w/ Relic ONLY)|r
 }
 
-STRING 3042
-// Abilities: A03P (Set Deathless Fire), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[Round 1: 14 Safezones] |cffff8c00Orange Fire|r |n|cffd45e19[Round 2: 14 Safezones] |cff008000Dark Green Fire|r |n|cffd45e19[Round 3: 14 Safezones] |cffffff00Yellow Fire|r |n|cffd45e19[Round 4: 10 Safezones] |cffff0000Red Fire|r |n|cffd45e19[Round 5:  6  Safezones] |cff00ff00Green Fire|r
-}
-
-STRING 3043
-// Abilities: A03P (Set Deathless Fire), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[Round 1: 14 Safezones] |cffff8c00Orange Fire|r |n|cffd45e19[Round 2: 14 Safezones] |cff008000Dark Green Fire|r |n|cffd45e19[Round 3: 14 Safezones] |cffffff00Yellow Fire|r |n|cffd45e19[Round 4: 10 Safezones] |cffff0000Red Fire|r |n|cffd45e19[Round 5:  6  Safezones] |cff00ff00Green Fire|r
-}
-
 STRING 3051
 // Doodads: D00A (Lantern), Name (Name)
 {
@@ -2513,12 +2063,6 @@ STRING 3061
 // Abilities: A03R (Holiday Rewards), Untip (Tooltip - Turn Off)
 {
 Set Holiday Rewards
-}
-
-STRING 3063
-// Abilities: A03R (Holiday Rewards), Hotkey (Hotkey - Normal)
-{
-H
 }
 
 STRING 3065
@@ -2779,34 +2323,10 @@ STRING 3164
 |cffd45e19Solo Tournament Champion:|r |cffff0000Fieryfox|r
 }
 
-STRING 3165
-// Abilities: A025 (Set Hats), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[200 Saves] |cff00ffffBandana|r|n|cffd45e19[250 Saves]|r |cff00ffffPirate Hat|r |n|cffd45e19[300 Saves]|r |cff00ffffChef Hat|r |n|cffd45e19[350 Saves]|r |cff00ffffHeadress|r |n|cffd45e19[400 Saves]|r|cff00ffff Samurai Mask|r |n|cffd45e19[800 Saves]|r|cff00ffff Santa Hat|r |r
-}
-
-STRING 3166
-// Abilities: A025 (Set Hats), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[200 Saves] |cff00ffffBandana|r|n|cffd45e19[250 Saves]|r |cff00ffffPirate Hat|r |n|cffd45e19[300 Saves]|r |cff00ffffChef Hat|r |n|cffd45e19[350 Saves]|r |cff00ffffHeadress|r |n|cffd45e19[400 Saves]|r|cff00ffff Samurai Mask|r |n|cffd45e19[800 Saves]|r|cff00ffff Santa Hat|r |r
-}
-
 STRING 3177
 // Abilities: A03V (Wings_TWhite), Tip (Tooltip - Normal)
 {
 White Tendrils
-}
-
-STRING 3183
-// Abilities: A029 (Set Aura), Ubertip (Tooltip - Normal - Extended)
-{
-|cFFFF7F50[5 Wins]|r |cFF00FFFFPrismatic Orb Aura|r|n|cFFFF7F50[65 Games]|r |cFF00FFFFStarlight Aura|r|n|cFFFF7F50[20 Wins]|r |cFF00FFFFMana Aura|r|n|cFFFF7F50[30 Wins]|r |cFF00FFFFSpectacular Aura|r|n|cFFFF7F50[Impossible R4 Nitro]|r |cFF00FF00Butterfly Aura|r|n
-}
-
-STRING 3184
-// Abilities: A029 (Set Aura), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cFFFF7F50[5 Wins]|r |cFF00FFFFPrismatic Orb Aura|r|n|cFFFF7F50[65 Games]|r |cFF00FFFFStarlight Aura|r|n|cFFFF7F50[20 Wins]|r |cFF00FFFFMana Aura|r|n|cFFFF7F50[30 Wins]|r |cFF00FFFFSpectacular Aura|r|n|cFFFF7F50[Impossible R4 Nitro]|r |cFF00FF00Butterfly Aura|r|n
 }
 
 STRING 3190
@@ -3223,22 +2743,10 @@ STRING 3282
 D
 }
 
-STRING 3285
-// Abilities: A042 (Ring of FrostBite), Tip (Tooltip - Normal)
-{
-Ring of damned
-}
-
 STRING 3286
 // Abilities: A042 (Ring of FrostBite), EditorSuffix (Editor Suffix)
 {
 (Ring Ultimate)
-}
-
-STRING 3289
-// Abilities: A042 (Ring of FrostBite), Ubertip (Tooltip - Normal - Extended)
-{
-Freeze some stuff
 }
 
 STRING 3290
@@ -3337,32 +2845,6 @@ STRING 3322
 |cffff0000Fieryfox|r
 }
 
-STRING 3323
-// Abilities: A01M (Set Fire), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[Round 2 Impossible 0 Deaths] |cff800080Purple Trail|r|n|cffd45e19[Win with less than 25 Deaths] |cff0000ffBlue Trail|r|n|cffd45e19[Round 5 in 10 or less deaths] |cff40e0d0Turquoise Trail|r|n|cffd45e19[Win a game with 3:1 S/D Ratio or Better] |cffffc0cbPink Trail|r|n|cffd45e19[Round 3 Nitro with 3 or less Deaths] |cffffffffWhite Trail|r
-
-}
-
-STRING 3324
-// Abilities: A01M (Set Fire), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[Round 2 Impossible 0 Deaths] |cff800080Purple Trail|r|n|cffd45e19[Win with less than 25 Deaths] |cff0000ffBlue Trail|r|n|cffd45e19[Round 5 in 10 or less deaths] |cff40e0d0Turquoise Trail|r|n|cffd45e19[Win a game with 3:1 S/D Ratio or Better] |cffffc0cbPink Trail|r|n|cffd45e19[Round 3 Nitro with 3 or less Deaths] |cffffffffWhite Trail|r
-
-}
-
-STRING 3327
-// Abilities: A03C (Set WindWalk), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[Blood Vial] |cffc80000Blood Windwalk|r  |n|cffd45e19[Urn]|r |cff0096c8Bluesoul Windwalk|r  |n|cffd45e19[Crystal of Fire]|r |cffffaa1eFire Windwalk|r   |n|cffd45e19[Win in under 25 mins]|r |cff78fa5aNecro Windwalk|r |n|cffd45e19[Cat Figurine]|r |cffdcdcffSwift Windwalk|r
-}
-
-STRING 3328
-// Abilities: A03C (Set WindWalk), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[Blood Vial] |cffc80000Blood Windwalk|r  |n|cffd45e19[Urn]|r |cff0096c8Bluesoul Windwalk|r  |n|cffd45e19[Crystal of Fire]|r |cffffaa1eFire Windwalk|r   |n|cffd45e19[Win in under 25 mins]|r |cff78fa5aNecro Windwalk|r |n|cffd45e19[Cat Figurine]|r |cffdcdcffSwift Windwalk|r
-}
-
 STRING 3329
 // Items: rhth (|cffff4500One of Nine|r), Ubertip (Tooltip - Extended)
 {
@@ -3397,58 +2879,6 @@ STRING 3338
 // Items: I00A (|cffdda0ddAmulet of Evasiveness|r), Description (Description)
 {
 |cffffcc00A magical Amulet meticulously crafted to shed a few pounds from your form, significantly enhancing your ability to elude the keen senses of prowling wolves and narrowing the danger zone in which you can be targeted.|r |cffff8c00Makes you smaller and reduces collision range by 10%.|r |cffff8c00(Relic)|r |cffadd8e6(Passive)|r
-}
-
-STRING 3343
-// Abilities: A027 (Set Wings 2), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[450 Saves] |cffc71585Chaos Wings|r|n|cffd45e19[500 Saves]|r |cffff69b4Void Wings|r |n|cffd45e19[550 Saves]|r |cff8a2be2Cosmic Wings|r |n|cffd45e19[600 Saves]|r |cffff1493Pink Wings|r|n|cffd45e19[750 Saves]|r |cff32cd32Nature Wings|r
-
-}
-
-STRING 3344
-// Abilities: A027 (Set Wings 2), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[450 Saves] |cffc71585Chaos Wings|r|n|cffd45e19[500 Saves]|r |cffff69b4Void Wings|r |n|cffd45e19[550 Saves]|r |cff8a2be2Cosmic Wings|r |n|cffd45e19[600 Saves]|r |cffff1493Pink Wings|r|n|cffd45e19[750 Saves]|r |cff32cd32Nature Wings|r
-
-}
-
-STRING 3349
-// Abilities: A041 (Set Wings 3), Name (Name)
-{
-Set Wings 3
-}
-
-STRING 3350
-// Abilities: A041 (Set Wings 3), Tip (Tooltip - Normal)
-{
-Set Wings 3!
-}
-
-STRING 3352
-// Abilities: A041 (Set Wings 3), Untip (Tooltip - Turn Off)
-{
-Set Wings 3!
-}
-
-STRING 3354
-// Abilities: A041 (Set Wings 3), Hotkey (Hotkey - Normal)
-{
-H
-}
-
-STRING 3358
-// Abilities: A026 (Set Wings 1), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[275 Saves] |cffffa500Fairy Wings|r|n|cffd45e19[325 Saves]|r |cffff4500Nightmare Wings|r |n|cffd45e19[375 Saves]|r |cffff6347Phoenix Wings|r |n|cffd45e19[425 Saves]|r |cffffd700Archangel Wings|r
-
-}
-
-STRING 3359
-// Abilities: A026 (Set Wings 1), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[275 Saves] |cffffa500Fairy Wings|r|n|cffd45e19[325 Saves]|r |cffff4500Nightmare Wings|r |n|cffd45e19[375 Saves]|r |cffff6347Phoenix Wings|r |n|cffd45e19[425 Saves]|r |cffffd700Archangel Wings|r
-
 }
 
 STRING 3361
@@ -3505,36 +2935,8 @@ STRING 3378
 +75% mana regeneration.
 }
 
-STRING 3381
-// Abilities: A01O (Set Lightning), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[2000 Saves] |cff8080ffLightning |r|n|cffd45e19[15 Save Streak] |cffff0000Red Lightning |r|n|cffd45e19[175 Saves in One Game] |cff800080Purple Lightning |r|n|cffd45e19[Obtain 6 Saves within 3 seconds] |cffffff00Yellow Lightning |r|n|cffd45e19[Finish a round with 10 save streak & no deaths] |cff00ff00Green Lightning |r
-
-}
-
-STRING 3382
-// Abilities: A01O (Set Lightning), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[2000 Saves] |cff8080ffLightning |r|n|cffd45e19[15 Save Streak] |cffff0000Red Lightning |r|n|cffd45e19[175 Saves in One Game] |cff800080Purple Lightning |r|n|cffd45e19[Obtain 6 Saves within 3 seconds] |cffffff00Yellow Lightning |r|n|cffd45e19[Finish a round with 10 save streak & no deaths] |cff00ff00Green Lightning |r
-
-}
-
-STRING 3383
-// Abilities: A01N (Set Nitro), Ubertip (Tooltip - Normal - Extended)
-{
-|cff00ffff[Complete a round within the Nitro timer]|r|n|cffffa500[Round 1]|r = |cffadd8e6Nitro|r|n|cffffa500[Round 2]|r = |cff4682b4Blue Nitro|r|n|cffffa500[Round 3]|r = |cffff0000Red Nitro|r|n|cffffa500[Round 4]|r = |cff00ff00Green Nitro|r|n|cffffa500[Round 5]|r = |cff6f2583Purple Nitro|r|n|cffffa500[?????????]|r = |cffffd700Divine Light|r
-
-}
-
-STRING 3384
-// Abilities: A01N (Set Nitro), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cff00ffff[Complete a round within the Nitro timer]|r|n|cffffa500[Round 1]|r = |cffadd8e6Nitro|r|n|cffffa500[Round 2]|r = |cff4682b4Blue Nitro|r|n|cffffa500[Round 3]|r = |cffff0000Red Nitro|r|n|cffffa500[Round 4]|r = |cff00ff00Green Nitro|r|n|cffffa500[Round 5]|r = |cff6f2583Purple Nitro|r|n|cffffa500[?????????]|r = |cffffd700Divine Light|r
-
-}
-
 STRING 3385
-// Abilities: A045 (Frostbite), Name (Name)
+// Abilities: A042 (Ring of FrostBite), Tip (Tooltip - Normal)
 {
 Frostbite
 }
@@ -3594,19 +2996,19 @@ S
 }
 
 STRING 3396
-// Abilities: A045 (Frostbite), Researchtip (Tooltip - Learn)
+// Abilities: A045 (Frostbite), Name (Name)
 {
 Frostbite
 }
 
 STRING 3397
-// Buffs/Effects: B003 (Frostbite), Bufftip (Tooltip)
+// Abilities: A045 (Frostbite), Researchtip (Tooltip - Learn)
 {
 Frostbite
 }
 
 STRING 3399
-// Buffs/Effects: B003 (Frostbite), EditorName (Name (Editor Only))
+// Buffs/Effects: B003 (Frostbite), Bufftip (Tooltip)
 {
 Frostbite
 }
@@ -3651,18 +3053,6 @@ STRING 3408
 // Doodads: D00B (Pathing Blocker (Doodad)), Name (Name)
 {
 Pathing Blocker (Doodad)
-}
-
-STRING 3409
-// Abilities: A041 (Set Wings 3), Ubertip (Tooltip - Normal - Extended)
-{
-|cffd45e19[Easter Egg]|r|cffdc143cRed Tendrils|r|n|cffd45e19[Win on Impossible]|r|cffffffffWhite Tendrils|r|n|cffd45e19[Ultimate AOE Revive (4)]|r|cff00bfffDivinity Tendrils|r|n|cffd45e19[$$$$]|r|cff32cd32Green Tendrils|r|n|cffd45e19[50 Save Streak]|r |cfffa3232P|r|cfff1343da|r|cffe93748t|r|cffe13a53r|r|cffd93c5ei|r|cffd03f6ao|r|cffc84276t|r|cffbf4581i|r|cffb7488cc|r|cffaf4a97 |r|cffa74da2T|r|cff9f50aee|r|cff9653ban|r|cff8e55c5d|r|cff8558d0r|r|cff7d5bdbi|r|cff755ee6l|r|cff6d60f2s|r
-}
-
-STRING 3410
-// Abilities: A041 (Set Wings 3), Unubertip (Tooltip - Turn Off - Extended)
-{
-|cffd45e19[Easter Egg]|r|cffdc143cRed Tendrils|r|n|cffd45e19[Win on Impossible]|r|cffffffffWhite Tendrils|r|n|cffd45e19[Ultimate AOE Revive (4)]|r|cff00bfffDivinity Tendrils|r|n|cffd45e19[$$$$]|r|cff32cd32Green Tendrils|r|n|cffd45e19[50 Save Streak]|r |cfffa3232P|r|cfff1343da|r|cffe93748t|r|cffe13a53r|r|cffd93c5ei|r|cffd03f6ao|r|cffc84276t|r|cffbf4581i|r|cffb7488cc|r|cffaf4a97 |r|cffa74da2T|r|cff9f50aee|r|cff9653ban|r|cff8e55c5d|r|cff8558d0r|r|cff7d5bdbi|r|cff755ee6l|r|cff6d60f2s|r
 }
 
 STRING 3411
@@ -4648,5 +4038,41 @@ STRING 3601
 // Abilities: A00J (Hat_Pirate), Tip (Tooltip - Normal)
 {
 |cffa56f34Pirate Hat|r
+}
+
+STRING 3602
+// Abilities: A01B (Book of Rewards), Tip (Tooltip - Normal)
+{
+Book of Relics
+}
+
+STRING 3603
+// Abilities: A01B (Book of Rewards), Ubertip (Tooltip - Normal - Extended)
+{
+Book with all learned relic abilities.
+}
+
+STRING 3604
+// Abilities: A03B (Summon Shadow Kitty), Tip (Tooltip - Normal)
+{
+Summon Shadow Kitty
+}
+
+STRING 3605
+// Abilities: A03B (Summon Shadow Kitty), Ubertip (Tooltip - Normal - Extended)
+{
+Creates a shadowy image to transverse lanes for you. Letting you teleport to at will.
+}
+
+STRING 3606
+// Abilities: A042 (Ring of FrostBite), Ubertip (Tooltip - Normal - Extended)
+{
+Freezes wolves
+}
+
+STRING 3607
+// Buffs/Effects: B003 (Frostbite), EditorName (Name (Editor Only))
+{
+Frostbite
 }
 

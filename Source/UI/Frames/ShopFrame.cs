@@ -205,11 +205,6 @@ public static class ShopFrame
         }
 
         if (player.IsLocal) shopFrame.Visible = !shopFrame.Visible;
-
-        else
-        {
-            Console.WriteLine($"No selected item found for player: {player}");
-        }
     }
 
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;

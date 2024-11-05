@@ -44,13 +44,17 @@ public static class FrameManager
         // Close Button
         var closeButton = framehandle.Create("GLUETEXTBUTTON", $"{parent.Name}CloseButton", header, "ScriptDialogButton", 0);
         closeButton.SetPoint(framepointtype.TopRight, -0.0025f, -0.0025f, header, framepointtype.TopRight);
-        closeButton.SetSize(height-0.005f, height-0.005f);
+        closeButton.SetSize(height - 0.005f, height - 0.005f);
         closeButton.Text = "X";
 
         // Close Actions
         var closeTrigger = trigger.Create();
         closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
-        closeTrigger.AddAction(() => parent.Visible = false);
+        closeTrigger.AddAction(() =>
+        {
+            if (!@event.Player.IsLocal) return;
+            parent.Visible = false;
+        });
 
         return header;
     }

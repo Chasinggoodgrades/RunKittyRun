@@ -77,11 +77,13 @@ public class Kibble
     {
         var jackPotChance = GetRandomInt(0, 100);
         var goldAmount = 0;
-        if (jackPotChance <= 50) {
+        if (jackPotChance <= 3) {
             JackpotEffect(kitty);
             return;
         }
         else goldAmount = GetRandomInt(1, GoldMax);
+        var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+        effect.Dispose();
         kitty.Player.Gold += goldAmount;
         Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
     }

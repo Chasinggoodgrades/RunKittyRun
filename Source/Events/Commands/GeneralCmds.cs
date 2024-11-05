@@ -50,6 +50,7 @@ public static class GeneralCmds
                 }
                 else {
                     zoom = float.Parse(args[1]);
+                    if(!p.IsLocal) return;
                     SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
                 }
                 break;

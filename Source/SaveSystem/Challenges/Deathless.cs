@@ -11,18 +11,35 @@ public static class Deathless
         ResetDeathless();
     }
 
+    /// <summary>
+    /// Resetes deathless progress for all players. Should be used at the beginning of new rounds.
+    /// </summary>
     public static void ResetDeathless()
     {
         foreach (var player in Globals.ALL_PLAYERS)
             DeathlessProgress[player] = 0;
     }
 
-    public static void DeathlessCheck(player player)
+    /// <summary>
+    /// Returns the number of deaths allowed for the current round.
+    /// </summary>
+    /// <returns></returns>
+    public static int DeathlessPerRound()
     {
         var requiredValue = 14 - ((Globals.ROUND - 3) * 4);
-        if(requiredValue > 14) { requiredValue = 14; }
+        if (requiredValue > 14) requiredValue = 14;
+        return requiredValue;
+    }
+
+    /// <summary>
+    /// Increments the players progress for deathless and awards them if they've reached the required checkpoints.
+    /// </summary>
+    /// <param name="player"></param>
+    public static void DeathlessCheck(player player)
+    {
+        if(Gamemode.CurrentGameMode != "Standard") return;
         DeathlessProgress[player]++;
-        if (DeathlessProgress[player] == requiredValue)
+        if (DeathlessProgress[player] == DeathlessPerRound())
         {
             AwardDeathless(player);
             DeathlessProgress[player] = 0;
@@ -32,7 +49,7 @@ public static class Deathless
     private static void AwardDeathless(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
-        // add item for crystal of fire later here..
+        CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
         switch (Globals.ROUND)
         {
             case 1:

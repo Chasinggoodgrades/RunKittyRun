@@ -110,6 +110,31 @@ public static class Utility
         return false;
     }
 
+    /// <summary>
+    /// If the unit has the item, it'll be deleted.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="itemId"></param>
+    public static void RemoveItemFromUnit(unit u, int itemId)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+            {
+                UnitItemInSlot(u, i).Dispose();
+                return;
+            }
+        }
+    }
+
+    public static string GetItemIconPath(int itemId)
+    {
+        var item = CreateItem(itemId, 0, 0);
+        var iconPath = item.Icon;
+        item.Dispose();
+        return iconPath;
+    }
+
     public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
     {
         var tt = CreateTextTag();

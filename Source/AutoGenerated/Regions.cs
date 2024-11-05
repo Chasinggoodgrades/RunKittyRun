@@ -30,7 +30,7 @@ public static class Regions
 	public static Rectangle safe_Area_11 { get; set; } = new Rectangle(-1696f, -2144f, -1248f, -1600f);
 	public static Rectangle safe_Area_12 { get; set; } = new Rectangle(-1696f, 224f, -1248f, 640f);
 	public static Rectangle safe_Area_13 { get; set; } = new Rectangle(608f, 192f, 1056f, 640f);
-	public static Rectangle safe_Area_14 { get; set; } = new Rectangle(-64f, -480f, 416f, 32f);
+	public static Rectangle safe_Area_14 { get; set; } = new Rectangle(-64f, -800f, 416f, 32f);
 	public static Rectangle Saves { get; set; } = new Rectangle(-416f, -608f, -352f, -576f);
 	public static Rectangle Savior_Medal { get; set; } = new Rectangle(-448f, -416f, -416f, -352f);
 	public static Rectangle Score_1 { get; set; } = new Rectangle(-320f, -736f, -256f, -704f);
@@ -78,7 +78,7 @@ public static class Regions
 	public static Rectangle UrnSoulRegion4 { get; set; } = new Rectangle(-2880f, 2336f, -2848f, 2368f);
 	public static Rectangle safe_Area_00 { get; set; } = new Rectangle(-3392f, 2304f, -2624f, 3072f);
 	public static Rectangle PandaRelicText { get; set; } = new Rectangle(3328f, 3104f, 3360f, 3136f);
-	public static Rectangle ProgressPoint3 { get; set; } = new Rectangle(-832f, -320f, -576f, -128f);
+	public static Rectangle ProgressPoint3 { get; set; } = new Rectangle(-768f, -320f, -576f, -128f);
 	public static Rectangle Dummy1Region { get; set; } = new Rectangle(-2624f, 2880f, -2592f, 2912f);
 	public static Rectangle Dummy2Region { get; set; } = new Rectangle(-2624f, 2656f, -2592f, 2688f);
 	public static Rectangle Dummy3Region { get; set; } = new Rectangle(-2624f, 2432f, -2592f, 2464f);

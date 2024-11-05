@@ -14,16 +14,8 @@ public static class Standard
         RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
         Difficulty.Initialize();
         Windwalk.Initialize();
-        try
-        {
-            SpawnChampions.Initialize();
-            MissingShoe.Initialize();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            throw;
-        }
+        SpawnChampions.Initialize();
+        EasterEggManager.LoadEasterEggs();
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
     }
 
