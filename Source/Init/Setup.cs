@@ -72,6 +72,7 @@ namespace Source.Init
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
                 ShadowKitty.Initialize();
+                UniqueItems.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
             }

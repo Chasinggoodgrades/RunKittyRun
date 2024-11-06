@@ -111,6 +111,23 @@ public static class Utility
     }
 
     /// <summary>
+    /// Returns how many of that item a player has in their inventory.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
+    public static int UnitHasItemCount(unit u, int itemId)
+    {
+        var count = 0;
+        for(int i = 0; i < 6; i ++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+                count++;
+        }
+        return count;
+    }
+
+    /// <summary>
     /// If the unit has the item, it'll be deleted.
     /// </summary>
     /// <param name="u"></param>
