@@ -52,6 +52,7 @@ public class Frostbite : Affix
     public override void Remove()
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
+        SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
         //InRangeTrigger.Dispose();
     }

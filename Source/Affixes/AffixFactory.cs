@@ -154,9 +154,9 @@ public static class AffixFactory
     {
         if(Difficulty.DifficultyValue >= (int)DifficultyLevel.Hard)
         {
-            RemoveAllAffixes();
             return true;
         }
+        RemoveAllAffixes();
         return false;
     }
     private static void RemoveAllAffixes()

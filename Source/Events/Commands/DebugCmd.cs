@@ -33,15 +33,10 @@ public static class DebugCmd
             case "?blink":
                 kitty.Unit.AddItem(FourCC("desc"));
                 break;
-            case "?test1":
-                Console.WriteLine("Test 1");
-                break;
-            case "?test2":
-                Console.WriteLine("Test 2");
-                break;
             case "?diff":
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");
                 AffixFactory.DistributeAffixes();
+                MultiboardUtil.RefreshMultiboards();
                 break;
             case "?rpos":
                 kitty.ReviveKitty();
@@ -51,14 +46,7 @@ public static class DebugCmd
                     Globals.ALL_KITTIES[p].ReviveKitty();
                 break;
             case "?data":
-                try
-                {
-                    Console.WriteLine(kitty.SaveData.SelectedData[SelectedData.SelectedSkin]);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                Console.WriteLine(kitty.SaveData.SelectedData[SelectedData.SelectedSkin]);
                 break;
             case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)
@@ -77,10 +65,16 @@ public static class DebugCmd
             case "?discord":
                 DiscordFrame.Initialize();
                 break;
-            case "?test4":
+            case "?summonall":
+                foreach (var k in Globals.ALL_KITTIES.Values)
+                {
+                    if (k.Unit.Owner == player)
+                        continue;
+                    k.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+                }
                 break;
             default:
-                player.DisplayTimedTextTo(10.0f, "Unknown command.");
+                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;
         }
     }

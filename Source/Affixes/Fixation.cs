@@ -56,6 +56,7 @@ public class Fixation : Affix
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
         Unit.Unit.RemoveAbility(Constants.ABILITY_FIXATION);
+        SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         InRangeTrigger.Dispose();
     }
 }

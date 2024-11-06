@@ -1,5 +1,6 @@
 ﻿using static WCSharp.Api.Common;
 using WCSharp.Api;
+using System;
 public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
@@ -24,13 +25,21 @@ public class AmuletOfEvasiveness : Relic
     }
     public override void ApplyEffect(unit Unit)
     {
-        var player = Unit.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
-        SetUnitScale(Unit);
-        CollisionDetection.KittyRegisterCollisions(kitty);
+        try
+        {
+            var player = Unit.Owner;
+            var kitty = Globals.ALL_KITTIES[player];
+            var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
+            UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
+            CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
+            SetUnitScale(Unit);
+            CollisionDetection.KittyRegisterCollisions(kitty);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
+        }
     }
 
     public override void RemoveEffect(unit Unit)
