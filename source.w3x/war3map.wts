@@ -4064,15 +4064,27 @@ STRING 3614
 Using this ability will hide all currently used cosmetic rewards including skin.
 }
 
-STRING 3615
-// Abilities: A01B (Book of Relics), Tip (Tooltip - Normal)
-{
-Book of Relics
-}
-
 STRING 3616
 // Abilities: A01B (Book of Relics), Ubertip (Tooltip - Normal - Extended)
 {
 Contains all of the relic abilities you've learned from the shop.
+}
+
+STRING 3617
+// Abilities: A004 (Reset), Hotkey (Hotkey - Normal)
+{
+G
+}
+
+STRING 3618
+// Abilities: A01B (Book of Relics), Tip (Tooltip - Normal)
+{
+|cffffff00Book of Relics|r
+}
+
+STRING 3619
+// Abilities: A01B (Book of Relics), Hotkey (Hotkey - Normal)
+{
+R
 }
 
