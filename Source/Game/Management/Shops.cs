@@ -33,7 +33,7 @@ public static class Shops
         if (Gamemode.CurrentGameMode != "Standard") return;
 
         StandardModeItems();
-        SpawnPandaVendor();
+        //SpawnPandaVendor(); // no need anymore.
     }
 
     private static void SpawnPandaVendor() => PandaVendor = unit.Create(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);

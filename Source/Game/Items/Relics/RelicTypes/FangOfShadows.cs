@@ -25,12 +25,12 @@ public class FangOfShadows : Relic
     public override void ApplyEffect(unit Unit)
     {
         RegisterTriggers(Unit);
-        Unit.AddAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
     public override void RemoveEffect(unit Unit)
     {
-        Unit.RemoveAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, true, true);
         SummonTrigger.Dispose();
         TeleTrigger.Dispose();
     }

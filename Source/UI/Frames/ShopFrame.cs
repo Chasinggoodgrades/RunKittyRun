@@ -185,22 +185,23 @@ public static class ShopFrame
 
             if (!HasEnoughGold(player, cost)) return;
 
-            ReduceGold(player, cost);
-
-            if (type != ShopItemType.Reward)
-            {
-                AddItem(player, itemID);
-            }
-
             if (type == ShopItemType.Relic)
             {
-                if (!RelicLevel(kitty.Unit)) return;
+                if (!RelicLevel(kitty.Unit))
+                {
+                    NotHighEnoughLevel(player);
+                    return;
+                }
                 selectedItem.Relic.ApplyEffect(kitty.Unit);
             }
-
             if (type == ShopItemType.Reward)
             {
                 AwardManager.GiveReward(player, selectedItem.Award);
+            }
+            ReduceGold(player, cost);
+            if (type != ShopItemType.Reward)
+            {
+                AddItem(player, itemID);
             }
         }
 
@@ -214,7 +215,8 @@ public static class ShopFrame
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
-    private static void RelicMaxedOut(player player) => BlzDisplayChatMessage(player, 0, "You already have the maximum amount of this relic!");
+    private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this relic!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
+    private static void RelicMaxedOut(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum amount of this relic!");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
     public static void ShopFrameActions()

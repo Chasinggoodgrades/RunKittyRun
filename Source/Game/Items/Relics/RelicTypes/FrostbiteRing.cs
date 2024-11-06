@@ -27,12 +27,12 @@ public class FrostbiteRing : Relic
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
-        Unit.AddAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
     public override void RemoveEffect(unit Unit)
     {
-        Unit.RemoveAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, true, true);
         Trigger.Dispose();
     }
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;

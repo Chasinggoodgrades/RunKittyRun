@@ -34,7 +34,7 @@ public class RingOfSummoning : Relic
     public override void RemoveEffect(unit Unit)
     {
         Trigger.Dispose();
-        Unit.RemoveAbility(RelicAbilityID);
+        Unit.DisableAbility(RelicAbilityID, true, true);
     }
 
     private static bool KittyFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY;

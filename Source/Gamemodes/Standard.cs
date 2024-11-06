@@ -58,6 +58,7 @@ public static class Standard
             if (@event.Unit.HeroLevel < 10) return;
             HitLevel10.Add(@event.Unit.Owner);
             Relic.EnableRelicBook(@event.Unit);
+            Relic.DisableRelicAbilities(@event.Unit);
             @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
         });
     }

@@ -73,7 +73,6 @@ public static class RewardsFrame
         {
             if (reward.Type == type) count++;
         }
-        Console.WriteLine($"There are {count} rewards of type {type}");
         return count;
     }
     private static void InitializePanels(string name, float colCount)
