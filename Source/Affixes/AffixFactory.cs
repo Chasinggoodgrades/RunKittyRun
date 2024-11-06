@@ -103,7 +103,7 @@ public static class AffixFactory
         // if above lane 8.. exclude fixation
         var affixes = AvailableAffixes(laneNumber);
         var index = GetRandomInt(0, affixes.Count - 1);
-        var randomAffix = AffixTypes[index];
+        var randomAffix = affixes[index];
         ApplyAffix(unit, randomAffix);
         affixes.Clear();
     }
@@ -113,56 +113,47 @@ public static class AffixFactory
     /// </summary>
     public static void DistributeAffixes()
     {
-        try
+        RemoveAllAffixes();
+        if (!CanDistributeAffixes()) return;
+
+        NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+
+        var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
+        var count = 0;
+        while(count < NUMBER_OF_AFFIXED_WOLVES)
         {
-            if (!CanDistributeAffixes()) return;
-
-            NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
-
-            var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
-            for (int i = 0; i < NUMBER_OF_AFFIXED_WOLVES; i++)
+            foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
-                foreach (var j in Enumerable.Range(0, LaneWeights.Length))
+                if (GetRandomReal(0, 100) <= LaneWeights[j])
                 {
-                    if (GetRandomReal(0, 100) <= LaneWeights[j])
+                    if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
                     {
-                        if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
-                        {
-                            affixedWolvesInLane[j]++;
-                            var wolvesInLane = Globals.ALL_WOLVES.Values
-                                .Where(wolf => wolf.RegionIndex == j)
-                                .ToList();
+                        affixedWolvesInLane[j]++;
+                        var wolvesInLane = Globals.ALL_WOLVES.Values
+                            .Where(wolf => wolf.RegionIndex == j && wolf.AffixCount() < MAX_NUMBER_OF_AFFIXES)
+                            .ToList();
 
-                            if (wolvesInLane.Any())
-                            {
-                                var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                                ApplyRandomAffix(wolf, j);
-                            }
+                        if (wolvesInLane.Any())
+                        {
+                            var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
+                            ApplyRandomAffix(wolf, j);
+                            count++;
                         }
                     }
                 }
             }
-        }
-        catch (Exception e)
-        {
-            if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Error in DistributeAffixes: {e.Message}|r");
         }
     }
 
 
     private static bool CanDistributeAffixes()
     {
-        if(Difficulty.DifficultyValue >= (int)DifficultyLevel.Hard)
-        {
-            return true;
-        }
-        RemoveAllAffixes();
-        return false;
+        return Difficulty.DifficultyValue != (int)DifficultyLevel.Normal;
     }
     private static void RemoveAllAffixes()
     {
         foreach (var affix in AllAffixes)
-            affix.Remove();
+            affix.Unit.RemoveAffix(affix);
         AllAffixes.Clear();
     }   
 }

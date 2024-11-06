@@ -127,6 +127,11 @@ public static class Utility
         }
     }
 
+    /// <summary>
+    /// Obtains the string path of the icon of an item.
+    /// </summary>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
     public static string GetItemIconPath(int itemId)
     {
         var item = CreateItem(itemId, 0, 0);
@@ -135,6 +140,16 @@ public static class Utility
         return iconPath;
     }
 
+    /// <summary>
+    /// Self explanatory. Creates a text flag over the player's head.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="duration"></param>
+    /// <param name="u"></param>
+    /// <param name="height"></param>
+    /// <param name="red"></param>
+    /// <param name="green"></param>
+    /// <param name="blue"></param>
     public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
     {
         var tt = CreateTextTag();
@@ -144,5 +159,15 @@ public static class Utility
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
         SimpleTimer(duration, () => tt.Dispose());
+    }
+
+    /// <summary>
+    /// Clears the screen of all messages for the given player.
+    /// </summary>
+    /// <param name="player"></param>
+    public static void ClearScreen(player player)
+    {
+        if (!player.IsLocal) return; 
+        ClearTextMessages(); 
     }
 }

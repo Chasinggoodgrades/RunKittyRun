@@ -147,7 +147,6 @@ public class Wolf
     public void RemoveAffix(Affix affix)
     {
         Affixes.Remove(affix);
-        AffixFactory.AllAffixes.Remove(affix);
         affix.Remove();
     }
 

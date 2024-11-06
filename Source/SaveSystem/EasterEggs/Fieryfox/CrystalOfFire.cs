@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+using static WCSharp.Api.Common;
 public static class CrystalOfFire
 {
     private static int ItemID;
@@ -98,6 +99,7 @@ public static class CrystalOfFire
         var region = Regions.Spawn_Area_05.Center;
         kitty.SetPosition(region.X, region.Y);
         DeathAttempts[player] = -1;
+        Utility.ClearScreen(player);
         player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r");
         QuestEligible.Remove(player);
     }

@@ -135,6 +135,7 @@ public static class StandardMultiboard
 
     private static void CurrentGameStats()
     {
+        CurrentStats.Title = CurrentTitle;
         CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
         var rowIndex = 2;
 

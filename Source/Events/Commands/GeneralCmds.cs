@@ -21,7 +21,7 @@ public static class GeneralCmds
                 p.DisplayTextTo(Colors.COLOR_GOLD + "Stats have been saved.");
                 break;
             case "-clear":
-                if(p.IsLocal) ClearTextMessages();
+                Utility.ClearScreen(p);
                 break;
             case "-color":
                 Colors.SetPlayerColor(p, args[1]);
