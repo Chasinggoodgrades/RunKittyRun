@@ -7,6 +7,7 @@ public static class MultiboardUtil
     /// </summary>
     public static void RefreshMultiboards()
     {
+        StandardMultiboard.UpdateStandardCurrentStatsMB();
         StandardMultiboard.UpdateOverallStatsMB();
         StandardMultiboard.UpdateBestTimesMB();
     }
