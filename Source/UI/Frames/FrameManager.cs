@@ -113,6 +113,12 @@ public static class FrameManager
         ESCTrigger.AddAction(ESCActions);
     }
 
+    public static void RefreshFrame(framehandle frame)
+    {
+        frame.Visible = !frame.Visible;
+        frame.Visible = !frame.Visible;
+    }
+
     private static void ESCActions()
     {
         var player = @event.Player;

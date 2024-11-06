@@ -162,11 +162,13 @@ public static class ShopFrame
     private static void ShowItemDetails(ShopItem relic)
     {
         var player = @event.Player;
+        var frame = @event.Frame;
 
         if (SelectedItems.ContainsKey(player)) SelectedItems[player] = relic;
         else SelectedItems.Add(player, relic);
 
         if (!player.IsLocal) return;
+        FrameManager.RefreshFrame(frame);
         nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {relic.Name}";
         costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:|r {relic.Cost}";
         descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {relic.Description}";

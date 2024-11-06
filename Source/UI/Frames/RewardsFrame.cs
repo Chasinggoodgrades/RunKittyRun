@@ -177,9 +177,12 @@ public static class RewardsFrame
     private static void RewardButtonActions(Reward reward)
     {
         var player = @event.Player;
+        var frame = @event.Frame;
         var stats = Globals.ALL_KITTIES[player].SaveData;
         if (stats.GameAwards[reward.Name] == 0) return; // Doesnt have the reward.
         reward.ApplyReward(player);
+        if (!player.IsLocal) return;
+        FrameManager.RefreshFrame(frame);
     }
 
     private static void UnavilableRewardIcons(player player)
