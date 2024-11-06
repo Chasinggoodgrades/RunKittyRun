@@ -59,13 +59,16 @@ public class Kibble
         var unit = @event.Unit;
         var player = unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
-
-        var randomChance = GetRandomInt(0, 500);
-        if (randomChance <= 1) KibbleReward(kitty); // 5% Chance
-        else if (randomChance <= 300) KibbleGoldReward(kitty); // 20% Chance
-        else if (randomChance <= 500) KibbleXP(kitty); // 20% Chance
+        effect effect = null;
+        var randomChance = GetRandomReal(0, 100);
+        if (randomChance <= 0.5) KibbleReward(kitty); // 5% Chance
+        else if (randomChance <= 30) KibbleGoldReward(kitty); // 20% Chance
+        else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
         else KibbleNothing(kitty); // 55% Chance
-        IncrementLumberAll();
+
+        if(randomChance <= 60) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+        if (effect != null) effect.Dispose();
+        IncrementKibblePoolAll();
     }
 
     private void KibbleReward(Kitty kitty)
@@ -82,8 +85,6 @@ public class Kibble
             return;
         }
         else goldAmount = GetRandomInt(1, GoldMax);
-        var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
-        effect.Dispose();
         kitty.Player.Gold += goldAmount;
         Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
     }
@@ -122,7 +123,7 @@ public class Kibble
         else Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
     }
 
-    private static void IncrementLumberAll()
+    private static void IncrementKibblePoolAll()
     {
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
