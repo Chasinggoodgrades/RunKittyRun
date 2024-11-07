@@ -104,6 +104,7 @@ public static class Constants
 	public const int ABILITY_WINGS_TYELLOW = 1093677898;
 	public const int ABILITY_AURA_BUTTERFLY = 1093677911;
 	public const int ABILITY_BOOK_OF_RELICS = 1093677378;
+	public const int ABILITY_FROSTBITE_AFFIX = 1395666993;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;

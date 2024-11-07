@@ -1,5 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
+using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 public class Fixation : Affix
 {
@@ -26,18 +27,15 @@ public class Fixation : Affix
 
     private void ChasingEvent(unit Target)
     {
-        var timer = CreateTimer();
-        IsChasing = true;
+        var chaseTimer = timer.Create();
         var Region = RegionList.WolfRegions[Unit.RegionIndex];
-        TimerStart(timer, 0.1f, true, () =>
-        {
-            if (!Target.Alive || !Region.Contains(GetUnitX(Target), GetUnitY(Target)))
+        IsChasing = true;
+        chaseTimer.Start(0.1f, true, () => {
+            if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
                 IsChasing = false;
-                var x = GetRandomReal(Region.Rect.MinX, Region.Rect.MaxX);
-                var y = GetRandomReal(Region.Rect.MinY, Region.Rect.MaxY);
-                Unit.Unit.IssueOrder("move", x, y);
-                timer.Dispose();
+                Unit.WolfMove();
+                chaseTimer.Dispose();
                 return;
             }
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);

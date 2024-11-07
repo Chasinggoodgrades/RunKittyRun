@@ -21,7 +21,7 @@ public static class Progress
     private static void StartProgressTracker()
     {
         if (Gamemode.CurrentGameMode == "Standard") return;
-        PeriodicTimer = CreateTimer();
+        PeriodicTimer = timer.Create();
         TimerStart(PeriodicTimer, PROGRESS_INTERVAL, true, PeriodicProgressTracker);
     }
 

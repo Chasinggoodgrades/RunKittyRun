@@ -4088,3 +4088,21 @@ STRING 3619
 R
 }
 
+STRING 3620
+// Abilities: S001 (Frostbite (Affix)), Name (Name)
+{
+Frostbite (Affix)
+}
+
+STRING 3621
+// Abilities: S001 (Frostbite (Affix)), Tip (Tooltip - Normal)
+{
+|cff0064ffFrostbite|r
+}
+
+STRING 3622
+// Abilities: S001 (Frostbite (Affix)), Ubertip (Tooltip - Normal - Extended)
+{
+Your limbs have gone numb.. Looks like you've been slowed by <SCae,DataA1,%>%.
+}
+
