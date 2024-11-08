@@ -20,19 +20,26 @@ public class FangOfShadows : Relic
         IconPath
         )
     {
+        RegisterTriggers();
     }
 
     public override void ApplyEffect(unit Unit)
     {
-        RegisterTriggers(Unit);
+        RegisterUnit(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
     public override void RemoveEffect(unit Unit)
     {
         Unit.DisableAbility(RelicAbilityID, true, true);
-        SummonTrigger.Dispose();
-        TeleTrigger.Dispose();
+    }
+
+    private void RegisterTriggers()
+    {
+        SummonTrigger = trigger.Create();
+        SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        TeleTrigger = trigger.Create();
+        TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
     }
 
     private static void SummonShadowKitty(player Player)
@@ -43,16 +50,12 @@ public class FangOfShadows : Relic
         Utility.SimpleTimer(SHADOW_KITTY_SUMMON_DURATION, () => sk.KillShadowKitty());
     }
 
-    private void RegisterTriggers(unit Unit)
+    private void RegisterUnit(unit Unit)
     {
-        SummonTrigger = trigger.Create();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         SummonTrigger.AddAction(() => SummonShadowKitty(Unit.Owner));
 
-        TeleTrigger = trigger.Create();
         TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
         TeleTrigger.AddAction(() => TeleportToShadowKitty());
     }
 

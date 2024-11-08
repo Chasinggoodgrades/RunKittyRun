@@ -24,9 +24,7 @@ public class Frostbite : Affix
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
         InRangeTrigger.AddAction(() =>
         {
-            Console.WriteLine("Frostbite triggered!");
             var target = @event.Unit;
-            if (target == Unit.Unit) return; // not self
             if (!target.Alive) return; // must be alive
             if (Frostbitten.ContainsKey(target)) return; // cannot be bitten already
             if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return; // must be in same lane
@@ -67,14 +65,14 @@ public class Frostbite : Affix
 
     public override void Apply()
     {
-        SetUnitVertexColor(Unit.Unit, 0, 50, 220, 255);
+        Unit.Unit.SetVertexColor(0, 50, 220);
         Unit.Unit.AddAbility(Constants.ABILITY_FROSTBITE);
         RegisterEvents();
     }
 
     public override void Remove()
     {
-        SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
+        Unit.Unit.SetVertexColor(150, 120, 255);
         Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
         InRangeTrigger.Dispose();
         Frostbitten.Clear();

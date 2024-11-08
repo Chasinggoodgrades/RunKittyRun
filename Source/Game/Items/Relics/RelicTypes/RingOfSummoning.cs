@@ -19,14 +19,20 @@ public class RingOfSummoning : Relic
         RelicCost,
         IconPath
         )
-    {}
+    {
+        RegisterTriggers();
+    }
+
+    private void RegisterTriggers()
+    {
+        Trigger = trigger.Create();
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => SacredRingOfSummoning());
+    }
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => SacredRingOfSummoning(Unit.Owner, @event.SpellTargetLoc));
         Unit.DisableAbility(RelicAbilityID, false, false);
         Console.WriteLine("Apply Effect Summonin Ring");
     }
@@ -45,13 +51,15 @@ public class RingOfSummoning : Relic
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
     }
 
-    public static void SacredRingOfSummoning(player Player, location targetedPoint)
+    public static void SacredRingOfSummoning()
     {
         // select all people within targeted point
+        var player = @event.Unit.Owner;
+        var targetedPoint = @event.SpellTargetLoc;
         var tempGroup = group.Create();
-        var summoningKitty = Globals.ALL_KITTIES[Player];
+        var summoningKitty = Globals.ALL_KITTIES[player];
         var summoningKittyUnit = summoningKitty.Unit;
-        SetAbilityData(@event.Player, @event.SpellAbility);
+        SetAbilityData(player, @event.SpellAbility);
         GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));
         foreach (var unit in tempGroup.ToList())
         {

@@ -19,7 +19,7 @@ public class Fixation : Affix
         InRangeTrigger.AddAction(() =>
         {
             Console.WriteLine("Fixation triggered!");
-            var target = GetTriggerUnit();
+            var target = @event.Unit;
             if (target != Unit.Unit && !IsChasing)
                 ChasingEvent(target);
         });

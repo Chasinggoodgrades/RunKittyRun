@@ -9,8 +9,10 @@ public class FrostbiteRing : Relic
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_RING_EFFECT = "Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathTargetArt.mdl";
-    private static float FROSTBITE_FREEZE_DURATION = 5.0f; private trigger Trigger;
+    private static float FROSTBITE_FREEZE_DURATION = 5.0f; 
     private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+
+    private trigger Trigger;
 
     public FrostbiteRing() : base(
         $"{Colors.COLOR_BLUE}Frostbite Ring",
@@ -19,22 +21,24 @@ public class FrostbiteRing : Relic
         RelicCost,
         IconPath
         )
-    {}
+    {
+        RegisterTriggers();
+    }
+
+    private void RegisterTriggers()
+    {
+        Trigger = trigger.Create();
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+    }
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
         Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
-    public override void RemoveEffect(unit Unit)
-    {
-        Unit.DisableAbility(RelicAbilityID, true, true);
-        Trigger.Dispose();
-    }
+    public override void RemoveEffect(unit Unit) => Unit.DisableAbility(RelicAbilityID, true, true);
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
 
     private static void FrostbiteCast(location freezeLocation)
@@ -53,7 +57,7 @@ public class FrostbiteRing : Relic
         var t = timer.Create();
         Unit.SetPausedEx(true);
         var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
-        TimerStart(t, FROSTBITE_FREEZE_DURATION, false, () =>
+        t.Start(FROSTBITE_FREEZE_DURATION, false, () =>
         {
             Unit.SetPausedEx(false);
             effect.Dispose();

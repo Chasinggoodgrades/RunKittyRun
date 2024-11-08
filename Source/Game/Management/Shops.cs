@@ -17,7 +17,7 @@ public static class Shops
     public static void Initialize()
     {
         KittyVendors = group.Create();
-        Trigger = CreateTrigger();
+        Trigger = trigger.Create();
         KittyVendorsList = new List<unit>();
         KittyVendorItemList = new List<int>();
         VendorsItemList = new Dictionary<unit, List<VendorItem>>();

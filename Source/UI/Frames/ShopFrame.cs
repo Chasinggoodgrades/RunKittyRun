@@ -14,6 +14,8 @@ public static class ShopFrame
     private static framehandle descriptionLabel;
     private static framehandle costLabel;
     private static framehandle buyButton;
+    private static framehandle sellButton;
+    private static framehandle upgradeButton;
     private const float buttonWidth = 0.025f;
     private const float buttonHeight = 0.025f;
     private const float panelPadding = 0.015f;
@@ -86,26 +88,36 @@ public static class ShopFrame
         detailsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
         var detailsPanelX = frameX - (panelX + panelPadding*2);
         var detailsPanelY = frameY - (panelPadding * 2);
-        BlzFrameSetPoint(detailsPanel, FRAMEPOINT_TOPRIGHT, shopFrame, FRAMEPOINT_TOPRIGHT, -panelPadding, -panelPadding);
-        BlzFrameSetSize(detailsPanel, detailsPanelX, detailsPanelY);
+        detailsPanel.SetPoint(framepointtype.TopRight, -panelPadding, -panelPadding, shopFrame, framepointtype.TopRight);
+        detailsPanel.SetSize(detailsPanelX, detailsPanelY);
 
         nameLabel = BlzCreateFrameByType("TEXT", "nameLabel", detailsPanel, "", 0);
         costLabel = BlzCreateFrameByType("TEXT", "costLabel", detailsPanel, "", 0);
         descriptionLabel = BlzCreateFrameByType("TEXT", "descriptionLabel", detailsPanel, "", 0);
+        
+        buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
+        sellButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
+        upgradeButton = BlzCreateFrame("DebugButton", detailsPanel, 0, 0);
 
         nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
         costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
         descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 4);
 
-        buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
-        buyButton.SetSize(detailsPanelX/3, detailsPanelY/6);
+        buyButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
+        sellButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
+        upgradeButton.SetSize(detailsPanelX/3.0f, detailsPanelY/6);
 
-        BlzFrameSetPoint(nameLabel, FRAMEPOINT_TOPLEFT, detailsPanel, FRAMEPOINT_TOPLEFT, panelPadding/2, -panelPadding);
-        BlzFrameSetPoint(costLabel, FRAMEPOINT_TOPLEFT, nameLabel, FRAMEPOINT_TOPLEFT, 0, -panelPadding);
-        BlzFrameSetPoint(descriptionLabel, FRAMEPOINT_TOPLEFT, costLabel, FRAMEPOINT_BOTTOMLEFT, 0, -panelPadding);
-        BlzFrameSetPoint(buyButton, FRAMEPOINT_BOTTOMRIGHT, detailsPanel, FRAMEPOINT_BOTTOMRIGHT, -panelPadding, panelPadding);
+        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding/2, -panelPadding, detailsPanel, framepointtype.TopLeft);
+        costLabel.SetPoint(framepointtype.TopLeft, 0, -panelPadding, nameLabel, framepointtype.TopLeft);
+        descriptionLabel.SetPoint(framepointtype.TopLeft, 0, 0, costLabel, framepointtype.BottomLeft);
+
+        upgradeButton.SetPoint(framepointtype.BottomLeft, panelPadding, panelPadding, detailsPanel, framepointtype.BottomLeft);
+        sellButton.SetPoint(framepointtype.BottomRight, -panelPadding, panelPadding, detailsPanel, framepointtype.BottomRight);
+        buyButton.SetPoint(framepointtype.BottomLeft, 0, 0, sellButton, framepointtype.TopLeft);
 
         buyButton.Text = "Buy";
+        sellButton.Text = "Sell";
+        upgradeButton.Text = "Upgrade";
 
         var Trigger = trigger.Create();
         Trigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
@@ -185,7 +197,11 @@ public static class ShopFrame
             var itemID = selectedItem.ItemID;
             var kitty = Globals.ALL_KITTIES[player];
 
-            if (!HasEnoughGold(player, cost)) return;
+            if (!HasEnoughGold(player, cost))
+            {
+                NotEnoughGold(player, cost);
+                return;
+            }
 
             if (type == ShopItemType.Relic)
             {
@@ -207,6 +223,7 @@ public static class ShopFrame
             }
         }
 
+        // If item is bought, the frame will disappear for the player.
         if (player.IsLocal) shopFrame.Visible = !shopFrame.Visible;
     }
 
@@ -219,6 +236,7 @@ public static class ShopFrame
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
     private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this relic!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
     private static void RelicMaxedOut(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum amount of this relic!");
+    private static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have {Colors.COLOR_YELLOW}{cost}gold|r");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
     public static void ShopFrameActions()
