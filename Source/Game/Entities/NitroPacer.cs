@@ -1,6 +1,7 @@
 ﻿using WCSharp.Api;
 using WCSharp.Shared.Data;
 using System.Linq;
+using System;
 public static class NitroPacer
 {
     public static unit Unit;
@@ -61,10 +62,9 @@ public static class NitroPacer
         if (PathingPoints[currentCheckpoint+1].Contains(Unit.X, Unit.Y))
         {
             currentCheckpoint++;
-            if(currentCheckpoint >= PathingPoints.Count())
+            if(currentCheckpoint >= PathingPoints.Count() - 1)
             {
                 pacerTimer.Pause();
-                Unit.IsPaused = true;
                 return;
             }
             MoveNextZone();

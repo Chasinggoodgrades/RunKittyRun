@@ -43,8 +43,8 @@ public class Kitty
         {
             foreach (var player in Globals.ALL_PLAYERS)
             {
-                new Kitty(player);
                 new Circle(player);
+                new Kitty(player);
             }
         }
         catch (Exception e)
@@ -65,6 +65,7 @@ public class Kitty
     {
         var circle = Globals.ALL_CIRCLES[Player];
         Unit.Kill();
+        if(!ProtectionActive) Alive = false;
         DeathStatUpdate();
         CrystalOfFire.CrystalOfFireDeath(this);
         circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);

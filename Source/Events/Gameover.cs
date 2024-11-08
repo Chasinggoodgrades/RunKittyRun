@@ -3,7 +3,7 @@ using WCSharp.Api;
 using System;
 public static class Gameover
 {
-    public static bool WinGame = false;
+    public static bool WinGame { get; set; } = false;
     public static bool GameOver()
     {
         if(WinningGame()) return true;
@@ -39,6 +39,7 @@ public static class Gameover
     {
         Console.WriteLine("Game will end... eventually..");
         Wolf.RemoveAllWolves();
+        DiscordFrame.Initialize();
         SaveManager.SaveAll();
     }
 

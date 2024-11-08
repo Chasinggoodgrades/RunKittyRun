@@ -34,7 +34,7 @@ namespace Source.Init
         {
             timeToChoose++;
             if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE)
-                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+                Gamemode.SetGameMode("Standard");
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();
@@ -78,7 +78,8 @@ namespace Source.Init
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error in StartGame: " + e.Message);
+                Console.WriteLine("StartGame: " + e.Message);
+                Console.WriteLine("Stacktrace: " + e.StackTrace);
                 throw;
             }
         }

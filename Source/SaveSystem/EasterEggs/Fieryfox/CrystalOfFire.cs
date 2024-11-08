@@ -126,6 +126,8 @@ public static class CrystalOfFire
         Utility.RemoveItemFromUnit(unit, orb);
         Utility.RemoveItemFromUnit(unit, lightningShot);
 
+        // ADD TEXT DISPLAY HERE FOR F&F
+
         AwardManager.GiveReward(player, Awards.WW_Fire);
     }
 }

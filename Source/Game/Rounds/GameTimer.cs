@@ -2,6 +2,7 @@
 public static class GameTimer
 {
     public static float[] RoundTime { get; set; }
+
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>

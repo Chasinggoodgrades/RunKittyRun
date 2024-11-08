@@ -51,6 +51,7 @@ public static class ProtectionOfAncients
         var t = timer.Create();
         t.Start(EFFECT_DELAY, false, () =>
         {
+            ApplyEffect(Unit);
             actiEffect.Dispose();
             t.Dispose();
         });

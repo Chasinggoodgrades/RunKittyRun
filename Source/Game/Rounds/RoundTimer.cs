@@ -5,16 +5,16 @@ using static WCSharp.Api.Common;
 
 public static class RoundTimer
 {
-    public static timer StartRoundTimer = CreateTimer();
-    public static timer EndRoundTimer = CreateTimer();
-    public static timerdialog RoundTimerDialog = CreateTimerDialog(StartRoundTimer);
-    private static timerdialog EndRoundTimerDialog = CreateTimerDialog(EndRoundTimer);
-    private static List<float> ROUND_ENDTIMES = new List<float>();
+    public static timer StartRoundTimer = timer.Create();
+    public static timer EndRoundTimer = timer.Create();
+    public static timerdialog RoundTimerDialog = timerdialog.Create(StartRoundTimer);
+    private static timerdialog EndRoundTimerDialog = timerdialog.Create(EndRoundTimer);
+    private static List<float> ROUND_ENDTIMES;
 
     public static void InitEndRoundTimer()
     {
         if (Gamemode.CurrentGameMode == "Standard") return;
-
+        ROUND_ENDTIMES = new List<float>();
         TimerDialogSetTitle(EndRoundTimerDialog, "Round Time Remaining");
         SetEndRoundTimes();
         EndRoundTimerDialogs();
@@ -22,10 +22,10 @@ public static class RoundTimer
 
     public static void EndRoundTimerDialogs()
     {
-        TimerDialogDisplay(Globals.GAME_TIMER_DIALOG, false);
-        TimerDialogDisplay(EndRoundTimerDialog, false);
-        TimerDialogSetTitle(RoundTimerDialog, "Starts in:");
-        TimerDialogDisplay(RoundTimerDialog, true);
+        Globals.GAME_TIMER_DIALOG.IsDisplayed = false;
+        EndRoundTimerDialog.IsDisplayed = false;
+        RoundTimerDialog.SetTitle("Starts in:");
+        RoundTimerDialog.IsDisplayed = true;
     }
 
     public static void StartEndRoundTimer()
@@ -41,7 +41,7 @@ public static class RoundTimer
     {
         if (StartRoundTimer.Remaining > 0)
         {
-            var t = CreateTimer();
+            var t = timer.Create();
             t.Start(1.0f, false, () =>
             {
                 string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";

@@ -23,7 +23,7 @@ public static class VictoryZone
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryContainerConditions(GetFilterUnit())));
+        InVictoryArea.RegisterEnterRegion(VictoryArea);
         InVictoryArea.AddAction(VictoryAreaActions);
     }
 
@@ -31,9 +31,10 @@ public static class VictoryZone
     {
         var u = @event.Unit;
         var player = u.Owner;
+        Console.WriteLine("Victory Area triggered");
         if(u.UnitType != Constants.UNIT_KITTY) return;
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
+        if (Gamemode.CurrentGameMode == "Standard") // Standard
         {
             RoundManager.RoundEnd();
         }
@@ -57,9 +58,7 @@ public static class VictoryZone
 
     private static bool VictoryAreaConditionsStandard(unit u)
     {
-        // Whoever enters .. Great. Finish.
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[0]) return false;
-        return true;
+        return Gamemode.CurrentGameMode == "Standard";
     }
 
     private static bool VictoryAreaConditionsSolo(unit u)
