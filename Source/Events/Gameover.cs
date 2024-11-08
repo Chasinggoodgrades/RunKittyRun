@@ -4,6 +4,7 @@ using System;
 public static class Gameover
 {
     public static bool WinGame { get; set; } = false;
+    private static float EndingTimer { get; set; } = 90.0f;
     public static bool GameOver()
     {
         if(WinningGame()) return true;
@@ -37,10 +38,18 @@ public static class Gameover
 
     private static void LosingGame()
     {
-        Console.WriteLine("Game will end... eventually..");
         Wolf.RemoveAllWolves();
         DiscordFrame.Initialize();
         SaveManager.SaveAll();
+
+        Console.WriteLine($"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
+        Utility.SimpleTimer(EndingTimer, EndGame);
+    }
+
+    private static void EndGame()
+    {
+        foreach(var player in Globals.ALL_PLAYERS)
+            player.Remove(playergameresult.Defeat);
     }
 
     private static bool LosingGameCheck()

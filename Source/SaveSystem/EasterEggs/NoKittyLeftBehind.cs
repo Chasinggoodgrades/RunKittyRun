@@ -2,7 +2,7 @@
 public static class NoKittyLeftBehind
 {
     private static int ItemID;
-    private static int CompletedCount = 0;
+    private static int CompletedCount { get; set; } = 0;
     private static int LastCheckedRound = 0;
     private static int RequiredCount = 3;
 

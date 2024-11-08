@@ -9,12 +9,15 @@ public class Frostbite : Affix
     private const float FROSTBITE_SPEED_REDUCTION = 0.83f;
     private trigger InRangeTrigger;
     private trigger PeriodicRangeTrigger;
+    private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     private Dictionary<unit, float> Frostbitten;
+    private Dictionary<unit, effect> Effects;
     public Frostbite(Wolf unit) : base(unit)
     {
         InRangeTrigger = trigger.Create();
         PeriodicRangeTrigger = trigger.Create();
         Frostbitten = new Dictionary<unit, float>();
+        Effects = new Dictionary<unit, effect>();
     }
 
     private void RegisterEvents()
@@ -52,6 +55,7 @@ public class Frostbite : Affix
         foreach (var target in targetsToRemove)
         {
             Frostbitten.Remove(target);
+            Effects[target].Dispose();
         }
     }
 
@@ -60,6 +64,7 @@ public class Frostbite : Affix
         if (target.GetAbilityLevel(FourCC("Bspe")) > 0) return; // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return; // Frostbite ring
         Frostbitten.Add(target, target.BaseMovementSpeed);
+        Effects[target] = effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
         target.BaseMovementSpeed = target.BaseMovementSpeed * FROSTBITE_SPEED_REDUCTION;
     }
 
@@ -75,7 +80,9 @@ public class Frostbite : Affix
         Unit.Unit.SetVertexColor(150, 120, 255);
         Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
         InRangeTrigger.Dispose();
+        PeriodicRangeTrigger.Dispose();
         Frostbitten.Clear();
+        Effects.Clear();
     }
 
     /*    private float CurrentEffectiveMS(unit target)
