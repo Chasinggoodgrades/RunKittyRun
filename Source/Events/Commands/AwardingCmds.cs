@@ -21,6 +21,12 @@ public static class AwardingCmds
             return;
         }
 
+        if(award.ToLower() == "all")
+        {
+            AwardAll(player);
+            return;
+        }
+
         foreach (var awd in Enum.GetValues(typeof(Awards)))
         {
             var awardString = Enum.GetName(typeof(Awards), awd).ToLower();
@@ -46,6 +52,14 @@ public static class AwardingCmds
             combined += awardString + ", ";
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid awards: {Colors.HighlightString(combined)}");
+    }
+
+    private static void AwardAll(player player)
+    {
+        foreach(var award in Enum.GetValues(typeof(Awards)))
+        {
+            AwardManager.GiveReward(player, (Awards)award);
+        }
     }
 
     /// <summary>

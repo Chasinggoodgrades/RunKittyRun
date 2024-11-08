@@ -79,6 +79,7 @@ namespace Source.Init
             catch (Exception e)
             {
                 Console.WriteLine("Error in StartGame: " + e.Message);
+                throw;
             }
         }
 
