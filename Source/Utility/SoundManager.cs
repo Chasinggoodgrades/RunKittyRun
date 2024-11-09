@@ -57,7 +57,6 @@ public static class SoundManager
         SPEED_SOUND = sounds["SpeedSound"];
         INVULNERABLE_SOUND = sounds["InvulnerableSound"];
     }
-
     private static void SetSoundAttributes()
     {
         foreach (var sound in sounds.Values)

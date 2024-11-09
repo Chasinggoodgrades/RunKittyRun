@@ -98,7 +98,7 @@ public static class MusicFrame
 
                 if (!player.IsLocal) return;
 
-                MusicManager.StopAllMusic();
+                //MusicManager.StopAllMusic();
 
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
                 if (music != null) music.Play();
