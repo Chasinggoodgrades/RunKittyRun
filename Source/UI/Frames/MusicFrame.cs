@@ -21,7 +21,7 @@ public static class MusicFrame
     {
         MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
         MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
-        Utility.SimpleTimer(5.0f, CreateMusicFrames);
+        CreateMusicFrames();
     }
 
     private static void CreateMusicFrames()

@@ -27,20 +27,17 @@ public static class AntiblockWand
         return Trigger;
     }
 
-
     private static void SpellActions()
     {
         if (@event.SpellAbilityId != AbilityID) return;
         var location = @event.SpellTargetLoc;
         var wolvesInArea = group.Create();
-        Console.WriteLine("Antiblock wand casted");
         wolvesInArea.EnumUnitsInRange(location.X, location.Y, Radius, null);
         var list = wolvesInArea.ToList();
         foreach (var wolf in list)
         {
             if (wolf.UnitType != Wolf.WOLF_MODEL) continue;
             var wolfUnit = Globals.ALL_WOLVES[wolf];
-            Console.WriteLine($"Wolf {wolfUnit.Unit.Name} moved");
             wolfUnit.WolfMove();
         }
 
