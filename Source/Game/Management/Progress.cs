@@ -9,7 +9,7 @@ public static class Progress
     public static Dictionary<int, float> DistancesFromStart = new Dictionary<int, float>();
     private static timer PeriodicTimer;
     private const float PROGRESS_INTERVAL = 0.2f;
-    public static Dictionary<player, rect> PlayerProgressPoints = new Dictionary<player, rect>();
+    public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
     public static void Initialize()
     {
         Globals.TEAM_PROGRESS = new Dictionary<Team, string>();

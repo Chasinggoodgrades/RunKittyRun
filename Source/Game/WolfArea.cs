@@ -69,10 +69,8 @@ public class WolfArea
         Trigger.RegisterLeaveRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
         Trigger.AddAction(() =>
         {
-            var unit = @event.Unit;
-            var randomX = GetRandomReal(Rect.MinX, Rect.MaxX);
-            var randomY = GetRandomReal(Rect.MinY, Rect.MaxY);
-            unit.IssueOrder("move", randomX, randomY);
+            var wolf = Globals.ALL_WOLVES[@event.Unit];
+            wolf.WolfMove();
         });
     }
 

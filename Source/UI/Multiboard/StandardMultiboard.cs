@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using WCSharp.Api;
 
@@ -133,17 +134,21 @@ public static class StandardMultiboard
         CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
         var rowIndex = 2;
 
-        foreach (var player in Globals.ALL_PLAYERS)
+        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        foreach (var player in sortedPlayers.Keys)
         {
             var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
             var playerColor = Colors.GetPlayerColor(player.Id+1);
 
+            var name = player.Name;
             var totalSaves = currentStats.TotalSaves;
             var totalDeaths = currentStats.TotalDeaths;
             var score = totalSaves - totalDeaths;
             var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
 
             var stats = new[] {
+                name,
                 score.ToString(),
                 totalSaves.ToString(),
                 totalDeaths.ToString(),
@@ -153,7 +158,10 @@ public static class StandardMultiboard
             };
 
             for (int i = 0; i < stats.Length; i++)
-                CurrentStats.GetItem(rowIndex, i + 1).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+            {
+                CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.08f);
+            }
 
             rowIndex++;
         }
@@ -164,11 +172,14 @@ public static class StandardMultiboard
         OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
         var rowIndex = 1;
 
-        foreach (var player in Globals.ALL_PLAYERS)
+        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats[StatTypes.Saves] - kvp.Value.SaveData.GameStats[StatTypes.Deaths]).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        foreach (var player in sortedPlayers.Keys)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
+            var name = player.Name;
             var allSaves = saveData.GameStats[StatTypes.Saves];
             var allDeaths = saveData.GameStats[StatTypes.Deaths];
             var score = allSaves - allDeaths;
@@ -177,6 +188,7 @@ public static class StandardMultiboard
 
             var stats = new[]
             {
+                name,
                 score.ToString(),
                 allSaves.ToString(),
                 allDeaths.ToString(),
@@ -186,8 +198,10 @@ public static class StandardMultiboard
                 wins.ToString()
             };
 
-            for (int i = 0; i < stats.Length; i++)
-                OverallStats.GetItem(rowIndex, i + 1).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+            for (int i = 0; i < stats.Length; i++) {
+                OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.08f);
+            }
 
             rowIndex++;
         }
@@ -215,11 +229,9 @@ public static class StandardMultiboard
             rowIndex++;
         }
     }
-
     public static void UpdateOverallStatsMB()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        FillPlayers(OverallStats, 1);
         OverallGameStats();
     }
 
@@ -227,7 +239,6 @@ public static class StandardMultiboard
     public static void UpdateStandardCurrentStatsMB()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        FillPlayers(CurrentStats);
         CurrentStatsRoundTimes();
         CurrentGameStats();
     }
