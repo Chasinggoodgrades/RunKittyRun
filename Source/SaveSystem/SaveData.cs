@@ -77,7 +77,7 @@ public enum StatTypes
 public enum Awards
 {
     // Hats
-    Bandana,
+    Bandana, // 0 
     Pirate_Hat,
     Chef_Hat,
     Tiki_Mask,
