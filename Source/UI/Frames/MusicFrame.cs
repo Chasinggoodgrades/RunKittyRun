@@ -7,6 +7,7 @@ public static class MusicFrame
     public static framehandle MusicFramehandle;
     private static framehandle MusicFrameTitle;
     private static framehandle MusicSlider;
+    private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
     private static Dictionary<int, framehandle> MusicButtons = new Dictionary<int, framehandle>();
     private static string[] Headers;
@@ -19,7 +20,7 @@ public static class MusicFrame
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
     public static void Initialize()
     {
-        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
+        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
         CreateMusicFrames();
     }

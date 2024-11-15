@@ -16,6 +16,7 @@ public static class ShopFrame
     private static framehandle buyButton;
     private static framehandle sellButton;
     private static framehandle upgradeButton;
+    private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private const float buttonWidth = 0.025f;
     private const float buttonHeight = 0.025f;
     private const float panelPadding = 0.015f;
@@ -47,7 +48,7 @@ public static class ShopFrame
 
     private static void InitializeShopFrame()
     {
-        shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", BlzGetFrameByName("ConsoleUIBackdrop", 0), "QuestButtonPushedBackdropTemplate", 0);
+        shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         BlzFrameSetAbsPoint(shopFrame, FRAMEPOINT_CENTER, 0.40f, 0.375f);
         BlzFrameSetSize(shopFrame, frameX, frameY);
         FrameManager.CreateHeaderFrame(shopFrame);

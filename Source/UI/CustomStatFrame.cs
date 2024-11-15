@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -43,14 +44,12 @@ public static class CustomStatFrame
 
         // Position frames based on Count
         if (Count == 1)
-            BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.320f, 0.08f);
+            fh.SetPoint(framepointtype.TopLeft, 0.015f, -0.035f, CustomStatFrameBoxS, framepointtype.TopLeft);
         else if (Count == 4)
-            BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.420f, 0.08f);
-        else if (Count == 7)
-            BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.435f, 0.08f);
+            fh.SetPoint(framepointtype.TopRight, -0.060f, -0.035f, CustomStatFrameBoxS, framepointtype.TopRight);
         else
-            BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName("CustomStat", Count - 1), FRAMEPOINT_BOTTOMLEFT, 0, -0.005f);
-         
+            fh.SetPoint(framepointtype.TopLeft, 0, -0.005f, BlzGetFrameByName("CustomStat", Count - 1), framepointtype.BottomLeft);
+
         Stats.Add(new CustomStat
         {
             Frame = fh,
@@ -66,33 +65,29 @@ public static class CustomStatFrame
     public static void Update()
     {
         var localPlayer = player.LocalPlayer;
-        var selectedUnit = SelectedUnit[GetPlayerId(localPlayer)];
+        var selectedUnit = SelectedUnit[localPlayer.Id];
         
         HandleFrameText(selectedUnit);
 
-        BlzFrameSetVisible(CustomStatFrameBoxF, BlzFrameIsVisible(CustomStatFrameBoxS));
+        CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
     }
 
     public static void Init()
     {
-        void MoveOutOfScreen(framehandle fh)
-        {
-            BlzFrameClearAllPoints(fh);
-            BlzFrameSetAbsPoint(fh, FRAMEPOINT_CENTER, 3, 3);
-            BlzFrameSetScale(fh, 0.001f);
-        }
+        var hideParent = BlzCreateFrameByType("SIMPLEFRAME", "HideParent", BlzGetFrameByName("ConsoleUI", 0), "", 0);
+        hideParent.Visible = false;
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconDamage", 0), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconDamage", 1), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconArmor", 2), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconRank", 3), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconFood", 4), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconGold", 5), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconHero", 6), hideParent);
+        BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
+        
 
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconDamage", 0));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconDamage", 1));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconArmor", 2));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconRank", 3));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconFood", 4));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconGold", 5));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconHero", 6));
-        MoveOutOfScreen(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7));
-
-        trigger trig = CreateTrigger();
-        TriggerAddAction(trig, () =>
+        trigger trig = trigger.Create();
+        trig.AddAction( () =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
@@ -100,9 +95,7 @@ public static class CustomStatFrame
         });
 
         foreach(var player in Globals.ALL_PLAYERS)
-        {
-            if(player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SELECTED, null);
-        }
+            if(player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);
         CustomStatFrameBoxF = BlzCreateFrameByType("FRAME", "CustomStatFrameBoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0);
@@ -117,8 +110,8 @@ public static class CustomStatFrame
         Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "s_Gold", "Gold");
         Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "s_Speed", "Speed");
 
-        t = CreateTimer();
-        TimerStart(t, 0.1f, true, Update);
+        t = timer.Create();
+        t.Start(0.1f, true, Update);
     }
 
     public class CustomStat
@@ -134,7 +127,7 @@ public static class CustomStatFrame
 
     private static void HandleFrameText(unit selectedUnit)
     {
-        if (GetUnitTypeId(selectedUnit) == Constants.UNIT_CUSTOM_DOG || GetUnitTypeId(selectedUnit) == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
+        if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
         else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
@@ -222,7 +215,7 @@ public static class CustomStatFrame
         if (Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team)) return team.TeamColor;
         return $"{ Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
-    private static int GetPlayerGold(unit u) => GetOwningPlayer(u).Gold;
+    private static int GetPlayerGold(unit u) => u.Owner.Gold;
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[u.Owner].Progress.ToString("F2");
     private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Saves];
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Deaths];

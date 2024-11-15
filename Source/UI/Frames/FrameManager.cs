@@ -21,8 +21,13 @@ public static class FrameManager
         CreateShopButton();
         CreateRewardsButton();
         MusicFrame.Initialize();
-        ShopFrame.Initialize();
         Utility.SimpleTimer(1.0f, ESCHideFrames);
+    }
+
+    public static void InitAllFrames()
+    {
+        ShopFrame.Initialize();
+        RewardsFrame.Initialize();
     }
 
     public static framehandle CreateHeaderFrame(framehandle parent)
@@ -90,7 +95,9 @@ public static class FrameManager
     private static void CreateRewardsButton()
     {
         RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", GameUI, "DebugButton", 0);
-        RewardsButton.SetAbsPoint(framepointtype.Center, 0.24f, 0.15f);
+        var statsFrameParent = BlzGetFrameByName("SimpleUnitStatsPanel", 0);
+        RewardsButton.SetPoint(framepointtype.TopLeft, -0.05f, 0.05f, statsFrameParent, framepointtype.TopLeft);
+        //RewardsButton.SetAbsPoint(framepointtype.Center, 0.24f, 0.15f);
         RewardsButton.SetSize(0.0525f, 0.025f);
         RewardsButton.Text = "Rewards";
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);

@@ -66,7 +66,7 @@ namespace Source.Init
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
                 RewardChecker.DisableALlRewards();
-                RewardsFrame.Initialize();
+                FrameManager.InitAllFrames();
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
