@@ -14,7 +14,6 @@ namespace Source.Init
         public static void Initialize()
         {
             Colors.Initialize();
-            GetActivePlayers();
             Gamemode.Initialize();
             Safezone.Initialize();
             Savecode.Initialize();
@@ -51,6 +50,7 @@ namespace Source.Init
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
                 SuspendTimeOfDay(true);
                 CustomStatFrame.Init();
+                SeasonalManager.Initialize();
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();
@@ -67,6 +67,7 @@ namespace Source.Init
                 RewardsManager.Initialize();
                 RewardChecker.DisableALlRewards();
                 FrameManager.InitAllFrames();
+                TerrainChanger.Initialize();
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
@@ -84,11 +85,11 @@ namespace Source.Init
         }
 
 
-        private static void GetActivePlayers()
+        public static void GetActivePlayers()
         {
             for (int i = 0; i < GetBJMaxPlayers(); i++)
             {
-                if (GetPlayerSlotState(Player(i)) == playerslotstate.Playing)
+                if (Player(i).SlotState == playerslotstate.Playing)
                     Globals.ALL_PLAYERS.Add(Player(i));
             }
         }

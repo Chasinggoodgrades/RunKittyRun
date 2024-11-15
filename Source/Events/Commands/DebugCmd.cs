@@ -52,6 +52,9 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 break;
+            case "?sn":
+
+                break;
             case "?award":
                 AwardingCmds.Awarding(player, command);
                 break;

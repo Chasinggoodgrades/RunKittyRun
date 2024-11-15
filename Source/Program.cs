@@ -33,8 +33,7 @@ namespace Source
 #if DEBUG
 				// This part of the code will only run if the map is compiled in Debug mode
 				Debug = true;
-				Console.WriteLine("Map Created By: Aches, Debugging Enabled");
-				Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Loading... Please Wait.{Colors.COLOR_RESET}");
+				//Console.WriteLine("Map Created By: Aches, Debugging Enabled");
 				// By calling these methods, whenever these systems call external code (i.e. your code),
 				// they will wrap the call in a try-catch and output any errors to the chat for easier debugging
 				PeriodicEvents.EnableDebug();
@@ -42,13 +41,15 @@ namespace Source
 				SyncSystem.EnableDebug();
 				Delay.EnableDebug();
 #endif
+				Setup.GetActivePlayers();
                 MusicManager.Initialize();
                 FrameManager.Initialize();
-				Setup.Initialize();
+                SaveManager.Initialize();
+                DateTimeManager.Initialize();
+                Setup.Initialize();
 				CommandHandler.Initialize();
 				CommandManager.InitializeCommands();
 				BarrierSetup.Initialize();
-				SaveManager.Initialize();
 
             }
             catch (Exception ex)

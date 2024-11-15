@@ -29,7 +29,7 @@ public static class SaveManager
             if(p.Controller != mapcontrol.User) continue;
             saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
             saveSystem.Load(p);
-            if(Program.Debug) Console.WriteLine("Loading... " + p.Name);
+            //if(Program.Debug) Console.WriteLine("Loading... " + p.Name);
         }
     }
 
