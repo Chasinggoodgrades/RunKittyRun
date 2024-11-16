@@ -6,6 +6,7 @@ public static class SeasonalManager
 {
     private static int CurrentMonth { get; set; }
     private static int SnowEffect { get; set; } = FourCC("SNls");
+    private static weathereffect CurrentWeather;
 
     /// <summary>
     /// Must be standard mode for seasonal changes to occur.
@@ -17,11 +18,42 @@ public static class SeasonalManager
         SetWeather();
     }
 
-    private static void SetWeather()
+    /// <summary>
+    /// Returns if it is currently Christmas season or not.
+    /// </summary>
+    /// <returns></returns>
+    public static bool ChristmasSeason() => DateTimeManager.CurrentMonth == 12;
+
+    /// <summary>
+    /// Admin command to activate Christmas season. Only works in standard mode.
+    /// </summary>
+    public static void ActivateChristmas()
     {
-        // December and January will have snow.
-        if (CurrentMonth == 11 || CurrentMonth == 12)
-            weathereffect.Create(rect.CreateWorldBounds(), SnowEffect);
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        TerrainChanger.ActivateChristmasTerrain();
+        DoodadChanger.ActivateChristmasDoodads();
+        SetWeather("Christmas");
+    
     }
+
+    public static void NoSeason()
+    {
+        TerrainChanger.NoSeasonTerrain();
+        DoodadChanger.NoSeasonDoodads();
+        SetWeather();
+    }
+
+    private static void SetWeather(string type = "")
+    {
+        if (ChristmasSeason() || type == "Christmas")
+        {
+            CurrentWeather ??= weathereffect.Create(rect.CreateWorldBounds(), SnowEffect);
+            CurrentWeather.Enable();
+        }
+        else
+            if (CurrentWeather != null) CurrentWeather.Dispose();
+    }
+
+
 
 }

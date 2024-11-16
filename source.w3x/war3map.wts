@@ -4101,3 +4101,9 @@ STRING 3622
 Your limbs have gone numb.. Looks like you've been slowed by <SCae,DataA1,%>%.
 }
 
+STRING 3623
+// Destructibles: B005 (Wall Lantern), Name (Name)
+{
+Wall Lantern
+}
+

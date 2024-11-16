@@ -68,6 +68,7 @@ namespace Source.Init
                 RewardChecker.DisableALlRewards();
                 FrameManager.InitAllFrames();
                 TerrainChanger.Initialize();
+                DoodadChanger.Initialize();
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();

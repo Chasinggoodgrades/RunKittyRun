@@ -15,7 +15,4 @@
 		<PackageReference Include="WCSharp.Shared" Version="3.0.3" />
 		<PackageReference Include="WCSharp.Sync" Version="3.0.2" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Seasonal\Doodads\" />
-	</ItemGroup>
 </Project>
