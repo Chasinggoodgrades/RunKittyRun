@@ -7,12 +7,13 @@ using static WCSharp.Api.Common;
 
 public class Wolf
 {
-    public const int WOLF_MODEL = Constants.UNIT_CUSTOM_DOG;
+    public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
+    public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
     private const float WANDER_LOWER_BOUND = 0.70f;
     private const float WANDER_UPPER_BOUND = 0.83f;
-    private const string OVERHEAD_EFFECT = "TalkToMe.mdx";
 
     public int RegionIndex { get; set; }
+    public string OVERHEAD_EFFECT_PATH { get; set; }
     private effect OverheadEffect { get; set; }
     private timer WanderTimer { get; set; }
     public rect Lane { get; private set; }
@@ -24,6 +25,7 @@ public class Wolf
         RegionIndex = regionIndex;
         Lane = RegionList.WolfRegions[RegionIndex].Rect;
         Affixes = new List<Affix>();
+        OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         InitializeWolf();
         StartWandering();
     }
@@ -89,7 +91,7 @@ public class Wolf
     private void ApplyEffect()
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
-        OverheadEffect = effect.Create(OVERHEAD_EFFECT, Unit, "overhead");
+        OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
 
         var effectTimer = timer.Create();
         effectTimer.Start(effectDuration, false, () =>
@@ -123,6 +125,7 @@ public class Wolf
                 for (int i = 0; i < numberOfWolves; i++)
                     new Wolf(lane);
             }
+            FandF.CreateBloodWolf();
         }
     }
     /// <summary>

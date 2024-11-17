@@ -10,9 +10,9 @@ public static class CrystalOfFire
     private static trigger QuestAccept;
     private static Dictionary<player, int> DeathAttempts;
     private static List<player> QuestEligible;
+
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
         ItemID = Constants.ITEM_CRYSTAL_OF_FIRE;
         TurnInRange = 150.0f;
         TurnInEventFieryfox = RegisterTurnInFiery();

@@ -11,7 +11,6 @@ public static class MissingShoe
 
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
         RegisterSpawnEvent();
         ItemID = Constants.ITEM_FIERYFOXES_S_MISSING_SHOE;
         TurnInRange = 200.0f;

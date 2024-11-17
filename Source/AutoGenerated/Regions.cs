@@ -51,8 +51,8 @@ public static class Regions
 	public static Rectangle Victory_Area { get; set; } = new Rectangle(-32f, -800f, 416f, -480f);
 	public static Rectangle Wolf_Area_01 { get; set; } = new Rectangle(-2560f, 2304f, 2560f, 3072f);
 	public static Rectangle Wolf_Area_02 { get; set; } = new Rectangle(2560f, -2976f, 3328f, 2240f);
-	public static Rectangle Wolf_Area_03 { get; set; } = new Rectangle(-2592f, -3584f, 2592f, -2944f);
-	public static Rectangle Wolf_Area_04 { get; set; } = new Rectangle(-3392f, -2944f, -2560f, 1536f);
+	public static Rectangle Wolf_Area_03 { get; set; } = new Rectangle(-2560f, -3584f, 2592f, -2944f);
+	public static Rectangle Wolf_Area_04 { get; set; } = new Rectangle(-3360f, -2912f, -2560f, 1536f);
 	public static Rectangle Wolf_Area_05 { get; set; } = new Rectangle(-2592f, 1504f, 1920f, 2176f);
 	public static Rectangle Wolf_Area_06 { get; set; } = new Rectangle(1888f, -2304f, 2464f, 1536f);
 	public static Rectangle Wolf_Area_07 { get; set; } = new Rectangle(-1952f, -2848f, 1920f, -2272f);
@@ -68,7 +68,7 @@ public static class Regions
 	public static Rectangle Wolf_Area_17 { get; set; } = new Rectangle(-928f, -384f, -64f, 32f);
 	public static Rectangle ProgressPoint1 { get; set; } = new Rectangle(672f, -1344f, 928f, -1120f);
 	public static Rectangle ProgressPoint2 { get; set; } = new Rectangle(-800f, -1344f, -608f, -1152f);
-	public static Rectangle Urn_Soul_Region { get; set; } = new Rectangle(2240f, -2880f, 2464f, -2624f);
+	public static Rectangle Urn_Soul_Region { get; set; } = new Rectangle(2208f, -2880f, 2464f, -2592f);
 	public static Rectangle UrnSoulRegion1 { get; set; } = new Rectangle(2368f, 2080f, 2400f, 2112f);
 	public static Rectangle UrnSoulRegion2 { get; set; } = new Rectangle(-2400f, 1216f, -2368f, 1248f);
 	public static Rectangle UrnSoulRegion3 { get; set; } = new Rectangle(352f, -256f, 384f, -224f);

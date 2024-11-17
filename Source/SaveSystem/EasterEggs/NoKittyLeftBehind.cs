@@ -16,6 +16,7 @@ public static class NoKittyLeftBehind
         if(Gamemode.CurrentGameMode != "Standard") return;
         if (!NoOneLeftBehind()) return;
         if (LastCheckedRound == Globals.ROUND) return; // Only check once per round
+
         CompletedCount++;
         LastCheckedRound = Globals.ROUND;
         SendMessage();

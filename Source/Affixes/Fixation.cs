@@ -12,7 +12,7 @@ public class Fixation : Affix
     private effect TargetEffect;
     public Fixation(Wolf unit) : base(unit) 
     {
-        InRangeTrigger = CreateTrigger();
+        InRangeTrigger = trigger.Create();
     }
 
     private void RegisterEvents()
