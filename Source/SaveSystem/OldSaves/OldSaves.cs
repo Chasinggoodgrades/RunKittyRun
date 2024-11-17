@@ -21,6 +21,7 @@ public class Savecode
 
     public static void Initialize()
     {
+        OldsaveSync.Initialize();
         for (int i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
         {
             var ability = OldSavesHelper.AbilityList[i];
@@ -122,7 +123,13 @@ public class Savecode
             Console.WriteLine("Starting Load...");
             int key = SCommHash(p.Name) + loadtype * 73;
             int inputhash = 0;
+
             string code = LoadString(p).ToString();
+            if (GetLocalPlayer() == p)
+            {
+                OldsaveSync.SyncString(code);
+                SyncSystem.Send(code);
+            }
 
             FromString(code);
             Obfuscate(key, -1);
@@ -130,7 +137,6 @@ public class Savecode
             Clean();
 
             Console.WriteLine(code);
-            SyncSystem.Send(code);
 
             if (inputhash == Hash())
                 SetRewardValues(p);
@@ -147,7 +153,6 @@ public class Savecode
     {
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
-        if (!p.IsLocal) return sb;
         Preloader(filePath);
 
         for(var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
