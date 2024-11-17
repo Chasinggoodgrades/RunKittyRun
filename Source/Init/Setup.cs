@@ -20,7 +20,7 @@ namespace Source.Init
             Savecode.Initialize();
             StartGameModeTimer();
             StopMusic(false);
-
+            ClearMapMusic();
         }
 
         private static void StartGameModeTimer()

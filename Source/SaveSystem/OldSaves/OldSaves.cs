@@ -125,7 +125,7 @@ public class Savecode
             string code = LoadString(p).ToString();
 
             FromString(code);
-            //Obfuscate(key, -1);
+            Obfuscate(key, -1);
             inputhash = Decode(HASHN());
             Clean();
 
