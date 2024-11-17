@@ -15,6 +15,7 @@ namespace Source.Init
         {
             Colors.Initialize();
             Gamemode.Initialize();
+            if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize();
             Savecode.Initialize();
             StartGameModeTimer();

@@ -25,6 +25,7 @@ public static class Gamemode
     private static void HostOptions()
     {
         var gamemodes = Globals.GAME_MODES;
+        if (!ADMINDISABLE.AdminsGame()) return;
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "Please choose a gamemode." + Colors.COLOR_RESET);
 

@@ -24,7 +24,7 @@ public static class Globals
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==" };
     public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
-    public static timer GAME_TIMER = CreateTimer();
+    public static timer GAME_TIMER = timer.Create();
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
