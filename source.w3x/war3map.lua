@@ -77,7 +77,26 @@ gg_rct_Solo2023 = nil
 gg_rct_Team2023 = nil
 gg_rct_Solo2024 = nil
 gg_rct_Team2024 = nil
+gg_snd_Human1 = ""
+gg_snd_Human2 = ""
+gg_snd_Human3 = ""
+gg_snd_Orc1 = ""
+gg_snd_Orc2 = ""
+gg_snd_Orc3 = ""
+gg_snd_Undead1 = ""
+gg_snd_Undead2 = ""
 function InitGlobals()
+end
+
+function InitSounds()
+gg_snd_Human1 = "Sound/Music/mp3Music/Human1.flac"
+gg_snd_Human2 = "Sound/Music/mp3Music/Human2.flac"
+gg_snd_Human3 = "Sound/Music/mp3Music/Human3.flac"
+gg_snd_Orc1 = "Sound/Music/mp3Music/Orc1.flac"
+gg_snd_Orc2 = "Sound/Music/mp3Music/Orc2.flac"
+gg_snd_Orc3 = "Sound/Music/mp3Music/Orc3.flac"
+gg_snd_Undead1 = "Sound/Music/mp3Music/Undead1.flac"
+gg_snd_Undead2 = "Sound/Music/mp3Music/Undead2.flac"
 end
 
 function CreateNeutralPassiveBuildings()
@@ -164,9 +183,9 @@ gg_rct_Spawn_Camera = Rect(-2848.0, 2336.0, -2688.0, 3040.0)
 gg_rct_Survivor_Medal = Rect(-224.0, -448.0, -192.0, -352.0)
 gg_rct_Victory_Area = Rect(-32.0, -800.0, 416.0, -480.0)
 gg_rct_Wolf_Area_01 = Rect(-2560.0, 2304.0, 2560.0, 3072.0)
-gg_rct_Wolf_Area_02 = Rect(2560.0, -2976.0, 3328.0, 2240.0)
+gg_rct_Wolf_Area_02 = Rect(2560.0, -2912.0, 3328.0, 2240.0)
 gg_rct_Wolf_Area_03 = Rect(-2560.0, -3584.0, 2592.0, -2944.0)
-gg_rct_Wolf_Area_04 = Rect(-3360.0, -2912.0, -2560.0, 1536.0)
+gg_rct_Wolf_Area_04 = Rect(-3360.0, -2880.0, -2560.0, 1504.0)
 gg_rct_Wolf_Area_05 = Rect(-2592.0, 1504.0, 1920.0, 2176.0)
 gg_rct_Wolf_Area_06 = Rect(1888.0, -2304.0, 2464.0, 1536.0)
 gg_rct_Wolf_Area_07 = Rect(-1952.0, -2848.0, 1920.0, -2272.0)
@@ -1913,6 +1932,7 @@ NewSoundEnvironment("Default")
 SetAmbientDaySound("DalaranDay")
 SetAmbientNightSound("DalaranNight")
 SetMapMusic("Music", true, 0)
+InitSounds()
 CreateRegions()
 CreateAllUnits()
 InitBlizzard()

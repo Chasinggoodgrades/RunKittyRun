@@ -44,8 +44,8 @@ public class Music
 
     public void Play()
     {
-        EndThematicMusic();
+        StopMusic(false);
         if (Name == "Stop All Music") return;
-        PlayThematicMusic(Path);
+        PlayMusic(Path);
     }
 }

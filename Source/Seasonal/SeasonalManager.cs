@@ -51,7 +51,13 @@ public static class SeasonalManager
             CurrentWeather.Enable();
         }
         else
-            if (CurrentWeather != null) CurrentWeather.Dispose();
+        {
+            if (CurrentWeather != null)
+            {
+                CurrentWeather.Dispose();
+                CurrentWeather = null;
+            }
+        }
     }
 
 
