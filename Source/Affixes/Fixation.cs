@@ -6,18 +6,23 @@ public class Fixation : Affix
 {
     private const float FIXATION_RADIUS = 500.0f;
     private const float FIXATION_MS = 325.0f;
+    private const float FIXATION_MAX_MS = 420.0f;
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
     private trigger InRangeTrigger;
+    private trigger PeriodicSpeed;
     private bool IsChasing = false;
     private effect TargetEffect;
     public Fixation(Wolf unit) : base(unit) 
     {
         InRangeTrigger = trigger.Create();
+        PeriodicSpeed = trigger.Create();
     }
 
     private void RegisterEvents()
     {
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        PeriodicSpeed.RegisterTimerEvent(0.1f, true);
+        PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
         InRangeTrigger.AddAction(() =>
         {
             Console.WriteLine("Fixation triggered!");
@@ -46,6 +51,24 @@ public class Fixation : Affix
         });
     }
 
+    private void UpdateChaseSpeed()
+    {
+        var currentMS = Unit.Unit.MovementSpeed;
+
+        if (!IsChasing && currentMS <= FIXATION_MS) return; // no actions required.
+        if (IsChasing && currentMS >= FIXATION_MAX_MS) return; // lets not go over...
+        var speedIncrementer = 0.20f; // 2ms every second
+
+        if (IsChasing)
+            SetUnitMoveSpeed(Unit.Unit, currentMS + speedIncrementer);
+        else
+            SetUnitMoveSpeed(Unit.Unit, currentMS - speedIncrementer/2); // Decrease by half the rate.
+
+        if (!IsChasing && currentMS >= FIXATION_MAX_MS)
+            SetUnitMoveSpeed(Unit.Unit, FIXATION_MS + (currentMS * 0.5f)); // Reduce by 50%
+    }
+
+
     public override void Apply()
     {
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
@@ -60,5 +83,7 @@ public class Fixation : Affix
         Unit.Unit.RemoveAbility(Constants.ABILITY_FIXATION);
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         InRangeTrigger.Dispose();
+        PeriodicSpeed.Dispose();
+        TargetEffect?.Dispose();
     }
 }
