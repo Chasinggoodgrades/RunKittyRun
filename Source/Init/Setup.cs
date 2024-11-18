@@ -66,7 +66,6 @@ namespace Source.Init
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
-                RewardChecker.DisableALlRewards();
                 FrameManager.InitAllFrames();
                 TerrainChanger.Initialize();
                 DoodadChanger.Initialize();

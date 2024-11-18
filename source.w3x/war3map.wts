@@ -3549,12 +3549,6 @@ STRING 3518
 |cffffd700Archangel Wings|r
 }
 
-STRING 3520
-// Abilities: A007 (Wings_Void), Tip (Tooltip - Normal)
-{
-|cffff69b4Void Wings|r
-}
-
 STRING 3522
 // Abilities: A00E (Wings_Nightmare), Tip (Tooltip - Normal)
 {
@@ -4105,5 +4099,11 @@ STRING 3623
 // Destructibles: B005 (Wall Lantern), Name (Name)
 {
 Wall Lantern
+}
+
+STRING 3624
+// Abilities: A007 (Wings_Void), Tip (Tooltip - Normal)
+{
+|cff3287ffVoid Wings|r
 }
 

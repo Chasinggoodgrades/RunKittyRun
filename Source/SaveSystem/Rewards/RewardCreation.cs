@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 /// <summary>
 /// This class is the primary location for adding rewards to the Reward System.
@@ -68,8 +69,8 @@ public static class RewardCreation
         AddReward(Awards.Fairy_Wings, Constants.ABILITY_WINGS_FAIRY, "chest", "war3mapImported\\fairywing.mdx", RewardType.Wings, StatTypes.Saves, 275);
         AddReward(Awards.Nightmare_Wings, Constants.ABILITY_WINGS_NIGHTMARE, "chest", "war3mapImported\\WingsoftheNightmare2.mdx", RewardType.Wings, StatTypes.Saves, 325);
         AddReward(Awards.Archangel_Wings, Constants.ABILITY_WINGS_ARCHANGEL, "chest", "war3mapImported\\ArchangelWings2.mdx", RewardType.Wings, StatTypes.Saves, 425);
-        AddReward(Awards.Cosmic_Wings, Constants.ABILITY_WINGS_COSMIC, "chest", "war3mapImported\\Cosmic Wings.mdx", RewardType.Wings, StatTypes.Saves, 550);
-        AddReward(Awards.Void_Wings, Constants.ABILITY_WINGS_VOID, "chest", "war3mapImported\\Void Wings.mdx", RewardType.Wings, StatTypes.Saves, 500);
+        AddReward(Awards.Cosmic_Wings, Constants.ABILITY_WINGS_COSMIC, "chest", "war3mapImported\\Void Wings.mdx", RewardType.Wings, StatTypes.Saves, 550); // swapped mdx files on purpose.
+        AddReward(Awards.Void_Wings, Constants.ABILITY_WINGS_VOID, "chest", "war3mapImported\\Cosmic Wings.mdx", RewardType.Wings, StatTypes.Saves, 500);
         AddReward(Awards.Chaos_Wings, Constants.ABILITY_WINGS_CHAOS, "chest", "war3mapImported\\ChaosWingsResized2.mdx", RewardType.Wings, StatTypes.Saves, 450);
         AddReward(Awards.Pink_Wings, Constants.ABILITY_WINGS_PINK, "chest", "war3mapImported\\PinkyWings2.mdx", RewardType.Wings, StatTypes.Saves, 600);
         AddReward(Awards.Nature_Wings, Constants.ABILITY_WINGS_NATURE, "chest", "war3mapImported\\Nature Wings2.mdx", RewardType.Wings, StatTypes.Saves, 750);
