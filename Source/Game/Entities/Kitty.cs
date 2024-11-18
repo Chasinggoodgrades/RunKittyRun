@@ -157,6 +157,7 @@ public class Kitty
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
+        Deathless.ResetPlayerDeathless(Player);
         SaveData.GameStats[StatTypes.Deaths] += 1;
         SaveData.GameStats[StatTypes.SaveStreak] = 0;
     }

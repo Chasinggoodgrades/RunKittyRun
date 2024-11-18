@@ -19,6 +19,10 @@ public class Savecode
     public BigNum Bignum { get; private set; }
     public BigNumL BigNumL { get; private set; }
 
+    public static Dictionary<player, Savecode> PlayerSaveObject { get; private set; } = new Dictionary<player, Savecode>();
+    private string Code { get; set; }
+    private bool Auth { get; set; } = false;
+
     public static void Initialize()
     {
         OldsaveSync.Initialize();
@@ -31,7 +35,20 @@ public class Savecode
             else
                 throw new ArgumentException($"Error, tooltip not available: {ability}");
         }
+        foreach(var player in Globals.ALL_PLAYERS)
+        {
+            InitializeSaveCode(player);
+        }
     }
+
+    private static void InitializeSaveCode(player p)
+    {
+        if (!PlayerSaveObject.ContainsKey(p)) {
+            PlayerSaveObject[p] = new Savecode();
+        }
+        PlayerSaveObject[p].LoadString();
+    }
+
     public Savecode()
     {
         Digits = 0.0;
@@ -115,31 +132,29 @@ public class Savecode
 
         SetRandomSeed(seed);
     }
-    public void Load(player p, int loadtype)
+
+    public void Load(player p)
     {
         try
         {
             SyncSystem.EnableDebug();
             Console.WriteLine("Starting Load...");
-            int key = SCommHash(p.Name) + loadtype * 73;
+
+            int key = SCommHash(p.Name) + 1 * 73;
             int inputhash = 0;
 
-            string code = LoadString(p).ToString();
-            if (GetLocalPlayer() == p)
-            {
-                OldsaveSync.SyncString(code);
-                SyncSystem.Send(code);
-            }
-
-            FromString(code);
+            FromString(Code);
             Obfuscate(key, -1);
             inputhash = Decode(HASHN());
             Clean();
 
-            Console.WriteLine(code);
+            Console.WriteLine(Code);
 
             if (inputhash == Hash())
-                SetRewardValues(p);
+            {
+                Console.WriteLine($"Savecode for {p.Name} is valid.");
+                Auth = true;
+            }
 
 
         }
@@ -149,7 +164,7 @@ public class Savecode
         }
     }
 
-    private StringBuilder LoadString(player p)
+    private void LoadString()
     {
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
@@ -176,11 +191,14 @@ public class Savecode
             result = result.Substring(newLineStart + 1);
 
         sb.Clear().Append(result);
-        return sb;
+        Code = sb.ToString();
+        OldsaveSync.SyncString(Code);
+        SyncSystem.Send(Code);
     }
 
-    private void SetRewardValues(player player)
+    public void SetRewardValues(player player)
     {
+        if (!player.IsLocal) return;
         foreach (var value in DecodeOldsave.decodeValues)
         {
             var decodedValue = Decode(value.Value);

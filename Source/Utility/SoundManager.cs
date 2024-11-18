@@ -12,6 +12,7 @@ public static class SoundManager
     private const string ROUND_5_PATH = "war3mapImported\\FinalRound.mp3";
     private const string SPEED_PATH = "war3mapImported\\Speed.mp3";
     private const string INVULNERABLE_PATH = "war3mapImported\\Invulnerable.mp3";
+    private const string KIBBLE_TOME_PATH = "war3mapImported\\Tomes.flac";
 
     private static sound KITTY_DEATH_SOUND;
     private static sound ROUND_1_SOUND;
@@ -21,6 +22,7 @@ public static class SoundManager
     private static sound ROUND_5_SOUND;
     private static sound SPEED_SOUND;
     private static sound INVULNERABLE_SOUND;
+    private static sound KIBBLE_TOME_SOUND;
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -34,7 +36,8 @@ public static class SoundManager
             { "Round4Sound", CreateSound(ROUND_4_PATH, false, false, false, 10, 10, "") },
             { "Round5Sound", CreateSound(ROUND_5_PATH, false, false, false, 10, 10, "") },
             { "SpeedSound", CreateSound(SPEED_PATH, false, false, false, 10, 10, "") },
-            { "InvulnerableSound", CreateSound(INVULNERABLE_PATH, false, false, false, 10, 10, "") }
+            { "InvulnerableSound", CreateSound(INVULNERABLE_PATH, false, false, false, 10, 10, "") },
+            { "KibbleTomeSound", CreateSound(KIBBLE_TOME_PATH, false, true, false, 10, 10, "") }
         };
         SetSoundAttributes();
         AssignSounds();
@@ -50,6 +53,7 @@ public static class SoundManager
         ROUND_5_SOUND = sounds["Round5Sound"];
         SPEED_SOUND = sounds["SpeedSound"];
         INVULNERABLE_SOUND = sounds["InvulnerableSound"];
+        KIBBLE_TOME_SOUND = sounds["KibbleTomeSound"];
     }
     private static void SetSoundAttributes()
     {
@@ -69,7 +73,8 @@ public static class SoundManager
     public static void PlayKittyDeathSound(unit Kitty)
     {
 
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamKittyDeathSound(Kitty);
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) 
+            TeamKittyDeathSound(Kitty);
         else
         {
             var s = KITTY_DEATH_SOUND;
@@ -77,6 +82,14 @@ public static class SoundManager
             s.AttachToUnit(Kitty);
             s.Start();
         }
+    }
+
+    public static void PlayKibbleTomeSound(unit Kitty)
+    {
+        var s = KIBBLE_TOME_SOUND;
+        s.Stop(false, false);
+        s.AttachToUnit(Kitty);
+        s.Start();
     }
     private static void TeamKittyDeathSound(unit Kitty)
     {

@@ -66,7 +66,7 @@ public class Kibble
         else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
         else KibbleNothing(kitty); // 55% Chance
 
-        if(randomChance <= 60) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+        if(randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
         if (effect != null) effect.Dispose();
         IncrementKibblePoolAll();
     }
@@ -93,6 +93,7 @@ public class Kibble
     {
         var xpAmount = GetRandomInt(50, XPMax);
         kitty.Unit.Experience += xpAmount;
+        SoundManager.PlayKibbleTomeSound(kitty.Unit);
     }
 
     private void KibbleNothing(Kitty kitty)

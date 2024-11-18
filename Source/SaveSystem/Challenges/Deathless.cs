@@ -46,6 +46,8 @@ public static class Deathless
         }
     }
 
+    public static void ResetPlayerDeathless(player player) => DeathlessProgress[player] = 0;
+
     private static void AwardDeathless(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];

@@ -43,6 +43,7 @@ public class Music
     public void Play()
     {
         StopMusic(false);
+        ClearMapMusic();
         if (Name == "Stop All Music") return;
         PlayMusic(Path);
     }

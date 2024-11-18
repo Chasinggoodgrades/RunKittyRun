@@ -65,8 +65,10 @@ public static class DebugCmd
                 AwardingCmds.SettingGameStats(player, command);
                 break;
             case "?oldcode":
-                var x = Savecode.Create();
-                x.Load(player, 1);
+                Savecode.PlayerSaveObject[player].Load(player);
+                break;
+            case "?decode":
+                Savecode.PlayerSaveObject[player].SetRewardValues(player);
                 break;
             case "?discord":
                 DiscordFrame.Initialize();

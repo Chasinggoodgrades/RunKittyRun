@@ -29,7 +29,7 @@ public static class UrnSoul
     {
         var x = UrnRegions[0].CenterX;
         var y = UrnRegions[0].CenterY;
-        var u = unit.Create(player.NeutralPassive, UnitType, x, y, 0);
+        var u = unit.Create(player.NeutralAggressive, UnitType, x, y, 0);
         u.HeroName = Name;
         u.SetPathing(false); // Disable Collision 
         u.AddAbility(FourCC("Agho")); // Ghost
@@ -66,8 +66,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem,
-                Filter(() => GetFilterItem().TypeId == Constants.ITEM_URN_OF_A_BROKEN_SOUL));
+            trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
         trig.AddAction(() => UrnUsageActions());
         return trig;
     }
@@ -79,6 +78,7 @@ public static class UrnSoul
         var unit = @event.Unit;
         StartEventRegion = Regions.Urn_Soul_Region.Region;
 
+        if(item.TypeId != Constants.ITEM_URN_OF_A_BROKEN_SOUL) return;
         if(!StartEventRegion.Contains(unit)) return;
 
         // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
