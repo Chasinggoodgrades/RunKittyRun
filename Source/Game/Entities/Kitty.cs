@@ -122,7 +122,6 @@ public class Kitty
         var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
-        AwardManager.SetStartingSkin(this);
         Utility.SelectUnitForPlayer(Player, Unit);
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
@@ -131,6 +130,9 @@ public class Kitty
         // Set Collision to Default
         CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
         CollisionDetection.KittyRegisterCollisions(this);
+
+        // Set Selected Rewards On Spawn but with a small delay for systems to catchup.
+        Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
     }
 
     private void Dispose()

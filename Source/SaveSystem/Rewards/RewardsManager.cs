@@ -102,7 +102,7 @@ public static class RewardsManager
             ActiveTrails[player] = null;
         }
         kitty.Unit.Skin = Constants.UNIT_KITTY;
-        kitty.SaveData.SelectedData[SelectedData.SelectedSkin] = 0;
+        kitty.SaveData.SelectedData[SelectedData.SelectedSkin] = -1;
 
     }
 }

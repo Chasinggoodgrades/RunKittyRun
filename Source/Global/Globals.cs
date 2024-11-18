@@ -17,7 +17,7 @@ public static class Globals
     public static int ROUND = 0;
     public static bool GAME_ACTIVE = false;
     public static float GAME_SECONDS = 0.0f;
-    public static rect MapBounds = rect.CreateWorldBounds();
+    public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED = GetRandomInt(1, 900000);
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };

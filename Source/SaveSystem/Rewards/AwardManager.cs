@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -26,12 +27,12 @@ public static class AwardManager
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
     public static void GiveReward(player player, Awards award, bool earnedPrompt = true)
     {
-        if(Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
+        if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
         var saveData = Globals.ALL_KITTIES[player].SaveData;
         saveData.GameAwards[award] = 1;
         EnableAbility(player, award);
         Awarded[player].Add(award);
-        if(earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
+        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
     }
 
     /// <summary>
@@ -89,36 +90,37 @@ public static class AwardManager
     }
 
     /// <summary>
-    /// Sets the players skin to the last skin they used previously.
+    /// Applies all previously selected awards onto the player. Based on their save data.
     /// </summary>
-    /// <param name="player"></param>
-    public static void SetStartingSkin(Kitty kitty)
+    /// <param name="kitty"></param>
+    public static void SetPlayerSelectedData(Kitty kitty)
     {
+        if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
+
         var unit = kitty.Unit;
-        var skin = kitty.SaveData.SelectedData[SelectedData.SelectedSkin];
-        switch (skin)
+        var selectedData = kitty.SaveData.SelectedData;
+
+        // Process SelectedSkin first if it exists
+        if (selectedData.TryGetValue(SelectedData.SelectedSkin, out var selectedSkinValue))
         {
-            case 0:
-                break;
-            case 1:
-                unit.Skin = Constants.UNIT_ASTRAL_KITTY;
-                break;
-            case 2:
-                unit.Skin = Constants.UNIT_HIGHELF_KITTY;
-                break;
-            case 3:
-                unit.Skin = Constants.UNIT_UNDEAD_KITTY;
-                break;
-            case 4:
-                unit.Skin = Constants.UNIT_SATYR_KITTY;
-                break;
-            case 5:
-                unit.Skin = Constants.UNIT_ANCIENT_KITTY;
-                break;
-            case 6:
-                // new skin later;
-                break;
+            ProcessAward(kitty, selectedSkinValue);
         }
 
+        // Process the remaining selected data excluding SelectedSkin
+        foreach (var entry in selectedData.Where(entry => entry.Key != SelectedData.SelectedSkin))
+        {
+            ProcessAward(kitty, entry.Value);
+        }
     }
+
+    private static void ProcessAward(Kitty kitty, int selectedEnum)
+    {
+        var award = (Awards)selectedEnum;
+        var reward = Reward.GetRewardFromAward(award);
+
+        if (reward is null) return;
+
+        reward.ApplyReward(kitty.Player, false);
+    }
+
 }

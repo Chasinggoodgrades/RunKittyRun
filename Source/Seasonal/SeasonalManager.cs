@@ -47,7 +47,7 @@ public static class SeasonalManager
     {
         if (ChristmasSeason() || type == "Christmas")
         {
-            CurrentWeather ??= weathereffect.Create(rect.CreateWorldBounds(), SnowEffect);
+            CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect);
             CurrentWeather.Enable();
         }
         else

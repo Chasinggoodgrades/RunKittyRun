@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 public static class SoundManager
@@ -90,9 +84,9 @@ public static class SoundManager
         s.AttachToUnit(Kitty);
         foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(Kitty)].TeamID].Teammembers)
         {
-            if (player == GetLocalPlayer())
-                s.Stop(false, false);
-                s.Start();
+            if (!player.IsLocal) return;
+            s.Stop(false, false);
+            s.Start();
         }
     }
 

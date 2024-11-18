@@ -17,7 +17,7 @@ public class KittyData : Saveable
         foreach (RoundTimes round in Enum.GetValues(typeof(RoundTimes)))
             GameTimes[round] = 0;
         foreach (SelectedData data in Enum.GetValues(typeof(SelectedData)))
-            SelectedData[data] = 0;
+            SelectedData[data] = -1;
     }
 }
 
@@ -32,7 +32,12 @@ public enum KittyType
 }
 public enum SelectedData
 {
-    SelectedSkin
+    SelectedSkin,
+    SelectedWings,
+    SelectedAura,
+    SelectedWindwalk,
+    SelectedHat,
+    SelectedTrail
 }
 public enum RoundTimes
 {

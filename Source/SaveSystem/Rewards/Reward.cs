@@ -67,39 +67,76 @@ public class Reward
         RewardsManager.GameStatRewards.Add(this);
     }
 
-    public void ApplyReward(player player)
+    /// <summary>
+    /// Applies the reward and cosmetic appearance to the player. 
+    /// If the <paramref name="setData"/> parameter is true, it also alters the saved data.
+    /// </summary>
+    /// <param name="player">The player object to which the reward will be applied.</param>
+    /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
+    public void ApplyReward(player player, bool setData = true)
     {
-        var kitty = Globals.ALL_KITTIES[player].Unit;
-        if(SetSkin(player)) return;
-        if (SetWindwalk(player)) return;
-        var Effect = effect.Create(ModelPath, kitty, OriginPoint);
-        SetEffect(player, Effect);
-        player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Applying {GetRewardName()}|r");
+        if (setData) SetSelectedData(player);
+        SetEffect(player);
+        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Applying {GetRewardName()}|r");
     }
 
-    private void SetEffect(player player, effect effect)
+    private void SetEffect(player player)
     {
+        // Special handle case.
+        if (SetSkin(player)) return;
+        if (SetWindwalk(player)) return;
+
+        var kitty = Globals.ALL_KITTIES[player].Unit;
+        var effectInstance = effect.Create(ModelPath, kitty, OriginPoint);
+
         DestroyCurrentEffect(player);
-        if (Type == RewardType.Wings)
-            RewardsManager.ActiveWings[player] = effect;
-        else if (Type == RewardType.Hats)
-            RewardsManager.ActiveHats[player] = effect;
-        else if (Type == RewardType.Auras)
-            RewardsManager.ActiveAuras[player] = effect;
-        else if (Type == RewardType.Trails || Type == RewardType.Nitros || Type == RewardType.Deathless)
-            RewardsManager.ActiveTrails[player] = effect;
+        ApplyEffect(player, effectInstance);
+    }
+
+    private void ApplyEffect(player player, effect effectInstance)
+    {
+        switch (Type)
+        {
+            case RewardType.Wings:
+                RewardsManager.ActiveWings[player] = effectInstance;
+                break;
+            case RewardType.Hats:
+                RewardsManager.ActiveHats[player] = effectInstance;
+                break;
+            case RewardType.Auras:
+                RewardsManager.ActiveAuras[player] = effectInstance;
+                break;
+            case RewardType.Trails:
+            case RewardType.Nitros:
+            case RewardType.Deathless:
+                RewardsManager.ActiveTrails[player] = effectInstance;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
+        }
     }
 
     private void DestroyCurrentEffect(player player)
     {
-        if (Type == RewardType.Wings)
-            RewardsManager.ActiveWings[player].Dispose();
-        else if (Type == RewardType.Hats)
-            RewardsManager.ActiveHats[player].Dispose();
-        else if (Type == RewardType.Auras)
-            RewardsManager.ActiveAuras[player].Dispose();
-        else if (Type == RewardType.Trails || Type == RewardType.Nitros || Type == RewardType.Deathless)
-            RewardsManager.ActiveTrails[player].Dispose();
+        switch (Type)
+        {
+            case RewardType.Wings:
+                RewardsManager.ActiveWings[player]?.Dispose();
+                break;
+            case RewardType.Hats:
+                RewardsManager.ActiveHats[player]?.Dispose();
+                break;
+            case RewardType.Auras:
+                RewardsManager.ActiveAuras[player]?.Dispose();
+                break;
+            case RewardType.Trails:
+            case RewardType.Nitros:
+            case RewardType.Deathless:
+                RewardsManager.ActiveTrails[player]?.Dispose();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
+        }
     }
 
     private bool SetWindwalk(player player)
@@ -112,28 +149,52 @@ public class Reward
 
     private bool SetSkin(player player)
     {
-        var kitty = Globals.ALL_KITTIES[player].Unit;
-        if (Type == RewardType.Skins)
-        {
-            if(SkinID != 0) kitty.Skin = SkinID;
-            else Console.WriteLine($"Skins ID invalid for {Name}");
-            SetSelectedSkin(player, SkinID);
+        if (Type != RewardType.Skins) return false;
 
-            return true;
-        }
-        return false;
+        var kitty = Globals.ALL_KITTIES[player].Unit;
+
+        if(SkinID != 0) 
+            kitty.Skin = SkinID;
+        else 
+            Console.WriteLine($"Skins ID invalid for {Name}");
+
+        return true;
     }
 
-    private static void SetSelectedSkin(player player, int skinID)
+    private void SetSelectedData(player player)
     {
         var saveData = Globals.ALL_KITTIES[player].SaveData;
-        if(skinID == Constants.UNIT_ASTRAL_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 1;
-        else if(skinID == Constants.UNIT_HIGHELF_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 2;
-        else if(skinID == Constants.UNIT_UNDEAD_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 3;
-        else if(skinID == Constants.UNIT_SATYR_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 4;
-        else if(skinID == Constants.UNIT_ANCIENT_KITTY) saveData.SelectedData[SelectedData.SelectedSkin] = 5;    
+        int nameValue = (int)Name;
+
+        switch (Type)
+        {
+            case RewardType.Skins:
+                saveData.SelectedData[SelectedData.SelectedSkin] = nameValue;
+                break;
+            case RewardType.Windwalks:
+                saveData.SelectedData[SelectedData.SelectedWindwalk] = nameValue;
+                break;
+            case RewardType.Auras:
+                saveData.SelectedData[SelectedData.SelectedAura] = nameValue;
+                break;
+            case RewardType.Hats:
+                saveData.SelectedData[SelectedData.SelectedHat] = nameValue;
+                break;
+            case RewardType.Wings:
+                saveData.SelectedData[SelectedData.SelectedWings] = nameValue;
+                break;
+            case RewardType.Trails:
+            case RewardType.Nitros:
+            case RewardType.Deathless:
+                saveData.SelectedData[SelectedData.SelectedTrail] = nameValue;
+                break;
+            default:
+                Console.WriteLine("Error with selected data");
+                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
+        }
     }
 
+    public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
     public string GetRewardName() => Name.ToString().Replace("_", " ");
     public int GetAbilityID() => AbilityID;
