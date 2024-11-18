@@ -18,28 +18,26 @@ public class AmuletOfEvasiveness : Relic
         ) 
     { }
 
-    public static void SetUnitScale (unit Unit)
+    /// <summary>
+    /// Changes the visual scale of the unit assuming they have the relic. This is particularly used whenever the player casts reset.
+    /// References: <see cref="RewardsManager.CastedReward()"/>
+    /// </summary>
+    /// <param name="Unit">The unit to scale.</param>
+    public static void ScaleUnit(unit Unit)
     {
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
         Unit.SetScale(UnitScale, UnitScale, UnitScale);
     }
+
     public override void ApplyEffect(unit Unit)
     {
-        try
-        {
-            var player = Unit.Owner;
-            var kitty = Globals.ALL_KITTIES[player];
-            var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
-            UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-            CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
-            SetUnitScale(Unit);
-            CollisionDetection.KittyRegisterCollisions(kitty);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            Console.WriteLine(ex.StackTrace);
-        }
+        var player = Unit.Owner;
+        var kitty = Globals.ALL_KITTIES[player];
+        var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
+        CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
+        CollisionDetection.KittyRegisterCollisions(kitty);
+        ScaleUnit(Unit);
     }
 
     public override void RemoveEffect(unit Unit)

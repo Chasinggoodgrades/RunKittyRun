@@ -12,7 +12,7 @@ public class FrostbiteRing : Relic
     private static float FROSTBITE_FREEZE_DURATION = 5.0f; 
     private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
 
-    private trigger Trigger;
+    private trigger Trigger = trigger.Create();
 
     public FrostbiteRing() : base(
         $"{Colors.COLOR_BLUE}Frostbite Ring",
@@ -22,19 +22,18 @@ public class FrostbiteRing : Relic
         IconPath
         )
     {
-        RegisterTriggers();
     }
 
-    private void RegisterTriggers()
+    private void RegisterTriggers(unit Unit)
     {
-        Trigger = trigger.Create();
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
     }
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
@@ -49,7 +48,9 @@ public class FrostbiteRing : Relic
         foreach (var unit in tempGroup.ToList())
             FrostbiteEffect(unit);
         freezeLocation.Dispose();
+        freezeLocation = null;
         tempGroup.Dispose();
+        tempGroup = null;
     }
 
     private static void FrostbiteEffect(unit Unit)

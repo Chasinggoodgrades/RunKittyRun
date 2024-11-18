@@ -3,6 +3,7 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public abstract class Relic
 {
+    public static Dictionary<Relic, player> keyValuePairs = new Dictionary<Relic, player>();
     public static int RequiredLevel = 10;
     public string Name { get; }
     public string Description { get; }

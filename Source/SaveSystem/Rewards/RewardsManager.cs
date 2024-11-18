@@ -63,14 +63,9 @@ public static class RewardsManager
         if (IsResetSpell(spellID))
         {
             ResetRewardSettings(unit);
+            AmuletOfEvasiveness.ScaleUnit(unit); // changes scale of unit if they have amulet.
             return;
         }
-/*        else if (IsRewardAbility(spellID))
-        {
-            var player = unit.Owner;
-            var reward = Rewards.Find(r => r.GetAbilityID() == GetSpellAbilityId());
-            reward.ApplyReward(player);
-        }*/
     }
 
     private static bool IsRewardAbility(int spellID) => RewardAbilities.Contains(spellID);
@@ -79,7 +74,7 @@ public static class RewardsManager
 
     private static void ResetRewardSettings(unit Unit)
     {
-        var player = GetOwningPlayer(Unit);
+        var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         if (ActiveWings[player] != null)
         {

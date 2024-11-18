@@ -252,45 +252,61 @@ public static class ShopFrame
 
         if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
-            var type = selectedItem.Type;
-            var cost = selectedItem.Cost;
-            var itemID = selectedItem.ItemID;
             var kitty = Globals.ALL_KITTIES[player];
 
-            if (!HasEnoughGold(player, cost))
+            if (!HasEnoughGold(player, selectedItem.Cost))
             {
-                NotEnoughGold(player, cost);
+                NotEnoughGold(player, selectedItem.Cost);
                 return;
             }
 
-            if (type == ShopItemType.Relic)
+            switch (selectedItem.Type)
             {
-                if (Utility.UnitHasItem(kitty.Unit, itemID))
-                {
-                    AlreadyHaveRelic(player);
-                    return;
-                }
-                if (!RelicLevel(kitty.Unit))
-                {
-                    NotHighEnoughLevel(player);
-                    return;
-                }
-                selectedItem.Relic.ApplyEffect(kitty.Unit);
+                case ShopItemType.Relic:
+                    HandleRelicPurchase(player, selectedItem, kitty);
+                    break;
+
+                case ShopItemType.Reward:
+                    AwardManager.GiveReward(player, selectedItem.Award);
+                    ReduceGold(player, selectedItem.Cost);
+                    break;
+                case ShopItemType.Misc:
+                    AddItem(player, selectedItem.ItemID);
+                    ReduceGold(player, selectedItem.Cost);
+                    break;
             }
-            if (type == ShopItemType.Reward)
-            {
-                AwardManager.GiveReward(player, selectedItem.Award);
-            }
-            ReduceGold(player, cost);
-            if (type != ShopItemType.Reward)
-            {
-                AddItem(player, itemID);
-            }
+
         }
 
-        // If item is bought, the frame will disappear for the player.
-        if (player.IsLocal) shopFrame.Visible = !shopFrame.Visible;
+        // Toggle the visibility of the shop frame for the player
+        if (player.IsLocal)
+            shopFrame.Visible = !shopFrame.Visible;
     }
+
+    private static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
+    {
+        if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
+        {
+            AlreadyHaveRelic(player);
+            return;
+        }
+
+        if (!RelicLevel(kitty.Unit))
+        {
+            NotHighEnoughLevel(player);
+            return;
+        }
+
+        AddItem(player, selectedItem.ItemID);
+        ReduceGold(player, selectedItem.Cost);
+        var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
+        if (newRelic != null)
+        {
+            kitty.Relics.Add(newRelic);
+            newRelic.ApplyEffect(kitty.Unit);
+        }
+    }
+
 
     private static void SellSelectedItem()
     {
@@ -298,11 +314,16 @@ public static class ShopFrame
         if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var itemID = selectedItem.ItemID;
-            var kitty = Globals.ALL_KITTIES[player].Unit;
-            if (!Utility.UnitHasItem(kitty, itemID)) return;
+            var kitty = Globals.ALL_KITTIES[player];
+            if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
             if (selectedItem.Type == ShopItemType.Relic)
-                selectedItem.Relic.RemoveEffect(kitty);
-            Utility.RemoveItemFromUnit(kitty, itemID);
+            {
+                // Find the relic type associated with the selected item that the player owns.
+                var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
+                relic?.RemoveEffect(kitty.Unit);
+            }
+
+            Utility.RemoveItemFromUnit(kitty.Unit, itemID);
             player.Gold += selectedItem.Cost;
 
         }

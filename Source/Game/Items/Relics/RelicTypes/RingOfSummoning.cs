@@ -9,7 +9,7 @@ public class RingOfSummoning : Relic
     private const int RelicCost = 650;
     private static float SUMMONING_RING_RADIUS = 300.0f;
     private const string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
-    private trigger Trigger;
+    private trigger Trigger = trigger.Create();
 
     public RingOfSummoning() : base(
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
@@ -20,26 +20,25 @@ public class RingOfSummoning : Relic
         IconPath
         )
     {
-        RegisterTriggers();
     }
 
-    private void RegisterTriggers()
+    private void RegisterTriggers(unit Unit)
     {
-        Trigger = trigger.Create();
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SacredRingOfSummoning());
     }
 
     public override void ApplyEffect(unit Unit)
     {
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
-        Console.WriteLine("Apply Effect Summonin Ring");
     }
 
     public override void RemoveEffect(unit Unit)
     {
         Trigger.Dispose();
+        Trigger = null;
         Unit.DisableAbility(RelicAbilityID, true, true);
     }
 

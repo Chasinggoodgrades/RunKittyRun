@@ -9,8 +9,8 @@ public class FangOfShadows : Relic
     private const int RelicCost = 650;
     private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
-    private trigger SummonTrigger;
-    private trigger TeleTrigger;
+    private trigger SummonTrigger = trigger.Create();
+    private trigger TeleTrigger = trigger.Create();
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
@@ -20,26 +20,37 @@ public class FangOfShadows : Relic
         IconPath
         )
     {
-        RegisterTriggers();
     }
 
     public override void ApplyEffect(unit Unit)
     {
-        RegisterUnit(Unit);
+        RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
     }
 
     public override void RemoveEffect(unit Unit)
     {
+        DeregisterTriggers();
         Unit.DisableAbility(RelicAbilityID, true, true);
     }
 
-    private void RegisterTriggers()
+    private void RegisterTriggers(unit Unit)
     {
-        SummonTrigger = trigger.Create();
+        SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        TeleTrigger = trigger.Create();
+        SummonTrigger.AddAction(() => SummonShadowKitty(Unit.Owner));
+
+        TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
+        TeleTrigger.AddAction(() => TeleportToShadowKitty());
+    }
+
+    private void DeregisterTriggers()
+    {
+        SummonTrigger.Dispose();
+        SummonTrigger = null;
+        TeleTrigger.Dispose();
+        TeleTrigger = null;
     }
 
     private static void SummonShadowKitty(player Player)
@@ -48,15 +59,6 @@ public class FangOfShadows : Relic
         var sk = ShadowKitty.ALL_SHADOWKITTIES[Player];
         sk.SummonShadowKitty();
         Utility.SimpleTimer(SHADOW_KITTY_SUMMON_DURATION, () => sk.KillShadowKitty());
-    }
-
-    private void RegisterUnit(unit Unit)
-    {
-        SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        SummonTrigger.AddAction(() => SummonShadowKitty(Unit.Owner));
-
-        TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        TeleTrigger.AddAction(() => TeleportToShadowKitty());
     }
 
     private static void TeleportToShadowKitty()
