@@ -338,7 +338,14 @@ public static class ShopFrame
             var relicType = selectedItem.Relic.GetType();
             var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
             if (playerRelic == null) return;
-
+            var goldCost = playerRelic.GetNextUpgrade().Cost;
+            if (player.Gold < goldCost)
+            {
+                NotEnoughGold(player, goldCost);
+                return;
+            }
+            player.Gold -= goldCost;
+            playerRelic.Upgrade();
         }
     }
 
