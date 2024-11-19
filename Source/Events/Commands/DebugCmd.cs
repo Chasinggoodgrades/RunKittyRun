@@ -70,6 +70,12 @@ public static class DebugCmd
             case "?decode":
                 Savecode.PlayerSaveObject[player].SetRewardValues(player);
                 break;
+            case "?invul":
+                UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
+                break;
+            case "?vul":
+                CollisionDetection.KittyRegisterCollisions(kitty);
+                break;
             case "?discord":
                 DiscordFrame.Initialize();
                 break;

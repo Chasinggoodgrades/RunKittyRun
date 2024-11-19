@@ -2,8 +2,18 @@
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
+public enum HolidaySeasons
+{
+    Christmas,
+    Halloween,
+    Easter,
+    Valentines,
+    None
+}
+
 public static class SeasonalManager
 {
+    public static HolidaySeasons Season { get; set; }
     private static int CurrentMonth { get; set; }
     private static int SnowEffect { get; set; } = FourCC("SNls");
     private static weathereffect CurrentWeather;
@@ -15,14 +25,45 @@ public static class SeasonalManager
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         CurrentMonth = DateTimeManager.DateTime.Month;
+        DetermineSeason();
         SetWeather();
+        DoodadChanger.Initialize();
+        TerrainChanger.Initialize();
+        SeasonalAwards.Initialize();
+    }
+
+    public static void DetermineSeason()
+    {
+        switch (CurrentMonth)
+        {
+            case 12:
+                Season = HolidaySeasons.Christmas;
+                break;
+/*            case 10:
+                Season = HolidaySeasons.Halloween;
+                break;
+            case 4:
+                Season = HolidaySeasons.Easter;
+                break;
+            case 2:
+                Season = HolidaySeasons.Valentines;
+                break;*/
+            default:
+                Season = HolidaySeasons.None;
+                break;
+        }
     }
 
     /// <summary>
     /// Returns if it is currently Christmas season or not.
     /// </summary>
     /// <returns></returns>
-    public static bool ChristmasSeason() => DateTimeManager.CurrentMonth == 12;
+    public static bool ChristmasSeason()
+    {
+        if (DateTimeManager.CurrentMonth != 12) return false;
+        Season = HolidaySeasons.Christmas;
+        return true;
+    }
 
     /// <summary>
     /// Admin command to activate Christmas season. Only works in standard mode.
@@ -30,33 +71,35 @@ public static class SeasonalManager
     public static void ActivateChristmas()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        Season = HolidaySeasons.Christmas;
         TerrainChanger.ActivateChristmasTerrain();
-        DoodadChanger.ActivateChristmasDoodads();
-        SetWeather("Christmas");
+        DoodadChanger.ChristmasDoodads();
+        SetWeather();
     
     }
 
+    /// <summary>
+    /// Admin Command for no seasons. Works regardless of mode.
+    /// </summary>
     public static void NoSeason()
     {
+        Season = HolidaySeasons.None;
         TerrainChanger.NoSeasonTerrain();
         DoodadChanger.NoSeasonDoodads();
         SetWeather();
     }
 
-    private static void SetWeather(string type = "")
+    private static void SetWeather()
     {
-        if (ChristmasSeason() || type == "Christmas")
+        if (Season == HolidaySeasons.Christmas)
         {
             CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect);
             CurrentWeather.Enable();
         }
-        else
+        else if (Season == HolidaySeasons.None)
         {
-            if (CurrentWeather != null)
-            {
-                CurrentWeather.Dispose();
-                CurrentWeather = null;
-            }
+            CurrentWeather?.Dispose();
+            CurrentWeather = null;
         }
     }
 

@@ -10,6 +10,9 @@ public abstract class Relic
     public int ItemID { get; }
     public int Cost { get; }
     public string IconPath { get; }
+    public int UpgradeLevel { get; private set; } = 0;
+    public int MaxUpgradeLevel => Upgrades.Count;
+    public List<RelicUpgrade> Upgrades { get; } = new List<RelicUpgrade>();
 
     public Relic(string name, string desc, int itemID, int cost, string iconPath)
     {
@@ -21,9 +24,20 @@ public abstract class Relic
     }
 
     public abstract void ApplyEffect(unit Unit);
-
     public abstract void RemoveEffect(unit Unit);
 
+    public bool CanUpgrade() => UpgradeLevel < MaxUpgradeLevel;
+    public bool Upgrade()
+    {
+        if (!CanUpgrade()) return false;
+        var kitty = Globals.ALL_KITTIES[keyValuePairs[this]];
+        UpgradeLevel++;
+        RemoveEffect(kitty.Unit);
+        ApplyEffect(kitty.Unit);
+        return true;
+    }
+
+    public RelicUpgrade GetNextUpgrade() => CanUpgrade() ? Upgrades[UpgradeLevel + 1] : null;
     public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true);
 
     public static void EnableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false);

@@ -6,7 +6,7 @@ public class Fixation : Affix
 {
     private const float FIXATION_RADIUS = 500.0f;
     private const float FIXATION_MS = 325.0f;
-    private const float FIXATION_MAX_MS = 420.0f;
+    private const float FIXATION_MAX_MS = 410.0f;
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
@@ -57,7 +57,7 @@ public class Fixation : Affix
 
         if (!IsChasing && currentMS <= FIXATION_MS) return; // no actions required.
         if (IsChasing && currentMS >= FIXATION_MAX_MS) return; // lets not go over...
-        var speedIncrementer = 0.20f; // 2ms every second
+        var speedIncrementer = 0.40f; // 4ms every second
 
         if (IsChasing)
             SetUnitMoveSpeed(Unit.Unit, currentMS + speedIncrementer);
@@ -65,7 +65,7 @@ public class Fixation : Affix
             SetUnitMoveSpeed(Unit.Unit, currentMS - speedIncrementer/2); // Decrease by half the rate.
 
         if (!IsChasing && currentMS >= FIXATION_MAX_MS)
-            SetUnitMoveSpeed(Unit.Unit, FIXATION_MS + (currentMS * 0.5f)); // Reduce by 50%
+            SetUnitMoveSpeed(Unit.Unit, FIXATION_MS + (currentMS * 0.3f)); // Reduce by 70%
     }
 
 

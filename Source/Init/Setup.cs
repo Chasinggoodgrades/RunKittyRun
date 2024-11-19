@@ -67,8 +67,6 @@ namespace Source.Init
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
                 FrameManager.InitAllFrames();
-                TerrainChanger.Initialize();
-                DoodadChanger.Initialize();
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();

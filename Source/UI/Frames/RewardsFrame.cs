@@ -134,10 +134,10 @@ public static class RewardsFrame
             var row = (count[reward.Type] - 1) / cols;
             var panel = FrameByName[Enum.GetName(typeof(RewardType), reward.Type)];
             var rewardButton = framehandle.Create("Button", reward.Name.ToString(), panel, "ScoreScreenTabButtonTemplate", 0);
-            if(col == 0) 
-                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize)  - Padding/2, panel, framepointtype.TopLeft);
+            if (col == 0)
+                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - Padding / 2, panel, framepointtype.TopLeft);
             else
-                rewardButton.SetPoint(framepointtype.TopLeft, col * IconSize + Padding, (-row * IconSize) -Padding/2, panel, framepointtype.TopLeft);
+                rewardButton.SetPoint(framepointtype.TopLeft, col * IconSize + Padding, (-row * IconSize) - Padding / 2, panel, framepointtype.TopLeft);
             rewardButton.SetSize(IconSize, IconSize);
 
             var icon = framehandle.Create("BACKDROP", reward.Name.ToString() + "icon", rewardButton, "", 0);
@@ -151,7 +151,6 @@ public static class RewardsFrame
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
             Trigger.AddAction(() => RewardButtonActions(reward));
-
         }
     }
 

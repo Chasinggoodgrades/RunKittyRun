@@ -11,16 +11,19 @@ public static class DoodadChanger
     {
         CreateInitDestructiables();
         if (Gamemode.CurrentGameMode != "Standard") return;
+        SeasonalDoodads();
+    }
+
+    private static void SeasonalDoodads()
+    {
         ChristmasDoodads();
     }
 
-    public static void ActivateChristmasDoodads() => ChristmasDoodads(true);
     public static void NoSeasonDoodads() => ReplaceDoodad(SafezoneLanterns, 1.0f);
 
-
-    private static void ChristmasDoodads(bool adminActivated = false)
+    public static void ChristmasDoodads()
     {
-        if (!SeasonalManager.ChristmasSeason() && !adminActivated) return;
+        if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
         ReplaceDoodad(ChristmasTree, 2.5f);
     }
 

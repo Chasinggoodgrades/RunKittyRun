@@ -45,6 +45,35 @@ public static class SaveManager
         else
         {
             var stats = save.Stats[KittyType.Kitty];
+            EnsureData(player);
+            Save(player);
+        }
+    }
+
+    private static void EnsureData(player player)
+    {
+        foreach(var selectData in Enum.GetValues(typeof(SelectedData)))
+        {
+            if (!PlayerSaveData[player].Stats[KittyType.Kitty].SelectedData.ContainsKey((SelectedData)selectData))
+                PlayerSaveData[player].Stats[KittyType.Kitty].SelectedData[(SelectedData)selectData] = -1;
+        }
+
+        foreach(var gamestat in Enum.GetValues(typeof(StatTypes)))
+        {
+            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameStats.ContainsKey((StatTypes)gamestat))
+                PlayerSaveData[player].Stats[KittyType.Kitty].GameStats[(StatTypes)gamestat] = 0;
+        }
+
+        foreach(var time in Enum.GetValues(typeof(RoundTimes)))
+        {
+            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameTimes.ContainsKey((RoundTimes)time))
+                PlayerSaveData[player].Stats[KittyType.Kitty].GameTimes[(RoundTimes)time] = 0;
+        }
+
+        foreach (var award in Enum.GetValues(typeof(Awards)))
+        {
+            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameAwards.ContainsKey((Awards)award))
+                PlayerSaveData[player].Stats[KittyType.Kitty].GameAwards[(Awards)award] = 0;
         }
     }
 

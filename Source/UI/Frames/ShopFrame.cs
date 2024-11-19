@@ -332,6 +332,14 @@ public static class ShopFrame
     private static void UpgradeRelic()
     {
         var player = @event.Player;
+        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+        {
+            var itemID = selectedItem.ItemID;
+            var relicType = selectedItem.Relic.GetType();
+            var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
+            if (playerRelic == null) return;
+
+        }
     }
 
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;

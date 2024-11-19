@@ -124,6 +124,10 @@ public static class RewardCreation
         AddReward(Awards.Ancient_Kitty, Constants.ABILITY_SKIN_KITTYANCIENT, Constants.UNIT_ANCIENT_KITTY, RewardType.Skins, StatTypes.Wins, 40);
         AddReward(Awards.Satyr_Kitty, Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, StatTypes.Wins, 25);
         AddReward(Awards.Astral_Kitty, Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, StatTypes.NormalGames, 55);
+
+        // Holiday
+        AddReward(Awards.Snow_Wings_2023, Constants.ABILITY_HOLIDAY_WINGS_C2023, "chest", "war3mapImported\\SnowflakeWings.mdx", RewardType.Wings);
+        AddReward(Awards.Snow_Trail_2023, Constants.ABILITY_HOLIDAY_TRAIL_C2023, "origin", "war3mapImported\\snowtrail.mdx", RewardType.Trails);
     }
 
 }

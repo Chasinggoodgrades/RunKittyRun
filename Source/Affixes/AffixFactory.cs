@@ -28,16 +28,12 @@ public static class AffixFactory
         switch (affixName)
         {
             case "Speedster":
-                if(Program.Debug) Console.WriteLine("Creating Speedster");
                 return new Speedster(unit);
             case "Unpredictable":
-                if(Program.Debug) Console.WriteLine("Creating Unpredictable");
                 return new Unpredictable(unit);
             case "Fixation":
-                if(Program.Debug) Console.WriteLine("Creating Fixation");
                 return new Fixation(unit);
             case "Frostbite":
-                if(Program.Debug) Console.WriteLine("Creating Frostbite");
                 return new Frostbite(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");

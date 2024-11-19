@@ -79,6 +79,7 @@ public enum StatTypes
     ImpossibleGames,
 }
 
+// New Awards should be added to bottom of this list. Don't change anything.
 public enum Awards
 {
     // Hats
@@ -157,4 +158,7 @@ public enum Awards
     Deathless_3,
     Deathless_4,
     Deathless_5,
+
+    Snow_Wings_2023,
+    Snow_Trail_2023
 }

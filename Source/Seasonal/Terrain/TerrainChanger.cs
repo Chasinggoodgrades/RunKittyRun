@@ -31,7 +31,7 @@ public static class TerrainChanger
 
     public static void ActivateChristmasTerrain()
     {
-        ChristmasTerrain(true);
+        ChristmasTerrain();
         SetTerrain();
     }
 
@@ -50,9 +50,9 @@ public static class TerrainChanger
         }
     }
 
-    private static void ChristmasTerrain(bool adminActivated = false)
+    private static void ChristmasTerrain()
     {
-        if (!SeasonalManager.ChristmasSeason() && !adminActivated) return;
+        if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
         SafezoneTerrain[0] = FourCC("Ibkb");
         SafezoneTerrain[1] = FourCC("Ksmb");
         SafezoneTerrain[2] = FourCC("Drds");

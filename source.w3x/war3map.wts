@@ -2019,25 +2019,25 @@ Set Holiday Rewards
 }
 
 STRING 3065
-// Abilities: A03S (Holiday_WingsBiohazard), Tip (Tooltip - Normal)
+// Abilities: A03S (Holiday_Wings_H2023), Tip (Tooltip - Normal)
 {
 |cff00ff00Biohazard Wings|r
 }
 
 STRING 3066
-// Abilities: A03S (Holiday_WingsBiohazard), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A03S (Holiday_Wings_H2023), Ubertip (Tooltip - Normal - Extended)
 {
 Careful, may spew bile everywhere!!
 }
 
 STRING 3067
-// Abilities: A03S (Holiday_WingsBiohazard), Untip (Tooltip - Turn Off)
+// Abilities: A03S (Holiday_Wings_H2023), Untip (Tooltip - Turn Off)
 {
 |cff00ff00Biohazard Wings|r
 }
 
 STRING 3068
-// Abilities: A03S (Holiday_WingsBiohazard), Unubertip (Tooltip - Turn Off - Extended)
+// Abilities: A03S (Holiday_Wings_H2023), Unubertip (Tooltip - Turn Off - Extended)
 {
 Careful, may spew bile everywhere!!
 }
@@ -2109,19 +2109,7 @@ Fireplace
 }
 
 STRING 3112
-// Abilities: A03U (Holiday_TrailSnow), Tip (Tooltip - Normal)
-{
-|cff6c9effSnow Trail|r
-}
-
-STRING 3113
-// Abilities: A03U (Holiday_TrailSnow), Unubertip (Tooltip - Turn Off - Extended)
-{
-Care, you might slip!!
-}
-
-STRING 3114
-// Abilities: A03U (Holiday_TrailSnow), Untip (Tooltip - Turn Off)
+// Abilities: A03U (Holiday_Trail_C2023), Tip (Tooltip - Normal)
 {
 |cff6c9effSnow Trail|r
 }
@@ -2133,33 +2121,27 @@ Super ChristmasTree
 }
 
 STRING 3117
-// Abilities: A03T (Holiday_WingsSnowy), Tip (Tooltip - Normal)
+// Abilities: A03T (Holiday_Wings_C2023), Tip (Tooltip - Normal)
 {
 |cff809effSnowy Wings|r
 }
 
 STRING 3118
-// Abilities: A03T (Holiday_WingsSnowy), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A03T (Holiday_Wings_C2023), Ubertip (Tooltip - Normal - Extended)
 {
 Everytime a bell rings, a kitty gets his wings!
 }
 
 STRING 3119
-// Abilities: A03T (Holiday_WingsSnowy), Untip (Tooltip - Turn Off)
+// Abilities: A03T (Holiday_Wings_C2023), Untip (Tooltip - Turn Off)
 {
 |cff809effSnowy Wings|r
 }
 
 STRING 3120
-// Abilities: A03T (Holiday_WingsSnowy), Unubertip (Tooltip - Turn Off - Extended)
+// Abilities: A03T (Holiday_Wings_C2023), Unubertip (Tooltip - Turn Off - Extended)
 {
 Everytime a bell rings, a kitty gets his wings!
-}
-
-STRING 3121
-// Abilities: A03U (Holiday_TrailSnow), Ubertip (Tooltip - Normal - Extended)
-{
-Careful, you might slip!!
 }
 
 STRING 3122
@@ -3441,24 +3423,6 @@ STRING 3497
 Wings_TYellow
 }
 
-STRING 3498
-// Abilities: A03S (Holiday_WingsBiohazard), Name (Name)
-{
-Holiday_WingsBiohazard
-}
-
-STRING 3499
-// Abilities: A03T (Holiday_WingsSnowy), Name (Name)
-{
-Holiday_WingsSnowy
-}
-
-STRING 3500
-// Abilities: A03U (Holiday_TrailSnow), Name (Name)
-{
-Holiday_TrailSnow
-}
-
 STRING 3501
 // Abilities: A03V (Wings_TWhite), Name (Name)
 {
@@ -4105,5 +4069,29 @@ STRING 3624
 // Abilities: A007 (Wings_Void), Tip (Tooltip - Normal)
 {
 |cff3287ffVoid Wings|r
+}
+
+STRING 3625
+// Abilities: A03U (Holiday_Trail_C2023), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by playing this map during the Christmas holidays :)
+}
+
+STRING 3626
+// Abilities: A03S (Holiday_Wings_H2023), Name (Name)
+{
+Holiday_Wings_H2023
+}
+
+STRING 3627
+// Abilities: A03T (Holiday_Wings_C2023), Name (Name)
+{
+Holiday_Wings_C2023
+}
+
+STRING 3628
+// Abilities: A03U (Holiday_Trail_C2023), Name (Name)
+{
+Holiday_Trail_C2023
 }
 

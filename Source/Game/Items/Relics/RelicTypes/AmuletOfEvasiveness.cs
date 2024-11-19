@@ -16,7 +16,11 @@ public class AmuletOfEvasiveness : Relic
         RelicCost,
         IconPath
         ) 
-    { }
+    {
+        Upgrades.Add(new RelicUpgrade(0, $"Reduce Collision by an extra 2%", 15, 800));
+        Upgrades.Add(new RelicUpgrade(1, $"Provides your relic with a passive slow aura for nearby wolves.", 20, 1000));
+
+    }
 
     /// <summary>
     /// Changes the visual scale of the unit assuming they have the relic. This is particularly used whenever the player casts reset.
