@@ -52,7 +52,8 @@ public class ShopItem
         new ShopItem(new RingOfSummoning()),
         new ShopItem(new AmuletOfEvasiveness()),
         new ShopItem(new FrostbiteRing()),
-        new ShopItem(new BeaconOfUnitedLifeforce())
+        new ShopItem(new BeaconOfUnitedLifeforce()),
+        new ShopItem(new ShardOfTranslocation())
     };
 
     public static List<ShopItem> ShopItemsReward()

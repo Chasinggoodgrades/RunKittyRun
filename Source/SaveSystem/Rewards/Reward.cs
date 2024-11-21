@@ -153,9 +153,12 @@ public class Reward
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
 
-        if(SkinID != 0) 
+        if (SkinID != 0)
+        {
             kitty.Skin = SkinID;
-        else 
+            AmuletOfEvasiveness.ScaleUnit(kitty);
+        }
+        else
             Console.WriteLine($"Skins ID invalid for {Name}");
 
         return true;

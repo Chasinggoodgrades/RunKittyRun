@@ -105,6 +105,7 @@ public static class Constants
 	public const int ABILITY_AURA_BUTTERFLY = 1093677911;
 	public const int ABILITY_BOOK_OF_RELICS = 1093677378;
 	public const int ABILITY_FROSTBITE_AFFIX = 1395666993;
+	public const int ABILITY_TRANSLOCATE = 1093677104;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -141,6 +142,7 @@ public static class Constants
 	public const int ITEM_KIBBLE_YELLOW = 1227894857;
 	public const int ITEM_KIBBLE_TEAL = 1227894858;
 	public const int ITEM_FROSTBITE_RING = 1227894859;
+	public const int ITEM_SHARD_OF_TRANSLOCATION = 1227894860;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;

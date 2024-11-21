@@ -8,7 +8,7 @@ public class OneOfNine : Relic
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
     private const int RelicCost = 650;
-    public const string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
+    private static new string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
     public OneOfNine() : base(
         $"|cffff4500One of Nine|r",
         $"Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r",

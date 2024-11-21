@@ -25,8 +25,9 @@ public class Fixation : Affix
         PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
         InRangeTrigger.AddAction(() =>
         {
-            Console.WriteLine("Fixation triggered!");
             var target = @event.Unit;
+            var Region = RegionList.WolfRegions[Unit.RegionIndex];
+            if(!Region.Contains(target.X, target.Y)) return;
             if (target != Unit.Unit && !IsChasing)
                 ChasingEvent(target);
         });

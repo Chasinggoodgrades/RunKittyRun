@@ -32,21 +32,18 @@ public static class FrameManager
 
     public static framehandle CreateHeaderFrame(framehandle parent)
     {
-        // Header Bar
         var header = framehandle.Create("BACKDROP", $"{parent.Name}Header", parent, "QuestButtonDisabledBackdropTemplate", 0);
         var width = parent.Width;
         var height = 0.0225f;
         header.SetPoint(framepointtype.TopLeft, 0, 0.0125f, parent, framepointtype.TopLeft);
         header.SetSize(width, height);
 
-        // Title
         var title = framehandle.Create("TEXT", $"{parent.Name}Title", header, "ScriptDialogText", 0);
         title.SetPoint(framepointtype.Center, 0, 0, header, framepointtype.Center);
         title.SetSize(width, height);
         title.Text = $"{Colors.COLOR_YELLOW}{parent.Name}{Colors.COLOR_RESET}";
         title.SetTextAlignment(textaligntype.Center, textaligntype.Center);
 
-        // Close Button
         var closeButton = framehandle.Create("GLUETEXTBUTTON", $"{parent.Name}CloseButton", header, "ScriptDialogButton", 0);
         closeButton.SetPoint(framepointtype.TopRight, -0.0025f, -0.0025f, header, framepointtype.TopRight);
         closeButton.SetSize(height - 0.005f, height - 0.005f);

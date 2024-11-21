@@ -18,6 +18,7 @@ public static class Standard
         Difficulty.Initialize();
         Windwalk.Initialize();
         SpawnChampions.Initialize();
+        PlayerUpgrades.Initialize();
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
@@ -57,8 +58,8 @@ public static class Standard
             if (HitLevel10.Contains(@event.Unit.Owner)) return;
             if (@event.Unit.HeroLevel < 10) return;
             HitLevel10.Add(@event.Unit.Owner);
-            Relic.EnableRelicBook(@event.Unit);
-            Relic.DisableRelicAbilities(@event.Unit);
+            RelicUtil.EnableRelicBook(@event.Unit);
+            RelicUtil.DisableRelicAbilities(@event.Unit);
             @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
         });
     }

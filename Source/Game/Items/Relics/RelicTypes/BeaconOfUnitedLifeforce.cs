@@ -6,7 +6,7 @@ public class BeaconOfUnitedLifeforce : Relic
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
     private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
     private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
-    private const string IconPath = "war3mapImported\\BTNTicTac.blp";
+    private static new string IconPath = "war3mapImported\\BTNTicTac.blp";
     private const int RelicCost = 650;
 
     public BeaconOfUnitedLifeforce() : base(

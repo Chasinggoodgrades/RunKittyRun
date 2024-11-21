@@ -20,7 +20,7 @@ public class Colors
     public const string COLOR_GREY = "|c00808080";
     public const string COLOR_BROWN = "|c008B4513";
     public const string COLOR_LIME = "|c0000FF00";
-    public const string COLOR_TEAL = "|c0000FF";
+    public const string COLOR_TURQUOISE = "|cff00ebff";
     public const string COLOR_YELLOW = "|c00FFFF00";
     public const string COLOR_DARK_RED = "|c008B0000";
     public const string COLOR_LIGHTBLUE = "|c006969FF";

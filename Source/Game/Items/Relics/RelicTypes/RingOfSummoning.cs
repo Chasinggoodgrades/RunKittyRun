@@ -8,7 +8,7 @@ public class RingOfSummoning : Relic
     private const int RelicAbilityID = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float SUMMONING_RING_RADIUS = 300.0f;
-    private const string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
+    private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
     private trigger Trigger = trigger.Create();
 
     public RingOfSummoning() : base(

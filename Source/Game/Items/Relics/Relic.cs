@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public abstract class Relic
 {
-    public static Dictionary<Relic, player> keyValuePairs = new Dictionary<Relic, player>();
     public static int RequiredLevel = 10;
     public string Name { get; }
     public string Description { get; }
@@ -29,24 +29,17 @@ public abstract class Relic
     public bool CanUpgrade() => UpgradeLevel < MaxUpgradeLevel;
     public bool Upgrade()
     {
-        if (!CanUpgrade()) return false;
-        var kitty = Globals.ALL_KITTIES[keyValuePairs[this]];
+        if (!CanUpgrade())
+        {
+            Console.WriteLine($"{Name} is at {UpgradeLevel}/{MaxUpgradeLevel}");
+            return false;
+        }
         UpgradeLevel++;
-        RemoveEffect(kitty.Unit);
-        ApplyEffect(kitty.Unit);
         return true;
     }
 
-    public RelicUpgrade GetNextUpgrade() => CanUpgrade() ? Upgrades[UpgradeLevel + 1] : null;
-    public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true);
+    public RelicUpgrade GetCurrentUpgrade() => Upgrades[UpgradeLevel];
+    public RelicUpgrade GetNextUpgrade() => CanUpgrade() ? Upgrades[UpgradeLevel] : null;
 
-    public static void EnableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false);
-
-    public static void DisableRelicAbilities(unit Unit)
-    {
-        Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, true, true);
-        Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, true, true);
-        Unit.DisableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, true, true);
-    }
-
+    public override string ToString() => Name;
 }

@@ -7,7 +7,7 @@ public class FangOfShadows : Relic
     private const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
     private const int RelicCost = 650;
-    private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
+    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
     private trigger SummonTrigger = trigger.Create();
     private trigger TeleTrigger = trigger.Create();

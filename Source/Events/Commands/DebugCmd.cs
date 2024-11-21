@@ -21,6 +21,7 @@ public static class DebugCmd
                 BarrierSetup.DeactivateBarrier();
                 break;
             case "?endround":
+            case "?er":
                 RoundManager.RoundEnd();
                 break;
             case "?gold":
@@ -28,9 +29,11 @@ public static class DebugCmd
                 player.Gold += amount;
                 break;
             case "?level":
+            case "?lvl":
                 kitty.Unit.HeroLevel = cmd.Length > 1 ? int.Parse(cmd[1]) : 10;
                 break;
             case "?blink":
+            case "?tele":
                 kitty.Unit.AddItem(FourCC("desc"));
                 break;
             case "?diff":
@@ -45,9 +48,6 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     Globals.ALL_KITTIES[p].ReviveKitty();
                 break;
-            case "?data":
-                Console.WriteLine(kitty.SaveData.SelectedData[SelectedData.SelectedSkin]);
-                break;
             case "?share":
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
@@ -57,6 +57,9 @@ public static class DebugCmd
                 break;
             case "?noseason":
                 SeasonalManager.NoSeason();
+                break;
+            case "?col":
+                Console.WriteLine($"Current Collision Value: {CollisionDetection.KITTY_COLLISION_RADIUS[player]}");
                 break;
             case "?award":
                 AwardingCmds.Awarding(player, command);

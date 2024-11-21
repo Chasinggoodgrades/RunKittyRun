@@ -31,6 +31,8 @@ public static class Globals
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
     public static Dictionary<player, int> PLAYER_REACHED_SAFEZONES = new Dictionary<player, int>();
+    public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
+
 
     public static Dictionary<int, Team> ALL_TEAMS;
     public static Dictionary<player, Team> PLAYERS_TEAMS;

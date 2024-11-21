@@ -5,7 +5,7 @@ public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
     private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
-    private const string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
+    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
     private const int RelicCost = 650;
     private static float UnitScale = 0.60f - (0.60f * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0f);
 
@@ -17,14 +17,14 @@ public class AmuletOfEvasiveness : Relic
         IconPath
         ) 
     {
-        Upgrades.Add(new RelicUpgrade(0, $"Reduce Collision by an extra 2%", 15, 800));
+        Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Provides your relic with a passive slow aura for nearby wolves.", 20, 1000));
 
     }
 
     /// <summary>
     /// Changes the visual scale of the unit assuming they have the relic. This is particularly used whenever the player casts reset.
-    /// References: <see cref="RewardsManager.CastedReward()"/>
+    /// References: <see cref="RewardsManager.CastedReward"/> and <see cref="Reward.SetSkin(player)"/>
     /// </summary>
     /// <param name="Unit">The unit to scale.</param>
     public static void ScaleUnit(unit Unit)
@@ -37,7 +37,7 @@ public class AmuletOfEvasiveness : Relic
     {
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
-        var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION);
+        var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
@@ -52,6 +52,13 @@ public class AmuletOfEvasiveness : Relic
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
         Unit.SetScale(0.60f, 0.60f, 0.60f);
         CollisionDetection.KittyRegisterCollisions(kitty);
+    }
+    
+    private float GetCollisionReduction(unit Unit)
+    {
+        var player = Unit.Owner;
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetCurrentUpgradeLevel(GetType());
+        return (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION) - (0.01f * upgradeLevel);
     }
 
 }

@@ -13,15 +13,20 @@ public static class DiscordFrame
     public static void Initialize()
     {
         BlzLoadTOCFile("war3mapImported\\templates.toc");
+        CreateFrame();
+        RegisterTrigger();
+        SetupDiscordIcon();
+        ApplyTextFrame();
+    }
+
+    private static void CreateFrame()
+    {
         EditBox = framehandle.Create("EscMenuEditBoxTemplate", originframetype.GameUI.GetOriginFrame(0), 0, 0);
         EditBox.SetAbsPoint(framepointtype.Center, 0.4f, 0.18f);
         EditBox.SetSize(0.20f, 0.03f);
         EditBox.TextSizeLimit = Link.Length;
         EditBox.Text = Link;
         EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center);
-        RegisterTrigger();
-        SetupDiscordIcon();
-        ApplyTextFrame();
     }
 
     private static void SetupDiscordIcon()

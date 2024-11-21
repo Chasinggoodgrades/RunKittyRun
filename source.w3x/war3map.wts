@@ -4095,3 +4095,59 @@ STRING 3628
 Holiday_Trail_C2023
 }
 
+STRING 3630
+// Items: I00L (Shard of Translocation), Hotkey (Hotkey)
+{
+B
+}
+
+STRING 3634
+// Items: I00L (Shard of Translocation), Name (Name)
+{
+Shard of Translocation
+}
+
+STRING 3635
+// Items: I00L (Shard of Translocation), Tip (Tooltip - Basic)
+{
+Shard of Translocation
+}
+
+STRING 3636
+// Items: I00L (Shard of Translocation), Ubertip (Tooltip - Extended)
+{
+|cffffcc00The holder of this shard can harness arcane energy to blink to a new location within 400 range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r
+
+}
+
+STRING 3638
+// Abilities: A000 (Translocate), Tip (Tooltip - Normal)
+{
+|cff2873ffTranslocate|r
+}
+
+STRING 3639
+// Abilities: A000 (Translocate), Researchtip (Tooltip - Learn)
+{
+|cff2873ffTranslocate|r
+}
+
+STRING 3640
+// Abilities: A000 (Translocate), Ubertip (Tooltip - Normal - Extended)
+{
+|cffffff00Teleports a short distance as long as it's within lane bounds or safezone bounds of your current safezone.|r
+}
+
+STRING 3641
+// Abilities: A000 (Translocate), Name (Name)
+{
+Translocate
+}
+
+STRING 3642
+// Items: I00L (Shard of Translocation), Description (Description)
+{
+|cffffcc00The holder of this shard can harness arcane energy to blink to a new location within 600 range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r
+
+}
+
