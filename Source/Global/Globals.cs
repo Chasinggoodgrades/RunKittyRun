@@ -30,7 +30,7 @@ public static class Globals
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
-    public static Dictionary<player, int> PLAYER_REACHED_SAFEZONES = new Dictionary<player, int>();
+    public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE = new Dictionary<player, int>();
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
 
 

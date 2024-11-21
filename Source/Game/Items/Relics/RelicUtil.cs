@@ -11,5 +11,6 @@ public static class RelicUtil
         Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, true, true);
         Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, true, true);
         Unit.DisableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, true, true);
+        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, true, true);
     }
 }

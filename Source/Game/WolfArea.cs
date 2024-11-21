@@ -54,7 +54,7 @@ public class WolfArea
             var progressPointDict = Progress.PlayerProgressPoints;
             if (ID <= 13)
             {
-                progressPointDict[player] = Globals.SAFE_ZONES[ID].r_Rect;
+                progressPointDict[player] = Globals.SAFE_ZONES[ID].Rect_;
                 Globals.ALL_KITTIES[player].ProgressZone = ID;
             }
             else {

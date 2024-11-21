@@ -54,7 +54,7 @@ public static class DoodadChanger
 
         foreach (var safeZone in Globals.SAFE_ZONES)
         {
-            var rect = safeZone.r_Rect;
+            var rect = safeZone.Rect_;
 
             var minX = rect.MinX;
             var minY = rect.MinY;

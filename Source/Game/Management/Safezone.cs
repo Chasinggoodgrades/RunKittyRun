@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Safezone
 {
-
     public region Region{ get; set; }
     private trigger Trigger { get; set; }
     public int ID { get; set; }
-    public rect r_Rect { get; set; }
+    public rect Rect_ { get; set; }
+    public List<player> AwardedPlayers { get; set; }
 
     public Safezone(int id, region region) { 
         ID = id;
         Region = region;
         Trigger = trigger.Create();
+        AwardedPlayers = new List<player>();
     }
 
     public static void Initialize()
@@ -24,7 +26,7 @@ public class Safezone
             var safezone = new Safezone(count, safeZone.Region);
             Globals.SAFE_ZONES.Add(safezone);
             safezone.EnterSafezoneEvents();
-            safezone.r_Rect = safeZone.Rect;
+            safezone.Rect_ = safeZone.Rect;
             count++;
         }
         FinalSafezone.Initialize();
@@ -40,16 +42,12 @@ public class Safezone
     {
         var unit = @event.Unit;
         var player = unit.Owner;
-        var currentSafezone = Globals.PLAYER_REACHED_SAFEZONES[player];
-        if(currentSafezone != ID) { return; }
+        Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
+        if (AwardedPlayers.Contains(player) || ID == 0) return;
         player.Gold += Resources.SafezoneGold;
         unit.Experience += Resources.SafezoneExperience;
-        Globals.PLAYER_REACHED_SAFEZONES[player] = ID + 1;
+        AwardedPlayers.Add(player);
         Deathless.DeathlessCheck(player);
-    }
-    private void WolfEntersZoneActions()
-    {
-
     }
 
     /// <summary>
@@ -57,10 +55,14 @@ public class Safezone
     /// </summary>
     public static void ResetPlayerSafezones()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
+            Globals.PLAYERS_CURRENT_SAFEZONE[player] = 0;
             Globals.ALL_KITTIES[player].ProgressZone = 0;
-            Globals.PLAYER_REACHED_SAFEZONES[player] = 1;
+        }
+        foreach (var safezone in Globals.SAFE_ZONES)
+        {
+            safezone.AwardedPlayers.Clear();
         }
     }
 }
