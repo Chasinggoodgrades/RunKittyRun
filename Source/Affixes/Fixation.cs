@@ -57,19 +57,19 @@ public class Fixation : Affix
         var currentMS = Unit.Unit.MovementSpeed;
         var speedIncrementer = 0.40f; // 4ms every second
 
-        if (!IsChasing)
+        if (IsChasing)
         {
-            if (currentMS <= FIXATION_MS) return; // no actions required.
-            SetUnitMoveSpeed(Unit.Unit, currentMS - speedIncrementer / 2); // Decrease by half the rate
-            if (Unit.Unit.MovementSpeed < FIXATION_MS)
-                SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
+            if (currentMS >= FIXATION_MAX_MS) return;
+
+            var newSpeed = currentMS + speedIncrementer;
+            SetUnitMoveSpeed(Unit.Unit, Math.Min(newSpeed, FIXATION_MAX_MS));
         }
         else
         {
-            if (currentMS >= FIXATION_MAX_MS) return;
-            SetUnitMoveSpeed(Unit.Unit, currentMS + speedIncrementer);
-            if (Unit.Unit.MovementSpeed > FIXATION_MAX_MS)
-                SetUnitMoveSpeed(Unit.Unit, FIXATION_MAX_MS);
+            if (currentMS <= FIXATION_MS) return;
+
+            var newSpeed = currentMS - (speedIncrementer / 2); // Decrease by half the rate
+            SetUnitMoveSpeed(Unit.Unit, Math.Max(newSpeed, FIXATION_MS));
         }
     }
 

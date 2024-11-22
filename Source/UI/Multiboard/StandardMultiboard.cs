@@ -115,7 +115,7 @@ public static class StandardMultiboard
         BestTimes.GetItem(0, 4).SetText($"{color}Round 4|r");
         BestTimes.GetItem(0, 5).SetText($"{color}Round 5|r");
         BestTimes.SetChildVisibility(true, false);
-        BestTimes.SetChildWidth(0.04f);
+        BestTimes.SetChildWidth(0.05f);
         BestTimes.GetItem(0, 0).SetWidth(0.07f);
         BestTimes.IsDisplayed = false;
         UpdateBestTimesMB();
@@ -125,7 +125,9 @@ public static class StandardMultiboard
     {
         var color = Colors.COLOR_GREEN;
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        {
             CurrentStats.GetItem(0, i).SetText($"{color}{Utility.ConvertFloatToTime(GameTimer.RoundTime[i])}|r");
+        }
     }
 
     private static void CurrentGameStats()

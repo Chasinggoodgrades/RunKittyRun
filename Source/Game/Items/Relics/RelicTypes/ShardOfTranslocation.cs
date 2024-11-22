@@ -7,12 +7,11 @@ public class ShardOfTranslocation : Relic
     public const int RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION;
     public static int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
     private static int RelicCost = 650;
-    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
-    private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
-    private static float DEFAULT_BLINK_RANGE = 600.0f;
+    private static float DEFAULT_BLINK_RANGE = 400.0f;
+    private static float UPGRADE_BLINK_RANGE = 600.0f;
     private static float CooldownReduction = 15.0f;
     private static new string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
-    private float MaxBlinkRange = 600.0f;
+    private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
     private trigger CastEventTrigger;
 
     public ShardOfTranslocation() : base(
@@ -23,26 +22,22 @@ public class ShardOfTranslocation : Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, $"Extends the teleport range to 800 yrds within lane bounds.", 15, 800));
+        Upgrades.Add(new RelicUpgrade(0, $"Extends the teleport range to {UPGRADE_BLINK_RANGE} yrds within lane bounds.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced by 15 seconds.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
     {
-        try
-        {
-            RegisterTrigger(Unit);
-            Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
-            Console.WriteLine("Applying Translocation");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        RegisterTrigger(Unit);
+        UpdateBlinkRange(Unit);
+        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
+        Console.WriteLine("Applying Translocation");
     }
 
     public override void RemoveEffect(unit Unit)
     {
+        CastEventTrigger.Dispose();
+        CastEventTrigger = null;
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, true);
     }
 
@@ -56,6 +51,7 @@ public class ShardOfTranslocation : Relic
 
     private void TeleportActions()
     {
+        if (!Globals.GAME_ACTIVE) return;
         if (@event.SpellAbilityId != RelicAbilityID) return;
         var unit = @event.Unit;
         var targetLoc = @event.SpellTargetLoc;
@@ -81,6 +77,12 @@ public class ShardOfTranslocation : Relic
             player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}An error occurred. Please report this to the developer.");
             Console.WriteLine(e.Message);
         }
+    }
+
+    private void UpdateBlinkRange(unit unit)
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType());
+        MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE;
     }
 
     private void SetCooldown(unit unit)

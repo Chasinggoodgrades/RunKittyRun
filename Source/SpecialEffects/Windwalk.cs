@@ -44,10 +44,12 @@ public static class Windwalk
     {
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
+        if (upgradeLevel < 2) return;
         var newCollisionRadius = AmuletOfEvasiveness.GetCollisionReduction(Unit) - AmuletOfEvasiveness.AMULET_UPGRADE_WW_COLLISION_REDUCTION;
-        Console.WriteLine($"Collision Radius: {newCollisionRadius}");
+        Console.WriteLine($"Collision Radius: {CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius}");
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
+        CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
 
         var t = timer.Create();

@@ -38,6 +38,8 @@ public class FrostbiteRing : Relic
 
     public override void RemoveEffect(unit Unit)
     {
+        Trigger.Dispose();
+        Trigger = null;
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 

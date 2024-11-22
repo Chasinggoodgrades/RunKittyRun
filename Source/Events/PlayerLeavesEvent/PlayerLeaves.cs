@@ -27,17 +27,25 @@ public static class PlayerLeaves
 
     private static void PlayerLeavesActions()
     {
-        var leavingPlayer = @event.Player;
-        var kitty = Globals.ALL_KITTIES[leavingPlayer];
-        var circle = Globals.ALL_CIRCLES[leavingPlayer];
-        var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];
-        TeamRemovePlayer(leavingPlayer);
-        kitty.RemoveKitty();
-        circle.RemoveCircle();
-        nameTag.Dispose();
-        Globals.ALL_PLAYERS.Remove(leavingPlayer);
-        Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
-        MultiboardUtil.RefreshMultiboards();
-        RoundManager.RoundEndCheck();
+        try
+        {
+            var leavingPlayer = @event.Player;
+            var kitty = Globals.ALL_KITTIES[leavingPlayer];
+            var circle = Globals.ALL_CIRCLES[leavingPlayer];
+            var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];
+            TeamRemovePlayer(leavingPlayer);
+            kitty.Dispose();
+            circle.RemoveCircle();
+            nameTag.Dispose();
+            Globals.ALL_PLAYERS.Remove(leavingPlayer);
+            Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
+            MultiboardUtil.RefreshMultiboards();
+            RoundManager.RoundEndCheck();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error in PlayerLeavesActions: " + e.Message);
+        }
+
     }
 }

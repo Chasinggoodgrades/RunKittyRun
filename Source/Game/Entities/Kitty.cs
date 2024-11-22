@@ -53,10 +53,6 @@ public class Kitty
             throw;
         }
     }
-    /// <summary>
-    /// Removes the kitty from the game. 
-    /// </summary>
-    public void RemoveKitty() => Dispose();
 
     /// <summary>
     /// Kills this kitty object, and increments death stats. Calls attached circle object.
@@ -96,7 +92,7 @@ public class Kitty
     {
         // Save Data
         if (Player.Controller == mapcontrol.User) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
-        else SaveData = new KittyData(); // dummy data for comps, if something breaks.. this may be related.
+        else SaveData = new KittyData(); // dummy data for comps
 
         // Round Times
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
@@ -135,14 +131,14 @@ public class Kitty
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
     }
 
-    private void Dispose()
+    public void Dispose()
     {
+        Globals.ALL_KITTIES.Remove(Player);
         Alive = false;
         Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
-        Globals.ALL_KITTIES.Remove(Player);
     }
 
     private void UpdateSaviorStats(Kitty savior)

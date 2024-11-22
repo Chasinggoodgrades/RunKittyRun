@@ -97,6 +97,7 @@ public static class RewardsManager
             ActiveTrails[player] = null;
         }
         kitty.Unit.Skin = Constants.UNIT_KITTY;
+        kitty.Unit.SetVertexColor(255, 255, 255);
         kitty.SaveData.SelectedData[SelectedData.SelectedSkin] = -1;
 
     }

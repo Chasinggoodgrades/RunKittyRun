@@ -35,20 +35,36 @@ public class BeaconOfUnitedLifeforce : Relic
 
     public static void BeaconOfUnitedLifeforceEffect(Kitty kitty)
     {
+        // Check if the kitty has the Beacon of United Lifeforce item
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return;
+
+        // Retrieve the upgrade level for the Beacon of United Lifeforce
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce));
+
+        // Generate a random chance
         var chance = GetRandomReal(0.00f, 1.00f);
+
+        // Check if the random chance is greater than the single revive chance
         if (chance > EXTRA_REVIVE_CHANCE_SINGLE) return;
+
+        // Revive all kitties if chance <= EXTRA_REVIVE_CHANCE_ALL, otherwise revive one kitty
+        bool reviveAll = chance <= EXTRA_REVIVE_CHANCE_ALL;
+
+        var color = Colors.COLOR_YELLOW_ORANGE;
+
         foreach (var k in Globals.ALL_KITTIES.Values)
         {
             if (k.Alive) continue;
+
             k.ReviveKitty(kitty);
             UpgradeInvulnerability(kitty, k);
-            if (upgradeLevel < 2) break;
-            Console.WriteLine("Chance for Reviving Dead Players Works as intended");
-            if (chance > EXTRA_REVIVE_CHANCE_ALL) break;
+
+            if (!reviveAll) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(k.Player)}{color} has been extra revived by {Colors.PlayerNameColored(kitty.Player)}!|r");
+            if (!reviveAll) break;
+            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(kitty.Player)}{color} has extra revived all dead players!|r");
         }
     }
+
 
     private static void UpgradeInvulnerability(Kitty beaconHolder, Kitty extraRevivedKitty)
     {

@@ -93,7 +93,10 @@ public static class ProtectionOfAncients
         foreach (var unit in tempGroup.ToList())
         {
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
-            playerToRevive.ReviveKitty(kitty);
+            if (kitty.Unit == playerToRevive.Unit)
+                kitty.ReviveKitty();
+            else
+                playerToRevive.ReviveKitty(kitty);
             reviveCount++;
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
 
