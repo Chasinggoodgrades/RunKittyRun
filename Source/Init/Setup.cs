@@ -60,6 +60,7 @@ namespace Source.Init
                 WolfArea.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
+                ItemStacker.Initialize();
                 ProtectionOfAncients.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();

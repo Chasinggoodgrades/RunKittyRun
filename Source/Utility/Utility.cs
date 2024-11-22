@@ -128,6 +128,22 @@ public static class Utility
     }
 
     /// <summary>
+    /// Returns the item if the unit has it, otherwise null.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
+    public static item UnitGetItem(unit u, int itemId)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+                return UnitItemInSlot(u, i);
+        }
+        return null;
+    }
+
+    /// <summary>
     /// If the unit has the item, it'll be deleted.
     /// </summary>
     /// <param name="u"></param>

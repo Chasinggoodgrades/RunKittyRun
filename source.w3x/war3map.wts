@@ -2108,24 +2108,6 @@ STRING 3117
 |cff809effSnowy Wings|r
 }
 
-STRING 3118
-// Abilities: A03T (Holiday_Wings_C2023), Ubertip (Tooltip - Normal - Extended)
-{
-Everytime a bell rings, a kitty gets his wings!
-}
-
-STRING 3119
-// Abilities: A03T (Holiday_Wings_C2023), Untip (Tooltip - Turn Off)
-{
-|cff809effSnowy Wings|r
-}
-
-STRING 3120
-// Abilities: A03T (Holiday_Wings_C2023), Unubertip (Tooltip - Turn Off - Extended)
-{
-Everytime a bell rings, a kitty gets his wings!
-}
-
 STRING 3122
 // Abilities: A03R (Holiday Rewards), Ubertip (Tooltip - Normal - Extended)
 {
@@ -4006,7 +3988,7 @@ STRING 3624
 }
 
 STRING 3625
-// Abilities: A03U (Holiday_Trail_C2023), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A03T (Holiday_Wings_C2023), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by playing this map during the Christmas holidays :)
 }
@@ -4125,5 +4107,11 @@ STRING 3654
 // Units: E009 (ShadowKitty(Relic Summon)), Propernames (Proper Names)
 {
 Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3655
+// Abilities: A03U (Holiday_Trail_C2023), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by playing this map during the Christmas holidays :)
 }
 
