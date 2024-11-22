@@ -62,7 +62,13 @@ public class AmuletOfEvasiveness : Relic
     public static void ScaleUnit(unit Unit)
     {
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
-        Unit.SetScale(UnitScale, UnitScale, UnitScale);
+
+        // Scale based on upgrade level
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
+        var scale = UnitScale - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
+
+        Unit.SetScale(scale, scale, scale);
     }
+
 
 }
