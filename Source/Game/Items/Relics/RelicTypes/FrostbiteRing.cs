@@ -15,8 +15,7 @@ public class FrostbiteRing : Relic
     private static float SLOW_DURATION = 5.0f;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
-
-    private trigger Trigger = trigger.Create();
+    private trigger Trigger;
 
     public FrostbiteRing() : base(
         $"{Colors.COLOR_BLUE}Frostbite Ring",
@@ -93,6 +92,7 @@ public class FrostbiteRing : Relic
 
     private void RegisterTriggers(unit Unit)
     {
+        Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));

@@ -12,7 +12,7 @@ public class RingOfSummoning : Relic
     private static float SUMMONING_COOLDOWN = 90.0f;
     private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
     private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
-    private trigger Trigger = trigger.Create();
+    private trigger Trigger;
 
     public RingOfSummoning() : base(
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
@@ -29,6 +29,7 @@ public class RingOfSummoning : Relic
 
     private void RegisterTriggers(unit Unit)
     {
+        Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         Trigger.AddAction(() => SacredRingOfSummoning());
@@ -53,7 +54,7 @@ public class RingOfSummoning : Relic
         var ability = Unit.GetAbility(RelicAbilityID);
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
-        Console.WriteLine($"Upgarde Level: {upgradeLevel}");
+        Console.WriteLine($"Upgrade Level: {upgradeLevel}");
         // Summon radius thingy
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
 
@@ -74,7 +75,6 @@ public class RingOfSummoning : Relic
         var summoningKitty = Globals.ALL_KITTIES[player];
         var summoningKittyUnit = summoningKitty.Unit;
         var numberOfPlayers = GetNumberOfPlayers(player);
-        Console.WriteLine("Casting Effect...");
         GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));
         var list = tempGroup.ToList();
         for(int i = 0; i < numberOfPlayers; i++)
@@ -95,7 +95,6 @@ public class RingOfSummoning : Relic
     private int GetNumberOfPlayers(player player)
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(RingOfSummoning));
-        Console.WriteLine($"Upgrade Level: {upgradeLevel}");
         return upgradeLevel >= 2 ? 2 : 1;
     }
 

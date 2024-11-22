@@ -4,6 +4,9 @@ using System;
 public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
+    public static float AMULET_UPGRADE_WW_COLLISION_REDUCTION = 0.02f; // 2%
+    public static float WINDWALK_COLLISION_DURATION = 5.0f;
+    private static float AMULET_UPGRADE_COLLISION_REDUCTION = 0.01f; // 1%
     private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
     private const int RelicCost = 650;
@@ -18,7 +21,7 @@ public class AmuletOfEvasiveness : Relic
         ) 
     {
         Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an addional 2% for 5 seconds.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an addional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
 
     }
 
@@ -44,11 +47,11 @@ public class AmuletOfEvasiveness : Relic
         CollisionDetection.KittyRegisterCollisions(kitty);
     }
     
-    private float GetCollisionReduction(unit Unit)
+    public static float GetCollisionReduction(unit Unit)
     {
         var player = Unit.Owner;
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(GetType());
-        return (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION) - (0.01f * upgradeLevel);
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
+        return (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION) - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
     }
 
     /// <summary>

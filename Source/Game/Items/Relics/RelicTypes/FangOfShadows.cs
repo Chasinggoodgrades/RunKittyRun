@@ -9,8 +9,8 @@ public class FangOfShadows : Relic
     private const int RelicCost = 650;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
-    private trigger SummonTrigger = trigger.Create();
-    private trigger TeleTrigger = trigger.Create();
+    private trigger SummonTrigger;
+    private trigger TeleTrigger;
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
@@ -38,10 +38,12 @@ public class FangOfShadows : Relic
 
     private void RegisterTriggers(unit Unit)
     {
+        SummonTrigger = trigger.Create();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
         SummonTrigger.AddAction(() => SummonShadowKitty(Unit.Owner));
 
+        TeleTrigger = trigger.Create();
         TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
         TeleTrigger.AddAction(() => TeleportToShadowKitty());
