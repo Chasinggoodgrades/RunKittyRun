@@ -269,7 +269,7 @@ public static class ShopFrame
     private static void RefreshUpgradeTooltip(Relic relic)
     {
         var finalString = new StringBuilder();
-        var playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(@event.Player).GetCurrentUpgradeLevel(relic.GetType());
+        var playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(@event.Player).GetUpgradeLevel(relic.GetType());
 
         for (int i = 0; i < relic.Upgrades.Count; i++)
         {
@@ -404,10 +404,9 @@ public static class ShopFrame
                 return;
             }
             player.Gold -= goldCost;
-            if (playerRelic.Upgrade())
+            if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
             {
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
-                playerUpgrades.SetUpgradeLevel(relicType, playerRelic.UpgradeLevel);
                 if(player.IsLocal) RefreshUpgradeTooltip(playerRelic);
             }
             else

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+using System;
 public class PlayerUpgrades
 {
     private player Player;
-    private Dictionary<System.Type, int> UpgradeLevels { get; set; } = new Dictionary<System.Type, int>();
+    private Dictionary<Type, int> UpgradeLevels { get; set; } = new Dictionary<Type, int>();
 
     public PlayerUpgrades(player player)
     {
@@ -18,12 +19,14 @@ public class PlayerUpgrades
     }
 
     public static PlayerUpgrades GetPlayerUpgrades(player player) => Globals.PLAYER_UPGRADES[player];
-    public void SetUpgradeLevel(System.Type relicType, int level) => UpgradeLevels[relicType] = level;
+    public void SetUpgradeLevel(Type relicType, int level) => UpgradeLevels[relicType] = level;
 
-    public int GetCurrentUpgradeLevel(System.Type relicType)
+    public static void IncreaseUpgradeLevel(Type relicType, unit Unit)
     {
-        if (!UpgradeLevels.ContainsKey(relicType))
-            UpgradeLevels[relicType] = 0;
-        return UpgradeLevels[relicType];
+        var player = Unit.Owner;
+        GetPlayerUpgrades(player).SetUpgradeLevel(relicType, GetPlayerUpgrades(player).GetUpgradeLevel(relicType) + 1);
     }
+
+    public int GetUpgradeLevel(Type relicType) => UpgradeLevels.TryGetValue(relicType, out var level) ? level : 0;
+
 }

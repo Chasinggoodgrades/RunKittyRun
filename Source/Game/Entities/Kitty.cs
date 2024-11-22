@@ -16,11 +16,11 @@ public class Kitty
     public player Player { get; }
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
+    public bool Invulnerable { get; set; } = false;
     public int TeamID { get; set; } = 0;
     public int ProgressZone { get; set; } = 0;
     public bool Alive { get; set; } = true;
     public bool Finished { get; set; } = false;
-    public bool CanBuyRelic { get; set; } = false;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public float Progress { get; set; } = 0.0f;

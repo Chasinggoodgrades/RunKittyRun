@@ -82,6 +82,12 @@ public static class DebugCmd
             case "?discord":
                 DiscordFrame.Initialize();
                 break;
+            case "?sot":
+                kitty.Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
+                break;
+            case "?eot":
+                kitty.Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, true, true);
+                break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)
                 {

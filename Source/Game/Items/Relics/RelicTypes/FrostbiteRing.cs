@@ -5,42 +5,44 @@ using WCSharp.Shared.Extensions;
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    private static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_RING_EFFECT = "Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathTargetArt.mdl";
-    private static float FROSTBITE_FREEZE_DURATION = 5.0f; 
+    private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
+    private static float DEFAULT_FREEZE_DURATION = 5.0f;
+    private float FREEZE_DURATION = 5.0f;
+    private static float SLOW_DURATION = 5.0f;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+    private player Owner;
 
     private trigger Trigger = trigger.Create();
 
     public FrostbiteRing() : base(
         $"{Colors.COLOR_BLUE}Frostbite Ring",
-        $"Freezes wolves in place for {Colors.COLOR_CYAN}{(int)FROSTBITE_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r",
+        $"Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r",
         RelicItemID,
         RelicCost,
         IconPath
         )
     {
-    }
-
-    private void RegisterTriggers(unit Unit)
-    {
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+        Upgrades.Add(new RelicUpgrade(0, $"Freeze duration is increased by 1 second per upgrade level.", 15, 800));
+        Upgrades.Add(new RelicUpgrade(1, $"Wolves that've been frozen will have 50% reduced movespeed for {SLOW_DURATION} seconds after being unfrozen.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
     {
         RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
+        Owner = Unit.Owner;
     }
 
-    public override void RemoveEffect(unit Unit) => Unit.DisableAbility(RelicAbilityID, true, true);
-    private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
+    public override void RemoveEffect(unit Unit)
+    {
+        Unit.DisableAbility(RelicAbilityID, false, true);
+    }
 
-    private static void FrostbiteCast(location freezeLocation)
+    private void FrostbiteCast(location freezeLocation)
     {
         Console.WriteLine("Frostbite");
         var tempGroup = group.Create();
@@ -53,17 +55,50 @@ public class FrostbiteRing : Relic
         tempGroup = null;
     }
 
-    private static void FrostbiteEffect(unit Unit)
+    private void FrostbiteEffect(unit Unit)
     {
         var t = timer.Create();
         Unit.SetPausedEx(true);
+        var duration = GetFreezeDuration();
+        Console.WriteLine($"Freeze Duration {duration}");
         var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
-        t.Start(FROSTBITE_FREEZE_DURATION, false, () =>
+        t.Start(duration, false, () =>
         {
             Unit.SetPausedEx(false);
+            SlowWolves(Unit);
             effect.Dispose();
             t.Dispose();
         });
     }
+
+    private void SlowWolves(unit Unit)
+    {
+        if (PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType()) < 2) return;
+        Unit.BaseMovementSpeed = 365.0f / 2.0f;
+        var t = timer.Create();
+        var effect = AddSpecialEffectTarget(FROSTBITE_TARGET_EFFECT, Unit, "origin");
+        t.Start(SLOW_DURATION, false, () =>
+        {
+            Unit.BaseMovementSpeed = 365.0f;
+            effect.Dispose();
+            t.Dispose();
+        });
+    }
+
+    private float GetFreezeDuration()
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType());
+        return DEFAULT_FREEZE_DURATION + upgradeLevel;
+    }
+
+    private void RegisterTriggers(unit Unit)
+    {
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+    }
+
+    private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
+
 
 }

@@ -25,21 +25,16 @@ public abstract class Relic
 
     public abstract void ApplyEffect(unit Unit);
     public abstract void RemoveEffect(unit Unit);
-
-    public bool CanUpgrade() => UpgradeLevel < MaxUpgradeLevel;
-    public bool Upgrade()
-    {
-        if (!CanUpgrade())
-        {
-            Console.WriteLine($"{Name} is at {UpgradeLevel}/{MaxUpgradeLevel}");
-            return false;
-        }
-        UpgradeLevel++;
-        return true;
-    }
-
     public RelicUpgrade GetCurrentUpgrade() => Upgrades[UpgradeLevel];
     public RelicUpgrade GetNextUpgrade() => CanUpgrade() ? Upgrades[UpgradeLevel] : null;
-
-    public override string ToString() => Name;
+    public bool CanUpgrade() => UpgradeLevel < MaxUpgradeLevel;
+    public bool Upgrade(unit Unit)
+    {
+        if (!CanUpgrade()) return false;
+        UpgradeLevel++;
+        PlayerUpgrades.IncreaseUpgradeLevel(GetType(), Unit);
+        RemoveEffect(Unit);
+        ApplyEffect(Unit);
+        return true;
+    }
 }

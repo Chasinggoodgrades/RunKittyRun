@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
-    private const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    public const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
     private const int RelicCost = 650;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
@@ -20,6 +20,8 @@ public class FangOfShadows : Relic
         IconPath
         )
     {
+        Upgrades.Add(new RelicUpgrade(0, $"I DONT KNOW OMFSAFJSAFKJASLFKASF", 15, 800));
+        Upgrades.Add(new RelicUpgrade(1, $"SOME OTHER UPGRADE GOES HERE?!?!?!", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -31,7 +33,7 @@ public class FangOfShadows : Relic
     public override void RemoveEffect(unit Unit)
     {
         DeregisterTriggers();
-        Unit.DisableAbility(RelicAbilityID, true, true);
+        Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
     private void RegisterTriggers(unit Unit)

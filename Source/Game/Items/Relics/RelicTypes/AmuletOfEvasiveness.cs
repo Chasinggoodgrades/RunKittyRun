@@ -18,19 +18,8 @@ public class AmuletOfEvasiveness : Relic
         ) 
     {
         Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Provides your relic with a passive slow aura for nearby wolves.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an addional 2% for 5 seconds.", 20, 1000));
 
-    }
-
-    /// <summary>
-    /// Changes the visual scale of the unit assuming they have the relic. This is particularly used whenever the player casts reset.
-    /// References: <see cref="RewardsManager.CastedReward"/> and <see cref="Reward.SetSkin(player)"/>
-    /// </summary>
-    /// <param name="Unit">The unit to scale.</param>
-    public static void ScaleUnit(unit Unit)
-    {
-        if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
-        Unit.SetScale(UnitScale, UnitScale, UnitScale);
     }
 
     public override void ApplyEffect(unit Unit)
@@ -38,6 +27,7 @@ public class AmuletOfEvasiveness : Relic
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
+        Console.WriteLine("Collision Radius: " + newCollisionRadius);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
@@ -57,8 +47,19 @@ public class AmuletOfEvasiveness : Relic
     private float GetCollisionReduction(unit Unit)
     {
         var player = Unit.Owner;
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetCurrentUpgradeLevel(GetType());
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(GetType());
         return (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION) - (0.01f * upgradeLevel);
+    }
+
+    /// <summary>
+    /// Changes the visual scale of the unit assuming they have the relic. This is particularly used whenever the player casts reset.
+    /// References: <see cref="RewardsManager.CastedReward"/> and <see cref="Reward.SetSkin(player)"/>
+    /// </summary>
+    /// <param name="Unit">The unit to scale.</param>
+    public static void ScaleUnit(unit Unit)
+    {
+        if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
+        Unit.SetScale(UnitScale, UnitScale, UnitScale);
     }
 
 }

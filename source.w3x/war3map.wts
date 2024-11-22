@@ -154,12 +154,6 @@ STRING 948
 Ritual Mask
 }
 
-STRING 959
-// Abilities: A017 (Book of Rewards Pandaren), Ubertip (Tooltip - Normal - Extended)
-{
-Use the |cffd45e19Nitro|r to pass everyone!
-}
-
 STRING 968
 // Abilities: A01I (Set Panda Hat), Tip (Tooltip - Normal)
 {
@@ -266,18 +260,6 @@ STRING 1126
 // Units: N00C (Super Panda), Propernames (Proper Names)
 {
 Chen Stormstout
-}
-
-STRING 1127
-// Abilities: A017 (Book of Rewards Pandaren), Name (Name)
-{
-Book of Rewards Pandaren
-}
-
-STRING 1128
-// Abilities: A017 (Book of Rewards Pandaren), Tip (Tooltip - Normal)
-{
-Book of Rewards Pandaren
 }
 
 STRING 1133
@@ -2172,54 +2154,6 @@ STRING 3142
 // Items: I004 (|cffff0000Fieryfoxes's Missing Shoe|r), Description (Description)
 {
 |cffffff00Looks like someone lost their shoe in the solo tournament!! Return this item to its rightful owner.|r|n|n|cff00ffffPS) Contact with wolves MAY destroy this item|r
-}
-
-STRING 3146
-// Units: E000 (Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3147
-// Units: E001 (Undead Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3148
-// Units: E003 (Highelf Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3149
-// Units: E004 (Astral Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3150
-// Units: E002 (Nitro Pacer), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3151
-// Units: E005 (Satyr Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3152
-// Units: E006 (Ancient Kitty), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
-}
-
-STRING 3153
-// Units: E009 (ShadowKitty(Relic Summon)), Propernames (Proper Names)
-{
-Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
 }
 
 STRING 3156
@@ -4143,5 +4077,53 @@ STRING 3646
 // Abilities: A000 (Translocate), Ubertip (Tooltip - Normal - Extended)
 {
 Teleports a short distance within the bounds of the lane and current safezones.
+}
+
+STRING 3647
+// Units: E000 (Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3648
+// Units: E001 (Undead Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3649
+// Units: E003 (Highelf Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3650
+// Units: E004 (Astral Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3651
+// Units: E002 (Nitro Pacer), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3652
+// Units: E005 (Satyr Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3653
+// Units: E006 (Ancient Kitty), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
+}
+
+STRING 3654
+// Units: E009 (ShadowKitty(Relic Summon)), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches
 }
 
