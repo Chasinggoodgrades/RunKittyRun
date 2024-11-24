@@ -204,6 +204,7 @@ public static class RewardsFrame
         if (!player.IsLocal) return;
         FrameManager.RewardsButton.Visible = false;
         FrameManager.RewardsButton.Visible = true;
+        FrameManager.HideOtherFrames(RewardFrame);
         RewardFrame.Visible = !RewardFrame.Visible;
         if (RewardFrame.Visible)
         {

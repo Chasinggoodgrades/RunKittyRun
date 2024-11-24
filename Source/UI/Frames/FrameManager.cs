@@ -11,15 +11,16 @@ public static class FrameManager
     public static framehandle MusicButton;
     public static framehandle ShopButton;
     public static framehandle RewardsButton;
+    public static framehandle Backdrop;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static trigger ESCTrigger = trigger.Create();
     public static void Initialize()
     {
         RemoveUnwantedFrames();
-        TopCenterBackdrop();
+        ButtonsBackdrop();
+        CreateRewardsButton();
         CreateMusicButton();
         CreateShopButton();
-        CreateRewardsButton();
         MusicFrame.Initialize();
         Utility.SimpleTimer(1.0f, ESCHideFrames);
     }
@@ -66,14 +67,24 @@ public static class FrameManager
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
         var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
-        timeDayDisplay.Visible = false;
+        //timeDayDisplay.Visible = false;
+    }
+
+    private static void CreateRewardsButton()
+    {
+        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "DebugButton", 0);
+        RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
+        RewardsButton.SetSize(0.0525f, 0.025f);
+        RewardsButton.Text = "Rewards";
+        RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
+        RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
     }
 
     private static void CreateMusicButton()
     {
-        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", GameUI, "DebugButton", 0);
-        MusicButton.SetAbsPoint(framepointtype.Center, 0.3790f, 0.5823f);
-        MusicButton.SetSize(0.043f, 0.022f);
+        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "DebugButton", 0);
+        MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
+        MusicButton.SetSize(0.0525f, 0.025f);
         MusicButton.Text = "Music";
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
         StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
@@ -81,31 +92,25 @@ public static class FrameManager
 
     private static void CreateShopButton()
     {
-        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", GameUI, "DebugButton", 0);
-        ShopButton.SetAbsPoint(framepointtype.Center, 0.4210f, 0.5823f);
-        ShopButton.SetSize(0.043f, 0.022f);
+        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "DebugButton", 0);
+        ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
+        ShopButton.SetSize(0.0525f, 0.025f);
         ShopButton.Text = "Shop";
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
         ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
     }
 
-    private static void CreateRewardsButton()
+    private static void ButtonsBackdrop()
     {
-        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", GameUI, "DebugButton", 0);
+        Backdrop = framehandle.Create("BACKDROP", "ButtonsBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
         var statsFrameParent = BlzGetFrameByName("SimpleUnitStatsPanel", 0);
-        RewardsButton.SetPoint(framepointtype.TopLeft, -0.05f, 0.05f, statsFrameParent, framepointtype.TopLeft);
-        //RewardsButton.SetAbsPoint(framepointtype.Center, 0.24f, 0.15f);
-        RewardsButton.SetSize(0.0525f, 0.025f);
-        RewardsButton.Text = "Rewards";
-        RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
-        RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
+        Backdrop.SetPoint(framepointtype.Center, 0, 0.075f, statsFrameParent, framepointtype.Center);
+        Backdrop.SetSize(0.18f, 0.035f);
     }
 
-    private static void TopCenterBackdrop()
+    public static void UpdateButtonPositions()
     {
-        var backdrop = framehandle.Create("BACKDROP", "TopCenterBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
-        backdrop.SetAbsPoint(framepointtype.Center, 0.40f, 0.59f);
-        backdrop.SetSize(0.1f, 0.05f);
+        Backdrop.SetPoint(framepointtype.Center, 0, 0.075f, BlzGetFrameByName("SimpleUnitStatsPanel", 0), framepointtype.Center);
     }
 
     private static void ESCHideFrames()
@@ -131,6 +136,21 @@ public static class FrameManager
         ShopFrame.shopFrame.Visible = false;
         MusicFrame.MusicFramehandle.Visible = false;
     }
+
+    public static void HideOtherFrames(framehandle currentFrame)
+    {
+        var frames = new List<framehandle>
+        {
+            RewardsFrame.RewardFrame,
+            ShopFrame.shopFrame,
+            MusicFrame.MusicFramehandle
+        };
+
+        // Hide all frames except the current one
+        foreach (var frame in frames)
+            if (frame != currentFrame) frame.Visible = false;
+    }
+
 }
 
 

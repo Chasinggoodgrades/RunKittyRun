@@ -355,6 +355,8 @@ public static class ShopFrame
             return;
         }
 
+        if(RelicMaxedOut(player)) return;
+
         AddItem(player, selectedItem.ItemID);
         ReduceGold(player, selectedItem.Cost);
         var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
@@ -422,10 +424,16 @@ public static class ShopFrame
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
     private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
-    private static void RelicMaxedOut(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum amount of this shopItem!");
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
     private static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
+    private static bool RelicMaxedOut(player player)
+    {
+        var relics = Globals.ALL_KITTIES[player].Relics;
+        if (relics.Count < Relic.MaxRelics) return false;
+        player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!");
+        return true;
+    }
 
     public static void ShopFrameActions()
     {
@@ -433,10 +441,13 @@ public static class ShopFrame
         if (!player.IsLocal) return;
         FrameManager.ShopButton.Visible = false;
         FrameManager.ShopButton.Visible = true;
+        FrameManager.HideOtherFrames(shopFrame);
         shopFrame.Visible = !shopFrame.Visible;
         UpdateButtonStatus(player);
-        if (shopFrame.Visible) MultiboardUtil.MinMultiboards(player, true);
-        else MultiboardUtil.MinMultiboards(player, false);
+        if (shopFrame.Visible)
+            MultiboardUtil.MinMultiboards(player, true);
+        else
+            MultiboardUtil.MinMultiboards(player, false);
 
     }
 }

@@ -155,7 +155,7 @@ public static class MusicFrame
     }
 
     /// <summary>
-    /// Whenever the player presses the stats button, this function shows the frame for that player using local player. 
+    /// Whenever the player presses the music button, this function shows the frame for that player using local player. 
     /// </summary>
     public static void MusicFrameActions()
     {
@@ -163,6 +163,7 @@ public static class MusicFrame
         if (!player.IsLocal) return;
         FrameManager.MusicButton.Visible = false;
         FrameManager.MusicButton.Visible = true;
+        FrameManager.HideOtherFrames(MusicFramehandle);
         MusicFramehandle.Visible = !MusicFramehandle.Visible;
         if (MusicFramehandle.Visible) MultiboardUtil.MinMultiboards(player, true);
         else MultiboardUtil.MinMultiboards(player, false);

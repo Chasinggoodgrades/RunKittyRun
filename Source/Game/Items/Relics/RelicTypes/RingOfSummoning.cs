@@ -83,6 +83,7 @@ public class RingOfSummoning : Relic
             var randomPlayer = GetRandomInt(0, list.Count - 1);
             var unit = list[randomPlayer];
             var kitty = Globals.ALL_KITTIES[unit.Owner];
+            if (!SummonDeadKitty(summoningKitty, kitty)) continue;
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
             list.Remove(unit);
@@ -90,6 +91,16 @@ public class RingOfSummoning : Relic
 
         tempGroup.Dispose();
         targetedPoint.Dispose();
+    }
+
+    private bool SummonDeadKitty(Kitty summoner, Kitty summoned)
+    {
+        if(summoner.Progress < summoned.Progress && !summoned.Alive)
+        {
+            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon a dead kitty that is ahead of you!");
+            return false;
+        }
+        return true;
     }
 
     private int GetNumberOfPlayers(player player)

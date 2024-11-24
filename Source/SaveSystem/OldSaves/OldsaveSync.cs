@@ -43,13 +43,12 @@ public static class OldsaveSync
     public static void LoadActions()
     {
         Savecode savecode = new Savecode();
+        if (SaveLoadCode.Length < 1) return;
         if(!savecode.Load(SavePlayer, SaveLoadCode))
         {
             SavePlayer.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}The save code is invalid :(");
             return;
         }
-
-
         savecode.SetRewardValues(SavePlayer);
 
     }

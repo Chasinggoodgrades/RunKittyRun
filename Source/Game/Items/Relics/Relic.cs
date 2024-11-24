@@ -4,7 +4,8 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 public abstract class Relic
 {
-    public static int RequiredLevel = 10;
+    public static int RequiredLevel { get; } = 10;
+    public static int MaxRelics { get; } = 2;
     public string Name { get; }
     public string Description { get; }
     public int ItemID { get; }

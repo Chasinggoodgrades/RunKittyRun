@@ -6,23 +6,20 @@ using static WCSharp.Api.Common;
 
 public static class Progress
 {
-    public static Dictionary<int, float> DistancesFromStart = new Dictionary<int, float>();
+    public static Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
+    public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
     private static timer PeriodicTimer;
     private const float PROGRESS_INTERVAL = 0.2f;
-    public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
     public static void Initialize()
     {
-        Globals.TEAM_PROGRESS = new Dictionary<Team, string>();
-        Globals.PLAYER_PROGRESS = new Dictionary<player, float>();
         CalculateTotalDistance();
         StartProgressTracker();
     }
 
     private static void StartProgressTracker()
     {
-        if (Gamemode.CurrentGameMode == "Standard") return;
         PeriodicTimer = timer.Create();
-        TimerStart(PeriodicTimer, PROGRESS_INTERVAL, true, PeriodicProgressTracker);
+        PeriodicTimer.Start( PROGRESS_INTERVAL, true, PeriodicProgressTracker);
     }
 
     private static void PeriodicProgressTracker()
@@ -35,16 +32,22 @@ public static class Progress
                 if (!Globals.ALL_KITTIES[Player].Finished)
                     Globals.ALL_KITTIES[Player].Progress = CalculatePlayerProgress(Player);
             }
-            foreach (var Team in Globals.ALL_TEAMS.Values)
-            {
-                Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
-            }
-            Multiboard.UpdateTeamStatsMB();
+            if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamProgressTracker();
+
         }
         catch (Exception e)
         {
             var error = e.Message;
         }
+    }
+    
+    private static void TeamProgressTracker()
+    {
+        foreach (var Team in Globals.ALL_TEAMS.Values)
+        {
+            Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
+        }
+        Multiboard.UpdateTeamStatsMB();
     }
 
     private static string CalculateTeamProgress(Team Team)
