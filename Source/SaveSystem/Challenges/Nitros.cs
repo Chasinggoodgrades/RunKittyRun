@@ -6,6 +6,7 @@ public static class Nitros
     private static Dictionary<int, int> NitroRoundTimes;
     private static timer NitroTimer = timer.Create();
     private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
+    private static List<player> HitNitroAlready = new List<player>();
     private static Dictionary<player, int> NitroCount;
     public static void Initialize()
     {
@@ -71,7 +72,7 @@ public static class Nitros
                 AwardManager.GiveReward(player, Awards.Nitro_Purple);
                 break;
         }
-        SoundManager.PlaySpeedSound();
+        PlayNitroSound(player);
         if (NitroCount.TryGetValue(player, out var count)) NitroCount[player] = count + 1;
         else NitroCount.Add(player, 1);
     }
@@ -84,6 +85,13 @@ public static class Nitros
 
         if (NitroCount.TryGetValue(player, out var count) && count == requiredCount)
             AwardManager.GiveReward(player, Awards.Divine_Light);
+    }
+
+    private static void PlayNitroSound(player player)
+    {
+        if (HitNitroAlready.Contains(player)) return;
+        HitNitroAlready.Add(player);
+        SoundManager.PlaySpeedSound();
     }
 
 
