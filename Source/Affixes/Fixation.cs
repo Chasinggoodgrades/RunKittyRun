@@ -18,6 +18,26 @@ public class Fixation : Affix
         PeriodicSpeed = trigger.Create();
     }
 
+    public override void Apply()
+    {
+        SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
+        SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
+        Unit.Unit.AddAbility(Constants.ABILITY_FIXATION);
+        RegisterEvents();
+    }
+
+    public override void Remove()
+    {
+        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
+        Unit.Unit.RemoveAbility(Constants.ABILITY_FIXATION);
+        SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
+        IsChasing = false;
+
+        InRangeTrigger.Dispose();
+        PeriodicSpeed.Dispose();
+        TargetEffect?.Dispose();
+    }
+
     private void RegisterEvents()
     {
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
@@ -75,23 +95,5 @@ public class Fixation : Affix
 
 
 
-    public override void Apply()
-    {
-        SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
-        SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
-        Unit.Unit.AddAbility(Constants.ABILITY_FIXATION);
-        RegisterEvents();
-    }
 
-    public override void Remove()
-    {
-        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
-        Unit.Unit.RemoveAbility(Constants.ABILITY_FIXATION);
-        SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
-        IsChasing = false;
-        
-        InRangeTrigger.Dispose();
-        PeriodicSpeed.Dispose();
-        TargetEffect?.Dispose();
-    }
 }

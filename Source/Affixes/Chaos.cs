@@ -29,22 +29,14 @@ public class Chaos : Affix
 
     private void RotateAffix()
     {
-        try
-        {
-            if (currentAffix != null)
-                currentAffix.Remove();
-            var randomAffixList = AffixFactory.AffixTypes;
-            randomAffixList.Remove("Chaos");
-            var randomAffixName = AffixFactory.AffixTypes.Count > 0 ? randomAffixList[GetRandomInt(0, randomAffixList.Count - 1)] : "Speedster";
-            currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
-            currentAffix.Apply();
-            Console.WriteLine("affixes rotated!");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
-        }
+        if (currentAffix != null)
+            currentAffix.Remove();
+        var randomAffixList = AffixFactory.AffixTypes;
+        randomAffixList.Remove("Chaos"); // Obviously... dont want to have an overlap on chaos affixes lol
+        var randomAffixName = AffixFactory.AffixTypes.Count > 0 ? randomAffixList[GetRandomInt(0, randomAffixList.Count - 1)] : "Speedster";
+        currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
+        currentAffix.Apply();
+        Console.WriteLine("affixes rotated!");
     }
 
 }
