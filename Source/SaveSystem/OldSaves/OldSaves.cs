@@ -17,11 +17,9 @@ public class Savecode
     private static List<string> OriginalToolTips { get; set; } = new();
     public double Digits { get; private set; }
     public BigNum Bignum { get; private set; }
-    public BigNumL BigNumL { get; private set; }
 
     public static Dictionary<player, Savecode> PlayerSaveObject { get; private set; } = new Dictionary<player, Savecode>();
-    private string Code { get; set; }
-    private bool Auth { get; set; } = false;
+    //public static Dictionary<player, Dictionary<Awards, int>> PlayerAwards { get; private set; } = new Dictionary<player, Dictionary<Awards, int>>();
 
     public static void Initialize()
     {
@@ -46,7 +44,6 @@ public class Savecode
         if (!PlayerSaveObject.ContainsKey(p)) {
             PlayerSaveObject[p] = new Savecode();
         }
-        PlayerSaveObject[p].LoadString();
     }
 
     public Savecode()
@@ -133,38 +130,28 @@ public class Savecode
         SetRandomSeed(seed);
     }
 
-    public void Load(player p)
+    public bool Load(player p, string code)
     {
         try
         {
-            SyncSystem.EnableDebug();
-            Console.WriteLine("Starting Load...");
-
             int key = SCommHash(p.Name) + 1 * 73;
             int inputhash = 0;
 
-            FromString(Code);
+            FromString(code);
             Obfuscate(key, -1);
             inputhash = Decode(HASHN());
             Clean();
 
-            Console.WriteLine(Code);
-
-            if (inputhash == Hash())
-            {
-                Console.WriteLine($"Savecode for {p.Name} is valid.");
-                Auth = true;
-            }
-
-
+            return inputhash == Hash();
         }
         catch (Exception e)
         {
             Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
+            return false;
         }
     }
 
-    private void LoadString()
+    public static void LoadString()
     {
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
@@ -184,21 +171,18 @@ public class Savecode
                 sb.Append(packet);
             }
         }
-        // remove the hero title from string for just code itself
         var result = sb.ToString();
         var newLineStart = result.IndexOf('\n');
         if(newLineStart >= 0)
             result = result.Substring(newLineStart + 1);
 
         sb.Clear().Append(result);
-        Code = sb.ToString();
-        OldsaveSync.SyncString(Code);
-        SyncSystem.Send(Code);
+        OldsaveSync.SyncString(sb.ToString());
+        //SyncSystem.Send(Code);
     }
 
     public void SetRewardValues(player player)
     {
-        if (!player.IsLocal) return;
         foreach (var value in DecodeOldsave.decodeValues)
         {
             var decodedValue = Decode(value.Value);

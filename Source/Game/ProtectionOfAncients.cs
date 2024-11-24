@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Source;
 using WCSharp.Api;
@@ -7,15 +8,23 @@ using static WCSharp.Api.Common;
 public static class ProtectionOfAncients
 {
     private static trigger Trigger;
+    private static trigger LevelUpTrigger;
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
     private const string APPLY_EFFECT = "war3mapImported\\Divine Edict.mdx";
     public const float EFFECT_DELAY = 3.0f;
     private const float EFFECT_RADIUS = 150.0f;
     private const float EFFECT_RADIUS_INCREASE = 50.0f;
+    private static int UPGRADE_LEVEL_2_REQUIREMENT = 9;
+    private static int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    private static List<player> UpgradeLevel2 = new List<player>();
+    private static List<player> UpgradeLevel3 = new List<player>();
+    private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+    private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         RegisterEvents();
+        RegisterUpgradeLevelEvents();
     }
 
     /// <summary>
@@ -27,6 +36,53 @@ public static class ProtectionOfAncients
         var player = unit.Owner;
         unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
+    }
+
+    public static void SetProtectionOfAncientsLevel(unit unit)
+    {
+        var player = unit.Owner;
+        var heroLevel = unit.HeroLevel;
+
+        // Return early if the hero level is below 6
+        if (heroLevel < 6) return;
+
+        // Determine ability level based on hero level
+        int abilityLevel = heroLevel >= UPGRADE_LEVEL_3_REQUIREMENT ? 3 :
+                           heroLevel >= UPGRADE_LEVEL_2_REQUIREMENT ? 2 : 0;
+
+        if (abilityLevel > 0)
+        {
+            unit.SetAbilityLevel(POTA_NO_RELIC, abilityLevel);
+            unit.SetAbilityLevel(POTA_WITH_RELIC, abilityLevel);
+
+            // Display the message only if the player is achieving this level for the first time
+            if ((abilityLevel == 2 && !UpgradeLevel2.Contains(player)) ||
+                (abilityLevel == 3 && !UpgradeLevel3.Contains(player)))
+            {
+                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level {heroLevel}! You've upgraded your ultimate to level {abilityLevel}!|r");
+            }
+
+            if (abilityLevel == 2)
+            {
+                UpgradeLevel2.Add(player);
+            }
+            else if (abilityLevel == 3)
+            {
+                UpgradeLevel3.Add(player);
+                UpgradeLevel2.Remove(player);  // Ensure the player is only in one list
+            }
+        }
+    }
+
+
+
+    private static void RegisterUpgradeLevelEvents()
+    {
+        LevelUpTrigger = trigger.Create();
+        foreach(var kitty in Globals.ALL_KITTIES.Values)
+            LevelUpTrigger.RegisterUnitEvent(kitty.Unit, unitevent.HeroLevel, null);
+        LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
+        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
     }
 
     private static void RegisterEvents()

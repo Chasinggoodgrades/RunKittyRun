@@ -28,6 +28,7 @@ public class OneOfNine : Relic
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(PreviousAbilityID);
         Unit.AddAbility(RelicAbilityID);
+        ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
         Console.WriteLine("End Apply Effect");
     }
@@ -38,6 +39,7 @@ public class OneOfNine : Relic
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(RelicAbilityID);
         Unit.AddAbility(PreviousAbilityID);
+        ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(PreviousAbilityID, cooldown);
     }
 

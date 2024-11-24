@@ -165,6 +165,7 @@ public static class Constants
 	public const int UNIT_TEAM_TOURNAMENT_2023 = 1160785976;
 	public const int UNIT_SHADOWKITTY_RELIC_SUMMON = 1160785977;
 	public const int UNIT_SOLO_TOURNAMENT_2024 = 1160785985;
+	public const int UNIT_SANTA = 1848651826;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

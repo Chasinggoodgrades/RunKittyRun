@@ -22,7 +22,7 @@ public static class Globals
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
-    public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==" };
+    public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw" };
     public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
     public static timer GAME_TIMER = timer.Create();
     public static List<player> ALL_PLAYERS = new List<player>();

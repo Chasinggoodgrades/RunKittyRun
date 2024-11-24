@@ -30,6 +30,7 @@ public static class SeasonalManager
         DoodadChanger.Initialize();
         TerrainChanger.Initialize();
         SeasonalAwards.Initialize();
+        ShopChanger.Initialize();
     }
 
     public static void DetermineSeason()
@@ -74,6 +75,7 @@ public static class SeasonalManager
         Season = HolidaySeasons.Christmas;
         TerrainChanger.ActivateChristmasTerrain();
         DoodadChanger.ChristmasDoodads();
+        ShopChanger.Initialize();
         SetWeather();
     
     }
@@ -86,6 +88,7 @@ public static class SeasonalManager
         Season = HolidaySeasons.None;
         TerrainChanger.NoSeasonTerrain();
         DoodadChanger.NoSeasonDoodads();
+        ShopChanger.Initialize();
         SetWeather();
     }
 

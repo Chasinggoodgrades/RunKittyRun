@@ -18,7 +18,7 @@ public class Wolf
     private timer WanderTimer { get; set; }
     public rect Lane { get; private set; }
     public unit Unit { get; private set; }
-    private List<Affix> Affixes { get; set; }
+    public List<Affix> Affixes { get; private set; }
 
     public Wolf(int regionIndex)
     {
@@ -160,7 +160,7 @@ public class Wolf
         return false;
     }
 
-    private void RemoveAllWolfAffixes()
+    public void RemoveAllWolfAffixes()
     {
         if(AffixCount() == 0) return;
         foreach (var affix in Affixes)

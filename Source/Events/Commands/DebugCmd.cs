@@ -9,6 +9,8 @@ public static class DebugCmd
     {
         var cmd = command.Split(" ");
         var kitty = Globals.ALL_KITTIES[player];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedPlayer = selectedUnit.Owner;
         var startswith = cmd[0];
         switch (startswith)
         {
@@ -26,11 +28,11 @@ public static class DebugCmd
                 break;
             case "?gold":
                 var amount = cmd.Length > 1 ? int.Parse(cmd[1]) : 10000;
-                player.Gold += amount;
+                selectedPlayer.Gold += amount;
                 break;
             case "?level":
             case "?lvl":
-                kitty.Unit.HeroLevel = cmd.Length > 1 ? int.Parse(cmd[1]) : 10;
+                selectedUnit.HeroLevel = cmd.Length > 1 ? int.Parse(cmd[1]) : 10;
                 break;
             case "?blink":
             case "?tele":
@@ -52,6 +54,9 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 break;
+            case "?cooldown":
+                selectedUnit.ResetCooldowns();
+                break;
             case "?christmas":
                 SeasonalManager.ActivateChristmas();
                 break;
@@ -68,10 +73,7 @@ public static class DebugCmd
                 AwardingCmds.SettingGameStats(player, command);
                 break;
             case "?oldcode":
-                Savecode.PlayerSaveObject[player].Load(player);
-                break;
-            case "?decode":
-                Savecode.PlayerSaveObject[player].SetRewardValues(player);
+                Savecode.LoadString();
                 break;
             case "?invul":
                 UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
@@ -81,12 +83,6 @@ public static class DebugCmd
                 break;
             case "?discord":
                 DiscordFrame.Initialize();
-                break;
-            case "?sot":
-                kitty.Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
-                break;
-            case "?eot":
-                kitty.Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, true, true);
                 break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)

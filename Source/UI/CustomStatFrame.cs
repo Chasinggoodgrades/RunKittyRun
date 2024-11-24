@@ -177,11 +177,23 @@ public static class CustomStatFrame
     {
         BlzFrameSetText(Stats[0].Text, "");
         BlzFrameSetText(Stats[1].Text, "");
-        BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
+        BlzFrameSetText(Stats[2].Text, "");
         BlzFrameSetText(Stats[3].Text, "");
         BlzFrameSetText(Stats[4].Text, "");
-        BlzFrameSetText(Stats[2].Text, "");
+        SetWolfAffixTexts(selectedUnit);
+        BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
     }
+
+    private static void SetWolfAffixTexts(unit selectedUnit)
+    {
+        var wolf = Globals.ALL_WOLVES[selectedUnit];
+        var affixes = wolf.Affixes;
+        for (var i = 0; i < affixes.Count; i++)
+        {
+            BlzFrameSetText(Stats[i].Text, affixes[i].GetType().ToString());
+        }
+    }
+
     private static void SetGamemodeFrameText(unit selectedUnit)
     {
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard

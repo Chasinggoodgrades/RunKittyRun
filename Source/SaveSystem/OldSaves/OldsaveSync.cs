@@ -6,6 +6,10 @@ public static class OldsaveSync
 {
     private const string SYNC_PREFIX = "S";
     private static trigger Trigger = trigger.Create();
+    private static trigger VariableEvent = trigger.Create();
+    public static string SaveLoadCode;
+    public static player SavePlayer;
+    public static float LoadEvent;
     
     public static bool SyncString(string s)
     {
@@ -30,11 +34,26 @@ public static class OldsaveSync
         }
         Trigger.AddAction(() =>
         {
-            var player = GetTriggerPlayer();
-            var prefix = BlzGetTriggerSyncPrefix();
-            var data = BlzGetTriggerSyncData();
+            SavePlayer = GetTriggerPlayer();
+            SaveLoadCode = BlzGetTriggerSyncData();
+            LoadActions();
         });
     }
+
+    public static void LoadActions()
+    {
+        Savecode savecode = new Savecode();
+        if(!savecode.Load(SavePlayer, SaveLoadCode))
+        {
+            SavePlayer.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}The save code is invalid :(");
+            return;
+        }
+
+
+        savecode.SetRewardValues(SavePlayer);
+
+    }
+
 
 
 }

@@ -162,7 +162,7 @@ public static class StandardMultiboard
             for (int i = 0; i < stats.Length; i++)
             {
                 CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
-                if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.08f);
+                if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.07f);
             }
 
             rowIndex++;
@@ -202,7 +202,7 @@ public static class StandardMultiboard
 
             for (int i = 0; i < stats.Length; i++) {
                 OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
-                if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.08f);
+                if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.07f);
             }
 
             rowIndex++;

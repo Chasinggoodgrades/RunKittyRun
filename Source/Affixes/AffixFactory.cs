@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes;
-    private readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite" };
+    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES; // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -23,7 +23,7 @@ public static class AffixFactory
         AllAffixes = new List<Affix>();
         InitLaneWeights();
     }
-    private static Affix CreateAffix(Wolf unit, string affixName)
+    public static Affix CreateAffix(Wolf unit, string affixName)
     {
         switch (affixName)
         {
@@ -35,6 +35,8 @@ public static class AffixFactory
                 return new Fixation(unit);
             case "Frostbite":
                 return new Frostbite(unit);
+            case "Chaos":
+                return new Chaos(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
@@ -75,11 +77,12 @@ public static class AffixFactory
         return true;
     }
 
-    private static void ApplyAffix(Wolf unit, string affixName)
+    private static Affix ApplyAffix(Wolf unit, string affixName)
     {
-        if(!CanApplyAffix(unit, affixName)) return; 
+        if (!CanApplyAffix(unit, affixName)) return null;
         var affix = CreateAffix(unit, affixName);
         unit.AddAffix(affix);
+        return affix;
     }
 
     private static List<string> AvailableAffixes(int laneNumber)
@@ -94,14 +97,14 @@ public static class AffixFactory
         return affixes;
     }
 
-    private static void ApplyRandomAffix(Wolf unit, int laneNumber)
+    private static Affix ApplyRandomAffix(Wolf unit, int laneNumber)
     {
         // if above lane 8.. exclude fixation
         var affixes = AvailableAffixes(laneNumber);
         var index = GetRandomInt(0, affixes.Count - 1);
         var randomAffix = affixes[index];
-        ApplyAffix(unit, randomAffix);
         affixes.Clear();
+        return ApplyAffix(unit, randomAffix);
     }
 
     /// <summary>
@@ -132,8 +135,8 @@ public static class AffixFactory
                         if (wolvesInLane.Any())
                         {
                             var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                            ApplyRandomAffix(wolf, j);
-                            count++;
+                            var affix = ApplyRandomAffix(wolf, j);
+                            if(affix != null) count++;
                         }
                     }
                 }
