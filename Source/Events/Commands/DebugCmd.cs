@@ -84,6 +84,10 @@ public static class DebugCmd
             case "?vul":
                 CollisionDetection.KittyRegisterCollisions(kitty);
                 break;
+            case "?tertest":
+                //TerrainChanger.ChangeMapTerrain(FourCC("Lgrd"), FourCC("Ywmb"));
+                TerrainChanger.ChangeMapTerrain(FourCC("Vgrs"), FourCC("Ywmb"));
+                break;
             case "?discord":
                 DiscordFrame.Initialize();
                 break;

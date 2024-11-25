@@ -1,17 +1,21 @@
-﻿using WCSharp.Api;
+﻿using System;
+using System.Collections.Generic;
+using WCSharp.Api;
 using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 public static class TerrainChanger
 {
     public static int[] Terrains { get; set; }
     public static int[] SafezoneTerrain { get; set; }
+    public static string NormalCliff = "cXc1";
+    public static string DirtCliff = "cXc2";
 
     public static void Initialize()
     {
         InitializeTerrain();
         if (Gamemode.CurrentGameMode != "Standard") return;
         ChristmasTerrain();
-        SetTerrain();
+        //SetTerrain();
     }
 
     /// <summary>
@@ -123,6 +127,35 @@ public static class TerrainChanger
             {
                 SetTerrainType(x, y, SafezoneTerrain[round], -1, 1, 1);
             }
+        }
+    }
+
+    public static void ChangeMapTerrain(int tileToChange, int newTerrain)
+    {
+        var mapRect = Globals.WORLD_BOUNDS;
+        var minX = mapRect.MinX;
+        var minY = mapRect.MinY;
+        var maxX = mapRect.MaxX;
+        var maxY = mapRect.MaxY;
+        var types = new List<int>();
+
+        for (var x = minX; x <= maxX; x += 128)
+        {
+            for (var y = minY; y <= maxY; y += 128)
+            {
+                var type = GetTerrainType(x, y);
+                if(!types.Contains(type)) types.Add(type);
+
+                if (GetTerrainType(x, y) == tileToChange)
+                {
+                    SetTerrainType(x, y, newTerrain, -1, 1, 1);
+                }
+            }
+        }
+
+        foreach(var typet in types)
+        {
+            Console.WriteLine($"Terrain type: {typet}");
         }
     }
 

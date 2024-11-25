@@ -97,11 +97,15 @@ public static class SeasonalManager
         if (Season == HolidaySeasons.Christmas)
         {
             CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect);
+            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23);
+            SuspendTimeOfDay(true);
             CurrentWeather.Enable();
         }
         else if (Season == HolidaySeasons.None)
         {
             CurrentWeather?.Dispose();
+            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
+            SuspendTimeOfDay(true);
             CurrentWeather = null;
         }
     }

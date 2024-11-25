@@ -1,17 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class DoodadChanger
 {
-    private static int SafezoneLanterns { get; set; } = FourCC("B005");
-    private static int ChristmasTree { get; set; } = FourCC("B001");
+    private static int SafezoneLanterns = FourCC("B005");
+    private static int ChristmasTree = FourCC("B001");
+    private static int CrystalRed = FourCC("B002");
+    private static int CrystalBlue = FourCC("B003");
+    private static int CrystalGreen = FourCC("B004");
+    private static int Snowglobe = FourCC("B006");
+    private static int Fireplace = FourCC("B008");
+    private static int Snowman = FourCC("B009");
+    private static int Firepit = FourCC("B00A");
+    private static int Igloo = FourCC("ITig");
+    private static int RedLavaCracks = FourCC("B00B");
+    private static int BlueLavaCracks = FourCC("B00C");
+    private static List<int> ChristmasDecor = InitChristmasDecor();
     private static List<destructable> AllDestructables { get; set; } = new();
     public static void Initialize()
     {
         CreateInitDestructiables();
         if (Gamemode.CurrentGameMode != "Standard") return;
         SeasonalDoodads();
+    }
+
+    private static List<int> InitChristmasDecor()
+    {
+        return new List<int>
+        {
+            CrystalRed,
+            CrystalBlue,
+            CrystalGreen,
+            Snowglobe,
+            Fireplace,
+            Snowman,
+            Firepit,
+            Igloo,
+            RedLavaCracks,
+            BlueLavaCracks,
+        };
     }
 
     private static void SeasonalDoodads()
@@ -25,6 +54,7 @@ public static class DoodadChanger
     {
         if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
         ReplaceDoodad(ChristmasTree, 2.5f);
+        ShowSeasonalDoodads(true);
     }
 
     private static void ReplaceDoodad(int newType, float scale)
@@ -72,6 +102,15 @@ public static class DoodadChanger
 
             counter++;
         }
+    }
+
+    public static void ShowSeasonalDoodads(bool show = false) => EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => HideDoodads(show));
+    private static void HideDoodads(bool show)
+    {
+        var des = GetEnumDestructable();
+        if (ChristmasDecor.Contains(des.Type))
+            des.SetVisibility(show);
+        Console.WriteLine("Hiding...");
     }
 
 }

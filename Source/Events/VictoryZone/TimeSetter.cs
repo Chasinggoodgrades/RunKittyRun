@@ -38,7 +38,7 @@ public static class TimeSetter
     private static RoundTimes GetRoundEnum()
     {
         var currentDiff = Difficulty.DifficultyValue;
-        var roundEnum = RoundTimes.ROneNormal;
+        var roundEnum = RoundTimes.RoundOneNormal;
 
         switch(currentDiff)
         {
@@ -70,15 +70,15 @@ public static class TimeSetter
         switch(round)
         {
             case 1:
-                return RoundTimes.ROneNormal;
+                return RoundTimes.RoundOneNormal;
             case 2:
-                return RoundTimes.RTwoNormal;
+                return RoundTimes.RoundTwoNormal;
             case 3:
-                return RoundTimes.RThreeNormal;
+                return RoundTimes.RoundThreeNormal;
             case 4:
-                return RoundTimes.RFourNormal;
+                return RoundTimes.RoundFourNormal;
             case 5:
-                return RoundTimes.RFiveNormal;
+                return RoundTimes.RoundFiveNormal;
             default:
                 Console.WriteLine("Invalid round number for GetNormalRoundEnum");
                 return 0;
@@ -91,15 +91,15 @@ public static class TimeSetter
         switch(round)
         {
             case 1:
-                return RoundTimes.ROneHard;
+                return RoundTimes.RoundOneHard;
             case 2:
-                return RoundTimes.RTwoHard;
+                return RoundTimes.RoundTwoHard;
             case 3:
-                return RoundTimes.RThreeHard;
+                return RoundTimes.RoundThreeHard;
             case 4:
-                return RoundTimes.RFourHard;
+                return RoundTimes.RoundFourHard;
             case 5:
-                return RoundTimes.RFiveHard;
+                return RoundTimes.RoundFiveHard;
             default:
                 Console.WriteLine("Invalid round number for GetHardRoundEnum");
                 return 0;
@@ -112,15 +112,15 @@ public static class TimeSetter
         switch(round)
         {
             case 1:
-                return RoundTimes.ROneImpossible;
+                return RoundTimes.RoundOneImpossible;
             case 2:
-                return RoundTimes.RTwoImpossible;
+                return RoundTimes.RoundTwoImpossible;
             case 3:
-                return RoundTimes.RThreeImpossible;
+                return RoundTimes.RoundThreeImpossible;
             case 4:
-                return RoundTimes.RFourImpossible;
+                return RoundTimes.RoundFourImpossible;
             case 5:
-                return RoundTimes.RFiveImpossible;
+                return RoundTimes.RoundFiveImpossible;
             default:
                 Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
                 return 0;
@@ -133,15 +133,15 @@ public static class TimeSetter
         switch(round)
         {
             case 1:
-                return RoundTimes.SoloRoundOne;
+                return RoundTimes.RoundOneSolo;
             case 2:
-                return RoundTimes.SoloRoundTwo;
+                return RoundTimes.RoundTwoSolo;
             case 3:
-                return RoundTimes.SoloRoundThree;
+                return RoundTimes.RoundThreeSolo;
             case 4:
-                return RoundTimes.SoloRoundFour;
+                return RoundTimes.RoundFourSolo;
             case 5:
-                return RoundTimes.SoloRoundFive;
+                return RoundTimes.RoundFiveSolo;
             default:
                 Console.WriteLine("Invalid round number for GetSoloRoundEnum");
                 return 0;

@@ -112,16 +112,6 @@ u = BlzCreateUnitWithSkin(p, FourCC("ngme"), 320.0, -64.0, 270.000, FourCC("ngme
 u = BlzCreateUnitWithSkin(p, FourCC("ngme"), -2368.0, -2752.0, 270.000, FourCC("ngme"))
 end
 
-function CreateNeutralPassive()
-local p = Player(PLAYER_NEUTRAL_PASSIVE)
-local u
-local unitID
-local t
-local life
-
-u = BlzCreateUnitWithSkin(p, FourCC("h003"), -260.9, -708.5, 63.890, FourCC("h003"))
-end
-
 function CreatePlayerBuildings()
 end
 
@@ -131,7 +121,6 @@ end
 function CreateAllUnits()
 CreateNeutralPassiveBuildings()
 CreatePlayerBuildings()
-CreateNeutralPassive()
 CreatePlayerUnits()
 end
 

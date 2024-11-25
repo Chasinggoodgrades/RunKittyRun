@@ -14,6 +14,7 @@ namespace Source.Init
         public static void Initialize()
         {
             Colors.Initialize();
+            DoodadChanger.ShowSeasonalDoodads(false);
             Gamemode.Initialize();
             if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize();

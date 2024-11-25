@@ -1971,7 +1971,7 @@ Revive all Kitties in a small area after 3 seconds.  Improved AeO. |cff8080ff(55
 }
 
 STRING 3051
-// Doodads: D00A (Lantern), Name (Name)
+// Destructibles: B007 (Lantern), Name (Name)
 {
 Lantern
 }
@@ -2073,7 +2073,7 @@ Crystal Green
 }
 
 STRING 3099
-// Doodads: D007 (Snowman), Name (Name)
+// Destructibles: B009 (Snowman), Name (Name)
 {
 Snowman
 }
@@ -2085,7 +2085,7 @@ ChristmasTreeP2
 }
 
 STRING 3101
-// Doodads: D009 (Fireplace), Name (Name)
+// Destructibles: B008 (Fireplace), Name (Name)
 {
 Fireplace
 }
@@ -4119,5 +4119,47 @@ STRING 3656
 // Units: n002 (Santa), Name (Name)
 {
 Santa
+}
+
+STRING 3657
+// Destructibles: B006 (Snowglobe), Name (Name)
+{
+Snowglobe
+}
+
+STRING 3658
+// Doodads: D009 (Fireplace), Name (Name)
+{
+Fireplace
+}
+
+STRING 3659
+// Doodads: D00A (Lantern), Name (Name)
+{
+Lantern
+}
+
+STRING 3660
+// Destructibles: B00A (Firepit), Name (Name)
+{
+Firepit
+}
+
+STRING 3661
+// Destructibles: B00B (LavaCracksRed), Name (Name)
+{
+LavaCracksRed
+}
+
+STRING 3662
+// Destructibles: B00C (LavaCracksBlue), Name (Name)
+{
+LavaCracksBlue
+}
+
+STRING 3663
+// Doodads: D007 (Snowman), Name (Name)
+{
+Snowman
 }
 
