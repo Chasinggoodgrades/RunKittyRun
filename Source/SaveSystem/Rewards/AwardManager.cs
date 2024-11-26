@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 /// <summary>
@@ -66,27 +67,56 @@ public static class AwardManager
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
             foreach (var gameStatReward in RewardsManager.GameStatRewards)
             {
-                // if the players value is < the required value..
-                // We're gonna create a new event that listens for the game stat to hit said value.
                 var gamestat = gameStatReward.GameStat;
                 var requiredValue = gameStatReward.GameStatValue;
-                var award = gameStatReward.Name; // award
-                if (kittyStats.GameStats[gamestat] < requiredValue)
+                var award = gameStatReward.Name;
+
+                // Check if the gamestat is NormalWins or NormalGames
+                if (gamestat == StatTypes.NormalWins || gamestat == StatTypes.NormalGames)
                 {
-                    triggeraction abc = null;
-                    abc = TriggerAddAction(AwardTrigger, () =>
-                    {
-                        if (kittyStats.GameStats[gamestat] >= requiredValue)
-                        {
-                            GiveReward(player, award);
-                            AwardTrigger.RemoveAction(abc);
-                        }
-                    });
+                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
+
+                    // Also check HardWins, HardGames, ImpossibleWins, ImpossibleGames
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.HardWins, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.HardGames, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleWins, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleGames, requiredValue, award);
+                }
+                // Check if the gamestat is HardWins or HardGames
+                else if (gamestat == StatTypes.HardWins || gamestat == StatTypes.HardGames)
+                {
+                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
+
+                    // Also check ImpossibleWins, ImpossibleGames
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleWins, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleGames, requiredValue, award);
+                }
+                else
+                {
+                    // Handle other game stats normally
+                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
                 }
             }
         }
         AwardTrigger.RegisterTimerEvent(1.0f, true);
     }
+
+    private static void HandleGameStatTrigger(player player, KittyData kittyStats, StatTypes gamestat, int requiredValue, Awards award)
+    {
+        if (kittyStats.GameStats[gamestat] < requiredValue)
+        {
+            triggeraction abc = null;
+            abc = TriggerAddAction(AwardTrigger, () =>
+            {
+                if (kittyStats.GameStats[gamestat] >= requiredValue)
+                {
+                    GiveReward(player, award);
+                    AwardTrigger.RemoveAction(abc);
+                }
+            });
+        }
+    }
+
 
     /// <summary>
     /// Applies all previously selected awards onto the player. Based on their save data.

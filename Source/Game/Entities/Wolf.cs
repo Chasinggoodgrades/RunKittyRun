@@ -78,19 +78,20 @@ public class Wolf
         return false;
     }
 
-    private void StartWandering()
+    public void StartWandering(bool forced = false)
     {
-        if (ShouldStartEffect())
+        if (ShouldStartEffect() || forced)
         {
             ApplyEffect();
         }
         var realTime = GetRandomReal(1.00f, 1.12f);
-        WanderTimer.Start(realTime, false, StartWandering);
+        WanderTimer.Start(realTime, false, () => StartWandering());
     }
 
     private void ApplyEffect()
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
+        OverheadEffect?.Dispose();
         OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
 
         var effectTimer = timer.Create();

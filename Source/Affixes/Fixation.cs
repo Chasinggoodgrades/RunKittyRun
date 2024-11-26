@@ -10,12 +10,14 @@ public class Fixation : Affix
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
+    private timer ChaseTimer;
     private bool IsChasing = false;
     private effect TargetEffect;
     public Fixation(Wolf unit) : base(unit) 
     {
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
+        ChaseTimer = timer.Create();
     }
 
     public override void Apply()
@@ -36,6 +38,8 @@ public class Fixation : Affix
         InRangeTrigger.Dispose();
         PeriodicSpeed.Dispose();
         TargetEffect?.Dispose();
+        ChaseTimer.Pause();
+        ChaseTimer.Dispose();
     }
 
     private void RegisterEvents()
@@ -55,17 +59,16 @@ public class Fixation : Affix
 
     private void ChasingEvent(unit Target)
     {
-        var chaseTimer = timer.Create();
         var Region = RegionList.WolfRegions[Unit.RegionIndex];
         IsChasing = true;
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        chaseTimer.Start(0.1f, true, () => {
+        ChaseTimer.Start(0.1f, true, () => {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
                 IsChasing = false;
                 Unit.WolfMove();
-                chaseTimer.Dispose();
                 TargetEffect.Dispose();
+                ChaseTimer.Pause();
                 return;
             }
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);

@@ -32,8 +32,9 @@ public class Chaos : Affix
         if (currentAffix != null)
             currentAffix.Remove();
         var randomAffixList = AffixFactory.AffixTypes;
-        randomAffixList.Remove("Chaos"); // Obviously... dont want to have an overlap on chaos affixes lol
         var randomAffixName = AffixFactory.AffixTypes.Count > 0 ? randomAffixList[GetRandomInt(0, randomAffixList.Count - 1)] : "Speedster";
+        if(randomAffixName == "Chaos")
+            randomAffixName = "Speedster";
         currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
         currentAffix.Apply();
         Console.WriteLine("affixes rotated!");

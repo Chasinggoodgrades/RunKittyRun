@@ -33,12 +33,11 @@ public class Howler : Affix
     {
         var nearbyWolves = group.Create();
         nearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
-        Console.WriteLine("Wolf howl begin");
         foreach (var wolf in nearbyWolves.ToList())
         {
             var wolfObject = Globals.ALL_WOLVES[wolf];
             if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
-            wolfObject.WolfMove();
+            wolfObject.StartWandering(true);
         }
         nearbyWolves.Dispose();
         nearbyWolves = null;

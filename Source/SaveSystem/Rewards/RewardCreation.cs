@@ -58,10 +58,10 @@ public static class RewardCreation
         AddReward(Awards.Santa_Hat, Constants.ABILITY_HAT_SANTA, "head", "war3mapImported\\SantaHat.mdx", RewardType.Hats, StatTypes.Saves, 800);
 
         // Auras
-        AddReward(Awards.Special_Aura, Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, StatTypes.Wins, 5);
-        AddReward(Awards.Starlight_Aura, Constants.ABILITY_AURA_STARLIGHT, "origin", "war3mapImported\\StarlightAura.mdx", RewardType.Auras, StatTypes.Wins, 10);
-        AddReward(Awards.Spectacular_Aura, Constants.ABILITY_AURA_SPECTACULAR, "origin", "war3mapImported\\ChillingAura.mdx", RewardType.Auras, StatTypes.Wins, 30);
-        AddReward(Awards.Mana_Aura, Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, StatTypes.Wins, 20);
+        AddReward(Awards.Special_Aura, Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, StatTypes.HardWins, 5);
+        AddReward(Awards.Starlight_Aura, Constants.ABILITY_AURA_STARLIGHT, "origin", "war3mapImported\\StarlightAura.mdx", RewardType.Auras, StatTypes.NormalGames, 65);
+        AddReward(Awards.Spectacular_Aura, Constants.ABILITY_AURA_SPECTACULAR, "origin", "war3mapImported\\ChillingAura.mdx", RewardType.Auras, StatTypes.NormalWins, 30);
+        AddReward(Awards.Mana_Aura, Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, StatTypes.NormalWins, 20);
         AddReward(Awards.Butterfly_Aura, Constants.ABILITY_AURA_BUTTERFLY, "origin", "war3mapImported\\ButterflyAura.mdx", RewardType.Auras);
 
         // Wings
@@ -119,10 +119,10 @@ public static class RewardCreation
         AddReward(Awards.Deathless_5, Constants.ABILITY_DEATHLESS_FIRE_1_05, "origin", "war3mapImported\\Deathless5.mdx", RewardType.Deathless);
 
         // Skins
-        AddReward(Awards.Undead_Kitty, Constants.ABILITY_SKIN_KITTYUNDEAD, Constants.UNIT_UNDEAD_KITTY, RewardType.Skins, StatTypes.Wins, 30);
+        AddReward(Awards.Undead_Kitty, Constants.ABILITY_SKIN_KITTYUNDEAD, Constants.UNIT_UNDEAD_KITTY, RewardType.Skins, StatTypes.NormalWins, 30);
         AddReward(Awards.Highelf_Kitty, Constants.ABILITY_SKIN_KITTYHIGHELF, Constants.UNIT_HIGHELF_KITTY, RewardType.Skins, StatTypes.NormalGames, 40);
-        AddReward(Awards.Ancient_Kitty, Constants.ABILITY_SKIN_KITTYANCIENT, Constants.UNIT_ANCIENT_KITTY, RewardType.Skins, StatTypes.Wins, 40);
-        AddReward(Awards.Satyr_Kitty, Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, StatTypes.Wins, 25);
+        AddReward(Awards.Ancient_Kitty, Constants.ABILITY_SKIN_KITTYANCIENT, Constants.UNIT_ANCIENT_KITTY, RewardType.Skins, StatTypes.NormalWins, 40);
+        AddReward(Awards.Satyr_Kitty, Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, StatTypes.NormalWins, 25);
         AddReward(Awards.Astral_Kitty, Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, StatTypes.NormalGames, 55);
 
         // Holiday

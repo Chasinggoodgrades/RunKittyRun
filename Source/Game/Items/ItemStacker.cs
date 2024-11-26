@@ -42,8 +42,11 @@ public static class ItemStacker
         var heldItem = Utility.UnitGetItem(unit, itemID);
         if (heldItem == item) return;
         if (heldItem == null) return;
+        var itemCharges = item.Charges;
+        if (itemCharges > 1) heldItem.Charges += itemCharges;
+        else heldItem.Charges += 1;
         item.Dispose();
-        heldItem.Charges += 1;
+
     }
 
 

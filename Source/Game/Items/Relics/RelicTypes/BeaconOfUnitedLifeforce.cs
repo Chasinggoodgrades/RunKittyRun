@@ -6,7 +6,7 @@ public class BeaconOfUnitedLifeforce : Relic
 {
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
     private static float INVULNERABILITY_DURATION = 1.0f;
-    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
+    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.13f; // 13%
     private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
     private static new string IconPath = "war3mapImported\\BTNTicTac.blp";
     private const int RelicCost = 650;
@@ -51,7 +51,7 @@ public class BeaconOfUnitedLifeforce : Relic
         bool reviveAll = chance <= EXTRA_REVIVE_CHANCE_ALL;
 
         var color = Colors.COLOR_YELLOW_ORANGE;
-
+        var msgSent = false;
         foreach (var k in Globals.ALL_KITTIES.Values)
         {
             if (k.Alive) continue;
@@ -61,7 +61,8 @@ public class BeaconOfUnitedLifeforce : Relic
 
             if (!reviveAll) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(k.Player)}{color} has been extra revived by {Colors.PlayerNameColored(kitty.Player)}!|r");
             if (!reviveAll) break;
-            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(kitty.Player)}{color} has extra revived all dead players!|r");
+            if (!msgSent) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(kitty.Player)}{color} has extra revived all dead players!|r");
+            msgSent = true;
         }
     }
 

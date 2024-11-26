@@ -381,6 +381,7 @@ public static class ShopFrame
                 // Find the shopItem type associated with the selected item that the player owns.
                 var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
                 relic?.RemoveEffect(kitty.Unit);
+                kitty.Relics.Remove(relic);
             }
 
             Utility.RemoveItemFromUnit(kitty.Unit, itemID);

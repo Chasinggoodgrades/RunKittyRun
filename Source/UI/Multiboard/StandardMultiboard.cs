@@ -80,7 +80,7 @@ public static class StandardMultiboard
         CurrentStats.GetItem(1, 5).SetText($"{color}Ratio|r");
         CurrentStats.GetItem(1, 6).SetText($"{color}S / D|r");
         CurrentStats.SetChildVisibility(true, false);
-        CurrentStats.SetChildWidth(0.052f);
+        CurrentStats.SetChildWidth(0.055f);
         CurrentStats.GetItem(1, 0).SetWidth(0.07f);
         CurrentStats.IsDisplayed = true;
     }

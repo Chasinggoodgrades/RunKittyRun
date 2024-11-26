@@ -20,6 +20,32 @@ public class Frostbite : Affix
         Effects = new Dictionary<unit, effect>();
     }
 
+    public override void Apply()
+    {
+        Unit.Unit.SetVertexColor(0, 50, 220);
+        Unit.Unit.AddAbility(Constants.ABILITY_FROSTBITE);
+        RegisterEvents();
+    }
+
+    public override void Remove()
+    {
+        Unit.Unit.SetVertexColor(150, 120, 255);
+        Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
+        InRangeTrigger.Dispose();
+        PeriodicRangeTrigger.Dispose();
+        RemoveAllEffects();
+        Frostbitten.Clear();
+        Effects.Clear();
+    }
+
+    private void RemoveAllEffects()
+    {
+        foreach (var effect in Effects.Values)
+            effect.Dispose();
+        foreach (var target in Frostbitten.Keys)
+            target.BaseMovementSpeed = Frostbitten[target];
+    }
+
     private void RegisterEvents()
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
@@ -68,22 +94,6 @@ public class Frostbite : Affix
         target.BaseMovementSpeed = target.BaseMovementSpeed * FROSTBITE_SPEED_REDUCTION;
     }
 
-    public override void Apply()
-    {
-        Unit.Unit.SetVertexColor(0, 50, 220);
-        Unit.Unit.AddAbility(Constants.ABILITY_FROSTBITE);
-        RegisterEvents();
-    }
-
-    public override void Remove()
-    {
-        Unit.Unit.SetVertexColor(150, 120, 255);
-        Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
-        InRangeTrigger.Dispose();
-        PeriodicRangeTrigger.Dispose();
-        Frostbitten.Clear();
-        Effects.Clear();
-    }
 
     /*    private float CurrentEffectiveMS(unit target)
     {
