@@ -11,12 +11,14 @@ public static class DoodadChanger
     private static int CrystalBlue = FourCC("B003");
     private static int CrystalGreen = FourCC("B004");
     private static int Snowglobe = FourCC("B006");
+    private static int Lantern = FourCC("B007");
     private static int Fireplace = FourCC("B008");
     private static int Snowman = FourCC("B009");
     private static int Firepit = FourCC("B00A");
     private static int Igloo = FourCC("ITig");
     private static int RedLavaCracks = FourCC("B00B");
     private static int BlueLavaCracks = FourCC("B00C");
+    private static int SuperChristmasTree = FourCC("B00D");
     private static List<int> ChristmasDecor = InitChristmasDecor();
     private static List<destructable> AllDestructables { get; set; } = new();
     public static void Initialize()
@@ -34,12 +36,14 @@ public static class DoodadChanger
             CrystalBlue,
             CrystalGreen,
             Snowglobe,
+            Lantern,
             Fireplace,
             Snowman,
             Firepit,
             Igloo,
             RedLavaCracks,
             BlueLavaCracks,
+            SuperChristmasTree,
         };
     }
 
@@ -48,7 +52,11 @@ public static class DoodadChanger
         ChristmasDoodads();
     }
 
-    public static void NoSeasonDoodads() => ReplaceDoodad(SafezoneLanterns, 1.0f);
+    public static void NoSeasonDoodads()
+    {
+        ReplaceDoodad(SafezoneLanterns, 1.0f);
+        ShowSeasonalDoodads(false);
+    }
 
     public static void ChristmasDoodads()
     {
@@ -110,7 +118,6 @@ public static class DoodadChanger
         var des = GetEnumDestructable();
         if (ChristmasDecor.Contains(des.Type))
             des.SetVisibility(show);
-        Console.WriteLine("Hiding...");
     }
 
 }

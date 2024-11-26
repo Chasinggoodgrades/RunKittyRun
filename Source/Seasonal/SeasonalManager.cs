@@ -86,7 +86,7 @@ public static class SeasonalManager
     public static void NoSeason()
     {
         Season = HolidaySeasons.None;
-        TerrainChanger.NoSeasonTerrain();
+        TerrainChanger.NoSeason();
         DoodadChanger.NoSeasonDoodads();
         ShopChanger.Initialize();
         SetWeather();
