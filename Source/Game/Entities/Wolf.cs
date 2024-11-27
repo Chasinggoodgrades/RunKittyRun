@@ -34,10 +34,8 @@ public class Wolf
     {
         var players = new[]
         {
-            player.NeutralExtra,
-            player.NeutralPassive,
-            player.NeutralVictim,
-            player.NeutralAggressive
+            player.NeutralExtra, player.NeutralPassive,
+            player.NeutralVictim, player.NeutralAggressive
         };
 
         var randomPlayer = players[GetRandomInt(0, players.Length - 1)];
@@ -56,11 +54,13 @@ public class Wolf
     /// <summary>
     /// Wolf moves to a random location within its lane.
     /// </summary>
-    public void WolfMove()
+    public (float x, float y) WolfMove()
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        Unit.IssueOrder("move", randomX, randomY);
+        if(!HasAffix("Blitzer"))
+            Unit.IssueOrder("move", randomX, randomY);
+        return (randomX, randomY);
     }
 
     private bool ShouldStartEffect()

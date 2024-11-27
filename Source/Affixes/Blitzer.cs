@@ -11,11 +11,19 @@ public class Blitzer : Affix
     public override void Apply()
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.OVERHEAD_EFFECT_PATH = "";
     }
 
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
     }
+
+
+
+
+
+
 
 }

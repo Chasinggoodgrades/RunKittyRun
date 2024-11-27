@@ -131,7 +131,7 @@ public static class AffixFactory
                     {
                         affixedWolvesInLane[j]++;
                         var wolvesInLane = Globals.ALL_WOLVES.Values
-                            .Where(wolf => WolvesToBeAffixedCondiitons(wolf, j))
+                            .Where(wolf => ShouldAffixWolves(wolf, j))
                             .ToList();
 
                         if (wolvesInLane.Any())
@@ -146,13 +146,17 @@ public static class AffixFactory
         }
     }
 
-    private static bool WolvesToBeAffixedCondiitons(Wolf wolf, int j)
+    // Conditions for affixing wolves:
+    // 1. Must be in the same lane
+    // 2. Must have fewer than the maximum number of affixes
+    // 3. Must not be a blood wolf
+    private static bool ShouldAffixWolves(Wolf wolf, int laneIndex)
     {
-        // Must be in same lane
-        // Must have less than max number of affixes
-        // Must not be a blood wolf
-        return (wolf.RegionIndex == j && wolf.AffixCount() < MAX_NUMBER_OF_AFFIXES && wolf.Unit != FandF.BloodWolf);
+        return wolf.RegionIndex == laneIndex
+            && wolf.AffixCount() < MAX_NUMBER_OF_AFFIXES
+            && wolf.Unit != FandF.BloodWolf;
     }
+
 
 
     private static bool CanDistributeAffixes()
