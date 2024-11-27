@@ -7,6 +7,7 @@ public class Frostbite : Affix
 {
     private const float FROSTBITE_RADIUS = 500.0f;
     private const float FROSTBITE_SPEED_REDUCTION = 0.83f;
+    private const int AFFIX_ABILITY = Constants.ABILITY_FROSTBITE;
     private trigger InRangeTrigger;
     private trigger PeriodicRangeTrigger;
     private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
@@ -23,14 +24,14 @@ public class Frostbite : Affix
     public override void Apply()
     {
         Unit.Unit.SetVertexColor(0, 50, 220);
-        Unit.Unit.AddAbility(Constants.ABILITY_FROSTBITE);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
     }
 
     public override void Remove()
     {
         Unit.Unit.SetVertexColor(150, 120, 255);
-        Unit.Unit.RemoveAbility(Constants.ABILITY_FROSTBITE);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         InRangeTrigger.Dispose();
         PeriodicRangeTrigger.Dispose();
         RemoveAllEffects();

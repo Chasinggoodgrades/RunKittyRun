@@ -11,6 +11,10 @@ public static class ItemStacker
         RegisterEvents();
     }
 
+    /// <summary>
+    /// List of all the stackable items... Easy way to add more if needed.
+    /// </summary>
+    /// <returns></returns>
     private static List<int> RegisterItemList()
     {
         if (StackableItemIDs != null) return StackableItemIDs;

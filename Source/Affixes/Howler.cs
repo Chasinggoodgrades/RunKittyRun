@@ -5,7 +5,8 @@ using static WCSharp.Api.Common;
 
 public class Howler : Affix
 {
-    private static float HOWL_RADIUS = 900.0f;
+    private const float HOWL_RADIUS = 900.0f;
+    private const int AFFIX_ABILITY = Constants.ABILITY_HOWLER;
     private timer HowlTimer;
     public Howler(Wolf unit) : base(unit)
     {}
@@ -13,12 +14,14 @@ public class Howler : Affix
     public override void Apply()
     {
         RegisterTimerEvents();
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(25, 25, 112);
     }
 
     public override void Remove()
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         HowlTimer.Pause();
         HowlTimer.Dispose();
     }

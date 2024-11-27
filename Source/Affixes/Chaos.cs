@@ -4,6 +4,7 @@ using static WCSharp.Api.Common;
 
 public class Chaos : Affix
 {
+    private const int AFFIX_ABILITY = Constants.ABILITY_CHAOS;
     private timer RotationTimer;
     private Affix currentAffix;
     private float rotationTime = 25.0f;
@@ -13,12 +14,14 @@ public class Chaos : Affix
     public override void Apply()
     {
         RegisterTimer();
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
     }
 
     public override void Remove()
     {
         currentAffix.Remove();
         RotationTimer?.Dispose();
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
     }
 
     private void RegisterTimer()

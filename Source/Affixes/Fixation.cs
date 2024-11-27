@@ -8,6 +8,7 @@ public class Fixation : Affix
     private const float FIXATION_MS = 325.0f;
     private const float FIXATION_MAX_MS = 410.0f;
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
+    private const int AFFIX_ABILITY = Constants.ABILITY_FIXATION;
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
     private timer ChaseTimer;
@@ -24,14 +25,14 @@ public class Fixation : Affix
     {
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
-        Unit.Unit.AddAbility(Constants.ABILITY_FIXATION);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
     }
 
     public override void Remove()
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
-        Unit.Unit.RemoveAbility(Constants.ABILITY_FIXATION);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
 

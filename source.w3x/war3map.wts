@@ -4169,3 +4169,273 @@ STRING 3664
 Super Christmas Tree
 }
 
+STRING 3665
+// Abilities: A00M (Chaos), Name (Name)
+{
+Chaos
+}
+
+STRING 3666
+// Buffs/Effects: B004 (Chaos), Buffubertip (Tooltip - Extended)
+{
+Unpredictable, Angry, Cold.... WHO KNOWS
+}
+
+STRING 3667
+// Abilities: A00M (Chaos), Researchtip (Tooltip - Learn)
+{
+Chaos
+}
+
+STRING 3668
+// Abilities: A00N (Howler), Name (Name)
+{
+Howler
+}
+
+STRING 3669
+// Buffs/Effects: B005 (Howler), Buffubertip (Tooltip - Extended)
+{
+Tends to alert other nearby wolves when it becomes irritatable. Happens randomly..
+}
+
+STRING 3670
+// Abilities: A00N (Howler), Researchtip (Tooltip - Learn)
+{
+Howler
+}
+
+STRING 3671
+// Buffs/Effects: B005 (Howler), Bufftip (Tooltip)
+{
+Howler
+}
+
+STRING 3673
+// Abilities: A00O (Blitzer), Name (Name)
+{
+Blitzer
+}
+
+STRING 3674
+// Abilities: A00M (Chaos), Researchubertip (Tooltip - Learn - Extended)
+{
+You feel the energy surrounding you, going through your pores and flowing inside you.
+}
+
+STRING 3675
+// Abilities: A00M (Chaos), Tip (Tooltip - Normal)
+{
+Speedster aura - [|cffffcc00Level 1|r]
+}
+
+STRING 3676
+// Abilities: A00M (Chaos), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 3677
+// Abilities: A00M (Chaos), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 3678
+// Abilities: A00M (Chaos), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 3679
+// Abilities: A00M (Chaos), Ubertip (Tooltip - Normal - Extended)
+{
+Boosts movement speed to max. Watch out.
+}
+
+STRING 3680
+// Abilities: A00M (Chaos), Ubertip (Tooltip - Normal - Extended)
+{
++35% mana regeneration.
+}
+
+STRING 3681
+// Abilities: A00M (Chaos), Ubertip (Tooltip - Normal - Extended)
+{
++45% mana regeneration.
+}
+
+STRING 3682
+// Abilities: A00M (Chaos), Ubertip (Tooltip - Normal - Extended)
+{
++60% mana regeneration.
+}
+
+STRING 3683
+// Abilities: A00M (Chaos), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 3684
+// Abilities: A00N (Howler), Researchubertip (Tooltip - Learn - Extended)
+{
+You feel the energy surrounding you, going through your pores and flowing inside you.
+}
+
+STRING 3685
+// Abilities: A00N (Howler), Tip (Tooltip - Normal)
+{
+Speedster aura - [|cffffcc00Level 1|r]
+}
+
+STRING 3686
+// Abilities: A00N (Howler), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 3687
+// Abilities: A00N (Howler), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 3688
+// Abilities: A00N (Howler), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 3689
+// Abilities: A00N (Howler), Ubertip (Tooltip - Normal - Extended)
+{
+Boosts movement speed to max. Watch out.
+}
+
+STRING 3690
+// Abilities: A00N (Howler), Ubertip (Tooltip - Normal - Extended)
+{
++35% mana regeneration.
+}
+
+STRING 3691
+// Abilities: A00N (Howler), Ubertip (Tooltip - Normal - Extended)
+{
++45% mana regeneration.
+}
+
+STRING 3692
+// Abilities: A00N (Howler), Ubertip (Tooltip - Normal - Extended)
+{
++60% mana regeneration.
+}
+
+STRING 3693
+// Abilities: A00N (Howler), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 3694
+// Abilities: A00O (Blitzer), Researchubertip (Tooltip - Learn - Extended)
+{
+You feel the energy surrounding you, going through your pores and flowing inside you.
+}
+
+STRING 3695
+// Abilities: A00O (Blitzer), Tip (Tooltip - Normal)
+{
+Speedster aura - [|cffffcc00Level 1|r]
+}
+
+STRING 3696
+// Abilities: A00O (Blitzer), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 3697
+// Abilities: A00O (Blitzer), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 3698
+// Abilities: A00O (Blitzer), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 3699
+// Abilities: A00O (Blitzer), Ubertip (Tooltip - Normal - Extended)
+{
+Boosts movement speed to max. Watch out.
+}
+
+STRING 3700
+// Abilities: A00O (Blitzer), Ubertip (Tooltip - Normal - Extended)
+{
++35% mana regeneration.
+}
+
+STRING 3701
+// Abilities: A00O (Blitzer), Ubertip (Tooltip - Normal - Extended)
+{
++45% mana regeneration.
+}
+
+STRING 3702
+// Abilities: A00O (Blitzer), Ubertip (Tooltip - Normal - Extended)
+{
++60% mana regeneration.
+}
+
+STRING 3703
+// Abilities: A00O (Blitzer), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 3704
+// Abilities: A00O (Blitzer), Researchtip (Tooltip - Learn)
+{
+Blitzer
+}
+
+STRING 3705
+// Buffs/Effects: B004 (Chaos), Bufftip (Tooltip)
+{
+Chaos
+}
+
+STRING 3706
+// Buffs/Effects: B004 (Chaos), EditorName (Name (Editor Only))
+{
+Chaos
+}
+
+STRING 3707
+// Buffs/Effects: B005 (Howler), EditorName (Name (Editor Only))
+{
+Howler
+}
+
+STRING 3708
+// Buffs/Effects: B006 (Blitzer), Bufftip (Tooltip)
+{
+Blitzer
+}
+
+STRING 3709
+// Buffs/Effects: B006 (Blitzer), Buffubertip (Tooltip - Extended)
+{
+Blitzes in random directions. Careful!
+}
+
+STRING 3710
+// Buffs/Effects: B006 (Blitzer), EditorName (Name (Editor Only))
+{
+Blitzer
+}
+

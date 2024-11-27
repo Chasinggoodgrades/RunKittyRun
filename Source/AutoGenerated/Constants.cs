@@ -105,10 +105,16 @@ public static class Constants
 	public const int ABILITY_BOOK_OF_RELICS = 1093677378;
 	public const int ABILITY_FROSTBITE_AFFIX = 1395666993;
 	public const int ABILITY_TRANSLOCATE = 1093677104;
+	public const int ABILITY_CHAOS = 1093677133;
+	public const int ABILITY_HOWLER = 1093677134;
+	public const int ABILITY_BLITZER = 1093677135;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
 	public const int BUFF_FROSTBITE = 1110454323;
+	public const int BUFF_CHAOS = 1110454324;
+	public const int BUFF_HOWLER = 1110454325;
+	public const int BUFF_BLITZER = 1110454326;
 	public const int ITEM_PEGASUS_BOOTS = 1651732580;
 	public const int ITEM_RITUAL_MASK = 1920428410;
 	public const int ITEM_MEDITATION_CLOAK = 1885695602;
