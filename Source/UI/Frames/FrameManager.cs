@@ -29,6 +29,15 @@ public static class FrameManager
     {
         ShopFrame.Initialize();
         RewardsFrame.Initialize();
+        InitalizeButtons();
+    }
+
+    public static void InitalizeButtons()
+    {
+        Backdrop.Visible = true;
+        RewardsButton.Visible = true;
+        MusicButton.Visible = true;
+        ShopButton.Visible = true;
     }
 
     public static framehandle CreateHeaderFrame(framehandle parent)
@@ -78,6 +87,7 @@ public static class FrameManager
         RewardsButton.Text = "Rewards";
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
         RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
+        RewardsButton.Visible = false;
     }
 
     private static void CreateMusicButton()
@@ -88,6 +98,7 @@ public static class FrameManager
         MusicButton.Text = "Music";
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
         StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
+        MusicButton.Visible = false;
     }
 
     private static void CreateShopButton()
@@ -98,6 +109,7 @@ public static class FrameManager
         ShopButton.Text = "Shop";
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
         ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
+        ShopButton.Visible = false;
     }
 
     private static void ButtonsBackdrop()
@@ -106,6 +118,7 @@ public static class FrameManager
         var statsFrameParent = BlzGetFrameByName("SimpleUnitStatsPanel", 0);
         Backdrop.SetPoint(framepointtype.Center, 0, 0.075f, statsFrameParent, framepointtype.Center);
         Backdrop.SetSize(0.18f, 0.035f);
+        Backdrop.Visible = false;
     }
 
     public static void UpdateButtonPositions()

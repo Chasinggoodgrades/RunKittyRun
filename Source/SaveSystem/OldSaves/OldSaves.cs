@@ -1,15 +1,10 @@
 ﻿using WCSharp.Api;
 using System;
+using Source;
 using static WCSharp.Api.Common;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.Collections;
-using WCSharp.SaveLoad;
 using System.Text;
-using System.Runtime.CompilerServices;
-using WCSharp.Sync;
 
 public class Savecode
 {
@@ -146,6 +141,7 @@ public class Savecode
         catch (Exception e)
         {
             Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
+            if(Program.Debug) Console.WriteLine(e.Message);
             return false;
         }
     }

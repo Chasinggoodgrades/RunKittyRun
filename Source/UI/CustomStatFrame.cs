@@ -20,6 +20,7 @@ public static class CustomStatFrame
     private static string Streak = $"{Colors.COLOR_YELLOW_ORANGE}Streak:|r";
     private static string Gold = $"{Colors.COLOR_YELLOW_ORANGE}Gold:|r";
     private static string Ratio = $"{Colors.COLOR_YELLOW_ORANGE}S/D:|r";
+    private static string Progress = $"{Colors.COLOR_YELLOW_ORANGE}Prog.:|r";
 
     private static timer t;
 
@@ -103,12 +104,12 @@ public static class CustomStatFrame
         BlzLoadTOCFile("war3mapimported\\CustomStat.toc");
         BlzLoadTOCFile("war3mapimported\\BoxedText.toc");
 
-        Add("war3mapImported\\BTNStopwatch.blp", "s_Score", "Score");
-        Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "s_Revives", "Revives");
-        Add("ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp", "s_Deaths", "Deaths");
-        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "s_Streak", "Streak");
-        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "s_Gold", "Gold");
-        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "s_Speed", "Speed");
+        Add("war3mapImported\\BTNStopwatch.blp", "", "Score");
+        Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "", "Revives");
+        Add("ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp", "", "Deaths");
+        Add("ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga", "", "Streak");
+        Add("ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp", "", "Gold");
+        Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "", "Speed");
 
         t = timer.Create();
         t.Start(0.1f, true, Update);
@@ -131,8 +132,8 @@ public static class CustomStatFrame
         else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
-            SetGamemodeFrameText(selectedUnit);
             SetCommonFrameText(selectedUnit);
+            SetGamemodeFrameText(selectedUnit);
         }
     }
 
@@ -196,7 +197,7 @@ public static class CustomStatFrame
 
     private static void SetGamemodeFrameText(unit selectedUnit)
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) // Standard
+        if (Gamemode.CurrentGameMode == "Standard") // Standard
         {
             BlzFrameSetText(Stats[3].Text, $"{Streak} {GetPlayerSaveStreak(selectedUnit)}");
             BlzFrameSetText(Stats[0].Text, $"{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r");
@@ -204,9 +205,9 @@ public static class CustomStatFrame
         }
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
-            BlzFrameSetText(Stats[0].Text, $"{Time} 0:00");
-            BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");
-            BlzFrameSetText(Stats[2].Text, $"{Saves} {GetPlayerSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[0].Text, $"{Time} {GetPlayerTime(selectedUnit)}");
+            BlzFrameSetText(Stats[1].Text, $"{Progress} {GetPlayerProgress(selectedUnit)}%");
+            BlzFrameSetText(Stats[2].Text, $"{Deaths} {GetGameTotalDeaths(selectedUnit)}");
         }
         else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
@@ -232,9 +233,11 @@ public static class CustomStatFrame
     private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Saves];
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.Deaths];
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats[StatTypes.SaveStreak];
-    private static float GetPlayerTime(unit u) => Globals.ALL_KITTIES[u.Owner].Time[Globals.ROUND];
+    private static string GetPlayerTime(unit u) => Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].Time[Globals.ROUND]);
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
     private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths;
+    private static int GetGameTotalSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalSaves;
+    private static int GetGameTotalDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalDeaths;
 
 
 

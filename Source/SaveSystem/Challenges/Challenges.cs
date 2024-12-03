@@ -12,9 +12,8 @@ public static class Challenges
     private const int PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175;
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        Deathless.Initialize();
         Nitros.Initialize();
+        Deathless.Initialize();
     }
     public static void WhiteTendrils() => AwardManager.GiveRewardAll(Awards.White_Tendrils);
     public static void DivinityTendrils(player player) => AwardManager.GiveReward(player, Awards.Divinity_Tendrils);

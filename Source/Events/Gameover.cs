@@ -15,9 +15,8 @@ public static class Gameover
     private static bool WinningGame()
     {
         if(!WinGame) return false;
-        Console.WriteLine("You won!!!");
+        Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations!!! You've won the game on {Difficulty.DifficultyChosen}!!!");
         StandardWinChallenges();
-        ImpossibleChallenges();
         SaveManager.SaveAll();
         return true;
     }
@@ -28,6 +27,7 @@ public static class Gameover
         Challenges.NecroWindwalk();
         Challenges.BlueFire();
         Challenges.PinkFire();
+        ImpossibleChallenges();
     }
 
     private static void ImpossibleChallenges()

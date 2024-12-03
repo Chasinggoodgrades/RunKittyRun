@@ -22,7 +22,7 @@ public static class RoundManager
             Globals.ROUND += 1;
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
-            AffixFactory.DistributeAffixes();
+            Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
             if(Globals.ROUND > 1) TerrainChanger.SetTerrain();
 
             RoundTimer.InitEndRoundTimer();
@@ -68,22 +68,31 @@ public static class RoundManager
 
     public static void RoundEnd()
     {
-        Globals.GAME_ACTIVE = false;
-        RoundTimer.EndRoundTimer.Pause();
-        Nitros.StopNitroTimer();
-        Wolf.RemoveAllWolves();
-        BarrierSetup.ActivateBarrier();
-        Resources.BonusResources();
-        RoundUtilities.MovedTimedCameraToStart();
-        RoundUtilities.MoveAllPlayersToStart();
-        RoundUtilities.RoundResetAll();
-        Team.RoundResetAllTeams();
-        NitroPacer.ResetNitroPacer();
-        Deathless.ResetDeathless();
-        SaveManager.SaveAll();
-        if (Gameover.GameOver()) return;
+        try
+        {
+            Console.WriteLine("Round End");
+            Globals.GAME_ACTIVE = false;
+            RoundTimer.EndRoundTimer.Pause();
+            Nitros.StopNitroTimer();
+            Wolf.RemoveAllWolves();
+            BarrierSetup.ActivateBarrier();
+            Resources.BonusResources();
+            RoundUtilities.MovedTimedCameraToStart();
+            RoundUtilities.MoveAllPlayersToStart();
+            RoundUtilities.RoundResetAll();
+            Team.RoundResetAllTeams();
+            NitroPacer.ResetNitroPacer();
+            Deathless.ResetDeathless();
+            SaveManager.SaveAll();
+            if (Gameover.GameOver()) return;
 
-        Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
+        }
     }
 
     public static void RoundEndCheck()

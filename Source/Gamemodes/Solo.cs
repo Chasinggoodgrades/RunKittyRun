@@ -15,6 +15,9 @@ public static class Solo
 {
     public static void Initialize()
     {
-       Console.WriteLine("Solo Mode is a work in progress.");
+        Console.WriteLine($"{Colors.COLOR_YELLOW}Solo Mode may still have several bugs. Report as you come across :)|r");
+        ItemSpawner.NUMBER_OF_ITEMS = 8;
     }
+
+
 }

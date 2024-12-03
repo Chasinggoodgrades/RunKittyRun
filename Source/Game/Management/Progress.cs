@@ -69,8 +69,10 @@ public static class Progress
                 PlayerProgressPoints[Player].CenterX, PlayerProgressPoints[Player].CenterY);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
+            var progress = (totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1]) * 100;
+            if (progress > 100) progress = 100.00f;
 
-            return (totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1]) * 100;
+            return progress;
         }
         catch (Exception e)
         {

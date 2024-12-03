@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Transactions;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public class Blitzer : Affix
@@ -20,17 +18,19 @@ public class Blitzer : Affix
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Pause();
+        Unit.Unit.SetVertexColor(42, 170, 138);
         RegisterMoveTimer();
     }
 
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Unit.WanderTimer.Resume();
-        MoveTimer?.Dispose();
-        BlitzerTimer?.Dispose();
-        Effect?.Dispose();
         WanderEffect?.Dispose();
+        Unit.WanderTimer.Resume();
+        MoveTimer.Pause();
+        MoveTimer.Dispose();
+        EndBlitz();
+        Unit.Unit.SetVertexColor(150, 120, 255, 255);
     }
 
     private void RegisterMoveTimer()
@@ -43,6 +43,8 @@ public class Blitzer : Affix
     private void PreBlitzerMove()
     {
         WanderEffect = effect.Create(Unit.OVERHEAD_EFFECT_PATH, Unit.Unit, "overhead");
+        Effect?.Dispose();
+        Unit.Unit.SetVertexColor(0, 255, 0);
         Utility.SimpleTimer(BLITZER_OVERHEAD_DELAY, BeginBlitz);
     }
 
@@ -66,10 +68,9 @@ public class Blitzer : Affix
         float distance = (float)Math.Sqrt(Math.Pow(targetX - currentX, 2) + Math.Pow(targetY - currentY, 2));
 
         // stop if its within range of the target / collision thingy
-        if (distance <= 70) // As long as its -WITHIN- the x,y .. thats good enough. 
+        if (distance <= CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS)
         {
-            Unit.Unit.SetAnimation(0);
-            Effect.Dispose();
+            EndBlitz();
             return;
         }
 
@@ -91,6 +92,14 @@ public class Blitzer : Affix
 
         // Set a timer to call this method again after a short delay
         BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+    }
+
+    private void EndBlitz()
+    {
+        BlitzerTimer.Pause();
+        Effect.Dispose();
+        Unit.Unit.SetAnimation(0);
+        Unit.Unit.SetVertexColor(42, 170, 138);
     }
 
 

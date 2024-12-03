@@ -19,7 +19,6 @@ public static class Nitros
 
     private static void SetNitroRoundTimes()
     {
-        // Only has rounds up to 5.
         NitroRoundTimes.Add(1, 125);
         NitroRoundTimes.Add(2, 140);
         NitroRoundTimes.Add(3, 160);

@@ -33,10 +33,7 @@ public static class Shops
         if (Gamemode.CurrentGameMode != "Standard") return;
 
         StandardModeItems();
-        //SpawnPandaVendor(); // no need anymore.
     }
-
-    //private static void SpawnPandaVendor() => PandaVendor = unit.Create(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_PANDA, Regions.PandaArea.Center.X, Regions.PandaArea.Center.Y, 270f);
 
     private static void ApplyItemListToVendor()
     {
@@ -48,9 +45,7 @@ public static class Shops
     {
         var vendorItems = VendorsItemList[vendor];
         foreach (var item in vendorItems)
-        {
             vendor.AddItemToStock(item.Item, item.Stock, item.Stock);
-        }
     }
 
     private static void AddRegularItemsToVendor(unit vendor, List<int> items)
@@ -84,8 +79,6 @@ public static class Shops
         KittyVendorItemList.Add(Constants.ITEM_EMPTY_VIAL);
         KittyVendorItemList.Add(Constants.ITEM_URN_OF_A_BROKEN_SOUL);
         KittyVendorItemList.Add(Constants.ITEM_CAT_FIGURINE);
-
-        // Panda Vendor is only spawned in Standard Mode, items are in the editor.
     }
 
     private static void CollectAllVendors()
@@ -132,7 +125,7 @@ public static class Shops
             Vendor = vendor;
             Item = item;
             Stock = stock;
-            RestockTime = restockTime; // doesnt work as intended.
+            RestockTime = restockTime; // May implement later? unsure.
         }
     }
 }

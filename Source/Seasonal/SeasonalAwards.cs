@@ -9,7 +9,7 @@ public static class SeasonalAwards
     {
         Season = SeasonalManager.Season;
         if (Season == HolidaySeasons.None) return;
-        Utility.SimpleTimer(30.0f, FreebeSeasonalAwards);
+        Utility.SimpleTimer(180.0f, FreebeSeasonalAwards);
     }
 
     public static void FreebeSeasonalAwards()

@@ -18,6 +18,7 @@ public static class FinalSafezone
             var unit = @event.Unit;
             var player = unit.Owner;
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
+            if (Gamemode.CurrentGameMode != "Standard") return;
             Nitros.CompletedNitro(unit);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);

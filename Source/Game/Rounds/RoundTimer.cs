@@ -30,11 +30,9 @@ public static class RoundTimer
 
     public static void StartEndRoundTimer()
     {
-        if (Gamemode.CurrentGameMode != "Standard")
-        {
-            TimerDialogDisplay(EndRoundTimerDialog, true);
-            EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, () => { RoundManager.RoundEnd(); });
-        }
+        if (Gamemode.CurrentGameMode == "Standard") return;
+        TimerDialogDisplay(EndRoundTimerDialog, true);
+        EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, RoundManager.RoundEnd);
     }
 
     public static void CountDown()

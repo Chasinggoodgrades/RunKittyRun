@@ -1,7 +1,5 @@
 ﻿using System;
-using WCSharp.Api;
 using static WCSharp.Api.Common;
-using System.Collections.Generic;
 /*
  * THIS CLASS IS UNUSED.. The idea was to spawn wolves based on the area of the lane.
  * It technically works just fine, however not each lane is equal in terms of difficulty.

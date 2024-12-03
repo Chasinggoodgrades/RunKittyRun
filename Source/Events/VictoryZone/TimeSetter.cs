@@ -25,7 +25,6 @@ public static class TimeSetter
 
         SetSavedTime(player, roundEnum);
 
-        Console.WriteLine($"Setting {roundEnum.ToString()} to {playersTime} for {player.Name}");
         return true;
     }
 
