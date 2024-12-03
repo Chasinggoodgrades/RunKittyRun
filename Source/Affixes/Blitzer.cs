@@ -1,24 +1,98 @@
-﻿using WCSharp.Api;
-
+﻿using System;
+using System.Threading.Tasks;
+using System.Transactions;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
+    private const string BLITZER_EFFECT = "war3mapImported\\ChargerWindCasterArt.mdx";
+    private const float BLITZER_SPEED = 600.0f;
+    private const float BLITZER_OVERHEAD_DELAY = 1.50f;
+    private timer MoveTimer;
+    private timer BlitzerTimer;
+    private effect Effect;
+    private effect WanderEffect;
     public Blitzer(Wolf unit) : base(unit)
-    {
-
-    }
+    {}
 
     public override void Apply()
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.OVERHEAD_EFFECT_PATH = "";
+        Unit.WanderTimer.Pause();
+        RegisterMoveTimer();
     }
 
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
+        Unit.WanderTimer.Resume();
+        MoveTimer?.Dispose();
+        BlitzerTimer?.Dispose();
+        Effect?.Dispose();
+        WanderEffect?.Dispose();
     }
+
+    private void RegisterMoveTimer()
+    {
+        MoveTimer = timer.Create();
+        MoveTimer.Start(5.0f, false, PreBlitzerMove); // initial move
+        BlitzerTimer = timer.Create();
+    }
+
+    private void PreBlitzerMove()
+    {
+        WanderEffect = effect.Create(Unit.OVERHEAD_EFFECT_PATH, Unit.Unit, "overhead");
+        Utility.SimpleTimer(BLITZER_OVERHEAD_DELAY, BeginBlitz);
+    }
+
+    private void BeginBlitz()
+    {
+        var randomTime = GetRandomReal(6.0f, 15.0f); // blitz randomly between this time interval
+        var (x, y) = Unit.WolfMove();
+        WanderEffect.Dispose();
+        BlitzerMove(x, y);
+        Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
+        MoveTimer.Start(randomTime, false, PreBlitzerMove);
+    }
+
+    private void BlitzerMove(float targetX, float targetY)
+    {
+        var speed = BLITZER_SPEED; // speed in yards per second
+        float currentX = Unit.Unit.X;
+        float currentY = Unit.Unit.Y;
+
+        // Distance between current and target pos
+        float distance = (float)Math.Sqrt(Math.Pow(targetX - currentX, 2) + Math.Pow(targetY - currentY, 2));
+
+        // stop if its within range of the target / collision thingy
+        if (distance <= 70) // As long as its -WITHIN- the x,y .. thats good enough. 
+        {
+            Unit.Unit.SetAnimation(0);
+            Effect.Dispose();
+            return;
+        }
+
+        // determine direction
+        float directionX = (targetX - currentX) / distance;
+        float directionY = (targetY - currentY) / distance;
+
+        // 60 fps for smooth movement, step distance
+        float stepDistance = speed / 60.0f; // Assuming 60 calls per second
+        float nextX = currentX + directionX * stepDistance;
+        float nextY = currentY + directionY * stepDistance;
+
+        // Move the unit one step
+        Unit.Unit.SetPosition(nextX, nextY);
+        Unit.Unit.SetFacing((float)(Math.Atan2(directionY, directionX) * 180.0 / Math.PI));
+        Unit.Unit.SetAnimation(2);
+
+        var stepTime = 1.0f / 60.0f; // 1/60th of a second
+
+        // Set a timer to call this method again after a short delay
+        BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+    }
+
 
 
 

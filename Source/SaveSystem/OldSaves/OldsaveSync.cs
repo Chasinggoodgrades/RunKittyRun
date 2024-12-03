@@ -16,16 +16,6 @@ public static class OldsaveSync
         return BlzSendSyncData(SYNC_PREFIX, s);
     }
 
-    public static triggeraction OnSyncString(Action func)
-    {
-        return Trigger.AddAction(func);
-    }
-
-    public static void RemoveSyncString(triggeraction t)
-    {
-        TriggerRemoveAction(Trigger, t);
-    }
-
     public static void Initialize()
     {
         foreach(var player in Globals.ALL_PLAYERS)
@@ -52,7 +42,4 @@ public static class OldsaveSync
         savecode.SetRewardValues(SavePlayer);
 
     }
-
-
-
 }

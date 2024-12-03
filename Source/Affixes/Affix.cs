@@ -17,6 +17,5 @@ public abstract class Affix
     public abstract void Apply();
 
     public abstract void Remove();
-
 }
 

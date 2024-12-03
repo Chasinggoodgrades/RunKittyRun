@@ -51,7 +51,6 @@ public class Savecode
         Digits = 0.0;
         Bignum = new BigNum(BASE());
     }
-    public static Savecode Create() => new Savecode();
     public int Decode(int max) => Bignum.DivSmall(max + 1);
     public void Clean() => Bignum.Clean();
     public void FromString(string s)
@@ -178,7 +177,6 @@ public class Savecode
 
         sb.Clear().Append(result);
         OldsaveSync.SyncString(sb.ToString());
-        //SyncSystem.Send(Code);
     }
 
     public void SetRewardValues(player player)
@@ -195,12 +193,16 @@ public class Savecode
                 if (Enum.TryParse<RoundTimes>(key, true, out RoundTimes roundtime))
                 {
                     var roundstats = Globals.ALL_KITTIES[player].SaveData.GameTimes;
-                    roundstats[roundtime] = decodedValue;
+                    // If ur time is worse (greater) than previous save.. Then update.
+                    if(roundstats[roundtime] > decodedValue)
+                        roundstats[roundtime] = decodedValue;
                 }
                 else if(Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
                 {
                     var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
-                    kittyStats[stats] = decodedValue;
+                    // If ur stats are less than previous save.. Then update.
+                    if (kittyStats[stats] < decodedValue) 
+                        kittyStats[stats] = decodedValue;
                 }
             }
         }

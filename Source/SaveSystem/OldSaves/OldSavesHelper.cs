@@ -42,15 +42,5 @@ public static class OldSavesHelper
 		1097228916, // Afbt
 		1097228907, // Afbk
     };
-
-    public static void SyncHelperInit()
-    {
-        var Trigger = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            Trigger.RegisterPlayerSyncEvent(player, "S", false);
-        }
-
-    }
 }
 

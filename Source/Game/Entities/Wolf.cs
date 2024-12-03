@@ -14,11 +14,11 @@ public class Wolf
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
-    private effect OverheadEffect { get; set; }
-    private timer WanderTimer { get; set; }
+    public timer WanderTimer { get; set; }
     public rect Lane { get; private set; }
     public unit Unit { get; private set; }
     public List<Affix> Affixes { get; private set; }
+    private effect OverheadEffect { get; set; }
 
     public Wolf(int regionIndex)
     {
@@ -58,8 +58,8 @@ public class Wolf
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if(!HasAffix("Blitzer"))
-            Unit.IssueOrder("move", randomX, randomY);
+        //if (!HasAffix("Blitzer"))
+        Unit.IssueOrder("move", randomX, randomY);
         return (randomX, randomY);
     }
 

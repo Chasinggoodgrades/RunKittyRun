@@ -75,7 +75,7 @@ public static class SeasonalManager
         Season = HolidaySeasons.Christmas;
         TerrainChanger.ActivateChristmasTerrain();
         DoodadChanger.ChristmasDoodads();
-        ShopChanger.Initialize();
+        ShopChanger.SetSeasonalShop();
         SetWeather();
     
     }
@@ -88,7 +88,7 @@ public static class SeasonalManager
         Season = HolidaySeasons.None;
         TerrainChanger.NoSeason();
         DoodadChanger.NoSeasonDoodads();
-        ShopChanger.Initialize();
+        ShopChanger.SetSeasonalShop();
         SetWeather();
     }
 

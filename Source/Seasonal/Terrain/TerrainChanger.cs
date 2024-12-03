@@ -54,6 +54,7 @@ public static class TerrainChanger
         for(int i = 0; i < Gamemode.NumberOfRounds; i++) {
             SafezoneTerrain[i] = FourCC("Xblm");
         }
+        SetTerrain();
     }
 
     private static void ChristmasTerrain()
