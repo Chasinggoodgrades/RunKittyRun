@@ -54,13 +54,11 @@ public static class RoundManager
     private static void HasDifficultyBeenChosen()
     {
         var Timer = timer.Create();
-        TimerStart(Timer, 0.35f, true, () =>
+        Timer.Start(0.35f, true, () =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
-                StandardMultiboard.Initialize();
-                Console.WriteLine("RoundSetup Begin");
                 Timer.Dispose();
             }
         });
@@ -68,37 +66,29 @@ public static class RoundManager
 
     public static void RoundEnd()
     {
-        try
-        {
-            Console.WriteLine("Round End");
-            Globals.GAME_ACTIVE = false;
-            RoundTimer.EndRoundTimer.Pause();
-            Nitros.StopNitroTimer();
-            Wolf.RemoveAllWolves();
-            BarrierSetup.ActivateBarrier();
-            Resources.BonusResources();
-            RoundUtilities.MovedTimedCameraToStart();
-            RoundUtilities.MoveAllPlayersToStart();
-            RoundUtilities.RoundResetAll();
-            Team.RoundResetAllTeams();
-            NitroPacer.ResetNitroPacer();
-            Deathless.ResetDeathless();
-            SaveManager.SaveAll();
-            if (Gameover.GameOver()) return;
+        Globals.GAME_ACTIVE = false;
+        RoundTimer.EndRoundTimer.Pause();
+        Nitros.StopNitroTimer();
+        Wolf.RemoveAllWolves();
+        BarrierSetup.ActivateBarrier();
+        Resources.BonusResources();
+        RoundUtilities.MovedTimedCameraToStart();
+        RoundUtilities.MoveAllPlayersToStart();
+        RoundUtilities.RoundResetAll();
+        TeamsUtil.RoundResetAllTeams();
+        NitroPacer.ResetNitroPacer();
+        Deathless.ResetDeathless();
+        SaveManager.SaveAll();
+        if (Gameover.GameOver()) return;
 
-            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
-        }
+        Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
     }
 
     public static void RoundEndCheck()
     {
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             if (!kitty.Finished) return;
+        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         RoundEnd();
     }
 }

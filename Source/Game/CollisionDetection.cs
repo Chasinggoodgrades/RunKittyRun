@@ -71,7 +71,7 @@ public static class CollisionDetection
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);
             k.KillKitty();
-            Team.CheckTeamDead(k);
+            TeamsUtil.CheckTeamDead(k);
         });
         return k.w_Collision;
     }

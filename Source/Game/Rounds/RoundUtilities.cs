@@ -50,7 +50,7 @@ public static class RoundUtilities
         var y = RegionList.SpawnRegions[0].Center.Y;
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            if (player == GetLocalPlayer()) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY);
+            if (player.IsLocal) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY);
         }
     }
 }

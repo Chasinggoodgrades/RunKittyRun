@@ -85,7 +85,7 @@ public class Colors
 
     /// <summary>
     /// Returns the color code string for that particular color.
-    /// Use (1-24) for player colors.
+    /// Use (1-24) for player colors. So.. (player.Id + 1)
     /// </summary>
     public static string GetPlayerColor(int playerColorID)
     {

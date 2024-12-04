@@ -12,7 +12,7 @@ public enum DifficultyLevel
 
 public static class Difficulty
 {
-    public static string DifficultyChosen { get; private set; }
+    public static string DifficultyChosen { get; private set; } = "";
     public static int DifficultyValue { get; private set; }
     private static float TIME_TO_CHOOSE_DIFFICULTY = 10.0f;
     private static dialog DifficultyChoosing;

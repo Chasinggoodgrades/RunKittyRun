@@ -7,6 +7,12 @@ public static class MultiboardUtil
     /// </summary>
     public static void RefreshMultiboards()
     {
+        RefreshStandardMbs();
+    }
+
+    private static void RefreshStandardMbs()
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         StandardMultiboard.UpdateStandardCurrentStatsMB();
         StandardMultiboard.UpdateOverallStatsMB();
         StandardMultiboard.UpdateBestTimesMB();
@@ -20,6 +26,12 @@ public static class MultiboardUtil
     public static void MinMultiboards(player player, bool minimize)
     {
         if (!player.IsLocal) return;
+        MinStandardMultiboards(minimize);
+    }
+
+    private static void MinStandardMultiboards(bool minimize)
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         StandardMultiboard.CurrentStats.IsMinimized = minimize;
         StandardMultiboard.BestTimes.IsMinimized = minimize;
         StandardMultiboard.OverallStats.IsMinimized = minimize;

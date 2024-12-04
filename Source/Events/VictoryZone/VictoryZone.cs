@@ -23,7 +23,7 @@ public static class VictoryZone
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        InVictoryArea.RegisterEnterRegion(VictoryArea);
+        InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
         InVictoryArea.AddAction(VictoryAreaActions);
     }
 
@@ -31,23 +31,22 @@ public static class VictoryZone
     {
         var u = @event.Unit;
         var player = u.Owner;
-        Console.WriteLine("Victory Area triggered");
         if(u.UnitType != Constants.UNIT_KITTY) return;
-        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gamemode.CurrentGameMode == "Standard") // Standard
         {
+            if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             RoundManager.RoundEnd();
         }
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
             MoveAndFinish(player);
             RoundManager.RoundEndCheck();
         }
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             // Move all team members to the start, save their time. Wait for all teams to finish.
-            foreach(var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
+            foreach (var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
             {
                 MoveAndFinish(teamMember);
             }

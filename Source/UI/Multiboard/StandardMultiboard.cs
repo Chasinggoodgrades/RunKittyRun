@@ -16,20 +16,11 @@ public static class StandardMultiboard
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        try
-        {
-            BestTimes = multiboard.Create();
-            OverallStats = multiboard.Create();
-            CurrentStats = multiboard.Create();
-            CreateMultiboards();
-            RegisterTriggers();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            Console.WriteLine(e.StackTrace);
-            throw;
-        }
+        BestTimes = multiboard.Create();
+        OverallStats = multiboard.Create();
+        CurrentStats = multiboard.Create();
+        CreateMultiboards();
+        RegisterTriggers();
     }
 
     private static void RegisterTriggers()

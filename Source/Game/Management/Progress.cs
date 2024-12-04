@@ -47,7 +47,7 @@ public static class Progress
         {
             Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
         }
-        Multiboard.UpdateTeamStatsMB();
+        TeamsMultiboard.UpdateTeamStatsMB();
     }
 
     private static string CalculateTeamProgress(Team Team)

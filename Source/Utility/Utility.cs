@@ -174,7 +174,7 @@ public static class Utility
     }
 
     /// <summary>
-    /// Self explanatory. Creates a text flag over the player's head.
+    /// Self explanatory. Creates a texttag over the player's head.
     /// </summary>
     /// <param name="text"></param>
     /// <param name="duration"></param>
@@ -185,7 +185,7 @@ public static class Utility
     /// <param name="blue"></param>
     public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
     {
-        var tt = CreateTextTag();
+        var tt = texttag.Create();
         tt.SetText(text, height);
         tt.SetColor(red, green, blue, 255);
         tt.SetPosition(u.X, u.Y, 0);
