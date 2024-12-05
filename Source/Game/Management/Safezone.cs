@@ -20,7 +20,7 @@ public class Safezone
 
     public static void Initialize()
     {
-        int count = 0;
+        var count = 0;
         foreach (var safeZone in RegionList.SafeZones)
         {
             var safezone = new Safezone(count, safeZone.Region);
@@ -42,12 +42,25 @@ public class Safezone
     {
         var unit = @event.Unit;
         var player = unit.Owner;
+        SafezoneAdditions(unit);
         Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
         if (AwardedPlayers.Contains(player) || ID == 0) return;
         player.Gold += Resources.SafezoneGold;
         unit.Experience += Resources.SafezoneExperience;
         AwardedPlayers.Add(player);
         Deathless.DeathlessCheck(player);
+    }
+
+    /// <summary>
+    /// Runs if the players current safezone isn't the same as their previously touched safezone.
+    /// </summary>
+    private void SafezoneAdditions(unit Unit)
+    {
+        var player = Unit.Owner;
+
+        if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID) return;
+
+        FangOfShadows.ReduceCooldownAtSafezone(Unit);
     }
 
     /// <summary>

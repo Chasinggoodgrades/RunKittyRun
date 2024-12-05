@@ -54,6 +54,9 @@ public static class GeneralCmds
                     SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
                 }
                 break;
+            case "-oldcode":
+                Savecode.LoadString();
+                break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;

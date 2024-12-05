@@ -21,7 +21,7 @@ public class AmuletOfEvasiveness : Relic
         ) 
     {
         Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an addional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
 
     }
 
@@ -30,7 +30,6 @@ public class AmuletOfEvasiveness : Relic
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
-        Console.WriteLine("Collision Radius: " + newCollisionRadius);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
@@ -70,5 +69,29 @@ public class AmuletOfEvasiveness : Relic
         Unit.SetScale(scale, scale, scale);
     }
 
+    /// <summary>
+    /// Upgrade Level 2, Windwalk Collision Reduction
+    /// </summary>
+    /// <param name="Unit"></param>
+    public static void AmuletWindwalkEffect(unit Unit)
+    {
+        var player = Unit.Owner;
+        var kitty = Globals.ALL_KITTIES[player];
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
+        if (upgradeLevel < 2) return;
+        var newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
+        Console.WriteLine($"Collision Radius: {CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius}");
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
+        CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
+        CollisionDetection.KittyRegisterCollisions(kitty);
+
+        var t = timer.Create();
+        t.Start(WINDWALK_COLLISION_DURATION, false, () =>
+        {
+            CollisionDetection.KITTY_COLLISION_RADIUS[player] = GetCollisionReduction(Unit);
+            CollisionDetection.KittyRegisterCollisions(kitty);
+            t.Dispose();
+        });
+    }
 
 }

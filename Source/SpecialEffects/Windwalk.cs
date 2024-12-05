@@ -30,7 +30,7 @@ public static class Windwalk
         var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
         var duration = 3.0f + (2.0f * abilityLevel);
         var wwID = kitty.WindwalkID;
-        AmuletWindwalkEffect(caster);
+        AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
         if (wwID != 0)
         {
             var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
@@ -40,25 +40,6 @@ public static class Windwalk
         }
     }
 
-    private static void AmuletWindwalkEffect(unit Unit)
-    {
-        var player = Unit.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
-        if (upgradeLevel < 2) return;
-        var newCollisionRadius = AmuletOfEvasiveness.GetCollisionReduction(Unit) - AmuletOfEvasiveness.AMULET_UPGRADE_WW_COLLISION_REDUCTION;
-        Console.WriteLine($"Collision Radius: {CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius}");
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
-        CollisionDetection.KittyRegisterCollisions(kitty);
 
-        var t = timer.Create();
-        t.Start(AmuletOfEvasiveness.WINDWALK_COLLISION_DURATION, false, () =>
-        {
-            CollisionDetection.KITTY_COLLISION_RADIUS[player] = AmuletOfEvasiveness.GetCollisionReduction(Unit);
-            CollisionDetection.KittyRegisterCollisions(kitty);
-            t.Dispose();
-        });
-    }
 
 }

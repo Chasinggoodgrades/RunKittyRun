@@ -96,6 +96,7 @@ public static class AwardingCmds
         Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats[stat] = val;
         player.DisplayTimedTextTo(3.0f, 
             $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
+        MultiboardUtil.RefreshMultiboards();
     }
 
     private static void GameStatsHelp(player player)

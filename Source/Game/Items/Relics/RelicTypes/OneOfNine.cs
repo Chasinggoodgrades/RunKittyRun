@@ -23,14 +23,12 @@ public class OneOfNine : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        Console.WriteLine("Starting Apply Effect");
         var player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(PreviousAbilityID);
         Unit.AddAbility(RelicAbilityID);
         ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
-        Console.WriteLine("End Apply Effect");
     }
 
     public override void RemoveEffect(unit Unit)
@@ -56,7 +54,6 @@ public class OneOfNine : Relic
             : kitty.GetAbilityCooldownRemaining(relic);
 
         cooldown -= reduction;
-        Console.WriteLine($"Cooldown: {cooldown} Reduction: {reduction}");
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
     }

@@ -54,7 +54,6 @@ public class RingOfSummoning : Relic
         var ability = Unit.GetAbility(RelicAbilityID);
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
-        Console.WriteLine($"Upgrade Level: {upgradeLevel}");
         // Summon radius thingy
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
 
@@ -65,7 +64,6 @@ public class RingOfSummoning : Relic
         // Set cooldown based on the upgrade lvl.
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_COOLDOWN, 0, cooldown);
     }
-
 
     private void SacredRingOfSummoning()
     {

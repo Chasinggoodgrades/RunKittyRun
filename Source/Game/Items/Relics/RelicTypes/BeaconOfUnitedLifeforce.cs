@@ -20,7 +20,7 @@ public class BeaconOfUnitedLifeforce : Relic
         )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Extra revived teammates will have {INVULNERABILITY_DURATION} second immunity when they're revived.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Each revive has a very small chance to simply revive all dead players.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Each revive has a VERY small chance to simply revive all dead players.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -35,16 +35,13 @@ public class BeaconOfUnitedLifeforce : Relic
 
     public static void BeaconOfUnitedLifeforceEffect(Kitty kitty)
     {
-        // Check if the kitty has the Beacon of United Lifeforce item
+        // Make sure person has the relic
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return;
 
-        // Retrieve the upgrade level for the Beacon of United Lifeforce
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce));
 
-        // Generate a random chance
         var chance = GetRandomReal(0.00f, 1.00f);
 
-        // Check if the random chance is greater than the single revive chance
         if (chance > EXTRA_REVIVE_CHANCE_SINGLE) return;
 
         // Revive all kitties if chance <= EXTRA_REVIVE_CHANCE_ALL, otherwise revive one kitty
@@ -66,12 +63,15 @@ public class BeaconOfUnitedLifeforce : Relic
         }
     }
 
-
+    /// <summary>
+    /// Upgrade Level 1
+    /// </summary>
+    /// <param name="beaconHolder"></param>
+    /// <param name="extraRevivedKitty"></param>
     private static void UpgradeInvulnerability(Kitty beaconHolder, Kitty extraRevivedKitty)
     {
         if (PlayerUpgrades.GetPlayerUpgrades(beaconHolder.Player).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce)) < 1) return;
         extraRevivedKitty.Invulnerable = true;
-        Console.WriteLine(extraRevivedKitty.Unit.Name + " is invulnerable for " + INVULNERABILITY_DURATION + " seconds.");
         Utility.SimpleTimer(INVULNERABILITY_DURATION, () => extraRevivedKitty.Invulnerable = false);
     }
 

@@ -16,7 +16,7 @@ public static class ShopFrame
     private static framehandle costLabel;
     private static framehandle buyButton;
     private static framehandle sellButton;
-    private static framehandle upgradeButton { get; set;}
+    private static framehandle upgradeButton;
     private static framehandle upgradeTooltip;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private const float buttonWidth = 0.025f;
@@ -173,6 +173,7 @@ public static class ShopFrame
 
             var itemDetails = trigger.Create();
             var relic = items[i];
+            CreateShopitemTooltips(button, relic);
             itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
             itemDetails.AddAction(() => ShowItemDetails(relic));
         }
@@ -266,6 +267,22 @@ public static class ShopFrame
         upgradeTooltip.Enabled = false;
     }
 
+    private static void CreateShopitemTooltips(framehandle parent, ShopItem item)
+    {
+        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
+        var tooltip = framehandle.Create("TEXT", $"{parent.Name}Tooltip", background, "", 0);
+
+        tooltip.SetSize(0.10f, 0);
+        background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, tooltip, framepointtype.BottomLeft);
+        background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, tooltip, framepointtype.TopRight);
+
+        parent.SetTooltip(background);
+        tooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);
+        tooltip.Enabled = false;
+
+        tooltip.Text = item.Name;
+    }
+
     private static void RefreshUpgradeTooltip(Relic relic)
     {
         var finalString = new StringBuilder();
@@ -355,6 +372,8 @@ public static class ShopFrame
             return;
         }
 
+        if(!CanGetSecondRelic(kitty.Unit)) return;
+        
         if(RelicMaxedOut(player)) return;
 
         AddItem(player, selectedItem.ItemID);
@@ -424,6 +443,7 @@ public static class ShopFrame
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
+
     private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
     private static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
@@ -433,6 +453,17 @@ public static class ShopFrame
         var relics = Globals.ALL_KITTIES[player].Relics;
         if (relics.Count < Relic.MaxRelics) return false;
         player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!");
+        return true;
+    }
+
+    private static bool CanGetSecondRelic(unit unit)
+    {
+        if (Globals.ALL_KITTIES[unit.Owner].Relics.Count < 1) return true; // can get a first relic ofc.
+        if (unit.HeroLevel < Relic.SecondRelicLevel)
+        {
+            unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You must have reached {Relic.SecondRelicLevel} to obtain your next relic.");
+            return false;
+        }
         return true;
     }
 

@@ -45,7 +45,6 @@ public class FrostbiteRing : Relic
 
     private void FrostbiteCast(location freezeLocation)
     {
-        Console.WriteLine("Frostbite");
         var tempGroup = group.Create();
         GroupEnumUnitsInRange(tempGroup, GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, Filter(() => WolvesFilter()));
         foreach (var unit in tempGroup.ToList())
@@ -61,7 +60,6 @@ public class FrostbiteRing : Relic
         var t = timer.Create();
         Unit.SetPausedEx(true);
         var duration = GetFreezeDuration();
-        Console.WriteLine($"Freeze Duration {duration}");
         var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
         t.Start(duration, false, () =>
         {
@@ -72,6 +70,10 @@ public class FrostbiteRing : Relic
         });
     }
 
+    /// <summary>
+    /// Upgrade Level 2, Reducing Wolves Movement Speed
+    /// </summary>
+    /// <param name="Unit"></param>
     private void SlowWolves(unit Unit)
     {
         if (PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType()) < 2) return;

@@ -40,6 +40,7 @@ public static class OldsaveSync
             return;
         }
         savecode.SetRewardValues(SavePlayer);
+        MultiboardUtil.RefreshMultiboards();
 
     }
 }

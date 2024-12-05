@@ -62,10 +62,6 @@ public static class RewardsFrame
         Console.WriteLine($"There are {count} types");
     }
 
-
-    /* Expand upon size of frame depending on count if it's so wished.
-    RewardFrame.SetSize(FrameWidth, FrameHeight + (count * 0.02f)); */
-
     private static int CountNumberOfRewards(RewardType type)
     {
         var count = 0;
@@ -196,7 +192,6 @@ public static class RewardsFrame
                 reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);
         }
     }
-
 
     public static void RewardsFrameActions()
     {

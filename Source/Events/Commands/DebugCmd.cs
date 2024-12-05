@@ -72,21 +72,11 @@ public static class DebugCmd
             case "?stat":
                 AwardingCmds.SettingGameStats(player, command);
                 break;
-            case "?oldcode":
-                Savecode.LoadString();
-                break;
-            case "?btnpos":
-                FrameManager.UpdateButtonPositions();
-                break;
             case "?invul":
                 UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 break;
             case "?vul":
                 CollisionDetection.KittyRegisterCollisions(kitty);
-                break;
-            case "?tertest":
-                //TerrainChanger.ChangeMapTerrain(FourCC("Lgrd"), FourCC("Ywmb"));
-                TerrainChanger.ChangeMapTerrain(FourCC("Vgrs"), FourCC("Ywmb"));
                 break;
             case "?discord":
                 DiscordFrame.Initialize();

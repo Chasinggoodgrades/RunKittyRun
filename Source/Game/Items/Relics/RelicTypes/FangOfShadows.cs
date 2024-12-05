@@ -6,28 +6,34 @@ public class FangOfShadows : Relic
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
     public const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
-    private const int RelicCost = 650;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
-    private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
     private trigger SummonTrigger;
     private trigger TeleTrigger;
+
+    private const int RelicCost = 650;
+    private static float SAFEZONE_REDUCTION = 0.25f; // 25%
+    private static float UPGRADE_SAFEZONE_REDUCTION = 0.50f; // 50%
+    private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
+    private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
+
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(4min) (Cooldown reduced by 50% at safezones.)|r",
+        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(4min) (Cooldown reduced by 25% at safezones.)|r",
         RelicItemID,
         RelicCost,
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, $"I DONT KNOW OMFSAFJSAFKJASLFKASF", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"SOME OTHER UPGRADE GOES HERE?!?!?!", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(0, $"Overall cooldwon is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
+        Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced at new safezones is now 50% instead of 25%.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
     {
         RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
+        SetAbilityCooldown(Unit);
     }
 
     public override void RemoveEffect(unit Unit)
@@ -59,7 +65,6 @@ public class FangOfShadows : Relic
 
     private static void SummonShadowKitty(player Player)
     {
-        Console.WriteLine("Fang of Shadows");
         var sk = ShadowKitty.ALL_SHADOWKITTIES[Player];
         sk.SummonShadowKitty();
         Utility.SimpleTimer(SHADOW_KITTY_SUMMON_DURATION, () => sk.KillShadowKitty());
@@ -69,5 +74,34 @@ public class FangOfShadows : Relic
     {
         var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Player];
         sk.TeleportToShadowKitty();
+    }
+
+    /// <summary>
+    /// Upgrade Level 1 Cooldown Reduction
+    /// </summary>
+    /// <param name="Unit"></param>
+    private void SetAbilityCooldown(unit Unit)
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
+        var currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0);
+        var newCooldown = upgradeLevel >= 1
+            ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION
+            : currentCooldown;
+
+        var ability = Unit.GetAbility(RelicAbilityID);
+        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_COOLDOWN, 0, newCooldown);
+    }
+
+    public static void ReduceCooldownAtSafezone(unit Unit)
+    {
+        // Have relic
+        if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
+        var ability = Unit.GetAbility(RelicAbilityID);
+        var reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
+        var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
+        if (remainingCooldown <= 0) return;
+        var newCooldown = remainingCooldown * reduction;
+        Unit.SetAbilityCooldownRemaining(RelicAbilityID, newCooldown);
     }
 }

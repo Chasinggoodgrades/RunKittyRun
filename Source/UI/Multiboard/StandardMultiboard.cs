@@ -19,8 +19,23 @@ public static class StandardMultiboard
         BestTimes = multiboard.Create();
         OverallStats = multiboard.Create();
         CurrentStats = multiboard.Create();
-        CreateMultiboards();
-        RegisterTriggers();
+        Init();
+    }
+
+    /// <summary>
+    /// Wait till difficulty is chosen, then begin..
+    /// </summary>
+    private static void Init()
+    {
+        var t = timer.Create();
+        t.Start(1.0f, true, () =>
+        {
+            if (!Difficulty.IsDifficultyChosen) return;
+            CreateMultiboards();
+            RegisterTriggers();
+            t.Pause();
+            t.Dispose();
+        });
     }
 
     private static void RegisterTriggers()
@@ -28,7 +43,7 @@ public static class StandardMultiboard
         Updater = trigger.Create();
         ESCTrigger = trigger.Create();
 
-        Updater.RegisterTimerEvent(1.03f, true);
+        Updater.RegisterTimerEvent(1.00f, true);
         Updater.AddAction(UpdateStandardCurrentStatsMB);
 
         foreach(var player in Globals.ALL_PLAYERS)

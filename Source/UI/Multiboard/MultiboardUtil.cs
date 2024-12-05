@@ -13,6 +13,7 @@ public static class MultiboardUtil
     private static void RefreshStandardMbs()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (!Difficulty.IsDifficultyChosen) return; // Init first.
         StandardMultiboard.UpdateStandardCurrentStatsMB();
         StandardMultiboard.UpdateOverallStatsMB();
         StandardMultiboard.UpdateBestTimesMB();

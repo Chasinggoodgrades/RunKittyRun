@@ -40,7 +40,6 @@ public class Chaos : Affix
             randomAffixName = "Speedster";
         currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
         currentAffix.Apply();
-        Console.WriteLine("affixes rotated!");
     }
 
 }
