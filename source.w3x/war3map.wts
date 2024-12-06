@@ -125,7 +125,7 @@ Revive your Kitty after 3 seconds. Use it before dying!
 }
 
 STRING 932
-// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
 {
 Revive your Kitty after 3 seconds. Use it before dying!
 }
@@ -461,18 +461,12 @@ Wind Walk - [|cffffcc00Level 3|r]
 }
 
 STRING 1483
-// Abilities: A00A (Protection of the Ancients), Researchubertip (Tooltip - Learn - Extended)
+// Abilities: A00C (Protection of the Ancients with Relic), Researchubertip (Tooltip - Learn - Extended)
 {
 Summon the Ancient Kitties to aid you. |n|n|cffffcc00Level 1:|r Revive your Kitty after 3s. |n|cffffcc00Level 2:|r Revive all Kitties in area after 3s |n|cffffcc00Level 3:|r Revive all Kitties in area after 3s. Improved AeO
 }
 
 STRING 1484
-// Abilities: A00A (Protection of the Ancients), Untip (Tooltip - Turn Off)
-{
-Revive all Kitties in a small area after 3 seconds.  Improved AeO.
-}
-
-STRING 1485
 // Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
 {
 Revive all Kitties in a small area after 3 seconds.  Improved AeO.
@@ -529,24 +523,6 @@ STRING 1562
 // Items: I005 (|cff9932ccFang of Shadows|r), Hotkey (Hotkey)
 {
 S
-}
-
-STRING 1613
-// Abilities: A00C (Protection of the Ancients with Relic), Untip (Tooltip - Turn Off)
-{
-Revive your Kitty after 3 seconds. Use it before dying!
-}
-
-STRING 1615
-// Abilities: A00C (Protection of the Ancients with Relic), Researchubertip (Tooltip - Learn - Extended)
-{
-Summon the Ancient Kitties to aid you. |n|n|cffffcc00Level 1:|r Revive your Kitty after 3s. |n|cffffcc00Level 2:|r Revive all Kitties in area after 3s |n|cffffcc00Level 3:|r Revive all Kitties in area after 3s. Improved AeO
-}
-
-STRING 1616
-// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
-{
-Revive all Kitties in a small area after 3 seconds. Use it before dying!
 }
 
 STRING 1627
@@ -1592,24 +1568,6 @@ STRING 2810
 Summon Shadow Kitty
 }
 
-STRING 2812
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 1|r]
-}
-
-STRING 2813
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 2|r]
-}
-
-STRING 2814
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 3|r]
-}
-
 STRING 2819
 // Abilities: A01J (Energy aura with relic), Researchhotkey (Hotkey - Learn)
 {
@@ -1764,24 +1722,6 @@ STRING 2898
 // Items: I002 (Orb of Mysteries), Tip (Tooltip - Basic)
 {
 |c00CC0000This special gem was worn by Chen for many decades until the sacred one passed by.|r |cff00ff00The power it holds has yet to be tapped.. Perhaps theres more to this orb...|r
-}
-
-STRING 2902
-// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
-{
-Revive your Kitty after 3 seconds. Use it before dying! |cff8080ff(100 second cooldown)|r
-}
-
-STRING 2903
-// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
-{
-Revive all Kitties in a small area after 3 seconds. Use it before dying! |cff8080ff(90 second cooldown)|r
-}
-
-STRING 2904
-// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
-{
-Revive all Kitties in a small area after 3 seconds.  Improved AeO. |cff8080ff(80 second cooldown)|r
 }
 
 STRING 2910
@@ -1944,30 +1884,6 @@ STRING 3032
 // Abilities: A00C (Protection of the Ancients with Relic), Researchtip (Tooltip - Learn)
 {
 Learn Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Nivel %d|r]
-}
-
-STRING 3033
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 1|r]
-}
-
-STRING 3034
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 2|r]
-}
-
-STRING 3035
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Nivel 3|r]
-}
-
-STRING 3036
-// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
-{
-Revive all Kitties in a small area after 3 seconds.  Improved AeO. |cff8080ff(55 second cooldown w/ Relic ONLY)|r
 }
 
 STRING 3051
@@ -4437,5 +4353,89 @@ STRING 3710
 // Buffs/Effects: B006 (Blitzer), EditorName (Name (Editor Only))
 {
 Blitzer
+}
+
+STRING 3711
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Level 1|r]
+}
+
+STRING 3712
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. |cffd45e19(100 Second Cooldown)|r Use before dying.
+}
+
+STRING 3713
+// Abilities: A00A (Protection of the Ancients), Researchubertip (Tooltip - Learn - Extended)
+{
+Summon the Ancient Kitties to aid you. |n|n|cffffcc00Level 1:|r Revive your Kitty after 3s. |n|cffffcc00Level 2:|r Revive all Kitties in area after 3s |n|cffffcc00Level 3:|r Revive all Kitties in area after 3s. Improved AoE
+}
+
+STRING 3714
+// Abilities: A00A (Protection of the Ancients), Untip (Tooltip - Turn Off)
+{
+Revive all Kitties in a small area after 3 seconds.  Improved AoE.
+}
+
+STRING 3715
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 2|r]
+}
+
+STRING 3716
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 3|r]
+}
+
+STRING 3717
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. |cffd45e19(90 Second Cooldown)|r Use before dying.
+}
+
+STRING 3718
+// Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. |cffd45e19(80 Second Cooldown)|r Use before dying.
+}
+
+STRING 3719
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Level 1|r]
+}
+
+STRING 3720
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. |cffd45e19(85 Second Cooldown)|r Use before dying.
+}
+
+STRING 3721
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 2|r]
+}
+
+STRING 3722
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 3|r]
+}
+
+STRING 3723
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. |cffd45e19(75 Second Cooldown)|r Use before dying.
+}
+
+STRING 3724
+// Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
+{
+Revive all Kitties in a small area after 3 seconds. Improved AoE. |cffd45e19(65 Second Cooldown)|r Use before dying.
 }
 
