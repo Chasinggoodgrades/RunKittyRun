@@ -63,6 +63,9 @@ public static class Gameover
 
     private static void SendWinMessage()
     {
-
+        if(Gamemode.CurrentGameMode == "Standard")
+            Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyChosen}!{Colors.COLOR_RESET}");
+        else
+            Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
     }
 }

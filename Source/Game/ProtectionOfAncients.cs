@@ -38,13 +38,18 @@ public static class ProtectionOfAncients
         player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
     }
 
-    public static void SetProtectionOfAncientsLevel(unit unit)
+    /// <summary>
+    /// Applies the Protection of the Ancients ability to the unit based on the hero level.
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <returns>Returns the integer level the ability was set to.</returns>
+    public static int SetProtectionOfAncientsLevel(unit unit)
     {
         var player = unit.Owner;
         var heroLevel = unit.HeroLevel;
 
         // Return early if the hero level is below 6
-        if (heroLevel < 6) return;
+        if (heroLevel < 6) return 0;
 
         // Determine ability level based on hero level
         int abilityLevel = heroLevel >= UPGRADE_LEVEL_3_REQUIREMENT ? 3 :
@@ -72,9 +77,8 @@ public static class ProtectionOfAncients
                 UpgradeLevel2.Remove(player);  // Ensure the player is only in one list
             }
         }
+        return abilityLevel;
     }
-
-
 
     private static void RegisterUpgradeLevelEvents()
     {
@@ -101,7 +105,7 @@ public static class ProtectionOfAncients
         var player = @event.Player;
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
-        if(Program.Debug) Console.WriteLine("Player: " + player.Name + " activated Protection of the Ancients!");
+        if(Program.Debug) Console.WriteLine("DEBUG: Player: " + player.Name + " activated Protection of the Ancients!");
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
         var t = timer.Create();

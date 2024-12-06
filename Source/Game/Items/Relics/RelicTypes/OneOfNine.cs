@@ -18,7 +18,7 @@ public class OneOfNine : Relic
         ) 
     {
         Upgrades.Add(new RelicUpgrade(0, $"Cooldown of your ultimate is reduced by an additional 3 seconds per upgrade level.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"The one of nine ultimate has become muscle memory, making One of Nine no longer a needed relic.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Your ultimate no longer costs mana.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -27,8 +27,9 @@ public class OneOfNine : Relic
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(PreviousAbilityID);
         Unit.AddAbility(RelicAbilityID);
-        ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
+        var abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
+        RemoveManaCost(Unit, abilityLevel);
     }
 
     public override void RemoveEffect(unit Unit)
@@ -56,6 +57,19 @@ public class OneOfNine : Relic
         cooldown -= reduction;
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
+    }
+
+    /// <summary>
+    /// Upgrade Level 2: Removes mana cost from the ability.
+    /// </summary>
+    /// <param name="Unit"></param>
+    /// <param name="abilityLevel"></param>
+    private void RemoveManaCost(unit Unit, int abilityLevel)
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
+        if (upgradeLevel < 2) return;
+        var ability = Unit.GetAbility(RelicAbilityID);
+        Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0);
     }
 
 

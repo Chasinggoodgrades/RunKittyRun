@@ -49,6 +49,10 @@ public class RingOfSummoning : Relic
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
+    /// <summary>
+    /// Sets ability cooldown and radius based on upgrade level.
+    /// </summary>
+    /// <param name="Unit"></param>
     private void SetAbilityData(unit Unit)
     {
         var ability = Unit.GetAbility(RelicAbilityID);
@@ -91,6 +95,12 @@ public class RingOfSummoning : Relic
         targetedPoint.Dispose();
     }
 
+    /// <summary>
+    /// This function will only return true if the summoned kitty is dead and ahead of the summoner.
+    /// </summary>
+    /// <param name="summoner"></param>
+    /// <param name="summoned"></param>
+    /// <returns></returns>
     private bool SummonDeadKitty(Kitty summoner, Kitty summoned)
     {
         var round = Globals.ROUND;
