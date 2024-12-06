@@ -43,8 +43,9 @@ public static class GameTimer
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
         foreach (var kitty in Globals.ALL_KITTIES.Values)
         {
-            if (!kitty.Finished) kitty.Time[Globals.ROUND] += 1.0f;
+            if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND);
         }
+        MultiboardUtil.RefreshMultiboards();
     }
 
     private static void UpdateTeamTimes()

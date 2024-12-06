@@ -17,5 +17,14 @@ public static class Solo
         new SoloDeathTimer(kitty.Player);
     }
 
+    public static void RoundEndCheck()
+    {
+        if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return; // Progression mode
+        foreach(var kitty in Globals.ALL_KITTIES.Values)
+        {
+            if (kitty.Alive) return;
+        }
+        RoundManager.RoundEnd();
+    }
 
 }

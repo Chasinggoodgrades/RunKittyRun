@@ -36,7 +36,6 @@ public static class RoundUtilities
             Globals.ALL_CIRCLES[kitty.Player].HideCircle();
             kitty.Alive = true;
             kitty.ProgressZone = 0;
-            kitty.Progress = 0.0f;
             kitty.Finished = false;
             kitty.Unit.Mana = kitty.Unit.MaxMana;
             kitty.CurrentStats.RoundSaves = 0;

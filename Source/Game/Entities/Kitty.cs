@@ -9,6 +9,7 @@ public class Kitty
     private const float MANA_DEATH_PENALTY = 65.0f;
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
+    public KittyTime TimeProg { get; set; } = new KittyTime();
     public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
@@ -23,8 +24,6 @@ public class Kitty
     public bool Finished { get; set; } = false;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
-    public float Progress { get; set; } = 0.0f;
-    public Dictionary<int, float> Time { get; set; } = new Dictionary<int, float>();
 
     public Kitty(player player)
     {
@@ -68,6 +67,8 @@ public class Kitty
         circle.KittyDied(this);
         SoundManager.PlayKittyDeathSound(Unit);
         Solo.ReviveKittySoloTournament(this);
+        Solo.RoundEndCheck();
+        if (Gamemode.CurrentGameMode != "Standard") return;
         Gameover.GameOver();
         MultiboardUtil.RefreshMultiboards();
     }
@@ -94,10 +95,6 @@ public class Kitty
         // Save Data
         if (Player.Controller == mapcontrol.User) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
         else SaveData = new KittyData(); // dummy data for comps
-
-        // Round Times
-        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
-            Time.Add(i, 0.0f);
 
         // Challenges, Relics, etc for Standard.
         if (Gamemode.CurrentGameMode == "Standard")

@@ -27,10 +27,11 @@ public static class Progress
         try
         {
             if (!Globals.GAME_ACTIVE) return;
+            var round = Globals.ROUND;
             foreach (var Player in Globals.ALL_PLAYERS)
             {
                 if (!Globals.ALL_KITTIES[Player].Finished)
-                    Globals.ALL_KITTIES[Player].Progress = CalculatePlayerProgress(Player);
+                    Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
             }
             if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamProgressTracker();
 
@@ -52,7 +53,7 @@ public static class Progress
 
     private static string CalculateTeamProgress(Team Team)
     {
-        return (Team.Teammembers.Sum(player => Globals.ALL_KITTIES[player].Progress) / Team.Teammembers.Count).ToString("F2");
+        return (Team.Teammembers.Sum(player => Globals.ALL_KITTIES[player].TimeProg.GetRoundProgress(Globals.ROUND)) / Team.Teammembers.Count).ToString("F2");
     }
 
     private static float CalculatePlayerProgress(player Player)
@@ -64,6 +65,7 @@ public static class Progress
 
             if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit)) return 0.0f; // if at start, 0 progress
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count-1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
+            if (Regions.Victory_Area.Region.Contains(kitty.Unit)) return 100.0f; // if in victory area, 100 progress
 
             var currentProgress = DistanceBetweenPoints(kitty.Unit.X, kitty.Unit.Y,
                 PlayerProgressPoints[Player].CenterX, PlayerProgressPoints[Player].CenterY);

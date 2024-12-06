@@ -56,13 +56,13 @@ namespace Source.Init
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();
-                Multiboard.Initialize();
                 Shops.Initialize();
                 WolfArea.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
                 ItemStacker.Initialize();
                 ProtectionOfAncients.Initialize();
+                Multiboard.Initialize();
                 PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
                 VictoryZone.Initialize();

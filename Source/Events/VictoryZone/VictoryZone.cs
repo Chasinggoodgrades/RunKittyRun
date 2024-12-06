@@ -53,6 +53,7 @@ public static class VictoryZone
             Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
             RoundManager.RoundEndCheck();
         }
+        MultiboardUtil.RefreshMultiboards();
     }
 
     private static bool VictoryAreaConditionsStandard(unit u)

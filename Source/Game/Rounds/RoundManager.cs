@@ -79,6 +79,7 @@ public static class RoundManager
         NitroPacer.ResetNitroPacer();
         Deathless.ResetDeathless();
         SaveManager.SaveAll();
+        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gameover.GameOver()) return;
 
         Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
@@ -86,9 +87,9 @@ public static class RoundManager
 
     public static void RoundEndCheck()
     {
+        // Always returns for standard mode, and solo progression mode.
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             if (!kitty.Finished) return;
-        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         RoundEnd();
     }
 }

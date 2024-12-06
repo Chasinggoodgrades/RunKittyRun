@@ -15,7 +15,7 @@ public static class Gameover
     private static bool WinningGame()
     {
         if(!WinGame) return false;
-        Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations!!! You've won the game on {Difficulty.DifficultyChosen}!!!");
+        SendWinMessage();
         StandardWinChallenges();
         SaveManager.SaveAll();
         return true;
@@ -59,5 +59,10 @@ public static class Gameover
             if (kitty.Alive) return false;
         LosingGame();
         return true;
+    }
+
+    private static void SendWinMessage()
+    {
+
     }
 }

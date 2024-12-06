@@ -81,10 +81,6 @@ public static class DebugCmd
             case "?discord":
                 DiscordFrame.Initialize();
                 break;
-            case "?progress":
-                foreach (var k in Globals.ALL_KITTIES.Values)
-                    Console.WriteLine($"{k.Player.Name} : Progress: {k.Progress}");
-                break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)
                 {

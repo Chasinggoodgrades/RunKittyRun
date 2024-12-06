@@ -58,20 +58,7 @@ public static class StandardMultiboard
         CurrentGameStatsMultiboard();
     }
 
-    /// <summary>
-    /// Fills the players going down the rows on most left side of multiboard. Passing thru rowIndex for which starting row.
-    /// </summary>
-    /// <param name="mb"></param>
-    /// <param name="rowIndex"></param>
-    private static void FillPlayers(multiboard mb, int rowIndex = 2)
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            mb.GetItem(rowIndex, 0).SetText(Colors.PlayerNameColored(player));
-            mb.GetItem(rowIndex, 0).SetWidth(0.08f);
-            rowIndex++;
-        }
-    }
+
 
     private static void CurrentGameStatsMultiboard()
     {
@@ -142,7 +129,7 @@ public static class StandardMultiboard
         CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
         var rowIndex = 2;
 
-        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         foreach (var player in sortedPlayers.Keys)
         {
@@ -180,7 +167,7 @@ public static class StandardMultiboard
         OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
         var rowIndex = 1;
 
-        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats[StatTypes.Saves] - kvp.Value.SaveData.GameStats[StatTypes.Deaths]).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats[StatTypes.Saves] - kvp.Value.SaveData.GameStats[StatTypes.Deaths]).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         foreach (var player in sortedPlayers.Keys)
         {
@@ -254,7 +241,7 @@ public static class StandardMultiboard
     public static void UpdateBestTimesMB()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        FillPlayers(BestTimes, 1);
+        MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimesStats();
     }
 

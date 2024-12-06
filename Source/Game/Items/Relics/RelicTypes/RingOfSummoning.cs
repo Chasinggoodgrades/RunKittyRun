@@ -93,9 +93,12 @@ public class RingOfSummoning : Relic
 
     private bool SummonDeadKitty(Kitty summoner, Kitty summoned)
     {
-        if(summoner.Progress < summoned.Progress && !summoned.Alive)
+        var round = Globals.ROUND;
+        var sumProg = summoner.TimeProg.GetRoundProgress(round);
+        var deadProg = summoned.TimeProg.GetRoundProgress(round);
+        if(sumProg < deadProg && !summoned.Alive)
         {
-            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon a dead kitty that is ahead of you!");
+            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon dead kitties that are ahead of you!");
             return false;
         }
         return true;

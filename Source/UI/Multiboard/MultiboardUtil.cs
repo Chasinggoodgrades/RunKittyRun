@@ -8,6 +8,7 @@ public static class MultiboardUtil
     public static void RefreshMultiboards()
     {
         RefreshStandardMbs();
+        RefreshSoloMbs();
     }
 
     private static void RefreshStandardMbs()
@@ -17,6 +18,13 @@ public static class MultiboardUtil
         StandardMultiboard.UpdateStandardCurrentStatsMB();
         StandardMultiboard.UpdateOverallStatsMB();
         StandardMultiboard.UpdateBestTimesMB();
+    }
+
+    private static void RefreshSoloMbs()
+    {
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo Tournament
+        SoloMultiboard.UpdateOverallStatsMB();
+        SoloMultiboard.UpdateBestTimesMB();
     }
 
     /// <summary>
@@ -36,5 +44,20 @@ public static class MultiboardUtil
         StandardMultiboard.CurrentStats.IsMinimized = minimize;
         StandardMultiboard.BestTimes.IsMinimized = minimize;
         StandardMultiboard.OverallStats.IsMinimized = minimize;
+    }
+
+    /// <summary>
+    /// Fills the players going down the rows on most left side of multiboard. Passing thru rowIndex for which starting row.
+    /// </summary>
+    /// <param name="mb"></param>
+    /// <param name="rowIndex"></param>
+    public static void FillPlayers(multiboard mb, int rowIndex = 2)
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            mb.GetItem(rowIndex, 0).SetText(Colors.PlayerNameColored(player));
+            mb.GetItem(rowIndex, 0).SetWidth(0.08f);
+            rowIndex++;
+        }
     }
 }
