@@ -4,7 +4,6 @@ using WCSharp.Api;
 using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 
-
 public class WolfArea
 {
     public static Dictionary<int, WolfArea> WolfAreas = new Dictionary<int, WolfArea>();
@@ -35,12 +34,6 @@ public class WolfArea
             WolfAreas.Add(count, wolfarea);
             count++;
         }
-    }
-
-    public static Rectangle GetRandomWolfRectangle()
-    {
-        var random = GetRandomInt(0, WolfAreas.Count - 1);
-        return WolfAreas[random].Rectangle;
     }
 
     private void EnterWolfAreaEvents()

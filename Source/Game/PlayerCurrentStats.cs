@@ -18,6 +18,4 @@ public class PlayerCurrentStats
         RoundSaves = 0;
         RoundDeaths = 0;
     }
-
-    public static PlayerCurrentStats CreateCurrentGameStats() => new PlayerCurrentStats();
 }

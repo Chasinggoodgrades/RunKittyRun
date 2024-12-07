@@ -7,6 +7,7 @@ public class Howler : Affix
 {
     private const float HOWL_RADIUS = 900.0f;
     private const int AFFIX_ABILITY = Constants.ABILITY_HOWLER;
+    private const string ROAR_EFFECT = "Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl";
     private timer HowlTimer;
     public Howler(Wolf unit) : base(unit)
     {}
@@ -35,6 +36,7 @@ public class Howler : Affix
     private void Howl()
     {
         var nearbyWolves = group.Create();
+        var roarEffect = effect.Create(ROAR_EFFECT, Unit.Unit, "origin");
         nearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
         foreach (var wolf in nearbyWolves.ToList())
         {
@@ -42,8 +44,10 @@ public class Howler : Affix
             if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
             wolfObject.StartWandering(true);
         }
+        nearbyWolves.Clear();
         nearbyWolves.Dispose();
         nearbyWolves = null;
+        roarEffect.Dispose();
         HowlTimer.Start(GetRandomHowlTime(), false, Howl);
     }
 
