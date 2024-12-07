@@ -10,6 +10,7 @@ public class PlayerCurrentStats
     public int RoundDeaths { get; set; }
     public int SaveStreak { get; set; }
     public int MaxSaveStreak { get; set; }
+    public List<int> ObtainedNitros { get; set; } = new List<int>();
 
     public PlayerCurrentStats()
     {

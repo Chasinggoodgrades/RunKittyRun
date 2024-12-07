@@ -27,13 +27,8 @@ public static class Gameover
         Challenges.NecroWindwalk();
         Challenges.BlueFire();
         Challenges.PinkFire();
-        ImpossibleChallenges();
-    }
-
-    private static void ImpossibleChallenges()
-    {
-        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
         Challenges.WhiteTendrils();
+        Challenges.ZandalariKitty();
     }
 
     private static void LosingGame()

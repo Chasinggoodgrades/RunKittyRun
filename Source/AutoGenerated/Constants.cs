@@ -108,6 +108,7 @@ public static class Constants
 	public const int ABILITY_CHAOS = 1093677133;
 	public const int ABILITY_HOWLER = 1093677134;
 	public const int ABILITY_BLITZER = 1093677135;
+	public const int ABILITY_SKIN_KITTYZANDALARI = 1093677136;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -172,6 +173,7 @@ public static class Constants
 	public const int UNIT_SHADOWKITTY_RELIC_SUMMON = 1160785977;
 	public const int UNIT_SOLO_TOURNAMENT_2024 = 1160785985;
 	public const int UNIT_SANTA = 1848651826;
+	public const int UNIT_ZANDALARI_KITTY = 1160785986;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

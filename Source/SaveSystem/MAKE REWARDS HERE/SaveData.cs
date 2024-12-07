@@ -79,7 +79,9 @@ public enum StatTypes
     ImpossibleGames,
 }
 
-// New Awards should be added to bottom of this list. Don't change anything.
+/// <summary>
+/// Awards Enum Data. New Rewards should be added to bottom of this list!!!!!!
+/// </summary>
 public enum Awards
 {
     // Hats
@@ -160,5 +162,6 @@ public enum Awards
     Deathless_5,
 
     Snow_Wings_2023,
-    Snow_Trail_2023
+    Snow_Trail_2023,
+    Zandalari_Kitty
 }

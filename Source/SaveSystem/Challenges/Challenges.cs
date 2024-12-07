@@ -15,7 +15,11 @@ public static class Challenges
         Nitros.Initialize();
         Deathless.Initialize();
     }
-    public static void WhiteTendrils() => AwardManager.GiveRewardAll(Awards.White_Tendrils);
+    public static void WhiteTendrils()
+    {
+        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
+        AwardManager.GiveRewardAll(Awards.White_Tendrils);
+    }
     public static void DivinityTendrils(player player) => AwardManager.GiveReward(player, Awards.Divinity_Tendrils);
     public static void NecroWindwalk() => AwardManager.GiveRewardAll(Awards.WW_Necro);
     public static void ButterflyAura(player player)
@@ -81,6 +85,22 @@ public static class Challenges
         if (saveStreak < 10 || currentDeaths > 0) return;
         AwardManager.GiveReward(player, Awards.Green_Lightning);
     }
+
+    /// <summary>
+    /// Hard+, Nitro Round 4 and Win game.
+    /// </summary>
+    /// <param name="player"></param>
+    public static void ZandalariKitty()
+    {
+        if(Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
+        if (!Gameover.WinGame) return;
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        {
+            if (!kitty.CurrentStats.ObtainedNitros.Contains(4)) continue;
+            AwardManager.GiveReward(kitty.Player, Awards.Zandalari_Kitty);
+        }
+    }
+
 }
 
 public class YellowLightning

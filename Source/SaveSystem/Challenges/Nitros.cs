@@ -4,6 +4,7 @@ using WCSharp.Api;
 public static class Nitros
 {
     private static Dictionary<int, int> NitroRoundTimes;
+    private static Dictionary<player, List<int>> AwardedNitros = new Dictionary<player, List<int>>();
     private static timer NitroTimer = timer.Create();
     private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
     private static List<player> HitNitroAlready = new List<player>();
@@ -70,8 +71,11 @@ public static class Nitros
             case 5:
                 AwardManager.GiveReward(player, Awards.Nitro_Purple);
                 break;
+            default:
+                break;
         }
         PlayNitroSound(player);
+        if (!Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Contains(round)) Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Add(round);
         if (NitroCount.TryGetValue(player, out var count)) NitroCount[player] = count + 1;
         else NitroCount.Add(player, 1);
     }

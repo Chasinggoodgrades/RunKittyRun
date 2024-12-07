@@ -10,42 +10,67 @@ public static class RewardCreation
     public static Reward AddReward(Reward reward)
     {
         RewardsManager.Rewards.Add(reward);
-        // Console.WriteLine(reward.SystemRewardName() + " has been added to the rewards list.");
         return reward;
     }
 
     /// <summary>
-    /// Handles the creation of a reward with specific parameters such as ability, model, and appearance.
+    /// General Award type, used when not using StatTypes or game statistics. Used most of the time. Often for wings / auras and such.
     /// </summary>
     /// <param name="name">The name of the Award enum</param>
     /// <param name="abilityID">The ID of the ability associated with the reward. Refer to Constants</param>
-    /// <param name="originPoint">Where reward displays.. i.e. "chest", "origin", etc.</param>
-    /// <param name="modelPath">
-    /// The file path to the model associated with the reward.  </param>
-    /// <param name="skinID">
-    /// If the reward is a skin, provide a valid skin ID; otherwise, set this to 0.</param>
+    /// <param name="originPoint">Where the reward is displayed, e.g., "chest", "origin", etc.</param>
+    /// <param name="modelPath">The file path to the model associated with the reward.</param>
     /// <param name="rewardType">The type of the reward (e.g., skin, ability, item).</param>
-    /// <param name="gameStatsAward">Whether the reward is associated with any game statistics or achievements.</param>
     /// <returns>Returns an instance of the created reward.</returns>
     public static Reward AddReward(Awards name, int abilityID, string originPoint, string modelPath, RewardType rewardType)
     {
         return AddReward(new Reward(name, abilityID, originPoint, modelPath, rewardType));
     }
 
+    /// <summary>
+    /// Niche Award type, used when the reward is a skin and not using StatTypes or game statistics.
+    /// </summary>
+    /// <param name="name">The name of the Award enum</param>
+    /// <param name="abilityID">The ID of the ability associated with the reward. Refer to Constants</param>
+    /// <param name="skinID">If the reward is a skin, provide a valid skin ID; otherwise, set this to 0.</param>
+    /// <param name="rewardType">The type of the reward (e.g., skin, ability, item).</param>
+    /// <returns>Returns an instance of the created reward.</returns>
     public static Reward AddReward(Awards name, int abilityID, int skinID, RewardType rewardType)
     {
         return AddReward(new Reward(name, abilityID, skinID, rewardType));
     }
 
+    /// <summary>
+    /// Skin Award type that is based on using StatTypes / Game Stats.
+    /// </summary>
+    /// <param name="name">The name of the Award enum</param>
+    /// <param name="abilityID">The ID of the ability associated with the reward. Refer to Constants</param>
+    /// <param name="skinID">If the reward is a skin, provide a valid skin ID; otherwise, set this to 0.</param>
+    /// <param name="rewardType">The type of the reward (e.g., skin, ability, item).</param>
+    /// <param name="gameStat">The type of the game statistic associated with the reward.</param>
+    /// <param name="gameStatValue">The value of the game statistic associated with the reward.</param>
+    /// <returns>Returns an instance of the created reward.</returns>
     public static Reward AddReward(Awards name, int abilityID, int skinID, RewardType rewardType, StatTypes gameStat, int gameStatValue)
     {
         return AddReward(new Reward(name, abilityID, skinID, rewardType, gameStat, gameStatValue));
     }
 
+    /// <summary>
+    /// General Award type that is based on using StatTypes / Game Stats that isn't a skin.
+    /// </summary>
+    /// <param name="name">The name of the Award enum</param>
+    /// <param name="abilityID">The ID of the ability associated with the reward. Refer to Constants</param>
+    /// <param name="originPoint">Where the reward is displayed, e.g., "chest", "origin", etc.</param>
+    /// <param name="modelPath">The file path to the model associated with the reward.</param>
+    /// <param name="rewardType">The type of the reward (e.g., skin, ability, item).</param>
+    /// <param name="gameStat">The type of the game statistic associated with the reward.</param>
+    /// <param name="gameStatValue">The value of the game statistic associated with the reward.</param>
+    /// <returns>Returns an instance of the created reward.</returns>
     public static Reward AddReward(Awards name, int abilityID, string originPoint, string modelPath, RewardType rewardType, StatTypes gameStat, int gameStatValue)
     {
         return AddReward(new Reward(name, abilityID, originPoint, modelPath, rewardType, gameStat, gameStatValue));
     }
+
 
     public static void SetupRewards()
     {
@@ -124,6 +149,7 @@ public static class RewardCreation
         AddReward(Awards.Ancient_Kitty, Constants.ABILITY_SKIN_KITTYANCIENT, Constants.UNIT_ANCIENT_KITTY, RewardType.Skins, StatTypes.NormalWins, 40);
         AddReward(Awards.Satyr_Kitty, Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, StatTypes.NormalWins, 25);
         AddReward(Awards.Astral_Kitty, Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, StatTypes.NormalGames, 55);
+        AddReward(Awards.Zandalari_Kitty, Constants.ABILITY_SKIN_KITTYZANDALARI, Constants.UNIT_ZANDALARI_KITTY, RewardType.Skins);
 
         // Holiday
         AddReward(Awards.Snow_Wings_2023, Constants.ABILITY_HOLIDAY_WINGS_C2023, "chest", "war3mapImported\\SnowflakeWings.mdx", RewardType.Wings);
