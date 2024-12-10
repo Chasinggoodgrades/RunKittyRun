@@ -5,8 +5,10 @@ public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
     private const string BLITZER_EFFECT = "war3mapImported\\ChargerWindCasterArt.mdx";
-    private const float BLITZER_SPEED = 600.0f;
+    private const float BLITZER_SPEED = 650.0f;
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
+    private const float BLITZER_LOWEND = 6.0f;
+    private const float BLITZER_HIGHEND = 11.0f;
     private timer MoveTimer;
     private timer BlitzerTimer;
     private effect Effect;
@@ -50,7 +52,7 @@ public class Blitzer : Affix
 
     private void BeginBlitz()
     {
-        var randomTime = GetRandomReal(6.0f, 15.0f); // blitz randomly between this time interval
+        var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
         var (x, y) = Unit.WolfMove();
         WanderEffect.Dispose();
         BlitzerMove(x, y);
@@ -100,6 +102,7 @@ public class Blitzer : Affix
         Effect.Dispose();
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(42, 170, 138);
+        Unit.Unit.SetPathing(true);
     }
 
 

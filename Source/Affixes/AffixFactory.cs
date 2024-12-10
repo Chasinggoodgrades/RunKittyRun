@@ -9,7 +9,7 @@ public static class AffixFactory
     public static List<Affix> AllAffixes;
     public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer" };
     private static float[] LaneWeights;
-    private static int NUMBER_OF_AFFIXED_WOLVES; // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+    private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 3;
 
@@ -97,6 +97,7 @@ public static class AffixFactory
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
             affixes.Remove("Frostbite");
+            affixes.Remove("Chaos");
         }
         return affixes;
     }
@@ -119,7 +120,8 @@ public static class AffixFactory
         RemoveAllAffixes();
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (Difficulty.DifficultyValue * 2) + Globals.ROUND;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.5) + Globals.ROUND;
+        //Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Spawning " + NUMBER_OF_AFFIXED_WOLVES + " affixed wolves");
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;

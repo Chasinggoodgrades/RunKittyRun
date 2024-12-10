@@ -74,6 +74,9 @@ public static class RewardCreation
 
     public static void SetupRewards()
     {
+
+        // Add Enum to <reference SaveData.cs>, Create ability in editorr (generate constants after), import effect into folder if needed, define values.
+
         // Hats
         AddReward(Awards.Bandana, Constants.ABILITY_HAT_BANDANA, "head", "war3mapImported\\Bandana2.MDX", RewardType.Hats, StatTypes.Saves, 200);
         AddReward(Awards.Pirate_Hat, Constants.ABILITY_HAT_PIRATE, "head", "war3mapImported\\PirateHat.MDX", RewardType.Hats, StatTypes.Saves, 250);

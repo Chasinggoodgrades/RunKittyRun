@@ -18,6 +18,8 @@ public static class Gameover
         SendWinMessage();
         StandardWinChallenges();
         SaveManager.SaveAll();
+        Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
+        Utility.SimpleTimer(5.0f, StandardPodium.BeginPodiumActions);
         return true;
     }
 
@@ -34,17 +36,14 @@ public static class Gameover
     private static void LosingGame()
     {
         Wolf.RemoveAllWolves();
-        DiscordFrame.Initialize();
         SaveManager.SaveAll();
-
-        Console.WriteLine($"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
-        Utility.SimpleTimer(EndingTimer, EndGame);
+        NotifyEndingGame();
     }
 
     private static void EndGame()
     {
         foreach(var player in Globals.ALL_PLAYERS)
-            player.Remove(playergameresult.Defeat);
+            player.Remove(playergameresult.Victory);
     }
 
     private static bool LosingGameCheck()
@@ -62,5 +61,12 @@ public static class Gameover
             Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyChosen}!{Colors.COLOR_RESET}");
         else
             Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
+    }
+
+    public static void NotifyEndingGame()
+    {
+        DiscordFrame.Initialize();
+        Console.WriteLine($"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
+        Utility.SimpleTimer(EndingTimer, EndGame);
     }
 }

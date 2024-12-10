@@ -18,6 +18,7 @@ public static class TimeSetter
 
         if(standard) roundEnum = GetRoundEnum();
         if(solo) roundEnum = GetSoloTime();
+        if (currentTime >= 1200) return false; // 20 min cap.
 
         playersTime = Globals.ALL_KITTIES[player].SaveData.GameTimes[roundEnum];
 

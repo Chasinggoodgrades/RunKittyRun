@@ -43,5 +43,8 @@ public static class DecodeOldsave
         new KeyValuePair<object, int>("Saves", 99999),
         new KeyValuePair<object, int>("Deaths", 99999),
         new KeyValuePair<object, int>(Awards.Purple_Fire, 1),
+        new KeyValuePair<object, int>(Awards.Patriotic_Tendrils, 1),
+        new KeyValuePair<object, int>(Awards.Divine_Light, 1),
+        new KeyValuePair<object, int>(Awards.Zandalari_Kitty, 1),
     };
 }

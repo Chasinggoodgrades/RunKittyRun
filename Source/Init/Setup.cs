@@ -68,6 +68,7 @@ namespace Source.Init
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
+                PodiumManager.Initialize();
                 FrameManager.InitAllFrames();
                 Challenges.Initialize();
                 SoundManager.Initialize();

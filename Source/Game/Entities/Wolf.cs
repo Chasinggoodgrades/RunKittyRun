@@ -9,8 +9,8 @@ public class Wolf
 {
     public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
     public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
-    private const float WANDER_LOWER_BOUND = 0.70f;
-    private const float WANDER_UPPER_BOUND = 0.83f;
+    private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
+    private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
@@ -74,7 +74,8 @@ public class Wolf
     private bool ImpossibleChance()
     {
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return true;
-        if (GetRandomInt(1, Globals.ROUND) == 1) return true;
+        if (Globals.ROUND < 2) return true;
+        if (GetRandomInt(1, 3) == 1) return true;
         return false;
     }
 

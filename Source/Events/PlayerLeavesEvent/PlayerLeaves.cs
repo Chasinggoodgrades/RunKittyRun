@@ -37,7 +37,7 @@ public static class PlayerLeaves
             kitty.Dispose();
             circle.RemoveCircle();
             nameTag.Dispose();
-            Globals.ALL_PLAYERS.Remove(leavingPlayer);
+            if(!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
             MultiboardUtil.RefreshMultiboards();
             RoundManager.RoundEndCheck();

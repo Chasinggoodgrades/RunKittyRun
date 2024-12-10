@@ -131,12 +131,13 @@ public class Kitty
 
     public void Dispose()
     {
-        Globals.ALL_KITTIES.Remove(Player);
         Alive = false;
         Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
+        if (Gameover.WinGame) return; 
+        Globals.ALL_KITTIES.Remove(Player);
     }
 
     private void UpdateSaviorStats(Kitty savior)

@@ -4,7 +4,6 @@ using WCSharp.Api;
 public static class Nitros
 {
     private static Dictionary<int, int> NitroRoundTimes;
-    private static Dictionary<player, List<int>> AwardedNitros = new Dictionary<player, List<int>>();
     private static timer NitroTimer = timer.Create();
     private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
     private static List<player> HitNitroAlready = new List<player>();
