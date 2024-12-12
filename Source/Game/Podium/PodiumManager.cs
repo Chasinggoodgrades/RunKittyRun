@@ -10,6 +10,23 @@ public static class PodiumManager
         SetPodiumPositions();
     }
 
+    public static void BeginPodiumEvents()
+    {
+        var gamemode = Gamemode.CurrentGameMode;
+        switch(Gamemode.CurrentGameMode)
+        {
+            case "Standard":
+                StandardPodium.BeginPodiumActions();
+                break;
+            case "Tournament Solo":
+                SoloPodium.BeginPodiumActions();
+                break;
+            case "Tournament Team":
+                TeamPodium.BeginPodiumActions();
+                break;
+        }
+    }
+
     private static void SetPodiumPositions()
     {
         PodiumSpots = new[]

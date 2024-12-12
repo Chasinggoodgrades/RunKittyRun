@@ -19,7 +19,7 @@ public static class Gameover
         StandardWinChallenges();
         SaveManager.SaveAll();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
-        Utility.SimpleTimer(5.0f, StandardPodium.BeginPodiumActions);
+        Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
     }
 

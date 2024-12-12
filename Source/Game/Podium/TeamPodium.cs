@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
 
-public static class TournamentPodiums
+public static class TeamPodium
 {
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();
@@ -16,33 +16,7 @@ public static class TournamentPodiums
         Utility.SimpleTimer(3.0f, ProcessPodiumTypeActions);
     }
 
-    private static void EnqueueTopPlayerTimes()
-    {
-        var topTimes = PodiumUtil.SortPlayersFastestTime();
-        var podiumPositions = PodiumManager.PodiumSpots;
-        for (int i = topTimes.Count - 1; i >= 0; i--)
-        {
-            var player = topTimes[i];
-            var position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
-        }
-        PodiumType = "Fastest Time";
-    }
-
-    private static void EnqueueTopPlayerProgress()
-    {
-        var topProgress = PodiumUtil.SortPlayersTopProgress();
-        var podiumPositions = PodiumManager.PodiumSpots;
-        for (int i = topProgress.Count - 1; i >= 0; i--)
-        {
-            var player = topProgress[i];
-            var position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
-        }
-        PodiumType = "Most Progress";
-    }
-
-    private static void EnqueueTopRatioPlayers()
+    private static void EnqueueMVPPlayer()
     {
         var topRatios = PodiumUtil.SortPlayersByHighestRatio();
         var podiumPositions = PodiumManager.PodiumSpots;
@@ -52,7 +26,7 @@ public static class TournamentPodiums
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Best Ratio";
+        PodiumType = "MVP";
     }
 
     private static void EnqueueTopSavesPlayer()
@@ -95,17 +69,13 @@ public static class TournamentPodiums
         switch (PodiumType)
         {
             case "":
+                EnqueueMVPPlayer();
                 break;
-            case "Highest Score":
+            case "MVP":
+                EnqueueTopSavesPlayer();
                 break;
             case "Most Saves":
-                EnqueueTopRatioPlayers();
-                break;
-            case "Highest Ratio":
-                break;
-            case "Highest Streak":
-                Console.WriteLine($"{Color}Thanks to everyone for playing, much love <3|r");
-                Gameover.NotifyEndingGame();
+                PodiumUtil.EndingGameThankyou();
                 return;
             default:
                 break;
@@ -118,17 +88,12 @@ public static class TournamentPodiums
         var stats = Globals.ALL_KITTIES[player].CurrentStats;
         switch (PodiumType)
         {
-            case "Highest Score":
-                return stats.TotalSaves - stats.TotalDeaths;
             case "Most Saves":
                 return stats.TotalSaves;
-            case "Highest Ratio":
+            case "MVP":
                 return stats.TotalDeaths == 0 ? stats.TotalSaves : (float)stats.TotalSaves / stats.TotalDeaths;
-            case "Highest Streak":
-                return stats.MaxSaveStreak;
             default:
                 return 0;
         }
     }
-
 }

@@ -109,8 +109,7 @@ public static class StandardPodium
                 EnqueueTopStreakPlayers();
                 break;
             case "Highest Streak":
-                Console.WriteLine($"{Color}Thanks to everyone for playing, much love <3|r");
-                Gameover.NotifyEndingGame();
+                PodiumUtil.EndingGameThankyou();
                 return;
             default:
                 break;

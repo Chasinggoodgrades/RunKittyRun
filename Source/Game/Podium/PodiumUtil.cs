@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
+/// <summary>
+/// Most of the following functions in this class , take the top 3 players and return them in a list
+/// </summary>
 public static class PodiumUtil
 {
-
     public static List<player> SortPlayersByScore()
     {
         return Globals.ALL_PLAYERS.OrderByDescending(player =>
@@ -81,6 +85,12 @@ public static class PodiumUtil
             kitty.IsPaused = false;
         }
         podiumUnits.Clear();
+    }
+
+    public static void EndingGameThankyou()
+    {
+        Console.WriteLine($"{Colors.COLOR_YELLOW}Thanks to everyone for playing, much love <3|r");
+        Gameover.NotifyEndingGame();
     }
 
     public static string PlacementString(int placement)
