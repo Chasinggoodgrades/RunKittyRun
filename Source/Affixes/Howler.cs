@@ -53,7 +53,7 @@ public class Howler : Affix
 
     private float GetRandomHowlTime()
     {
-        return GetRandomReal(25.0f, 65.0f);
+        return GetRandomReal(15.0f, 45.0f);
     }
 
 }

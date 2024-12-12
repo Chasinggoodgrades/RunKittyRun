@@ -42,6 +42,23 @@ public static class PodiumUtil
         }).Take(3).ToList();
     }
 
+    public static List<player> SortPlayersTopProgress()
+    {
+        return Globals.ALL_PLAYERS.OrderByDescending(player =>
+        {
+            var stats = Globals.ALL_KITTIES[player].TimeProg;
+            return stats.GetOverallProgress();
+        }).Take(3).ToList();
+    }
+
+    public static List<player> SortPlayersFastestTime()
+    {
+        return Globals.ALL_PLAYERS.OrderBy(player =>
+        {
+            var stats = Globals.ALL_KITTIES[player].TimeProg;
+            return stats.GetTotalTime();
+        }).Take(3).ToList();
+    }
 
     public static void SetCameraToPodium()
     {
