@@ -97,9 +97,11 @@ public static class SoundManager
         s.AttachToUnit(Kitty);
         foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(Kitty)].TeamID].Teammembers)
         {
-            if (!player.IsLocal) return;
-            s.Stop(false, false);
-            s.Start();
+            if (player.IsLocal)
+            {
+                s.Stop(false, false);
+                s.Start();
+            }
         }
     }
 

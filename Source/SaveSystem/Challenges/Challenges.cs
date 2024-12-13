@@ -10,23 +10,29 @@ public static class Challenges
     private const float PINK_FIRE_SD_REQUIREMENT = 3.0f;
     private const int WHITE_FIRE_DEATH_REQUIREMENT = 3;
     private const int PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175;
+
     public static void Initialize()
     {
         Nitros.Initialize();
         Deathless.Initialize();
     }
+
     public static void WhiteTendrils()
     {
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
         AwardManager.GiveRewardAll(Awards.White_Tendrils);
     }
+
     public static void DivinityTendrils(player player) => AwardManager.GiveReward(player, Awards.Divinity_Tendrils);
+
     public static void NecroWindwalk() => AwardManager.GiveRewardAll(Awards.WW_Necro);
+
     public static void ButterflyAura(player player)
     {
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
         AwardManager.GiveReward(player, Awards.Butterfly_Aura);
     }
+
     public static void PurpleFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
@@ -34,6 +40,7 @@ public static class Challenges
         if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
         AwardManager.GiveReward(player, Awards.Purple_Fire);
     }
+
     public static void BlueFire()
     {
         foreach(var player in Globals.ALL_PLAYERS)
@@ -43,12 +50,14 @@ public static class Challenges
             AwardManager.GiveReward(player, Awards.Blue_Fire);
         }
     }
+
     public static void TurquoiseFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
         if (Globals.ROUND != 5 || currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return;
         AwardManager.GiveReward(player, Awards.Turquoise_Fire);
     }
+
     public static void PinkFire()
     {
         foreach (var player in Globals.ALL_PLAYERS)
@@ -100,7 +109,6 @@ public static class Challenges
             AwardManager.GiveReward(kitty.Player, Awards.Zandalari_Kitty);
         }
     }
-
 }
 
 public class YellowLightning

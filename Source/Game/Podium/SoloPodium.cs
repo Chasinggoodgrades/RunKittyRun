@@ -8,7 +8,9 @@ public static class SoloPodium
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();
     private static string PodiumType = "";
-    private static string Color = Colors.COLOR_YELLOW;
+    private static string Color = Colors.COLOR_YELLOW_ORANGE;
+    private const string Time = "time";
+    private const string Progress = "progress";
 
     public static void BeginPodiumActions()
     {
@@ -26,7 +28,7 @@ public static class SoloPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Time";
+        PodiumType = Time;
     }
 
     private static void EnqueueTopPlayerProgress()
@@ -39,7 +41,7 @@ public static class SoloPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Progress";
+        PodiumType = Progress;
     }
 
     private static void ProcessNextPodiumAction()
@@ -81,9 +83,9 @@ public static class SoloPodium
         var stats = Globals.ALL_KITTIES[player].TimeProg;
         switch (PodiumType)
         {
-            case "Time":
+            case Time:
                 return stats.GetTotalTimeFormatted();
-            case "Progress":
+            case Progress:
                 return stats.GetOverallProgress().ToString("F2") + "%";
             default:
                 return "n/a";

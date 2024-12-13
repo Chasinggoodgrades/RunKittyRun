@@ -61,7 +61,7 @@ public class Kibble
         var kitty = Globals.ALL_KITTIES[player];
         effect effect = null;
         var randomChance = GetRandomReal(0, 100);
-        if (randomChance <= 0.5) KibbleReward(kitty); // 5% Chance
+        if (randomChance <= 0.5) KibbleReward(kitty); // .5% Chance
         else if (randomChance <= 30) KibbleGoldReward(kitty); // 20% Chance
         else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
         else KibbleNothing(kitty); // 55% Chance

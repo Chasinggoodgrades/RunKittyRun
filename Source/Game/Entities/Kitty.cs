@@ -9,7 +9,7 @@ public class Kitty
     private const float MANA_DEATH_PENALTY = 65.0f;
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
-    public KittyTime TimeProg { get; set; } = new KittyTime();
+    public KittyTime TimeProg { get; set; }
     public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
@@ -31,6 +31,7 @@ public class Kitty
         InitData();
         SpawnEffect();
         CreateKitty();
+        TimeProg = new KittyTime(this);
     }
 
     /// <summary>

@@ -5,9 +5,10 @@ using WCSharp.Api;
 
 public static class TeamHandler
 {
+    public static bool FreepickEnabled = false;
     public static void Handler(player Player, int TeamNumber)
     {
-        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && !RoundManager.GAME_STARTED)
+        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && !RoundManager.GAME_STARTED && FreepickEnabled)
         {
             FreepickHandler(Player, TeamNumber);
         }
@@ -42,6 +43,7 @@ public static class TeamHandler
     /// </summary>
     public static void RandomHandler()
     {
+        FreepickEnabled = false;
         var random = new Random(Globals.GAME_SEED); // Must Set To Specific Seed to avoid desyncs.
         List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
 

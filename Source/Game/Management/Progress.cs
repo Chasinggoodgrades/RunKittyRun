@@ -8,38 +8,25 @@ public static class Progress
 {
     public static Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
     public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
-    private static timer PeriodicTimer;
-    private const float PROGRESS_INTERVAL = 0.2f;
     public static void Initialize()
     {
         CalculateTotalDistance();
-        StartProgressTracker();
+        InitializePlayerProgressPoints();
     }
 
-    private static void StartProgressTracker()
+    public static void CalculateProgress(Kitty kitty)
     {
-        PeriodicTimer = timer.Create();
-        PeriodicTimer.Start( PROGRESS_INTERVAL, true, PeriodicProgressTracker);
+        if (!Globals.GAME_ACTIVE) return;
+        var Player = kitty.Player;
+        var round = Globals.ROUND;
+        Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamProgressTracker();
     }
 
-    private static void PeriodicProgressTracker()
+    private static void InitializePlayerProgressPoints()
     {
-        try
-        {
-            if (!Globals.GAME_ACTIVE) return;
-            var round = Globals.ROUND;
-            foreach (var Player in Globals.ALL_PLAYERS)
-            {
-                if (!Globals.ALL_KITTIES[Player].Finished)
-                    Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
-            }
-            if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamProgressTracker();
-
-        }
-        catch (Exception e)
-        {
-            var error = e.Message;
-        }
+        foreach (var player in Globals.ALL_PLAYERS)
+            PlayerProgressPoints.Add(player, Globals.SAFE_ZONES[0].Rect_);
     }
     
     private static void TeamProgressTracker()
@@ -63,9 +50,10 @@ public static class Progress
             var kitty = Globals.ALL_KITTIES[Player];
             var currentSafezone = kitty.ProgressZone;
 
-            if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit)) return 0.0f; // if at start, 0 progress
+            if (kitty.Finished) return 100.0f;
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count-1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
             if (Regions.Victory_Area.Region.Contains(kitty.Unit)) return 100.0f; // if in victory area, 100 progress
+            if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit) && !kitty.Finished) return 0.0f; // if at start, 0 progress
 
             var currentProgress = DistanceBetweenPoints(kitty.Unit.X, kitty.Unit.Y,
                 PlayerProgressPoints[Player].CenterX, PlayerProgressPoints[Player].CenterY);
@@ -79,6 +67,8 @@ public static class Progress
         catch (Exception e)
         {
             var error = e.Message;
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
             return 0.0f;
         }
     }

@@ -11,7 +11,11 @@ public static class StandardPodium
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();
     private static string PodiumType = "";
-    private static string Color = Colors.COLOR_YELLOW;
+    private static string Color = Colors.COLOR_YELLOW_ORANGE;
+    private const string HighestScore = "highest score";
+    private const string MostSaves = "most saves";
+    private const string HighestRatio = "highest ratio";
+    private const string HighestStreak = "highest streak";
     public static void BeginPodiumActions()
     {
         PodiumUtil.SetCameraToPodium();
@@ -28,7 +32,7 @@ public static class StandardPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Highest Score";
+        PodiumType = HighestScore;
     }
 
     private static void EnqueueTopSavesPlayers()
@@ -41,7 +45,7 @@ public static class StandardPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Most Saves";
+        PodiumType = MostSaves;
     }
 
     private static void EnqueueTopRatioPlayers()
@@ -54,7 +58,7 @@ public static class StandardPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Highest Ratio";
+        PodiumType = HighestRatio;
     }
 
     private static void EnqueueTopStreakPlayers()
@@ -67,7 +71,7 @@ public static class StandardPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Highest Streak";
+        PodiumType = HighestStreak;
     }
 
     private static void ProcessNextPodiumAction()
@@ -83,7 +87,7 @@ public static class StandardPodium
         kitty.SetFacing(270);
         kitty.IsPaused = true;
         MovedUnits.Add(kitty);
-        Console.WriteLine($"{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.Count + 1)} place for {PodiumType} with {GetStatBasedOnType(player).ToString("F2")}|r");
+        Console.WriteLine($"{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.Count + 1)} place for {PodiumType} with {GetStatBasedOnType(player)}|r");
         Utility.SimpleTimer(5.0f, ProcessNextPodiumAction);
     }
 
@@ -99,16 +103,16 @@ public static class StandardPodium
             case "":
                 EnqueueTopScorePlayers();
                 break;
-            case "Highest Score":
+            case HighestScore:
                 EnqueueTopSavesPlayers();
                 break;
-            case "Most Saves":
+            case MostSaves:
                 EnqueueTopRatioPlayers();
                 break;
-            case "Highest Ratio":
+            case HighestRatio:
                 EnqueueTopStreakPlayers();
                 break;
-            case "Highest Streak":
+            case HighestStreak:
                 PodiumUtil.EndingGameThankyou();
                 return;
             default:
@@ -117,21 +121,21 @@ public static class StandardPodium
         ProcessNextPodiumAction();
     }
 
-    private static float GetStatBasedOnType(player player)
+    private static string GetStatBasedOnType(player player)
     {
         var stats = Globals.ALL_KITTIES[player].CurrentStats;
         switch (PodiumType)
         {
-            case "Highest Score":
-                return stats.TotalSaves - stats.TotalDeaths;
-            case "Most Saves":
-                return stats.TotalSaves;
-            case "Highest Ratio":
-                return stats.TotalDeaths == 0 ? stats.TotalSaves : (float)stats.TotalSaves / stats.TotalDeaths;
-            case "Highest Streak":
-                return stats.MaxSaveStreak;
+            case HighestScore:
+                return (stats.TotalSaves - stats.TotalDeaths).ToString();
+            case MostSaves:
+                return stats.TotalSaves.ToString();
+            case HighestRatio:
+                return stats.TotalDeaths == 0 ? stats.TotalSaves.ToString("F2") : ((float)stats.TotalSaves / stats.TotalDeaths).ToString("F2");
+            case HighestStreak:
+                return stats.MaxSaveStreak.ToString();
             default:
-                return 0;
+                return "n/a";
         }
     }
 }

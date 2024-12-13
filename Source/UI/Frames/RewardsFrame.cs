@@ -59,7 +59,7 @@ public static class RewardsFrame
             count += colCount;
             FrameCount++;
         }
-        Console.WriteLine($"There are {count} types");
+        //Console.WriteLine($"There are {count} types");
     }
 
     private static int CountNumberOfRewards(RewardType type)

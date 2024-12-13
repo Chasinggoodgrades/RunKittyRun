@@ -91,6 +91,7 @@ public class Team
         if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0]) // free pick
         {
             RoundManager.ROUND_INTERMISSION += 15.0f;
+            TeamHandler.FreepickEnabled = true;
             foreach (var player in Globals.ALL_PLAYERS)
             {
                 player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Colors.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +

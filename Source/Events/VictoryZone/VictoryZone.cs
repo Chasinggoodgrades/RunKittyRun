@@ -8,7 +8,6 @@ using static WCSharp.Api.Common;
 public static class VictoryZone
 {
     private static trigger InVictoryArea;
-    private static unit currentUnit;
     public static void Initialize()
     {
         InVictoryArea = trigger.Create();
@@ -65,7 +64,6 @@ public static class VictoryZone
     {
         // If solo player enters.. Great. Done.
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return false;
-        currentUnit = u;
         return true;
     }
 
@@ -78,7 +76,6 @@ public static class VictoryZone
         {
             if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false;
         }
-        currentUnit = u;
         return true;
     }
 
@@ -87,12 +84,13 @@ public static class VictoryZone
         var kitty = Globals.ALL_KITTIES[player];
         kitty.Finished = true;
         kitty.Unit.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y);
+        Progress.CalculateProgress(kitty);
         BarrierSetup.ActivateBarrier();
     }
 
     private static bool VictoryContainerConditions(unit u)
     {
-        if(!Regions.Victory_Area.Region.Contains(u) || !Regions.safe_Area_14.Region.Contains(u)) return false;
-        return true;
+        if(Regions.Victory_Area.Region.Contains(u) || Regions.safe_Area_14.Region.Contains(u)) return true;
+        return false;
     }
 }

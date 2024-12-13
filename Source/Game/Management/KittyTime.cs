@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
+using WCSharp.Api;
 
 public class KittyTime
 {
     private Dictionary<int, float> RoundTime { get; set; } = new Dictionary<int, float>();
     private Dictionary<int, float> RoundProgress { get; set; } = new Dictionary<int, float>();
+    private timer ProgressTimer { get; set; } = timer.Create();
     private float TotalTime { get; set; }
+    private Kitty Kitty { get; set; }
 
-    public KittyTime()
+    public KittyTime(Kitty kitty)
     {
+        Kitty = kitty;
         Initialize();
     }
 
@@ -17,6 +21,12 @@ public class KittyTime
             RoundTime.Add(i, 0.0f);
         for(int i = 1; i < Gamemode.NumberOfRounds; i++)
             RoundProgress.Add(i, 0.0f);
+        PeriodicProgressTimer();
+    }
+
+    private void PeriodicProgressTimer()
+    {
+        ProgressTimer.Start(0.2f, true, () => Progress.CalculateProgress(Kitty));
     }
     #region Time Section
     public float GetRoundTime(int round)

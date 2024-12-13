@@ -471,14 +471,14 @@ public static class ShopFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
+        FrameManager.ShopButton.Visible = false;
+        FrameManager.ShopButton.Visible = true;
+        FrameManager.HideOtherFrames(shopFrame);
         if (Gamemode.CurrentGameMode != "Standard")
         {
             player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is only accessible in Standard mode.");
             return;
         }
-        FrameManager.ShopButton.Visible = false;
-        FrameManager.ShopButton.Visible = true;
-        FrameManager.HideOtherFrames(shopFrame);
         shopFrame.Visible = !shopFrame.Visible;
         UpdateButtonStatus(player);
         if (shopFrame.Visible)

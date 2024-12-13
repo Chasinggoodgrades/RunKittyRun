@@ -8,8 +8,9 @@ public static class TeamPodium
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();
     private static string PodiumType = "";
-    private static string Color = Colors.COLOR_YELLOW;
-
+    private static string Color = Colors.COLOR_YELLOW_ORANGE;
+    private const string MVP = "MVP";
+    private const string MostSaves = "most saves";
     public static void BeginPodiumActions()
     {
         PodiumUtil.SetCameraToPodium();
@@ -26,7 +27,7 @@ public static class TeamPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "MVP";
+        PodiumType = MVP;
     }
 
     private static void EnqueueTopSavesPlayer()
@@ -39,7 +40,7 @@ public static class TeamPodium
             var position = podiumPositions[i];
             PodiumQueue.Enqueue((player, position));
         }
-        PodiumType = "Most Saves";
+        PodiumType = MostSaves;
     }
 
     private static void ProcessNextPodiumAction()
@@ -55,7 +56,7 @@ public static class TeamPodium
         kitty.SetFacing(270);
         kitty.IsPaused = true;
         MovedUnits.Add(kitty);
-        Console.WriteLine($"{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.Count + 1)} place for {PodiumType} with {GetStatBasedOnType(player).ToString("F2")}|r");
+        Console.WriteLine($"{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.Count + 1)} place for {PodiumType} with {GetStatBasedOnType(player)}|r");
         Utility.SimpleTimer(5.0f, ProcessNextPodiumAction);
     }
 
@@ -71,10 +72,10 @@ public static class TeamPodium
             case "":
                 EnqueueMVPPlayer();
                 break;
-            case "MVP":
+            case MVP:
                 EnqueueTopSavesPlayer();
                 break;
-            case "Most Saves":
+            case MostSaves:
                 PodiumUtil.EndingGameThankyou();
                 return;
             default:
@@ -83,17 +84,17 @@ public static class TeamPodium
         ProcessNextPodiumAction();
     }
 
-    private static float GetStatBasedOnType(player player)
+    private static string GetStatBasedOnType(player player)
     {
         var stats = Globals.ALL_KITTIES[player].CurrentStats;
         switch (PodiumType)
         {
-            case "Most Saves":
-                return stats.TotalSaves;
-            case "MVP":
-                return stats.TotalDeaths == 0 ? stats.TotalSaves : (float)stats.TotalSaves / stats.TotalDeaths;
+            case MostSaves:
+                return stats.TotalSaves.ToString();
+            case MVP:
+                return stats.TotalDeaths == 0 ? stats.TotalSaves.ToString("F2") + " ratio." : ((float)stats.TotalSaves / stats.TotalDeaths).ToString("F2") + " ratio";
             default:
-                return 0;
+                return "n/a";
         }
     }
 }
