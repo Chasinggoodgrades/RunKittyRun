@@ -97,11 +97,11 @@ public class Kitty
         if (Player.Controller == mapcontrol.User) SaveData = SaveManager.PlayerSaveData[Player].Stats[KittyType.Kitty];
         else SaveData = new KittyData(); // dummy data for comps
 
+        YellowLightning = new YellowLightning(Player);
         // Challenges, Relics, etc for Standard.
         if (Gamemode.CurrentGameMode == "Standard")
         {
             Relics = new List<Relic>();
-            YellowLightning = new YellowLightning(Player);
         }
 
     }

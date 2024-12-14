@@ -25,7 +25,7 @@ public class FangOfShadows : Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, $"Overall cooldwon is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
+        Upgrades.Add(new RelicUpgrade(0, $"Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced at new safezones is now 50% instead of 25%.", 20, 1000));
     }
 

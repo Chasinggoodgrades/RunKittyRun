@@ -23,7 +23,7 @@ public class Frostbite : Affix
 
     public override void Apply()
     {
-        Unit.Unit.SetVertexColor(0, 50, 220);
+        Unit.Unit.SetVertexColor(0, 90, 220);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
     }

@@ -42,12 +42,14 @@ public class OneOfNine : Relic
         Unit.SetAbilityCooldownRemaining(PreviousAbilityID, cooldown);
     }
 
-    private static float GetOneOfNineCooldown(player Player)
+    public static float GetOneOfNineCooldown(player Player)
     {
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
         var reduction = PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof(OneOfNine)) * 3.0f;
+
+        Console.WriteLine(reduction);
 
         // remaining cooldown depending on relic or no relic 
         float cooldown = kitty.GetAbilityCooldownRemaining(noRelic) > 0.0f
@@ -55,6 +57,8 @@ public class OneOfNine : Relic
             : kitty.GetAbilityCooldownRemaining(relic);
 
         cooldown -= reduction;
+
+        Console.WriteLine($"{cooldown} - {reduction}");
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
     }

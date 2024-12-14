@@ -326,6 +326,10 @@ public static class ShopFrame
     {
         var player = @event.Player;
 
+        if (player.IsLocal)
+        {
+            buyButton.Visible = false; buyButton.Visible = true;
+        }
         if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var kitty = Globals.ALL_KITTIES[player];
@@ -352,8 +356,7 @@ public static class ShopFrame
                     break;
             }
         }
-
-        // Toggle the visibility of the shop frame for the player
+        // hide shop after purchase
         if (player.IsLocal)
             shopFrame.Visible = !shopFrame.Visible;
     }
@@ -390,6 +393,10 @@ public static class ShopFrame
     private static void SellSelectedItem()
     {
         var player = @event.Player;
+        if (player.IsLocal)
+        {
+            sellButton.Visible = false; sellButton.Visible = true;
+        }
         if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var itemID = selectedItem.ItemID;
@@ -405,13 +412,17 @@ public static class ShopFrame
 
             Utility.RemoveItemFromUnit(kitty.Unit, itemID);
             player.Gold += selectedItem.Cost;
-
         }
+
     }
 
     private static void UpgradeRelic()
     {
         var player = @event.Player;
+        if (player.IsLocal)
+        {
+            upgradeButton.Visible = false; upgradeButton.Visible = true;
+        }
         if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var itemID = selectedItem.ItemID;

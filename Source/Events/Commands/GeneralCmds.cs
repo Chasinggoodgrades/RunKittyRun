@@ -1,16 +1,21 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class GeneralCmds
 {
     private static CommandInfo CmdInfo = null;
+
     public static void Handle(player p, string command)
     {
         var args = command.Split(' ');
         CommandInfoCheck(args);
+
         switch (args[0])
         {
+            case "-commands":
             case "-help":
+                DisplayCommands(p);
                 break;
             case "-team":
                 if (Gamemode.CurrentGameModeType != Globals.TEAM_MODES[0]) return;
@@ -27,6 +32,7 @@ public static class GeneralCmds
                 Colors.SetPlayerColor(p, args[1]);
                 break;
             case "-sc":
+            case "-setcolor":
                 Colors.SetPlayerVertexColor(p, args);
                 break;
             case "-wild":
@@ -42,17 +48,7 @@ public static class GeneralCmds
                 break;
             case "-zoom":
             case "-cam":
-                var zoom = 2000f;
-                if (args.Length < 2)
-                {
-                    p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Incorrect usage: -zoom (xxxx) or -cam (xxxx)|r");
-                    return;
-                }
-                else {
-                    zoom = float.Parse(args[1]);
-                    if(!p.IsLocal) return;
-                    SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
-                }
+                HandleZoomCommand(p, args);
                 break;
             case "-oldcode":
                 Savecode.LoadString();
@@ -61,6 +57,38 @@ public static class GeneralCmds
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
         }
+    }
+
+    private static void DisplayCommands(player p)
+    {
+        string commandList = string.Join("\n", new string[]
+        {
+            "-team - Manage team settings",
+            "-save - Save your current game stats",
+            "-clear - Clear your screen",
+            "-color [color] - Set your player color",
+            "-sc [rgb] | -setcolor [rgb] - Set your player vertex color",
+            "-wild - Set a random vertex color",
+            "-hidenames | -hn - Hide all floating name tags",
+            "-shownames | -sn - Show all floating name tags",
+            "-zoom [xxxx] | -cam [xxxx] - Adjust the camera zoom level",
+            "-oldcode - Load the previous save code (works once)"
+        });
+
+        p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Available Commands:\n" + commandList);
+    }
+
+    private static void HandleZoomCommand(player p, string[] args)
+    {
+        if (args.Length < 2)
+        {
+            p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Incorrect usage: -zoom (xxxx) or -cam (xxxx)|r");
+            return;
+        }
+
+        float zoom = float.Parse(args[1]);
+        if (!p.IsLocal) return;
+        SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
     }
 
     private static void HandleTeamCommand(player p, string[] args)
@@ -93,7 +121,8 @@ public static class GeneralCmds
             CmdInfo = CommandManager.GetCommandInfo(parts[0]);
         }
         else if (parts.Length == 2)
+        {
             CmdInfo = CommandManager.GetCommandInfo(parts[0] + " " + parts[1]);
+        }
     }
-
 }

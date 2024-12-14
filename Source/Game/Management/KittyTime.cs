@@ -17,9 +17,9 @@ public class KittyTime
 
     private void Initialize()
     {
-        for(int i = 1; i < Gamemode.NumberOfRounds; i++)
+        for(int i = 1; i <= Gamemode.NumberOfRounds; i++)
             RoundTime.Add(i, 0.0f);
-        for(int i = 1; i < Gamemode.NumberOfRounds; i++)
+        for(int i = 1; i <= Gamemode.NumberOfRounds; i++)
             RoundProgress.Add(i, 0.0f);
         PeriodicProgressTimer();
     }

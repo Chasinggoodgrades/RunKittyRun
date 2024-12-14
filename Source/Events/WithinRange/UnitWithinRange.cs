@@ -115,7 +115,6 @@ public static class UnitWithinRange
     public static void DeRegisterUnitWithinRangeUnit(unit u)
     {
         int unitId = GetUniqueUnitId(u);
-        Console.WriteLine("Begin");
         if (unitRangeTriggers.ContainsKey(unitId))
         {
             foreach (var kvp in unitRangeTriggers[unitId])

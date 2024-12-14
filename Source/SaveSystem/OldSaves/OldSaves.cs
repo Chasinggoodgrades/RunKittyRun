@@ -12,9 +12,7 @@ public class Savecode
     private static List<string> OriginalToolTips { get; set; } = new();
     public double Digits { get; private set; }
     public BigNum Bignum { get; private set; }
-
     public static Dictionary<player, Savecode> PlayerSaveObject { get; private set; } = new Dictionary<player, Savecode>();
-    //public static Dictionary<player, Dictionary<Awards, int>> PlayerAwards { get; private set; } = new Dictionary<player, Dictionary<Awards, int>>();
 
     public static void Initialize()
     {
@@ -177,32 +175,34 @@ public class Savecode
 
     public void SetRewardValues(player player)
     {
+        var awardData = Globals.ALL_KITTIES[player].SaveData.GameAwards;
+        var roundstats = Globals.ALL_KITTIES[player].SaveData.GameTimes;
+        var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
+
         foreach (var value in DecodeOldsave.decodeValues)
         {
             var decodedValue = Decode(value.Value);
             if(value.Key is Awards && decodedValue == 1)
             {
-                AwardManager.GiveReward(player, (Awards)value.Key);
+                if(awardData[(Awards)value.Key] == 0)
+                    AwardManager.GiveReward(player, (Awards)value.Key);
             }
             if (value.Key is string key)
             {
                 if (Enum.TryParse<RoundTimes>(key, true, out RoundTimes roundtime))
                 {
-                    var roundstats = Globals.ALL_KITTIES[player].SaveData.GameTimes;
                     // If ur time is worse (greater) than previous save.. Then update.
                     if(roundstats[roundtime] > decodedValue)
                         roundstats[roundtime] = decodedValue;
                 }
                 else if(Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
                 {
-                    var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
                     // If ur stats are less than previous save.. Then update.
                     if (kittyStats[stats] < decodedValue) 
                         kittyStats[stats] = decodedValue;
                 }
             }
         }
-
     }
 
     private static int SCommHash(string name)

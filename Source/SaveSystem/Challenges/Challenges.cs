@@ -132,7 +132,7 @@ public class YellowLightning
 
     private void EndTimer()
     {
-        if(SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT)
+        if(SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
         {
             AwardManager.GiveReward(Player, Awards.Yellow_Lightning);
         }

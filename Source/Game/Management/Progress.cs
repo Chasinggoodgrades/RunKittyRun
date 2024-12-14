@@ -50,11 +50,10 @@ public static class Progress
             var kitty = Globals.ALL_KITTIES[Player];
             var currentSafezone = kitty.ProgressZone;
 
-            if (kitty.Finished) return 100.0f;
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count-1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
             if (Regions.Victory_Area.Region.Contains(kitty.Unit)) return 100.0f; // if in victory area, 100 progress
             if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit) && !kitty.Finished) return 0.0f; // if at start, 0 progress
-
+            if (kitty.Alive && kitty.Finished) return 100.0f;
             var currentProgress = DistanceBetweenPoints(kitty.Unit.X, kitty.Unit.Y,
                 PlayerProgressPoints[Player].CenterX, PlayerProgressPoints[Player].CenterY);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;

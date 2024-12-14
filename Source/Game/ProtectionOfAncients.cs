@@ -103,9 +103,16 @@ public static class ProtectionOfAncients
     {
         var Unit = @event.Unit;
         var player = @event.Player;
+        var kitty = Globals.ALL_KITTIES[player];
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
         if(Program.Debug) Console.WriteLine("DEBUG: Player: " + player.Name + " activated Protection of the Ancients!");
+
+        var cooldown = OneOfNine.GetOneOfNineCooldown(player);
+
+        Console.WriteLine("Remaining CD: " + cooldown);
+        // Let the ability actually hit cooldown first. Then call.. Give a .1 delay.
+        Utility.SimpleTimer(0.1f, () => kitty.Unit.SetAbilityCooldownRemaining(GetProtectionAbility(player), cooldown));
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
         var t = timer.Create();
@@ -120,6 +127,7 @@ public static class ProtectionOfAncients
     private static void ApplyEffect(unit Unit)
     {
         var owningPlayer = Unit.Owner;
+        var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
         actiEffect.Dispose();
         EndEffectActions(owningPlayer);
@@ -164,4 +172,18 @@ public static class ProtectionOfAncients
         tempGroup.Dispose();
 
     }
+
+    private static int GetProtectionAbility(player player)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+
+        var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+        var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+
+        var noRelicCD = kitty.Unit.GetAbilityCooldownRemaining(noRelic);
+        var relicCD = kitty.Unit.GetAbilityCooldownRemaining(relic);
+
+        return noRelicCD > relicCD ? noRelic : relic;
+    }
+
 }
