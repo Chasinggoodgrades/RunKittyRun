@@ -8,19 +8,19 @@ public static class Progress
 {
     public static Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
     public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
+    private static timer TeamProgTimer { get; set; } = timer.Create();
     public static void Initialize()
     {
         CalculateTotalDistance();
         InitializePlayerProgressPoints();
+        TeamProgTimer.Start(0.2f, true, () => TeamProgressTracker());
     }
 
     public static void CalculateProgress(Kitty kitty)
     {
-        if (!Globals.GAME_ACTIVE) return;
         var Player = kitty.Player;
         var round = Globals.ROUND;
         Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamProgressTracker();
     }
 
     private static void InitializePlayerProgressPoints()
@@ -31,6 +31,7 @@ public static class Progress
     
     private static void TeamProgressTracker()
     {
+        if (!Globals.GAME_ACTIVE) return;
         foreach (var Team in Globals.ALL_TEAMS.Values)
         {
             Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
