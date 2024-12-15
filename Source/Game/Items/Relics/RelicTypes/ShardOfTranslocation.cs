@@ -31,7 +31,6 @@ public class ShardOfTranslocation : Relic
         RegisterTrigger(Unit);
         UpdateBlinkRange(Unit);
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
-        Console.WriteLine("Applying Translocation");
     }
 
     public override void RemoveEffect(unit Unit)
@@ -74,8 +73,8 @@ public class ShardOfTranslocation : Relic
         }
         catch (Exception e)
         {
-            player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}An error occurred. Please report this to the developer.");
-            Console.WriteLine(e.Message);
+            player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Translocation Relic: An error occurred. Please report this to the developer.");
+            //Console.WriteLine(e.Message);
         }
     }
 
@@ -92,7 +91,6 @@ public class ShardOfTranslocation : Relic
             reduction = CooldownReduction;
         var cooldown = unit.GetAbilityCooldown(RelicAbilityID, 0);
         unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown - reduction);
-        Console.WriteLine($"Reducing Cooldown: {cooldown - reduction} from {cooldown}");
     }
 
     private void TeleportUnit(unit unit, location targetLoc)
@@ -101,7 +99,6 @@ public class ShardOfTranslocation : Relic
         var y = targetLoc.Y;
         var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unit, x, y);
 
-        Console.WriteLine($"Max Blink Range: {MaxBlinkRange}");
         if (distance > MaxBlinkRange)
         {
             var angle = Atan2(y - unit.Y, x - unit.X);

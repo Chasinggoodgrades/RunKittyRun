@@ -47,7 +47,7 @@ public class OneOfNine : Relic
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
-        var reduction = PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof(OneOfNine)) * 3.0f;
+        var reduction = GetOneOfNineReduction(Player);
 
         Console.WriteLine(reduction);
 
@@ -61,6 +61,12 @@ public class OneOfNine : Relic
         Console.WriteLine($"{cooldown} - {reduction}");
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
+    }
+
+
+    public static float GetOneOfNineReduction(player Player)
+    {
+        return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof(OneOfNine)) * 3.0f;
     }
 
     /// <summary>
@@ -85,7 +91,6 @@ public class OneOfNine : Relic
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
         {
             IssueImmediateOrder(kitty.Unit, "divineshield");
-            kitty.Unit.SetAbilityCooldownRemaining(RelicAbilityID, GetOneOfNineCooldown(Player));
             return true;
         }
         return false;

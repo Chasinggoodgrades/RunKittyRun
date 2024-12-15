@@ -47,11 +47,11 @@ public class ShadowKitty
         Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
         Unit.SetVertexColor(0, 0, 0, 255);
         Utility.MakeUnitLocust(Unit);
-        Utility.SelectUnitForPlayer(Player, Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
         Unit.BaseMovementSpeed = 522;
         Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
         PauseKitty(Player, true);
+        SelectReselectShadowKitty();
     }
 
     /// <summary>
@@ -68,7 +68,6 @@ public class ShadowKitty
     /// </summary>
     public void KillShadowKitty()
     {
-        if(Unit == null) return;
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         Unit.Kill();
         Unit.Dispose();
@@ -80,6 +79,19 @@ public class ShadowKitty
     {
         var kitty = Globals.ALL_KITTIES[player].Unit;
         kitty.IsPaused = paused;
+    }
+
+    /// <summary>
+    /// The game doesnt register the the abilities or movement, so a reselection is required.
+    /// </summary>
+    /// <param name="player"></param>
+    private void SelectReselectShadowKitty()
+    {
+        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        Utility.SelectUnitForPlayer(Player, Unit);
+        Utility.SelectUnitForPlayer(Player, kitty);
+        Utility.SelectUnitForPlayer(Player, Unit);
+
     }
 
 

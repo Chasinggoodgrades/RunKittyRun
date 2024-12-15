@@ -1862,20 +1862,14 @@ STRING 3023
 |cff008000Deathless Fire II|r
 }
 
-STRING 3029
-// Abilities: A03Q (Appear at ShadowKitty), Name (Name)
-{
-Appear at ShadowKitty
-}
-
 STRING 3030
-// Abilities: A03Q (Appear at ShadowKitty), Tip (Tooltip - Normal)
+// Abilities: A00Q (Appear At ShadowKitty), Tip (Tooltip - Normal)
 {
 Teleport to ShadowKitty - [|cffffcc00Level 1|r]
 }
 
 STRING 3031
-// Abilities: A03Q (Appear at ShadowKitty), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A00Q (Appear At ShadowKitty), Ubertip (Tooltip - Normal - Extended)
 {
 Teleports you to your Shadowkitty. However, the cost is your shadowkitties life.
 }
@@ -4473,5 +4467,11 @@ STRING 3730
 // Abilities: A00P (Skin_KittyZandalari), Untip (Tooltip - Turn Off)
 {
 |cffd48c19Zandalari Kitty|r
+}
+
+STRING 3731
+// Abilities: A00Q (Appear At ShadowKitty), Name (Name)
+{
+Appear At ShadowKitty
 }
 

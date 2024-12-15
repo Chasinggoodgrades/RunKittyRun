@@ -5,6 +5,7 @@ using System;
 public class Kibble
 {
     private static List<int> KibblesColors = KibbleList();
+    private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
     private static int XPMax = 350;
     private static int GoldMax = 150;
@@ -35,6 +36,7 @@ public class Kibble
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
+        Utility.CreateEffectAndDispose(StarfallEffect, x, y);
         return CreateItem(Type, x, y);
     }
     
@@ -132,6 +134,13 @@ public class Kibble
 
     private static List<int> KibbleList()
     {
+        if (SeasonalManager.Season == HolidaySeasons.Christmas)
+        {
+            return new List<int>
+            {
+                Constants.ITEM_KIBBLE_TEAL
+            };
+        }
         return new List<int>
         {
             Constants.ITEM_KIBBLE,

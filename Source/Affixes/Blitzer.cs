@@ -19,6 +19,7 @@ public class Blitzer : Affix
     public override void Apply()
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.WanderTimer.Start(1.0f, false, () => Unit.StartWandering());
         Unit.WanderTimer.Pause();
         Unit.Unit.SetVertexColor(42, 170, 138);
         RegisterMoveTimer();
@@ -31,6 +32,7 @@ public class Blitzer : Affix
         Unit.WanderTimer.Resume();
         MoveTimer.Pause();
         MoveTimer.Dispose();
+        Effect.Dispose();
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
     }

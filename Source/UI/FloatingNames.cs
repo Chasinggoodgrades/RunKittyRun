@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared.Data;
-using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
 public class FloatingNameTag
@@ -67,7 +63,7 @@ public class FloatingNameTag
             {
                 var kitty = Globals.ALL_KITTIES[player].Unit;
                 PlayerNameTags[player].UpdateNameTag();
-                if (player == GetLocalPlayer()) SetCameraQuickPosition(kitty.X, kitty.Y); // Spacebar 
+                if (player.IsLocal) SetCameraQuickPosition(kitty.X, kitty.Y); // Spacebar 
             }
         });
     }

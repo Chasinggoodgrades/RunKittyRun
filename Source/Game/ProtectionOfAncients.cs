@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Source;
+using Source.Init;
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
@@ -104,15 +105,13 @@ public static class ProtectionOfAncients
         var Unit = @event.Unit;
         var player = @event.Player;
         var kitty = Globals.ALL_KITTIES[player];
+        var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
         if(Program.Debug) Console.WriteLine("DEBUG: Player: " + player.Name + " activated Protection of the Ancients!");
 
-        var cooldown = OneOfNine.GetOneOfNineCooldown(player);
-
-        Console.WriteLine("Remaining CD: " + cooldown);
-        // Let the ability actually hit cooldown first. Then call.. Give a .1 delay.
-        Utility.SimpleTimer(0.1f, () => kitty.Unit.SetAbilityCooldownRemaining(GetProtectionAbility(player), cooldown));
+        // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
+        Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)));
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
         var t = timer.Create();

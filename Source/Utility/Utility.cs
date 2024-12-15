@@ -195,6 +195,15 @@ public static class Utility
     }
 
     /// <summary>
+    /// Creates an effect using path, @ x & y, and disposes of it immediately.
+    /// </summary>
+    public static void CreateEffectAndDispose(string path, float x, float y)
+    {
+        effect e = effect.Create(path, x, y);
+        e.Dispose();
+    }
+
+    /// <summary>
     /// Clears the screen of all messages for the given player.
     /// </summary>
     /// <param name="player"></param>
@@ -203,4 +212,15 @@ public static class Utility
         if (!player.IsLocal) return; 
         ClearTextMessages(); 
     }
+
+    public static void DropAllItems(unit Unit)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            var item = UnitItemInSlot(Unit, i);
+            if (item == null) continue;
+            UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
+        }
+    }
+
 }

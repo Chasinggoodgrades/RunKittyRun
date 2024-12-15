@@ -80,7 +80,6 @@ public class AmuletOfEvasiveness : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
         if (upgradeLevel < 2) return;
         var newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
-        Console.WriteLine($"Collision Radius: {CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius}");
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
