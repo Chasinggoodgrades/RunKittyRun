@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
+using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public class Fixation : Affix
 {
@@ -12,6 +14,8 @@ public class Fixation : Affix
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
     private timer ChaseTimer;
+    private group UnitsInRange;
+    private int Type;
     private bool IsChasing = false;
     private effect TargetEffect;
     public Fixation(Wolf unit) : base(unit) 
@@ -23,6 +27,7 @@ public class Fixation : Affix
 
     public override void Apply()
     {
+        Type = RandomType();
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
@@ -41,10 +46,23 @@ public class Fixation : Affix
         TargetEffect?.Dispose();
         ChaseTimer.Pause();
         ChaseTimer.Dispose();
+        Unit.WanderTimer.Resume();
+    }
+
+    /// <summary>
+    /// Type for the fixation...
+    /// #0 being pick a player and chase them
+    /// #1 being pick player in shortest range and chase them
+    /// </summary>
+    /// <returns></returns>
+    private int RandomType()
+    {
+        return GetRandomInt(0, 1);
     }
 
     private void RegisterEvents()
     {
+        if (Type == 1) UnitsInRange = group.Create();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
@@ -62,6 +80,7 @@ public class Fixation : Affix
     {
         var Region = RegionList.WolfRegions[Unit.RegionIndex];
         IsChasing = true;
+        Unit.WanderTimer.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         ChaseTimer.Start(0.1f, true, () => {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
@@ -69,11 +88,50 @@ public class Fixation : Affix
                 IsChasing = false;
                 Unit.WolfMove();
                 TargetEffect.Dispose();
+                Unit.WanderTimer.Resume();
                 ChaseTimer.Pause();
                 return;
             }
+            if (Type == 1)
+            {
+                UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+                if (UnitsInRange.Count > 0)
+                {
+                    var newTarget = GetClosestUnitInRange();
+                    if (newTarget != Target)
+                    {
+                        Target = newTarget;
+                        TargetEffect.Dispose();
+                        TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
+                    }
+                }
+            }
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
         });
+    }
+
+    private unit GetClosestUnitInRange()
+    {
+        var rangeList = UnitsInRange.ToList();
+        var unitX = Unit.Unit.X;
+        var unitY = Unit.Unit.Y;
+
+        // Determine closest unit in list
+        var closestUnit = rangeList[0];
+        var closestDistance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, closestUnit.X, closestUnit.Y);
+        if (closestDistance > 0) {
+            foreach (var unit in rangeList)
+            {
+                var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+                if (distance < closestDistance)
+                {
+                    closestUnit = unit;
+                    closestDistance = distance;
+                }
+            }
+        }
+        rangeList.Clear();
+        return closestUnit;
     }
 
     private void UpdateChaseSpeed()
