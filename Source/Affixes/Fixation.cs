@@ -15,6 +15,7 @@ public class Fixation : Affix
     private trigger PeriodicSpeed;
     private timer ChaseTimer;
     private group UnitsInRange;
+    private unit Target;
     private int Type;
     private bool IsChasing = false;
     private effect TargetEffect;
@@ -72,11 +73,14 @@ public class Fixation : Affix
             var Region = RegionList.WolfRegions[Unit.RegionIndex];
             if(!Region.Contains(target.X, target.Y)) return;
             if (target != Unit.Unit && !IsChasing)
-                ChasingEvent(target);
+            {
+                Target = target;
+                ChasingEvent();
+            }
         });
     }
 
-    private void ChasingEvent(unit Target)
+    private void ChasingEvent()
     {
         var Region = RegionList.WolfRegions[Unit.RegionIndex];
         IsChasing = true;
@@ -93,21 +97,22 @@ public class Fixation : Affix
                 return;
             }
             if (Type == 1)
-            {
-                UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
-                if (UnitsInRange.Count > 0)
-                {
-                    var newTarget = GetClosestUnitInRange();
-                    if (newTarget != Target)
-                    {
-                        Target = newTarget;
-                        TargetEffect.Dispose();
-                        TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-                    }
-                }
-            }
+                GetClosestTarget();
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
         });
+    }
+
+    private void GetClosestTarget()
+    {
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        if (UnitsInRange.Count <= 0) return;
+        var newTarget = GetClosestUnitInRange();
+        if (newTarget != Target)
+        {
+            Target = newTarget;
+            TargetEffect.Dispose();
+            TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
+        }
     }
 
     private unit GetClosestUnitInRange()

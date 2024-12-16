@@ -138,7 +138,7 @@ public class Kibble
         {
             return new List<int>
             {
-                Constants.ITEM_KIBBLE_TEAL
+                Constants.ITEM_PRESENT
             };
         }
         return new List<int>

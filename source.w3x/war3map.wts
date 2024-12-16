@@ -4475,3 +4475,33 @@ STRING 3731
 Appear At ShadowKitty
 }
 
+STRING 3732
+// Items: I00M (|cffff4b4bPresent|r), Name (Name)
+{
+|cffff4b4bPresent|r
+}
+
+STRING 3733
+// Items: I00M (|cffff4b4bPresent|r), Description (Description)
+{
+Who knows what you may get!
+}
+
+STRING 3734
+// Items: I00M (|cffff4b4bPresent|r), Hotkey (Hotkey)
+{
+T
+}
+
+STRING 3735
+// Items: I00M (|cffff4b4bPresent|r), Tip (Tooltip - Basic)
+{
+|cffff4b4bPresent|r
+}
+
+STRING 3736
+// Items: I00M (|cffff4b4bPresent|r), Ubertip (Tooltip - Extended)
+{
+Happy holidays :)
+}
+
