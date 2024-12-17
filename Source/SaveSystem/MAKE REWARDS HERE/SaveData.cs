@@ -68,7 +68,6 @@ public enum StatTypes
     SaveStreak,
     HighestSaveStreak,
     Deaths,
-    Wins,
     WinStreak,
     HighestWinStreak,
     NormalWins,

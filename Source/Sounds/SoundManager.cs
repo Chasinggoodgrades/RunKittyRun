@@ -95,7 +95,7 @@ public static class SoundManager
     {
         var s = KITTY_DEATH_SOUND;
         s.AttachToUnit(Kitty);
-        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[GetOwningPlayer(Kitty)].TeamID].Teammembers)
+        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
         {
             if (player.IsLocal)
             {

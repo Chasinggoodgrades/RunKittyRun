@@ -38,7 +38,7 @@ public static class AntiblockWand
         {
             if (wolf.UnitType != Wolf.WOLF_MODEL) continue;
             var wolfUnit = Globals.ALL_WOLVES[wolf];
-            wolfUnit.WolfMove();
+            wolfUnit.StartWandering(true);
         }
 
 

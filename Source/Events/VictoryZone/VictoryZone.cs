@@ -31,6 +31,7 @@ public static class VictoryZone
         var u = @event.Unit;
         var player = u.Owner;
         if(u.UnitType != Constants.UNIT_KITTY) return;
+        if (!Globals.GAME_ACTIVE) return;
         if (Gamemode.CurrentGameMode == "Standard") // Standard
         {
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;

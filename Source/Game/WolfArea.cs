@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
@@ -39,7 +38,7 @@ public class WolfArea
     private void EnterWolfAreaEvents()
     {
         Trigger = trigger.Create();
-        Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
         Trigger.AddAction(() =>
         {
             var unit = @event.Unit;
@@ -65,7 +64,7 @@ public class WolfArea
     private void LeaveAreaEvents()
     {
         Trigger = trigger.Create();
-        Trigger.RegisterLeaveRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
+        Trigger.RegisterLeaveRegion(Region, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
         Trigger.AddAction(() =>
         {
             var wolf = Globals.ALL_WOLVES[@event.Unit];

@@ -21,6 +21,7 @@ public static class ProtectionOfAncients
     private static List<player> UpgradeLevel3 = new List<player>();
     private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
@@ -165,6 +166,7 @@ public static class ProtectionOfAncients
             else
                 playerToRevive.ReviveKitty(kitty);
             reviveCount++;
+            // Give Divinity Tendrils if meets challenge requiremnet.
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
 
         }

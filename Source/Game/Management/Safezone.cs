@@ -34,7 +34,7 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
         Trigger.AddAction(EnterSafezoneActions);
     }
 
@@ -77,5 +77,21 @@ public class Safezone
         {
             safezone.AwardedPlayers.Clear();
         }
+    }
+
+    /// <summary>
+    /// Counts the number of safezones a player has touched.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns>int count of the # of safezones reached.</returns>
+    public static int CountHitSafezones(player player)
+    {
+        int count = 0;
+        foreach (var safezone in Globals.SAFE_ZONES)
+        {
+            if (safezone.AwardedPlayers.Contains(player))
+                count++;
+        }
+        return count;
     }
 }

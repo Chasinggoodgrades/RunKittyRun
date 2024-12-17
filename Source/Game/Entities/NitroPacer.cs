@@ -65,7 +65,7 @@ public static class NitroPacer
             if(currentCheckpoint >= PathingPoints.Count() - 1)
             {
                 pacerTimer.Pause();
-                Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true);
+                Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
                 return;
             }
             MoveNextZone();

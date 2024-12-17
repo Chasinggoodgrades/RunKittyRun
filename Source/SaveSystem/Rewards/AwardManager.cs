@@ -56,6 +56,11 @@ public static class AwardManager
         kitty.DisableAbility(reward.GetAbilityID(), false, false);
     }
 
+    public static bool ReceivedAwardAlready(player player, Awards award)
+    {
+        return Awarded.TryGetValue(player, out var awards) && awards.Contains(award);
+    }
+
     /// <summary>
     /// Registers all gamestats for each player to earn rewards. 
     /// Ex. If less than 200 saves, itll add every game stat to check periodically. to see if you've hit or gone over said value.

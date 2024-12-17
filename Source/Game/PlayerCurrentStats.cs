@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
 
+/// <summary>
+/// Keeps track of current game stats, saves, deaths, streak, nitros.
+/// </summary>
 public class PlayerCurrentStats 
 {
     public int TotalSaves { get; set; }
