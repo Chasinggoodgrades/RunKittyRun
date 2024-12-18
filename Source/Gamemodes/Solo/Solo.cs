@@ -7,7 +7,6 @@ public static class Solo
     private const float TIME_TO_REVIVE = 6.0f;
     public static void Initialize()
     {
-        Console.WriteLine($"{Colors.COLOR_YELLOW}Solo Mode may still have several bugs. Report as you come across :)|r");
         ItemSpawner.NUMBER_OF_ITEMS = 8;
     }
 

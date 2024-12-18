@@ -195,6 +195,17 @@ public static class Utility
     }
 
     /// <summary>
+    /// Gives the player owner of u the amount of gold as well as shows a floating text displaying how much gold they recieved.
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <param name="u"></param>
+    public static void GiveGoldFloatingText(int amount, unit u)
+    {
+        u.Owner.Gold += amount;
+        CreateSimpleTextTag($"+{amount} Gold", 2.0f, u, 10.0f, 255, 215, 0);
+    }
+
+    /// <summary>
     /// Creates an effect using path, @ x & y, and disposes of it immediately.
     /// </summary>
     public static void CreateEffectAndDispose(string path, float x, float y)

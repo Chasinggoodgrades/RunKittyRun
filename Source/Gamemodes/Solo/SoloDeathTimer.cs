@@ -53,6 +53,7 @@ public class SoloDeathTimer
 
     private void Dispose()
     {
+        ReviveTimer.Pause();
         ReviveTimer.Dispose();
         UpdateTextTimer.Pause();
         UpdateTextTimer.Dispose();

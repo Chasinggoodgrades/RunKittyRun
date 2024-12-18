@@ -45,7 +45,7 @@ public class Safezone
         SafezoneAdditions(unit);
         Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
         if (AwardedPlayers.Contains(player) || ID == 0) return;
-        player.Gold += Resources.SafezoneGold;
+        Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
         unit.Experience += Resources.SafezoneExperience;
         AwardedPlayers.Add(player);
         Deathless.DeathlessCheck(player);
