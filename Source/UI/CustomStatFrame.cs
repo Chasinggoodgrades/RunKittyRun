@@ -213,7 +213,8 @@ public static class CustomStatFrame
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
             BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");
-            BlzFrameSetText(Stats[2].Text, $"{Saves} {GetGameTotalSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[1].Text, $"{Saves} {GetGameTotalSaves(selectedUnit)}");
+            BlzFrameSetText(Stats[2].Text, $"{Deaths} {GetGameTotalDeaths(selectedUnit)}");
         }
     }
 

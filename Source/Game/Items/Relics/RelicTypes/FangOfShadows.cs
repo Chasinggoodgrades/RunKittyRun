@@ -78,7 +78,7 @@ public class FangOfShadows : Relic
         var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
         sk.TeleportToShadowKitty();
         Utility.DropAllItems(@event.Unit);
-        Utility.SimpleTimer(0.06f, sk.KillShadowKitty);
+        Utility.SimpleTimer(0.09f, sk.KillShadowKitty);
         KillTimer.Pause();
     }
 

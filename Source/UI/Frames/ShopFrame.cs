@@ -46,6 +46,7 @@ public static class ShopFrame
         InitializePanelTitles();
         LoadItemsIntoPanels();
         CreateUpgradeTooltip();
+        SetRewardsFrameHotkey();
         shopFrame.Visible = false;
     }
 
@@ -389,7 +390,6 @@ public static class ShopFrame
         }
     }
 
-
     private static void SellSelectedItem()
     {
         var player = @event.Player;
@@ -436,11 +436,11 @@ public static class ShopFrame
                 NotEnoughGold(player, goldCost);
                 return;
             }
-            player.Gold -= goldCost;
             if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
             {
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
-                if(player.IsLocal) RefreshUpgradeTooltip(playerRelic);
+                player.Gold -= goldCost;
+                if (player.IsLocal) RefreshUpgradeTooltip(playerRelic);
             }
             else
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
@@ -478,6 +478,16 @@ public static class ShopFrame
         return true;
     }
 
+    private static void SetRewardsFrameHotkey()
+    {
+        var shopFrameHotkey = trigger.Create();
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
+        }
+        shopFrameHotkey.AddAction(() => ShopFrameActions());
+    }
+
     public static void ShopFrameActions()
     {
         var player = @event.Player;
@@ -494,8 +504,5 @@ public static class ShopFrame
         UpdateButtonStatus(player);
         if (shopFrame.Visible)
             MultiboardUtil.MinMultiboards(player, true);
-        else
-            MultiboardUtil.MinMultiboards(player, false);
-
     }
 }

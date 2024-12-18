@@ -202,7 +202,7 @@ public static class Utility
     public static void GiveGoldFloatingText(int amount, unit u)
     {
         u.Owner.Gold += amount;
-        CreateSimpleTextTag($"+{amount} Gold", 2.0f, u, 10.0f, 255, 215, 0);
+        CreateSimpleTextTag($"+{amount} Gold", 2.0f, u, 0.018f, 255, 215, 0);
     }
 
     /// <summary>
@@ -229,8 +229,8 @@ public static class Utility
         for (int i = 0; i < 6; i++)
         {
             var item = UnitItemInSlot(Unit, i);
-            if (item == null) continue;
-            UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
+            if(item != null)
+                UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
         }
     }
 

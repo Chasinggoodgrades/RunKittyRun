@@ -63,7 +63,7 @@ public static class GeneralCmds
     {
         string commandList = string.Join("\n", new string[]
         {
-            "-team - Manage team settings",
+            "-team [#] - Switches to #'d team. (Team Mode Free Pick Only)",
             "-save - Save your current game stats",
             "-clear - Clear your screen",
             "-color [color] - Set your player color",

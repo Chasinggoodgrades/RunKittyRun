@@ -24,6 +24,7 @@ public static class RewardsFrame
     {
         RewardFrame = CreateRewardFrame();
         TempHandle = RewardFrame;
+        SetRewardsFrameHotkey();
         CountRewardFrames();
         AppendRewardsToFrames();
         FrameManager.CreateHeaderFrame(RewardFrame);
@@ -193,6 +194,16 @@ public static class RewardsFrame
         }
     }
 
+    private static void SetRewardsFrameHotkey()
+    {
+        var rewardsHotKey = trigger.Create();
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
+        }
+        rewardsHotKey.AddAction(() => RewardsFrameActions());
+    }
+
     public static void RewardsFrameActions()
     {
         var player = @event.Player;
@@ -206,7 +217,6 @@ public static class RewardsFrame
             UnavilableRewardIcons(player);
             MultiboardUtil.MinMultiboards(player, true);
         }
-        else MultiboardUtil.MinMultiboards(player, false);
     }
 
 

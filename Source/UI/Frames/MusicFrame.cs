@@ -23,6 +23,7 @@ public static class MusicFrame
         MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
         CreateMusicFrames();
+        SetMusicFrameHotkeyEvent();
     }
 
     private static void CreateMusicFrames()
@@ -154,6 +155,17 @@ public static class MusicFrame
         }
     }
 
+    private static void SetMusicFrameHotkeyEvent()
+    {
+        var musicHotkeyTrigger = trigger.Create();
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
+        }
+        musicHotkeyTrigger.AddAction(() => MusicFrameActions());
+    }
+
+
     /// <summary>
     /// Whenever the player presses the music button, this function shows the frame for that player using local player. 
     /// </summary>
@@ -166,7 +178,6 @@ public static class MusicFrame
         FrameManager.HideOtherFrames(MusicFramehandle);
         MusicFramehandle.Visible = !MusicFramehandle.Visible;
         if (MusicFramehandle.Visible) MultiboardUtil.MinMultiboards(player, true);
-        else MultiboardUtil.MinMultiboards(player, false);
         PopulateMusicFrame(player);
     }
 }

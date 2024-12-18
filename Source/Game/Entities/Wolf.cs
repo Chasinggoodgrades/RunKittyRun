@@ -74,8 +74,8 @@ public class Wolf
     private bool ImpossibleChance()
     {
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return true;
-        if (Globals.ROUND < 2) return true;
-        if (GetRandomInt(1, 3) == 1) return true;
+        if (Globals.ROUND < 3) return true;
+        if (GetRandomInt(1, 2) == 1) return true;
         return false;
     }
 

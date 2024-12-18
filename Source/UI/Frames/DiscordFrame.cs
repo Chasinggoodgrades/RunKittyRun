@@ -12,7 +12,7 @@ public static class DiscordFrame
     private static string JoinDiscord = "|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r";
     public static void Initialize()
     {
-        BlzLoadTOCFile("war3mapImported\\templates.toc");
+        //BlzLoadTOCFile("war3mapImported\\templates.toc");
         SetupBackdrop();
         CreateFrame();
         RegisterTrigger();

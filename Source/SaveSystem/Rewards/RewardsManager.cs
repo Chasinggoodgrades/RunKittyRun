@@ -28,6 +28,7 @@ public static class RewardsManager
         RewardCreation.SetupRewards();
         RewardAbilitiesList();
         AwardManager.RegisterGamestatEvents();
+        ChampionAwards.AwardAllChampions();
     }
 
     private static void RewardAbilitiesList()

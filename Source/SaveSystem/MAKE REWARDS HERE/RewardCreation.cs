@@ -91,6 +91,7 @@ public static class RewardCreation
         AddReward(Awards.Spectacular_Aura, Constants.ABILITY_AURA_SPECTACULAR, "origin", "war3mapImported\\ChillingAura.mdx", RewardType.Auras, StatTypes.NormalWins, 30);
         AddReward(Awards.Mana_Aura, Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, StatTypes.NormalWins, 20);
         AddReward(Awards.Butterfly_Aura, Constants.ABILITY_AURA_BUTTERFLY, "origin", "war3mapImported\\ButterflyAura.mdx", RewardType.Auras);
+        AddReward(Awards.Violet_Aura, Constants.ABILITY_CHAMPION_AURAPURPLERUNIC, "origin", "war3mapImported\\GlaciarAuraPurple.mdx", RewardType.Auras);
 
         // Wings
         AddReward(Awards.Phoenix_Wings, Constants.ABILITY_WINGS_PHOENIX, "chest", "war3mapImported\\PhoenixWing2.mdx", RewardType.Wings, StatTypes.Saves, 375);
@@ -102,6 +103,9 @@ public static class RewardCreation
         AddReward(Awards.Chaos_Wings, Constants.ABILITY_WINGS_CHAOS, "chest", "war3mapImported\\ChaosWingsResized2.mdx", RewardType.Wings, StatTypes.Saves, 450);
         AddReward(Awards.Pink_Wings, Constants.ABILITY_WINGS_PINK, "chest", "war3mapImported\\PinkyWings2.mdx", RewardType.Wings, StatTypes.Saves, 600);
         AddReward(Awards.Nature_Wings, Constants.ABILITY_WINGS_NATURE, "chest", "war3mapImported\\Nature Wings2.mdx", RewardType.Wings, StatTypes.Saves, 750);
+        AddReward(Awards.Violet_Wings, Constants.ABILITY_CHAMPION_WINGSTVIOLET, "chest", "war3mapImported\\VoidTendrilsWings.mdx", RewardType.Wings);
+        AddReward(Awards.Turquoise_Wings, Constants.ABILITY_CHAMPION_WINGSTURQUOISE, "chest", "war3mapImported\\TurquoiseWings.mdx", RewardType.Wings);
+
 
         // Tendrils
         AddReward(Awards.Red_Tendrils, Constants.ABILITY_WINGS_TRED, "chest", "war3mapImported\\RedTendrils.mdx", RewardType.Wings);
@@ -124,6 +128,7 @@ public static class RewardCreation
         AddReward(Awards.Nitro_Green, Constants.ABILITY_NITROGREEN, "origin", "war3mapImported\\NitroGreen.mdx", RewardType.Nitros);
         AddReward(Awards.Nitro_Purple, Constants.ABILITY_NITROPURPLE, "origin", "war3mapImported\\NitroPurple.mdx", RewardType.Nitros);
         AddReward(Awards.Divine_Light, Constants.ABILITY_TRAIL_DIVINELIGHT, "origin", "DivineLight.mdx", RewardType.Nitros);
+        AddReward(Awards.Turquoise_Nitro, Constants.ABILITY_CHAMION_NITROTURQUOISE, "origin", "war3mapImported\\NitroTurquoise.mdx", RewardType.Nitros);
 
         // Lightning
         AddReward(Awards.Blue_Lightning, Constants.ABILITY_TRAIL_LIGHTNINGBLUE, "origin", "war3mapImported\\GreatElderHydraLightningOrbV3.mdx", RewardType.Trails, StatTypes.Saves, 2000);

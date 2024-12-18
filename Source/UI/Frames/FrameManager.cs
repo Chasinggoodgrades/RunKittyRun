@@ -15,6 +15,7 @@ public static class FrameManager
     private static trigger ESCTrigger = trigger.Create();
     public static void Initialize()
     {
+        BlzLoadTOCFile("war3mapImported\\templates.toc");
         RemoveUnwantedFrames();
         ButtonsBackdrop();
         CreateRewardsButton();
@@ -75,15 +76,15 @@ public static class FrameManager
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
         var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
-        //timeDayDisplay.Visible = false;
+        timeDayDisplay.Visible = false;
     }
 
     private static void CreateRewardsButton()
     {
-        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "DebugButton", 0);
+        RewardsButton = framehandle.Create("UpperButtonBarButtonTemplate", "RewardsButton", Backdrop, "DebugButton", 0);
         RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
         RewardsButton.SetSize(0.0525f, 0.025f);
-        RewardsButton.Text = "Rewards";
+        RewardsButton.Text = "(-) Rewards";
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
         RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
         RewardsButton.Visible = false;
@@ -91,10 +92,10 @@ public static class FrameManager
 
     private static void CreateMusicButton()
     {
-        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "DebugButton", 0);
+        MusicButton = framehandle.Create("UpperButtonBarButtonTemplate", "MusicButton", Backdrop, "DebugButton", 0);
         MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
         MusicButton.SetSize(0.0525f, 0.025f);
-        MusicButton.Text = "Music";
+        MusicButton.Text = "(0) Music";
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
         StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
         MusicButton.Visible = false;
@@ -102,10 +103,10 @@ public static class FrameManager
 
     private static void CreateShopButton()
     {
-        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "DebugButton", 0);
+        ShopButton = framehandle.Create("UpperButtonBarButtonTemplate", "ShopButton", Backdrop, "DebugButton", 0);
         ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
         ShopButton.SetSize(0.0525f, 0.025f);
-        ShopButton.Text = "Shop";
+        ShopButton.Text = "(=) Shop";
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
         ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
         ShopButton.Visible = false;

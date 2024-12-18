@@ -162,5 +162,10 @@ public enum Awards
 
     Snow_Wings_2023,
     Snow_Trail_2023,
-    Zandalari_Kitty
+    Zandalari_Kitty,
+    Turquoise_Nitro,
+    Turquoise_Wings,
+    Violet_Wings,
+    Violet_Aura
+
 }
