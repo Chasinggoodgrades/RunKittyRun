@@ -42,11 +42,11 @@ namespace Source
 				Delay.EnableDebug();
 #endif
 				Setup.GetActivePlayers();
-                MusicManager.Initialize();
-                FrameManager.Initialize();
-                SaveManager.Initialize();
-                DateTimeManager.Initialize();
-                Setup.Initialize();
+				MusicManager.Initialize();
+				FrameManager.Initialize();
+				SaveManager.Initialize();
+				DateTimeManager.Initialize();
+				Setup.Initialize();
 				CommandHandler.Initialize();
 				CommandManager.InitializeCommands();
 				BarrierSetup.Initialize();

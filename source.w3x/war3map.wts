@@ -2516,34 +2516,16 @@ STRING 3290
 |cff32cd32Sacred Ring of Summoning|r
 }
 
-STRING 3291
-// Items: I000 (|cff32cd32Sacred Ring of Summoning|r), Tip (Tooltip - Basic)
-{
-Purchase the |cff32cd32Sacred Ring of Summoning|r|cff8080ff [Relic] [Max 1] [level 10]|r
-}
-
 STRING 3294
 // Items: I001 (|cff1e90ffBeacon of United Lifeforce|r), Name (Name)
 {
 |cff1e90ffBeacon of United Lifeforce|r
 }
 
-STRING 3295
-// Items: I001 (|cff1e90ffBeacon of United Lifeforce|r), Tip (Tooltip - Basic)
-{
-Purchase the |cff1e90ffBeacon of United Lifeforce|r |cff8080ff[Relic] [Max 1] [level 10]|r
-}
-
 STRING 3298
 // Items: I005 (|cff9932ccFang of Shadows|r), Name (Name)
 {
 |cff9932ccFang of Shadows|r
-}
-
-STRING 3299
-// Items: I005 (|cff9932ccFang of Shadows|r), Tip (Tooltip - Basic)
-{
-Purchase the |cff9932ccFang of Shadows|r|cff8080ff [Relic] [Max 1] [level 10]|r
 }
 
 STRING 3302
@@ -2796,18 +2778,6 @@ STRING 3405
 // Items: I00K (|cff00ccffFrostbite Ring|r), Description (Description)
 {
 |cffffcc00This ring, imbued with Frost Giant magic, freezes wolves in place for |cffff8c005 seconds|r |cffffcc00within a |cffff8c00350|r |cffffcc00AoE. Equipping this ring, provides immunity to the pesky frostbitten wolves. |r|cffff8c00(Active)|r |cffadd8e6Cooldown: 60 seconds|r
-}
-
-STRING 3406
-// Items: I005 (|cff9932ccFang of Shadows|r), Ubertip (Tooltip - Extended)
-{
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 1 min 30 sec, once per life)|r
-}
-
-STRING 3407
-// Items: I005 (|cff9932ccFang of Shadows|r), Description (Description)
-{
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 1 min 30 sec, once per life)|r
 }
 
 STRING 3408
@@ -4503,5 +4473,35 @@ STRING 3736
 // Items: I00M (|cffff4b4bPresent|r), Ubertip (Tooltip - Extended)
 {
 Happy holidays :)
+}
+
+STRING 3737
+// Items: I000 (|cff32cd32Sacred Ring of Summoning|r), Tip (Tooltip - Basic)
+{
+Purchase the |cff32cd32Sacred Ring of Summoning|r|cff8080ff [Relic] [level 10]|r
+}
+
+STRING 3738
+// Items: I001 (|cff1e90ffBeacon of United Lifeforce|r), Tip (Tooltip - Basic)
+{
+Purchase the |cff1e90ffBeacon of United Lifeforce|r |cff8080ff[Relic] [level 10]|r
+}
+
+STRING 3739
+// Items: I005 (|cff9932ccFang of Shadows|r), Tip (Tooltip - Basic)
+{
+Purchase the |cff9932ccFang of Shadows|r|cff8080ff [Relic] [level 10]|r
+}
+
+STRING 3740
+// Items: I005 (|cff9932ccFang of Shadows|r), Ubertip (Tooltip - Extended)
+{
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+}
+
+STRING 3741
+// Items: I005 (|cff9932ccFang of Shadows|r), Description (Description)
+{
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
 }
 

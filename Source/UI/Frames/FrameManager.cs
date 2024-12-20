@@ -81,7 +81,7 @@ public static class FrameManager
 
     private static void CreateRewardsButton()
     {
-        RewardsButton = framehandle.Create("UpperButtonBarButtonTemplate", "RewardsButton", Backdrop, "DebugButton", 0);
+        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
         RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
         RewardsButton.SetSize(0.0525f, 0.025f);
         RewardsButton.Text = "(-) Rewards";
@@ -92,7 +92,7 @@ public static class FrameManager
 
     private static void CreateMusicButton()
     {
-        MusicButton = framehandle.Create("UpperButtonBarButtonTemplate", "MusicButton", Backdrop, "DebugButton", 0);
+        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
         MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
         MusicButton.SetSize(0.0525f, 0.025f);
         MusicButton.Text = "(0) Music";
@@ -103,7 +103,7 @@ public static class FrameManager
 
     private static void CreateShopButton()
     {
-        ShopButton = framehandle.Create("UpperButtonBarButtonTemplate", "ShopButton", Backdrop, "DebugButton", 0);
+        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
         ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
         ShopButton.SetSize(0.0525f, 0.025f);
         ShopButton.Text = "(=) Shop";
