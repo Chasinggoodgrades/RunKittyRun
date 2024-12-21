@@ -36,16 +36,17 @@ public static class AwardManager
     }
 
     /// <summary>
-    /// Gives reward to all players.
+    /// Gives reward to all players, set Prompt to false if you don't want to show the earned prompt.
     /// </summary>
     /// <param name="award"></param>
-    public static void GiveRewardAll(Awards award)
+    public static void GiveRewardAll(Awards award, bool earnedPrompt = true)
     {
         var color = Colors.COLOR_YELLOW_ORANGE;
         var rewardColor = Colors.COLOR_YELLOW;
         foreach (var player in Globals.ALL_PLAYERS)
             GiveReward(player, award, false);
-        Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{GetRewardName(award)}");
+        if (earnedPrompt)
+            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{GetRewardName(award)}");
     }
 
     private static void EnableAbility(player player, Awards award)

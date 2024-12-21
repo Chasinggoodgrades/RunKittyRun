@@ -20,14 +20,14 @@ public class FangOfShadows : Relic
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Cooldown reduced by 25% at safezones.)|r",
+        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r",
         RelicItemID,
         RelicCost,
         IconPath
         )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced at new safezones is now 50% instead of 25%.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Remaining cooldown reduced at new safezones is now 50% instead of 25%.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
