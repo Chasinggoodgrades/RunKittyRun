@@ -2,6 +2,7 @@
 public static class GameTimer
 {
     public static float[] RoundTime { get; set; }
+    public static float RoundSpeedIncrement { get; set; } = 1.0000f;
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
@@ -11,7 +12,7 @@ public static class GameTimer
         Globals.GAME_TIMER_DIALOG.SetTitle("Elapsed Game Time");
         RoundTime = new float[Gamemode.NumberOfRounds + 1];
         var t = timer.Create();
-        t.Start(1.0f, true, () => { StartGameTimer(); });
+        t.Start(RoundSpeedIncrement, true, () => { StartGameTimer(); });
     }
 
     /// <summary>
@@ -21,10 +22,10 @@ public static class GameTimer
     {
         if (Globals.GAME_ACTIVE)
         {
-            Globals.GAME_SECONDS += 1.0f;
+            Globals.GAME_SECONDS += RoundSpeedIncrement;
             Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
             Globals.GAME_TIMER.Pause();
-            RoundTime[Globals.ROUND] += 1.0f;
+            RoundTime[Globals.ROUND] += RoundSpeedIncrement;
             var resourcebar = framehandle.Get("ResourceBarSupplyText", 0);
             resourcebar.Text = $"{Utility.ConvertFloatToTime(Globals.GAME_SECONDS)}";
             UpdatingTimes();
@@ -53,7 +54,7 @@ public static class GameTimer
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         foreach (var team in Globals.ALL_TEAMS.Values)
         {
-            if (!team.Finished) team.TeamTimes[Globals.ROUND] += 1.0f;
+            if (!team.Finished) team.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
         }
     }
 

@@ -191,11 +191,16 @@ public class Savecode
             {
                 if (Enum.TryParse<RoundTimes>(key, true, out RoundTimes roundtime))
                 {
-                    // If ur time is worse (greater) than previous save.. Then update.
-                    if(roundstats[roundtime] > decodedValue)
+                    // Check if the current round time is worse (greater) than the new decoded value.
+                    if (roundstats[roundtime] > decodedValue || roundstats[roundtime] == 0)
+                    {
+                        // Update the round time with the better (lower) decoded value.
                         roundstats[roundtime] = decodedValue;
+                    }
+                    Console.WriteLine($"Time: {key} : {roundstats[roundtime]} : {decodedValue}");
                 }
-                else if(Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
+
+                else if (Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
                 {
                     // If ur stats are less than previous save.. Then update.
                     if (kittyStats[stats] < decodedValue) 

@@ -115,7 +115,7 @@ public static class Gameover
     public static void NotifyEndingGame()
     {
         DiscordFrame.Initialize();
-        Console.WriteLine($"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(EndingTimer, $"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
         Globals.GAME_ACTIVE = false;
         Utility.SimpleTimer(EndingTimer, EndGame);
     }

@@ -11,7 +11,7 @@ public static class TimeSetter
         var standard = Gamemode.CurrentGameMode == "Standard";
         var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
         RoundTimes roundEnum = 0;
-        var playersTime = 0;
+        var playersTime = 0.00f;
         var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
         if (!standard && !solo) return false;

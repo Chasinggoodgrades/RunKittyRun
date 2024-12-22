@@ -33,7 +33,12 @@ public static class SpawnChampions
 
     private static void ApplyCosmetics()
     {
-
+        Fieryfox2023.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+        Fieryfox2023.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
+        FandF2023.AddSpecialEffect("war3mapImported\\GlaciarAuraPurple.mdx", "origin");
+        FandF2023.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
+        Fieryfox2024.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+        Fieryfox2024.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
     }
     
 

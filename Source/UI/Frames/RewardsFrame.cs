@@ -201,7 +201,11 @@ public static class RewardsFrame
         {
             rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
         }
-        rewardsHotKey.AddAction(() => RewardsFrameActions());
+        rewardsHotKey.AddAction(() =>
+        {
+            Utility.SimpleTimer(0.1f, () => SetGameSpeed(gamespeed.Fastest));
+            RewardsFrameActions();
+        });
     }
 
     public static void RewardsFrameActions()

@@ -49,16 +49,12 @@ public class OneOfNine : Relic
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
         var reduction = GetOneOfNineReduction(Player);
 
-        Console.WriteLine(reduction);
-
         // remaining cooldown depending on relic or no relic 
         float cooldown = kitty.GetAbilityCooldownRemaining(noRelic) > 0.0f
             ? kitty.GetAbilityCooldownRemaining(noRelic)
             : kitty.GetAbilityCooldownRemaining(relic);
 
         cooldown -= reduction;
-
-        Console.WriteLine($"{cooldown} - {reduction}");
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
     }

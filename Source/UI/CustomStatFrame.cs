@@ -181,7 +181,7 @@ public static class CustomStatFrame
         BlzFrameSetText(Stats[2].Text, "");
         BlzFrameSetText(Stats[3].Text, "");
         BlzFrameSetText(Stats[4].Text, "");
-        SetWolfAffixTexts(selectedUnit);
+        if(selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
         BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
     }
 

@@ -17,14 +17,52 @@ public static class Nitros
 
     public static float GetNitroTimeRemaining() => NitroTimer.Remaining;
 
-    private static void SetNitroRoundTimes()
+    public static void SetNitroRoundTimes()
     {
-        NitroRoundTimes.Add(1, 125);
-        NitroRoundTimes.Add(2, 140);
-        NitroRoundTimes.Add(3, 160);
-        NitroRoundTimes.Add(4, 235);
-        NitroRoundTimes.Add(5, 345);
+        NitroRoundTimes.Clear();
+        switch (Difficulty.DifficultyValue)
+        {
+            case (int)DifficultyLevel.Normal:
+                SetNormalNitroRoundTimes();
+                break;
+            case (int)DifficultyLevel.Hard:
+                SetHardNitroRoundTimes();
+                break;
+            case (int)DifficultyLevel.Impossible:
+                SetImpossibleNitroRoundTimes();
+                break;
+            default:
+                break;
+        }
     }
+    private static void SetNormalNitroRoundTimes()
+    {
+        NitroRoundTimes.Add(1, 125); // 2:05
+        NitroRoundTimes.Add(2, 140); // 2:20
+        NitroRoundTimes.Add(3, 160); // 2:40
+        NitroRoundTimes.Add(4, 235); // 3:55
+        NitroRoundTimes.Add(5, 345); // 5:45
+    }
+
+    private static void SetHardNitroRoundTimes()
+    {
+        NitroRoundTimes.Add(1, 140); // 2:20
+        NitroRoundTimes.Add(2, 170); // 2:50
+        NitroRoundTimes.Add(3, 195); // 3:15
+        NitroRoundTimes.Add(4, 265); // 4:25
+        NitroRoundTimes.Add(5, 390); // 6:30
+    }
+
+    private static void SetImpossibleNitroRoundTimes()
+    {
+        NitroRoundTimes.Add(1, 155); // 2:35
+        NitroRoundTimes.Add(2, 180); // 3:00
+        NitroRoundTimes.Add(3, 220); // 3:40 
+        NitroRoundTimes.Add(4, 275); // 4:35 
+        NitroRoundTimes.Add(5, 410); // 6:50
+    }
+
+
 
     public static void StartNitroTimer()
     {

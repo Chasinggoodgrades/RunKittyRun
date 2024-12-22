@@ -63,7 +63,7 @@ public class KittyTime
     public void IncrementRoundTime(int round)
     {
         if(RoundTime.ContainsKey(round))
-            RoundTime[round] += 1.0f;
+            RoundTime[round] += GameTimer.RoundSpeedIncrement;
         SetTotalTime();
     }
 

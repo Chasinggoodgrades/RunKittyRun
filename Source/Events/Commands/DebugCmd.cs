@@ -42,6 +42,7 @@ public static class DebugCmd
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");
                 AffixFactory.DistributeAffixes();
                 MultiboardUtil.RefreshMultiboards();
+                Nitros.SetNitroRoundTimes();
                 break;
             case "?rpos":
                 kitty.ReviveKitty();

@@ -48,8 +48,8 @@ public static class Utility
     public static string ConvertFloatToTime(float time, int teamID)
     {
         if (time <= 0.0f) return "0:00";
-        var minutes = (int)time / 60;
-        var seconds = (int)time % 60;
+        var minutes = time / 60;
+        var seconds = time % 60;
         if (seconds < 10) return Colors.ColorString($"{minutes}:0{seconds}", teamID);
         return Colors.ColorString($"{minutes}:{seconds}", teamID);
     }
@@ -61,9 +61,14 @@ public static class Utility
     public static string ConvertFloatToTime(float time)
     {
         if (time <= 0.0f) return "0:00";
-        var minutes = (int)time / 60;
-        var seconds = (int)time % 60;
-        if (seconds < 10) return $"{minutes}:0{seconds}";
+        var minutes = (int)(time / 60);
+        var seconds = (int)(time % 60);
+        //var tenths = (int)((time * 10) % 10); // Get the tenths of a second
+
+        if (seconds < 10)
+        {
+            return $"{minutes}:0{seconds}";
+        }
         return $"{minutes}:{seconds}";
     }
 

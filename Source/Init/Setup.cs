@@ -13,11 +13,12 @@ namespace Source.Init
 
         public static void Initialize()
         {
-            SetGameSpeed(gamespeed.Fast);
             SetGameSpeed(gamespeed.Fastest);
             Colors.Initialize();
             DoodadChanger.ShowSeasonalDoodads(false);
             Gamemode.Initialize();
+            SetAlliedPlayers();
+            Utility.SimpleTimer(2.0f, DateTimeManager.Initialize);
             if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize();
             Savecode.Initialize();
@@ -95,6 +96,20 @@ namespace Source.Init
             {
                 if (Player(i).SlotState == playerslotstate.Playing)
                     Globals.ALL_PLAYERS.Add(Player(i));
+            }
+        }
+
+        private static void SetAlliedPlayers()
+        {
+            foreach(var player in Globals.ALL_PLAYERS)
+            {
+                foreach(var playerx in Globals.ALL_PLAYERS)
+                {
+                    if (player == playerx) continue;
+                    player.SetAlliance(playerx, alliancetype.Passive, true);
+                    player.SetAlliance(playerx, alliancetype.SharedVision, true);
+                    player.SetAlliance(playerx, alliancetype.SharedExperience, true);
+                }
             }
         }
 

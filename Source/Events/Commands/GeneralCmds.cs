@@ -75,7 +75,7 @@ public static class GeneralCmds
             "-oldcode - Load the previous save code (works once)"
         });
 
-        p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Available Commands:\n" + commandList);
+        p.DisplayTextTo(Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList);
     }
 
     private static void HandleZoomCommand(player p, string[] args)

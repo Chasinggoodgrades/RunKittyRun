@@ -37,7 +37,7 @@ public enum SelectedData
     SelectedAura,
     SelectedWindwalk,
     SelectedHat,
-    SelectedTrail
+    SelectedTrail,
 }
 public enum RoundTimes
 {
@@ -166,6 +166,5 @@ public enum Awards
     Turquoise_Nitro,
     Turquoise_Wings,
     Violet_Wings,
-    Violet_Aura
-
+    Violet_Aura,
 }

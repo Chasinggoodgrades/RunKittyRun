@@ -22,31 +22,36 @@ public static class SaveManager
             SaveFolder = "Run-Kitty-Run",
         });
 
-        // load all..
-        //GetStats(Player(0
-        foreach (var p in Globals.ALL_PLAYERS)
+        saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
+
+        foreach(var player in WCSharp.Shared.Util.EnumeratePlayers())
         {
-            if(p.Controller != mapcontrol.User) continue;
-            saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
-            saveSystem.Load(p);
-            //if(Program.Debug) Console.WriteLine("Loading... " + p.Name);
+            saveSystem.Load(player);
         }
     }
 
     public static void SaveManager_OnSaveLoaded(SaveData save, LoadResult loadResult)
     {
-        var player = save.GetPlayer();
-        PlayerSaveData[save.GetPlayer()] = save;
-        if (loadResult == LoadResult.NewSave)
+        try
         {
-            save.Stats = new Dictionary<KittyType, KittyData>();
-            NewSave(player);
+            var player = save.GetPlayer();
+            PlayerSaveData[save.GetPlayer()] = save;
+            if (loadResult == LoadResult.NewSave)
+            {
+                save.Stats = new Dictionary<KittyType, KittyData>();
+                NewSave(player);
+            }
+            else
+            {
+                var stats = save.Stats[KittyType.Kitty];
+                EnsureData(player);
+                Save(player);
+            }
         }
-        else
+        catch (Exception e)
         {
-            var stats = save.Stats[KittyType.Kitty];
-            EnsureData(player);
-            Save(player);
+            if(Program.Debug) Console.WriteLine(e.Message);
+            throw;
         }
     }
 
