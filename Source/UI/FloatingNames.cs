@@ -15,14 +15,14 @@ public class FloatingNameTag
     public FloatingNameTag(player player)
     {
         Player = player;
-        NameTag = CreateTextTag();
+        NameTag = texttag.Create();
         Unit = Globals.ALL_KITTIES[Player];
     }
 
     public static void Initialize()
     {
         PlayerNameTags = new Dictionary<player, FloatingNameTag>();
-        NamePosUpdater = CreateTimer();
+        NamePosUpdater = timer.Create();
         CreateNameTags();
         SetNameTagAttributes();
         NamePosTimer();

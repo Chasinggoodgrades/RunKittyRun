@@ -13,6 +13,7 @@ namespace Source.Init
 
         public static void Initialize()
         {
+            SetGameSpeed(gamespeed.Fast);
             SetGameSpeed(gamespeed.Fastest);
             Colors.Initialize();
             DoodadChanger.ShowSeasonalDoodads(false);

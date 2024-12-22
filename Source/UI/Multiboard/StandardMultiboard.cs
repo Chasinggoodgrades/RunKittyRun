@@ -165,6 +165,7 @@ public static class StandardMultiboard
     private static void OverallGameStats()
     {
         OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
         var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats[StatTypes.Saves] - kvp.Value.SaveData.GameStats[StatTypes.Deaths]).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -205,6 +206,7 @@ public static class StandardMultiboard
     private static void BestTimesStats()
     {
         BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
         foreach (var player in Globals.ALL_PLAYERS)

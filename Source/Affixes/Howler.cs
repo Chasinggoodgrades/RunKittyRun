@@ -8,6 +8,8 @@ public class Howler : Affix
     private const float HOWL_RADIUS = 900.0f;
     private const int AFFIX_ABILITY = Constants.ABILITY_HOWLER;
     private const string ROAR_EFFECT = "Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl";
+    private const float MIN_HOWL_TIME = 10.0f;
+    private const float MAX_HOWL_TIME = 35.0f;
     private timer HowlTimer;
     public Howler(Wolf unit) : base(unit)
     {}
@@ -37,7 +39,7 @@ public class Howler : Affix
     {
         var nearbyWolves = group.Create();
         var roarEffect = effect.Create(ROAR_EFFECT, Unit.Unit, "origin");
-        nearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG));
+        nearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
         foreach (var wolf in nearbyWolves.ToList())
         {
             var wolfObject = Globals.ALL_WOLVES[wolf];
@@ -53,7 +55,7 @@ public class Howler : Affix
 
     private float GetRandomHowlTime()
     {
-        return GetRandomReal(15.0f, 45.0f);
+        return GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
     }
 
 }

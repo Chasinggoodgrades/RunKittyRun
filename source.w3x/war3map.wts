@@ -857,7 +857,7 @@ Pursache the Ritual |cffffcc00M|rask |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run 0.0.1
+Run Kitty Run Remastered v1.0.0
 }
 
 STRING 2035
@@ -2848,59 +2848,14 @@ STRING 3428
 Omniology
 }
 
-STRING 3429
-{
-Player 13
-}
-
-STRING 3430
-{
-Player 14
-}
-
-STRING 3431
-{
-Player 15
-}
-
-STRING 3432
-{
-Player 16
-}
-
-STRING 3434
-{
-Player 18
-}
-
-STRING 3435
-{
-Player 19
-}
-
-STRING 3436
-{
-Player 20
-}
-
 STRING 3437
 {
 Player 21
 }
 
-STRING 3438
-{
-Player 22
-}
-
 STRING 3439
 {
 Player 23
-}
-
-STRING 3440
-{
-Player 24
 }
 
 STRING 3441
@@ -2936,11 +2891,6 @@ Dominos
 STRING 3447
 {
 Fieryfox
-}
-
-STRING 3448
-{
-RandomHoe
 }
 
 STRING 3449
@@ -4503,5 +4453,60 @@ STRING 3741
 // Items: I005 (|cff9932ccFang of Shadows|r), Description (Description)
 {
 |cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+}
+
+STRING 3742
+{
+Maroony
+}
+
+STRING 3743
+{
+Navy
+}
+
+STRING 3744
+{
+BestColorEver
+}
+
+STRING 3745
+{
+GheedIfHeWasGirly
+}
+
+STRING 3746
+{
+RandomGuy
+}
+
+STRING 3747
+{
+RandomGuyTwo
+}
+
+STRING 3748
+{
+Kanon
+}
+
+STRING 3749
+{
+LightPink
+}
+
+STRING 3750
+{
+snowiguess
+}
+
+STRING 3751
+{
+POOP
+}
+
+STRING 3752
+{
+MORE KITTIES
 }
 

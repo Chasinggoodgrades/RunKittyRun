@@ -142,7 +142,7 @@ public class Fixation : Affix
     private void UpdateChaseSpeed()
     {
         var currentMS = Unit.Unit.MovementSpeed;
-        var speedIncrementer = 0.40f; // 4ms every second
+        var speedIncrementer = 0.40f; // 4 movespeed every second
 
         if (IsChasing)
         {

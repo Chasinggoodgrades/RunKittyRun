@@ -13,6 +13,8 @@ public static class FrameManager
     public static framehandle Backdrop;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static trigger ESCTrigger = trigger.Create();
+    private static string TEXT_COLOR = Colors.COLOR_YELLOW;
+    private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
     public static void Initialize()
     {
         BlzLoadTOCFile("war3mapImported\\templates.toc");
@@ -76,15 +78,19 @@ public static class FrameManager
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
         var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
-        timeDayDisplay.Visible = false;
+        //timeDayDisplay.Visible = false;
     }
 
     private static void CreateRewardsButton()
     {
-        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
+        RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "ScriptDialogButton", 0);
         RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
-        RewardsButton.SetSize(0.0525f, 0.025f);
-        RewardsButton.Text = "(-) Rewards";
+        RewardsButton.SetSize(0.0545f, 0.025f);
+        var shopText = framehandle.Create("TEXT", "RewardsText", RewardsButton, "", 0);
+        shopText.Text = $"{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r";
+        shopText.SetPoint(framepointtype.Center, 0, 0, RewardsButton, framepointtype.Center);
+        shopText.SetScale(0.9f);
+        shopText.Enabled = false;
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
         RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
         RewardsButton.Visible = false;
@@ -92,10 +98,14 @@ public static class FrameManager
 
     private static void CreateMusicButton()
     {
-        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
+        MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "ScriptDialogButton", 0);
         MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
         MusicButton.SetSize(0.0525f, 0.025f);
-        MusicButton.Text = "(0) Music";
+        var shopText = framehandle.Create("TEXT", "MusicText", MusicButton, "", 0);
+        shopText.Text = $"{TEXT_COLOR}Music{HOTKEY_COLOR}(0)";
+        shopText.SetPoint(framepointtype.Center, 0, 0, MusicButton, framepointtype.Center);
+        shopText.SetScale(0.98f);
+        shopText.Enabled = false;
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
         StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
         MusicButton.Visible = false;
@@ -103,10 +113,14 @@ public static class FrameManager
 
     private static void CreateShopButton()
     {
-        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "UpperButtonBarButtonTemplate", 0);
+        ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "ScriptDialogButton", 0);
         ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
         ShopButton.SetSize(0.0525f, 0.025f);
-        ShopButton.Text = "(=) Shop";
+        var shopText = framehandle.Create("TEXT", "ShopText", ShopButton, "", 0);
+        shopText.Text = $"{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)";
+        shopText.SetPoint(framepointtype.Center, 0, 0, ShopButton, framepointtype.Center);
+        shopText.SetScale(1.0f);
+        shopText.Enabled = false;
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
         ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
         ShopButton.Visible = false;
@@ -115,15 +129,27 @@ public static class FrameManager
     private static void ButtonsBackdrop()
     {
         Backdrop = framehandle.Create("BACKDROP", "ButtonsBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
-        var statsFrameParent = BlzGetFrameByName("SimpleUnitStatsPanel", 0);
-        Backdrop.SetPoint(framepointtype.Center, 0, 0.075f, statsFrameParent, framepointtype.Center);
-        Backdrop.SetSize(0.18f, 0.035f);
+        var statsFrameParent = BlzGetFrameByName("ResourceBarGoldText", 0);
+        Backdrop.SetPoint(framepointtype.Top, 0, 0, GameUI, framepointtype.Top);
+        Backdrop.SetSize(0.16f, 0.035f);
+        Backdrop.SetScale(1.0f);
         Backdrop.Visible = false;
+        RepositionBackdrop();
     }
 
-    public static void UpdateButtonPositions()
+    private static void RepositionBackdrop()
     {
-        Backdrop.SetPoint(framepointtype.Center, 0, 0.075f, BlzGetFrameByName("SimpleUnitStatsPanel", 0), framepointtype.Center);
+        var t = timer.Create();
+        var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
+        t.Start(0.1f, true, () =>
+        {
+            var x = nameFrame.Width / 4;
+            var h = nameFrame.Height / 8;
+            var yOffSet = nameFrame.Height / 8;
+            Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
+            Backdrop.SetSize(x, h);
+            t.Dispose();
+        });
     }
 
     private static void ESCHideFrames()
