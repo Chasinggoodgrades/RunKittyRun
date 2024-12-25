@@ -18,7 +18,6 @@ namespace Source.Init
             DoodadChanger.ShowSeasonalDoodads(false);
             Gamemode.Initialize();
             SetAlliedPlayers();
-            Utility.SimpleTimer(2.0f, DateTimeManager.Initialize);
             if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize();
             Savecode.Initialize();
@@ -55,7 +54,7 @@ namespace Source.Init
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
                 SuspendTimeOfDay(true);
                 CustomStatFrame.Init();
-                SeasonalManager.Initialize();
+                //SeasonalManager.Initialize();
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();

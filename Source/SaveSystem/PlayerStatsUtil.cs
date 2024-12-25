@@ -14,11 +14,11 @@ public static class PlayerStatsUtil
         switch (currentDiff)
         {
             case (int)DifficultyLevel.Normal:
-                return kittyData[StatTypes.NormalGames];
+                return kittyData.NormalGames;
             case (int)DifficultyLevel.Hard:
-                return kittyData[StatTypes.HardGames];
+                return kittyData.HardGames;
             case (int)DifficultyLevel.Impossible:
-                return kittyData[StatTypes.ImpossibleGames];
+                return kittyData.ImpossibleGames;
             default:
                 return 0;
         }

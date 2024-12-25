@@ -97,7 +97,7 @@ public static class Nitros
         var round = Globals.ROUND;
         switch(round)
         {
-            case 1:
+/*            case 1:
                 AwardManager.GiveReward(player, Awards.Nitro);
                 break;
             case 2:
@@ -112,7 +112,7 @@ public static class Nitros
                 break;
             case 5:
                 AwardManager.GiveReward(player, Awards.Nitro_Purple);
-                break;
+                break;*/
             default:
                 break;
         }
@@ -129,7 +129,7 @@ public static class Nitros
         if(Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
         if (NitroCount.TryGetValue(player, out var count) && count == requiredCount)
-            AwardManager.GiveReward(player, Awards.Divine_Light);
+            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.DivineLight));
     }
 
     private static void PlayNitroSound(player player)

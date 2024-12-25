@@ -192,17 +192,17 @@ public static class SoloMultiboard
 
     private static int[] GetGameRoundTime(KittyData data)
     {
-        var gameData = data.GameTimes;
+        var gameData = data.RoundTimes;
         var roundTimes = new int[5];
 
         switch (Gamemode.CurrentGameMode)
         {
             case "Tournament Solo":
-                roundTimes[0] = gameData[RoundTimes.RoundOneSolo];
-                roundTimes[1] = gameData[RoundTimes.RoundTwoSolo];
-                roundTimes[2] = gameData[RoundTimes.RoundThreeSolo];
-                roundTimes[3] = gameData[RoundTimes.RoundFourSolo];
-                roundTimes[4] = gameData[RoundTimes.RoundFiveSolo];
+                roundTimes[0] = gameData.RoundOneSolo;
+                roundTimes[1] = gameData.RoundTwoSolo;
+                roundTimes[2] = gameData.RoundThreeSolo;
+                roundTimes[3] = gameData.RoundFourSolo;
+                roundTimes[4] = gameData.RoundFiveSolo;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");

@@ -176,35 +176,40 @@ public class Savecode
     public void SetRewardValues(player player)
     {
         var awardData = Globals.ALL_KITTIES[player].SaveData.GameAwards;
-        var roundstats = Globals.ALL_KITTIES[player].SaveData.GameTimes;
+        var roundstats = Globals.ALL_KITTIES[player].SaveData.RoundTimes;
         var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
 
         foreach (var value in DecodeOldsave.decodeValues)
         {
             var decodedValue = Decode(value.Value);
-            if(value.Key is Awards && decodedValue == 1)
+            var property = awardData.GetType().GetProperty(value.Key);
+            // Award Events
+            if (property != null && decodedValue == 1)
             {
-                if(awardData[(Awards)value.Key] == 0)
-                    AwardManager.GiveReward(player, (Awards)value.Key);
-            }
-            if (value.Key is string key)
-            {
-                if (Enum.TryParse<RoundTimes>(key, true, out RoundTimes roundtime))
+                if ((int)property.GetValue(awardData) == 0)
                 {
-                    // Check if the current round time is worse (greater) than the new decoded value.
-                    if (roundstats[roundtime] > decodedValue || roundstats[roundtime] == 0)
-                    {
-                        // Update the round time with the better (lower) decoded value.
-                        roundstats[roundtime] = decodedValue;
-                    }
-                    Console.WriteLine($"Time: {key} : {roundstats[roundtime]} : {decodedValue}");
+                    AwardManager.GiveReward(player, value.Key);
+                    continue;
                 }
-
-                else if (Enum.TryParse<StatTypes>(key, true, out StatTypes stats))
+            }
+            property = roundstats.GetType().GetProperty(value.Key);
+            // Round Times
+            if (property != null)
+            {
+                if (decodedValue < (int)property.GetValue(roundstats) || (int)property.GetValue(roundstats) == 0)
                 {
-                    // If ur stats are less than previous save.. Then update.
-                    if (kittyStats[stats] < decodedValue) 
-                        kittyStats[stats] = decodedValue;
+                    property.SetValue(roundstats, decodedValue);
+                    continue;
+                }
+            }
+            property = kittyStats.GetType().GetProperty(value.Key);
+            // Game Stats
+            if (property != null)
+            {
+                if (decodedValue > (int)property.GetValue(kittyStats))
+                {
+                    property.SetValue(kittyStats, decodedValue);
+                    continue;
                 }
             }
         }

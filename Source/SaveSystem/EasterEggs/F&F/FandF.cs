@@ -84,7 +84,7 @@ public static class FandF
         if (BloodVialItems(u))
         {
             RemoveQuestItems(u);
-            AwardManager.GiveReward(u.Owner, Awards.WW_Blood);
+            AwardManager.GiveReward(u.Owner, nameof(Globals.GAME_AWARDS.WWBlood));
         }
         else u.Owner.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:| r |cffffff00Ah, splendid! You've recovered the sample. Your prowess is truly remarkable. Evidently, the potential within this sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r");

@@ -84,13 +84,13 @@ public static class Gameover
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:
-                stats[StatTypes.NormalGames] += 1;
+                stats.NormalGames += 1;
                 break;
             case (int)DifficultyLevel.Hard:
-                stats[StatTypes.HardGames] += 1;
+                stats.HardGames += 1;
                 break;
             case (int)DifficultyLevel.Impossible:
-                stats[StatTypes.ImpossibleGames] += 1;
+                stats.ImpossibleGames += 1;
                 break;
         }
     }
@@ -101,13 +101,13 @@ public static class Gameover
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:
-                stats[StatTypes.NormalWins] += 1;
+                stats.NormalWins += 1;
                 break;
             case (int)DifficultyLevel.Hard:
-                stats[StatTypes.HardWins] += 1;
+                stats.HardWins += 1;
                 break;
             case (int)DifficultyLevel.Impossible:
-                stats[StatTypes.ImpossibleWins] += 1;
+                stats.ImpossibleWins += 1;
                 break;
         }
     }

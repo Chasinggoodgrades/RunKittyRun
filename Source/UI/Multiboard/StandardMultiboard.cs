@@ -168,7 +168,7 @@ public static class StandardMultiboard
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats[StatTypes.Saves] - kvp.Value.SaveData.GameStats[StatTypes.Deaths]).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats.Saves - kvp.Value.SaveData.GameStats.Deaths).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         foreach (var player in sortedPlayers.Keys)
         {
@@ -176,8 +176,8 @@ public static class StandardMultiboard
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
             var name = player.Name;
-            var allSaves = saveData.GameStats[StatTypes.Saves];
-            var allDeaths = saveData.GameStats[StatTypes.Deaths];
+            var allSaves = saveData.GameStats.Saves;
+            var allDeaths = saveData.GameStats.Deaths;
             var score = allSaves - allDeaths;
             var kda = allDeaths == 0 ? allSaves.ToString("F2") : (allSaves / (double)allDeaths).ToString("F2");
             var (games, wins) = GetGameStatData(saveData);
@@ -188,7 +188,7 @@ public static class StandardMultiboard
                 score.ToString(),
                 allSaves.ToString(),
                 allDeaths.ToString(),
-                saveData.GameStats[StatTypes.HighestSaveStreak].ToString(),
+                saveData.GameStats.HighestSaveStreak.ToString(),
                 kda,
                 games.ToString(),
                 wins.ToString()
@@ -257,16 +257,16 @@ public static class StandardMultiboard
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:
-                numberOfGames = gameData[StatTypes.NormalGames];
-                numberOfWins = gameData[StatTypes.NormalWins];
+                numberOfGames = gameData.NormalGames;
+                numberOfWins = gameData.NormalWins;
                 break;
             case (int)DifficultyLevel.Hard:
-                numberOfGames = gameData[StatTypes.HardGames];
-                numberOfWins = gameData[StatTypes.HardWins];
+                numberOfGames = gameData.HardGames;
+                numberOfWins = gameData.HardWins;
                 break;
             case (int)DifficultyLevel.Impossible:
-                numberOfGames = gameData[StatTypes.ImpossibleGames];
-                numberOfWins = gameData[StatTypes.ImpossibleWins];
+                numberOfGames = gameData.ImpossibleGames;
+                numberOfWins = gameData.ImpossibleWins;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
@@ -277,31 +277,31 @@ public static class StandardMultiboard
 
     private static int[] GetGameRoundTime(KittyData data)
     {
-        var gameData = data.GameTimes;
+        var gameData = data.RoundTimes;
         var roundTimes = new int[5];
 
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:
-                roundTimes[0] = gameData[RoundTimes.RoundOneNormal];
-                roundTimes[1] = gameData[RoundTimes.RoundTwoNormal];
-                roundTimes[2] = gameData[RoundTimes.RoundThreeNormal];
-                roundTimes[3] = gameData[RoundTimes.RoundFourNormal];
-                roundTimes[4] = gameData[RoundTimes.RoundFiveNormal];
+                roundTimes[0] = gameData.RoundOneNormal;
+                roundTimes[1] = gameData.RoundTwoNormal;
+                roundTimes[2] = gameData.RoundThreeNormal;
+                roundTimes[3] = gameData.RoundFourNormal;
+                roundTimes[4] = gameData.RoundFiveNormal;
                 break;
             case (int)DifficultyLevel.Hard:
-                roundTimes[0] = gameData[RoundTimes.RoundOneHard];
-                roundTimes[1] = gameData[RoundTimes.RoundTwoHard];
-                roundTimes[2] = gameData[RoundTimes.RoundThreeHard];
-                roundTimes[3] = gameData[RoundTimes.RoundFourHard];
-                roundTimes[4] = gameData[RoundTimes.RoundFiveHard];
+                roundTimes[0] = gameData.RoundOneHard;
+                roundTimes[1] = gameData.RoundTwoHard;
+                roundTimes[2] = gameData.RoundThreeHard;
+                roundTimes[3] = gameData.RoundFourHard;
+                roundTimes[4] = gameData.RoundFiveHard;
                 break;
             case (int)DifficultyLevel.Impossible:
-                roundTimes[0] = gameData[RoundTimes.RoundOneImpossible];
-                roundTimes[1] = gameData[RoundTimes.RoundTwoImpossible];
-                roundTimes[2] = gameData[RoundTimes.RoundThreeImpossible];
-                roundTimes[3] = gameData[RoundTimes.RoundFourImpossible];
-                roundTimes[4] = gameData[RoundTimes.RoundFiveImpossible];
+                roundTimes[0] = gameData.RoundOneImpossible;
+                roundTimes[1] = gameData.RoundTwoImpossible;
+                roundTimes[2] = gameData.RoundThreeImpossible;
+                roundTimes[3] = gameData.RoundFourImpossible;
+                roundTimes[4] = gameData.RoundFiveImpossible;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");

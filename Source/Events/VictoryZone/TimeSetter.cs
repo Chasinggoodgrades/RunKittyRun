@@ -10,35 +10,35 @@ public static class TimeSetter
     {
         var standard = Gamemode.CurrentGameMode == "Standard";
         var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
-        RoundTimes roundEnum = 0;
-        var playersTime = 0.00f;
+        string roundString = "";
         var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
         if (!standard && !solo) return false;
 
-        if(standard) roundEnum = GetRoundEnum();
-        if(solo) roundEnum = GetSoloTime();
+        if(standard) roundString = GetRoundEnum();
+        if(solo) roundString = GetSoloTime();
         if (currentTime >= 1200) return false; // 20 min cap.
 
-        playersTime = Globals.ALL_KITTIES[player].SaveData.GameTimes[roundEnum];
+        var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
+        var value = (int)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+        if (currentTime >= value && value != 0) return false;
 
-        if (currentTime >= playersTime && playersTime != 0) return false;
-
-        SetSavedTime(player, roundEnum);
+        SetSavedTime(player, roundString);
 
         return true;
     }
 
-    private static void SetSavedTime(player player, RoundTimes roundEnum)
+    private static void SetSavedTime(player player, string roundString)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-        kittyStats.GameTimes[roundEnum] = (int)GameTimer.RoundTime[Globals.ROUND];
+        var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
+        property.SetValue(kittyStats.RoundTimes, (int)GameTimer.RoundTime[Globals.ROUND]);
     }
 
-    private static RoundTimes GetRoundEnum()
+    private static string GetRoundEnum()
     {
         var currentDiff = Difficulty.DifficultyValue;
-        var roundEnum = RoundTimes.RoundOneNormal;
+        var roundEnum = "";
 
         switch(currentDiff)
         {
@@ -53,98 +53,102 @@ public static class TimeSetter
                 break;
             default:
                 Console.WriteLine("Invalid difficulty level for GetRoundEnum");
-                return 0;
+                return "";
         }
         return roundEnum;
     }
 
-    private static RoundTimes GetSoloTime()
+    private static string GetSoloTime()
     {
         var roundEnum = GetSoloRoundEnum();
         return roundEnum;
     }
 
-    private static RoundTimes GetNormalRoundEnum()
+    private static string GetNormalRoundEnum()
     {
+        var gameTimeData = Globals.GAME_TIMES;
         var round = Globals.ROUND;
         switch(round)
         {
             case 1:
-                return RoundTimes.RoundOneNormal;
+                return nameof(gameTimeData.RoundOneNormal);
             case 2:
-                return RoundTimes.RoundTwoNormal;
+                return nameof(gameTimeData.RoundTwoNormal);
             case 3:
-                return RoundTimes.RoundThreeNormal;
+                return nameof(gameTimeData.RoundThreeNormal);
             case 4:
-                return RoundTimes.RoundFourNormal;
+                return nameof(gameTimeData.RoundFourNormal);
             case 5:
-                return RoundTimes.RoundFiveNormal;
+                return nameof(gameTimeData.RoundFiveNormal);
             default:
                 Console.WriteLine("Invalid round number for GetNormalRoundEnum");
-                return 0;
+                return "";
         }
     }
 
-    private static RoundTimes GetHardRoundEnum()
+    private static string GetHardRoundEnum()
     {
         var round = Globals.ROUND;
-        switch(round)
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
         {
             case 1:
-                return RoundTimes.RoundOneHard;
+                return nameof(gameTimeData.RoundOneHard);
             case 2:
-                return RoundTimes.RoundTwoHard;
+                return nameof(gameTimeData.RoundTwoHard);
             case 3:
-                return RoundTimes.RoundThreeHard;
+                return nameof(gameTimeData.RoundThreeHard);
             case 4:
-                return RoundTimes.RoundFourHard;
+                return nameof(gameTimeData.RoundFourHard);
             case 5:
-                return RoundTimes.RoundFiveHard;
+                return nameof(gameTimeData.RoundFiveHard);
             default:
                 Console.WriteLine("Invalid round number for GetHardRoundEnum");
-                return 0;
+                return "";
         }
     }
 
-    private static RoundTimes GetImpossibleRoundEnum()
+    private static string GetImpossibleRoundEnum()
     {
         var round = Globals.ROUND;
-        switch(round)
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
         {
             case 1:
-                return RoundTimes.RoundOneImpossible;
+                return nameof(gameTimeData.RoundOneImpossible);
             case 2:
-                return RoundTimes.RoundTwoImpossible;
+                return nameof(gameTimeData.RoundTwoImpossible);
             case 3:
-                return RoundTimes.RoundThreeImpossible;
+                return nameof(gameTimeData.RoundThreeImpossible);
             case 4:
-                return RoundTimes.RoundFourImpossible;
+                return nameof(gameTimeData.RoundFourImpossible);
             case 5:
-                return RoundTimes.RoundFiveImpossible;
+                return nameof(gameTimeData.RoundFiveImpossible);
             default:
                 Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
-                return 0;
+                return "";
         }
     }
 
-    private static RoundTimes GetSoloRoundEnum()
+    private static string GetSoloRoundEnum()
     {
         var round = Globals.ROUND;
-        switch(round)
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
         {
             case 1:
-                return RoundTimes.RoundOneSolo;
+                return nameof(gameTimeData.RoundOneSolo);
             case 2:
-                return RoundTimes.RoundTwoSolo;
+                return nameof(gameTimeData.RoundTwoSolo);
             case 3:
-                return RoundTimes.RoundThreeSolo;
+                return nameof(gameTimeData.RoundThreeSolo);
             case 4:
-                return RoundTimes.RoundFourSolo;
+                return nameof(gameTimeData.RoundFourSolo);
             case 5:
-                return RoundTimes.RoundFiveSolo;
+                return nameof(gameTimeData.RoundFiveSolo);
             default:
                 Console.WriteLine("Invalid round number for GetSoloRoundEnum");
-                return 0;
+                return "";
         }
     }
 }

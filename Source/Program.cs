@@ -42,15 +42,16 @@ namespace Source
 				Delay.EnableDebug();
 #endif
 				Setup.GetActivePlayers();
-/*				MusicManager.Initialize();
-				FrameManager.Initialize();*/
+				MusicManager.Initialize();
+				FrameManager.Initialize();
 				SaveManager.Initialize();
-/*				Setup.Initialize();
-				CommandHandler.Initialize();
+                DateTimeManager.Initialize();
+                Setup.Initialize();
+                CommandHandler.Initialize();
 				CommandManager.InitializeCommands();
-				BarrierSetup.Initialize();*/
+				BarrierSetup.Initialize();
 
-            }
+			}
             catch (Exception ex)
 			{
 				DisplayTextToPlayer(GetLocalPlayer(), 0, 0, ex.Message);

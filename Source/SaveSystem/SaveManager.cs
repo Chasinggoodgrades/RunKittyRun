@@ -1,11 +1,8 @@
 ﻿using Source;
 using WCSharp.SaveLoad;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
-using WCSharp.Json;
 using System.Collections.Generic;
 using System;
-using System.Diagnostics;
 
 public static class SaveManager
 {
@@ -15,11 +12,12 @@ public static class SaveManager
     {
         saveSystem = new SaveSystem<SaveData>(new SaveSystemOptions
         {
-            Hash1 = 826927,
-            Hash2 = 945673,
+            Hash1 = 39667,
+            Hash2 = 2861,
             Salt = "QWNoZXMjMTgxNw",
             BindSavesToPlayerName = true,
             SaveFolder = "Run-Kitty-Run",
+            AttemptToLoadNewerVersions = true,
         });
 
         saveSystem.OnSaveLoaded += SaveManager_OnSaveLoaded;
@@ -34,51 +32,25 @@ public static class SaveManager
     {
         try
         {
-            var player = save.GetPlayer();
             PlayerSaveData[save.GetPlayer()] = save;
             if (loadResult == LoadResult.NewSave)
             {
-                save.Stats = new Dictionary<KittyType, KittyData>();
-                NewSave(player);
+                NewSave(save.GetPlayer());
+            }
+            if (loadResult.Failed())             {
+                if(Program.Debug) Console.WriteLine($"Failed to load save for {save.GetPlayer().Name}");
+                NewSave(save.GetPlayer());
             }
             else
             {
-                var stats = save.Stats[KittyType.Kitty];
-                EnsureData(player);
-                Save(player);
+                var stats = save.Stats;
+                Save(save);
             }
         }
         catch (Exception e)
         {
             if(Program.Debug) Console.WriteLine(e.Message);
             throw;
-        }
-    }
-
-    private static void EnsureData(player player)
-    {
-        foreach(var selectData in Enum.GetValues(typeof(SelectedData)))
-        {
-            if (!PlayerSaveData[player].Stats[KittyType.Kitty].SelectedData.ContainsKey((SelectedData)selectData))
-                PlayerSaveData[player].Stats[KittyType.Kitty].SelectedData[(SelectedData)selectData] = -1;
-        }
-
-        foreach(var gamestat in Enum.GetValues(typeof(StatTypes)))
-        {
-            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameStats.ContainsKey((StatTypes)gamestat))
-                PlayerSaveData[player].Stats[KittyType.Kitty].GameStats[(StatTypes)gamestat] = 0;
-        }
-
-        foreach(var time in Enum.GetValues(typeof(RoundTimes)))
-        {
-            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameTimes.ContainsKey((RoundTimes)time))
-                PlayerSaveData[player].Stats[KittyType.Kitty].GameTimes[(RoundTimes)time] = 0;
-        }
-
-        foreach (var award in Enum.GetValues(typeof(Awards)))
-        {
-            if (!PlayerSaveData[player].Stats[KittyType.Kitty].GameAwards.ContainsKey((Awards)award))
-                PlayerSaveData[player].Stats[KittyType.Kitty].GameAwards[(Awards)award] = 0;
         }
     }
 
@@ -91,13 +63,8 @@ public static class SaveManager
     public static void Save(player Player) => Save(PlayerSaveData[Player]);
     public static void NewSave(player Player)
     {
-        var kitty = KittyType.Kitty;
         var save = PlayerSaveData[Player];
-        if(!save.Stats.TryGetValue(kitty, out var kittyData))
-        {
-            kittyData = new KittyData();
-            save.Stats[kitty] = kittyData;
-        }
+        save.Stats = new KittyData();
         Save(save);
     }
 }

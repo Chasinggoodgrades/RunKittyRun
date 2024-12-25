@@ -12,7 +12,7 @@ public class ShopItem
     public string Description { get; set; }
     public string IconPath { get; set; }
     public Relic Relic { get; set; }
-    public Awards Award { get; set; }
+    public string Award { get; set; }
     public ShopItemType Type { get; set; }
 
     public ShopItem(Relic relic)
@@ -21,9 +21,9 @@ public class ShopItem
         Relic = relic;
     }
 
-    public ShopItem(Awards award, int cost, int abilityID, string description)
+    public ShopItem(string award, int cost, int abilityID, string description)
     {
-        InitializeShopItem(AwardManager.GetRewardName(award), cost, abilityID, description, null, ShopItemType.Reward);
+        InitializeShopItem(award, cost, abilityID, description, null, ShopItemType.Reward);
         Award = award;
         IconPath = BlzGetAbilityIcon(abilityID);
     }
@@ -58,8 +58,8 @@ public class ShopItem
     {
         var shopItems = new List<ShopItem>();
 
-        var reward = RewardsManager.Rewards.Find(x => x.Name == Awards.Green_Tendrils);
-        shopItems.Add(new ShopItem(Awards.Green_Tendrils, 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
+        var reward = RewardsManager.Rewards.Find(x => x.Name == "GreenTendrils");
+        shopItems.Add(new ShopItem("GreenTendrils", 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
         
         return shopItems;
     }

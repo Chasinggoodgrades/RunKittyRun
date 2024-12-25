@@ -50,9 +50,7 @@ public static class ItemStacker
         if (itemCharges > 1) heldItem.Charges += itemCharges;
         else heldItem.Charges += 1;
         item.Dispose();
-
     }
-
 
     private static bool StackableItem(int itemID)
     {

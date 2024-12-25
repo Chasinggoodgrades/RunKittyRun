@@ -18,16 +18,18 @@ public enum RewardType
 }
 public class Reward
 {
-    public Awards Name { get; }
+    public string Name { get; }
     public int AbilityID { get; }
     public string OriginPoint { get; }
     public string ModelPath { get; }
     public int SkinID { get; }
     public RewardType Type { get; }
-    public StatTypes GameStat { get; }
+    public string GameStat { get; }
     public int GameStatValue { get; set; }
 
-    public Reward(Awards name, int abilityID, string originPoint, string modelPath, RewardType type)
+    private static GameSelectedData GlobalSelectedData = new GameSelectedData();
+
+    public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type)
     {
         Name = name;
         AbilityID = abilityID;
@@ -36,7 +38,7 @@ public class Reward
         Type = type;
     }
 
-    public Reward(Awards name, int abilityID, int skinID, RewardType type)
+    public Reward(string name, int abilityID, int skinID, RewardType type)
     {
         Name = name;
         AbilityID = abilityID;
@@ -44,7 +46,7 @@ public class Reward
         Type = type;
     }
 
-    public Reward(Awards name, int abilityID, int skinID, RewardType type, StatTypes gameStat, int gameStatValue)
+    public Reward(string name, int abilityID, int skinID, RewardType type, string gameStat, int gameStatValue)
     {
         Name = name;
         AbilityID = abilityID;
@@ -55,7 +57,7 @@ public class Reward
         RewardsManager.GameStatRewards.Add(this);
     }
 
-    public Reward(Awards name, int abilityID, string originPoint, string modelPath, RewardType type, StatTypes gameStat, int gameStatValue)
+    public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type, string gameStat, int gameStatValue)
     {
         Name = name;
         AbilityID = abilityID;
@@ -167,29 +169,28 @@ public class Reward
     private void SetSelectedData(player player)
     {
         var saveData = Globals.ALL_KITTIES[player].SaveData;
-        int nameValue = (int)Name;
 
         switch (Type)
         {
             case RewardType.Skins:
-                saveData.SelectedData[SelectedData.SelectedSkin] = nameValue;
+                saveData.SelectedData.SelectedSkin = Name;
                 break;
             case RewardType.Windwalks:
-                saveData.SelectedData[SelectedData.SelectedWindwalk] = nameValue;
+                saveData.SelectedData.SelectedWindwalk = Name;
                 break;
             case RewardType.Auras:
-                saveData.SelectedData[SelectedData.SelectedAura] = nameValue;
+                saveData.SelectedData.SelectedAura = Name;
                 break;
             case RewardType.Hats:
-                saveData.SelectedData[SelectedData.SelectedHat] = nameValue;
+                saveData.SelectedData.SelectedHat = Name;
                 break;
             case RewardType.Wings:
-                saveData.SelectedData[SelectedData.SelectedWings] = nameValue;
+                saveData.SelectedData.SelectedWings = Name;
                 break;
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                saveData.SelectedData[SelectedData.SelectedTrail] = nameValue;
+                saveData.SelectedData.SelectedTrail = Name;
                 break;
             default:
                 Console.WriteLine("Error with selected data");
@@ -197,7 +198,7 @@ public class Reward
         }
     }
 
-    public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
+    //public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
     public string GetRewardName() => Name.ToString().Replace("_", " ");
     public int GetAbilityID() => AbilityID;

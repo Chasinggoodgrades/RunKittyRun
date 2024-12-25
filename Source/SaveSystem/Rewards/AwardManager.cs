@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 /// <summary>
@@ -10,13 +11,13 @@ using static WCSharp.Api.Common;
 /// </summary>
 public static class AwardManager
 {
-    private static Dictionary<player, List<Awards>> Awarded = new Dictionary<player, List<Awards>>();
+    private static Dictionary<player, List<string>> Awarded = new Dictionary<player, List<string>>();
     private static trigger AwardTrigger = trigger.Create();
-    public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
+    //public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)
-            Awarded.Add(player, new List<Awards>());
+            Awarded.Add(player, new List<string>());
     }
 
     /// <summary>
@@ -25,31 +26,34 @@ public static class AwardManager
     /// <param name="player">The Player</param>
     /// <param name="award">The Awards.{award} that you're handing out.</param>
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
-    public static void GiveReward(player player, Awards award, bool earnedPrompt = true)
+    public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
         if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
         var saveData = Globals.ALL_KITTIES[player].SaveData;
-        saveData.GameAwards[award] = 1;
+
+        var property = saveData.GameAwards.GetType().GetProperty(award);
+        property.SetValue(saveData.GameAwards, 1);
+
         EnableAbility(player, award);
         Awarded[player].Add(award);
-        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + GetRewardName(award));
+        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + award);
     }
 
     /// <summary>
     /// Gives reward to all players, set Prompt to false if you don't want to show the earned prompt.
     /// </summary>
     /// <param name="award"></param>
-    public static void GiveRewardAll(Awards award, bool earnedPrompt = true)
+    public static void GiveRewardAll(string award, bool earnedPrompt = true)
     {
         var color = Colors.COLOR_YELLOW_ORANGE;
         var rewardColor = Colors.COLOR_YELLOW;
         foreach (var player in Globals.ALL_PLAYERS)
             GiveReward(player, award, false);
         if (earnedPrompt)
-            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{GetRewardName(award)}");
+            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{award}");
     }
 
-    private static void EnableAbility(player player, Awards award)
+    private static void EnableAbility(player player, string award)
     {
         var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.ToString());
         var kitty = Globals.ALL_KITTIES[player].Unit;
@@ -57,7 +61,7 @@ public static class AwardManager
         kitty.DisableAbility(reward.GetAbilityID(), false, false);
     }
 
-    public static bool ReceivedAwardAlready(player player, Awards award)
+    public static bool ReceivedAwardAlready(player player, string award)
     {
         return Awarded.TryGetValue(player, out var awards) && awards.Contains(award);
     }
@@ -71,50 +75,45 @@ public static class AwardManager
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-            foreach (var gameStatReward in RewardsManager.GameStatRewards)
+            var gameStats = kittyStats.GameStats;
+            // TODO: Game stats should go to the other object and properties
+
+            foreach(var gameStatReward in RewardsManager.GameStatRewards)
             {
                 var gamestat = gameStatReward.GameStat;
-                var requiredValue = gameStatReward.GameStatValue;
-                var award = gameStatReward.Name;
-
-                // Check if the gamestat is NormalWins or NormalGames
-                if (gamestat == StatTypes.NormalWins || gamestat == StatTypes.NormalGames)
+                if (gamestat == nameof(gameStats.NormalWins) || gamestat == nameof(gameStats.NormalGames))
                 {
-                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
-
-                    // Also check HardWins, HardGames, ImpossibleWins, ImpossibleGames
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.HardWins, requiredValue, award);
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.HardGames, requiredValue, award);
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleWins, requiredValue, award);
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleGames, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.HardWins), gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.HardGames), gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleWins), gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleGames), gameStatReward.GameStatValue, gameStatReward.Name);
                 }
-                // Check if the gamestat is HardWins or HardGames
-                else if (gamestat == StatTypes.HardWins || gamestat == StatTypes.HardGames)
+                else if (gamestat == nameof(gameStats.HardWins) || gamestat == nameof(gameStats.HardGames))
                 {
-                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
-
-                    // Also check ImpossibleWins, ImpossibleGames
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleWins, requiredValue, award);
-                    HandleGameStatTrigger(player, kittyStats, StatTypes.ImpossibleGames, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleWins), gameStatReward.GameStatValue, gameStatReward.Name);
+                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleGames), gameStatReward.GameStatValue, gameStatReward.Name);
                 }
                 else
                 {
-                    // Handle other game stats normally
-                    HandleGameStatTrigger(player, kittyStats, gamestat, requiredValue, award);
+                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
                 }
             }
         }
         AwardTrigger.RegisterTimerEvent(1.0f, true);
     }
 
-    private static void HandleGameStatTrigger(player player, KittyData kittyStats, StatTypes gamestat, int requiredValue, Awards award)
+    private static void HandleGameStatTrigger(player player, KittyData kittyStats, string gamestat, int requiredValue, string award)
     {
-        if (kittyStats.GameStats[gamestat] < requiredValue)
+        var property = kittyStats.GameStats.GetType().GetProperty(gamestat);
+        var value = (int)property.GetValue(kittyStats.GameStats);
+        if (value < requiredValue)
         {
             triggeraction abc = null;
             abc = TriggerAddAction(AwardTrigger, () =>
             {
-                if (kittyStats.GameStats[gamestat] >= requiredValue)
+                if ((int)property.GetValue(kittyStats.GameStats) >= requiredValue)
                 {
                     GiveReward(player, award);
                     AwardTrigger.RemoveAction(abc);
@@ -122,7 +121,6 @@ public static class AwardManager
             });
         }
     }
-
 
     /// <summary>
     /// Applies all previously selected awards onto the player. Based on their save data.
@@ -133,28 +131,23 @@ public static class AwardManager
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
 
         var unit = kitty.Unit;
-        var selectedData = kitty.SaveData.SelectedData;
+        var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
 
-        // Process SelectedSkin first if it exists
-        if (selectedData.TryGetValue(SelectedData.SelectedSkin, out var selectedSkinValue))
-        {
-            ProcessAward(kitty, selectedSkinValue);
-        }
+        var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));
+        var skinValue = (string)skinProperty.GetValue(selectedData);
+        ProcessAward(kitty, skinValue);
 
-        // Process the remaining selected data excluding SelectedSkin
-        foreach (var entry in selectedData.Where(entry => entry.Key != SelectedData.SelectedSkin))
+        foreach (var property in selectedData.GetType().GetProperties())
         {
-            ProcessAward(kitty, entry.Value);
+            var selectedName = (string)property.GetValue(selectedData);
+            ProcessAward(kitty, selectedName);
         }
     }
 
-    private static void ProcessAward(Kitty kitty, int selectedEnum)
+    private static void ProcessAward(Kitty kitty, string selectedAwardName)
     {
-        var award = (Awards)selectedEnum;
-        var reward = Reward.GetRewardFromAward(award);
-
+        var reward = RewardsManager.Rewards.Find(x => x.Name == selectedAwardName);
         if (reward is null) return;
-
         reward.ApplyReward(kitty.Player, false);
     }
 

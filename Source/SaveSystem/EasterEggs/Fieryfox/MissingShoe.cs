@@ -48,7 +48,7 @@ public static class MissingShoe
         if (!@event.Unit.HasItem(Shoe)) return;
         @event.Unit.RemoveItem(Shoe);
         SpawnChampions.Fieryfox2023.AddItem(Shoe);
-        AwardManager.GiveRewardAll(Awards.Red_Tendrils);
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.RedTendrils));
     }
 
 }

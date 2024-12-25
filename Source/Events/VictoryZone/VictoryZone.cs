@@ -63,9 +63,7 @@ public static class VictoryZone
 
     private static bool VictoryAreaConditionsSolo(unit u)
     {
-        // If solo player enters.. Great. Done.
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return false;
-        return true;
+        return Gamemode.CurrentGameMode != Globals.GAME_MODES[1];
     }
 
     private static bool VictoryAreaConditionsTeam(unit u)
@@ -91,7 +89,6 @@ public static class VictoryZone
 
     private static bool VictoryContainerConditions(unit u)
     {
-        if(Regions.Victory_Area.Region.Contains(u) || Regions.safe_Area_14.Region.Contains(u)) return true;
-        return false;
+        return Regions.Victory_Area.Region.Contains(u) || Regions.safe_Area_14.Region.Contains(u);
     }
 }

@@ -18,7 +18,7 @@ public static class Globals
     public static bool GAME_ACTIVE = false;
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
-    public static int GAME_SEED = GetRandomInt(1, 900000);
+    public static int GAME_SEED = 500;//GetRandomInt(1, 900000);
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
@@ -34,6 +34,9 @@ public static class Globals
     public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE = new Dictionary<player, int>();
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
 
+    public static GameAwardsData GAME_AWARDS = new GameAwardsData();
+    public static GameTimesData GAME_TIMES = new GameTimesData();
+    public static GameStatsData GAME_STATS = new GameStatsData();
 
     public static Dictionary<int, Team> ALL_TEAMS;
     public static Dictionary<player, Team> PLAYERS_TEAMS;

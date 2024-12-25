@@ -7,9 +7,9 @@ public static class OldsaveSync
     private const string SYNC_PREFIX = "S";
     private static trigger Trigger = trigger.Create();
     private static trigger VariableEvent = trigger.Create();
-    public static string SaveLoadCode;
-    public static player SavePlayer;
-    public static float LoadEvent;
+    private static string SaveLoadCode { get; set;}
+    private static player SavePlayer { get; set; }
+    public static float LoadEvent { get; set; }
     
     public static bool SyncString(string s)
     {

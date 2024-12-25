@@ -2,49 +2,55 @@
 
 public static class DecodeOldsave
 {
-    public static List<KeyValuePair<object, int>> decodeValues = new List<KeyValuePair<object, int>>
+
+    private static GameAwardsData awards = Globals.GAME_AWARDS;
+    private static GameTimesData times = Globals.GAME_TIMES;
+    private static GameStatsData stats = Globals.GAME_STATS;
+
+    public static List<KeyValuePair<string, int>> decodeValues = new List<KeyValuePair<string, int>>
     {
-        new KeyValuePair<object, int>(Awards.Butterfly_Aura, 1),
-        new KeyValuePair<object, int>(Awards.Divinity_Tendrils, 1),
-        new KeyValuePair<object, int>(Awards.Green_Tendrils, 1),
-        new KeyValuePair<object, int>(Awards.Red_Tendrils, 1),
-        new KeyValuePair<object, int>(Awards.White_Tendrils, 1),
-        new KeyValuePair<object, int>(Awards.Green_Lightning, 1),
-        new KeyValuePair<object, int>(Awards.Yellow_Lightning, 1),
-        new KeyValuePair<object, int>(Awards.Purple_Lightning, 1),
-        new KeyValuePair<object, int>(Awards.Red_Lightning, 1),
-        new KeyValuePair<object, int>(Awards.WW_Swift, 1),
-        new KeyValuePair<object, int>(Awards.WW_Necro, 1),
-        new KeyValuePair<object, int>(Awards.WW_Fire, 1),
-        new KeyValuePair<object, int>(Awards.WW_Blue, 1),
-        new KeyValuePair<object, int>(Awards.WW_Blood, 1),
-        new KeyValuePair<object, int>(Awards.Deathless_5, 1),
-        new KeyValuePair<object, int>(Awards.Deathless_4, 1),
-        new KeyValuePair<object, int>(Awards.Deathless_3, 1),
-        new KeyValuePair<object, int>(Awards.Deathless_2, 1),
-        new KeyValuePair<object, int>(Awards.Deathless_1, 1),
-        new KeyValuePair<object, int>(Awards.White_Fire, 1),
-        new KeyValuePair<object, int>(Awards.Pink_Fire, 1),
-        new KeyValuePair<object, int>(Awards.Blue_Fire, 1),
-        new KeyValuePair<object, int>(Awards.Turquoise_Fire, 1),
-        new KeyValuePair<object, int>(Awards.Nitro_Purple, 1),
-        new KeyValuePair<object, int>(Awards.Nitro_Green, 1),
-        new KeyValuePair<object, int>(Awards.Nitro_Red, 1),
-        new KeyValuePair<object, int>(Awards.Nitro_Blue, 1),
-        new KeyValuePair<object, int>(Awards.Nitro, 1),
-        new KeyValuePair<object, int>("RoundFiveNormal", 420),
-        new KeyValuePair<object, int>("RoundFourNormal", 300),
-        new KeyValuePair<object, int>("RoundThreeNormal", 300),
-        new KeyValuePair<object, int>("RoundTwoNormal", 300),
-        new KeyValuePair<object, int>("RoundOneNormal", 300),
-        new KeyValuePair<object, int>("WinStreak", 100),
-        new KeyValuePair<object, int>("NormalWins", 999),
-        new KeyValuePair<object, int>("NormalGames", 9999),
-        new KeyValuePair<object, int>("Saves", 99999),
-        new KeyValuePair<object, int>("Deaths", 99999),
-        new KeyValuePair<object, int>(Awards.Purple_Fire, 1),
-        new KeyValuePair<object, int>(Awards.Patriotic_Tendrils, 1),
-        new KeyValuePair<object, int>(Awards.Divine_Light, 1),
-        new KeyValuePair<object, int>(Awards.Zandalari_Kitty, 1),
+        new KeyValuePair<string, int>(nameof(awards.ButterflyAura), 1),
+        new KeyValuePair<string, int>(nameof(awards.DivinityTendrils), 1),
+        new KeyValuePair<string, int>(nameof(awards.GreenTendrils), 1),
+        new KeyValuePair<string, int>(nameof(awards.RedTendrils), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WhiteTendrils), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.GreenLightning), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.YellowLightning), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.PurpleLightning), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.RedLightning), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WWSwift), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WWNecro), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WWFire), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WWBlue), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WWBlood), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Deathless5), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Deathless4), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Deathless3), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Deathless2), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Deathless1), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.WhiteFire), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.PinkFire), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.BlueFire), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.TurquoiseFire), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.NitroPurple), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.NitroGreen), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.NitroRed), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.NitroBlue), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(awards.Nitro), 1),  // Update to nameof
+        new KeyValuePair<string, int>(nameof(times.RoundFiveNormal), 420),
+        new KeyValuePair<string, int>(nameof(times.RoundFourNormal), 300),
+        new KeyValuePair<string, int>(nameof(times.RoundThreeNormal), 300),
+        new KeyValuePair<string, int>(nameof(times.RoundTwoNormal), 300),
+        new KeyValuePair<string, int>(nameof(times.RoundOneNormal), 300),
+        new KeyValuePair<string, int>(nameof(stats.WinStreak), 100),
+        new KeyValuePair<string, int>(nameof(stats.NormalWins), 999),  
+        new KeyValuePair<string, int>(nameof(stats.NormalGames), 9999), 
+        new KeyValuePair<string, int>(nameof(stats.Saves), 99999),  
+        new KeyValuePair<string, int>(nameof(stats.Deaths), 99999),  
+        new KeyValuePair<string, int>(nameof(awards.PurpleFire), 1),  
+        new KeyValuePair<string, int>(nameof(awards.PatrioticTendrils), 1),  
+        new KeyValuePair<string, int>(nameof(awards.DivineLight), 1),  
+        new KeyValuePair<string, int>(nameof(awards.ZandalariKitty), 1), 
     };
+
 }

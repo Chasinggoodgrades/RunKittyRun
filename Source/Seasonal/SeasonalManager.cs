@@ -23,7 +23,6 @@ public static class SeasonalManager
     /// </summary>
     public static void Initialize()
     {
-        //if (Gamemode.CurrentGameMode != "Standard") return;
         CurrentMonth = DateTimeManager.DateTime.Month;
         DetermineSeason();
         SetWeather();
@@ -114,7 +113,4 @@ public static class SeasonalManager
             CurrentWeather = null;
         }
     }
-
-
-
 }

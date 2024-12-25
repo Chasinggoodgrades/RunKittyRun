@@ -132,7 +132,7 @@ public static class UrnSoul
         Utility.RemoveItemFromUnit(unit, energyStone);
         Utility.RemoveItemFromUnit(unit, water);
 
-        AwardManager.GiveReward(unit.Owner, Awards.WW_Blue);
+        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS.WWBlue));
     }
 
 

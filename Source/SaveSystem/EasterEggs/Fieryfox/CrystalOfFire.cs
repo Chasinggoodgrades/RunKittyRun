@@ -128,6 +128,6 @@ public static class CrystalOfFire
 
         // ADD TEXT DISPLAY HERE FOR F&F
 
-        AwardManager.GiveReward(player, Awards.WW_Fire);
+        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.WWFire));
     }
 }

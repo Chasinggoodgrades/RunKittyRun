@@ -14,10 +14,11 @@ public static class ChampionAwards
 
     private static void GiveAllChampionAwards(player player)
     {
-        AwardManager.GiveReward(player, Awards.Turquoise_Nitro, false);
-        AwardManager.GiveReward(player, Awards.Turquoise_Wings, false);
-        AwardManager.GiveReward(player, Awards.Violet_Aura, false);
-        AwardManager.GiveReward(player, Awards.Violet_Wings, false);
+        var awards = Globals.GAME_AWARDS;
+        AwardManager.GiveReward(player, nameof(awards.TurquoiseNitro), false);
+        AwardManager.GiveReward(player, nameof(awards.TurquoiseWings), false);
+        AwardManager.GiveReward(player, nameof(awards.VioletAura), false);
+        AwardManager.GiveReward(player, nameof(awards.VioletWings), false);
     }
 
 }

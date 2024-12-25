@@ -175,7 +175,9 @@ public static class RewardsFrame
         var player = @event.Player;
         var frame = @event.Frame;
         var stats = Globals.ALL_KITTIES[player].SaveData;
-        if (stats.GameAwards[reward.Name] == 0) return; // Doesnt have the reward.
+        var property = stats.GameAwards.GetType().GetProperty(reward.Name);
+        var value = (int)property.GetValue(stats.GameAwards);
+        if (value == 0) return; // Doesnt have the reward.
         reward.ApplyReward(player);
         if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
@@ -187,7 +189,9 @@ public static class RewardsFrame
         var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
         foreach(var reward in RewardIcons)
         {
-            if (stats.GameAwards[reward.Value.Name] == 0)
+            var property = stats.GameAwards.GetType().GetProperty(reward.Value.Name);
+            var value = (int)property.GetValue(stats.GameAwards);
+            if (value == 0)
                 reward.Key.SetTexture(unavailablePath, 0, false);
             else
                 reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);

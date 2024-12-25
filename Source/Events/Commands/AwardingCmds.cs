@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -27,15 +28,15 @@ public static class AwardingCmds
             return;
         }
 
-        foreach (var awd in Enum.GetValues(typeof(Awards)))
+        foreach (var awd in Globals.GAME_AWARDS.GetType().GetProperties())
         {
-            var awardString = Enum.GetName(typeof(Awards), awd).ToLower();
+            var awardString = awd.Name.ToLower();
             var inputAward = award.ToLower();
 
             // Exact match
             if (awardString == inputAward)
             {
-                AwardManager.GiveReward(selectedPlayer, (Awards)awd);
+                AwardManager.GiveReward(selectedPlayer, awd.Name);
                 return;
             }
         }
@@ -46,19 +47,19 @@ public static class AwardingCmds
     private static void AwardingHelp(player player)
     {
         var combined = "";
-        foreach (var awd in Enum.GetValues(typeof(Awards)))
+
+        foreach (var awd in Globals.GAME_AWARDS.GetType().GetProperties())
         {
-            var awardString = Enum.GetName(typeof(Awards), awd);
-            combined += awardString + ", ";
+            combined += awd.Name + ", ";
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid awards: {Colors.HighlightString(combined)}");
     }
 
     private static void AwardAll(player player)
     {
-        foreach(var award in Enum.GetValues(typeof(Awards)))
+        foreach (var property in Globals.GAME_AWARDS.GetType().GetProperties())
         {
-            AwardManager.GiveReward(player, (Awards)award);
+            AwardManager.GiveReward(player, property.Name);
         }
     }
 
@@ -81,31 +82,34 @@ public static class AwardingCmds
 
         var value = command.Split(" ")[2];
 
-        if (!Enum.TryParse(stats, true, out StatTypes stat))
+        // Search properties for the name.. If it doesnt exist, say invalid game stat.
+        // Then check if the value is actually a proper value.
+        foreach(var prop in Globals.GAME_STATS.GetType().GetProperties())
         {
-            player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid game stat:|r {Colors.HighlightString(stats)}");
-            return;
-        }
+            if (prop.Name.ToLower() == stats.ToLower())
+            {
+                if (!int.TryParse(value, out int val))
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid value:|r {Colors.HighlightString(value.ToString())}");
+                    return;
+                }
 
-        if (!int.TryParse(value, out int val))
-        {
-            player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid value:|r {Colors.HighlightString(value.ToString())}");
-            return;
+                var changeProp =  Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats.GetType().GetProperty(prop.Name);
+                changeProp.SetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats, val);
+                player.DisplayTimedTextTo(3.0f, 
+                    $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
+                MultiboardUtil.RefreshMultiboards();
+                return;
+            }
         }
-
-        Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats[stat] = val;
-        player.DisplayTimedTextTo(3.0f, 
-            $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
-        MultiboardUtil.RefreshMultiboards();
     }
 
     private static void GameStatsHelp(player player)
     {
         var combined = "";
-        foreach (var stat in Enum.GetValues(typeof(StatTypes)))
+        foreach (var property in Globals.GAME_STATS.GetType().GetProperties())
         {
-            var statString = Enum.GetName(typeof(StatTypes), stat);
-            combined += statString + ", ";
+            combined += property.Name + ", ";
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game stats: {Colors.HighlightString(combined)}");
     }
