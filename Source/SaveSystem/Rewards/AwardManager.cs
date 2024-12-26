@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 /// <summary>
@@ -36,7 +38,9 @@ public static class AwardManager
 
         EnableAbility(player, award);
         Awarded[player].Add(award);
-        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, Colors.PlayerNameColored(player) + " has earned " + award);
+        // ex: PurpleFire should be Purple Fire
+        var awardFormatted = Utility.FormatAwardName(award);
+        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
     }
 
     /// <summary>
@@ -150,5 +154,4 @@ public static class AwardManager
         if (reward is null) return;
         reward.ApplyReward(kitty.Player, false);
     }
-
 }

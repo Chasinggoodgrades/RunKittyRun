@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using WCSharp.Api;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
@@ -237,6 +238,22 @@ public static class Utility
             if(item != null)
                 UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
         }
+    }
+
+    public static string FormatAwardName(string awardName)
+    {
+        var stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < awardName.Length; i++)
+        {
+            if (i > 0 && char.IsUpper(awardName[i]))
+            {
+                stringBuilder.Append(' ');
+            }
+            stringBuilder.Append(awardName[i]);
+        }
+
+        return stringBuilder.ToString();
     }
 
 }

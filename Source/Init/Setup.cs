@@ -54,7 +54,7 @@ namespace Source.Init
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
                 SuspendTimeOfDay(true);
                 CustomStatFrame.Init();
-                //SeasonalManager.Initialize();
+                SeasonalManager.Initialize();
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();
