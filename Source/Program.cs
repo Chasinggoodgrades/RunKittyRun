@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using Source.Init;
 using WCSharp.Api;
 using WCSharp.Events;
-using WCSharp.SaveLoad;
 using WCSharp.Shared;
 using WCSharp.Sync;
 using static WCSharp.Api.Common;
@@ -44,11 +43,12 @@ namespace Source
 				Setup.GetActivePlayers();
 				MusicManager.Initialize();
 				FrameManager.Initialize();
-				SaveManager.Initialize();
-                DateTimeManager.Initialize();
-                Setup.Initialize();
                 CommandHandler.Initialize();
-				CommandManager.InitializeCommands();
+                CommandManager.InitializeCommands();
+				SaveManager.Initialize();
+				DateTimeManager.Initialize();
+                Setup.Initialize();
+
 				BarrierSetup.Initialize();
 
 			}

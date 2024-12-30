@@ -191,18 +191,18 @@ public static class SoloMultiboard
     }
 
     private static int[] GetGameRoundTime(KittyData data)
-    {
+    {   
         var gameData = data.RoundTimes;
         var roundTimes = new int[5];
 
         switch (Gamemode.CurrentGameMode)
         {
             case "Tournament Solo":
-                roundTimes[0] = gameData.RoundOneSolo;
+/*                roundTimes[0] = gameData.RoundOneSolo;
                 roundTimes[1] = gameData.RoundTwoSolo;
                 roundTimes[2] = gameData.RoundThreeSolo;
                 roundTimes[3] = gameData.RoundFourSolo;
-                roundTimes[4] = gameData.RoundFiveSolo;
+                roundTimes[4] = gameData.RoundFiveSolo;*/
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
@@ -226,6 +226,12 @@ public static class SoloMultiboard
             BestTimes.IsDisplayed = false;
             OverallBoard.IsDisplayed = true;
         }
+    }
+
+    private static string Decode64(string str)
+    {
+        byte[] bytes = Convert.FromBase64String(str);
+        return System.Text.Encoding.UTF8.GetString(bytes);
     }
 
 }

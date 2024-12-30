@@ -114,4 +114,50 @@ public static class AwardingCmds
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game stats: {Colors.HighlightString(combined)}");
     }
 
+
+    public static void SettingGameTimes(player player, string command)
+    {
+        var roundTime = command.Split(" ")[1];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedPlayer = selectedUnit.Owner;
+
+        if (roundTime.ToLower() == "help")
+        {
+            GameTimesHelp(player);
+            return;
+        }
+
+        var value = command.Split(" ")[2];
+
+        // Search properties for the name.. If it doesnt exist, say invalid game stat.
+        foreach(var prop in Globals.GAME_TIMES.GetType().GetProperties())
+        {
+            if (prop.Name.ToLower() == roundTime.ToLower())
+            {
+                if (!float.TryParse(value, out float val))
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid value:|r {Colors.HighlightString(value.ToString())}");
+                    return;
+                }
+
+                var changeProp =  Globals.ALL_KITTIES[selectedPlayer].SaveData.RoundTimes.GetType().GetProperty(prop.Name);
+                changeProp.SetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.RoundTimes, val);
+                player.DisplayTimedTextTo(3.0f, 
+                    $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
+                MultiboardUtil.RefreshMultiboards();
+                return;
+            }
+        }
+
+    }
+
+    private static void GameTimesHelp(player player)
+    {
+        var combined = "";
+        foreach (var property in Globals.GAME_TIMES.GetType().GetProperties())
+        {
+            combined += property.Name + ", ";
+        }
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game times: {Colors.HighlightString(combined)}");
+    }
 }

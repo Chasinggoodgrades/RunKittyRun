@@ -56,15 +56,30 @@ public static class Utility
     }
 
     /// <summary>
-    /// Converts a float to time string
+    /// Converts a float to time string tenths.
     /// No colorization.
     /// </summary>
     public static string ConvertFloatToTime(float time)
     {
-        if (time <= 0.0f) return "0:00";
+        if (time <= 0.0f) return "0:00.0";
+
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
-        //var tenths = (int)((time * 10) % 10); // Get the tenths of a second
+        var tenths = (int)((time * 10) % 10); // Get the tenths of a second
+
+        if (seconds < 10)
+        {
+            return $"{minutes}:0{seconds}.{tenths}";
+        }
+        return $"{minutes}:{seconds}.{tenths}";
+    }
+
+    public static string ConvertFloatToTimeInt(float time)
+    {
+        if (time <= 0.0f) return "0:00";
+
+        var minutes = (int)(time / 60);
+        var seconds = (int)(time % 60);
 
         if (seconds < 10)
         {
@@ -72,6 +87,7 @@ public static class Utility
         }
         return $"{minutes}:{seconds}";
     }
+
 
     public static bool IsDeveloper(player p)
     {

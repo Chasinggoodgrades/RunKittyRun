@@ -119,7 +119,7 @@ public static class StandardMultiboard
         var color = Colors.COLOR_GREEN;
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
         {
-            CurrentStats.GetItem(0, i).SetText($"{color}{Utility.ConvertFloatToTime(GameTimer.RoundTime[i])}|r");
+            CurrentStats.GetItem(0, i).SetText($"{color}{Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i])}|r");
         }
     }
 

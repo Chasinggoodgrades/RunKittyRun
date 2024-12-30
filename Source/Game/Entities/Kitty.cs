@@ -86,7 +86,7 @@ public class Kitty
     private void InitData()
     {
         // Save Data
-        if (Player.Controller == mapcontrol.User) SaveData = SaveManager.PlayerSaveData[Player].Stats;
+        if (Player.Controller == mapcontrol.User) SaveData = SaveManager.SaveData[Player];
         else SaveData = new KittyData(); // dummy data for comps
 
         YellowLightning = new YellowLightning(Player);

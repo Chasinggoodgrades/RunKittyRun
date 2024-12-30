@@ -20,6 +20,7 @@ public static class RoundManager
         try
         {
             Globals.ROUND += 1;
+            Nitros.SetNitroRoundTimes();
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
             Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
@@ -78,7 +79,7 @@ public static class RoundManager
         TeamsUtil.RoundResetAllTeams();
         NitroPacer.ResetNitroPacer();
         Deathless.ResetDeathless();
-        SaveManager.SaveAll();
+        //Source.SaveSystem.SaveManager.SaveAll();
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gameover.GameOver()) return;
 

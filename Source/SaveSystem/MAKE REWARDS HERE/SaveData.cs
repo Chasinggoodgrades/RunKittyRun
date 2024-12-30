@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using WCSharp.SaveLoad;
 
-public class KittyData : Saveable
+public class KittyData
 {
+    public string PlayerName { get; set; } = "";
     public GameStatsData GameStats { get; set; }
     public GameAwardsData GameAwards { get; set; }
     public GameSelectedData SelectedData { get; set; }
@@ -17,7 +17,7 @@ public class KittyData : Saveable
     }
 }
 
-public class SaveData : Saveable
+public class SaveData
 {
     public KittyData Stats { get; set; } = new KittyData();
 }

@@ -12,7 +12,6 @@ public static class Nitros
     {
         NitroRoundTimes = new Dictionary<int, int>();
         NitroCount = new Dictionary<player, int>();
-        SetNitroRoundTimes();
     }
 
     public static float GetNitroTimeRemaining() => NitroTimer.Remaining;
@@ -32,6 +31,8 @@ public static class Nitros
                 SetImpossibleNitroRoundTimes();
                 break;
             default:
+                // Gamemode being solo / team;
+                SetNormalNitroRoundTimes();
                 break;
         }
     }
@@ -61,8 +62,6 @@ public static class Nitros
         NitroRoundTimes.Add(4, 275); // 4:35 
         NitroRoundTimes.Add(5, 410); // 6:50
     }
-
-
 
     public static void StartNitroTimer()
     {
@@ -97,22 +96,22 @@ public static class Nitros
         var round = Globals.ROUND;
         switch(round)
         {
-/*            case 1:
-                AwardManager.GiveReward(player, Awards.Nitro);
+            case 1:
+                AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.Nitro));
                 break;
             case 2:
-                AwardManager.GiveReward(player, Awards.Nitro_Blue);
+                AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroBlue));
                 break;
             case 3:
-                AwardManager.GiveReward(player, Awards.Nitro_Red);
+                AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroRed));
                 break;
             case 4:
-                AwardManager.GiveReward(player, Awards.Nitro_Green);
+                AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroGreen));
                 Challenges.ButterflyAura(player);
                 break;
             case 5:
-                AwardManager.GiveReward(player, Awards.Nitro_Purple);
-                break;*/
+                AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroPurple));
+                break;
             default:
                 break;
         }

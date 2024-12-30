@@ -22,7 +22,7 @@ public static class GeneralCmds
                 HandleTeamCommand(p, args);
                 break;
             case "-save":
-                SaveManager.Save(p);
+                Globals.SaveSystem.Save(p);
                 p.DisplayTextTo(Colors.COLOR_GOLD + "Stats have been saved.");
                 break;
             case "-clear":

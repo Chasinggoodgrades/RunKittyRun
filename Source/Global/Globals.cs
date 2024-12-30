@@ -33,7 +33,7 @@ public static class Globals
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
     public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE = new Dictionary<player, int>();
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
-
+    public static SaveManager SaveSystem;
     public static GameAwardsData GAME_AWARDS = new GameAwardsData();
     public static GameTimesData GAME_TIMES = new GameTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();

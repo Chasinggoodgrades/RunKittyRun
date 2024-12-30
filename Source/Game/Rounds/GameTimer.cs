@@ -2,7 +2,7 @@
 public static class GameTimer
 {
     public static float[] RoundTime { get; set; }
-    public static float RoundSpeedIncrement { get; set; } = 1.0000f;
+    public static float RoundSpeedIncrement { get; set; } = 0.1f;
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
@@ -27,7 +27,7 @@ public static class GameTimer
             Globals.GAME_TIMER.Pause();
             RoundTime[Globals.ROUND] += RoundSpeedIncrement;
             var resourcebar = framehandle.Get("ResourceBarSupplyText", 0);
-            resourcebar.Text = $"{Utility.ConvertFloatToTime(Globals.GAME_SECONDS)}";
+            resourcebar.Text = $"{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}";
             UpdatingTimes();
         }
     }

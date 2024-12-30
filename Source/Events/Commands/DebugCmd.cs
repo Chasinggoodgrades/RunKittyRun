@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Text.Json.Serialization;
 using WCSharp.Api;
 using WCSharp.Json;
@@ -76,6 +77,9 @@ public static class DebugCmd
             case "?stat":
                 AwardingCmds.SettingGameStats(player, command);
                 break;
+            case "?time":
+                AwardingCmds.SettingGameTimes(player, command);
+                break;
             case "?invul":
                 UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 break;
@@ -85,9 +89,11 @@ public static class DebugCmd
             case "?discord":
                 DiscordFrame.Initialize();
                 break;
-            case "?json":
-                var saveData = SaveManager.PlayerSaveData[player];
-                Console.WriteLine(JsonConvert.Serialize(saveData));
+            case "?load":
+                Globals.SaveSystem.Load(player);
+                break;
+            case "?save":
+                Globals.SaveSystem.Save(player);
                 break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)
