@@ -59,32 +59,32 @@ public class GameAwardsData
     public int WhiteFire { get; set; } = 0;
 
     // Nitros
-    public int Nitro { get; set; } = 0;
-    public int NitroBlue { get; set; } = 0;
-    public int NitroRed { get; set; } = 0;
-    public int NitroGreen { get; set; } = 0;
-    public int NitroPurple { get; set; } = 0;
-    public int DivineLight { get; set; } = 0;
+    public int Nitro { get; set; }
+    public int NitroBlue { get; set; }
+    public int NitroRed { get; set; }
+    public int NitroGreen { get; set; }
+    public int NitroPurple { get; set; }
+    public int DivineLight { get; set; }
 
     // Lightning
-    public int BlueLightning { get; set; } = 0;
-    public int RedLightning { get; set; } = 0;
-    public int PurpleLightning { get; set; } = 0;
-    public int YellowLightning { get; set; } = 0;
-    public int GreenLightning { get; set; } = 0;
+    public int BlueLightning { get; set; }
+    public int RedLightning { get; set; }
+    public int PurpleLightning { get; set; }
+    public int YellowLightning { get; set; }
+    public int GreenLightning { get; set; }
 
     // Deathless
-    public int Deathless1 { get; set; } = 0;
-    public int Deathless2 { get; set; } = 0;
-    public int Deathless3 { get; set; } = 0;
-    public int Deathless4 { get; set; } = 0;
-    public int Deathless5 { get; set; } = 0;
+    public int Deathless1 { get; set; }
+    public int Deathless2 { get; set; }
+    public int Deathless3 { get; set; }
+    public int Deathless4 { get; set; }
+    public int Deathless5 { get; set; }
 
-    public int SnowWings2023 { get; set; } = 0;
-    public int SnowTrail2023 { get; set; } = 0;
-    public int ZandalariKitty { get; set; } = 0;
-    public int TurquoiseNitro { get; set; } = 0;
-    public int TurquoiseWings { get; set; } = 0;
-    public int VioletWings { get; set; } = 0;
-    public int VioletAura { get; set; } = 0;
+    public int SnowWings2023 { get; set; }
+    public int SnowTrail2023 { get; set; }
+    public int ZandalariKitty { get; set; }
+    public int TurquoiseNitro { get; set; }
+    public int TurquoiseWings { get; set; }
+    public int VioletWings { get; set; }
+    public int VioletAura { get; set; }
 }

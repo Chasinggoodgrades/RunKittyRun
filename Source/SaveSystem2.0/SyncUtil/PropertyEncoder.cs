@@ -5,19 +5,16 @@ using System.Collections.Generic;
 
 public static class PropertyEncoder
 {
-    // Encodes an object to a JSON-like Base64 string
     public static string EncodeToJsonBase64(object obj)
     {
         StringBuilder jsonString = new StringBuilder("{");
         AppendProperties(obj, jsonString);
         jsonString.Append("}");
 
-        // Encode the JSON-like string to Base64
         var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
         return base64String;
     }
 
-    // Helper method to append properties to JSON string
     private static void AppendProperties(object obj, StringBuilder jsonString)
     {
         if (obj == null)
@@ -58,7 +55,6 @@ public static class PropertyEncoder
     {
         // Decode the Base64 string to a JSON-like string
         var jsonString = WCSharp.Shared.Base64.FromBase64(base64EncodedData.ToString());
-
         return jsonString;
     }
 

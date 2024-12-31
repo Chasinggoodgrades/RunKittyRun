@@ -45,7 +45,7 @@ public class SyncSaveLoad
         StringBuilder assemble = new StringBuilder();
         int noOfChunks = (int)Math.Ceiling((double)toCompile.Length / chunkSize);
 
-        Console.WriteLine($"toCompile.Length: {toCompile.Length}");
+        //Console.WriteLine($"toCompile.Length: {toCompile.Length}");
 
         try
         {
@@ -70,7 +70,6 @@ public class SyncSaveLoad
             Console.WriteLine(ex);
         }
         PreloadGenEnd(filename);
-        Console.WriteLine("Write File End");
     }
 
     public FilePromise Read(string filename, player reader, Action<FilePromise> onFinish = null)
@@ -104,7 +103,7 @@ public class SyncSaveLoad
             int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
             string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
             var promise = allPromises[@event.Player.Id];
-            Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
+            //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
             if (promise != null)
             {
@@ -115,8 +114,8 @@ public class SyncSaveLoad
                 else if (prefix == SyncPrefixFinish)
                 {
                     promise.Finish();
-                    allPromises[GetPlayerId(promise.SyncOwner)] = null;
-                    Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
+                    allPromises.Remove(GetPlayerId(promise.SyncOwner));
+                    //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
                 }
             }
             else
@@ -135,7 +134,6 @@ public class FilePromise
     public player SyncOwner { get; }
     public bool HasLoaded { get; private set; } = false;
     public Dictionary<int, string> Buffer { get; } = new Dictionary<int, string>();
-    public string FinalString { get; private set; } = string.Empty;
     public string DecodedString { get; private set; }
     private Action<FilePromise> onFinish;
 
@@ -156,15 +154,16 @@ public class FilePromise
                 if (Buffer.ContainsKey(i))
                 {
                     loadString.Append(Buffer[i]);
-                    Console.WriteLine($"{Buffer[i]}");
+                    //if(Source.Program.Debug) Console.WriteLine($"{Buffer[i]}");
                 }
             }
 
             //FinalString = WCSharp.Shared.Base64.FromBase64(loadString.ToString());
             DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString);
-            Logger.Verbose("loadString.Length", loadString.Length);
+
+/*            Logger.Verbose("loadString.Length", loadString.Length);
             Logger.Verbose("Finished: ");
-            Logger.Verbose("DecodedString.Length: ", DecodedString.Length);
+            Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
             //Logger.Verbose("FinalString: ", FinalString);
 
             onFinish?.Invoke(this);

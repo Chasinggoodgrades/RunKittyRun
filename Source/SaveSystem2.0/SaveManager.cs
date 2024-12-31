@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Nodes;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public class SaveManager
 {
@@ -12,15 +10,21 @@ public class SaveManager
     public SaveManager()
     {
         syncSaveLoad = SyncSaveLoad.Instance;
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            SaveData.Add(player, new KittyData());
-        }
+        foreach (var player in Globals.ALL_PLAYERS) SaveData.Add(player, null);
+        LoadAll();
     }
 
     public static void Initialize()
     {
         Globals.SaveSystem = new SaveManager();
+    }
+
+    public static void SaveAll()
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            Globals.SaveSystem.Save(player);
+        }
     }
 
     public void Save(player player)
@@ -32,7 +36,7 @@ public class SaveManager
 
     public void Load(player player)
     {
-        syncSaveLoad.Read($"Run-Kitty-Run/{player.Name}.txt", player, ConvertingSaveData());
+        syncSaveLoad.Read($"Run-Kitty-Run/{player.Name}.txt", player, FinishLoading());
     }
 
     public void LoadAll()
@@ -43,22 +47,37 @@ public class SaveManager
         }
     }
 
-    private static Action<FilePromise> ConvertingSaveData()
+    private void NewSave(player player)
+    {
+        SaveData[player] = new KittyData();
+        SaveData[player].PlayerName = player.Name;
+        Save(player);
+        if (!Gamemode.IsGameModeChosen) return;
+        Globals.ALL_KITTIES[player].SaveData = SaveData[player];
+    }
+
+    private static Action<FilePromise> FinishLoading()
     {
         return (promise) =>
          {
              var data = promise.DecodedString;
              var player = promise.SyncOwner;
+             if (data.Length < 1)
+             {
+                 Globals.SaveSystem.NewSave(player);
+                 return;
+             }
              ConvertJsonToSaveData(data, player);
          };
     }
 
     private static void ConvertJsonToSaveData(string data, player player)
     {
-        var playerData = SaveData[player];
-        
-        // read the json string and convert
-
-
+        if (!WCSharp.Json.JsonConvert.TryDeserialize(data, out KittyData kittyData))
+        {
+            Globals.SaveSystem.NewSave(player);
+            return;
+        }
+        SaveData[player] = kittyData;
     }
 }

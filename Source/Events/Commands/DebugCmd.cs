@@ -92,9 +92,6 @@ public static class DebugCmd
             case "?load":
                 Globals.SaveSystem.Load(player);
                 break;
-            case "?save":
-                Globals.SaveSystem.Save(player);
-                break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)
                 {

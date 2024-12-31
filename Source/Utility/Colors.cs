@@ -55,8 +55,8 @@ public class Colors
         AddColor("green", 7, "|cff21bf00", playercolor.Green);
         AddColor("pink", 8, "|cffe45caf", playercolor.Pink);
         AddColor("gray", 9, "|cff939596", playercolor.LightGray);
-        AddColor("light blue,lb,light-blue,lightblue", 10, "|cff7ebff1", playercolor.LightBlue);
-        AddColor("darkgreen,dark green,dg,dark-green", 11, "|cff106247", playercolor.Emerald);
+        AddColor("lightblue,lb,light-blue", 10, "|cff7ebff1", playercolor.LightBlue);
+        AddColor("darkgreen,dg,dark-green", 11, "|cff106247", playercolor.Emerald);
         AddColor("brown", 12, "|cff4f2b05", playercolor.Brown);
         AddColor("maroon", 13, "|cff9c0000", playercolor.Maroon);
         AddColor("navy", 14, "|cff0000c3", playercolor.Navy);

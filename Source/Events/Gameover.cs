@@ -1,6 +1,7 @@
 ﻿using static WCSharp.Api.Common;
 using WCSharp.Api;
 using System;
+using WCSharp.SaveLoad;
 public static class Gameover
 {
     public static bool WinGame { get; set; } = false;
@@ -18,7 +19,7 @@ public static class Gameover
         SendWinMessage();
         StandardWinChallenges();
         GameStats(true);
-        //Source.SaveSystem.SaveManager.SaveAll();
+        SaveManager.SaveAll();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
@@ -38,7 +39,7 @@ public static class Gameover
     {
         Wolf.RemoveAllWolves();
         GameStats(false);
-        //Source.SaveSystem.SaveManager.SaveAll();
+        SaveManager.SaveAll();
         NotifyEndingGame();
     }
 

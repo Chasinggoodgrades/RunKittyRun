@@ -16,8 +16,3 @@ public class KittyData
         RoundTimes = new GameTimesData();
     }
 }
-
-public class SaveData
-{
-    public KittyData Stats { get; set; } = new KittyData();
-}

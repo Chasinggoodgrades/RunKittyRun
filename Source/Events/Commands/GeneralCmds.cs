@@ -67,6 +67,7 @@ public static class GeneralCmds
             "-save - Save your current game stats",
             "-clear - Clear your screen",
             "-color [color] - Set your player color",
+            "-colors - Display all available colors",
             "-sc [rgb] | -setcolor [rgb] - Set your player vertex color",
             "-wild - Set a random vertex color",
             "-hidenames | -hn - Hide all floating name tags",
