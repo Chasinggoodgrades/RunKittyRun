@@ -4,59 +4,59 @@ using WCSharp.SaveLoad;
 public class GameAwardsData
 {
     // Hats
-    public int Bandana { get; set; } = 0;
-    public int PirateHat { get; set; } = 0;
-    public int ChefHat { get; set; } = 0;
-    public int TikiMask { get; set; } = 0;
-    public int SamuraiHelm { get; set; } = 0;
-    public int SantaHat { get; set; } = 0;
+    public int Bandana { get; set; }
+    public int PirateHat { get; set; }
+    public int ChefHat { get; set; }
+    public int TikiMask { get; set; }
+    public int SamuraiHelm { get; set; }
+    public int SantaHat { get; set; }
 
     // Wings
-    public int PhoenixWings { get; set; } = 0;
-    public int FairyWings { get; set; } = 0;
-    public int NightmareWings { get; set; } = 0;
-    public int ArchangelWings { get; set; } = 0;
+    public int PhoenixWings { get; set; }
+    public int FairyWings { get; set; }
+    public int NightmareWings { get; set; }
+    public int ArchangelWings { get; set; }
 
-    public int VoidWings { get; set; } = 0;
-    public int CosmicWings { get; set; } = 0;
-    public int ChaosWings { get; set; } = 0;
-    public int PinkWings { get; set; } = 0;
-    public int NatureWings { get; set; } = 0;
+    public int VoidWings { get; set; }
+    public int CosmicWings { get; set; }
+    public int ChaosWings { get; set; }
+    public int PinkWings { get; set; }
+    public int NatureWings { get; set; }
 
     // Tendrils Wings
-    public int RedTendrils { get; set; } = 0;
-    public int WhiteTendrils { get; set; } = 0;
-    public int DivinityTendrils { get; set; } = 0;
-    public int GreenTendrils { get; set; } = 0;
-    public int PatrioticTendrils { get; set; } = 0;
+    public int RedTendrils { get; set; }
+    public int WhiteTendrils { get; set; }
+    public int DivinityTendrils { get; set; }
+    public int GreenTendrils { get; set; }
+    public int PatrioticTendrils { get; set; }
 
     // Auras
-    public int SpecialAura { get; set; } = 0;
-    public int StarlightAura { get; set; } = 0;
-    public int ManaAura { get; set; } = 0;
-    public int SpectacularAura { get; set; } = 0;
-    public int ButterflyAura { get; set; } = 0;
+    public int SpecialAura { get; set; }
+    public int StarlightAura { get; set; }
+    public int ManaAura { get; set; }
+    public int SpectacularAura { get; set; }
+    public int ButterflyAura { get; set; }
 
     // Skins
-    public int UndeadKitty { get; set; } = 0;
-    public int HighelfKitty { get; set; } = 0;
-    public int AstralKitty { get; set; } = 0;
-    public int SatyrKitty { get; set; } = 0;
-    public int AncientKitty { get; set; } = 0;
+    public int UndeadKitty { get; set; }
+    public int HighelfKitty { get; set; }
+    public int AstralKitty { get; set; }
+    public int SatyrKitty { get; set; }
+    public int AncientKitty { get; set; }
 
     // Windwalks
-    public int WWBlood { get; set; } = 0;
-    public int WWBlue { get; set; } = 0;
-    public int WWFire { get; set; } = 0;
-    public int WWNecro { get; set; } = 0;
-    public int WWSwift { get; set; } = 0;
+    public int WWBlood { get; set; }
+    public int WWBlue { get; set; }
+    public int WWFire { get; set; }
+    public int WWNecro { get; set; }
+    public int WWSwift { get; set; }
 
     // Fire
-    public int PurpleFire { get; set; } = 0;
-    public int BlueFire { get; set; } = 0;
-    public int TurquoiseFire { get; set; } = 0;
-    public int PinkFire { get; set; } = 0;
-    public int WhiteFire { get; set; } = 0;
+    public int PurpleFire { get; set; }
+    public int BlueFire { get; set; }
+    public int TurquoiseFire { get; set; }
+    public int PinkFire { get; set; }
+    public int WhiteFire { get; set; }
 
     // Nitros
     public int Nitro { get; set; }
@@ -74,11 +74,11 @@ public class GameAwardsData
     public int GreenLightning { get; set; }
 
     // Deathless
-    public int Deathless1 { get; set; }
-    public int Deathless2 { get; set; }
-    public int Deathless3 { get; set; }
-    public int Deathless4 { get; set; }
-    public int Deathless5 { get; set; }
+    public int Deathless1Normal { get; set; }
+    public int Deathless2Normal { get; set; }
+    public int Deathless3Normal { get; set; }
+    public int Deathless4Normal { get; set; }
+    public int Deathless5Normal { get; set; }
 
     public int SnowWings2023 { get; set; }
     public int SnowTrail2023 { get; set; }

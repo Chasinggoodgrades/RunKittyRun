@@ -56,19 +56,19 @@ public static class Deathless
         switch (Globals.ROUND)
         {
             case 1:
-                AwardManager.GiveReward(player, nameof(gameAwards.Deathless1));
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless1Normal));
                 break;
             case 2:
-                AwardManager.GiveReward(player, nameof(gameAwards.Deathless2));
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless2Normal));
                 break;
             case 3:
-                AwardManager.GiveReward(player, nameof(gameAwards.Deathless3));
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless3Normal));
                 break;
             case 4:
-                AwardManager.GiveReward(player, nameof(gameAwards.Deathless4));
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless4Normal));
                 break;
             case 5:
-                AwardManager.GiveReward(player, nameof(gameAwards.Deathless5));
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless5Normal));
                 break;
         }
         SoundManager.PlayInvulnerableSound();
