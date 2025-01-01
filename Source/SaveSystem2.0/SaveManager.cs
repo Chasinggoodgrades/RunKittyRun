@@ -5,6 +5,7 @@ using WCSharp.Api;
 public class SaveManager
 {
     private SyncSaveLoad syncSaveLoad;
+    private static string SavePath { get; } = "Run-Kitty-Run";
     public static Dictionary<player, KittyData> SaveData { get; set; } = new Dictionary<player, KittyData>();
 
     public SaveManager()
@@ -31,12 +32,12 @@ public class SaveManager
     {
         var playerData = SaveData[player];
         if (!player.IsLocal) return;
-        syncSaveLoad.WriteFileObjects($"Run-Kitty-Run/{player.Name}.txt", playerData);
+        syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
     }
 
     public void Load(player player)
     {
-        syncSaveLoad.Read($"Run-Kitty-Run/{player.Name}.txt", player, FinishLoading());
+        syncSaveLoad.Read($"{SavePath}/{player.Name}.txt", player, FinishLoading());
     }
 
     public void LoadAll()
@@ -65,6 +66,7 @@ public class SaveManager
              if (data.Length < 1)
              {
                  Globals.SaveSystem.NewSave(player);
+                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.|r");
                  return;
              }
              ConvertJsonToSaveData(data, player);
@@ -75,6 +77,7 @@ public class SaveManager
     {
         if (!WCSharp.Json.JsonConvert.TryDeserialize(data, out KittyData kittyData))
         {
+            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}Failed to deserialize data. Creating new save.|r");
             Globals.SaveSystem.NewSave(player);
             return;
         }

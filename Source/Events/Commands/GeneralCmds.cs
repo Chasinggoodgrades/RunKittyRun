@@ -28,6 +28,9 @@ public static class GeneralCmds
             case "-clear":
                 Utility.ClearScreen(p);
                 break;
+            case "-colors":
+                Colors.ListColorCommands(p);
+                break;
             case "-color":
                 Colors.SetPlayerColor(p, args[1]);
                 break;

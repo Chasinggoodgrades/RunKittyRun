@@ -190,23 +190,23 @@ public static class SoloMultiboard
         BestTimeStats();
     }
 
-    private static int[] GetGameRoundTime(KittyData data)
+    private static float[] GetGameRoundTime(KittyData data)
     {   
         var gameData = data.RoundTimes;
-        var roundTimes = new int[5];
+        var roundTimes = new float[5];
 
         switch (Gamemode.CurrentGameMode)
         {
             case "Tournament Solo":
-/*                roundTimes[0] = gameData.RoundOneSolo;
+                roundTimes[0] = gameData.RoundOneSolo;
                 roundTimes[1] = gameData.RoundTwoSolo;
                 roundTimes[2] = gameData.RoundThreeSolo;
                 roundTimes[3] = gameData.RoundFourSolo;
-                roundTimes[4] = gameData.RoundFiveSolo;*/
+                roundTimes[4] = gameData.RoundFiveSolo;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
-                return new int[5];
+                return new float[5];
         }
         return roundTimes;
     }

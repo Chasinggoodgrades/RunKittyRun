@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using WCSharp.Api;
-
-public static class OldSavesHelper
+﻿public static class OldSavesHelper
 {
     public static string charset { get; } = "!$%&'()*+,-.0123456789:;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}`";
     private static string PlayerCharSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -16,7 +11,7 @@ public static class OldSavesHelper
                 return i;
             }
         }
-        return -1; // Return -1 if character not found
+        return -1;
     }
     public static int ModuloInteger(int x, int n) => ((x % n) + n) % n;
 

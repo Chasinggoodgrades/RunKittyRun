@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -155,4 +157,13 @@ public class Colors
         else return $"{COLOR_RED}ERROR{COLOR_RESET}";
     }
 
+    public static void ListColorCommands(player player)
+    {
+        StringBuilder combinedColors = new StringBuilder();
+
+        foreach (var color in ColorManager)
+            combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
+
+        player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
+    }
 }

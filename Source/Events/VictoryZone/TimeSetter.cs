@@ -32,7 +32,7 @@ public static class TimeSetter
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
-        property.SetValue(kittyStats.RoundTimes, (int)(GameTimer.RoundTime[Globals.ROUND]));
+        property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
     }
 
     private static string GetRoundEnum()
@@ -136,7 +136,7 @@ public static class TimeSetter
         var gameTimeData = Globals.GAME_TIMES;
         switch (round)
         {
-/*            case 1:
+            case 1:
                 return nameof(gameTimeData.RoundOneSolo);
             case 2:
                 return nameof(gameTimeData.RoundTwoSolo);
@@ -145,7 +145,7 @@ public static class TimeSetter
             case 4:
                 return nameof(gameTimeData.RoundFourSolo);
             case 5:
-                return nameof(gameTimeData.RoundFiveSolo);*/
+                return nameof(gameTimeData.RoundFiveSolo);
             default:
                 Console.WriteLine("Invalid round number for GetSoloRoundEnum");
                 return "";

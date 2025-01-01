@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
-
 
 public static class Globals
 {
@@ -18,7 +11,7 @@ public static class Globals
     public static bool GAME_ACTIVE = false;
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
-    public static int GAME_SEED = 500;//GetRandomInt(1, 900000);
+    public static int GAME_SEED = GetRandomInt(1, 900000);
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };

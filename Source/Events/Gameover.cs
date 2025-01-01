@@ -1,7 +1,6 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using System;
-using WCSharp.SaveLoad;
+
 public static class Gameover
 {
     public static bool WinGame { get; set; } = false;

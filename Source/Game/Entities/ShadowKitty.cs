@@ -1,6 +1,6 @@
 ﻿using WCSharp.Api;
 using System.Collections.Generic;
-using System;
+
 public class ShadowKitty
 {
     public unit Unit { get; set; }

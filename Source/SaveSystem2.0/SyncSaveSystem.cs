@@ -34,6 +34,12 @@ public class SyncSaveLoad
         SyncEvent.AddAction(OnSync);
     }
 
+    /// <summary>
+    /// Splits the given data object into chunks, encodes each chunk to a base64 JSON format,
+    /// and writes the resulting data to the specified file.
+    /// </summary>
+    /// <param name="filename">The name of the file to write to.</param>
+    /// <param name="data">The object to be encoded and written.</param>
     public void WriteFileObjects(string filename, object data)
     {
         PreloadGenClear();

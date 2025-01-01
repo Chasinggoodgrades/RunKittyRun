@@ -173,6 +173,10 @@ public class Savecode
         OldsaveSync.SyncString(sb.ToString());
     }
 
+    /// <summary>
+    /// Method that is setting the values of rewards for the players.
+    /// </summary>
+    /// <param name="player"></param>
     public void SetRewardValues(player player)
     {
         var awardData = Globals.ALL_KITTIES[player].SaveData.GameAwards;

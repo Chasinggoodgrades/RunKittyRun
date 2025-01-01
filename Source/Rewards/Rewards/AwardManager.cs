@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 /// <summary>
 /// This class handles Awarding functionality. 
-/// * If you add more skins, they'll need to go in the Set StartingSkin function
 /// </summary>
 public static class AwardManager
 {
@@ -80,7 +74,6 @@ public static class AwardManager
         {
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
             var gameStats = kittyStats.GameStats;
-            // TODO: Game stats should go to the other object and properties
 
             foreach(var gameStatReward in RewardsManager.GameStatRewards)
             {

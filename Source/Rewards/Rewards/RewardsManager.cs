@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 /// <summary>
 /// This class handles:
@@ -15,7 +12,7 @@ public static class RewardsManager
     private static List<int> RewardAbilities = new List<int>();
     public static List<Reward> Rewards = new List<Reward>();
     public static List<Reward> GameStatRewards = new List<Reward>();
-    public static Dictionary<player, effect> ActiveWings = new Dictionary<player, effect>();
+    public static Dictionary<player, effect> ActiveWings { get; set; } = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveAuras = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveHats = new Dictionary<player, effect>();
     public static Dictionary<player, effect> ActiveTrails = new Dictionary<player, effect>();

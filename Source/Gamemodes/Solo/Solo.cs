@@ -1,8 +1,4 @@
-﻿using System;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
-
-public static class Solo
+﻿public static class Solo
 {
     private const float TIME_TO_REVIVE = 6.0f;
     public static void Initialize()

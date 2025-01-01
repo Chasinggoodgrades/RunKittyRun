@@ -1,5 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
+
 public static class SpawnChampions
 {
     public static unit Fieryfox2023;
@@ -40,7 +41,4 @@ public static class SpawnChampions
         Fieryfox2024.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
         Fieryfox2024.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
     }
-    
-
-
 }
