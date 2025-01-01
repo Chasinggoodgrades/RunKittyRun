@@ -86,7 +86,6 @@ public static class TeamHandler
                     {
                         team = new Team(teamNumber);
                         Globals.ALL_TEAMS[teamNumber] = team;
-
                     }
 
                     // Add the player to the new team
@@ -96,7 +95,7 @@ public static class TeamHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine("TeamHandler, RandomHandler: " + e.Message);
+            Console.WriteLine($"{Colors.COLOR_RED}TeamHandler, RandomHandler: " + e.Message);
         }
     }
 

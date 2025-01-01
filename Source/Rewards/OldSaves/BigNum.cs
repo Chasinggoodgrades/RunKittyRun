@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-public class BigNum
+﻿public class BigNum
 {
     public BigNumL List { get; set; }
     public int Base { get; set; }
@@ -75,7 +72,6 @@ public class BigNumL
         }
     }
 
-    // DivSmall method
     public int DivSmall(int baseValue, int denom)
     {
         int quotient = 0;

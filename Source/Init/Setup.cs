@@ -82,8 +82,8 @@ namespace Source.Init
             }
             catch (Exception e)
             {
-                Console.WriteLine("StartGame: " + e.Message);
-                Console.WriteLine("Stacktrace: " + e.StackTrace);
+                Console.WriteLine($"{Colors.COLOR_RED}StartGame: " + e.Message);
+                Console.WriteLine($"{Colors.COLOR_RED}Stacktrace: " + e.StackTrace);
                 throw;
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Reflection;
-using System.Collections.Generic;
 
 public static class PropertyEncoder
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public static class RoundManager
 {
@@ -79,7 +77,7 @@ public static class RoundManager
         TeamsUtil.RoundResetAllTeams();
         NitroPacer.ResetNitroPacer();
         Deathless.ResetDeathless();
-        //Source.SaveSystem.SaveManager.SaveAll();
+        SaveManager.SaveAll();
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gameover.GameOver()) return;
 

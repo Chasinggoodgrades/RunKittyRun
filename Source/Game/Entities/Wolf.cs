@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
 public class Wolf

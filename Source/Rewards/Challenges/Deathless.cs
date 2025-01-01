@@ -51,23 +51,24 @@ public static class Deathless
     private static void AwardDeathless(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
+        var gameAwards = Globals.GAME_AWARDS;
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
         switch (Globals.ROUND)
         {
             case 1:
-                //AwardManager.GiveReward(player, Awards.Deathless_1);
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless1));
                 break;
             case 2:
-                //AwardManager.GiveReward(player, Awards.Deathless_2);
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless2));
                 break;
             case 3:
-                //AwardManager.GiveReward(player, Awards.Deathless_3);
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless3));
                 break;
             case 4:
-                //AwardManager.GiveReward(player, Awards.Deathless_4);
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless4));
                 break;
             case 5:
-                //AwardManager.GiveReward(player, Awards.Deathless_5);
+                AwardManager.GiveReward(player, nameof(gameAwards.Deathless5));
                 break;
         }
         SoundManager.PlayInvulnerableSound();

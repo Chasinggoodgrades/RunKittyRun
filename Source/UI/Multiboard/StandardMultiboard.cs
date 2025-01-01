@@ -275,10 +275,10 @@ public static class StandardMultiboard
         return (numberOfGames, numberOfWins);
     }
 
-    private static int[] GetGameRoundTime(KittyData data)
+    private static float[] GetGameRoundTime(KittyData data)
     {
         var gameData = data.RoundTimes;
-        var roundTimes = new int[5];
+        var roundTimes = new float[5];
 
         switch (Difficulty.DifficultyValue)
         {
@@ -305,7 +305,7 @@ public static class StandardMultiboard
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
-                return new int[5];
+                return new float[5];
         }
         return roundTimes;
 

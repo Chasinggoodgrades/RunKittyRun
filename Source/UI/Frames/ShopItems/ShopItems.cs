@@ -57,9 +57,10 @@ public class ShopItem
     public static List<ShopItem> ShopItemsReward()
     {
         var shopItems = new List<ShopItem>();
+        var gameAwards = Globals.GAME_AWARDS;
 
         var reward = RewardsManager.Rewards.Find(x => x.Name == "GreenTendrils");
-        shopItems.Add(new ShopItem("GreenTendrils", 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
+        shopItems.Add(new ShopItem(nameof(gameAwards.GreenTendrils), 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
         
         return shopItems;
     }
