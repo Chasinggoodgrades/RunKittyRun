@@ -39,8 +39,9 @@ public static class PlayerLeaves
             nameTag.Dispose();
             if(!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
-            MultiboardUtil.RefreshMultiboards();
             RoundManager.RoundEndCheck();
+            if (Gameover.WinGame) return;
+            MultiboardUtil.RefreshMultiboards();
         }
         catch (Exception e)
         {

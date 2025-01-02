@@ -34,6 +34,9 @@ public static class GeneralCmds
             case "-color":
                 Colors.SetPlayerColor(p, args[1]);
                 break;
+            case "-kick":
+                Votekick.InitiateVotekick(p, args[1]);
+                break;
             case "-sc":
             case "-setcolor":
                 Colors.SetPlayerVertexColor(p, args);
@@ -75,8 +78,9 @@ public static class GeneralCmds
             "-wild - Set a random vertex color",
             "-hidenames | -hn - Hide all floating name tags",
             "-shownames | -sn - Show all floating name tags",
+            "-kick [playerName] | -kick [playerNumber] - Initiate a votekick against a player",
             "-zoom [xxxx] | -cam [xxxx] - Adjust the camera zoom level",
-            "-oldcode - Load the previous save code (works once)"
+            "-oldcode - Loads a previous save from RKR 4.2.0+"
         });
 
         p.DisplayTextTo(Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList);

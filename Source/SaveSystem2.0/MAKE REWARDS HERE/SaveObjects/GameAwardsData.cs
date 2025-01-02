@@ -65,6 +65,10 @@ public class GameAwardsData
     public int NitroGreen { get; set; }
     public int NitroPurple { get; set; }
     public int DivineLight { get; set; }
+    public int CrimsonLight { get; set; }
+    public int AzureLight { get; set; }
+    public int VioletLight { get; set; }
+    public int EmeraldLight { get; set; }
 
     // Lightning
     public int BlueLightning { get; set; }
@@ -74,11 +78,11 @@ public class GameAwardsData
     public int GreenLightning { get; set; }
 
     // Deathless
-    public int Deathless1Normal { get; set; }
-    public int Deathless2Normal { get; set; }
-    public int Deathless3Normal { get; set; }
-    public int Deathless4Normal { get; set; }
-    public int Deathless5Normal { get; set; }
+    public int NormalDeathless1 { get; set; }
+    public int NormalDeathless2 { get; set; }
+    public int NormalDeathless3 { get; set; }
+    public int NormalDeathless4 { get; set; }
+    public int NormalDeathless5 { get; set; }
 
     public int SnowWings2023 { get; set; }
     public int SnowTrail2023 { get; set; }
@@ -87,4 +91,5 @@ public class GameAwardsData
     public int TurquoiseWings { get; set; }
     public int VioletWings { get; set; }
     public int VioletAura { get; set; }
+
 }

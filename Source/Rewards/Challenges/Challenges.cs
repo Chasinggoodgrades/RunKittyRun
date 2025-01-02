@@ -106,7 +106,7 @@ public static class Challenges
         foreach (var kitty in Globals.ALL_KITTIES.Values)
         {
             if (!kitty.CurrentStats.ObtainedNitros.Contains(4)) continue;
-            //AwardManager.GiveReward(kitty.Player, Awards.Zandalari_Kitty);
+                AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS.ZandalariKitty));
         }
     }
 }

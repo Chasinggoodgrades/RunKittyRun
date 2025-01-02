@@ -126,8 +126,14 @@ public static class RewardCreation
         AddReward(nameof(awards.NitroRed), Constants.ABILITY_NITRORED, "origin", "war3mapImported\\NitroRed.mdx", RewardType.Nitros);
         AddReward(nameof(awards.NitroGreen), Constants.ABILITY_NITROGREEN, "origin", "war3mapImported\\NitroGreen.mdx", RewardType.Nitros);
         AddReward(nameof(awards.NitroPurple), Constants.ABILITY_NITROPURPLE, "origin", "war3mapImported\\NitroPurple.mdx", RewardType.Nitros);
-        AddReward(nameof(awards.DivineLight), Constants.ABILITY_TRAIL_DIVINELIGHT, "origin", "DivineLight.mdx", RewardType.Nitros);
         AddReward(nameof(awards.TurquoiseNitro), Constants.ABILITY_CHAMION_NITROTURQUOISE, "origin", "war3mapImported\\NitroTurquoise.mdx", RewardType.Nitros);
+
+        // Divine Lights
+        AddReward(nameof(awards.DivineLight), Constants.ABILITY_TRAIL_DIVINELIGHT, "origin", "DivineLight.mdx", RewardType.Nitros);
+        AddReward(nameof(awards.AzureLight), Constants.ABILITY_TRAIL_AZURELIGHT, "origin", "AzureLight.mdx", RewardType.Nitros);
+        AddReward(nameof(awards.CrimsonLight), Constants.ABILITY_TRAIL_CRIMSONLIGHT, "origin", "CrimsonLight.mdx", RewardType.Nitros);
+        AddReward(nameof(awards.EmeraldLight), Constants.ABILITY_TRAIL_EMERALDLIGHT, "origin", "EmeraldLight.mdx", RewardType.Nitros);
+        AddReward(nameof(awards.VioletLight), Constants.ABILITY_TRAIL_VIOLETLIGHT, "origin", "VioletLight.mdx", RewardType.Nitros);
 
         // Lightning
         AddReward(nameof(awards.BlueLightning), Constants.ABILITY_TRAIL_LIGHTNINGBLUE, "origin", "war3mapImported\\GreatElderHydraLightningOrbV3.mdx", RewardType.Trails, nameof(stats.Saves), 2000);
@@ -144,11 +150,11 @@ public static class RewardCreation
         AddReward(nameof(awards.WWSwift), Constants.ABILITY_WW_SWIFT, "chest", "war3mapImported\\Windwalk.mdx", RewardType.Windwalks);
 
         // Deathless
-        AddReward(nameof(awards.Deathless1Normal), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl", RewardType.Deathless);
-        AddReward(nameof(awards.Deathless2Normal), Constants.ABILITY_DEATHLESS_FIRE_1_02, "origin", "war3mapImported\\Deathless2.mdx", RewardType.Deathless);
-        AddReward(nameof(awards.Deathless3Normal), Constants.ABILITY_DEATHLESS_FIRE_1_03, "origin", "war3mapImported\\Deathless3.mdx", RewardType.Deathless);
-        AddReward(nameof(awards.Deathless4Normal), Constants.ABILITY_DEATHLESS_FIRE_1_04, "origin", "war3mapImported\\Deathless4.mdx", RewardType.Deathless);
-        AddReward(nameof(awards.Deathless5Normal), Constants.ABILITY_DEATHLESS_FIRE_1_05, "origin", "war3mapImported\\Deathless5.mdx", RewardType.Deathless);
+        AddReward(nameof(awards.NormalDeathless1), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl", RewardType.Deathless);
+        AddReward(nameof(awards.NormalDeathless2), Constants.ABILITY_DEATHLESS_FIRE_1_02, "origin", "war3mapImported\\Deathless2.mdx", RewardType.Deathless);
+        AddReward(nameof(awards.NormalDeathless3), Constants.ABILITY_DEATHLESS_FIRE_1_03, "origin", "war3mapImported\\Deathless3.mdx", RewardType.Deathless);
+        AddReward(nameof(awards.NormalDeathless4), Constants.ABILITY_DEATHLESS_FIRE_1_04, "origin", "war3mapImported\\Deathless4.mdx", RewardType.Deathless);
+        AddReward(nameof(awards.NormalDeathless5), Constants.ABILITY_DEATHLESS_FIRE_1_05, "origin", "war3mapImported\\Deathless5.mdx", RewardType.Deathless);
 
         // Skins
         AddReward(nameof(awards.UndeadKitty), Constants.ABILITY_SKIN_KITTYUNDEAD, Constants.UNIT_UNDEAD_KITTY, RewardType.Skins, nameof(stats.NormalWins), 30);

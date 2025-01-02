@@ -47,20 +47,20 @@ public static class Nitros
 
     private static void SetHardNitroRoundTimes()
     {
-        NitroRoundTimes.Add(1, 140); // 2:20
-        NitroRoundTimes.Add(2, 170); // 2:50
+        NitroRoundTimes.Add(1, 135); // 2:15
+        NitroRoundTimes.Add(2, 150); // 2:30
         NitroRoundTimes.Add(3, 195); // 3:15
-        NitroRoundTimes.Add(4, 265); // 4:25
-        NitroRoundTimes.Add(5, 390); // 6:30
+        NitroRoundTimes.Add(4, 255); // 4:15
+        NitroRoundTimes.Add(5, 360); // 6:00
     }
 
     private static void SetImpossibleNitroRoundTimes()
     {
-        NitroRoundTimes.Add(1, 155); // 2:35
-        NitroRoundTimes.Add(2, 180); // 3:00
-        NitroRoundTimes.Add(3, 220); // 3:40 
-        NitroRoundTimes.Add(4, 275); // 4:35 
-        NitroRoundTimes.Add(5, 410); // 6:50
+        NitroRoundTimes.Add(1, 135); // 2:15
+        NitroRoundTimes.Add(2, 150); // 2:30
+        NitroRoundTimes.Add(3, 195); // 3:15 
+        NitroRoundTimes.Add(4, 255); // 4:15 
+        NitroRoundTimes.Add(5, 360); // 6:00
     }
 
     public static void StartNitroTimer()
@@ -92,42 +92,54 @@ public static class Nitros
 
     private static void AwardingNitroEvents(player player)
     {
-        if(NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
+        if (NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
         var round = Globals.ROUND;
-        switch(round)
+
+        switch (round)
         {
             case 1:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.Nitro));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.DivineLight));
                 break;
             case 2:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroBlue));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.AzureLight));
                 break;
             case 3:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroRed));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.CrimsonLight));
                 break;
             case 4:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroGreen));
                 Challenges.ButterflyAura(player);
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.EmeraldLight));
                 break;
             case 5:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.NitroPurple));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.VioletLight));
                 break;
             default:
                 break;
         }
+
         PlayNitroSound(player);
-        if (!Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Contains(round)) Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Add(round);
-        if (NitroCount.TryGetValue(player, out var count)) NitroCount[player] = count + 1;
-        else NitroCount.Add(player, 1);
+        if (!Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Contains(round))
+            Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Add(round);
+        if (NitroCount.TryGetValue(player, out var count))
+            NitroCount[player] = count + 1;
+        else
+            NitroCount.Add(player, 1);
     }
+
+
 
     private static void AwardingDivineLight(player player)
     {
+        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
         var requiredCount = 5;
-        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) requiredCount = 3;
         if(Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
-        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount)
+        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount) 
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.DivineLight));
     }
 

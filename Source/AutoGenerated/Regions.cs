@@ -54,13 +54,13 @@ public static class Regions
 	public static Rectangle Wolf_Area_03 { get; set; } = new Rectangle(-2560f, -3584f, 2560f, -2944f);
 	public static Rectangle Wolf_Area_04 { get; set; } = new Rectangle(-3360f, -2880f, -2560f, 1504f);
 	public static Rectangle Wolf_Area_05 { get; set; } = new Rectangle(-2592f, 1504f, 1920f, 2176f);
-	public static Rectangle Wolf_Area_06 { get; set; } = new Rectangle(1888f, -2304f, 2464f, 1536f);
+	public static Rectangle Wolf_Area_06 { get; set; } = new Rectangle(1920f, -2304f, 2432f, 1536f);
 	public static Rectangle Wolf_Area_07 { get; set; } = new Rectangle(-1952f, -2848f, 1920f, -2272f);
-	public static Rectangle Wolf_Area_08 { get; set; } = new Rectangle(-2464f, -2304f, -1888f, 864f);
+	public static Rectangle Wolf_Area_08 { get; set; } = new Rectangle(-2432f, -2304f, -1888f, 864f);
 	public static Rectangle Wolf_Area_09 { get; set; } = new Rectangle(-1888f, 864f, 1280f, 1312f);
 	public static Rectangle Wolf_Area_10 { get; set; } = new Rectangle(1248f, -1664f, 1696f, 896f);
-	public static Rectangle Wolf_Area_11 { get; set; } = new Rectangle(-1280f, -2080f, 1280f, -1632f);
-	public static Rectangle Wolf_Area_12 { get; set; } = new Rectangle(-1696f, -1664f, -1248f, 256f);
+	public static Rectangle Wolf_Area_11 { get; set; } = new Rectangle(-1280f, -2080f, 1280f, -1664f);
+	public static Rectangle Wolf_Area_12 { get; set; } = new Rectangle(-1664f, -1664f, -1248f, 256f);
 	public static Rectangle Wolf_Area_13 { get; set; } = new Rectangle(-1248f, 224f, 640f, 640f);
 	public static Rectangle Wolf_Area_14 { get; set; } = new Rectangle(608f, -1024f, 1056f, 256f);
 	public static Rectangle Wolf_Area_15 { get; set; } = new Rectangle(-928f, -1440f, 1056f, -1024f);
