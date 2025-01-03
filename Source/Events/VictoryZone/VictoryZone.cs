@@ -60,7 +60,7 @@ public static class VictoryZone
 
     private static bool VictoryAreaConditionsSolo(unit u)
     {
-        return Gamemode.CurrentGameMode != Globals.GAME_MODES[1];
+        return Gamemode.CurrentGameMode == Globals.GAME_MODES[1];
     }
 
     private static bool VictoryAreaConditionsTeam(unit u)

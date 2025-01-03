@@ -5,11 +5,11 @@ using static WCSharp.Api.Common;
 
 public static class RoundTimer
 {
-    public static timer StartRoundTimer = timer.Create();
-    public static timer EndRoundTimer = timer.Create();
-    public static timerdialog RoundTimerDialog = timerdialog.Create(StartRoundTimer);
+    public static List<float> ROUND_ENDTIMES { get; private set; }
+    public static timer StartRoundTimer { get; set; } = timer.Create();
+    public static timer EndRoundTimer { get; set; } = timer.Create();
+    public static timerdialog RoundTimerDialog { get; set; } = timerdialog.Create(StartRoundTimer);
     private static timerdialog EndRoundTimerDialog = timerdialog.Create(EndRoundTimer);
-    private static List<float> ROUND_ENDTIMES;
 
     public static void InitEndRoundTimer()
     {
@@ -55,7 +55,7 @@ public static class RoundTimer
 
     private static void SetEndRoundTimes()
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
         {
             ROUND_ENDTIMES.Add(420.0f);
             ROUND_ENDTIMES.Add(420.0f);
@@ -63,7 +63,7 @@ public static class RoundTimer
             ROUND_ENDTIMES.Add(720.0f);
             ROUND_ENDTIMES.Add(720.0f);
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1])
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
         {
             ROUND_ENDTIMES.Add(420.0f);
             ROUND_ENDTIMES.Add(420.0f);

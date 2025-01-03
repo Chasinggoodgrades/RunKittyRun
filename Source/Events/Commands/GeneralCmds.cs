@@ -37,6 +37,13 @@ public static class GeneralCmds
             case "-kick":
                 Votekick.InitiateVotekick(p, args[1]);
                 break;
+            case "-endround":
+                VoteEndRound.InitiateVote(p);
+                break;
+            case "-yes":
+                Votekick.IncrementTally();
+                VoteEndRound.IncrementVote(p);
+                break;
             case "-sc":
             case "-setcolor":
                 Colors.SetPlayerVertexColor(p, args);
@@ -78,12 +85,13 @@ public static class GeneralCmds
             "-wild - Set a random vertex color",
             "-hidenames | -hn - Hide all floating name tags",
             "-shownames | -sn - Show all floating name tags",
-            "-kick [playerName] | -kick [playerNumber] - Initiate a votekick against a player",
+            "-kick [playerNumber] - Initiate a votekick against a player",
             "-zoom [xxxx] | -cam [xxxx] - Adjust the camera zoom level",
-            "-oldcode - Loads a previous save from RKR 4.2.0+"
+            "-oldcode - Loads a previous save from RKR 4.2.0+",
+            "-endround - Initiate a vote to end the round (Solo Mode Only)",
         });
 
-        p.DisplayTextTo(Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList);
+        p.DisplayTextTo(Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_LAVENDER + commandList);
     }
 
     private static void HandleZoomCommand(player p, string[] args)

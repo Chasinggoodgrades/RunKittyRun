@@ -8,7 +8,7 @@ public static class Globals
     public const float TIME_TO_PICK_GAMEMODE = 30.0f;
     public const int DEFAULT_TEAM_SIZE = 3;
     public static int ROUND = 0;
-    public static bool GAME_ACTIVE = false;
+    public static bool GAME_ACTIVE { get; set; } = false;
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED = GetRandomInt(1, 900000);
