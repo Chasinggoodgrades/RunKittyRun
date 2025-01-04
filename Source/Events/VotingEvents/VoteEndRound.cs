@@ -8,6 +8,7 @@ public static class VoteEndRound
 
     public static void InitiateVote(player voteStarter)
     {
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
         if (VoteAlreadyActive()) return;
         if (!GameActive()) return;
         VoteActive = true;
@@ -55,7 +56,8 @@ public static class VoteEndRound
         foreach(var kitty in Globals.ALL_KITTIES)
         {
             if (kitty.Value.Finished) continue;
-            kitty.Value.TimeProg.SetRoundProgress(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1]);
+            kitty.Value.TimeProg.SetRoundTime(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1]);
+            kitty.Value.TimeProg.SetRoundProgress(Globals.ROUND, 0.00f);
             kitty.Value.Finished = true;
         }
         RoundManager.RoundEnd();

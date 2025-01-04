@@ -16,7 +16,7 @@ public static class PlayerLeaves
         {
             Trigger.RegisterPlayerEvent(player, playerevent.Leave);
         }
-        Trigger.AddAction(PlayerLeavesActions);
+        Trigger.AddAction(() => PlayerLeavesActions());
     }
 
     private static void TeamRemovePlayer(player player)
@@ -25,11 +25,12 @@ public static class PlayerLeaves
         Globals.PLAYERS_TEAMS[player].RemoveMember(player);
     }
 
-    private static void PlayerLeavesActions()
+    public static void PlayerLeavesActions(player player = null)
     {
         try
         {
             var leavingPlayer = @event.Player;
+            if (player != null) leavingPlayer = player;
             var kitty = Globals.ALL_KITTIES[leavingPlayer];
             var circle = Globals.ALL_CIRCLES[leavingPlayer];
             var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];

@@ -57,19 +57,25 @@ public static class Shops
         RefreshItemsOnVendor(vendor);
     }
 
+    /// <summary>
+    /// No longer has use. Constant items will just remain in the editor.
+    /// </summary>
     private static void ConstantItems()
     {
         // Items for all modes
-        KittyVendorItemList.Add(Constants.ITEM_ADRENALINE_POTION);
+/*        KittyVendorItemList.Add(Constants.ITEM_ADRENALINE_POTION);
         KittyVendorItemList.Add(Constants.ITEM_HEALING_WATER);
         KittyVendorItemList.Add(Constants.ITEM_PEGASUS_BOOTS);
         KittyVendorItemList.Add(Constants.ITEM_ENERGY_STONE);
         KittyVendorItemList.Add(Constants.ITEM_MEDITATION_CLOAK);
         KittyVendorItemList.Add(Constants.ITEM_RITUAL_MASK);
         KittyVendorItemList.Add(Constants.ITEM_ELIXIR);
-        KittyVendorItemList.Add(Constants.ITEM_ANCIENT_TOME);
+        KittyVendorItemList.Add(Constants.ITEM_ANCIENT_TOME);*/
     }
 
+    /// <summary>
+    /// These items can go to the misc shop if we want space for constant items. 
+    /// </summary>
     private static void StandardModeItems()
     {
         // Kitty Vendor

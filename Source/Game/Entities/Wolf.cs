@@ -70,9 +70,10 @@ public class Wolf
 
     private bool ImpossibleChance()
     {
+        // Actually has 0 meaning currently, but something to play with.
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return true;
-        if (Globals.ROUND < 3) return true;
-        if (GetRandomInt(1, 2) == 1) return true;
+        if (Globals.ROUND <= 3) return true;
+        if (GetRandomInt(1, 1) == 1) return true;
         return false;
     }
 

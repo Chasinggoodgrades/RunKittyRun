@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class CollisionDetection
 {
     public static Dictionary<player, float> KITTY_COLLISION_RADIUS = new Dictionary<player, float>();
-    public const float DEFAULT_WOLF_COLLISION_RADIUS = 75.0f;
+    public const float DEFAULT_WOLF_COLLISION_RADIUS = 74.0f;
     private const float CIRCLE_COLLISION_RADIUS = 77.0f;
 
     private static Func<bool> WolfCollisionFilter(Kitty k)

@@ -54,6 +54,7 @@ public static class Votekick
         if (Voters.Count >= requiredVotes)
         {
             Console.WriteLine($"{Colors.COLOR_YELLOW}Votekick succeeded. {Voters.Count}/{totalPlayers} players voted yes. {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW} has been removed from the game.{Colors.COLOR_RESET}");
+            PlayerLeaves.PlayerLeavesActions(target);
             target.Remove(playergameresult.Defeat);
         }
         else
@@ -74,10 +75,12 @@ public static class Votekick
 
     private static bool VotekickAlreadyActive()
     {
-        if (!VoteActive) return false;
-        if (!VoteEndRound.VoteActive) return false;
-        Console.WriteLine($"{Colors.COLOR_YELLOW}A vote is already active. Please wait for the current vote to finish.{Colors.COLOR_RESET}");
-        return true;
+        if (VoteActive || VoteEndRound.VoteActive)
+        {
+            Console.WriteLine($"{Colors.COLOR_YELLOW}A vote is already active. Please wait for the current vote to finish.{Colors.COLOR_RESET}");
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
