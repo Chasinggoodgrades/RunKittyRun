@@ -78,7 +78,8 @@ public class Kitty
         Unit.Revive(Unit.X, Unit.Y, false);
         Unit.Mana = circle.Unit.Mana;
         Utility.SelectUnitForPlayer(Player, Unit);
-        if(Globals.LockedCamera.Contains(Player)) SetCameraTargetController(Unit, 0, 0, false);
+        if(Globals.LockedCamera.Contains(Player)) 
+            if(Player.IsLocal) SetCameraTargetController(Unit, 0, 0, true);
 
         if (savior == null) return;
         UpdateSaviorStats(savior);

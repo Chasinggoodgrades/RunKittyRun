@@ -71,6 +71,7 @@ public static class GeneralCmds
                 break;
             case "-lc":
             case "-lockcamera":
+                if(!p.IsLocal) return;
                 Globals.LockedCamera.Add(p);
                 SetCameraTargetController(kitty.Unit, 0, 0, false);
                 break;
