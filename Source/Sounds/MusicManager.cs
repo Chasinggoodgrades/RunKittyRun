@@ -23,7 +23,8 @@ public static class MusicManager
             new Music("Sum 41 - The Hell Song", "Orc2"),
             new Music("DJ Sammy - Heaven", "Orc3"),
             new Music("Cascada - Everytime We Touch", "Undead1"),
-            new Music("Cascada - Everytime We Touch(Fast)", "Undead2")
+            new Music("BassHunter - Dota", "Undead3"),
+            new Music("[PLACEHOLDER]", "Undead3"), // use undead2
         };
     }
 }

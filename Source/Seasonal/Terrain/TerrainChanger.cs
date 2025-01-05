@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Api;
-using WCSharp.Shared.Data;
-using static WCSharp.Api.Common;
+﻿using static WCSharp.Api.Common;
+
 public static class TerrainChanger
 {
     public static int[] Terrains { get; set; }

@@ -14,7 +14,9 @@ public class Blitzer : Affix
     private effect Effect;
     private effect WanderEffect;
     public Blitzer(Wolf unit) : base(unit)
-    {}
+    {
+        Name = $"{Colors.COLOR_LIME}Blitzer|r";
+    }
 
     public override void Apply()
     {

@@ -70,6 +70,7 @@ public static class AwardManager
     /// </summary>
     public static void RegisterGamestatEvents()
     {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
@@ -126,6 +127,7 @@ public static class AwardManager
     public static void SetPlayerSelectedData(Kitty kitty)
     {
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
+        if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
 
         var unit = kitty.Unit;
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object

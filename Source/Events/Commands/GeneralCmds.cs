@@ -9,6 +9,7 @@ public static class GeneralCmds
     public static void Handle(player p, string command)
     {
         var args = command.Split(' ');
+        var kitty = Globals.ALL_KITTIES[p];
         CommandInfoCheck(args);
 
         switch (args[0])
@@ -44,8 +45,13 @@ public static class GeneralCmds
                 Votekick.IncrementTally();
                 VoteEndRound.IncrementVote(p);
                 break;
+            case "-affixinfo":
+                var affixes = AffixFactory.CalculateAffixes();
+                p.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes));
+                break;
             case "-sc":
             case "-setcolor":
+            case "-vc":
                 Colors.SetPlayerVertexColor(p, args);
                 break;
             case "-wild":
@@ -63,6 +69,21 @@ public static class GeneralCmds
             case "-cam":
                 HandleZoomCommand(p, args);
                 break;
+            case "-lc":
+            case "-lockcamera":
+                Globals.LockedCamera.Add(p);
+                SetCameraTargetController(kitty.Unit, 0, 0, false);
+                break;
+            case "-reset":
+                if (!p.IsLocal) return;
+                Globals.LockedCamera.Remove(p);
+                ResetToGameCamera(0);
+                SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2600.0f, 0.0f);
+                break;
+            case "-kc":
+                PlayerLeaves.PlayerLeavesActions(p);
+                p.Remove(playergameresult.Defeat);
+                break;
             case "-oldcode":
                 Savecode.LoadString();
                 break;
@@ -78,20 +99,24 @@ public static class GeneralCmds
         {
             "-team [#] - Switches to #'d team. (Team Mode Free Pick Only)",
             "-save - Save your current game stats",
+            "-affixInfo - Displays current round affixes",
             "-clear - Clear your screen",
             "-color [color] - Set your player color",
             "-colors - Display all available colors",
-            "-sc [rgb] | -setcolor [rgb] - Set your player vertex color",
+            "-sc [rgb] | -setcolor [rgb] | -vc [rgb] - Set your player vertex color",
             "-wild - Set a random vertex color",
             "-hidenames | -hn - Hide all floating name tags",
             "-shownames | -sn - Show all floating name tags",
             "-kick [playerNumber] - Initiate a votekick against a player",
             "-zoom [xxxx] | -cam [xxxx] - Adjust the camera zoom level",
             "-oldcode - Loads a previous save from RKR 4.2.0+",
-            "-endround - Initiate a vote to end the round (Solo Mode Only)",
+            "-endround - Initiate a vote to end the round (Solo Tournament Only)",
+            "-lc | -lockcamera - Locks your camera to your unit",
+            "-reset - Resets your camera to default",
+            "-kc - Kicks yourself from the game"
         });
 
-        p.DisplayTextTo(Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_LAVENDER + commandList);
+        p.DisplayTimedTextTo(15.0f, Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList, 0, 10);
     }
 
     private static void HandleZoomCommand(player p, string[] args)

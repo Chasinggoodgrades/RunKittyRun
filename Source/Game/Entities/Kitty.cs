@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public class Kitty
 {
@@ -77,6 +78,7 @@ public class Kitty
         Unit.Revive(Unit.X, Unit.Y, false);
         Unit.Mana = circle.Unit.Mana;
         Utility.SelectUnitForPlayer(Player, Unit);
+        if(Globals.LockedCamera.Contains(Player)) SetCameraTargetController(Unit, 0, 0, false);
 
         if (savior == null) return;
         UpdateSaviorStats(savior);

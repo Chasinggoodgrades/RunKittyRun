@@ -86,6 +86,12 @@ public static class DebugCmd
             case "?vul":
                 CollisionDetection.KittyRegisterCollisions(kitty);
                 break;
+            case "?slide":
+                Slider slider = new Slider(kitty.Unit);
+                slider.StartSlider();
+                break;
+            case "?noslide":
+                break;
             case "?discord":
                 DiscordFrame.Initialize();
                 break;

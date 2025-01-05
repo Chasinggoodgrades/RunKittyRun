@@ -24,6 +24,7 @@ public class Fixation : Affix
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
         ChaseTimer = timer.Create();
+        Name = $"{Colors.COLOR_RED}Fixation|r";
     }
 
     public override void Apply()

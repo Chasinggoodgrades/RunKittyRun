@@ -15,6 +15,7 @@ public class Frostbite : Affix
     private Dictionary<unit, effect> Effects;
     public Frostbite(Wolf unit) : base(unit)
     {
+        Name = $"{Colors.COLOR_LIGHTBLUE}Frostbite|r";
         InRangeTrigger = trigger.Create();
         PeriodicRangeTrigger = trigger.Create();
         Frostbitten = new Dictionary<unit, float>();

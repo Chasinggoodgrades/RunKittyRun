@@ -18,7 +18,7 @@ namespace Source.Init
             DoodadChanger.ShowSeasonalDoodads(false);
             Gamemode.Initialize();
             SetAlliedPlayers();
-            if (!ADMINDISABLE.AdminsGame()) return;
+            //if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize();
             Savecode.Initialize();
             StartGameModeTimer();

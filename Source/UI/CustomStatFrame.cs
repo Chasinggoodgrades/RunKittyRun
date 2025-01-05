@@ -191,7 +191,7 @@ public static class CustomStatFrame
         var affixes = wolf.Affixes;
         for (var i = 0; i < affixes.Count; i++)
         {
-            BlzFrameSetText(Stats[i].Text, affixes[i].GetType().ToString());
+            BlzFrameSetText(Stats[i].Text, affixes[i].Name);
         }
     }
 

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static WCSharp.Api.Common;
 
 public static class AffixFactory
 {
-    public static List<Affix> AllAffixes;
+    public static List<Affix> AllAffixes = new List<Affix>();
     public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
@@ -23,6 +24,37 @@ public static class AffixFactory
         AllAffixes = new List<Affix>();
         InitLaneWeights();
     }
+
+
+    public static string[] CalculateAffixes()
+    {
+        var affixCounts = new Dictionary<string, int>();
+
+        foreach (var affix in AllAffixes)
+        {
+            if (affixCounts.ContainsKey(affix.Name)) continue;
+                affixCounts[affix.Name] = 0;
+        }
+
+        foreach (var affix in AllAffixes)
+        {
+            if (affixCounts.ContainsKey(affix.Name))
+            {
+                affixCounts[affix.Name]++;
+            }
+        }
+
+        var affixes = new List<string>();
+        foreach (var affix in affixCounts)
+        {
+            if (affix.Value > 0)
+            {
+                affixes.Add($"{affix.Key} x{affix.Value}");
+            }
+        }
+        return affixes.ToArray();
+    }
+
     public static Affix CreateAffix(Wolf unit, string affixName)
     {
         switch (affixName)
@@ -120,7 +152,7 @@ public static class AffixFactory
         RemoveAllAffixes();
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.5) + Globals.ROUND;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.75) + Globals.ROUND;
         //Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Spawning " + NUMBER_OF_AFFIXED_WOLVES + " affixed wolves");
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
@@ -160,8 +192,6 @@ public static class AffixFactory
             && wolf.AffixCount() < MAX_NUMBER_OF_AFFIXES
             && wolf.Unit != FandF.BloodWolf;
     }
-
-
 
     private static bool CanDistributeAffixes()
     {

@@ -56,7 +56,7 @@ public static class Utility
 
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
-        var tenths = (int)((time * 10) % 10); // Get the tenths of a second
+        var tenths = (int)((time * 10) % 10);
 
         string timeString;
         if (seconds < 10)
@@ -82,7 +82,7 @@ public static class Utility
 
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
-        var tenths = (int)((time * 10) % 10); // Get the tenths of a second
+        var tenths = (int)((time * 10) % 10);
 
         if (seconds < 10)
         {
