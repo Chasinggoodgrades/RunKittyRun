@@ -75,11 +75,13 @@ public static class Gameover
         {
             IncrementGameStats(kitty);
             if(win) IncrementWins(kitty);
+            IncrementWinStreak(kitty, win);
         }
     }
 
     private static void IncrementGameStats(Kitty kitty)
     {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         var stats = kitty.SaveData.GameStats;
         switch (Difficulty.DifficultyValue)
         {
@@ -97,6 +99,7 @@ public static class Gameover
 
     private static void IncrementWins(Kitty kitty)
     {
+        if (Gamemode.CurrentGameMode != "Standard") return;
         var stats = kitty.SaveData.GameStats;
         switch (Difficulty.DifficultyValue)
         {
@@ -109,6 +112,23 @@ public static class Gameover
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleWins += 1;
                 break;
+        }
+    }
+
+    private static void IncrementWinStreak(Kitty kitty, bool win)
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        var stats = kitty.SaveData.GameStats;
+
+        if (win)
+        {
+            stats.WinStreak += 1;
+            if (stats.WinStreak > stats.HighestWinStreak)
+                stats.HighestWinStreak = stats.WinStreak;
+        }
+        else
+        {
+            stats.WinStreak = 0;
         }
     }
 

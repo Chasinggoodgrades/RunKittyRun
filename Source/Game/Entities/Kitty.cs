@@ -75,7 +75,7 @@ public class Kitty
         var circle = Globals.ALL_CIRCLES[Player];
         circle.HideCircle();
         Alive = true;
-        Unit.Revive(Unit.X, Unit.Y, false);
+        Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
         Unit.Mana = circle.Unit.Mana;
         Utility.SelectUnitForPlayer(Player, Unit);
         if(Globals.LockedCamera.Contains(Player)) 

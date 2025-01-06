@@ -146,6 +146,11 @@ public class Savecode
 
     public static void LoadString()
     {
+        if(Gamemode.CurrentGameMode != "Standard")
+        {
+            Console.WriteLine($"{Colors.COLOR_YELLOW}Old save codes work only in Standard");
+            return;
+        }
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
         Preloader(filePath);
