@@ -85,8 +85,8 @@ public class RingOfSummoning : Relic
             var unit = list[randomPlayer];
             var kitty = Globals.ALL_KITTIES[unit.Owner];
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
+            Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
-            Utility.SimpleTimer(0.01f, () => kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y));
             list.Remove(unit);
         }
 
