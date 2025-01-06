@@ -5,8 +5,8 @@ using static WCSharp.Api.Common;
 public abstract class Relic
 {
     public static int RequiredLevel { get; } = 10;
-    public static int SecondRelicLevel { get; } = 15;
-    public static int MaxRelics { get; } = 2;
+    public static int RelicIncrease { get; } = 16;
+    public static int MaxRelics { get; } = 5;
     public string Name { get; }
     public string Description { get; }
     public int ItemID { get; }
@@ -37,5 +37,13 @@ public abstract class Relic
         RemoveEffect(Unit);
         ApplyEffect(Unit);
         return true;
+    }
+
+    public static int GetRelicCountForLevel(int currentLevel)
+    {
+        var count = (currentLevel - RelicIncrease) + 1; // account for level 10 relic .. 
+        if (count < 0) return 0;
+        else if(count >= MaxRelics) return MaxRelics;
+        else return count;
     }
 }

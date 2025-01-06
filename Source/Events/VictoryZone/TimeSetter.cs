@@ -15,12 +15,13 @@ public static class TimeSetter
 
         if (!standard && !solo) return false;
 
-        if(standard) roundString = GetRoundEnum();
-        if(solo) roundString = GetSoloTime();
+        if (standard) roundString = GetRoundEnum();
+        if (solo) roundString = GetSoloTime();
         if (currentTime >= 1200.00f) return false; // 20 min cap.
 
         var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
-        var value = (int)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+        var value = (float)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+
         if (currentTime >= value && value != 0) return false;
 
         SetSavedTime(player, roundString);

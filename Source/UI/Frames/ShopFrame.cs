@@ -7,6 +7,8 @@ using System.Text;
 public static class ShopFrame
 {
     public static framehandle shopFrame;
+    public static framehandle upgradeButton;
+    public static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
     private static framehandle relicsPanel;
     private static framehandle rewardsPanel;
     private static framehandle miscPanel;
@@ -16,7 +18,6 @@ public static class ShopFrame
     private static framehandle costLabel;
     private static framehandle buyButton;
     private static framehandle sellButton;
-    private static framehandle upgradeButton;
     private static framehandle upgradeTooltip;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private const float buttonWidth = 0.025f;
@@ -31,7 +32,6 @@ public static class ShopFrame
     private const int ActiveAlpha = 255;
     private const int DisabledAlpha = 150;
     private const string DisabledPath = "UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp";
-    private static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
 
     public static void Initialize()
     {
@@ -137,7 +137,7 @@ public static class ShopFrame
 
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction( () => UpgradeRelic() );
+        UpgradeTrigger.AddAction( () => RelicFunctions.UpgradeRelic() );
 
     }
 
@@ -284,7 +284,7 @@ public static class ShopFrame
         tooltip.Text = item.Name;
     }
 
-    private static void RefreshUpgradeTooltip(Relic relic)
+    public static void RefreshUpgradeTooltip(Relic relic)
     {
         var finalString = new StringBuilder();
         var playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(@event.Player).GetUpgradeLevel(relic.GetType());
@@ -344,7 +344,7 @@ public static class ShopFrame
             switch (selectedItem.Type)
             {
                 case ShopItemType.Relic:
-                    HandleRelicPurchase(player, selectedItem, kitty);
+                    RelicFunctions.HandleRelicPurchase(player, selectedItem, kitty);
                     break;
 
                 case ShopItemType.Reward:
@@ -360,34 +360,6 @@ public static class ShopFrame
         // hide shop after purchase
         if (player.IsLocal)
             shopFrame.Visible = !shopFrame.Visible;
-    }
-
-    private static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
-    {
-        if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
-        {
-            AlreadyHaveRelic(player);
-            return;
-        }
-
-        if (!RelicLevel(kitty.Unit))
-        {
-            NotHighEnoughLevel(player);
-            return;
-        }
-
-        if(!CanGetSecondRelic(kitty.Unit)) return;
-        
-        if(RelicMaxedOut(player)) return;
-
-        AddItem(player, selectedItem.ItemID);
-        ReduceGold(player, selectedItem.Cost);
-        var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
-        if (newRelic != null)
-        {
-            kitty.Relics.Add(newRelic);
-            newRelic.ApplyEffect(kitty.Unit);
-        }
     }
 
     private static void SellSelectedItem()
@@ -425,67 +397,14 @@ public static class ShopFrame
 
     }
 
-    private static void UpgradeRelic()
-    {
-        var player = @event.Player;
-        if (player.IsLocal)
-        {
-            upgradeButton.Visible = false; upgradeButton.Visible = true;
-        }
-        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
-        {
-            var itemID = selectedItem.ItemID;
-            var relicType = selectedItem.Relic.GetType();
-            var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
-            var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
-            if (playerRelic == null) return;
-            var goldCost = playerRelic.GetCurrentUpgrade().Cost;
-            if (player.Gold < goldCost)
-            {
-                NotEnoughGold(player, goldCost);
-                return;
-            }
-            if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
-            {
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
-                player.Gold -= goldCost;
-                if (player.IsLocal) RefreshUpgradeTooltip(playerRelic);
-            }
-            else
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
-        }
-    }
-
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
     private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
     private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
-    private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
-
-    private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
-    private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
-    private static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
+    public static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
-    private static bool RelicMaxedOut(player player)
-    {
-        var relics = Globals.ALL_KITTIES[player].Relics;
-        if (relics.Count < Relic.MaxRelics) return false;
-        player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!");
-        return true;
-    }
-
-    private static bool CanGetSecondRelic(unit unit)
-    {
-        if (Globals.ALL_KITTIES[unit.Owner].Relics.Count < 1) return true; // can get a first relic ofc.
-        if (unit.HeroLevel < Relic.SecondRelicLevel)
-        {
-            unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You must have reached {Relic.SecondRelicLevel} to obtain your next relic.");
-            return false;
-        }
-        return true;
-    }
 
     private static void SetRewardsFrameHotkey()
     {

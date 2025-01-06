@@ -23,7 +23,7 @@ public class Blitzer : Affix
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Start(1.0f, false, () => Unit.StartWandering());
         Unit.WanderTimer.Pause();
-        Unit.Unit.SetVertexColor(255, 255, 204);
+        Unit.Unit.SetVertexColor(204, 204, 100);
         RegisterMoveTimer();
     }
 
@@ -105,7 +105,7 @@ public class Blitzer : Affix
         BlitzerTimer.Pause();
         Effect.Dispose();
         Unit.Unit.SetAnimation(0);
-        Unit.Unit.SetVertexColor(255, 255, 204);
+        Unit.Unit.SetVertexColor(204, 204, 100);
         Unit.Unit.SetPathing(true);
     }
 
