@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public class RingOfSummoning : Relic

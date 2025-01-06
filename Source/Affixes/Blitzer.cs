@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
-    private const string BLITZER_EFFECT = "war3mapImported\\ChargerWindCasterArt.mdx";
+    private const string BLITZER_EFFECT = "war3mapImported\\ChargerCasterArt.mdx";
     private const float BLITZER_SPEED = 650.0f;
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
     private const float BLITZER_LOWEND = 6.0f;
@@ -23,7 +23,7 @@ public class Blitzer : Affix
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Start(1.0f, false, () => Unit.StartWandering());
         Unit.WanderTimer.Pause();
-        Unit.Unit.SetVertexColor(42, 170, 138);
+        Unit.Unit.SetVertexColor(255, 255, 204);
         RegisterMoveTimer();
     }
 
@@ -50,7 +50,7 @@ public class Blitzer : Affix
     {
         WanderEffect = effect.Create(Unit.OVERHEAD_EFFECT_PATH, Unit.Unit, "overhead");
         Effect?.Dispose();
-        Unit.Unit.SetVertexColor(0, 255, 0);
+        Unit.Unit.SetVertexColor(255, 255, 0);
         Utility.SimpleTimer(BLITZER_OVERHEAD_DELAY, BeginBlitz);
     }
 
@@ -105,7 +105,7 @@ public class Blitzer : Affix
         BlitzerTimer.Pause();
         Effect.Dispose();
         Unit.Unit.SetAnimation(0);
-        Unit.Unit.SetVertexColor(42, 170, 138);
+        Unit.Unit.SetVertexColor(255, 255, 204);
         Unit.Unit.SetPathing(true);
     }
 
