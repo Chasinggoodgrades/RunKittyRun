@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public class RingOfSummoning : Relic
@@ -84,8 +85,8 @@ public class RingOfSummoning : Relic
             var unit = list[randomPlayer];
             var kitty = Globals.ALL_KITTIES[unit.Owner];
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
-            kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
+            Utility.SimpleTimer(0.01f, () => kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y));
             list.Remove(unit);
         }
 
@@ -104,7 +105,9 @@ public class RingOfSummoning : Relic
         var round = Globals.ROUND;
         var sumProg = summoner.TimeProg.GetRoundProgress(round);
         var deadProg = summoned.TimeProg.GetRoundProgress(round);
-        if(sumProg < deadProg && !summoned.Alive)
+
+        Console.WriteLine($"{summoner.Player.Name} {summoner.TimeProg.GetRoundProgress(round)} ||||| {summoned.Player.Name} {summoned.TimeProg.GetRoundProgress(round)}");
+        if(sumProg > deadProg && !summoned.Alive)
         {
             summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon dead kitties that are ahead of you!");
             return false;
