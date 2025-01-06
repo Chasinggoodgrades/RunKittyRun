@@ -71,15 +71,11 @@ public static class GeneralCmds
                 break;
             case "-lc":
             case "-lockcamera":
-                if(!p.IsLocal) return;
-                Globals.LockedCamera.Add(p);
-                SetCameraTargetController(kitty.Unit, 0, 0, false);
+                CameraUtil.LockCamera(p);
                 break;
             case "-reset":
-                if (!p.IsLocal) return;
-                Globals.LockedCamera.Remove(p);
-                ResetToGameCamera(0);
-                SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2600.0f, 0.0f);
+                CameraUtil.UnlockCamera(p);
+                FrameManager.InitalizeButtons();
                 break;
             case "-kc":
                 PlayerLeaves.PlayerLeavesActions(p);

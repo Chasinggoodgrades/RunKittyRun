@@ -273,6 +273,19 @@ public static class Utility
         }
     }
 
+    public static void UnitAddMana(unit unit, int amount)
+    {
+        // grab max mana
+        var maxMana = unit.MaxMana;
+        var currentMana = unit.Mana;
+        var newMana = currentMana + amount;
+
+        if (newMana >= maxMana)
+            unit.Mana = maxMana-1;
+        else
+            unit.Mana = newMana;
+    }
+
     public static string FormatAwardName(string awardName)
     {
         var stringBuilder = new StringBuilder();

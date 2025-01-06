@@ -23,7 +23,7 @@ public class Blitzer : Affix
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Start(1.0f, false, () => Unit.StartWandering());
         Unit.WanderTimer.Pause();
-        Unit.Unit.SetVertexColor(204, 204, 100);
+        Unit.Unit.SetVertexColor(224, 224, 120);
         RegisterMoveTimer();
     }
 
@@ -37,6 +37,7 @@ public class Blitzer : Affix
         Effect.Dispose();
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
+        Unit.Unit.SetColor(playercolor.Brown);
     }
 
     private void RegisterMoveTimer()
@@ -51,6 +52,7 @@ public class Blitzer : Affix
         WanderEffect = effect.Create(Unit.OVERHEAD_EFFECT_PATH, Unit.Unit, "overhead");
         Effect?.Dispose();
         Unit.Unit.SetVertexColor(255, 255, 0);
+        Unit.Unit.SetColor(playercolor.Yellow);
         Utility.SimpleTimer(BLITZER_OVERHEAD_DELAY, BeginBlitz);
     }
 
@@ -105,7 +107,8 @@ public class Blitzer : Affix
         BlitzerTimer.Pause();
         Effect.Dispose();
         Unit.Unit.SetAnimation(0);
-        Unit.Unit.SetVertexColor(204, 204, 100);
+        Unit.Unit.SetVertexColor(224, 224, 120);
+        Unit.Unit.SetColor(playercolor.Brown);
         Unit.Unit.SetPathing(true);
     }
 
