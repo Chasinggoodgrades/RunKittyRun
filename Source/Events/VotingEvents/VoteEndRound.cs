@@ -27,7 +27,6 @@ public static class VoteEndRound
         }
         Votes.Add(player);
         Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW} has voted yes to end the round{Colors.COLOR_RESET}");
-        VoteTally();
     }
 
     private static void VoteTally()
