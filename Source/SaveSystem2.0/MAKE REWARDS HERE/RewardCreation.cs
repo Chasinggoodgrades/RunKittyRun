@@ -92,6 +92,7 @@ public static class RewardCreation
         AddReward(nameof(awards.ManaAura), Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, nameof(stats.NormalWins), 20);
         AddReward(nameof(awards.ButterflyAura), Constants.ABILITY_AURA_BUTTERFLY, "origin", "war3mapImported\\ButterflyAura.mdx", RewardType.Auras);
         AddReward(nameof(awards.VioletAura), Constants.ABILITY_CHAMPION_AURAPURPLERUNIC, "origin", "war3mapImported\\GlaciarAuraPurple.mdx", RewardType.Auras);
+        AddReward(nameof(awards.FreezeAura), Constants.ABILITY_AURA_FREEZE, "origin", "war3mapImported\\HolyFreezeAuraD2.mdx", RewardType.Auras);
 
         // Wings
         AddReward(nameof(awards.PhoenixWings), Constants.ABILITY_WINGS_PHOENIX, "chest", "war3mapImported\\PhoenixWing2.mdx", RewardType.Wings, nameof(stats.Saves), 375);

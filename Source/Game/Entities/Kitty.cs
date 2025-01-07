@@ -10,7 +10,7 @@ public class Kitty
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
-    public PlayerCurrentStats CurrentStats { get; set; } = new PlayerCurrentStats();
+    public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
     private effect Effect { get; set; }

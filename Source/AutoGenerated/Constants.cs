@@ -113,6 +113,7 @@ public static class Constants
 	public const int ABILITY_TRAIL_CRIMSONLIGHT = 1093677140;
 	public const int ABILITY_TRAIL_AZURELIGHT = 1093677141;
 	public const int ABILITY_TRAIL_EMERALDLIGHT = 1093677142;
+	public const int ABILITY_AURA_FREEZE = 1093677143;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 public static class Challenges
 {
     private static Dictionary<player, timer> YellowLightningPairs = new Dictionary<player, timer>();
+    public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
     public const int DIVINITY_TENDRILS_COUNT = 4;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
@@ -10,6 +11,7 @@ public static class Challenges
     private const float PINK_FIRE_SD_REQUIREMENT = 3.0f;
     private const int WHITE_FIRE_DEATH_REQUIREMENT = 3;
     private const int PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175;
+    private const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
 
     public static void Initialize()
     {
@@ -97,6 +99,16 @@ public static class Challenges
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.GreenLightning));
     }
 
+    public static void FreezeAura()
+    {
+        if (!Gameover.WinGame) return;
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        {
+            if (kitty.CurrentStats.WolfFreezeCount < FREEZE_AURA_WOLF_REQUIREMENT) continue;
+            AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS.FreezeAura));
+        }
+    }
+
     /// <summary>
     /// Hard+, Nitro Round 4 and Win game.
     /// </summary>
@@ -142,5 +154,4 @@ public class YellowLightning
     }
 
     public void Dispose() => Timer.Dispose();
-
 }

@@ -32,6 +32,7 @@ public static class Gameover
         Challenges.PinkFire();
         Challenges.WhiteTendrils();
         Challenges.ZandalariKitty();
+        Challenges.FreezeAura();
     }
 
     private static void LosingGame()

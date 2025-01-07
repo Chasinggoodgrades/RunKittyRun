@@ -61,6 +61,7 @@ public class FrostbiteRing : Relic
         Unit.SetPausedEx(true);
         var duration = GetFreezeDuration();
         var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
+        Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount += 1; // increment freeze count for freeze_aura reward
         t.Start(duration, false, () =>
         {
             Unit.SetPausedEx(false);
