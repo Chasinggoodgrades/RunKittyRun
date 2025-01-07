@@ -376,6 +376,13 @@ public static class ShopFrame
             if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
             if (selectedItem.Type == ShopItemType.Relic)
             {
+
+                if (!CanSellRelic(kitty.Unit))
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level 15.|r");
+                    return;
+                }
+
                 // Find the shopItem type associated with the selected item that the player owns.
                 var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
                 if (relic.GetType() == typeof(OneOfNine))
@@ -402,6 +409,7 @@ public static class ShopFrame
     private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
+    private static bool CanSellRelic(unit unit) => unit.HeroLevel >= 15;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     public static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
