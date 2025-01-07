@@ -23,6 +23,7 @@ public static class FinalSafezone
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
+            Challenges.GreenLightning(player);
             NoKittyLeftBehind.CheckChallenge();
         });
     }

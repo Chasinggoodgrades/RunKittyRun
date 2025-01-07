@@ -94,7 +94,7 @@ public static class Challenges
     {
         var kitty = Globals.ALL_KITTIES[player];
         var currentDeaths = kitty.CurrentStats.RoundDeaths;
-        var saveStreak = kitty.SaveData.GameStats.SaveStreak;
+        var saveStreak = kitty.SaveData.GameStats.SaveStreak; // current or overall, either is fine tbh.
         if (saveStreak < 10 || currentDeaths > 0) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.GreenLightning));
     }
