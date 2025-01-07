@@ -11,6 +11,7 @@ public class Blitzer : Affix
     private const float BLITZER_HIGHEND = 11.0f;
     private timer MoveTimer;
     private timer BlitzerTimer;
+    private timer PreBlitzerTimer;
     private effect Effect;
     private effect WanderEffect;
     public Blitzer(Wolf unit) : base(unit)
@@ -33,7 +34,9 @@ public class Blitzer : Affix
         WanderEffect?.Dispose();
         Unit.WanderTimer.Resume();
         MoveTimer.Pause();
+        PreBlitzerTimer.Pause();
         MoveTimer.Dispose();
+        PreBlitzerTimer.Dispose();
         Effect.Dispose();
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
@@ -43,6 +46,7 @@ public class Blitzer : Affix
     private void RegisterMoveTimer()
     {
         MoveTimer = timer.Create();
+        PreBlitzerTimer = timer.Create();
         MoveTimer.Start(5.0f, false, PreBlitzerMove); // initial move
         BlitzerTimer = timer.Create();
     }
@@ -53,7 +57,7 @@ public class Blitzer : Affix
         Effect?.Dispose();
         Unit.Unit.SetVertexColor(255, 255, 0);
         Unit.Unit.SetColor(playercolor.Yellow);
-        Utility.SimpleTimer(BLITZER_OVERHEAD_DELAY, BeginBlitz);
+        PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
     }
 
     private void BeginBlitz()

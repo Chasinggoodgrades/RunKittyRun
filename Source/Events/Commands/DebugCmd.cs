@@ -77,6 +77,9 @@ public static class DebugCmd
             case "?stat":
                 AwardingCmds.SettingGameStats(player, command);
                 break;
+            case "?cd":
+                kitty.Unit.ResetCooldowns();
+                break;
             case "?time":
                 AwardingCmds.SettingGameTimes(player, command);
                 break;

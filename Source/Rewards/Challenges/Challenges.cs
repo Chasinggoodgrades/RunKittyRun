@@ -5,13 +5,13 @@ public static class Challenges
     private static Dictionary<player, timer> YellowLightningPairs = new Dictionary<player, timer>();
     public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
     public const int DIVINITY_TENDRILS_COUNT = 4;
+    public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
     private const int PURPLE_FIRE_DEATH_REQUIREMENT = 0;
     private const float PINK_FIRE_SD_REQUIREMENT = 3.0f;
     private const int WHITE_FIRE_DEATH_REQUIREMENT = 3;
     private const int PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175;
-    private const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
 
     public static void Initialize()
     {
