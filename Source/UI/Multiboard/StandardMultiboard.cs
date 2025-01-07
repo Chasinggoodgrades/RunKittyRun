@@ -136,7 +136,7 @@ public static class StandardMultiboard
             var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
             var playerColor = Colors.GetPlayerColor(player.Id+1);
 
-            var name = player.Name;
+            var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var totalSaves = currentStats.TotalSaves;
             var totalDeaths = currentStats.TotalDeaths;
             var score = totalSaves - totalDeaths;
@@ -175,7 +175,7 @@ public static class StandardMultiboard
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
-            var name = player.Name;
+            var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var allSaves = saveData.GameStats.Saves;
             var allDeaths = saveData.GameStats.Deaths;
             var score = allSaves - allDeaths;

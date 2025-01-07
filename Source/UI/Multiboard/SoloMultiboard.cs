@@ -116,11 +116,11 @@ public static class SoloMultiboard
             var times = sortedDict[player].TimeProg;
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
             var totalDeaths = sortedDict[player].CurrentStats.TotalDeaths;
-
+            var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var stats = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
                 ? new[]
                 {
-                    player.Name,
+                    name,
                     times.GetRoundProgress(1).ToString("F2") + "%",
                     times.GetRoundProgress(2).ToString("F2") + "%",
                     times.GetRoundProgress(3).ToString("F2") + "%",
@@ -130,7 +130,7 @@ public static class SoloMultiboard
                 }
                 : new[]
                 {
-                    player.Name,
+                    name,
                     totalDeaths.ToString(),
                     times.GetRoundTimeFormatted(1),
                     times.GetRoundTimeFormatted(2),
