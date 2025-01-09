@@ -29,7 +29,7 @@ public static class Globals
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
     public static SaveManager SaveSystem;
     public static GameAwardsData GAME_AWARDS = new GameAwardsData();
-    public static GameTimesData GAME_TIMES = new GameTimesData();
+    public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
 
     public static Dictionary<int, Team> ALL_TEAMS;

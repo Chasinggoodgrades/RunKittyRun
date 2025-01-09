@@ -11,8 +11,8 @@ public class ChronoSphere : Relic
     private const int RelicCost = 650;
     private const float SLOW_AURA_RADIUS = 400.0f;
     private const float MAGNITUDE_CHANGE_INTERVAL = 15.0f;
-    private const float MAGNITUDE_LOWER_BOUND = 10.0f;
-    private const float MAGNITUDE_UPPER_BOUND = 15.0f;
+    private const float MAGNITUDE_LOWER_BOUND = 8.0f;
+    private const float MAGNITUDE_UPPER_BOUND = 14.0f;
     private const float LOCATION_CAPTURE_INTERVAL = 5.0f;
     //private static List <player> OnCooldown = new List<player>();
 
@@ -84,9 +84,11 @@ public class ChronoSphere : Relic
 
     private void CaptureLocation()
     {
+        if (OnCooldown) return; // let's not proc if on cooldown
         var unit = Globals.ALL_KITTIES[Owner].Unit;
         CapturedLocation = (unit.X, unit.Y, unit.Facing);
         LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
+        LocationEffect.Scale = 0.5f;
         Utility.SimpleTimer(0.25f, LocationEffect.Dispose);
     }
 

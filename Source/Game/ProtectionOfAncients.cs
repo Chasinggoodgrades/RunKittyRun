@@ -17,6 +17,7 @@ public static class ProtectionOfAncients
     private const float EFFECT_RADIUS_INCREASE = 50.0f;
     private static int UPGRADE_LEVEL_2_REQUIREMENT = 9;
     private static int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    private static float INVULNERABLE_DURATION = 1.0f;
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
     private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
@@ -129,6 +130,7 @@ public static class ProtectionOfAncients
         var owningPlayer = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
+        kitty.Invulnerable = true;
         actiEffect.Dispose();
         EndEffectActions(owningPlayer);
     }
@@ -168,8 +170,8 @@ public static class ProtectionOfAncients
             reviveCount++;
             // Give Divinity Tendrils if meets challenge requiremnet.
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
-
         }
+        Utility.SimpleTimer(INVULNERABLE_DURATION, () => kitty.Invulnerable = false);
         tempGroup.Dispose();
 
     }

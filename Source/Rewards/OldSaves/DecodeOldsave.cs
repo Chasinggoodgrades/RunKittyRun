@@ -4,7 +4,7 @@ public static class DecodeOldsave
 {
 
     private static GameAwardsData awards = Globals.GAME_AWARDS;
-    private static GameTimesData times = Globals.GAME_TIMES;
+    private static RoundTimesData times = Globals.GAME_TIMES;
     private static GameStatsData stats = Globals.GAME_STATS;
 
     public static List<KeyValuePair<string, int>> decodeValues = new List<KeyValuePair<string, int>>
