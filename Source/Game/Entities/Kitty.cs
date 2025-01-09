@@ -62,6 +62,7 @@ public class Kitty
         Solo.ReviveKittySoloTournament(this);
         Solo.RoundEndCheck();
         if (Gamemode.CurrentGameMode != "Standard") return;
+        SoundManager.PlayLastManStandingSound();
         Gameover.GameOver();
         MultiboardUtil.RefreshMultiboards();
     }

@@ -216,6 +216,7 @@ public static class RewardsFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
+        if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.RewardsButton.Visible = false;
         FrameManager.RewardsButton.Visible = true;
         FrameManager.HideOtherFrames(RewardFrame);

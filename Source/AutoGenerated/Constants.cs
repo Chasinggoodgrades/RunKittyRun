@@ -155,6 +155,7 @@ public static class Constants
 	public const int ITEM_FROSTBITE_RING = 1227894859;
 	public const int ITEM_SHARD_OF_TRANSLOCATION = 1227894860;
 	public const int ITEM_PRESENT = 1227894861;
+	public const int ITEM_CHRONO_ORB = 1227894862;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;

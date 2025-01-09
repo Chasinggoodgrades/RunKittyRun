@@ -68,6 +68,7 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             if (!k.Unit.Alive) return;
+            if (ChronoSphere.RewindDeath(k.Unit)) return;
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);
             k.KillKitty();
@@ -82,7 +83,8 @@ public static class CollisionDetection
         {
             var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
             circle.ReviveKitty(k);
-            BeaconOfUnitedLifeforce.BeaconOfUnitedLifeforceEffect(k);
+            var relic = k.Relics.Find(r => r is BeaconOfUnitedLifeforce);
+            if (relic != null) (relic as BeaconOfUnitedLifeforce).BeaconOfUnitedLifeforceEffect(k.Player);
         });
         return k.c_Collision;
     }

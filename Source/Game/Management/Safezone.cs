@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -58,10 +59,16 @@ public class Safezone
     {
         var player = Unit.Owner;
 
-        if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID) return;
+        if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID)
+            return;
 
-        FangOfShadows.ReduceCooldownAtSafezone(Unit);
+        var fangShadowsRelic = Globals.ALL_KITTIES[player].Relics
+            .OfType<FangOfShadows>()
+            .FirstOrDefault();
+
+        fangShadowsRelic?.ReduceCooldownAtSafezone(Unit);
     }
+
 
     /// <summary>
     /// Resets progress zones and reached safezones to initial state.

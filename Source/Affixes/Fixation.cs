@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
-using WCSharp.Shared.Data;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public class Fixation : Affix
@@ -33,6 +31,9 @@ public class Fixation : Affix
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Console.WriteLine(Unit.Unit.TargetedAs);
+        Unit.Unit.TargetedAs = 16;
+        Console.WriteLine(Unit.Unit.TargetedAs);
         RegisterEvents();
     }
 
@@ -40,6 +41,7 @@ public class Fixation : Affix
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.TargetedAs = 2;
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
 
@@ -150,6 +152,7 @@ public class Fixation : Affix
             if (currentMS >= FIXATION_MAX_MS) return;
 
             var newSpeed = currentMS + speedIncrementer;
+
             SetUnitMoveSpeed(Unit.Unit, Math.Min(newSpeed, FIXATION_MAX_MS));
         }
         else
@@ -160,8 +163,4 @@ public class Fixation : Affix
             SetUnitMoveSpeed(Unit.Unit, Math.Max(newSpeed, FIXATION_MS));
         }
     }
-
-
-
-
 }

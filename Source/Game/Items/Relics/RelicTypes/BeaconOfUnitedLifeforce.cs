@@ -6,14 +6,17 @@ public class BeaconOfUnitedLifeforce : Relic
 {
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
     private static float INVULNERABILITY_DURATION = 1.0f;
-    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.13f; // 13%
-    private static float EXTRA_REVIVE_CHANCE_ALL = 0.02f; // 2%
+    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
+    private static float EXTRA_REVIVE_CHANCE_ALL = 0.015f; // 1.5%
     private static new string IconPath = "war3mapImported\\BTNTicTac.blp";
     private const int RelicCost = 650;
+
+    private player Owner;
 
     public BeaconOfUnitedLifeforce() : base(
         "|cff1e90ffBeacon of United Lifeforce|r",
         $"Gives the owner a chance to revive an extra Kitty whenever they revive someone. {Colors.COLOR_LIGHTBLUE}(Passive)|r",
+        0,
         RelicItemID,
         RelicCost,
         IconPath
@@ -25,7 +28,7 @@ public class BeaconOfUnitedLifeforce : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-
+        Owner = Unit.Owner;
     }
 
     public override void RemoveEffect(unit Unit)
@@ -33,9 +36,11 @@ public class BeaconOfUnitedLifeforce : Relic
 
     }
 
-    public static void BeaconOfUnitedLifeforceEffect(Kitty kitty)
+    public void BeaconOfUnitedLifeforceEffect(player player)
     {
         // Make sure person has the relic
+        if (player != Owner) return;
+        var kitty = Globals.ALL_KITTIES[player];
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return;
 
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce));
@@ -68,7 +73,7 @@ public class BeaconOfUnitedLifeforce : Relic
     /// </summary>
     /// <param name="beaconHolder"></param>
     /// <param name="extraRevivedKitty"></param>
-    private static void UpgradeInvulnerability(Kitty beaconHolder, Kitty extraRevivedKitty)
+    private void UpgradeInvulnerability(Kitty beaconHolder, Kitty extraRevivedKitty)
     {
         if (PlayerUpgrades.GetPlayerUpgrades(beaconHolder.Player).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce)) < 1) return;
         extraRevivedKitty.Invulnerable = true;

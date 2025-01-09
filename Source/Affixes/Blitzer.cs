@@ -116,11 +116,26 @@ public class Blitzer : Affix
         Unit.Unit.SetPathing(true);
     }
 
+    public static Blitzer GetBlitzer(unit unit)
+    {
+        var affix = Globals.ALL_WOLVES[unit].Affixes.Find(a => a is Blitzer);
+        return affix is Blitzer blitzer ? blitzer : null;
+    }
 
-
-
-
-
-
-
+    public void PauseBlitzing(bool pause)
+    {
+        if (pause)
+        {
+            BlitzerTimer.Pause();
+            PreBlitzerTimer.Pause();
+            WanderEffect.Dispose();
+            MoveTimer.Pause();
+        }
+        else
+        {
+            BlitzerTimer.Resume();
+            PreBlitzerTimer.Resume();
+            MoveTimer.Resume();
+        }
+    }
 }

@@ -13,6 +13,7 @@ public static class SoundManager
     private const string SPEED_PATH = "war3mapImported\\Speed.mp3";
     private const string INVULNERABLE_PATH = "war3mapImported\\Invulnerable.mp3";
     private const string KIBBLE_TOME_PATH = "war3mapImported\\Tomes.flac";
+    private const string LAST_MAN_STANDING_PATH = "war3mapImported\\last_man_standing.mp3";
 
     private static sound KITTY_DEATH_SOUND;
     private static sound ROUND_1_SOUND;
@@ -23,6 +24,7 @@ public static class SoundManager
     private static sound SPEED_SOUND;
     private static sound INVULNERABLE_SOUND;
     private static sound KIBBLE_TOME_SOUND;
+    private static sound LAST_MAN_STANDING_SOUND;
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -37,7 +39,8 @@ public static class SoundManager
             { "Round5Sound", CreateSound(ROUND_5_PATH, false, false, false, 10, 10, "") },
             { "SpeedSound", CreateSound(SPEED_PATH, false, false, false, 10, 10, "") },
             { "InvulnerableSound", CreateSound(INVULNERABLE_PATH, false, false, false, 10, 10, "") },
-            { "KibbleTomeSound", CreateSound(KIBBLE_TOME_PATH, false, true, false, 10, 10, "") }
+            { "KibbleTomeSound", CreateSound(KIBBLE_TOME_PATH, false, true, false, 10, 10, "") },
+            { "LastManStandingSound", CreateSound(LAST_MAN_STANDING_PATH, false, false, false, 10, 10, "") }
         };
         SetSoundAttributes();
         AssignSounds();
@@ -54,6 +57,7 @@ public static class SoundManager
         SPEED_SOUND = sounds["SpeedSound"];
         INVULNERABLE_SOUND = sounds["InvulnerableSound"];
         KIBBLE_TOME_SOUND = sounds["KibbleTomeSound"];
+        LAST_MAN_STANDING_SOUND = sounds["LastManStandingSound"];
     }
     private static void SetSoundAttributes()
     {
@@ -122,5 +126,21 @@ public static class SoundManager
             _ => null
         };
         sound.Start();
+    }
+
+    public static void PlayLastManStandingSound()
+    {
+        Utility.SimpleTimer(0.5f, () =>
+        {
+            var count = 0;
+            foreach(var kitty in Globals.ALL_KITTIES)
+            {
+                if (kitty.Value.Alive) count += 1;
+                if (count > 1) return;
+            }
+            if (count == 0) return;
+            var s = LAST_MAN_STANDING_SOUND;
+            s.Start();
+        });
     }
 }

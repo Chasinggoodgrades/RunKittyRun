@@ -17,6 +17,7 @@ public class RingOfSummoning : Relic
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
         $"On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you." +
         $" {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r",
+        RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath

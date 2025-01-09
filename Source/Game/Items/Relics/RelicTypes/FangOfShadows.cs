@@ -21,6 +21,7 @@ public class FangOfShadows : Relic
         $"{Colors.COLOR_PURPLE}Fang of Shadows",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
         $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r",
+        RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath
@@ -104,7 +105,7 @@ public class FangOfShadows : Relic
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_COOLDOWN, 0, newCooldown);
     }
 
-    public static void ReduceCooldownAtSafezone(unit Unit)
+    public void ReduceCooldownAtSafezone(unit Unit)
     {
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;

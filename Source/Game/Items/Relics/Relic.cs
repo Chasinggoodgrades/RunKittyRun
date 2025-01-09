@@ -14,12 +14,14 @@ public abstract class Relic
     public string IconPath { get; }
     public int UpgradeLevel { get; private set; } = 0;
     public int MaxUpgradeLevel => Upgrades.Count;
+    public int RelicAbilityID { get; protected set; }
     public List<RelicUpgrade> Upgrades { get; } = new List<RelicUpgrade>();
 
-    public Relic(string name, string desc, int itemID, int cost, string iconPath)
+    public Relic(string name, string desc, int relicAbilityID, int itemID, int cost, string iconPath)
     {
         Name = name;
         Description = desc;
+        RelicAbilityID = relicAbilityID;
         ItemID = itemID;
         Cost = cost;
         IconPath = iconPath;

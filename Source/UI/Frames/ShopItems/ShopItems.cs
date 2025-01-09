@@ -51,7 +51,8 @@ public class ShopItem
         new ShopItem(new AmuletOfEvasiveness()),
         new ShopItem(new FrostbiteRing()),
         new ShopItem(new BeaconOfUnitedLifeforce()),
-        new ShopItem(new ShardOfTranslocation())
+        new ShopItem(new ShardOfTranslocation()),
+        new ShopItem(new ChronoSphere())
     };
 
     public static List<ShopItem> ShopItemsReward()

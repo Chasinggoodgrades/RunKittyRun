@@ -18,6 +18,7 @@ public class ShardOfTranslocation : Relic
     public ShardOfTranslocation() : base(
         "|c7eb66ff1Shard of Translocation|r",
         $"Teleports the user to a targeted location within {DEFAULT_BLINK_RANGE} range, restricted to lane bounds.{Colors.COLOR_ORANGE}(Active) {Colors.COLOR_LIGHTBLUE}(1min 30 sec cooldown).|r",
+        RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath

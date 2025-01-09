@@ -5,13 +5,15 @@ using static WCSharp.Api.Common;
 public class OneOfNine : Relic
 {
     public const int RelicItemID = Constants.ITEM_ONE_OF_NINE;
+    public const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
-    private const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
     private const int RelicCost = 650;
     private static new string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
     public OneOfNine() : base(
         $"|cffff4500One of Nine|r",
         $"Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r",
+        RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath

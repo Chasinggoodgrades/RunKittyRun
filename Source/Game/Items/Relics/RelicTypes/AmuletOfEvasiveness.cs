@@ -15,6 +15,7 @@ public class AmuletOfEvasiveness : Relic
     public AmuletOfEvasiveness() : base(
         $"{Colors.COLOR_LAVENDER}Amulet of Evasiveness|r",
         $"Makes you smaller and reduces collision range by {Colors.COLOR_ORANGE}{(int)(AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 100)}%|r{Colors.COLOR_LIGHTBLUE} (Passive)|r",
+        0,
         RelicItemID,
         RelicCost,
         IconPath

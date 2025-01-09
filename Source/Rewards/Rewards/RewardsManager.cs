@@ -96,7 +96,8 @@ public static class RewardsManager
         }
         kitty.Unit.Skin = Constants.UNIT_KITTY;
         kitty.Unit.SetVertexColor(255, 255, 255);
-        kitty.SaveData.SelectedData.SelectedSkin = "";
+        foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
+            property.SetValue(kitty.SaveData.SelectedData, "");
 
     }
 }

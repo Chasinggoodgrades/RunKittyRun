@@ -8,8 +8,8 @@ public class FrostbiteRing : Relic
     public static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
-    private const string FROSTBITE_RING_EFFECT = "Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathTargetArt.mdl";
-    private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
+    private const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
+    private const string FROSTBITE_SLOW_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
     private static float SLOW_DURATION = 5.0f;
@@ -20,6 +20,7 @@ public class FrostbiteRing : Relic
     public FrostbiteRing() : base(
         $"{Colors.COLOR_BLUE}Frostbite Ring",
         $"Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r",
+        RelicAbilityID,
         RelicItemID,
         RelicCost,
         IconPath
@@ -61,15 +62,25 @@ public class FrostbiteRing : Relic
         var t = timer.Create();
         Unit.SetPausedEx(true);
         var duration = GetFreezeDuration();
-        var effect = AddSpecialEffectTarget(FROSTBITE_RING_EFFECT, Unit, "origin");
+        var effect = AddSpecialEffectTarget(FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
         Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount += 1; // increment freeze count for freeze_aura reward
-        t.Start(duration, false, () =>
+        var blitzUnit = Blitzer.GetBlitzer(Unit);
+        try
         {
-            Unit.SetPausedEx(false);
-            SlowWolves(Unit);
-            effect.Dispose();
-            t.Dispose();
-        });
+            if(blitzUnit != null) blitzUnit.PauseBlitzing(true);
+            t.Start(duration, false, () =>
+            {
+                Unit.SetPausedEx(false);
+                if(blitzUnit != null) blitzUnit.PauseBlitzing(false);
+                SlowWolves(Unit);
+                effect.Dispose();
+                t.Dispose();
+            });
+        }
+        catch (Exception e)
+        {
+            Logger.Warning(e.Message);
+        }
     }
 
     /// <summary>
@@ -81,7 +92,7 @@ public class FrostbiteRing : Relic
         if (PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType()) < 2) return;
         Unit.BaseMovementSpeed = 365.0f / 2.0f;
         var t = timer.Create();
-        var effect = AddSpecialEffectTarget(FROSTBITE_TARGET_EFFECT, Unit, "origin");
+        var effect = AddSpecialEffectTarget(FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
         t.Start(SLOW_DURATION, false, () =>
         {
             Unit.BaseMovementSpeed = 365.0f;

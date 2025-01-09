@@ -173,6 +173,7 @@ public static class MusicFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
+        if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.MusicButton.Visible = false;
         FrameManager.MusicButton.Visible = true;
         FrameManager.HideOtherFrames(MusicFramehandle);
