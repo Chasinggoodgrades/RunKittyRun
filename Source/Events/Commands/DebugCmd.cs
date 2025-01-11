@@ -96,7 +96,7 @@ public static class DebugCmd
             case "?noslide":
                 break;
             case "?tm":
-                kitty.SaveData.GameTimes.NormalGameTime.TeamMembers.Add(player.Name);
+                //kitty.SaveData.GameTimes.NormalGameTime.TeamMembers.Add(player.Name);
                 break;
             case "?discord":
                 DiscordFrame.Initialize();

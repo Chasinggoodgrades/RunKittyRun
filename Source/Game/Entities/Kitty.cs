@@ -138,7 +138,7 @@ public class Kitty
     private void UpdateSaviorStats(Kitty savior)
     {
         SaveStatUpdate(savior);
-        savior.Player.Gold += Resources.SaveGold;
+        savior.Player.Gold += Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak);
         savior.Unit.Experience += Resources.SaveExperience;
     }
 

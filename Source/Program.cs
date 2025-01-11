@@ -42,14 +42,12 @@ namespace Source
 #endif
 				Setup.GetActivePlayers();
 				MusicManager.Initialize();
-				FrameManager.Initialize();
                 CommandHandler.Initialize();
                 CommandManager.InitializeCommands();
 				SaveManager.Initialize();
 				DateTimeManager.Initialize();
                 Setup.Initialize();
-
-				BarrierSetup.Initialize();
+                BarrierSetup.Initialize();
 
 			}
             catch (Exception ex)

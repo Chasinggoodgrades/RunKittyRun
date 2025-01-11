@@ -6,14 +6,14 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="WCSharp.Api" Version="3.0.3" />
-		<PackageReference Include="WCSharp.Buffs" Version="3.0.3" />
+		<PackageReference Include="WCSharp.Buffs" Version="3.0.4" />
 		<PackageReference Include="WCSharp.DateTime" Version="3.0.0" />
 		<PackageReference Include="WCSharp.Dummies" Version="3.0.0" />
 		<PackageReference Include="WCSharp.Effects" Version="3.0.0" />
-		<PackageReference Include="WCSharp.Events" Version="3.0.3" />
+		<PackageReference Include="WCSharp.Events" Version="3.0.4" />
 		<PackageReference Include="WCSharp.Json" Version="3.0.0" />
 		<PackageReference Include="WCSharp.SaveLoad" Version="3.0.1" />
 		<PackageReference Include="WCSharp.Shared" Version="3.0.3" />
-		<PackageReference Include="WCSharp.Sync" Version="3.0.2" />
+		<PackageReference Include="WCSharp.Sync" Version="3.0.3" />
 	</ItemGroup>
 </Project>

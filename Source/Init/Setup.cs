@@ -53,6 +53,7 @@ namespace Source.Init
                 FogMaskEnable(false);
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
                 SuspendTimeOfDay(true);
+                FrameManager.Initialize();
                 CustomStatFrame.Init();
                 SeasonalManager.Initialize();
                 GameTimer.Initialize();

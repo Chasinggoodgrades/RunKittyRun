@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -16,6 +17,7 @@ public class Wolf
     public unit Unit { get; private set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
+    private WolfPoint WolfPoint { get; set; }
 
     public Wolf(int regionIndex)
     {
@@ -23,6 +25,7 @@ public class Wolf
         Lane = RegionList.WolfRegions[RegionIndex].Rect;
         Affixes = new List<Affix>();
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
+        WolfPoint = new WolfPoint(this);
         InitializeWolf();
         StartWandering();
     }
@@ -57,6 +60,7 @@ public class Wolf
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         //if (!HasAffix("Blitzer"))
         Unit.IssueOrder("move", randomX, randomY);
+        //WolfPoint.CreateRegionsBetweenPoints((Unit.X, Unit.Y), (randomX, randomY));
         return (randomX, randomY);
     }
 
@@ -79,11 +83,12 @@ public class Wolf
 
     public void StartWandering(bool forced = false)
     {
+        var realTime = GetRandomReal(1.00f, 1.12f);
         if (ShouldStartEffect() || forced)
         {
             ApplyEffect();
+            realTime = 2.0f; // Gives a brief delay before the wolf has a chance to move again.
         }
-        var realTime = GetRandomReal(1.00f, 1.12f);
         WanderTimer.Start(realTime, false, () => StartWandering());
     }
 

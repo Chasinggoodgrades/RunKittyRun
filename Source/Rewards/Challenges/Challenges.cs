@@ -27,7 +27,11 @@ public static class Challenges
 
     public static void DivinityTendrils(player player) => AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.DivinityTendrils));
 
-    public static void NecroWindwalk() => AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.WWNecro));
+    public static void NecroWindwalk()
+    {
+        if (Globals.GAME_TIMER.Remaining > 1500) return; // only awarded if under 25 mins.
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.WWNecro));
+    }
 
     public static void ButterflyAura(player player)
     {

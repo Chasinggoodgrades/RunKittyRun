@@ -9,6 +9,7 @@ public static class Resources
     private static int StartingGold { get; set; } = 100;
     public static int SaveExperience { get; set; } = 80;
     public static int SaveGold { get; set; } = 25;
+    public static float SaveStreakMultiplier { get; set; } = 0.10f;
     public static int SafezoneExperience { get; set; } = 100;
     public static int SafezoneGold { get; set; } = 20;
     private static int EndRoundBonusGold { get; set; } = 150 + (50*Globals.ROUND);
@@ -21,16 +22,21 @@ public static class Resources
 
     public static void BonusResources()
     {
+        EndRoundBonusXP = 550 * Globals.ROUND;
+        EndRoundBonusGold = 150 + (50 * Globals.ROUND);
         foreach(var player in Globals.ALL_PLAYERS)
             player.Gold += EndRoundBonusGold;
         foreach(var kitty in Globals.ALL_KITTIES.Values)
             kitty.Unit.Experience += EndRoundBonusXP;
     }
+
     public static void StartingItems(Kitty kitty)
     {
         var unit = kitty.Unit;
         if (Gamemode.CurrentGameMode == "Standard") unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
     }
+
+    public static int SaveGoldBonus(int streak) => (int)(SaveGold * (SaveStreakMultiplier * streak));
 
     private static void AdjustStartingGold()
     {

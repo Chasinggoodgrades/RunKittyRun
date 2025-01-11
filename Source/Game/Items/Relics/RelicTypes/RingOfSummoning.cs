@@ -107,7 +107,6 @@ public class RingOfSummoning : Relic
         var sumProg = summoner.TimeProg.GetRoundProgress(round);
         var deadProg = summoned.TimeProg.GetRoundProgress(round);
 
-        Console.WriteLine($"{summoner.Player.Name} {summoner.TimeProg.GetRoundProgress(round)} ||||| {summoned.Player.Name} {summoned.TimeProg.GetRoundProgress(round)}");
         if(sumProg > deadProg && !summoned.Alive)
         {
             summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon dead kitties that are ahead of you!");

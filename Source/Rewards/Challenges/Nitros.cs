@@ -41,25 +41,25 @@ public static class Nitros
         NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 140); // 2:20
         NitroRoundTimes.Add(3, 160); // 2:40
-        NitroRoundTimes.Add(4, 235); // 3:55
+        NitroRoundTimes.Add(4, 215); // 3:35
         NitroRoundTimes.Add(5, 345); // 5:45
     }
 
     private static void SetHardNitroRoundTimes()
     {
-        NitroRoundTimes.Add(1, 135); // 2:15
-        NitroRoundTimes.Add(2, 150); // 2:30
-        NitroRoundTimes.Add(3, 195); // 3:15
-        NitroRoundTimes.Add(4, 255); // 4:15
+        NitroRoundTimes.Add(1, 125); // 2:05
+        NitroRoundTimes.Add(2, 145); // 2:25
+        NitroRoundTimes.Add(3, 170); // 2:50
+        NitroRoundTimes.Add(4, 230); // 3:50
         NitroRoundTimes.Add(5, 360); // 6:00
     }
 
     private static void SetImpossibleNitroRoundTimes()
     {
-        NitroRoundTimes.Add(1, 135); // 2:15
+        NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 150); // 2:30
-        NitroRoundTimes.Add(3, 195); // 3:15 
-        NitroRoundTimes.Add(4, 255); // 4:15 
+        NitroRoundTimes.Add(3, 175); // 2:55
+        NitroRoundTimes.Add(4, 230); // 3:50
         NitroRoundTimes.Add(5, 360); // 6:00
     }
 
