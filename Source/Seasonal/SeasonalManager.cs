@@ -25,6 +25,7 @@ public static class SeasonalManager
     {
         CurrentMonth = DateTimeManager.DateTime.Month;
         DetermineSeason();
+        SetMinimap();
         SetWeather();
         DoodadChanger.Initialize();
         TerrainChanger.Initialize();
@@ -61,17 +62,6 @@ public static class SeasonalManager
     }
 
     /// <summary>
-    /// Returns if it is currently Christmas season or not.
-    /// </summary>
-    /// <returns></returns>
-    public static bool ChristmasSeason()
-    {
-        if (DateTimeManager.CurrentMonth != 12) return false;
-        Season = HolidaySeasons.Christmas;
-        return true;
-    }
-
-    /// <summary>
     /// Admin command to activate Christmas season. Only works in standard mode.
     /// </summary>
     public static void ActivateChristmas()
@@ -82,7 +72,7 @@ public static class SeasonalManager
         DoodadChanger.ChristmasDoodads();
         ShopChanger.SetSeasonalShop();
         SetWeather();
-    
+        SetMinimap();
     }
 
     /// <summary>
@@ -94,7 +84,21 @@ public static class SeasonalManager
         TerrainChanger.NoSeason();
         DoodadChanger.NoSeasonDoodads();
         ShopChanger.SetSeasonalShop();
+        SetMinimap();
         SetWeather();
+    }
+
+    private static void SetMinimap()
+    {
+        switch (Season)
+        {
+            case HolidaySeasons.Christmas:
+                BlzChangeMinimapTerrainTex("snowMap.blp");
+                break;
+            case HolidaySeasons.None:
+                BlzChangeMinimapTerrainTex("war3mapMap.blp");
+                break;
+        }
     }
 
     private static void SetWeather()
