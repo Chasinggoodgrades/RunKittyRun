@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 
-public static class Deathless
+public static class DeathlessChallenges
 {
     private static Dictionary<player, int> DeathlessProgress;
 

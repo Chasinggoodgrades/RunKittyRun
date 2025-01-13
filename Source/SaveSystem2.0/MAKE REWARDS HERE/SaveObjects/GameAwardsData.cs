@@ -93,4 +93,20 @@ public class GameAwardsData
     public int VioletAura { get; set; }
     public int FreezeAura { get; set; }
 
+/*    public Auras Auras { get; set; }
+    public Hats Hats { get; set; }
+    public Nitros Nitros { get; set; }
+    public Skins Skins { get; set; }
+    public Trails Trails { get; set; }
+    public Windwalks Windwalks { get; set; }
+
+    public GameAwardsData()
+    {
+        Auras = new Auras();
+        Hats = new Hats();
+        Nitros = new Nitros();
+        Skins = new Skins();
+        Trails = new Trails();
+        Windwalks = new Windwalks();
+    }*/
 }

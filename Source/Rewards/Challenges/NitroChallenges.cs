@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-public static class Nitros
+public static class NitroChallenges
 {
     private static Dictionary<int, int> NitroRoundTimes;
     private static timer NitroTimer = timer.Create();

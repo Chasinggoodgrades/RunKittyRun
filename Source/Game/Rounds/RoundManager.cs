@@ -18,7 +18,7 @@ public static class RoundManager
         try
         {
             Globals.ROUND += 1;
-            Nitros.SetNitroRoundTimes();
+            NitroChallenges.SetNitroRoundTimes();
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
             Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
@@ -46,7 +46,7 @@ public static class RoundManager
         BarrierSetup.DeactivateBarrier();
         NitroPacer.StartNitroPacer();
         SoundManager.PlayRoundSound();
-        Nitros.StartNitroTimer();
+        NitroChallenges.StartNitroTimer();
         Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
     }
 
@@ -67,7 +67,7 @@ public static class RoundManager
     {
         Globals.GAME_ACTIVE = false;
         RoundTimer.EndRoundTimer.Pause();
-        Nitros.StopNitroTimer();
+        NitroChallenges.StopNitroTimer();
         Wolf.RemoveAllWolves();
         BarrierSetup.ActivateBarrier();
         Resources.BonusResources();
@@ -76,7 +76,7 @@ public static class RoundManager
         RoundUtilities.RoundResetAll();
         TeamsUtil.RoundResetAllTeams();
         NitroPacer.ResetNitroPacer();
-        Deathless.ResetDeathless();
+        DeathlessChallenges.ResetDeathless();
         SaveManager.SaveAll();
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
         if (Gameover.GameOver()) return;

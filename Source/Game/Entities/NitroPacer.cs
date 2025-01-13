@@ -51,7 +51,7 @@ public static class NitroPacer
     {
         currentDistance = Progress.CalculateNitroPacerProgress();
         var remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
-        var remainingTime = Nitros.GetNitroTimeRemaining();
+        var remainingTime = NitroChallenges.GetNitroTimeRemaining();
         var speed = 0.0f;
         if (remainingTime != 0.0f) speed = remainingDistance / remainingTime;
         else speed = 350.0f;

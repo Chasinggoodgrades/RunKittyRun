@@ -49,7 +49,7 @@ public class Safezone
         Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
         unit.Experience += Resources.SafezoneExperience;
         AwardedPlayers.Add(player);
-        Deathless.DeathlessCheck(player);
+        DeathlessChallenges.DeathlessCheck(player);
     }
 
     /// <summary>

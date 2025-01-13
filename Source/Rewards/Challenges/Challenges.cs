@@ -15,8 +15,8 @@ public static class Challenges
 
     public static void Initialize()
     {
-        Nitros.Initialize();
-        Deathless.Initialize();
+        NitroChallenges.Initialize();
+        DeathlessChallenges.Initialize();
     }
 
     public static void WhiteTendrils()
@@ -82,7 +82,7 @@ public static class Challenges
 
     public static void WhiteFire(player player)
     {
-        if (Nitros.GetNitroTimeRemaining() <= 0) return;
+        if (NitroChallenges.GetNitroTimeRemaining() <= 0) return;
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
         if (Globals.ROUND != 3 || currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.WhiteFire));
