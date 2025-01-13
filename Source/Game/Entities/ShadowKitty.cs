@@ -91,7 +91,6 @@ public class ShadowKitty
         Utility.SelectUnitForPlayer(Player, Unit);
         Utility.SelectUnitForPlayer(Player, kitty);
         Utility.SelectUnitForPlayer(Player, Unit);
-
     }
 
 

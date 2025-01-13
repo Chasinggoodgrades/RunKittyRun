@@ -31,9 +31,7 @@ public class Fixation : Affix
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Console.WriteLine(Unit.Unit.TargetedAs);
         Unit.Unit.TargetedAs = 16;
-        Console.WriteLine(Unit.Unit.TargetedAs);
         RegisterEvents();
     }
 

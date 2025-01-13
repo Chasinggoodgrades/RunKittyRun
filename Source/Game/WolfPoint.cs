@@ -2,28 +2,36 @@
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class WolfPoint
 {
-    private static float MAX_DISTANCE = 400; // max distance between points
-    private Wolf Wolf { get; set; }
-    private List<WolfPointInfo> PointsToVisit { get; set; } = new List<WolfPointInfo>();
-    public (float x, float y) StartPoint { get; set; }
-    public (float x, float y) EndPoint { get; set; }
+    private const float MaxDistance = 400f; // Max distance between points
 
+    private Wolf Wolf { get; set; }
+    private List<WolfPointInfo> PointsToVisit { get; } = new List<WolfPointInfo>();
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WolfPoint"/> class.
+    /// </summary>
+    /// <param name="wolf">The wolf instance.</param>
     public WolfPoint(Wolf wolf)
     {
         Wolf = wolf;
     }
 
+    /// <summary>
+    /// Creates regions between the start and end points.
+    /// </summary>
+    /// <param name="startPoint">The start point coordinates.</param>
+    /// <param name="endPoint">The end point coordinates.</param>
     public void CreateRegionsBetweenPoints((float x, float y) startPoint, (float x, float y) endPoint)
     {
         Cleanup();
         float xDiff = endPoint.x - startPoint.x;
         float yDiff = endPoint.y - startPoint.y;
         float distance = (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+        int numRegions = (int)Math.Ceiling(distance / MaxDistance);
 
-        int numRegions = (int)Math.Ceiling(distance / MAX_DISTANCE);
-        //Console.WriteLine($"Distance: {distance} | Num Regions: {numRegions}");
         float stepX = xDiff / numRegions;
         float stepY = yDiff / numRegions;
 
@@ -32,49 +40,57 @@ public class WolfPoint
             float regionX = startPoint.x + (i * stepX);
             float regionY = startPoint.y + (i * stepY);
             region newRegion = region.Create();
-            rect regionRect = CreateRectForRegion(newRegion, regionX, regionY);
-            var pointInfo = new WolfPointInfo(newRegion, null, regionRect); // set triggers later.
+            rect regionRect = CreateRect(newRegion, regionX, regionY);
+            var pointInfo = new WolfPointInfo(newRegion, null, regionRect); // Set triggers later
             PointsToVisit.Add(pointInfo);
-
-            //Console.WriteLine($"Region {i}: ({regionX}, {regionY})");
         }
-        CreateEnterRegionTrig();
-        //Begin();
+        CreateEnterRegionTriggers();
+        Begin(endPoint.x, endPoint.y);
     }
 
     private void Cleanup()
     {
-        foreach (var point in PointsToVisit) point.Dispose();
+        foreach (var point in PointsToVisit)
+        {
+            point.Dispose();
+        }
         PointsToVisit.Clear();
     }
 
-    private void Begin()
+    private void Begin(float x, float y)
     {
-        var point = PointsToVisit[0];
-        Console.WriteLine($"Moving to initial point: ({point.Rect.CenterX}, {point.Rect.CenterY})");
-        Wolf.Unit.IssueOrder("move", point.Rect.CenterX, point.Rect.CenterY);
+        if (PointsToVisit.Count > 1) // If there are more points to visit, set the next point as the target
+        {
+            var nextPoint = PointsToVisit[1];
+            Wolf.Unit.IssueOrder("move", nextPoint.Rect.CenterX, nextPoint.Rect.CenterY);
+        }
+        else // If there is only one point, just move to endPoint
+        {
+            Wolf.Unit.IssueOrder("move", x, y);
+        }
     }
 
-    private rect CreateRectForRegion(region region, float x, float y)
+    private rect CreateRect(region region, float x, float y)
     {
-        rect r = rect.Create(-75,-75,75,75);
-        r.MoveTo(x, y);
-        region.AddRect(r);
-        return r;
+        var regionRect = rect.Create(-25, -25, 25, 25); // Just a small region size
+        regionRect.MoveTo(x, y);
+        region.AddRect(regionRect);
+        return regionRect;
     }
 
-    private void CreateEnterRegionTrig()
+    private void CreateEnterRegionTriggers()
     {
-        // creating enter region trigger, that tells unit to move to the next point
         foreach (var point in PointsToVisit)
         {
             point.Trigger = trigger.Create();
             point.Trigger.RegisterEnterRegion(point.Region, Filter(() => GetFilterUnit() == Wolf.Unit));
             point.Trigger.AddAction(() =>
             {
-                Console.WriteLine($"Entered region: ({point.Rect.CenterX}, {point.Rect.CenterY})");
-                if (point == PointsToVisit[PointsToVisit.Count - 1]) return; // if last point, do nothing
-                Console.WriteLine(point.Rect.CenterX + " " + point.Rect.CenterY);
+                if (point == PointsToVisit[PointsToVisit.Count - 1]) // last point , cleanup and return
+                {
+                    Cleanup();
+                    return;
+                }
                 var nextPoint = PointsToVisit[PointsToVisit.IndexOf(point) + 1];
                 Wolf.Unit.IssueOrder("move", nextPoint.Rect.CenterX, nextPoint.Rect.CenterY);
             });
@@ -83,9 +99,9 @@ public class WolfPoint
 
     private class WolfPointInfo
     {
-        public region Region;
-        public trigger Trigger;
-        public rect Rect;
+        public region Region { get; }
+        public trigger Trigger { get; set; }
+        public rect Rect { get; }
 
         public WolfPointInfo(region region, trigger trigger, rect rect)
         {

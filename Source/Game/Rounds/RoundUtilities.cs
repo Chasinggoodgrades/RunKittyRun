@@ -50,6 +50,7 @@ public static class RoundUtilities
         foreach (var player in Globals.ALL_PLAYERS)
         {
             if (player.IsLocal) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY);
+            CameraUtil.RelockCamera(player);
         }
     }
 }

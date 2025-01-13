@@ -28,7 +28,4 @@ public static class CameraUtil
         if (!player.IsLocal) return;
         SetCameraTargetController(kitty.Unit, 0, 0, false);
     }
-
-
-
 }
