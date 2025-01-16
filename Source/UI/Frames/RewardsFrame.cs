@@ -87,7 +87,7 @@ public static class RewardsFrame
         if(parent == RewardFrame) framePoint2 = framepointtype.TopLeft;
         if(parent == RewardFrame) x = Padding;
         if(parent == RewardFrame) y = -Padding * 2;
-        if (FrameCount == 4)
+        if (FrameCount == 5)
         {
             parent = RewardFrame;
             framePoint1 = framepointtype.TopRight;

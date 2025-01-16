@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -24,17 +26,79 @@ public static class AwardManager
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
     public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
-        if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award)) return;
-        var saveData = Globals.ALL_KITTIES[player].SaveData;
+        // Check if the player already has the award
+        if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award))
+            return;
 
-        var property = saveData.GameAwards.GetType().GetProperty(award);
-        property.SetValue(saveData.GameAwards, 1);
+        var saveData = Globals.ALL_KITTIES[player].SaveData;
+        var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.ToString());
+
+        if (reward == null)
+        {
+            Console.WriteLine("Reward not found.");
+            return;
+        }
+
+        UpdateProperty(saveData.GameAwards, award, 1);
+        UpdateNestedProperty(saveData.GameAwardsSorted, reward.TypeSorted, award, 1);
 
         EnableAbility(player, award);
-        Awarded[player].Add(award);
+
         // ex: PurpleFire should be Purple Fire
         var awardFormatted = Utility.FormatAwardName(award);
-        if (earnedPrompt) Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
+        if (earnedPrompt)
+        {
+            Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
+            Awarded[player].Add(award);
+        }
+    }
+
+    // Helper method to update a property value
+    private static void UpdateProperty(object obj, string propertyName, object value)
+    {
+        var property = obj.GetType().GetProperty(propertyName);
+        if (property != null)
+        {
+            property.SetValue(obj, value);
+        }
+        else
+        {
+            Console.WriteLine($"Property {propertyName} not found.");
+        }
+    }
+
+    private static void UpdateNestedProperty(object obj, string nestedPropertyName, string propertyName, object value)
+    {
+        var nestedProperty = obj.GetType().GetProperty(nestedPropertyName);
+        if (nestedProperty != null)
+        {
+            var nestedObject = nestedProperty.GetValue(obj);
+            if (nestedObject != null)
+            {
+                UpdateProperty(nestedObject, propertyName, value);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Nested property {nestedPropertyName} not found.");
+        }
+    }
+
+    /// <summary>
+    /// Updates all Game Awards for the player to add to GameSortedAwards.. 
+    /// </summary>
+    /// <param name="player"></param>
+    public static void UpdateRewardsSorted()
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            var gameAwards = Globals.ALL_KITTIES[player].SaveData.GameAwards;
+            foreach (var property in gameAwards.GetType().GetProperties())
+            {
+                var value = (int)property.GetValue(gameAwards);
+                if (value == 1) GiveReward(player, property.Name, false);
+            }
+        }
     }
 
     /// <summary>

@@ -26,6 +26,7 @@ public static class RewardsManager
         RewardAbilitiesList();
         AwardManager.RegisterGamestatEvents();
         ChampionAwards.AwardAllChampions();
+        Utility.SimpleTimer(2.5f, AwardManager.UpdateRewardsSorted);
     }
 
     private static void RewardAbilitiesList()

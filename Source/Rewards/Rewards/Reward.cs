@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using WCSharp.Api;
 /// <summary>
 /// Reward Class and Enums
@@ -11,6 +12,7 @@ public enum RewardType
     Windwalks,
     Skins,
     Trails,
+    Tournament,
     Deathless,
     Nitros,
     Hats,
@@ -24,6 +26,7 @@ public class Reward
     public string ModelPath { get; }
     public int SkinID { get; }
     public RewardType Type { get; }
+    public string TypeSorted { get; set; }
     public string GameStat { get; }
     public int GameStatValue { get; set; }
 
@@ -113,6 +116,9 @@ public class Reward
             case RewardType.Deathless:
                 RewardsManager.ActiveTrails[player] = effectInstance;
                 break;
+            case RewardType.Tournament:
+                SetTournamentReward(player, effectInstance, true);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
@@ -135,6 +141,9 @@ public class Reward
             case RewardType.Nitros:
             case RewardType.Deathless:
                 RewardsManager.ActiveTrails[player]?.Dispose();
+                break;
+            case RewardType.Tournament:
+                SetTournamentReward(player, null, false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -192,12 +201,70 @@ public class Reward
             case RewardType.Deathless:
                 saveData.SelectedData.SelectedTrail = Name;
                 break;
+            case RewardType.Tournament:
+                break;
             default:
                 Console.WriteLine("Error with selected data");
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
     }
 
+    private bool SetTournamentReward(player player, effect e, bool activate)
+    {
+        if (Type != RewardType.Tournament)
+            return false;
+
+        if (activate)
+        {
+            if (Name.Contains("Nitro"))
+                RewardsManager.ActiveTrails[player] = e;
+            else if (Name.Contains("Aura"))
+                RewardsManager.ActiveAuras[player] = e;
+            else if (Name.Contains("Wings"))
+                RewardsManager.ActiveWings[player] = e;
+            else
+                return false;
+        }
+        else
+        {
+            if (Name.Contains("Nitro"))
+                RewardsManager.ActiveTrails[player]?.Dispose();
+            else if (Name.Contains("Aura"))
+                RewardsManager.ActiveAuras[player]?.Dispose();
+            else if (Name.Contains("Wings"))
+                RewardsManager.ActiveWings[player]?.Dispose();
+            else
+                return false;
+        }
+
+        return true;
+    }
+
+
+    public string SetRewardTypeSorted()
+    {
+        switch (Type)
+        {
+            case RewardType.Auras:
+                return new Auras().GetType().Name;
+            case RewardType.Windwalks:
+                return new Windwalks().GetType().Name;
+            case RewardType.Skins:
+                return new Skins().GetType().Name;
+            case RewardType.Trails:
+                return new Trails().GetType().Name;
+            case RewardType.Deathless:
+                return new Deathless().GetType().Name;
+            case RewardType.Nitros:
+                return new Nitros().GetType().Name;
+            case RewardType.Hats:
+                return new Hats().GetType().Name;
+            case RewardType.Wings:
+                return new Wings().GetType().Name;
+            default:
+                return new Tournament().GetType().Name;
+        }
+    }
     //public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
     public string GetRewardName() => Name.ToString().Replace("_", " ");
