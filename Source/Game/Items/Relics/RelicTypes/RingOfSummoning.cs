@@ -88,6 +88,7 @@ public class RingOfSummoning : Relic
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
+            Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
             list.Remove(unit);
         }
 
