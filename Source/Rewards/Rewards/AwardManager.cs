@@ -63,7 +63,7 @@ public static class AwardManager
         }
         else
         {
-            Console.WriteLine($"Property {propertyName} not found.");
+            if(Source.Program.Debug) Console.WriteLine($"Property {propertyName} not found.");
         }
     }
 
@@ -80,7 +80,7 @@ public static class AwardManager
         }
         else
         {
-            Console.WriteLine($"Nested property {nestedPropertyName} not found.");
+            if(Source.Program.Debug) Console.WriteLine($"Nested property {nestedPropertyName} not found.");
         }
     }
 
