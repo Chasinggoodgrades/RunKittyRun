@@ -106,10 +106,11 @@ namespace Source.Init
                 foreach(var playerx in Globals.ALL_PLAYERS)
                 {
                     if (player == playerx) continue;
-                    player.SetAlliance(playerx, alliancetype.Rescuable, true);
-                    player.SetAlliance(playerx, alliancetype.SharedControl, true);
-                    player.SetAlliance(playerx, alliancetype.SharedVision, true);
-                    player.SetAlliance(playerx, alliancetype.SharedExperience, true);
+                    player.SetAlliance(playerx, ALLIANCE_PASSIVE, true);
+                    player.SetAlliance(playerx, ALLIANCE_HELP_REQUEST, true);
+                    player.SetAlliance(playerx, ALLIANCE_HELP_RESPONSE, true);
+                    player.SetAlliance(playerx, ALLIANCE_SHARED_XP, true);
+                    player.SetAlliance(playerx, ALLIANCE_SHARED_VISION, true);
                 }
             }
         }
