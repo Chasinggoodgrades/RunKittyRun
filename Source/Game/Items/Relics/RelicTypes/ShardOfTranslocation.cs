@@ -73,6 +73,7 @@ public class ShardOfTranslocation : Relic
             SetCooldown(unit);
             targetLoc.Dispose();
             targetLoc = null;
+            RelicUtil.CloseRelicBook(player);
         }
         catch (Exception e)
         {

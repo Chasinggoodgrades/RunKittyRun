@@ -55,6 +55,7 @@ public class FrostbiteRing : Relic
         tempGroup.Dispose();
         tempGroup = null;
         Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
+        RelicUtil.CloseRelicBook(Owner);
     }
 
     private void FrostbiteEffect(unit Unit)

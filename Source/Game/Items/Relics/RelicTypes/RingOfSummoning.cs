@@ -94,6 +94,7 @@ public class RingOfSummoning : Relic
 
         tempGroup.Dispose();
         targetedPoint.Dispose();
+        RelicUtil.CloseRelicBook(player);
     }
 
     /// <summary>
