@@ -51,6 +51,7 @@ public class BeaconOfUnitedLifeforce : Relic
 
         // Revive all kitties if chance <= EXTRA_REVIVE_CHANCE_ALL, otherwise revive one kitty
         bool reviveAll = chance <= EXTRA_REVIVE_CHANCE_ALL;
+        if(upgradeLevel < 2) reviveAll = false;
 
         var color = Colors.COLOR_YELLOW_ORANGE;
         var msgSent = false;
