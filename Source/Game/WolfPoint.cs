@@ -41,7 +41,7 @@ public class WolfPoint
             float regionY = startPoint.y + (i * stepY);
             region newRegion = region.Create();
             rect regionRect = CreateRect(newRegion, regionX, regionY);
-            var pointInfo = new WolfPointInfo(newRegion, null, regionRect); // Set triggers later
+            var pointInfo = new WolfPointInfo(newRegion, null, regionRect);
             PointsToVisit.Add(pointInfo);
         }
         CreateEnterRegionTriggers();

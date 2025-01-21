@@ -119,6 +119,7 @@ public class ChronoSphere : Relic
 
     public static bool RewindDeath(unit unit)
     {
+        if(Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
         var relic = Globals.ALL_KITTIES[unit.Owner].Relics.Find(r => r is ChronoSphere) as ChronoSphere;
         if(relic == null) return false;
         if(relic.OnCooldown) return false;

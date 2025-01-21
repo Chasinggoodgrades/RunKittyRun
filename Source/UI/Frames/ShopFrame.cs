@@ -6,7 +6,7 @@ using System.Text;
 
 public static class ShopFrame
 {
-    public static framehandle shopFrame;
+    public static framehandle shopFrame { get; private set; }
     public static framehandle upgradeButton;
     public static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
     private static framehandle relicsPanel;
@@ -379,7 +379,7 @@ public static class ShopFrame
 
                 if (!CanSellRelic(kitty.Unit))
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level 15.|r");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.|r");
                     return;
                 }
 
@@ -406,7 +406,7 @@ public static class ShopFrame
     private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
-    private static bool CanSellRelic(unit unit) => unit.HeroLevel >= 15;
+    private static bool CanSellRelic(unit unit) => unit.HeroLevel >= Relic.RelicSellLevel;
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
     public static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);

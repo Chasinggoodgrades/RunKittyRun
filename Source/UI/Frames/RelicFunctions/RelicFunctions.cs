@@ -17,6 +17,12 @@ public static class RelicFunctions
             return;
         }
 
+        if (!HasInventorySpace(kitty.Unit))
+        {
+            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
+            return;
+        }
+
         if (!CanGetAnotherRelic(kitty.Unit)) return;
 
         if (RelicMaxedOut(player)) return;
@@ -60,6 +66,13 @@ public static class RelicFunctions
             else
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
         }
+    }
+
+    private static bool HasInventorySpace(unit unit)
+    {
+        for(int i = 0; i < 6; i++)
+            if (unit.ItemAtOrDefault(i) == null) return true;
+        return false;
     }
 
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;

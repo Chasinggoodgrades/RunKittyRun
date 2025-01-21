@@ -86,7 +86,7 @@ public class Wolf
         if (ShouldStartEffect() || forced)
         {
             ApplyEffect();
-            realTime = 2.0f; // Gives a brief delay before the wolf has a chance to move again.
+            realTime = 2.5f; // Gives a brief delay before the wolf has a chance to move again.
         }
         WanderTimer.Start(realTime, false, () => StartWandering());
     }

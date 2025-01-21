@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -39,10 +40,17 @@ public class Kitty
     /// </summary>
     public static void Initialize()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            new Circle(player);
-            new Kitty(player);
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                new Circle(player);
+                new Kitty(player);
+            }
+        }
+        catch (System.Exception e)
+        {
+            Logger.Critical(e);
         }
     }
 
@@ -115,7 +123,7 @@ public class Kitty
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
-        
+
         // Set Collision to Default
         CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
         CollisionDetection.KittyRegisterCollisions(this);

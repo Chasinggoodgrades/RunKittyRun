@@ -62,6 +62,8 @@ public class Safezone
         if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID)
             return;
 
+        if (Gamemode.CurrentGameMode != "Standard") return;
+
         var fangShadowsRelic = Globals.ALL_KITTIES[player].Relics
             .OfType<FangOfShadows>()
             .FirstOrDefault();
