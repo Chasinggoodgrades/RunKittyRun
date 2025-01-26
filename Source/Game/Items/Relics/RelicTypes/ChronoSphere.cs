@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -11,16 +12,18 @@ public class ChronoSphere : Relic
     private const int RelicCost = 650;
     private const float SLOW_AURA_RADIUS = 400.0f;
     private const float MAGNITUDE_CHANGE_INTERVAL = 15.0f;
-    private const float MAGNITUDE_LOWER_BOUND = 8.0f;
+    private const float MAGNITUDE_LOWER_BOUND = 10.0f;
     private const float MAGNITUDE_UPPER_BOUND = 14.0f;
     private const float LOCATION_CAPTURE_INTERVAL = 5.0f;
     //private static List <player> OnCooldown = new List<player>();
 
     private ability Ability;
     private player Owner;
+    private unit OwnerUnit;
+    private float Magnitude;
     private timer MagnitudeTimer;
     private timer LocationCaptureTimer;
-    private effect LocationEffect;
+    private effect LocationEffect = null;
     private (float, float, float) CapturedLocation; // x, y, facing
     private bool OnCooldown = false;
 
@@ -39,12 +42,17 @@ public class ChronoSphere : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        var item = Utility.UnitGetItem(Unit, RelicItemID);
-        item.AddAbility(RelicAbilityID);
-        Owner = Unit.Owner;
-        Ability = item.GetAbility(RelicAbilityID);
-        RotatingSlowAura();
-        RotatingLocationCapture();
+        try
+        {
+            Owner = Unit.Owner;
+            OwnerUnit = Unit;
+            Utility.SimpleTimer(0.1f, () => RotatingSlowAura());
+            RotatingLocationCapture();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
     public override void RemoveEffect(unit Unit)
@@ -58,8 +66,12 @@ public class ChronoSphere : Relic
 
     private void SetAbilityData()
     {
-        Ability.SetMovementSpeedIncreasePercent_Oae1(0, RandomMagnitude());
+        var item = Utility.UnitGetItem(OwnerUnit, RelicItemID);
+        Ability = item.GetAbility(RelicAbilityID);
+        Magnitude = RandomMagnitude();
+        Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
         Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
+        item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
     }
 
     // Upgrade level 1, rotating aura slow 
@@ -98,7 +110,7 @@ public class ChronoSphere : Relic
         var lowerBound = (MAGNITUDE_LOWER_BOUND / 100.0f) * -1.0f;
         var upperBound = (MAGNITUDE_UPPER_BOUND / 100.0f) * -1.0f;
         if(upgradeLevel == 0) return lowerBound;
-        return GetRandomReal(lowerBound, upperBound);
+        return GetRandomReal(upperBound, lowerBound); // as weird as this is.. yes.
     }
 
     private void RewindTime()

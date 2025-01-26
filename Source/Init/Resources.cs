@@ -33,7 +33,7 @@ public static class Resources
     public static void StartingItems(Kitty kitty)
     {
         var unit = kitty.Unit;
-        if (Gamemode.CurrentGameMode == "Standard") unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
+        unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
     }
 
     public static int SaveGoldBonus(int streak) => (int)(SaveGold * (SaveStreakMultiplier * streak));

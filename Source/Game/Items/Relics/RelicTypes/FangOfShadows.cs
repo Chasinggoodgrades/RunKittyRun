@@ -10,6 +10,7 @@ public class FangOfShadows : Relic
     private trigger SummonTrigger;
     private trigger TeleTrigger;
     private timer KillTimer;
+    private unit Owner;
 
     private const int RelicCost = 650;
     private static float SAFEZONE_REDUCTION = 0.25f; // 25%
@@ -33,6 +34,7 @@ public class FangOfShadows : Relic
 
     public override void ApplyEffect(unit Unit)
     {
+        Owner = Unit;
         RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
         SetAbilityCooldown(Unit);
@@ -71,6 +73,7 @@ public class FangOfShadows : Relic
         RegisterTeleportAbility(sk.Unit);
         sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
         KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, () => sk.KillShadowKitty());
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
     }
 
     private void TeleportToShadowKitty()
@@ -101,8 +104,8 @@ public class FangOfShadows : Relic
             ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION
             : currentCooldown;
 
-        var ability = Unit.GetAbility(RelicAbilityID);
-        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_COOLDOWN, 0, newCooldown);
+        //var ability = Unit.GetAbility(RelicAbilityID);
+        RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
 
     public void ReduceCooldownAtSafezone(unit Unit)
@@ -115,6 +118,7 @@ public class FangOfShadows : Relic
         var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;
         var newCooldown = remainingCooldown * (1.00f - reduction);
-        Unit.SetAbilityCooldownRemaining(RelicAbilityID, newCooldown);
+        //Unit.SetAbilityCooldownRemaining(RelicAbilityID, newCooldown);
+        RelicUtil.SetRelicCooldowns(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
 }

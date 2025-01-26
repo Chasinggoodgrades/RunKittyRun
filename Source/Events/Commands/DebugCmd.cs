@@ -59,6 +59,12 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 break;
+            case "?wshare":
+                player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                break;
             case "?cooldown":
                 selectedUnit.ResetCooldowns();
                 break;
@@ -92,6 +98,16 @@ public static class DebugCmd
             case "?slide":
                 Slider slider = new Slider(kitty.Unit);
                 slider.StartSlider();
+                break;
+            case "?test2":
+                break;
+            case "?pw":
+            case "?pause":
+                Wolf.PauseAllWolves(true);
+                break;
+            case "?uw":
+            case "?unpause":
+                Wolf.PauseAllWolves(false);
                 break;
             case "?noslide":
                 break;

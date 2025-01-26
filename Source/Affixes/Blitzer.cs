@@ -110,6 +110,7 @@ public class Blitzer : Affix
     {
         BlitzerTimer.Pause();
         Effect.Dispose();
+        Effect = null;
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);

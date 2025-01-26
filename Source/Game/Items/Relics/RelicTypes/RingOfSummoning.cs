@@ -12,6 +12,7 @@ public class RingOfSummoning : Relic
     private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
     private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
     private trigger Trigger;
+    private unit Owner;
 
     public RingOfSummoning() : base(
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
@@ -38,14 +39,16 @@ public class RingOfSummoning : Relic
     public override void ApplyEffect(unit Unit)
     {
         RegisterTriggers(Unit);
+        Owner = Unit;
         Unit.DisableAbility(RelicAbilityID, false, false);
-        SetAbilityData(Unit);
+        Utility.SimpleTimer(0.1f, () => SetAbilityData(Unit));
     }
 
     public override void RemoveEffect(unit Unit)
     {
         Trigger.Dispose();
         Trigger = null;
+        Owner = null;
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
@@ -66,7 +69,7 @@ public class RingOfSummoning : Relic
             : SUMMONING_COOLDOWN;
 
         // Set cooldown based on the upgrade lvl.
-        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_COOLDOWN, 0, cooldown);
+        RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, cooldown);
     }
 
     private void SacredRingOfSummoning()
@@ -77,6 +80,8 @@ public class RingOfSummoning : Relic
         var summoningKitty = Globals.ALL_KITTIES[player];
         var summoningKittyUnit = summoningKitty.Unit;
         var numberOfPlayers = GetNumberOfPlayers(player);
+        RelicUtil.CloseRelicBook(player);
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
         GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));
         var list = tempGroup.ToList();
         for(int i = 0; i < numberOfPlayers; i++)
@@ -86,6 +91,7 @@ public class RingOfSummoning : Relic
             var unit = list[randomPlayer];
             var kitty = Globals.ALL_KITTIES[unit.Owner];
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
+            Globals.ALL_KITTIES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
             Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
@@ -94,7 +100,7 @@ public class RingOfSummoning : Relic
 
         tempGroup.Dispose();
         targetedPoint.Dispose();
-        RelicUtil.CloseRelicBook(player);
+
     }
 
     /// <summary>

@@ -34,7 +34,7 @@ namespace Source.Init
 
         private static void ChoosingGameMode()
         {
-            timeToChoose++;
+            timeToChoose += 1.0f;
             if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE)
                 Gamemode.SetGameMode("Standard");
             if (Gamemode.IsGameModeChosen)
@@ -42,6 +42,7 @@ namespace Source.Init
                 StartGame();
                 gameModeTimer.Pause();
                 gameModeTimer.Dispose();
+                gameModeTimer = null;
             }
         }
 

@@ -17,7 +17,7 @@ public class Wolf
     public unit Unit { get; private set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
-    private WolfPoint WolfPoint { get; set; }
+    public WolfPoint WolfPoint { get; set; }
 
     public Wolf(int regionIndex)
     {
@@ -58,8 +58,8 @@ public class Wolf
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        //Unit.IssueOrder("move", randomX, randomY);
-        WolfPoint.CreateRegionsBetweenPoints((Unit.X, Unit.Y), (randomX, randomY));
+        Unit.IssueOrder("move", randomX, randomY);
+        WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
         return (randomX, randomY);
     }
 
@@ -102,7 +102,9 @@ public class Wolf
         {
             WolfMove();
             OverheadEffect.Dispose();
+            OverheadEffect = null;
             effectTimer.Dispose();
+            effectTimer = null;
         });
     }
 
@@ -110,7 +112,10 @@ public class Wolf
     {
         Unit.Dispose();
         OverheadEffect?.Dispose();
+        OverheadEffect = null;
         WanderTimer.Dispose();
+        WanderTimer = null;
+        WolfPoint.Dispose();
         RemoveAllWolfAffixes();
     }
 
@@ -137,10 +142,26 @@ public class Wolf
     /// </summary>
     public static void RemoveAllWolves()
     {
-        foreach (var wolf in Globals.ALL_WOLVES.Keys)
-            wolf.Dispose();
+        foreach (var wolf in Globals.ALL_WOLVES)
+            wolf.Value.Dispose();
 
         Globals.ALL_WOLVES.Clear();
+    }
+
+    public static void PauseAllWolves(bool pause)
+    {
+        if (pause)
+            foreach (var wolf in Globals.ALL_WOLVES)
+            {
+                wolf.Value.WanderTimer.Pause();
+                wolf.Value.Unit.SetPausedEx(pause);
+            }
+        else
+            foreach (var wolf in Globals.ALL_WOLVES)
+            {
+                wolf.Value.WanderTimer.Resume();
+                wolf.Value.Unit.SetPausedEx(pause);
+            }
     }
 
     #region AFFIXES

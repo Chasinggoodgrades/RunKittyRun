@@ -71,6 +71,7 @@ public static class GeneralCmds
                 break;
             case "-lc":
             case "-lockcamera":
+            case "&f":
                 CameraUtil.LockCamera(p);
                 break;
             case "-reset":

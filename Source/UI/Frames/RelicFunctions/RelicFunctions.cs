@@ -5,35 +5,43 @@ public static class RelicFunctions
 {
     public static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
     {
-        if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
+        try
         {
-            AlreadyHaveRelic(player);
-            return;
+            if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
+            {
+                AlreadyHaveRelic(player);
+                return;
+            }
+
+            if (!RelicLevel(kitty.Unit))
+            {
+                NotHighEnoughLevel(player);
+                return;
+            }
+
+            if (!HasInventorySpace(kitty.Unit))
+            {
+                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
+                return;
+            }
+
+            if (!CanGetAnotherRelic(kitty.Unit)) return;
+
+            if (RelicMaxedOut(player)) return;
+
+            ReduceGold(player, selectedItem.Cost);
+            var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
+            if (newRelic != null)
+            {
+                kitty.Relics.Add(newRelic);
+                newRelic.ApplyEffect(kitty.Unit);
+                AddItem(player, selectedItem.ItemID);
+            }
         }
-
-        if (!RelicLevel(kitty.Unit))
+        catch (Exception e)
         {
-            NotHighEnoughLevel(player);
-            return;
-        }
-
-        if (!HasInventorySpace(kitty.Unit))
-        {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
-            return;
-        }
-
-        if (!CanGetAnotherRelic(kitty.Unit)) return;
-
-        if (RelicMaxedOut(player)) return;
-
-        AddItem(player, selectedItem.ItemID);
-        ReduceGold(player, selectedItem.Cost);
-        var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
-        if (newRelic != null)
-        {
-            kitty.Relics.Add(newRelic);
-            newRelic.ApplyEffect(kitty.Unit);
+            Console.WriteLine(e.Message);
+            throw;
         }
     }
 

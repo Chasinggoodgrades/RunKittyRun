@@ -391,8 +391,11 @@ public static class ShopFrame
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
                     return;
                 }
+                Utility.RemoveItemFromUnit(kitty.Unit, itemID);
+                player.Gold += selectedItem.Cost;
                 relic?.RemoveEffect(kitty.Unit);
                 kitty.Relics.Remove(relic);
+                return;
             }
 
             Utility.RemoveItemFromUnit(kitty.Unit, itemID);

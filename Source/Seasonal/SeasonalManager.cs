@@ -43,7 +43,6 @@ public static class SeasonalManager
         switch (CurrentMonth)
         {
             case 12:
-            case 1:
                 Season = HolidaySeasons.Christmas;
                 break;
 /*            case 10:

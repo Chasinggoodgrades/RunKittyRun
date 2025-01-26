@@ -29,6 +29,7 @@ public class Howler : Affix
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         HowlTimer.Pause();
         HowlTimer.Dispose();
+        HowlTimer = null;
     }
 
     private void RegisterTimerEvents()
@@ -52,6 +53,7 @@ public class Howler : Affix
         nearbyWolves.Dispose();
         nearbyWolves = null;
         roarEffect.Dispose();
+        roarEffect = null;
         HowlTimer.Start(GetRandomHowlTime(), false, Howl);
     }
 

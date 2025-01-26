@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class RelicUtil
 {
@@ -37,5 +38,42 @@ public static class RelicUtil
     {
         if (!Player.IsLocal) return;
         ForceUICancel();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <param name="itemID"></param>
+    /// <param name="abilityID"></param>
+    public static void SetRelicCooldowns(unit unit, int itemID, int abilityID, float cooldown = 0)
+    {
+        // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
+        var item = Utility.UnitGetItem(unit, itemID);
+        if(item == null) Console.WriteLine("Item is null");
+        var itemAbility = item.GetAbility(abilityID);
+        var unitAbility = unit.GetAbility(abilityID);
+        float unitCooldown = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0);
+        float itemCooldown = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0);
+
+        Console.WriteLine($"Unit CD: {unitCooldown}, Item CD: {itemCooldown}");
+        cooldown = (cooldown == 0) ? Math.Min(unitCooldown, itemCooldown) : cooldown;
+        Console.WriteLine($"Cooldown: {cooldown}");
+        unit.RemoveItem(item);
+        unit.SetAbilityCooldownRemaining(abilityID, cooldown);
+        unit.AddItem(item);
+        unit.SetAbilityCooldownRemaining(abilityID, cooldown);
+    }
+
+    public static void SetAbilityCooldown(unit unit, int itemID, int abilityID, float cooldown)
+    {
+        var item = Utility.UnitGetItem(unit, itemID);
+        var unitAbility = unit.GetAbility(abilityID);
+        unit.RemoveItem(item);
+        BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
+        unit.AddItem(item);
+        var itemAbility = item.GetAbility(abilityID);
+        BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
+        Console.WriteLine($"Setting cooldown to {cooldown} for {unitAbility.Name} and {itemAbility.Name}");
     }
 }

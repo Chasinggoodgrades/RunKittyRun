@@ -5,12 +5,13 @@ using System;
 public class ShardOfTranslocation : Relic
 {
     public const int RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION;
-    public static int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
+    public const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
     private static int RelicCost = 650;
     private static float DEFAULT_BLINK_RANGE = 400.0f;
     private static float UPGRADE_BLINK_RANGE = 600.0f;
     private static float DEFAULT_COOLDOWN = 90.0f;
     private static float CooldownReduction = 15.0f;
+    private unit Owner;
     private static new string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
     private trigger CastEventTrigger;
@@ -32,7 +33,9 @@ public class ShardOfTranslocation : Relic
     {
         RegisterTrigger(Unit);
         UpdateBlinkRange(Unit);
+        Owner = Unit;
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
+        Utility.SimpleTimer(0.1f, () => SetAbilityData(Unit));
     }
 
     public override void RemoveEffect(unit Unit)
@@ -64,16 +67,16 @@ public class ShardOfTranslocation : Relic
             if (!EligibleLocation(targetLoc, currentSafezone))
             {
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Invalid location. Must be within safezone bounds.");
-                Utility.SimpleTimer(0.1f, () => BlzEndUnitAbilityCooldown(unit, RelicAbilityID));
-                Utility.SimpleTimer(0.15f, () => Utility.UnitAddMana(unit, 200));
+                Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID, 1));
+                Utility.SimpleTimer(0.15f, () => Utility.UnitAddMana(Owner, 200));
                 return;
             }
 
             TeleportUnit(unit, targetLoc);
-            SetCooldown(unit);
             targetLoc.Dispose();
             targetLoc = null;
             RelicUtil.CloseRelicBook(player);
+            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
         }
         catch (Exception e)
         {
@@ -88,13 +91,21 @@ public class ShardOfTranslocation : Relic
         MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE;
     }
 
-    private void SetCooldown(unit unit)
+    /// <summary>
+    /// Sets ability cooldown and radius based on upgrade level.
+    /// </summary>
+    /// <param name="Unit"></param>
+    private void SetAbilityData(unit Unit)
     {
-        var reduction = 0.0f;
-        if (PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType()) == 2)
-            reduction = CooldownReduction;
-        var cooldown = unit.GetAbilityCooldown(RelicAbilityID, 0);
-        unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown - reduction);
+        var ability = Unit.GetAbility(RelicAbilityID);
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
+
+        var cooldown = upgradeLevel >= 2 // lvl 2 upgrade
+            ? DEFAULT_COOLDOWN - CooldownReduction
+            : DEFAULT_COOLDOWN;
+
+        // Set cooldown based on the upgrade lvl.
+        RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, cooldown);
     }
 
     private void TeleportUnit(unit unit, location targetLoc)

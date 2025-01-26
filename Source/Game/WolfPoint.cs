@@ -5,10 +5,11 @@ using static WCSharp.Api.Common;
 
 public class WolfPoint
 {
-    private const float MaxDistance = 400f; // Max distance between points
-
+    private const float MaxDistance = 200f; // Max distance between points
     private Wolf Wolf { get; set; }
-    private List<WolfPointInfo> PointsToVisit { get; } = new List<WolfPointInfo>();
+    public List<WolfPointInfo> PointsToVisit { get; set; } = new List<WolfPointInfo>();
+    private region Region { get; set; }
+    private trigger Trigger { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -17,44 +18,65 @@ public class WolfPoint
     public WolfPoint(Wolf wolf)
     {
         Wolf = wolf;
+        Trigger = trigger.Create();
+        CreateEnterRegionTriggers();
     }
 
     /// <summary>
     /// Creates regions between the start and end points.
     /// </summary>
-    /// <param name="startPoint">The start point coordinates.</param>
-    /// <param name="endPoint">The end point coordinates.</param>
-    public void CreateRegionsBetweenPoints((float x, float y) startPoint, (float x, float y) endPoint)
+    /// <param name="startX">The start point X coordinate.</param>
+    /// <param name="startY">The start point Y coordinate.</param>
+    /// <param name="endX">The end point X coordinate.</param>
+    /// <param name="endY">The end point Y coordinate.</param>
+    public void CreateRegionsBetweenPoints(float startX, float startY, float endX, float endY)
     {
-        Cleanup();
-        float xDiff = endPoint.x - startPoint.x;
-        float yDiff = endPoint.y - startPoint.y;
-        float distance = (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
-        int numRegions = (int)Math.Ceiling(distance / MaxDistance);
-
-        float stepX = xDiff / numRegions;
-        float stepY = yDiff / numRegions;
-
-        for (int i = 0; i < numRegions; i++)
+        try
         {
-            float regionX = startPoint.x + (i * stepX);
-            float regionY = startPoint.y + (i * stepY);
-            region newRegion = region.Create();
-            rect regionRect = CreateRect(newRegion, regionX, regionY);
-            var pointInfo = new WolfPointInfo(newRegion, null, regionRect);
-            PointsToVisit.Add(pointInfo);
+            if (PointsToVisit == null) return;
+            Cleanup();
+            float xDiff = endX - startX;
+            float yDiff = endY - startY;
+            float distance = (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+            int numRegions = (int)Math.Ceiling(distance / MaxDistance);
+
+            float stepX = xDiff / numRegions;
+            float stepY = yDiff / numRegions;
+            for (int i = 0; i < numRegions; i++)
+            {
+                float regionX = startX + (i * stepX);
+                float regionY = startY + (i * stepY);
+                var pointInfo = new WolfPointInfo(regionX, regionY);
+                PointsToVisit.Add(pointInfo);
+            }
+            if(PointsToVisit != null && PointsToVisit.Count > 0)
+                StartRects();
+            //Begin(endX, endY);
         }
-        CreateEnterRegionTriggers();
-        Begin(endPoint.x, endPoint.y);
+        catch (Exception ex)
+        {
+            if (Source.Program.Debug) Console.WriteLine($"{ex.Message}");
+        }
     }
 
-    private void Cleanup()
+    public void Cleanup()
     {
-        foreach (var point in PointsToVisit)
+        if (PointsToVisit == null) return;
+        for (int i = 0; i < PointsToVisit.Count; i++)
         {
-            point.Dispose();
+            Region.RemoveCell(PointsToVisit[i].PointX, PointsToVisit[i].PointY);
+            PointsToVisit[i] = null;
         }
         PointsToVisit.Clear();
+    }
+
+    public void Dispose()
+    {
+        Cleanup();
+        Region.Dispose();
+        Trigger.ClearActions();
+        Trigger.Dispose();
+        PointsToVisit = null;
     }
 
     private void Begin(float x, float y)
@@ -62,59 +84,50 @@ public class WolfPoint
         if (PointsToVisit.Count > 1) // If there are more points to visit, set the next point as the target
         {
             var nextPoint = PointsToVisit[1];
-            Wolf.Unit.IssueOrder("move", nextPoint.Rect.CenterX, nextPoint.Rect.CenterY);
+            Wolf.Unit.IssueOrder("move", nextPoint.PointX, nextPoint.PointY);
         }
-        else // If there is only one point, just move to endPoint
-        {
-            Wolf.Unit.IssueOrder("move", x, y);
-        }
-    }
-
-    private rect CreateRect(region region, float x, float y)
-    {
-        var regionRect = rect.Create(-25, -25, 25, 25); // Just a small region size
-        regionRect.MoveTo(x, y);
-        region.AddRect(regionRect);
-        return regionRect;
     }
 
     private void CreateEnterRegionTriggers()
     {
-        foreach (var point in PointsToVisit)
+        Region = region.Create();
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit() == Wolf.Unit));
+        Trigger.AddAction(() =>
         {
-            point.Trigger = trigger.Create();
-            point.Trigger.RegisterEnterRegion(point.Region, Filter(() => GetFilterUnit() == Wolf.Unit));
-            point.Trigger.AddAction(() =>
+            if (PointsToVisit.Count > 0)
             {
-                if (point == PointsToVisit[PointsToVisit.Count - 1]) // last point , cleanup and return
+                Region.RemoveCell(PointsToVisit[0].PointX, PointsToVisit[0].PointY);
+                PointsToVisit.RemoveAt(0);
+                // If there are more points to visit, set the next point as the target
+                if (PointsToVisit.Count > 0)
                 {
-                    Cleanup();
-                    return;
+                    var nextPoint = PointsToVisit[0];
+                    Region.AddCell(nextPoint.PointX, nextPoint.PointY);
+                    Wolf.Unit.IssueOrder("move", nextPoint.PointX, nextPoint.PointY);
                 }
-                var nextPoint = PointsToVisit[PointsToVisit.IndexOf(point) + 1];
-                Wolf.Unit.IssueOrder("move", nextPoint.Rect.CenterX, nextPoint.Rect.CenterY);
-            });
+            }
+        });
+    }
+
+    private void StartRects()
+    {
+        if (PointsToVisit.Count > 1)
+        {
+            var currentPoint = PointsToVisit[1];
+            Region.AddCell(currentPoint.PointX, currentPoint.PointY);
+            PointsToVisit.RemoveAt(0);
         }
     }
 
-    private class WolfPointInfo
+    public class WolfPointInfo
     {
-        public region Region { get; }
-        public trigger Trigger { get; set; }
-        public rect Rect { get; }
+        public float PointX { get; set; } = 0.0f;
+        public float PointY { get; set; } = 0.0f;
 
-        public WolfPointInfo(region region, trigger trigger, rect rect)
+        public WolfPointInfo(float pointX, float pointY)
         {
-            Region = region;
-            Trigger = trigger;
-            Rect = rect;
-        }
-
-        public void Dispose()
-        {
-            Rect.Dispose();
-            Trigger.Dispose();
-            Region.Dispose();
+            PointX = pointX;
+            PointY = pointY;
         }
     }
 }
