@@ -16,8 +16,8 @@ public static class Gameover
     {
         if(!WinGame) return false;
         SendWinMessage();
-        StandardWinChallenges();
         GameStats(true);
+        StandardWinChallenges();
         SaveManager.SaveAll();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
@@ -33,6 +33,7 @@ public static class Gameover
         Challenges.WhiteTendrils();
         Challenges.ZandalariKitty();
         Challenges.FreezeAura();
+        Challenges.PrismaticAura();
     }
 
     private static void LosingGame()

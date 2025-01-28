@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Source;
+using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -50,7 +51,8 @@ public class Kitty
         }
         catch (System.Exception e)
         {
-            Logger.Critical(e);
+            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            throw;
         }
     }
 

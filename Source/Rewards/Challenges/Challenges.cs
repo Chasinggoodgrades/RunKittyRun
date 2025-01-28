@@ -113,6 +113,17 @@ public static class Challenges
         }
     }
 
+    public static void PrismaticAura()
+    {
+        foreach(var player in Globals.ALL_PLAYERS)
+        {
+            var saveData = Globals.ALL_KITTIES[player].SaveData;
+            if (saveData.GameAwardsSorted.Auras.SpecialAura == 1) continue;
+            if (saveData.GameStats.HardWins < 5 || saveData.GameStats.ImpossibleWins < 5) continue;
+            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.SpecialAura));
+        }
+    }
+
     /// <summary>
     /// Hard+, Nitro Round 4 and Win game.
     /// </summary>

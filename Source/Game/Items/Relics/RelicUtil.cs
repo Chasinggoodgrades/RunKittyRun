@@ -50,15 +50,12 @@ public static class RelicUtil
     {
         // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
         var item = Utility.UnitGetItem(unit, itemID);
-        if(item == null) Console.WriteLine("Item is null");
         var itemAbility = item.GetAbility(abilityID);
         var unitAbility = unit.GetAbility(abilityID);
         float unitCooldown = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0);
         float itemCooldown = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0);
 
-        Console.WriteLine($"Unit CD: {unitCooldown}, Item CD: {itemCooldown}");
         cooldown = (cooldown == 0) ? Math.Min(unitCooldown, itemCooldown) : cooldown;
-        Console.WriteLine($"Cooldown: {cooldown}");
         unit.RemoveItem(item);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
         unit.AddItem(item);
@@ -74,6 +71,5 @@ public static class RelicUtil
         unit.AddItem(item);
         var itemAbility = item.GetAbility(abilityID);
         BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
-        Console.WriteLine($"Setting cooldown to {cooldown} for {unitAbility.Name} and {itemAbility.Name}");
     }
 }

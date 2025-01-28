@@ -110,13 +110,13 @@ public class Wolf
 
     public void Dispose()
     {
+        RemoveAllWolfAffixes();
         Unit.Dispose();
         OverheadEffect?.Dispose();
         OverheadEffect = null;
         WanderTimer.Dispose();
         WanderTimer = null;
         WolfPoint.Dispose();
-        RemoveAllWolfAffixes();
     }
 
     /// <summary>

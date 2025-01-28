@@ -51,7 +51,7 @@ public class ChronoSphere : Relic
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            //error tied to location
         }
     }
 
