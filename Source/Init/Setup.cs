@@ -97,6 +97,7 @@ namespace Source.Init
             {
                 if (Player(i).SlotState == playerslotstate.Playing)
                     Globals.ALL_PLAYERS.Add(Player(i));
+                Player(i).Team = 0;
             }
         }
 
@@ -112,9 +113,9 @@ namespace Source.Init
                     player.SetAlliance(playerx, ALLIANCE_HELP_RESPONSE, true);
                     player.SetAlliance(playerx, ALLIANCE_SHARED_XP, true);
                     player.SetAlliance(playerx, ALLIANCE_SHARED_VISION, true);
+                    player.SetAlliance(playerx, ALLIANCE_SHARED_CONTROL, false);
                 }
             }
         }
-
     }
 }

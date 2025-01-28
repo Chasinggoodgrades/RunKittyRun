@@ -58,7 +58,8 @@ public class Wolf
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        Unit.IssueOrder("move", randomX, randomY);
+        if (HasAffix("Blitzer")) return (0, 0);
+        //Unit.IssueOrder("move", randomX, randomY);
         WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
         return (randomX, randomY);
     }

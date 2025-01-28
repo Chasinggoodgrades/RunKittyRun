@@ -71,6 +71,7 @@ public class Kitty
         SoundManager.PlayKittyDeathSound(Unit);
         Solo.ReviveKittySoloTournament(this);
         Solo.RoundEndCheck();
+        SoundManager.PlayFirstBloodSound();
         if (Gamemode.CurrentGameMode != "Standard") return;
         SoundManager.PlayLastManStandingSound();
         Gameover.GameOver();

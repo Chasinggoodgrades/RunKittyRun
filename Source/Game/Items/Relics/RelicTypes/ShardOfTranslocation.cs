@@ -89,6 +89,13 @@ public class ShardOfTranslocation : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType());
         MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE;
+        if(upgradeLevel >= 1) Utility.SimpleTimer(0.1f, () => SetItemTooltip(unit));
+    }
+
+    private void SetItemTooltip(unit unit)
+    {
+        var item = Utility.UnitGetItem(unit, RelicItemID);
+        item.ExtendedDescription = $"{Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within {Colors.COLOR_LAVENDER}{MaxBlinkRange.ToString("F2")}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r";
     }
 
     /// <summary>

@@ -51,7 +51,7 @@ public class WolfPoint
             }
             if(PointsToVisit != null && PointsToVisit.Count > 0)
                 StartRects();
-            //Begin(endX, endY);
+            Begin(endX, endY);
         }
         catch (Exception ex)
         {
@@ -85,6 +85,11 @@ public class WolfPoint
         {
             var nextPoint = PointsToVisit[1];
             Wolf.Unit.IssueOrder("move", nextPoint.PointX, nextPoint.PointY);
+        }
+        else
+        {
+            var point = PointsToVisit[0];
+            Wolf.Unit.IssueOrder("move", point.PointX, point.PointY);
         }
     }
 

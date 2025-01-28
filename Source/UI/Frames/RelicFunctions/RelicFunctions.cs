@@ -60,6 +60,7 @@ public static class RelicFunctions
             var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
             if (playerRelic == null) return;
             var goldCost = playerRelic.GetCurrentUpgrade().Cost;
+            if (ActiveShadowKitty(player)) return;
             if (player.Gold < goldCost)
             {
                 ShopFrame.NotEnoughGold(player, goldCost);
@@ -106,6 +107,17 @@ public static class RelicFunctions
             return false;
         }
         return true;
+    }
+
+    private static bool ActiveShadowKitty(player player)
+    {
+        var shadowkitty = ShadowKitty.ALL_SHADOWKITTIES[player];
+        if(shadowkitty.Active)
+        {
+            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You cannot upgrade your while your shadow kitty is active!|r");
+            return true;
+        }
+        return false;
     }
 
 

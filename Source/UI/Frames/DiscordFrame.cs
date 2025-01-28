@@ -8,6 +8,7 @@ public static class DiscordFrame
     private static framehandle DiscordText;
     private static framehandle Backdrop;
     private static trigger Trigger;
+    private static trigger ESCTrigger;
     private static string Link = "https://discord.gg/GSu6zkNvx5";
     private static string JoinDiscord = "|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r";
     public static void Initialize()
@@ -18,6 +19,7 @@ public static class DiscordFrame
         RegisterTrigger();
         SetupDiscordIcon();
         ApplyTextFrame();
+        RegisterESCTrigger();
     }
 
     private static void CreateFrame()
@@ -64,6 +66,27 @@ public static class DiscordFrame
         Trigger = trigger.Create();
         Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter);
         Trigger.AddAction(UpdateTextBox);
+    }
+
+    private static void RegisterESCTrigger()
+    {
+        ESCTrigger = trigger.Create();
+        foreach(var player in Globals.ALL_PLAYERS)
+        {
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        }
+        ESCTrigger.AddAction(ESCPressed);
+    }
+
+    private static void ESCPressed()
+    {
+        var player = @event.Player;
+        if (!player.IsLocal) return;
+        Backdrop.Visible = !Backdrop.Visible;
+        EditBox.Visible = !EditBox.Visible;
+        DiscordIconFront.Visible = !DiscordIconFront.Visible;
+        DiscordIconBack.Visible = !DiscordIconBack.Visible;
+        DiscordText.Visible = !DiscordText.Visible;
     }
 
     private static void UpdateTextBox()

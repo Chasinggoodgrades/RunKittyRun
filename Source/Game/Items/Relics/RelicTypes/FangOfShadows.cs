@@ -11,6 +11,7 @@ public class FangOfShadows : Relic
     private trigger TeleTrigger;
     private timer KillTimer;
     private unit Owner;
+    private bool Active = false;
 
     private const int RelicCost = 650;
     private static float SAFEZONE_REDUCTION = 0.25f; // 25%

@@ -8,6 +8,7 @@ public class ShadowKitty
     public int ID;
     public trigger w_Collision;
     public trigger c_Collision;
+    public bool Active;
     public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES;
 
     public ShadowKitty(player Player)
@@ -53,6 +54,7 @@ public class ShadowKitty
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(Player, true);
         Utility.SelectUnitForPlayer(Player, Unit);
+        Active = true;
     }
 
     /// <summary>
@@ -73,6 +75,7 @@ public class ShadowKitty
         Unit.Kill();
         Unit.Dispose();
         Unit = null;
+        Active = false;
         PauseKitty(Player, false);
     }
 

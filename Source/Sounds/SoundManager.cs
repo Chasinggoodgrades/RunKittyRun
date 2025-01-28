@@ -14,6 +14,7 @@ public static class SoundManager
     private const string INVULNERABLE_PATH = "war3mapImported\\Invulnerable.mp3";
     private const string KIBBLE_TOME_PATH = "war3mapImported\\Tomes.flac";
     private const string LAST_MAN_STANDING_PATH = "war3mapImported\\last_man_standing.mp3";
+    private const string FIRST_BLOOD_PATH = "war3mapImported\\first_blood.mp3";
 
     private static sound KITTY_DEATH_SOUND;
     private static sound ROUND_1_SOUND;
@@ -25,6 +26,9 @@ public static class SoundManager
     private static sound INVULNERABLE_SOUND;
     private static sound KIBBLE_TOME_SOUND;
     private static sound LAST_MAN_STANDING_SOUND;
+    private static sound FIRST_BLOOD_SOUND;
+
+    private static bool FirstBloodSoundPlayed = false;
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -40,7 +44,8 @@ public static class SoundManager
             { "SpeedSound", CreateSound(SPEED_PATH, false, false, false, 10, 10, "") },
             { "InvulnerableSound", CreateSound(INVULNERABLE_PATH, false, false, false, 10, 10, "") },
             { "KibbleTomeSound", CreateSound(KIBBLE_TOME_PATH, false, true, false, 10, 10, "") },
-            { "LastManStandingSound", CreateSound(LAST_MAN_STANDING_PATH, false, false, false, 10, 10, "") }
+            { "LastManStandingSound", CreateSound(LAST_MAN_STANDING_PATH, false, false, false, 10, 10, "") },
+            { "FirstBloodSound", CreateSound(FIRST_BLOOD_PATH, false, false, false, 10, 10, "") }
         };
         SetSoundAttributes();
         AssignSounds();
@@ -58,6 +63,7 @@ public static class SoundManager
         INVULNERABLE_SOUND = sounds["InvulnerableSound"];
         KIBBLE_TOME_SOUND = sounds["KibbleTomeSound"];
         LAST_MAN_STANDING_SOUND = sounds["LastManStandingSound"];
+        FIRST_BLOOD_SOUND = sounds["FirstBloodSound"];
     }
     private static void SetSoundAttributes()
     {
@@ -86,6 +92,15 @@ public static class SoundManager
             s.AttachToUnit(Kitty);
             s.Start();
         }
+    }
+
+    public static void PlayFirstBloodSound()
+    {
+        if(FirstBloodSoundPlayed) return;
+        var s = FIRST_BLOOD_SOUND;
+        s.Stop(false, false);
+        s.Start();
+        FirstBloodSoundPlayed = true;
     }
 
     public static void PlayKibbleTomeSound(unit Kitty)
@@ -140,6 +155,7 @@ public static class SoundManager
             }
             if (count == 0) return;
             var s = LAST_MAN_STANDING_SOUND;
+            s.Stop(false, false);
             s.Start();
         });
     }

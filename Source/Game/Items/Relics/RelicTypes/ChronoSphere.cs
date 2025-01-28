@@ -120,7 +120,7 @@ public class ChronoSphere : Relic
         kitty.Unit.SetPosition(CapturedLocation.Item1, CapturedLocation.Item2);
         kitty.Unit.SetFacing(CapturedLocation.Item3);
         kitty.Unit.IsPaused = true;
-        
+
         if(kitty.Player.IsLocal) PanCameraToTimed(kitty.Unit.X, kitty.Unit.Y, 0.0f);
         Utility.SimpleTimer(2.0f, () =>
         { 
