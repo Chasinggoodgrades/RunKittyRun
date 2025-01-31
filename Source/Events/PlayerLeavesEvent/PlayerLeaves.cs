@@ -19,7 +19,7 @@ public static class PlayerLeaves
         Trigger.AddAction(() => PlayerLeavesActions());
     }
 
-    private static void TeamRemovePlayer(player player)
+    public static void TeamRemovePlayer(player player)
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         Globals.PLAYERS_TEAMS[player].RemoveMember(player);
@@ -36,7 +36,7 @@ public static class PlayerLeaves
             var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];
             TeamRemovePlayer(leavingPlayer);
             kitty.Dispose();
-            circle.RemoveCircle();
+            circle.Dispose();
             nameTag.Dispose();
             if(!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");

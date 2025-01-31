@@ -157,7 +157,8 @@ public static class AffixFactory
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES)
+        var interations = 0;
+        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 250)
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
@@ -178,6 +179,7 @@ public static class AffixFactory
                         }
                     }
                 }
+                interations += 1;
             }
         }
     }

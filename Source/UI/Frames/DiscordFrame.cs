@@ -25,7 +25,7 @@ public static class DiscordFrame
     private static void CreateFrame()
     {
         EditBox = framehandle.Create("EscMenuEditBoxTemplate", originframetype.GameUI.GetOriginFrame(0), 0, 0);
-        EditBox.SetAbsPoint(framepointtype.Center, 0.4f, 0.18f);
+        EditBox.SetAbsPoint(framepointtype.Center, 0.4f, 0.165f);
         EditBox.SetSize(0.20f, 0.03f);
         EditBox.TextSizeLimit = Link.Length;
         EditBox.Text = Link;
@@ -42,12 +42,12 @@ public static class DiscordFrame
     private static void SetupDiscordIcon()
     {
         DiscordIconFront = framehandle.Create("BACKDROP", "FrameDiscordIconFront", originframetype.GameUI.GetOriginFrame(0), "", 1);
-        DiscordIconFront.SetAbsPoint(framepointtype.Center, 0.29f, 0.18f);
+        DiscordIconFront.SetAbsPoint(framepointtype.Center, 0.29f, 0.165f);
         DiscordIconFront.SetSize(0.03f, 0.03f);
         DiscordIconFront.SetTexture("war3mapImported\\DiscordIcon.dds", 0, true);
 
         DiscordIconBack = framehandle.Create("BACKDROP", "FrameDiscordIconBack", originframetype.GameUI.GetOriginFrame(0), "", 1);
-        DiscordIconBack.SetAbsPoint(framepointtype.Center, 0.51f, 0.18f);
+        DiscordIconBack.SetAbsPoint(framepointtype.Center, 0.51f, 0.165f);
         DiscordIconBack.SetSize(0.03f, 0.03f);
         DiscordIconBack.SetTexture("war3mapImported\\DiscordIcon.dds", 0, true);
     }

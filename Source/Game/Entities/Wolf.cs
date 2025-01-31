@@ -13,6 +13,7 @@ public class Wolf
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
     public timer WanderTimer { get; set; }
+    private timer EffectTimer { get; set; }
     public rect Lane { get; private set; }
     public unit Unit { get; private set; }
     public List<Affix> Affixes { get; private set; }
@@ -49,6 +50,7 @@ public class Wolf
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
         WanderTimer = timer.Create();
+        EffectTimer = timer.Create();
     }
 
     /// <summary>
@@ -58,7 +60,7 @@ public class Wolf
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if (HasAffix("Blitzer")) return (0, 0);
+        if (HasAffix("Blitzer")) return (randomX, randomY);
         //Unit.IssueOrder("move", randomX, randomY);
         WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
         return (randomX, randomY);
@@ -67,19 +69,32 @@ public class Wolf
     private bool ShouldStartEffect()
     {
         if (Gamemode.CurrentGameMode != "Standard")
-            return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);
+            return TournamentChance();
+        /*            return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);*/
         else
-            return GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1 && ImpossibleChance();
+            return GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
     }
 
-    private bool ImpossibleChance()
+    private bool TournamentChance()
     {
-        // Actually has 0 meaning currently, but something to play with.
-        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return true;
-        if (Globals.ROUND <= 3) return true;
-        if (GetRandomInt(1, 1) == 1) return true;
-        return false;
+        var baseChance = 12.0f;
+        var increasePerRound = 2.0f;
+        var maxProbability = 22.5f;
+
+        var currentRound = Globals.ROUND;
+        if (currentRound < 1 || currentRound > 5)
+            throw new ArgumentOutOfRangeException(nameof(currentRound), "Round must be between 1 and 5.");
+
+        var linearProbability = baseChance + (increasePerRound * (currentRound - 1));
+        var randomAdjustment = (float)GetRandomReal(0, 4); // Random adjustment between 0 and 4%
+        var totalProbability = linearProbability + randomAdjustment;
+
+        // Cap the probability to the maximum limit
+        totalProbability = Math.Min(totalProbability, maxProbability);
+        //Console.WriteLine($"{totalProbability}%");
+        return GetRandomReal(0, 100) <= totalProbability;
     }
+
 
     public void StartWandering(bool forced = false)
     {
@@ -98,14 +113,11 @@ public class Wolf
         OverheadEffect?.Dispose();
         OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
 
-        var effectTimer = timer.Create();
-        effectTimer.Start(effectDuration, false, () =>
+        EffectTimer.Start(effectDuration, false, () =>
         {
             WolfMove();
             OverheadEffect.Dispose();
             OverheadEffect = null;
-            effectTimer.Dispose();
-            effectTimer = null;
         });
     }
 
@@ -113,6 +125,8 @@ public class Wolf
     {
         RemoveAllWolfAffixes();
         Unit.Dispose();
+        EffectTimer.Dispose();
+        EffectTimer = null;
         OverheadEffect?.Dispose();
         OverheadEffect = null;
         WanderTimer.Dispose();
@@ -181,6 +195,7 @@ public class Wolf
 
     public bool HasAffix(string affixName)
     {
+        if(Affixes.Count == 0) return false;
         foreach (var affix in Affixes)
             if (affix.GetType().Name == affixName) return true;
         return false;

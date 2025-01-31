@@ -43,6 +43,7 @@ public class Team
     public void RemoveMember(player player)
     {
         if(Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if(!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
         Globals.PLAYERS_TEAMS.Remove(player);
         Teammembers.Remove(player);
         Globals.ALL_KITTIES[player].TeamID = 0;

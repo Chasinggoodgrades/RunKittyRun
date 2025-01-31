@@ -85,6 +85,16 @@ public static class GeneralCmds
             case "-oldcode":
                 Savecode.LoadString();
                 break;
+            case "-obs":
+            case "-observer":
+                PlayerLeaves.TeamRemovePlayer(p);
+                Globals.ALL_KITTIES[p].Dispose();
+                Globals.ALL_CIRCLES[p].Dispose();
+                Globals.ALL_PLAYERS.Remove(p);
+                FloatingNameTag.PlayerNameTags[p].Dispose();
+                RoundManager.RoundEndCheck();
+                MultiboardUtil.RefreshMultiboards();
+                break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
@@ -111,7 +121,8 @@ public static class GeneralCmds
             "-endround - Initiate a vote to end the round (Solo Tournament Only)",
             "-lc | -lockcamera - Locks your camera to your unit",
             "-reset - Resets your camera to default",
-            "-kc - Kicks yourself from the game"
+            "-kc - Kicks yourself from the game",
+            "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 
         p.DisplayTimedTextTo(15.0f, Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList, 0, 10);

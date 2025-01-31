@@ -25,7 +25,7 @@ public class Circle
         Unit.IsVisible = false;
     }
 
-    public void RemoveCircle()
+    public void Dispose()
     {
         Unit.Dispose();
         Collision.Dispose();

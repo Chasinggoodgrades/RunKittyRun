@@ -34,7 +34,7 @@ public class AmuletOfEvasiveness : Relic
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
         CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
-        Utility.SimpleTimer(0.2f, () => ScaleUnit(Unit));
+        Utility.SimpleTimer(0.1f, () => ScaleUnit(Unit));
     }
 
     public override void RemoveEffect(unit Unit)

@@ -66,8 +66,8 @@ public static class Progress
         catch (Exception e)
         {
             var error = e.Message;
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
+            if(Source.Program.Debug) Console.WriteLine(e.Message);
+            if(Source.Program.Debug) Console.WriteLine(e.StackTrace);
             return 0.0f;
         }
     }

@@ -48,6 +48,7 @@ public class SoloDeathTimer
         kitty.ReviveKitty();
         kitty.Unit.SetPosition(x, y);
         if (Player.IsLocal) PanCameraToTimed(x, y, 0.00f);
+        CameraUtil.RelockCamera(Player);
         Dispose();
     }
 

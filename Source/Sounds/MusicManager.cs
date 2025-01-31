@@ -19,7 +19,7 @@ public static class MusicManager
             new Music("Linkin Park - Numb", "Human1"),
             new Music("Linkin Park - In The End", "Human2"),
             new Music("Linkin Park - Faint", "Human3"),
-            new Music("Skillet - Whispers in Dark", "Orc1"),
+            new Music("AI - The Purrfectly (RKR)", "Orc1"),
             new Music("Sum 41 - The Hell Song", "Orc2"),
             new Music("DJ Sammy - Heaven", "Orc3"),
             new Music("Cascada - Everytime We Touch", "Undead1"),
