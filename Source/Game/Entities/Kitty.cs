@@ -61,21 +61,30 @@ public class Kitty
     /// </summary>
     public void KillKitty()
     {
-        var circle = Globals.ALL_CIRCLES[Player];
-        Unit.Kill();
-        if(!ProtectionActive) Alive = false;
-        DeathStatUpdate();
-        CrystalOfFire.CrystalOfFireDeath(this);
-        circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
-        circle.KittyDied(this);
-        SoundManager.PlayKittyDeathSound(Unit);
-        Solo.ReviveKittySoloTournament(this);
-        Solo.RoundEndCheck();
-        SoundManager.PlayFirstBloodSound();
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        SoundManager.PlayLastManStandingSound();
-        Gameover.GameOver();
-        MultiboardUtil.RefreshMultiboards();
+        try
+        {
+            var circle = Globals.ALL_CIRCLES[Player];
+            Unit.Kill();
+            if (!ProtectionActive) Alive = false;
+            CrystalOfFire.CrystalOfFireDeath(this);
+            circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
+            circle.KittyDied(this);
+            SoundManager.PlayKittyDeathSound(Unit);
+            Solo.ReviveKittySoloTournament(this);
+            Solo.RoundEndCheck();
+            SoundManager.PlayFirstBloodSound();
+            DeathStatUpdate();
+            if (Gamemode.CurrentGameMode != "Standard") return;
+            SoundManager.PlayLastManStandingSound();
+            Gameover.GameOver();
+            MultiboardUtil.RefreshMultiboards();
+        }
+        catch (Exception e)
+        {
+            if (Program.Debug) Console.WriteLine(e.Message);
+            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            throw;
+        }
     }
 
     /// <summary>
@@ -98,17 +107,21 @@ public class Kitty
     }
     private void InitData()
     {
-        // Save Data
-        if (Player.Controller == mapcontrol.User) SaveData = SaveManager.SaveData[Player];
-        else SaveData = new KittyData(); // dummy data for comps
-
-        YellowLightning = new YellowLightning(Player);
-        // Challenges, Relics, etc for Standard.
-        if (Gamemode.CurrentGameMode == "Standard")
+        try
         {
+            // Save Data
+            if (Player.Controller == mapcontrol.User) SaveData = SaveManager.SaveData[Player];
+            else SaveData = new KittyData(); // dummy data for comps
+
+            YellowLightning = new YellowLightning(Player);
             Relics = new List<Relic>();
         }
-
+        catch (Exception e)
+        {
+            if (Program.Debug) Console.WriteLine(e.Message);
+            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            throw;
+        }
     }
     private void SpawnEffect()
     {
@@ -158,6 +171,8 @@ public class Kitty
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
+        SoloMultiboard.UpdateDeathCount(Player);
+        if (Gamemode.CurrentGameMode != "Standard") return;
         DeathlessChallenges.ResetPlayerDeathless(Player);
         SaveData.GameStats.Deaths += 1;
         SaveData.GameStats.SaveStreak = 0;
@@ -170,6 +185,7 @@ public class Kitty
         savior.CurrentStats.SaveStreak += 1;
         if(savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         savior.SaveData.GameStats.Saves += 1;
         savior.SaveData.GameStats.SaveStreak += 1;
         if(savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)

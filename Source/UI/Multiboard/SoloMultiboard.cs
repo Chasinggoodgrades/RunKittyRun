@@ -9,6 +9,8 @@ public static class SoloMultiboard
     private static multiboard OverallBoard;
     private static multiboard BestTimes;
     private static trigger ESCTrigger;
+    private static Dictionary<player, Kitty> sortedDict = new Dictionary<player, Kitty>();
+    private static Dictionary<player, int> MBSlot = new Dictionary<player, int>();
     private static string color = Colors.COLOR_YELLOW_ORANGE;
 
     /// <summary>
@@ -16,11 +18,19 @@ public static class SoloMultiboard
     /// </summary>
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
-        OverallBoard = multiboard.Create();
-        BestTimes = multiboard.Create();
-        CreateMultiboards();    
-        RegisterTriggers();
+        try
+        {
+            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            OverallBoard = multiboard.Create();
+            BestTimes = multiboard.Create();
+            CreateMultiboards();
+            RegisterTriggers();
+        }
+        catch (Exception ex)
+        {
+            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SoloMultiboard: {ex.Message}");
+            throw;
+        }
     }
 
     private static void CreateMultiboards()
@@ -42,7 +52,7 @@ public static class SoloMultiboard
     {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[1]) return; // Race mode
         OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
-        OverallBoard.Columns = 8;
+        OverallBoard.Columns = 9;
         OverallBoard.GetItem(0, 0).SetText($"{color}Player|r");
         OverallBoard.GetItem(0, 1).SetText($"{color}Deaths|r");
         OverallBoard.GetItem(0, 2).SetText($"{color}Round 1|r");
@@ -51,6 +61,7 @@ public static class SoloMultiboard
         OverallBoard.GetItem(0, 5).SetText($"{color}Round 4|r");
         OverallBoard.GetItem(0, 6).SetText($"{color}Round 5|r");
         OverallBoard.GetItem(0, 7).SetText($"{color}Total|r");
+        OverallBoard.GetItem(0, 8).SetText($"{color}Status|r");
 
         OverallBoard.SetChildVisibility(true, false);
         OverallBoard.SetChildWidth(0.05f);
@@ -107,9 +118,9 @@ public static class SoloMultiboard
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         var sortedPlayers = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
             ? Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.TimeProg.GetOverallProgress()).ThenBy(kvp => kvp.Key.Id) // Progression mode
-            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id); // Race Mode
+            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode
 
-        var sortedDict = new Dictionary<player, Kitty>(sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)); // Avoid pass by reference
+        sortedDict = sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Avoid pass by reference
 
         foreach (var player in sortedDict.Keys)
         {
@@ -117,6 +128,8 @@ public static class SoloMultiboard
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
             var totalDeaths = sortedDict[player].CurrentStats.TotalDeaths;
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
+            var status = Globals.ALL_KITTIES[player].Finished ? "Finished" : "Racing";
+            MBSlot[player] = rowIndex;
             var stats = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
                 ? new[]
                 {
@@ -137,7 +150,8 @@ public static class SoloMultiboard
                     times.GetRoundTimeFormatted(3),
                     times.GetRoundTimeFormatted(4),
                     times.GetRoundTimeFormatted(5),
-                    times.GetTotalTimeFormatted()
+                    times.GetTotalTimeFormatted(),
+                    status
                 };
 
             for (int i = 0; i < stats.Length; i++)
@@ -147,6 +161,7 @@ public static class SoloMultiboard
             }
 
             rowIndex++;
+            stats = null;
         }
 
         sortedDict.Clear();
@@ -171,9 +186,10 @@ public static class SoloMultiboard
                 else
                     BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
             }
-            float sum = roundTimes.Sum();
+            var sum = roundTimes.Sum();
             BestTimes.GetItem(rowIndex, 6).SetText($"{playerColor}{Utility.ConvertFloatToTime(sum)}");
             rowIndex++;
+            roundTimes = null;
         }
     }
 
@@ -188,6 +204,14 @@ public static class SoloMultiboard
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
         MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimeStats();
+    }
+
+    public static void UpdateDeathCount(player player)
+    {
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
+        if (rowIndex == 0) return;
+        OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetPlayerColor(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
     }
 
     private static float[] GetGameRoundTime(KittyData data)
@@ -226,12 +250,6 @@ public static class SoloMultiboard
             BestTimes.IsDisplayed = false;
             OverallBoard.IsDisplayed = true;
         }
-    }
-
-    private static string Decode64(string str)
-    {
-        byte[] bytes = Convert.FromBase64String(str);
-        return System.Text.Encoding.UTF8.GetString(bytes);
     }
 
 }

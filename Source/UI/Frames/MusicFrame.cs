@@ -20,10 +20,18 @@ public static class MusicFrame
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
     public static void Initialize()
     {
-        MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
-        MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
-        CreateMusicFrames();
-        SetMusicFrameHotkeyEvent();
+        try
+        {
+            MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
+            MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
+            CreateMusicFrames();
+            SetMusicFrameHotkeyEvent();
+        }
+        catch (Exception ex)
+        {
+            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in MusicFrame: {ex.Message}");
+            throw;
+        }
     }
 
     private static void CreateMusicFrames()

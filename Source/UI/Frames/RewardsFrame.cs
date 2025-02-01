@@ -22,12 +22,20 @@ public static class RewardsFrame
     private static string FrameTitle = $"{Colors.COLOR_YELLOW}Rewards{Colors.COLOR_RESET}";
     public static void Initialize()
     {
-        RewardFrame = CreateRewardFrame();
-        TempHandle = RewardFrame;
-        SetRewardsFrameHotkey();
-        CountRewardFrames();
-        AppendRewardsToFrames();
-        FrameManager.CreateHeaderFrame(RewardFrame);
+        try
+        {
+            RewardFrame = CreateRewardFrame();
+            TempHandle = RewardFrame;
+            SetRewardsFrameHotkey();
+            CountRewardFrames();
+            AppendRewardsToFrames();
+            FrameManager.CreateHeaderFrame(RewardFrame);
+        }
+        catch (Exception ex)
+        {
+            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in RewardsFrame: {ex.Message}");
+            throw;
+        }
     }
 
     private static framehandle CreateRewardFrame()

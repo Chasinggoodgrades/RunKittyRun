@@ -2,7 +2,7 @@
 public static class GameTimer
 {
     public static float[] RoundTime { get; set; }
-    public static float RoundSpeedIncrement { get; set; } = 0.1f;
+    public static float RoundSpeedIncrement { get; set; } = 0.12f;
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
@@ -20,16 +20,16 @@ public static class GameTimer
     /// </summary>
     private static void StartGameTimer()
     {
-        if (Globals.GAME_ACTIVE)
-        {
-            Globals.GAME_SECONDS += RoundSpeedIncrement;
-            Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
-            Globals.GAME_TIMER.Pause();
-            RoundTime[Globals.ROUND] += RoundSpeedIncrement;
-            var resourcebar = framehandle.Get("ResourceBarSupplyText", 0);
-            resourcebar.Text = $"{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}";
-            UpdatingTimes();
-        }
+        if (!Globals.GAME_ACTIVE) return;
+
+        Globals.GAME_SECONDS += RoundSpeedIncrement;
+        Globals.GAME_TIMER.Start(Globals.GAME_SECONDS, false, null);
+        Globals.GAME_TIMER.Pause();
+
+        RoundTime[Globals.ROUND] += RoundSpeedIncrement;
+        var resourcebar = framehandle.Get("ResourceBarSupplyText", 0);
+        resourcebar.Text = $"{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}";
+        UpdatingTimes();
     }
 
     private static void UpdatingTimes()
@@ -46,7 +46,7 @@ public static class GameTimer
         {
             if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND);
         }
-        MultiboardUtil.RefreshMultiboards();
+        //MultiboardUtil.RefreshMultiboards();
     }
 
     private static void UpdateTeamTimes()

@@ -28,7 +28,7 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        StartWandering();
+        Utility.SimpleTimer(3.0f, () => StartWandering());
     }
 
     private void InitializeWolf()
@@ -77,7 +77,7 @@ public class Wolf
 
     private bool TournamentChance()
     {
-        var baseChance = 12.0f;
+        var baseChance = 14.0f;
         var increasePerRound = 2.0f;
         var maxProbability = 22.5f;
 

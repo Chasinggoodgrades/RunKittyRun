@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public static class Resources
+﻿public static class Resources
 {
     private static int StartingGold { get; set; } = 100;
     public static int SaveExperience { get; set; } = 80;
@@ -22,7 +16,7 @@ public static class Resources
 
     public static void BonusResources()
     {
-        EndRoundBonusXP = 550 * Globals.ROUND;
+        EndRoundBonusXP = 250 * Globals.ROUND;
         EndRoundBonusGold = 150 + (50 * Globals.ROUND);
         foreach(var player in Globals.ALL_PLAYERS)
             player.Gold += EndRoundBonusGold;

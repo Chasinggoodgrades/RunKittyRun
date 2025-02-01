@@ -302,4 +302,15 @@ public static class Utility
         return stringBuilder.ToString();
     }
 
+    public static void MakePlayerSpectator(player player)
+    {
+        PlayerLeaves.TeamRemovePlayer(player);
+        Globals.ALL_KITTIES[player].Dispose();
+        Globals.ALL_CIRCLES[player].Dispose();
+        Globals.ALL_PLAYERS.Remove(player);
+        FloatingNameTag.PlayerNameTags[player].Dispose();
+        RoundManager.RoundEndCheck();
+        MultiboardUtil.RefreshMultiboards();
+    }
+
 }

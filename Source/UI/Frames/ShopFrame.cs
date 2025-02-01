@@ -41,13 +41,21 @@ public static class ShopFrame
 
     public static void FinishInitialization()
     {
-        InitializePanels();
-        InitializeDetailsPanel();
-        InitializePanelTitles();
-        LoadItemsIntoPanels();
-        CreateUpgradeTooltip();
-        SetRewardsFrameHotkey();
-        shopFrame.Visible = false;
+        try
+        {
+            InitializePanels();
+            InitializeDetailsPanel();
+            InitializePanelTitles();
+            LoadItemsIntoPanels();
+            CreateUpgradeTooltip();
+            SetRewardsFrameHotkey();
+            shopFrame.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in ShopFrame: {ex.Message}");
+            throw;
+        }
     }
 
     private static void InitializeShopFrame()

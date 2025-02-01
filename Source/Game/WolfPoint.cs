@@ -12,7 +12,6 @@ public class WolfPoint
     private region Region { get; set; }
     private trigger Trigger { get; set; }
     private int CurrentIndex = 1;
-    private rect CurrentRect { get; set; } = rect.Create(-25, -25, 25, 25);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -68,7 +67,7 @@ public class WolfPoint
         {
             PointsToVisit[i] = null;
         }
-        Region.RemoveRect(CurrentRect);
+        Region.Dispose();
         PointsToVisit.Clear();
         CurrentIndex = 1;
     }
@@ -76,9 +75,9 @@ public class WolfPoint
     public void Dispose()
     {
         Cleanup();
-        Region.RemoveRect(CurrentRect);
+        //Region.RemoveRect(CurrentRect);
         Region.Dispose();
-        CurrentRect.Dispose();
+        //CurrentRect.Dispose();
         Trigger.ClearActions();
         Trigger.Dispose();
         PointsToVisit = null;
@@ -99,19 +98,19 @@ public class WolfPoint
 
     private void CreateEnterRegionTriggers()
     {
-        Region = region.Create();
-        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit() == Wolf.Unit));
         Trigger.AddAction(() =>
         {
             if (CurrentIndex > PointsToVisit.Count - 1) return;
-            Region.RemoveRect(CurrentRect);
+            //Region.RemoveRect(CurrentRect);
             // If there are more points to visit, set the next point as the target
             CurrentIndex = CurrentIndex + 1;
             if (CurrentIndex < PointsToVisit.Count)
             {
                 var nextPoint = PointsToVisit[CurrentIndex];
-                CurrentRect.MoveTo(nextPoint.PointX, nextPoint.PointY);
-                Region.AddRect(CurrentRect);
+                var r = rect.Create(-25, -25, 25, 25);
+                r.MoveTo(nextPoint.PointX, nextPoint.PointY);
+                Region.AddRect(r);
+                r.Dispose();
                 Wolf.Unit.IssueOrder("move", nextPoint.PointX, nextPoint.PointY);
             }
         });
@@ -119,10 +118,14 @@ public class WolfPoint
 
     private void StartRects()
     {
+        Region = region.Create();
+        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit() == Wolf.Unit));
         if (PointsToVisit.Count > 1)
         {
-            CurrentRect.MoveTo(PointsToVisit[1].PointX, PointsToVisit[1].PointY);
-            Region.AddRect(CurrentRect);
+            var r = rect.Create(-25, -25, 25, 25);
+            r.MoveTo(PointsToVisit[1].PointX, PointsToVisit[1].PointY);
+            Region.AddRect(r);
+            r.Dispose();
         }
     }
 

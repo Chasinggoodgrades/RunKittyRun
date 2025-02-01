@@ -12,7 +12,7 @@ public static class DebugCmd
     public static void Handle(player player, string command)
     {
         var cmd = command.Split(" ");
-        var kitty = Globals.ALL_KITTIES[player];
+        var kitty = Globals.ALL_KITTIES.ContainsKey(player) ? Globals.ALL_KITTIES[player] : null;
         var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
         var selectedPlayer = selectedUnit.Owner;
         var startswith = cmd[0];
@@ -119,6 +119,42 @@ public static class DebugCmd
                 break;
             case "?load":
                 Globals.SaveSystem.Load(player);
+                break;
+            case "?spawnloc":
+                var spawnCenter = RegionList.SpawnRegions[1];
+                foreach(var ko in Globals.ALL_KITTIES)
+                    ko.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                break;
+            case "?roundpause":
+            case "?rp":
+                RoundTimer.StartRoundTimer.Pause();
+                break;
+            case "?roundunpause":
+            case "?rup":
+                RoundTimer.StartRoundTimer.Resume();
+                break;
+            case "?redwave":
+            case "?red":
+                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                {
+                    var affix = AffixFactory.CreateAffix(wolf, "Fixation");
+                    affix.Apply();
+                }
+                break;
+            case "?clearaffixes":
+                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                {
+                    wolf.RemoveAllWolfAffixes();
+                }
+                break;
+            case "?obs":
+                var name = cmd.Length > 1 ? cmd[1] : "??__";
+                foreach (var p in Globals.ALL_PLAYERS)
+                    if (p.Name.ToLower().StartsWith(name))
+                    {
+                        Utility.MakePlayerSpectator(p);
+                        break;
+                    }
                 break;
             case "?summonall":
                 foreach (var k in Globals.ALL_KITTIES.Values)

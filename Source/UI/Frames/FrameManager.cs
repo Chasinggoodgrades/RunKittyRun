@@ -1,6 +1,7 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 using System.Collections.Generic;
+using System;
 
 public static class FrameManager
 {
@@ -17,14 +18,22 @@ public static class FrameManager
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
     public static void Initialize()
     {
-        BlzLoadTOCFile("war3mapImported\\templates.toc");
-        RemoveUnwantedFrames();
-        ButtonsBackdrop();
-        CreateRewardsButton();
-        CreateMusicButton();
-        CreateShopButton();
-        MusicFrame.Initialize();
-        Utility.SimpleTimer(1.0f, ESCHideFrames);
+        try
+        {
+            BlzLoadTOCFile("war3mapImported\\templates.toc");
+            RemoveUnwantedFrames();
+            ButtonsBackdrop();
+            CreateRewardsButton();
+            CreateMusicButton();
+            CreateShopButton();
+            MusicFrame.Initialize();
+            Utility.SimpleTimer(1.0f, ESCHideFrames);
+        }
+        catch (Exception ex)
+        {
+            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in FrameManager: {ex.Message}");
+            throw;
+        }
     }
 
     public static void InitAllFrames()

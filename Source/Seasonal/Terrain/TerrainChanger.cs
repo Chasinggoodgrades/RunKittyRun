@@ -1,4 +1,5 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
+using static WCSharp.Api.Common;
 
 public static class TerrainChanger
 {
@@ -11,12 +12,20 @@ public static class TerrainChanger
 
     public static void Initialize()
     {
-        Terrains = new int[Gamemode.NumberOfRounds];
-        SafezoneTerrain = new int[Gamemode.NumberOfRounds];
-        NoSeason();
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        ChristmasTerrain();
-        SetTerrain();
+        try
+        {
+            Terrains = new int[Gamemode.NumberOfRounds];
+            SafezoneTerrain = new int[Gamemode.NumberOfRounds];
+            NoSeason();
+            if (Gamemode.CurrentGameMode != "Standard") return;
+            ChristmasTerrain();
+            SetTerrain();
+        }
+        catch (Exception e)
+        {
+            if(Source.Program.Debug) Console.WriteLine(e.Message);
+            throw;
+        }
     }
 
     /// <summary>

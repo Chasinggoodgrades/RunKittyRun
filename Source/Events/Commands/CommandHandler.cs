@@ -12,10 +12,12 @@ public static class CommandHandler
 
     public static void Initialize()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+
+        for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, player, "-", false);
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, player, "?", false);
+            if (Player(i).SlotState != playerslotstate.Playing) continue;
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "-", false);
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
         }
         TriggerAddAction(DebugCmdTrigger, HandleCommand);
     }

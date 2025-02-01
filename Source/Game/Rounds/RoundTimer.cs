@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 
 public static class RoundTimer
 {
-    public static List<float> ROUND_ENDTIMES { get; private set; }
+    public static List<float> ROUND_ENDTIMES { get; set; } = new List<float>();
     public static timer StartRoundTimer { get; set; } = timer.Create();
     public static timer EndRoundTimer { get; set; } = timer.Create();
     public static timerdialog RoundTimerDialog { get; set; } = timerdialog.Create(StartRoundTimer);
@@ -13,11 +13,18 @@ public static class RoundTimer
 
     public static void InitEndRoundTimer()
     {
-        if (Gamemode.CurrentGameMode == "Standard") return;
-        ROUND_ENDTIMES = new List<float>();
-        TimerDialogSetTitle(EndRoundTimerDialog, "Round Time Remaining");
-        SetEndRoundTimes();
-        EndRoundTimerDialogs();
+        try
+        {
+            if (Gamemode.CurrentGameMode == "Standard") return;
+            SetEndRoundTimes();
+            EndRoundTimerDialog.SetTitle("Round Time Remaining");
+            EndRoundTimerDialogs();
+        }
+        catch (Exception e)
+        {
+            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            throw;
+        }
     }
 
     public static void EndRoundTimerDialogs()

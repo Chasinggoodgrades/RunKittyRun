@@ -31,7 +31,7 @@ public static class RoundManager
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            if(Source.Program.Debug) Console.WriteLine(e.Message);
             throw;
         }
     }
@@ -65,6 +65,7 @@ public static class RoundManager
 
     public static void RoundEnd()
     {
+        MultiboardUtil.RefreshMultiboards();
         Globals.GAME_ACTIVE = false;
         RoundTimer.EndRoundTimer.Pause();
         NitroChallenges.StopNitroTimer();

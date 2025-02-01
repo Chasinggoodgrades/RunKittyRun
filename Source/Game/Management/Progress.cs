@@ -12,6 +12,7 @@ public static class Progress
     {
         CalculateTotalDistance();
         InitializePlayerProgressPoints();
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         TeamProgTimer.Start(0.2f, true, () => TeamProgressTracker());
     }
 

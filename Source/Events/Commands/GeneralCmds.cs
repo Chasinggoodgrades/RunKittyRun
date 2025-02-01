@@ -87,13 +87,7 @@ public static class GeneralCmds
                 break;
             case "-obs":
             case "-observer":
-                PlayerLeaves.TeamRemovePlayer(p);
-                Globals.ALL_KITTIES[p].Dispose();
-                Globals.ALL_CIRCLES[p].Dispose();
-                Globals.ALL_PLAYERS.Remove(p);
-                FloatingNameTag.PlayerNameTags[p].Dispose();
-                RoundManager.RoundEndCheck();
-                MultiboardUtil.RefreshMultiboards();
+                Utility.MakePlayerSpectator(p);
                 break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);

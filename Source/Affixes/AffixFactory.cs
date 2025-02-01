@@ -19,7 +19,6 @@ public static class AffixFactory
     /// </summary>
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
         if(Program.Debug) Console.WriteLine("Initializing AffixFactory");
         AllAffixes = new List<Affix>();
         InitLaneWeights();
@@ -150,6 +149,7 @@ public static class AffixFactory
     public static void DistributeAffixes()
     {
         RemoveAllAffixes();
+        if (Gamemode.CurrentGameMode != "Standard") return;
         if (!CanDistributeAffixes()) return;
 
         NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.75) + Globals.ROUND;
