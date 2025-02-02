@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Shared;
+﻿using System.Collections.Generic;
 
 public static class CommandManager
 {

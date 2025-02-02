@@ -112,7 +112,7 @@ public static class AffixFactory
         return true;
     }
 
-    private static Affix ApplyAffix(Wolf unit, string affixName)
+    public static Affix ApplyAffix(Wolf unit, string affixName)
     {
         if (!CanApplyAffix(unit, affixName)) return null;
         var affix = CreateAffix(unit, affixName);
@@ -199,10 +199,10 @@ public static class AffixFactory
     {
         return Difficulty.DifficultyValue != (int)DifficultyLevel.Normal;
     }
-    private static void RemoveAllAffixes()
+    public static void RemoveAllAffixes()
     {
         foreach (var affix in AllAffixes)
             affix.Unit.RemoveAffix(affix);
         AllAffixes.Clear();
-    }   
+    }
 }

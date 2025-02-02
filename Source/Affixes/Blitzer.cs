@@ -16,7 +16,7 @@ public class Blitzer : Affix
     private effect WanderEffect;
     public Blitzer(Wolf unit) : base(unit)
     {
-        Name = $"{Colors.COLOR_LIME}Blitzer|r";
+        Name = $"{Colors.COLOR_YELLOW}Blitzer|r";
     }
 
     public override void Apply()
@@ -47,7 +47,8 @@ public class Blitzer : Affix
     {
         MoveTimer = timer.Create();
         PreBlitzerTimer = timer.Create();
-        MoveTimer.Start(5.0f, false, PreBlitzerMove); // initial move
+        var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
+        MoveTimer.Start(randomFlyTime, false, PreBlitzerMove); // initial move
         BlitzerTimer = timer.Create();
     }
 

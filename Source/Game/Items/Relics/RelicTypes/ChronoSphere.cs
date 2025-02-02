@@ -100,7 +100,7 @@ public class ChronoSphere : Relic
         var unit = Globals.ALL_KITTIES[Owner].Unit;
         CapturedLocation = (unit.X, unit.Y, unit.Facing);
         LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
-        LocationEffect.Scale = 0.5f;
+        LocationEffect.Scale = 0.6f;
         Utility.SimpleTimer(0.25f, LocationEffect.Dispose);
     }
 
@@ -139,7 +139,11 @@ public class ChronoSphere : Relic
         if(upgradeLevel < 2) return false;
         relic.RewindTime();
         relic.OnCooldown = true;
-        Utility.SimpleTimer(90.0f, () => relic.OnCooldown = false);
+        Utility.SimpleTimer(90.0f, () => {
+            relic.OnCooldown = false;
+            relic.CaptureLocation();
+            unit.Owner.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
+        });
         return true;
     }
 

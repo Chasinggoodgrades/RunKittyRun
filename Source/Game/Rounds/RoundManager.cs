@@ -18,6 +18,7 @@ public static class RoundManager
         try
         {
             Globals.ROUND += 1;
+            GameTimer.RoundTime[Globals.ROUND] = 0.0f;
             NitroChallenges.SetNitroRoundTimes();
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();

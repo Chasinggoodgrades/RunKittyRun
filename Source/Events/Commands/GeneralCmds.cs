@@ -24,7 +24,6 @@ public static class GeneralCmds
                 break;
             case "-save":
                 Globals.SaveSystem.Save(p);
-                p.DisplayTextTo(Colors.COLOR_GOLD + "Stats have been saved.");
                 break;
             case "-clear":
                 Utility.ClearScreen(p);
@@ -67,7 +66,7 @@ public static class GeneralCmds
                 break;
             case "-zoom":
             case "-cam":
-                HandleZoomCommand(p, args);
+                CameraUtil.HandleZoomCommand(p, args);
                 break;
             case "-lc":
             case "-lockcamera":
@@ -89,13 +88,16 @@ public static class GeneralCmds
             case "-observer":
                 Utility.MakePlayerSpectator(p);
                 break;
+            case "-overheadcam":
+                CameraUtil.OverheadCamera(p, 280f);
+                break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
         }
     }
 
-    private static void DisplayCommands(player p)
+    public static string DisplayCommands(player p = null)
     {
         string commandList = string.Join("\n", new string[]
         {
@@ -116,24 +118,15 @@ public static class GeneralCmds
             "-lc | -lockcamera - Locks your camera to your unit",
             "-reset - Resets your camera to default",
             "-kc - Kicks yourself from the game",
+            "-overheadcam - Gives an overhead view",
             "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 
-        p.DisplayTimedTextTo(15.0f, Colors.COLOR_YELLOW + "Available Commands:\n" + Colors.COLOR_YELLOW_ORANGE + commandList, 0, 10);
+        if(p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
+        return commandList;
     }
 
-    private static void HandleZoomCommand(player p, string[] args)
-    {
-        if (args.Length < 2)
-        {
-            p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Incorrect usage: -zoom (xxxx) or -cam (xxxx)|r");
-            return;
-        }
 
-        float zoom = float.Parse(args[1]);
-        if (!p.IsLocal) return;
-        SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
-    }
 
     private static void HandleTeamCommand(player p, string[] args)
     {

@@ -33,6 +33,7 @@ public class SaveManager
         var playerData = SaveData[player];
         if (!player.IsLocal) return;
         syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
+        player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
     }
 
     public void Load(player player)

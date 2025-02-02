@@ -9,6 +9,7 @@ public class Wolf
     public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
     private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
     private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
+    private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
@@ -61,8 +62,10 @@ public class Wolf
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         if (HasAffix("Blitzer")) return (randomX, randomY);
-        //Unit.IssueOrder("move", randomX, randomY);
-        WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
+        if(WCSharp.Shared.Util.DistanceBetweenPoints(Unit, randomX, randomY) < 400)
+            Unit.IssueOrder("move", randomX, randomY);
+        else
+            WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
         return (randomX, randomY);
     }
 
@@ -102,7 +105,7 @@ public class Wolf
         if (ShouldStartEffect() || forced)
         {
             ApplyEffect();
-            realTime = 2.5f; // Gives a brief delay before the wolf has a chance to move again.
+            realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
         WanderTimer.Start(realTime, false, () => StartWandering());
     }
@@ -131,7 +134,7 @@ public class Wolf
         OverheadEffect = null;
         WanderTimer.Dispose();
         WanderTimer = null;
-        WolfPoint.Dispose();
+        //WolfPoint.Dispose();
     }
 
     /// <summary>
@@ -206,8 +209,8 @@ public class Wolf
         if(AffixCount() == 0) return;
         foreach (var affix in Affixes)
         {
-            affix.Remove();
             AffixFactory.AllAffixes.Remove(affix);
+            affix.Remove();
         }
         Affixes.Clear();
     }

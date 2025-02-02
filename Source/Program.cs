@@ -48,6 +48,7 @@ namespace Source
 				DateTimeManager.Initialize();
                 Setup.Initialize();
                 BarrierSetup.Initialize();
+				Quests.CreateCommandsQuest();
 
 			}
             catch (Exception ex)

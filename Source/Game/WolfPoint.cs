@@ -37,13 +37,16 @@ public class WolfPoint
         {
             if (PointsToVisit == null) return;
             Cleanup();
-            float xDiff = endX - startX;
-            float yDiff = endY - startY;
-            float distance = (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+
+            // Calculate the distance between points
+            float distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(startX, startY, endX, endY);
             int numRegions = (int)Math.Ceiling(distance / MaxDistance);
 
-            float stepX = xDiff / numRegions;
-            float stepY = yDiff / numRegions;
+            // Calculate angle and step sizes using trigonometry
+            float angle = (float)Math.Atan2(endY - startY, endX - startX);
+            float stepX = (float)(MaxDistance * Math.Cos(angle));
+            float stepY = (float)(MaxDistance * Math.Sin(angle));
+
             for (int i = 0; i < numRegions; i++)
             {
                 float regionX = startX + (i * stepX);
@@ -51,7 +54,12 @@ public class WolfPoint
                 var pointInfo = new WolfPointInfo(regionX, regionY);
                 PointsToVisit.Add(pointInfo);
             }
-            if(PointsToVisit != null && PointsToVisit.Count > 0) StartRects();
+
+            // Ensure the last point is exactly the end point
+            var lastPointInfo = new WolfPointInfo(endX, endY);
+            PointsToVisit.Add(lastPointInfo);
+
+            if (PointsToVisit != null && PointsToVisit.Count > 0) StartRects();
             Begin(endX, endY);
         }
         catch (Exception ex)
@@ -59,6 +67,7 @@ public class WolfPoint
             if (Source.Program.Debug) Console.WriteLine($"{ex.Message}");
         }
     }
+
 
     public void Cleanup()
     {
@@ -101,13 +110,12 @@ public class WolfPoint
         Trigger.AddAction(() =>
         {
             if (CurrentIndex > PointsToVisit.Count - 1) return;
-            //Region.RemoveRect(CurrentRect);
-            // If there are more points to visit, set the next point as the target
+            //Console.WriteLine($"{CurrentIndex} / {PointsToVisit.Count - 1}");
             CurrentIndex = CurrentIndex + 1;
             if (CurrentIndex < PointsToVisit.Count)
             {
                 var nextPoint = PointsToVisit[CurrentIndex];
-                var r = rect.Create(-25, -25, 25, 25);
+                var r = rect.Create(-35, -35, 35, 35);
                 r.MoveTo(nextPoint.PointX, nextPoint.PointY);
                 Region.AddRect(r);
                 r.Dispose();
