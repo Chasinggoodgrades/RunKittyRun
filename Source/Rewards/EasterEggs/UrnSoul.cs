@@ -1,6 +1,5 @@
 ﻿using System;
 using WCSharp.Api;
-using static System.Reflection.Metadata.BlobBuilder;
 using static WCSharp.Api.Common;
 public static class UrnSoul
 {
@@ -78,7 +77,7 @@ public static class UrnSoul
         var unit = @event.Unit;
         StartEventRegion = Regions.Urn_Soul_Region.Region;
 
-        if(item.TypeId != Constants.ITEM_URN_OF_A_BROKEN_SOUL) return;
+        if(item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return;
         if(!StartEventRegion.Contains(unit)) return;
 
         // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
@@ -108,7 +107,7 @@ public static class UrnSoul
     {
         var unit = @event.Unit;
 
-        var urn = Constants.ITEM_URN_OF_A_BROKEN_SOUL;
+        var urn = Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL;
         var orb = Constants.ITEM_ORB_OF_MYSTERIES;
         var energyStone = Constants.ITEM_ENERGY_STONE;
         var water = Constants.ITEM_HEALING_WATER;

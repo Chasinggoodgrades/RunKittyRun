@@ -200,7 +200,7 @@ public static class Utility
     }
 
     /// <summary>
-    /// Obtains the string path of the icon of an item.
+    /// Obtains and returns the string path of the icon of an item.
     /// </summary>
     /// <param name="itemId"></param>
     /// <returns></returns>
@@ -245,13 +245,18 @@ public static class Utility
     }
 
     /// <summary>
-    /// Creates an effect using path, @ x & y, and disposes of it immediately.
+    /// Creates an effect using the specified path at the given x and y coordinates,
+    /// and disposes of it immediately.
     /// </summary>
+    /// <param name="path">The path to the effect resource.</param>
+    /// <param name="x">The x-coordinate at which to create the effect.</param>
+    /// <param name="y">The y-coordinate at which to create the effect.</param>
     public static void CreateEffectAndDispose(string path, float x, float y)
     {
         effect e = effect.Create(path, x, y);
         e.Dispose();
     }
+
 
     /// <summary>
     /// Clears the screen of all messages for the given player.
@@ -263,29 +268,42 @@ public static class Utility
         ClearTextMessages(); 
     }
 
+    /// <summary>
+    /// Drops all items held by the specified unit.
+    /// </summary>
+    /// <param name="Unit">The unit whose items are to be dropped.</param>
     public static void DropAllItems(unit Unit)
     {
         for (int i = 0; i < 6; i++)
         {
             var item = UnitItemInSlot(Unit, i);
-            if(item != null)
+            if (item != null)
                 UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
         }
     }
 
+    /// <summary>
+    /// Adds mana to a unit, without exceeding the unit's maximum mana.
+    /// </summary>
+    /// <param name="unit">The unit to which mana is to be added.</param>
+    /// <param name="amount">The amount of mana to add.</param>
     public static void UnitAddMana(unit unit, int amount)
     {
-        // grab max mana
         var maxMana = unit.MaxMana;
         var currentMana = unit.Mana;
         var newMana = currentMana + amount;
 
         if (newMana >= maxMana)
-            unit.Mana = maxMana-1;
+            unit.Mana = maxMana - 1;
         else
             unit.Mana = newMana;
     }
 
+    /// <summary>
+    /// Formats an award name by inserting spaces before capital letters.
+    /// </summary>
+    /// <param name="awardName">The award name to be formatted.</param>
+    /// <returns>The formatted award name.</returns>
     public static string FormatAwardName(string awardName)
     {
         var stringBuilder = new StringBuilder();
@@ -302,6 +320,11 @@ public static class Utility
         return stringBuilder.ToString();
     }
 
+    /// <summary>
+    /// Makes a player a spectator by removing them from their team,
+    /// disposing of their in-game objects, and refreshing the game state.
+    /// </summary>
+    /// <param name="player">The player to be made a spectator.</param>
     public static void MakePlayerSpectator(player player)
     {
         PlayerLeaves.TeamRemovePlayer(player);
@@ -312,5 +335,6 @@ public static class Utility
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
     }
+
 
 }

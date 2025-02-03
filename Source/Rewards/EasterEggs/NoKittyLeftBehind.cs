@@ -10,7 +10,7 @@ public static class NoKittyLeftBehind
 
     public static void Initialize()
     {
-        ItemID = Constants.ITEM_CAT_FIGURINE;
+        ItemID = Constants.ITEM_EASTER_EGG_CAT_FIGURINE;
         CompletedRounds = new List<int>();
     }
 

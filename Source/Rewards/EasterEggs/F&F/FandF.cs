@@ -3,11 +3,13 @@ using static WCSharp.Api.Common;
 
 public static class FandF
 {
-    public static unit BloodWolf { get; private set; }
+    private const int EmptyVial = Constants.ITEM_EASTER_EGG_EMPTY_VIAL;
+    private const int BloodVial = Constants.ITEM_EASTER_EGG_BLOOD_FILLED_VIAL;
     private static float TurnInRange { get; set; }
     private static float CollectionRange { get; set; }
     private static trigger InRangeTrigger;
     private static trigger CollectionTrigger;
+    public static unit BloodWolf { get; private set; }
 
     public static void Initialize()
     {
@@ -46,11 +48,11 @@ public static class FandF
         var unit = @event.Unit;
         var player = unit.Owner;
 
-        if (!Utility.UnitHasItem(unit, Constants.ITEM_EMPTY_VIAL)) return;
+        if (!Utility.UnitHasItem(unit, EmptyVial)) return;
 
         // Otherwise .. they have item.. Give them blood filled vial.
-        Utility.RemoveItemFromUnit(unit, Constants.ITEM_EMPTY_VIAL);
-        unit.AddItem(Constants.ITEM_BLOOD_FILLED_VIAL);
+        Utility.RemoveItemFromUnit(unit, EmptyVial);
+        unit.AddItem(BloodVial);
     }
 
     private static trigger RegisterTurnIn()
@@ -70,7 +72,7 @@ public static class FandF
 
     private static void EmptyVialQuest(unit u)
     {
-        if (!Utility.UnitHasItem(u, Constants.ITEM_EMPTY_VIAL)) return;
+        if (!Utility.UnitHasItem(u, EmptyVial)) return;
         var player = u.Owner;
         player.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:|r |cffffff00Greetings, fellow feline! What paws you hold there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r");
@@ -79,7 +81,7 @@ public static class FandF
 
     private static void BloodVialQuest(unit u)
     {
-        if (!Utility.UnitHasItem(u, Constants.ITEM_BLOOD_FILLED_VIAL)) return;
+        if (!Utility.UnitHasItem(u, BloodVial)) return;
 
         if (BloodVialItems(u))
         {
@@ -95,13 +97,13 @@ public static class FandF
         if(!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
         if(!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
         if(!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_BLOOD_FILLED_VIAL)) return false;
+        if(!Utility.UnitHasItem(u, BloodVial)) return false;
         return true;
     }
 
     private static void RemoveQuestItems(unit u)
     {
-        Utility.RemoveItemFromUnit(u, Constants.ITEM_BLOOD_FILLED_VIAL);
+        Utility.RemoveItemFromUnit(u, BloodVial);
         Utility.RemoveItemFromUnit(u, Constants.ITEM_ADRENALINE_POTION);
         Utility.RemoveItemFromUnit(u, Constants.ITEM_RITUAL_MASK);
         Utility.RemoveItemFromUnit(u, Constants.ITEM_ORB_OF_MYSTERIES);

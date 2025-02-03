@@ -137,10 +137,10 @@ public static class Constants
 	public const int ITEM_ANTI_BLOCK_WAND = 1735352941;
 	public const int ITEM_GHOST_KITTY_BOOTS = 1227894835;
 	public const int ITEM_FIERYFOXES_S_MISSING_SHOE = 1227894836;
-	public const int ITEM_EMPTY_VIAL = 1227894838;
-	public const int ITEM_BLOOD_FILLED_VIAL = 1227894839;
-	public const int ITEM_URN_OF_A_BROKEN_SOUL = 1227894840;
-	public const int ITEM_CAT_FIGURINE = 1227894841;
+	public const int ITEM_EASTER_EGG_EMPTY_VIAL = 1227894838;
+	public const int ITEM_EASTER_EGG_BLOOD_FILLED_VIAL = 1227894839;
+	public const int ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL = 1227894840;
+	public const int ITEM_EASTER_EGG_CAT_FIGURINE = 1227894841;
 	public const int ITEM_ORB_OF_MYSTERIES = 1227894834;
 	public const int ITEM_AMULET_OF_EVASIVENESS = 1227894849;
 	public const int ITEM_GREEN_TENDRILS = 1227894851;
@@ -156,6 +156,7 @@ public static class Constants
 	public const int ITEM_SHARD_OF_TRANSLOCATION = 1227894860;
 	public const int ITEM_PRESENT = 1227894861;
 	public const int ITEM_CHRONO_ORB = 1227894862;
+	public const int ITEM_HEART = 1227894863;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;

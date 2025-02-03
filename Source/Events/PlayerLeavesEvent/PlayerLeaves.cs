@@ -31,6 +31,7 @@ public static class PlayerLeaves
         {
             var leavingPlayer = @event.Player;
             if (player != null) leavingPlayer = player;
+            if (!Globals.ALL_PLAYERS.Contains(leavingPlayer)) return;
             var kitty = Globals.ALL_KITTIES[leavingPlayer];
             var circle = Globals.ALL_CIRCLES[leavingPlayer];
             var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];

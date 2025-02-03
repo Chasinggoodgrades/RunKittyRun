@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq.Expressions;
 using Source.Init;
-using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 namespace Source
@@ -48,7 +42,7 @@ namespace Source
 				DateTimeManager.Initialize();
                 Setup.Initialize();
                 BarrierSetup.Initialize();
-				Quests.CreateCommandsQuest();
+				Quests.Initialize();
 
 			}
             catch (Exception ex)

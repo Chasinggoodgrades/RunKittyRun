@@ -79,9 +79,9 @@ public static class Shops
     private static void StandardModeItems()
     {
         // Kitty Vendor
-        KittyVendorItemList.Add(Constants.ITEM_EMPTY_VIAL);
-        KittyVendorItemList.Add(Constants.ITEM_URN_OF_A_BROKEN_SOUL);
-        KittyVendorItemList.Add(Constants.ITEM_CAT_FIGURINE);
+        KittyVendorItemList.Add(Constants.ITEM_EASTER_EGG_EMPTY_VIAL);
+        KittyVendorItemList.Add(Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL);
+        KittyVendorItemList.Add(Constants.ITEM_EASTER_EGG_CAT_FIGURINE);
     }
 
     private static void CollectAllVendors()

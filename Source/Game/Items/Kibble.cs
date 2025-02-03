@@ -141,6 +141,13 @@ public class Kibble
                 Constants.ITEM_PRESENT
             };
         }
+        if (SeasonalManager.Season == HolidaySeasons.Valentines)
+        {
+            return new List<int>
+            {
+                Constants.ITEM_HEART
+            };
+        }
         return new List<int>
         {
             Constants.ITEM_KIBBLE,

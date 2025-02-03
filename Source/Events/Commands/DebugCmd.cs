@@ -154,6 +154,7 @@ public static class DebugCmd
                 break;
             case "?camfield":
                 var value = cmd.Length > 1 ? float.Parse(cmd[1]) : 0.0f;
+                if (!player.IsLocal) return;
                 SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0);
                 break;
             case "?roundset":
