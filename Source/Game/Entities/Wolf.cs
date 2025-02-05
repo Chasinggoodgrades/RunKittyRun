@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -194,6 +195,16 @@ public class Wolf
     {
         Affixes.Remove(affix);
         affix.Remove();
+        AffixFactory.AllAffixes.Remove(affix);
+    }
+
+    public void RemoveAffix(string affixName)
+    {
+        var affixToRemove = Affixes.FirstOrDefault(a => a.GetType().Name == affixName);
+        if (affixToRemove != null)
+        {
+            RemoveAffix(affixToRemove);
+        }
     }
 
     public bool HasAffix(string affixName)

@@ -17,6 +17,7 @@ public class Fixation : Affix
     private int Type;
     private bool IsChasing = false;
     private effect TargetEffect;
+
     public Fixation(Wolf unit) : base(unit) 
     {
         InRangeTrigger = trigger.Create();
@@ -48,6 +49,7 @@ public class Fixation : Affix
         TargetEffect?.Dispose();
         ChaseTimer.Pause();
         ChaseTimer.Dispose();
+        UnitsInRange?.Dispose();
         Unit.WanderTimer.Resume();
     }
 
@@ -97,8 +99,7 @@ public class Fixation : Affix
                 ChaseTimer.Pause();
                 return;
             }
-            if (Type == 1)
-                GetClosestTarget();
+            if (Type == 1) GetClosestTarget();
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
         });
     }

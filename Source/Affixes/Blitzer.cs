@@ -14,6 +14,7 @@ public class Blitzer : Affix
     private timer PreBlitzerTimer;
     private effect Effect;
     private effect WanderEffect;
+
     public Blitzer(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_YELLOW}Blitzer|r";
@@ -67,6 +68,7 @@ public class Blitzer : Affix
         var (x, y) = Unit.WolfMove();
         WanderEffect.Dispose();
         BlitzerMove(x, y);
+        Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
         MoveTimer.Start(randomTime, false, PreBlitzerMove);
     }
@@ -78,7 +80,7 @@ public class Blitzer : Affix
         float currentY = Unit.Unit.Y;
 
         // Distance between current and target pos
-        float distance = (float)Math.Sqrt(Math.Pow(targetX - currentX, 2) + Math.Pow(targetY - currentY, 2));
+        float distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(currentX, currentY, targetX, targetY);
 
         // stop if its within range of the target / collision thingy
         if (distance <= CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS)
@@ -99,7 +101,7 @@ public class Blitzer : Affix
         // Move the unit one step
         Unit.Unit.SetPosition(nextX, nextY);
         Unit.Unit.SetFacing((float)(Math.Atan2(directionY, directionX) * 180.0 / Math.PI));
-        Unit.Unit.SetAnimation(2);
+        Unit.Unit.SetAnimation(2); // running animation
 
         var stepTime = 1.0f / 60.0f; // 1/60th of a second
 
@@ -115,7 +117,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
-        Unit.Unit.SetPathing(true);
+        Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 
     public static Blitzer GetBlitzer(unit unit)

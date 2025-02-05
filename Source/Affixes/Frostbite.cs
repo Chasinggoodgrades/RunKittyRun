@@ -6,11 +6,12 @@ public class Frostbite : Affix
     private const float FROSTBITE_RADIUS = 500.0f;
     private const float FROSTBITE_SPEED_REDUCTION = 0.83f;
     private const int AFFIX_ABILITY = Constants.ABILITY_FROSTBITE;
+    private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     private trigger InRangeTrigger;
     private trigger PeriodicRangeTrigger;
-    private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     private Dictionary<unit, float> Frostbitten;
     private Dictionary<unit, effect> Effects;
+
     public Frostbite(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_LIGHTBLUE}Frostbite|r";
@@ -83,6 +84,9 @@ public class Frostbite : Affix
             Frostbitten.Remove(target);
             Effects[target].Dispose();
         }
+
+        targetsToRemove.Clear();
+        targetsToRemove = null;
     }
 
     private void SlowEffect(unit target)

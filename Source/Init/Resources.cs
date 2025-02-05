@@ -8,6 +8,7 @@
     public static int SafezoneGold { get; set; } = 20;
     private static int EndRoundBonusGold { get; set; } = 150 + (50*Globals.ROUND);
     private static int EndRoundBonusXP { get; set; } = (550*Globals.ROUND);
+
     public static void Initialize()
     {
         SetResourcesForGamemode();

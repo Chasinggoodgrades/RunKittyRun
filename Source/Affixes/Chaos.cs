@@ -8,6 +8,7 @@ public class Chaos : Affix
     private timer RotationTimer;
     private Affix currentAffix;
     private float rotationTime = 25.0f;
+
     public Chaos(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_GREEN}Chaos|r";

@@ -11,6 +11,7 @@ public class Howler : Affix
     private const float MIN_HOWL_TIME = 10.0f;
     private const float MAX_HOWL_TIME = 20.0f;
     private timer HowlTimer;
+
     public Howler(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_BLUE}Howler|r";

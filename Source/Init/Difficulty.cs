@@ -11,8 +11,12 @@ public enum DifficultyLevel
 
 public static class Difficulty
 {
+    public const string s_NORMAL = $"{Colors.COLOR_YELLOW}Normal|r";
+    public const string s_HARD = $"{Colors.COLOR_RED}Hard|r";
+    public const string s_IMPOSSIBLE = $"{Colors.COLOR_DARK_RED}Impossible|r";
     public static string DifficultyChosen { get; private set; } = "";
     public static int DifficultyValue { get; private set; }
+    public static bool IsDifficultyChosen = false;
     private static float TIME_TO_CHOOSE_DIFFICULTY = 10.0f;
     private static dialog DifficultyChoosing;
     private static button NormalButton;
@@ -20,10 +24,6 @@ public static class Difficulty
     private static button ImpossibleButton;
     private static Dictionary<button, int> ButtonTallys;
     private static Dictionary<button, string> ButtonNames;
-    public const string s_NORMAL = $"{Colors.COLOR_YELLOW}Normal|r";
-    public const string s_HARD = $"{Colors.COLOR_RED}Hard|r";
-    public const string s_IMPOSSIBLE = $"{Colors.COLOR_DARK_RED}Impossible|r";
-    public static bool IsDifficultyChosen { get; set; } = false;
 
     private static trigger Trigger;
 

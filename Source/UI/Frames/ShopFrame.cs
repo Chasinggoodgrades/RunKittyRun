@@ -385,6 +385,12 @@ public static class ShopFrame
             if (selectedItem.Type == ShopItemType.Relic)
             {
 
+                if(!kitty.Alive || kitty.ProtectionActive)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
+                    return;
+                }
+
                 if (!CanSellRelic(kitty.Unit))
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.|r");

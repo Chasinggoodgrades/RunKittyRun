@@ -130,6 +130,14 @@ public static class DebugCmd
                 var affixX = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName);
                 Globals.ALL_WOLVES[selectedUnit].AddAffix(affixX);
                 break;
+            case "?removeaffix":
+            case "?ra":
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
+                var affixToRemove = cmd.Length > 1 ? char.ToUpper(cmd[1][0]) + cmd[1].Substring(1).ToLower() : "";
+                if (affixToRemove == "") return;
+                if (!Globals.ALL_WOLVES[selectedUnit].HasAffix(affixToRemove)) return;
+                Globals.ALL_WOLVES[selectedUnit].RemoveAffix(affixToRemove);
+                break;
             case "?clearaffixes":
             case "?ca":
                 foreach (var wolf in Globals.ALL_WOLVES.Values)
@@ -162,6 +170,12 @@ public static class DebugCmd
                 if (round < 1 || round > 5) return;
                 Globals.ROUND = round - 1;
                 RoundManager.RoundEnd();
+                break;
+            case "?noend":
+                var endValue = cmd.Length > 1 ? cmd[1] : "off";
+                if (endValue == "on") Gameover.NoEnd = true;
+                else if (endValue == "off") Gameover.NoEnd = false;
+                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Game will {(endValue == "on" ? "" : "not")} end");
                 break;
             case "?help":
                 DisplayAdminCommands(player);
@@ -208,6 +222,8 @@ public static class DebugCmd
             "?summonall - Summons all players to your location.",
             "?camfield [value] - Adjusts the camera field. (default 0.0f)",
             "?roundset [round] - Sets the current round. (1-5)",
+            "?noend [on/off] - Game won't end if turned on and all kitties die. (default off)",
+            "?removeaffix || ?ra - Removes the specified affix from the currently selected wolf. (fixation, chaos, blitzer, speedster, frostbite, howler, unpredictable)",
         };
 
         p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n");

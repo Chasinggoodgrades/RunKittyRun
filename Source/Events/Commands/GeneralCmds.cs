@@ -5,6 +5,7 @@ using static WCSharp.Api.Common;
 public static class GeneralCmds
 {
     private static CommandInfo CmdInfo = null;
+    private static effect TestE;
 
     public static void Handle(player p, string command)
     {
@@ -79,7 +80,7 @@ public static class GeneralCmds
                 break;
             case "-kc":
                 PlayerLeaves.PlayerLeavesActions(p);
-                p.Remove(playergameresult.Defeat);
+                p.Remove(PLAYER_GAME_RESULT_DEFEAT);
                 break;
             case "-oldcode":
                 Savecode.LoadString();
@@ -90,6 +91,21 @@ public static class GeneralCmds
                 break;
             case "-overheadcam":
                 CameraUtil.OverheadCamera(p, 280f);
+                break;
+            case "-test1":
+                TestE?.Dispose();
+                TestE = effect.Create("GlowyLight.mdx", kitty.Unit, "origin");
+                break;
+            case "-test2":
+                TestE?.Dispose();
+                TestE = effect.Create("PurpleLight.mdx", kitty.Unit, "origin");
+                break;
+            case "-test3":
+                TestE?.Dispose();
+                TestE = effect.Create("ButterflyAura2.0.mdx", kitty.Unit, "origin");
+                break;
+            case "-cleareffect":
+                TestE?.Dispose();
                 break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);

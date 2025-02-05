@@ -5,6 +5,7 @@ public static class Gameover
 {
     public static bool WinGame { get; set; } = false;
     private static float EndingTimer { get; set; } = 90.0f;
+    public static bool NoEnd { get; set; } = false;
     public static bool GameOver()
     {
         if(WinningGame()) return true;
@@ -52,7 +53,8 @@ public static class Gameover
 
     private static bool LosingGameCheck()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return false; 
+        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (NoEnd) return false;
         foreach (var kitty in Globals.ALL_KITTIES.Values)
             if (kitty.Alive) return false;
         LosingGame();

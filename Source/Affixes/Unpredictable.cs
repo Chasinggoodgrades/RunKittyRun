@@ -3,7 +3,10 @@ using static WCSharp.Api.Common;
 public class Unpredictable : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_UNPREDICTABLE;
-    public Unpredictable(Wolf unit) : base(unit) { Name = "Unpredictable"; }
+
+    public Unpredictable(Wolf unit) : base(unit) {
+        Name = "Unpredictable"; 
+    }
 
     public override void Apply()
     {

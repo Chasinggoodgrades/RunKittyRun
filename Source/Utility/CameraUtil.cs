@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class CameraUtil
 {
     private static List<player> LockedCameras { get; set; } = new List<player>();
