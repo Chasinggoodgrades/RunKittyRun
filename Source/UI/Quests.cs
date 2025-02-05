@@ -11,6 +11,7 @@ public static class Quests
     {
         CreateCommandsQuest();
         CreateContributorsQuest();
+        CreateLeaderboardsQuest();
     }
 
     private static void CreateCommandsQuest()
@@ -39,10 +40,11 @@ public static class Quests
     private static void CreateLeaderboardsQuest()
     {
         LeaderboardsQuest.SetTitle("Leaderboards");
-        LeaderboardsQuest.SetIcon("ReplaceableTextures\\CommandButtons\\BTNHeartOff.blp");
+        LeaderboardsQuest.SetIcon("war3mapImported\\DiscordIcon.dds");
+        LeaderboardsQuest.IsRequired = false;
         LeaderboardsQuest.SetDescription($"{Colors.COLOR_YELLOW}The leaderboards are a way to show off your skills and accomplishments. You can view the leaderboards at|r {Colors.COLOR_LAVENDER}https://rkr-w3.vercel.app/leaderboard.|r\n\n" +
             $"{Colors.COLOR_YELLOW}If you'd like to upload your stats, join our Discord and use the #uploadstats channel.|r\n\n" +
-            $"{Colors.COLOR_YELLOW}Good luck and have fun!|r");
+            $"{Colors.COLOR_LAVENDER}https://discord.gg/GSu6zkNvx5|r");
     }
 
 

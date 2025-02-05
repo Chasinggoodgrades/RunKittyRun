@@ -175,7 +175,7 @@ public static class DebugCmd
                 var endValue = cmd.Length > 1 ? cmd[1] : "off";
                 if (endValue == "on") Gameover.NoEnd = true;
                 else if (endValue == "off") Gameover.NoEnd = false;
-                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Game will {(endValue == "on" ? "" : "not")} end");
+                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Game will {(endValue == "on" ? "no longer" : "")} end");
                 break;
             case "?help":
                 DisplayAdminCommands(player);
