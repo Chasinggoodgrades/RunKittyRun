@@ -35,7 +35,6 @@ public class SaveManager
         {
             var playerData = SaveData[player];
             if (!player.IsLocal) return;
-            Console.WriteLine("SaveObject");
             syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
             player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
         }
@@ -51,7 +50,6 @@ public class SaveManager
         try
         {
             if (!player.IsLocal) return;
-            Console.WriteLine("All SaveObject");
             syncSaveLoad.WriteFileObjects($"{SavePath}/AllData.txt");
         }
         catch (Exception ex)
@@ -99,8 +97,8 @@ public class SaveManager
              var player = promise.SyncOwner;
              if (data.Length < 1)
              {
-                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.|r");
                  Globals.SaveSystem.NewSave(player);
+                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.|r");
                  return;
              }
              ConvertJsonToSaveData(data, player);

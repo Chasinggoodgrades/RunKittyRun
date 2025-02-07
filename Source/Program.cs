@@ -38,13 +38,13 @@ namespace Source
 				Delay.EnableDebug();
 #endif
 				Setup.GetActivePlayers();
-                DateTimeManager.Initialize();
-                MusicManager.Initialize();
-                CommandHandler.Initialize();
-                CommandManager.InitializeCommands();
+				DateTimeManager.Initialize();
+				MusicManager.Initialize();
+				CommandHandler.Initialize();
+				CommandManager.InitializeCommands();
 				SaveManager.Initialize();
-                Setup.Initialize();
-                BarrierSetup.Initialize();
+				Setup.Initialize();
+				BarrierSetup.Initialize();
 				Quests.Initialize();
 
 			}
