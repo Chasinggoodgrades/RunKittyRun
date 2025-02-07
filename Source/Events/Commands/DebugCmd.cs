@@ -180,6 +180,9 @@ public static class DebugCmd
             case "?help":
                 DisplayAdminCommands(player);
                 break;
+            case "?allsave":
+                Globals.SaveSystem.SaveAllDataToFile();
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;

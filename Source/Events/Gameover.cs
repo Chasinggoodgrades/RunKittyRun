@@ -20,6 +20,7 @@ public static class Gameover
         GameStats(true);
         StandardWinChallenges();
         Utility.SimpleTimer(0.5f, () => SaveManager.SaveAll());
+        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAllDataToFile());
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
@@ -42,6 +43,7 @@ public static class Gameover
         Wolf.RemoveAllWolves();
         GameStats(false);
         Utility.SimpleTimer(0.5f, () => SaveManager.SaveAll());
+        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAllDataToFile());
         NotifyEndingGame();
     }
 

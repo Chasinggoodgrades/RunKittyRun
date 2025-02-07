@@ -40,12 +40,17 @@ public class SyncSaveLoad
     /// </summary>
     /// <param name="filename">The name of the file to write to.</param>
     /// <param name="data">The object to be encoded and written.</param>
-    public void WriteFileObjects(string filename, object data)
+    public void WriteFileObjects(string filename, object data = null)
     {
         PreloadGenClear();
         PreloadGenStart();
 
-        var rawDataString = PropertyEncoder.EncodeToJsonBase64(data);
+        string rawDataString;
+        if (data != null)
+            rawDataString = PropertyEncoder.EncodeToJsonBase64(data);
+        else
+            rawDataString = PropertyEncoder.EncodeAllDataToJsonBase64();
+
         string toCompile = rawDataString;
         int chunkSize = 180;
         StringBuilder assemble = new StringBuilder();

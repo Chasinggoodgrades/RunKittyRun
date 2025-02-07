@@ -13,6 +13,7 @@ public class SaveManager
         syncSaveLoad = SyncSaveLoad.Instance;
         foreach (var player in Globals.ALL_PLAYERS) SaveData.Add(player, null);
         LoadAll();
+
     }
 
     public static void Initialize()
@@ -30,10 +31,42 @@ public class SaveManager
 
     public void Save(player player)
     {
-        var playerData = SaveData[player];
-        if (!player.IsLocal) return;
-        syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
-        player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
+        try
+        {
+            var playerData = SaveData[player];
+            if (!player.IsLocal) return;
+            Console.WriteLine("SaveObject");
+            syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
+            player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
+        }
+        catch (Exception ex)
+        {
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            throw;
+        }
+    }
+
+    private void SaveAllDataToFile(player player)
+    {
+        try
+        {
+            if (!player.IsLocal) return;
+            Console.WriteLine("All SaveObject");
+            syncSaveLoad.WriteFileObjects($"{SavePath}/AllData.txt");
+        }
+        catch (Exception ex)
+        {
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            throw;
+        }
+    }
+
+    public static void SaveAllDataToFile()
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            Globals.SaveSystem.SaveAllDataToFile(player);
+        }
     }
 
     public void Load(player player)
@@ -66,8 +99,8 @@ public class SaveManager
              var player = promise.SyncOwner;
              if (data.Length < 1)
              {
-                 Globals.SaveSystem.NewSave(player);
                  player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.|r");
+                 Globals.SaveSystem.NewSave(player);
                  return;
              }
              ConvertJsonToSaveData(data, player);

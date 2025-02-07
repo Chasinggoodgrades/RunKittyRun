@@ -1,6 +1,9 @@
 ﻿using System;
 using Source.Init;
 using static WCSharp.Api.Common;
+using WCSharp.Events;
+using WCSharp.Sync;
+using WCSharp.Shared;
 
 namespace Source
 {
@@ -35,11 +38,11 @@ namespace Source
 				Delay.EnableDebug();
 #endif
 				Setup.GetActivePlayers();
-				MusicManager.Initialize();
+                DateTimeManager.Initialize();
+                MusicManager.Initialize();
                 CommandHandler.Initialize();
                 CommandManager.InitializeCommands();
 				SaveManager.Initialize();
-				DateTimeManager.Initialize();
                 Setup.Initialize();
                 BarrierSetup.Initialize();
 				Quests.Initialize();
