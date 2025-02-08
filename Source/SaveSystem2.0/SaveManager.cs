@@ -23,8 +23,10 @@ public class SaveManager
 
     public static void SaveAll()
     {
+        var date = DateTimeManager.DateTime.ToString();
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            SaveData[player].Date = date;
             Globals.SaveSystem.Save(player);
         }
     }
@@ -33,7 +35,9 @@ public class SaveManager
     {
         try
         {
+            var date = DateTimeManager.DateTime.ToString();
             var playerData = SaveData[player];
+            playerData.Date = date;
             if (!player.IsLocal) return;
             syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
             player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
@@ -50,7 +54,7 @@ public class SaveManager
         try
         {
             if (!player.IsLocal) return;
-            syncSaveLoad.WriteFileObjects($"{SavePath}/AllData.txt");
+            syncSaveLoad.WriteFileObjects($"{SavePath}/AllSaveData.txt");
         }
         catch (Exception ex)
         {
@@ -61,8 +65,10 @@ public class SaveManager
 
     public static void SaveAllDataToFile()
     {
+        var date = DateTimeManager.DateTime.ToString();
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            SaveData[player].Date = date;
             Globals.SaveSystem.SaveAllDataToFile(player);
         }
     }

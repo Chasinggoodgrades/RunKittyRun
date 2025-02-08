@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class KittyData
 {
     public string PlayerName { get; set; } = "";
+    public string Date { get; set; } = "";
     public GameStatsData GameStats { get; set; }
     public GameAwardsData GameAwards { get; set; }
     public GameSelectedData SelectedData { get; set; }

@@ -31,7 +31,7 @@
         unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
     }
 
-    public static int SaveGoldBonus(int streak) => (int)(SaveGold * (SaveStreakMultiplier * streak));
+    public static int SaveGoldBonus(int streak) => SaveGold + (int)(SaveGold * (SaveStreakMultiplier * streak));
 
     private static void AdjustStartingGold()
     {

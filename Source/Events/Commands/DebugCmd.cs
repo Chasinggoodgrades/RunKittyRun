@@ -181,7 +181,7 @@ public static class DebugCmd
                 DisplayAdminCommands(player);
                 break;
             case "?allsave":
-                Globals.SaveSystem.SaveAllDataToFile();
+                SaveManager.SaveAllDataToFile();
                 break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
