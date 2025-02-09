@@ -82,6 +82,15 @@ public static class DebugCmd
             case "?time":
                 AwardingCmds.SettingGameTimes(player, command);
                 break;
+            case "?kick":
+                var name = cmd.Length > 1 ? cmd[1] : "??__";
+                foreach (var p in Globals.ALL_PLAYERS)
+                    if (p.Name.ToLower().StartsWith(name))
+                    {
+                        p.Remove(playergameresult.Defeat);
+                        break;
+                    }
+                break;
             case "?invul":
                 var setting = cmd.Length > 1 ? cmd[1] : "off";
                 if (setting == "on") UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
@@ -144,9 +153,9 @@ public static class DebugCmd
                     wolf.RemoveAllWolfAffixes();
                 break;
             case "?obs":
-                var name = cmd.Length > 1 ? cmd[1] : "??__";
+                var obsName = cmd.Length > 1 ? cmd[1] : "??__";
                 foreach (var p in Globals.ALL_PLAYERS)
-                    if (p.Name.ToLower().StartsWith(name))
+                    if (p.Name.ToLower().StartsWith(obsName))
                     {
                         Utility.MakePlayerSpectator(p);
                         break;

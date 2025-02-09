@@ -139,6 +139,7 @@ public class Kitty
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
+        TrueSightGhostWolves();
 
         // Set Collision to Default
         CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
@@ -193,4 +194,12 @@ public class Kitty
         Challenges.PurpleLighting(savior);
         savior.YellowLightning.SaveIncrement();
     }
+
+    private void TrueSightGhostWolves()
+    {
+        var trueSight = FourCC("Atru");
+        Unit.AddAbility(trueSight);
+        Unit.HideAbility(trueSight, true);
+    }
+
 }

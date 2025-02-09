@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes = new List<Affix>();
-    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer" };
+    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -71,6 +71,8 @@ public static class AffixFactory
                 return new Howler(unit);
             case "Blitzer":
                 return new Blitzer(unit);
+            case "Stealth":
+                return new Stealth(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
