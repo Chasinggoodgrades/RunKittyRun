@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes = new List<Affix>();
-    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth" };
+    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth", "Vortex" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -50,6 +50,10 @@ public static class AffixFactory
                 affixes.Add($"{affix.Key} x{affix.Value}");
             }
         }
+
+        affixCounts.Clear();
+        affixCounts = null;
+
         return affixes.ToArray();
     }
 
@@ -73,6 +77,8 @@ public static class AffixFactory
                 return new Blitzer(unit);
             case "Stealth":
                 return new Stealth(unit);
+            case "Vortex":
+                return new Vortex(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
@@ -141,6 +147,7 @@ public static class AffixFactory
         var index = GetRandomInt(0, affixes.Count - 1);
         var randomAffix = affixes[index];
         affixes.Clear();
+        affixes = null;
         return ApplyAffix(unit, randomAffix);
     }
 
@@ -154,12 +161,11 @@ public static class AffixFactory
         if (!CanDistributeAffixes()) return;
 
         NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.75) + Globals.ROUND;
-        //Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Spawning " + NUMBER_OF_AFFIXED_WOLVES + " affixed wolves");
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
         var interations = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 250)
+        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 800)
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
@@ -178,6 +184,8 @@ public static class AffixFactory
                             var affix = ApplyRandomAffix(wolf, j);
                             if(affix != null) count++;
                         }
+
+                        wolvesInLane.Clear();
                     }
                 }
                 interations += 1;

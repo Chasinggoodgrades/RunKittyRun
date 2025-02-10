@@ -37,8 +37,8 @@ public class Wolf
     {
         var players = new[]
         {
-            player.NeutralExtra, player.NeutralPassive,
-            player.NeutralVictim, player.NeutralAggressive
+            player.NeutralExtra, player.NeutralVictim, 
+            player.NeutralAggressive
         };
 
         var randomPlayer = players[GetRandomInt(0, players.Length - 1)];
@@ -74,7 +74,6 @@ public class Wolf
     {
         if (Gamemode.CurrentGameMode != "Standard")
             return TournamentChance();
-        /*            return GetRandomInt(1, 9 - Globals.ROUND) == 1 && (GetRandomInt(1, Globals.ROUND) == 1 || GetRandomInt(1, 3) == 1);*/
         else
             return GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
     }
@@ -135,7 +134,7 @@ public class Wolf
         OverheadEffect = null;
         WanderTimer.Dispose();
         WanderTimer = null;
-        //WolfPoint.Dispose();
+        WolfPoint.Dispose();
     }
 
     /// <summary>

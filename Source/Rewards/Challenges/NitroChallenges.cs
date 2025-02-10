@@ -131,8 +131,6 @@ public static class NitroChallenges
             NitroCount.Add(player, 1);
     }
 
-
-
     private static void AwardingDivineLight(player player)
     {
         if(Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;

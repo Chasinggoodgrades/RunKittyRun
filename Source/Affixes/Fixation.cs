@@ -67,7 +67,7 @@ public class Fixation : Affix
     private void RegisterEvents()
     {
         if (Type == 1) UnitsInRange = group.Create();
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
         InRangeTrigger.AddAction(() =>
@@ -148,6 +148,7 @@ public class Fixation : Affix
 
         if (IsChasing)
         {
+            if (currentMS <= 300) SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
             if (currentMS >= FIXATION_MAX_MS) return;
 
             var newSpeed = currentMS + speedIncrementer;

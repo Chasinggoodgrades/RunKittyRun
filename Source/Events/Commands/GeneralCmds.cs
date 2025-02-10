@@ -47,7 +47,7 @@ public static class GeneralCmds
                 break;
             case "-affixinfo":
                 var affixes = AffixFactory.CalculateAffixes();
-                p.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes));
+                p.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}Total: {AffixFactory.AllAffixes.Count}");
                 break;
             case "-sc":
             case "-setcolor":

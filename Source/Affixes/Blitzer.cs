@@ -94,7 +94,7 @@ public class Blitzer : Affix
         float directionY = (targetY - currentY) / distance;
 
         // 60 fps for smooth movement, step distance
-        float stepDistance = speed / 60.0f; // Assuming 60 calls per second
+        float stepDistance = speed / 50.0f; // Assuming 60 calls per second
         float nextX = currentX + directionX * stepDistance;
         float nextY = currentY + directionY * stepDistance;
 
@@ -103,7 +103,7 @@ public class Blitzer : Affix
         Unit.Unit.SetFacing((float)(Math.Atan2(directionY, directionX) * 180.0 / Math.PI));
         Unit.Unit.SetAnimation(2); // running animation
 
-        var stepTime = 1.0f / 60.0f; // 1/60th of a second
+        var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
         BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));

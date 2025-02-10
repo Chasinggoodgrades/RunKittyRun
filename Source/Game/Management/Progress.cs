@@ -110,6 +110,7 @@ public static class Progress
 
     private static float DistanceBetweenPoints(float x1, float y1, float x2, float y2) 
     {
-        return WCSharp.Shared.FastUtil.DistanceBetweenPoints(x1, y2, x2, y2);
+        if (Math.Abs(x1 - x2) > Math.Abs(y1 - y2)) return Math.Abs(x1 - x2);
+        return Math.Abs(y1 - y2);
     }
 }

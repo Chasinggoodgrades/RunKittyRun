@@ -84,9 +84,7 @@ public class WolfPoint
     public void Dispose()
     {
         Cleanup();
-        //Region.RemoveRect(CurrentRect);
         Region.Dispose();
-        //CurrentRect.Dispose();
         Trigger.ClearActions();
         Trigger.Dispose();
         PointsToVisit = null;

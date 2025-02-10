@@ -129,12 +129,17 @@ public static class StandardMultiboard
         CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
         var rowIndex = 2;
 
-        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        // Create a sorted list from the dictionary
+        var sortedPlayers = Globals.ALL_KITTIES
+            .OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths)
+            .ThenBy(kvp => kvp.Key.Id)
+            .ToList();
 
-        foreach (var player in sortedPlayers.Keys)
+        foreach (var kvp in sortedPlayers)
         {
-            var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
-            var playerColor = Colors.GetPlayerColor(player.Id+1);
+            var player = kvp.Key;
+            var currentStats = kvp.Value.CurrentStats;
+            var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var totalSaves = currentStats.TotalSaves;
@@ -143,14 +148,14 @@ public static class StandardMultiboard
             var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
 
             var stats = new[] {
-                name,
-                score.ToString(),
-                totalSaves.ToString(),
-                totalDeaths.ToString(),
-                currentStats.SaveStreak.ToString(),
-                kda,
-                currentStats.RoundSaves + " / " + currentStats.RoundDeaths
-            };
+            name,
+            score.ToString(),
+            totalSaves.ToString(),
+            totalDeaths.ToString(),
+            currentStats.SaveStreak.ToString(),
+            kda,
+            currentStats.RoundSaves + " / " + currentStats.RoundDeaths
+        };
 
             for (int i = 0; i < stats.Length; i++)
             {
@@ -160,6 +165,8 @@ public static class StandardMultiboard
 
             rowIndex++;
         }
+        sortedPlayers.Clear();
+        sortedPlayers = null;
     }
 
     private static void OverallGameStats()
@@ -168,11 +175,16 @@ public static class StandardMultiboard
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        var sortedPlayers = Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.SaveData.GameStats.Saves - kvp.Value.SaveData.GameStats.Deaths).ThenBy(kvp => kvp.Key.Id).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        // Was converting to dict, but seems dict caused a lot of overhead. Switching to list helped a little.
+        var sortedPlayers = Globals.ALL_KITTIES
+            .OrderByDescending(kvp => kvp.Value.SaveData.GameStats.Saves - kvp.Value.SaveData.GameStats.Deaths)
+            .ThenBy(kvp => kvp.Key.Id)
+            .ToList();
 
-        foreach (var player in sortedPlayers.Keys)
+        foreach (var kvp in sortedPlayers)
         {
-            var saveData = Globals.ALL_KITTIES[player].SaveData;
+            var player = kvp.Key;
+            var saveData = kvp.Value.SaveData;
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
@@ -184,24 +196,29 @@ public static class StandardMultiboard
 
             var stats = new[]
             {
-                name,
-                score.ToString(),
-                allSaves.ToString(),
-                allDeaths.ToString(),
-                saveData.GameStats.HighestSaveStreak.ToString(),
-                kda,
-                games.ToString(),
-                wins.ToString()
-            };
+            name,
+            score.ToString(),
+            allSaves.ToString(),
+            allDeaths.ToString(),
+            saveData.GameStats.HighestSaveStreak.ToString(),
+            kda,
+            games.ToString(),
+            wins.ToString()
+        };
 
-            for (int i = 0; i < stats.Length; i++) {
+            for (int i = 0; i < stats.Length; i++)
+            {
                 OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
                 if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.07f);
             }
 
             rowIndex++;
         }
+
+        sortedPlayers.Clear();
+        sortedPlayers = null;
     }
+
 
     private static void BestTimesStats()
     {

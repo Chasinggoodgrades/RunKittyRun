@@ -45,9 +45,9 @@ public static class RoundManager
         RoundTimer.StartEndRoundTimer();
 
         BarrierSetup.DeactivateBarrier();
+        NitroChallenges.StartNitroTimer();
         NitroPacer.StartNitroPacer();
         SoundManager.PlayRoundSound();
-        NitroChallenges.StartNitroTimer();
         Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
     }
 
