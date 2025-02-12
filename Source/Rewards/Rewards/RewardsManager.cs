@@ -99,6 +99,7 @@ public static class RewardsManager
         kitty.Unit.SetVertexColor(255, 255, 255);
         foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
             property.SetValue(kitty.SaveData.SelectedData, "");
+        if (kitty.SaveData.SelectedData.SelectedWindwalk == "") kitty.WindwalkID = 0;
 
     }
 }

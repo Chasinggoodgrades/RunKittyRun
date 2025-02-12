@@ -65,7 +65,8 @@ public class Blitzer : Affix
     private void BeginBlitz()
     {
         var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
-        var (x, y) = Unit.WolfMove();
+        var x = GetRandomReal(Unit.Lane.MinX, Unit.Lane.MaxX);
+        var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
         WanderEffect.Dispose();
         BlitzerMove(x, y);
         Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible

@@ -192,6 +192,13 @@ public static class DebugCmd
             case "?allsave":
                 SaveManager.SaveAllDataToFile();
                 break;
+            case "?testx":
+                for(int i = 0; i < 800; i++)
+                {
+                    var x = kitty.Unit.X;
+                }
+                Console.WriteLine("Done:");
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;

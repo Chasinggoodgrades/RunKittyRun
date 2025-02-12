@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using WCSharp.SaveLoad;
-
 public class GameAwardsData
 {
     // Hats

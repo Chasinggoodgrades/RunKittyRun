@@ -58,16 +58,17 @@ public class Wolf
     /// <summary>
     /// Wolf moves to a random location within its lane.
     /// </summary>
-    public (float x, float y) WolfMove()
+    public void WolfMove()
     {
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if (HasAffix("Blitzer")) return (randomX, randomY);
-        if(WCSharp.Shared.Util.DistanceBetweenPoints(Unit, randomX, randomY) < 400)
+        if (HasAffix("Blitzer")) return;
+        Unit.IssueOrder("move", randomX, randomY);
+
+        if (WCSharp.Shared.Util.DistanceBetweenPoints(Unit, randomX, randomY) < 400)
             Unit.IssueOrder("move", randomX, randomY);
         else
             WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
-        return (randomX, randomY);
     }
 
     private bool ShouldStartEffect()
