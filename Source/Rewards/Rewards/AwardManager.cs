@@ -175,13 +175,52 @@ public static class AwardManager
             triggeraction abc = null;
             abc = TriggerAddAction(AwardTrigger, () =>
             {
-                if ((int)property.GetValue(kittyStats.GameStats) >= requiredValue)
+                if (gamestat == nameof(kittyStats.GameStats.NormalGames) && !NormalGamesCheck(kittyStats, requiredValue)) return;
+                else if (gamestat == nameof(kittyStats.GameStats.NormalWins) && !NormalWinsCheck(kittyStats, requiredValue)) return;
+                else if (gamestat == nameof(kittyStats.GameStats.HardGames) && !HardGamesCheck(kittyStats, requiredValue)) return;
+                else if (gamestat == nameof(kittyStats.GameStats.HardWins) && !HardWinsCheck(kittyStats, requiredValue)) return;
+                else if ((int)property.GetValue(kittyStats.GameStats) < requiredValue) return;
+                else
                 {
                     GiveReward(player, award);
                     AwardTrigger.RemoveAction(abc);
                 }
             });
         }
+    }
+
+    private static bool NormalGamesCheck(KittyData kittyStats, int requiredValue)
+    {
+        var combinedValue = 0;
+        combinedValue += kittyStats.GameStats.NormalGames;
+        combinedValue += kittyStats.GameStats.HardGames;
+        combinedValue += kittyStats.GameStats.ImpossibleGames;
+        return combinedValue >= requiredValue;
+    }
+
+    private static bool NormalWinsCheck(KittyData kittyStats, int requiredValue)
+    {
+        var combinedValue = 0;
+        combinedValue += kittyStats.GameStats.NormalWins;
+        combinedValue += kittyStats.GameStats.HardWins;
+        combinedValue += kittyStats.GameStats.ImpossibleWins;
+        return combinedValue >= requiredValue;
+    }
+
+    private static bool HardGamesCheck(KittyData kittyStats, int requiredValue)
+    {
+        var combinedValue = 0;
+        combinedValue += kittyStats.GameStats.HardGames;
+        combinedValue += kittyStats.GameStats.ImpossibleGames;
+        return combinedValue >= requiredValue;
+    }
+
+    private static bool HardWinsCheck(KittyData kittyStats, int requiredValue)
+    {
+        var combinedValue = 0;
+        combinedValue += kittyStats.GameStats.HardWins;
+        combinedValue += kittyStats.GameStats.ImpossibleWins;
+        return combinedValue >= requiredValue;
     }
 
     /// <summary>
