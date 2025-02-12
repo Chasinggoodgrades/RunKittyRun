@@ -35,7 +35,6 @@ public static class Constants
 	public const int ABILITY_CHAMPION_SPOILS = 1093677876;
 	public const int ABILITY_HOLIDAY_REWARDS = 1093677906;
 	public const int ABILITY_WINGS_COSMIC = 1093677107;
-	public const int ABILITY_AURA_SPECIAL = 1093677106;
 	public const int ABILITY_WINGS_FAIRY = 1093677110;
 	public const int ABILITY_WINGS_NIGHTMARE = 1093677125;
 	public const int ABILITY_WINGS_VOID = 1093677111;
@@ -86,6 +85,7 @@ public static class Constants
 	public const int ABILITY_WINGS_PATRIOTIC = 1093678131;
 	public const int ABILITY_TRAIL_DIVINELIGHT = 1093678132;
 	public const int ABILITY_FROSTBITE = 1093678133;
+	public const int ABILITY_AURA_SPECIAL = 1093677106;
 	public const int ABILITY_WINGS_PHOENIX = 1093677109;
 	public const int ABILITY_WINGS_ARCHANGEL = 1093677105;
 	public const int ABILITY_WINGS_CHAOS = 1093677126;
