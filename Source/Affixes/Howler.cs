@@ -11,6 +11,7 @@ public class Howler : Affix
     private const float MIN_HOWL_TIME = 10.0f;
     private const float MAX_HOWL_TIME = 20.0f;
     private timer HowlTimer;
+    private group NearbyWolves = group.Create();
 
     public Howler(Wolf unit) : base(unit)
     {
@@ -31,6 +32,8 @@ public class Howler : Affix
         HowlTimer.Pause();
         HowlTimer.Dispose();
         HowlTimer = null;
+        NearbyWolves.Dispose();
+        NearbyWolves = null;
     }
 
     private void RegisterTimerEvents()
@@ -41,18 +44,17 @@ public class Howler : Affix
 
     private void Howl()
     {
-        var nearbyWolves = group.Create();
         var roarEffect = effect.Create(ROAR_EFFECT, Unit.Unit, "origin");
-        nearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
-        foreach (var wolf in nearbyWolves.ToList())
+        NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
+        foreach (var wolf in NearbyWolves.ToList())
         {
             var wolfObject = Globals.ALL_WOLVES[wolf];
             if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
             wolfObject.StartWandering(true);
         }
-        nearbyWolves.Clear();
-        nearbyWolves.Dispose();
-        nearbyWolves = null;
+        NearbyWolves.Clear();
+        NearbyWolves.Dispose();
+        NearbyWolves = null;
         roarEffect.Dispose();
         roarEffect = null;
         HowlTimer.Start(GetRandomHowlTime(), false, Howl);

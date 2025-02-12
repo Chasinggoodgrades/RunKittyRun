@@ -107,7 +107,7 @@ public class Kibble
     {
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
-        
+
         // Use PositionWithPolarOffset to calculate new point
         var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, JackPotIndex * 36.0f);
         var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, JackPotIndex * 36.0f);
@@ -115,16 +115,29 @@ public class Kibble
         var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", newX, newY);
         effect.Dispose();
         JackPotIndex += 1;
+
         if (JackPotIndex >= 20)
         {
             Dispose();
             var goldAmount = GetRandomInt(JackpotMin, JackpotMax);
+
+            // Roll for super jackpot (1/10 chance)
+            var isSuperJackpot = GetRandomInt(1, 10) == 1;
+            if (isSuperJackpot) goldAmount *= 10;
+
             kitty.Player.Gold += goldAmount;
-            Console.WriteLine($"{Colors.PlayerNameColored(kitty.Player)}{Colors.HighlightString(" has won the jackpot for ")}{Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r");
+            string jackpotString = isSuperJackpot ? $"{Colors.COLOR_RED}Super Jackpot" : "jackpot";
+            string msg = $"{Colors.PlayerNameColored(kitty.Player)}{Colors.HighlightString($" has won the {jackpotString} for ")}{Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r";
+
+            Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
         }
-        else Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
+        else
+        {
+            Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
+        }
     }
+
 
     private static void IncrementKibblePoolAll()
     {
