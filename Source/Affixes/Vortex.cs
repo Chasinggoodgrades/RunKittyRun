@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 /// <summary>
-/// Have to decide on how to handle this.
-/// - Constant? or Periodic?
-/// - If periodic, how often? 15 seconds - 45 seconds? and how long?
-/// - Strength of the pull, effect of the pull...
-/// - Likely need to use a group, enum units, and use a timer to determine if they're in radius.
+/// -- Periodic
+/// -- Pulls Every 30 seconds
+/// -- 500 Yd Range..
+/// 
+/// -- Have to figure out a way to simulate the gravity effect smoothly.. 
 /// </summary>
 
 public class Vortex : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_UNPREDICTABLE;
     private const float VORTEX_RADIUS = 500.0f; // triggers witihn 500 yds
-    private const float VORTEX_PULL_SPEED = 2.0f; // pulls 2 yds per second.
-    private const float VORTEX_PULSE_RATE = 0.04f; // every second.
+    private const float VORTEX_PULL_SPEED = 40.0f; // pulls 2 yds per second.
+    private const float VORTEX_PULSE_RATE = 0.4f; // every second.
     private const float VORTEX_PERIODIC_PULL = 30.0f; // every 30 seconds
     private const float VORTEX_LENGTH = 10.0f; // lasts 10 seconds.
     private trigger EntersRange = trigger.Create();
@@ -85,25 +86,35 @@ public class Vortex : Affix
 
     private void PullActions()
     {
-        if (Counter >= (int)(VORTEX_LENGTH/VORTEX_PULSE_RATE))
+        try
         {
-            ResetVortex();
-            return; // Exit early if the vortex is reset
+            if (Counter >= (int)(VORTEX_LENGTH / VORTEX_PULSE_RATE))
+            {
+                ResetVortex();
+                return; // Exit early if the vortex is reset
+            }
+            var distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE;
+            foreach (var unit in UnitsInRange)
+            {
+                if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue;
+                var x = unit.X;
+                var y = unit.Y;
+                var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
+                var newX = x + distance * Cos(angle);
+                var newY = y + distance * Sin(angle);
+                unit.SetPosition(newX, newY);
+                unit.SetFacing(angle);
+                var lastOrder = UnitOrders.GetLastOrderLocation(unit);
+                unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+                // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
+                // Setup @event system to acquire last x,y location of this unit.
+            }
+            Counter += 1;
         }
-        var distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE;
-        foreach (var unit in UnitsInRange) 
-        {
-            if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue;
-            var x = unit.X;
-            var y = unit.Y;
-            var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
-            var newX = x + distance * Cos(angle);
-            var newY = y + distance * Sin(angle);
-            unit.SetPosition(newX, newY);
-            // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
-            // Setup @event system to acquire last x,y location of this unit.
+        catch (Exception e) {
+            Console.WriteLine(e);
+            throw;
         }
-        Counter += 1;
     }
 
     private void ResetVortex()

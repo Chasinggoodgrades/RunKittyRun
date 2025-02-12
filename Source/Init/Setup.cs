@@ -71,6 +71,7 @@ namespace Source.Init
                 FloatingNameTag.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
+                UnitOrders.Initialize();
                 RewardsManager.Initialize();
                 PodiumManager.Initialize();
                 FrameManager.InitAllFrames();

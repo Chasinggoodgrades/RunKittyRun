@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -145,18 +146,30 @@ public static class SoundManager
 
     public static void PlayLastManStandingSound()
     {
-        Utility.SimpleTimer(0.5f, () =>
+        Utility.SimpleTimer(0.8f, () =>
         {
             var count = 0;
+            unit u = null;
             foreach(var kitty in Globals.ALL_KITTIES)
             {
-                if (kitty.Value.Alive) count += 1;
+                if (kitty.Value.Alive)
+                {
+                    count += 1;
+                    u = kitty.Value.Unit;
+                }
                 if (count > 1) return;
             }
             if (count == 0) return;
             var s = LAST_MAN_STANDING_SOUND;
+            var e = u.AddSpecialEffect("TalkToMe.mdx", "head");
+            Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!|r");
             s.Stop(false, false);
             s.Start();
+            Utility.SimpleTimer(2.0f, () =>
+            {
+                e.Dispose();
+                e = null;
+            });
         });
     }
 }
