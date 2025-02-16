@@ -215,7 +215,6 @@ public static class RewardsFrame
         }
         rewardsHotKey.AddAction(() =>
         {
-            Utility.SimpleTimer(0.1f, () => SetGameSpeed(gamespeed.Fastest));
             RewardsFrameActions();
         });
     }

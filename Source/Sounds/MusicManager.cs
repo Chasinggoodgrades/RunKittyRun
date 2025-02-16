@@ -4,7 +4,11 @@ using static WCSharp.Api.Common;
 public static class MusicManager
 {
     public static List<Music> MusicList { get; private set; }
-    public static void Initialize() => MusicList = RegisterMusicList();
+    public static void Initialize()
+    {
+        MusicList = RegisterMusicList();
+        Utility.SimpleTimer(5.0f, () => PlayNumb());
+    }
 
     // The best approach for this was to replace the internal music files with the songs themselves.
     // If you take the approach of creating the sounds themselves, it causes a lot of lag at initialization.
@@ -27,6 +31,8 @@ public static class MusicManager
             new Music("[PLACEHOLDER]", "Undead3"), // use undead2
         };
     }
+
+    private static void PlayNumb() => MusicList[1].Play();
 }
 
 public class Music

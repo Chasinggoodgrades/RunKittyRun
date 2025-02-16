@@ -5,7 +5,6 @@ using System.Linq;
 public static class NitroPacer
 {
     public static unit Unit;
-    private static float Speed = 0.03f;
     private static float currentDistance = 0;
     private static int currentCheckpoint = 0;
     private static timer pacerTimer;

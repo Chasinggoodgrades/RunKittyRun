@@ -70,7 +70,7 @@ public static class Gamemode
             var localplayer = player.LocalPlayer;
             if(localplayer != HostPlayer)
             {
-                player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, $"{color}Please wait for {Colors.PlayerNameColored(HostPlayer)}{color} to pick the gamemode. {Colors.COLOR_RED}(Defaults to Standard in 30 seconds).");
+                player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, $"{color}Please wait for {Colors.PlayerNameColored(HostPlayer)}{color} to pick the gamemode. {Colors.COLOR_RED}(Defaults to Standard in {Globals.TIME_TO_PICK_GAMEMODE} seconds).|r");
             }
         }
     }

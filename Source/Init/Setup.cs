@@ -14,6 +14,7 @@ namespace Source.Init
         public static void Initialize()
         {
             SetGameSpeed(gamespeed.Fastest);
+            Blizzard.LockGameSpeedBJ();
             Colors.Initialize();
             DoodadChanger.ShowSeasonalDoodads(false);
             Gamemode.Initialize();

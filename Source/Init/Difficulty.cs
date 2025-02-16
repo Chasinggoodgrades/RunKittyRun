@@ -85,6 +85,7 @@ public static class Difficulty
                 highestTally = ButtonTallys[button];
                 chosenButton = button;
             }
+        RemoveDifficultyDialog();
         if (chosenButton != null) SetDifficulty(ButtonNames[chosenButton]);
     }
 
@@ -107,6 +108,12 @@ public static class Difficulty
         }
         IsDifficultyChosen = true;
         Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
+    }
+
+    private static void RemoveDifficultyDialog()
+    {
+        foreach(var player in Globals.ALL_PLAYERS)
+            DifficultyChoosing.SetVisibility(player, false);
     }
 
 

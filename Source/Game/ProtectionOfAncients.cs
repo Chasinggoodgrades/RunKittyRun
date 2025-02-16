@@ -175,18 +175,4 @@ public static class ProtectionOfAncients
         tempGroup.Dispose();
 
     }
-
-    private static int GetProtectionAbility(player player)
-    {
-        var kitty = Globals.ALL_KITTIES[player];
-
-        var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
-        var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
-
-        var noRelicCD = kitty.Unit.GetAbilityCooldownRemaining(noRelic);
-        var relicCD = kitty.Unit.GetAbilityCooldownRemaining(relic);
-
-        return noRelicCD > relicCD ? noRelic : relic;
-    }
-
 }

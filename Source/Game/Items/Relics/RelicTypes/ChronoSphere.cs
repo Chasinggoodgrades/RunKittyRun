@@ -29,7 +29,7 @@ public class ChronoSphere : Relic
 
     public ChronoSphere() : base(
         $"{Colors.COLOR_YELLOW}Chrono Sphere",
-        $"Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} yards.{Colors.COLOR_LIGHTBLUE}(Passive)|r",
+        $"Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,

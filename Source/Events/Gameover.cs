@@ -50,7 +50,7 @@ public static class Gameover
     private static void EndGame()
     {
         foreach(var player in Globals.ALL_PLAYERS)
-            player.Remove(playergameresult.Victory);
+            Blizzard.CustomVictoryBJ(player, true, true);
     }
 
     private static bool LosingGameCheck()

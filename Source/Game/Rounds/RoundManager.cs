@@ -66,24 +66,32 @@ public static class RoundManager
 
     public static void RoundEnd()
     {
-        MultiboardUtil.RefreshMultiboards();
-        Globals.GAME_ACTIVE = false;
-        RoundTimer.EndRoundTimer.Pause();
-        NitroChallenges.StopNitroTimer();
-        Wolf.RemoveAllWolves();
-        BarrierSetup.ActivateBarrier();
-        Resources.BonusResources();
-        RoundUtilities.MovedTimedCameraToStart();
-        RoundUtilities.MoveAllPlayersToStart();
-        RoundUtilities.RoundResetAll();
-        TeamsUtil.RoundResetAllTeams();
-        NitroPacer.ResetNitroPacer();
-        DeathlessChallenges.ResetDeathless();
-        SaveManager.SaveAll();
-        if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
-        if (Gameover.GameOver()) return;
+        try
+        {
+            MultiboardUtil.RefreshMultiboards();
+            Globals.GAME_ACTIVE = false;
+            RoundTimer.EndRoundTimer.Pause();
+            NitroChallenges.StopNitroTimer();
+            Wolf.RemoveAllWolves();
+            BarrierSetup.ActivateBarrier();
+            Resources.BonusResources();
+            RoundUtilities.MovedTimedCameraToStart();
+            RoundUtilities.MoveAllPlayersToStart();
+            RoundUtilities.RoundResetAll();
+            TeamsUtil.RoundResetAllTeams();
+            NitroPacer.ResetNitroPacer();
+            DeathlessChallenges.ResetDeathless();
+            SaveManager.SaveAll();
+            if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
+            if (Gameover.GameOver()) return;
 
-        Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+        }
+        catch (Exception e)
+        {
+            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            throw;
+        }
     }
 
     public static void RoundEndCheck()

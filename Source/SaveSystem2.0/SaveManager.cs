@@ -26,6 +26,7 @@ public class SaveManager
         var date = DateTimeManager.DateTime.ToString();
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            if(player.Controller == mapcontrol.Computer) continue;
             SaveData[player].Date = date;
             Globals.SaveSystem.Save(player);
         }

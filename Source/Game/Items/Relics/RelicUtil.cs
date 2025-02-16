@@ -56,7 +56,7 @@ public static class RelicUtil
         float itemCooldown = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0);
 
         cooldown = (cooldown == 0) ? Math.Min(unitCooldown, itemCooldown) : cooldown;
-        unit.RemoveItem(item);
+        if(Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
         unit.AddItem(item);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
@@ -66,7 +66,7 @@ public static class RelicUtil
     {
         var item = Utility.UnitGetItem(unit, itemID);
         var unitAbility = unit.GetAbility(abilityID);
-        unit.RemoveItem(item);
+        if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
         BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
         unit.AddItem(item);
         var itemAbility = item.GetAbility(abilityID);

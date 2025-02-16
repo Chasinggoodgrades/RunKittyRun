@@ -80,7 +80,7 @@ public static class GeneralCmds
                 break;
             case "-kc":
                 PlayerLeaves.PlayerLeavesActions(p);
-                p.Remove(PLAYER_GAME_RESULT_DEFEAT);
+                Blizzard.CustomDefeatBJ(p, $"{Colors.COLOR_RED}You kicked yourself!|r");
                 break;
             case "-oldcode":
                 Savecode.LoadString();

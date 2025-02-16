@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using WCSharp.Api;
 
 public static class StandardMultiboard
@@ -125,29 +123,42 @@ public static class StandardMultiboard
 
     private static void CurrentGameStats()
     {
-        CurrentStats.Title = $"Current Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
-        CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
-        var rowIndex = 2;
-
-        // Create a sorted list from the dictionary
-        var sortedPlayers = Globals.ALL_KITTIES
-            .OrderByDescending(kvp => kvp.Value.CurrentStats.TotalSaves - kvp.Value.CurrentStats.TotalDeaths)
-            .ThenBy(kvp => kvp.Key.Id)
-            .ToList();
-
-        foreach (var kvp in sortedPlayers)
+        try
         {
-            var player = kvp.Key;
-            var currentStats = kvp.Value.CurrentStats;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            CurrentStats.Title = $"Current Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+            CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
+            var rowIndex = 2;
 
-            var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
-            var totalSaves = currentStats.TotalSaves;
-            var totalDeaths = currentStats.TotalDeaths;
-            var score = totalSaves - totalDeaths;
-            var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
+            // Array to hold keys for manual sorting
+            var players = Globals.ALL_KITTIES.Keys.ToArray();
 
-            var stats = new[] {
+            // Sort the array of keys based on custom criteria
+            Array.Sort(players, (p1, p2) =>
+            {
+                var stats1 = Globals.ALL_KITTIES[p1].CurrentStats;
+                var stats2 = Globals.ALL_KITTIES[p2].CurrentStats;
+                var score1 = stats1.TotalSaves - stats1.TotalDeaths;
+                var score2 = stats2.TotalSaves - stats2.TotalDeaths;
+
+                int compareScore = score2.CompareTo(score1);
+                if (compareScore != 0)
+                    return compareScore;
+
+                return p1.Id.CompareTo(p2.Id);
+            });
+
+            foreach (var player in players)
+            {
+                var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
+                var playerColor = Colors.GetPlayerColor(player.Id + 1);
+
+                var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
+                var totalSaves = currentStats.TotalSaves;
+                var totalDeaths = currentStats.TotalDeaths;
+                var score = totalSaves - totalDeaths;
+                var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
+
+                var stats = new[] {
             name,
             score.ToString(),
             totalSaves.ToString(),
@@ -157,17 +168,22 @@ public static class StandardMultiboard
             currentStats.RoundSaves + " / " + currentStats.RoundDeaths
         };
 
-            for (int i = 0; i < stats.Length; i++)
-            {
-                CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
-                if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.07f);
-            }
+                for (int i = 0; i < stats.Length; i++)
+                {
+                    CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                    if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.07f);
+                }
 
-            rowIndex++;
+                rowIndex++;
+            }
         }
-        sortedPlayers.Clear();
-        sortedPlayers = null;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: {ex.Message}");
+        }
     }
+
+
 
     private static void OverallGameStats()
     {

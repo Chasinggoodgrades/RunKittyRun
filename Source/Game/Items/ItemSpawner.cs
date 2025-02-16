@@ -44,12 +44,25 @@ public static class ItemSpawner
 
     private static void RemoveSpawnedItems()
     {
-        foreach (var item in TrackItems)
-            if (!item.IsOwned) item.Dispose();
-        foreach (var kibble in TrackKibbles)
+        for (int i = 0; i < TrackItems.Count; i++)
+        {
+            var item = TrackItems[i];
+            if (item.IsOwned) continue;
+            item.Dispose();
+            item = null;
+        }
+
+        for (int i = 0; i < TrackKibbles.Count; i++)
+        {
+            var kibble = TrackKibbles[i];
             kibble.Dispose();
+            kibble = null;
+        }
+
         TrackItems.Clear();
+        TrackKibbles.Clear();
     }
+
 
     private static void SpawnKibble()
     {
