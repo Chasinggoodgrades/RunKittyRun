@@ -41,7 +41,7 @@ public static class UnitOrders
         if (orderId == OrderId("move") || orderId == OrderId("smart"))
         {
             LastOrderLocation[unit] = (x, y);
-            Console.WriteLine($"Captured Loc, {x}, {y}");
+            //Console.WriteLine($"Captured Loc, {x}, {y}");
         }
     }
 

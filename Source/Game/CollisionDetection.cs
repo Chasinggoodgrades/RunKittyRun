@@ -14,8 +14,8 @@ public static class CollisionDetection
     {
         return () =>
         {
-            return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG) 
-                    && k.Alive;
+            return (GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG)
+                    && k.Alive && GetFilterUnit().Alive; // wolf should be alive too (marco wolf)
         };
     }
 
@@ -42,8 +42,8 @@ public static class CollisionDetection
     {
         return () =>
         {
-            return (GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
-                    && GetFilterUnit().Owner != k.Player) // Not Same Player
+            return GetFilterUnit().UnitType == Constants.UNIT_KITTY_CIRCLE
+                    && GetFilterUnit().Owner != k.Player // Not Same Player
                     && k.Alive // Has to Be Alive
                     && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[k.Player].TeamID // Must be same team
                     && Gamemode.CurrentGameMode != Globals.GAME_MODES[1]; // Not Solo Mode
@@ -53,12 +53,16 @@ public static class CollisionDetection
     public static void KittyRegisterCollisions(Kitty k)
     {
         var WOLF_COLL_RADIUS = KITTY_COLLISION_RADIUS[k.Player];
+        k.w_Collision.ClearActions();
+        k.c_Collision.ClearActions();
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, WOLF_COLL_RADIUS, WolfCollisionFilter(k), WolfCollisionTrigger(k));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, CIRCLE_COLLISION_RADIUS, CircleCollisionFilter(k), CircleCollisionTrigger(k));
     }
 
     public static void ShadowKittyRegisterCollision(ShadowKitty sk)
     {
+        sk.w_Collision.ClearActions();
+        sk.c_Collision.ClearActions();
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, DEFAULT_WOLF_COLLISION_RADIUS, ShadowRelicWolvesFilter(sk), WolfCollisionShadowTrigger(sk));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, CIRCLE_COLLISION_RADIUS, ShadowRelicCircleFilter(sk), CircleCollisionShadowTrigger(sk));
     }
@@ -68,6 +72,10 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             if (!k.Unit.Alive) return;
+            if (GetFilterUnit() == NamedWolves.MarcoWolf.Unit) {
+                NamedWolves.MarcoSucksLmao();
+                return;
+            }
             if (ChronoSphere.RewindDeath(k.Unit)) return;
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);
@@ -81,7 +89,7 @@ public static class CollisionDetection
     {
         TriggerAddAction(k.c_Collision, () =>
         {
-            var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
+            var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
             circle.ReviveKitty(k);
             var relic = k.Relics.Find(r => r is BeaconOfUnitedLifeforce);
             if (relic != null) (relic as BeaconOfUnitedLifeforce).BeaconOfUnitedLifeforceEffect(k.Player);

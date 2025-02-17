@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 
 public static class CommandHandler
 {
-    private static trigger DebugCmdTrigger = CreateTrigger();
+    private static trigger DebugCmdTrigger = trigger.Create();
 
     public static void Initialize()
     {

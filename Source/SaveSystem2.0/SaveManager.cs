@@ -27,6 +27,7 @@ public class SaveManager
         foreach (var player in Globals.ALL_PLAYERS)
         {
             if(player.Controller == mapcontrol.Computer) continue;
+            if(player.SlotState != playerslotstate.Playing) continue;
             SaveData[player].Date = date;
             Globals.SaveSystem.Save(player);
         }
@@ -89,6 +90,7 @@ public class SaveManager
 
     private void NewSave(player player)
     {
+        if (player.SlotState != playerslotstate.Playing) return;
         SaveData[player] = new KittyData();
         SaveData[player].PlayerName = player.Name;
         Save(player);

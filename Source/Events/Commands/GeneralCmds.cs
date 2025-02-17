@@ -5,12 +5,11 @@ using static WCSharp.Api.Common;
 public static class GeneralCmds
 {
     private static CommandInfo CmdInfo = null;
-    private static effect TestE;
 
     public static void Handle(player p, string command)
     {
         var args = command.Split(' ');
-        var kitty = Globals.ALL_KITTIES[p];
+        Globals.ALL_KITTIES.TryGetValue(p, out var kitty);
         CommandInfoCheck(args);
 
         switch (args[0])
@@ -27,6 +26,7 @@ public static class GeneralCmds
                 Globals.SaveSystem.Save(p);
                 break;
             case "-clear":
+            case "-c":
                 Utility.ClearScreen(p);
                 break;
             case "-colors":
@@ -90,22 +90,10 @@ public static class GeneralCmds
                 Utility.MakePlayerSpectator(p);
                 break;
             case "-overheadcam":
+            case "-overhead":
+            case "-topdown":
+            case "-ohc":
                 CameraUtil.OverheadCamera(p, 280f);
-                break;
-            case "-test1":
-                TestE?.Dispose();
-                TestE = effect.Create("GlowyLight.mdx", kitty.Unit, "origin");
-                break;
-            case "-test2":
-                TestE?.Dispose();
-                TestE = effect.Create("PurpleLight.mdx", kitty.Unit, "origin");
-                break;
-            case "-test3":
-                TestE?.Dispose();
-                TestE = effect.Create("ButterflyAura2.0.mdx", kitty.Unit, "origin");
-                break;
-            case "-cleareffect":
-                TestE?.Dispose();
                 break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
@@ -120,7 +108,7 @@ public static class GeneralCmds
             "-team [#] - Switches to #'d team. (Team Mode Free Pick Only)",
             "-save - Save your current game stats",
             "-affixInfo - Displays current round affixes",
-            "-clear - Clear your screen",
+            "-clear | -c - Clears your screen",
             "-color [color] - Set your player color",
             "-colors - Display all available colors",
             "-sc [rgb] | -setcolor [rgb] | -vc [rgb] - Set your player vertex color",
@@ -134,7 +122,7 @@ public static class GeneralCmds
             "-lc | -lockcamera - Locks your camera to your unit",
             "-reset - Resets your camera to default",
             "-kc - Kicks yourself from the game",
-            "-overheadcam - Gives an overhead view",
+            "-overheadcam | -overhead | -ohc | -topdown - Gives an overhead view",
             "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 

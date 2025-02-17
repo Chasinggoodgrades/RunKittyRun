@@ -51,6 +51,7 @@ namespace Source.Init
         {
             try
             {
+                RemoveDisconnectedPlayers();
                 FogEnable(false);
                 FogMaskEnable(false);
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
@@ -68,8 +69,8 @@ namespace Source.Init
                 ItemStacker.Initialize();
                 ProtectionOfAncients.Initialize();
                 Multiboard.Initialize();
-                PlayerLeaves.Initialize();
                 FloatingNameTag.Initialize();
+                PlayerLeaves.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 UnitOrders.Initialize();
@@ -100,6 +101,18 @@ namespace Source.Init
                 if (Player(i).SlotState == playerslotstate.Playing)
                     Globals.ALL_PLAYERS.Add(Player(i));
                 Player(i).Team = 0;
+            }
+        }
+
+        private static void RemoveDisconnectedPlayers()
+        {
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                if (player.SlotState == playerslotstate.Left)
+                {
+                    Globals.ALL_PLAYERS.Remove(player);
+                    break;
+                }
             }
         }
 

@@ -110,7 +110,7 @@ public class Kitty
         try
         {
             // Save Data
-            if (Player.Controller == mapcontrol.User) SaveData = SaveManager.SaveData[Player];
+            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing) SaveData = SaveManager.SaveData[Player];
             else SaveData = new KittyData(); // dummy data for comps
 
             YellowLightning = new YellowLightning(Player);

@@ -3,29 +3,43 @@ using static WCSharp.Api.Common;
 
 public static class NamedWolves
 {
-    private static Wolf MarcoWolf;
+    public static Wolf MarcoWolf;
     private static Wolf StanWolf;
-
-    public static void Initialize()
-    {
-    }
+    private static timer MarcoRevive = timer.Create();
 
     public static void CreateNamedWolves()
     {
-
+        CreateMarcoWolf();
+        CreateStanWolf();
     }
-
 
     private static void CreateMarcoWolf()
     {
         var index = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         MarcoWolf = new Wolf(index);
-        MarcoWolf.
+        MarcoWolf.Unit.SetColor(playercolor.Yellow);
     }
 
     private static void CreateStanWolf()
     {
+        // this clown doesnt move :)
+        var index = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
+        StanWolf = new Wolf(index);
+        StanWolf.Unit.IsPaused = true;
+        StanWolf.WanderTimer.Pause();
+        StanWolf.WanderTimer = null;
+        StanWolf.Unit.SetColor(playercolor.Purple);
+    }
 
+    public static bool MarcoSucksLmao()
+    {
+        if (!MarcoWolf.Unit.Alive) return false;
+        MarcoWolf.Unit.Kill();
+        MarcoRevive.Start(25.0f, false, () =>
+        {
+            MarcoWolf.Unit.Revive(MarcoWolf.Unit.X, MarcoWolf.Unit.Y, true);
+        });
+        return true;
     }
 
 }
