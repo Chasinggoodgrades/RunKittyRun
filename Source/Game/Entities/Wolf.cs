@@ -17,7 +17,7 @@ public class Wolf
     public timer WanderTimer { get; set; }
     private timer EffectTimer { get; set; }
     public rect Lane { get; private set; }
-    public unit Unit { get; private set; }
+    public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
     public WolfPoint WolfPoint { get; set; }
@@ -154,6 +154,7 @@ public class Wolf
                     new Wolf(lane);
             }
             FandF.CreateBloodWolf();
+            NamedWolves.CreateNamedWolves();
         }
     }
     /// <summary>
@@ -161,11 +162,14 @@ public class Wolf
     /// </summary>
     public static void RemoveAllWolves()
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
-            wolf.Value.Dispose();
-
+        foreach (var wolfKey in Globals.ALL_WOLVES.Keys.ToList())
+        {
+            Globals.ALL_WOLVES[wolfKey].Dispose();
+            Globals.ALL_WOLVES[wolfKey] = null;
+        }
         Globals.ALL_WOLVES.Clear();
     }
+
 
     public static void PauseAllWolves(bool pause)
     {

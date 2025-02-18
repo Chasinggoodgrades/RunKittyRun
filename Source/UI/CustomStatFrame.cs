@@ -24,6 +24,17 @@ public static class CustomStatFrame
 
     private static timer t;
 
+    public class CustomStat
+    {
+        public framehandle Frame { get; set; }
+        public framehandle Icon { get; set; }
+        public framehandle Text { get; set; }
+        public framehandle Hover { get; set; }
+        public framehandle ToolTipBox { get; set; }
+        public framehandle ToolTipTitle { get; set; }
+        public framehandle ToolTipText { get; set; }
+    }
+
     public static void Add(string icon, string text, string titleTooltip)
     {
         Count++;
@@ -43,7 +54,6 @@ public static class CustomStatFrame
         BlzFrameSetText(BlzGetFrameByName("BoxedTextValue", Count), text);
         BlzFrameSetTexture(BlzGetFrameByName("CustomStatIcon", Count), icon, 0, true);
 
-        // Position frames based on Count
         if (Count == 1)
             fh.SetPoint(framepointtype.TopLeft, 0.015f, -0.035f, CustomStatFrameBoxS, framepointtype.TopLeft);
         else if (Count == 4)
@@ -115,17 +125,6 @@ public static class CustomStatFrame
         t.Start(0.1f, true, Update);
     }
 
-    public class CustomStat
-    {
-        public framehandle Frame { get; set; }
-        public framehandle Icon { get; set; }
-        public framehandle Text { get; set; }
-        public framehandle Hover { get; set; }
-        public framehandle ToolTipBox { get; set; }
-        public framehandle ToolTipTitle { get; set; }
-        public framehandle ToolTipText { get; set; }
-    }
-
     private static void HandleFrameText(unit selectedUnit)
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
@@ -139,50 +138,55 @@ public static class CustomStatFrame
 
     private static bool SetChampionFrameText(unit selectedUnit)
     {
-        var b = false;
         if (selectedUnit.Name == "|cffffff00Solo Tournament 2023|r")
         {
-            BlzFrameSetText(Stats[1].Text, ("|cffff0000Fieryfox|r"));
-            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r EU"));
-            BlzFrameSetText(Stats[0].Text, ("|cffffff00Time:|r 13:25"));
-            BlzFrameSetText(Stats[4].Text, ("|cffffff00Qoz|r"));
-            BlzFrameSetText(Stats[5].Text, ("|cffffff00Region:|r US"));
-            BlzFrameSetText(Stats[3].Text, ("|cffffff00Time:|r 15:36"));
-            b = true;
+            Stats[1].Text.Text = "|cffff0000Fieryfox|r";
+            Stats[2].Text.Text = "|cffffff00Region:|r EU";
+            Stats[0].Text.Text = "|cffffff00Time:|r 13:25";
+            Stats[4].Text.Text = "|cffffff00Qoz|r";
+            Stats[5].Text.Text = "|cffffff00Region:|r US";
+            Stats[3].Text.Text = "|cffffff00Time:|r 15:36";
         }
         else if (selectedUnit.Name == "|cffffff00Team Tournament 2023|r")
         {
-            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r US"));
-            BlzFrameSetText(Stats[1].Text, ("|cff00ffffAches|r"));
-            BlzFrameSetText(Stats[3].Text, ("|cff00ffffBranFlake|r"));
-            BlzFrameSetText(Stats[5].Text, ("|cffffff00Time:|r 23:12"));
-            BlzFrameSetText(Stats[4].Text, ("|cff00ffffBalmydrop|r"));
-            BlzFrameSetText(Stats[0].Text, ("|cff00ffffUdo|r"));
-            b = true;
+            Stats[2].Text.Text = "|cffffff00Region:|r US";
+            Stats[1].Text.Text = "|cff00ffffAches|r";
+            Stats[3].Text.Text = "|cff00ffffBranFlake|r";
+            Stats[5].Text.Text = "|cffffff00Time:|r 23:12";
+            Stats[4].Text.Text = "|cff00ffffBalmydrop|r";
+            Stats[0].Text.Text = "|cff00ffffUdo|r";
         }
         else if (selectedUnit.Name == "|cffffff00Solo Tournament 2024|r")
         {
-            BlzFrameSetText(Stats[1].Text, ("|cffff0000Fieryfox|r"));
-            BlzFrameSetText(Stats[2].Text, ("|cffffff00Region:|r EU"));
-            BlzFrameSetText(Stats[0].Text, ("|cffffff00Time:|r 13:23"));
-            BlzFrameSetText(Stats[4].Text, ("|cff964bc8MrGheed|r"));
-            BlzFrameSetText(Stats[5].Text, ("|cffffff00Region:|r US"));
-            BlzFrameSetText(Stats[3].Text, ("|cffffff00Time:|r 16:31"));
-            b = true;
+            Stats[1].Text.Text = "|cffff0000Fieryfox|r";
+            Stats[2].Text.Text = "|cffffff00Region:|r EU";
+            Stats[0].Text.Text = "|cffffff00Time:|r 13:23";
+            Stats[4].Text.Text = "|cff964bc8MrGheed|r";
+            Stats[5].Text.Text = "|cffffff00Region:|r US";
+            Stats[3].Text.Text = "|cffffff00Time:|r 16:31";
         }
-        return b;
+        else if (selectedUnit.Name == "|cffffff00Solo Tournament 2025|r")
+        {
+            Stats[0].Text.Text = "|cffffff00Time:|r 14:25";
+            Stats[1].Text.Text = "|cffa471e3Stan|r";
+            Stats[2].Text.Text = "|cffffff00Region:|r EU";
+            Stats[3].Text.Text = "|cffffff00Time:|r 14:56";
+            Stats[4].Text.Text = "|cff964bc8Balmydrop|r";
+            Stats[5].Text.Text = "|cffffff00Region:|r US";
+        }
+        else return false;
+        return true;
     }
-
 
     private static void SetWolfFrameText(unit selectedUnit)
     {
-        BlzFrameSetText(Stats[0].Text, "");
-        BlzFrameSetText(Stats[1].Text, "");
-        BlzFrameSetText(Stats[2].Text, "");
-        BlzFrameSetText(Stats[3].Text, "");
-        BlzFrameSetText(Stats[4].Text, "");
+        Stats[0].Text.Text = "";
+        Stats[1].Text.Text = "";
+        Stats[2].Text.Text = "";
+        Stats[3].Text.Text = "";
+        Stats[4].Text.Text = "";
         if(selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
-        BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
+        Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 
     private static void SetWolfAffixTexts(unit selectedUnit)
@@ -192,7 +196,7 @@ public static class CustomStatFrame
         var affixes = wolf.Affixes;
         for (var i = 0; i < affixes.Count; i++)
         {
-            BlzFrameSetText(Stats[i].Text, affixes[i].Name);
+            Stats[i].Text.Text = affixes[i].Name;
         }
     }
 

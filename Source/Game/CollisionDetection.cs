@@ -73,7 +73,7 @@ public static class CollisionDetection
         {
             if (!k.Unit.Alive) return;
             if (GetFilterUnit() == NamedWolves.MarcoWolf.Unit) {
-                NamedWolves.MarcoSucksLmao();
+                NamedWolves.MarcoDiedAgainLmao();
                 return;
             }
             if (ChronoSphere.RewindDeath(k.Unit)) return;
@@ -91,8 +91,8 @@ public static class CollisionDetection
         {
             var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
             circle.ReviveKitty(k);
-            var relic = k.Relics.Find(r => r is BeaconOfUnitedLifeforce);
-            if (relic != null) (relic as BeaconOfUnitedLifeforce).BeaconOfUnitedLifeforceEffect(k.Player);
+            (k.Relics.Find(r => r is BeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
+
         });
         return k.c_Collision;
     }

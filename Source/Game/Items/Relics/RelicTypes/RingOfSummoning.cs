@@ -13,6 +13,7 @@ public class RingOfSummoning : Relic
     private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
     private trigger Trigger;
     private unit Owner;
+    private group SummonGroup = group.Create();
 
     public RingOfSummoning() : base(
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
@@ -76,31 +77,31 @@ public class RingOfSummoning : Relic
     {
         var player = @event.Unit.Owner;
         var targetedPoint = @event.SpellTargetLoc;
-        var tempGroup = group.Create();
         var summoningKitty = Globals.ALL_KITTIES[player];
         var summoningKittyUnit = summoningKitty.Unit;
-        var numberOfPlayers = GetNumberOfPlayers(player);
+        var numberOfSummons = GetNumberOfSummons(player);
+
         RelicUtil.CloseRelicBook(player);
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
-        GroupEnumUnitsInRange(tempGroup, GetLocationX(targetedPoint), GetLocationY(targetedPoint), SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));
-        var list = tempGroup.ToList();
-        for(int i = 0; i < numberOfPlayers; i++)
+
+        SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));   
+        var units = SummonGroup.ToList();
+
+        for (int i = 0; i < numberOfSummons && i < units.Count; i++)
         {
-            if (list.Count <= i) return;
-            var randomPlayer = GetRandomInt(0, list.Count - 1);
-            var unit = list[randomPlayer];
+            var unit = units[i];    
             var kitty = Globals.ALL_KITTIES[unit.Owner];
+
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
-            Globals.ALL_KITTIES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+
+            kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
             Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
-            list.Remove(unit);
         }
 
-        tempGroup.Dispose();
+        SummonGroup.Clear();
         targetedPoint.Dispose();
-
     }
 
     /// <summary>
@@ -123,7 +124,12 @@ public class RingOfSummoning : Relic
         return true;
     }
 
-    private int GetNumberOfPlayers(player player)
+    /// <summary>
+    /// Returns the number of kitties that can be summoned based on the upgrade level.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    private int GetNumberOfSummons(player player)
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(RingOfSummoning));
         return upgradeLevel >= 2 ? 2 : 1;
