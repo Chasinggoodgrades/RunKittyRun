@@ -130,6 +130,7 @@ public static class Utility
         {
             action();
             t.Dispose();
+            t = null;
         });
     }
 
@@ -350,7 +351,7 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
-    public static void RemoveTimer(timer t)
+    public static void RemoveTimer(ref timer t)
     {
         t.Pause();
         t.Dispose();

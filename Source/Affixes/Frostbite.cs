@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public class Frostbite : Affix
@@ -60,6 +61,11 @@ public class Frostbite : Affix
             if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return; // must be in same lane
             SlowEffect(target);
         });
+    }
+
+    private Func<bool> Test()
+    {
+        return () => true;
     }
 
     private void PeriodicRangeCheck()

@@ -121,7 +121,9 @@ public static class ProtectionOfAncients
         {
             ApplyEffect(Unit);
             actiEffect.Dispose();
+            actiEffect = null;
             t.Dispose();
+            t = null;
         });
     }
 

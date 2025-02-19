@@ -68,22 +68,25 @@ public class FloatingNameTag
         });
     }
 
-    private void UpdateNameTag()
-    {
-        NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
-    }
+    private void UpdateNameTag() => NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
 
     public static void HideAllNameTags(player Player)
     {
         if (!Player.IsLocal) return;
         foreach (var player in Globals.ALL_PLAYERS)
+        {
             PlayerNameTags[player].NameTag.SetVisibility(false);
+            NamedWolves.ShowWolfNames(false);
+        }
     }
 
     public static void ShowAllNameTags(player Player)
     {
         if(!Player.IsLocal) return;
         foreach (var player in Globals.ALL_PLAYERS)
+        {
             PlayerNameTags[player].NameTag.SetVisibility(true);
+            NamedWolves.ShowWolfNames(true);
+        }
     }
 }

@@ -35,10 +35,11 @@ public class Blitzer : Affix
         WanderEffect?.Dispose();
         Unit.WanderTimer.Resume();
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
-        Utility.RemoveTimer(BlitzerTimer);
-        Utility.RemoveTimer(MoveTimer);
-        Utility.RemoveTimer(PreBlitzerTimer);
+        Utility.RemoveTimer(ref BlitzerTimer);
+        Utility.RemoveTimer(ref MoveTimer);
+        Utility.RemoveTimer(ref PreBlitzerTimer);
         Effect.Dispose();
+        Effect = null;
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
         Unit.Unit.SetColor(playercolor.Brown);

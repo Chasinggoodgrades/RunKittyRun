@@ -29,7 +29,7 @@ public class Howler : Affix
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Utility.RemoveTimer(HowlTimer);
+        Utility.RemoveTimer(ref HowlTimer);
         NearbyWolves.Dispose();
         NearbyWolves = null;
     }
