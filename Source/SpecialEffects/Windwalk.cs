@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class Windwalk
@@ -39,7 +37,4 @@ public static class Windwalk
             Utility.SimpleTimer(duration, () => effect.Dispose());
         }
     }
-
-
-
 }

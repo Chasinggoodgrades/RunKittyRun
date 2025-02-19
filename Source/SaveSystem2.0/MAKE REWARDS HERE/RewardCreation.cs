@@ -87,7 +87,7 @@ public static class RewardCreation
         AddReward(nameof(awards.SantaHat), Constants.ABILITY_HAT_SANTA, "head", "war3mapImported\\SantaHat.mdx", RewardType.Hats, nameof(stats.Saves), 800);
 
         // Auras
-        AddReward(nameof(awards.SpecialAura), Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, nameof(stats.HardGames), 5);
+        AddReward(nameof(awards.SpecialAura), Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, nameof(stats.HardWins), 5);
         AddReward(nameof(awards.StarlightAura), Constants.ABILITY_AURA_STARLIGHT, "origin", "war3mapImported\\StarlightAura.mdx", RewardType.Auras, nameof(stats.NormalGames), 65);
         AddReward(nameof(awards.SpectacularAura), Constants.ABILITY_AURA_SPECTACULAR, "origin", "war3mapImported\\ChillingAura.mdx", RewardType.Auras, nameof(stats.NormalWins), 30);
         AddReward(nameof(awards.ManaAura), Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, nameof(stats.NormalWins), 20);

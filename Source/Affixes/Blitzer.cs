@@ -23,8 +23,8 @@ public class Blitzer : Affix
     public override void Apply()
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.WanderTimer.Start(1.0f, false, () => Unit.StartWandering());
         Unit.WanderTimer.Pause();
+        Unit.OVERHEAD_EFFECT_PATH = "";
         Unit.Unit.SetVertexColor(224, 224, 120);
         RegisterMoveTimer();
     }
@@ -34,10 +34,10 @@ public class Blitzer : Affix
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         WanderEffect?.Dispose();
         Unit.WanderTimer.Resume();
-        MoveTimer.Pause();
-        PreBlitzerTimer.Pause();
-        MoveTimer.Dispose();
-        PreBlitzerTimer.Dispose();
+        Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
+        Utility.RemoveTimer(BlitzerTimer);
+        Utility.RemoveTimer(MoveTimer);
+        Utility.RemoveTimer(PreBlitzerTimer);
         Effect.Dispose();
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
@@ -55,7 +55,7 @@ public class Blitzer : Affix
 
     private void PreBlitzerMove()
     {
-        WanderEffect = effect.Create(Unit.OVERHEAD_EFFECT_PATH, Unit.Unit, "overhead");
+        WanderEffect = effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
         Effect?.Dispose();
         Unit.Unit.SetVertexColor(255, 255, 0);
         Unit.Unit.SetColor(playercolor.Yellow);

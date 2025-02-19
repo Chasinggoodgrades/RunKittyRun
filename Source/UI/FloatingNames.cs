@@ -6,7 +6,7 @@ public class FloatingNameTag
 {
     public static Dictionary<player, FloatingNameTag> PlayerNameTags;
     private static float NAME_TAG_HEIGHT = 0.015f;
-    private static float NAME_TAG_UPDATE_INTERVAL = 0.02f;
+    private static float NAME_TAG_UPDATE_INTERVAL = 0.03f;
     private static timer NamePosUpdater;
     private player Player;
     public texttag NameTag;

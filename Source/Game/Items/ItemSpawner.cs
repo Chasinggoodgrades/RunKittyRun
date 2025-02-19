@@ -8,11 +8,11 @@ using static WCSharp.Api.Common;
 public static class ItemSpawner
 {
     private static List<int> SpawnableItems;
-    private static List<int> Kibbles;
     private static List<item> TrackItems;
     private static List<Kibble> TrackKibbles;
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS = 15;
+
     public static void Initialize()
     {
         if(Gamemode.CurrentGameMode != "Standard") return;

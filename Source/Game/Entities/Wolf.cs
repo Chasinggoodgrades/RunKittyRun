@@ -63,12 +63,7 @@ public class Wolf
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         if (HasAffix("Blitzer")) return;
-        Unit.IssueOrder("move", randomX, randomY);
-
-        if (WCSharp.Shared.Util.DistanceBetweenPoints(Unit, randomX, randomY) < 400)
-            Unit.IssueOrder("move", randomX, randomY);
-        else
-            WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
+        WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
     }
 
     private bool ShouldStartEffect()

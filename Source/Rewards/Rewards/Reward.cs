@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using WCSharp.Api;
+using static WCSharp.Api.Common;
 /// <summary>
 /// Reward Class and Enums
 /// * Enums are the different types of rewards. They help designate which category the reward should be in.
@@ -82,7 +83,7 @@ public class Reward
     {
         if (setData) SetSelectedData(player);
         SetEffect(player);
-        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Applying {GetRewardName()}|r");
+        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.ToString()}]");
     }
 
     private void SetEffect(player player)
@@ -267,7 +268,7 @@ public class Reward
     }
     //public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
-    public string GetRewardName() => Name.ToString().Replace("_", " ");
+    public string GetRewardName() => BlzGetAbilityTooltip(AbilityID, 0);
     public int GetAbilityID() => AbilityID;
 
 }

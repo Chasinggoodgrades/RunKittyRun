@@ -26,14 +26,11 @@ public static class UrnSoul
 
     private static unit UnitCreation()
     {
-        var x = UrnRegions[0].CenterX;
-        var y = UrnRegions[0].CenterY;
-        var u = unit.Create(player.NeutralAggressive, UnitType, x, y, 0);
+        var u = unit.Create(player.NeutralAggressive, UnitType, 0, 0, 0);
         u.HeroName = Name;
         u.SetPathing(false); // Disable Collision 
         u.AddAbility(FourCC("Agho")); // Ghost
         u.AddAbility(FourCC("Augh")); // Shade
-        u.IssueOrder("move", x, y);
         return u;
     }
 

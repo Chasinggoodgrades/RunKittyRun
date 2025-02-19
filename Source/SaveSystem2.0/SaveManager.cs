@@ -70,6 +70,8 @@ public class SaveManager
         var date = DateTimeManager.DateTime.ToString();
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            if (player.Controller == mapcontrol.Computer) continue;
+            if (player.SlotState != playerslotstate.Playing) continue;
             SaveData[player].Date = date;
             Globals.SaveSystem.SaveAllDataToFile(player);
         }
@@ -84,6 +86,8 @@ public class SaveManager
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            if (player.Controller == mapcontrol.Computer) continue;
+            if (player.SlotState != playerslotstate.Playing) continue;
             Load(player);
         }
     }

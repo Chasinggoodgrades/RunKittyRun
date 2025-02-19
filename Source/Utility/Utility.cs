@@ -350,5 +350,12 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
+    public static void RemoveTimer(timer t)
+    {
+        t.Pause();
+        t.Dispose();
+        t = null;
+    }
+
 
 }

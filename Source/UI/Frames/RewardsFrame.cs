@@ -19,7 +19,7 @@ public static class RewardsFrame
     private static float Padding = 0.01f;
     private static float IconSize = 0.02f;
     private static int FrameCount = 0;
-    private static string FrameTitle = $"{Colors.COLOR_YELLOW}Rewards{Colors.COLOR_RESET}";
+
     public static void Initialize()
     {
         try
