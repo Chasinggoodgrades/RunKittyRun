@@ -25,7 +25,12 @@ public class Kibble
     public void Dispose()
     {
         Trigger.Dispose();
-        if (!Item.IsOwned) RemoveItem(Item);
+        Trigger = null;
+        if (!Item.IsOwned)
+        {
+            Item.Dispose();
+            Item = null;
+        }
     }
 
     private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];

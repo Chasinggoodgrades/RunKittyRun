@@ -137,7 +137,6 @@ public static class Constants
 	public const int ITEM_BEACON_OF_UNITED_LIFEFORCE = 1227894833;
 	public const int ITEM_ANTI_BLOCK_WAND = 1735352941;
 	public const int ITEM_GHOST_KITTY_BOOTS = 1227894835;
-	public const int ITEM_FIERYFOXES_S_MISSING_SHOE = 1227894836;
 	public const int ITEM_EASTER_EGG_EMPTY_VIAL = 1227894838;
 	public const int ITEM_EASTER_EGG_BLOOD_FILLED_VIAL = 1227894839;
 	public const int ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL = 1227894840;
@@ -148,6 +147,7 @@ public static class Constants
 	public const int ITEM_CRYSTAL_OF_FIRE = 1227894850;
 	public const int ITEM_KITTY_XP = 1227894852;
 	public const int ITEM_KIBBLE = 1227894853;
+	public const int ITEM_FIERYFOX_S_MISSING_SHOE = 1227894836;
 	public const int ITEM_KIBBLE_GREEN = 1227894854;
 	public const int ITEM_KIBBLE_RED = 1227894855;
 	public const int ITEM_KIBBLE_PURPLE = 1227894856;

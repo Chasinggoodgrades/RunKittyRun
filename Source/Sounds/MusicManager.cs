@@ -7,7 +7,6 @@ public static class MusicManager
     public static void Initialize()
     {
         MusicList = RegisterMusicList();
-        Utility.SimpleTimer(5.0f, () => PlayNumb());
     }
 
     // The best approach for this was to replace the internal music files with the songs themselves.
@@ -32,7 +31,7 @@ public static class MusicManager
         };
     }
 
-    private static void PlayNumb() => MusicList[1].Play();
+    public static void PlayNumb() => MusicList[1].Play();
 }
 
 public class Music

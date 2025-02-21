@@ -129,6 +129,7 @@ public static class DebugCmd
                 Console.WriteLine($"Applying {nameAffix} to all wolves.");
                 foreach (var wolf in Globals.ALL_WOLVES.Values)
                 {
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
                     var affix = AffixFactory.CreateAffix(wolf, nameAffix);
                     wolf.AddAffix(affix);
                 }
@@ -136,6 +137,7 @@ public static class DebugCmd
             case "?affix":
                 var affixName = cmd.Length > 1 ? char.ToUpper(cmd[1][0]) + cmd[1].Substring(1).ToLower() : "Speedster";
                 if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
+                if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[selectedUnit])) return;
                 var affixX = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName);
                 Globals.ALL_WOLVES[selectedUnit].AddAffix(affixX);
                 break;
@@ -191,8 +193,6 @@ public static class DebugCmd
                 break;
             case "?allsave":
                 SaveManager.SaveAllDataToFile();
-                break;
-            case "?testx":
                 break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");

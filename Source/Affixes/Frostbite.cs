@@ -63,11 +63,6 @@ public class Frostbite : Affix
         });
     }
 
-    private Func<bool> Test()
-    {
-        return () => true;
-    }
-
     private void PeriodicRangeCheck()
     {
         if (Frostbitten.Count == 0) return;
@@ -103,32 +98,4 @@ public class Frostbite : Affix
         Effects[target] = effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
         target.BaseMovementSpeed = target.BaseMovementSpeed * FROSTBITE_SPEED_REDUCTION;
     }
-
-
-    /*    private float CurrentEffectiveMS(unit target)
-    {
-        var baseMS = target.BaseMovementSpeed;
-        var bootMS = Utility.UnitHasItem(target, Constants.ITEM_PEGASUS_BOOTS) ? 60.0f : 0.0f;
-        float msMultiplier = 1.0f;
-
-        // Agility Aura
-        int agiAbility = Constants.ABILITY_AGILITY_AURA;
-        int agiLevel = target.GetAbilityLevel(agiAbility);
-        if (agiLevel > 0)
-        {
-            float agiBonus = target.GetAbility(agiAbility).GetMovementSpeedIncreasePercent_Oae1(agiLevel);
-            msMultiplier *= (1.0f + agiBonus);
-        }
-
-        // Windwalk
-        int wwAbility = Constants.ABILITY_WIND_WALK;
-        int wwLevel = target.GetAbilityLevel(wwAbility);
-        if (wwLevel > 0)
-        {
-            float wwBonus = target.GetAbility(wwAbility).GetMovementSpeedIncreasePercent_Owk2(wwLevel);
-            msMultiplier *= (1.0f + wwBonus);
-        }
-
-        return (baseMS * msMultiplier * FROSTBITE_SPEED_REDUCTION) - (bootMS / 2);
-    }*/
 }

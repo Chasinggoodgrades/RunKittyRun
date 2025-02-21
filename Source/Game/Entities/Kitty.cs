@@ -138,6 +138,7 @@ public class Kitty
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
+        Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
 
         // Set Collision to Default

@@ -357,6 +357,4 @@ public static class Utility
         t.Dispose();
         t = null;
     }
-
-
 }

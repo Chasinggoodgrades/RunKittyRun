@@ -85,6 +85,9 @@ public static class GeneralCmds
             case "-oldcode":
                 Savecode.LoadString();
                 break;
+            case "-apm":
+                p.DisplayTimedTextTo(10.0f, UnitOrders.CalculateAllAPM());
+                break;
             case "-obs":
             case "-observer":
                 Utility.MakePlayerSpectator(p);

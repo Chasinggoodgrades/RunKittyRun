@@ -159,14 +159,14 @@ public static class StandardMultiboard
                 var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
 
                 var stats = new[] {
-            name,
-            score.ToString(),
-            totalSaves.ToString(),
-            totalDeaths.ToString(),
-            currentStats.SaveStreak.ToString(),
-            kda,
-            currentStats.RoundSaves + " / " + currentStats.RoundDeaths
-        };
+                name,
+                score.ToString(),
+                totalSaves.ToString(),
+                totalDeaths.ToString(),
+                currentStats.SaveStreak.ToString(),
+                kda,
+                currentStats.RoundSaves + " / " + currentStats.RoundDeaths
+                };
 
                 for (int i = 0; i < stats.Length; i++)
                 {
@@ -176,6 +176,8 @@ public static class StandardMultiboard
 
                 rowIndex++;
             }
+
+            players = null;
         }
         catch (Exception ex)
         {

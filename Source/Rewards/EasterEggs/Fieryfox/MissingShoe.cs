@@ -11,7 +11,7 @@ public static class MissingShoe
     public static void Initialize()
     {
         RegisterSpawnEvent();
-        ItemID = Constants.ITEM_FIERYFOXES_S_MISSING_SHOE;
+        ItemID = Constants.ITEM_FIERYFOX_S_MISSING_SHOE;
         TurnInRange = 200.0f;
     }
 
@@ -28,6 +28,7 @@ public static class MissingShoe
     {
         TurnInEvent = trigger.Create();
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
+        TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null);
         TurnInEvent.AddAction(TurnInActions);
     }
 

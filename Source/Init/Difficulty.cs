@@ -87,6 +87,7 @@ public static class Difficulty
             }
         RemoveDifficultyDialog();
         if (chosenButton != null) SetDifficulty(ButtonNames[chosenButton]);
+        else SetDifficulty(s_NORMAL);
     }
 
     private static void SetDifficulty(string difficulty)

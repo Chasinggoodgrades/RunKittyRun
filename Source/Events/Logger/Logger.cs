@@ -19,6 +19,7 @@ public static class Logger
 
     private static void Log(string level, params object[] messages)
     {
+        if (!Source.Program.Debug) return;
         Console.WriteLine($"[{level}] {string.Join(" ", messages)}");
     }
 }

@@ -84,6 +84,7 @@ namespace Source.Init
                 UniqueItems.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
+                MusicManager.PlayNumb();
             }
             catch (Exception e)
             {
