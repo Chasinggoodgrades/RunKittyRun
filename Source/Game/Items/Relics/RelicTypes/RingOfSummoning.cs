@@ -86,6 +86,7 @@ public class RingOfSummoning : Relic
 
         SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));   
         var units = SummonGroup.ToList();
+        if(SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
 
         for (int i = 0; i < numberOfSummons && i < units.Count; i++)
         {

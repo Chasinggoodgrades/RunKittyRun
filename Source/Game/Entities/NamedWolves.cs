@@ -44,7 +44,7 @@ public static class NamedWolves
         StanWolf.Unit.Name = $"{Colors.COLOR_PURPLE}Stan|r";
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
-        StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f);
+        Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f)); // delay, let unit spawn and pos properly.
         StanWolf.Unit.IsPaused = true;
         DNTNamedWolves.Add(StanWolf);
     }

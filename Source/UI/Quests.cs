@@ -7,8 +7,10 @@ public static class Quests
     private static quest CommandsQuest = quest.Create();
     private static quest ContributorsQuest = quest.Create();
     private static quest LeaderboardsQuest = quest.Create();
+    private static quest HowToPlay = quest.Create();
     public static void Initialize()
     {
+        CreateHowToPlayQuest();
         CreateCommandsQuest();
         CreateContributorsQuest();
         CreateLeaderboardsQuest();
@@ -19,7 +21,7 @@ public static class Quests
         var commands = GeneralCmds.DisplayCommands();
         CommandsQuest.SetTitle("Commands");
         CommandsQuest.SetIcon("war3mapImported\\BTNArcaniteNightRing.blp");
-
+        CommandsQuest.IsRequired = false;
 
         var commandLines = commands.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         string description = string.Join($"\n{Colors.COLOR_YELLOW}", commandLines);
@@ -46,6 +48,16 @@ public static class Quests
             $"{Colors.COLOR_YELLOW}If you'd like to upload your stats, join our Discord and use the #uploadstats channel.|r\n\n" +
             $"{Colors.COLOR_LAVENDER}https://discord.gg/GSu6zkNvx5|r");
     }
+
+    private static void CreateHowToPlayQuest()
+    {
+        HowToPlay.SetTitle("How to Play");
+        HowToPlay.SetIcon("war3mapImported\\BTNArcaniteNightRing.blp");
+        HowToPlay.SetDescription($"{Colors.COLOR_YELLOW}Run Kitty Run is a fast-paced, cooperative escape. Players must navigate through the safezones while dodging wolves.{Colors.COLOR_RESET}" +
+            $"\n\n{Colors.COLOR_YELLOW}This game has 5 rounds, each getting harder as the game goes on. Teamwork and quick reflexes are the key to success.{Colors.COLOR_RESET}" +
+            $"\n\n{Colors.COLOR_YELLOW}Once players hit level 10, they should acquire a relic from the shop {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}(Hotkey: =).{Colors.COLOR_RESET}{Colors.COLOR_YELLOW} Good luck and have fun!{Colors.COLOR_RESET}");
+    }
+
 
 
 }

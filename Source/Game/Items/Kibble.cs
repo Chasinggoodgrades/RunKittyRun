@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 public class Kibble
 {
+    public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
@@ -62,20 +63,27 @@ public class Kibble
 
     private void KibblePickup()
     {
-        // either some gold, or xp... jack pot.. or a reward
-        var unit = @event.Unit;
-        var player = unit.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        effect effect = null;
-        var randomChance = GetRandomReal(0, 100);
-        //if (randomChance <= 0.5) KibbleReward(kitty); // .5% Chance
-        if (randomChance <= 30) KibbleGoldReward(kitty); // 20% Chance
-        else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
-        else KibbleNothing(kitty); // 55% Chance
+        try
+        {
+            // either some gold, or xp... jack pot.. or a reward
+            var unit = @event.Unit;
+            var player = unit.Owner;
+            var kitty = Globals.ALL_KITTIES[player];
+            effect effect = null;
+            var randomChance = GetRandomReal(0, 100);
+            //if (randomChance <= 0.5) KibbleReward(kitty); // .5% Chance
+            if (randomChance <= 30) KibbleGoldReward(kitty); // 20% Chance
+            else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
+            else KibbleNothing(kitty); // 55% Chance
 
-        if(randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
-        if (effect != null) effect.Dispose();
-        IncrementKibblePoolAll();
+            if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+            if (effect != null) effect.Dispose();
+            IncrementKibble(player);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in KibblePickup: {e.Message}");
+        }
     }
 
     private void KibbleReward(Kitty kitty)
@@ -144,8 +152,11 @@ public class Kibble
     }
 
 
-    private static void IncrementKibblePoolAll()
+    private static void IncrementKibble(player kibblePicker)
     {
+        if (PickedUpKibble.ContainsKey(kibblePicker)) PickedUpKibble[kibblePicker] += 1;
+        else PickedUpKibble.Add(kibblePicker, 1);
+
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
     }
