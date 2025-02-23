@@ -15,7 +15,7 @@ public class ChronoSphere : Relic
     private const float MAGNITUDE_LOWER_BOUND = 10.0f;
     private const float MAGNITUDE_UPPER_BOUND = 14.0f;
     private const float LOCATION_CAPTURE_INTERVAL = 5.0f;
-    private const float REWIND_COOLDOWN = 120.0f;
+    private const float REWIND_COOLDOWN = 150.0f;
 
     private ability Ability;
     private player Owner;

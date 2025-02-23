@@ -52,7 +52,7 @@ public static class Quests
     private static void CreateHowToPlayQuest()
     {
         HowToPlay.SetTitle("How to Play");
-        HowToPlay.SetIcon("war3mapImported\\BTNArcaniteNightRing.blp");
+        HowToPlay.SetIcon("ReplaceableTextures\\CommandButtons\\BTNTome.blp");
         HowToPlay.SetDescription($"{Colors.COLOR_YELLOW}Run Kitty Run is a fast-paced, cooperative escape. Players must navigate through the safezones while dodging wolves.{Colors.COLOR_RESET}" +
             $"\n\n{Colors.COLOR_YELLOW}This game has 5 rounds, each getting harder as the game goes on. Teamwork and quick reflexes are the key to success.{Colors.COLOR_RESET}" +
             $"\n\n{Colors.COLOR_YELLOW}Once players hit level 10, they should acquire a relic from the shop {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}(Hotkey: =).{Colors.COLOR_RESET}{Colors.COLOR_YELLOW} Good luck and have fun!{Colors.COLOR_RESET}");
