@@ -90,4 +90,5 @@ public class GameAwardsData
     public int VioletWings { get; set; }
     public int VioletAura { get; set; }
     public int FreezeAura { get; set; }
+    public int PenguinSkin { get; set; }
 }

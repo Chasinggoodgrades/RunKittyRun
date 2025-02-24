@@ -76,6 +76,7 @@ public static class RewardCreation
     public static void SetupRewards()
     {
         var awards = Globals.GAME_AWARDS;
+        var awardsSorted = Globals.GAME_AWARDS_SORTED;
         var stats = Globals.GAME_STATS;
 
         // Hats
@@ -165,6 +166,7 @@ public static class RewardCreation
         AddReward(nameof(awards.SatyrKitty), Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, nameof(stats.NormalWins), 25);
         AddReward(nameof(awards.AstralKitty), Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, nameof(stats.NormalGames), 55);
         AddReward(nameof(awards.ZandalariKitty), Constants.ABILITY_SKIN_KITTYZANDALARI, Constants.UNIT_ZANDALARI_KITTY, RewardType.Skins);
+        AddReward(nameof(awards.PenguinSkin), Constants.ABILITY_CHAMPION_SKINPENGUIN, Constants.UNIT_PENGUIN, RewardType.Tournament);
 
         // Holiday
         AddReward(nameof(awards.SnowWings2023), Constants.ABILITY_HOLIDAY_WINGS_C2023, "chest", "war3mapImported\\SnowflakeWings.mdx", RewardType.Wings);

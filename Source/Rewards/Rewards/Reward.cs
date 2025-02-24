@@ -23,8 +23,8 @@ public class Reward
 {
     public string Name { get; }
     public int AbilityID { get; }
-    public string OriginPoint { get; }
-    public string ModelPath { get; }
+    public string OriginPoint { get; } = "";
+    public string ModelPath { get; } = "";
     public int SkinID { get; }
     public RewardType Type { get; }
     public string TypeSorted { get; set; }
@@ -99,7 +99,7 @@ public class Reward
         ApplyEffect(player, effectInstance);
     }
 
-    private void ApplyEffect(player player, effect effectInstance)
+    private void ApplyEffect(player player, effect effectInstance = null)
     {
         switch (Type)
         {
@@ -161,7 +161,7 @@ public class Reward
 
     private bool SetSkin(player player)
     {
-        if (Type != RewardType.Skins) return false;
+        if (Type != RewardType.Skins && Type != RewardType.Tournament) return false;
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
 
@@ -171,7 +171,7 @@ public class Reward
             AmuletOfEvasiveness.ScaleUnit(kitty);
         }
         else
-            Console.WriteLine($"Skins ID invalid for {Name}");
+            Logger.Critical($"Skins ID invalid for {Name}");
 
         return true;
     }
@@ -205,7 +205,7 @@ public class Reward
             case RewardType.Tournament:
                 break;
             default:
-                Console.WriteLine("Error with selected data");
+                Logger.Critical("Error with selected data");
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
     }
@@ -223,8 +223,16 @@ public class Reward
                 RewardsManager.ActiveAuras[player] = e;
             else if (Name.Contains("Wings"))
                 RewardsManager.ActiveWings[player] = e;
+            else if (Name.Contains("Skin"))
+            {
+                SetSkin(player);
+                Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
+            }
             else
+            {
+                Logger.Warning($"Error: Tournament reward {Name} is not a valid type.");
                 return false;
+            }
         }
         else
         {
@@ -266,7 +274,6 @@ public class Reward
                 return new Tournament().GetType().Name;
         }
     }
-    //public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
     public string GetRewardName() => BlzGetAbilityTooltip(AbilityID, 0);
     public int GetAbilityID() => AbilityID;

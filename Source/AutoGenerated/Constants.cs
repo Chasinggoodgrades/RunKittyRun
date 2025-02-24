@@ -115,6 +115,7 @@ public static class Constants
 	public const int ABILITY_TRAIL_EMERALDLIGHT = 1093677142;
 	public const int ABILITY_AURA_FREEZE = 1093677143;
 	public const int ABILITY_GHOSTAFFIX = 1093677144;
+	public const int ABILITY_CHAMPION_SKINPENGUIN = 1093677360;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -184,6 +185,7 @@ public static class Constants
 	public const int UNIT_SANTA = 1848651826;
 	public const int UNIT_ZANDALARI_KITTY = 1160785986;
 	public const int UNIT_SOLO_TOURNAMENT_2025 = 1160785987;
+	public const int UNIT_PENGUIN = 1160785988;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;
