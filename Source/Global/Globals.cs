@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -36,6 +37,7 @@ public static class Globals
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
 
+    public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
     public static Dictionary<int, Team> ALL_TEAMS;
     public static Dictionary<player, Team> PLAYERS_TEAMS;
     public static Dictionary<Team, string> TEAM_PROGRESS;

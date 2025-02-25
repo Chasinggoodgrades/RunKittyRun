@@ -79,7 +79,7 @@ public static class NitroChallenges
 
     public static void CompletedNitro(unit unit)
     {
-        if (NitroTimer.Remaining == 0.00) return;
+        if (NitroTimer.Remaining <= 0.00) return;
         if (Safezone.CountHitSafezones(unit.Owner) <= 12)
         {
             unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You didn't hit enough safezones on your own to obtain nitro.");

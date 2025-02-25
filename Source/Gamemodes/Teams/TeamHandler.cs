@@ -44,7 +44,7 @@ public static class TeamHandler
     public static void RandomHandler()
     {
         FreepickEnabled = false;
-        var random = new Random(Globals.GAME_SEED); // Must Set To Specific Seed to avoid desyncs.
+        var random = Globals.RANDOM_GEN;
         List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
 
         shuffled = shuffled.OrderBy(x => random.Next()).ToList();

@@ -31,8 +31,6 @@ public class Reward
     public string GameStat { get; }
     public int GameStatValue { get; set; }
 
-    private static GameSelectedData GlobalSelectedData = new GameSelectedData();
-
     public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type)
     {
         Name = name;
