@@ -2,10 +2,10 @@
 
 public class RewardHelper
 {
-    public static List<Reward> Hats;
-    public static List<Reward> Wings;
-    public static List<Reward> Trails;
-    public static List<Reward> Auras;
+    public List<Reward> Hats;
+    public List<Reward> Wings;
+    public List<Reward> Trails;
+    public List<Reward> Auras;
 
     public RewardHelper()
     {
