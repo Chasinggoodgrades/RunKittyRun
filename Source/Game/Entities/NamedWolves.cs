@@ -10,6 +10,7 @@ public static class NamedWolves
     public static texttag StanNameTag = texttag.Create();
     public static texttag MarcoNameTag = texttag.Create();
     private static timer MarcoTexttagTimer = timer.Create();
+    private static timer StanTexttagTimer = timer.Create();
     private static timer MarcoRevive = timer.Create();
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
 
@@ -44,8 +45,9 @@ public static class NamedWolves
         StanWolf.Unit.Name = $"{Colors.COLOR_PURPLE}Stan|r";
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
-        Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f)); // delay, let unit spawn and pos properly.
-        Utility.SimpleTimer(1.5f, () => StanWolf.Unit.IsPaused = true);
+        StanWolf.Unit.IsPaused = true;
+        StanWolf.Unit.BaseMovementSpeed = 0;
+        Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
 
@@ -76,6 +78,7 @@ public static class NamedWolves
 
     public static void ShowWolfNames(bool hidden = true)
     {
+        if (DNTNamedWolves.Count == 0) return;
         MarcoNameTag.SetVisibility(hidden);
         StanNameTag.SetVisibility(hidden);
     }

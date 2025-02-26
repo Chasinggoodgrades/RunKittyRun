@@ -132,7 +132,7 @@ public static class ProtectionOfAncients
         var owningPlayer = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
-        if(!kitty.Alive) kitty.Invulnerable = true;
+        if(!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
         actiEffect.Dispose();
         EndEffectActions(owningPlayer);
     }
@@ -175,6 +175,6 @@ public static class ProtectionOfAncients
         }
         Utility.SimpleTimer(INVULNERABLE_DURATION, () => kitty.Invulnerable = false);
         tempGroup.Dispose();
-
+        tempGroup = null;
     }
 }

@@ -30,7 +30,7 @@ public static class RewardsFrame
             SetRewardsFrameHotkey();
             CountRewardFrames();
             AppendRewardsToFrames();
-            //CreateRandomRewardButton();
+            CreateRandomRewardButton();
             FrameManager.CreateHeaderFrame(RewardFrame);
         }
         catch (Exception ex)
@@ -160,7 +160,6 @@ public static class RewardsFrame
     private static void RandomRewardsButtonActions()
     {
         var player = @event.Player;
-        if (!player.IsLocal) return;
         var frame = @event.Frame;
 
         RewardHelp.ClearRewards();
@@ -185,6 +184,7 @@ public static class RewardsFrame
         selectedTrail?.ApplyReward(player);
         selectedAura?.ApplyReward(player);
 
+        if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
     }
 
