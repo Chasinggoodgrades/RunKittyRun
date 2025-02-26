@@ -76,7 +76,6 @@ public class FloatingNameTag
         foreach (var player in Globals.ALL_PLAYERS)
         {
             PlayerNameTags[player].NameTag.SetVisibility(false);
-            NamedWolves.ShowWolfNames(false);
         }
     }
 
@@ -86,7 +85,6 @@ public class FloatingNameTag
         foreach (var player in Globals.ALL_PLAYERS)
         {
             PlayerNameTags[player].NameTag.SetVisibility(true);
-            NamedWolves.ShowWolfNames(true);
         }
     }
 }

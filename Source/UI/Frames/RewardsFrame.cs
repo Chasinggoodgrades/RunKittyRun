@@ -30,7 +30,7 @@ public static class RewardsFrame
             SetRewardsFrameHotkey();
             CountRewardFrames();
             AppendRewardsToFrames();
-            CreateRandomRewardButton();
+            //CreateRandomRewardButton();
             FrameManager.CreateHeaderFrame(RewardFrame);
         }
         catch (Exception ex)
