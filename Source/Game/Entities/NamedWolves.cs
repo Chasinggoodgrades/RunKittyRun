@@ -45,8 +45,7 @@ public static class NamedWolves
         StanWolf.Unit.Name = $"{Colors.COLOR_PURPLE}Stan|r";
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
-        StanWolf.Unit.IsPaused = true;
-        StanWolf.Unit.BaseMovementSpeed = 0;
+        StanWolf.IsPaused = true;
         Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
