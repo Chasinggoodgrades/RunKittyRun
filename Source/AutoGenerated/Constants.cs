@@ -115,6 +115,7 @@ public static class Constants
 	public const int ABILITY_TRAIL_EMERALDLIGHT = 1093677142;
 	public const int ABILITY_AURA_FREEZE = 1093677143;
 	public const int ABILITY_GHOSTAFFIX = 1093677144;
+	public const int ABILITY_CHAMPION_SKINPENGUIN = 1093677360;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -137,7 +138,6 @@ public static class Constants
 	public const int ITEM_BEACON_OF_UNITED_LIFEFORCE = 1227894833;
 	public const int ITEM_ANTI_BLOCK_WAND = 1735352941;
 	public const int ITEM_GHOST_KITTY_BOOTS = 1227894835;
-	public const int ITEM_FIERYFOXES_S_MISSING_SHOE = 1227894836;
 	public const int ITEM_EASTER_EGG_EMPTY_VIAL = 1227894838;
 	public const int ITEM_EASTER_EGG_BLOOD_FILLED_VIAL = 1227894839;
 	public const int ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL = 1227894840;
@@ -148,6 +148,7 @@ public static class Constants
 	public const int ITEM_CRYSTAL_OF_FIRE = 1227894850;
 	public const int ITEM_KITTY_XP = 1227894852;
 	public const int ITEM_KIBBLE = 1227894853;
+	public const int ITEM_FIERYFOX_S_MISSING_SHOE = 1227894836;
 	public const int ITEM_KIBBLE_GREEN = 1227894854;
 	public const int ITEM_KIBBLE_RED = 1227894855;
 	public const int ITEM_KIBBLE_PURPLE = 1227894856;
@@ -183,6 +184,8 @@ public static class Constants
 	public const int UNIT_SOLO_TOURNAMENT_2024 = 1160785985;
 	public const int UNIT_SANTA = 1848651826;
 	public const int UNIT_ZANDALARI_KITTY = 1160785986;
+	public const int UNIT_SOLO_TOURNAMENT_2025 = 1160785987;
+	public const int UNIT_PENGUIN = 1160785988;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

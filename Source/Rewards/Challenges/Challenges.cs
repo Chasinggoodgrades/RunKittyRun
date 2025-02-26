@@ -5,7 +5,6 @@ public static class Challenges
     public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
     public const int DIVINITY_TENDRILS_COUNT = 4;
     public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
-    private static Dictionary<player, timer> YellowLightningPairs = new Dictionary<player, timer>();
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
     private const int PURPLE_FIRE_DEATH_REQUIREMENT = 0;
@@ -110,18 +109,6 @@ public static class Challenges
         {
             if (kitty.CurrentStats.WolfFreezeCount < FREEZE_AURA_WOLF_REQUIREMENT) continue;
             AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS.FreezeAura));
-        }
-    }
-
-    public static void PrismaticAura()
-    {
-        foreach(var player in Globals.ALL_PLAYERS)
-        {
-            var saveData = Globals.ALL_KITTIES[player].SaveData;
-            if (saveData.GameAwardsSorted.Auras.SpecialAura == 1) continue; // already have it.. no need.
-            var winningGames = saveData.GameStats.HardWins + saveData.GameStats.ImpossibleWins;
-            if (winningGames < 5) continue;
-            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.SpecialAura));
         }
     }
 

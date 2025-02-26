@@ -47,7 +47,5 @@ public class Circle
 
     public void HideCircle() => Unit.IsVisible = false;
 
-
     private void ShowCircle() => Unit.IsVisible = true;
-
 }

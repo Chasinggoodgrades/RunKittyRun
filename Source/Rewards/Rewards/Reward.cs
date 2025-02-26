@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using WCSharp.Api;
+using static WCSharp.Api.Common;
 /// <summary>
 /// Reward Class and Enums
 /// * Enums are the different types of rewards. They help designate which category the reward should be in.
@@ -22,15 +23,13 @@ public class Reward
 {
     public string Name { get; }
     public int AbilityID { get; }
-    public string OriginPoint { get; }
-    public string ModelPath { get; }
+    public string OriginPoint { get; } = "";
+    public string ModelPath { get; } = "";
     public int SkinID { get; }
     public RewardType Type { get; }
     public string TypeSorted { get; set; }
     public string GameStat { get; }
     public int GameStatValue { get; set; }
-
-    private static GameSelectedData GlobalSelectedData = new GameSelectedData();
 
     public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type)
     {
@@ -82,7 +81,7 @@ public class Reward
     {
         if (setData) SetSelectedData(player);
         SetEffect(player);
-        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Applying {GetRewardName()}|r");
+        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.ToString()}]");
     }
 
     private void SetEffect(player player)
@@ -98,7 +97,7 @@ public class Reward
         ApplyEffect(player, effectInstance);
     }
 
-    private void ApplyEffect(player player, effect effectInstance)
+    private void ApplyEffect(player player, effect effectInstance = null)
     {
         switch (Type)
         {
@@ -158,9 +157,9 @@ public class Reward
         return true;
     }
 
-    private bool SetSkin(player player)
+    private bool SetSkin(player player, bool tournament = false)
     {
-        if (Type != RewardType.Skins) return false;
+        if (Type != RewardType.Skins && tournament == false) return false;
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
 
@@ -168,9 +167,10 @@ public class Reward
         {
             kitty.Skin = SkinID;
             AmuletOfEvasiveness.ScaleUnit(kitty);
+            kitty.Name = $"{Colors.PlayerNameColored(player)}";
         }
         else
-            Console.WriteLine($"Skins ID invalid for {Name}");
+            Logger.Critical($"Skins ID invalid for {Name}");
 
         return true;
     }
@@ -204,7 +204,7 @@ public class Reward
             case RewardType.Tournament:
                 break;
             default:
-                Console.WriteLine("Error with selected data");
+                Logger.Critical("Error with selected data");
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
     }
@@ -222,8 +222,16 @@ public class Reward
                 RewardsManager.ActiveAuras[player] = e;
             else if (Name.Contains("Wings"))
                 RewardsManager.ActiveWings[player] = e;
+            else if (Name.Contains("Skin"))
+            {
+                SetSkin(player, true);
+                Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
+            }
             else
+            {
+                Logger.Warning($"Error: Tournament reward {Name} is not a valid type.");
                 return false;
+            }
         }
         else
         {
@@ -265,9 +273,8 @@ public class Reward
                 return new Tournament().GetType().Name;
         }
     }
-    //public static Reward GetRewardFromAward(Awards award) => RewardsManager.Rewards.Find(x => x.Name == award);
     public string SystemRewardName() => Name.ToString();
-    public string GetRewardName() => Name.ToString().Replace("_", " ");
+    public string GetRewardName() => BlzGetAbilityTooltip(AbilityID, 0);
     public int GetAbilityID() => AbilityID;
 
 }

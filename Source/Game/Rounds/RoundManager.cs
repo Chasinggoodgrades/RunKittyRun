@@ -84,7 +84,7 @@ public static class RoundManager
             SaveManager.SaveAll();
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;
-
+            Tips.DisplayTip();
             Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
         }
         catch (Exception e)

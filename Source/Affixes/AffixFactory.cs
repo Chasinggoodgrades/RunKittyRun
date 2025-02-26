@@ -196,12 +196,13 @@ public static class AffixFactory
     // Conditions for affixing wolves:
     // 1. Must be in the same lane
     // 2. Must have fewer than the maximum number of affixes
-    // 3. Must not be a blood wolf
+    // 3. Must not be a blood wolf, or named wolves
     private static bool ShouldAffixWolves(Wolf wolf, int laneIndex)
     {
         return wolf.RegionIndex == laneIndex
             && wolf.AffixCount() < MAX_NUMBER_OF_AFFIXES
-            && wolf.Unit != FandF.BloodWolf;
+            && wolf.Unit != FandF.BloodWolf
+            && !NamedWolves.DNTNamedWolves.Contains(wolf);
     }
 
     private static bool CanDistributeAffixes()

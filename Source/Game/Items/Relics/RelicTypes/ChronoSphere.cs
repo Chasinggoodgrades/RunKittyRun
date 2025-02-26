@@ -15,7 +15,7 @@ public class ChronoSphere : Relic
     private const float MAGNITUDE_LOWER_BOUND = 10.0f;
     private const float MAGNITUDE_UPPER_BOUND = 14.0f;
     private const float LOCATION_CAPTURE_INTERVAL = 5.0f;
-    //private static List <player> OnCooldown = new List<player>();
+    private const float REWIND_COOLDOWN = 150.0f;
 
     private ability Ability;
     private player Owner;
@@ -37,7 +37,7 @@ public class ChronoSphere : Relic
         )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Every {MAGNITUDE_CHANGE_INTERVAL.ToString("F2")} seconds, the magnitude of the slowing aura will change between {MAGNITUDE_LOWER_BOUND.ToString("F2")}% - {MAGNITUDE_UPPER_BOUND.ToString("F2")}% effectiveness.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Every {LOCATION_CAPTURE_INTERVAL.ToString("F2")} seconds, your location is captured. If you were to die, you'll reverse time to that location. {Colors.COLOR_LIGHTBLUE}(1min 30sec cooldown)|r", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Every {LOCATION_CAPTURE_INTERVAL.ToString("F2")} seconds, your location is captured. If you were to die, you'll reverse time to that location. {Colors.COLOR_LIGHTBLUE}(2min 30sec cooldown)|r", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -100,7 +100,7 @@ public class ChronoSphere : Relic
         var unit = Globals.ALL_KITTIES[Owner].Unit;
         CapturedLocation = (unit.X, unit.Y, unit.Facing);
         LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
-        LocationEffect.Scale = 0.6f;
+        LocationEffect.Scale = 0.55f;
         Utility.SimpleTimer(0.25f, LocationEffect.Dispose);
     }
 
@@ -139,10 +139,10 @@ public class ChronoSphere : Relic
         if(upgradeLevel < 2) return false;
         relic.RewindTime();
         relic.OnCooldown = true;
-        Utility.SimpleTimer(90.0f, () => {
+        Utility.SimpleTimer(REWIND_COOLDOWN, () => {
             relic.OnCooldown = false;
-            relic.CaptureLocation();
             unit.Owner.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
+            relic.CaptureLocation();
         });
         return true;
     }

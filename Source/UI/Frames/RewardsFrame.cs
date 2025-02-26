@@ -11,15 +11,16 @@ public static class RewardsFrame
     private static framehandle TempHandle;
     private static Dictionary<string, framehandle> FrameByName = new Dictionary<string, framehandle>();
     private static Dictionary<framehandle, Reward> RewardIcons = new Dictionary<framehandle, Reward>();
+    private static RewardHelper RewardHelp = new RewardHelper();
     private static int RewardsPerRow = 6;
     private static float FrameX = 0.4f;
     private static float FrameY = 0.35f;
     private static float FrameWidth = 0.30f;
-    private static float FrameHeight = 0.28f;
+    private static float FrameHeight = 0.27f;
     private static float Padding = 0.01f;
     private static float IconSize = 0.02f;
     private static int FrameCount = 0;
-    private static string FrameTitle = $"{Colors.COLOR_YELLOW}Rewards{Colors.COLOR_RESET}";
+
     public static void Initialize()
     {
         try
@@ -29,6 +30,7 @@ public static class RewardsFrame
             SetRewardsFrameHotkey();
             CountRewardFrames();
             AppendRewardsToFrames();
+            //CreateRandomRewardButton();
             FrameManager.CreateHeaderFrame(RewardFrame);
         }
         catch (Exception ex)
@@ -120,6 +122,72 @@ public static class RewardsFrame
         return panel;
     }
 
+    private static void CreateRandomRewardButton()
+    {
+        // Create the random rewards button at the bottom right of the rewards frame.
+        const float ButtonSize = 0.025f;
+        const float TooltipWidth = 0.25f;
+        const float BackgroundPadding = 0.01f;
+        const float TooltipYOffset = 0.01f;
+        var dice = "ReplaceableTextures\\CommandButtons\\BTNDice.blp";
+
+        var button = framehandle.Create("Button", "RandomRewardButton", RewardFrame, "ScoreScreenTabButtonTemplate", 0);
+        button.SetPoint(framepointtype.BottomRight, -Padding, Padding, RewardFrame, framepointtype.BottomRight);
+        button.SetSize(ButtonSize, ButtonSize);
+
+        var icon = framehandle.Create("BACKDROP", "RandomRewardButtonIcon", button, "", 0);
+        icon.SetPoints(button);
+
+        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
+        var tooltipText = framehandle.Create("TEXT", "RandomRewardTooltip", background, "", 0);
+        tooltipText.SetSize(TooltipWidth, 0);
+        background.SetPoint(framepointtype.BottomLeft, -BackgroundPadding, -BackgroundPadding, tooltipText, framepointtype.BottomLeft);
+        background.SetPoint(framepointtype.TopRight, BackgroundPadding, BackgroundPadding, tooltipText, framepointtype.TopRight);
+
+        button.SetTooltip(background);
+        tooltipText.SetPoint(framepointtype.Bottom, 0, TooltipYOffset, button, framepointtype.Top);
+        tooltipText.Enabled = false;
+
+        icon.SetTexture(dice, 0, false);
+
+        tooltipText.Text = $"{Colors.COLOR_YELLOW}Randomize Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Picks from your rewards list, applying random cosmetics.{Colors.COLOR_RESET}";
+
+        var t = trigger.Create();
+        t.RegisterFrameEvent(button, frameeventtype.Click);
+        t.AddAction(RandomRewardsButtonActions);
+    }
+
+    private static void RandomRewardsButtonActions()
+    {
+        var player = @event.Player;
+        if (!player.IsLocal) return;
+        var frame = @event.Frame;
+
+        RewardHelp.ClearRewards();
+
+        foreach (var reward in RewardsManager.Rewards)
+        {
+            var stats = Globals.ALL_KITTIES[player].SaveData;
+            var property = stats.GameAwards.GetType().GetProperty(reward.Name);
+            var value = (int)property.GetValue(stats.GameAwards);
+            if (value == 0) continue;
+
+            RewardHelp.AddReward(reward);
+        }
+
+        Reward selectedHat = (RewardHelp.Hats.Count > 0) ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.Count - 1)] : null;
+        Reward selectedWings = (RewardHelp.Wings.Count > 0) ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.Count - 1)] : null;
+        Reward selectedTrail = (RewardHelp.Trails.Count > 0) ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null;
+        Reward selectedAura = (RewardHelp.Auras.Count > 0) ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null;
+
+        selectedHat?.ApplyReward(player);
+        selectedWings?.ApplyReward(player);
+        selectedTrail?.ApplyReward(player);
+        selectedAura?.ApplyReward(player);
+
+        FrameManager.RefreshFrame(frame);
+    }
+
     private static void AppendRewardsToFrames()
     {
         var cols = RewardsPerRow;
@@ -146,8 +214,6 @@ public static class RewardsFrame
             rewardButton.SetSize(IconSize, IconSize);
 
             var icon = framehandle.Create("BACKDROP", reward.Name.ToString() + "icon", rewardButton, "", 0);
-            var iconPath = BlzGetAbilityIcon(reward.AbilityID);
-            //icon.SetTexture(iconPath, 0, false);
             icon.SetPoints(rewardButton);
             RewardTooltip(rewardButton, reward);
 

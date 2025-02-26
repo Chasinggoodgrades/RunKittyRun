@@ -60,7 +60,7 @@ public static class Standard
             RelicUtil.EnableRelicBook(@event.Unit);
             RelicUtil.DisableRelicAbilities(@event.Unit);
             ProtectionOfAncients.SetProtectionOfAncientsLevel(@event.Unit);
-            @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}Your may now buy relics from the shop!|r");
+            @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}You may now buy relics from the shop!|r");
         });
     }
 }

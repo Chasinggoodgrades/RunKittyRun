@@ -29,9 +29,7 @@ public class Howler : Affix
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        HowlTimer.Pause();
-        HowlTimer.Dispose();
-        HowlTimer = null;
+        Utility.RemoveTimer(ref HowlTimer);
         NearbyWolves.Dispose();
         NearbyWolves = null;
     }
@@ -44,7 +42,7 @@ public class Howler : Affix
 
     private void Howl()
     {
-        var roarEffect = effect.Create(ROAR_EFFECT, Unit.Unit, "origin");
+        Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
         NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
         foreach (var wolf in NearbyWolves.ToList())
         {
@@ -53,10 +51,6 @@ public class Howler : Affix
             wolfObject.StartWandering(true);
         }
         NearbyWolves.Clear();
-        NearbyWolves.Dispose();
-        NearbyWolves = null;
-        roarEffect.Dispose();
-        roarEffect = null;
         HowlTimer.Start(GetRandomHowlTime(), false, Howl);
     }
 

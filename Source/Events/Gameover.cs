@@ -18,9 +18,9 @@ public static class Gameover
         if(!WinGame) return false;
         SendWinMessage();
         GameStats(true);
+        GameoverUtil.SetBestGameStats();
         StandardWinChallenges();
-        Utility.SimpleTimer(0.5f, () => SaveManager.SaveAll());
-        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAllDataToFile());
+        SaveGame();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
@@ -35,16 +35,20 @@ public static class Gameover
         Challenges.WhiteTendrils();
         Challenges.ZandalariKitty();
         Challenges.FreezeAura();
-        Challenges.PrismaticAura();
     }
 
     private static void LosingGame()
     {
         Wolf.RemoveAllWolves();
         GameStats(false);
-        Utility.SimpleTimer(0.5f, () => SaveManager.SaveAll());
-        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAllDataToFile());
+        SaveGame();
         NotifyEndingGame();
+    }
+
+    private static void SaveGame()
+    {
+        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAll());
+        Utility.SimpleTimer(2.5f, () => SaveManager.SaveAllDataToFile());
     }
 
     private static void EndGame()
@@ -68,7 +72,7 @@ public static class Gameover
         if(Gamemode.CurrentGameMode == "Standard")
             Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyChosen}!{Colors.COLOR_RESET}");
         else
-            Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
+            Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for playing RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
     }
 
     /// <summary>
@@ -83,6 +87,7 @@ public static class Gameover
             if(win) IncrementWins(kitty);
             IncrementWinStreak(kitty, win);
         }
+        AwardManager.AwardGameStatRewards();
     }
 
     private static void IncrementGameStats(Kitty kitty)
@@ -132,10 +137,7 @@ public static class Gameover
             if (stats.WinStreak > stats.HighestWinStreak)
                 stats.HighestWinStreak = stats.WinStreak;
         }
-        else
-        {
-            stats.WinStreak = 0;
-        }
+        else stats.WinStreak = 0;
     }
 
     public static void NotifyEndingGame()

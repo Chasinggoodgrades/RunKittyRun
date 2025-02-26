@@ -84,6 +84,7 @@ namespace Source.Init
                 UniqueItems.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
+                Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
             }
             catch (Exception e)
             {

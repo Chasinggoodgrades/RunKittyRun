@@ -76,6 +76,7 @@ public static class RewardCreation
     public static void SetupRewards()
     {
         var awards = Globals.GAME_AWARDS;
+        var awardsSorted = Globals.GAME_AWARDS_SORTED;
         var stats = Globals.GAME_STATS;
 
         // Hats
@@ -87,7 +88,7 @@ public static class RewardCreation
         AddReward(nameof(awards.SantaHat), Constants.ABILITY_HAT_SANTA, "head", "war3mapImported\\SantaHat.mdx", RewardType.Hats, nameof(stats.Saves), 800);
 
         // Auras
-        AddReward(nameof(awards.SpecialAura), Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, nameof(stats.HardGames), 5);
+        AddReward(nameof(awards.SpecialAura), Constants.ABILITY_AURA_SPECIAL, "origin", "war3mapImported\\SoulArmor.mdx", RewardType.Auras, nameof(stats.HardWins), 5);
         AddReward(nameof(awards.StarlightAura), Constants.ABILITY_AURA_STARLIGHT, "origin", "war3mapImported\\StarlightAura.mdx", RewardType.Auras, nameof(stats.NormalGames), 65);
         AddReward(nameof(awards.SpectacularAura), Constants.ABILITY_AURA_SPECTACULAR, "origin", "war3mapImported\\ChillingAura.mdx", RewardType.Auras, nameof(stats.NormalWins), 30);
         AddReward(nameof(awards.ManaAura), Constants.ABILITY_AURA_MANATAP, "origin", "war3mapImported\\ManaTapAura.MDX", RewardType.Auras, nameof(stats.NormalWins), 20);
@@ -165,6 +166,7 @@ public static class RewardCreation
         AddReward(nameof(awards.SatyrKitty), Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, nameof(stats.NormalWins), 25);
         AddReward(nameof(awards.AstralKitty), Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, nameof(stats.NormalGames), 55);
         AddReward(nameof(awards.ZandalariKitty), Constants.ABILITY_SKIN_KITTYZANDALARI, Constants.UNIT_ZANDALARI_KITTY, RewardType.Skins);
+        AddReward(nameof(awards.PenguinSkin), Constants.ABILITY_CHAMPION_SKINPENGUIN, Constants.UNIT_PENGUIN, RewardType.Tournament);
 
         // Holiday
         AddReward(nameof(awards.SnowWings2023), Constants.ABILITY_HOLIDAY_WINGS_C2023, "chest", "war3mapImported\\SnowflakeWings.mdx", RewardType.Wings);

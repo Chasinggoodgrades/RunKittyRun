@@ -112,7 +112,7 @@ public static class AwardManager
         foreach (var player in Globals.ALL_PLAYERS)
             GiveReward(player, award, false);
         if (earnedPrompt)
-            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{award}");
+            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{Utility.FormatAwardName(award)}");
     }
 
     private static void EnableAbility(player player, string award)
@@ -137,30 +137,17 @@ public static class AwardManager
         if (Gamemode.CurrentGameMode != "Standard") return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
+            if(player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
+            if(player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
             var gameStats = kittyStats.GameStats;
 
             foreach(var gameStatReward in RewardsManager.GameStatRewards)
             {
                 var gamestat = gameStatReward.GameStat;
-                if (gamestat == nameof(gameStats.NormalWins) || gamestat == nameof(gameStats.NormalGames))
-                {
-                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.HardWins), gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.HardGames), gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleWins), gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleGames), gameStatReward.GameStatValue, gameStatReward.Name);
-                }
-                else if (gamestat == nameof(gameStats.HardWins) || gamestat == nameof(gameStats.HardGames))
-                {
-                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleWins), gameStatReward.GameStatValue, gameStatReward.Name);
-                    HandleGameStatTrigger(player, kittyStats, nameof(gameStats.ImpossibleGames), gameStatReward.GameStatValue, gameStatReward.Name);
-                }
-                else
-                {
-                    HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
-                }
+                if (gamestat == nameof(gameStats.NormalGames) || gamestat == nameof(gameStats.HardGames) || gamestat == nameof(gameStats.ImpossibleGames)) continue;
+                if (gamestat == nameof(gameStats.NormalWins) || gamestat == nameof(gameStats.HardWins) || gamestat == nameof(gameStats.ImpossibleWins)) continue;
+                HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
             }
         }
         AwardTrigger.RegisterTimerEvent(1.0f, true);
@@ -175,52 +162,64 @@ public static class AwardManager
             triggeraction abc = null;
             abc = TriggerAddAction(AwardTrigger, () =>
             {
-                if (gamestat == nameof(kittyStats.GameStats.NormalGames) && !NormalGamesCheck(kittyStats, requiredValue)) return;
-                else if (gamestat == nameof(kittyStats.GameStats.NormalWins) && !NormalWinsCheck(kittyStats, requiredValue)) return;
-                else if (gamestat == nameof(kittyStats.GameStats.HardGames) && !HardGamesCheck(kittyStats, requiredValue)) return;
-                else if (gamestat == nameof(kittyStats.GameStats.HardWins) && !HardWinsCheck(kittyStats, requiredValue)) return;
-                else if ((int)property.GetValue(kittyStats.GameStats) < requiredValue) return;
-                else
-                {
-                    GiveReward(player, award);
-                    AwardTrigger.RemoveAction(abc);
-                }
+                if ((int)property.GetValue(kittyStats.GameStats) < requiredValue) return;
+                GiveReward(player, award);
+                AwardTrigger.RemoveAction(abc);
             });
         }
     }
 
-    private static bool NormalGamesCheck(KittyData kittyStats, int requiredValue)
+    public static void AwardGameStatRewards()
     {
-        var combinedValue = 0;
-        combinedValue += kittyStats.GameStats.NormalGames;
-        combinedValue += kittyStats.GameStats.HardGames;
-        combinedValue += kittyStats.GameStats.ImpossibleGames;
-        return combinedValue >= requiredValue;
-    }
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers
+            if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers
 
-    private static bool NormalWinsCheck(KittyData kittyStats, int requiredValue)
-    {
-        var combinedValue = 0;
-        combinedValue += kittyStats.GameStats.NormalWins;
-        combinedValue += kittyStats.GameStats.HardWins;
-        combinedValue += kittyStats.GameStats.ImpossibleWins;
-        return combinedValue >= requiredValue;
-    }
+            var kittyStats = Globals.ALL_KITTIES[player].SaveData;
+            var gameStats = kittyStats.GameStats;
 
-    private static bool HardGamesCheck(KittyData kittyStats, int requiredValue)
-    {
-        var combinedValue = 0;
-        combinedValue += kittyStats.GameStats.HardGames;
-        combinedValue += kittyStats.GameStats.ImpossibleGames;
-        return combinedValue >= requiredValue;
-    }
+            var normalGames = gameStats.NormalGames;
+            var hardGames = gameStats.HardGames;
+            var impossibleGames = gameStats.ImpossibleGames;
 
-    private static bool HardWinsCheck(KittyData kittyStats, int requiredValue)
-    {
-        var combinedValue = 0;
-        combinedValue += kittyStats.GameStats.HardWins;
-        combinedValue += kittyStats.GameStats.ImpossibleWins;
-        return combinedValue >= requiredValue;
+            var normalWins = gameStats.NormalWins;
+            var hardWins = gameStats.HardWins;
+            var impossibleWins = gameStats.ImpossibleWins;
+
+            var normalPlusGames = normalGames + hardGames + impossibleGames;
+            var normalPlusWins = normalWins + hardWins + impossibleWins;
+
+            var hardPlusGames = hardGames + impossibleGames;
+            var hardPlusWins = hardWins + impossibleWins;
+
+            var impossiblePlusGames = impossibleGames;
+            var impossiblePlusWins = impossibleWins;
+
+            foreach (var gameStatReward in RewardsManager.GameStatRewards)
+            {
+                if (gameStatReward.GameStat != nameof(gameStats.NormalGames) && gameStatReward.GameStat != nameof(gameStats.HardGames) && gameStatReward.GameStat != nameof(gameStats.ImpossibleGames) &&
+                    gameStatReward.GameStat != nameof(gameStats.NormalWins) && gameStatReward.GameStat != nameof(gameStats.HardWins) && gameStatReward.GameStat != nameof(gameStats.ImpossibleWins)) continue;
+
+                var gameStat = gameStatReward.GameStat;
+                var requiredValue = gameStatReward.GameStatValue;
+
+                var typeProperty = kittyStats.GameAwardsSorted.GetType().GetProperty(gameStatReward.TypeSorted);
+                var nestedProperty = typeProperty.PropertyType.GetProperty(gameStatReward.Name);
+                var value = (int)nestedProperty.GetValue(typeProperty.GetValue(kittyStats.GameAwardsSorted));
+
+                if (value == 1) continue;
+
+                if (gameStat == nameof(gameStats.NormalGames) && normalPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
+                else if (gameStat == nameof(gameStats.HardGames) && hardPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
+                else if (gameStat == nameof(gameStats.ImpossibleGames) && impossiblePlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
+
+                else if (gameStat == nameof(gameStats.NormalWins) && normalPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
+                else if (gameStat == nameof(gameStats.HardWins) && hardPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
+                else if (gameStat == nameof(gameStats.ImpossibleWins) && impossiblePlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
+            }
+        }
     }
 
     /// <summary>
@@ -230,6 +229,7 @@ public static class AwardManager
     public static void SetPlayerSelectedData(Kitty kitty)
     {
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
+        if (kitty.Player.SlotState != playerslotstate.Playing) return;
         if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
 
         var unit = kitty.Unit;

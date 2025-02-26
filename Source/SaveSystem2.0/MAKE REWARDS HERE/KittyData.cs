@@ -10,7 +10,7 @@ public class KittyData
     public GameSelectedData SelectedData { get; set; }
     public RoundTimesData RoundTimes { get; set; }
     public GameAwardsDataSorted GameAwardsSorted { get; set; }
-    //public GameTimesData GameTimes { get; set; }
+    public GameTimesData BestGameTimes { get; set; }
     public KittyData()
     {
         GameStats = new GameStatsData();
@@ -18,6 +18,6 @@ public class KittyData
         SelectedData = new GameSelectedData();
         RoundTimes = new RoundTimesData();
         GameAwardsSorted = new GameAwardsDataSorted();
-        //GameTimes = new GameTimesData();
+        BestGameTimes = new GameTimesData();
     }
 }

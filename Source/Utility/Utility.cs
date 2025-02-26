@@ -130,6 +130,7 @@ public static class Utility
         {
             action();
             t.Dispose();
+            t = null;
         });
     }
 
@@ -255,6 +256,20 @@ public static class Utility
     {
         effect e = effect.Create(path, x, y);
         e.Dispose();
+        e = null;
+    }
+
+    /// <summary>
+    /// Creates an effect using the specified path at the given unit and attach point,
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="u"></param>
+    /// <param name="attachPoint"></param>
+    public static void CreateEffectAndDispose(string path, unit u, string attachPoint)
+    {
+        effect e = effect.Create(path, u, attachPoint);
+        e.Dispose();
+        e = null;
     }
 
 
@@ -336,5 +351,10 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
-
+    public static void RemoveTimer(ref timer t)
+    {
+        t.Pause();
+        t.Dispose();
+        t = null;
+    }
 }

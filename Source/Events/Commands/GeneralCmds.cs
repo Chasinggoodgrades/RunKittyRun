@@ -85,6 +85,18 @@ public static class GeneralCmds
             case "-oldcode":
                 Savecode.LoadString();
                 break;
+            case "-apm":
+                p.DisplayTimedTextTo(10.0f, UnitOrders.CalculateAllAPM());
+                break;
+            case "-kibble":
+                var kibbleList = "";
+                foreach (var playerx in Kibble.PickedUpKibble)
+                {
+                    if (playerx.Value == 0) continue;
+                    kibbleList += $"{Colors.PlayerNameColored(playerx.Key)}: {playerx.Value}\n";
+                }
+                p.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}");
+                break;
             case "-obs":
             case "-observer":
                 Utility.MakePlayerSpectator(p);
@@ -113,11 +125,13 @@ public static class GeneralCmds
             "-colors - Display all available colors",
             "-sc [rgb] | -setcolor [rgb] | -vc [rgb] - Set your player vertex color",
             "-wild - Set a random vertex color",
+            "-kibble - Displays the kibble collected by each player",
             "-hidenames | -hn - Hide all floating name tags",
             "-shownames | -sn - Show all floating name tags",
             "-kick [playerNumber] - Initiate a votekick against a player",
             "-zoom [xxxx] | -cam [xxxx] - Adjust the camera zoom level",
             "-oldcode - Loads a previous save from RKR 4.2.0+",
+            "-apm - Displays your APM for ACTIVE game time. (not counting intermissions)",
             "-endround - Initiate a vote to end the round (Solo Tournament Only)",
             "-lc | -lockcamera - Locks your camera to your unit",
             "-reset - Resets your camera to default",

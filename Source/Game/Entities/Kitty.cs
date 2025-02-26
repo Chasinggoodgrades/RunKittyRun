@@ -15,7 +15,6 @@ public class Kitty
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
-    private effect Effect { get; set; }
     public player Player { get; }
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
@@ -126,9 +125,9 @@ public class Kitty
     private void SpawnEffect()
     {
         var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
-        Effect = effect.Create(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
-        Effect.Dispose();
+        Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
     }
+
     private void CreateKitty()
     {
         // Spawn, Create, Locust
@@ -139,6 +138,7 @@ public class Kitty
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
+        Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
 
         // Set Collision to Default
