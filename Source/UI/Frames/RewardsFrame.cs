@@ -175,10 +175,10 @@ public static class RewardsFrame
             RewardHelp.AddReward(reward);
         }
 
-        Reward selectedHat = (RewardHelper.Hats.Count > 0) ? RewardHelper.Hats[GetRandomInt(0, RewardHelper.Hats.Count - 1)] : null;
-        Reward selectedWings = (RewardHelper.Wings.Count > 0) ? RewardHelper.Wings[GetRandomInt(0, RewardHelper.Wings.Count - 1)] : null;
-        Reward selectedTrail = (RewardHelper.Trails.Count > 0) ? RewardHelper.Trails[GetRandomInt(0, RewardHelper.Trails.Count - 1)] : null;
-        Reward selectedAura = (RewardHelper.Auras.Count > 0) ? RewardHelper.Auras[GetRandomInt(0, RewardHelper.Auras.Count - 1)] : null;
+        Reward selectedHat = (RewardHelp.Hats.Count > 0) ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.Count - 1)] : null;
+        Reward selectedWings = (RewardHelp.Wings.Count > 0) ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.Count - 1)] : null;
+        Reward selectedTrail = (RewardHelp.Trails.Count > 0) ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null;
+        Reward selectedAura = (RewardHelp.Auras.Count > 0) ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null;
 
         selectedHat?.ApplyReward(player);
         selectedWings?.ApplyReward(player);

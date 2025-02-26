@@ -19,6 +19,7 @@ public static class ChampionAwards
         AwardManager.GiveReward(player, nameof(awards.TurquoiseWings), false);
         AwardManager.GiveReward(player, nameof(awards.VioletAura), false);
         AwardManager.GiveReward(player, nameof(awards.VioletWings), false);
+        AwardManager.GiveReward(player, nameof(awards.PenguinSkin), false);
     }
 
 }

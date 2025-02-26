@@ -93,6 +93,7 @@ public static class NitroChallenges
     private static void AwardingNitroEvents(player player)
     {
         if (NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
+        if (NitroTimer.Remaining <= 0.00 || NitroTimer == null) return;
         var round = Globals.ROUND;
 
         switch (round)

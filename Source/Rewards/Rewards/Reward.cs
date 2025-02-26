@@ -157,9 +157,9 @@ public class Reward
         return true;
     }
 
-    private bool SetSkin(player player)
+    private bool SetSkin(player player, bool tournament = false)
     {
-        if (Type != RewardType.Skins && Type != RewardType.Tournament) return false;
+        if (Type != RewardType.Skins && tournament == false) return false;
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
 
@@ -167,6 +167,7 @@ public class Reward
         {
             kitty.Skin = SkinID;
             AmuletOfEvasiveness.ScaleUnit(kitty);
+            kitty.Name = $"{Colors.PlayerNameColored(player)}";
         }
         else
             Logger.Critical($"Skins ID invalid for {Name}");
@@ -223,7 +224,7 @@ public class Reward
                 RewardsManager.ActiveWings[player] = e;
             else if (Name.Contains("Skin"))
             {
-                SetSkin(player);
+                SetSkin(player, true);
                 Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
             }
             else
