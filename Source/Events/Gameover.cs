@@ -18,6 +18,7 @@ public static class Gameover
         if(!WinGame) return false;
         SendWinMessage();
         GameStats(true);
+        GameoverUtil.SetBestGameStats();
         StandardWinChallenges();
         SaveGame();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
