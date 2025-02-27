@@ -11,7 +11,7 @@ public static class AffixFactory
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
-    private static int MAX_AFFIXED_PER_LANE = 3;
+    private static int MAX_AFFIXED_PER_LANE = 6;
 
     /// <summary>
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
@@ -160,12 +160,12 @@ public static class AffixFactory
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2.75) + Globals.ROUND;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2) + Globals.ROUND * 6;
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
         var interations = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 800)
+        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 1000)
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
