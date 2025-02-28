@@ -71,12 +71,6 @@ public static class NitroPacer
 
     }
 
-    private static void MoveNextZone()
-    {
-        var nextZone = PathingPoints[currentCheckpoint+1];
-        Unit.IssueOrder("move", nextZone.Center.X, nextZone.Center.Y);
-    }
-
     private static void NitroPacerQueueOrders()
     {
         // backwards for pathingpoints, for stack queue order

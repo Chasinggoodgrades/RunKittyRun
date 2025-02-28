@@ -146,8 +146,7 @@ public static class AffixFactory
         var affixes = AvailableAffixes(laneNumber);
         var index = GetRandomInt(0, affixes.Count - 1);
         var randomAffix = affixes[index];
-        affixes.Clear();
-        affixes = null;
+        GC.RemoveList(ref affixes);
         return ApplyAffix(unit, randomAffix);
     }
 
@@ -165,7 +164,7 @@ public static class AffixFactory
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
         var interations = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 1000)
+        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 2000) // shit limit but beats crash
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
