@@ -82,6 +82,7 @@ public class WolfPoint
     private void StartMovingOrders()
     {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
+        if (Wolf.IsPaused) return;
         for (int i = PointsToVisit.Count -1; i >= 1; i--)
         {
             Wolf.Unit.QueueOrder(MoveOrderID, PointsToVisit[i][0], PointsToVisit[i][1]); 

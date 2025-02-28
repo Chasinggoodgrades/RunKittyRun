@@ -86,7 +86,9 @@ public class Kibble
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error in KibblePickup: {e.Message}");
+            Logger.Warning(e.Message);
+            Logger.Warning("Kibble Pickup Error");
+            throw;
         }
     }
 

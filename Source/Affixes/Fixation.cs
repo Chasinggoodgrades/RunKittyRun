@@ -95,7 +95,7 @@ public class Fixation : Affix
             {
                 IsChasing = false;
                 Unit.WolfMove();
-                TargetEffect.Dispose();
+                GC.RemoveEffect(ref TargetEffect);
                 Unit.WanderTimer.Resume();
                 ChaseTimer.Pause();
                 return;
@@ -114,7 +114,7 @@ public class Fixation : Affix
         if (newTarget != Target)
         {
             Target = newTarget;
-            TargetEffect.Dispose();
+            GC.RemoveEffect(ref TargetEffect);
             TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         }
         GC.RemoveFilterFunc(ref filter);

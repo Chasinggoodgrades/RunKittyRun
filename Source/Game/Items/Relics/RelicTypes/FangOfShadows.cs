@@ -60,11 +60,9 @@ public class FangOfShadows : Relic
 
     private void DeregisterTriggers()
     {
-        SummonTrigger.Dispose();
-        SummonTrigger = null;
-        TeleTrigger.Dispose();
-        TeleTrigger = null;
-        KillTimer.Dispose();
+        GC.RemoveTrigger(ref SummonTrigger);
+        GC.RemoveTrigger(ref TeleTrigger);
+        GC.RemoveTimer(ref KillTimer);
     }
 
     private void SummonShadowKitty()

@@ -40,6 +40,7 @@ public static class RelicFunctions
             kitty.Relics.Add(newRelic);
             newRelic.ApplyEffect(kitty.Unit);
             AddItem(player, selectedItem.ItemID);
+            Utility.SimpleTimer(0.21f, () => newRelic.SetUpgradeLevelDesc(kitty.Unit));
         }
     }
 
@@ -87,7 +88,11 @@ public static class RelicFunctions
 
     private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
-    private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
+    private static void AddItem(player player, int itemID)
+    {
+        Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
+    }
+
     private static bool RelicMaxedOut(player player)
     {
         var relics = Globals.ALL_KITTIES[player].Relics;
