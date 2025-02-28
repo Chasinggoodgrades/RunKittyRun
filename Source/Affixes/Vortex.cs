@@ -37,22 +37,21 @@ public class Vortex : Affix
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
+        base.Apply();
     }
 
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(150, 120, 255);
-        EntersRange.Dispose();
-        LeavesRange.Dispose();
-        PullingInTimer.Dispose();
-        PeriodicPull.Dispose();
-        UnitsInRange.Clear();
-        UnitsInRange = null;
-        PullingInTimer = null;
-        EntersRange = null;
-        LeavesRange = null;
-        PeriodicPull = null;
+
+        GC.RemoveTimer(ref PullingInTimer);
+        GC.RemoveTimer(ref PeriodicPull);
+        GC.RemoveTimer(ref PullStart);
+        GC.RemoveTrigger(ref EntersRange);
+        GC.RemoveTrigger(ref LeavesRange);
+        GC.RemoveList(ref UnitsInRange);
+        base.Remove();
     }
 
     private void RegisterEvents()

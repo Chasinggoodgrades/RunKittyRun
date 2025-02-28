@@ -40,8 +40,7 @@ public class ShardOfTranslocation : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        CastEventTrigger.Dispose();
-        CastEventTrigger = null;
+        GC.RemoveTrigger(ref CastEventTrigger);
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, true);
     }
 
@@ -73,15 +72,14 @@ public class ShardOfTranslocation : Relic
             }
 
             TeleportUnit(unit, targetLoc);
-            targetLoc.Dispose();
-            targetLoc = null;
             RelicUtil.CloseRelicBook(player);
             Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+            GC.RemoveLocation(ref targetLoc);
         }
         catch (Exception e)
         {
-            player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Translocation Relic: An error occurred. Please report this to the developer.");
-            //Console.WriteLine(e.Message);
+            Logger.Critical(e.Message);
+            throw;
         }
     }
 

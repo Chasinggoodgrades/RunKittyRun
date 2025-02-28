@@ -55,7 +55,7 @@ public static class RoundTimer
                 if (StartRoundTimer.Remaining <= 5 && StartRoundTimer.Remaining > 0)
                     Utility.TimedTextToAllPlayers(1.0f, RoundStartingString);
                 CountDown();
-                t.Dispose();
+                GC.RemoveTimer(ref t);
             });
         }
     }

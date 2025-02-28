@@ -75,31 +75,26 @@ public static class RewardsManager
     {
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
-        if (ActiveWings[player] != null)
-        {
-            ActiveWings[player].Dispose();
-            ActiveWings[player] = null;
-        }
-        if (ActiveAuras[player] != null)
-        {
-            ActiveAuras[player].Dispose();
-            ActiveAuras[player] = null;
-        }
-        if (ActiveHats[player] != null)
-        {
-            ActiveHats[player].Dispose();
-            ActiveHats[player] = null;
-        }
-        if (ActiveTrails[player] != null)
-        {
-            ActiveTrails[player].Dispose();
-            ActiveTrails[player] = null;
-        }
+
+        var wings = ActiveWings[player];
+        GC.RemoveEffect(ref wings);
+
+        var auras = ActiveAuras[player];
+        GC.RemoveEffect(ref auras);
+
+        var hats = ActiveHats[player];
+        GC.RemoveEffect(ref hats);
+
+        var trails = ActiveTrails[player];
+        GC.RemoveEffect(ref trails);
+
         kitty.Unit.Skin = Constants.UNIT_KITTY;
         kitty.Unit.SetVertexColor(255, 255, 255);
+
         foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
             property.SetValue(kitty.SaveData.SelectedData, "");
-        if (kitty.SaveData.SelectedData.SelectedWindwalk == "") kitty.WindwalkID = 0;
 
+        if (kitty.SaveData.SelectedData.SelectedWindwalk == "")
+            kitty.WindwalkID = 0;
     }
 }

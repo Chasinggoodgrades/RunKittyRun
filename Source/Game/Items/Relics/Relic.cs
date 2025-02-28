@@ -37,6 +37,7 @@ public abstract class Relic
         if (!CanUpgrade(Unit.Owner)) return false;
         UpgradeLevel++;
         PlayerUpgrades.IncreaseUpgradeLevel(GetType(), Unit);
+        SetUpgradeLevelDesc(Unit);
         RemoveEffect(Unit);
         ApplyEffect(Unit);
         return true;
@@ -49,4 +50,26 @@ public abstract class Relic
         else if(count >= MaxRelics) return MaxRelics;
         else return count;
     }
+
+    public void SetUpgradeLevelDesc(unit Unit)
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
+        if (upgradeLevel == 0) return;
+
+        var item = Utility.UnitGetItem(Unit, ItemID);
+        if (item == null) return;
+
+        var tempName = item.Name;
+        var newUpgradeText = $"{Colors.COLOR_TURQUOISE}[Upgrade: {upgradeLevel}]{Colors.COLOR_RESET}";
+
+        if (tempName.StartsWith($"{Colors.COLOR_TURQUOISE}[Upgrade:"))
+        {
+            var endIndex = tempName.IndexOf("]|r") + 3;
+            tempName = tempName.Substring(endIndex).Trim();
+        }
+
+        item.Name = $"{newUpgradeText} {tempName}";
+    }
+
+
 }

@@ -31,8 +31,7 @@ public static class StandardMultiboard
             if (!Difficulty.IsDifficultyChosen) return;
             CreateMultiboards();
             RegisterTriggers();
-            t.Pause();
-            t.Dispose();
+            GC.RemoveTimer(ref t);
         });
     }
 
@@ -42,7 +41,7 @@ public static class StandardMultiboard
         ESCTrigger = trigger.Create();
 
         Updater.RegisterTimerEvent(1.00f, true);
-        Updater.AddAction(UpdateStandardCurrentStatsMB);
+        Updater.AddAction(CurrentStatsRoundTimes);
 
         foreach(var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
@@ -54,9 +53,8 @@ public static class StandardMultiboard
         OverallGamesStatsMultiboard();
         BestTimesMultiboard();
         CurrentGameStatsMultiboard();
+        CurrentGameStats();
     }
-
-
 
     private static void CurrentGameStatsMultiboard()
     {
@@ -271,7 +269,6 @@ public static class StandardMultiboard
     public static void UpdateStandardCurrentStatsMB()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        CurrentStatsRoundTimes();
         CurrentGameStats();
     }
 

@@ -44,8 +44,8 @@ public static class NamedWolves
         StanWolf.Unit.Name = $"{Colors.COLOR_PURPLE}Stan|r";
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
-        Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f)); // delay, let unit spawn and pos properly.
-        Utility.SimpleTimer(1.5f, () => StanWolf.Unit.IsPaused = true);
+        StanWolf.IsPaused = true;
+        Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
 
@@ -67,6 +67,7 @@ public static class NamedWolves
 
     private static void MarcoWolfDesc()
     {
+        Utility.MakeUnitLocust(MarcoWolf.Unit);
         MarcoWolf.Unit.SetVertexColor(255, 255, 175);
         MarcoWolf.Unit.Name = $"{Colors.COLOR_YELLOW}Marco|r";
         MarcoWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
@@ -76,6 +77,7 @@ public static class NamedWolves
 
     public static void ShowWolfNames(bool hidden = true)
     {
+        if (DNTNamedWolves.Count == 0) return;
         MarcoNameTag.SetVisibility(hidden);
         StanNameTag.SetVisibility(hidden);
     }

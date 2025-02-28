@@ -13,7 +13,7 @@ public class RingOfSummoning : Relic
     private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
     private trigger Trigger;
     private unit Owner;
-    private group SummonGroup = group.Create();
+    private group SummonGroup;
 
     public RingOfSummoning() : base(
         $"{Colors.COLOR_GREEN}Sacred Ring of Summoning|r",
@@ -47,8 +47,8 @@ public class RingOfSummoning : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        Trigger.Dispose();
-        Trigger = null;
+        GC.RemoveTrigger(ref Trigger);
+        GC.RemoveGroup(ref SummonGroup);
         Owner = null;
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
@@ -75,34 +75,45 @@ public class RingOfSummoning : Relic
 
     private void SacredRingOfSummoning()
     {
-        var player = @event.Unit.Owner;
-        var targetedPoint = @event.SpellTargetLoc;
-        var summoningKitty = Globals.ALL_KITTIES[player];
-        var summoningKittyUnit = summoningKitty.Unit;
-        var numberOfSummons = GetNumberOfSummons(player);
-
-        RelicUtil.CloseRelicBook(player);
-        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
-
-        SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));   
-        var units = SummonGroup.ToList();
-        if(SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
-
-        for (int i = 0; i < numberOfSummons && i < units.Count; i++)
+        try
         {
-            var unit = units[i];    
-            var kitty = Globals.ALL_KITTIES[unit.Owner];
+            var player = @event.Unit.Owner;
+            var targetedPoint = @event.SpellTargetLoc;
+            var summoningKitty = Globals.ALL_KITTIES[player];
+            var summoningKittyUnit = summoningKitty.Unit;
+            var numberOfSummons = GetNumberOfSummons(player);
+            SummonGroup ??= group.Create();
 
-            if (!SummonDeadKitty(summoningKitty, kitty)) continue;
+            RelicUtil.CloseRelicBook(player);
+            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
 
-            kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
-            Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
-            kitty.ReviveKitty(summoningKitty);
-            Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
+            var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
+            SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
+            var units = SummonGroup.ToList();
+            if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
+
+            for (int i = 0; i < numberOfSummons && i < units.Count; i++)
+            {
+                var unit = units[i];
+                var kitty = Globals.ALL_KITTIES[unit.Owner];
+
+                if (!SummonDeadKitty(summoningKitty, kitty)) continue;
+
+                kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+                Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+                kitty.ReviveKitty(summoningKitty);
+                Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
+            }
+
+            SummonGroup.Clear();
+            targetedPoint.Dispose(); // dispose, cannot null because of trigger action
+            GC.RemoveList(ref units);
+            GC.RemoveFilterFunc(ref filter);
         }
-
-        SummonGroup.Clear();
-        targetedPoint.Dispose();
+        catch (Exception e)
+        {
+            Logger.Critical(e.Message);
+        }
     }
 
     /// <summary>
@@ -119,7 +130,7 @@ public class RingOfSummoning : Relic
 
         if(sumProg > deadProg && !summoned.Alive)
         {
-            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cam only summon dead kitties that are ahead of you!");
+            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!");
             return false;
         }
         return true;

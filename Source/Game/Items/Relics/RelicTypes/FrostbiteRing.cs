@@ -39,32 +39,41 @@ public class FrostbiteRing : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        Trigger.Dispose();
-        Trigger = null;
+        GC.RemoveTrigger(ref Trigger);
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
     private void FrostbiteCast(location freezeLocation)
     {
-        var tempGroup = group.Create();
-        GroupEnumUnitsInRange(tempGroup, GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, Filter(() => WolvesFilter()));
-        foreach (var unit in tempGroup.ToList())
-            FrostbiteEffect(unit);
-        freezeLocation.Dispose();
-        freezeLocation = null;
-        tempGroup.Dispose();
-        tempGroup = null;
-        Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
-        RelicUtil.CloseRelicBook(Owner);
-        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
+        try
+        {
+            var tempGroup = group.Create();
+            var filter = Utility.CreateFilterFunc(() => WolvesFilter());
+            tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
+            var list = tempGroup.ToList();
+            foreach (var unit in list)
+                FrostbiteEffect(unit);
+            GC.RemoveList(ref list);
+            GC.RemoveGroup(ref tempGroup);
+            GC.RemoveFilterFunc(ref filter);
+            Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
+            RelicUtil.CloseRelicBook(Owner);
+            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
+            freezeLocation.Dispose();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical(e.Message);
+        }
     }
 
     private void FrostbiteEffect(unit Unit)
     {
         var t = timer.Create();
-        Unit.SetPausedEx(true);
         var duration = GetFreezeDuration();
         var effect = AddSpecialEffectTarget(FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
+        Unit.ClearOrders();
+        PausingWolf(Unit, true);
         Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount += 1; // increment freeze count for freeze_aura reward
         var blitzUnit = Blitzer.GetBlitzer(Unit);
         try
@@ -72,11 +81,11 @@ public class FrostbiteRing : Relic
             if(blitzUnit != null) blitzUnit.PauseBlitzing(true);
             t.Start(duration, false, () =>
             {
-                Unit.SetPausedEx(false);
-                if(blitzUnit != null) blitzUnit.PauseBlitzing(false);
+                PausingWolf(Unit, false);
+                if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
                 SlowWolves(Unit);
-                effect.Dispose();
-                t.Dispose();
+                GC.RemoveEffect(ref effect);
+                GC.RemoveTimer(ref t);
             });
         }
         catch (Exception e)
@@ -98,8 +107,8 @@ public class FrostbiteRing : Relic
         t.Start(SLOW_DURATION, false, () =>
         {
             Unit.BaseMovementSpeed = 365.0f;
-            effect.Dispose();
-            t.Dispose();
+            GC.RemoveEffect(ref effect);
+            GC.RemoveTimer(ref t);
         });
     }
 
@@ -107,6 +116,14 @@ public class FrostbiteRing : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType());
         return DEFAULT_FREEZE_DURATION + upgradeLevel;
+    }
+
+    private void PausingWolf(unit unit, bool pause = true)
+    {
+        if (unit == null) return;
+        Globals.ALL_WOLVES[unit].IsPaused = pause;
+        PauseUnit(unit, pause);
+        unit.ClearOrders();
     }
 
     private void RegisterTriggers(unit Unit)

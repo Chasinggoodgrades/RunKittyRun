@@ -23,15 +23,16 @@ public class Howler : Affix
         RegisterTimerEvents();
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(25, 25, 112);
+        base.Apply();
     }
 
     public override void Remove()
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Utility.RemoveTimer(ref HowlTimer);
-        NearbyWolves.Dispose();
-        NearbyWolves = null;
+        GC.RemoveTimer(ref HowlTimer);
+        GC.RemoveGroup(ref NearbyWolves);
+        base.Remove();
     }
 
     private void RegisterTimerEvents()
@@ -43,8 +44,10 @@ public class Howler : Affix
     private void Howl()
     {
         Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
-        NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG));
-        foreach (var wolf in NearbyWolves.ToList())
+        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG);
+        NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, filter);
+        var list = NearbyWolves.ToList();
+        foreach (var wolf in list)
         {
             var wolfObject = Globals.ALL_WOLVES[wolf];
             if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
@@ -52,6 +55,8 @@ public class Howler : Affix
         }
         NearbyWolves.Clear();
         HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+        GC.RemoveList(ref list);
+        GC.RemoveFilterFunc(ref filter);
     }
 
     private float GetRandomHowlTime()

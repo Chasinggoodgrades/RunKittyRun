@@ -34,6 +34,7 @@ public static class NitroPacer
     {
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
+        NitroPacerQueueOrders();
         pacerTimer.Start(0.15f, true, UpdateNitroPacer);
     }
 
@@ -57,24 +58,27 @@ public static class NitroPacer
 
         SetSpeed(speed);
 
-        if(currentCheckpoint == 0) MoveNextZone();
-        if (PathingPoints[currentCheckpoint+1].Contains(Unit.X, Unit.Y))
+        if (PathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
         {
             currentCheckpoint++;
-            if(currentCheckpoint >= PathingPoints.Count() - 1)
+            if (currentCheckpoint >= PathingPoints.Count() - 1)
             {
                 pacerTimer.Pause();
                 Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
                 return;
             }
-            MoveNextZone();
         }
+
     }
 
-    private static void MoveNextZone()
+    private static void NitroPacerQueueOrders()
     {
-        var nextZone = PathingPoints[currentCheckpoint+1];
-        Unit.IssueOrder("move", nextZone.Center.X, nextZone.Center.Y);
+        // backwards for pathingpoints, for stack queue order
+        for (int i = PathingPoints.Count() - 1; i >= 1; i--) // exclude starting point
+        {
+            var point = PathingPoints[i];
+            Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
+        }
     }
 
     private static void VisionShare()

@@ -57,11 +57,9 @@ public class ChronoSphere : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        MagnitudeTimer?.Pause();
-        MagnitudeTimer?.Dispose();
-        LocationCaptureTimer?.Pause();
-        LocationCaptureTimer?.Dispose();
-        LocationEffect?.Dispose();
+        GC.RemoveTimer(ref MagnitudeTimer);
+        GC.RemoveTimer(ref LocationCaptureTimer);
+        GC.RemoveEffect(ref LocationEffect);
     }
 
     private void SetAbilityData()

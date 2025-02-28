@@ -21,6 +21,7 @@ public class Wolf
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
     public WolfPoint WolfPoint { get; set; }
+    public bool IsPaused { get; set; } = false;
 
     public Wolf(int regionIndex)
     {
@@ -98,7 +99,7 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if (ShouldStartEffect() || forced)
+        if ((ShouldStartEffect() || forced) && !IsPaused)
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.

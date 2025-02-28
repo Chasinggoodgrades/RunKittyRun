@@ -12,6 +12,7 @@ public class Frostbite : Affix
     private trigger PeriodicRangeTrigger;
     private Dictionary<unit, float> Frostbitten;
     private Dictionary<unit, effect> Effects;
+    private List<unit> TempList = new List<unit>();
 
     public Frostbite(Wolf unit) : base(unit)
     {
@@ -27,17 +28,20 @@ public class Frostbite : Affix
         Unit.Unit.SetVertexColor(80, 140, 250);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
+        base.Apply();
     }
 
     public override void Remove()
     {
         Unit.Unit.SetVertexColor(150, 120, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        InRangeTrigger.Dispose();
-        PeriodicRangeTrigger.Dispose();
+        GC.RemoveTrigger(ref InRangeTrigger);
+        GC.RemoveTrigger(ref PeriodicRangeTrigger);
         RemoveAllEffects();
-        Frostbitten.Clear();
-        Effects.Clear();
+        GC.RemoveDictionary(ref Frostbitten);
+        GC.RemoveDictionary(ref Effects);
+        GC.RemoveList(ref TempList);
+        base.Remove();
     }
 
     private void RemoveAllEffects()
@@ -67,8 +71,6 @@ public class Frostbite : Affix
     {
         if (Frostbitten.Count == 0) return;
 
-        var targetsToRemove = new List<unit>();
-
         foreach (var kvp in Frostbitten)
         {
             var target = kvp.Key;
@@ -77,17 +79,16 @@ public class Frostbite : Affix
             if (target.IsInRange(Unit.Unit, FROSTBITE_RADIUS)) continue;
 
             target.BaseMovementSpeed = originalSpeed;
-            targetsToRemove.Add(target);
+            TempList.Add(target);
         }
 
-        foreach (var target in targetsToRemove)
+        foreach (var target in TempList)
         {
             Frostbitten.Remove(target);
             Effects[target].Dispose();
         }
 
-        targetsToRemove.Clear();
-        targetsToRemove = null;
+        TempList.Clear();
     }
 
     private void SlowEffect(unit target)

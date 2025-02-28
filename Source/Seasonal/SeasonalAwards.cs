@@ -25,8 +25,7 @@ public static class SeasonalAwards
         {
             AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.SnowTrail2023), false);
             AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.SnowWings2023), false);
-            t.Dispose();
-            t = null;
+            GC.RemoveTimer(ref t);
         });
     }
 }

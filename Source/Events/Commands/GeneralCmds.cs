@@ -88,6 +88,9 @@ public static class GeneralCmds
             case "-apm":
                 p.DisplayTimedTextTo(10.0f, UnitOrders.CalculateAllAPM());
                 break;
+            case "-stats":
+                AwardingCmds.GetAllGameStats(p);
+                break;
             case "-kibble":
                 var kibbleList = "";
                 foreach (var playerx in Kibble.PickedUpKibble)
@@ -134,6 +137,7 @@ public static class GeneralCmds
             "-apm - Displays your APM for ACTIVE game time. (not counting intermissions)",
             "-endround - Initiate a vote to end the round (Solo Tournament Only)",
             "-lc | -lockcamera - Locks your camera to your unit",
+            "-stats - Displays game stats of whoever you currently have selected",
             "-reset - Resets your camera to default",
             "-kc - Kicks yourself from the game",
             "-overheadcam | -overhead | -ohc | -topdown - Gives an overhead view",

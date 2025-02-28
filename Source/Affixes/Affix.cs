@@ -7,8 +7,14 @@
         Unit = unit;
     }
 
-    public abstract void Apply();
+    public virtual void Apply()
+    {
+        GC.GCAffixes.Add(this);
+    }
 
-    public abstract void Remove();
+    public virtual void Remove()
+    {
+        GC.RemoveAffix(this);
+    }
 }
 
