@@ -39,21 +39,22 @@ public class FrostbiteRing : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        Trigger.Dispose();
-        Trigger = null;
+        GC.RemoveTrigger(ref Trigger);
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
     private void FrostbiteCast(location freezeLocation)
     {
         var tempGroup = group.Create();
-        GroupEnumUnitsInRange(tempGroup, GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, Filter(() => WolvesFilter()));
-        foreach (var unit in tempGroup.ToList())
+        var filter = Utility.CreateFilterFunc(() => WolvesFilter());
+        tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
+        var list = tempGroup.ToList();
+        foreach (var unit in list)
             FrostbiteEffect(unit);
-        freezeLocation.Dispose();
-        freezeLocation = null;
-        tempGroup.Dispose();
-        tempGroup = null;
+        GC.RemoveLocation(ref freezeLocation);
+        GC.RemoveList(ref list);
+        GC.RemoveGroup(ref tempGroup);
+        GC.RemoveFilterFunc(ref filter);
         Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
         RelicUtil.CloseRelicBook(Owner);
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
@@ -64,6 +65,7 @@ public class FrostbiteRing : Relic
         var t = timer.Create();
         var duration = GetFreezeDuration();
         var effect = AddSpecialEffectTarget(FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
+        Unit.ClearOrders();
         PausingWolf(Unit, true);
         Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount += 1; // increment freeze count for freeze_aura reward
         var blitzUnit = Blitzer.GetBlitzer(Unit);
@@ -75,8 +77,8 @@ public class FrostbiteRing : Relic
                 PausingWolf(Unit, false);
                 if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
                 SlowWolves(Unit);
-                effect.Dispose();
-                t.Dispose();
+                GC.RemoveEffect(ref effect);
+                GC.RemoveTimer(ref t);
             });
         }
         catch (Exception e)
@@ -98,8 +100,8 @@ public class FrostbiteRing : Relic
         t.Start(SLOW_DURATION, false, () =>
         {
             Unit.BaseMovementSpeed = 365.0f;
-            effect.Dispose();
-            t.Dispose();
+            GC.RemoveEffect(ref effect);
+            GC.RemoveTimer(ref t);
         });
     }
 

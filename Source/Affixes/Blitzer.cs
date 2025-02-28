@@ -27,22 +27,25 @@ public class Blitzer : Affix
         Unit.OVERHEAD_EFFECT_PATH = "";
         Unit.Unit.SetVertexColor(224, 224, 120);
         RegisterMoveTimer();
+        base.Apply();
     }
 
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        WanderEffect?.Dispose();
         Unit.WanderTimer.Resume();
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
-        Utility.RemoveTimer(ref BlitzerTimer);
-        Utility.RemoveTimer(ref MoveTimer);
-        Utility.RemoveTimer(ref PreBlitzerTimer);
-        Effect.Dispose();
-        Effect = null;
+
+        GC.RemoveEffect(ref WanderEffect);
+        GC.RemoveTimer(ref BlitzerTimer);
+        GC.RemoveTimer(ref MoveTimer);
+        GC.RemoveTimer(ref PreBlitzerTimer);
+        GC.RemoveEffect(ref Effect);
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
         Unit.Unit.SetColor(playercolor.Brown);
+        base.Remove();
+
     }
 
     private void RegisterMoveTimer()

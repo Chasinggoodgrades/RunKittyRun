@@ -59,7 +59,7 @@ public static class RoundManager
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
-                Timer.Dispose();
+                GC.RemoveTimer(ref Timer);
             }
         });
     }

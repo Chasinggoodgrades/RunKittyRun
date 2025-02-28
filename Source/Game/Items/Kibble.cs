@@ -2,9 +2,11 @@
 using WCSharp.Api;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
 public class Kibble
 {
     public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
+    public static trigger PickupTrigger;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
@@ -14,24 +16,23 @@ public class Kibble
     private static int JackpotMax = 1500;
     private int Type;
     private int JackPotIndex = 1;
-    private trigger Trigger;
+    private triggeraction TrigActions;
     public item Item;
     public Kibble()
     {
+        PickupTrigger ??= KibblePickupEvents();
         Type = RandomKibbleType();
         Item = SpawnKibble();
-        Trigger = KibblePickupEvents();
+        AddKibblePickupActions();
     }
 
     public void Dispose()
     {
-        Trigger.Dispose();
-        Trigger = null;
-        if (!Item.IsOwned)
-        {
-            Item.Dispose();
-            Item = null;
-        }
+        // kibble never "owned" 
+        Item.Dispose();
+        Item = null;
+        PickupTrigger.RemoveAction(TrigActions);
+        TrigActions = null;
     }
 
     private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
@@ -50,15 +51,17 @@ public class Kibble
     {
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-        {
             trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
-        }
-        trig.AddAction (() =>
+        return trig;
+    }
+
+    private void AddKibblePickupActions()
+    {
+        TrigActions = PickupTrigger.AddAction(() =>
         {
             if (@event.ManipulatedItem != Item) return;
             KibblePickup();
         });
-        return trig;
     }
 
     private void KibblePickup()
@@ -77,7 +80,8 @@ public class Kibble
             else KibbleNothing(kitty); // 55% Chance
 
             if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
-            if (effect != null) effect.Dispose();
+            GC.RemoveEffect(ref effect);
+
             IncrementKibble(player);
         }
         catch (Exception e)
@@ -126,7 +130,7 @@ public class Kibble
         var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, JackPotIndex * 36.0f);
 
         var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", newX, newY);
-        effect.Dispose();
+        GC.RemoveEffect(ref effect);
         JackPotIndex += 1;
 
         if (JackPotIndex >= 20)

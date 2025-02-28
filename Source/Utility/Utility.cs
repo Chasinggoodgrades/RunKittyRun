@@ -332,7 +332,11 @@ public static class Utility
             stringBuilder.Append(awardName[i]);
         }
 
-        return stringBuilder.ToString();
+        var s = stringBuilder.ToString();
+        stringBuilder.Clear();
+        stringBuilder = null;
+
+        return s;
     }
 
     /// <summary>
@@ -351,10 +355,9 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
-    public static void RemoveTimer(ref timer t)
+    public static filterfunc CreateFilterFunc(Func<bool> func)
     {
-        t.Pause();
-        t.Dispose();
-        t = null;
+        return filterfunc.Create(func);
     }
+
 }

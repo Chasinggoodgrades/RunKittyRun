@@ -47,8 +47,8 @@ public class RingOfSummoning : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        Trigger.Dispose();
-        Trigger = null;
+        GC.RemoveTrigger(ref Trigger);
+        GC.RemoveGroup(ref SummonGroup);
         Owner = null;
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
@@ -84,7 +84,8 @@ public class RingOfSummoning : Relic
         RelicUtil.CloseRelicBook(player);
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
 
-        SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, Filter(() => CircleFilter() || KittyFilter()));   
+        var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
+        SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter); 
         var units = SummonGroup.ToList();
         if(SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
 
@@ -102,7 +103,9 @@ public class RingOfSummoning : Relic
         }
 
         SummonGroup.Clear();
-        targetedPoint.Dispose();
+        GC.RemoveLocation(ref targetedPoint);
+        GC.RemoveList(ref units);
+        GC.RemoveFilterFunc(ref filter);
     }
 
     /// <summary>

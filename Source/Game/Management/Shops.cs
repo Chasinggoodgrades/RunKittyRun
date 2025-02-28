@@ -5,7 +5,6 @@ using static WCSharp.Api.Common;
 
 public static class Shops
 {
-    private static unit PandaVendor;
     private static group KittyVendors;
     private static List<unit> KittyVendorsList;
     private static List<int> KittyVendorItemList;

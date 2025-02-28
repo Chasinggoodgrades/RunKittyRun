@@ -167,8 +167,7 @@ public static class SoundManager
             s.Start();
             Utility.SimpleTimer(2.0f, () =>
             {
-                e.Dispose();
-                e = null;
+                GC.RemoveEffect(ref e);
             });
         });
     }

@@ -120,10 +120,8 @@ public static class ProtectionOfAncients
         t.Start(EFFECT_DELAY, false, () =>
         {
             ApplyEffect(Unit);
-            actiEffect.Dispose();
-            actiEffect = null;
-            t.Dispose();
-            t = null;
+            GC.RemoveEffect(ref actiEffect);
+            GC.RemoveTimer(ref t);
         });
     }
 
@@ -133,7 +131,7 @@ public static class ProtectionOfAncients
         var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
         if(!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
-        actiEffect.Dispose();
+        GC.RemoveEffect(ref actiEffect);
         EndEffectActions(owningPlayer);
     }
 
@@ -160,9 +158,13 @@ public static class ProtectionOfAncients
         if(levelOfRelic > 0) levelOfAbility = levelOfRelic;
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
+        var filter = Utility.CreateFilterFunc(() => AoEEffectFilter());
+
         kitty.ProtectionActive = false;
-        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, Filter(() => AoEEffectFilter()));
-        foreach (var unit in tempGroup.ToList())
+        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);
+
+        var list = tempGroup.ToList();
+        foreach (var unit in list)
         {
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
             if (kitty.Unit == playerToRevive.Unit)
@@ -174,7 +176,9 @@ public static class ProtectionOfAncients
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
         }
         Utility.SimpleTimer(INVULNERABLE_DURATION, () => kitty.Invulnerable = false);
-        tempGroup.Dispose();
-        tempGroup = null;
+
+        GC.RemoveGroup(ref tempGroup);
+        GC.RemoveFilterFunc(ref filter);
+        GC.RemoveList(ref list);
     }
 }

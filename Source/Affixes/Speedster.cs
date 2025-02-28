@@ -12,11 +12,13 @@ public class Speedster : Affix
     {
         SetUnitMoveSpeed(Unit.Unit, 522);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
+        base.Apply();
     }
 
     public override void Remove()
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        base.Remove();
     }
 }

@@ -34,6 +34,7 @@ public class Fixation : Affix
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.TargetedAs = 16;
         RegisterEvents();
+        base.Apply();
     }
 
     public override void Remove()
@@ -44,13 +45,13 @@ public class Fixation : Affix
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
 
-        InRangeTrigger.Dispose();
-        PeriodicSpeed.Dispose();
-        TargetEffect?.Dispose();
-        ChaseTimer.Pause();
-        ChaseTimer.Dispose();
-        UnitsInRange?.Dispose();
+        GC.RemoveTrigger(ref InRangeTrigger);
+        GC.RemoveTrigger(ref PeriodicSpeed);
+        GC.RemoveTimer(ref ChaseTimer);
+        GC.RemoveGroup(ref UnitsInRange);
+        GC.RemoveEffect(ref TargetEffect);
         Unit.WanderTimer.Resume();
+        base.Remove();
     }
 
     /// <summary>
@@ -106,7 +107,8 @@ public class Fixation : Affix
 
     private void GetClosestTarget()
     {
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY);
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, filter);
         if (UnitsInRange.Count <= 0) return;
         var newTarget = GetClosestUnitInRange();
         if (newTarget != Target)
@@ -115,6 +117,7 @@ public class Fixation : Affix
             TargetEffect.Dispose();
             TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         }
+        GC.RemoveFilterFunc(ref filter);
     }
 
     private unit GetClosestUnitInRange()
@@ -137,7 +140,7 @@ public class Fixation : Affix
                 }
             }
         }
-        rangeList.Clear();
+        GC.RemoveList(ref rangeList);
         return closestUnit;
     }
 

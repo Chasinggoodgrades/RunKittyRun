@@ -76,7 +76,7 @@ public class FloatingNameTag
         foreach (var player in Globals.ALL_PLAYERS)
         {
             PlayerNameTags[player].NameTag.SetVisibility(false);
-            NamedWolves.ShowWolfNames(false);
+            //NamedWolves.ShowWolfNames(false); (desync if wolves havent spawned yet)
         }
     }
 
@@ -86,7 +86,7 @@ public class FloatingNameTag
         foreach (var player in Globals.ALL_PLAYERS)
         {
             PlayerNameTags[player].NameTag.SetVisibility(true);
-            NamedWolves.ShowWolfNames();
+            //NamedWolves.ShowWolfNames(); (desync if wolves havent spawned yet)
         }
     }
 }

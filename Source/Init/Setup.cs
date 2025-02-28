@@ -41,9 +41,7 @@ namespace Source.Init
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();
-                gameModeTimer.Pause();
-                gameModeTimer.Dispose();
-                gameModeTimer = null;
+                GC.RemoveTimer(ref gameModeTimer);
             }
         }
 

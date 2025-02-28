@@ -18,13 +18,15 @@ public class Chaos : Affix
     {
         RegisterTimer();
         Unit.Unit.AddAbility(AFFIX_ABILITY);
+        base.Apply();
     }
 
     public override void Remove()
     {
         currentAffix.Remove();
-        RotationTimer?.Dispose();
+        GC.RemoveTimer(ref RotationTimer);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        base.Remove();
     }
 
     private void RegisterTimer()

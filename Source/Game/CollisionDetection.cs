@@ -73,6 +73,7 @@ public static class CollisionDetection
         {
             if (!k.Unit.Alive) return;
             if (GetFilterUnit() == NamedWolves.MarcoWolf.Unit) {
+                Utility.GiveGoldFloatingText(25, k.Unit);
                 NamedWolves.MarcoDiedAgainLmao();
                 return;
             }

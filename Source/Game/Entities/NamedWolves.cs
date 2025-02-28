@@ -10,7 +10,6 @@ public static class NamedWolves
     public static texttag StanNameTag = texttag.Create();
     public static texttag MarcoNameTag = texttag.Create();
     private static timer MarcoTexttagTimer = timer.Create();
-    private static timer StanTexttagTimer = timer.Create();
     private static timer MarcoRevive = timer.Create();
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
 
@@ -68,6 +67,7 @@ public static class NamedWolves
 
     private static void MarcoWolfDesc()
     {
+        Utility.MakeUnitLocust(MarcoWolf.Unit);
         MarcoWolf.Unit.SetVertexColor(255, 255, 175);
         MarcoWolf.Unit.Name = $"{Colors.COLOR_YELLOW}Marco|r";
         MarcoWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;

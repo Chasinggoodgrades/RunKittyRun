@@ -128,18 +128,22 @@ public class Reward
         switch (Type)
         {
             case RewardType.Wings:
-                RewardsManager.ActiveWings[player]?.Dispose();
+                var x = RewardsManager.ActiveWings[player];
+                GC.RemoveEffect(ref x);
                 break;
             case RewardType.Hats:
-                RewardsManager.ActiveHats[player]?.Dispose();
+                var y = RewardsManager.ActiveHats[player];
+                GC.RemoveEffect(ref y);
                 break;
             case RewardType.Auras:
-                RewardsManager.ActiveAuras[player]?.Dispose();
+                var z = RewardsManager.ActiveAuras[player];
+                GC.RemoveEffect(ref z);
                 break;
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                RewardsManager.ActiveTrails[player]?.Dispose();
+                var t = RewardsManager.ActiveTrails[player];
+                GC.RemoveEffect(ref t);
                 break;
             case RewardType.Tournament:
                 SetTournamentReward(player, null, false);
@@ -148,6 +152,7 @@ public class Reward
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
     }
+
 
     private bool SetWindwalk(player player)
     {
