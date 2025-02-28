@@ -50,11 +50,10 @@ public static class AffixFactory
                 affixes.Add($"{affix.Key} x{affix.Value}");
             }
         }
-
-        affixCounts.Clear();
-        affixCounts = null;
-
-        return affixes.ToArray();
+        var arr = affixes.ToArray();
+        GC.RemoveDictionary(ref affixCounts);
+        GC.RemoveList(ref affixes);
+        return arr;
     }
 
     public static Affix CreateAffix(Wolf unit, string affixName)
