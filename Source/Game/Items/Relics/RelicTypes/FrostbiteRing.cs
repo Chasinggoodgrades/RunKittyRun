@@ -62,9 +62,9 @@ public class FrostbiteRing : Relic
     private void FrostbiteEffect(unit Unit)
     {
         var t = timer.Create();
-        Globals.ALL_WOLVES[Unit].IsPaused = true;
         var duration = GetFreezeDuration();
         var effect = AddSpecialEffectTarget(FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
+        PausingWolf(Unit, true);
         Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount += 1; // increment freeze count for freeze_aura reward
         var blitzUnit = Blitzer.GetBlitzer(Unit);
         try
@@ -72,7 +72,7 @@ public class FrostbiteRing : Relic
             if(blitzUnit != null) blitzUnit.PauseBlitzing(true);
             t.Start(duration, false, () =>
             {
-                Globals.ALL_WOLVES[Unit].IsPaused = false;
+                PausingWolf(Unit, false);
                 if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
                 SlowWolves(Unit);
                 effect.Dispose();
@@ -107,6 +107,13 @@ public class FrostbiteRing : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType());
         return DEFAULT_FREEZE_DURATION + upgradeLevel;
+    }
+
+    private void PausingWolf(unit unit, bool pause = true)
+    {
+        if (unit == null) return;
+        Globals.ALL_WOLVES[unit].IsPaused = pause;
+        PauseUnit(unit, pause);
     }
 
     private void RegisterTriggers(unit Unit)
