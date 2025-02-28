@@ -53,7 +53,7 @@ public static class Challenges
         foreach(var player in Globals.ALL_PLAYERS)
         {
             var gameDeaths = Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths;
-            if (gameDeaths >= BLUE_FIRE_DEATH_REQUIREMENT) return;
+            if (gameDeaths >= BLUE_FIRE_DEATH_REQUIREMENT) continue;
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.BlueFire));
         }
     }
@@ -73,7 +73,7 @@ public static class Challenges
             var currentSaves = stats.TotalSaves;
             var currentDeaths = stats.TotalDeaths;
 
-            if (currentDeaths == 0 ? currentSaves < PINK_FIRE_SD_REQUIREMENT : (float)(currentSaves / currentDeaths) < PINK_FIRE_SD_REQUIREMENT) return;
+            if (currentDeaths == 0 ? currentSaves < PINK_FIRE_SD_REQUIREMENT : (float)(currentSaves / currentDeaths) < PINK_FIRE_SD_REQUIREMENT) continue;
 
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.PinkFire));
         }
