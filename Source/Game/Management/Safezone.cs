@@ -45,6 +45,7 @@ public class Safezone
         var player = unit.Owner;
         SafezoneAdditions(unit);
         Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
+        WolfLaneHider.LanesHider();
         if (AwardedPlayers.Contains(player) || ID == 0) return;
         Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
         unit.Experience += Resources.SafezoneExperience;

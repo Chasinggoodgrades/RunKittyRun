@@ -29,6 +29,8 @@ public static class RoundManager
 
             RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
             RoundTimer.CountDown();
+            WolfLaneHider.HideAllLanes();
+            WolfLaneHider.LanesHider();
         }
         catch (Exception e)
         {

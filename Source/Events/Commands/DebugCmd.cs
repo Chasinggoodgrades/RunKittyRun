@@ -123,6 +123,9 @@ public static class DebugCmd
             case "?rup":
                 RoundTimer.StartRoundTimer.Resume();
                 break;
+            case "?en":
+                WolfLaneHider.LanesHider();
+                break;
             case "?affixall":
             case "?aa":
                 var nameAffix = cmd.Length > 1 ? char.ToUpper(cmd[1][0]) + cmd[1].Substring(1).ToLower() : "Speedster";

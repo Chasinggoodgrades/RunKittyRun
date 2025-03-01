@@ -12,6 +12,7 @@ public class WolfArea
     public region Region { get; set; }
     public Rectangle Rectangle { get; set; }
     public float Area { get; set; }
+    public bool Enabled { get; set; } = true;
     private trigger Trigger;
     public WolfArea(int areaID, region wolfRegion)
     {
