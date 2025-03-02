@@ -11,6 +11,7 @@ public class KittyData
     public RoundTimesData RoundTimes { get; set; }
     public GameAwardsDataSorted GameAwardsSorted { get; set; }
     public GameTimesData BestGameTimes { get; set; }
+    public KibbleCurrency KibbleCurrency { get; set; }
     public KittyData()
     {
         GameStats = new GameStatsData();
@@ -19,5 +20,6 @@ public class KittyData
         RoundTimes = new RoundTimesData();
         GameAwardsSorted = new GameAwardsDataSorted();
         BestGameTimes = new GameTimesData();
+        KibbleCurrency = new KibbleCurrency();
     }
 }

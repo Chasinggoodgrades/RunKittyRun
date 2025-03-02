@@ -11,7 +11,7 @@ public static class CustomStatFrame
     private static framehandle CustomStatFrameBoxS;
     private static framehandle CustomStatFrameBoxF;
 
-    public static Dictionary<int, unit> SelectedUnit = new Dictionary<int, unit>();
+    public static Dictionary<player, unit> SelectedUnit = new Dictionary<player, unit>();
     private static List<CustomStat> Stats = new List<CustomStat>();
     private static string MoveSpeed = $"{Colors.COLOR_YELLOW_ORANGE}MS:|r";
     private static string Time = $"{Colors.COLOR_YELLOW_ORANGE}Time:|r";
@@ -76,7 +76,7 @@ public static class CustomStatFrame
     public static void Update()
     {
         var localPlayer = player.LocalPlayer;
-        var selectedUnit = SelectedUnit[localPlayer.Id];
+        var selectedUnit = SelectedUnit[localPlayer];
         
         HandleFrameText(selectedUnit);
 
@@ -102,7 +102,7 @@ public static class CustomStatFrame
         {
             var player = @event.Player;
             var unit = @event.Unit;
-            SelectedUnit[player.Id] = unit;
+            SelectedUnit[player] = unit;
         });
 
         foreach(var player in Globals.ALL_PLAYERS)

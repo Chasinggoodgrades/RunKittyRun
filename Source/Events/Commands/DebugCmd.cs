@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using WCSharp.Api;
+using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
 public static class DebugCmd
@@ -8,7 +10,7 @@ public static class DebugCmd
     {
         var cmd = command.Split(" ");
         var kitty = Globals.ALL_KITTIES.ContainsKey(player) ? Globals.ALL_KITTIES[player] : null;
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
         var startswith = cmd[0];
         switch (startswith)
@@ -194,6 +196,9 @@ public static class DebugCmd
             case "?help":
                 DisplayAdminCommands(player);
                 break;
+            case "?testx":
+                Console.WriteLine($"{Globals.ALL_KITTIES.ElementAt(1)}");
+                break;
             case "?allsave":
                 SaveManager.SaveAllDataToFile();
                 break;
@@ -251,8 +256,7 @@ public static class DebugCmd
         {
             if (currentIndex >= commandList.Length)
             {
-                t.Pause();
-                t.Dispose();
+                GC.RemoveTimer(ref t);
                 return;
             }
 

@@ -21,7 +21,8 @@ public static class CommandHandler
     private static void HandleCommand()
     {
         var player = @event.Player;
-        var command = @event.PlayerChatString.ToLower();
+        var chatString = @event.PlayerChatString;
+        var command = chatString.ToLower();
 
         if (command.StartsWith("-t ") || command == "-s")
         {
@@ -29,7 +30,8 @@ public static class CommandHandler
         }
         else if (command.StartsWith("?") && Utility.IsDeveloper(player))
         {
-            DebugCmd.Handle(player, command);
+            if (command.ToLower().StartsWith("?exec")) ExecuteLua.LuaCode(player, chatString); 
+            else DebugCmd.Handle(player, command);
         }
         else if (command.StartsWith("-"))
         {

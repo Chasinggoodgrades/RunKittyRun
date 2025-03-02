@@ -13,7 +13,7 @@ public static class AwardingCmds
     public static void Awarding(player player, string command)
     {
         var award = command.Split(" ")[1];
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = GetOwningPlayer(selectedUnit);
 
         if (award.ToLower() == "help")
@@ -71,7 +71,7 @@ public static class AwardingCmds
     public static void SettingGameStats(player player, string command)
     {
         var stats = command.Split(" ")[1];
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
 
         if (stats.ToLower() == "help")
@@ -118,7 +118,7 @@ public static class AwardingCmds
     public static void SettingGameTimes(player player, string command)
     {
         var roundTime = command.Split(" ")[1];
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
 
         if (roundTime.ToLower() == "help")
@@ -162,7 +162,7 @@ public static class AwardingCmds
 
     public static void GetAllGameStats(player player)
     {
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
         if (!Globals.ALL_PLAYERS.Contains(selectedPlayer)) return;
         var combined = "";
