@@ -72,11 +72,7 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             if (!k.Unit.Alive) return;
-            if (GetFilterUnit() == NamedWolves.MarcoWolf.Unit) {
-                Utility.GiveGoldFloatingText(25, k.Unit);
-                NamedWolves.MarcoDiedAgainLmao();
-                return;
-            }
+            if (NamedWolves.MarcoWolfCollision(GetFilterUnit(), k)) return;
             if (ChronoSphere.RewindDeath(k.Unit)) return;
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);

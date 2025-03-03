@@ -231,8 +231,8 @@ public static class StandardMultiboard
             rowIndex++;
         }
 
-        sortedPlayers.Clear();
-        sortedPlayers = null;
+        GC.RemoveList(ref sortedPlayers);
+
     }
 
 

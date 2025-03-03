@@ -82,4 +82,13 @@ public static class NamedWolves
         StanNameTag.SetVisibility(hidden);
     }
 
+    public static bool MarcoWolfCollision(unit unit, Kitty k)
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (unit != NamedWolves.MarcoWolf.Unit) return false;
+        Utility.GiveGoldFloatingText(25, k.Unit);
+        NamedWolves.MarcoDiedAgainLmao();
+        return true;
+    }
+
 }

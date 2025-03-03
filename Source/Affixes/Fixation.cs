@@ -68,7 +68,7 @@ public class Fixation : Affix
     private void RegisterEvents()
     {
         if (Type == 1) UnitsInRange = group.Create();
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
         InRangeTrigger.AddAction(() =>
@@ -107,8 +107,7 @@ public class Fixation : Affix
 
     private void GetClosestTarget()
     {
-        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY);
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, filter);
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filters.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
         var newTarget = GetClosestUnitInRange();
         if (newTarget != Target)
@@ -117,7 +116,6 @@ public class Fixation : Affix
             GC.RemoveEffect(ref TargetEffect);
             TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         }
-        GC.RemoveFilterFunc(ref filter);
     }
 
     private unit GetClosestUnitInRange()

@@ -150,7 +150,7 @@ public static class FrameManager
     {
         var t = timer.Create();
         var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
-        t.Start(0.1f, true, () =>
+        t.Start(1.0f, true, () =>
         {
             var x = nameFrame.Width / 4;
             var h = nameFrame.Height / 8;
