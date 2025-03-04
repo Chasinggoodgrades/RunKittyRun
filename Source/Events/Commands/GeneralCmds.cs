@@ -16,6 +16,7 @@ public static class GeneralCmds
         {
             case "-commands":
             case "-help":
+            case "-?":
                 DisplayCommands(p);
                 break;
             case "-team":
@@ -26,6 +27,7 @@ public static class GeneralCmds
                 Globals.SaveSystem.Save(p);
                 break;
             case "-clear":
+            case "-clr":
             case "-c":
                 Utility.ClearScreen(p);
                 break;
