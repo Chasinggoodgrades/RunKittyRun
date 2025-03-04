@@ -78,7 +78,7 @@ public class FrostbiteRing : Relic
         var blitzUnit = Blitzer.GetBlitzer(Unit);
         try
         {
-            if(blitzUnit != null) blitzUnit.PauseBlitzing(true);
+            if (blitzUnit != null) blitzUnit.PauseBlitzing(true);
             t.Start(duration, false, () =>
             {
                 PausingWolf(Unit, false);
