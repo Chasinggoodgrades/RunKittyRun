@@ -68,7 +68,8 @@ public static class UnitOrders
         {
             LastOrderLocation[@event.OrderedUnit] = (@event.OrderPointX, @event.OrderPointY);
         }
-      
+
+        var player = @event.OrderedUnit.Owner;
         if (TotalActions.ContainsKey(player))
         {
             TotalActions[player]++;

@@ -61,7 +61,7 @@ public static class WolfLaneHider
         }
         foreach (var wolfArea in WolfArea.WolfAreas)
         {
-            wolfArea.Value.Enabled = false;
+            wolfArea.Value.IsEnabled = false;
         }
     }
 
