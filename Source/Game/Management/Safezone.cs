@@ -6,13 +6,14 @@ using static WCSharp.Api.Common;
 
 public class Safezone
 {
-    public region Region{ get; set; }
+    public region Region { get; set; }
     private trigger Trigger { get; set; }
     public int ID { get; set; }
     public rect Rect_ { get; set; }
     public List<player> AwardedPlayers { get; set; }
 
-    public Safezone(int id, region region) { 
+    public Safezone(int id, region region)
+    {
         ID = id;
         Region = region;
         Trigger = trigger.Create();
@@ -61,6 +62,8 @@ public class Safezone
         var player = Unit.Owner;
 
         if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID) return;
+
+        CameraUtil.UpdateKomotoCam(player, ID);
 
         if (Gamemode.CurrentGameMode != "Standard") return;
 

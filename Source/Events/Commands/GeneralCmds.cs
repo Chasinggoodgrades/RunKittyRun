@@ -117,6 +117,9 @@ public static class GeneralCmds
             case "-ohc":
                 CameraUtil.OverheadCamera(p, 280f);
                 break;
+            case "-komotocam":
+                CameraUtil.ToggleKomotoCam(p);
+                break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
