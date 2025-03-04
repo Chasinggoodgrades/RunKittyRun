@@ -40,7 +40,7 @@ public static class UnitOrders
 
     private static void StartPeriodicCheck()
     {
-        TimerStart(PeriodicTimer, 1.0f, true, CheckKittyPositions);
+        TimerStart(PeriodicTimer, 0.1f, true, CheckKittyPositions);
     }
 
     private static void CheckKittyPositions()
@@ -51,21 +51,14 @@ public static class UnitOrders
             var player = kitty.Player;
             if (!IsInSafeZone(unit))
             {
-                TimeOutsideSafeZones[player] += 1.0f;
+                TimeOutsideSafeZones[player] += 0.1f;
             }
         }
     }
 
     private static bool IsInSafeZone(unit unit)
     {
-        foreach (var safeZone in RegionList.SafeZones)
-        {
-            if (IsUnitInRegion(safeZone.Region, unit))
-            {
-                return true;
-            }
-        }
-        return false;
+        return RegionList.SafeZones[Globals.PLAYERS_CURRENT_SAFEZONE[unit.Owner]].Contains(unit.X, unit.Y);
     }
 
     private static void CaptureActions()
