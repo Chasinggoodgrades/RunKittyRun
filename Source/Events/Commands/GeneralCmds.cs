@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -75,6 +75,11 @@ public static class GeneralCmds
             case "-lockcamera":
             case "&f":
                 CameraUtil.LockCamera(p);
+                break;
+            case "-fpc":
+            case "-firstperson":
+            case "-firstpersoncamera":
+                FirstPersonCameraManager.ToggleFirstPerson(p);
                 break;
             case "-reset":
                 CameraUtil.UnlockCamera(p);

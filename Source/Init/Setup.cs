@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -82,6 +82,7 @@ namespace Source.Init
                 UniqueItems.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
+                FirstPersonCameraManager.Initialize();
                 Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
             }
             catch (Exception e)
