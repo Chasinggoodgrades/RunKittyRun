@@ -7,12 +7,15 @@ public static class UnitOrders
 {
     private static Dictionary<player, int> TotalActions = new Dictionary<player, int>();
     private static Dictionary<unit, (float, float)> LastOrderLocation = new Dictionary<unit, (float, float)>();
+    private static Dictionary<player, float> TimeOutsideSafeZones = new Dictionary<player, float>();
     private static trigger ActionsCapture = trigger.Create();
+    private static timer PeriodicTimer = CreateTimer();
 
     public static void Initialize()
     {
         RegisterDicts();
         RegisterTriggers();
+        StartPeriodicCheck();
     }
 
     private static void RegisterTriggers()
@@ -29,9 +32,40 @@ public static class UnitOrders
     {
         foreach (var kitty in Globals.ALL_KITTIES.Values)
         {
-                TotalActions[kitty.Player] = 0;
-                LastOrderLocation[kitty.Unit] = (0.0f, 0.0f);
+            TotalActions[kitty.Player] = 0;
+            LastOrderLocation[kitty.Unit] = (0.0f, 0.0f);
+            TimeOutsideSafeZones[kitty.Player] = 0.0f;
         }
+    }
+
+    private static void StartPeriodicCheck()
+    {
+        TimerStart(PeriodicTimer, 1.0f, true, CheckKittyPositions);
+    }
+
+    private static void CheckKittyPositions()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        {
+            var unit = kitty.Unit;
+            var player = kitty.Player;
+            if (!IsInSafeZone(unit))
+            {
+                TimeOutsideSafeZones[player] += 1.0f;
+            }
+        }
+    }
+
+    private static bool IsInSafeZone(unit unit)
+    {
+        foreach (var safeZone in RegionList.SafeZones)
+        {
+            if (IsUnitInRegion(safeZone.Region, unit))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void CaptureActions()
@@ -44,6 +78,11 @@ public static class UnitOrders
         if (orderId == OrderId("move") || orderId == OrderId("smart"))
         {
             LastOrderLocation[unit] = (x, y);
+        }
+
+        if (IsInSafeZone(unit))
+        {
+            return;
         }
 
         var player = GetOwningPlayer(unit);
@@ -62,9 +101,9 @@ public static class UnitOrders
         }
 
         var totalActions = TotalActions[player];
-        var gameTime = (Globals.GAME_TIMER.Remaining) / 60.0f; // put in mins (APM)
-        if (gameTime == 0.0f) return 0.0f;
-        return totalActions / gameTime;
+        var timeOutsideSafeZones = TimeOutsideSafeZones[player] / 60.0f; // put in mins (APM)
+        if (timeOutsideSafeZones == 0.0f) return 0.0f;
+        return totalActions / timeOutsideSafeZones;
     }
 
     public static string CalculateAllAPM()
@@ -94,5 +133,4 @@ public static class UnitOrders
 
         return LastOrderLocation[unit];
     }
-
 }
