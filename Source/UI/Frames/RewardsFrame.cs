@@ -54,7 +54,7 @@ public static class RewardsFrame
     {
         var count = 0;
         var colCount = 0;
-        var rewardTypes = Enum.GetValues(typeof(RewardType)).Cast<RewardType>().OrderBy(rt => (int)rt).ToList();
+        var rewardTypes = Enum.GetValues(typeof(RewardType)).Cast<RewardType>().OrderBy(rt => (int)rt).ToList(); // sorts by enum, no desync possibilies here.
 
         foreach (var type in rewardTypes)
         {
