@@ -9,8 +9,8 @@ public static class SoloMultiboard
     private static multiboard OverallBoard;
     private static multiboard BestTimes;
     private static trigger ESCTrigger;
-    private static Dictionary<player, Kitty> sortedDict = new Dictionary<player, Kitty>();
-    private static Dictionary<player, int> MBSlot = new Dictionary<player, int>();
+    private static Dictionary<player, Kitty> sortedDict;
+    private static Dictionary<player, int> MBSlot;
     private static string color = Colors.COLOR_YELLOW_ORANGE;
 
     /// <summary>
@@ -23,6 +23,8 @@ public static class SoloMultiboard
             if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
             OverallBoard = multiboard.Create();
             BestTimes = multiboard.Create();
+            sortedDict = new Dictionary<player, Kitty>();
+            MBSlot = new Dictionary<player, int>();
             CreateMultiboards();
             RegisterTriggers();
         }

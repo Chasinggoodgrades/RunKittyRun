@@ -53,6 +53,7 @@ public static class Shops
 
         }
         VendorsItemList.Add(vendor, vendorList);
+        GC.RemoveList(ref vendorList);
         RefreshItemsOnVendor(vendor);
     }
 
@@ -85,12 +86,13 @@ public static class Shops
 
     private static void CollectAllVendors()
     {
-        KittyVendors.EnumUnitsInRect(GetWorldBounds(), Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_VENDOR));
+        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_VENDOR);
+        KittyVendors.EnumUnitsInRect(GetWorldBounds(), filter);
         KittyVendorsList = KittyVendors.ToList();
 
         RegisterVendorSellingEvent();
 
-        KittyVendors.Dispose();
+        GC.RemoveFilterFunc(ref filter);
     }
 
     private static void RegisterVendorSellingEvent()

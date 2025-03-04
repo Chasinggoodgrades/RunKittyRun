@@ -6,7 +6,6 @@ public static class WolfLaneHider
 {
     public static List<int> LanesToEnable { get; set; } = new List<int>();
     public static List<unit> Units { get; set; } = new List<unit>();
-    public static group g { get; set; } = group.Create();
     public static void LanesHider()
     {
         try
@@ -84,7 +83,6 @@ public static class WolfLaneHider
             foreach (var unit in Units)
                 ShowUnit(unit, true);
 
-            g.Clear();
             Units.Clear();
             HideUndetectedLanes();
         }
@@ -108,7 +106,6 @@ public static class WolfLaneHider
             Logger.Verbose($"Hiding {Units.Count} wolves in undetected lanes");
             foreach (var unit in Units)
                 ShowUnit(unit, false);
-            g.Clear();
             Units.Clear();
         }
         catch (Exception e)
