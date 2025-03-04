@@ -73,14 +73,24 @@ public class FirstPersonCamera
             if (keyDownState["UP"]) fwd += movePerTick;
             if (keyDownState["DOWN"]) fwd -= movePerTick;
 
-            float newX = GetUnitX(hero) + fwd * Cos(angle);
-            float newY = GetUnitY(hero) + fwd * Sin(angle);
+            float oldX = GetUnitX(hero);
+            float oldY = GetUnitY(hero);
 
-            if (!IsTerrainPathable(newX, newY, PATHING_TYPE_WALKABILITY))
+            float newX = oldX + fwd * Cos(angle);
+            float newY = oldY + fwd * Sin(angle);
+
+            if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
             {
-                SetUnitX(hero, newX);
-                SetUnitY(hero, newY);
+                newX = oldX;
             }
+
+            if (IsTerrainPathable(oldX, newY, PATHING_TYPE_WALKABILITY))
+            {
+                newY = oldY;
+            }
+
+            SetUnitX(hero, newX);
+            SetUnitY(hero, newY);
         }
 
         // // Doesn't work :c
