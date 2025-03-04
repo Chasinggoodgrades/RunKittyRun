@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -146,7 +146,7 @@ public static class GeneralCmds
             "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 
-        if(p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
+        if (p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
         return commandList;
     }
 

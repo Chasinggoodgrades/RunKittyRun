@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -86,8 +86,8 @@ namespace Source.Init
             }
             catch (Exception e)
             {
-                if(Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}StartGame: " + e.Message);
-                if(Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Stacktrace: " + e.StackTrace);
+                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}StartGame: " + e.Message);
+                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Stacktrace: " + e.StackTrace);
                 throw;
             }
         }
@@ -117,9 +117,9 @@ namespace Source.Init
 
         private static void SetAlliedPlayers()
         {
-            foreach(var player in Globals.ALL_PLAYERS)
+            foreach (var player in Globals.ALL_PLAYERS)
             {
-                foreach(var playerx in Globals.ALL_PLAYERS)
+                foreach (var playerx in Globals.ALL_PLAYERS)
                 {
                     if (player == playerx) continue;
                     player.SetAlliance(playerx, ALLIANCE_PASSIVE, true);

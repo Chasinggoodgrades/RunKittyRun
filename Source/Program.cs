@@ -7,7 +7,7 @@ using WCSharp.Shared;
 
 namespace Source
 {
-    public static class Program
+	public static class Program
 	{
 		public static bool Debug { get; private set; } = false;
 
@@ -48,7 +48,7 @@ namespace Source
 				Quests.Initialize();
 
 			}
-            catch (Exception ex)
+			catch (Exception ex)
 			{
 				DisplayTextToPlayer(GetLocalPlayer(), 0, 0, ex.Message);
 			}
