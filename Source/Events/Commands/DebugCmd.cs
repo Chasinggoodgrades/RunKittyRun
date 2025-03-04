@@ -99,8 +99,16 @@ public static class DebugCmd
                 else if (setting == "off") CollisionDetection.KittyRegisterCollisions(kitty);
                 break;
             case "?slide":
-                Slider slider = new Slider(kitty.Unit);
-                slider.StartSlider();
+                if (kitty.Slider.IsEnabled())
+                {
+                    kitty.Slider.StopSlider();
+                    player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Slider deactivated.");
+                }
+                else
+                {
+                    kitty.Slider.StartSlider();
+                    player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Slider activated.");
+                }
                 break;
             case "?pw":
             case "?pause":
@@ -114,7 +122,7 @@ public static class DebugCmd
                 break;
             case "?spawnloc":
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach(var ko in Globals.ALL_KITTIES)
+                foreach (var ko in Globals.ALL_KITTIES)
                     ko.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 break;
             case "?roundpause":

@@ -25,6 +25,7 @@ public class Kitty
     public bool Finished { get; set; } = false;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
+    public Slider Slider { get; private set; }
 
     public Kitty(player player)
     {
@@ -33,6 +34,7 @@ public class Kitty
         SpawnEffect();
         CreateKitty();
         TimeProg = new KittyTime(this);
+        Slider = new Slider(this);
     }
 
     /// <summary>
@@ -79,6 +81,7 @@ public class Kitty
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
+            this.Slider.StopSlider();
         }
         catch (Exception e)
         {
@@ -101,6 +104,7 @@ public class Kitty
         Unit.Mana = circle.Unit.Mana;
         Utility.SelectUnitForPlayer(Player, Unit);
         CameraUtil.RelockCamera(Player);
+        this.Slider.ResumeSlider();
 
         if (savior == null) return;
         UpdateSaviorStats(savior);
@@ -158,7 +162,7 @@ public class Kitty
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
-        if (Gameover.WinGame) return; 
+        if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
     }
 
@@ -186,12 +190,12 @@ public class Kitty
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
         savior.CurrentStats.SaveStreak += 1;
-        if(savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
+        if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
         if (Gamemode.CurrentGameMode != "Standard") return;
         savior.SaveData.GameStats.Saves += 1;
         savior.SaveData.GameStats.SaveStreak += 1;
-        if(savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)
+        if (savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)
             savior.SaveData.GameStats.HighestSaveStreak = savior.SaveData.GameStats.SaveStreak;
         Challenges.PurpleLighting(savior);
         savior.YellowLightning.SaveIncrement();
