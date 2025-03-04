@@ -63,22 +63,12 @@ public static class UnitOrders
 
     private static void CaptureActions()
     {
-        var x = @event.OrderPointX;
-        var y = @event.OrderPointY;
-        var unit = @event.OrderedUnit;
-
         var orderId = @event.IssuedOrderId;
         if (orderId == OrderId("move") || orderId == OrderId("smart"))
         {
-            LastOrderLocation[unit] = (x, y);
+            LastOrderLocation[@event.OrderedUnit] = (@event.OrderPointX, @event.OrderPointY);
         }
-
-        if (IsInSafeZone(unit))
-        {
-            return;
-        }
-
-        var player = GetOwningPlayer(unit);
+      
         if (TotalActions.ContainsKey(player))
         {
             TotalActions[player]++;

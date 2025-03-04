@@ -68,11 +68,13 @@ public class Kitty
             CrystalOfFire.CrystalOfFireDeath(this);
             circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             circle.KittyDied(this);
-            SoundManager.PlayKittyDeathSound(Unit);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();
+
+            SoundManager.PlayKittyDeathSound(Unit);
             SoundManager.PlayFirstBloodSound();
             DeathStatUpdate();
+
             if (Gamemode.CurrentGameMode != "Standard") return;
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
