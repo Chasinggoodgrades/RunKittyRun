@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
@@ -166,4 +166,25 @@ public class Fixation : Affix
             SetUnitMoveSpeed(Unit.Unit, Math.Max(newSpeed, FIXATION_MS));
         }
     }
+
+    public static Fixation GetFixation(unit Unit)
+    {
+        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(a => a is Fixation);
+        return affix is Fixation fixation ? fixation : null;
+    }
+
+    public void PauseFixation(bool pause)
+    {
+        if (pause)
+        {
+            IsChasing = false;
+            ChaseTimer.Pause();
+            GC.RemoveEffect(ref TargetEffect);
+        }
+        else
+        {
+            ChaseTimer.Resume();
+        }
+    }
+
 }
