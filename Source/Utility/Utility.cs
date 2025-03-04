@@ -184,6 +184,22 @@ public static class Utility
     }
 
     /// <summary>
+    /// Returns the slot of the item if the unit has it, otherwise -1.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
+    public static int GetSlotOfItem(unit u, int itemId)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+                return i;
+        }
+        return -1;
+    }
+
+    /// <summary>
     /// If the unit has the item, it'll be deleted.
     /// </summary>
     /// <param name="u"></param>
@@ -210,6 +226,7 @@ public static class Utility
         var item = CreateItem(itemId, 0, 0);
         var iconPath = item.Icon;
         item.Dispose();
+        item = null;
         return iconPath;
     }
 

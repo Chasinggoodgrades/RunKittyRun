@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Shared;
-using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public static class WolfLaneHider
 {
@@ -72,7 +70,6 @@ public static class WolfLaneHider
     {
         try
         {
-            var filter = Utility.CreateFilterFunc(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG);
             foreach (var lane in LanesToEnable)
             {
                 foreach (var wolf in Globals.ALL_WOLVES)
@@ -89,7 +86,6 @@ public static class WolfLaneHider
 
             g.Clear();
             Units.Clear();
-            GC.RemoveFilterFunc(ref filter);
             HideUndetectedLanes();
         }
         catch (Exception e)
@@ -102,7 +98,6 @@ public static class WolfLaneHider
     {
         try
         {
-            var filter = Utility.CreateFilterFunc(() => GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG);
             foreach (var wolf in Globals.ALL_WOLVES)
             {
                 if (!LanesToEnable.Contains(wolf.Value.RegionIndex))
@@ -115,7 +110,6 @@ public static class WolfLaneHider
                 ShowUnit(unit, false);
             g.Clear();
             Units.Clear();
-            GC.RemoveFilterFunc(ref filter);
         }
         catch (Exception e)
         {

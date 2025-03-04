@@ -137,7 +137,6 @@ public class Kibble
 
         if (JackPotIndex >= 20)
         {
-            Dispose();
             var goldAmount = GetRandomInt(JackpotMin, JackpotMax);
 
             // Roll for super jackpot (1/10 chance)
@@ -150,6 +149,8 @@ public class Kibble
 
             Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
+            kitty.SaveData.KibbleCurrency.Jackpots += 1;
+            Dispose();
         }
         else
         {
@@ -165,6 +166,8 @@ public class Kibble
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
+
+        Globals.ALL_KITTIES[kibblePicker].SaveData.KibbleCurrency.Collected += 1;
     }
 
     private static List<int> KibbleList()

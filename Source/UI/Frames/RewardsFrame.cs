@@ -223,6 +223,8 @@ public static class RewardsFrame
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
             Trigger.AddAction(() => RewardButtonActions(reward));
         }
+
+        GC.RemoveDictionary(ref count);
     }
 
     private static void RewardTooltip(framehandle parent, Reward reward)

@@ -82,7 +82,7 @@ public static class DoodadChanger
             var newDestructible = destructable.CreateDead(newType, pos.x, pos.y, 0, scale);
             AllDestructables.Add(newDestructible);
         }
-        positions.Clear();
+        GC.RemoveList(ref positions);
     }
 
 
