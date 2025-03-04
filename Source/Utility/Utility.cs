@@ -125,8 +125,8 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var t = CreateTimer();
-        TimerStart(t, duration, false, () =>
+        var t = timer.Create();
+        t.Start(duration, false, () =>
         {
             action();
             t.Dispose();
@@ -240,7 +240,7 @@ public static class Utility
     /// <param name="red"></param>
     /// <param name="green"></param>
     /// <param name="blue"></param>
-    public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
+    public static void CreateSimpleTextTag(string text, float duration, unit u, float height = 0.015f, int red = 255, int green = 255, int blue = 255)
     {
         var tt = texttag.Create();
         tt.SetText(text, height);
