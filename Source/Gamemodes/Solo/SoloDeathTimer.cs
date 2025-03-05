@@ -54,10 +54,9 @@ public class SoloDeathTimer
 
     private void Dispose()
     {
-        ReviveTimer.Pause();
-        ReviveTimer.Dispose();
-        UpdateTextTimer.Pause();
-        UpdateTextTimer.Dispose();
+        GC.RemoveTimer(ref ReviveTimer);
+        GC.RemoveTimer(ref UpdateTextTimer);
         FloatingTimer.Dispose();
+        FloatingTimer = null;
     }
 }

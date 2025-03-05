@@ -1,6 +1,5 @@
 ﻿public static class Solo
 {
-    private const float TIME_TO_REVIVE = 6.0f;
     public static void Initialize()
     {
         ItemSpawner.NUMBER_OF_ITEMS = 8;

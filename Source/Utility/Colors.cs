@@ -32,47 +32,54 @@ public class Colors
     private int colorID;
     private string colorcode;
     private playercolor playercolor;
+    private int red;
+    private int green;
+    private int blue;
 
-    public Colors(string colorname, int colorID, string colorcode, playercolor playercolor)
+    public Colors(string colorname, int colorID, string colorcode, playercolor playercolor, int red, int green, int blue)
     {
         this.colorname = colorname;
         this.colorcode = colorcode;
         this.colorID = colorID;
         this.playercolor = playercolor;
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
-    public static void AddColor(string colorname, int colorID, string colorcode, playercolor playercolor)
+    public static void AddColor(string colorname, int colorID, string colorcode, playercolor playercolor, int redValue, int greenValue, int blueValue)
     {
-        ColorManager.Add(new Colors(colorname, colorID, colorcode, playercolor));
+        ColorManager.Add(new Colors(colorname, colorID, colorcode, playercolor, redValue, greenValue, blueValue));
     }
 
     public static void Initialize()
     {
-        AddColor("red", 1, "|cffff0303", playercolor.Red);
-        AddColor("blue", 2, "|cff0042ff", playercolor.Blue);
-        AddColor("teal", 3, "|cff1be7ba", playercolor.Cyan);
-        AddColor("purple", 4, "|cff550081", playercolor.Purple);
-        AddColor("yellow", 5, "|cfffefc00", playercolor.Yellow);
-        AddColor("orange", 6, "|cfffe890d", playercolor.Orange);
-        AddColor("green", 7, "|cff21bf00", playercolor.Green);
-        AddColor("pink", 8, "|cffe45caf", playercolor.Pink);
-        AddColor("gray", 9, "|cff939596", playercolor.LightGray);
-        AddColor("lightblue,lb,light-blue", 10, "|cff7ebff1", playercolor.LightBlue);
-        AddColor("darkgreen,dg,dark-green", 11, "|cff106247", playercolor.Emerald);
-        AddColor("brown", 12, "|cff4f2b05", playercolor.Brown);
-        AddColor("maroon", 13, "|cff9c0000", playercolor.Maroon);
-        AddColor("navy", 14, "|cff0000c3", playercolor.Navy);
-        AddColor("turquoise", 15, "|cff00ebff", playercolor.Turquoise);
-        AddColor("violet", 16, "|cffbd00ff", playercolor.Violet);
-        AddColor("wheat", 17, "|cffecce87", playercolor.Wheat);
-        AddColor("peach", 18, "|cfff7a58b", playercolor.Peach);
-        AddColor("mint", 19, "|cffbfff81", playercolor.Mint);
-        AddColor("lavender", 20, "|cffdbb8eb", playercolor.Lavender);
-        AddColor("coal", 21, "|cff4f5055", playercolor.Coal);
-        AddColor("snow,white", 22, "|cffecf0ff", playercolor.Snow);
-        AddColor("emerald", 23, "|cff00781e", playercolor.Emerald);
-        AddColor("peanut", 24, "|cffa56f34", playercolor.Peanut);
+        AddColor("red", 1, "|cffff0303", playercolor.Red, 255, 3, 3);
+        AddColor("blue", 2, "|cff0042ff", playercolor.Blue, 0, 66, 255);
+        AddColor("teal", 3, "|cff1be7ba", playercolor.Cyan, 27, 231, 186);
+        AddColor("purple", 4, "|cff550081", playercolor.Purple, 85, 0, 129);
+        AddColor("yellow", 5, "|cfffefc00", playercolor.Yellow, 254, 252, 0);
+        AddColor("orange", 6, "|cfffe890d", playercolor.Orange, 254, 137, 13);
+        AddColor("green", 7, "|cff21bf00", playercolor.Green, 33, 191, 0);
+        AddColor("pink", 8, "|cffe45caf", playercolor.Pink, 228, 92, 175);
+        AddColor("gray", 9, "|cff939596", playercolor.LightGray, 147, 149, 150);
+        AddColor("lightblue,lb,light-blue", 10, "|cff7ebff1", playercolor.LightBlue, 126, 191, 241);
+        AddColor("darkgreen,dg,dark-green", 11, "|cff106247", playercolor.Emerald, 16, 98, 71);
+        AddColor("brown", 12, "|cff4f2b05", playercolor.Brown, 79, 43, 5);
+        AddColor("maroon", 13, "|cff9c0000", playercolor.Maroon, 156, 0, 0);
+        AddColor("navy", 14, "|cff0000c3", playercolor.Navy, 0, 0, 195);
+        AddColor("turquoise", 15, "|cff00ebff", playercolor.Turquoise, 0, 235, 255);
+        AddColor("violet", 16, "|cffbd00ff", playercolor.Violet, 189, 0, 255);
+        AddColor("wheat", 17, "|cffecce87", playercolor.Wheat, 236, 206, 135);
+        AddColor("peach", 18, "|cfff7a58b", playercolor.Peach, 247, 165, 139);
+        AddColor("mint", 19, "|cffbfff81", playercolor.Mint, 191, 255, 129);
+        AddColor("lavender", 20, "|cffdbb8eb", playercolor.Lavender, 219, 184, 235);
+        AddColor("coal", 21, "|cff4f5055", playercolor.Coal, 79, 80, 85);
+        AddColor("snow,white", 22, "|cffecf0ff", playercolor.Snow, 236, 240, 255);
+        AddColor("emerald", 23, "|cff00781e", playercolor.Emerald, 0, 120, 30);
+        AddColor("peanut", 24, "|cffa56f34", playercolor.Peanut, 165, 111, 52);
     }
+
 
     /// <summary>
     /// Colorizes a player's name based on their player ID.
@@ -155,6 +162,17 @@ public class Colors
     {
         if(text != null && text.Length > 0) return COLOR_YELLOW + text + COLOR_RESET;
         else return $"{COLOR_RED}ERROR{COLOR_RESET}";
+    }
+
+    /// <summary>
+    /// Sets the unit's vertex color based on the passed parameter playerID... 
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <param name="playerID"></param>
+    public static void SetUnitToVertexColor(unit unit, int playerID)
+    {
+        var color = ColorManager[playerID];
+        unit.SetVertexColor(color.red, color.green, color.blue, 255);
     }
 
     public static void ListColorCommands(player player)
