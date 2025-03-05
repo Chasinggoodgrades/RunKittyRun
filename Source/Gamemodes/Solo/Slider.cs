@@ -41,8 +41,8 @@ public class Slider
             return;
         }
 
-        EnableTrigger(ClickTrigger);
-        EnableTrigger(WidgetTrigger);
+        ClickTrigger.Enable();
+        WidgetTrigger.Enable();
 
         SliderTimer.Start(SLIDE_INTERVAL, true, () =>
         {
@@ -54,8 +54,8 @@ public class Slider
     public void StopSlider()
     {
         enabled = false;
-        DisableTrigger(ClickTrigger);
-        DisableTrigger(WidgetTrigger);
+        ClickTrigger.Disable();
+        WidgetTrigger.Disable();
         SliderTimer.Pause();
     }
 
@@ -69,10 +69,10 @@ public class Slider
         float moveSpeed = GetUnitMoveSpeed(kitty.Unit);
         float movePerTick = moveSpeed * SLIDE_INTERVAL;
 
-        float angle = Rad2Deg(GetUnitFacing(kitty.Unit));
+        float angle = Rad2Deg(kitty.Unit.Facing);
 
-        float oldX = GetUnitX(kitty.Unit);
-        float oldY = GetUnitY(kitty.Unit);
+        float oldX = kitty.Unit.X;
+        float oldY = kitty.Unit.Y;
 
         float newX = oldX + movePerTick * Cos(angle);
         float newY = oldY + movePerTick * Sin(angle);
@@ -87,53 +87,43 @@ public class Slider
             newY = oldY;
         }
 
-        SetUnitX(kitty.Unit, newX);
-        SetUnitY(kitty.Unit, newY);
+        kitty.Unit.SetPosition(newX, newY);
     }
 
     private void RegisterClickEvent()
     {
-        ClickTrigger = CreateTrigger();
+        ClickTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(ClickTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        TriggerAddCondition(ClickTrigger, Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        TriggerAddAction(ClickTrigger, () => HandleTurn(true));
+        ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        ClickTrigger.AddAction(() => HandleTurn(true));
 
-        WidgetTrigger = CreateTrigger();
+        WidgetTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(WidgetTrigger, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
-        TriggerAddCondition(WidgetTrigger, Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        TriggerAddAction(WidgetTrigger, () => HandleTurn(false));
+        WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        WidgetTrigger.AddAction(() => HandleTurn(false));
 
-        DisableTrigger(ClickTrigger);
-        DisableTrigger(WidgetTrigger);
-    }
-
-    private void StopUnit(unit unit)
-    {
-        PauseUnit(unit, true);
-        IssueImmediateOrder(unit, "stop");
-        PauseUnit(unit, false);
+        ClickTrigger.Disable();
+        WidgetTrigger.Disable();
     }
 
     private void HandleTurn(bool isToLocation)
     {
-        var unit = GetTriggerUnit();
+        var unit = @event.Unit;
         var angle = 0.0f;
 
         if (isToLocation)
         {
             var orderX = GetOrderPointX();
             var orderY = GetOrderPointY();
-            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
+            angle = Atan2(orderY - unit.Y, orderX - unit.X) * Blizzard.bj_RADTODEG;
         }
         else
         {
             var target = GetOrderTarget();
             var orderX = GetWidgetX(target);
             var orderY = GetWidgetY(target);
-            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
+            angle = Atan2(orderY - unit.Y, orderX - unit.X) * Blizzard.bj_RADTODEG;
         }
-
-        StopUnit(unit);
 
         // if (kitty.SlidingMode == "max")
         // {
@@ -143,7 +133,7 @@ public class Slider
         // }
         // else
         // {
-        SetUnitFacing(unit, angle);
+        unit.Facing =  angle;
         // }
     }
 }
