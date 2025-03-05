@@ -115,14 +115,14 @@ public class Slider
         {
             var orderX = GetOrderPointX();
             var orderY = GetOrderPointY();
-            angle = Atan2(orderY - unit.Y, orderX - unit.X) * Blizzard.bj_RADTODEG;
+            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
         }
         else
         {
             var target = GetOrderTarget();
             var orderX = GetWidgetX(target);
             var orderY = GetWidgetY(target);
-            angle = Atan2(orderY - unit.Y, orderX - unit.X) * Blizzard.bj_RADTODEG;
+            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
         }
 
         // if (kitty.SlidingMode == "max")
@@ -133,7 +133,7 @@ public class Slider
         // }
         // else
         // {
-        unit.Facing =  angle;
+        SetUnitFacing(unit, angle);
         // }
     }
 }
