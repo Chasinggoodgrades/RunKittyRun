@@ -32,6 +32,10 @@ public class Bomber : Affix
 
         GC.RemoveTimer(ref ExplodeTimer);
         GC.RemoveTimer(ref ReviveAlphaTimer);
+
+        Unit.IsReviving = false;
+        Unit.IsPaused = false;
+
         base.Remove();
     }
 

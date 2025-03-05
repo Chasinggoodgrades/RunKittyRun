@@ -172,28 +172,19 @@ public class Kibble
 
     private static List<int> KibbleList()
     {
-        if (SeasonalManager.Season == HolidaySeasons.Christmas)
+        return SeasonalManager.Season switch
         {
-            return new List<int>
+            HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
+            HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
+            _ => new List<int>
             {
-                Constants.ITEM_PRESENT
-            };
-        }
-        if (SeasonalManager.Season == HolidaySeasons.Valentines)
-        {
-            return new List<int>
-            {
-                Constants.ITEM_HEART
-            };
-        }
-        return new List<int>
-        {
-            Constants.ITEM_KIBBLE,
-            Constants.ITEM_KIBBLE_TEAL,
-            Constants.ITEM_KIBBLE_GREEN,
-            Constants.ITEM_KIBBLE_PURPLE,
-            Constants.ITEM_KIBBLE_RED,
-            Constants.ITEM_KIBBLE_YELLOW
+                Constants.ITEM_KIBBLE,
+                Constants.ITEM_KIBBLE_TEAL,
+                Constants.ITEM_KIBBLE_GREEN,
+                Constants.ITEM_KIBBLE_PURPLE,
+                Constants.ITEM_KIBBLE_RED,
+                Constants.ITEM_KIBBLE_YELLOW
+            }
         };
     }
 }

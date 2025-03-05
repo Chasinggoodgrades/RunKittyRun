@@ -95,8 +95,7 @@ public static class UrnSoul
     private static trigger RegisterInRangeEvent()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, 
-            Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
         trig.AddAction(() => InRangeActions());
         return trig;
     }
@@ -129,7 +128,7 @@ public static class UrnSoul
         Utility.RemoveItemFromUnit(unit, energyStone);
         Utility.RemoveItemFromUnit(unit, water);
 
-        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS.WWBlue));
+        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue));
     }
 
 

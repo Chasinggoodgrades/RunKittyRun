@@ -39,8 +39,7 @@ public static class AwardManager
             return;
         }
 
-        UpdateProperty(saveData.GameAwards, award, 1);
-        UpdateNestedProperty(saveData.GameAwardsSorted, reward.TypeSorted, award, 1);
+        RewardHelper.UpdateNestedProperty(saveData.GameAwardsSorted, reward.TypeSorted, award, 1);
 
         EnableAbility(player, award);
 
@@ -50,54 +49,6 @@ public static class AwardManager
         {
             Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
             Awarded[player].Add(award);
-        }
-    }
-
-    // Helper method to update a property value
-    private static void UpdateProperty(object obj, string propertyName, object value)
-    {
-        var property = obj.GetType().GetProperty(propertyName);
-        if (property != null)
-        {
-            property.SetValue(obj, value);
-        }
-        else
-        {
-            if(Source.Program.Debug) Console.WriteLine($"Property {propertyName} not found.");
-        }
-    }
-
-    private static void UpdateNestedProperty(object obj, string nestedPropertyName, string propertyName, object value)
-    {
-        var nestedProperty = obj.GetType().GetProperty(nestedPropertyName);
-        if (nestedProperty != null)
-        {
-            var nestedObject = nestedProperty.GetValue(obj);
-            if (nestedObject != null)
-            {
-                UpdateProperty(nestedObject, propertyName, value);
-            }
-        }
-        else
-        {
-            if(Source.Program.Debug) Console.WriteLine($"Nested property {nestedPropertyName} not found.");
-        }
-    }
-
-    /// <summary>
-    /// Updates all Game Awards for the player to add to GameSortedAwards.. 
-    /// </summary>
-    /// <param name="player"></param>
-    public static void UpdateRewardsSorted()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            var gameAwards = Globals.ALL_KITTIES[player].SaveData.GameAwards;
-            foreach (var property in gameAwards.GetType().GetProperties())
-            {
-                var value = (int)property.GetValue(gameAwards);
-                if (value == 1) GiveReward(player, property.Name, false);
-            }
         }
     }
 

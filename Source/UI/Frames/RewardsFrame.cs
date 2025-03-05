@@ -167,8 +167,7 @@ public static class RewardsFrame
         foreach (var reward in RewardsManager.Rewards)
         {
             var stats = Globals.ALL_KITTIES[player].SaveData;
-            var property = stats.GameAwards.GetType().GetProperty(reward.Name);
-            var value = (int)property.GetValue(stats.GameAwards);
+            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
             if (value == 0) continue;
 
             RewardHelp.AddReward(reward);
@@ -251,8 +250,7 @@ public static class RewardsFrame
         var player = @event.Player;
         var frame = @event.Frame;
         var stats = Globals.ALL_KITTIES[player].SaveData;
-        var property = stats.GameAwards.GetType().GetProperty(reward.Name);
-        var value = (int)property.GetValue(stats.GameAwards);
+        var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
         if (value == 0) return; // Doesnt have the reward.
         reward.ApplyReward(player);
         if (!player.IsLocal) return;
@@ -265,8 +263,7 @@ public static class RewardsFrame
         var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
         foreach(var reward in RewardIcons)
         {
-            var property = stats.GameAwards.GetType().GetProperty(reward.Value.Name);
-            var value = (int)property.GetValue(stats.GameAwards);
+            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.Value.TypeSorted, reward.Value.Name);
             if (value == 0)
                 reward.Key.SetTexture(unavailablePath, 0, false);
             else

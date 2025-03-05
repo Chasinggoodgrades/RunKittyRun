@@ -22,22 +22,26 @@ public static class AwardingCmds
             return;
         }
 
-        if(award.ToLower() == "all")
+        if (award.ToLower() == "all")
         {
             AwardAll(player);
             return;
         }
 
-        foreach (var awd in Globals.GAME_AWARDS.GetType().GetProperties())
+        foreach (var category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties())
         {
-            var awardString = awd.Name.ToLower();
-            var inputAward = award.ToLower();
-
-            // Exact match
-            if (awardString == inputAward)
+            var subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED);
+            foreach (var awd in subCategory.GetType().GetProperties())
             {
-                AwardManager.GiveReward(selectedPlayer, awd.Name);
-                return;
+                var awardString = awd.Name.ToLower();
+                var inputAward = award.ToLower();
+
+                // Exact match
+                if (awardString == inputAward)
+                {
+                    AwardManager.GiveReward(selectedPlayer, awd.Name);
+                    return;
+                }
             }
         }
 
@@ -48,18 +52,26 @@ public static class AwardingCmds
     {
         var combined = "";
 
-        foreach (var awd in Globals.GAME_AWARDS.GetType().GetProperties())
+        foreach (var category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties())
         {
-            combined += awd.Name + ", ";
+            var subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED);
+            foreach (var awd in subCategory.GetType().GetProperties())
+            {
+                combined += awd.Name + ", ";
+            }
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid awards: {Colors.HighlightString(combined)}");
     }
 
     private static void AwardAll(player player)
     {
-        foreach (var property in Globals.GAME_AWARDS.GetType().GetProperties())
+        foreach (var category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties())
         {
-            AwardManager.GiveReward(player, property.Name);
+            var subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED);
+            foreach (var property in subCategory.GetType().GetProperties())
+            {
+                AwardManager.GiveReward(player, property.Name);
+            }
         }
     }
 
@@ -84,7 +96,7 @@ public static class AwardingCmds
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         // Then check if the value is actually a proper value.
-        foreach(var prop in Globals.GAME_STATS.GetType().GetProperties())
+        foreach (var prop in Globals.GAME_STATS.GetType().GetProperties())
         {
             if (prop.Name.ToLower() == stats.ToLower())
             {
@@ -94,9 +106,9 @@ public static class AwardingCmds
                     return;
                 }
 
-                var changeProp =  Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats.GetType().GetProperty(prop.Name);
+                var changeProp = Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats.GetType().GetProperty(prop.Name);
                 changeProp.SetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats, val);
-                player.DisplayTimedTextTo(3.0f, 
+                player.DisplayTimedTextTo(3.0f,
                     $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
                 MultiboardUtil.RefreshMultiboards();
                 return;
@@ -113,7 +125,6 @@ public static class AwardingCmds
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game stats: {Colors.HighlightString(combined)}");
     }
-
 
     public static void SettingGameTimes(player player, string command)
     {
@@ -173,5 +184,4 @@ public static class AwardingCmds
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(selectedPlayer)}:\n{Colors.HighlightString(combined)}");
     }
-
 }

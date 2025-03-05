@@ -14,7 +14,7 @@ public static class ChampionAwards
 
     private static void GiveAllChampionAwards(player player)
     {
-        var awards = Globals.GAME_AWARDS;
+        var awards = Globals.GAME_AWARDS_SORTED.Tournament;
         AwardManager.GiveReward(player, nameof(awards.TurquoiseNitro), false);
         AwardManager.GiveReward(player, nameof(awards.TurquoiseWings), false);
         AwardManager.GiveReward(player, nameof(awards.VioletAura), false);

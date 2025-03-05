@@ -35,10 +35,10 @@ public static class NoKittyLeftBehind
         foreach(var kitty in Globals.ALL_KITTIES.Values)
         {
             if (!Utility.UnitHasItem(kitty.Unit, ItemID)) continue;
-            if (AwardManager.ReceivedAwardAlready(kitty.Player, nameof(kitty.SaveData.GameAwards.WWSwift))) continue;
+            if (AwardManager.ReceivedAwardAlready(kitty.Player, nameof(kitty.SaveData.GameAwardsSorted.Windwalks.WWSwift))) continue;
             kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_LAVENDER}No Kitty Left Behind|r {Colors.COLOR_YELLOW_ORANGE}({CompletedCount}/{RequiredCount})|r");
             if(CompletedCount >= RequiredCount) 
-                AwardManager.GiveReward(kitty.Player, nameof(kitty.SaveData.GameAwards.WWSwift));
+                AwardManager.GiveReward(kitty.Player, nameof(kitty.SaveData.GameAwardsSorted.Windwalks.WWSwift));
         }
     }
 

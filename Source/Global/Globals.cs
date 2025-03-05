@@ -33,7 +33,6 @@ public static class Globals
     public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE { get; set; } = new Dictionary<player, int>();
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
     public static SaveManager SaveSystem;
-    public static GameAwardsData GAME_AWARDS = new GameAwardsData();
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
