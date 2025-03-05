@@ -18,6 +18,7 @@ public static class Standard
         Windwalk.Initialize();
         SpawnChampions.Initialize();
         PlayerUpgrades.Initialize();
+        RollerSkates.Initialize();
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
         Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
@@ -35,8 +36,7 @@ public static class Standard
     {
         // Ultimate, Protection of the Ancients
         KittyReachedLevelSix = trigger.Create();
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
-            TriggerRegisterUnitEvent(KittyReachedLevelSix, kitty.Unit, unitevent.HeroLevel);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
         {
             if (HitLevel6.Contains(@event.Unit.Owner)) return;
@@ -50,8 +50,7 @@ public static class Standard
     {
         // Ability to Purchase Relics
         KittyReachedLevelTen = trigger.Create();
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            TriggerRegisterUnitEvent(KittyReachedLevelTen, kitty.Unit, unitevent.HeroLevel);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelTen, playerunitevent.HeroLevel);
         KittyReachedLevelTen.AddAction(() =>
         {
             if (HitLevel10.Contains(@event.Unit.Owner)) return;
