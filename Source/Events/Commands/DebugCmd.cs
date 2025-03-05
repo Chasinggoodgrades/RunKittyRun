@@ -94,7 +94,7 @@ public static class DebugCmd
                     }
                 break;
             case "?invul":
-                var setting = cmd.Length > 1 ? cmd[1] : "off";
+                var setting = cmd.Length > 1 ? cmd[1] : "on";
                 if (setting == "on") UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 else if (setting == "off") CollisionDetection.KittyRegisterCollisions(kitty);
                 break;

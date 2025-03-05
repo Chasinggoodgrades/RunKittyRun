@@ -67,6 +67,7 @@ public static class ItemSpawner
     private static void SpawnKibble()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (KibbleEvent.IsEventActive()) return;
         var kibble = new Kibble();
         TrackKibbles.Add(kibble);
     }
