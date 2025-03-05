@@ -25,18 +25,20 @@ public static class RollerSkates
 
         if (RollerSkaters.Contains(unit.Owner))
         {
-            SetRollerSkates(item);
+            SetPegasusBoots(item);
             slider.StopSlider();
             RollerSkaters.Remove(unit.Owner);
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Deactivated|r");
         }
         else
         {
-            SetPegasusBoots(item);
+            SetRollerSkates(item);
             if (slider.IsEnabled())
                 slider.ResumeSlider();
             else
                 slider.StartSlider();
             RollerSkaters.Add(unit.Owner);
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Activated|r");
         }
     }
 
