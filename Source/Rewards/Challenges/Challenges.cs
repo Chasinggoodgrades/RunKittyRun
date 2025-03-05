@@ -32,7 +32,10 @@ public static class Challenges
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWNecro));
     }
 
-    public static void DivineWindwalk() => AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine));
+    public static void DivineWindwalk()
+    {
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine));
+    }
 
     public static void ButterflyAura(player player)
     {
