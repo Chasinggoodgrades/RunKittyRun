@@ -72,6 +72,7 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             if (!k.Unit.Alive) return;
+            if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
             if (NamedWolves.MarcoWolfCollision(GetFilterUnit(), k)) return;
             if (ChronoSphere.RewindDeath(k.Unit)) return;
             if (k.Invulnerable) return;

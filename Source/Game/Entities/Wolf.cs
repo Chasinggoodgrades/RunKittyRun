@@ -22,6 +22,7 @@ public class Wolf
     private effect OverheadEffect { get; set; }
     public WolfPoint WolfPoint { get; set; }
     public bool IsPaused { get; set; } = false;
+    public bool IsReviving { get; set; } = false;
 
     public Wolf(int regionIndex)
     {
@@ -32,6 +33,8 @@ public class Wolf
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
         Utility.SimpleTimer(3.0f, () => StartWandering());
+
+        if(WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea)) wolfArea.Wolves.Add(this);
     }
 
     private void InitializeWolf()

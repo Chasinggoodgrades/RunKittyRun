@@ -64,13 +64,12 @@ public class Bomber : Affix
         GC.RemoveList(ref list);
         Globals.TempGroup.Clear();
         Revive();
+        Unit.Unit.SetVertexColor(204, 102, 0, 25);
     }
 
     private void Revive()
     {
-        // currently makes it look transparent, but..
-        // i should make it so it doesnt kill players until it's fully revived.
-
+        Unit.IsReviving = true;
         ReviveAlphaTimer.Start(1.0f, true, () =>
         {
             if (ReviveAlpha < 10)
@@ -83,6 +82,7 @@ public class Bomber : Affix
                 ReviveAlpha = 1;
                 ReviveAlphaTimer.Pause();
                 Unit.IsPaused = false;
+                Unit.IsReviving = false;
                 ExplodeTimer.Start(EXPLODE_INTERVAL, false, StartExplosion);
             }
         });

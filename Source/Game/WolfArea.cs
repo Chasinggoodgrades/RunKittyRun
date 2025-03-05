@@ -14,6 +14,7 @@ public class WolfArea
     public float Area { get; private set; }
     public bool IsEnabled { get; set; } = true;
     private trigger AreaTrigger { get; set; }
+    public List<Wolf> Wolves { get; set; } = new List<Wolf>();
 
     public WolfArea(int id, region region)
     {

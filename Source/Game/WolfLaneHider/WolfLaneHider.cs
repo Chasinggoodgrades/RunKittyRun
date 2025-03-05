@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System.Collections.Generic;
+using System;
+
 public static class WolfLaneHider
 {
-    public static List<int> LanesToEnable { get; set; } = new List<int>();
-    public static List<unit> Units { get; set; } = new List<unit>();
+    public static HashSet<int> LanesToEnable { get; set; } = new HashSet<int>();
+
     public static void LanesHider()
     {
         try
         {
             DetectLanesToEnable();
+            ShowAndHideLanes();
         }
         catch (Exception e)
         {
@@ -36,8 +36,6 @@ public static class WolfLaneHider
                     AddLaneIfNotInList(currentSafezone + 3);
                 }
             }
-
-            ShowDetectedLanes();
         }
         catch (Exception e)
         {
@@ -47,70 +45,40 @@ public static class WolfLaneHider
 
     private static void AddLaneIfNotInList(int lane)
     {
-        if (lane >= 0 && !LanesToEnable.Contains(lane) && lane <= 17)
+        if (lane >= 0 && lane <= 17)
         {
             LanesToEnable.Add(lane);
         }
     }
 
+    private static void ShowAndHideLanes()
+    {
+        try
+        {
+            foreach (var lane in WolfArea.WolfAreas)
+            {
+                bool shouldShow = LanesToEnable.Contains(lane.Key);
+                foreach (var wolf in lane.Value.Wolves)
+                {
+                    wolf.Unit.IsVisible = shouldShow;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ShowAndHideLanes: {e.Message}");
+        }
+    }
+
     public static void HideAllLanes()
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
+        foreach (var lane in WolfArea.WolfAreas)
         {
-            ShowUnit(wolf.Value.Unit, false);
-        }
-        foreach (var wolfArea in WolfArea.WolfAreas)
-        {
-            wolfArea.Value.IsEnabled = false;
-        }
-    }
-
-    private static void ShowDetectedLanes()
-    {
-        try
-        {
-            foreach (var lane in LanesToEnable)
+            foreach (var wolf in lane.Value.Wolves)
             {
-                foreach (var wolf in Globals.ALL_WOLVES)
-                {
-                    if (wolf.Value.RegionIndex == lane)
-                    {
-                        Units.Add(wolf.Value.Unit);
-                    }
-                }
+                wolf.Unit.IsVisible = false;
             }
-            Logger.Verbose($"Showing {Units.Count} wolves in detected lanes");
-            foreach (var unit in Units)
-                ShowUnit(unit, true);
-
-            Units.Clear();
-            HideUndetectedLanes();
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in ShowDetectedLanes: {e.Message}");
-        }
-    }
-
-    private static void HideUndetectedLanes()
-    {
-        try
-        {
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                if (!LanesToEnable.Contains(wolf.Value.RegionIndex))
-                {
-                    Units.Add(wolf.Value.Unit);
-                }
-            }
-            Logger.Verbose($"Hiding {Units.Count} wolves in undetected lanes");
-            foreach (var unit in Units)
-                ShowUnit(unit, false);
-            Units.Clear();
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in HideUndetectedLanes: {e.Message}");
+            lane.Value.IsEnabled = false;
         }
     }
 }

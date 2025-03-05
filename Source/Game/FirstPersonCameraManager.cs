@@ -99,7 +99,6 @@ public class FirstPersonCamera
             if (this.lastUnitAnimation != "stand")
             {
                 this.lastUnitAnimation = "stand";
-                Console.WriteLine(fwd);
                 hero.SetAnimation(0); // 0 is stand for most units
             }
         }
@@ -109,7 +108,6 @@ public class FirstPersonCamera
             if (this.lastUnitAnimation != "walk")
             {
                 this.lastUnitAnimation = "walk";
-                Console.WriteLine($"{fwd} : walking");
                 hero.SetAnimation(6); // POTM is 6 for walk
             }
         }
