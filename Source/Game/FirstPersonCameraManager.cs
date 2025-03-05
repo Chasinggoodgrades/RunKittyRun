@@ -12,7 +12,7 @@ public class FirstPersonCamera
     private unit hero;
     private player player;
     private Dictionary<string, bool> keyDownState;
-    // private string lastUnitAnimation;
+    private string lastUnitAnimation;
 
     public FirstPersonCamera(unit hero, player player)
     {
@@ -93,23 +93,27 @@ public class FirstPersonCamera
             SetUnitY(hero, newY);
         }
 
-        // // Doesn't work :c
-        // if (fwd == 0)
-        // {
-        //     if (this.lastUnitAnimation != "stand")
-        //     {
-        //         this.lastUnitAnimation = "stand";
-        //         Common.SetUnitAnimation(hero, "stand");
-        //     }
-        // }
-        // else
-        // {
-        //     if (this.lastUnitAnimation != "walk")
-        //     {
-        //         this.lastUnitAnimation = "walk";
-        //         Common.SetUnitAnimation(hero, "walk");
-        //     }
-        // }
+        // Doesn't work :c
+        if (fwd == 0)
+        {
+            if (this.lastUnitAnimation != "stand")
+            {
+                this.lastUnitAnimation = "stand";
+                Console.WriteLine(fwd);
+                hero.SetAnimation(0); // 0 is stand for most units
+            }
+        }
+
+        else
+        {
+            if (this.lastUnitAnimation != "walk")
+            {
+                this.lastUnitAnimation = "walk";
+                Console.WriteLine($"{fwd} : walking");
+                hero.SetAnimation(6); // POTM is 6 for walk
+            }
+        }
+
 
         Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, true);
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0);
