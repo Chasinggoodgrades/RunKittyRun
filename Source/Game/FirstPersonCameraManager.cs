@@ -93,7 +93,6 @@ public class FirstPersonCamera
             SetUnitY(hero, newY);
         }
 
-        // Doesn't work :c
         if (fwd == 0)
         {
             if (this.lastUnitAnimation != "stand")
@@ -204,6 +203,14 @@ public static class FirstPersonCameraManager
         if (cameras.ContainsKey(player))
         {
             cameras[player].ToggleFirstPerson(!cameras[player].IsFirstPerson());
+        }
+    }
+
+    public static void SetFirstPerson(player player, bool active)
+    {
+        if (cameras.ContainsKey(player))
+        {
+            cameras[player].ToggleFirstPerson(active);
         }
     }
 }

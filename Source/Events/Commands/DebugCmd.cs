@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using WCSharp.Api;
 using WCSharp.Shared;
@@ -209,6 +209,34 @@ public static class DebugCmd
                 break;
             case "?allsave":
                 SaveManager.SaveAllDataToFile();
+                break;
+            case "?ability":
+                var abilityId = cmd.Length > 1 ? cmd[1] : "";
+
+                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
+                {
+                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId));
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
+                }
+                else
+                {
+                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId));
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
+                }
+                break;
+            case "?scale":
+                var scale = cmd.Length > 1 ? float.Parse(cmd[1]) : 0.6f;
+                kitty.Unit.SetScale(scale, scale, scale);
+                break;
+            case "?day":
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
+                SetTimeOfDayScale(0.0f);
+                break;
+            case "?night":
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 0.0f);
+                SetTimeOfDayScale(0.0f);
                 break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");

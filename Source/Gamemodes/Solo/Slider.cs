@@ -19,6 +19,9 @@ public class Slider
     private float remainingDegreesToTurn = 0;
     private float slideCurrentTurnPerPeriod = 0;
 
+    private bool isMirror = false;
+    private bool wasSliding = false;
+
     // percentage of maximum speed
     private Dictionary<int, float> SPEED_AT_LEAST_THAN_50_DEGREES = new Dictionary<int, float>()
     {
@@ -90,6 +93,16 @@ public class Slider
         return enabled;
     }
 
+    public bool IsMirror()
+    {
+        return isMirror;
+    }
+
+    public void ToggleMirror()
+    {
+        isMirror = !isMirror;
+    }
+
     public void StartSlider()
     {
         enabled = true;
@@ -108,7 +121,26 @@ public class Slider
 
         SliderTimer.Start(SLIDE_INTERVAL, true, () =>
         {
-            if (!IsOnSlideTerrain()) return;
+            if (!IsOnSlideTerrain())
+            {
+                if (this.wasSliding && this.isMirror)
+                {
+                    // Reverse hero
+                    BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
+                }
+
+                this.wasSliding = false;
+                return;
+            }
+
+            if (!this.wasSliding && this.isMirror)
+            {
+                // Reverse hero
+                BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
+            }
+
+
+            this.wasSliding = true;
             UpdateSlider();
         });
     }
@@ -121,16 +153,17 @@ public class Slider
         SliderTimer.Pause();
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
+        this.wasSliding = false;
     }
 
-    private bool IsOnSlideTerrain()
+    public bool IsOnSlideTerrain()
     {
         return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.Unit.Y));
     }
 
     private void UpdateSlider()
     {
-        float moveSpeed = GetUnitMoveSpeed(kitty.Unit);
+        float moveSpeed = (this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit);
         float movePerTick = moveSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);
@@ -202,11 +235,11 @@ public class Slider
         // }
     }
 
-    private int ForceAngleBetween0And360(float angle)
+    public float ForceAngleBetween0And360(float angle)
     {
         while (angle < 0) angle += 360;
         while (angle >= 360) angle -= 360;
-        return (int)angle;
+        return angle;
     }
 
     private int AnglesDiff(float endAngle, float startAngle)

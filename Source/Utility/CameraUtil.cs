@@ -20,6 +20,7 @@ public static class CameraUtil
     {
         LockedCameras.Remove(player);
         KomotoCamEnabled.Remove(player);
+        FirstPersonCameraManager.SetFirstPerson(player, false);
         if (!player.IsLocal) return;
         ResetToGameCamera(0);
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0f, 0.0f);

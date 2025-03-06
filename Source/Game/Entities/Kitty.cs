@@ -26,6 +26,11 @@ public class Kitty
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public Slider Slider { get; private set; }
+    public timer DiscoTimer { get; set; }
+    public float SpinCamSpeed { get; set; } = 0;
+    public timer SpinCamTimer { get; set; }
+    public bool WasSpinCamReset = false;
+    public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
     public Kitty(player player)
     {
@@ -208,4 +213,68 @@ public class Kitty
         Unit.HideAbility(trueSight, true);
     }
 
+    public void ToggleDisco()
+    {
+        if (DiscoTimer == null)
+        {
+            DiscoTimer = timer.Create();
+            DiscoTimer.Start(0.4f, true, DiscoActions);
+        }
+        else
+        {
+            DiscoTimer.Pause();
+            DiscoTimer = null;
+        }
+    }
+
+    private void DiscoActions()
+    {
+        SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
+        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
+    }
+
+    public void ToggleSpinCam(float speed)
+    {
+        this.SpinCamSpeed = speed / 360;
+        this.WasSpinCamReset = false;
+
+        if (this.SpinCamSpeed != 0)
+        {
+            if (SpinCamTimer == null)
+            {
+                SpinCamTimer = timer.Create();
+                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
+            }
+        }
+        else
+        {
+            SpinCamTimer?.Pause();
+            SpinCamTimer = null;
+            CameraUtil.UnlockCamera(Player);
+        }
+    }
+
+    public bool IsSpinCamActive()
+    {
+        return SpinCamTimer != null;
+    }
+
+    private void SpinCamActions()
+    {
+        Console.WriteLine("SpinCamActions");
+        if (!this.Slider.IsOnSlideTerrain() || !this.Alive)
+        {
+            if (!this.Alive && !this.WasSpinCamReset)
+            {
+                this.WasSpinCamReset = true;
+                this.SpinCamRotation = 0;
+                Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, 0, 0);
+            }
+
+            return;
+        }
+
+        SpinCamRotation = this.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed);
+        Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0);
+    }
 }
