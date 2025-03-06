@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 
 public class WolfPoint
 {
-    private const float MaxDistance = 400f; // Max distance between points
+    private const float MaxDistance = 128f; // Max distance between points
     public readonly static int MoveOrderID = OrderId("move");
     private Wolf Wolf { get; set; }
     public List<float[]> PointsToVisit { get; set; } = new List<float[]>();

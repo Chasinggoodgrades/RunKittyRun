@@ -3,12 +3,12 @@
  * It technically works just fine, however not each lane is equal in terms of difficulty.
  */
 
-/*using System;
+using System;
 using static WCSharp.Api.Common;
 
 public static class WolfSpawning
 {
-    private static int[] WolvesPerRound = new int[] { 185, 254, 305, 355, 407 };
+    private static int[] WolvesPerRound = new int[] { 195, 264, 325, 365, 427 };
     private const int MaxWolvesPerLane = 60;
     public static void SpawnWolves()
     {
@@ -45,4 +45,3 @@ public static class WolfSpawning
         }
     }
 }
-*/

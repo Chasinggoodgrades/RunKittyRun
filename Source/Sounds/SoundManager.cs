@@ -30,6 +30,7 @@ public static class SoundManager
     private static sound FIRST_BLOOD_SOUND;
 
     private static bool FirstBloodSoundPlayed = false;
+    private static timer LastManStanding = timer.Create();
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -146,7 +147,7 @@ public static class SoundManager
 
     public static void PlayLastManStandingSound()
     {
-        Utility.SimpleTimer(0.8f, () =>
+        LastManStanding.Start(0.8f, false, () =>
         {
             var count = 0;
             unit u = null;

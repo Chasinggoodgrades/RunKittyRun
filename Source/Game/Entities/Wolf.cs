@@ -33,8 +33,9 @@ public class Wolf
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
         Utility.SimpleTimer(3.0f, () => StartWandering());
+        Globals.ALL_WOLVES.Add(Unit, this);
 
-        if(WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea)) wolfArea.Wolves.Add(this);
+        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea)) wolfArea.Wolves.Add(this);
     }
 
     private void InitializeWolf()
@@ -51,7 +52,6 @@ public class Wolf
         var facing = GetRandomReal(0, 360);
 
         Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
-        Globals.ALL_WOLVES.Add(Unit, this);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
 
@@ -127,7 +127,6 @@ public class Wolf
     public void Dispose()
     {
         RemoveAllWolfAffixes();
-        Unit.Dispose();
         EffectTimer.Dispose();
         EffectTimer = null;
         OverheadEffect?.Dispose();
@@ -135,6 +134,9 @@ public class Wolf
         WanderTimer.Dispose();
         WanderTimer = null;
         WolfPoint.Dispose();
+        WolfPoint = null;
+        Unit.Dispose();
+        Unit = null;
     }
 
     /// <summary>
@@ -144,14 +146,16 @@ public class Wolf
     {
         if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
         {
-            foreach (var laneEntry in wolvesInRound)
-            {
-                int lane = laneEntry.Key;
-                int numberOfWolves = laneEntry.Value;
+            /*            foreach (var laneEntry in wolvesInRound)
+                        {
+                            int lane = laneEntry.Key;
+                            int numberOfWolves = laneEntry.Value;
 
-                for (int i = 0; i < numberOfWolves; i++)
-                    new Wolf(lane);
-            }
+                            for (int i = 0; i < numberOfWolves; i++)
+                                new Wolf(lane);
+                        }*/
+
+            WolfSpawning.SpawnWolves();
             FandF.CreateBloodWolf();
             NamedWolves.CreateNamedWolves();
         }

@@ -3,7 +3,7 @@ using WCSharp.Shared.Extensions;
 
 public class Bomber : Affix
 {
-    private const int AFFIX_ABILITY = Constants.ABILITY_CHAOS; // replace with bomber ability in WE later after i make it.
+    private const int AFFIX_ABILITY = Constants.ABILITY_BOMBER; // replace with bomber ability in WE later after i make it.
     private const float EXPLOSION_RANGE = 200.0f;
     //private const string EXPLOSION_PATH_EFFECT = "";
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";

@@ -116,6 +116,9 @@ public static class Constants
 	public const int ABILITY_AURA_FREEZE = 1093677143;
 	public const int ABILITY_GHOSTAFFIX = 1093677144;
 	public const int ABILITY_CHAMPION_SKINPENGUIN = 1093677360;
+	public const int ABILITY_BOMBER = 1093677361;
+	public const int ABILITY_WW_DIVINE = 1093677362;
+	public const int ABILITY_WW_VIOLET = 1093677363;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -123,6 +126,7 @@ public static class Constants
 	public const int BUFF_CHAOS = 1110454324;
 	public const int BUFF_HOWLER = 1110454325;
 	public const int BUFF_BLITZER = 1110454326;
+	public const int BUFF_BOMBER = 1110454327;
 	public const int ITEM_PEGASUS_BOOTS = 1651732580;
 	public const int ITEM_RITUAL_MASK = 1920428410;
 	public const int ITEM_MEDITATION_CLOAK = 1885695602;

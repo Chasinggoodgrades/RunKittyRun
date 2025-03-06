@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|cffff0000RKR Remastered v1.0.8|r
+|cffff0000RKR Remastered v1.0.9|r
 }
 
 STRING 2
@@ -10,7 +10,7 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.0.8|n
+|cff00ffffRun Kitty Run|r v1.0.9|n
 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Music, and more! 
 |n|n- Check out our leaderboard in discord!
@@ -794,7 +794,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.0.8
+Run Kitty Run Remastered v1.0.9
 }
 
 STRING 2035
@@ -4748,15 +4748,123 @@ STRING 3828
 This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
 }
 
-STRING 3829
+STRING 3831
 // Items: rwiz (Ritual Mask), Ubertip (Tooltip - Extended)
 {
-The priestesses wear this mask during the most important rituals to channel more energy.|n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
+This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
 }
 
-STRING 3830
+STRING 3832
 // Items: rwiz (Ritual Mask), Description (Description)
 {
-The priestesses wear this mask during the most important rituals to channel more energy.|n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
+This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
+}
+
+STRING 3833
+// Abilities: A011 (Bomber), Name (Name)
+{
+Bomber
+}
+
+STRING 3834
+// Abilities: A011 (Bomber), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 2|r]
+}
+
+STRING 3835
+// Abilities: A011 (Bomber), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 3|r]
+}
+
+STRING 3836
+// Abilities: A011 (Bomber), Tip (Tooltip - Normal)
+{
+Energy aura - [|cffffcc00Level 4|r]
+}
+
+STRING 3837
+// Abilities: A011 (Bomber), Ubertip (Tooltip - Normal - Extended)
+{
++35% mana regeneration.
+}
+
+STRING 3838
+// Abilities: A011 (Bomber), Ubertip (Tooltip - Normal - Extended)
+{
++45% mana regeneration.
+}
+
+STRING 3839
+// Abilities: A011 (Bomber), Ubertip (Tooltip - Normal - Extended)
+{
++60% mana regeneration.
+}
+
+STRING 3840
+// Abilities: A011 (Bomber), Researchhotkey (Hotkey - Learn)
+{
+S
+}
+
+STRING 3841
+// Abilities: A011 (Bomber), Researchtip (Tooltip - Learn)
+{
+Bomber
+}
+
+STRING 3842
+// Abilities: A012 (WW_Divine), Name (Name)
+{
+WW_Divine
+}
+
+STRING 3843
+// Abilities: A012 (WW_Divine), Tip (Tooltip - Normal)
+{
+|cffffff00Divine Windwalk|r
+}
+
+STRING 3844
+// Abilities: A012 (WW_Divine), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by winning the kibble collection event!
+}
+
+STRING 3845
+// Abilities: A013 (WW_Violet), Name (Name)
+{
+WW_Violet
+}
+
+STRING 3846
+// Abilities: A013 (WW_Violet), Tip (Tooltip - Normal)
+{
+|cffa150b5Violet Windwalk|r
+}
+
+STRING 3847
+// Abilities: A013 (WW_Violet), Ubertip (Tooltip - Normal - Extended)
+{
+?
+}
+
+STRING 3848
+// Buffs/Effects: B007 (Bomber), Bufftip (Tooltip)
+{
+Bomber
+}
+
+STRING 3849
+// Buffs/Effects: B007 (Bomber), Buffubertip (Tooltip - Extended)
+{
+Explodes periodically... Be on the lookout!
+}
+
+STRING 3850
+// Buffs/Effects: B007 (Bomber), EditorName (Name (Editor Only))
+{
+Bomber
 }
 

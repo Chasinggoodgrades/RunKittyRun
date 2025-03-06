@@ -150,6 +150,7 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Windwalks.WWFire), Constants.ABILITY_WW_FIRE, "chest", "war3mapImported\\Windwalk Fire.mdx", RewardType.Windwalks);
         AddReward(nameof(awardsSorted.Windwalks.WWNecro), Constants.ABILITY_WW_NECRO, "chest", "war3mapImported\\Windwalk Necro Soul.mdx", RewardType.Windwalks);
         AddReward(nameof(awardsSorted.Windwalks.WWSwift), Constants.ABILITY_WW_SWIFT, "chest", "war3mapImported\\Windwalk.mdx", RewardType.Windwalks);
+        //AddReward(nameof(awardsSorted.Windwalks.WWDivine), Constants.ABILITY_WW_DIVINE, "chest", "war3mapImported\\WindwalkDivine", RewardType.Windwalks);
 
         // Deathless
         AddReward(nameof(awardsSorted.Deathless.NormalDeathless1), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl", RewardType.Deathless);

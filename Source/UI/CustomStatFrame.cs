@@ -75,16 +75,28 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        var localPlayer = player.LocalPlayer;
-        var selectedUnit = SelectedUnit[localPlayer];
-        
-        HandleFrameText(selectedUnit);
+        try
+        {
+            var localPlayer = player.LocalPlayer;
+            if(!SelectedUnit.TryGetValue(localPlayer, out var selectedUnit)) return;
 
-        CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
+            HandleFrameText(selectedUnit);
+
+            CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
+        }
+        catch (Exception e)
+        {
+            Logger.Warning(e.Message);
+            Logger.Warning(e.StackTrace);
+            throw;
+        }
     }
 
     public static void Init()
     {
+        BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
+        BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
+
         var hideParent = BlzCreateFrameByType("SIMPLEFRAME", "HideParent", BlzGetFrameByName("ConsoleUI", 0), "", 0);
         hideParent.Visible = false;
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconDamage", 0), hideParent);
@@ -95,24 +107,21 @@ public static class CustomStatFrame
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconGold", 5), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconHero", 6), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
-        
+
 
         trigger trig = trigger.Create();
-        trig.AddAction( () =>
+        trig.AddAction(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
             SelectedUnit[player] = unit;
         });
 
-        foreach(var player in Globals.ALL_PLAYERS)
-            if(player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
+        foreach (var player in Globals.ALL_PLAYERS)
+            if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);
         CustomStatFrameBoxF = BlzCreateFrameByType("FRAME", "CustomStatFrameBoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0);
-
-        BlzLoadTOCFile("war3mapimported\\CustomStat.toc");
-        BlzLoadTOCFile("war3mapimported\\BoxedText.toc");
 
         Add("war3mapImported\\BTNStopwatch.blp", "", "Score");
         Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "", "Revives");
@@ -129,10 +138,14 @@ public static class CustomStatFrame
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
         else if (SetChampionFrameText(selectedUnit)) { }
-        else
+        else if (selectedUnit.UnitType == Constants.UNIT_KITTY)
         {
             SetCommonFrameText(selectedUnit);
             SetGamemodeFrameText(selectedUnit);
+        }
+        else
+        {
+            // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.
         }
     }
 
