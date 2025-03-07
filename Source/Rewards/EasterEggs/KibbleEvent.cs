@@ -16,7 +16,7 @@ public static class KibbleEvent
 
     public static void StartKibbleEvent(float chance)
     {
-        var adjustedChance = Source.Program.Debug ? 70 : 0.05f;
+        var adjustedChance = Source.Program.Debug ? 70 : 1;
         if (chance > adjustedChance || EventPlayed) return;
 
         EventActive = true;

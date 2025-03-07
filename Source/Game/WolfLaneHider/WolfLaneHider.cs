@@ -30,6 +30,7 @@ public static class WolfLaneHider
                 AddLaneIfNotInList(currentSafezone);
                 AddLaneIfNotInList(currentSafezone + 1);
                 AddLaneIfNotInList(currentSafezone - 1);
+                AddLaneIfNotInList(currentSafezone - 2);
                 if (currentSafezone >= 13)
                 {
                     AddLaneIfNotInList(currentSafezone + 2);

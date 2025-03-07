@@ -101,19 +101,28 @@ public class Kitty
     /// </summary>
     public void ReviveKitty(Kitty savior = null)
     {
-        if (Unit.Alive) return;
-        var circle = Globals.ALL_CIRCLES[Player];
-        circle.HideCircle();
-        Alive = true;
-        Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
-        Unit.Mana = circle.Unit.Mana;
-        Utility.SelectUnitForPlayer(Player, Unit);
-        CameraUtil.RelockCamera(Player);
-        this.Slider.ResumeSlider();
+        try
+        {
+            if (Unit.Alive) return;
+            var circle = Globals.ALL_CIRCLES[Player];
+            circle.HideCircle();
+            Alive = true;
+            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
+            Unit.Mana = circle.Unit.Mana;
+            Utility.SelectUnitForPlayer(Player, Unit);
+            CameraUtil.RelockCamera(Player);
+            this.Slider.ResumeSlider();
 
-        if (savior == null) return;
-        UpdateSaviorStats(savior);
-        MultiboardUtil.RefreshMultiboards();
+            if (savior == null) return;
+            UpdateSaviorStats(savior);
+            MultiboardUtil.RefreshMultiboards();
+        }
+        catch (Exception e)
+        {
+            if (Program.Debug) Console.WriteLine(e.Message);
+            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            throw;
+        }
     }
     private void InitData()
     {
@@ -261,7 +270,6 @@ public class Kitty
 
     private void SpinCamActions()
     {
-        Console.WriteLine("SpinCamActions");
         if (!this.Slider.IsOnSlideTerrain() || !this.Alive)
         {
             if (!this.Alive && !this.WasSpinCamReset)

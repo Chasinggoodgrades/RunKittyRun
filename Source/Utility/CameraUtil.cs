@@ -77,6 +77,7 @@ public static class CameraUtil
         if (!KomotoCamEnabled.Contains(player)) return;
 
         float rotation = (4 - (safezoneIndex % 4)) * 90.0f + 90.0f;
+        if(!player.IsLocal) return;
         SetCameraField(CAMERA_FIELD_ROTATION, rotation, 0.0f);
     }
 }

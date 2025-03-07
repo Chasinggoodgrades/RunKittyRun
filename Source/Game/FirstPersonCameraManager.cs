@@ -129,6 +129,7 @@ public class FirstPersonCamera
 
     private void ResetCamera()
     {
+        if (!player.IsLocal) return;
         ResetToGameCamera(0);
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0f, 0.0f);
     }

@@ -52,6 +52,7 @@ public class Howler : Affix
             var list = NearbyWolves.ToList();
             foreach (var wolf in list)
             {
+                if (NamedWolves.StanWolf.Unit == wolf) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
                 wolfObject.StartWandering(true);
