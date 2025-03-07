@@ -119,6 +119,7 @@ public static class Constants
 	public const int ABILITY_BOMBER = 1093677361;
 	public const int ABILITY_WW_DIVINE = 1093677362;
 	public const int ABILITY_WW_VIOLET = 1093677363;
+	public const int ABILITY_SKIN_KITTYHUNTRESS = 1093677364;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -190,6 +191,7 @@ public static class Constants
 	public const int UNIT_ZANDALARI_KITTY = 1160785986;
 	public const int UNIT_SOLO_TOURNAMENT_2025 = 1160785987;
 	public const int UNIT_PENGUIN = 1160785988;
+	public const int UNIT_HUNTRESS_KITTY = 1160785989;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-public class KittyData
+﻿public class KittyData
 {
     public string PlayerName { get; set; } = "";
     public string Date { get; set; } = "";
@@ -19,5 +16,13 @@ public class KittyData
         GameAwardsSorted = new GameAwardsDataSorted();
         BestGameTimes = new GameTimesData();
         KibbleCurrency = new KibbleCurrency();
+    }
+
+    public void SetRewardsFromUnavailableToAvailable()
+    {
+        var data = this.GameAwardsSorted;
+        if (data.Skins.HuntressKitty < 0) data.Skins.HuntressKitty = 0;
+        if (data.Windwalks.WWDivine < 0) data.Windwalks.WWDivine = 0;
+        if (data.Windwalks.WWViolet < 0) data.Windwalks.WWViolet = 0;
     }
 }

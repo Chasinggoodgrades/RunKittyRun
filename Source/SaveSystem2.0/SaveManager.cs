@@ -126,6 +126,7 @@ public class SaveManager
             Globals.SaveSystem.NewSave(player);
             return;
         }
+        kittyData.SetRewardsFromUnavailableToAvailable();
         SaveData[player] = kittyData;
     }
 }

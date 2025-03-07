@@ -150,8 +150,8 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Windwalks.WWFire), Constants.ABILITY_WW_FIRE, "chest", "war3mapImported\\Windwalk Fire.mdx", RewardType.Windwalks);
         AddReward(nameof(awardsSorted.Windwalks.WWNecro), Constants.ABILITY_WW_NECRO, "chest", "war3mapImported\\Windwalk Necro Soul.mdx", RewardType.Windwalks);
         AddReward(nameof(awardsSorted.Windwalks.WWSwift), Constants.ABILITY_WW_SWIFT, "chest", "war3mapImported\\Windwalk.mdx", RewardType.Windwalks);
-        //AddReward(nameof(awardsSorted.Windwalks.WWDivine), Constants.ABILITY_WW_DIVINE, "chest", "war3mapImported\\WindwalkDivine", RewardType.Windwalks);
-
+        AddReward(nameof(awardsSorted.Windwalks.WWDivine), Constants.ABILITY_WW_DIVINE, "chest", "war3mapImported\\WindwalkDivine.mdx", RewardType.Windwalks);
+        AddReward(nameof(awardsSorted.Windwalks.WWViolet), Constants.ABILITY_WW_VIOLET, "chest", "war3mapImported\\Windwalk Violet.mdx", RewardType.Windwalks);
         // Deathless
         AddReward(nameof(awardsSorted.Deathless.NormalDeathless1), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl", RewardType.Deathless);
         AddReward(nameof(awardsSorted.Deathless.NormalDeathless2), Constants.ABILITY_DEATHLESS_FIRE_1_02, "origin", "war3mapImported\\Deathless2.mdx", RewardType.Deathless);
@@ -166,6 +166,7 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Skins.SatyrKitty), Constants.ABILITY_SKIN_KITTYSATYR, Constants.UNIT_SATYR_KITTY, RewardType.Skins, nameof(stats.NormalWins), 25);
         AddReward(nameof(awardsSorted.Skins.AstralKitty), Constants.ABILITY_SKIN_KITTYASTRAL, Constants.UNIT_ASTRAL_KITTY, RewardType.Skins, nameof(stats.NormalGames), 55);
         AddReward(nameof(awardsSorted.Skins.ZandalariKitty), Constants.ABILITY_SKIN_KITTYZANDALARI, Constants.UNIT_ZANDALARI_KITTY, RewardType.Skins);
+        AddReward(nameof(awardsSorted.Skins.HuntressKitty), Constants.ABILITY_SKIN_KITTYHUNTRESS, Constants.UNIT_HUNTRESS_KITTY, RewardType.Skins);
         AddReward(nameof(awardsSorted.Tournament.PenguinSkin), Constants.ABILITY_CHAMPION_SKINPENGUIN, Constants.UNIT_PENGUIN, RewardType.Tournament);
 
         // Holiday

@@ -28,6 +28,7 @@ public static class KibbleEvent
         EventTimerDialog.SetTitle("Kibble Event");
         EventTimerDialog.IsDisplayed = true;
         EventTimer.Start(EventLength, false, EndKibbleEvent);
+        Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}A Kibble event has started! Collect {TotalEventKibbles} kibbles to earn an award!");
 
         // Spawn event kibbles
         for (int i = 0; i < TotalEventKibbles; i++)
@@ -69,7 +70,7 @@ public static class KibbleEvent
 
         if (EventKibblesCollected >= TotalEventKibbles)
         {
-            Challenges.DivineWindwalk();
+            Challenges.HuntressKitty();
             EndKibbleEvent();
         }
     }

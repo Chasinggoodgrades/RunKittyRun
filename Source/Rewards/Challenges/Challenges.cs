@@ -32,9 +32,22 @@ public static class Challenges
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWNecro));
     }
 
+    // Violet Windwalk, awarded for killing stan with something, then taking his shoe and turning it in.
+    public static void VioletWindwalk(player player)
+    {
+        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWViolet));
+    }
+
+    // 
     public static void DivineWindwalk()
     {
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine));
+    }
+
+    // Kibble Event, give all
+    public static void HuntressKitty()
+    {
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Skins.HuntressKitty));
     }
 
     public static void ButterflyAura(player player)
