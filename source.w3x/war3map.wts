@@ -4748,18 +4748,6 @@ STRING 3828
 This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
 }
 
-STRING 3831
-// Items: rwiz (Ritual Mask), Ubertip (Tooltip - Extended)
-{
-This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
-}
-
-STRING 3832
-// Items: rwiz (Ritual Mask), Description (Description)
-{
-This moonstone gathers energy and gives it to the bearer.|n |cffd45e19+25% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
-}
-
 STRING 3833
 // Abilities: A011 (Bomber), Name (Name)
 {
@@ -4938,5 +4926,17 @@ STRING 3864
 // Abilities: A013 (WW_Violet), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by ... ???
+}
+
+STRING 3865
+// Items: rwiz (Ritual Mask), Ubertip (Tooltip - Extended)
+{
+This ritual mask gathers energy and bestows it upon the bearer. |n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
+}
+
+STRING 3866
+// Items: rwiz (Ritual Mask), Description (Description)
+{
+This ritual mask gathers energy and bestows it upon the bearer. |n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
 }
 
