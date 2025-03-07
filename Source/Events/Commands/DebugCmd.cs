@@ -98,18 +98,6 @@ public static class DebugCmd
                 if (setting == "on") UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 else if (setting == "off") CollisionDetection.KittyRegisterCollisions(kitty);
                 break;
-            case "?slide":
-                if (kitty.Slider.IsEnabled())
-                {
-                    kitty.Slider.StopSlider();
-                    player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Slider deactivated.");
-                }
-                else
-                {
-                    kitty.Slider.StartSlider();
-                    player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Slider activated.");
-                }
-                break;
             case "?pw":
             case "?pause":
                 Wolf.PauseAllWolves(true);

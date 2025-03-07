@@ -149,7 +149,8 @@ public class Kibble
 
             Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
-            kitty.SaveData.KibbleCurrency.Jackpots += 1;
+            if (isSuperJackpot) kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
+            else kitty.SaveData.KibbleCurrency.Jackpots += 1;
             Dispose();
         }
         else
