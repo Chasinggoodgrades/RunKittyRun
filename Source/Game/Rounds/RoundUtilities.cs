@@ -35,6 +35,7 @@ public static class RoundUtilities
             kitty.Unit.Revive(RegionList.SpawnRegions[kitty.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Player.Id].Center.Y, false);
             Globals.ALL_CIRCLES[kitty.Player].HideCircle();
             kitty.Alive = true;
+            kitty.CurrentStats.RoundFinished = false;
             kitty.ProgressZone = 0;
             kitty.Finished = false;
             kitty.Unit.Mana = kitty.Unit.MaxMana;

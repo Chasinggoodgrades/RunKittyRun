@@ -21,6 +21,7 @@ public static class FinalSafezone
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
             if (Gamemode.CurrentGameMode != "Standard") return;
 
+            Globals.ALL_KITTIES[player].CurrentStats.RoundFinished = true;
             NitroChallenges.CompletedNitro(unit);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);

@@ -29,7 +29,6 @@ public static class WolfSpawning
                 numberOfWolves = MaxWolvesPerLane;
             }
 
-            Console.WriteLine($"Spawning {numberOfWolves} wolves in lane {laneID}");
             for (int i = 0; i < numberOfWolves; i++)
             {
                 new Wolf(laneID);
@@ -39,7 +38,6 @@ public static class WolfSpawning
         while (excessWolves > 0)
         {
             var randomLane = GetRandomInt(6, 12);
-            Console.WriteLine($"Spawning 1 excess wolf in lane {randomLane}");
             new Wolf(randomLane);
             excessWolves--;
         }

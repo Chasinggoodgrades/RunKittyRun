@@ -7,7 +7,7 @@ public static class NamedWolves
 {
     public static List<Wolf> DNTNamedWolves { get; set; } = new List<Wolf>();
     public static Wolf ExplodingWolf;
-    private static Wolf StanWolf;
+    public static Wolf StanWolf;
     public static texttag StanNameTag = texttag.Create();
     public static texttag ExplodingWolfNameTag = texttag.Create();
     private static timer ExplodingTexttagTimer = timer.Create();
@@ -46,6 +46,8 @@ public static class NamedWolves
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
         StanWolf.IsPaused = true;
+        StanWolf.Unit.IsInvulnerable = false;
+        BurntMeat.RegisterDeathTrigger();
         Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
@@ -55,9 +57,8 @@ public static class NamedWolves
         try
         {
             if (ExplodingWolf.IsReviving) return;
-            //ExplodingWolf.Unit.Kill();
+            ExplodingWolf.Unit.Kill();
             ExplodingWolf.IsReviving = true;
-            ExplodingWolf.Unit.SetAnimation(9); // play dead
             ExplodingWolf.OVERHEAD_EFFECT_PATH = "";
             ExplodingWolfNameTag.SetText("", 0.015f);
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, ExplodingWolf.Unit, "origin");
@@ -65,8 +66,8 @@ public static class NamedWolves
             {
                 DNTNamedWolves.Remove(ExplodingWolf);
                 ExplodingWolf.IsReviving = false;
-                ExplodingWolf.Unit.SetAnimation(0);
-                Utility.MakeUnitLocust(ExplodingWolf.Unit);
+                ExplodingWolf.Unit?.Dispose();
+                ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 360);
                 ExplodingWolfDesc();
             });
         }
@@ -80,9 +81,10 @@ public static class NamedWolves
     {
         try
         {
+            Utility.MakeUnitLocust(ExplodingWolf.Unit);
             var randomPlayer = GetRandomPlayerFromLobby();
             SetRandomVertexColor(ExplodingWolf.Unit, randomPlayer.Id);
-            ExplodingWolf.Unit.Name = Colors.PlayerNameColored(randomPlayer);
+            ExplodingWolf.Unit.Name = Utility.FormattedColorPlayerName(randomPlayer);
             ExplodingWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
             ExplodingWolfNameTag.SetText(ExplodingWolf.Unit.Name, 0.015f);
             DNTNamedWolves.Add(ExplodingWolf);
@@ -93,29 +95,20 @@ public static class NamedWolves
         }
     }
 
+    public static bool ExplodingWolfCollision(unit unit, Kitty k)
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (unit != ExplodingWolf.Unit) return false;
+        Utility.GiveGoldFloatingText(25, k.Unit);
+        KillExplodingWolf();
+        return true;
+    }
+
     public static void ShowWolfNames(bool hidden = true)
     {
         if (DNTNamedWolves.Count == 0) return;
         ExplodingWolfNameTag.SetVisibility(hidden);
         StanNameTag.SetVisibility(hidden);
-    }
-
-    public static bool ExplodingWolfCollision(unit unit, Kitty k)
-    {
-        try
-        {
-
-            if (Gamemode.CurrentGameMode != "Standard") return false;
-            if (unit != ExplodingWolf.Unit) return false;
-            Utility.GiveGoldFloatingText(25, k.Unit);
-            KillExplodingWolf();
-            return true;
-        }
-        catch
-        {
-            Logger.Warning("Error in ExplodingWolfCollision");
-            return false;
-        }
     }
 
     private static player GetRandomPlayerFromLobby()

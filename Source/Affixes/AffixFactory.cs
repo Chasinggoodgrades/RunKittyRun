@@ -160,7 +160,7 @@ public static class AffixFactory
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2) + Globals.ROUND * 6;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + Globals.ROUND * 8;
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;

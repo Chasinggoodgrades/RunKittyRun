@@ -31,13 +31,11 @@ public static class Windwalk
             var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
             var duration = 3.0f + (2.0f * abilityLevel);
             var wwID = kitty.WindwalkID;
-            Logger.Verbose($"Windwalk ID: {wwID}");
             AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
             if (wwID != 0)
             {
                 var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
                 var visual = reward.ModelPath;
-                Logger.Verbose($"Name: {reward.Name} - Windwalk Visual: {visual}");
                 var effect = caster.AddSpecialEffect(visual, "origin");
                 Utility.SimpleTimer(duration, () => effect.Dispose());
             }

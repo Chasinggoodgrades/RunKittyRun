@@ -45,6 +45,8 @@ public class Howler : Affix
     {
         try
         {
+            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+            if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
             NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filters.DogFilter);
             var list = NearbyWolves.ToList();
@@ -55,7 +57,6 @@ public class Howler : Affix
                 wolfObject.StartWandering(true);
             }
             NearbyWolves.Clear();
-            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
             GC.RemoveList(ref list);
         }
         catch (Exception e)

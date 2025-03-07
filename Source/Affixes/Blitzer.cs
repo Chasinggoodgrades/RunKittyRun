@@ -59,6 +59,11 @@ public class Blitzer : Affix
 
     private void PreBlitzerMove()
     {
+        if (Unit.IsPaused)
+        {
+            MoveTimer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
+            return;
+        }
         WanderEffect = effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
         Effect?.Dispose();
         Unit.Unit.SetVertexColor(255, 255, 0);

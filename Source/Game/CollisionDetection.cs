@@ -15,7 +15,7 @@ public static class CollisionDetection
         return () =>
         {
             return (GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG)
-                    && k.Alive && GetFilterUnit().Alive; // wolf should be alive too (marco wolf)
+                    && k.Alive && GetFilterUnit().Alive; // wolf should be alive too (exploding / stan wolf)
         };
     }
 
@@ -72,8 +72,8 @@ public static class CollisionDetection
         TriggerAddAction(k.w_Collision, () =>
         {
             if (!k.Unit.Alive) return;
-            if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
             if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
+            if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
             if (ChronoSphere.RewindDeath(k.Unit)) return;
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);

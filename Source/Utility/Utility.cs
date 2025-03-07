@@ -372,6 +372,13 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
+    public static string FormattedColorPlayerName(player p)
+    {
+        // removes everything after '#' in the player name
+        var name = p.Name.Split('#')[0];
+        return $"{Colors.ColorString(name, p.Id+1)}";
+    }
+
     public static filterfunc CreateFilterFunc(Func<bool> func)
     {
         return filterfunc.Create(func);

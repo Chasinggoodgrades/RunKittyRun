@@ -16,6 +16,7 @@ public static class Challenges
     {
         NitroChallenges.Initialize();
         DeathlessChallenges.Initialize();
+        DoubleBackingTrigger();
     }
 
     public static void WhiteTendrils()
@@ -32,16 +33,16 @@ public static class Challenges
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWNecro));
     }
 
-    // Violet Windwalk, awarded for killing stan with something, then taking his shoe and turning it in.
+    // Violet Windwalk, awarded for killing stan with something, then taking some burnt meat n and turning it in.
     public static void VioletWindwalk(player player)
     {
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWViolet));
     }
 
-    // 
-    public static void DivineWindwalk()
+    // finished round, then run all the way back to the start.
+    public static void DivineWindwalk(player player)
     {
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine));
+        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine));
     }
 
     // Kibble Event, give all
@@ -144,6 +145,23 @@ public static class Challenges
                 AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
         }
     }
+
+    private static void DoubleBackingTrigger()
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        var t = trigger.Create();
+        Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
+        t.AddAction(() =>
+        {
+            var unit = @event.Unit;
+            var player = unit.Owner;
+            if (unit.UnitType != Constants.UNIT_KITTY) return;
+            if (!Globals.ALL_PLAYERS.Contains(player)) return;
+            if (!Globals.ALL_KITTIES[player].CurrentStats.RoundFinished) return;
+            DivineWindwalk(player);
+        });
+    }
+
 }
 
 public class YellowLightning

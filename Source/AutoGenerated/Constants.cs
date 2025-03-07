@@ -118,8 +118,8 @@ public static class Constants
 	public const int ABILITY_CHAMPION_SKINPENGUIN = 1093677360;
 	public const int ABILITY_BOMBER = 1093677361;
 	public const int ABILITY_WW_DIVINE = 1093677362;
-	public const int ABILITY_WW_VIOLET = 1093677363;
 	public const int ABILITY_SKIN_KITTYHUNTRESS = 1093677364;
+	public const int ABILITY_WW_VIOLET = 1093677363;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
@@ -164,6 +164,8 @@ public static class Constants
 	public const int ITEM_PRESENT = 1227894861;
 	public const int ITEM_CHRONO_ORB = 1227894862;
 	public const int ITEM_HEART = 1227894863;
+	public const int ITEM_CLOAK_OF_FLAMES = 1227894864;
+	public const int ITEM_WOLF_MEAT = 1227894865;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;

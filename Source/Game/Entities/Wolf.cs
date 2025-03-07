@@ -54,6 +54,7 @@ public class Wolf
         Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
+        Unit.IsInvulnerable = true;
 
         WanderTimer = timer.Create();
         EffectTimer = timer.Create();
@@ -146,16 +147,15 @@ public class Wolf
     {
         if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
         {
-            /*            foreach (var laneEntry in wolvesInRound)
-                        {
-                            int lane = laneEntry.Key;
-                            int numberOfWolves = laneEntry.Value;
+            foreach (var laneEntry in wolvesInRound)
+            {
+                int lane = laneEntry.Key;
+                int numberOfWolves = laneEntry.Value;
 
-                            for (int i = 0; i < numberOfWolves; i++)
-                                new Wolf(lane);
-                        }*/
-
-            WolfSpawning.SpawnWolves();
+                for (int i = 0; i < numberOfWolves; i++)
+                    new Wolf(lane);
+            }
+            //WolfSpawning.SpawnWolves();
             FandF.CreateBloodWolf();
             NamedWolves.CreateNamedWolves();
         }

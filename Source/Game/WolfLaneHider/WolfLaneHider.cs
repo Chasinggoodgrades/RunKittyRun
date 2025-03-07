@@ -61,6 +61,7 @@ public static class WolfLaneHider
                 foreach (var wolf in lane.Value.Wolves)
                 {
                     wolf.Unit.IsVisible = shouldShow;
+                    wolf.IsPaused = !shouldShow;
                 }
             }
         }
@@ -77,6 +78,7 @@ public static class WolfLaneHider
             foreach (var wolf in lane.Value.Wolves)
             {
                 wolf.Unit.IsVisible = false;
+                wolf.IsPaused = true;
             }
             lane.Value.IsEnabled = false;
         }

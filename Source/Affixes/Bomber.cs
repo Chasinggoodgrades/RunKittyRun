@@ -1,13 +1,14 @@
 ﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
-
+using static WCSharp.Api.Common;
 public class Bomber : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BOMBER; // replace with bomber ability in WE later after i make it.
     private const float EXPLOSION_RANGE = 200.0f;
     //private const string EXPLOSION_PATH_EFFECT = "";
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
-    private const float EXPLODE_INTERVAL = 15.0f;
+    private const float MIN_EXPLODE_INTERVAL = 10.0f;
+    private const float MAX_EXPLODE_INTERVAL = 15.0f;
     private timer ExplodeTimer = timer.Create();
     private timer ReviveAlphaTimer = timer.Create();
     private int ReviveAlpha = 1;
@@ -41,12 +42,17 @@ public class Bomber : Affix
 
     private void RegisterTimers()
     {
-        ExplodeTimer.Start(EXPLODE_INTERVAL, false, StartExplosion);
+        ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
     }
 
     private void StartExplosion()
     {
         // Temporary for testing, will add an actual graphic ticker later
+        if (Unit.IsPaused)
+        {
+            ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
+            return;
+        }
         Unit.IsPaused = true;
         Unit.Unit.ClearOrders();
         Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.015f, 255, 0, 0));
@@ -71,6 +77,11 @@ public class Bomber : Affix
         Unit.Unit.SetVertexColor(204, 102, 0, 25);
     }
 
+    private float ExplosionInterval()
+    {
+        return GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL);
+    }
+
     private void Revive()
     {
         Unit.IsReviving = true;
@@ -87,7 +98,7 @@ public class Bomber : Affix
                 ReviveAlphaTimer.Pause();
                 Unit.IsPaused = false;
                 Unit.IsReviving = false;
-                ExplodeTimer.Start(EXPLODE_INTERVAL, false, StartExplosion);
+                ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
             }
         });
 

@@ -78,8 +78,8 @@ public static class RoundManager
             BarrierSetup.ActivateBarrier();
             Resources.BonusResources();
             RoundUtilities.MovedTimedCameraToStart();
-            RoundUtilities.MoveAllPlayersToStart();
             RoundUtilities.RoundResetAll();
+            RoundUtilities.MoveAllPlayersToStart();
             TeamsUtil.RoundResetAllTeams();
             NitroPacer.ResetNitroPacer();
             DeathlessChallenges.ResetDeathless();

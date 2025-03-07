@@ -4827,7 +4827,7 @@ STRING 3843
 }
 
 STRING 3844
-// Abilities: A012 (WW_Divine), Ubertip (Tooltip - Normal - Extended)
+// Abilities: A014 (Skin_KittyHuntress), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by winning the kibble collection event!
 }
@@ -4842,12 +4842,6 @@ STRING 3846
 // Abilities: A013 (WW_Violet), Tip (Tooltip - Normal)
 {
 |cffa150b5Violet Windwalk|r
-}
-
-STRING 3847
-// Abilities: A013 (WW_Violet), Ubertip (Tooltip - Normal - Extended)
-{
-?
 }
 
 STRING 3848
@@ -4892,9 +4886,57 @@ STRING 3854
 |cff80ff80Huntress|r
 }
 
-STRING 3855
-// Abilities: A014 (Skin_KittyHuntress), Ubertip (Tooltip - Normal - Extended)
+STRING 3856
+// Items: I00P (|cffe69619Cloak of Flames|r), Name (Name)
 {
-Obtained by winning the Kibble event.
+|cffe69619Cloak of Flames|r
+}
+
+STRING 3857
+// Items: I00P (|cffe69619Cloak of Flames|r), Tip (Tooltip - Basic)
+{
+|cffe69619Cloak of Flames|r
+}
+
+STRING 3858
+// Items: I00P (|cffe69619Cloak of Flames|r), Ubertip (Tooltip - Extended)
+{
+Radiates with heat... I suppose if they won't move, you could make a wolf stew. ;)
+}
+
+STRING 3859
+// Items: I00P (|cffe69619Cloak of Flames|r), Description (Description)
+{
+Radiates with heat... I suppose if they won't move, you could make a wolf stew. ;)
+}
+
+STRING 3860
+// Items: I00Q (Wolf Meat), Name (Name)
+{
+Wolf Meat
+}
+
+STRING 3861
+// Items: I00Q (Wolf Meat), Ubertip (Tooltip - Extended)
+{
+Seems burned... There may be someone who'd enjoy this though.
+}
+
+STRING 3862
+// Items: I00Q (Wolf Meat), Description (Description)
+{
+Seems burned... There may be someone who'd enjoy this though.
+}
+
+STRING 3863
+// Abilities: A012 (WW_Divine), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by reaching the limit.. only to retrace your journey.
+}
+
+STRING 3864
+// Abilities: A013 (WW_Violet), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by ... ???
 }
 
