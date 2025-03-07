@@ -86,7 +86,7 @@ public class Kitty
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
-            this.Slider.StopSlider();
+            this.Slider.PauseSlider();
         }
         catch (Exception e)
         {

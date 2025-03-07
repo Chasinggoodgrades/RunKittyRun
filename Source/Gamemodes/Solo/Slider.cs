@@ -145,15 +145,20 @@ public class Slider
         });
     }
 
-    public void StopSlider()
+    public void PauseSlider()
     {
-        enabled = false;
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
         SliderTimer.Pause();
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
         this.wasSliding = false;
+    }
+
+    public void StopSlider()
+    {
+        enabled = false;
+        this.PauseSlider();
     }
 
     public bool IsOnSlideTerrain()
