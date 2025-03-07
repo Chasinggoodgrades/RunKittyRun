@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
 using WCSharp.Shared;
@@ -6,6 +7,8 @@ using static WCSharp.Api.Common;
 
 public static class DebugCmd
 {
+    public static dynamic _G;
+
     public static void Handle(player player, string command)
     {
         var cmd = command.Split(" ");
@@ -226,6 +229,20 @@ public static class DebugCmd
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 0.0f);
                 SetTimeOfDayScale(0.0f);
                 break;
+            case "?mem":
+                _G["trackPrintMap"] = true;
+
+                try
+                {
+                    DebugUtilities.DebugPrinter.PrintDebugNames("globals");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    throw;
+                }
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;
@@ -287,5 +304,19 @@ public static class DebugCmd
             p.DisplayTimedTextTo(15.0f, Colors.COLOR_YELLOW + commandList[currentIndex]);
             currentIndex++;
         });
+    }
+}
+
+namespace DebugUtilities
+{
+    public static class DebugPrinter
+    {
+        public static dynamic _G;
+
+        // Converts the TypeScript function printDebugNames into C#.
+        public static void PrintDebugNames(string title)
+        {
+            // {{ LUA_REPLACE }}
+        }
     }
 }

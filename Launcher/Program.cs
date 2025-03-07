@@ -10,6 +10,7 @@ using War3Net.Build;
 using War3Net.Build.Extensions;
 using War3Net.IO.Mpq;
 using WCSharp.ConstantGenerator;
+using System.Text.RegularExpressions;
 
 namespace Launcher
 {
@@ -40,6 +41,7 @@ namespace Launcher
 			Console.WriteLine("1. Generate constants");
 			Console.WriteLine("2. Compile map");
 			Console.WriteLine("3. Compile and run map");
+			Console.WriteLine("4. Compile and run map and track memory usage");
 			MakeDecision();
 		}
 
@@ -60,6 +62,9 @@ namespace Launcher
 				case ConsoleKey.D3:
 					Build(true);
 					break;
+				case ConsoleKey.D4:
+					Build(true, true);
+					break;
 				default:
 					Console.WriteLine($"{Environment.NewLine}Invalid input. Please choose again.");
 					MakeDecision();
@@ -67,7 +72,7 @@ namespace Launcher
 			}
 		}
 
-		public static void Build(bool launch)
+		public static void Build(bool launch, bool mem = false)
 		{
 			// Ensure these folders exist
 			Directory.CreateDirectory(OUTPUT_FOLDER_PATH);
@@ -101,6 +106,11 @@ namespace Launcher
 			if (!compileResult.Success)
 			{
 				throw new Exception(compileResult.Diagnostics.First(x => x.Severity == DiagnosticSeverity.Error).GetMessage());
+			}
+
+			if (mem)
+			{
+				map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
 			}
 
 			// Update war3map.lua so you can inspect the generated Lua code easily
@@ -150,5 +160,126 @@ namespace Launcher
 				}
 			}
 		}
+	}
+}
+
+public static class LuaScriptProcessor
+{
+	public static string ProcessLuaScript(string script)
+	{
+		int counter = 0;
+		string objPrefix = "info.GetStackTrace() .. ' > ' .. "; // "info.GetStackTrace() .. ' > ' .. "
+
+		// Replace MemoryHandler.getEmptyObject()
+		script = Regex.Replace(
+			script,
+			"MemoryHandler\\.getEmptyObject\\(\\)",
+			m => $"MemoryHandler.getEmptyObject({objPrefix}'obj.{counter++}')",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// Replace MemoryHandler.getEmptyArray()
+		script = Regex.Replace(
+			script,
+			"MemoryHandler\\.getEmptyArray\\(\\)",
+			m => $"MemoryHandler.getEmptyArray({objPrefix}'arr.{counter++}')",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// Replace occurrences of an object literal initialization to insert a print statement.
+		script = Regex.Replace(
+			script,
+			"(=|return|,)\\s+\\{",
+			m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Object #{counter++}') or {{",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// Replace occurrences where an object literal is immediately wrapped in parentheses.
+		script = Regex.Replace(
+			script,
+			"\\(\\{",
+			m => $"(__fakePrint({objPrefix}'Object #{counter++}') or {{",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// Replace occurrences of function expressions to insert a print statement.
+		script = Regex.Replace(
+			script,
+			"(=|return|,)\\s+function\\(",
+			m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or function(",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// // Insert a print for local function declarations. -- Doesn't work??
+		// script = Regex.Replace(
+		// 	script,
+		// 	"local function",
+		// 	m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
+		// 	RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+		// Define the fakePrint Lua code block to prepend.
+		string fakePrint = @"_G['__fakePrintMap'] = {}
+
+function __fakePrint(s)
+    if _G['trackPrintMap'] then
+        if (not _G['__fakePrintMap'][s]) then
+            _G['__fakePrintMap'][s] = 0
+        end
+
+        _G['__fakePrintMap'][s] = _G['__fakePrintMap'][s] + 1
+    end
+
+    if _G['printCreation'] then
+	    print(s)
+    end
+end";
+
+		script = script.Replace("class._G:set(\"trackPrintMap\", true)", "_G['trackPrintMap'] = true");
+		script = script.Replace("class._G:get(\"__fakePrintMap\")", "_G['__fakePrintMap']");
+
+		script = script.Replace("-- {{ LUA_REPLACE }}", @"-- Create an empty array to store targets
+    local sortedTargets = {}
+    
+    -- Convert each key/value pair from the targets table into a target object
+    for debugName, count in pairs(_G['__fakePrintMap']) do
+        table.insert(sortedTargets, { debugName = debugName, count = count })
+    end
+
+    -- If there is at least one target, proceed
+    if #sortedTargets > 0 then
+        -- Sort the targets in descending order by count
+        table.sort(sortedTargets, function(a, b)
+            return a.count > b.count
+        end)
+
+        -- Build the string for the top 10 targets
+        local d = ''
+        for i = 1, math.min(10, #sortedTargets) do
+            local target = sortedTargets[i]
+            if #d > 0 then
+                d = d .. ', '
+            end
+            d = d .. tostring(target.debugName) .. ': ' .. tostring(target.count)
+        end
+
+        -- Print the output
+        print('Most used ' .. title .. ': ' .. d)
+    end");
+
+		string lualib_info = @"info = {}
+
+info.GetStackTrace = function()
+    local trace, lastMsg, i, separator = '', '', 5, ' > '
+    local store = function(msg) lastMsg = msg:sub(1,-3) end
+    xpcall(error, store, '', 4)
+    while lastMsg:sub(1,11) == 'war3map.lua' or lastMsg:sub(1,14) == 'blizzard.j.lua' do
+        if lastMsg:sub(1,11) == 'war3map.lua' then
+            trace = separator .. lastMsg:sub(13) .. trace
+        else
+            trace = separator .. lastMsg .. trace
+        end
+        xpcall(error, store, '', i)
+        i = i+1
+    end
+    return 'T' .. trace
+end";
+
+		// Prepend the fakePrint code to the modified script.
+		return lualib_info + "\n\n" + fakePrint + "\n\n" + script;
 	}
 }
