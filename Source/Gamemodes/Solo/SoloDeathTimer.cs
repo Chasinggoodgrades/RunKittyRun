@@ -36,7 +36,7 @@ public class SoloDeathTimer
 
     private void UpdateFloatingText()
     {
-        FloatingTimer.SetText($"{Colors.GetPlayerColor(Player.Id + 1)}{ReviveTimer.Remaining.ToString("F2")}|r", TextTagHeight);
+        FloatingTimer.SetText($"{Colors.GetStringColorOfPlayer(Player.Id + 1)}{ReviveTimer.Remaining.ToString("F2")}|r", TextTagHeight);
     }
 
     private void Revive()

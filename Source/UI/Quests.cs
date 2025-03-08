@@ -13,7 +13,7 @@ public static class Quests
         CreateHowToPlayQuest();
         CreateCommandsQuest();
         CreateContributorsQuest();
-        CreateLeaderboardsQuest();
+        WebsiteQuest();
     }
 
     private static void CreateCommandsQuest()
@@ -40,7 +40,7 @@ public static class Quests
             $"{Colors.COLOR_YELLOW}Huge thank you to both Stan & Maxiglider for use of their magical slide code!|r");
     }
 
-    private static void CreateLeaderboardsQuest()
+    private static void WebsiteQuest()
     {
         LeaderboardsQuest.SetTitle("Leaderboards");
         LeaderboardsQuest.SetIcon("war3mapImported\\DiscordIcon.dds");

@@ -25,7 +25,7 @@ public class WolfPoint
     /// <param name="startY">The start point Y coordinate.</param>
     /// <param name="endX">The end point X coordinate.</param>
     /// <param name="endY">The end point Y coordinate.</param>
-    public void CreateRegionsBetweenPoints(float startX, float startY, float endX, float endY)
+    public void DiagonalRegionCreate(float startX, float startY, float endX, float endY)
     {
         try
         {

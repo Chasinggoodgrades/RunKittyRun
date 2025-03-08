@@ -18,7 +18,7 @@ public class Team
         Teammembers = new List<player>();
         RoundProgress = new Dictionary<int, string>();
         TeamTimes = new Dictionary<int, float>();
-        TeamColor = Colors.GetPlayerColor(TeamID) + "Team " + TeamID;
+        TeamColor = Colors.GetStringColorOfPlayer(TeamID) + "Team " + TeamID;
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
     }

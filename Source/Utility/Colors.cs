@@ -84,19 +84,19 @@ public class Colors
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
-    public static string PlayerNameColored(player p) => GetPlayerColor(GetPlayerId(p) + 1) + p.Name + COLOR_RESET;
+    public static string PlayerNameColored(player p) => GetStringColorOfPlayer(GetPlayerId(p) + 1) + p.Name + COLOR_RESET;
 
     /// <summary>
     /// Colorizes a string based on integer value of player color ID.
     /// Use (1-24) for player colors.
     /// </summary>
-    public static string ColorString(string text, int playerColorID) => GetPlayerColor(playerColorID) + text + COLOR_RESET;
+    public static string ColorString(string text, int playerColorID) => GetStringColorOfPlayer(playerColorID) + text + COLOR_RESET;
 
     /// <summary>
     /// Returns the color code string for that particular color.
     /// Use (1-24) for player colors. So.. (player.Id + 1)
     /// </summary>
-    public static string GetPlayerColor(int playerColorID)
+    public static string GetStringColorOfPlayer(int playerColorID)
     {
         foreach (var color in ColorManager)
         {

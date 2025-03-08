@@ -29,7 +29,7 @@ public static class StandardMultiboard
         t.Start(1.0f, true, () =>
         {
             if (!Difficulty.IsDifficultyChosen) return;
-            CreateMultiboards();
+            MakeMultiboard();
             RegisterTriggers();
             GC.RemoveTimer(ref t);
         });
@@ -48,7 +48,7 @@ public static class StandardMultiboard
         ESCTrigger.AddAction(ESCPressed);
     }
 
-    private static void CreateMultiboards()
+    private static void MakeMultiboard()
     {
         OverallGamesStatsMultiboard();
         BestTimesMultiboard();
@@ -148,7 +148,7 @@ public static class StandardMultiboard
             foreach (var player in players)
             {
                 var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
-                var playerColor = Colors.GetPlayerColor(player.Id + 1);
+                var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
                 var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
                 var totalSaves = currentStats.TotalSaves;
@@ -212,7 +212,7 @@ public static class StandardMultiboard
         foreach (var player in players)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var allSaves = saveData.GameStats.Saves;
@@ -254,7 +254,7 @@ public static class StandardMultiboard
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var roundTimes = GetGameRoundTime(saveData);
 
