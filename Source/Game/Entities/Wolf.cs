@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Source.Init;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -40,21 +41,17 @@ public class Wolf
 
     private void InitializeWolf()
     {
-        var players = new[]
-        {
-            player.NeutralExtra, player.NeutralVictim, 
-            player.NeutralAggressive
-        };
+        var selectedPlayer = Setup.getNextWolfPlayer();
 
-        var randomPlayer = players[GetRandomInt(0, players.Length - 1)];
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         var facing = GetRandomReal(0, 360);
 
-        Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
+        Unit = unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
         Unit.IsInvulnerable = true;
+        Unit.SetColor(ConvertPlayerColor(24));
 
         WanderTimer = timer.Create();
         EffectTimer = timer.Create();
@@ -216,7 +213,7 @@ public class Wolf
 
     public bool HasAffix(string affixName)
     {
-        if(Affixes.Count == 0) return false;
+        if (Affixes.Count == 0) return false;
         foreach (var affix in Affixes)
             if (affix.GetType().Name == affixName) return true;
         return false;
@@ -224,7 +221,7 @@ public class Wolf
 
     public void RemoveAllWolfAffixes()
     {
-        if(AffixCount() == 0) return;
+        if (AffixCount() == 0) return;
         foreach (var affix in Affixes)
         {
             AffixFactory.AllAffixes.Remove(affix);

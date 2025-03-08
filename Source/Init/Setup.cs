@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -10,6 +11,8 @@ namespace Source.Init
 
         private static float timeToChoose = 0.0f;
         private static timer gameModeTimer;
+        private static List<player> wolfPlayers;
+        private static int wolfPlayerIndex = 0;
 
         public static void Initialize()
         {
@@ -84,6 +87,21 @@ namespace Source.Init
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
                 Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
+
+                // Wolf players, move this maybe
+                wolfPlayers = new List<player>
+      {
+            player.NeutralExtra, player.NeutralVictim,
+            player.NeutralAggressive, player.NeutralPassive
+        };
+
+                for (int i = 0; i < GetBJMaxPlayers(); i++)
+                {
+                    if (Player(i).SlotState != playerslotstate.Playing)
+                    {
+                        wolfPlayers.Add(Player(i));
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -131,6 +149,13 @@ namespace Source.Init
                     player.SetAlliance(playerx, ALLIANCE_SHARED_CONTROL, false);
                 }
             }
+        }
+
+        public static player getNextWolfPlayer()
+        {
+            var selectedPlayer = wolfPlayers[wolfPlayerIndex];
+            wolfPlayerIndex = (wolfPlayerIndex + 1) % wolfPlayers.Count;
+            return selectedPlayer;
         }
     }
 }
