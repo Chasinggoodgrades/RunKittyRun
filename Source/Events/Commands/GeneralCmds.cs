@@ -51,6 +51,11 @@ public static class GeneralCmds
                 var affixes = AffixFactory.CalculateAffixes();
                 p.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}Total: {AffixFactory.AllAffixes.Count}");
                 break;
+            case "-lnbm":
+            case "-wolfinfo":
+                var nbWolfs = System.Linq.Enumerable.Count(Globals.ALL_WOLVES);
+                p.DisplayTextTo(Colors.COLOR_GOLD + "Current Wolf Count: " + nbWolfs);
+                break;
             case "-sc":
             case "-setcolor":
             case "-vc":

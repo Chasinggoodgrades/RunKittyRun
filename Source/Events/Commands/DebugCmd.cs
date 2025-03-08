@@ -284,6 +284,12 @@ public static class DebugCmd
                     compKitty?.Dispose();
                     break;
                 }
+            case "?skin":
+                {
+                    var skin = cmd.Length > 1 ? FourCC(cmd[1]) : Constants.UNIT_KITTY;
+                    BlzSetUnitSkin(kitty.Unit, skin);
+                    break;
+                }
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;
