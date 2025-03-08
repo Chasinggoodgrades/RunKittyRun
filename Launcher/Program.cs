@@ -205,12 +205,12 @@ public static class LuaScriptProcessor
 			m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or function(",
 			RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-		// // Insert a print for local function declarations. -- Doesn't work??
-		// script = Regex.Replace(
-		// 	script,
-		// 	"local function",
-		// 	m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
-		// 	RegexOptions.Multiline | RegexOptions.IgnoreCase);
+		// Insert a print for local function declarations. -- Doesn't work??
+		script = Regex.Replace(
+			script,
+			"^(\\s+)?local function",
+			m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
+			RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
 		// Define the fakePrint Lua code block to prepend.
 		string fakePrint = @"_G['__fakePrintMap'] = {}
