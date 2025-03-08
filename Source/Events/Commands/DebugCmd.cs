@@ -243,6 +243,47 @@ public static class DebugCmd
                     throw;
                 }
                 break;
+            case "?createhero":
+            case "?crh":
+                {
+                    int target = int.Parse(cmd[1]) - 1;
+                    var compPlayer = Player(target);
+
+                    if (Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player already has a hero.");
+                        return;
+                    }
+
+                    Globals.ALL_PLAYERS.Add(compPlayer);
+                    new Circle(compPlayer);
+                    new Kitty(compPlayer);
+                    break;
+                }
+            case "?deletehero":
+            case "?delh":
+                {
+                    int target = int.Parse(cmd[1]) - 1;
+                    var compPlayer = Player(target);
+
+                    if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
+                        return;
+                    }
+
+                    if (compPlayer.Controller != mapcontrol.Computer)
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.");
+                        return;
+                    }
+
+                    Globals.ALL_PLAYERS.Remove(compPlayer);
+
+                    var compKitty = Globals.ALL_KITTIES[compPlayer];
+                    compKitty?.Dispose();
+                    break;
+                }
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
                 break;
