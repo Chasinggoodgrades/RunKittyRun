@@ -62,11 +62,11 @@ public static class TeamHandler
                 bool addedToExistingTeam = false;
 
                 // Attempt to add player to an existing team
-                foreach (var team in Globals.ALL_TEAMS.Values)
+                foreach (var team in Globals.ALL_TEAMS)
                 {
-                    if (team.Teammembers.Count < Gamemode.PlayersPerTeam)
+                    if (team.Value.Teammembers.Count < Gamemode.PlayersPerTeam)
                     {
-                        team.AddMember(player);
+                        team.Value.AddMember(player);
                         addedToExistingTeam = true;
                         break;
                     }

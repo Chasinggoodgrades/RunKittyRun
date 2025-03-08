@@ -99,8 +99,8 @@ public static class RoundManager
     public static void RoundEndCheck()
     {
         // Always returns for standard mode, and solo progression mode.
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
-            if (!kitty.Finished) return;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            if (!kitty.Value.Finished) return;
         RoundEnd();
     }
 }

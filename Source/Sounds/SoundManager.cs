@@ -69,11 +69,11 @@ public static class SoundManager
     }
     private static void SetSoundAttributes()
     {
-        foreach (var sound in sounds.Values)
+        foreach (var sound in sounds)
         {
-            sound.SetChannel(0);
-            sound.SetVolume(127);
-            sound.SetPitch(1.0f);
+            sound.Value.SetChannel(0);
+            sound.Value.SetVolume(127);
+            sound.Value.SetPitch(1.0f);
         }
     }
     public static void PlaySpeedSound() => SPEED_SOUND.Start();

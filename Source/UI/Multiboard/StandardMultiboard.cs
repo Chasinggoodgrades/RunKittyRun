@@ -191,16 +191,27 @@ public static class StandardMultiboard
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        // Was converting to dict, but seems dict caused a lot of overhead. Switching to list helped a little.
-        var sortedPlayers = Globals.ALL_KITTIES
-            .OrderByDescending(kvp => kvp.Value.SaveData.GameStats.Saves - kvp.Value.SaveData.GameStats.Deaths)
-            .ThenBy(kvp => kvp.Key.Id)
-            .ToList();
+        // Use an array to hold keys for sorting
+        var players = Globals.ALL_KITTIES.Keys.ToArray();
 
-        foreach (var kvp in sortedPlayers)
+        // Sort the array of keys based on custom criteria
+        Array.Sort(players, (p1, p2) =>
         {
-            var player = kvp.Key;
-            var saveData = kvp.Value.SaveData;
+            var stats1 = Globals.ALL_KITTIES[p1].SaveData.GameStats;
+            var stats2 = Globals.ALL_KITTIES[p2].SaveData.GameStats;
+            var score1 = stats1.Saves - stats1.Deaths;
+            var score2 = stats2.Saves - stats2.Deaths;
+
+            int compareScore = score2.CompareTo(score1);
+            if (compareScore != 0)
+                return compareScore;
+
+            return p1.Id.CompareTo(p2.Id);
+        });
+
+        foreach (var player in players)
+        {
+            var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetPlayerColor(player.Id + 1);
 
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
@@ -230,10 +241,8 @@ public static class StandardMultiboard
 
             rowIndex++;
         }
-
-        GC.RemoveList(ref sortedPlayers);
-
     }
+
 
 
     private static void BestTimesStats()

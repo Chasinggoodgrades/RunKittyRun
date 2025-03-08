@@ -32,9 +32,9 @@ public static class Progress
     private static void TeamProgressTracker()
     {
         if (!Globals.GAME_ACTIVE) return;
-        foreach (var Team in Globals.ALL_TEAMS.Values)
+        foreach (var Team in Globals.ALL_TEAMS)
         {
-            Team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team));
+            Team.Value.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team.Value));
         }
         TeamsMultiboard.UpdateTeamStatsMB();
     }

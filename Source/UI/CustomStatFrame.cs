@@ -205,8 +205,10 @@ public static class CustomStatFrame
     private static void SetWolfAffixTexts(unit selectedUnit)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        var wolf = Globals.ALL_WOLVES[selectedUnit];
+        if (!Globals.ALL_WOLVES.TryGetValue(selectedUnit, out var wolf)) return;
+
         var affixes = wolf.Affixes;
+
         for (var i = 0; i < affixes.Count; i++)
         {
             Stats[i].Text.Text = affixes[i].Name;

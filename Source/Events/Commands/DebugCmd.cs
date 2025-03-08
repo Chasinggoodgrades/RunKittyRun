@@ -131,11 +131,11 @@ public static class DebugCmd
             case "?aa":
                 var nameAffix = cmd.Length > 1 ? char.ToUpper(cmd[1][0]) + cmd[1].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {nameAffix} to all wolves.");
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                foreach (var wolf in Globals.ALL_WOLVES)
                 {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
-                    var affix = AffixFactory.CreateAffix(wolf, nameAffix);
-                    wolf.AddAffix(affix);
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
+                    var affix = AffixFactory.CreateAffix(wolf.Value, nameAffix);
+                    wolf.Value.AddAffix(affix);
                 }
                 break;
             case "?affix":
@@ -155,8 +155,8 @@ public static class DebugCmd
                 break;
             case "?clearaffixes":
             case "?ca":
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
-                    wolf.RemoveAllWolfAffixes();
+                foreach (var wolf in Globals.ALL_WOLVES)
+                    wolf.Value.RemoveAllWolfAffixes();
                 break;
             case "?obs":
                 var obsName = cmd.Length > 1 ? cmd[1] : "??__";
@@ -168,11 +168,11 @@ public static class DebugCmd
                     }
                 break;
             case "?summonall":
-                foreach (var k in Globals.ALL_KITTIES.Values)
+                foreach (var k in Globals.ALL_KITTIES)
                 {
-                    if (k.Unit.Owner == player)
+                    if (k.Value.Unit.Owner == player)
                         continue;
-                    k.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
                 }
                 break;
             case "?camfield":

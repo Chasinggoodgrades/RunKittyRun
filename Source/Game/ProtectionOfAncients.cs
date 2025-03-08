@@ -54,6 +54,8 @@ public static class ProtectionOfAncients
         var player = unit.Owner;
         var heroLevel = unit.HeroLevel;
 
+        if (unit.UnitType != Constants.UNIT_KITTY) return 0;
+
         // Return early if the hero level is below 6
         if (heroLevel < 6) return 0;
 
@@ -89,8 +91,7 @@ public static class ProtectionOfAncients
     private static void RegisterUpgradeLevelEvents()
     {
         LevelUpTrigger = trigger.Create();
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            LevelUpTrigger.RegisterUnitEvent(kitty.Unit, unitevent.HeroLevel, null);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
         LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
     }

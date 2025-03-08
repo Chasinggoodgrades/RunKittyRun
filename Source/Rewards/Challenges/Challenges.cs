@@ -124,10 +124,10 @@ public static class Challenges
     public static void FreezeAura()
     {
         if (!Gameover.WinGame) return;
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            if (kitty.CurrentStats.WolfFreezeCount < FREEZE_AURA_WOLF_REQUIREMENT) continue;
-            AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Auras.FreezeAura));
+            if (kitty.Value.CurrentStats.WolfFreezeCount < FREEZE_AURA_WOLF_REQUIREMENT) continue;
+            AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Auras.FreezeAura));
         }
     }
 
@@ -139,10 +139,10 @@ public static class Challenges
     {
         if(Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
         if (!Gameover.WinGame) return;
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            if (!kitty.CurrentStats.ObtainedNitros.Contains(4)) continue;
-                AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
+            if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(4)) continue;
+                AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
         }
     }
 

@@ -108,14 +108,22 @@ public static class Utility
 
     public static bool IsDeveloper(player p)
     {
-        foreach (var player in Globals.VIPLIST)
+        try
         {
-            if (p.Name == Base64.FromBase64(player))
+            foreach (var player in Globals.VIPLIST)
             {
-                return true;
+                if (p.Name == Base64.FromBase64(player))
+                {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Logger.Warning(ex.StackTrace);
+            return false;
+        }
     }
 
     /// <summary>

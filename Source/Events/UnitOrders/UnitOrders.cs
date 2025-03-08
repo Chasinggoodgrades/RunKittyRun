@@ -20,9 +20,10 @@ public static class UnitOrders
 
     private static void RegisterTriggers()
     {
-        foreach (var player in Globals.ALL_KITTIES.Values)
+        foreach (var player in Globals.ALL_KITTIES)
         {
-            ActionsCapture.RegisterUnitEvent(player.Unit, unitevent.IssuedPointOrder, null);
+            var kvp = player.Value;
+            ActionsCapture.RegisterUnitEvent(kvp.Unit, unitevent.IssuedPointOrder, null);
         }
 
         ActionsCapture.AddAction(CaptureActions);
@@ -30,11 +31,12 @@ public static class UnitOrders
 
     private static void RegisterDicts()
     {
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            TotalActions[kitty.Player] = 0;
-            LastOrderLocation[kitty.Unit] = (0.0f, 0.0f);
-            TimeOutsideSafeZones[kitty.Player] = 0.0f;
+            var kvp = kitty.Value;
+            TotalActions[kvp.Player] = 0;
+            LastOrderLocation[kvp.Unit] = (0.0f, 0.0f);
+            TimeOutsideSafeZones[kvp.Player] = 0.0f;
         }
     }
 
@@ -45,10 +47,11 @@ public static class UnitOrders
 
     private static void CheckKittyPositions()
     {
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            var unit = kitty.Unit;
-            var player = kitty.Player;
+            var kvp = kitty.Value;
+            var unit = kvp.Unit;
+            var player = kvp.Player;
             if (!IsInSafeZone(unit))
             {
                 TimeOutsideSafeZones[player] += 0.1f;

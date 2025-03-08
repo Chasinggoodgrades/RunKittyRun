@@ -42,9 +42,9 @@ public static class GameTimer
     private static void UpdateIndividualTimes()
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND);
+            if (!kitty.Value.Finished) kitty.Value.TimeProg.IncrementRoundTime(Globals.ROUND);
         }
         //MultiboardUtil.RefreshMultiboards();
     }
@@ -52,9 +52,9 @@ public static class GameTimer
     private static void UpdateTeamTimes()
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        foreach (var team in Globals.ALL_TEAMS.Values)
+        foreach (var team in Globals.ALL_TEAMS)
         {
-            if (!team.Finished) team.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
+            if (!team.Value.Finished) team.Value.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
         }
     }
 
@@ -66,9 +66,9 @@ public static class GameTimer
     public static float TeamTotalTime(Team team)
     {
         var totalTime = 0.0f;
-        foreach(var time in team.TeamTimes.Values)
+        foreach(var time in team.TeamTimes)
         {
-            totalTime += time;
+            totalTime += time.Value;
         }
         return totalTime;
     }

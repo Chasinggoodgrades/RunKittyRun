@@ -165,7 +165,7 @@ public static class AffixFactory
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
         var interations = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 2000) // shit limit but beats crash
+        while (count < NUMBER_OF_AFFIXED_WOLVES && interations < 2000) // limit to prevent crash
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
@@ -174,24 +174,22 @@ public static class AffixFactory
                     if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
                     {
                         affixedWolvesInLane[j]++;
-                        var wolvesInLane = Globals.ALL_WOLVES.Values
-                            .Where(wolf => ShouldAffixWolves(wolf, j))
-                            .ToList();
 
-                        if (wolvesInLane.Any())
+                        // Use a single iteration to find eligible wolves and apply affix
+                        var eligibleWolves = Globals.ALL_WOLVES.Where(wolf => ShouldAffixWolves(wolf.Value, j));
+                        foreach (var wolf in eligibleWolves)
                         {
-                            var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                            var affix = ApplyRandomAffix(wolf, j);
-                            if(affix != null) count++;
+                            var affix = ApplyRandomAffix(wolf.Value, j);
+                            if (affix != null) count++;
+                            break; // Apply affix to the first eligible wolf and exit loop
                         }
-
-                        wolvesInLane.Clear();
                     }
                 }
                 interations += 1;
             }
         }
     }
+
 
     // Conditions for affixing wolves:
     // 1. Must be in the same lane

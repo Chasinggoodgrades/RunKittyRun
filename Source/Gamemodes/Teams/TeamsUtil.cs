@@ -5,8 +5,8 @@ public static class TeamsUtil
     public static void RoundResetAllTeams()
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        foreach (var team in Globals.ALL_TEAMS.Values)
-            team.Finished = false;
+        foreach (var team in Globals.ALL_TEAMS)
+            team.Value.Finished = false;
     }
 
     public static void CheckTeamDead(Kitty k)
