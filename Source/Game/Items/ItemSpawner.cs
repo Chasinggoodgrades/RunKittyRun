@@ -16,7 +16,7 @@ public static class ItemSpawner
 
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         SpawnableItems = StandardItems();
         TrackItems = new List<item>();
         TrackKibbles = new List<Kibble>();
@@ -26,21 +26,17 @@ public static class ItemSpawner
 
     private static void RegisterEvent()
     {
-        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, () => SpawnItems());
+        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, SpawnItems);
     }
 
-    private static Func<bool> SpawnItems()
+    private static void SpawnItems()
     {
-        return () =>
+        RemoveSpawnedItems();
+        for (var i = 0; i < NUMBER_OF_ITEMS; i++)
         {
-            RemoveSpawnedItems();
-            for(var i = 0; i < NUMBER_OF_ITEMS; i++)
-            {
-                TrackItems.Add(SpawnRegularItems());
-                SpawnKibble();
-            }
-            return true;
-        };
+            TrackItems.Add(SpawnRegularItems());
+            SpawnKibble();
+        }
     }
 
     private static void RemoveSpawnedItems()
