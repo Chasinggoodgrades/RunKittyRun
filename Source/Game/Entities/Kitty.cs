@@ -27,6 +27,7 @@ public class Kitty
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public Slider Slider { get; private set; }
+    public AIController aiController { get; set; }
     public timer DiscoTimer { get; set; }
     public float SpinCamSpeed { get; set; } = 0;
     public timer SpinCamTimer { get; set; }
@@ -41,6 +42,9 @@ public class Kitty
         CreateKitty();
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
+        aiController = new AIController(this);
+
+        Globals.PLAYERS_CURRENT_SAFEZONE[player] = 0;
     }
 
     /// <summary>
@@ -88,6 +92,7 @@ public class Kitty
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
             this.Slider.PauseSlider();
+            this.aiController.PauseAi();
         }
         catch (Exception e)
         {
@@ -113,6 +118,7 @@ public class Kitty
             Utility.SelectUnitForPlayer(Player, Unit);
             CameraUtil.RelockCamera(Player);
             this.Slider.ResumeSlider();
+            this.aiController.ResumeAi();
 
             if (savior == null) return;
             UpdateSaviorStats(savior);

@@ -59,6 +59,13 @@ public static class DebugCmd
                 foreach (var p in Globals.ALL_PLAYERS)
                     p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 break;
+            case "?aishare":
+                foreach (var p in Globals.ALL_PLAYERS)
+                    if (p.SlotState != playerslotstate.Playing)
+                    {
+                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                    }
+                break;
             case "?wshare":
                 player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
@@ -246,48 +253,123 @@ public static class DebugCmd
             case "?createhero":
             case "?crh":
                 {
-                    int target = int.Parse(cmd[1]) - 1;
-                    var compPlayer = Player(target);
-
-                    if (Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                    for (var i = 0; i < 24; i++)
                     {
-                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player already has a hero.");
-                        return;
+                        int target = cmd[1] != "all" ? int.Parse(cmd[1]) - 1 : (cmd[1] == "all" ? i : -1);
+
+                        if (target == i || cmd[1] == "all")
+                        {
+                            var compPlayer = Player(target);
+
+                            if (Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                            {
+                                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player already has a hero.");
+                                continue;
+                            }
+
+                            Globals.ALL_PLAYERS.Add(compPlayer);
+                            new Circle(compPlayer);
+                            new Kitty(compPlayer);
+                        }
                     }
 
-                    Globals.ALL_PLAYERS.Add(compPlayer);
-                    new Circle(compPlayer);
-                    new Kitty(compPlayer);
                     break;
                 }
             case "?deletehero":
             case "?delh":
                 {
-                    int target = int.Parse(cmd[1]) - 1;
-                    var compPlayer = Player(target);
-
-                    if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                    for (var i = 0; i < 24; i++)
                     {
-                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
-                        return;
+                        int target = cmd[1] != "all" ? int.Parse(cmd[1]) - 1 : (cmd[1] == "all" ? i : -1);
+
+                        if (target == i || cmd[1] == "all")
+                        {
+                            var compPlayer = Player(target);
+
+                            if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                            {
+                                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
+                                continue;
+                            }
+
+                            if (compPlayer.Controller != mapcontrol.Computer)
+                            {
+                                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.");
+                                continue;
+                            }
+
+                            Globals.ALL_PLAYERS.Remove(compPlayer);
+
+                            var compKitty = Globals.ALL_KITTIES[compPlayer];
+                            compKitty?.Dispose();
+                        }
                     }
 
-                    if (compPlayer.Controller != mapcontrol.Computer)
-                    {
-                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.");
-                        return;
-                    }
-
-                    Globals.ALL_PLAYERS.Remove(compPlayer);
-
-                    var compKitty = Globals.ALL_KITTIES[compPlayer];
-                    compKitty?.Dispose();
                     break;
                 }
             case "?skin":
                 {
                     var skin = cmd.Length > 1 ? FourCC(cmd[1]) : Constants.UNIT_KITTY;
                     BlzSetUnitSkin(kitty.Unit, skin);
+                    break;
+                }
+            case "?ai":
+                {
+                    for (var i = 0; i < 24; i++)
+                    {
+                        int target = cmd[1] != "all" ? int.Parse(cmd[1]) - 1 : (cmd[1] == "all" ? i : -1);
+
+                        if (target == i || cmd[1] == "all")
+                        {
+                            var compPlayer = Player(target);
+
+                            if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
+                            {
+                                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
+                                continue;
+                            }
+
+                            var compKitty = Globals.ALL_KITTIES[compPlayer];
+
+                            if (compKitty.aiController.IsEnabled())
+                            {
+                                compKitty.aiController.StopAi();
+                                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI deactivated.");
+                            }
+                            else
+                            {
+                                compKitty.aiController.StartAi();
+                                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI activated.");
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            case "?aisetup":
+                {
+                    if (cmd.Length == 0)
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: ?aisetup [dodgeRadius=160] [reviveRadius=1024] [timerInterval=0.2]");
+                        return;
+                    }
+
+                    var dodgeRadius = cmd.Length > 1 ? float.Parse(cmd[1]) : 160.0f;
+                    var reviveRadius = cmd.Length > 2 ? float.Parse(cmd[2]) : 1024.0f;
+                    var timerInterval = cmd.Length > 3 ? float.Parse(cmd[3]) : 0.2f;
+
+                    foreach (var compKitty in Globals.ALL_KITTIES.Values)
+                    {
+                        if (compKitty.aiController.IsEnabled())
+                        {
+                            compKitty.aiController.DODGE_RADIUS = dodgeRadius;
+                            compKitty.aiController.REVIVE_RADIUS = reviveRadius;
+                            compKitty.aiController.timerInterval = timerInterval;
+                        }
+                    }
+
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW}AI setup: dodgeRadius={dodgeRadius}, reviveRadius={reviveRadius}, timerInterval={timerInterval}");
+
                     break;
                 }
             default:
