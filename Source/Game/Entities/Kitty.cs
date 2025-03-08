@@ -13,6 +13,7 @@ public class Kitty
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
+    public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
     public player Player { get; }

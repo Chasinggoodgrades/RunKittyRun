@@ -75,21 +75,11 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        try
-        {
-            var localPlayer = player.LocalPlayer;
-            if(!SelectedUnit.TryGetValue(localPlayer, out var selectedUnit)) return;
+        if(!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
 
-            HandleFrameText(selectedUnit);
+        HandleFrameText(selectedUnit);
 
-            CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
-        }
-        catch (Exception e)
-        {
-            Logger.Warning(e.Message);
-            Logger.Warning(e.StackTrace);
-            throw;
-        }
+        CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
     }
 
     public static void Init()

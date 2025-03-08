@@ -63,7 +63,7 @@ public class FloatingNameTag
             {
                 var kitty = Globals.ALL_KITTIES[player].Unit;
                 PlayerNameTags[player].UpdateNameTag();
-                if (player.IsLocal) SetCameraQuickPosition(kitty.X, kitty.Y); // Spacebar 
+                Blizzard.SetCameraQuickPositionForPlayer(player, kitty.X, kitty.Y);
             }
         });
     }

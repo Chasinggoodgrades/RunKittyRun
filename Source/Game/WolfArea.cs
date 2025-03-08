@@ -48,23 +48,10 @@ public class WolfArea
         {
             var unit = @event.Unit;
             var player = unit.Owner;
-            var progressPoints = Progress.PlayerProgressPoints;
-            if (ID <= 13)
-            {
-                progressPoints[player] = Globals.SAFE_ZONES[ID].Rect_;
-                Globals.ALL_KITTIES[player].ProgressZone = ID;
-            }
-            else
-            {
-                progressPoints[player] = ID switch
-                {
-                    14 => Regions.ProgressPoint1.Rect,
-                    15 => Regions.ProgressPoint2.Rect,
-                    16 => Regions.ProgressPoint3.Rect,
-                    _ => progressPoints[player]
-                };
-                Globals.ALL_KITTIES[player].ProgressZone = ID;
-            }
+
+            var kitty = Globals.ALL_KITTIES[player];
+            kitty.ProgressHelper.CurrentPoint = ID;
+            kitty.ProgressZone = ID;
         });
     }
 

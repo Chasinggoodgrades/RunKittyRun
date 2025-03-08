@@ -6,12 +6,11 @@ using WCSharp.Api;
 public static class Progress
 {
     public static Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
-    public static Dictionary<player, rect> PlayerProgressPoints { get; set; } = new Dictionary<player, rect>();
     private static timer TeamProgTimer { get; set; } = timer.Create();
+
     public static void Initialize()
     {
         CalculateTotalDistance();
-        InitializePlayerProgressPoints();
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         TeamProgTimer.Start(0.2f, true, () => TeamProgressTracker());
     }
@@ -21,12 +20,6 @@ public static class Progress
         var Player = kitty.Player;
         var round = Globals.ROUND;
         Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
-    }
-
-    private static void InitializePlayerProgressPoints()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-            PlayerProgressPoints.Add(player, Globals.SAFE_ZONES[0].Rect_);
     }
     
     private static void TeamProgressTracker()
@@ -56,7 +49,7 @@ public static class Progress
             if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit) && !kitty.Finished) return 0.0f; // if at start, 0 progress
             if (kitty.Alive && kitty.Finished) return 100.0f;
             var currentProgress = DistanceBetweenPoints(kitty.Unit.X, kitty.Unit.Y,
-                PlayerProgressPoints[Player].CenterX, PlayerProgressPoints[Player].CenterY);
+                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X, ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
             var progress = (totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1]) * 100;
@@ -80,7 +73,7 @@ public static class Progress
         if (Globals.SAFE_ZONES[0].Region.Contains(nitroKitty)) return 0.0f; // if at start, 0 progress
         if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Region.Contains(nitroKitty)) return 100.0f; // if at end.. 100 progress
         var currentProgress = DistanceBetweenPoints(nitroKitty.X, nitroKitty.Y,
-            RegionList.PathingPoints[currentSafezone].Rect.CenterX, RegionList.PathingPoints[currentSafezone].Rect.CenterY);
+            ProgressPointHelper.Points[currentSafezone].X, ProgressPointHelper.Points[currentSafezone].Y);
         var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
         return totalProgress;
