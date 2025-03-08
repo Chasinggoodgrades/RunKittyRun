@@ -1,14 +1,19 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using WCSharp.Api;
+using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
 public static class DebugCmd
 {
+    public static dynamic _G;
+
     public static void Handle(player player, string command)
     {
         var cmd = command.Split(" ");
         var kitty = Globals.ALL_KITTIES.ContainsKey(player) ? Globals.ALL_KITTIES[player] : null;
-        var selectedUnit = CustomStatFrame.SelectedUnit[player.Id];
+        var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
         var startswith = cmd[0];
         switch (startswith)
@@ -92,13 +97,9 @@ public static class DebugCmd
                     }
                 break;
             case "?invul":
-                var setting = cmd.Length > 1 ? cmd[1] : "off";
+                var setting = cmd.Length > 1 ? cmd[1] : "on";
                 if (setting == "on") UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 else if (setting == "off") CollisionDetection.KittyRegisterCollisions(kitty);
-                break;
-            case "?slide":
-                Slider slider = new Slider(kitty.Unit);
-                slider.StartSlider();
                 break;
             case "?pw":
             case "?pause":
@@ -112,7 +113,7 @@ public static class DebugCmd
                 break;
             case "?spawnloc":
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach(var ko in Globals.ALL_KITTIES)
+                foreach (var ko in Globals.ALL_KITTIES)
                     ko.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 break;
             case "?roundpause":
@@ -123,15 +124,18 @@ public static class DebugCmd
             case "?rup":
                 RoundTimer.StartRoundTimer.Resume();
                 break;
+            case "?en":
+                WolfLaneHider.LanesHider();
+                break;
             case "?affixall":
             case "?aa":
                 var nameAffix = cmd.Length > 1 ? char.ToUpper(cmd[1][0]) + cmd[1].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {nameAffix} to all wolves.");
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                foreach (var wolf in Globals.ALL_WOLVES)
                 {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
-                    var affix = AffixFactory.CreateAffix(wolf, nameAffix);
-                    wolf.AddAffix(affix);
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
+                    var affix = AffixFactory.CreateAffix(wolf.Value, nameAffix);
+                    wolf.Value.AddAffix(affix);
                 }
                 break;
             case "?affix":
@@ -151,8 +155,8 @@ public static class DebugCmd
                 break;
             case "?clearaffixes":
             case "?ca":
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
-                    wolf.RemoveAllWolfAffixes();
+                foreach (var wolf in Globals.ALL_WOLVES)
+                    wolf.Value.RemoveAllWolfAffixes();
                 break;
             case "?obs":
                 var obsName = cmd.Length > 1 ? cmd[1] : "??__";
@@ -164,11 +168,11 @@ public static class DebugCmd
                     }
                 break;
             case "?summonall":
-                foreach (var k in Globals.ALL_KITTIES.Values)
+                foreach (var k in Globals.ALL_KITTIES)
                 {
-                    if (k.Unit.Owner == player)
+                    if (k.Value.Unit.Owner == player)
                         continue;
-                    k.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
                 }
                 break;
             case "?camfield":
@@ -191,8 +195,53 @@ public static class DebugCmd
             case "?help":
                 DisplayAdminCommands(player);
                 break;
+            case "?testx":
+                Console.WriteLine($"{Globals.ALL_KITTIES.ElementAt(1)}");
+                break;
             case "?allsave":
                 SaveManager.SaveAllDataToFile();
+                break;
+            case "?ability":
+                var abilityId = cmd.Length > 1 ? cmd[1] : "";
+
+                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
+                {
+                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId));
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
+                }
+                else
+                {
+                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId));
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
+                }
+                break;
+            case "?scale":
+                var scale = cmd.Length > 1 ? float.Parse(cmd[1]) : 0.6f;
+                kitty.Unit.SetScale(scale, scale, scale);
+                break;
+            case "?day":
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
+                SetTimeOfDayScale(0.0f);
+                break;
+            case "?night":
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 0.0f);
+                SetTimeOfDayScale(0.0f);
+                break;
+            case "?mem":
+                _G["trackPrintMap"] = true;
+
+                try
+                {
+                    DebugUtilities.DebugPrinter.PrintDebugNames("globals");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    throw;
+                }
                 break;
             default:
                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown command.");
@@ -248,13 +297,26 @@ public static class DebugCmd
         {
             if (currentIndex >= commandList.Length)
             {
-                t.Pause();
-                t.Dispose();
+                GC.RemoveTimer(ref t);
                 return;
             }
 
             p.DisplayTimedTextTo(15.0f, Colors.COLOR_YELLOW + commandList[currentIndex]);
             currentIndex++;
         });
+    }
+}
+
+namespace DebugUtilities
+{
+    public static class DebugPrinter
+    {
+        public static dynamic _G;
+
+        // Converts the TypeScript function printDebugNames into C#.
+        public static void PrintDebugNames(string title)
+        {
+            // {{ LUA_REPLACE }}
+        }
     }
 }

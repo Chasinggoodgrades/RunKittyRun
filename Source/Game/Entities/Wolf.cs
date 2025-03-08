@@ -22,6 +22,7 @@ public class Wolf
     private effect OverheadEffect { get; set; }
     public WolfPoint WolfPoint { get; set; }
     public bool IsPaused { get; set; } = false;
+    public bool IsReviving { get; set; } = false;
 
     public Wolf(int regionIndex)
     {
@@ -32,6 +33,9 @@ public class Wolf
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
         Utility.SimpleTimer(3.0f, () => StartWandering());
+        Globals.ALL_WOLVES.Add(Unit, this);
+
+        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea)) wolfArea.Wolves.Add(this);
     }
 
     private void InitializeWolf()
@@ -48,9 +52,9 @@ public class Wolf
         var facing = GetRandomReal(0, 360);
 
         Unit = unit.Create(randomPlayer, WOLF_MODEL, randomX, randomY, facing);
-        Globals.ALL_WOLVES.Add(Unit, this);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
+        Unit.IsInvulnerable = true;
 
         WanderTimer = timer.Create();
         EffectTimer = timer.Create();
@@ -64,7 +68,7 @@ public class Wolf
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         if (HasAffix("Blitzer")) return;
-        WolfPoint.CreateRegionsBetweenPoints(Unit.X, Unit.Y, randomX, randomY);
+        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
     private bool ShouldStartEffect()
@@ -99,7 +103,7 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && !IsPaused)
+        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving))
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
@@ -124,7 +128,6 @@ public class Wolf
     public void Dispose()
     {
         RemoveAllWolfAffixes();
-        Unit.Dispose();
         EffectTimer.Dispose();
         EffectTimer = null;
         OverheadEffect?.Dispose();
@@ -132,6 +135,9 @@ public class Wolf
         WanderTimer.Dispose();
         WanderTimer = null;
         WolfPoint.Dispose();
+        WolfPoint = null;
+        Unit.Dispose();
+        Unit = null;
     }
 
     /// <summary>
@@ -149,6 +155,7 @@ public class Wolf
                 for (int i = 0; i < numberOfWolves; i++)
                     new Wolf(lane);
             }
+            //WolfSpawning.SpawnWolves();
             FandF.CreateBloodWolf();
             NamedWolves.CreateNamedWolves();
         }

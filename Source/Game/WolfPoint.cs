@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 
 public class WolfPoint
 {
-    private const float MaxDistance = 400f; // Max distance between points
+    private const float MaxDistance = 300f; // Max distance between points
     public readonly static int MoveOrderID = OrderId("move");
     private Wolf Wolf { get; set; }
     public List<float[]> PointsToVisit { get; set; } = new List<float[]>();
@@ -25,7 +25,7 @@ public class WolfPoint
     /// <param name="startY">The start point Y coordinate.</param>
     /// <param name="endX">The end point X coordinate.</param>
     /// <param name="endY">The end point Y coordinate.</param>
-    public void CreateRegionsBetweenPoints(float startX, float startY, float endX, float endY)
+    public void DiagonalRegionCreate(float startX, float startY, float endX, float endY)
     {
         try
         {
@@ -50,7 +50,7 @@ public class WolfPoint
             }
 
             // Ensure the last point is exactly the end point
-            var lastPointInfo = new float[] { endX, endY };
+            float[] lastPointInfo = new float[] { endX, endY };
             PointsToVisit.Add(lastPointInfo);
 
             if (PointsToVisit != null && PointsToVisit.Count > 0)
@@ -82,7 +82,7 @@ public class WolfPoint
     private void StartMovingOrders()
     {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
-        if (Wolf.IsPaused) return;
+        if (Wolf.IsPaused || Wolf.IsReviving) return;
         for (int i = PointsToVisit.Count -1; i >= 1; i--)
         {
             Wolf.Unit.QueueOrder(MoveOrderID, PointsToVisit[i][0], PointsToVisit[i][1]); 

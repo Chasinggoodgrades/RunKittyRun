@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class NamedWolves
 {
     public static List<Wolf> DNTNamedWolves { get; set; } = new List<Wolf>();
-    public static Wolf MarcoWolf;
-    private static Wolf StanWolf;
+    public static Wolf ExplodingWolf;
+    public static Wolf StanWolf;
     public static texttag StanNameTag = texttag.Create();
-    public static texttag MarcoNameTag = texttag.Create();
-    private static timer MarcoTexttagTimer = timer.Create();
-    private static timer MarcoRevive = timer.Create();
+    public static texttag ExplodingWolfNameTag = texttag.Create();
+    private static timer ExplodingTexttagTimer = timer.Create();
+    private static timer ExplodingWolfRevive = timer.Create();
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
 
     /// <summary>
@@ -21,16 +22,16 @@ public static class NamedWolves
         if (Gamemode.CurrentGameMode != "Standard") return;
         DNTNamedWolves.Clear();
         CreateStanWolf();
-        CreateMarcoWolf();
+        CreateExplodingWolf();
     }
 
-    private static void CreateMarcoWolf()
+    private static void CreateExplodingWolf()
     {
         var index = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
-        MarcoWolf = new Wolf(index);
-        MarcoNameTag.SetPermanent(true);
-        MarcoTexttagTimer.Start(0.03f, true, () => MarcoNameTag.SetPosition(MarcoWolf.Unit.X, MarcoWolf.Unit.Y, 0.015f));
-        MarcoWolfDesc();
+        ExplodingWolf = new Wolf(index);
+        ExplodingWolfNameTag.SetPermanent(true);
+        ExplodingTexttagTimer.Start(0.03f, true, () => ExplodingWolfNameTag.SetPosition(ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 0.015f));
+        ExplodingWolfDesc();
     }
 
     private static void CreateStanWolf()
@@ -45,41 +46,79 @@ public static class NamedWolves
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
         StanWolf.IsPaused = true;
+        StanWolf.Unit.IsInvulnerable = false;
+        BurntMeat.RegisterDeathTrigger();
         Utility.SimpleTimer(1.0f, () => StanNameTag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
 
-    public static void MarcoDiedAgainLmao()
+    public static void KillExplodingWolf()
     {
-        if (!MarcoWolf.Unit.Alive) return;
-        MarcoWolf.Unit.Kill();
-        MarcoWolf.OVERHEAD_EFFECT_PATH = "";
-        MarcoNameTag.SetText("", 0.015f);
-        Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, MarcoWolf.Unit, "origin");
-        MarcoRevive.Start(25.0f, false, () =>
+        try
         {
-            DNTNamedWolves.Remove(MarcoWolf);
-            MarcoWolf.Unit?.Dispose();
-            MarcoWolf.Unit = unit.Create(player.NeutralExtra, Constants.UNIT_CUSTOM_DOG, MarcoWolf.Unit.X, MarcoWolf.Unit.Y, 0.0f);
-            MarcoWolfDesc();
-        });
+            if (ExplodingWolf.IsReviving) return;
+            ExplodingWolf.Unit.Kill();
+            ExplodingWolf.IsReviving = true;
+            ExplodingWolf.OVERHEAD_EFFECT_PATH = "";
+            ExplodingWolfNameTag.SetText("", 0.015f);
+            Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, ExplodingWolf.Unit, "origin");
+            ExplodingWolfRevive.Start(25.0f, false, () =>
+            {
+                DNTNamedWolves.Remove(ExplodingWolf);
+                ExplodingWolf.IsReviving = false;
+                ExplodingWolf.Unit?.Dispose();
+                ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 360);
+                ExplodingWolfDesc();
+            });
+        }
+        catch
+        {
+            Logger.Warning("Error in KillExplodingWolf");
+        }
     }
 
-    private static void MarcoWolfDesc()
+    private static void ExplodingWolfDesc()
     {
-        Utility.MakeUnitLocust(MarcoWolf.Unit);
-        MarcoWolf.Unit.SetVertexColor(255, 255, 175);
-        MarcoWolf.Unit.Name = $"{Colors.COLOR_YELLOW}Marco|r";
-        MarcoWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
-        MarcoNameTag.SetText(MarcoWolf.Unit.Name, 0.015f);
-        DNTNamedWolves.Add(MarcoWolf);
+        try
+        {
+            Utility.MakeUnitLocust(ExplodingWolf.Unit);
+            var randomPlayer = GetRandomPlayerFromLobby();
+            SetRandomVertexColor(ExplodingWolf.Unit, randomPlayer.Id);
+            ExplodingWolf.Unit.Name = Utility.FormattedColorPlayerName(randomPlayer);
+            ExplodingWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
+            ExplodingWolfNameTag.SetText(ExplodingWolf.Unit.Name, 0.015f);
+            DNTNamedWolves.Add(ExplodingWolf);
+        }
+        catch
+        {
+            Logger.Warning("Error in ExplodingWolfDesc");
+        }
+    }
+
+    public static bool ExplodingWolfCollision(unit unit, Kitty k)
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (unit != ExplodingWolf.Unit) return false;
+        Utility.GiveGoldFloatingText(25, k.Unit);
+        KillExplodingWolf();
+        return true;
     }
 
     public static void ShowWolfNames(bool hidden = true)
     {
         if (DNTNamedWolves.Count == 0) return;
-        MarcoNameTag.SetVisibility(hidden);
+        ExplodingWolfNameTag.SetVisibility(hidden);
         StanNameTag.SetVisibility(hidden);
+    }
+
+    private static player GetRandomPlayerFromLobby()
+    {
+        return Globals.ALL_PLAYERS[GetRandomInt(0, Globals.ALL_PLAYERS.Count - 1)];
+    }
+
+    private static void SetRandomVertexColor(unit u, int playerID)
+    {
+        Colors.SetUnitToVertexColor(u, playerID);
     }
 
 }

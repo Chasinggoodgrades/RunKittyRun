@@ -12,13 +12,16 @@ public static class FinalSafezone
 
     private static void RegisterEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
         Trigger.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
+
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
             if (Gamemode.CurrentGameMode != "Standard") return;
+
+            Globals.ALL_KITTIES[player].CurrentStats.RoundFinished = true;
             NitroChallenges.CompletedNitro(unit);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);

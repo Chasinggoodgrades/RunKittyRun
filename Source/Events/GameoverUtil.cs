@@ -5,18 +5,18 @@ public static class GameoverUtil
 {
     public static void SetBestGameStats()
     {
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
+        foreach(var kitty in Globals.ALL_KITTIES)
         {
             switch (Difficulty.DifficultyValue)
             {
                 case (int)DifficultyLevel.Normal:
-                    SetNormalGameStats(kitty);
+                    SetNormalGameStats(kitty.Value);
                     break;
                 case (int)DifficultyLevel.Hard:
-                    SetHardGameStats(kitty);
+                    SetHardGameStats(kitty.Value);
                     break;
                 case (int)DifficultyLevel.Impossible:
-                    SetImpossibleGameStats(kitty);
+                    SetImpossibleGameStats(kitty.Value);
                     break;
             }
         }

@@ -52,6 +52,8 @@ public static class RelicUtil
         var item = Utility.UnitGetItem(unit, itemID);
         var itemAbility = item.GetAbility(abilityID);
         var unitAbility = unit.GetAbility(abilityID);
+        var itemSlot = Utility.GetSlotOfItem(unit, itemID);
+
         float unitCooldown = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0);
         float itemCooldown = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0);
 
@@ -59,17 +61,21 @@ public static class RelicUtil
         if(Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
         unit.AddItem(item);
+        unit.DropItem(item, itemSlot);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
     }
 
     public static void SetAbilityCooldown(unit unit, int itemID, int abilityID, float cooldown)
     {
         var item = Utility.UnitGetItem(unit, itemID);
+        var itemSlot = Utility.GetSlotOfItem(unit, itemID);
         var unitAbility = unit.GetAbility(abilityID);
         if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
         BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
         unit.AddItem(item);
+        unit.DropItem(item, itemSlot);
         var itemAbility = item.GetAbility(abilityID);
         BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
     }
+
 }

@@ -43,20 +43,28 @@ public class Howler : Affix
 
     private void Howl()
     {
-        Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
-        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG);
-        NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, filter);
-        var list = NearbyWolves.ToList();
-        foreach (var wolf in list)
+        try
         {
-            var wolfObject = Globals.ALL_WOLVES[wolf];
-            if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
-            wolfObject.StartWandering(true);
+            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+            if (Unit.IsPaused) return;
+            Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
+            NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filters.DogFilter);
+            var list = NearbyWolves.ToList();
+            foreach (var wolf in list)
+            {
+                if (NamedWolves.StanWolf.Unit == wolf) continue;
+                if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
+                if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
+                wolfObject.StartWandering(true);
+            }
+            NearbyWolves.Clear();
+            GC.RemoveList(ref list);
         }
-        NearbyWolves.Clear();
-        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
-        GC.RemoveList(ref list);
-        GC.RemoveFilterFunc(ref filter);
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in Howl: {e.Message}");
+            throw;
+        }
     }
 
     private float GetRandomHowlTime()

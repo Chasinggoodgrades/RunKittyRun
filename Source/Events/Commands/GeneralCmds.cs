@@ -16,6 +16,7 @@ public static class GeneralCmds
         {
             case "-commands":
             case "-help":
+            case "-?":
                 DisplayCommands(p);
                 break;
             case "-team":
@@ -26,6 +27,7 @@ public static class GeneralCmds
                 Globals.SaveSystem.Save(p);
                 break;
             case "-clear":
+            case "-clr":
             case "-c":
                 Utility.ClearScreen(p);
                 break;
@@ -74,6 +76,11 @@ public static class GeneralCmds
             case "&f":
                 CameraUtil.LockCamera(p);
                 break;
+            case "-fpc":
+            case "-firstperson":
+            case "-firstpersoncamera":
+                FirstPersonCameraManager.ToggleFirstPerson(p);
+                break;
             case "-reset":
                 CameraUtil.UnlockCamera(p);
                 FrameManager.InitalizeButtons();
@@ -110,6 +117,41 @@ public static class GeneralCmds
             case "-ohc":
                 CameraUtil.OverheadCamera(p, 280f);
                 break;
+            case "-komotocam":
+                CameraUtil.ToggleKomotoCam(p);
+                break;
+            case "-glow":
+                var glow = args.Length > 1 && (args[1] == "false" || args[1] == "off" || args[1] == "0") ? false : true;
+
+                // Changing base color with -red will break the teamglow. Thats why we need to reapply it
+                BlzShowUnitTeamGlow(kitty.Unit, true);
+                BlzShowUnitTeamGlow(kitty.Unit, glow);
+                break;
+            case "-reverse":
+            case "-mirror":
+                if (kitty.Slider.IsOnSlideTerrain())
+                {
+                    p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "You can't toggle mirror mode while sliding!");
+                    return;
+                }
+
+                kitty.Slider.ToggleMirror();
+                p.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (kitty.Slider.IsMirror() ? "On" : "Off"));
+                break;
+            case "-disco":
+                kitty.ToggleDisco();
+                break;
+            case "-animation":
+            case "-animate":
+            case "-an":
+                SetUnitAnimationByIndex(kitty.Unit, int.Parse(args[1]));
+                break;
+            case "-spincam":
+                float speed = args.Length > 1 ? float.Parse(args[1]) : 0;
+
+                kitty.ToggleSpinCam(speed);
+                p.DisplayTextTo(Colors.COLOR_GOLD + "SpinCam: " + (kitty.IsSpinCamActive() ? "On" : "Off"));
+                break;
             default:
                 p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Unknown command: " + Colors.COLOR_GOLD + args[0]);
                 break;
@@ -144,7 +186,7 @@ public static class GeneralCmds
             "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 
-        if(p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
+        if (p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
         return commandList;
     }
 

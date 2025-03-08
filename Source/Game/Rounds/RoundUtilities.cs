@@ -22,24 +22,26 @@ public static class RoundUtilities
 
     public static void MoveAllPlayersToStart()
     {
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            MovePlayerToStart(kitty.Player);
+            MovePlayerToStart(kitty.Value.Player);
         }
     }
 
+
     public static void RoundResetAll()
     {
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            kitty.Unit.Revive(RegionList.SpawnRegions[kitty.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Player.Id].Center.Y, false);
-            Globals.ALL_CIRCLES[kitty.Player].HideCircle();
-            kitty.Alive = true;
-            kitty.ProgressZone = 0;
-            kitty.Finished = false;
-            kitty.Unit.Mana = kitty.Unit.MaxMana;
-            kitty.CurrentStats.RoundSaves = 0;
-            kitty.CurrentStats.RoundDeaths = 0;
+            kitty.Value.Unit.Revive(RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y, false);
+            Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle();
+            kitty.Value.Alive = true;
+            kitty.Value.CurrentStats.RoundFinished = false;
+            kitty.Value.ProgressZone = 0;
+            kitty.Value.Finished = false;
+            kitty.Value.Unit.Mana = kitty.Value.Unit.MaxMana;
+            kitty.Value.CurrentStats.RoundSaves = 0;
+            kitty.Value.CurrentStats.RoundDeaths = 0;
         }
     }
 

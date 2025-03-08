@@ -184,24 +184,24 @@ public class Savecode
     /// <param name="player"></param>
     public void SetRewardValues(player player)
     {
-        var awardData = Globals.ALL_KITTIES[player].SaveData.GameAwards;
+        var awardData = Globals.ALL_KITTIES[player].SaveData.GameAwardsSorted;
         var roundstats = Globals.ALL_KITTIES[player].SaveData.RoundTimes;
         var kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats;
 
         foreach (var value in DecodeOldsave.decodeValues)
         {
             var decodedValue = Decode(value.Value);
-            var property = awardData.GetType().GetProperty(value.Key);
+            var propertyValue = RewardHelper.GetAwardNestedValue(awardData, value.Key);
             // Award Events
-            if (property != null && decodedValue == 1)
+            if (propertyValue != -1 && decodedValue == 1)
             {
-                if ((int)property.GetValue(awardData) == 0)
+                if (propertyValue == 0)
                 {
                     AwardManager.GiveReward(player, value.Key);
                     continue;
                 }
             }
-            property = roundstats.GetType().GetProperty(value.Key);
+            var property = roundstats.GetType().GetProperty(value.Key);
             // Round Times
             if (property != null)
             {

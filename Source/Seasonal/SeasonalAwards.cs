@@ -23,8 +23,8 @@ public static class SeasonalAwards
         var t = timer.Create();
         t.Start(1.0f, false, () =>
         {
-            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.SnowTrail2023), false);
-            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.SnowWings2023), false);
+            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Trails.SnowTrail2023), false);
+            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.SnowWings2023), false);
             GC.RemoveTimer(ref t);
         });
     }

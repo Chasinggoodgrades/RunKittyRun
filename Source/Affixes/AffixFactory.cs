@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes = new List<Affix>();
-    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth"};
+    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth", "Bomber"};
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -76,8 +76,10 @@ public static class AffixFactory
                 return new Blitzer(unit);
             case "Stealth":
                 return new Stealth(unit);
-/*            case "Vortex":
-                return new Vortex(unit);*/
+            case "Bomber":
+                return new Bomber(unit);
+            case "Vortex":
+                return new Vortex(unit);
             default:
                 if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
@@ -158,12 +160,12 @@ public static class AffixFactory
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 2) + Globals.ROUND * 6;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + Globals.ROUND * 8;
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;
         var interations = 0;
-        while(count < NUMBER_OF_AFFIXED_WOLVES && interations < 2000) // shit limit but beats crash
+        while (count < NUMBER_OF_AFFIXED_WOLVES && interations < 2000) // limit to prevent crash
         {
             foreach (var j in Enumerable.Range(0, LaneWeights.Length))
             {
@@ -172,24 +174,22 @@ public static class AffixFactory
                     if (affixedWolvesInLane[j] < MAX_AFFIXED_PER_LANE)
                     {
                         affixedWolvesInLane[j]++;
-                        var wolvesInLane = Globals.ALL_WOLVES.Values
-                            .Where(wolf => ShouldAffixWolves(wolf, j))
-                            .ToList();
 
-                        if (wolvesInLane.Any())
+                        // Use a single iteration to find eligible wolves and apply affix
+                        var eligibleWolves = Globals.ALL_WOLVES.Where(wolf => ShouldAffixWolves(wolf.Value, j));
+                        foreach (var wolf in eligibleWolves)
                         {
-                            var wolf = wolvesInLane[GetRandomInt(0, wolvesInLane.Count - 1)];
-                            var affix = ApplyRandomAffix(wolf, j);
-                            if(affix != null) count++;
+                            var affix = ApplyRandomAffix(wolf.Value, j);
+                            if (affix != null) count++;
+                            break; // Apply affix to the first eligible wolf and exit loop
                         }
-
-                        wolvesInLane.Clear();
                     }
                 }
                 interations += 1;
             }
         }
     }
+
 
     // Conditions for affixing wolves:
     // 1. Must be in the same lane

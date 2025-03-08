@@ -16,7 +16,7 @@ public static class RewardsFrame
     private static float FrameX = 0.4f;
     private static float FrameY = 0.35f;
     private static float FrameWidth = 0.30f;
-    private static float FrameHeight = 0.27f;
+    private static float FrameHeight = 0.28f;
     private static float Padding = 0.01f;
     private static float IconSize = 0.02f;
     private static int FrameCount = 0;
@@ -54,7 +54,7 @@ public static class RewardsFrame
     {
         var count = 0;
         var colCount = 0;
-        var rewardTypes = Enum.GetValues(typeof(RewardType)).Cast<RewardType>().OrderBy(rt => (int)rt).ToList();
+        var rewardTypes = Enum.GetValues(typeof(RewardType)).Cast<RewardType>().OrderBy(rt => (int)rt).ToList(); // sorts by enum, no desync possibilies here.
 
         foreach (var type in rewardTypes)
         {
@@ -167,9 +167,8 @@ public static class RewardsFrame
         foreach (var reward in RewardsManager.Rewards)
         {
             var stats = Globals.ALL_KITTIES[player].SaveData;
-            var property = stats.GameAwards.GetType().GetProperty(reward.Name);
-            var value = (int)property.GetValue(stats.GameAwards);
-            if (value == 0) continue;
+            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
+            if (value <= 0) continue;
 
             RewardHelp.AddReward(reward);
         }
@@ -223,6 +222,8 @@ public static class RewardsFrame
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
             Trigger.AddAction(() => RewardButtonActions(reward));
         }
+
+        GC.RemoveDictionary(ref count);
     }
 
     private static void RewardTooltip(framehandle parent, Reward reward)
@@ -249,9 +250,8 @@ public static class RewardsFrame
         var player = @event.Player;
         var frame = @event.Frame;
         var stats = Globals.ALL_KITTIES[player].SaveData;
-        var property = stats.GameAwards.GetType().GetProperty(reward.Name);
-        var value = (int)property.GetValue(stats.GameAwards);
-        if (value == 0) return; // Doesnt have the reward.
+        var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
+        if (value <= 0) return; // Doesnt have the reward , dont apply.
         reward.ApplyReward(player);
         if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
@@ -263,9 +263,8 @@ public static class RewardsFrame
         var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
         foreach(var reward in RewardIcons)
         {
-            var property = stats.GameAwards.GetType().GetProperty(reward.Value.Name);
-            var value = (int)property.GetValue(stats.GameAwards);
-            if (value == 0)
+            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.Value.TypeSorted, reward.Value.Name);
+            if (value <= 0) // Doesnt have reward
                 reward.Key.SetTexture(unavailablePath, 0, false);
             else
                 reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);

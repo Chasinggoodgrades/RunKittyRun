@@ -13,6 +13,7 @@ public class Kitty
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
+    public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public YellowLightning YellowLightning { get; set; }
     public int WindwalkID { get; set; } = 0;
     public player Player { get; }
@@ -25,6 +26,12 @@ public class Kitty
     public bool Finished { get; set; } = false;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
+    public Slider Slider { get; private set; }
+    public timer DiscoTimer { get; set; }
+    public float SpinCamSpeed { get; set; } = 0;
+    public timer SpinCamTimer { get; set; }
+    public bool WasSpinCamReset = false;
+    public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
     public Kitty(player player)
     {
@@ -33,6 +40,7 @@ public class Kitty
         SpawnEffect();
         CreateKitty();
         TimeProg = new KittyTime(this);
+        Slider = new Slider(this);
     }
 
     /// <summary>
@@ -68,15 +76,18 @@ public class Kitty
             CrystalOfFire.CrystalOfFireDeath(this);
             circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             circle.KittyDied(this);
-            SoundManager.PlayKittyDeathSound(Unit);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();
+
+            SoundManager.PlayKittyDeathSound(Unit);
             SoundManager.PlayFirstBloodSound();
             DeathStatUpdate();
+
             if (Gamemode.CurrentGameMode != "Standard") return;
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
+            this.Slider.PauseSlider();
         }
         catch (Exception e)
         {
@@ -91,18 +102,28 @@ public class Kitty
     /// </summary>
     public void ReviveKitty(Kitty savior = null)
     {
-        if (Unit.Alive) return;
-        var circle = Globals.ALL_CIRCLES[Player];
-        circle.HideCircle();
-        Alive = true;
-        Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
-        Unit.Mana = circle.Unit.Mana;
-        Utility.SelectUnitForPlayer(Player, Unit);
-        CameraUtil.RelockCamera(Player);
+        try
+        {
+            if (Unit.Alive) return;
+            var circle = Globals.ALL_CIRCLES[Player];
+            circle.HideCircle();
+            Alive = true;
+            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
+            Unit.Mana = circle.Unit.Mana;
+            Utility.SelectUnitForPlayer(Player, Unit);
+            CameraUtil.RelockCamera(Player);
+            this.Slider.ResumeSlider();
 
-        if (savior == null) return;
-        UpdateSaviorStats(savior);
-        MultiboardUtil.RefreshMultiboards();
+            if (savior == null) return;
+            UpdateSaviorStats(savior);
+            MultiboardUtil.RefreshMultiboards();
+        }
+        catch (Exception e)
+        {
+            if (Program.Debug) Console.WriteLine(e.Message);
+            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            throw;
+        }
     }
     private void InitData()
     {
@@ -156,7 +177,7 @@ public class Kitty
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
-        if (Gameover.WinGame) return; 
+        if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
     }
 
@@ -184,12 +205,12 @@ public class Kitty
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
         savior.CurrentStats.SaveStreak += 1;
-        if(savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
+        if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
         if (Gamemode.CurrentGameMode != "Standard") return;
         savior.SaveData.GameStats.Saves += 1;
         savior.SaveData.GameStats.SaveStreak += 1;
-        if(savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)
+        if (savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)
             savior.SaveData.GameStats.HighestSaveStreak = savior.SaveData.GameStats.SaveStreak;
         Challenges.PurpleLighting(savior);
         savior.YellowLightning.SaveIncrement();
@@ -202,4 +223,67 @@ public class Kitty
         Unit.HideAbility(trueSight, true);
     }
 
+    public void ToggleDisco()
+    {
+        if (DiscoTimer == null)
+        {
+            DiscoTimer = timer.Create();
+            DiscoTimer.Start(0.4f, true, DiscoActions);
+        }
+        else
+        {
+            DiscoTimer.Pause();
+            DiscoTimer = null;
+        }
+    }
+
+    private void DiscoActions()
+    {
+        SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
+        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
+    }
+
+    public void ToggleSpinCam(float speed)
+    {
+        this.SpinCamSpeed = speed / 360;
+        this.WasSpinCamReset = false;
+
+        if (this.SpinCamSpeed != 0)
+        {
+            if (SpinCamTimer == null)
+            {
+                SpinCamTimer = timer.Create();
+                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
+            }
+        }
+        else
+        {
+            SpinCamTimer?.Pause();
+            SpinCamTimer = null;
+            CameraUtil.UnlockCamera(Player);
+        }
+    }
+
+    public bool IsSpinCamActive()
+    {
+        return SpinCamTimer != null;
+    }
+
+    private void SpinCamActions()
+    {
+        if (!this.Slider.IsOnSlideTerrain() || !this.Alive)
+        {
+            if (!this.Alive && !this.WasSpinCamReset)
+            {
+                this.WasSpinCamReset = true;
+                this.SpinCamRotation = 0;
+                Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, 0, 0);
+            }
+
+            return;
+        }
+
+        SpinCamRotation = this.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed);
+        Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0);
+    }
 }

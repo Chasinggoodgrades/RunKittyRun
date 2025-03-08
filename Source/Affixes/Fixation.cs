@@ -18,7 +18,7 @@ public class Fixation : Affix
     private bool IsChasing = false;
     private effect TargetEffect;
 
-    public Fixation(Wolf unit) : base(unit) 
+    public Fixation(Wolf unit) : base(unit)
     {
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
@@ -68,14 +68,14 @@ public class Fixation : Affix
     private void RegisterEvents()
     {
         if (Type == 1) UnitsInRange = group.Create();
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
         InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;
             var Region = RegionList.WolfRegions[Unit.RegionIndex];
-            if(!Region.Contains(target.X, target.Y)) return;
+            if (!Region.Contains(target.X, target.Y)) return;
             if (target != Unit.Unit && !IsChasing)
             {
                 Target = target;
@@ -90,7 +90,8 @@ public class Fixation : Affix
         IsChasing = true;
         Unit.WanderTimer.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        ChaseTimer.Start(0.1f, true, () => {
+        ChaseTimer.Start(0.1f, true, () =>
+        {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
                 IsChasing = false;
@@ -107,8 +108,7 @@ public class Fixation : Affix
 
     private void GetClosestTarget()
     {
-        var filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY);
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, filter);
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filters.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
         var newTarget = GetClosestUnitInRange();
         if (newTarget != Target)
@@ -117,7 +117,6 @@ public class Fixation : Affix
             GC.RemoveEffect(ref TargetEffect);
             TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         }
-        GC.RemoveFilterFunc(ref filter);
     }
 
     private unit GetClosestUnitInRange()
@@ -129,7 +128,8 @@ public class Fixation : Affix
         // Determine closest unit in list
         var closestUnit = rangeList[0];
         var closestDistance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, closestUnit.X, closestUnit.Y);
-        if (closestDistance > 0) {
+        if (closestDistance > 0)
+        {
             foreach (var unit in rangeList)
             {
                 var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
@@ -166,4 +166,25 @@ public class Fixation : Affix
             SetUnitMoveSpeed(Unit.Unit, Math.Max(newSpeed, FIXATION_MS));
         }
     }
+
+    public static Fixation GetFixation(unit Unit)
+    {
+        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(a => a is Fixation);
+        return affix is Fixation fixation ? fixation : null;
+    }
+
+    public void PauseFixation(bool pause)
+    {
+        if (pause)
+        {
+            IsChasing = false;
+            ChaseTimer.Pause();
+            GC.RemoveEffect(ref TargetEffect);
+        }
+        else
+        {
+            ChaseTimer.Resume();
+        }
+    }
+
 }

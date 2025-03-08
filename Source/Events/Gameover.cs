@@ -61,8 +61,8 @@ public static class Gameover
     {
         if (Gamemode.CurrentGameMode != "Standard") return false;
         if (NoEnd) return false;
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
-            if (kitty.Alive) return false;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            if (kitty.Value.Alive) return false;
         LosingGame();
         return true;
     }
@@ -81,11 +81,11 @@ public static class Gameover
     /// <param name="win"></param>
     private static void GameStats(bool win)
     {
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
+        foreach(var kitty in Globals.ALL_KITTIES)
         {
-            IncrementGameStats(kitty);
-            if(win) IncrementWins(kitty);
-            IncrementWinStreak(kitty, win);
+            IncrementGameStats(kitty.Value);
+            if(win) IncrementWins(kitty.Value);
+            IncrementWinStreak(kitty.Value, win);
         }
         AwardManager.AwardGameStatRewards();
     }

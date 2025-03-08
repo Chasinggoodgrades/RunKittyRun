@@ -88,4 +88,18 @@ public static class GC
         s = null;
     }
 
+    public static void RemoveTimerDialog(ref timerdialog td)
+    {
+        if (td == null) return;
+        td.Dispose();
+        td = null;
+    }
+
+    public static void RemoveItem(ref item i)
+    {
+        if (i == null) return;
+        i.Dispose();
+        i = null;
+    } 
+
 }

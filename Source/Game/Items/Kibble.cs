@@ -2,7 +2,7 @@
 using WCSharp.Api;
 using System.Collections.Generic;
 using System;
-using System.Runtime.CompilerServices;
+
 public class Kibble
 {
     public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
@@ -18,6 +18,7 @@ public class Kibble
     private int JackPotIndex = 1;
     private triggeraction TrigActions;
     public item Item;
+
     public Kibble()
     {
         PickupTrigger ??= KibblePickupEvents();
@@ -28,12 +29,13 @@ public class Kibble
 
     public void Dispose()
     {
-        // kibble never "owned" 
         Item.Dispose();
         Item = null;
         PickupTrigger.RemoveAction(TrigActions);
         TrigActions = null;
     }
+
+    #region Kibble Initialization
 
     private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
 
@@ -46,7 +48,7 @@ public class Kibble
         Utility.CreateEffectAndDispose(StarfallEffect, x, y);
         return CreateItem(Type, x, y);
     }
-    
+
     private trigger KibblePickupEvents()
     {
         var trig = trigger.Create();
@@ -64,23 +66,29 @@ public class Kibble
         });
     }
 
+    #endregion
+
+    #region Kibble Pickup Logic
+
     private void KibblePickup()
     {
         try
         {
-            // either some gold, or xp... jack pot.. or a reward
             var unit = @event.Unit;
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
             effect effect = null;
             var randomChance = GetRandomReal(0, 100);
-            //if (randomChance <= 0.5) KibbleReward(kitty); // .5% Chance
-            if (randomChance <= 30) KibbleGoldReward(kitty); // 20% Chance
-            else if (randomChance <= 60) KibbleXP(kitty); // 20% Chance
-            else KibbleNothing(kitty); // 55% Chance
+
+            if (randomChance <= 30) KibbleGoldReward(kitty);
+            else if (randomChance <= 60) KibbleXP(kitty);
+            else KibbleNothing(kitty);
 
             if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
             GC.RemoveEffect(ref effect);
+
+            KibbleEvent.StartKibbleEvent(randomChance);
+            KibbleEvent.CollectEventKibble();
 
             IncrementKibble(player);
         }
@@ -92,16 +100,12 @@ public class Kibble
         }
     }
 
-    private void KibbleReward(Kitty kitty)
-    {
-        //Console.WriteLine("Kibble Reward Later..");
-    }
-
     private void KibbleGoldReward(Kitty kitty)
     {
         var jackPotChance = GetRandomInt(0, 100);
         var goldAmount = 0;
-        if (jackPotChance <= 3) {
+        if (jackPotChance <= 3)
+        {
             JackpotEffect(kitty);
             return;
         }
@@ -126,8 +130,6 @@ public class Kibble
     {
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
-
-        // Use PositionWithPolarOffset to calculate new point
         var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, JackPotIndex * 36.0f);
         var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, JackPotIndex * 36.0f);
 
@@ -137,10 +139,7 @@ public class Kibble
 
         if (JackPotIndex >= 20)
         {
-            Dispose();
             var goldAmount = GetRandomInt(JackpotMin, JackpotMax);
-
-            // Roll for super jackpot (1/10 chance)
             var isSuperJackpot = GetRandomInt(1, 10) == 1;
             if (isSuperJackpot) goldAmount *= 10;
 
@@ -150,13 +149,17 @@ public class Kibble
 
             Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
+            if (isSuperJackpot) kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
+            else kitty.SaveData.KibbleCurrency.Jackpots += 1;
+            Dispose();
         }
         else
-        {
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
-        }
     }
 
+    #endregion
+
+    #region Utility Methods
 
     private static void IncrementKibble(player kibblePicker)
     {
@@ -165,33 +168,27 @@ public class Kibble
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
+
+        Globals.ALL_KITTIES[kibblePicker].SaveData.KibbleCurrency.Collected += 1;
     }
 
     private static List<int> KibbleList()
     {
-        if (SeasonalManager.Season == HolidaySeasons.Christmas)
+        return SeasonalManager.Season switch
         {
-            return new List<int>
+            HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
+            HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
+            _ => new List<int>
             {
-                Constants.ITEM_PRESENT
-            };
-        }
-        if (SeasonalManager.Season == HolidaySeasons.Valentines)
-        {
-            return new List<int>
-            {
-                Constants.ITEM_HEART
-            };
-        }
-        return new List<int>
-        {
-            Constants.ITEM_KIBBLE,
-            Constants.ITEM_KIBBLE_TEAL,
-            Constants.ITEM_KIBBLE_GREEN,
-            Constants.ITEM_KIBBLE_PURPLE,
-            Constants.ITEM_KIBBLE_RED,
-            Constants.ITEM_KIBBLE_YELLOW
+                Constants.ITEM_KIBBLE,
+                Constants.ITEM_KIBBLE_TEAL,
+                Constants.ITEM_KIBBLE_GREEN,
+                Constants.ITEM_KIBBLE_PURPLE,
+                Constants.ITEM_KIBBLE_RED,
+                Constants.ITEM_KIBBLE_YELLOW
+            }
         };
     }
-}
 
+    #endregion
+}

@@ -1,4 +1,5 @@
 ﻿using WCSharp.Api;
+using System;
 using static WCSharp.Api.Common;
 
 public static class Windwalk
@@ -22,19 +23,26 @@ public static class Windwalk
 
     private static void ApplyWindwalkEffect()
     {
-        var caster = @event.Unit;
-        var player = caster.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
-        var duration = 3.0f + (2.0f * abilityLevel);
-        var wwID = kitty.WindwalkID;
-        AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
-        if (wwID != 0)
+        try
         {
-            var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
-            var visual = reward.ModelPath;
-            var effect = caster.AddSpecialEffect(visual, "origin");
-            Utility.SimpleTimer(duration, () => effect.Dispose());
+            var caster = @event.Unit;
+            var player = caster.Owner;
+            var kitty = Globals.ALL_KITTIES[player];
+            var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
+            var duration = 3.0f + (2.0f * abilityLevel);
+            var wwID = kitty.WindwalkID;
+            AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
+            if (wwID != 0)
+            {
+                var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
+                var visual = reward.ModelPath;
+                var effect = caster.AddSpecialEffect(visual, "origin");
+                Utility.SimpleTimer(duration, () => effect.Dispose());
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning(e.Message);
         }
     }
 }

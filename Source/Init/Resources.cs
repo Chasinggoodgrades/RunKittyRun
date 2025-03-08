@@ -21,8 +21,8 @@
         EndRoundBonusGold = 150 + (50 * Globals.ROUND);
         foreach(var player in Globals.ALL_PLAYERS)
             player.Gold += EndRoundBonusGold;
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            kitty.Unit.Experience += EndRoundBonusXP;
+        foreach(var kitty in Globals.ALL_KITTIES)
+            kitty.Value.Unit.Experience += EndRoundBonusXP;
     }
 
     public static void StartingItems(Kitty kitty)

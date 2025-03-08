@@ -70,8 +70,8 @@ public class KittyTime
     private void SetTotalTime()
     {
         TotalTime = 0.0f;
-        foreach(var time in RoundTime.Values)
-            TotalTime += time;
+        foreach(var time in RoundTime)
+            TotalTime += time.Value;
     }
     #endregion
 
@@ -92,8 +92,8 @@ public class KittyTime
     public float GetOverallProgress()
     {
         float overallProgress = 0.0f;
-        foreach(var progress in RoundProgress.Values)
-            overallProgress += progress;
+        foreach(var progress in RoundProgress)
+            overallProgress += progress.Value;
         return overallProgress / RoundProgress.Count;
     }
     #endregion

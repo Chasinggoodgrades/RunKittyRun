@@ -86,15 +86,21 @@ public class Reward
 
     private void SetEffect(player player)
     {
-        // Special handle case.
-        if (SetSkin(player)) return;
-        if (SetWindwalk(player)) return;
+        try
+        {
+            if (SetSkin(player)) return;
+            if (SetWindwalk(player)) return;
 
-        var kitty = Globals.ALL_KITTIES[player].Unit;
-        var effectInstance = effect.Create(ModelPath, kitty, OriginPoint);
+            var kitty = Globals.ALL_KITTIES[player].Unit;
+            var effectInstance = effect.Create(ModelPath, kitty, OriginPoint);
 
-        DestroyCurrentEffect(player);
-        ApplyEffect(player, effectInstance);
+            DestroyCurrentEffect(player);
+            ApplyEffect(player, effectInstance);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning(e.Message);
+        }
     }
 
     private void ApplyEffect(player player, effect effectInstance = null)

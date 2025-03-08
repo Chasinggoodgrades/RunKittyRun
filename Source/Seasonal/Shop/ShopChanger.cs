@@ -41,10 +41,11 @@ public static class ShopChanger
     {
         var tempGroup = group.Create();
         tempGroup.EnumUnitsInRect(Globals.WORLD_BOUNDS, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY_VENDOR));
-        foreach(var vendor in tempGroup.ToList())
+        var tempList = tempGroup.ToList();
+        foreach (var vendor in tempList)
             vendor.Skin = skinType;
-        tempGroup.Dispose();
-        tempGroup = null;
+        GC.RemoveList(ref tempList);
+        GC.RemoveGroup(ref tempGroup);
     }
 
 }

@@ -13,6 +13,7 @@ public static class Globals
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED = GetRandomInt(1, 900000);
+    public static group TempGroup = group.Create();
     public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
@@ -32,7 +33,6 @@ public static class Globals
     public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE { get; set; } = new Dictionary<player, int>();
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
     public static SaveManager SaveSystem;
-    public static GameAwardsData GAME_AWARDS = new GameAwardsData();
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
@@ -44,12 +44,12 @@ public static class Globals
     public static Dictionary<player, float> PLAYER_PROGRESS;
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
     {
-        // Round                         // Lane ,  // # Wolves
-        { 1, new Dictionary<int, int> { { 0, 20 }, { 1, 20 }, { 2, 20 }, { 3, 20 }, { 4, 14 }, { 5, 13 }, { 6, 13 }, { 7, 13 }, { 8, 10 }, { 9, 10 }, { 10, 10 }, { 11, 6 }, { 12, 6 }, { 13, 4 }, { 14, 4 }, { 15, 1 }, { 16, 1 } } },
-        { 2, new Dictionary<int, int> { { 0, 28 }, { 1, 28 }, { 2, 28 }, { 3, 28 }, { 4, 19 }, { 5, 19 }, { 6, 18 }, { 7, 17 }, { 8, 13 }, { 9, 13 }, { 10, 12 }, { 11, 8 }, { 12, 8 }, { 13, 6 }, { 14, 5 }, { 15, 2 }, { 16, 2 } } },
-        { 3, new Dictionary<int, int> { { 0, 34 }, { 1, 34 }, { 2, 33 }, { 3, 33 }, { 4, 24 }, { 5, 23 }, { 6, 21 }, { 7, 20 }, { 8, 15 }, { 9, 15 }, { 10, 14 }, { 11, 10 }, { 12, 10 }, { 13, 7 }, { 14, 6 }, { 15, 3 }, { 16, 3 } } },
-        { 4, new Dictionary<int, int> { { 0, 40 }, { 1, 40 }, { 2, 38 }, { 3, 38 }, { 4, 28 }, { 5, 27 }, { 6, 24 }, { 7, 23 }, { 8, 17 }, { 9, 17 }, { 10, 16 }, { 11, 12 }, { 12, 12 }, { 13, 8 }, { 14, 7 }, { 15, 4 }, { 16, 4 } } },
-        { 5, new Dictionary<int, int> { { 0, 46 }, { 1, 46 }, { 2, 44 }, { 3, 44 }, { 4, 32 }, { 5, 31 }, { 6, 27 }, { 7, 26 }, { 8, 19 }, { 9, 19 }, { 10, 18 }, { 11, 14 }, { 12, 14 }, { 13, 9 }, { 14, 8 }, { 15, 5 }, { 16, 5 } } }
+        // Round                         // Lane ,  // # Wolves (10% for first 6 lanes, 5% for others)
+        { 1, new Dictionary<int, int> { { 0, 24 }, { 1, 24 }, { 2, 24 }, { 3, 24 }, { 4, 16 }, { 5, 15 }, { 6, 15 }, { 7, 14 }, { 8, 11 }, { 9, 11 }, { 10, 11 }, { 11, 7 }, { 12, 7 }, { 13, 5 }, { 14, 5 }, { 15, 1 }, { 16, 1 } } },
+        { 2, new Dictionary<int, int> { { 0, 32 }, { 1, 32 }, { 2, 32 }, { 3, 32 }, { 4, 22 }, { 5, 21 }, { 6, 19 }, { 7, 18 }, { 8, 14 }, { 9, 14 }, { 10, 13 }, { 11, 9 }, { 12, 9 }, { 13, 7 }, { 14, 6 }, { 15, 3 }, { 16, 3 } } },
+        { 3, new Dictionary<int, int> { { 0, 37 }, { 1, 37 }, { 2, 36 }, { 3, 36 }, { 4, 26 }, { 5, 25 }, { 6, 22 }, { 7, 21 }, { 8, 16 }, { 9, 16 }, { 10, 15 }, { 11, 11 }, { 12, 11 }, { 13, 8 }, { 14, 7 }, { 15, 3 }, { 16, 3 } } },
+        { 4, new Dictionary<int, int> { { 0, 46 }, { 1, 46 }, { 2, 46 }, { 3, 44 }, { 4, 31 }, { 5, 30 }, { 6, 25 }, { 7, 24 }, { 8, 18 }, { 9, 18 }, { 10, 17 }, { 11, 13 }, { 12, 13 }, { 13, 9 }, { 14, 8 }, { 15, 4 }, { 16, 4 } } },
+        { 5, new Dictionary<int, int> { { 0, 54 }, { 1, 54 }, { 2, 54 }, { 3, 54 }, { 4, 35 }, { 5, 34 }, { 6, 28 }, { 7, 27 }, { 8, 20 }, { 9, 20 }, { 10, 19 }, { 11, 15 }, { 12, 15 }, { 13, 10 }, { 14, 9 }, { 15, 5 }, { 16, 5 } } }
     };
 
     /// <summary>

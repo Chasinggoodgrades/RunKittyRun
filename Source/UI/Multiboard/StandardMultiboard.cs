@@ -29,7 +29,7 @@ public static class StandardMultiboard
         t.Start(1.0f, true, () =>
         {
             if (!Difficulty.IsDifficultyChosen) return;
-            CreateMultiboards();
+            MakeMultiboard();
             RegisterTriggers();
             GC.RemoveTimer(ref t);
         });
@@ -48,7 +48,7 @@ public static class StandardMultiboard
         ESCTrigger.AddAction(ESCPressed);
     }
 
-    private static void CreateMultiboards()
+    private static void MakeMultiboard()
     {
         OverallGamesStatsMultiboard();
         BestTimesMultiboard();
@@ -148,7 +148,7 @@ public static class StandardMultiboard
             foreach (var player in players)
             {
                 var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
-                var playerColor = Colors.GetPlayerColor(player.Id + 1);
+                var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
                 var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
                 var totalSaves = currentStats.TotalSaves;
@@ -191,17 +191,28 @@ public static class StandardMultiboard
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        // Was converting to dict, but seems dict caused a lot of overhead. Switching to list helped a little.
-        var sortedPlayers = Globals.ALL_KITTIES
-            .OrderByDescending(kvp => kvp.Value.SaveData.GameStats.Saves - kvp.Value.SaveData.GameStats.Deaths)
-            .ThenBy(kvp => kvp.Key.Id)
-            .ToList();
+        // Use an array to hold keys for sorting
+        var players = Globals.ALL_KITTIES.Keys.ToArray();
 
-        foreach (var kvp in sortedPlayers)
+        // Sort the array of keys based on custom criteria
+        Array.Sort(players, (p1, p2) =>
         {
-            var player = kvp.Key;
-            var saveData = kvp.Value.SaveData;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var stats1 = Globals.ALL_KITTIES[p1].SaveData.GameStats;
+            var stats2 = Globals.ALL_KITTIES[p2].SaveData.GameStats;
+            var score1 = stats1.Saves - stats1.Deaths;
+            var score2 = stats2.Saves - stats2.Deaths;
+
+            int compareScore = score2.CompareTo(score1);
+            if (compareScore != 0)
+                return compareScore;
+
+            return p1.Id.CompareTo(p2.Id);
+        });
+
+        foreach (var player in players)
+        {
+            var saveData = Globals.ALL_KITTIES[player].SaveData;
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var allSaves = saveData.GameStats.Saves;
@@ -230,10 +241,8 @@ public static class StandardMultiboard
 
             rowIndex++;
         }
-
-        sortedPlayers.Clear();
-        sortedPlayers = null;
     }
+
 
 
     private static void BestTimesStats()
@@ -245,7 +254,7 @@ public static class StandardMultiboard
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var roundTimes = GetGameRoundTime(saveData);
 

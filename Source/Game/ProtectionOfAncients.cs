@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using Source;
-using Source.Init;
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public static class ProtectionOfAncients
 {
-    private static trigger Trigger;
-    private static trigger LevelUpTrigger;
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
     private const string APPLY_EFFECT = "war3mapImported\\Divine Edict.mdx";
     public const float EFFECT_DELAY = 3.0f;
     private const float EFFECT_RADIUS = 150.0f;
     private const float EFFECT_RADIUS_INCREASE = 50.0f;
+    private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
+    private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+
+    private static trigger Trigger;
+    private static trigger LevelUpTrigger;
+
     private static int UPGRADE_LEVEL_2_REQUIREMENT = 9;
     private static int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+
     private static float INVULNERABLE_DURATION = 1.0f;
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
-    private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
-    private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+
 
     public static void Initialize()
     {
@@ -50,6 +53,8 @@ public static class ProtectionOfAncients
     {
         var player = unit.Owner;
         var heroLevel = unit.HeroLevel;
+
+        if (unit.UnitType != Constants.UNIT_KITTY) return 0;
 
         // Return early if the hero level is below 6
         if (heroLevel < 6) return 0;
@@ -86,8 +91,7 @@ public static class ProtectionOfAncients
     private static void RegisterUpgradeLevelEvents()
     {
         LevelUpTrigger = trigger.Create();
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            LevelUpTrigger.RegisterUnitEvent(kitty.Unit, unitevent.HeroLevel, null);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
         LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
     }

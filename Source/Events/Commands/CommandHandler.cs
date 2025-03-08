@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+using System;
 
 
 public static class CommandHandler
@@ -8,32 +9,51 @@ public static class CommandHandler
 
     public static void Initialize()
     {
-
-        for (int i = 0; i < GetBJMaxPlayers(); i++)
+        try
         {
-            if (Player(i).SlotState != playerslotstate.Playing) continue;
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "-", false);
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+            for (int i = 0; i < GetBJMaxPlayers(); i++)
+            {
+                if (Player(i).SlotState != playerslotstate.Playing) continue;
+                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "-", false);
+                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+            }
+            TriggerAddAction(DebugCmdTrigger, HandleCommand);
         }
-        TriggerAddAction(DebugCmdTrigger, HandleCommand);
+        catch (Exception e)
+        {
+            Logger.Warning(e.Message);
+            Logger.Warning("Command Handler Error");
+            throw;
+        }
     }
 
     private static void HandleCommand()
     {
-        var player = @event.Player;
-        var command = @event.PlayerChatString.ToLower();
+        try
+        {
+            var player = @event.Player;
+            var chatString = @event.PlayerChatString;
+            var command = chatString.ToLower();
 
-        if (command.StartsWith("-t ") || command == "-s")
-        {
-            GamemodeCmd.Handle(player, command);
+            if (command.StartsWith("-t ") || command == "-s")
+            {
+                GamemodeCmd.Handle(player, command);
+            }
+            else if (command.StartsWith("?") && Utility.IsDeveloper(player))
+            {
+                if (command.ToLower().StartsWith("?exec")) ExecuteLua.LuaCode(player, chatString);
+                else DebugCmd.Handle(player, command);
+            }
+            else if (command.StartsWith("-"))
+            {
+                GeneralCmds.Handle(player, command);
+            }
         }
-        else if (command.StartsWith("?") && Utility.IsDeveloper(player))
+        catch (Exception e)
         {
-            DebugCmd.Handle(player, command);
-        }
-        else if (command.StartsWith("-"))
-        {
-            GeneralCmds.Handle(player, command);
+            Logger.Warning(e.Message);
+            Logger.Warning("Command Error");
+            throw;
         }
     }
 }

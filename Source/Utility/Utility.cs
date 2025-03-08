@@ -108,14 +108,22 @@ public static class Utility
 
     public static bool IsDeveloper(player p)
     {
-        foreach (var player in Globals.VIPLIST)
+        try
         {
-            if (p.Name == Base64.FromBase64(player))
+            foreach (var player in Globals.VIPLIST)
             {
-                return true;
+                if (p.Name == Base64.FromBase64(player))
+                {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Logger.Warning(ex.StackTrace);
+            return false;
+        }
     }
 
     /// <summary>
@@ -125,8 +133,8 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var t = CreateTimer();
-        TimerStart(t, duration, false, () =>
+        var t = timer.Create();
+        t.Start(duration, false, () =>
         {
             action();
             t.Dispose();
@@ -184,6 +192,22 @@ public static class Utility
     }
 
     /// <summary>
+    /// Returns the slot of the item if the unit has it, otherwise -1.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
+    public static int GetSlotOfItem(unit u, int itemId)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
+                return i;
+        }
+        return -1;
+    }
+
+    /// <summary>
     /// If the unit has the item, it'll be deleted.
     /// </summary>
     /// <param name="u"></param>
@@ -210,6 +234,7 @@ public static class Utility
         var item = CreateItem(itemId, 0, 0);
         var iconPath = item.Icon;
         item.Dispose();
+        item = null;
         return iconPath;
     }
 
@@ -223,7 +248,7 @@ public static class Utility
     /// <param name="red"></param>
     /// <param name="green"></param>
     /// <param name="blue"></param>
-    public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
+    public static void CreateSimpleTextTag(string text, float duration, unit u, float height = 0.015f, int red = 255, int green = 255, int blue = 255)
     {
         var tt = texttag.Create();
         tt.SetText(text, height);
@@ -353,6 +378,13 @@ public static class Utility
         FloatingNameTag.PlayerNameTags[player].Dispose();
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
+    }
+
+    public static string FormattedColorPlayerName(player p)
+    {
+        // removes everything after '#' in the player name
+        var name = p.Name.Split('#')[0];
+        return $"{Colors.ColorString(name, p.Id+1)}";
     }
 
     public static filterfunc CreateFilterFunc(Func<bool> func)

@@ -32,8 +32,7 @@ public static class FandF
 
     private static void AppendCollectionsUnit()
     {
-        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, 
-            Filter( () => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
     }
 
     private static trigger RegisterCollection()
@@ -58,8 +57,7 @@ public static class FandF
     private static trigger RegisterTurnIn()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, 
-            Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
         trig.AddAction(TurnInActions);
         return trig;
     }
@@ -86,7 +84,7 @@ public static class FandF
         if (BloodVialItems(u))
         {
             RemoveQuestItems(u);
-            AwardManager.GiveReward(u.Owner, nameof(Globals.GAME_AWARDS.WWBlood));
+            AwardManager.GiveReward(u.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlood));
         }
         else u.Owner.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:| r |cffffff00Ah, splendid! You've recovered the sample. Your prowess is truly remarkable. Evidently, the potential within this sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r");

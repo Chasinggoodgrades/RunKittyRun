@@ -6,13 +6,14 @@ using static WCSharp.Api.Common;
 
 public class Safezone
 {
-    public region Region{ get; set; }
+    public region Region { get; set; }
     private trigger Trigger { get; set; }
     public int ID { get; set; }
     public rect Rect_ { get; set; }
     public List<player> AwardedPlayers { get; set; }
 
-    public Safezone(int id, region region) { 
+    public Safezone(int id, region region)
+    {
         ID = id;
         Region = region;
         Trigger = trigger.Create();
@@ -35,7 +36,7 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
         Trigger.AddAction(EnterSafezoneActions);
     }
 
@@ -45,6 +46,7 @@ public class Safezone
         var player = unit.Owner;
         SafezoneAdditions(unit);
         Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
+        WolfLaneHider.LanesHider();
         if (AwardedPlayers.Contains(player) || ID == 0) return;
         Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
         unit.Experience += Resources.SafezoneExperience;
@@ -60,6 +62,8 @@ public class Safezone
         var player = Unit.Owner;
 
         if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID) return;
+
+        CameraUtil.UpdateKomotoCam(player, ID);
 
         if (Gamemode.CurrentGameMode != "Standard") return;
 

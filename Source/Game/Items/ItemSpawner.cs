@@ -10,6 +10,7 @@ public static class ItemSpawner
     private static List<int> SpawnableItems;
     private static List<item> TrackItems;
     private static List<Kibble> TrackKibbles;
+    private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS = 15;
 
@@ -25,7 +26,7 @@ public static class ItemSpawner
 
     private static void RegisterEvent()
     {
-        PeriodicEvents.AddPeriodicEvent(SpawnItems(), ITEM_SPAWN_INTERVAL);
+        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, () => SpawnItems());
     }
 
     private static Func<bool> SpawnItems()
@@ -67,6 +68,7 @@ public static class ItemSpawner
     private static void SpawnKibble()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (KibbleEvent.IsEventActive()) return;
         var kibble = new Kibble();
         TrackKibbles.Add(kibble);
     }

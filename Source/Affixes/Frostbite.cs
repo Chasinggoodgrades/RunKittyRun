@@ -46,8 +46,8 @@ public class Frostbite : Affix
 
     private void RemoveAllEffects()
     {
-        foreach (var effect in Effects.Values)
-            effect.Dispose();
+        foreach (var effect in Effects)
+            effect.Value.Dispose();
         foreach (var target in Frostbitten.Keys)
             target.BaseMovementSpeed = Frostbitten[target];
     }
@@ -56,7 +56,7 @@ public class Frostbite : Affix
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
         PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filter(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY));
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
         InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;

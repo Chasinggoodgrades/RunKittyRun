@@ -140,7 +140,7 @@ public static class UnitWithinRange
         unitRangeUnits.Remove(trigId);
         udg_WithinRangeHash.Remove(trigId);
         // Destroy the trigger
-        DestroyTrigger(trig);
+        GC.RemoveTrigger(ref trig);
     }
 
     public static bool RegisterUnitWithinRangeEvent(unit u, float range, Func<bool> filter, float eventValue)

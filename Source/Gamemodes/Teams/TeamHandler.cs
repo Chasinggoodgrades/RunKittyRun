@@ -47,7 +47,7 @@ public static class TeamHandler
         var random = Globals.RANDOM_GEN;
         List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
 
-        shuffled = shuffled.OrderBy(x => random.Next()).ToList();
+        shuffled = shuffled.OrderBy(x => random.Next()).ToList(); // seeded random shuffle, no desyncs
         var teamNumber = 1;
 
         try
@@ -62,11 +62,11 @@ public static class TeamHandler
                 bool addedToExistingTeam = false;
 
                 // Attempt to add player to an existing team
-                foreach (var team in Globals.ALL_TEAMS.Values)
+                foreach (var team in Globals.ALL_TEAMS)
                 {
-                    if (team.Teammembers.Count < Gamemode.PlayersPerTeam)
+                    if (team.Value.Teammembers.Count < Gamemode.PlayersPerTeam)
                     {
-                        team.AddMember(player);
+                        team.Value.AddMember(player);
                         addedToExistingTeam = true;
                         break;
                     }

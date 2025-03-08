@@ -13,7 +13,7 @@ public static class Quests
         CreateHowToPlayQuest();
         CreateCommandsQuest();
         CreateContributorsQuest();
-        CreateLeaderboardsQuest();
+        WebsiteQuest();
     }
 
     private static void CreateCommandsQuest()
@@ -36,10 +36,11 @@ public static class Quests
         ContributorsQuest.SetDescription($"{Colors.COLOR_YELLOW}Special thank you to each of the previous developers and clans such as F0LK, WaR, RD, and many more for their inspiration for this map.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Also a huge thank you to all of the previous developers of those versions, you've made a great difference.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Contributors: |r{Colors.COLOR_GREEN}Aches, Leyenda, Geek. Stan, Yoshimaru|r\n\n" +
-            $"{Colors.COLOR_YELLOW}Several assets within the map are from Hiveworkshop, if your asset is within this map ; Thank you! If you'd like to be specially named, please let me know!|r");
+            $"{Colors.COLOR_YELLOW}Several assets within the map are from Hiveworkshop, if your asset is within this map ; Thank you! If you'd like to be specially named, please let me know!|r\n\n" +
+            $"{Colors.COLOR_YELLOW}Huge thank you to both Stan & Maxiglider for use of their magical slide code!|r");
     }
 
-    private static void CreateLeaderboardsQuest()
+    private static void WebsiteQuest()
     {
         LeaderboardsQuest.SetTitle("Leaderboards");
         LeaderboardsQuest.SetIcon("war3mapImported\\DiscordIcon.dds");
