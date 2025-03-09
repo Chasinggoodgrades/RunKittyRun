@@ -1,8 +1,5 @@
 ﻿using Source.Init;
 using System;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Sync;
 using static WCSharp.Api.Common;
 
 namespace Source

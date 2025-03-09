@@ -94,8 +94,7 @@ public static class FandF
     {
         if (!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
         if (!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
-        if (!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
-        return Utility.UnitHasItem(u, BloodVial);
+        return Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) && Utility.UnitHasItem(u, BloodVial);
     }
 
     private static void RemoveQuestItems(unit u)

@@ -113,14 +113,13 @@ public static class GamemodeCmd
 
         var mode = parts[2];
         int teamSize = Globals.DEFAULT_TEAM_SIZE;
-        int parsedTeamSize;
         if (parts.Length == 4 && !int.TryParse(parts[3], out _))
         {
             _ = Globals.MAX_TEAM_SIZE.ToString();
             player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
             return;
         }
-        else if (parts.Length == 4 && int.TryParse(parts[3], out parsedTeamSize))
+        else if (parts.Length == 4 && int.TryParse(parts[3], out int parsedTeamSize))
         {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0)
             {

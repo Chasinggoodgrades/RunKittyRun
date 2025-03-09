@@ -48,7 +48,7 @@ public class ChronoSphere : Relic
             Utility.SimpleTimer(0.1f, () => RotatingSlowAura());
             RotatingLocationCapture();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             //error tied to location
         }

@@ -69,13 +69,9 @@ public static class PropertyEncoder
                 AppendProperties(value, jsonString);
                 _ = jsonString.Append("}");
             }
-            else if (value is string)
-            {
-                _ = jsonString.Append($"\"{value}\"");
-            }
             else
             {
-                _ = jsonString.Append($"{value}");
+                _ = value is string ? jsonString.Append($"\"{value}\"") : jsonString.Append($"{value}");
             }
         }
     }

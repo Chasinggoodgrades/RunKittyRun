@@ -8,8 +8,7 @@ public static class Gameover
     public static bool NoEnd { get; set; } = false;
     public static bool GameOver()
     {
-        if (WinningGame()) return true;
-        return LosingGameCheck();
+        return WinningGame() || LosingGameCheck();
     }
 
     private static bool WinningGame()

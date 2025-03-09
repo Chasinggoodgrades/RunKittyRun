@@ -125,7 +125,7 @@ public static class GeneralCmds
                 CameraUtil.ToggleKomotoCam(p);
                 break;
             case "-glow":
-                var glow = args.Length <= 1 || args[1] != "false" && args[1] != "off" && args[1] != "0";
+                var glow = args.Length <= 1 || (args[1] != "false" && args[1] != "off" && args[1] != "0");
 
                 // Changing base color with -red will break the teamglow. Thats why we need to reapply it
                 BlzShowUnitTeamGlow(kitty.Unit, true);

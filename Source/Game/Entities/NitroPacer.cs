@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Data;
 
 public static class NitroPacer
