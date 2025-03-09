@@ -207,7 +207,6 @@ public class AIController
         return (centerX, centerY);
     }
 
-    // Computes a composite dodge position based on all wolves in range.
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, (float X, float Y) forwardDirection)
     {
         float compositeX = 0f;
@@ -220,9 +219,9 @@ public class AIController
             float dist = (float)Math.Sqrt((dx * dx) + (dy * dy));
             if (dist > 0)
             {
-                // Weight by the inverse of distance so that nearer wolves contribute more
+                // Weight by the inverse of distance so that nearer wolves contribute more.
                 float weight = 1f / dist;
-                // Sum the normalized direction away from each wolf, scaled by weight
+                // Sum the normalized direction away from each wolf, scaled by weight.
                 compositeX += (dx / dist) * weight;
                 compositeY += (dy / dist) * weight;
                 count++;
@@ -236,7 +235,7 @@ public class AIController
                     kitty.Unit.Y + (forwardDirection.Y * DODGE_RADIUS));
         }
 
-        // Normalize the dodge direction vector.
+        // Normalize the composite dodge vector.
         float dodgeMagnitude = (float)Math.Sqrt((compositeX * compositeX) + (compositeY * compositeY));
         if (dodgeMagnitude == 0)
         {
@@ -248,7 +247,7 @@ public class AIController
         compositeX /= dodgeMagnitude;
         compositeY /= dodgeMagnitude;
 
-        // Ensure the forwardDirection is normalized.
+        // Normalize the forward direction.
         float forwardMagnitude = (float)Math.Sqrt((forwardDirection.X * forwardDirection.X) + (forwardDirection.Y * forwardDirection.Y));
         if (forwardMagnitude == 0)
         {
@@ -257,26 +256,45 @@ public class AIController
         }
         var normForward = (X: forwardDirection.X / forwardMagnitude, Y: forwardDirection.Y / forwardMagnitude);
 
-        // Blend the dodge vector and the forward direction.
-        float dodgeWeight = 0.7f;
-        float forwardWeight = 0.3f;
-        float combinedX = (dodgeWeight * compositeX) + (forwardWeight * normForward.X);
-        float combinedY = (dodgeWeight * compositeY) + (forwardWeight * normForward.Y);
-
-        // Normalize the combined direction.
-        float combinedMagnitude = (float)Math.Sqrt((combinedX * combinedX) + (combinedY * combinedY));
-        if (combinedMagnitude == 0)
+        // Check candidate angles: -90, -45, 0, 45, and 90 degrees.
+        float[] angles = { -90f, -45f, 0f, 45f, 90f };
+        (float X, float Y)? bestCandidate = null;
+        float bestDot = float.MinValue;
+        foreach (var angle in angles)
         {
-            combinedX = 1;
-            combinedY = 0;
-            combinedMagnitude = 1;
-        }
-        combinedX /= combinedMagnitude;
-        combinedY /= combinedMagnitude;
+            float rad = angle * (float)Math.PI / 180f;
+            float candX = compositeX * (float)Math.Cos(rad) - compositeY * (float)Math.Sin(rad);
+            float candY = compositeX * (float)Math.Sin(rad) + compositeY * (float)Math.Cos(rad);
 
-        // Calculate and return the final position by moving along the combined direction.
-        float resultX = kitty.Unit.X + (combinedX * DODGE_RADIUS);
-        float resultY = kitty.Unit.Y + (combinedY * DODGE_RADIUS);
+            // Calculate candidate's final position.
+            float candidatePosX = kitty.Unit.X + (candX * DODGE_RADIUS);
+            float candidatePosY = kitty.Unit.Y + (candY * DODGE_RADIUS);
+
+            // Check if candidate is within lane bounds.
+            if (!IsWithinLaneBounds(candidatePosX, candidatePosY))
+            {
+                continue; // Skip candidate if it's not within the lane.
+            }
+
+            // Compute dot product with the normalized forward direction.
+            float dot = candX * normForward.X + candY * normForward.Y;
+            if (dot > bestDot)
+            {
+                bestDot = dot;
+                bestCandidate = (candX, candY);
+            }
+        }
+
+        // If no candidate passed the lane bounds check, fallback to moving forward.
+        if (bestCandidate == null)
+        {
+            return (kitty.Unit.X + (normForward.X * DODGE_RADIUS),
+                    kitty.Unit.Y + (normForward.Y * DODGE_RADIUS));
+        }
+
+        // Calculate and return the final dodge position based on the best candidate.
+        float resultX = kitty.Unit.X + (bestCandidate.Value.X * DODGE_RADIUS);
+        float resultY = kitty.Unit.Y + (bestCandidate.Value.Y * DODGE_RADIUS);
         return (resultX, resultY);
     }
 
