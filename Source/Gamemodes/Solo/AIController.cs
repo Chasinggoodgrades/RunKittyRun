@@ -157,7 +157,7 @@ public class AIController
         lastY = y;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        kitty.Unit.IssueOrder(command, x, y);
+        _ = kitty.Unit.IssueOrder(command, x, y);
     }
 
     private (float X, float Y) GetCenterPositionInSafezone(Safezone safezone)
@@ -166,6 +166,18 @@ public class AIController
         var centerY = (safezone.Rect_.MinY + safezone.Rect_.MaxY) / 2;
         return (centerX, centerY);
     }
+
+    /// <summary>
+    /// Returns if the cords are within the actual wolf area. (obv only works up to 13, a problem for later.)
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private bool WithinWolfArea(float x, float y)
+    {
+        return RegionList.WolfRegions[Globals.PLAYERS_CURRENT_SAFEZONE[kitty.Player]].Contains(x, y);
+    }
+
 
     // Computes a composite dodge position based on all wolves in range.
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, (float X, float Y) forwardDirection)
@@ -177,7 +189,7 @@ public class AIController
         {
             float dx = kitty.Unit.X - wolf.Unit.X;
             float dy = kitty.Unit.Y - wolf.Unit.Y;
-            float dist = (float)Math.Sqrt(dx * dx + dy * dy);
+            float dist = (float)Math.Sqrt((dx * dx) + (dy * dy));
             if (dist > 0)
             {
                 // Sum the normalized direction away from each wolf
@@ -190,12 +202,12 @@ public class AIController
         // If no wolves are nearby, simply move forward.
         if (count == 0)
         {
-            return (kitty.Unit.X + forwardDirection.X * DODGE_RADIUS,
-                    kitty.Unit.Y + forwardDirection.Y * DODGE_RADIUS);
+            return (kitty.Unit.X + (forwardDirection.X * DODGE_RADIUS),
+                    kitty.Unit.Y + (forwardDirection.Y * DODGE_RADIUS));
         }
 
         // Normalize the dodge direction vector.
-        float dodgeMagnitude = (float)Math.Sqrt(compositeX * compositeX + compositeY * compositeY);
+        float dodgeMagnitude = (float)Math.Sqrt((compositeX * compositeX) + (compositeY * compositeY));
         if (dodgeMagnitude == 0)
         {
             // Rare case: perfect cancellation. Default to an arbitrary direction.
@@ -207,7 +219,7 @@ public class AIController
         compositeY /= dodgeMagnitude;
 
         // Ensure the forwardDirection is normalized.
-        float forwardMagnitude = (float)Math.Sqrt(forwardDirection.X * forwardDirection.X + forwardDirection.Y * forwardDirection.Y);
+        float forwardMagnitude = (float)Math.Sqrt((forwardDirection.X * forwardDirection.X) + (forwardDirection.Y * forwardDirection.Y));
         if (forwardMagnitude == 0)
         {
             forwardDirection = (1, 0);
@@ -219,11 +231,11 @@ public class AIController
         // Adjust the weights as needed. Here, dodgeWeight prioritizes avoiding wolves, while forwardWeight retains some forward motion.
         float dodgeWeight = 0.7f;
         float forwardWeight = 0.3f;
-        float combinedX = dodgeWeight * compositeX + forwardWeight * normForward.X;
-        float combinedY = dodgeWeight * compositeY + forwardWeight * normForward.Y;
+        float combinedX = (dodgeWeight * compositeX) + (forwardWeight * normForward.X);
+        float combinedY = (dodgeWeight * compositeY) + (forwardWeight * normForward.Y);
 
         // Normalize the combined direction.
-        float combinedMagnitude = (float)Math.Sqrt(combinedX * combinedX + combinedY * combinedY);
+        float combinedMagnitude = (float)Math.Sqrt((combinedX * combinedX) + (combinedY * combinedY));
         if (combinedMagnitude == 0)
         {
             combinedX = 1;
@@ -234,14 +246,14 @@ public class AIController
         combinedY /= combinedMagnitude;
 
         // Calculate and return the final position by moving along the combined direction.
-        float resultX = kitty.Unit.X + combinedX * DODGE_RADIUS;
-        float resultY = kitty.Unit.Y + combinedY * DODGE_RADIUS;
+        float resultX = kitty.Unit.X + (combinedX * DODGE_RADIUS);
+        float resultY = kitty.Unit.Y + (combinedY * DODGE_RADIUS);
         return (resultX, resultY);
     }
 
     private bool IsWithinRadius(float x1, float y1, float x2, float y2, float radius)
     {
-        var distance = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        var distance = Math.Sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
         return distance <= radius;
     }
 
@@ -275,7 +287,7 @@ public class AIController
     {
         if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk"))) // Wind Walk
         {
-            kitty.Unit.IssueOrder("windwalk");
+            _ = kitty.Unit.IssueOrder("windwalk");
             MoveKittyToPosition();
         }
     }
