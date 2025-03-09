@@ -152,7 +152,7 @@ public class AIController
         if (wolvesInRange.Count > 0)
         {
             var dodgePosition = GetCompositeDodgePosition(wolvesInRange, forwardDirection);
-            IssueOrder("move", dodgePosition.X, dodgePosition.Y);
+            IssueOrder("move", dodgePosition.X, dodgePosition.Y, true);
             return;
         }
 
@@ -165,11 +165,11 @@ public class AIController
             var scale = 256 / distance;
             var moveX = kitty.Unit.X + deltaX * scale;
             var moveY = kitty.Unit.Y + deltaY * scale;
-            IssueOrder("move", moveX, moveY);
+            IssueOrder("move", moveX, moveY, false);
         }
         else
         {
-            IssueOrder("move", targetPosition.X, targetPosition.Y);
+            IssueOrder("move", targetPosition.X, targetPosition.Y, false);
         }
     }
 
@@ -182,9 +182,9 @@ public class AIController
     }
 
     // IssueOrder now clamps the target point to lane bounds before sending the order.
-    private void IssueOrder(string command, float x, float y)
+    private void IssueOrder(string command, float x, float y, bool isDodge)
     {
-        const float MIN_MOVE_DISTANCE = 64.0f; // Minimum distance to issue a new move order
+        float MIN_MOVE_DISTANCE = isDodge ? 16.0f : 64.0f; // Minimum distance to issue a new move order
 
         if (command == "move")
         {
