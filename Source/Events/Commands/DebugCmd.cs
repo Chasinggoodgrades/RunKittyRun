@@ -69,6 +69,16 @@ public static class DebugCmd
                 player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
                 player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+
+                for (var i = 0; i < 24; i++)
+                {
+                    var p = Player(i);
+
+                    if (p.SlotState != playerslotstate.Playing)
+                    {
+                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                    }
+                }
                 break;
             case "?cooldown":
             case "?cd":

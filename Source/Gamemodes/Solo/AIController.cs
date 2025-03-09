@@ -12,14 +12,10 @@ public class AIController
     public float _timerInterval = 0.2f;
     public float timerInterval
     {
-        get
-        {
-            return _timerInterval;
-        }
+        get { return _timerInterval; }
         set
         {
             _timerInterval = value;
-
             if (this.IsEnabled())
             {
                 this.PauseAi();
@@ -37,6 +33,7 @@ public class AIController
 
     private timer moveTimer;
     private List<Wolf> wolvesInRange = new List<Wolf>();
+    private lightning lastLightning;
 
     public AIController(Kitty kitty)
     {
@@ -53,12 +50,13 @@ public class AIController
     public void ResumeAi()
     {
         if (!enabled)
-        {
             return;
-        }
 
-        moveTimer = CreateTimer();
-        TimerStart(moveTimer, this.timerInterval, true, PollMovement);
+        if (moveTimer == null)
+        {
+            moveTimer = CreateTimer();
+            TimerStart(moveTimer, this.timerInterval, true, PollMovement);
+        }
     }
 
     public void StopAi()
@@ -82,6 +80,9 @@ public class AIController
             DestroyTimer(moveTimer);
             moveTimer = null;
         }
+
+        DestroyLightning(lastLightning);
+        lastLightning = null;
     }
 
     public bool IsEnabled()
@@ -91,10 +92,27 @@ public class AIController
 
     private void MoveKittyToPosition()
     {
+        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+
         var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
         var targetPosition = GetCenterPositionInSafezone(nextSafezone);
 
-        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        // Check for nearby circles to revive allies.
+        foreach (var circle in Globals.ALL_CIRCLES)
+        {
+            var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
+            var deadKittySafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[deadKitty.Player];
+
+            if (deadKittySafezoneId != currentSafezoneId)
+                continue;
+
+            if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
+            {
+                targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
+                break;
+            }
+        }
+
         var wolvesInLane = WolfArea.WolfAreas[currentSafezoneId].Wolves;
 
         wolvesInRange.Clear();
@@ -106,10 +124,9 @@ public class AIController
             }
         }
 
-        // Calculate the forward direction vector toward the target position.
         var forwardDirection = (X: targetPosition.X - kitty.Unit.X, Y: targetPosition.Y - kitty.Unit.Y);
 
-        // If any wolves are in range, compute a composite dodge position that considers both dodging and moving forward.
+        // If any wolves are in range, calculate a dodge position using the combined forward direction.
         if (wolvesInRange.Count > 0)
         {
             var dodgePosition = GetCompositeDodgePosition(wolvesInRange, forwardDirection);
@@ -117,47 +134,70 @@ public class AIController
             return;
         }
 
-        // Check for nearby circles to revive allies
-        foreach (var circle in Globals.ALL_CIRCLES)
+        // Otherwise, move toward the target safezone center
+        var deltaX = targetPosition.X - kitty.Unit.X;
+        var deltaY = targetPosition.Y - kitty.Unit.Y;
+        var distance = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance > 256)
         {
-            var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
-            var deadKittySafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[deadKitty.Player];
-
-            if (deadKittySafezoneId != currentSafezoneId)
-            {
-                continue;
-            }
-
-            if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
-            {
-                IssueOrder("move", circle.Value.Unit.X, circle.Value.Unit.Y);
-                return;
-            }
+            var scale = 256 / distance;
+            var moveX = kitty.Unit.X + deltaX * scale;
+            var moveY = kitty.Unit.Y + deltaY * scale;
+            IssueOrder("move", moveX, moveY);
         }
-
-        // Move towards the target position directly
-        IssueOrder("move", targetPosition.X, targetPosition.Y);
+        else
+        {
+            IssueOrder("move", targetPosition.X, targetPosition.Y);
+        }
     }
 
-    // IssueOrder method that sends orders only if they differ from the last order,
-    // unless the last order was issued more than 5 seconds ago.
+    // Helper to check if a given point is within the lane bounds.
+    private bool IsWithinLaneBounds(float x, float y)
+    {
+        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        var laneBounds = WolfArea.WolfAreas[currentSafezoneId].Rectangle;
+        return laneBounds.Contains(x, y);
+    }
+
+    // IssueOrder now clamps the target point to lane bounds before sending the order.
     private void IssueOrder(string command, float x, float y)
     {
+        if (command == "move")
+        {
+            if (lastLightning != null)
+            {
+                MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+            }
+            else
+            {
+                lastLightning = AddLightning("DRAM", false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+            }
+        }
+
         if (hasLastOrder && lastCommand == command && lastX == x && lastY == y)
         {
-            // Only block identical orders if they were issued less than 5 seconds ago.
-            if ((elapsedTime - lastOrderTime) < 5f)
+            if ((elapsedTime - lastOrderTime) < 4f)
             {
                 return;
             }
         }
-        // Update last order info and send the new command
+
         lastCommand = command;
         lastX = x;
         lastY = y;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        _ = kitty.Unit.IssueOrder(command, x, y);
+        kitty.Unit.IssueOrder(command, x, y);
+    }
+
+    private void IssueOrderBasic(string command)
+    {
+        lastCommand = command;
+        lastX = -1;
+        lastY = -1;
+        lastOrderTime = elapsedTime;
+        hasLastOrder = true;
+        kitty.Unit.IssueOrder(command);
     }
 
     private (float X, float Y) GetCenterPositionInSafezone(Safezone safezone)
@@ -180,9 +220,11 @@ public class AIController
             float dist = (float)Math.Sqrt((dx * dx) + (dy * dy));
             if (dist > 0)
             {
-                // Sum the normalized direction away from each wolf
-                compositeX += dx / dist;
-                compositeY += dy / dist;
+                // Weight by the inverse of distance so that nearer wolves contribute more
+                float weight = 1f / dist;
+                // Sum the normalized direction away from each wolf, scaled by weight
+                compositeX += (dx / dist) * weight;
+                compositeY += (dy / dist) * weight;
                 count++;
             }
         }
@@ -216,7 +258,6 @@ public class AIController
         var normForward = (X: forwardDirection.X / forwardMagnitude, Y: forwardDirection.Y / forwardMagnitude);
 
         // Blend the dodge vector and the forward direction.
-        // Adjust the weights as needed. Here, dodgeWeight prioritizes avoiding wolves, while forwardWeight retains some forward motion.
         float dodgeWeight = 0.7f;
         float forwardWeight = 0.3f;
         float combinedX = (dodgeWeight * compositeX) + (forwardWeight * normForward.X);
@@ -273,9 +314,16 @@ public class AIController
 
     private void UseWindWalkIfAvailable()
     {
+        var wwLvl = GetUnitAbilityLevel(kitty.Unit, Constants.ABILITY_WIND_WALK);
+
+        if (wwLvl == 0 || (wwLvl == 1 && kitty.Unit.Mana < 75) || (wwLvl == 2 && kitty.Unit.Mana < 60) || (wwLvl == 3 && kitty.Unit.Mana < 45))
+        {
+            return;
+        }
+
         if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk"))) // Wind Walk
         {
-            _ = kitty.Unit.IssueOrder("windwalk");
+            IssueOrderBasic("windwalk");
             MoveKittyToPosition();
         }
     }
