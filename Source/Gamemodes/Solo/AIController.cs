@@ -89,8 +89,11 @@ public class AIController
         return enabled;
     }
 
-    private void MoveKittyToPosition((float X, float Y) targetPosition)
+    private void MoveKittyToPosition()
     {
+        var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
+        var targetPosition = GetCenterPositionInSafezone(nextSafezone);
+
         var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
         var wolvesInLane = WolfArea.WolfAreas[currentSafezoneId].Wolves;
 
@@ -154,7 +157,6 @@ public class AIController
         lastY = y;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        kitty.Unit.ClearOrders();
         kitty.Unit.IssueOrder(command, x, y);
     }
 
@@ -251,9 +253,7 @@ public class AIController
             elapsedTime += timerInterval;
             LearnSkills();
             UseWindWalkIfAvailable();
-            var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
-            var targetPosition = GetCenterPositionInSafezone(nextSafezone);
-            MoveKittyToPosition(targetPosition);
+            MoveKittyToPosition();
         }
         catch (Exception e)
         {
@@ -276,6 +276,7 @@ public class AIController
         if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk"))) // Wind Walk
         {
             kitty.Unit.IssueOrder("windwalk");
+            MoveKittyToPosition();
         }
     }
 }
