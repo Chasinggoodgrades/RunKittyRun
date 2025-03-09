@@ -9,10 +9,11 @@ public static class KibbleEvent
     private static bool EventPlayed = false;
     private static int EventKibblesCollected = 0;
     private static int TotalEventKibbles = 50;
+    private static int EventExtraKibbles = 15;
     private static timer EventTimer;
     private static timerdialog EventTimerDialog;
     private static List<Kibble> EventKibbles = new List<Kibble>();
-    private const float EventLength = 300.0f; // 5 minutes
+    private const float EventLength = 180.0f; // 3 minutes
 
     public static void StartKibbleEvent(float chance)
     {
@@ -31,7 +32,7 @@ public static class KibbleEvent
         Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}A Kibble event has started! Collect {TotalEventKibbles} kibbles to earn an award!");
 
         // Spawn event kibbles
-        for (int i = 0; i < TotalEventKibbles; i++)
+        for (int i = 0; i < TotalEventKibbles + EventExtraKibbles; i++)
         {
             var kibble = new Kibble();
             EventKibbles.Add(kibble);
