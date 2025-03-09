@@ -28,16 +28,14 @@ public class AIController
         }
     }
 
-    // Fields to track the last issued order
     private string lastCommand = "";
     private float lastX;
     private float lastY;
     private bool hasLastOrder = false;
-    private DateTime lastOrderTime = DateTime.MinValue; // Tracks when the last order was issued
+    private float lastOrderTime = 0f;
+    private float elapsedTime = 0f;
 
     private timer moveTimer;
-
-    // Class-level list to reuse for tracking wolves in range
     private List<Wolf> wolvesInRange = new List<Wolf>();
 
     public AIController(Kitty kitty)
@@ -59,7 +57,6 @@ public class AIController
             return;
         }
 
-        // Start the Warcraft III timer to poll movement every 200ms
         moveTimer = CreateTimer();
         TimerStart(moveTimer, this.timerInterval, true, PollMovement);
     }
@@ -72,14 +69,13 @@ public class AIController
 
     public void PauseAi()
     {
-        // Pause any ongoing actions
         lastCommand = "";
         lastX = 0;
         lastY = 0;
         hasLastOrder = false;
-        lastOrderTime = DateTime.MinValue;
+        lastOrderTime = 0f;
+        elapsedTime = 0f;
 
-        // Destroy the timer when stopping the AI
         if (moveTimer != null)
         {
             PauseTimer(moveTimer);
@@ -98,7 +94,6 @@ public class AIController
         var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
         var wolvesInLane = WolfArea.WolfAreas[currentSafezoneId].Wolves;
 
-        // Clear and reuse the existing list to track wolves in range
         wolvesInRange.Clear();
         foreach (var wolf in wolvesInLane)
         {
@@ -122,8 +117,15 @@ public class AIController
         // Check for nearby circles to revive allies
         foreach (var circle in Globals.ALL_CIRCLES)
         {
-            var allyKitty = Globals.ALL_KITTIES[circle.Value.Player];
-            if (!allyKitty.Alive && IsWithinRadius(allyKitty.Unit.X, allyKitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
+            var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
+            var deadKittySafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[deadKitty.Player];
+
+            if (deadKittySafezoneId != currentSafezoneId)
+            {
+                continue;
+            }
+
+            if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
             {
                 IssueOrder("move", circle.Value.Unit.X, circle.Value.Unit.Y);
                 return;
@@ -138,11 +140,10 @@ public class AIController
     // unless the last order was issued more than 5 seconds ago.
     private void IssueOrder(string command, float x, float y)
     {
-        DateTime currentTime = DateTime.Now;
         if (hasLastOrder && lastCommand == command && lastX == x && lastY == y)
         {
             // Only block identical orders if they were issued less than 5 seconds ago.
-            if ((currentTime - lastOrderTime).TotalSeconds < 5)
+            if ((elapsedTime - lastOrderTime) < 5f)
             {
                 return;
             }
@@ -151,7 +152,7 @@ public class AIController
         lastCommand = command;
         lastX = x;
         lastY = y;
-        lastOrderTime = currentTime;
+        lastOrderTime = elapsedTime;
         hasLastOrder = true;
         kitty.Unit.ClearOrders();
         kitty.Unit.IssueOrder(command, x, y);
@@ -236,19 +237,20 @@ public class AIController
         return (resultX, resultY);
     }
 
-
     private bool IsWithinRadius(float x1, float y1, float x2, float y2, float radius)
     {
         var distance = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         return distance <= radius;
     }
 
-    // Timer callback invoked every 200ms to check for movement.
     private void PollMovement()
     {
         try
         {
             if (!enabled) return;
+            elapsedTime += timerInterval;
+            LearnSkills();
+            UseWindWalkIfAvailable();
             var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
             var targetPosition = GetCenterPositionInSafezone(nextSafezone);
             MoveKittyToPosition(targetPosition);
@@ -256,6 +258,24 @@ public class AIController
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+        }
+    }
+
+    private void LearnSkills()
+    {
+        if (kitty.Unit.SkillPoints > 0)
+        {
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_WIND_WALK);
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_AGILITY_AURA);
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_ENERGY_AURA);
+        }
+    }
+
+    private void UseWindWalkIfAvailable()
+    {
+        if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk"))) // Wind Walk
+        {
+            kitty.Unit.IssueOrder("windwalk");
         }
     }
 }
