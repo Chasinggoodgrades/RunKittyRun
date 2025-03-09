@@ -4,12 +4,13 @@ using System.Linq;
 
 public static class NitroPacer
 {
-    public static unit Unit;
+    public static unit Unit { get; set; }
+
     private static float currentDistance = 0;
     private static int currentCheckpoint = 0;
     private static timer pacerTimer;
-    private static rect SPAWN_RECT = RegionList.SpawnRegions[5].Rect;
-    private static Rectangle[] PathingPoints = RegionList.PathingPoints;
+    private static rect spawnRect = RegionList.SpawnRegions[5].Rect;
+    private static Rectangle[] pathingPoints = RegionList.PathingPoints;
     private static effect nitroEffect;
     private static item ghostBoots;
 
@@ -18,9 +19,12 @@ public static class NitroPacer
     /// </summary>
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard")
+        {
+            return;
+        }
 
-        Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, SPAWN_RECT.CenterX, SPAWN_RECT.CenterY, 360);
+        Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
         Unit.IsInvulnerable = true;
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);
@@ -30,6 +34,15 @@ public static class NitroPacer
         pacerTimer = timer.Create();
     }
 
+    /// <summary>
+    /// Returns the current distance of the nitro pacer.
+    /// </summary>
+    /// <returns></returns>
+    public static int GetCurrentCheckpoint() => currentCheckpoint;
+
+    /// <summary>
+    /// Starts the nitro pacer, resets the pacer and sets the speed of the unit to 0.
+    /// </summary>
     public static void StartNitroPacer()
     {
         ResetNitroPacer();
@@ -38,11 +51,14 @@ public static class NitroPacer
         pacerTimer.Start(0.15f, true, UpdateNitroPacer);
     }
 
+    /// <summary>
+    /// Resets the nitro pacer, sets the unit to the spawn point, and sets the speed of the unit to 0.
+    /// </summary>
     public static void ResetNitroPacer()
     {
         pacerTimer.Pause();
         Unit.IsPaused = false;
-        Unit.SetPosition(SPAWN_RECT.CenterX, SPAWN_RECT.CenterY);
+        Unit.SetPosition(spawnRect.CenterX, spawnRect.CenterY);
         currentCheckpoint = 0;
         currentDistance = 0;
     }
@@ -53,15 +69,21 @@ public static class NitroPacer
         var remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
         var remainingTime = NitroChallenges.GetNitroTimeRemaining();
         var speed = 0.0f;
-        if (remainingTime != 0.0f) speed = remainingDistance / remainingTime;
-        else speed = 350.0f;
+        if (remainingTime != 0.0f)
+        {
+            speed = remainingDistance / remainingTime;
+        }
+        else
+        {
+            speed = 350.0f;
+        }
 
         SetSpeed(speed);
 
-        if (PathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
+        if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
         {
             currentCheckpoint++;
-            if (currentCheckpoint >= PathingPoints.Count() - 1)
+            if (currentCheckpoint >= pathingPoints.Count() - 1)
             {
                 pacerTimer.Pause();
                 Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
@@ -74,21 +96,23 @@ public static class NitroPacer
     private static void NitroPacerQueueOrders()
     {
         // backwards for pathingpoints, for stack queue order
-        for (int i = PathingPoints.Count() - 1; i >= 1; i--) // exclude starting point
+        for (int i = pathingPoints.Count() - 1; i >= 1; i--) // exclude starting point
         {
-            var point = PathingPoints[i];
+            var point = pathingPoints[i];
             Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
         }
     }
 
     private static void VisionShare()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
             player.NeutralPassive.SetAlliance(player, alliancetype.SharedVisionForced, true);
+        }
     }
 
     private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;
-    public static int GetCurrentCheckpoint() => currentCheckpoint;
-    
+
+
 
 }

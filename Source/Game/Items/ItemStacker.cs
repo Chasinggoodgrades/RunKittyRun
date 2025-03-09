@@ -23,7 +23,7 @@ public static class ItemStacker
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,
             Constants.ITEM_ELIXIR,
-            Constants.ITEM_ANTI_BLOCK_WAND
+            Constants.ITEM_ANTI_BLOCK_WAND,
         };
         return StackableItemIDs;
     }

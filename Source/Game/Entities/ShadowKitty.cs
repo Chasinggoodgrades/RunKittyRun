@@ -1,21 +1,27 @@
-﻿using WCSharp.Api;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using WCSharp.Api;
 
 public class ShadowKitty
 {
     public unit Unit { get; set; }
+
     public player Player { get; }
+
+    public bool Active { get; set; }
+
+    public trigger wCollision { get; set; }
+
+    public trigger cCollision { get; set; }
+
     public int ID;
-    public trigger w_Collision;
-    public trigger c_Collision;
-    public bool Active;
+
     public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES;
 
     public ShadowKitty(player Player)
     {
         this.Player = Player;
         ID = Player.Id;
-        RegisterTriggers();
+        this.RegisterTriggers();
     }
 
     public static void Initialize()
@@ -25,36 +31,23 @@ public class ShadowKitty
         CreateShadowKitties();
     }
 
-    private static void CreateShadowKitties()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            var shadowKitty = new ShadowKitty(player);
-            ALL_SHADOWKITTIES.Add(player, shadowKitty);
-        }
-    }
-    private void RegisterTriggers()
-    {
-        w_Collision = trigger.Create();
-        c_Collision = trigger.Create();
-    }
-
     /// <summary>
     /// Summons shadow kitty to the position of this player's kitty object.
     /// </summary>
     public void SummonShadowKitty()
     {
         var kitty = Globals.ALL_KITTIES[Player].Unit;
-        Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
-        Unit.SetVertexColor(0, 0, 0, 255);
-        //Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
-        Utility.MakeUnitLocust(Unit);
+        this.Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
+        this.Unit.SetVertexColor(0, 0, 0, 255);
+
+        // Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
+        Utility.MakeUnitLocust(this.Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
-        Unit.BaseMovementSpeed = 522;
+        this.Unit.BaseMovementSpeed = 522;
         RelicUtil.CloseRelicBook(kitty);
-        PauseKitty(Player, true);
-        Utility.SelectUnitForPlayer(Player, Unit);
-        Active = true;
+        PauseKitty(this.Player, true);
+        Utility.SelectUnitForPlayer(this.Player, this.Unit);
+        this.Active = true;
     }
 
     /// <summary>
@@ -71,18 +64,12 @@ public class ShadowKitty
     /// </summary>
     public void KillShadowKitty()
     {
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        Unit.Kill();
-        Unit.Dispose();
-        Unit = null;
-        Active = false;
-        PauseKitty(Player, false);
-    }
-
-    private static void PauseKitty(player player, bool paused)
-    {
-        var kitty = Globals.ALL_KITTIES[player].Unit;
-        kitty.IsPaused = paused;
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Unit);
+        this.Unit.Kill();
+        this.Unit.Dispose();
+        this.Unit = null;
+        this.Active = false;
+        PauseKitty(this.Player, false);
     }
 
     /// <summary>
@@ -91,10 +78,31 @@ public class ShadowKitty
     /// <param name="player"></param>
     public void SelectReselectShadowKitty()
     {
-        var kitty = Globals.ALL_KITTIES[Player].Unit;
-        Utility.SelectUnitForPlayer(Player, Unit);
-        Utility.SelectUnitForPlayer(Player, kitty);
-        Utility.SelectUnitForPlayer(Player, Unit);
+        var kitty = Globals.ALL_KITTIES[this.Player].Unit;
+        Utility.SelectUnitForPlayer(this.Player, this.Unit);
+        Utility.SelectUnitForPlayer(this.Player, kitty);
+        Utility.SelectUnitForPlayer(this.Player, this.Unit);
+    }
+
+    private static void PauseKitty(player player, bool paused)
+    {
+        var kitty = Globals.ALL_KITTIES[player].Unit;
+        kitty.IsPaused = paused;
+    }
+
+    private static void CreateShadowKitties()
+    {
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            var shadowKitty = new ShadowKitty(player);
+            ALL_SHADOWKITTIES.Add(player, shadowKitty);
+        }
+    }
+
+    private void RegisterTriggers()
+    {
+        this.wCollision = trigger.Create();
+        this.cCollision = trigger.Create();
     }
 
 

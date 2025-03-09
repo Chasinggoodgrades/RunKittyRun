@@ -7,23 +7,34 @@ using static WCSharp.Api.Common;
 
 public class Wolf
 {
-    public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
     public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
+    public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
     private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
     private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
     private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
 
     public int RegionIndex { get; set; }
+
     public string OVERHEAD_EFFECT_PATH { get; set; }
+
     public timer WanderTimer { get; set; }
+
     private timer EffectTimer { get; set; }
+
     public rect Lane { get; private set; }
+
     public unit Unit { get; set; }
+
     public List<Affix> Affixes { get; private set; }
+
     private effect OverheadEffect { get; set; }
+
     public WolfPoint WolfPoint { get; set; }
+
     public bool IsPaused { get; set; } = false;
+
     public bool IsReviving { get; set; } = false;
+
 
     public Wolf(int regionIndex)
     {
@@ -36,7 +47,105 @@ public class Wolf
         Utility.SimpleTimer(3.0f, () => StartWandering());
         Globals.ALL_WOLVES.Add(Unit, this);
 
-        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea)) wolfArea.Wolves.Add(this);
+        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
+        {
+            wolfArea.Wolves.Add(this);
+        }
+    }
+
+    /// <summary>
+    /// Spawns wolves based on round and lane according to the Globals.WolvesPerRound dictionary.
+    /// </summary>
+    public static void SpawnWolves()
+    {
+        if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
+        {
+            foreach (var laneEntry in wolvesInRound)
+            {
+                int lane = laneEntry.Key;
+                int numberOfWolves = laneEntry.Value;
+
+                for (int i = 0; i < numberOfWolves; i++)
+                    new Wolf(lane);
+            }
+            //WolfSpawning.SpawnWolves();
+            FandF.CreateBloodWolf();
+            NamedWolves.CreateNamedWolves();
+        }
+    }
+
+    public void StartWandering(bool forced = false)
+    {
+        var realTime = GetRandomReal(1.00f, 1.12f);
+        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving))
+        {
+            ApplyEffect();
+            realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
+        }
+        WanderTimer.Start(realTime, false, () => StartWandering());
+    }
+
+    /// <summary>
+    /// Wolf moves to a random location within its lane.
+    /// </summary>
+    public void WolfMove()
+    {
+        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
+        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        if (HasAffix("Blitzer")) return;
+        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
+    }
+
+    public void Dispose()
+    {
+        RemoveAllWolfAffixes();
+        EffectTimer.Dispose();
+        EffectTimer = null;
+        OverheadEffect?.Dispose();
+        OverheadEffect = null;
+        WanderTimer.Dispose();
+        WanderTimer = null;
+        WolfPoint.Dispose();
+        WolfPoint = null;
+        Unit.Dispose();
+        Unit = null;
+    }
+
+    /// <summary>
+    /// Removes all wolves from the game and clears wolf list.
+    /// </summary>
+    public static void RemoveAllWolves()
+    {
+        foreach (var wolfKey in Globals.ALL_WOLVES.Keys.ToList())
+        {
+            Globals.ALL_WOLVES[wolfKey].Dispose();
+            Globals.ALL_WOLVES[wolfKey] = null;
+        }
+        Globals.ALL_WOLVES.Clear();
+    }
+
+    /// <summary>
+    /// Pauses or resumes all wolves in the game.
+    /// </summary>
+    /// <param name="pause"></param>
+    public static void PauseAllWolves(bool pause)
+    {
+        if (pause)
+        {
+            foreach (var wolf in Globals.ALL_WOLVES)
+            {
+                wolf.Value.WanderTimer.Pause();
+                wolf.Value.Unit.SetPausedEx(pause);
+            }
+        }
+        else
+        {
+            foreach (var wolf in Globals.ALL_WOLVES)
+            {
+                wolf.Value.WanderTimer.Resume();
+                wolf.Value.Unit.SetPausedEx(pause);
+            }
+        }
     }
 
     private void InitializeWolf()
@@ -55,17 +164,6 @@ public class Wolf
 
         WanderTimer = timer.Create();
         EffectTimer = timer.Create();
-    }
-
-    /// <summary>
-    /// Wolf moves to a random location within its lane.
-    /// </summary>
-    public void WolfMove()
-    {
-        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
-        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if (HasAffix("Blitzer")) return;
-        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
     private bool ShouldStartEffect()
@@ -96,18 +194,6 @@ public class Wolf
         return GetRandomReal(0, 100) <= totalProbability;
     }
 
-
-    public void StartWandering(bool forced = false)
-    {
-        var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving))
-        {
-            ApplyEffect();
-            realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
-        }
-        WanderTimer.Start(realTime, false, () => StartWandering());
-    }
-
     private void ApplyEffect()
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
@@ -120,71 +206,6 @@ public class Wolf
             OverheadEffect.Dispose();
             OverheadEffect = null;
         });
-    }
-
-    public void Dispose()
-    {
-        RemoveAllWolfAffixes();
-        EffectTimer.Dispose();
-        EffectTimer = null;
-        OverheadEffect?.Dispose();
-        OverheadEffect = null;
-        WanderTimer.Dispose();
-        WanderTimer = null;
-        WolfPoint.Dispose();
-        WolfPoint = null;
-        Unit.Dispose();
-        Unit = null;
-    }
-
-    /// <summary>
-    /// Spawns wolves based on round and lane according to the Globals.WolvesPerRound dictionary.
-    /// </summary>
-    public static void SpawnWolves()
-    {
-        if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
-        {
-            foreach (var laneEntry in wolvesInRound)
-            {
-                int lane = laneEntry.Key;
-                int numberOfWolves = laneEntry.Value;
-
-                for (int i = 0; i < numberOfWolves; i++)
-                    new Wolf(lane);
-            }
-            //WolfSpawning.SpawnWolves();
-            FandF.CreateBloodWolf();
-            NamedWolves.CreateNamedWolves();
-        }
-    }
-    /// <summary>
-    /// Removes all wolves from the game and clears wolf list.
-    /// </summary>
-    public static void RemoveAllWolves()
-    {
-        foreach (var wolfKey in Globals.ALL_WOLVES.Keys.ToList())
-        {
-            Globals.ALL_WOLVES[wolfKey].Dispose();
-            Globals.ALL_WOLVES[wolfKey] = null;
-        }
-        Globals.ALL_WOLVES.Clear();
-    }
-
-
-    public static void PauseAllWolves(bool pause)
-    {
-        if (pause)
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                wolf.Value.WanderTimer.Pause();
-                wolf.Value.Unit.SetPausedEx(pause);
-            }
-        else
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                wolf.Value.WanderTimer.Resume();
-                wolf.Value.Unit.SetPausedEx(pause);
-            }
     }
 
     #region AFFIXES

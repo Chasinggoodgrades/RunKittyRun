@@ -61,8 +61,8 @@ public static class CollisionDetection
 
     public static void ShadowKittyRegisterCollision(ShadowKitty sk)
     {
-        sk.w_Collision.ClearActions();
-        sk.c_Collision.ClearActions();
+        sk.wCollision.ClearActions();
+        sk.cCollision.ClearActions();
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, DEFAULT_WOLF_COLLISION_RADIUS, ShadowRelicWolvesFilter(sk), WolfCollisionShadowTrigger(sk));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, CIRCLE_COLLISION_RADIUS, ShadowRelicCircleFilter(sk), CircleCollisionShadowTrigger(sk));
     }
@@ -97,18 +97,18 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.w_Collision, () => sk.KillShadowKitty());
-        return sk.w_Collision;
+        TriggerAddAction(sk.wCollision, () => sk.KillShadowKitty());
+        return sk.wCollision;
     }
 
     private static trigger CircleCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.c_Collision, () =>
+        TriggerAddAction(sk.cCollision, () =>
         {
             var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
             var saviorKitty = Globals.ALL_KITTIES[GetOwningPlayer(sk.Unit)];
             circle.ReviveKitty(saviorKitty);
         });
-        return sk.c_Collision;
+        return sk.cCollision;
     }
 }
