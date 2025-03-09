@@ -178,11 +178,13 @@ public class Fixation : Affix
         if (pause)
         {
             IsChasing = false;
+            InRangeTrigger.Disable();
             ChaseTimer.Pause();
             GC.RemoveEffect(ref TargetEffect);
         }
         else
         {
+            InRangeTrigger.Enable();
             ChaseTimer.Resume();
         }
     }
