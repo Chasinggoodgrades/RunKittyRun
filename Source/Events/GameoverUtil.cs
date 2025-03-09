@@ -50,7 +50,7 @@ public static class GameoverUtil
 
     private static string GetTeamMembers()
     {
-        return string.Join(", ", Globals.ALL_PLAYERS.Select(player => player.Name));
+        return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
     }
 
 
