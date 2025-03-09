@@ -167,18 +167,6 @@ public class AIController
         return (centerX, centerY);
     }
 
-    /// <summary>
-    /// Returns if the cords are within the actual wolf area. (obv only works up to 13, a problem for later.)
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    private bool WithinWolfArea(float x, float y)
-    {
-        return RegionList.WolfRegions[Globals.PLAYERS_CURRENT_SAFEZONE[kitty.Player]].Contains(x, y);
-    }
-
-
     // Computes a composite dodge position based on all wolves in range.
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, (float X, float Y) forwardDirection)
     {
