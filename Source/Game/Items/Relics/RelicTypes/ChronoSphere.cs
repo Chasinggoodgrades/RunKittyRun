@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -67,8 +66,8 @@ public class ChronoSphere : Relic
         var item = Utility.UnitGetItem(OwnerUnit, RelicItemID);
         Ability = item.GetAbility(RelicAbilityID);
         Magnitude = RandomMagnitude();
-        Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
-        Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
+        _ = Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
+        _ = Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
         item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
     }
 
@@ -76,7 +75,7 @@ public class ChronoSphere : Relic
     private void RotatingSlowAura()
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
-        if(upgradeLevel <= 0) return;
+        if (upgradeLevel <= 0) return;
         MagnitudeTimer = timer.Create();
         MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, () => SetAbilityData());
         SetAbilityData();
@@ -86,7 +85,7 @@ public class ChronoSphere : Relic
     private void RotatingLocationCapture()
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
-        if(upgradeLevel <= 1) return;
+        if (upgradeLevel <= 1) return;
         LocationCaptureTimer = timer.Create();
         LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, () => CaptureLocation());
         CaptureLocation();
@@ -105,9 +104,9 @@ public class ChronoSphere : Relic
     private float RandomMagnitude()
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
-        var lowerBound = (MAGNITUDE_LOWER_BOUND / 100.0f) * -1.0f;
-        var upperBound = (MAGNITUDE_UPPER_BOUND / 100.0f) * -1.0f;
-        if(upgradeLevel == 0) return lowerBound;
+        var lowerBound = MAGNITUDE_LOWER_BOUND / 100.0f * -1.0f;
+        var upperBound = MAGNITUDE_UPPER_BOUND / 100.0f * -1.0f;
+        if (upgradeLevel == 0) return lowerBound;
         return GetRandomReal(upperBound, lowerBound); // as weird as this is.. yes.
     }
 
@@ -119,9 +118,9 @@ public class ChronoSphere : Relic
         kitty.Unit.SetFacing(CapturedLocation.Item3);
         kitty.Unit.IsPaused = true;
 
-        if(kitty.Player.IsLocal) PanCameraToTimed(kitty.Unit.X, kitty.Unit.Y, 0.0f);
+        if (kitty.Player.IsLocal) PanCameraToTimed(kitty.Unit.X, kitty.Unit.Y, 0.0f);
         Utility.SimpleTimer(2.0f, () =>
-        { 
+        {
             kitty.Unit.IsPaused = false;
             Utility.SimpleTimer(1.0f, () => kitty.Invulnerable = false);
         });
@@ -129,15 +128,16 @@ public class ChronoSphere : Relic
 
     public static bool RewindDeath(unit unit)
     {
-        if(Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
+        if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
         var relic = Globals.ALL_KITTIES[unit.Owner].Relics.Find(r => r is ChronoSphere) as ChronoSphere;
-        if(relic == null) return false;
-        if(relic.OnCooldown) return false;
+        if (relic == null) return false;
+        if (relic.OnCooldown) return false;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(typeof(ChronoSphere));
-        if(upgradeLevel < 2) return false;
+        if (upgradeLevel < 2) return false;
         relic.RewindTime();
         relic.OnCooldown = true;
-        Utility.SimpleTimer(REWIND_COOLDOWN, () => {
+        Utility.SimpleTimer(REWIND_COOLDOWN, () =>
+        {
             relic.OnCooldown = false;
             unit.Owner.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
             relic.CaptureLocation();

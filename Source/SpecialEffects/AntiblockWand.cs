@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 public static class AntiblockWand
 {
@@ -21,9 +20,9 @@ public static class AntiblockWand
     private static trigger RegisterCastEvents()
     {
         var Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
-            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
-        Trigger.AddAction(SpellActions);
+        foreach (var player in Globals.ALL_PLAYERS)
+            _ = Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
+        _ = Trigger.AddAction(SpellActions);
         return Trigger;
     }
 

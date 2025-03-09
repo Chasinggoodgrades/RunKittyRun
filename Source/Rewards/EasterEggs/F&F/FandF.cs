@@ -21,7 +21,7 @@ public static class FandF
 
     public static void CreateBloodWolf()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         var region = GetRandomInt(0, WolfArea.WolfAreas.Count - 1);
         var wolfObject = new Wolf(region);
         BloodWolf = wolfObject.Unit;
@@ -32,33 +32,33 @@ public static class FandF
 
     private static void AppendCollectionsUnit()
     {
-        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
+        _ = CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
     }
 
     private static trigger RegisterCollection()
     {
         var trig = trigger.Create();
-        trig.AddAction(CollectionActions);
+        _ = trig.AddAction(CollectionActions);
         return trig;
     }
 
     private static void CollectionActions()
     {
         var unit = @event.Unit;
-        var player = unit.Owner;
+        _ = unit.Owner;
 
         if (!Utility.UnitHasItem(unit, EmptyVial)) return;
 
         // Otherwise .. they have item.. Give them blood filled vial.
         Utility.RemoveItemFromUnit(unit, EmptyVial);
-        unit.AddItem(BloodVial);
+        _ = unit.AddItem(BloodVial);
     }
 
     private static trigger RegisterTurnIn()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
-        trig.AddAction(TurnInActions);
+        _ = trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
+        _ = trig.AddAction(TurnInActions);
         return trig;
     }
 
@@ -92,11 +92,10 @@ public static class FandF
 
     private static bool BloodVialItems(unit u)
     {
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
-        if(!Utility.UnitHasItem(u, BloodVial)) return false;
-        return true;
+        if (!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
+        if (!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
+        if (!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
+        return Utility.UnitHasItem(u, BloodVial);
     }
 
     private static void RemoveQuestItems(unit u)

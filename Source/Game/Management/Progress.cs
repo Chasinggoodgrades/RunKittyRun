@@ -21,7 +21,7 @@ public static class Progress
         var round = Globals.ROUND;
         Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
     }
-    
+
     private static void TeamProgressTracker()
     {
         if (!Globals.GAME_ACTIVE) return;
@@ -44,7 +44,7 @@ public static class Progress
             var kitty = Globals.ALL_KITTIES[Player];
             var currentSafezone = kitty.ProgressZone;
 
-            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count-1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
+            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
             if (Regions.Victory_Area.Region.Contains(kitty.Unit)) return 100.0f; // if in victory area, 100 progress
             if (Globals.SAFE_ZONES[0].Region.Contains(kitty.Unit) && !kitty.Finished) return 0.0f; // if at start, 0 progress
             if (kitty.Alive && kitty.Finished) return 100.0f;
@@ -52,16 +52,16 @@ public static class Progress
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X, ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
-            var progress = (totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1]) * 100;
+            var progress = totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1] * 100;
             if (progress > 100) progress = 100.00f;
 
             return progress;
         }
         catch (Exception e)
         {
-            var error = e.Message;
-            if(Source.Program.Debug) Console.WriteLine(e.Message);
-            if(Source.Program.Debug) Console.WriteLine(e.StackTrace);
+            _ = e.Message;
+            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            if (Source.Program.Debug) Console.WriteLine(e.StackTrace);
             return 0.0f;
         }
     }
@@ -79,7 +79,8 @@ public static class Progress
         return totalProgress;
     }
 
-    private static void CalculateTotalDistance() {
+    private static void CalculateTotalDistance()
+    {
         try
         {
             var totalDistance = 0.0f;
@@ -88,22 +89,21 @@ public static class Progress
             foreach (var pathPoint in RegionList.PathingPoints)
             {
                 if (count > RegionList.PathingPoints.Count() - 1) break;
-                var nextPathPoint = RegionList.PathingPoints[count+1];
+                var nextPathPoint = RegionList.PathingPoints[count + 1];
                 totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY, nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);
-                DistancesFromStart.Add(count+1, totalDistance);
+                DistancesFromStart.Add(count + 1, totalDistance);
                 count++;
             }
         }
         catch (Exception e)
         {
             //Console.WriteLine(e.Message);
-            var error = e.Message;
+            _ = e.Message;
         }
     }
 
-    private static float DistanceBetweenPoints(float x1, float y1, float x2, float y2) 
+    private static float DistanceBetweenPoints(float x1, float y1, float x2, float y2)
     {
-        if (Math.Abs(x1 - x2) > Math.Abs(y1 - y2)) return Math.Abs(x1 - x2);
-        return Math.Abs(y1 - y2);
+        return Math.Abs(x1 - x2) > Math.Abs(y1 - y2) ? Math.Abs(x1 - x2) : Math.Abs(y1 - y2);
     }
 }

@@ -23,7 +23,7 @@ public static class RoundManager
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
             Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
-            if(Globals.ROUND > 1) TerrainChanger.SetTerrain();
+            if (Globals.ROUND > 1) TerrainChanger.SetTerrain();
 
             RoundTimer.InitEndRoundTimer();
 
@@ -34,7 +34,7 @@ public static class RoundManager
         }
         catch (Exception e)
         {
-            if(Source.Program.Debug) Console.WriteLine(e.Message);
+            if (Source.Program.Debug) Console.WriteLine(e.Message);
             throw;
         }
     }

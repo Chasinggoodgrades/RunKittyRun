@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class GC
@@ -43,7 +41,7 @@ public static class GC
         if (affix == null) return;
         var index = GCAffixes.IndexOf(affix);
         if (index != -1) GCAffixes[index] = null;
-        GCAffixes.Remove(affix);
+        _ = GCAffixes.Remove(affix);
     }
 
     public static void RemoveDictionary<K, V>(ref Dictionary<K, V> dict)
@@ -100,6 +98,6 @@ public static class GC
         if (i == null) return;
         i.Dispose();
         i = null;
-    } 
+    }
 
 }

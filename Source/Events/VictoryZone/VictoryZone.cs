@@ -19,15 +19,15 @@ public static class VictoryZone
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
-        InVictoryArea.AddAction(VictoryAreaActions);
+        _ = InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
+        _ = InVictoryArea.AddAction(VictoryAreaActions);
     }
 
     private static void VictoryAreaActions()
     {
         var u = @event.Unit;
         var player = u.Owner;
-        if(u.UnitType != Constants.UNIT_KITTY) return;
+        if (u.UnitType != Constants.UNIT_KITTY) return;
         if (!Globals.GAME_ACTIVE) return;
         if (Gamemode.CurrentGameMode == "Standard") // Standard
         {

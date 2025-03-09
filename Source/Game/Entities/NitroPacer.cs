@@ -1,6 +1,6 @@
-﻿using WCSharp.Api;
+﻿using System.Linq;
+using WCSharp.Api;
 using WCSharp.Shared.Data;
-using System.Linq;
 
 public static class NitroPacer
 {
@@ -46,7 +46,7 @@ public static class NitroPacer
     public static void StartNitroPacer()
     {
         ResetNitroPacer();
-        Unit.UseItem(ghostBoots);
+        _ = Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
         pacerTimer.Start(0.15f, true, UpdateNitroPacer);
     }
@@ -66,18 +66,9 @@ public static class NitroPacer
     private static void UpdateNitroPacer()
     {
         currentDistance = Progress.CalculateNitroPacerProgress();
-        var remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
-        var remainingTime = NitroChallenges.GetNitroTimeRemaining();
-        var speed = 0.0f;
-        if (remainingTime != 0.0f)
-        {
-            speed = remainingDistance / remainingTime;
-        }
-        else
-        {
-            speed = 350.0f;
-        }
-
+        float remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
+        float remainingTime = NitroChallenges.GetNitroTimeRemaining();
+        float speed = remainingTime != 0.0f ? remainingDistance / remainingTime : 350.0f;
         SetSpeed(speed);
 
         if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
@@ -98,21 +89,19 @@ public static class NitroPacer
         // backwards for pathingpoints, for stack queue order
         for (int i = pathingPoints.Count() - 1; i >= 1; i--) // exclude starting point
         {
-            var point = pathingPoints[i];
-            Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
+            Rectangle point = pathingPoints[i];
+            _ = Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
         }
     }
 
     private static void VisionShare()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (player player in Globals.ALL_PLAYERS)
         {
             player.NeutralPassive.SetAlliance(player, alliancetype.SharedVisionForced, true);
         }
     }
 
     private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;
-
-
 
 }

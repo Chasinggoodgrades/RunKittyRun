@@ -1,6 +1,6 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
-using System;
 
 
 public static class CommandHandler
@@ -14,10 +14,10 @@ public static class CommandHandler
             for (int i = 0; i < GetBJMaxPlayers(); i++)
             {
                 if (Player(i).SlotState != playerslotstate.Playing) continue;
-                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "-", false);
-                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+                _ = TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "-", false);
+                _ = TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
             }
-            TriggerAddAction(DebugCmdTrigger, HandleCommand);
+            _ = TriggerAddAction(DebugCmdTrigger, HandleCommand);
         }
         catch (Exception e)
         {

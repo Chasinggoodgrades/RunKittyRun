@@ -1,7 +1,7 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class FrameManager
 {
@@ -20,7 +20,7 @@ public static class FrameManager
     {
         try
         {
-            BlzLoadTOCFile("war3mapImported\\templates.toc");
+            _ = BlzLoadTOCFile("war3mapImported\\templates.toc");
             RemoveUnwantedFrames();
             ButtonsBackdrop();
             CreateRewardsButton();
@@ -31,7 +31,7 @@ public static class FrameManager
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in FrameManager: {ex.Message}");
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in FrameManager: {ex.Message}");
             throw;
         }
     }
@@ -72,8 +72,8 @@ public static class FrameManager
 
         // Close Actions
         var closeTrigger = trigger.Create();
-        closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
-        closeTrigger.AddAction(() =>
+        _ = closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
+        _ = closeTrigger.AddAction(() =>
         {
             if (!@event.Player.IsLocal) return;
             parent.Visible = false;
@@ -85,7 +85,7 @@ public static class FrameManager
     private static void RemoveUnwantedFrames()
     {
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
-        var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
+        _ = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
         //timeDayDisplay.Visible = false;
     }
@@ -100,8 +100,8 @@ public static class FrameManager
         shopText.SetPoint(framepointtype.Center, 0, 0, RewardsButton, framepointtype.Center);
         shopText.SetScale(0.9f);
         shopText.Enabled = false;
-        RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
-        RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
+        _ = RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
+        _ = RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
         RewardsButton.Visible = false;
     }
 
@@ -115,8 +115,8 @@ public static class FrameManager
         shopText.SetPoint(framepointtype.Center, 0, 0, MusicButton, framepointtype.Center);
         shopText.SetScale(0.98f);
         shopText.Enabled = false;
-        StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
-        StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
+        _ = StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
+        _ = StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
         MusicButton.Visible = false;
     }
 
@@ -130,15 +130,15 @@ public static class FrameManager
         shopText.SetPoint(framepointtype.Center, 0, 0, ShopButton, framepointtype.Center);
         shopText.SetScale(1.0f);
         shopText.Enabled = false;
-        ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
-        ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
+        _ = ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
+        _ = ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
         ShopButton.Visible = false;
     }
 
     private static void ButtonsBackdrop()
     {
         Backdrop = framehandle.Create("BACKDROP", "ButtonsBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
-        var statsFrameParent = BlzGetFrameByName("ResourceBarGoldText", 0);
+        _ = BlzGetFrameByName("ResourceBarGoldText", 0);
         Backdrop.SetPoint(framepointtype.Top, 0, 0, GameUI, framepointtype.Top);
         Backdrop.SetSize(0.16f, 0.035f);
         Backdrop.SetScale(1.0f);
@@ -163,11 +163,11 @@ public static class FrameManager
 
     private static void ESCHideFrames()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCActions);
+        _ = ESCTrigger.AddAction(ESCActions);
     }
 
     public static void RefreshFrame(framehandle frame)

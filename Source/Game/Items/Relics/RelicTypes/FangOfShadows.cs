@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 public class FangOfShadows : Relic
 {
@@ -50,9 +49,9 @@ public class FangOfShadows : Relic
     private void RegisterTriggers(unit Unit)
     {
         SummonTrigger = trigger.Create();
-        SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        SummonTrigger.AddAction(() => SummonShadowKitty());
+        _ = SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
+        _ = SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        _ = SummonTrigger.AddAction(() => SummonShadowKitty());
 
         TeleTrigger = trigger.Create();
         KillTimer = timer.Create();
@@ -86,9 +85,9 @@ public class FangOfShadows : Relic
 
     private void RegisterTeleportAbility(unit Unit)
     {
-        TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
-        TeleTrigger.AddAction(() => TeleportToShadowKitty());
+        _ = TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
+        _ = TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
+        _ = TeleTrigger.AddAction(() => TeleportToShadowKitty());
     }
 
     /// <summary>
@@ -112,7 +111,7 @@ public class FangOfShadows : Relic
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
-        var ability = Unit.GetAbility(RelicAbilityID);
+        _ = Unit.GetAbility(RelicAbilityID);
         var reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
         var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;

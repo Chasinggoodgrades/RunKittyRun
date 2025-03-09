@@ -4,7 +4,7 @@ public class Circle
 {
     private const int CIRCLE_UNIT_MODEL = Constants.UNIT_KITTY_CIRCLE;
     private static rect CIRCLE_SPAWN_REGION = Regions.Circle_Area.Rect;
-    private int ID {  get; set; }
+    private int ID { get; set; }
     public player Player { get; set; }
     public unit Unit { get; set; }
     public trigger Collision { get; set; }
@@ -29,7 +29,7 @@ public class Circle
     {
         Unit.Dispose();
         Collision.Dispose();
-        Globals.ALL_CIRCLES.Remove(Player);
+        _ = Globals.ALL_CIRCLES.Remove(Player);
     }
 
     public void KittyDied(Kitty kitty)

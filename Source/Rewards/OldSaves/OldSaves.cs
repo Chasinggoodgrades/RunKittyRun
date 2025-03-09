@@ -1,10 +1,10 @@
-﻿using WCSharp.Api;
+﻿using Source;
 using System;
-using Source;
-using static WCSharp.Api.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public class Savecode
 {
@@ -26,7 +26,7 @@ public class Savecode
             else
                 throw new ArgumentException($"Error, tooltip not available: {ability}");
         }
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             InitializeSaveCode(player);
         }
@@ -34,7 +34,8 @@ public class Savecode
 
     private static void InitializeSaveCode(player p)
     {
-        if (!PlayerSaveObject.ContainsKey(p)) {
+        if (!PlayerSaveObject.ContainsKey(p))
+        {
             PlayerSaveObject[p] = new Savecode();
         }
     }
@@ -70,7 +71,7 @@ public class Savecode
         while (current != null)
         {
             x = current.Leaf;
-            hash = OldSavesHelper.ModuloInteger(hash + 79 * hash / (x + 1) + 293 * x / (1 + hash - (hash / BASE()) * BASE()) + 479, HASHN());
+            hash = OldSavesHelper.ModuloInteger(hash + (79 * hash / (x + 1)) + (293 * x / (1 + hash - (hash / BASE() * BASE()))) + 479, HASHN());
             current = current.Next;
         }
 
@@ -87,7 +88,7 @@ public class Savecode
         if (sign == -1)
         {
             SetRandomSeed(Bignum.LastDigit());
-            current.Leaf = Modb(current.Leaf + sign * GetRandomInt(0, BASE() - 1));
+            current.Leaf = Modb(current.Leaf + (sign * GetRandomInt(0, BASE() - 1)));
             x = current.Leaf;
         }
         SetRandomSeed(key);
@@ -99,7 +100,7 @@ public class Savecode
                 advance = current.Leaf;
             }
 
-            current.Leaf = Modb(current.Leaf + sign * GetRandomInt(0, BASE() - 1));
+            current.Leaf = Modb(current.Leaf + (sign * GetRandomInt(0, BASE() - 1)));
 
             if (sign == 1)
             {
@@ -116,7 +117,7 @@ public class Savecode
         if (sign == 1)
         {
             SetRandomSeed(x);
-            Bignum.List.Leaf = Modb(Bignum.List.Leaf + sign * GetRandomInt(0, BASE() - 1));
+            Bignum.List.Leaf = Modb(Bignum.List.Leaf + (sign * GetRandomInt(0, BASE() - 1)));
         }
 
         SetRandomSeed(seed);
@@ -126,7 +127,7 @@ public class Savecode
     {
         try
         {
-            int key = SCommHash(p.Name) + 1 * 73;
+            int key = SCommHash(p.Name) + (1 * 73);
             int inputhash = 0;
 
             FromString(code);
@@ -139,14 +140,14 @@ public class Savecode
         catch (Exception e)
         {
             Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
-            if(Program.Debug) Console.WriteLine(e.Message);
+            if (Program.Debug) Console.WriteLine(e.Message);
             return false;
         }
     }
 
     public static void LoadString()
     {
-        if(Gamemode.CurrentGameMode != "Standard")
+        if (Gamemode.CurrentGameMode != "Standard")
         {
             Console.WriteLine($"{Colors.COLOR_YELLOW}Old save codes work only in Standard");
             return;
@@ -155,7 +156,7 @@ public class Savecode
         var sb = new StringBuilder();
         Preloader(filePath);
 
-        for(var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
+        for (var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
         {
             var abilityID = OldSavesHelper.AbilityList[i];
             var originalTooltip = OriginalToolTips[i];
@@ -166,16 +167,16 @@ public class Savecode
             else
             {
                 BlzSetAbilityTooltip(abilityID, originalTooltip, 0);
-                sb.Append(packet);
+                _ = sb.Append(packet);
             }
         }
         var result = sb.ToString();
         var newLineStart = result.IndexOf('\n');
-        if(newLineStart >= 0)
+        if (newLineStart >= 0)
             result = result.Substring(newLineStart + 1);
 
-        sb.Clear().Append(result);
-        OldsaveSync.SyncString(sb.ToString());
+        _ = sb.Clear().Append(result);
+        _ = OldsaveSync.SyncString(sb.ToString());
     }
 
     /// <summary>
@@ -228,8 +229,7 @@ public class Savecode
     {
         var charlen = player_charset.Length;
         var count = new int[charlen];
-        var x = 0;
-
+        int x;
         foreach (var c in name.ToUpper())
         {
             x = OldSavesHelper.Player_CharToInt(c);
@@ -238,7 +238,7 @@ public class Savecode
 
         x = 0;
         for (var i = 0; i < charlen; i++)
-            x = count[i] * count[i] * i + count[i] * x + x + 199;
+            x = (count[i] * count[i] * i) + (count[i] * x) + x + 199;
 
         if (x < 0)
             x = -x;

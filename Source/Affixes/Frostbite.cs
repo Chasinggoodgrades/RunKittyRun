@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public class Frostbite : Affix
@@ -26,7 +25,7 @@ public class Frostbite : Affix
     public override void Apply()
     {
         Unit.Unit.SetVertexColor(80, 140, 250);
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
         base.Apply();
     }
@@ -34,7 +33,7 @@ public class Frostbite : Affix
     public override void Remove()
     {
         Unit.Unit.SetVertexColor(150, 120, 255);
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(ref PeriodicRangeTrigger);
         RemoveAllEffects();
@@ -54,10 +53,10 @@ public class Frostbite : Affix
 
     private void RegisterEvents()
     {
-        PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
-        PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
-        InRangeTrigger.AddAction(() =>
+        _ = PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
+        _ = PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
+        _ = InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
+        _ = InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;
             if (!target.Alive) return; // must be alive
@@ -84,7 +83,7 @@ public class Frostbite : Affix
 
         foreach (var target in TempList)
         {
-            Frostbitten.Remove(target);
+            _ = Frostbitten.Remove(target);
             Effects[target].Dispose();
         }
 

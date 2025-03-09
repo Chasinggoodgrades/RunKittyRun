@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -85,7 +84,7 @@ public static class SoundManager
     public static void PlayKittyDeathSound(unit Kitty)
     {
 
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) 
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
             TeamKittyDeathSound(Kitty);
         else
         {
@@ -98,7 +97,7 @@ public static class SoundManager
 
     public static void PlayFirstBloodSound()
     {
-        if(FirstBloodSoundPlayed) return;
+        if (FirstBloodSoundPlayed) return;
         var s = FIRST_BLOOD_SOUND;
         s.Stop(false, false);
         s.Start();
@@ -116,7 +115,7 @@ public static class SoundManager
     {
         var s = KITTY_DEATH_SOUND;
         s.AttachToUnit(Kitty);
-        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
+        foreach (var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
         {
             if (player.IsLocal)
             {
@@ -151,7 +150,7 @@ public static class SoundManager
         {
             var count = 0;
             unit u = null;
-            foreach(var kitty in Globals.ALL_KITTIES)
+            foreach (var kitty in Globals.ALL_KITTIES)
             {
                 if (kitty.Value.Alive)
                 {

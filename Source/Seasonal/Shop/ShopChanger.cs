@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 public static class ShopChanger
@@ -25,15 +24,15 @@ public static class ShopChanger
             case HolidaySeasons.Christmas:
                 SetShopsToSkin(SantaSkin);
                 break;
-/*            case HolidaySeasons.Halloween:
-                HalloweenShop();
-                break;
-            case HolidaySeasons.Easter:
-                EasterShop();
-                break;
-            case HolidaySeasons.Valentines:
-                ValentinesShop();
-                break;*/
+                /*            case HolidaySeasons.Halloween:
+                                HalloweenShop();
+                                break;
+                            case HolidaySeasons.Easter:
+                                EasterShop();
+                                break;
+                            case HolidaySeasons.Valentines:
+                                ValentinesShop();
+                                break;*/
         }
     }
 

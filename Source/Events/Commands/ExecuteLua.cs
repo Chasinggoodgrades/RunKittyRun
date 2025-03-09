@@ -1,11 +1,11 @@
 ﻿using System;
-using WCSharp.Shared;
 using WCSharp.Api;
-using System;
+using WCSharp.Shared;
 
 public static class ExecuteLua
 {
-    public static void LuaCode(player player, string command) {
+    public static void LuaCode(player player, string command)
+    {
 
         var cmdArgs = command.Substring(command.IndexOf(" ") + 1);
         player.DisplayTextTo($"Args: {cmdArgs}");
@@ -14,7 +14,7 @@ public static class ExecuteLua
             local self = Globals.ALL_KITTIES:get(GetTriggerPlayer())
             local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
             "
-            + cmdArgs + 
+            + cmdArgs +
             @"end");
         if (func != null)
         {

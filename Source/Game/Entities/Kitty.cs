@@ -54,10 +54,10 @@ public class Kitty
     {
         try
         {
-            foreach (var player in Globals.ALL_PLAYERS)
+            foreach (player player in Globals.ALL_PLAYERS)
             {
-                new Circle(player);
-                new Kitty(player);
+                _ = new Circle(player);
+                _ = new Kitty(player);
             }
         }
         catch (System.Exception e)
@@ -74,7 +74,7 @@ public class Kitty
     {
         try
         {
-            var circle = Globals.ALL_CIRCLES[Player];
+            Circle circle = Globals.ALL_CIRCLES[Player];
             Unit.Kill();
             if (!ProtectionActive) Alive = false;
             CrystalOfFire.CrystalOfFireDeath(this);
@@ -89,7 +89,7 @@ public class Kitty
 
             if (Gamemode.CurrentGameMode != "Standard") return;
             SoundManager.PlayLastManStandingSound();
-            Gameover.GameOver();
+            _ = Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
             this.Slider.PauseSlider();
             this.aiController.PauseAi();
@@ -110,10 +110,10 @@ public class Kitty
         try
         {
             if (Unit.Alive) return;
-            var circle = Globals.ALL_CIRCLES[Player];
+            Circle circle = Globals.ALL_CIRCLES[Player];
             circle.HideCircle();
             Alive = true;
-            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
+            _ = Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
             Unit.Mana = circle.Unit.Mana;
             Utility.SelectUnitForPlayer(Player, Unit);
             CameraUtil.RelockCamera(Player);
@@ -151,14 +151,14 @@ public class Kitty
     }
     private void SpawnEffect()
     {
-        var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
+        WCSharp.Shared.Data.Point spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
     }
 
     private void CreateKitty()
     {
         // Spawn, Create, Locust
-        var spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
+        WCSharp.Shared.Data.Point spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
         Utility.SelectUnitForPlayer(Player, Unit);
@@ -184,7 +184,7 @@ public class Kitty
         c_Collision.Dispose();
         YellowLightning.Dispose();
         if (Gameover.WinGame) return;
-        Globals.ALL_KITTIES.Remove(Player);
+        _ = Globals.ALL_KITTIES.Remove(Player);
     }
 
     private void UpdateSaviorStats(Kitty savior)
@@ -224,8 +224,8 @@ public class Kitty
 
     private void TrueSightGhostWolves()
     {
-        var trueSight = FourCC("Atru");
-        Unit.AddAbility(trueSight);
+        int trueSight = FourCC("Atru");
+        _ = Unit.AddAbility(trueSight);
         Unit.HideAbility(trueSight, true);
     }
 

@@ -178,8 +178,8 @@ public class Slider
 
         escaperTurnForOnePeriod();
 
-        float newX = oldX + movePerTick * Cos(angle);
-        float newY = oldY + movePerTick * Sin(angle);
+        float newX = oldX + (movePerTick * Cos(angle));
+        float newY = oldY + (movePerTick * Sin(angle));
 
         if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
         {
@@ -198,13 +198,13 @@ public class Slider
     {
         ClickTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(ClickTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        ClickTrigger.AddAction(() => HandleTurn(true));
+        _ = ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        _ = ClickTrigger.AddAction(() => HandleTurn(true));
 
         WidgetTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(WidgetTrigger, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
-        WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        WidgetTrigger.AddAction(() => HandleTurn(false));
+        _ = WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        _ = WidgetTrigger.AddAction(() => HandleTurn(false));
 
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
@@ -213,8 +213,7 @@ public class Slider
     private void HandleTurn(bool isToLocation)
     {
         var unit = @event.Unit;
-        var angle = 0.0f;
-
+        float angle;
         if (isToLocation)
         {
             var orderX = GetOrderPointX();
@@ -282,7 +281,7 @@ public class Slider
             if (diffToApplyAbs > 0.05f)
             {
                 int sens = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1;
-                float maxIncreaseRotationSpeedPerPeriod = Math.Abs((maxSlideTurnPerPeriod * SLIDE_INTERVAL) / rotationTimeForMaximumSpeed);
+                float maxIncreaseRotationSpeedPerPeriod = Math.Abs(maxSlideTurnPerPeriod * SLIDE_INTERVAL / rotationTimeForMaximumSpeed);
 
                 float newSlideTurn;
                 float curSlideTurn = slideCurrentTurnPerPeriod;
@@ -293,7 +292,7 @@ public class Slider
                 {
                     int tableInd = (int)Math.Round((float)Math.Abs(remainingDegrees));
                     float aimedSpeedPercentage = SPEED_AT_LEAST_THAN_50_DEGREES[tableInd];
-                    float aimedNewSpeedPerPeriod = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100;
+                    float aimedNewSpeedPerPeriod = maxSlideTurnPerPeriod * aimedSpeedPercentage * sens / 100;
                     float diffSpeed = aimedNewSpeedPerPeriod - curSlideTurn;
                     if (Math.Abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod)
                     {
@@ -302,7 +301,7 @@ public class Slider
                     else
                     {
                         int sensDiffToApply = diffSpeed > 0 ? 1 : -1;
-                        diffToApply = curSlideTurn + sensDiffToApply * maxIncreaseRotationSpeedPerPeriod;
+                        diffToApply = curSlideTurn + (sensDiffToApply * maxIncreaseRotationSpeedPerPeriod);
                     }
                     slideCurrentTurnPerPeriod = diffToApply;
                 }

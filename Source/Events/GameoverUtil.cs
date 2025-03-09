@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using WCSharp.Api;
 public static class GameoverUtil
 {
     public static void SetBestGameStats()
     {
-        foreach(var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
             switch (Difficulty.DifficultyValue)
             {

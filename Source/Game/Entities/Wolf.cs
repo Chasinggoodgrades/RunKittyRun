@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Source.Init;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Source.Init;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -66,7 +66,7 @@ public class Wolf
                 int numberOfWolves = laneEntry.Value;
 
                 for (int i = 0; i < numberOfWolves; i++)
-                    new Wolf(lane);
+                    _ = new Wolf(lane);
             }
             //WolfSpawning.SpawnWolves();
             FandF.CreateBloodWolf();
@@ -168,10 +168,9 @@ public class Wolf
 
     private bool ShouldStartEffect()
     {
-        if (Gamemode.CurrentGameMode != "Standard")
-            return TournamentChance();
-        else
-            return GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
+        return Gamemode.CurrentGameMode != "Standard"
+            ? TournamentChance()
+            : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
     }
 
     private bool TournamentChance()
@@ -218,9 +217,9 @@ public class Wolf
 
     public void RemoveAffix(Affix affix)
     {
-        Affixes.Remove(affix);
+        _ = Affixes.Remove(affix);
         affix.Remove();
-        AffixFactory.AllAffixes.Remove(affix);
+        _ = AffixFactory.AllAffixes.Remove(affix);
     }
 
     public void RemoveAffix(string affixName)
@@ -245,7 +244,7 @@ public class Wolf
         if (AffixCount() == 0) return;
         foreach (var affix in Affixes)
         {
-            AffixFactory.AllAffixes.Remove(affix);
+            _ = AffixFactory.AllAffixes.Remove(affix);
             affix.Remove();
         }
         Affixes.Clear();

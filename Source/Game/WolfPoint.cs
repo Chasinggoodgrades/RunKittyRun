@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class WolfPoint
 {
     private const float MaxDistance = 128f; // Max distance between points
-    public readonly static int MoveOrderID = OrderId("move");
+    public static readonly int MoveOrderID = OrderId("move");
     private Wolf Wolf { get; set; }
     public List<float[]> PointsToVisit { get; set; } = new List<float[]>();
 
@@ -83,9 +83,9 @@ public class WolfPoint
     {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
         if (Wolf.IsPaused || Wolf.IsReviving) return;
-        for (int i = PointsToVisit.Count -1; i >= 1; i--)
+        for (int i = PointsToVisit.Count - 1; i >= 1; i--)
         {
-            Wolf.Unit.QueueOrder(MoveOrderID, PointsToVisit[i][0], PointsToVisit[i][1]); 
+            _ = Wolf.Unit.QueueOrder(MoveOrderID, PointsToVisit[i][0], PointsToVisit[i][1]);
         }
     }
 }

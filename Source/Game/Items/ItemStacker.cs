@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 public static class ItemStacker
 {
     private static trigger PickupTrigger;
     private static List<int> StackableItemIDs;
     public static void Initialize()
     {
-        RegisterItemList();
-        RegisterEvents();
+        _ = RegisterItemList();
+        _ = RegisterEvents();
     }
 
     /// <summary>
@@ -32,8 +31,8 @@ public static class ItemStacker
     {
         PickupTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            PickupTrigger.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem, null);
-        PickupTrigger.AddAction(StackActions);
+            _ = PickupTrigger.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem, null);
+        _ = PickupTrigger.AddAction(StackActions);
         return PickupTrigger;
     }
 
@@ -50,7 +49,6 @@ public static class ItemStacker
         if (itemCharges > 1) heldItem.Charges += itemCharges;
         else heldItem.Charges += 1;
         item.Dispose();
-        item = null;
     }
 
     private static bool StackableItem(int itemID)

@@ -37,7 +37,7 @@ public static class DeathlessChallenges
     /// <param name="player"></param>
     public static void DeathlessCheck(player player)
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         DeathlessProgress[player]++;
         if (DeathlessProgress[player] == DeathlessPerRound())
         {
@@ -58,7 +58,7 @@ public static class DeathlessChallenges
 
     private static void AwardBasedOnDifficulty(player player)
     {
-        var difficulty = (DifficultyLevel)Difficulty.DifficultyValue;
+        _ = (DifficultyLevel)Difficulty.DifficultyValue;
         NormalDeathlessAward(player);
         /*        switch (difficulty)
                 {
@@ -78,19 +78,22 @@ public static class DeathlessChallenges
 
     private static void NormalDeathlessAward(player player)
     {
-        var gameAwards = Globals.GAME_AWARDS_SORTED;
+        _ = Globals.GAME_AWARDS_SORTED;
+        GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.NormalDeathless1), nameof(gameAwards.Deathless.NormalDeathless2), nameof(gameAwards.Deathless.NormalDeathless3), nameof(gameAwards.Deathless.NormalDeathless4), nameof(gameAwards.Deathless.NormalDeathless5));
     }
 
     private static void HardDeathlessAward(player player)
     {
-        var gameAwards = Globals.GAME_AWARDS_SORTED;
+        _ = Globals.GAME_AWARDS_SORTED;
+        GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.HardDeathless1), nameof(gameAwards.Deathless.HardDeathless2), nameof(gameAwards.Deathless.HardDeathless3), nameof(gameAwards.Deathless.HardDeathless4), nameof(gameAwards.Deathless.HardDeathless5));
     }
 
     private static void ImpossibleDeathlessAward(player player)
     {
-        var gameAwards = Globals.GAME_AWARDS_SORTED;
+        _ = Globals.GAME_AWARDS_SORTED;
+        GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.ImpossibleDeathless1), nameof(gameAwards.Deathless.ImpossibleDeathless2), nameof(gameAwards.Deathless.ImpossibleDeathless3), nameof(gameAwards.Deathless.ImpossibleDeathless4), nameof(gameAwards.Deathless.ImpossibleDeathless5));
     }
 

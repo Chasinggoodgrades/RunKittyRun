@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public static class KibbleEvent
 {
@@ -53,7 +51,7 @@ public static class KibbleEvent
             EventKibbles[i] = null;
         }
         GC.RemoveList(ref EventKibbles);
-        
+
         Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}The kibble collecting event has ended! {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r were collected.");
     }
 

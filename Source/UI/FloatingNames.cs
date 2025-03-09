@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public class FloatingNameTag
 {
@@ -82,7 +81,7 @@ public class FloatingNameTag
 
     public static void ShowAllNameTags(player Player)
     {
-        if(!Player.IsLocal) return;
+        if (!Player.IsLocal) return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
             PlayerNameTags[player].NameTag.SetVisibility(true);

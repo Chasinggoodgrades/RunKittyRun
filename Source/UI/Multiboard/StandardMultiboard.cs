@@ -40,12 +40,12 @@ public static class StandardMultiboard
         Updater = trigger.Create();
         ESCTrigger = trigger.Create();
 
-        Updater.RegisterTimerEvent(1.00f, true);
-        Updater.AddAction(CurrentStatsRoundTimes);
+        _ = Updater.RegisterTimerEvent(1.00f, true);
+        _ = Updater.AddAction(CurrentStatsRoundTimes);
 
-        foreach(var player in Globals.ALL_PLAYERS)
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        ESCTrigger.AddAction(ESCPressed);
+        foreach (var player in Globals.ALL_PLAYERS)
+            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        _ = ESCTrigger.AddAction(ESCPressed);
     }
 
     private static void MakeMultiboard()
@@ -139,10 +139,7 @@ public static class StandardMultiboard
                 var score2 = stats2.TotalSaves - stats2.TotalDeaths;
 
                 int compareScore = score2.CompareTo(score1);
-                if (compareScore != 0)
-                    return compareScore;
-
-                return p1.Id.CompareTo(p2.Id);
+                return compareScore != 0 ? compareScore : p1.Id.CompareTo(p2.Id);
             });
 
             foreach (var player in players)
@@ -203,10 +200,7 @@ public static class StandardMultiboard
             var score2 = stats2.Saves - stats2.Deaths;
 
             int compareScore = score2.CompareTo(score1);
-            if (compareScore != 0)
-                return compareScore;
-
-            return p1.Id.CompareTo(p2.Id);
+            return compareScore != 0 ? compareScore : p1.Id.CompareTo(p2.Id);
         });
 
         foreach (var player in players)
@@ -260,7 +254,7 @@ public static class StandardMultiboard
 
             for (int i = 0; i < roundTimes.Length; i++)
             {
-                if(roundTimes[i] != 0)
+                if (roundTimes[i] != 0)
                     BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}");
                 else
                     BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
@@ -291,10 +285,8 @@ public static class StandardMultiboard
     private static (int gameCount, int winCount) GetGameStatData(KittyData data)
     {
         var gameData = data.GameStats;
-
-        var numberOfGames = 0;
-        var numberOfWins = 0;
-
+        int numberOfGames;
+        int numberOfWins;
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:

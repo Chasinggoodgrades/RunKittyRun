@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class UniqueItems
@@ -25,9 +24,9 @@ public static class UniqueItems
     private static trigger RegisterEvents()
     {
         var trig = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
-            trig.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem);
-        trig.AddAction(ItemPickup);
+        foreach (var player in Globals.ALL_PLAYERS)
+            _ = trig.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem);
+        _ = trig.AddAction(ItemPickup);
         return trig;
     }
 

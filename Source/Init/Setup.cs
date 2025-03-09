@@ -128,7 +128,7 @@ namespace Source.Init
             {
                 if (player.SlotState == playerslotstate.Left)
                 {
-                    Globals.ALL_PLAYERS.Remove(player);
+                    _ = Globals.ALL_PLAYERS.Remove(player);
                     break;
                 }
             }

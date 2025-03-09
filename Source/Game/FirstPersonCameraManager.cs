@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -76,8 +75,8 @@ public class FirstPersonCamera
             float oldX = GetUnitX(hero);
             float oldY = GetUnitY(hero);
 
-            float newX = oldX + fwd * Cos(angle);
-            float newY = oldY + fwd * Sin(angle);
+            float newX = oldX + (fwd * Cos(angle));
+            float newY = oldY + (fwd * Sin(angle));
 
             if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
             {
@@ -178,8 +177,8 @@ public static class FirstPersonCameraManager
                     var keyTrigger = CreateTrigger();
                     var localKey = key.Key; // Create a local copy of the key
                     var localValue = keyState.Key; // Create a local copy of the value
-                    Blizzard.TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value);
-                    TriggerAddAction(keyTrigger, () => OnKeyEvent(localKey, localValue));
+                    _ = Blizzard.TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value);
+                    _ = TriggerAddAction(keyTrigger, () => OnKeyEvent(localKey, localValue));
                 }
             }
         }

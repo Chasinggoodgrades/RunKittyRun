@@ -28,10 +28,10 @@ public class SyncSaveLoad
     {
         for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
-            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
-            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
+            _ = SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
+            _ = SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
         }
-        SyncEvent.AddAction(OnSync);
+        _ = SyncEvent.AddAction(OnSync);
     }
 
     /// <summary>
@@ -45,12 +45,7 @@ public class SyncSaveLoad
         PreloadGenClear();
         PreloadGenStart();
 
-        string rawDataString;
-        if (data != null)
-            rawDataString = PropertyEncoder.EncodeToJsonBase64(data);
-        else
-            rawDataString = PropertyEncoder.EncodeAllDataToJsonBase64();
-
+        string rawDataString = data != null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64();
         string toCompile = rawDataString;
         int chunkSize = 180;
         StringBuilder assemble = new StringBuilder();
@@ -62,12 +57,12 @@ public class SyncSaveLoad
         {
             for (int i = 0; i < toCompile.Length; i++)
             {
-                assemble.Append(toCompile[i]);
+                _ = assemble.Append(toCompile[i]);
                 if (assemble.Length >= chunkSize)
                 {
                     string header = EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString((int)Math.Ceiling((double)i / chunkSize));
                     Preload($"\")\ncall BlzSendSyncData(\"{SyncPrefix}\",\"{header + assemble}\")\ncall S2I(\"");
-                    assemble.Clear();
+                    _ = assemble.Clear();
                 }
             }
             if (assemble.Length > 0)
@@ -94,7 +89,7 @@ public class SyncSaveLoad
                 PreloadStart();
                 Preloader(filename);
                 PreloadEnd(1);
-                BlzSendSyncData(SyncPrefixFinish, "");
+                _ = BlzSendSyncData(SyncPrefixFinish, "");
             }
         }
         else
@@ -110,7 +105,7 @@ public class SyncSaveLoad
         {
             string readData = BlzGetTriggerSyncData();
             string prefix = BlzGetTriggerSyncPrefix();
-            int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0; 
+            int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0;
             int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
             string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
             var promise = allPromises[@event.Player.Id];
@@ -125,7 +120,7 @@ public class SyncSaveLoad
                 else if (prefix == SyncPrefixFinish)
                 {
                     promise.Finish();
-                    allPromises.Remove(GetPlayerId(promise.SyncOwner));
+                    _ = allPromises.Remove(GetPlayerId(promise.SyncOwner));
                     //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
                 }
             }
@@ -136,7 +131,7 @@ public class SyncSaveLoad
         }
         catch (Exception ex)
         {
-            Console.WriteLine((ex.StackTrace));
+            Console.WriteLine(ex.StackTrace);
         }
     }
 }
@@ -164,7 +159,7 @@ public class FilePromise
             {
                 if (Buffer.ContainsKey(i))
                 {
-                    loadString.Append(Buffer[i]);
+                    _ = loadString.Append(Buffer[i]);
                     //if(Source.Program.Debug) Console.WriteLine($"{Buffer[i]}");
                 }
             }
@@ -172,9 +167,9 @@ public class FilePromise
             //FinalString = WCSharp.Shared.Base64.FromBase64(loadString.ToString());
             DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString);
 
-/*            Logger.Verbose("loadString.Length", loadString.Length);
-            Logger.Verbose("Finished: ");
-            Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
+            /*            Logger.Verbose("loadString.Length", loadString.Length);
+                        Logger.Verbose("Finished: ");
+                        Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
             //Logger.Verbose("FinalString: ", FinalString);
 
             onFinish?.Invoke(this);

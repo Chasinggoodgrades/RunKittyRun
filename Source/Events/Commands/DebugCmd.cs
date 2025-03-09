@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
-using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
 public static class DebugCmd
@@ -40,7 +38,7 @@ public static class DebugCmd
                 break;
             case "?blink":
             case "?tele":
-                kitty.Unit.AddItem(FourCC("desc"));
+                _ = kitty.Unit.AddItem(FourCC("desc"));
                 break;
             case "?diff":
                 Difficulty.ChangeDifficulty(cmd.Length > 1 ? cmd[1] : "normal");
@@ -213,13 +211,13 @@ public static class DebugCmd
 
                 if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
                 {
-                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
+                    _ = UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
                     var abilityName = GetObjectName(FourCC(abilityId));
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
                 }
                 else
                 {
-                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
+                    _ = UnitAddAbility(kitty.Unit, FourCC(abilityId));
                     var abilityName = GetObjectName(FourCC(abilityId));
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
                 }
@@ -268,9 +266,9 @@ public static class DebugCmd
                             }
 
                             Globals.ALL_PLAYERS.Add(compPlayer);
-                            new Circle(compPlayer);
+                            _ = new Circle(compPlayer);
                             var newKitty = new Kitty(compPlayer);
-                            newKitty.Unit.AddItem(FourCC("bspd"));
+                            _ = newKitty.Unit.AddItem(FourCC("bspd"));
                         }
                     }
 
@@ -299,7 +297,7 @@ public static class DebugCmd
                                 continue;
                             }
 
-                            Globals.ALL_PLAYERS.Remove(compPlayer);
+                            _ = Globals.ALL_PLAYERS.Remove(compPlayer);
 
                             var compKitty = Globals.ALL_KITTIES[compPlayer];
                             compKitty?.Dispose();

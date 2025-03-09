@@ -1,4 +1,4 @@
-﻿public abstract class Affix 
+﻿public abstract class Affix
 {
     public Wolf Unit { get; set; }
     public string Name { get; set; }

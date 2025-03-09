@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class RewardsFrame
@@ -31,11 +30,11 @@ public static class RewardsFrame
             CountRewardFrames();
             AppendRewardsToFrames();
             CreateRandomRewardButton();
-            FrameManager.CreateHeaderFrame(RewardFrame);
+            _ = FrameManager.CreateHeaderFrame(RewardFrame);
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in RewardsFrame: {ex.Message}");
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in RewardsFrame: {ex.Message}");
             throw;
         }
     }
@@ -76,7 +75,7 @@ public static class RewardsFrame
     private static int CountNumberOfRewards(RewardType type)
     {
         var count = 0;
-        foreach(var reward in RewardsManager.Rewards)
+        foreach (var reward in RewardsManager.Rewards)
         {
             if (reward.Type == type) count++;
         }
@@ -85,18 +84,18 @@ public static class RewardsFrame
     private static void InitializePanels(string name, float colCount)
     {
         var y = -Padding;
-        var width = (FrameWidth - Padding * 2)/2;
+        var width = (FrameWidth - (Padding * 2)) / 2;
         var height = (colCount == 1) ? 0.03f : 0.03f + ((colCount - 1) * 0.02f);
-        CreatePanel(TempHandle, 0, y, width, height, name);
+        _ = CreatePanel(TempHandle, 0, y, width, height, name);
     }
 
     private static framehandle CreatePanel(framehandle parent, float x, float y, float width, float height, string title)
     {
         var framePoint1 = framepointtype.TopLeft;
         var framePoint2 = framepointtype.BottomLeft;
-        if(parent == RewardFrame) framePoint2 = framepointtype.TopLeft;
-        if(parent == RewardFrame) x = Padding;
-        if(parent == RewardFrame) y = -Padding * 2;
+        if (parent == RewardFrame) framePoint2 = framepointtype.TopLeft;
+        if (parent == RewardFrame) x = Padding;
+        if (parent == RewardFrame) y = -Padding * 2;
         if (FrameCount == 5)
         {
             parent = RewardFrame;
@@ -153,8 +152,8 @@ public static class RewardsFrame
         tooltipText.Text = $"{Colors.COLOR_YELLOW}Randomize Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Picks from your rewards list, applying random cosmetics.{Colors.COLOR_RESET}";
 
         var t = trigger.Create();
-        t.RegisterFrameEvent(button, frameeventtype.Click);
-        t.AddAction(RandomRewardsButtonActions);
+        _ = t.RegisterFrameEvent(button, frameeventtype.Click);
+        _ = t.AddAction(RandomRewardsButtonActions);
     }
 
     private static void RandomRewardsButtonActions()
@@ -201,15 +200,15 @@ public static class RewardsFrame
         foreach (var reward in RewardsManager.Rewards)
         {
             count[reward.Type]++;
-            var rows = CountNumberOfRewards(reward.Type) / cols + 1;
+            var rows = (CountNumberOfRewards(reward.Type) / cols) + 1;
             var col = (count[reward.Type] - 1) % cols;
             var row = (count[reward.Type] - 1) / cols;
             var panel = FrameByName[Enum.GetName(typeof(RewardType), reward.Type)];
             var rewardButton = framehandle.Create("Button", reward.Name.ToString(), panel, "ScoreScreenTabButtonTemplate", 0);
             if (col == 0)
-                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - Padding / 2, panel, framepointtype.TopLeft);
+                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);
             else
-                rewardButton.SetPoint(framepointtype.TopLeft, col * IconSize + Padding, (-row * IconSize) - Padding / 2, panel, framepointtype.TopLeft);
+                rewardButton.SetPoint(framepointtype.TopLeft, (col * IconSize) + Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);
             rewardButton.SetSize(IconSize, IconSize);
 
             var icon = framehandle.Create("BACKDROP", reward.Name.ToString() + "icon", rewardButton, "", 0);
@@ -219,8 +218,8 @@ public static class RewardsFrame
             RewardIcons.Add(icon, reward);
 
             var Trigger = trigger.Create();
-            Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
-            Trigger.AddAction(() => RewardButtonActions(reward));
+            _ = Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
+            _ = Trigger.AddAction(() => RewardButtonActions(reward));
         }
 
         GC.RemoveDictionary(ref count);
@@ -261,7 +260,7 @@ public static class RewardsFrame
     {
         var stats = Globals.ALL_KITTIES[player].SaveData;
         var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
-        foreach(var reward in RewardIcons)
+        foreach (var reward in RewardIcons)
         {
             var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.Value.TypeSorted, reward.Value.Name);
             if (value <= 0) // Doesnt have reward
@@ -276,9 +275,9 @@ public static class RewardsFrame
         var rewardsHotKey = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
+            _ = rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
         }
-        rewardsHotKey.AddAction(() =>
+        _ = rewardsHotKey.AddAction(() =>
         {
             RewardsFrameActions();
         });

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class AwardingCmds

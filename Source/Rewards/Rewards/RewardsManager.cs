@@ -49,9 +49,9 @@ public static class RewardsManager
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+            _ = Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         }
-        Trigger.AddAction(() => CastedReward());
+        _ = Trigger.AddAction(() => CastedReward());
     }
 
     private static void CastedReward()

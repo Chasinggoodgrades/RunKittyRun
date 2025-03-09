@@ -62,14 +62,14 @@ public static class Shops
     private static void ConstantItems()
     {
         // Items for all modes
-/*        KittyVendorItemList.Add(Constants.ITEM_ADRENALINE_POTION);
-        KittyVendorItemList.Add(Constants.ITEM_HEALING_WATER);
-        KittyVendorItemList.Add(Constants.ITEM_PEGASUS_BOOTS);
-        KittyVendorItemList.Add(Constants.ITEM_ENERGY_STONE);
-        KittyVendorItemList.Add(Constants.ITEM_MEDITATION_CLOAK);
-        KittyVendorItemList.Add(Constants.ITEM_RITUAL_MASK);
-        KittyVendorItemList.Add(Constants.ITEM_ELIXIR);
-        KittyVendorItemList.Add(Constants.ITEM_ANCIENT_TOME);*/
+        /*        KittyVendorItemList.Add(Constants.ITEM_ADRENALINE_POTION);
+                KittyVendorItemList.Add(Constants.ITEM_HEALING_WATER);
+                KittyVendorItemList.Add(Constants.ITEM_PEGASUS_BOOTS);
+                KittyVendorItemList.Add(Constants.ITEM_ENERGY_STONE);
+                KittyVendorItemList.Add(Constants.ITEM_MEDITATION_CLOAK);
+                KittyVendorItemList.Add(Constants.ITEM_RITUAL_MASK);
+                KittyVendorItemList.Add(Constants.ITEM_ELIXIR);
+                KittyVendorItemList.Add(Constants.ITEM_ANCIENT_TOME);*/
     }
 
     /// <summary>
@@ -98,8 +98,8 @@ public static class Shops
     {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         foreach (var vendor in KittyVendorsList)
-            Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
-        Trigger.AddAction( () => OnVendorSell());
+            _ = Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
+        _ = Trigger.AddAction(() => OnVendorSell());
     }
 
     private static void OnVendorSell()

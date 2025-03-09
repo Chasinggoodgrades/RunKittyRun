@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Events;
 using static WCSharp.Api.Common;
 
 public static class ItemSpawner
@@ -46,14 +43,12 @@ public static class ItemSpawner
             var item = TrackItems[i];
             if (item.IsOwned) continue;
             item.Dispose();
-            item = null;
         }
 
         for (int i = 0; i < TrackKibbles.Count; i++)
         {
             var kibble = TrackKibbles[i];
             kibble.Dispose();
-            kibble = null;
         }
 
         TrackItems.Clear();

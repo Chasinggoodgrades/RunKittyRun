@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class RewardHelper
 {
@@ -49,11 +48,7 @@ public class RewardHelper
     {
         // search rewardsList for this award name, then return getawardNestedvalue
         var reward = RewardsManager.Rewards.Find(r => r.Name == awardName);
-        if (reward != null)
-        {
-            return GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name);
-        }
-        return -1;
+        return reward != null ? GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name) : -1;
     }
 
 

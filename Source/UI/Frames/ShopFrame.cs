@@ -1,8 +1,8 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Text;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class ShopFrame
 {
@@ -25,9 +25,9 @@ public static class ShopFrame
     private const float panelPadding = 0.015f;
     private const float frameX = 0.4f;
     private const float frameY = 0.25f;
-    private const float panelX = (frameX/2) - panelPadding;
-    private const float panelY = (frameY/3) - panelPadding*2;
-    private const float detailsPanelX = frameX - (panelX + panelPadding * 2);
+    private const float panelX = (frameX / 2) - panelPadding;
+    private const float panelY = (frameY / 3) - (panelPadding * 2);
+    private const float detailsPanelX = frameX - (panelX + (panelPadding * 2));
     private const float detailsPanelY = frameY - (panelPadding * 2);
     private const int ActiveAlpha = 255;
     private const int DisabledAlpha = 150;
@@ -53,7 +53,7 @@ public static class ShopFrame
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in ShopFrame: {ex.Message}");
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in ShopFrame: {ex.Message}");
             throw;
         }
     }
@@ -63,13 +63,13 @@ public static class ShopFrame
         shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         BlzFrameSetAbsPoint(shopFrame, FRAMEPOINT_CENTER, 0.40f, 0.375f);
         BlzFrameSetSize(shopFrame, frameX, frameY);
-        FrameManager.CreateHeaderFrame(shopFrame);
+        _ = FrameManager.CreateHeaderFrame(shopFrame);
     }
 
     private static void InitializePanels()
     {
         relicsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -panelPadding*2, shopFrame, FRAMEPOINT_TOPLEFT);
+        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -panelPadding * 2, shopFrame, FRAMEPOINT_TOPLEFT);
         relicsPanel.SetSize(panelX, panelY);
         rewardsPanel = CreatePanel(relicsPanel, 0, -panelPadding);
         miscPanel = CreatePanel(rewardsPanel, 0, -panelPadding);
@@ -102,7 +102,7 @@ public static class ShopFrame
     private static void InitializeDetailsPanel()
     {
         detailsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        var detailsPanelX = frameX - (panelX + panelPadding*2);
+        var detailsPanelX = frameX - (panelX + (panelPadding * 2));
         var detailsPanelY = frameY - (panelPadding * 2);
         detailsPanel.SetPoint(framepointtype.TopRight, -panelPadding, -panelPadding, shopFrame, framepointtype.TopRight);
         detailsPanel.SetSize(detailsPanelX, detailsPanelY);
@@ -110,20 +110,20 @@ public static class ShopFrame
         nameLabel = BlzCreateFrameByType("TEXT", "nameLabel", detailsPanel, "", 0);
         costLabel = BlzCreateFrameByType("TEXT", "costLabel", detailsPanel, "", 0);
         descriptionLabel = BlzCreateFrameByType("TEXT", "descriptionLabel", detailsPanel, "", 0);
-        
+
         buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         sellButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         upgradeButton = BlzCreateFrame("DebugButton", detailsPanel, 0, 0);
 
-        nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
-        costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
+        nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
+        costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
         descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 4);
 
-        buyButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
-        sellButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
-        upgradeButton.SetSize(detailsPanelX/3.0f, detailsPanelY/6);
+        buyButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
+        sellButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
+        upgradeButton.SetSize(detailsPanelX / 3.0f, detailsPanelY / 6);
 
-        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding/2, -panelPadding, detailsPanel, framepointtype.TopLeft);
+        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding / 2, -panelPadding, detailsPanel, framepointtype.TopLeft);
         costLabel.SetPoint(framepointtype.TopLeft, 0, -panelPadding, nameLabel, framepointtype.TopLeft);
         descriptionLabel.SetPoint(framepointtype.TopLeft, 0, 0, costLabel, framepointtype.BottomLeft);
 
@@ -136,16 +136,16 @@ public static class ShopFrame
         upgradeButton.Text = "Upgrade";
 
         var BuyTrigger = trigger.Create();
-        BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        BuyTrigger.AddAction( () => BuySelectedItem() );
+        _ = BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
+        _ = BuyTrigger.AddAction(() => BuySelectedItem());
 
         var SellTrigger = trigger.Create();
-        SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        SellTrigger.AddAction( () => SellSelectedItem() );
+        _ = SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
+        _ = SellTrigger.AddAction(() => SellSelectedItem());
 
         var UpgradeTrigger = trigger.Create();
-        UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction( () => RelicFunctions.UpgradeRelic() );
+        _ = UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
+        _ = UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
 
     }
 
@@ -169,8 +169,8 @@ public static class ShopFrame
             var button = BlzCreateFrameByType("BUTTON", name, panel, "ScoreScreenTabButtonTemplate", 0);
             var icon = BlzCreateFrameByType("BACKDROP", name + "icon", button, "", 0);
 
-            var x = column * (buttonWidth);
-            var y = -row * (buttonHeight);
+            var x = column * buttonWidth;
+            var y = -row * buttonHeight;
 
             x += panelPadding / 2;
             y -= panelPadding / 2;
@@ -183,12 +183,12 @@ public static class ShopFrame
             var itemDetails = trigger.Create();
             var relic = items[i];
             CreateShopitemTooltips(button, relic);
-            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            itemDetails.AddAction(() => ShowItemDetails(relic));
+            _ = itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
+            _ = itemDetails.AddAction(() => ShowItemDetails(relic));
         }
 
-        float panelHeight = rows * (buttonHeight) + panelPadding;
-        panel.SetSize(columns * (buttonWidth) + panelPadding, panelHeight);
+        float panelHeight = (rows * buttonHeight) + panelPadding;
+        panel.SetSize((columns * buttonWidth) + panelPadding, panelHeight);
         if (panelHeight > panelY)
         {
             shopFrame.SetSize(frameX, frameY + (panelHeight - panelY));
@@ -205,7 +205,7 @@ public static class ShopFrame
         var kitty = Globals.ALL_KITTIES[player];
 
         upgradeButton.Visible = false;
-        sellButton.Visible = false; 
+        sellButton.Visible = false;
         buyButton.Visible = true;
 
         // basically if type == shopItem, it'll do the buttons.
@@ -323,9 +323,9 @@ public static class ShopFrame
                 colorDescription = Colors.COLOR_GREY;
             }
 
-            finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g|r");
-            finalString.AppendLine($"{colorDescription}{upgrade.Description}|r");
-            finalString.AppendLine("----------------------------");
+            _ = finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g|r");
+            _ = finalString.AppendLine($"{colorDescription}{upgrade.Description}|r");
+            _ = finalString.AppendLine("----------------------------");
         }
 
         upgradeTooltip.Text = finalString.ToString();
@@ -385,7 +385,7 @@ public static class ShopFrame
             if (selectedItem.Type == ShopItemType.Relic)
             {
 
-                if(!kitty.Alive || kitty.ProtectionActive)
+                if (!kitty.Alive || kitty.ProtectionActive)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
                     return;
@@ -400,7 +400,7 @@ public static class ShopFrame
                 // Find the shopItem type associated with the selected item that the player owns.
                 var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
                 var CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID);
-                if(CD > 0.0f && relic.RelicAbilityID != 0)
+                if (CD > 0.0f && relic.RelicAbilityID != 0)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
                     return;
@@ -408,7 +408,7 @@ public static class ShopFrame
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID);
                 player.Gold += selectedItem.Cost;
                 relic?.RemoveEffect(kitty.Unit);
-                kitty.Relics.Remove(relic);
+                _ = kitty.Relics.Remove(relic);
                 return;
             }
 
@@ -433,9 +433,9 @@ public static class ShopFrame
         var shopFrameHotkey = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
+            _ = shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
         }
-        shopFrameHotkey.AddAction(() => ShopFrameActions());
+        _ = shopFrameHotkey.AddAction(() => ShopFrameActions());
     }
 
     public static void ShopFrameActions()

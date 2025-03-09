@@ -1,5 +1,5 @@
-﻿using WCSharp.Api;
-using System;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class Windwalk
@@ -15,10 +15,10 @@ public static class Windwalk
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
-            Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
-        Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
-        Trigger.AddAction(() => ApplyWindwalkEffect());
+        foreach (var player in Globals.ALL_PLAYERS)
+            _ = Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
+        _ = Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
+        _ = Trigger.AddAction(() => ApplyWindwalkEffect());
     }
 
     private static void ApplyWindwalkEffect()

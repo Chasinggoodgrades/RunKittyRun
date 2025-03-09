@@ -21,7 +21,7 @@ public class Howler : Affix
     public override void Apply()
     {
         RegisterTimerEvents();
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(25, 25, 112);
         base.Apply();
     }
@@ -29,7 +29,7 @@ public class Howler : Affix
     public override void Remove()
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         GC.RemoveTimer(ref HowlTimer);
         GC.RemoveGroup(ref NearbyWolves);
         base.Remove();

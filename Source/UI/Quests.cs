@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using WCSharp.Api;
 
 public static class Quests

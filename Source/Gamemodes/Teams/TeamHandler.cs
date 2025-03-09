@@ -120,7 +120,7 @@ public static class TeamHandler
         else
         {
             RemoveFromCurrentTeam(Player);
-            new Team(TeamNumber);
+            _ = new Team(TeamNumber);
         }
         return true;
 
@@ -128,9 +128,9 @@ public static class TeamHandler
 
     private static void RemoveFromCurrentTeam(player Player)
     {
-        if(Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team team))
+        if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team team))
         {
             team.RemoveMember(Player);
-        }   
+        }
     }
 }

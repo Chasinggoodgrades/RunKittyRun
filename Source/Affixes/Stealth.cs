@@ -11,13 +11,13 @@
 
     public override void Apply()
     {
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         base.Apply();
     }
 
     public override void Remove()
     {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }
 

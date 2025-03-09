@@ -78,7 +78,7 @@ public static class RelicFunctions
 
     private static bool HasInventorySpace(unit unit)
     {
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
             if (unit.ItemAtOrDefault(i) == null) return true;
         return false;
     }
@@ -90,7 +90,7 @@ public static class RelicFunctions
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
     private static void AddItem(player player, int itemID)
     {
-        Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
+        _ = Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
     }
 
     private static bool RelicMaxedOut(player player)
@@ -105,7 +105,8 @@ public static class RelicFunctions
     {
         var relicCount = Globals.ALL_KITTIES[unit.Owner].Relics.Count;
         if (relicCount < 1) return true; // can get a first relic ofc.
-        if(Relic.GetRelicCountForLevel(unit.HeroLevel) < relicCount) {
+        if (Relic.GetRelicCountForLevel(unit.HeroLevel) < relicCount)
+        {
             unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You must have reached {Relic.RelicIncrease} to obtain a second relic. Then +1 for each level after up to {Relic.MaxRelics} relics.");
             return false;
         }
@@ -115,7 +116,7 @@ public static class RelicFunctions
     private static bool ActiveShadowKitty(player player)
     {
         var shadowkitty = ShadowKitty.ALL_SHADOWKITTIES[player];
-        if(shadowkitty.Active)
+        if (shadowkitty.Active)
         {
             player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You cannot upgrade your while your shadow kitty is active!|r");
             return true;

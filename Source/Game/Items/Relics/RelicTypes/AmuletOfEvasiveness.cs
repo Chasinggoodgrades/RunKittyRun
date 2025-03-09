@@ -1,6 +1,4 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
-using System;
+﻿using WCSharp.Api;
 public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
@@ -19,7 +17,7 @@ public class AmuletOfEvasiveness : Relic
         RelicItemID,
         RelicCost,
         IconPath
-        ) 
+        )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
@@ -46,12 +44,12 @@ public class AmuletOfEvasiveness : Relic
         Unit.SetScale(0.60f, 0.60f, 0.60f);
         CollisionDetection.KittyRegisterCollisions(kitty);
     }
-    
+
     public static float GetCollisionReduction(unit Unit)
     {
         var player = Unit.Owner;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
-        return (1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION) - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
+        return 1.0f - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
     }
 
     /// <summary>

@@ -12,8 +12,8 @@ public static class PodiumManager
 
     public static void BeginPodiumEvents()
     {
-        var gamemode = Gamemode.CurrentGameMode;
-        switch(Gamemode.CurrentGameMode)
+        _ = Gamemode.CurrentGameMode;
+        switch (Gamemode.CurrentGameMode)
         {
             case "Standard":
                 StandardPodium.BeginPodiumActions();

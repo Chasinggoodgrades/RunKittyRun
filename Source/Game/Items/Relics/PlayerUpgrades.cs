@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
-using System;
 public class PlayerUpgrades
 {
     private player Player;
@@ -15,7 +15,7 @@ public class PlayerUpgrades
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)
-            new PlayerUpgrades(player);
+            _ = new PlayerUpgrades(player);
     }
 
     public static PlayerUpgrades GetPlayerUpgrades(player player) => Globals.PLAYER_UPGRADES[player];

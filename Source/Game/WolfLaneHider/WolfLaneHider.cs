@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 public static class WolfLaneHider
 {
@@ -48,7 +48,7 @@ public static class WolfLaneHider
     {
         if (lane >= 0 && lane <= 17)
         {
-            LanesToEnable.Add(lane);
+            _ = LanesToEnable.Add(lane);
         }
     }
 

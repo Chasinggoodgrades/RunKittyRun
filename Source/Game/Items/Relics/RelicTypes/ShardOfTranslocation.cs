@@ -1,6 +1,6 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
+using static WCSharp.Api.Common;
 
 public class ShardOfTranslocation : Relic
 {
@@ -48,8 +48,8 @@ public class ShardOfTranslocation : Relic
     {
         var player = Unit.Owner;
         CastEventTrigger = trigger.Create();
-        CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        CastEventTrigger.AddAction(() => TeleportActions());
+        _ = CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+        _ = CastEventTrigger.AddAction(() => TeleportActions());
     }
 
     private void TeleportActions()
@@ -87,7 +87,7 @@ public class ShardOfTranslocation : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType());
         MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE;
-        if(upgradeLevel >= 1) Utility.SimpleTimer(0.1f, () => SetItemTooltip(unit));
+        if (upgradeLevel >= 1) Utility.SimpleTimer(0.1f, () => SetItemTooltip(unit));
     }
 
     private void SetItemTooltip(unit unit)
@@ -102,7 +102,7 @@ public class ShardOfTranslocation : Relic
     /// <param name="Unit"></param>
     private void SetAbilityData(unit Unit)
     {
-        var ability = Unit.GetAbility(RelicAbilityID);
+        _ = Unit.GetAbility(RelicAbilityID);
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
         var cooldown = upgradeLevel >= 2 // lvl 2 upgrade
@@ -122,8 +122,8 @@ public class ShardOfTranslocation : Relic
         if (distance > MaxBlinkRange)
         {
             var angle = Atan2(y - unit.Y, x - unit.X);
-            x = unit.X + MaxBlinkRange * Cos(angle);
-            y = unit.Y + MaxBlinkRange * Sin(angle);
+            x = unit.X + (MaxBlinkRange * Cos(angle));
+            y = unit.Y + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
     }
@@ -133,9 +133,7 @@ public class ShardOfTranslocation : Relic
         var SAFEZONES = Globals.SAFE_ZONES;
         if (SAFEZONES[currentSafezone].Region.Contains(targetLoc.X, targetLoc.Y)) return true;
         if (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.Contains(targetLoc.X, targetLoc.Y)) return true;
-        if (currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13) return true;
-        if (WolfRegionEligible(targetLoc, currentSafezone)) return true;
-        return false;
+        return currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13 || WolfRegionEligible(targetLoc, currentSafezone);
     }
 
     private static bool WolfRegionEligible(location targetLoc, int currentSafezone)
@@ -144,7 +142,7 @@ public class ShardOfTranslocation : Relic
         if (WOLF_AREAS[currentSafezone].Contains(targetLoc.X, targetLoc.Y)) return true;
         if (currentSafezone > 0 && WOLF_AREAS[currentSafezone - 1].Contains(targetLoc.X, targetLoc.Y)) return true;
         if (WOLF_AREAS[currentSafezone + 1].Contains(targetLoc.X, targetLoc.Y)) return true;
-        if(currentSafezone == 13 || currentSafezone == 14)
+        if (currentSafezone == 13 || currentSafezone == 14)
         {
             if (WOLF_AREAS[14].Contains(targetLoc.X, targetLoc.Y)) return true;
             if (WOLF_AREAS[15].Contains(targetLoc.X, targetLoc.Y)) return true;

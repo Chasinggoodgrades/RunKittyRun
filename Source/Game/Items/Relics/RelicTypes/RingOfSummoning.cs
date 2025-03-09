@@ -32,9 +32,9 @@ public class RingOfSummoning : Relic
     private void RegisterTriggers(unit Unit)
     {
         Trigger = trigger.Create();
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => SacredRingOfSummoning());
+        _ = Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        _ = Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        _ = Trigger.AddAction(() => SacredRingOfSummoning());
     }
 
     public override void ApplyEffect(unit Unit)
@@ -63,7 +63,7 @@ public class RingOfSummoning : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
         // Summon radius thingy
-        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
+        _ = BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
 
         var cooldown = upgradeLevel >= 1
             ? SUMMONING_COOLDOWN - UPGRADE_COOLDOWN_REDUCTION
@@ -90,7 +90,7 @@ public class RingOfSummoning : Relic
             var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
             SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
             var units = SummonGroup.ToList();
-            if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
+            if (SummonGroup.Contains(summoningKittyUnit)) _ = units.Remove(summoningKittyUnit); // remove self from the list
 
             for (int i = 0; i < numberOfSummons && i < units.Count; i++)
             {
@@ -128,7 +128,7 @@ public class RingOfSummoning : Relic
         var sumProg = summoner.TimeProg.GetRoundProgress(round);
         var deadProg = summoned.TimeProg.GetRoundProgress(round);
 
-        if(sumProg > deadProg && !summoned.Alive)
+        if (sumProg > deadProg && !summoned.Alive)
         {
             summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!");
             return false;

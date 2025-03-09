@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class AffixFactory
 {
     public static List<Affix> AllAffixes = new List<Affix>();
-    public readonly static List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth", "Bomber"};
+    public static readonly List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth", "Bomber" };
     private static float[] LaneWeights;
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
@@ -18,7 +18,7 @@ public static class AffixFactory
     /// </summary>
     public static void Initialize()
     {
-        if(Program.Debug) Console.WriteLine("Initializing AffixFactory");
+        if (Program.Debug) Console.WriteLine("Initializing AffixFactory");
         AllAffixes = new List<Affix>();
         InitLaneWeights();
     }
@@ -31,7 +31,7 @@ public static class AffixFactory
         foreach (var affix in AllAffixes)
         {
             if (affixCounts.ContainsKey(affix.Name)) continue;
-                affixCounts[affix.Name] = 0;
+            affixCounts[affix.Name] = 0;
         }
 
         foreach (var affix in AllAffixes)
@@ -81,7 +81,7 @@ public static class AffixFactory
             case "Vortex":
                 return new Vortex(unit);
             default:
-                if(Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
+                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
         }
     }
@@ -94,7 +94,7 @@ public static class AffixFactory
         var totalArea = 0.0f;
         LaneWeights = new float[regionCount];
 
-        foreach(var lane in WolfArea.WolfAreas)
+        foreach (var lane in WolfArea.WolfAreas)
         {
             totalArea += lane.Value.Area;
             LaneWeights[lane.Value.ID] = lane.Value.Area;
@@ -107,7 +107,7 @@ public static class AffixFactory
             //if(Program.Debug) Console.WriteLine($"Lane {i + 1} weight: {LaneWeights[i]}");
         }
     }
-    
+
     /* summary 
      * Checks if we can apply affix to Wolf type.
      * @parm unit: Wolf
@@ -115,9 +115,7 @@ public static class AffixFactory
      */
     private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
-        if (unit.AffixCount() >= MAX_NUMBER_OF_AFFIXES) return false;
-        if (unit.HasAffix(affixName)) return false;
-        return true;
+        return unit.AffixCount() < MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName);
     }
 
     public static Affix ApplyAffix(Wolf unit, string affixName)
@@ -132,11 +130,11 @@ public static class AffixFactory
     {
         var affixes = new List<string>(AffixTypes);
         if (laneNumber > 7 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
-            affixes.Remove("Fixation");
+            _ = affixes.Remove("Fixation");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
-            affixes.Remove("Frostbite");
-            affixes.Remove("Chaos");
+            _ = affixes.Remove("Frostbite");
+            _ = affixes.Remove("Chaos");
         }
         return affixes;
     }
@@ -160,7 +158,7 @@ public static class AffixFactory
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (!CanDistributeAffixes()) return;
 
-        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + Globals.ROUND * 8;
+        NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
 
         var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
         var count = 0;

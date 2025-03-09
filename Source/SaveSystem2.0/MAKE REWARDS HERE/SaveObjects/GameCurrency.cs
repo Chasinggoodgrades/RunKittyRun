@@ -9,7 +9,7 @@
 
 }
 
-public class KibbleCurrency 
+public class KibbleCurrency
 {
     public int Collected { get; set; }
     public int Jackpots { get; set; }

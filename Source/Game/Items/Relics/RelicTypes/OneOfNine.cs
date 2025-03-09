@@ -17,7 +17,7 @@ public class OneOfNine : Relic
         RelicItemID,
         RelicCost,
         IconPath
-        ) 
+        )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Cooldown of your ultimate is reduced by an additional 3 seconds per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Your ultimate no longer costs mana.", 20, 1000));
@@ -27,8 +27,8 @@ public class OneOfNine : Relic
     {
         var player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
-        Unit.RemoveAbility(PreviousAbilityID);
-        Unit.AddAbility(RelicAbilityID);
+        _ = Unit.RemoveAbility(PreviousAbilityID);
+        _ = Unit.AddAbility(RelicAbilityID);
         var abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
         RemoveManaCost(Unit, abilityLevel);
@@ -38,9 +38,9 @@ public class OneOfNine : Relic
     {
         var player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
-        Unit.RemoveAbility(RelicAbilityID);
-        Unit.AddAbility(PreviousAbilityID);
-        ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
+        _ = Unit.RemoveAbility(RelicAbilityID);
+        _ = Unit.AddAbility(PreviousAbilityID);
+        _ = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(PreviousAbilityID, cooldown);
     }
 
@@ -76,7 +76,7 @@ public class OneOfNine : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
         if (upgradeLevel < 2) return;
-        var ability = Unit.GetAbility(RelicAbilityID);
+        _ = Unit.GetAbility(RelicAbilityID);
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0);
     }
 
@@ -88,7 +88,7 @@ public class OneOfNine : Relic
         if (Program.Debug) Console.WriteLine("One of Nine Effect");
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
         {
-            IssueImmediateOrder(kitty.Unit, "divineshield");
+            _ = IssueImmediateOrder(kitty.Unit, "divineshield");
             return true;
         }
         return false;

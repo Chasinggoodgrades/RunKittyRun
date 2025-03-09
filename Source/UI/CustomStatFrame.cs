@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -75,7 +73,7 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        if(!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
+        if (!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
 
         HandleFrameText(selectedUnit);
 
@@ -84,8 +82,8 @@ public static class CustomStatFrame
 
     public static void Init()
     {
-        BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
-        BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
+        _ = BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
+        _ = BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
 
         var hideParent = BlzCreateFrameByType("SIMPLEFRAME", "HideParent", BlzGetFrameByName("ConsoleUI", 0), "", 0);
         hideParent.Visible = false;
@@ -100,7 +98,7 @@ public static class CustomStatFrame
 
 
         trigger trig = trigger.Create();
-        trig.AddAction(() =>
+        _ = trig.AddAction(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
@@ -108,7 +106,7 @@ public static class CustomStatFrame
         });
 
         foreach (var player in Globals.ALL_PLAYERS)
-            if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
+            if (player.SlotState == playerslotstate.Playing) _ = trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);
         CustomStatFrameBoxF = BlzCreateFrameByType("FRAME", "CustomStatFrameBoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0);
@@ -188,7 +186,7 @@ public static class CustomStatFrame
         Stats[2].Text.Text = "";
         Stats[3].Text.Text = "";
         Stats[4].Text.Text = "";
-        if(selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
+        if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
         Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 
@@ -236,8 +234,7 @@ public static class CustomStatFrame
     }
     private static string GetPlayerTeamName(unit u)
     {
-        if (Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team)) return team.TeamColor;
-        return $"{ Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
+        return Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team) ? team.TeamColor : $"{Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
     private static int GetPlayerGold(unit u) => u.Owner.Gold;
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundProgress(Globals.ROUND).ToString("F2");

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 /// <summary>
@@ -122,7 +121,7 @@ public class Reward
                 RewardsManager.ActiveTrails[player] = effectInstance;
                 break;
             case RewardType.Tournament:
-                SetTournamentReward(player, effectInstance, true);
+                _ = SetTournamentReward(player, effectInstance, true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -152,7 +151,7 @@ public class Reward
                 GC.RemoveEffect(ref t);
                 break;
             case RewardType.Tournament:
-                SetTournamentReward(player, null, false);
+                _ = SetTournamentReward(player, null, false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -235,7 +234,7 @@ public class Reward
                 RewardsManager.ActiveWings[player] = e;
             else if (Name.Contains("Skin"))
             {
-                SetSkin(player, true);
+                _ = SetSkin(player, true);
                 Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
             }
             else

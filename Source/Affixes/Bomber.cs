@@ -20,7 +20,7 @@ public class Bomber : Affix
 
     public override void Apply()
     {
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(204, 102, 0);
         RegisterTimers();
         base.Apply();
@@ -28,7 +28,7 @@ public class Bomber : Affix
 
     public override void Remove()
     {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
 
         GC.RemoveTimer(ref ExplodeTimer);
@@ -103,9 +103,4 @@ public class Bomber : Affix
         });
 
     }
-
-
-
-
-
 }

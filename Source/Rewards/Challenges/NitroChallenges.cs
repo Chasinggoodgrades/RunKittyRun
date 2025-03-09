@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 public static class NitroChallenges
 {
@@ -134,11 +133,11 @@ public static class NitroChallenges
 
     private static void AwardingDivineLight(player player)
     {
-        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
         var requiredCount = 5;
-        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
-        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount) 
+        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount)
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
     }
 

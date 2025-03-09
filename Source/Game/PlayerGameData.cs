@@ -3,7 +3,7 @@
 /// <summary>
 /// Keeps track of current game stats, saves, deaths, streak, nitros, and other misc data.
 /// </summary>
-public class PlayerGameData 
+public class PlayerGameData
 {
     public int TotalSaves { get; set; }
     public int TotalDeaths { get; set; }

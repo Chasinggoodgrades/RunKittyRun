@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -88,12 +87,12 @@ public static class AwardManager
         if (Gamemode.CurrentGameMode != "Standard") return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            if(player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
-            if(player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
+            if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
+            if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
             var kittyStats = Globals.ALL_KITTIES[player].SaveData;
             var gameStats = kittyStats.GameStats;
 
-            foreach(var gameStatReward in RewardsManager.GameStatRewards)
+            foreach (var gameStatReward in RewardsManager.GameStatRewards)
             {
                 var gamestat = gameStatReward.GameStat;
                 if (gamestat == nameof(gameStats.NormalGames) || gamestat == nameof(gameStats.HardGames) || gamestat == nameof(gameStats.ImpossibleGames)) continue;
@@ -101,7 +100,7 @@ public static class AwardManager
                 HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
             }
         }
-        AwardTrigger.RegisterTimerEvent(1.0f, true);
+        _ = AwardTrigger.RegisterTimerEvent(1.0f, true);
     }
 
     private static void HandleGameStatTrigger(player player, KittyData kittyStats, string gamestat, int requiredValue, string award)
@@ -182,8 +181,7 @@ public static class AwardManager
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
         if (kitty.Player.SlotState != playerslotstate.Playing) return;
         if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
-
-        var unit = kitty.Unit;
+        _ = kitty.Unit;
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
 
         var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));

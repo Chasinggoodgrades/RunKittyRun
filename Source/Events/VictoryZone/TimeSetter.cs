@@ -1,6 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
-public static class TimeSetter 
+public static class TimeSetter
 {
     /// <summary>
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
@@ -39,16 +39,15 @@ public static class TimeSetter
     private static string GetRoundEnum()
     {
         var currentDiff = Difficulty.DifficultyValue;
-        var roundEnum = "";
-
-        switch(currentDiff)
+        string roundEnum;
+        switch (currentDiff)
         {
             case (int)DifficultyLevel.Normal:
                 roundEnum = GetNormalRoundEnum();
                 break;
             case (int)DifficultyLevel.Hard:
                 roundEnum = GetHardRoundEnum();
-                break;  
+                break;
             case (int)DifficultyLevel.Impossible:
                 roundEnum = GetImpossibleRoundEnum();
                 break;
@@ -69,7 +68,7 @@ public static class TimeSetter
     {
         var gameTimeData = Globals.GAME_TIMES;
         var round = Globals.ROUND;
-        switch(round)
+        switch (round)
         {
             case 1:
                 return nameof(gameTimeData.RoundOneNormal);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -13,8 +12,8 @@ public static class RollerSkates
         RollerSkaters = new List<player>();
         OnUseTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
-        OnUseTrigger.AddCondition(Condition(() => @event.ManipulatedItem.TypeId == Constants.ITEM_PEGASUS_BOOTS));
-        OnUseTrigger.AddAction(SwitchingBoots);
+        _ = OnUseTrigger.AddCondition(Condition(() => @event.ManipulatedItem.TypeId == Constants.ITEM_PEGASUS_BOOTS));
+        _ = OnUseTrigger.AddAction(SwitchingBoots);
     }
 
     private static void SwitchingBoots()
@@ -27,7 +26,7 @@ public static class RollerSkates
         {
             SetPegasusBoots(item);
             slider.StopSlider();
-            RollerSkaters.Remove(unit.Owner);
+            _ = RollerSkaters.Remove(unit.Owner);
             unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Deactivated|r");
         }
         else

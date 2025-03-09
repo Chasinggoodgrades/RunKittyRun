@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class MusicFrame
@@ -29,7 +29,7 @@ public static class MusicFrame
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in MusicFrame: {ex.Message}");
+            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in MusicFrame: {ex.Message}");
             throw;
         }
     }
@@ -39,7 +39,7 @@ public static class MusicFrame
         var ySize = MusicManager.MusicList.Count * 0.03f;
         MusicFramehandle.SetSize(0.20f, ySize);
 
-        FrameManager.CreateHeaderFrame(MusicFramehandle);
+        _ = FrameManager.CreateHeaderFrame(MusicFramehandle);
 
         // Slider
         RegisterMusicSlider();
@@ -63,23 +63,22 @@ public static class MusicFrame
 
         var Trigger = trigger.Create();
         var mousewheel = trigger.Create();
-        Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
-        mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        Trigger.AddAction(() =>
+        _ = Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
+        _ = mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
+        _ = Trigger.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
             MusicSliderValues[player] = (int)@event.FrameValue;
             if (player.IsLocal) PopulateMusicFrame(player);
         });
-        mousewheel.AddAction(() =>
+        _ = mousewheel.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
             var frameValue = @event.FrameValue;
             if (!player.IsLocal) return;
-            if (frameValue > 0) MusicSlider.Value = frameValue + 1.0f;
-            else MusicSlider.Value = frameValue - 1.0f;
+            MusicSlider.Value = frameValue > 0 ? frameValue + 1.0f : frameValue - 1.0f;
             var value = MusicSliderValues[player];
             if (player.IsLocal) PopulateMusicFrame(player);
         });
@@ -100,8 +99,8 @@ public static class MusicFrame
             MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - (i * ButtonSpacing));
 
             var trigger = CreateTrigger();
-            trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            trigger.AddAction(() =>
+            _ = trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
+            _ = trigger.AddAction(() =>
             {
                 var frame = @event.Frame;
                 var player = @event.Player;
@@ -111,7 +110,7 @@ public static class MusicFrame
                 //MusicManager.StopAllMusic();
 
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
-                if (music != null) music.Play();
+                music?.Play();
                 MusicFramehandle.Visible = !MusicFramehandle.Visible;
             });
         }
@@ -147,12 +146,7 @@ public static class MusicFrame
         {
             if (i >= start && i < end)
             {
-                float positionY;
-                if (i == end - 1)
-                    positionY = ButtonStartY - ((visibleButtons - 1) * ButtonSpacing);
-                else
-                    positionY = ButtonStartY - ((i - start) * ButtonSpacing);
-
+                float positionY = i == end - 1 ? ButtonStartY - ((visibleButtons - 1) * ButtonSpacing) : ButtonStartY - ((i - start) * ButtonSpacing);
                 MusicButtons[i].SetAbsPoint(framepointtype.Center, ButtonStartX, positionY);
                 MusicButtons[i].Visible = true;
             }
@@ -168,9 +162,9 @@ public static class MusicFrame
         var musicHotkeyTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
+            _ = musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
         }
-        musicHotkeyTrigger.AddAction(() => MusicFrameActions());
+        _ = musicHotkeyTrigger.AddAction(() => MusicFrameActions());
     }
 
 

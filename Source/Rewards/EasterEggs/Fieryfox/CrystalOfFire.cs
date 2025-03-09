@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 public static class CrystalOfFire
 {
     private static int ItemID;
@@ -26,41 +25,41 @@ public static class CrystalOfFire
 
     public static void CrystalOfFireDeath(Kitty kitty)
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
-        if(!DeathAttempts.ContainsKey(kitty.Player)) return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (!DeathAttempts.ContainsKey(kitty.Player)) return;
         DeathAttempts[kitty.Player]++;
     }
 
     private static trigger RegisterTurnInFiery()
     {
         var Trigger = trigger.Create();
-        Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
-        Trigger.AddAction(FieryfoxEvent);
+        _ = Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
+        _ = Trigger.AddAction(FieryfoxEvent);
         return Trigger;
     }
 
     private static trigger RegisterTurnInFandF()
     {
         var Trigger = trigger.Create();
-        Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
-        Trigger.AddAction(FandFEvent);
+        _ = Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
+        _ = Trigger.AddAction(FandFEvent);
         return Trigger;
     }
 
     private static trigger RegisterChatEvent()
     {
         var Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
-            Trigger.RegisterPlayerChatEvent(player, "yes!", false);
+            _ = Trigger.RegisterPlayerChatEvent(player, "yes!", false);
         }
-        Trigger.AddAction(AcceptedQuest);
+        _ = Trigger.AddAction(AcceptedQuest);
         return Trigger;
     }
 
     private static int GetDeathAttempts(player player)
     {
-        if(DeathAttempts.TryGetValue(player, out var attempts) == false)
+        if (DeathAttempts.TryGetValue(player, out var attempts) == false)
         {
             DeathAttempts[player] = 0;
             return 0;
@@ -82,10 +81,10 @@ public static class CrystalOfFire
             // 30 seconds to accept the quest.
             Utility.SimpleTimer(30.0f, () =>
             {
-                if(QuestEligible.Contains(player)) QuestEligible.Remove(player);
+                if (QuestEligible.Contains(player)) _ = QuestEligible.Remove(player);
             });
         }
-        else if(GetDeathAttempts(player) == -1)
+        else if (GetDeathAttempts(player) == -1)
         {
             player.DisplayTextTo(PartTwoMessage(player));
         }
@@ -101,13 +100,13 @@ public static class CrystalOfFire
         DeathAttempts[player] = -1;
         Utility.ClearScreen(player);
         player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r");
-        QuestEligible.Remove(player);
+        _ = QuestEligible.Remove(player);
     }
 
     private static void FandFEvent()
     {
         var unit = @event.Unit;
-        if(!Utility.UnitHasItem(unit, ItemID)) return;
+        if (!Utility.UnitHasItem(unit, ItemID)) return;
         var player = unit.Owner;
         if (GetDeathAttempts(player) != -1) return;
 
@@ -119,7 +118,7 @@ public static class CrystalOfFire
         if (!Utility.UnitHasItem(unit, boots)) return;
         if (!Utility.UnitHasItem(unit, orb)) return;
         if (!Utility.UnitHasItem(unit, lightningShot)) return;
-        
+
         // Remove Items
         Utility.RemoveItemFromUnit(unit, ItemID);
         Utility.RemoveItemFromUnit(unit, boots);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -23,10 +22,10 @@ public static class UnitOrders
         foreach (var player in Globals.ALL_KITTIES)
         {
             var kvp = player.Value;
-            ActionsCapture.RegisterUnitEvent(kvp.Unit, unitevent.IssuedPointOrder, null);
+            _ = ActionsCapture.RegisterUnitEvent(kvp.Unit, unitevent.IssuedPointOrder, null);
         }
 
-        ActionsCapture.AddAction(CaptureActions);
+        _ = ActionsCapture.AddAction(CaptureActions);
     }
 
     private static void RegisterDicts()
@@ -89,8 +88,7 @@ public static class UnitOrders
 
         var totalActions = TotalActions[player];
         var timeOutsideSafeZones = TimeOutsideSafeZones[player] / 60.0f; // put in mins (APM)
-        if (timeOutsideSafeZones == 0.0f) return 0.0f;
-        return totalActions / timeOutsideSafeZones;
+        return timeOutsideSafeZones == 0.0f ? 0.0f : totalActions / timeOutsideSafeZones;
     }
 
     public static string CalculateAllAPM()
@@ -99,7 +97,7 @@ public static class UnitOrders
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var apm = CalculateAPM(player);
-            apmString += $"{Colors.PlayerNameColored(player)}:  {(int)apm} Active APM\n"; 
+            apmString += $"{Colors.PlayerNameColored(player)}:  {(int)apm} Active APM\n";
         }
         return apmString;
     }

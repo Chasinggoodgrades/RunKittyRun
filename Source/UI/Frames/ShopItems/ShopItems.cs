@@ -62,7 +62,7 @@ public class ShopItem
 
         var reward = RewardsManager.Rewards.Find(x => x.Name == "GreenTendrils");
         shopItems.Add(new ShopItem(nameof(gameAwards.Wings.GreenTendrils), 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
-        
+
         return shopItems;
     }
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public class Safezone
 {
@@ -36,8 +34,8 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        Trigger.AddAction(EnterSafezoneActions);
+        _ = Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        _ = Trigger.AddAction(EnterSafezoneActions);
     }
 
     private void EnterSafezoneActions()

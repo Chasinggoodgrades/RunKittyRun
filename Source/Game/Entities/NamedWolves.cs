@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -64,7 +63,7 @@ public static class NamedWolves
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, ExplodingWolf.Unit, "origin");
             ExplodingWolfRevive.Start(25.0f, false, () =>
             {
-                DNTNamedWolves.Remove(ExplodingWolf);
+                _ = DNTNamedWolves.Remove(ExplodingWolf);
                 ExplodingWolf.IsReviving = false;
                 ExplodingWolf.Unit?.Dispose();
                 ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 360);

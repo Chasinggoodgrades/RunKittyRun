@@ -1,5 +1,5 @@
-﻿using WCSharp.Api;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using WCSharp.Api;
 public static class Challenges
 {
     public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
@@ -69,7 +69,7 @@ public static class Challenges
 
     public static void BlueFire()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             var gameDeaths = Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths;
             if (gameDeaths >= BLUE_FIRE_DEATH_REQUIREMENT) continue;
@@ -137,12 +137,12 @@ public static class Challenges
     /// <param name="player"></param>
     public static void ZandalariKitty()
     {
-        if(Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
         if (!Gameover.WinGame) return;
         foreach (var kitty in Globals.ALL_KITTIES)
         {
             if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(4)) continue;
-                AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
+            AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
         }
     }
 
@@ -150,8 +150,8 @@ public static class Challenges
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         var t = trigger.Create();
-        Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
-        t.AddAction(() =>
+        _ = Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
+        _ = t.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -185,7 +185,7 @@ public class YellowLightning
 
     private void EndTimer()
     {
-        if(SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
+        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
         {
             AwardManager.GiveReward(Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
         }

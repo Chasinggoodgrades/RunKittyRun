@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using WCSharp.Shared.Data;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
-using System;
+using WCSharp.Shared.Data;
 
 public static class SoloPodium
 {

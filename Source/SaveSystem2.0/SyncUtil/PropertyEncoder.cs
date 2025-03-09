@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Reflection;
-using WCSharp.Json;
-using System.Collections;
+using System.Text;
 
 public static class PropertyEncoder
 {
@@ -10,7 +8,7 @@ public static class PropertyEncoder
     {
         StringBuilder jsonString = new StringBuilder("{");
         AppendProperties(obj, jsonString);
-        jsonString.Append("}");
+        _ = jsonString.Append("}");
 
         var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
         return base64String;
@@ -20,7 +18,7 @@ public static class PropertyEncoder
     {
         StringBuilder jsonString = new StringBuilder("{");
         AppendProperties(obj, jsonString);
-        jsonString.Append("}");
+        _ = jsonString.Append("}");
 
         return jsonString.ToString();
     }
@@ -28,15 +26,15 @@ public static class PropertyEncoder
     public static string EncodeAllDataToJsonBase64()
     {
         StringBuilder jsonString = new StringBuilder();
-        jsonString.Append("{");
+        _ = jsonString.Append("{");
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var playerData = SaveManager.SaveData[player];
-            jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
+            _ = jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
         }
         if (jsonString.Length > 0 && jsonString[jsonString.Length - 1] == ',')
             jsonString.Length--;
-        jsonString.Append("}");
+        _ = jsonString.Append("}");
 
         var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
         return base64String;
@@ -59,25 +57,25 @@ public static class PropertyEncoder
 
             if (!firstProperty)
             {
-                jsonString.Append(",");
+                _ = jsonString.Append(",");
             }
             firstProperty = false;
 
-            jsonString.Append($"\"{name}\":");
+            _ = jsonString.Append($"\"{name}\":");
 
             if (value != null && property.PropertyType.IsClass && property.PropertyType != typeof(string))
             {
-                jsonString.Append("{");
+                _ = jsonString.Append("{");
                 AppendProperties(value, jsonString);
-                jsonString.Append("}");
+                _ = jsonString.Append("}");
             }
             else if (value is string)
             {
-                jsonString.Append($"\"{value}\"");
+                _ = jsonString.Append($"\"{value}\"");
             }
             else
             {
-                jsonString.Append($"{value}");
+                _ = jsonString.Append($"{value}");
             }
         }
     }

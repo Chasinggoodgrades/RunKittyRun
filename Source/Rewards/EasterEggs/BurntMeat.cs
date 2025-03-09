@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 public static class BurntMeat
@@ -16,12 +15,12 @@ public static class BurntMeat
     {
         var randomRoll = GetRandomInt(1, 100);
         if (randomRoll > 5) return; // 5% chance
-        k.Unit.AddItem(ITEM_CLOAK_FLAMES);
+        _ = k.Unit.AddItem(ITEM_CLOAK_FLAMES);
     }
 
     public static void RegisterDeathTrigger()
     {
-        StanDeath.RegisterUnitEvent(NamedWolves.StanWolf.Unit, unitevent.Death);
+        _ = StanDeath.RegisterUnitEvent(NamedWolves.StanWolf.Unit, unitevent.Death);
         if (StanDeathActions != null) return;
         RegisterTurnInTrigger();
         StanDeathActions = StanDeath.AddAction(() =>
@@ -29,14 +28,14 @@ public static class BurntMeat
             var killer = @event.KillingUnit;
             if (killer == null) return;
             Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES);
-            killer.AddItem(ITEM_BURNT_MEAT);
+            _ = killer.AddItem(ITEM_BURNT_MEAT);
             Completed.Add(killer);
         });
     }
 
     private static void RegisterTurnInTrigger()
     {
-        Blizzard.TriggerRegisterUnitInRangeSimple(StanTurnIn, 200f, SpawnChampions.Stan2025);
+        _ = Blizzard.TriggerRegisterUnitInRangeSimple(StanTurnIn, 200f, SpawnChampions.Stan2025);
         if (StanTurnInActions != null) return;
         StanTurnInActions = StanTurnIn.AddAction(() =>
         {
@@ -46,9 +45,9 @@ public static class BurntMeat
             player.DisplayTimedTextTo(8.0f, $"Bedankt vriend, je moet slide eens proberen! (Thanks friend, you should try slide!)");
             Challenges.VioletWindwalk(player);
             Utility.RemoveItemFromUnit(unit, ITEM_BURNT_MEAT);
-            Completed.Remove(unit);
+            _ = Completed.Remove(unit);
         });
     }
 
-    
+
 }

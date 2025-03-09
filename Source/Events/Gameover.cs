@@ -1,5 +1,5 @@
-﻿using WCSharp.Api;
-using System;
+﻿using System;
+using WCSharp.Api;
 
 public static class Gameover
 {
@@ -8,14 +8,13 @@ public static class Gameover
     public static bool NoEnd { get; set; } = false;
     public static bool GameOver()
     {
-        if(WinningGame()) return true;
-        if (LosingGameCheck()) return true;
-        return false;
+        if (WinningGame()) return true;
+        return LosingGameCheck();
     }
 
     private static bool WinningGame()
     {
-        if(!WinGame) return false;
+        if (!WinGame) return false;
         SendWinMessage();
         GameStats(true);
         GameoverUtil.SetBestGameStats();
@@ -53,7 +52,7 @@ public static class Gameover
 
     private static void EndGame()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             Blizzard.CustomVictoryBJ(player, true, true);
     }
 
@@ -69,7 +68,7 @@ public static class Gameover
 
     private static void SendWinMessage()
     {
-        if(Gamemode.CurrentGameMode == "Standard")
+        if (Gamemode.CurrentGameMode == "Standard")
             Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyChosen}!{Colors.COLOR_RESET}");
         else
             Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for playing RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
@@ -81,10 +80,10 @@ public static class Gameover
     /// <param name="win"></param>
     private static void GameStats(bool win)
     {
-        foreach(var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
             IncrementGameStats(kitty.Value);
-            if(win) IncrementWins(kitty.Value);
+            if (win) IncrementWins(kitty.Value);
             IncrementWinStreak(kitty.Value, win);
         }
         AwardManager.AwardGameStatRewards();

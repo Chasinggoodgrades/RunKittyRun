@@ -4,7 +4,7 @@
     public static bool AdminsGame()
     {
         if (!AdminOnly) return true;
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             if (Utility.IsDeveloper(player)) return true;
         }

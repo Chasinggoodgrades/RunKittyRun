@@ -136,9 +136,9 @@ public static class TeamsMultiboard
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCPressed);
+        _ = ESCTrigger.AddAction(ESCPressed);
 
     }
 

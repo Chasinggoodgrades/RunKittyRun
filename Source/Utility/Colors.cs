@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -160,8 +159,7 @@ public class Colors
     /// <returns></returns>
     public static string HighlightString(string text)
     {
-        if(text != null && text.Length > 0) return COLOR_YELLOW + text + COLOR_RESET;
-        else return $"{COLOR_RED}ERROR{COLOR_RESET}";
+        return text != null && text.Length > 0 ? COLOR_YELLOW + text + COLOR_RESET : $"{COLOR_RED}ERROR{COLOR_RESET}";
     }
 
     /// <summary>
@@ -180,7 +178,7 @@ public class Colors
         StringBuilder combinedColors = new StringBuilder();
 
         foreach (var color in ColorManager)
-            combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
+            _ = combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
 
         player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
     }

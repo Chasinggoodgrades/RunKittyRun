@@ -1,5 +1,4 @@
 ﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 public static class Multiboard
 {
@@ -17,7 +16,7 @@ public static class Multiboard
 
     private static void SetupMultiboards()
     {
-        switch(Gamemode.CurrentGameMode)
+        switch (Gamemode.CurrentGameMode)
         {
             case "Standard":
                 StandardMultiboard.Initialize();

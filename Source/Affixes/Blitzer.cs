@@ -22,7 +22,7 @@ public class Blitzer : Affix
 
     public override void Apply()
     {
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Pause();
         Unit.OVERHEAD_EFFECT_PATH = "";
         Unit.Unit.SetVertexColor(224, 224, 120);
@@ -32,7 +32,7 @@ public class Blitzer : Affix
 
     public override void Remove()
     {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Resume();
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
@@ -78,7 +78,7 @@ public class Blitzer : Affix
         var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
         WanderEffect.Dispose();
         BlitzerMove(x, y);
-        Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
+        _ = Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
         MoveTimer.Start(randomTime, false, PreBlitzerMove);
     }
@@ -105,8 +105,8 @@ public class Blitzer : Affix
 
         // 60 fps for smooth movement, step distance
         float stepDistance = speed / 50.0f; // Assuming 60 calls per second
-        float nextX = currentX + directionX * stepDistance;
-        float nextY = currentY + directionY * stepDistance;
+        float nextX = currentX + (directionX * stepDistance);
+        float nextY = currentY + (directionY * stepDistance);
 
         // Move the unit one step
         Unit.Unit.SetPosition(nextX, nextY);
@@ -127,7 +127,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
-        Unit.Unit.AddAbility(FourCC("Aeth"));
+        _ = Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 
     public static Blitzer GetBlitzer(unit unit)

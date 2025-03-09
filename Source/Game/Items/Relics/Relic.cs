@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 public abstract class Relic
 {
     public static int RequiredLevel { get; } = 10;
@@ -45,10 +43,8 @@ public abstract class Relic
 
     public static int GetRelicCountForLevel(int currentLevel)
     {
-        var count = (currentLevel - RelicIncrease) + 1; // account for level 10 relic .. 
-        if (count < 0) return 0;
-        else if(count >= MaxRelics) return MaxRelics;
-        else return count;
+        var count = currentLevel - RelicIncrease + 1; // account for level 10 relic .. 
+        return count < 0 ? 0 : count >= MaxRelics ? MaxRelics : count;
     }
 
     public void SetUpgradeLevelDesc(unit Unit)

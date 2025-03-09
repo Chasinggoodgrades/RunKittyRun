@@ -34,14 +34,7 @@ public static class CommandManager
 
     public static CommandInfo GetCommandInfo(string cmd)
     {
-        if (commands.ContainsKey(cmd.ToLower()))
-        {
-            return commands[cmd.ToLower()];
-        }
-        else
-        {
-            return null;
-        }
+        return commands.ContainsKey(cmd.ToLower()) ? commands[cmd.ToLower()] : null;
     }
 }
 

@@ -1,10 +1,8 @@
 ﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
-using System;
 public static class FinalSafezone
 {
     private static trigger Trigger = trigger.Create();
-    private static region Region = RegionList.SafeZones[RegionList.SafeZones.Length-1].Region;
+    private static region Region = RegionList.SafeZones[RegionList.SafeZones.Length - 1].Region;
     public static void Initialize()
     {
         RegisterEvents();
@@ -12,8 +10,8 @@ public static class FinalSafezone
 
     private static void RegisterEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        Trigger.AddAction(() =>
+        _ = Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        _ = Trigger.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;

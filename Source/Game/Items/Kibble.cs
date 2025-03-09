@@ -1,7 +1,7 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public class Kibble
 {
@@ -53,7 +53,7 @@ public class Kibble
     {
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
+            _ = trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
         return trig;
     }
 
@@ -103,7 +103,7 @@ public class Kibble
     private void KibbleGoldReward(Kitty kitty)
     {
         var jackPotChance = GetRandomInt(0, 100);
-        var goldAmount = 0;
+        int goldAmount;
         if (jackPotChance <= 3)
         {
             JackpotEffect(kitty);

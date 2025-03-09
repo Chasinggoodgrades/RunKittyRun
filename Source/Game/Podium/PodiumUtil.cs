@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -66,10 +65,11 @@ public static class PodiumUtil
 
     public static void SetCameraToPodium()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             var podium = Regions.Podium_cinematic;
-            if (player.IsLocal) {
+            if (player.IsLocal)
+            {
                 SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1400.0f, 0.0f);
                 PanCameraToTimed(podium.Center.X, podium.Center.Y, 2.0f);
             }
@@ -95,7 +95,7 @@ public static class PodiumUtil
 
     public static string PlacementString(int placement)
     {
-        switch(placement)
+        switch (placement)
         {
             case 1:
                 return "1st";

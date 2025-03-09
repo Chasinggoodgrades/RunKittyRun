@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class GeneralCmds
@@ -9,7 +8,7 @@ public static class GeneralCmds
     public static void Handle(player p, string command)
     {
         var args = command.Split(' ');
-        Globals.ALL_KITTIES.TryGetValue(p, out var kitty);
+        _ = Globals.ALL_KITTIES.TryGetValue(p, out var kitty);
         CommandInfoCheck(args);
 
         switch (args[0])
@@ -17,7 +16,7 @@ public static class GeneralCmds
             case "-commands":
             case "-help":
             case "-?":
-                DisplayCommands(p);
+                _ = DisplayCommands(p);
                 break;
             case "-team":
                 if (Gamemode.CurrentGameModeType != Globals.TEAM_MODES[0]) return;
@@ -126,7 +125,7 @@ public static class GeneralCmds
                 CameraUtil.ToggleKomotoCam(p);
                 break;
             case "-glow":
-                var glow = args.Length > 1 && (args[1] == "false" || args[1] == "off" || args[1] == "0") ? false : true;
+                var glow = args.Length <= 1 || args[1] != "false" && args[1] != "off" && args[1] != "0";
 
                 // Changing base color with -red will break the teamglow. Thats why we need to reapply it
                 BlzShowUnitTeamGlow(kitty.Unit, true);
@@ -191,7 +190,7 @@ public static class GeneralCmds
             "-obs | -observer - Removes all units from game and you become an observer/spectator."
         });
 
-        if (p != null) p.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
+        p?.DisplayTimedTextTo(15.0f, Colors.COLOR_TURQUOISE + "Available Commands:\n" + Colors.COLOR_YELLOW + commandList, 0, 10);
         return commandList;
     }
 

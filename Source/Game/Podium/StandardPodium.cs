@@ -6,7 +6,7 @@ using WCSharp.Shared.Data;
 /// <summary>
 /// Players are going to be rewarded 
 /// </summary>
-public static class StandardPodium 
+public static class StandardPodium
 {
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();

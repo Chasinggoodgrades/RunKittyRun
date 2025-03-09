@@ -12,11 +12,11 @@ public static class PlayerLeaves
 
     private static void RegisterTrigger()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
-            Trigger.RegisterPlayerEvent(player, playerevent.Leave);
+            _ = Trigger.RegisterPlayerEvent(player, playerevent.Leave);
         }
-        Trigger.AddAction(() => PlayerLeavesActions());
+        _ = Trigger.AddAction(() => PlayerLeavesActions());
     }
 
     public static void TeamRemovePlayer(player player)
@@ -39,8 +39,8 @@ public static class PlayerLeaves
             kitty.Dispose();
             circle.Dispose();
             nameTag.Dispose();
-            if(Kibble.PickedUpKibble.ContainsKey(leavingPlayer)) Kibble.PickedUpKibble.Remove(leavingPlayer);
-            if (!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
+            if (Kibble.PickedUpKibble.ContainsKey(leavingPlayer)) _ = Kibble.PickedUpKibble.Remove(leavingPlayer);
+            if (!Gameover.WinGame) _ = Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
             RoundManager.RoundEndCheck();
             if (Gameover.WinGame) return;

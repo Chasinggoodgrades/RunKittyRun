@@ -35,14 +35,14 @@ public class Vortex : Affix
 
     public override void Apply()
     {
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
         base.Apply();
     }
 
     public override void Remove()
     {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(150, 120, 255);
 
         GC.RemoveTimer(ref PullingInTimer);
@@ -56,9 +56,9 @@ public class Vortex : Affix
 
     private void RegisterEvents()
     {
-        EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
-        EntersRange.AddAction(EnterRegionActions);
-        LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
+        _ = EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
+        _ = EntersRange.AddAction(EnterRegionActions);
+        _ = LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
 
         PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, () => PullBegin());
     }
@@ -66,7 +66,7 @@ public class Vortex : Affix
     private void EnterRegionActions()
     {
         var enteringUnit = @event.Unit;
-        if(UnitsInRange.Contains(enteringUnit)) return;
+        if (UnitsInRange.Contains(enteringUnit)) return;
         UnitsInRange.Add(enteringUnit);
     }
 
@@ -74,7 +74,7 @@ public class Vortex : Affix
     {
         var leavingUnit = @event.Unit;
         if (!UnitsInRange.Contains(leavingUnit)) return;
-        UnitsInRange.Remove(leavingUnit);
+        _ = UnitsInRange.Remove(leavingUnit);
     }
 
     private void PullBegin()
@@ -99,18 +99,19 @@ public class Vortex : Affix
                 var x = unit.X;
                 var y = unit.Y;
                 var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
-                var newX = x + distance * Cos(angle);
-                var newY = y + distance * Sin(angle);
+                var newX = x + (distance * Cos(angle));
+                var newY = y + (distance * Sin(angle));
                 unit.SetPosition(newX, newY);
                 unit.SetFacing(angle);
                 var lastOrder = UnitOrders.GetLastOrderLocation(unit);
-                unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+                _ = unit.IssueOrder("move", lastOrder.x, lastOrder.y);
                 // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
                 // Setup @event system to acquire last x,y location of this unit.
             }
             Counter += 1;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Console.WriteLine(e);
             throw;
         }

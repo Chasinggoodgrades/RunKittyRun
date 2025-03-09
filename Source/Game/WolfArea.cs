@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
-using static WCSharp.Api.Common;
-
 public class WolfArea
 {
     public static Dictionary<int, WolfArea> WolfAreas { get; } = new();
@@ -43,8 +41,8 @@ public class WolfArea
     private void RegisterEnterEvents()
     {
         AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        AreaTrigger.AddAction(() =>
+        _ = AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        _ = AreaTrigger.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -61,8 +59,8 @@ public class WolfArea
     private void RegisterLeaveEvents()
     {
         AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
-        AreaTrigger.AddAction(() =>
+        _ = AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
+        _ = AreaTrigger.AddAction(() =>
         {
             var wolf = Globals.ALL_WOLVES[@event.Unit];
             wolf.WolfMove();

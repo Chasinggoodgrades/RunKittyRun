@@ -1,7 +1,7 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
 using WCSharp.Shared.Extensions;
+using static WCSharp.Api.Common;
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
@@ -79,13 +79,13 @@ public class FrostbiteRing : Relic
         var fixationUnit = Fixation.GetFixation(Unit);
         try
         {
-            if (blitzUnit != null) blitzUnit.PauseBlitzing(true);
-            if (fixationUnit != null) fixationUnit.PauseFixation(true);
+            blitzUnit?.PauseBlitzing(true);
+            fixationUnit?.PauseFixation(true);
             t.Start(duration, false, () =>
             {
                 PausingWolf(Unit, false);
-                if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
-                if (fixationUnit != null) fixationUnit.PauseFixation(false);
+                blitzUnit?.PauseBlitzing(false);
+                fixationUnit?.PauseFixation(false);
                 SlowWolves(Unit);
                 GC.RemoveEffect(ref effect);
                 GC.RemoveTimer(ref t);
@@ -132,9 +132,9 @@ public class FrostbiteRing : Relic
     private void RegisterTriggers(unit Unit)
     {
         Trigger = trigger.Create();
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+        _ = Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        _ = Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        _ = Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
