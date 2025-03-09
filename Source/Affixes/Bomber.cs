@@ -68,6 +68,7 @@ public class Bomber : Affix
         var list = Globals.TempGroup.ToList();
         foreach (unit u in list)
         {
+            if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue;
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
             Globals.ALL_KITTIES[u.Owner].KillKitty();
         }
