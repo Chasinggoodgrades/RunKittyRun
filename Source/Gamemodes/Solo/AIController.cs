@@ -35,6 +35,9 @@ public class AIController
     private List<Wolf> wolvesInRange = new List<Wolf>();
     private lightning lastLightning;
 
+    private int lastSafezoneIndexId = -1;
+    private bool reachedLastSafezoneCenter = false;
+
     public AIController(Kitty kitty)
     {
         this.kitty = kitty;
@@ -93,9 +96,28 @@ public class AIController
     private void MoveKittyToPosition()
     {
         var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        var currentSafezone = Globals.SAFE_ZONES[currentSafezoneId];
+        var nextSafezone = Globals.SAFE_ZONES[currentSafezoneId + 1];
+        var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
+        var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
-        var targetPosition = GetCenterPositionInSafezone(nextSafezone);
+        // Check if the safezone index has changed
+        if (currentSafezoneId != lastSafezoneIndexId)
+        {
+            reachedLastSafezoneCenter = false;
+            lastSafezoneIndexId = currentSafezoneId;
+        }
+
+        // Check if kitty is within a threshold distance from the center of the current safe zone
+        var distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.Unit.Y - currentSafezoneCenter.Y, 2));
+        const float SAFEZONE_THRESHOLD = 128.0f; // Adjust this threshold as needed
+
+        if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD)
+        {
+            reachedLastSafezoneCenter = true;
+        }
+
+        var targetPosition = reachedLastSafezoneCenter ? nextSafezoneCenter : currentSafezoneCenter;
 
         // Check for nearby circles to revive allies.
         foreach (var circle in Globals.ALL_CIRCLES)
