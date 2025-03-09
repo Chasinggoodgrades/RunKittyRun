@@ -68,6 +68,13 @@ public class FirstPersonCamera
             float moveSpeed = GetUnitMoveSpeed(hero);
             float movePerTick = moveSpeed * timerPeriod;
 
+            Kitty kitty = Globals.ALL_KITTIES[player];
+
+            if (kitty.Slider.IsEnabled())
+            {
+                movePerTick = 0.2f;
+            }
+
             float angle = Rad2Deg(GetUnitFacing(hero));
             if (keyDownState["UP"]) fwd += movePerTick;
             if (keyDownState["DOWN"]) fwd -= movePerTick;
