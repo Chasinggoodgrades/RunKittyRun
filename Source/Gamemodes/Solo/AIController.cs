@@ -118,6 +118,13 @@ public class AIController
         foreach (var circle in Globals.ALL_CIRCLES)
         {
             var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
+            var deadKittySafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[deadKitty.Player];
+
+            if (deadKittySafezoneId != currentSafezoneId)
+            {
+                continue;
+            }
+
             if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
             {
                 IssueOrder("move", circle.Value.Unit.X, circle.Value.Unit.Y);
@@ -230,7 +237,6 @@ public class AIController
         return (resultX, resultY);
     }
 
-
     private bool IsWithinRadius(float x1, float y1, float x2, float y2, float radius)
     {
         var distance = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -243,6 +249,8 @@ public class AIController
         {
             if (!enabled) return;
             elapsedTime += timerInterval;
+            LearnSkills();
+            UseWindWalkIfAvailable();
             var nextSafezone = Globals.SAFE_ZONES[Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player] + 1];
             var targetPosition = GetCenterPositionInSafezone(nextSafezone);
             MoveKittyToPosition(targetPosition);
@@ -250,6 +258,24 @@ public class AIController
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+        }
+    }
+
+    private void LearnSkills()
+    {
+        if (kitty.Unit.SkillPoints > 0)
+        {
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_WIND_WALK);
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_AGILITY_AURA);
+            kitty.Unit.SelectHeroSkill(Constants.ABILITY_ENERGY_AURA);
+        }
+    }
+
+    private void UseWindWalkIfAvailable()
+    {
+        if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk"))) // Wind Walk
+        {
+            kitty.Unit.IssueOrder("windwalk");
         }
     }
 }

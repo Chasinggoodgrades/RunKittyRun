@@ -269,7 +269,8 @@ public static class DebugCmd
 
                             Globals.ALL_PLAYERS.Add(compPlayer);
                             new Circle(compPlayer);
-                            new Kitty(compPlayer);
+                            var newKitty = new Kitty(compPlayer);
+                            newKitty.Unit.AddItem(FourCC("bspd"));
                         }
                     }
 
