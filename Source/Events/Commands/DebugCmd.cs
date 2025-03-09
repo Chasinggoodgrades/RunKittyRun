@@ -292,7 +292,7 @@ public static class DebugCmd
                                 continue;
                             }
 
-                            if (compPlayer.Controller != mapcontrol.Computer)
+                            if (player.SlotState == playerslotstate.Playing)
                             {
                                 player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.");
                                 continue;
