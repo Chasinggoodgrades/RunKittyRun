@@ -162,6 +162,8 @@ public class AIController
     // IssueOrder now clamps the target point to lane bounds before sending the order.
     private void IssueOrder(string command, float x, float y)
     {
+        const float MIN_MOVE_DISTANCE = 64.0f; // Minimum distance to issue a new move order
+
         if (command == "move")
         {
             if (lastLightning != null)
@@ -174,7 +176,12 @@ public class AIController
             }
         }
 
-        if (hasLastOrder && lastCommand == command && lastX == x && lastY == y)
+        // Calculate the distance between the last issued order position and the new target position
+        float deltaX = x - lastX;
+        float deltaY = y - lastY;
+        float distanceSquared = deltaX * deltaX + deltaY * deltaY;
+
+        if (hasLastOrder && lastCommand == command && distanceSquared < MIN_MOVE_DISTANCE * MIN_MOVE_DISTANCE)
         {
             if ((elapsedTime - lastOrderTime) < 4f)
             {
