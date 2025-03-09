@@ -77,10 +77,7 @@ public class Bomber : Affix
         Unit.Unit.SetVertexColor(204, 102, 0, 25);
     }
 
-    private float ExplosionInterval()
-    {
-        return GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL);
-    }
+    private static float ExplosionInterval() => GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL);
 
     private void Revive()
     {

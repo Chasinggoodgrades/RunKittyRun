@@ -8,7 +8,7 @@ public static class BarrierSetup
     private static unit DummyUnitOne;
     private static unit DummyUnitTwo;
     private static unit DummyUnitThree;
-    private static List<destructable> destructables = new List<destructable>();
+    public static List<destructable> destructables = new List<destructable>();
 
     public static void Initialize()
     {

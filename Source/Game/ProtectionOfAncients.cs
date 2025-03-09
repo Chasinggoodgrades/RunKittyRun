@@ -18,10 +18,10 @@ public static class ProtectionOfAncients
     private static trigger Trigger;
     private static trigger LevelUpTrigger;
 
-    private static int UPGRADE_LEVEL_2_REQUIREMENT = 9;
-    private static int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    private static readonly int UPGRADE_LEVEL_2_REQUIREMENT = 9;
+    private static readonly int UPGRADE_LEVEL_3_REQUIREMENT = 12;
 
-    private static float INVULNERABLE_DURATION = 1.0f;
+    private static readonly float INVULNERABLE_DURATION = 1.0f;
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
 

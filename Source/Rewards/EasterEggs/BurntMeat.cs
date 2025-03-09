@@ -48,6 +48,4 @@ public static class BurntMeat
             _ = Completed.Remove(unit);
         });
     }
-
-
 }

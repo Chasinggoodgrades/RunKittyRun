@@ -66,7 +66,7 @@ public static class NitroPacer
     private static void UpdateNitroPacer()
     {
         currentDistance = Progress.CalculateNitroPacerProgress();
-        float remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Count() - 1] - currentDistance;
+        float remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Length - 1] - currentDistance;
         float remainingTime = NitroChallenges.GetNitroTimeRemaining();
         float speed = remainingTime != 0.0f ? remainingDistance / remainingTime : 350.0f;
         SetSpeed(speed);
@@ -74,7 +74,7 @@ public static class NitroPacer
         if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
         {
             currentCheckpoint++;
-            if (currentCheckpoint >= pathingPoints.Count() - 1)
+            if (currentCheckpoint >= pathingPoints.Length - 1)
             {
                 pacerTimer.Pause();
                 Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
@@ -87,7 +87,7 @@ public static class NitroPacer
     private static void NitroPacerQueueOrders()
     {
         // backwards for pathingpoints, for stack queue order
-        for (int i = pathingPoints.Count() - 1; i >= 1; i--) // exclude starting point
+        for (int i = pathingPoints.Length - 1; i >= 1; i--) // exclude starting point
         {
             Rectangle point = pathingPoints[i];
             _ = Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);

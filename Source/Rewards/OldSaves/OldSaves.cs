@@ -17,7 +17,7 @@ public class Savecode
     public static void Initialize()
     {
         OldsaveSync.Initialize();
-        for (int i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
+        for (int i = 0; i < OldSavesHelper.AbilityList.Length; i++)
         {
             var ability = OldSavesHelper.AbilityList[i];
             var tooltip = BlzGetAbilityTooltip(ability, 0);
@@ -156,7 +156,7 @@ public class Savecode
         var sb = new StringBuilder();
         Preloader(filePath);
 
-        for (var i = 0; i < OldSavesHelper.AbilityList.Count(); i++)
+        for (var i = 0; i < OldSavesHelper.AbilityList.Length; i++)
         {
             var abilityID = OldSavesHelper.AbilityList[i];
             var originalTooltip = OriginalToolTips[i];

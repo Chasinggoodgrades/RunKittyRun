@@ -9,6 +9,7 @@ public static class NamedWolves
     public static Wolf StanWolf;
     public static texttag StanNameTag = texttag.Create();
     public static texttag ExplodingWolfNameTag = texttag.Create();
+    public const string STAN_NAME = $"{Colors.COLOR_PURPLE}Stan|r";
     private static timer ExplodingTexttagTimer = timer.Create();
     private static timer ExplodingWolfRevive = timer.Create();
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
@@ -41,7 +42,7 @@ public static class NamedWolves
         StanWolf.WanderTimer.Pause();
         StanWolf.WanderTimer = null;
         StanWolf.Unit.SetVertexColor(235, 115, 255);
-        StanWolf.Unit.Name = $"{Colors.COLOR_PURPLE}Stan|r";
+        StanWolf.Unit.Name = STAN_NAME;
         StanNameTag.SetText(StanWolf.Unit.Name, 0.015f);
         StanNameTag.SetPermanent(true);
         StanWolf.IsPaused = true;

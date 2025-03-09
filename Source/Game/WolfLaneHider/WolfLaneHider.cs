@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public static class WolfLaneHider
 {
-    public static HashSet<int> LanesToEnable { get; set; } = new HashSet<int>();
+    private static readonly HashSet<int> lanesToEnable = new HashSet<int>();
 
     public static void LanesHider()
     {
         try
         {
-            DetectLanesToEnable();
-            ShowAndHideLanes();
+            UpdateLanesToEnable();
+            ApplyLaneVisibility();
         }
         catch (Exception e)
         {
@@ -18,70 +18,100 @@ public static class WolfLaneHider
         }
     }
 
-    private static void DetectLanesToEnable()
+    private static void UpdateLanesToEnable()
     {
         try
         {
-            LanesToEnable.Clear();
+            lanesToEnable.Clear();
+
+            if (Globals.PLAYERS_CURRENT_SAFEZONE == null)
+            {
+                return;
+            }
 
             foreach (var player in Globals.PLAYERS_CURRENT_SAFEZONE)
             {
                 int currentSafezone = player.Value;
-                AddLaneIfNotInList(currentSafezone);
-                AddLaneIfNotInList(currentSafezone + 1);
-                AddLaneIfNotInList(currentSafezone - 1);
-                AddLaneIfNotInList(currentSafezone - 2);
-                if (currentSafezone >= 13)
-                {
-                    AddLaneIfNotInList(currentSafezone + 2);
-                    AddLaneIfNotInList(currentSafezone + 3);
-                }
+                AddAdjacentLanes(currentSafezone);
             }
+
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in DetectLanesToEnable: {e.Message}");
+            Logger.Warning($"Error in UpdateLanesToEnable: {e.Message}");
         }
     }
 
-    private static void AddLaneIfNotInList(int lane)
+    private static void AddAdjacentLanes(int currentSafezone)
+    {
+        AddLane(currentSafezone);
+        AddLane(currentSafezone + 1);
+        AddLane(currentSafezone - 1);
+        AddLane(currentSafezone - 2);
+
+        if (currentSafezone >= 13)
+        {
+            AddLane(currentSafezone + 2);
+            AddLane(currentSafezone + 3);
+        }
+    }
+
+    private static void AddLane(int lane)
     {
         if (lane >= 0 && lane <= 17)
         {
-            _ = LanesToEnable.Add(lane);
+            _ = lanesToEnable.Add(lane);
         }
     }
 
-    private static void ShowAndHideLanes()
+    private static void ApplyLaneVisibility()
     {
         try
         {
+            if (WolfArea.WolfAreas == null)
+            {
+                return;
+            }
+
             foreach (var lane in WolfArea.WolfAreas)
             {
-                bool shouldShow = LanesToEnable.Contains(lane.Key);
-                foreach (var wolf in lane.Value.Wolves)
-                {
-                    wolf.Unit.IsVisible = shouldShow;
-                    wolf.IsPaused = !shouldShow;
-                }
+                bool shouldShow = lanesToEnable.Contains(lane.Key);
+                SetLaneVisibility(lane.Value, shouldShow);
             }
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in ShowAndHideLanes: {e.Message}");
+            Logger.Warning($"Error in ApplyLaneVisibility: {e.Message}");
+        }
+    }
+
+    private static void SetLaneVisibility(WolfArea lane, bool isVisible)
+    {
+        foreach (var wolf in lane.Wolves)
+        {
+            wolf.Unit.IsVisible = isVisible;
+            wolf.IsPaused = !isVisible;
         }
     }
 
     public static void HideAllLanes()
     {
-        foreach (var lane in WolfArea.WolfAreas)
+        try
         {
-            foreach (var wolf in lane.Value.Wolves)
+            if (WolfArea.WolfAreas == null)
             {
-                wolf.Unit.IsVisible = false;
-                wolf.IsPaused = true;
+                return;
             }
-            lane.Value.IsEnabled = false;
+
+            foreach (var lane in WolfArea.WolfAreas)
+            {
+                SetLaneVisibility(lane.Value, false);
+                lane.Value.IsEnabled = false;
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in HideAllLanes: {e.Message}");
         }
     }
 }

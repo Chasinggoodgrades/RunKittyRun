@@ -78,6 +78,11 @@ public class FirstPersonCamera
             float newX = oldX + (fwd * Cos(angle));
             float newY = oldY + (fwd * Sin(angle));
 
+            if (!Globals.GAME_ACTIVE && Regions.BarrierRegion.Contains(newX, newY))
+            {
+                return;
+            }
+
             if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
             {
                 newX = oldX;
