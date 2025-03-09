@@ -74,7 +74,10 @@ public static class UnitOrders
         var player = @event.OrderedUnit.Owner;
         if (TotalActions.ContainsKey(player))
         {
-            TotalActions[player]++;
+            if (!IsInSafeZone(@event.OrderedUnit))
+            {
+                TotalActions[player]++;
+            }
         }
     }
 
