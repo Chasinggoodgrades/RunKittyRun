@@ -238,12 +238,11 @@ public class AIController
 
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, (float X, float Y) forwardDirection)
     {
-        // Define a bin size (in radians). Here we use 45 degrees.
+        // Define a bin size (45 degrees).
         float binSize = (float)(Math.PI / 4);
-
-        // Dictionary to hold clusters keyed by a quantized angle bin.
         Dictionary<int, ClusterData> clusters = new Dictionary<int, ClusterData>();
 
+        // Process each wolf normally.
         foreach (var wolf in wolves)
         {
             float dx = kitty.Unit.X - wolf.Unit.X;
@@ -251,24 +250,17 @@ public class AIController
             float dist = (float)Math.Sqrt(dx * dx + dy * dy);
             if (dist > 0)
             {
-                // Calculate weight using inverse square distance.
-                float weight = SquareRoot(1f / dist);
-                // Get the normalized direction away from the wolf.
+                // Weight inversely related to distance.
+                float weight = (float)Math.Sqrt(1f / dist);
                 float nx = dx / dist;
                 float ny = dy / dist;
-                // Compute the angle of the direction.
                 float angle = (float)Math.Atan2(ny, nx);
-                // Determine the bin (cluster) index.
                 int bin = (int)Math.Round(angle / binSize);
 
-                // Check if a cluster already exists for this bin.
                 if (clusters.ContainsKey(bin))
                 {
-                    // Update the cluster if this wolf has a higher weight.
                     if (weight > clusters[bin].Weight)
-                    {
                         clusters[bin] = new ClusterData(nx, ny, weight);
-                    }
                 }
                 else
                 {
@@ -277,16 +269,53 @@ public class AIController
             }
         }
 
-        // Sum up the contributions from each cluster.
-        float compositeX = 0f;
-        float compositeY = 0f;
+        // --- Incorporate Wall Repulsion ---
+        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        var laneBounds = WolfArea.WolfAreas[currentSafezoneId].Rectangle;
+
+        float laneLeft = laneBounds.Left;
+        float laneRight = laneBounds.Right;
+        float laneBottom = laneBounds.Bottom;
+        float laneTop = laneBounds.Top;
+        float wallThreshold = 20f;          // Distance threshold for wall repulsion.
+        float wallRepulsionConstant = 1000f;  // High constant to simulate a “huge” wolf.
+
+        // Helper method to add wall repulsion.
+        void AddWallRepulsion(float distance, float nx, float ny)
+        {
+            if (distance < wallThreshold && distance > 0)
+            {
+                float weight = (float)Math.Sqrt(wallRepulsionConstant / distance);
+                float angle = (float)Math.Atan2(ny, nx);
+                int bin = (int)Math.Round(angle / binSize);
+                if (clusters.ContainsKey(bin))
+                {
+                    if (weight > clusters[bin].Weight)
+                        clusters[bin] = new ClusterData(nx, ny, weight);
+                }
+                else
+                {
+                    clusters[bin] = new ClusterData(nx, ny, weight);
+                }
+            }
+        }
+
+        // Apply wall repulsion for each wall.
+        AddWallRepulsion(kitty.Unit.X - laneLeft, 1f, 0f);        // Left wall: repel right.
+        AddWallRepulsion(laneRight - kitty.Unit.X, -1f, 0f);       // Right wall: repel left.
+        AddWallRepulsion(kitty.Unit.Y - laneBottom, 0f, 1f);        // Bottom wall: repel up.
+        AddWallRepulsion(laneTop - kitty.Unit.Y, 0f, -1f);          // Top wall: repel down.
+                                                                    // --- End Wall Repulsion ---
+
+        // If no clusters are found (no wolves and no wall repulsion), default to moving forward.
         if (clusters.Count == 0)
         {
-            // If no wolves are nearby, simply move forward.
             return (kitty.Unit.X + (forwardDirection.X * DODGE_RADIUS),
                     kitty.Unit.Y + (forwardDirection.Y * DODGE_RADIUS));
         }
 
+        // Sum cluster contributions.
+        float compositeX = 0f, compositeY = 0f;
         foreach (var cluster in clusters.Values)
         {
             compositeX += cluster.DirX * cluster.Weight;
@@ -294,16 +323,15 @@ public class AIController
         }
 
         // Normalize the composite dodge vector.
-        float dodgeMagnitude = (float)Math.Sqrt(compositeX * compositeX + compositeY * compositeY);
-        if (dodgeMagnitude == 0)
+        float compositeMagnitude = (float)Math.Sqrt(compositeX * compositeX + compositeY * compositeY);
+        if (compositeMagnitude == 0)
         {
-            // Rare case: perfect cancellation. Default to an arbitrary direction.
             compositeX = 1;
             compositeY = 0;
-            dodgeMagnitude = 1;
+            compositeMagnitude = 1;
         }
-        compositeX /= dodgeMagnitude;
-        compositeY /= dodgeMagnitude;
+        compositeX /= compositeMagnitude;
+        compositeY /= compositeMagnitude;
 
         // Normalize the forward direction.
         float forwardMagnitude = (float)Math.Sqrt(forwardDirection.X * forwardDirection.X +
@@ -315,28 +343,40 @@ public class AIController
         }
         var normForward = (X: forwardDirection.X / forwardMagnitude, Y: forwardDirection.Y / forwardMagnitude);
 
-        // Check candidate angles: -90, -45, 0, 45, and 90 degrees.
-        float[] angles = { -90f, -45f, 0f, 45f, 90f };
+        // Blend the composite dodge vector with the forward direction.
+        // Adjust 'alpha' to bias the dodge vs. forward motion.
+        float alpha = 0.7f; // 70% dodge, 30% forward
+        float desiredX = compositeX * alpha + normForward.X * (1 - alpha);
+        float desiredY = compositeY * alpha + normForward.Y * (1 - alpha);
+        float desiredMagnitude = (float)Math.Sqrt(desiredX * desiredX + desiredY * desiredY);
+        desiredX /= desiredMagnitude;
+        desiredY /= desiredMagnitude;
+
+        // Evaluate candidate dodge directions.
+        // Use a narrower range (e.g., -30° to 30°) to keep progress.
+        float[] angles = { -30f, -15f, 0f, 15f, 30f };
         (float X, float Y)? bestCandidate = null;
         float bestDot = float.MinValue;
+
         foreach (var angle in angles)
         {
             float rad = angle * (float)Math.PI / 180f;
-            float candX = (compositeX * (float)Math.Cos(rad)) - (compositeY * (float)Math.Sin(rad));
-            float candY = (compositeX * (float)Math.Sin(rad)) + (compositeY * (float)Math.Cos(rad));
+            float candX = desiredX * (float)Math.Cos(rad) - desiredY * (float)Math.Sin(rad);
+            float candY = desiredX * (float)Math.Sin(rad) + desiredY * (float)Math.Cos(rad);
 
             // Calculate candidate's final position.
             float candidatePosX = kitty.Unit.X + (candX * DODGE_RADIUS);
             float candidatePosY = kitty.Unit.Y + (candY * DODGE_RADIUS);
 
-            // Check if candidate is within lane bounds.
+            // Apply a penalty if candidate is out-of-bounds.
+            float penalty = 0f;
             if (!IsWithinLaneBounds(candidatePosX, candidatePosY))
             {
-                continue; // Skip candidate if it's not within the lane.
+                penalty = -1f;
             }
 
-            // Compute dot product with the normalized forward direction.
-            float dot = (candX * normForward.X) + (candY * normForward.Y);
+            // Compute dot product with forward direction (plus any penalty).
+            float dot = (candX * normForward.X) + (candY * normForward.Y) + penalty;
             if (dot > bestDot)
             {
                 bestDot = dot;
@@ -349,7 +389,6 @@ public class AIController
             return (kitty.Unit.X, kitty.Unit.Y);
         }
 
-        // Calculate and return the final dodge position based on the best candidate.
         float resultX = kitty.Unit.X + (bestCandidate.Value.X * DODGE_RADIUS);
         float resultY = kitty.Unit.Y + (bestCandidate.Value.Y * DODGE_RADIUS);
         return (resultX, resultY);
