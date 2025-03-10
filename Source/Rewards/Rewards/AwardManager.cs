@@ -84,6 +84,16 @@ public static class AwardManager
     /// </summary>
     public static void RegisterGamestatEvents()
     {
+        GameStatsData gamestatsx;
+        var gameStatsToIgnore = new List<string>
+        {
+            nameof(gamestatsx.NormalGames),
+            nameof(gamestatsx.HardGames),
+            nameof(gamestatsx.ImpossibleGames),
+            nameof(gamestatsx.NormalWins),
+            nameof(gamestatsx.HardWins),
+            nameof(gamestatsx.ImpossibleWins)
+        };
         if (Gamemode.CurrentGameMode != "Standard") return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
@@ -95,8 +105,7 @@ public static class AwardManager
             foreach (var gameStatReward in RewardsManager.GameStatRewards)
             {
                 var gamestat = gameStatReward.GameStat;
-                if (gamestat == nameof(gameStats.NormalGames) || gamestat == nameof(gameStats.HardGames) || gamestat == nameof(gameStats.ImpossibleGames)) continue;
-                if (gamestat == nameof(gameStats.NormalWins) || gamestat == nameof(gameStats.HardWins) || gamestat == nameof(gameStats.ImpossibleWins)) continue;
+                if (gameStatsToIgnore.Contains(gamestat)) continue;
                 HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
             }
         }

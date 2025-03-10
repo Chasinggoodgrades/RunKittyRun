@@ -2,7 +2,7 @@
 
 public static class GamemodeCmd
 {
-    private static CommandInfo CmdInfo;
+    private static GamemodeInfo CmdInfo;
     public static void Handle(player player, string command)
     {
         if (player != Gamemode.HostPlayer)
@@ -36,7 +36,7 @@ public static class GamemodeCmd
     {
         if (parts[0] == "-s")
         {
-            CmdInfo = CommandManager.GetCommandInfo(parts[0]);
+            CmdInfo = GamemodeManager.GetCommandInfo(parts[0]);
             return;
         }
         else if (parts.Length < 2)
@@ -44,7 +44,7 @@ public static class GamemodeCmd
         else
         {
             var commandXD = parts[0] + " " + parts[1];
-            CmdInfo = CommandManager.GetCommandInfo(commandXD);
+            CmdInfo = GamemodeManager.GetCommandInfo(commandXD);
         }
     }
 

@@ -4,17 +4,15 @@ using WCSharp.Shared;
 
 public static class ExecuteLua
 {
-    public static void LuaCode(player player, string command)
+    public static void LuaCode(player player, string args)
     {
-
-        var cmdArgs = command.Substring(command.IndexOf(" ") + 1);
-        player.DisplayTextTo($"Args: {cmdArgs}");
+        player.DisplayTextTo($"Args: {args}");
         var func = Lua.Load(
             @"return function() 
             local self = Globals.ALL_KITTIES:get(GetTriggerPlayer())
             local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
             "
-            + cmdArgs +
+            + args +
             @"end");
         if (func != null)
         {
@@ -33,4 +31,18 @@ public static class ExecuteLua
         else player.DisplayTextTo("Syntax Error");
     }
 
+}
+
+namespace DebugUtilities
+{
+    public static class DebugPrinter
+    {
+        public static dynamic _G;
+
+        // Converts the TypeScript function printDebugNames into C#.
+        public static void PrintDebugNames(string title)
+        {
+            // {{ LUA_REPLACE }}
+        }
+    }
 }

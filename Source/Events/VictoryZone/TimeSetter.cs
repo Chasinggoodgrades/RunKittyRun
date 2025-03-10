@@ -25,18 +25,12 @@ public static class TimeSetter
         if (currentTime >= value && value != 0) return false;
 
         SetSavedTime(player, roundString);
+        PersonalBestAwarder.BeatRecordTime(player);
 
         return true;
     }
 
-    private static void SetSavedTime(player player, string roundString)
-    {
-        var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-        var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
-        property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
-    }
-
-    private static string GetRoundEnum()
+    public static string GetRoundEnum()
     {
         var currentDiff = Difficulty.DifficultyValue;
         string roundEnum;
@@ -56,6 +50,13 @@ public static class TimeSetter
                 return "";
         }
         return roundEnum;
+    }
+
+    private static void SetSavedTime(player player, string roundString)
+    {
+        var kittyStats = Globals.ALL_KITTIES[player].SaveData;
+        var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
+        property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
     }
 
     private static string GetSoloTime()

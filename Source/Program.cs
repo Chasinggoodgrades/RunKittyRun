@@ -1,7 +1,7 @@
 ﻿using Source.Init;
 using System;
 using static WCSharp.Api.Common;
-
+using WCSharp.Shared;
 namespace Source
 {
     public static class Program
@@ -29,16 +29,16 @@ namespace Source
                 //Console.WriteLine("Map Created By: Aches, Debugging Enabled");
                 // By calling these methods, whenever these systems call external code (i.e. your code),
                 // they will wrap the call in a try-catch and output any errors to the chat for easier debugging
-                PeriodicEvents.EnableDebug();
+/*                PeriodicEvents.EnableDebug();
                 PlayerUnitEvents.EnableDebug();
-                SyncSystem.EnableDebug();
+                SyncSystem.EnableDebug();*/
                 Delay.EnableDebug();
 #endif
                 Setup.GetActivePlayers();
                 DateTimeManager.Initialize();
                 MusicManager.Initialize();
                 CommandHandler.Initialize();
-                CommandManager.InitializeCommands();
+                GamemodeManager.InitializeCommands();
                 SaveManager.Initialize();
                 Setup.Initialize();
                 BarrierSetup.Initialize();
