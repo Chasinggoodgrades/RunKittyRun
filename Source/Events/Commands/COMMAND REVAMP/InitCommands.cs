@@ -396,7 +396,7 @@ public static class InitCommands
             name: "level",
             alias: "lvl",
             group: "admin",
-            argDesc: "[player/selected][level]",
+            argDesc: "[level][player/selected]",
             description: "Sets the level of the selected unit.",
             action: (player, args) =>
             {
@@ -405,9 +405,9 @@ public static class InitCommands
                     var kitty = Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]);
                     return;
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
-                    kitty.Unit.HeroLevel = int.Parse(args[1]);
+                    kitty.Unit.HeroLevel = int.Parse(args[0]);
                 });
             }
         );
