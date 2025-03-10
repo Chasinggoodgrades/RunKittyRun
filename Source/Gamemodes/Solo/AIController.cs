@@ -84,7 +84,7 @@ public class AIController
             moveTimer = null;
         }
 
-        DestroyLightning(lastLightning);
+        _ = DestroyLightning(lastLightning);
         lastLightning = null;
     }
 
@@ -159,12 +159,12 @@ public class AIController
         // Otherwise, move toward the target safezone center
         var deltaX = targetPosition.X - kitty.Unit.X;
         var deltaY = targetPosition.Y - kitty.Unit.Y;
-        var distance = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        var distance = (float)Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
         if (distance > 256)
         {
             var scale = 256 / distance;
-            var moveX = kitty.Unit.X + deltaX * scale;
-            var moveY = kitty.Unit.Y + deltaY * scale;
+            var moveX = kitty.Unit.X + (deltaX * scale);
+            var moveY = kitty.Unit.Y + (deltaY * scale);
             IssueOrder("move", moveX, moveY, false);
         }
         else
@@ -190,7 +190,7 @@ public class AIController
         {
             if (lastLightning != null)
             {
-                MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                _ = MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
             }
             else
             {
@@ -201,7 +201,7 @@ public class AIController
         // Calculate the distance between the last issued order position and the new target position
         float deltaX = x - lastX;
         float deltaY = y - lastY;
-        float distanceSquared = deltaX * deltaX + deltaY * deltaY;
+        float distanceSquared = (deltaX * deltaX) + (deltaY * deltaY);
 
         if (hasLastOrder && lastCommand == command && distanceSquared < MIN_MOVE_DISTANCE * MIN_MOVE_DISTANCE)
         {
@@ -216,7 +216,7 @@ public class AIController
         lastY = y;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        kitty.Unit.IssueOrder(command, x, y);
+        _ = kitty.Unit.IssueOrder(command, x, y);
     }
 
     private void IssueOrderBasic(string command)
@@ -226,7 +226,7 @@ public class AIController
         lastY = -1;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        kitty.Unit.IssueOrder(command);
+        _ = kitty.Unit.IssueOrder(command);
     }
 
     private (float X, float Y) GetCenterPositionInSafezone(Safezone safezone)
@@ -251,8 +251,8 @@ public class AIController
                 // Weight by the inverse of distance so that nearer wolves contribute more.
                 float weight = 1f / dist;
                 // Sum the normalized direction away from each wolf, scaled by weight.
-                compositeX += (dx / dist) * weight;
-                compositeY += (dy / dist) * weight;
+                compositeX += dx / dist * weight;
+                compositeY += dy / dist * weight;
                 count++;
             }
         }
@@ -292,8 +292,8 @@ public class AIController
         foreach (var angle in angles)
         {
             float rad = angle * (float)Math.PI / 180f;
-            float candX = compositeX * (float)Math.Cos(rad) - compositeY * (float)Math.Sin(rad);
-            float candY = compositeX * (float)Math.Sin(rad) + compositeY * (float)Math.Cos(rad);
+            float candX = (compositeX * (float)Math.Cos(rad)) - (compositeY * (float)Math.Sin(rad));
+            float candY = (compositeX * (float)Math.Sin(rad)) + (compositeY * (float)Math.Cos(rad));
 
             // Calculate candidate's final position.
             float candidatePosX = kitty.Unit.X + (candX * DODGE_RADIUS);
@@ -306,7 +306,7 @@ public class AIController
             }
 
             // Compute dot product with the normalized forward direction.
-            float dot = candX * normForward.X + candY * normForward.Y;
+            float dot = (candX * normForward.X) + (candY * normForward.Y);
             if (dot > bestDot)
             {
                 bestDot = dot;

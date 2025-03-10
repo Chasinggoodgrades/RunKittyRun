@@ -131,8 +131,7 @@ public class ShardOfTranslocation : Relic
     private static bool EligibleLocation(location targetLoc, int currentSafezone)
     {
         var SAFEZONES = Globals.SAFE_ZONES;
-        if (SAFEZONES[currentSafezone].Region.Contains(targetLoc.X, targetLoc.Y)) return true;
-        return currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.Contains(targetLoc.X, targetLoc.Y) || (currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13) || WolfRegionEligible(targetLoc, currentSafezone);
+        return SAFEZONES[currentSafezone].Region.Contains(targetLoc.X, targetLoc.Y) || (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.Contains(targetLoc.X, targetLoc.Y)) || (currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13) || WolfRegionEligible(targetLoc, currentSafezone);
     }
 
     private static bool WolfRegionEligible(location targetLoc, int currentSafezone)

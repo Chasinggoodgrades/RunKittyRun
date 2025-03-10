@@ -135,6 +135,9 @@ public static class Difficulty
             case "impossible":
                 SetDifficulty(s_IMPOSSIBLE);
                 break;
+            default:
+                Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}");
+                break;
         }
     }
 

@@ -355,6 +355,20 @@ public static class Utility
         MultiboardUtil.RefreshMultiboards();
     }
 
+    public static player GetPlayerByName(string playerName)
+    {
+        // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
+        if (playerName.Length < 3) return null;
+        foreach (var p in Globals.ALL_PLAYERS)
+        {
+            if (p.Name.ToLower().Contains(playerName.ToLower()))
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public static string FormattedColorPlayerName(player p)
     {
         // removes everything after '#' in the player name

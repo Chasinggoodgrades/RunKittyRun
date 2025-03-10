@@ -182,4 +182,18 @@ public class Colors
 
         player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
     }
+
+    public static player GetPlayerByColor(string colorName)
+    {
+        foreach (var color in ColorManager)
+        {
+            if (ColorContainsCommand(color, colorName.ToLower()))
+            {
+                return Player(color.colorID - 1);
+            }
+        }
+        return null;
+    }
+
+
 }

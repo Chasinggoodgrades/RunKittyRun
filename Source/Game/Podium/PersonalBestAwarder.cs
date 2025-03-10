@@ -1,6 +1,5 @@
 ﻿using System;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
 
 
 /*
@@ -28,16 +27,4 @@ public static class PersonalBestAwarder
         var timeFormatted = Utility.ConvertFloatToTime(time);
         Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}!|r");
     }
-
-    public static void BeatRecordScore()
-    {
-        var trig = trigger.Create();
-        trig.RegisterVariableEvent("PersonalBestAwarder.TestOne", limitop.GreaterThan, 2.0f);
-        trig.AddAction(() =>
-        {
-            Console.WriteLine("test");
-        });
-    }
-
-
 }

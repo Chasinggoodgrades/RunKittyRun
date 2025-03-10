@@ -177,11 +177,22 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "lockcamera",
-            alias: "lc,&f",
+            alias: "lc,spectate",
             group: "all",
             argDesc: "",
-            description: "Locks your camera to your unit.",
-            action: (player, args) => CameraUtil.LockCamera(player)
+            description: "Locks your camera to a unit.",
+            action: (player, args) =>
+            {
+                if (args.Length == 0)
+                {
+                    CameraUtil.LockCamera(player);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    CameraUtil.LockCamera(kitty.Player);
+                });
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -265,8 +276,8 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "observer",
-            alias: "obs",
+            name: "watcher",
+            alias: "watching",
             group: "all",
             argDesc: "",
             description: "Removes all units from game and you become an observer/spectator.",
@@ -293,14 +304,13 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "glow",
-            alias: string.Empty,
+            alias: "",
             group: "all",
             argDesc: "[true/false]",
             description: "Toggle unit glow.",
             action: (player, args) =>
             {
-                var glow = args.Length == 0 || !(args[0].ToLower() == "false" || args[0].ToLower() == "off" || args[0].ToLower() == "0");
-                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, true);
+                var glow = CommandsManager.IsBool(args[0]) != true || bool.Parse(args[0]);
                 BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, glow);
             }
         );
@@ -386,12 +396,19 @@ public static class InitCommands
             name: "level",
             alias: "lvl",
             group: "admin",
-            argDesc: "[level]",
+            argDesc: "[player/selected][level]",
             description: "Sets the level of the selected unit.",
             action: (player, args) =>
             {
-                var level = args.Length > 0 ? int.Parse(args[0]) : 10;
-                CustomStatFrame.SelectedUnit[player].HeroLevel = level;
+                if (args.Length < 2)
+                {
+                    var kitty = Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    kitty.Unit.HeroLevel = int.Parse(args[1]);
+                });
             }
         );
 
@@ -430,21 +447,16 @@ public static class InitCommands
             group: "admin",
             argDesc: "",
             description: "Revives yourself.",
-            action: (player, args) => Globals.ALL_KITTIES[player].ReviveKitty()
-        );
-
-        CommandsManager.RegisterCommand( // Combine these 2 ^
-            name: "reviveall",
-            alias: "rposall",
-            group: "admin",
-            argDesc: "",
-            description: "Revives all players.",
             action: (player, args) =>
             {
-                foreach (var kitty in Globals.ALL_KITTIES.Values)
+                // if args is null or empty, revive self
+                // else resolve playerid
+                if (args.Length == 0)
                 {
-                    kitty.ReviveKitty();
+                    Globals.ALL_KITTIES[player].ReviveKitty();
+                    return;
                 }
+                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty());
             }
         );
 
@@ -533,7 +545,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[name]",
             description: "Award currently selected player using award [name].",
-            action: (player, args) => AwardingCmds.Awarding(player, string.Join(" ", args))
+            action: (player, args) => AwardingCmds.Awarding(player, args[0])
         );
 
         CommandsManager.RegisterCommand(
@@ -542,7 +554,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[stat] [value]",
             description: "Sets the specified game stat for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameStats(player, string.Join(" ", args))
+            action: (player, args) => AwardingCmds.SettingGameStats(player, args[0])
         );
 
         CommandsManager.RegisterCommand(
@@ -551,7 +563,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[time]",
             description: "Sets the specified game time for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameTimes(player, string.Join(" ", args))
+            action: (player, args) => AwardingCmds.SettingGameTimes(player, args[0])
         );
 
         CommandsManager.RegisterCommand(
@@ -562,13 +574,13 @@ public static class InitCommands
             description: "Gives invulnerability.",
             action: (player, args) =>
             {
-                var setting = args.Length > 0 ? args[0] : "on";
+                var setting = CommandsManager.IsBool(args[0]) != true || bool.Parse(args[0]);
                 var kitty = Globals.ALL_KITTIES[player];
-                if (setting == "on")
+                if (setting)
                 {
                     UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
                 }
-                else if (setting == "off")
+                else
                 {
                     CollisionDetection.KittyRegisterCollisions(kitty);
                 }
@@ -602,9 +614,9 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach (var kitty in Globals.ALL_KITTIES.Values)
+                foreach (var kitty in Globals.ALL_KITTIES)
                 {
-                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                    kitty.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 }
             }
         );
@@ -646,11 +658,11 @@ public static class InitCommands
             {
                 var affixName = args.Length > 0 ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {affixName} to all wolves.");
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                foreach (var wolf in Globals.ALL_WOLVES)
                 {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
-                    var affix = AffixFactory.CreateAffix(wolf, affixName);
-                    wolf.AddAffix(affix);
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
+                    var affix = AffixFactory.CreateAffix(wolf.Value, affixName);
+                    wolf.Value.AddAffix(affix);
                 }
             }
         );
@@ -697,9 +709,9 @@ public static class InitCommands
             description: "Clears all affixes from all wolves.",
             action: (player, args) =>
             {
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                foreach (var wolf in Globals.ALL_WOLVES)
                 {
-                    wolf.RemoveAllWolfAffixes();
+                    wolf.Value.RemoveAllWolfAffixes();
                 }
             }
         );
@@ -733,10 +745,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kitty = Globals.ALL_KITTIES[player];
-                foreach (var k in Globals.ALL_KITTIES.Values)
+                foreach (var k in Globals.ALL_KITTIES)
                 {
-                    if (k.Unit.Owner == player) continue;
-                    k.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+                    if (k.Value.Unit.Owner == player) continue;
+                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
                 }
             }
         );
@@ -827,7 +839,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "day",
             alias: "",
-            group: "admin",
+            group: "red",
             argDesc: "",
             description: "Sets the time of day to day.",
             action: (player, args) =>
@@ -840,7 +852,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "night",
             alias: "",
-            group: "admin",
+            group: "red",
             argDesc: "",
             description: "Sets the time of day to night.",
             action: (player, args) =>
@@ -1042,13 +1054,13 @@ public static class InitCommands
                 var reviveRadius = args.Length > 1 ? float.Parse(args[1]) : 1024.0f;
                 var timerInterval = args.Length > 2 ? float.Parse(args[2]) : 0.2f;
 
-                foreach (var compKitty in Globals.ALL_KITTIES.Values)
+                foreach (var compKitty in Globals.ALL_KITTIES)
                 {
-                    if (compKitty.aiController.IsEnabled())
+                    if (compKitty.Value.aiController.IsEnabled())
                     {
-                        compKitty.aiController.DODGE_RADIUS = dodgeRadius;
-                        compKitty.aiController.REVIVE_RADIUS = reviveRadius;
-                        compKitty.aiController.timerInterval = timerInterval;
+                        compKitty.Value.aiController.DODGE_RADIUS = dodgeRadius;
+                        compKitty.Value.aiController.REVIVE_RADIUS = reviveRadius;
+                        compKitty.Value.aiController.timerInterval = timerInterval;
                     }
                 }
 

@@ -33,7 +33,9 @@ public static class CommandHandler
 
     private static void HandleCommands()
     {
-        var cmd = @event.PlayerChatString.ToLower().Substring(1);
+        var chatString = @event.PlayerChatString;
+        if (chatString.Length < 2 || chatString[0] != '-') return;
+        var cmd = chatString.ToLower().Substring(1);
         var parts = cmd.Split(' ');
         var args = parts.Skip(1).ToArray();
         var command = CommandsManager.GetCommand(parts[0]);
