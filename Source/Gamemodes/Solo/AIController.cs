@@ -23,6 +23,7 @@ public class AIController
             }
         }
     }
+    public bool laser = false;
 
     private string lastCommand = "";
     private float lastX;
@@ -194,7 +195,10 @@ public class AIController
             }
             else
             {
-                lastLightning = AddLightning("DRAM", false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                if (this.laser)
+                {
+                    lastLightning = AddLightning("DRAM", false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                }
             }
         }
 
