@@ -9,7 +9,7 @@ public class AIController
     private bool enabled;
     public float DODGE_RADIUS = 160.0f;
     public float REVIVE_RADIUS = 1024.0f;
-    public float _timerInterval = 0.2f;
+    public float _timerInterval = 0.1f;
     public float timerInterval
     {
         get { return _timerInterval; }
@@ -97,7 +97,7 @@ public class AIController
     {
         var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
         var currentSafezone = Globals.SAFE_ZONES[currentSafezoneId];
-        var nextSafezone = Globals.SAFE_ZONES[currentSafezoneId + 1];
+        var nextSafezone = (currentSafezoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentSafezoneId + 1] : Globals.SAFE_ZONES[currentSafezoneId]; // Exclude last one
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
@@ -238,34 +238,63 @@ public class AIController
 
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, (float X, float Y) forwardDirection)
     {
-        float compositeX = 0f;
-        float compositeY = 0f;
-        int count = 0;
+        // Define a bin size (in radians). Here we use 45 degrees.
+        float binSize = (float)(Math.PI / 4);
+
+        // Dictionary to hold clusters keyed by a quantized angle bin.
+        Dictionary<int, ClusterData> clusters = new Dictionary<int, ClusterData>();
+
         foreach (var wolf in wolves)
         {
             float dx = kitty.Unit.X - wolf.Unit.X;
             float dy = kitty.Unit.Y - wolf.Unit.Y;
-            float dist = (float)Math.Sqrt((dx * dx) + (dy * dy));
+            float dist = (float)Math.Sqrt(dx * dx + dy * dy);
             if (dist > 0)
             {
-                // Weight by the inverse of distance so that nearer wolves contribute more.
-                float weight = 1f / dist;
-                // Sum the normalized direction away from each wolf, scaled by weight.
-                compositeX += dx / dist * weight;
-                compositeY += dy / dist * weight;
-                count++;
+                // Calculate weight using inverse square distance.
+                float weight = SquareRoot(1f / dist);
+                // Get the normalized direction away from the wolf.
+                float nx = dx / dist;
+                float ny = dy / dist;
+                // Compute the angle of the direction.
+                float angle = (float)Math.Atan2(ny, nx);
+                // Determine the bin (cluster) index.
+                int bin = (int)Math.Round(angle / binSize);
+
+                // Check if a cluster already exists for this bin.
+                if (clusters.ContainsKey(bin))
+                {
+                    // Update the cluster if this wolf has a higher weight.
+                    if (weight > clusters[bin].Weight)
+                    {
+                        clusters[bin] = new ClusterData(nx, ny, weight);
+                    }
+                }
+                else
+                {
+                    clusters[bin] = new ClusterData(nx, ny, weight);
+                }
             }
         }
 
-        // If no wolves are nearby, simply move forward.
-        if (count == 0)
+        // Sum up the contributions from each cluster.
+        float compositeX = 0f;
+        float compositeY = 0f;
+        if (clusters.Count == 0)
         {
+            // If no wolves are nearby, simply move forward.
             return (kitty.Unit.X + (forwardDirection.X * DODGE_RADIUS),
                     kitty.Unit.Y + (forwardDirection.Y * DODGE_RADIUS));
         }
 
+        foreach (var cluster in clusters.Values)
+        {
+            compositeX += cluster.DirX * cluster.Weight;
+            compositeY += cluster.DirY * cluster.Weight;
+        }
+
         // Normalize the composite dodge vector.
-        float dodgeMagnitude = (float)Math.Sqrt((compositeX * compositeX) + (compositeY * compositeY));
+        float dodgeMagnitude = (float)Math.Sqrt(compositeX * compositeX + compositeY * compositeY);
         if (dodgeMagnitude == 0)
         {
             // Rare case: perfect cancellation. Default to an arbitrary direction.
@@ -277,7 +306,8 @@ public class AIController
         compositeY /= dodgeMagnitude;
 
         // Normalize the forward direction.
-        float forwardMagnitude = (float)Math.Sqrt((forwardDirection.X * forwardDirection.X) + (forwardDirection.Y * forwardDirection.Y));
+        float forwardMagnitude = (float)Math.Sqrt(forwardDirection.X * forwardDirection.X +
+                                                    forwardDirection.Y * forwardDirection.Y);
         if (forwardMagnitude == 0)
         {
             forwardDirection = (1, 0);
@@ -314,11 +344,9 @@ public class AIController
             }
         }
 
-        // If no candidate passed the lane bounds check, fallback to moving forward.
         if (bestCandidate == null)
         {
-            return (kitty.Unit.X + (normForward.X * DODGE_RADIUS),
-                    kitty.Unit.Y + (normForward.Y * DODGE_RADIUS));
+            return (kitty.Unit.X, kitty.Unit.Y);
         }
 
         // Calculate and return the final dodge position based on the best candidate.
@@ -373,5 +401,19 @@ public class AIController
             IssueOrderBasic("windwalk");
             MoveKittyToPosition();
         }
+    }
+}
+
+public class ClusterData
+{
+    public float DirX { get; set; }
+    public float DirY { get; set; }
+    public float Weight { get; set; }
+
+    public ClusterData(float dirX, float dirY, float weight)
+    {
+        DirX = dirX;
+        DirY = dirY;
+        Weight = weight;
     }
 }
