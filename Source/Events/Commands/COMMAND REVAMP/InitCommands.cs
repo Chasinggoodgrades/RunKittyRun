@@ -188,10 +188,10 @@ public static class InitCommands
                     CameraUtil.LockCamera(player);
                     return;
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
+/*                CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
                     CameraUtil.LockCamera(kitty.Player);
-                });
+                });*/
             }
         );
 
