@@ -12,6 +12,7 @@ public class AIController
     private bool enabled;
     public float DODGE_RADIUS = 160.0f;
     public float REVIVE_RADIUS = 1024.0f;
+    private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public float _timerInterval = 0.1f;
     public float timerInterval
     {
@@ -43,6 +44,9 @@ public class AIController
     private bool reachedLastSafezoneCenter = false;
     private List<lightning> availableLightnings = new List<lightning>();
     private List<lightning> usedLightnings = new List<lightning>();
+    private List<AngleInterval> blockedIntervals = new List<AngleInterval>();
+    private List<AngleInterval> freeGaps = new List<AngleInterval>();
+    private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
 
     public AIController(Kitty kitty)
     {
@@ -243,13 +247,10 @@ public class AIController
         return (centerX, centerY);
     }
 
-    private const float DODGE_DISTANCE = 128f;
-
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
-    private Vector2 GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
+    private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
     {
         float forwardAngle = MathF.Atan2(forwardDirection.Y, forwardDirection.X);
-        List<AngleInterval> blockedIntervals = new List<AngleInterval>();
 
         // Calculate the angle interval that each wolf “blocks.”
         foreach (Wolf wolf in wolves)
@@ -263,12 +264,14 @@ public class AIController
                 MAX_TOTAL_BLOCKED_ANGLE = MathF.PI / 4f;  // 45° total
             }
 
-            Vector2 toWolf = new Vector2(wolf.Unit.X - this.kitty.Unit.X, wolf.Unit.Y - this.kitty.Unit.Y);
-            float distance = toWolf.Length();
+            float dx = wolf.Unit.X - this.kitty.Unit.X;
+            float dy = wolf.Unit.Y - this.kitty.Unit.Y;
+            float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
             if (distance < 1)
                 continue; // Skip if the wolf is at the same position to avoid division by zero
 
-            float centerAngle = MathF.Atan2(toWolf.Y, toWolf.X);
+            float centerAngle = MathF.Atan2(wolf.Unit.Y - this.kitty.Unit.Y, wolf.Unit.X - this.kitty.Unit.X);
             float combinedRadius = DODGE_RADIUS;
             float ratio = combinedRadius / distance;
 
@@ -287,17 +290,27 @@ public class AIController
             // If the interval wraps around 0, split it into two parts.
             if (start > end)
             {
-                blockedIntervals.Add(new AngleInterval(start, 2f * MathF.PI));
-                blockedIntervals.Add(new AngleInterval(0, end));
+                var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                a.Start = start;
+                a.End = 2f * MathF.PI;
+                blockedIntervals.Add(a);
+
+                var b = MemoryHandler.GetEmptyObject<AngleInterval>();
+                b.Start = 0;
+                b.End = end;
+                blockedIntervals.Add(b);
             }
             else
             {
-                blockedIntervals.Add(new AngleInterval(start, end));
+                var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                a.Start = start;
+                a.End = end;
+                blockedIntervals.Add(a);
             }
         }
 
         // Merge any overlapping blocked intervals.
-        List<AngleInterval> mergedIntervals = MergeIntervals(blockedIntervals);
+        MergeIntervals(blockedIntervals);
 
         // Visualize the blocked intervals
         HideAllLightnings();
@@ -307,11 +320,13 @@ public class AIController
         }
 
         // Determine free angular gaps on the circle.
-        List<AngleInterval> freeGaps = new List<AngleInterval>();
         if (mergedIntervals.Count == 0)
         {
             // No wolves blocking any direction; entire circle is free.
-            freeGaps.Add(new AngleInterval(0, 2f * MathF.PI));
+            var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+            a.Start = 0;
+            a.End = 2f * MathF.PI;
+            freeGaps.Add(a);
         }
         else
         {
@@ -322,14 +337,22 @@ public class AIController
             float wrapGap = (mergedIntervals[0].Start + 2f * MathF.PI) - mergedIntervals[mergedIntervals.Count - 1].End;
             if (wrapGap > 0)
             {
-                freeGaps.Add(new AngleInterval(mergedIntervals[mergedIntervals.Count - 1].End, mergedIntervals[0].Start + 2f * MathF.PI));
+                var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                a.Start = mergedIntervals[mergedIntervals.Count - 1].End;
+                a.End = mergedIntervals[0].Start + 2f * MathF.PI;
+                freeGaps.Add(a);
             }
             // Gaps between consecutive intervals.
             for (int i = 0; i < mergedIntervals.Count - 1; i++)
             {
                 float gapSize = mergedIntervals[i + 1].Start - mergedIntervals[i].End;
                 if (gapSize > 0)
-                    freeGaps.Add(new AngleInterval(mergedIntervals[i].End, mergedIntervals[i + 1].Start));
+                {
+                    var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                    a.Start = mergedIntervals[i].End;
+                    a.End = mergedIntervals[i + 1].Start;
+                    freeGaps.Add(a);
+                }
             }
         }
 
@@ -350,10 +373,36 @@ public class AIController
         }
 
         // Update the forward direction to the chosen dodge direction.
-        var forwardDirection2 = new Vector2(MathF.Cos(bestAngle), MathF.Sin(bestAngle));
+        (float X, float Y) forwardDirection2 = (MathF.Cos(bestAngle), MathF.Sin(bestAngle));
+
+        cleanArrays();
 
         // Return the target dodge position (kitty's position plus 128f in the chosen direction).
-        return new Vector2(kitty.Unit.X, kitty.Unit.Y) + forwardDirection2 * DODGE_DISTANCE;
+        return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.Unit.Y + forwardDirection2.Y * DODGE_DISTANCE);
+    }
+
+    private void cleanArrays()
+    {
+        foreach (var blockedInterval in blockedIntervals)
+        {
+            blockedInterval.__destroy();
+        }
+
+        blockedIntervals.Clear();
+
+        foreach (var freeGap in freeGaps)
+        {
+            freeGap.__destroy();
+        }
+
+        freeGaps.Clear();
+
+        foreach (var mergedInterval in mergedIntervals)
+        {
+            mergedInterval.__destroy();
+        }
+
+        mergedIntervals.Clear();
     }
 
     private void VisualizeBlockedInterval(AngleInterval interval)
@@ -428,13 +477,10 @@ public class AIController
     /// <summary>
     /// Merges overlapping angular intervals.
     /// </summary>
-    private List<AngleInterval> MergeIntervals(List<AngleInterval> intervals)
+    private void MergeIntervals(List<AngleInterval> intervals)
     {
-        if (intervals.Count == 0)
-            return intervals;
-
         intervals.Sort((a, b) => a.Start.CompareTo(b.Start));
-        List<AngleInterval> merged = new List<AngleInterval>();
+
         AngleInterval current = intervals[0];
 
         for (int i = 1; i < intervals.Count; i++)
@@ -446,26 +492,29 @@ public class AIController
             }
             else
             {
-                merged.Add(current);
+                mergedIntervals.Add(current);
                 current = intervals[i];
             }
         }
-        merged.Add(current);
-        return merged;
+
+        mergedIntervals.Add(current);
     }
 
     /// <summary>
     /// Helper class representing an angular interval [Start, End] in radians.
     /// </summary>
-    private class AngleInterval
+    private class AngleInterval : IDestroyable
     {
         public float Start;
         public float End;
 
-        public AngleInterval(float start, float end)
+        public AngleInterval()
         {
-            Start = start;
-            End = end;
+        }
+
+        public void __destroy(bool recursive = false)
+        {
+            MemoryHandler.DestroyObject(this);
         }
     }
 
