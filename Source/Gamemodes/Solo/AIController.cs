@@ -1,3 +1,4 @@
+using Source;
 using System;
 using System.Collections.Generic;
 using WCSharp.Api;
@@ -23,7 +24,7 @@ public class AIController
             }
         }
     }
-    public bool laser = false;
+    public bool laser = Program.Debug;
 
     private string lastCommand = "";
     private float lastX;
