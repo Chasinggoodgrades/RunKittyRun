@@ -146,12 +146,15 @@ public class Blitzer : Affix
             PreBlitzerTimer.Pause();
             WanderEffect.Dispose();
             MoveTimer.Pause();
+            Unit.IsWalking = !pause;
         }
         else
         {
             BlitzerTimer.Resume();
             PreBlitzerTimer.Resume();
             MoveTimer.Resume();
+            Unit.IsWalking = !pause;
+
         }
     }
 }

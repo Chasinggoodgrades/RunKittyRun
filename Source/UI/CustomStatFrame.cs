@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Source;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -185,8 +186,9 @@ public static class CustomStatFrame
         Stats[1].Text.Text = "";
         Stats[2].Text.Text = "";
         Stats[3].Text.Text = "";
-        Stats[4].Text.Text = "";
+        //Stats[4].Text.Text = "";
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
+        if (Program.Debug) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
         Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 
