@@ -45,14 +45,14 @@ public static class CommandHandler
         if (spaceIndex < 0)
         {
             commandName = cmd;
-            args = new[] { "" };
+            args = Array.Empty<string>();
         }
         else
         {
             commandName = cmd.Substring(0, spaceIndex);
             var remainder = cmd.Substring(spaceIndex + 1);
             var split = remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            args = split.Length > 0 ? split : new[] { "" };
+            args = split.Length > 0 ? split : Array.Empty<string>();
         }
 
         if (GamemodeSetting(@event.PlayerChatString))
