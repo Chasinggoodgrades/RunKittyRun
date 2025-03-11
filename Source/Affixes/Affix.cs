@@ -1,4 +1,4 @@
-﻿public abstract class Affix
+﻿public abstract class Affix : IDestroyable
 {
     public Wolf Unit { get; set; }
     public string Name { get; set; }
@@ -15,6 +15,11 @@
     public virtual void Remove()
     {
         GC.RemoveAffix(this);
+    }
+
+    public void __destroy(bool recursive = false)
+    {
+        Remove();
     }
 }
 

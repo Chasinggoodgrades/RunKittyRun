@@ -21,6 +21,18 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "test3",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Memory Handler Test",
+            action: (player, args) =>
+            {
+                MemoryHandlerTest.PeriodicTest();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "save",
             alias: "",
             group: "all",
