@@ -397,11 +397,7 @@ public class AIController
 
         freeGaps.Clear();
 
-        foreach (var mergedInterval in mergedIntervals)
-        {
-            mergedInterval.__destroy();
-        }
-
+        // No need to destroy merged intervals, as they are just references to the original intervals.
         mergedIntervals.Clear();
     }
 
