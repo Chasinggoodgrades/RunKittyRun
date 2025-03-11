@@ -69,22 +69,12 @@ public class FloatingNameTag
 
     private void UpdateNameTag() => NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
 
-    public static void HideAllNameTags(player Player)
+    public static void ShowAllNameTags(player Player, bool shown)
     {
         if (!Player.IsLocal) return;
         foreach (var player in PlayerNameTags)
         {
-            PlayerNameTags[player.Key].NameTag.SetVisibility(false);
-            //NamedWolves.ShowWolfNames(false); (desync if wolves havent spawned yet)
-        }
-    }
-
-    public static void ShowAllNameTags(player Player)
-    {
-        if (!Player.IsLocal) return;
-        foreach (var player in PlayerNameTags)
-        {
-            PlayerNameTags[player.Key].NameTag.SetVisibility(true);
+            PlayerNameTags[player.Key].NameTag.SetVisibility(shown);
             //NamedWolves.ShowWolfNames(); (desync if wolves havent spawned yet)
         }
     }

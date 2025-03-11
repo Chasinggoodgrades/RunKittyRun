@@ -16,7 +16,7 @@ public static class TimeSetter
         if (!standard && !solo) return false;
 
         if (standard) roundString = GetRoundEnum();
-        if (solo) roundString = GetSoloTime();
+        if (solo) roundString = GetSoloEnum();
         if (currentTime >= 1200.00f) return false; // 20 min cap.
 
         var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
@@ -52,17 +52,17 @@ public static class TimeSetter
         return roundEnum;
     }
 
+    public static string GetSoloEnum()
+    {
+        var roundEnum = GetSoloRoundEnum();
+        return roundEnum;
+    }
+
     private static void SetSavedTime(player player, string roundString)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
         property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
-    }
-
-    private static string GetSoloTime()
-    {
-        var roundEnum = GetSoloRoundEnum();
-        return roundEnum;
     }
 
     private static string GetNormalRoundEnum()

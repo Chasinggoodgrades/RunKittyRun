@@ -11,7 +11,7 @@ namespace Source.Init
 
         private static float timeToChoose = 0.0f;
         private static timer gameModeTimer;
-        private static List<player> wolfPlayers;
+        private static List<player> wolfPlayers { get; set; } = new List<player> { player.NeutralExtra, player.NeutralVictim, player.NeutralAggressive, player.NeutralPassive };
         private static int wolfPlayerIndex = 0;
 
         public static void Initialize()
@@ -88,12 +88,6 @@ namespace Source.Init
                 FirstPersonCameraManager.Initialize();
                 Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
 
-                // Wolf players, move this maybe
-                wolfPlayers = new List<player>
-      {
-            player.NeutralExtra, player.NeutralVictim,
-            player.NeutralAggressive, player.NeutralPassive
-        };
 
                 for (int i = 0; i < GetBJMaxPlayers(); i++)
                 {

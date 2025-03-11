@@ -22,7 +22,9 @@ public static class PersonalBestAwarder
     public static void BeatRecordTime(player player)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-        var roundEnum = TimeSetter.GetRoundEnum();
+        var roundEnum = "";
+        if (Gamemode.CurrentGameMode == "Standard") roundEnum = TimeSetter.GetRoundEnum();
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) roundEnum = TimeSetter.GetSoloEnum();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
         Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}!|r");

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -34,14 +33,32 @@ public static class CommandHandler
     private static void HandleCommands()
     {
         var chatString = @event.PlayerChatString;
-        if (chatString.Length < 2 || chatString[0] != '-') return;
+        if (chatString.Length < 2 || chatString[0] != '-')
+            return;
+
         var cmd = chatString.ToLower().Substring(1);
-        var parts = cmd.Split(' ');
-        var args = parts.Skip(1).ToArray();
-        var command = CommandsManager.GetCommand(parts[0]);
+        var spaceIndex = cmd.IndexOf(' ');
 
-        if (GamemodeSetting(@event.PlayerChatString)) return;
+        string commandName;
+        string[] args;
 
+        if (spaceIndex < 0)
+        {
+            commandName = cmd;
+            args = new[] { "" };
+        }
+        else
+        {
+            commandName = cmd.Substring(0, spaceIndex);
+            var remainder = cmd.Substring(spaceIndex + 1);
+            var split = remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            args = split.Length > 0 ? split : new[] { "" };
+        }
+
+        if (GamemodeSetting(@event.PlayerChatString))
+            return;
+
+        var command = CommandsManager.GetCommand(commandName);
         if (command != null)
         {
             command.Action?.Invoke(@event.Player, args);
@@ -51,6 +68,8 @@ public static class CommandHandler
             Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
         }
     }
+
+
 
     private static bool GamemodeSetting(string chatString)
     {

@@ -108,6 +108,13 @@ public static class CommandsManager
         return lower == "true" || lower == "false" || lower == "on" || lower == "off" || lower == "0" || lower == "1";
     }
 
+    public static bool GetBool(string arg)
+    {
+        if (string.IsNullOrEmpty(arg)) return false;
+        var lower = arg.ToLower();
+        return lower == "true" || lower == "on" || lower == "1";
+    }
+
     public static void HelpCommands(player player, string arg = "")
     {
         var filter = string.IsNullOrEmpty(arg) ? "" : arg.ToLower();

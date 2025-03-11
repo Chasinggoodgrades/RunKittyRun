@@ -28,9 +28,7 @@ public static class InitCommands
             description: "Memory Handler Periodic Message",
             action: (player, args) =>
             {
-                var status = false;
-                if (args[0].Length != 0) status = args[0] == "on";
-                MemoryHandlerTest.PeriodicTest(status);
+                MemoryHandlerTest.PeriodicTest(CommandsManager.GetBool(args[0]));
             }
         );
 
@@ -44,12 +42,12 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "disableeffcts",
-            alias: "de,dwe",
+            name: "wolfeffects",
+            alias: "we,wolfe",
             group: "admin",
             argDesc: "[true][false]",
             description: "Disables the wolves overhead ! effects",
-            action: (player, args) => Wolf.DisableEffects = args[0] == "on"
+            action: (player, args) => Wolf.DisableEffects = CommandsManager.GetBool(args[0])
         );
 
         CommandsManager.RegisterCommand(
@@ -172,21 +170,12 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "hidenames",
-            alias: "hn",
+            name: "names",
+            alias: "n",
             group: "all",
             argDesc: "",
             description: "Hide all floating name tags.",
-            action: (player, args) => FloatingNameTag.HideAllNameTags(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "shownames",
-            alias: "sn",
-            group: "all",
-            argDesc: "",
-            description: "Show all floating name tags.",
-            action: (player, args) => FloatingNameTag.ShowAllNameTags(player)
+            action: (player, args) => FloatingNameTag.ShowAllNameTags(player, CommandsManager.GetBool(args[0]))
         );
 
         CommandsManager.RegisterCommand(
@@ -211,10 +200,10 @@ public static class InitCommands
                     CameraUtil.LockCamera(player);
                     return;
                 }
-/*                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    CameraUtil.LockCamera(kitty.Player);
-                });*/
+                /*                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                                {
+                                    CameraUtil.LockCamera(kitty.Player);
+                                });*/
             }
         );
 
@@ -294,7 +283,7 @@ public static class InitCommands
                     if (playerx.Value == 0) continue;
                     kibbleList += $"{Colors.PlayerNameColored(playerx.Key)}: {playerx.Value}\n";
                 }
-                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}");
+                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}|r");
             }
         );
 
@@ -333,8 +322,7 @@ public static class InitCommands
             description: "Toggle unit glow.",
             action: (player, args) =>
             {
-                var glow = CommandsManager.IsBool(args[0]) != true || bool.Parse(args[0]);
-                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, glow);
+                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, CommandsManager.GetBool(args[0]));
             }
         );
 
@@ -487,13 +475,14 @@ public static class InitCommands
             name: "sharecontrol",
             alias: "share",
             group: "admin",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Forces everyone to share control with you.",
             action: (player, args) =>
             {
+                var status = CommandsManager.GetBool(args[0]);
                 foreach (var p in Globals.ALL_PLAYERS)
                 {
-                    p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                    p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
                 }
             }
         );
@@ -502,21 +491,22 @@ public static class InitCommands
             name: "wolfshare",
             alias: "wshare",
             group: "admin",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Gives you control of all the wolves.",
             action: (player, args) =>
             {
-                player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
-                player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
-                player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
-                player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                var status = CommandsManager.GetBool(args[0]);
+                player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
 
                 for (var i = 0; i < 24; i++)
                 {
                     var p = Player(i);
                     if (p.SlotState != playerslotstate.Playing)
                     {
-                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
                     }
                 }
             }
@@ -597,7 +587,7 @@ public static class InitCommands
             description: "Gives invulnerability.",
             action: (player, args) =>
             {
-                var setting = CommandsManager.IsBool(args[0]) != true || bool.Parse(args[0]);
+                var setting = CommandsManager.GetBool(args[0]);
                 var kitty = Globals.ALL_KITTIES[player];
                 if (setting)
                 {
@@ -607,6 +597,7 @@ public static class InitCommands
                 {
                     CollisionDetection.KittyRegisterCollisions(kitty);
                 }
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Invulnerability: {setting}|r");
             }
         );
 
@@ -614,18 +605,9 @@ public static class InitCommands
             name: "pausewolves",
             alias: "pw,pause",
             group: "admin",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Pauses all wolves.",
-            action: (player, args) => Wolf.PauseAllWolves(true)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "unpausewolves",
-            alias: "uw,unpause",
-            group: "admin",
-            argDesc: "",
-            description: "Unpauses all wolves.",
-            action: (player, args) => Wolf.PauseAllWolves(false)
+            action: (player, args) => Wolf.PauseAllWolves(CommandsManager.GetBool(args[0]))
         );
 
         CommandsManager.RegisterCommand(
@@ -813,10 +795,9 @@ public static class InitCommands
             description: "Game won't end if turned on and all kitties die.",
             action: (player, args) =>
             {
-                var endValue = args.Length > 0 ? args[0] : "off";
-                if (endValue == "on") Gameover.NoEnd = true;
-                else if (endValue == "off") Gameover.NoEnd = false;
-                player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}Game will {(endValue == "on" ? "no longer" : "")} end");
+                var status = CommandsManager.GetBool(args[0]);
+                Gameover.NoEnd = status;
+                player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_YELLOW_ORANGE}Game will end: {!status}|r");
             }
         );
 
