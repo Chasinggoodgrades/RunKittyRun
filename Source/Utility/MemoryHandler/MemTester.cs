@@ -4,6 +4,7 @@ using WCSharp.Api;
 public static class MemoryHandlerTest
 {
     public static int cylceCount = 0;
+    private static timer t = timer.Create();
 
     private class TestDestroyable : IDestroyable
     {
@@ -28,22 +29,15 @@ public static class MemoryHandlerTest
         MemoryHandler.PrintDebugInfo();
     }
 
-    public static void PeriodicTest()
+    public static void PeriodicTest(bool on)
     {
-        var t = timer.Create();
-
+        if (!on)
+        {
+            t.Pause();
+            return;
+        }
         t.Start(1.0f, true, () =>
         {
-
-/*            cylceCount += 1;
-            var obj = MemoryHandler.GetEmptyObject<TestDestroyable>("TestAffix");
-
-
-            if (cylceCount == 6)
-            {
-                MemoryHandler.DestroyObject(obj);
-            }*/
-
             MemoryHandler.PrintDebugInfo();
         });
     }

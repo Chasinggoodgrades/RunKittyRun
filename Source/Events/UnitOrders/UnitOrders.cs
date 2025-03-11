@@ -51,8 +51,11 @@ public static class UnitOrders
             var kvp = kitty.Value;
             var unit = kvp.Unit;
             var player = kvp.Player;
+
+
             if (!IsInSafeZone(unit))
             {
+                if (!TimeOutsideSafeZones.ContainsKey(player)) TimeOutsideSafeZones.Add(player, 0.0f);
                 TimeOutsideSafeZones[player] += 0.1f;
             }
         }
@@ -71,12 +74,11 @@ public static class UnitOrders
             LastOrderLocation[@event.OrderedUnit] = (@event.OrderPointX, @event.OrderPointY);
         }
 
-        var player = @event.OrderedUnit.Owner;
-        if (TotalActions.ContainsKey(player))
+        if (TotalActions.ContainsKey(@event.OrderedUnit.Owner))
         {
             if (!IsInSafeZone(@event.OrderedUnit))
             {
-                TotalActions[player]++;
+                TotalActions[@event.OrderedUnit.Owner]++;
             }
         }
     }

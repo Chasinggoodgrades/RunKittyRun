@@ -21,14 +21,16 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "test3",
+            name: "memtest",
             alias: "",
             group: "admin",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Memory Handler Periodic Message",
             action: (player, args) =>
             {
-                MemoryHandlerTest.PeriodicTest();
+                var status = false;
+                if (args[0].Length != 0) status = args[0] == "on";
+                MemoryHandlerTest.PeriodicTest(status);
             }
         );
 
@@ -39,6 +41,15 @@ public static class InitCommands
             argDesc: "",
             description: "Save your current game stats.",
             action: (player, args) => Globals.SaveSystem.Save(player)
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "disableeffcts",
+            alias: "de,dwe",
+            group: "admin",
+            argDesc: "[true][false]",
+            description: "Disables the wolves overhead ! effects",
+            action: (player, args) => Wolf.DisableEffects = args[0] == "on"
         );
 
         CommandsManager.RegisterCommand(

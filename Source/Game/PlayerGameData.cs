@@ -12,6 +12,7 @@ public class PlayerGameData
     public int SaveStreak { get; set; }
     public int MaxSaveStreak { get; set; }
     public List<int> ObtainedNitros { get; set; } = new List<int>();
+    public List<string> ObtainedAwards { get; set; } = new List<string>();
     public int WolfFreezeCount { get; set; }
     public bool RoundFinished { get; set; } = false;
 

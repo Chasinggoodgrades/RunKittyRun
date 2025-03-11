@@ -9,6 +9,7 @@ public class Wolf
 {
     public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
     public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
+    public static bool DisableEffects { get; set; } = false;
     private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
     private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
     private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
@@ -35,6 +36,8 @@ public class Wolf
 
     public bool IsReviving { get; set; } = false;
 
+    public bool IsWalking { get; set; } = false;
+
 
     public Wolf(int regionIndex)
     {
@@ -44,7 +47,7 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        Utility.SimpleTimer(3.0f, () => StartWandering());
+        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), () => StartWandering());
         Globals.ALL_WOLVES.Add(Unit, this);
 
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
@@ -197,7 +200,7 @@ public class Wolf
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
         OverheadEffect?.Dispose();
-        OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
+        if (!DisableEffects) OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
 
         EffectTimer.Start(effectDuration, false, () =>
         {

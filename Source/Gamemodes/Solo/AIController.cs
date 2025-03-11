@@ -238,11 +238,11 @@ public class AIController
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
     {
         float binSize = (float)(Math.PI / 4);
-        var dodgeClusters = MemoryHandler.GetEmptyArray<ClusterData>("null", 9);
+        var dodgeClusters = MemoryHandler.GetEmptyArray<ClusterData>(null, 9);
 
         for (int i = 0; i < dodgeClusters.Length; i++)
         {
-            dodgeClusters[i] = MemoryHandler.GetEmptyObject<ClusterData>("null");
+            dodgeClusters[i] = MemoryHandler.GetEmptyObject<ClusterData>();
         }
 
         // Process each wolf.

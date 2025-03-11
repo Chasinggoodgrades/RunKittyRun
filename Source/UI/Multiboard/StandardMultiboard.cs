@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using WCSharp.Api;
 
 public static class StandardMultiboard
@@ -13,6 +15,7 @@ public static class StandardMultiboard
     private static string color = Colors.COLOR_YELLOW_ORANGE;
     private static string[] PlayerStats = new string[8];
     private static float[] RoundTimes = new float[5];
+    private static List<player> PlayersList = new List<player>();
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
@@ -129,22 +132,33 @@ public static class StandardMultiboard
             CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
             var rowIndex = 2;
 
-            // Array to hold keys for manual sorting
-            var players = Globals.ALL_KITTIES.Keys.ToArray();
+            // Use a list to hold keys for manual sorting
+            PlayersList.Clear();
+            foreach (var key in Globals.ALL_KITTIES)
+            {
+                PlayersList.Add(key.Key);
+            }
 
             // Sort the array of keys based on custom criteria
-            Array.Sort(players, (p1, p2) =>
+            for (int i = 0; i < PlayersList.Count - 1; i++)
             {
-                var stats1 = Globals.ALL_KITTIES[p1].CurrentStats;
-                var stats2 = Globals.ALL_KITTIES[p2].CurrentStats;
-                var score1 = stats1.TotalSaves - stats1.TotalDeaths;
-                var score2 = stats2.TotalSaves - stats2.TotalDeaths;
+                for (int j = i + 1; j < PlayersList.Count; j++)
+                {
+                    var stats1 = Globals.ALL_KITTIES[PlayersList[i]].CurrentStats;
+                    var stats2 = Globals.ALL_KITTIES[PlayersList[j]].CurrentStats;
+                    var score1 = stats1.TotalSaves - stats1.TotalDeaths;
+                    var score2 = stats2.TotalSaves - stats2.TotalDeaths;
 
-                int compareScore = score2.CompareTo(score1);
-                return compareScore != 0 ? compareScore : p1.Id.CompareTo(p2.Id);
-            });
+                    if (score2 > score1 || (score2 == score1 && PlayersList[j].Id < PlayersList[i].Id))
+                    {
+                        var temp = PlayersList[i];
+                        PlayersList[i] = PlayersList[j];
+                        PlayersList[j] = temp;
+                    }
+                }
+            }
 
-            foreach (var player in players)
+            foreach (var player in PlayersList)
             {
                 var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
                 var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
@@ -172,7 +186,6 @@ public static class StandardMultiboard
                 rowIndex++;
             }
 
-            players = null;
         }
         catch (Exception ex)
         {
@@ -180,30 +193,38 @@ public static class StandardMultiboard
         }
     }
 
-
-
     private static void OverallGameStats()
     {
         OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        // Use an array to hold keys for sorting
-        var players = Globals.ALL_KITTIES.Keys.ToArray();
+        PlayersList.Clear();
+        foreach (var key in Globals.ALL_KITTIES)
+        {
+            PlayersList.Add(key.Key);
+        }
 
         // Sort the array of keys based on custom criteria
-        Array.Sort(players, (p1, p2) =>
+        for (int i = 0; i < PlayersList.Count - 1; i++)
         {
-            var stats1 = Globals.ALL_KITTIES[p1].SaveData.GameStats;
-            var stats2 = Globals.ALL_KITTIES[p2].SaveData.GameStats;
-            var score1 = stats1.Saves - stats1.Deaths;
-            var score2 = stats2.Saves - stats2.Deaths;
+            for (int j = i + 1; j < PlayersList.Count; j++)
+            {
+                var stats1 = Globals.ALL_KITTIES[PlayersList[i]].SaveData.GameStats;
+                var stats2 = Globals.ALL_KITTIES[PlayersList[j]].SaveData.GameStats;
+                var score1 = stats1.Saves - stats1.Deaths;
+                var score2 = stats2.Saves - stats2.Deaths;
 
-            int compareScore = score2.CompareTo(score1);
-            return compareScore != 0 ? compareScore : p1.Id.CompareTo(p2.Id);
-        });
+                if (score2 > score1 || (score2 == score1 && PlayersList[j].Id < PlayersList[i].Id))
+                {
+                    var temp = PlayersList[i];
+                    PlayersList[i] = PlayersList[j];
+                    PlayersList[j] = temp;
+                }
+            }
+        }
 
-        foreach (var player in players)
+        foreach (var player in PlayersList)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
@@ -233,8 +254,6 @@ public static class StandardMultiboard
             rowIndex++;
         }
     }
-
-
 
     private static void BestTimesStats()
     {

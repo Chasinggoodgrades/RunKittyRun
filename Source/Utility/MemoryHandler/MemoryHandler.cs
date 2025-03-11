@@ -10,8 +10,8 @@ public static class MemoryHandler
     private static readonly Dictionary<string, int> debugObjects = new();
     private static readonly Dictionary<string, int> debugArrays = new();
 
-    private static readonly List<object> cachedObjects = new();
-    private static readonly List<object[]> cachedArrays = new();
+    private static readonly Dictionary<Type, List<object>> cachedObjects = new();
+    private static readonly List<Array> cachedArrays = new();
 
     // BECAUSE NO setmetadata and getmetadata .. got improvise
     private static readonly Dictionary<object, Dictionary<string, object>> MetaTable = new();
@@ -82,7 +82,12 @@ public static class MemoryHandler
     private static void DestroyObject(object obj, bool recursive = false)
     {
         PurgeObject(obj, recursive);
-        cachedObjects.Add(obj);
+        var type = obj.GetType();
+        if (!cachedObjects.ContainsKey(type))
+        {
+            cachedObjects[type] = new List<object>();
+        }
+        cachedObjects[type].Add(obj);
     }
 
     private static void DestroyArray(object[] arr, bool recursive = false)
@@ -137,10 +142,11 @@ public static class MemoryHandler
     public static T GetEmptyObject<T>(string debugName = null)
         where T : class, IDestroyable, new()
     {
-        if (cachedObjects.Count > 0)
+        var type = typeof(T);
+        if (cachedObjects.TryGetValue(type, out var objects) && objects.Count > 0)
         {
-            var obj = (T)cachedObjects[0];
-            cachedObjects.RemoveAt(0);
+            var obj = (T)objects[0];
+            objects.RemoveAt(0);
 
             if (!string.IsNullOrEmpty(debugName) && MetaTable.TryGetValue(obj, out var meta))
             {
@@ -194,48 +200,66 @@ public static class MemoryHandler
             var arr = cachedArrays[0];
             cachedArrays.RemoveAt(0);
 
-            if (arr.Length < length)
+            // Try casting to T[] so Array.Resize and indexing work
+            if (arr is T[] typedArr)
             {
-                Array.Resize(ref arr, length);
-            }
+                if (typedArr.Length < length)
+                {
+                    // Explicitly specify type on Array.Resize
+                    Array.Resize<T>(ref typedArr, length);
+                }
 
-            if (!string.IsNullOrEmpty(debugName) && MetaTable.TryGetValue(arr, out var meta))
-            {
-                meta["__debugName"] = debugName;
-                meta["__destroyed"] = false;
-            }
-            else if (!string.IsNullOrEmpty(debugName))
-            {
-                MetaTable[arr] = GetArrayMeta(debugName);
-            }
+                // Update metadata
+                if (!string.IsNullOrEmpty(debugName) && MetaTable.TryGetValue(typedArr, out var meta))
+                {
+                    meta["__debugName"] = debugName;
+                    meta["__destroyed"] = false;
+                }
+                else if (!string.IsNullOrEmpty(debugName))
+                {
+                    MetaTable[typedArr] = GetArrayMeta(debugName);
+                }
 
-            if (!string.IsNullOrEmpty(debugName))
-            {
-                if (!debugArrays.ContainsKey(debugName))
-                    debugArrays[debugName] = 0;
-                debugArrays[debugName]++;
+                if (!string.IsNullOrEmpty(debugName))
+                {
+                    if (!debugArrays.ContainsKey(debugName))
+                        debugArrays[debugName] = 0;
+                    debugArrays[debugName]++;
+                }
+                return typedArr;
             }
+            else
+            {
+                // If it's not T[], create a new one and copy over elements safely
+                var newArr = new T[length];
+                for (int i = 0; i < Math.Min(arr.Length, length); i++)
+                {
+                    newArr[i] = (T)arr.GetValue(i);
+                }
 
-            return arr.Cast<T>().ToArray();
+                // Update metadata
+                MetaTable[newArr] = !string.IsNullOrEmpty(debugName) ? GetArrayMeta(debugName) : defaultArrayMeta;
+                if (!string.IsNullOrEmpty(debugName))
+                {
+                    if (!debugArrays.ContainsKey(debugName))
+                        debugArrays[debugName] = 0;
+                    debugArrays[debugName]++;
+                }
+                return newArr;
+            }
         }
         else
         {
+            // Create fresh
             var arr = new T[length];
             numCreatedArrays++;
-
-            var meta = !string.IsNullOrEmpty(debugName)
-                ? GetArrayMeta(debugName)
-                : defaultArrayMeta;
-
-            MetaTable[arr] = meta;
-
+            MetaTable[arr] = !string.IsNullOrEmpty(debugName) ? GetArrayMeta(debugName) : defaultArrayMeta;
             if (!string.IsNullOrEmpty(debugName))
             {
                 if (!debugArrays.ContainsKey(debugName))
                     debugArrays[debugName] = 0;
                 debugArrays[debugName]++;
             }
-
             return arr;
         }
     }
@@ -253,7 +277,34 @@ public static class MemoryHandler
     /// </summary>
     public static void DestroyArray<T>(T[] arr, bool recursive = false)
     {
-        DestroyArray(arr.Cast<object>().ToArray(), recursive);
+        // Purge the array elements
+        for (int i = 0; i < arr.Length; i++)
+        {
+            if (recursive && arr[i] is IDestroyable destroyable)
+            {
+                destroyable.__destroy(true);
+            }
+            arr[i] = default;
+        }
+
+        // Look up meta info
+        if (MetaTable.TryGetValue(arr, out var meta))
+        {
+            if (meta.TryGetValue("__debugName", out var debugNameObj) && debugNameObj is string dbgName)
+            {
+                if (debugArrays.ContainsKey(dbgName))
+                {
+                    debugArrays[dbgName]--;
+                    if (debugArrays[dbgName] <= 0)
+                        _ = debugArrays.Remove(dbgName);
+                }
+            }
+            meta["__debugName"] = null;
+            meta["__destroyed"] = true;
+        }
+
+        // Add the array back to the cache for reuse
+        cachedArrays.Add(arr);
     }
 
     /// <summary>
@@ -273,7 +324,7 @@ public static class MemoryHandler
     public static void PrintDebugInfo()
     {
         Console.WriteLine("MemoryHandler");
-        Console.WriteLine($"Objects: {numCreatedObjects - cachedObjects.Count}/{numCreatedObjects}");
+        Console.WriteLine($"Objects: {numCreatedObjects - cachedObjects.Values.Sum(list => list.Count)}/{numCreatedObjects}");
         Console.WriteLine($"Arrays: {numCreatedArrays - cachedArrays.Count}/{numCreatedArrays}");
 
         PrintDebugNames("objects", debugObjects);
@@ -309,4 +360,3 @@ public static class MemoryHandler
 
     #endregion
 }
-

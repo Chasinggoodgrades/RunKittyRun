@@ -26,6 +26,7 @@ public static class AwardManager
     public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
         // Check if the player already has the award
+        if (!Awarded.ContainsKey(player)) Awarded.Add(player, new List<string>());
         if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award))
             return;
 

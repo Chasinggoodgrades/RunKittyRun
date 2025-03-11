@@ -80,6 +80,7 @@ public class Blitzer : Affix
         BlitzerMove(x, y);
         _ = Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
+        Unit.IsWalking = true;
         MoveTimer.Start(randomTime, false, PreBlitzerMove);
     }
 
@@ -127,6 +128,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
+        Unit.IsWalking = false;
         _ = Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 

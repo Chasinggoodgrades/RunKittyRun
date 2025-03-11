@@ -92,13 +92,6 @@ public static class UnitWithinRange
     {
         int trigId = GetUniqueTriggerId(trig);
         var (eventValue, execution) = udg_WithinRangeHash[trigId];
-        _ = unitRangeUnits[trigId];
-        _ = GetTriggerUnit();
-
-        if (eventValue != 0.0f)
-        {
-
-        }
 
         execution?.Execute();
     }

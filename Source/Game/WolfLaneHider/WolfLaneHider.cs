@@ -25,16 +25,13 @@ public static class WolfLaneHider
             lanesToEnable.Clear();
 
             if (Globals.PLAYERS_CURRENT_SAFEZONE == null)
-            {
                 return;
-            }
 
             foreach (var player in Globals.PLAYERS_CURRENT_SAFEZONE)
             {
                 int currentSafezone = player.Value;
                 AddAdjacentLanes(currentSafezone);
             }
-
         }
         catch (Exception e)
         {
@@ -60,7 +57,7 @@ public static class WolfLaneHider
     {
         if (lane >= 0 && lane <= 17)
         {
-            _ = lanesToEnable.Add(lane);
+            lanesToEnable.Add(lane);
         }
     }
 
@@ -69,13 +66,12 @@ public static class WolfLaneHider
         try
         {
             if (WolfArea.WolfAreas == null)
-            {
                 return;
-            }
 
             foreach (var lane in WolfArea.WolfAreas)
             {
                 bool shouldShow = lanesToEnable.Contains(lane.Key);
+                lane.Value.IsEnabled = shouldShow; // wasnt being set lmao
                 SetLaneVisibility(lane.Value, shouldShow);
             }
         }
@@ -99,9 +95,7 @@ public static class WolfLaneHider
         try
         {
             if (WolfArea.WolfAreas == null)
-            {
                 return;
-            }
 
             foreach (var lane in WolfArea.WolfAreas)
             {
