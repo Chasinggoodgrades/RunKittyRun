@@ -43,14 +43,14 @@ public class FloatingNameTag
 
     private static void SetNameTagAttributes()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var player in PlayerNameTags)
         {
             // Splitting at the #
-            var name = player.Name.Split('#')[0];
-            PlayerNameTags[player].NameTag.SetText(name, NAME_TAG_HEIGHT);
-            PlayerNameTags[player].NameTag.SetPermanent(true);
-            PlayerNameTags[player].NameTag.SetColor(114, 188, 212, 255);
-            PlayerNameTags[player].NameTag.SetVisibility(true);
+            var name = player.Key.Name.Split('#')[0];
+            PlayerNameTags[player.Key].NameTag.SetText(name, NAME_TAG_HEIGHT);
+            PlayerNameTags[player.Key].NameTag.SetPermanent(true);
+            PlayerNameTags[player.Key].NameTag.SetColor(114, 188, 212, 255);
+            PlayerNameTags[player.Key].NameTag.SetVisibility(true);
         }
     }
 
@@ -58,11 +58,11 @@ public class FloatingNameTag
     {
         NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
         {
-            foreach (var player in Globals.ALL_PLAYERS)
+            foreach (var player in PlayerNameTags)
             {
-                var kitty = Globals.ALL_KITTIES[player].Unit;
-                PlayerNameTags[player].UpdateNameTag();
-                Blizzard.SetCameraQuickPositionForPlayer(player, kitty.X, kitty.Y);
+                var kitty = Globals.ALL_KITTIES[player.Key].Unit;
+                PlayerNameTags[player.Key].UpdateNameTag();
+                Blizzard.SetCameraQuickPositionForPlayer(player.Key, kitty.X, kitty.Y);
             }
         });
     }
@@ -72,9 +72,9 @@ public class FloatingNameTag
     public static void HideAllNameTags(player Player)
     {
         if (!Player.IsLocal) return;
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var player in PlayerNameTags)
         {
-            PlayerNameTags[player].NameTag.SetVisibility(false);
+            PlayerNameTags[player.Key].NameTag.SetVisibility(false);
             //NamedWolves.ShowWolfNames(false); (desync if wolves havent spawned yet)
         }
     }
@@ -82,9 +82,9 @@ public class FloatingNameTag
     public static void ShowAllNameTags(player Player)
     {
         if (!Player.IsLocal) return;
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var player in PlayerNameTags)
         {
-            PlayerNameTags[player].NameTag.SetVisibility(true);
+            PlayerNameTags[player.Key].NameTag.SetVisibility(true);
             //NamedWolves.ShowWolfNames(); (desync if wolves havent spawned yet)
         }
     }
