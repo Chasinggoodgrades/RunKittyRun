@@ -42,7 +42,7 @@ public static class Globals
     public static Dictionary<player, Team> PLAYERS_TEAMS;
     public static Dictionary<Team, string> TEAM_PROGRESS;
     public static Dictionary<player, float> PLAYER_PROGRESS;
-    /*    public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
+    public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
         {
             // Round                         // Lane ,  // # Wolves (10% for first 6 lanes, 5% for others)
             { 1, new Dictionary<int, int> { { 0, 24 }, { 1, 24 }, { 2, 24 }, { 3, 24 }, { 4, 16 }, { 5, 15 }, { 6, 15 }, { 7, 14 }, { 8, 11 }, { 9, 11 }, { 10, 11 }, { 11, 7 }, { 12, 7 }, { 13, 5 }, { 14, 5 }, { 15, 1 }, { 16, 1 } } },
@@ -50,12 +50,12 @@ public static class Globals
             { 3, new Dictionary<int, int> { { 0, 37 }, { 1, 37 }, { 2, 36 }, { 3, 36 }, { 4, 26 }, { 5, 25 }, { 6, 22 }, { 7, 21 }, { 8, 16 }, { 9, 16 }, { 10, 15 }, { 11, 11 }, { 12, 11 }, { 13, 8 }, { 14, 7 }, { 15, 3 }, { 16, 3 } } },
             { 4, new Dictionary<int, int> { { 0, 46 }, { 1, 46 }, { 2, 46 }, { 3, 44 }, { 4, 31 }, { 5, 30 }, { 6, 25 }, { 7, 24 }, { 8, 18 }, { 9, 18 }, { 10, 17 }, { 11, 13 }, { 12, 13 }, { 13, 9 }, { 14, 8 }, { 15, 4 }, { 16, 4 } } },
             { 5, new Dictionary<int, int> { { 0, 54 }, { 1, 54 }, { 2, 54 }, { 3, 54 }, { 4, 35 }, { 5, 34 }, { 6, 28 }, { 7, 27 }, { 8, 20 }, { 9, 20 }, { 10, 19 }, { 11, 15 }, { 12, 15 }, { 13, 10 }, { 14, 9 }, { 15, 5 }, { 16, 5 } } }
-        };*/
+        };
 
     /// <summary>
     /// Mock Data to Test Whatever lanes, and # of wolves as needed.
     /// </summary>
-    public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
+/*    public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
     {
         // Round                         // Lane ,  // # Wolves
         { 1, new Dictionary<int, int> { { 0, 3 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } },
@@ -63,7 +63,7 @@ public static class Globals
         { 3, new Dictionary<int, int> { { 0, 5 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } },
         { 4, new Dictionary<int, int> { { 0, 5 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } },
         { 5, new Dictionary<int, int> { { 0, 5 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } }
-    };
+    };*/
 
 
 }

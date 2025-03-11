@@ -77,7 +77,7 @@ public static class CommandHandler
         var player = @event.Player;
         var command = chatString.ToLower();
 
-        if (!command.StartsWith("-t ") && command != "-s") return false;
+        if (!command.StartsWith("-t ") && command != "-s" && !command.StartsWith("-dev")) return false;
 
         GamemodeCmd.Handle(player, command);
         return true;

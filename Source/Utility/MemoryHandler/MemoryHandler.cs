@@ -2,6 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
+public class MetaDictionary : Dictionary<string, object> // doesnt do shit >.<
+{
+    public bool IsDestroyed { get; set; }
+
+    public new object this[string key]
+    {
+        get
+        {
+            if (IsDestroyed)
+            {
+                Logger.Warning($"Reading a destroyed object: {key}");
+                throw new InvalidOperationException("Reading a destroyed object.");
+            }
+            return base[key];
+        }
+        set
+        {
+            if (IsDestroyed)
+            {
+                Logger.Warning($"Writing a destroyed object: {key}");
+                throw new InvalidOperationException("Writing a destroyed object.");
+            }
+            base[key] = value;
+        }
+    }
+}
+
+
 public static class MemoryHandler
 {
     private static int numCreatedObjects;
@@ -10,8 +39,10 @@ public static class MemoryHandler
     private static readonly Dictionary<string, int> debugObjects = new();
     private static readonly Dictionary<string, int> debugArrays = new();
 
+    private static readonly Dictionary<Type, Stack<List<object>>> cachedLists = new();
     private static readonly Dictionary<Type, List<object>> cachedObjects = new();
     private static readonly List<Array> cachedArrays = new();
+
 
     // BECAUSE NO setmetadata and getmetadata .. got improvise
     private static readonly Dictionary<object, Dictionary<string, object>> MetaTable = new();
@@ -102,10 +133,10 @@ public static class MemoryHandler
 
     private static Dictionary<string, object> GetObjectMeta(string debugName = null)
     {
-        var meta = new Dictionary<string, object>
+        var meta = new MetaDictionary
         {
-            { "__gc", (Action<object, bool>)DestroyObject },
-            { "__destroyed", false }
+            ["__gc"] = (Action<object, bool>)DestroyObject,
+            ["__destroyed"] = false
         };
         if (!string.IsNullOrEmpty(debugName))
         {
@@ -262,6 +293,72 @@ public static class MemoryHandler
             }
             return arr;
         }
+    }
+
+    public static List<T> GetEmptyList<T>(string debugName = null, int initialCapacity = 0)
+    {
+        var type = typeof(T);
+        if (!cachedLists.TryGetValue(type, out var stackObj))
+        {
+            stackObj = new Stack<List<object>>();
+            cachedLists[type] = stackObj;
+        }
+
+        var stack = (Stack<List<object>>)stackObj;
+        if (stack.Count > 0)
+        {
+            var existingList = stack.Pop();
+            var result = new List<T>(existingList.Count);
+            foreach (var item in existingList)
+            {
+                result.Add((T)item);
+            }
+            PurgeList(result, false);
+            if (result.Capacity < initialCapacity)
+                result.Capacity = initialCapacity;
+            return result;
+        }
+        else
+        {
+            return new List<T>(initialCapacity);
+        }
+    }
+
+    public static void DestroyList<T>(List<T> list, bool recursive = false)
+    {
+        PurgeList(list, recursive);
+        var type = typeof(T);
+        if (!cachedLists.TryGetValue(type, out var stackObj))
+        {
+            stackObj = new Stack<List<object>>();
+            cachedLists[type] = stackObj;
+        }
+
+        var stack = (Stack<List<object>>)stackObj;
+        // Because we can't push List<T> directly into Stack<List<object>>,
+        // convert it to List<object>.
+        var objectList = new List<object>(list.Count);
+        for (int i = 0; i < list.Count; i++)
+        {
+            objectList.Add(list[i]);
+        }
+        stack.Push(objectList);
+    }
+
+    private static void PurgeList<T>(List<T> list, bool recursive)
+    {
+        if (recursive)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] is IDestroyable destroyable)
+                {
+                    destroyable.__destroy(true);
+                }
+                list[i] = default;
+            }
+        }
+        list.Clear();
     }
 
     /// <summary>

@@ -30,6 +30,7 @@ public static class Difficulty
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (IsDifficultyChosen) return;
 
         CreateDialog();
         RegisterSelectionEvent();
@@ -122,7 +123,7 @@ public static class Difficulty
     /// Changes the difficulty of the game to the specified difficulty.
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
-    public static void ChangeDifficulty(string difficulty)
+    public static bool ChangeDifficulty(string difficulty = "normal")
     {
         switch (difficulty)
         {
@@ -137,8 +138,9 @@ public static class Difficulty
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}");
-                break;
+                return false;
         }
+        return true;
     }
 
 }

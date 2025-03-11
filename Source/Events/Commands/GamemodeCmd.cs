@@ -26,11 +26,18 @@ public static class GamemodeCmd
             case "-t":
                 HandleTeamOrSoloMode(player, parts);
                 break;
+            case "-dev":
+                if (!Utility.IsDeveloper(player)) return;
+                string difficulty = parts.Length > 1 ? parts[1] : "normal";
+                Difficulty.ChangeDifficulty(difficulty);
+                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+                break;
             default:
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Use: -s, -t solo, -t team");
                 break;
         }
     }
+
 
     private static void CommandInfoCheck(string[] parts)
     {

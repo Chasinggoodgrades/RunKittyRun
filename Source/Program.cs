@@ -18,7 +18,6 @@ namespace Source
                 Start();
             });
         }
-
         private static void Start()
         {
             try
