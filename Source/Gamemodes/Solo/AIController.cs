@@ -42,8 +42,10 @@ public class AIController
 
     private int lastSafezoneIndexId = -1;
     private bool reachedLastSafezoneCenter = false;
-    private List<lightning> availableLightnings = new List<lightning>();
-    private List<lightning> usedLightnings = new List<lightning>();
+    private List<lightning> availableBlockedLightnings = new List<lightning>();
+    private List<lightning> availableClearLightnings = new List<lightning>();
+    private List<lightning> usedBlockedLightnings = new List<lightning>();
+    private List<lightning> usedClearLightnings = new List<lightning>();
     private List<AngleInterval> blockedIntervals = new List<AngleInterval>();
     private List<AngleInterval> freeGaps = new List<AngleInterval>();
     private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
@@ -98,6 +100,7 @@ public class AIController
         lastLightning = null;
 
         HideAllLightnings();
+        HideAllFreeLightnings();
     }
 
     public bool IsEnabled()
@@ -166,6 +169,7 @@ public class AIController
         else
         {
             HideAllLightnings();
+            HideAllFreeLightnings();
         }
 
         var deltaX = targetPosition.X - kitty.Unit.X;
@@ -356,7 +360,13 @@ public class AIController
             }
         }
 
-        // Pick the free gap whose center is closest to the forward angle.
+        // Visualize the free intervals
+        HideAllFreeLightnings();
+        foreach (var interval in freeGaps)
+        {
+            VisualizeFreeInterval(interval);
+        }
+
         float bestScore = float.MaxValue;
         float bestAngle = forwardAngle; // Default to the forward direction.
         foreach (AngleInterval gap in freeGaps)
@@ -420,31 +430,79 @@ public class AIController
             //
             lightning freeLightning = null;
 
-            if (availableLightnings.Count > 0)
+            if (availableBlockedLightnings.Count > 0)
             {
-                freeLightning = availableLightnings[availableLightnings.Count - 1];
-                availableLightnings.RemoveAt(availableLightnings.Count - 1);
+                freeLightning = availableBlockedLightnings[availableBlockedLightnings.Count - 1];
+                availableBlockedLightnings.RemoveAt(availableBlockedLightnings.Count - 1);
             }
 
             if (freeLightning == null)
             {
                 freeLightning = AddLightning("DRAM", false, x1, y1, x2, y2);
+                // SetLightningColor(freeLightning, 1, 0, 0, 1); // Red is barely visible
             }
 
-            usedLightnings.Add(freeLightning);
+            usedBlockedLightnings.Add(freeLightning);
+            MoveLightning(freeLightning, false, x1, y1, x2, y2);
+        }
+    }
+
+    private void VisualizeFreeInterval(AngleInterval interval)
+    {
+        if (!laser)
+        {
+            return;
+        }
+
+        float radius = DODGE_RADIUS;
+        float step = 0.1f; // Adjust step size for smoother lines
+        for (float angle = interval.Start; angle < interval.End; angle += step)
+        {
+            float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
+            float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
+            float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
+            float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+
+            //
+            lightning freeLightning = null;
+
+            if (availableClearLightnings.Count > 0)
+            {
+                freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
+                availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
+            }
+
+            if (freeLightning == null)
+            {
+                freeLightning = AddLightning("DRAM", false, x1, y1, x2, y2);
+                SetLightningColor(freeLightning, 0, 1, 0, 1);
+            }
+
+            usedClearLightnings.Add(freeLightning);
             MoveLightning(freeLightning, false, x1, y1, x2, y2);
         }
     }
 
     private void HideAllLightnings()
     {
-        foreach (var lightning in usedLightnings)
+        foreach (var lightning in usedBlockedLightnings)
         {
             MoveLightning(lightning, false, 0.0f, 0.0f, 0.0f, 0.0f);
-            availableLightnings.Add(lightning);
+            availableBlockedLightnings.Add(lightning);
         }
 
-        usedLightnings.Clear();
+        usedBlockedLightnings.Clear();
+    }
+
+    private void HideAllFreeLightnings()
+    {
+        foreach (var lightning in usedClearLightnings)
+        {
+            MoveLightning(lightning, false, 0.0f, 0.0f, 0.0f, 0.0f);
+            availableClearLightnings.Add(lightning);
+        }
+
+        usedClearLightnings.Clear();
     }
 
     /// <summary>
