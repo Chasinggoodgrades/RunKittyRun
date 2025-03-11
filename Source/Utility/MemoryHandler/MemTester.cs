@@ -19,19 +19,11 @@ public static class MemoryHandlerTest
 
     public static void RunTest()
     {
-        var obj = MemoryHandler.GetEmptyObject<TestDestroyable>("TestDestroyable");
-        obj.Name = "DummyObject";
-
-        var arr = MemoryHandler.GetEmptyArray<TestDestroyable>("TestDestroyableArray", 3);
+        var arr = MemoryHandler.GetEmptyArray<ClusterData>(null, 9);
         for (int i = 0; i < arr.Length; i++)
         {
-            arr[i] = new TestDestroyable { Name = $"ArrayObject{i}" };
+            arr[i] = new ClusterData();
         }
-
-        MemoryHandler.PrintDebugInfo();
-
-        MemoryHandler.DestroyObject(obj);
-        MemoryHandler.DestroyArray(arr);
 
         MemoryHandler.PrintDebugInfo();
     }
@@ -43,14 +35,14 @@ public static class MemoryHandlerTest
         t.Start(1.0f, true, () =>
         {
 
-            cylceCount += 1;
+/*            cylceCount += 1;
             var obj = MemoryHandler.GetEmptyObject<TestDestroyable>("TestAffix");
 
 
             if (cylceCount == 6)
             {
                 MemoryHandler.DestroyObject(obj);
-            }
+            }*/
 
             MemoryHandler.PrintDebugInfo();
         });

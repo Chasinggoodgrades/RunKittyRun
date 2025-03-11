@@ -40,7 +40,6 @@ public class AIController
     private bool reachedLastSafezoneCenter = false;
 
     // Reusable dodge clusters array (9 bins for angles -4 to 4).
-    private ClusterData[] dodgeClusters = new ClusterData[9];
 
     public AIController(Kitty kitty)
     {
@@ -239,14 +238,11 @@ public class AIController
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
     {
         float binSize = (float)(Math.PI / 4);
+        var dodgeClusters = MemoryHandler.GetEmptyArray<ClusterData>("null", 9);
 
-        // Reset our dodgeClusters array (9 bins for indices -4 to 4).
         for (int i = 0; i < dodgeClusters.Length; i++)
         {
-            dodgeClusters[i].Exists = false;
-            dodgeClusters[i].Weight = 0f;
-            dodgeClusters[i].DirX = 0f;
-            dodgeClusters[i].DirY = 0f;
+            dodgeClusters[i] = MemoryHandler.GetEmptyObject<ClusterData>("null");
         }
 
         // Process each wolf.
@@ -378,6 +374,7 @@ public class AIController
 
         float resultX = kitty.Unit.X + (bestCandidate.Value.X * DODGE_RADIUS);
         float resultY = kitty.Unit.Y + (bestCandidate.Value.Y * DODGE_RADIUS);
+        MemoryHandler.DestroyArray(dodgeClusters, true);
         return (resultX, resultY);
     }
 
@@ -452,10 +449,23 @@ public class AIController
 }
 
 // Define a struct for cluster data to avoid per-call allocations.
-public struct ClusterData
+public class ClusterData : IDestroyable
 {
     public float DirX;
     public float DirY;
     public float Weight;
     public bool Exists;
+
+    public ClusterData()
+    {
+        DirX = 0f;
+        DirY = 0f;
+        Weight = 0f;
+        Exists = false;
+    }
+
+    public void __destroy(bool recursive = false)
+    {
+        MemoryHandler.DestroyObject(this);
+    }
 }

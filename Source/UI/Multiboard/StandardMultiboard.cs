@@ -11,6 +11,8 @@ public static class StandardMultiboard
     private static trigger ESCTrigger;
 
     private static string color = Colors.COLOR_YELLOW_ORANGE;
+    private static string[] PlayerStats = new string[8];
+    private static float[] RoundTimes = new float[5];
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
@@ -148,24 +150,22 @@ public static class StandardMultiboard
                 var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
                 var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
-                var totalSaves = currentStats.TotalSaves;
-                var totalDeaths = currentStats.TotalDeaths;
-                var score = totalSaves - totalDeaths;
-                var kda = totalDeaths == 0 ? totalSaves.ToString("F2") : (totalSaves / (double)totalDeaths).ToString("F2");
+                var score = currentStats.TotalSaves - currentStats.TotalDeaths;
+                var kda = currentStats.TotalDeaths == 0
+                    ? currentStats.TotalSaves.ToString("F2")
+                    : (currentStats.TotalSaves / (double)currentStats.TotalDeaths).ToString("F2");
 
-                var stats = new[] {
-                name,
-                score.ToString(),
-                totalSaves.ToString(),
-                totalDeaths.ToString(),
-                currentStats.SaveStreak.ToString(),
-                kda,
-                currentStats.RoundSaves + " / " + currentStats.RoundDeaths
-                };
+                PlayerStats[0] = name;
+                PlayerStats[1] = score.ToString();
+                PlayerStats[2] = currentStats.TotalSaves.ToString();
+                PlayerStats[3] = currentStats.TotalDeaths.ToString();
+                PlayerStats[4] = currentStats.SaveStreak.ToString();
+                PlayerStats[5] = kda;
+                PlayerStats[6] = $"{currentStats.RoundSaves} / {currentStats.RoundDeaths}";
 
-                for (int i = 0; i < stats.Length; i++)
+                for (int i = 0; i < PlayerStats.Length - 1; i++) // skip last element
                 {
-                    CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                    CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{PlayerStats[i]}{Colors.COLOR_RESET}");
                     if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.07f);
                 }
 
@@ -215,21 +215,18 @@ public static class StandardMultiboard
             var kda = allDeaths == 0 ? allSaves.ToString("F2") : (allSaves / (double)allDeaths).ToString("F2");
             var (games, wins) = GetGameStatData(saveData);
 
-            var stats = new[]
-            {
-            name,
-            score.ToString(),
-            allSaves.ToString(),
-            allDeaths.ToString(),
-            saveData.GameStats.HighestSaveStreak.ToString(),
-            kda,
-            games.ToString(),
-            wins.ToString()
-        };
+            PlayerStats[0] = name;
+            PlayerStats[1] = score.ToString();
+            PlayerStats[2] = allSaves.ToString();
+            PlayerStats[3] = allDeaths.ToString();
+            PlayerStats[4] = saveData.GameStats.HighestSaveStreak.ToString();
+            PlayerStats[5] = kda;
+            PlayerStats[6] = games.ToString();
+            PlayerStats[7] = wins.ToString();
 
-            for (int i = 0; i < stats.Length; i++)
+            for (int i = 0; i < PlayerStats.Length; i++)
             {
-                OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{PlayerStats[i]}{Colors.COLOR_RESET}");
                 if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.07f);
             }
 
@@ -311,36 +308,35 @@ public static class StandardMultiboard
     private static float[] GetGameRoundTime(KittyData data)
     {
         var gameData = data.RoundTimes;
-        var roundTimes = new float[5];
 
         switch (Difficulty.DifficultyValue)
         {
             case (int)DifficultyLevel.Normal:
-                roundTimes[0] = gameData.RoundOneNormal;
-                roundTimes[1] = gameData.RoundTwoNormal;
-                roundTimes[2] = gameData.RoundThreeNormal;
-                roundTimes[3] = gameData.RoundFourNormal;
-                roundTimes[4] = gameData.RoundFiveNormal;
+                RoundTimes[0] = gameData.RoundOneNormal;
+                RoundTimes[1] = gameData.RoundTwoNormal;
+                RoundTimes[2] = gameData.RoundThreeNormal;
+                RoundTimes[3] = gameData.RoundFourNormal;
+                RoundTimes[4] = gameData.RoundFiveNormal;
                 break;
             case (int)DifficultyLevel.Hard:
-                roundTimes[0] = gameData.RoundOneHard;
-                roundTimes[1] = gameData.RoundTwoHard;
-                roundTimes[2] = gameData.RoundThreeHard;
-                roundTimes[3] = gameData.RoundFourHard;
-                roundTimes[4] = gameData.RoundFiveHard;
+                RoundTimes[0] = gameData.RoundOneHard;
+                RoundTimes[1] = gameData.RoundTwoHard;
+                RoundTimes[2] = gameData.RoundThreeHard;
+                RoundTimes[3] = gameData.RoundFourHard;
+                RoundTimes[4] = gameData.RoundFiveHard;
                 break;
             case (int)DifficultyLevel.Impossible:
-                roundTimes[0] = gameData.RoundOneImpossible;
-                roundTimes[1] = gameData.RoundTwoImpossible;
-                roundTimes[2] = gameData.RoundThreeImpossible;
-                roundTimes[3] = gameData.RoundFourImpossible;
-                roundTimes[4] = gameData.RoundFiveImpossible;
+                RoundTimes[0] = gameData.RoundOneImpossible;
+                RoundTimes[1] = gameData.RoundTwoImpossible;
+                RoundTimes[2] = gameData.RoundThreeImpossible;
+                RoundTimes[3] = gameData.RoundFourImpossible;
+                RoundTimes[4] = gameData.RoundFiveImpossible;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
-                return new float[5];
+                return RoundTimes;
         }
-        return roundTimes;
+        return RoundTimes;
 
     }
 

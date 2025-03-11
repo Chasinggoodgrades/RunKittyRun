@@ -25,7 +25,7 @@ public static class InitCommands
             alias: "",
             group: "admin",
             argDesc: "",
-            description: "Memory Handler Test",
+            description: "Memory Handler Periodic Message",
             action: (player, args) =>
             {
                 MemoryHandlerTest.PeriodicTest();
