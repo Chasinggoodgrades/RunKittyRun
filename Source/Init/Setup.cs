@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -28,6 +29,10 @@ namespace Source.Init
             StartGameModeTimer();
             StopMusic(false);
             ClearMapMusic();
+
+            if (!Source.Program.Debug) return;
+            Difficulty.ChangeDifficulty("normal");
+            Gamemode.SetGameMode(Globals.GAME_MODES[0]);
         }
 
         private static void StartGameModeTimer()
