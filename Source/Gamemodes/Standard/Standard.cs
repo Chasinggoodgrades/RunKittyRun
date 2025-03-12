@@ -12,7 +12,7 @@ public static class Standard
     private static List<player> HitLevel10;
     public static void Initialize()
     {
-        RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
+        RoundManager.ROUND_INTERMISSION = Source.Program.Debug ? 0.0f : ROUND_INTERMISSION;
         Difficulty.Initialize();
         Windwalk.Initialize();
         SpawnChampions.Initialize();

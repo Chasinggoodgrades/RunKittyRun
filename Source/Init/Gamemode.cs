@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class Gamemode
@@ -52,14 +53,21 @@ public static class Gamemode
 
     public static void SetGameMode(string mode, string modeType = "", int teamSize = Globals.DEFAULT_TEAM_SIZE)
     {
-        CurrentGameMode = mode;
-        CurrentGameModeType = modeType;
-        IsGameModeChosen = true;
-        PlayersPerTeam = teamSize;
+        try
+        {
+            CurrentGameMode = mode;
+            CurrentGameModeType = modeType;
+            IsGameModeChosen = true;
+            PlayersPerTeam = teamSize;
 
-        ClearTextMessages();
-        NotifyGamemodeChosen();
-        SetupChosenGamemode();
+            ClearTextMessages();
+            NotifyGamemodeChosen();
+            SetupChosenGamemode();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Gamemode: SetGameMode: {e.Message}");
+        }
     }
 
     private static void HostPickingGamemode()

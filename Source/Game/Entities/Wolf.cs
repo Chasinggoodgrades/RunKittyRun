@@ -138,6 +138,7 @@ public class Wolf
             foreach (var wolf in Globals.ALL_WOLVES)
             {
                 wolf.Value.WanderTimer.Pause();
+                wolf.Value.Unit.ClearOrders();
                 wolf.Value.Unit.SetPausedEx(pause);
             }
         }
@@ -146,6 +147,7 @@ public class Wolf
             foreach (var wolf in Globals.ALL_WOLVES)
             {
                 wolf.Value.WanderTimer.Resume();
+                wolf.Value.Unit.ClearOrders();
                 wolf.Value.Unit.SetPausedEx(pause);
             }
         }
@@ -201,10 +203,15 @@ public class Wolf
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
         //OverheadEffect?.Dispose();
         OverheadEffect??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
+
+        BlzSetSpecialEffectAlpha(OverheadEffect, 255);
+        BlzSetSpecialEffectColor(OverheadEffect, 255, 255, 255);
+        BlzSetSpecialEffectTime(OverheadEffect, 0);
+        BlzSetSpecialEffectTimeScale(OverheadEffect, 1.0f);
         BlzSpecialEffectClearSubAnimations(OverheadEffect);
+
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
-        BlzSetSpecialEffectTime(OverheadEffect, 1);
-        OverheadEffect.SetColor(255, 255, 255);
+
         EffectTimer.Start(effectDuration, false, () =>
         {
             WolfMove();

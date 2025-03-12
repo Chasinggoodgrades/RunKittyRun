@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class ItemSpawner
 {
+    public static List<Kibble> TrackKibbles;
+
     private static List<int> SpawnableItems;
     private static List<item> TrackItems;
-    private static List<Kibble> TrackKibbles;
     private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS = 15;
@@ -28,11 +30,18 @@ public static class ItemSpawner
 
     private static void SpawnItems()
     {
-        RemoveSpawnedItems();
-        for (var i = 0; i < NUMBER_OF_ITEMS; i++)
+        try
         {
-            TrackItems.Add(SpawnRegularItems());
-            SpawnKibble();
+            RemoveSpawnedItems();
+            for (var i = 0; i < NUMBER_OF_ITEMS; i++)
+            {
+                SpawnRegularItems();
+                SpawnKibble();
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"ItemSpawner: SpawnItems: {e.Message}");
         }
     }
 
@@ -45,13 +54,15 @@ public static class ItemSpawner
             item.Dispose();
         }
 
+        TrackItems.Clear();
+
+        if (KibbleEvent.IsEventActive()) return;
+
         for (int i = 0; i < TrackKibbles.Count; i++)
         {
-            var kibble = TrackKibbles[i];
-            kibble.Dispose();
+            TrackKibbles[i].__destroy();
         }
 
-        TrackItems.Clear();
         TrackKibbles.Clear();
     }
 
@@ -60,11 +71,12 @@ public static class ItemSpawner
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (KibbleEvent.IsEventActive()) return;
-        var kibble = new Kibble();
+        var kibble = MemoryHandler.GetEmptyObject<Kibble>();
+        kibble.SpawnKibble();
         TrackKibbles.Add(kibble);
     }
 
-    private static item SpawnRegularItems()
+    private static void SpawnRegularItems()
     {
         var random = GetRandomInt(0, SpawnableItems.Count - 1);
         var item = SpawnableItems[random];
@@ -72,8 +84,8 @@ public static class ItemSpawner
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
-
-        return CreateItem(item, x, y);
+        var i = CreateItem(item, x, y);
+        TrackItems.Add(i);
     }
 
     private static List<int> StandardItems()

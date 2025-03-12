@@ -173,50 +173,58 @@ public static class MemoryHandler
     public static T GetEmptyObject<T>(string debugName = null)
         where T : class, IDestroyable, new()
     {
-        var type = typeof(T);
-        if (cachedObjects.TryGetValue(type, out var objects) && objects.Count > 0)
+        try
         {
-            var obj = (T)objects[0];
-            objects.RemoveAt(0);
-
-            if (!string.IsNullOrEmpty(debugName) && MetaTable.TryGetValue(obj, out var meta))
+            var type = typeof(T);
+            if (cachedObjects.TryGetValue(type, out var objects) && objects.Count > 0)
             {
-                meta["__debugName"] = debugName;
-                meta["__destroyed"] = false;
-            }
-            else if (!string.IsNullOrEmpty(debugName))
-            {
-                MetaTable[obj] = GetObjectMeta(debugName);
-            }
+                var obj = (T)objects[0];
+                objects.RemoveAt(0);
 
-            if (!string.IsNullOrEmpty(debugName))
-            {
-                if (!debugObjects.ContainsKey(debugName))
-                    debugObjects[debugName] = 0;
-                debugObjects[debugName]++;
-            }
+                if (!string.IsNullOrEmpty(debugName) && MetaTable.TryGetValue(obj, out var meta))
+                {
+                    meta["__debugName"] = debugName;
+                    meta["__destroyed"] = false;
+                }
+                else if (!string.IsNullOrEmpty(debugName))
+                {
+                    MetaTable[obj] = GetObjectMeta(debugName);
+                }
 
-            return obj;
+                if (!string.IsNullOrEmpty(debugName))
+                {
+                    if (!debugObjects.ContainsKey(debugName))
+                        debugObjects[debugName] = 0;
+                    debugObjects[debugName]++;
+                }
+
+                return obj;
+            }
+            else
+            {
+                var obj = new T();
+                numCreatedObjects++;
+
+                var meta = !string.IsNullOrEmpty(debugName)
+                    ? GetObjectMeta(debugName)
+                    : defaultObjectMeta;
+
+                MetaTable[obj] = meta;
+
+                if (!string.IsNullOrEmpty(debugName))
+                {
+                    if (!debugObjects.ContainsKey(debugName))
+                        debugObjects[debugName] = 0;
+                    debugObjects[debugName]++;
+                }
+
+                return obj;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            var obj = new T();
-            numCreatedObjects++;
-
-            var meta = !string.IsNullOrEmpty(debugName)
-                ? GetObjectMeta(debugName)
-                : defaultObjectMeta;
-
-            MetaTable[obj] = meta;
-
-            if (!string.IsNullOrEmpty(debugName))
-            {
-                if (!debugObjects.ContainsKey(debugName))
-                    debugObjects[debugName] = 0;
-                debugObjects[debugName]++;
-            }
-
-            return obj;
+            Console.WriteLine("Error getting empty object" + ex.Message);
+            return default;
         }
     }
 

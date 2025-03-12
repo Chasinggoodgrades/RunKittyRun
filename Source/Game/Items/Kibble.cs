@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class Kibble
+public class Kibble : IDestroyable
 {
     public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
     public static trigger PickupTrigger;
@@ -14,63 +14,58 @@ public class Kibble
     private static int GoldMax = 150;
     private static int JackpotMin = 600;
     private static int JackpotMax = 1500;
-    private int Type;
-    private int JackPotIndex = 1;
-    private triggeraction TrigActions;
+    private static int JackPotIndex = 1;
+
     public item Item;
+    private int Type;
 
     public Kibble()
     {
         PickupTrigger ??= KibblePickupEvents();
         Type = RandomKibbleType();
-        Item = SpawnKibble();
-        AddKibblePickupActions();
     }
 
-    public void Dispose()
+    public void __destroy(bool recursive = false)
     {
         Item.Dispose();
         Item = null;
-        PickupTrigger.RemoveAction(TrigActions);
-        TrigActions = null;
+        MemoryHandler.DestroyObject(this, recursive);
     }
 
-    #region Kibble Initialization
-
-    private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
-
-    private item SpawnKibble()
+    public void SpawnKibble()
     {
         var regionNumber = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
         Utility.CreateEffectAndDispose(StarfallEffect, x, y);
-        return CreateItem(Type, x, y);
+        Item = CreateItem(Type, x, y);
     }
 
-    private trigger KibblePickupEvents()
+    #region Kibble Initialization
+
+    private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
+
+
+
+    private static trigger KibblePickupEvents()
     {
         var trig = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            _ = trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
-        return trig;
-    }
-
-    private void AddKibblePickupActions()
-    {
-        TrigActions = PickupTrigger.AddAction(() =>
+        Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
+        trig.AddAction(() =>
         {
-            if (@event.ManipulatedItem != Item) return;
-            KibblePickup();
+            var item = @event.ManipulatedItem;
+            if (!KibblesColors.Contains(item.TypeId)) return;
+            KibblePickup(item);
         });
+        return trig;
     }
 
     #endregion
 
     #region Kibble Pickup Logic
 
-    private void KibblePickup()
+    private static void KibblePickup(item item)
     {
         try
         {
@@ -91,6 +86,8 @@ public class Kibble
             KibbleEvent.CollectEventKibble();
 
             IncrementKibble(player);
+
+            ItemSpawner.TrackKibbles.Find(k => k.Item == item).__destroy();
         }
         catch (Exception e)
         {
@@ -100,7 +97,7 @@ public class Kibble
         }
     }
 
-    private void KibbleGoldReward(Kitty kitty)
+    private static void KibbleGoldReward(Kitty kitty)
     {
         var jackPotChance = GetRandomInt(0, 100);
         int goldAmount;
@@ -114,19 +111,19 @@ public class Kibble
         Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
     }
 
-    private void KibbleXP(Kitty kitty)
+    private static void KibbleXP(Kitty kitty)
     {
         var xpAmount = GetRandomInt(50, XPMax);
         kitty.Unit.Experience += xpAmount;
         SoundManager.PlayKibbleTomeSound(kitty.Unit);
     }
 
-    private void KibbleNothing(Kitty kitty)
+    private static void KibbleNothing(Kitty kitty)
     {
         Utility.CreateSimpleTextTag("Nothing!", 2.0f, kitty.Unit, TextTagHeight, 50, 150, 150);
     }
 
-    private void JackpotEffect(Kitty kitty)
+    private static void JackpotEffect(Kitty kitty)
     {
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
@@ -151,7 +148,6 @@ public class Kibble
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
             if (isSuperJackpot) kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
             else kitty.SaveData.KibbleCurrency.Jackpots += 1;
-            Dispose();
         }
         else
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));

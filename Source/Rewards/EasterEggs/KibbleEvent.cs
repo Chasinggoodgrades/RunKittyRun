@@ -7,15 +7,14 @@ public static class KibbleEvent
     private static bool EventPlayed = false;
     private static int EventKibblesCollected = 0;
     private static int TotalEventKibbles = 50;
-    private static int EventExtraKibbles = 15;
+    private static int EventExtraKibbles = 10;
     private static timer EventTimer;
     private static timerdialog EventTimerDialog;
-    private static List<Kibble> EventKibbles = new List<Kibble>();
     private const float EventLength = 180.0f; // 3 minutes
 
     public static void StartKibbleEvent(float chance)
     {
-        var adjustedChance = Source.Program.Debug ? 70 : 1;
+        var adjustedChance = Source.Program.Debug ? 5 : 1;
         if (chance > adjustedChance || EventPlayed) return;
 
         EventActive = true;
@@ -32,8 +31,8 @@ public static class KibbleEvent
         // Spawn event kibbles
         for (int i = 0; i < TotalEventKibbles + EventExtraKibbles; i++)
         {
-            var kibble = new Kibble();
-            EventKibbles.Add(kibble);
+            var kibble = MemoryHandler.GetEmptyObject<Kibble>();
+            ItemSpawner.TrackKibbles.Add(kibble);
         }
 
         UpdateEventProgress();
@@ -45,12 +44,13 @@ public static class KibbleEvent
         EventActive = false;
         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(ref EventTimer);
-        for (int i = 0; i < EventKibbles.Count; i++)
+
+        foreach(var kibble in ItemSpawner.TrackKibbles)
         {
-            EventKibbles[i].Dispose();
-            EventKibbles[i] = null;
+            kibble.__destroy();
         }
-        GC.RemoveList(ref EventKibbles);
+
+        ItemSpawner.TrackKibbles.Clear();
 
         Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}The kibble collecting event has ended! {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r were collected.");
     }
@@ -74,6 +74,10 @@ public static class KibbleEvent
         }
     }
 
+    /// <summary>
+    /// Returns if the event is active or not.
+    /// </summary>
+    /// <returns></returns>
     public static bool IsEventActive()
     {
         return EventActive;

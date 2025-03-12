@@ -17,22 +17,30 @@ namespace Source.Init
 
         public static void Initialize()
         {
-            SetGameSpeed(gamespeed.Fastest);
-            Blizzard.LockGameSpeedBJ();
-            Colors.Initialize();
-            DoodadChanger.ShowSeasonalDoodads(false);
-            Gamemode.Initialize();
-            SetAlliedPlayers();
-            //if (!ADMINDISABLE.AdminsGame()) return;
-            Safezone.Initialize();
-            Savecode.Initialize();
-            StartGameModeTimer();
-            StopMusic(false);
-            ClearMapMusic();
+            try
+            {
+                SetGameSpeed(gamespeed.Fastest);
+                Blizzard.LockGameSpeedBJ();
+                Colors.Initialize();
+                DoodadChanger.ShowSeasonalDoodads(false);
+                Gamemode.Initialize();
+                SetAlliedPlayers();
+                //if (!ADMINDISABLE.AdminsGame()) return;
+                Safezone.Initialize();
+                Savecode.Initialize();
+                StartGameModeTimer();
+                StopMusic(false);
+                ClearMapMusic();
 
-            if (!Source.Program.Debug) return;
-            Difficulty.ChangeDifficulty("normal");
-            Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+                if (!Source.Program.Debug) return;
+                Difficulty.ChangeDifficulty("normal");
+                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+            }
+            catch (Exception e)
+            {
+                Logger.Critical($"Error in Setup.Initialize: {e.Message}");
+                throw;
+            }
         }
 
         private static void StartGameModeTimer()
@@ -103,8 +111,7 @@ namespace Source.Init
             }
             catch (Exception e)
             {
-                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}StartGame: " + e.Message);
-                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_RED}Stacktrace: " + e.StackTrace);
+                Logger.Critical($"Error in Setup.StartGame: {e.Message}");
                 throw;
             }
         }
