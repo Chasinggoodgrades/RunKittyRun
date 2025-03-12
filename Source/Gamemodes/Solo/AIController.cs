@@ -261,8 +261,8 @@ public class AIController
         // Calculate the angle interval that each wolf “blocks.”
         foreach (Wolf wolf in wolves)
         {
-            float MIN_TOTAL_BLOCKED_ANGLE = MathF.PI / 4f;  // 45° total
-            float MAX_TOTAL_BLOCKED_ANGLE = MathF.PI / 2f;  // 90° total
+            float MIN_TOTAL_BLOCKED_ANGLE = MathF.PI / 2f;  // 45° total
+            float MAX_TOTAL_BLOCKED_ANGLE = MathF.PI / 1f;  // 90° total
 
             if (!wolf.IsWalking)
             {
@@ -369,19 +369,77 @@ public class AIController
             VisualizeFreeInterval(interval);
         }
 
-        float bestScore = float.MaxValue;
-        float bestAngle = forwardAngle; // Default to the forward direction.
+        // Define the required clearance (45° in radians)
+        float requiredClearance = MathF.PI / 4; // 45°
+
+        // Initialize bestAngle to the original forward direction
+        float bestAngle = -500f;
+        bool foundGapContainingForward = false;
+
+        // First, check if forwardAngle falls within any free gap.
         foreach (AngleInterval gap in freeGaps)
         {
-            // Compute the center of the gap.
-            float center = gap.Start + (gap.End - gap.Start) / 2f;
-            center = NormalizeAngle(center);
-            float diff = AngleDifference(center, forwardAngle);
-            if (diff < bestScore)
+            Console.WriteLine("Checking gap: " + gap.Start + " " + gap.End + " " + forwardAngle);
+
+            if (IsAngleInInterval(forwardAngle, gap))
             {
-                bestScore = diff;
-                bestAngle = center;
+                foundGapContainingForward = true;
+                // Calculate the distance from forwardAngle to the gap boundaries.
+                float diffToStart = AngleDifference(forwardAngle, gap.Start);
+                float diffToEnd = AngleDifference(gap.End, forwardAngle);
+
+                // If too close to the start boundary, adjust forwardAngle to be 45° inside.
+                if (diffToStart < requiredClearance)
+                {
+                    Console.WriteLine("A: " + diffToStart + " " + requiredClearance);
+                    bestAngle = gap.Start + requiredClearance;
+                }
+                // If too close to the end boundary, adjust forwardAngle to be 45° inside.
+                else if (diffToEnd < requiredClearance)
+                {
+                    Console.WriteLine("B: " + diffToEnd + " " + requiredClearance);
+                    bestAngle = gap.End - requiredClearance;
+                }
+                else
+                {
+                    Console.WriteLine("C");
+                    bestAngle = forwardAngle; // It’s safely in the middle.
+                }
+
+                break;
             }
+        }
+
+        // If forwardAngle isn't within any free gap, find the candidate edge closest to forwardAngle.
+        if (!foundGapContainingForward)
+        {
+            float bestScore = float.MaxValue;
+            foreach (AngleInterval gap in freeGaps)
+            {
+                // Calculate candidate angles from each gap’s boundaries (adjusted by required clearance).
+                float candidateFromStart = gap.Start + requiredClearance;
+                float candidateFromEnd = gap.End - requiredClearance;
+
+                float diffStart = AngleDifference(candidateFromStart, forwardAngle);
+                float diffEnd = AngleDifference(candidateFromEnd, forwardAngle);
+
+                if (diffStart < bestScore)
+                {
+                    bestScore = diffStart;
+                    bestAngle = candidateFromStart;
+                }
+                if (diffEnd < bestScore)
+                {
+                    bestScore = diffEnd;
+                    bestAngle = candidateFromEnd;
+                }
+            }
+        }
+
+        if (bestAngle == -500f)
+        {
+            cleanArrays();
+            return (kitty.Unit.X, kitty.Unit.Y);
         }
 
         // Update the forward direction to the chosen dodge direction.
@@ -391,6 +449,23 @@ public class AIController
 
         // Return the target dodge position (kitty's position plus 128f in the chosen direction).
         return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.Unit.Y + forwardDirection2.Y * DODGE_DISTANCE);
+    }
+
+    private bool IsAngleInInterval(float angle, AngleInterval interval)
+    {
+        // Normalize the angle and interval boundaries to [0, 2π)
+        angle = NormalizeAngle(angle);
+        float start = NormalizeAngle(interval.Start);
+        float end = NormalizeAngle(interval.End);
+
+        // Check if the interval does not wrap around.
+        if (start <= end)
+        {
+            return angle >= start && angle <= end;
+        }
+        // If the interval wraps around 0 (e.g., 350° to 10°), the angle is within the interval 
+        // if it's greater than or equal to the start OR less than or equal to the end.
+        return angle >= start || angle <= end;
     }
 
     private void cleanArrays()
@@ -447,6 +522,97 @@ public class AIController
             MoveLightning(freeLightning, false, x1, y1, x2, y2);
         }
     }
+
+    // private void VisualizeFreeInterval(AngleInterval interval)
+    // {
+    //     if (!laser)
+    //     {
+    //         return;
+    //     }
+
+    //     float radius = DODGE_RADIUS;
+    //     float step = 0.1f; // Adjust step size for smoother lines
+
+    //     if (interval.Start > interval.End)
+    //     {
+    //         for (float angle = interval.Start; angle < 2 * MathF.PI; angle += step)
+    //         {
+    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
+    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
+    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
+    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+
+    //             //
+    //             lightning freeLightning = null;
+
+    //             if (availableClearLightnings.Count > 0)
+    //             {
+    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
+    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
+    //             }
+
+    //             if (freeLightning == null)
+    //             {
+    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
+    //             }
+
+    //             usedClearLightnings.Add(freeLightning);
+    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
+    //         }
+
+    //         for (float angle = 0; angle < interval.End; angle += step)
+    //         {
+    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
+    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
+    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
+    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+
+    //             //
+    //             lightning freeLightning = null;
+
+    //             if (availableClearLightnings.Count > 0)
+    //             {
+    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
+    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
+    //             }
+
+    //             if (freeLightning == null)
+    //             {
+    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
+    //             }
+
+    //             usedClearLightnings.Add(freeLightning);
+    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         for (float angle = interval.Start; angle < interval.End; angle += step)
+    //         {
+    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
+    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
+    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
+    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+
+    //             //
+    //             lightning freeLightning = null;
+
+    //             if (availableClearLightnings.Count > 0)
+    //             {
+    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
+    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
+    //             }
+
+    //             if (freeLightning == null)
+    //             {
+    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
+    //             }
+
+    //             usedClearLightnings.Add(freeLightning);
+    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
+    //         }
+    //     }
+    // }
 
     private void VisualizeFreeInterval(AngleInterval interval)
     {
@@ -522,9 +688,7 @@ public class AIController
     /// </summary>
     private float AngleDifference(float a, float b)
     {
-        float diff = MathF.Abs(a - b);
-        if (diff > MathF.PI)
-            diff = 2f * MathF.PI - diff;
+        float diff = MathF.Abs(NormalizeAngle(a) - NormalizeAngle(b));
         return diff;
     }
 
