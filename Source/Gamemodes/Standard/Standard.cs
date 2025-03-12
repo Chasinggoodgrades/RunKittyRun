@@ -20,7 +20,7 @@ public static class Standard
         RollerSkates.Initialize();
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
-        Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
+        RegisterLevelTriggers();
     }
 
     private static void RegisterLevelTriggers()
