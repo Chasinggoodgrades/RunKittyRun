@@ -1,13 +1,17 @@
-﻿/*
+﻿using WCSharp.Api;
+using static WCSharp.Api.Common;
 
-using WCSharp.Api;
 public class APMTracker
 {
     private const float CAPTURE_INTERVAL = 0.1f;
-    public static trigger ClicksTrigger = trigger.Create();
-    private timer Timer { get; set; } = timer.Create();
+    private static trigger ClicksTrigger = trigger.Create();
+    private static triggeraction ClicksAction;
+    private static timer PeriodicTimer;
+
+    private int TotalActions;
+    private float TimeOutsideSafeZones;
+    // private (float X, float Y) LastPosition;
     private Kitty Kitty { get; set; }
-    private bool Active { get; set; }
 
     public APMTracker(Kitty kitty)
     {
@@ -17,24 +21,77 @@ public class APMTracker
 
     private void Init()
     {
-        Timer.Start(CAPTURE_INTERVAL, true, RunningTime);
+        var unused = ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
+        ClicksAction ??= ClicksTrigger.AddAction(() => CaptureActions());
+        PeriodicTimer ??= PeriodicCheck();
     }
 
-    private void RunningTime()
+    private timer PeriodicCheck()
     {
-        // if not in safezone region && game is active
-
-
-        // Active = true
+        PeriodicTimer = CreateTimer();
+        PeriodicTimer.Start(CAPTURE_INTERVAL, true, CheckKittyPositions);
+        return PeriodicTimer;
     }
 
-    private void DetectClicks()
+    private void CaptureActions()
     {
-        // if != Active, return
+        var orderID = @event.IssuedOrderId;
 
-        // Increment clicks with trigger
+        /*        if (orderID == OrderId("move") || orderID == OrderId("smart"))
+                    LastPosition = (@event.OrderPointX, @event.OrderPointY);*/
+
+        if (!IsInSafeZone(Kitty.Unit))
+            TotalActions++;
     }
+
+    private static void CheckKittyPositions()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES)
+        {
+            if (IsInSafeZone(kitty.Value.Unit)) continue;
+            kitty.Value.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
+        }
+    }
+
+    private static bool IsInSafeZone(unit unit)
+    {
+        return RegionList.SafeZones[Globals.PLAYERS_CURRENT_SAFEZONE[unit.Owner]].Contains(unit.X, unit.Y);
+    }
+
+    private static float CalculateAPM(Kitty kitty)
+    {
+        var totalActions = kitty.APMTracker.TotalActions;
+        var timeOutsideSafeZones = kitty.APMTracker.TimeOutsideSafeZones / 60.0f; // put in mins (APM)
+        return timeOutsideSafeZones == 0.0f ? 0.0f : totalActions / timeOutsideSafeZones;
+    }
+
+    public static string CalculateAllAPM()
+    {
+        string apmString = "";
+        foreach (var kitty in Globals.ALL_KITTIES)
+        {
+            var apm = CalculateAPM(kitty.Value);
+            apmString += $"{Colors.PlayerNameColored(kitty.Value.Player)}:  {(int)apm} Active APM\n";
+        }
+        return apmString;
+    }
+
+    /*    public static (float x, float y) GetLastOrderLocation(unit unit)
+        {
+            if (unit == null)
+            {
+                Logger.Warning("Unit is null in GetLastOrderLocation.");
+                return (0.0f, 0.0f);
+            }
+
+            if (!LastOrderLocation.ContainsKey(unit))
+            {
+                Logger.Warning($"Unit {unit} not found in LastOrderLocation.");
+                return (0.0f, 0.0f);
+            }
+
+            return LastOrderLocation[unit];
+        }*/
 
 }
 
-*/

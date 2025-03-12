@@ -28,6 +28,7 @@ public class Kitty
     public trigger c_Collision { get; set; } = trigger.Create();
     public Slider Slider { get; private set; }
     public AIController aiController { get; set; }
+    public APMTracker APMTracker { get; set; }
     public timer DiscoTimer { get; set; }
     public float SpinCamSpeed { get; set; } = 0;
     public timer SpinCamTimer { get; set; }
@@ -43,6 +44,7 @@ public class Kitty
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
         aiController = new AIController(this);
+        APMTracker = new APMTracker(this);
 
         Globals.PLAYERS_CURRENT_SAFEZONE[player] = 0;
     }

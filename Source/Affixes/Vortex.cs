@@ -103,8 +103,8 @@ public class Vortex : Affix
                 var newY = y + (distance * Sin(angle));
                 unit.SetPosition(newX, newY);
                 unit.SetFacing(angle);
-                var lastOrder = UnitOrders.GetLastOrderLocation(unit);
-                _ = unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+                //var lastOrder = UnitOrders.GetLastOrderLocation(unit);
+                //_ = unit.IssueOrder("move", lastOrder.x, lastOrder.y);
                 // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
                 // Setup @event system to acquire last x,y location of this unit.
             }

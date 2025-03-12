@@ -120,13 +120,13 @@ public class Colors
     public static void SetPlayerVertexColor(player p, string[] RGB)
     {
         var kitty = Globals.ALL_KITTIES[p];
-        if (RGB.Length == 4)
-        {
-            var r = int.Parse(RGB[1]);
-            var g = int.Parse(RGB[2]);
-            var b = int.Parse(RGB[3]);
-            kitty.Unit.SetVertexColor(r, g, b, 255);
-        }
+        int r = 0, g = 0, b = 0;
+
+        if (RGB.Length > 0) r = int.Parse(RGB[0]);
+        if (RGB.Length > 1) g = int.Parse(RGB[1]);
+        if (RGB.Length > 2) b = int.Parse(RGB[2]);
+
+        kitty.Unit.SetVertexColor(r, g, b, 255);
     }
 
     /// <summary>

@@ -257,7 +257,7 @@ public static class InitCommands
             group: "all",
             argDesc: "",
             description: "Displays your APM for ACTIVE game time. (not counting intermissions)",
-            action: (player, args) => player.DisplayTimedTextTo(10.0f, UnitOrders.CalculateAllAPM())
+            action: (player, args) => player.DisplayTimedTextTo(10.0f, APMTracker.CalculateAllAPM())
         );
 
         CommandsManager.RegisterCommand(

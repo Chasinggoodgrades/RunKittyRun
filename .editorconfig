@@ -14,7 +14,6 @@ tab_width = 4
 # New line preferences
 end_of_line = crlf
 insert_final_newline = false
-trim_trailing_whitespace = true
 
 #### .NET Code Actions ####
 
@@ -97,7 +96,7 @@ csharp_style_var_when_type_is_apparent = false
 csharp_style_expression_bodied_accessors = true
 csharp_style_expression_bodied_constructors = false
 csharp_style_expression_bodied_indexers = true
-csharp_style_expression_bodied_lambdas = true
+csharp_style_expression_bodied_lambdas = true:suggestion
 csharp_style_expression_bodied_local_functions = false
 csharp_style_expression_bodied_methods = false
 csharp_style_expression_bodied_operators = false
@@ -143,8 +142,8 @@ csharp_style_prefer_tuple_swap = true
 csharp_style_prefer_unbound_generic_type_in_nameof = true
 csharp_style_prefer_utf8_string_literals = true
 csharp_style_throw_expression = true
-csharp_style_unused_value_assignment_preference = discard_variable
-csharp_style_unused_value_expression_statement_preference = discard_variable
+csharp_style_unused_value_assignment_preference = unused_local_variable
+csharp_style_unused_value_expression_statement_preference = unused_local_variable:suggestion
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace
@@ -165,7 +164,6 @@ csharp_new_line_before_finally = true
 csharp_new_line_before_members_in_anonymous_types = true
 csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_open_brace = all
-csharp_new_line_between_method_declarations = true
 csharp_new_line_between_query_expression_clauses = true
 
 # Indentation preferences

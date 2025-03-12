@@ -67,7 +67,9 @@ public static class NamedWolves
                 _ = DNTNamedWolves.Remove(ExplodingWolf);
                 ExplodingWolf.IsReviving = false;
                 ExplodingWolf.Unit?.Dispose();
+                Globals.ALL_WOLVES.Remove(ExplodingWolf.Unit);
                 ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 360);
+                Globals.ALL_WOLVES.Add(ExplodingWolf.Unit, ExplodingWolf);
                 ExplodingWolfDesc();
             });
         }

@@ -199,14 +199,16 @@ public class Wolf
     private void ApplyEffect()
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
-        OverheadEffect?.Dispose();
-        if (!DisableEffects) OverheadEffect = effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
-
+        //OverheadEffect?.Dispose();
+        OverheadEffect??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
+        BlzSpecialEffectClearSubAnimations(OverheadEffect);
+        BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
+        BlzSetSpecialEffectTime(OverheadEffect, 1);
+        OverheadEffect.SetColor(255, 255, 255);
         EffectTimer.Start(effectDuration, false, () =>
         {
             WolfMove();
-            OverheadEffect.Dispose();
-            OverheadEffect = null;
+            BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
         });
     }
 
