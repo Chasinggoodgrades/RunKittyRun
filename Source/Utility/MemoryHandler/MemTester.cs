@@ -12,7 +12,6 @@ public static class MemoryHandlerTest
         public int Count { get; set; }
         public void __destroy(bool recursive = false)
         {
-            Console.WriteLine($"Destroyed object: {Name}");
             Name = null;
             Count = 0;
         }

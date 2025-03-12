@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class UniqueItems
@@ -24,8 +25,8 @@ public static class UniqueItems
     private static trigger RegisterEvents()
     {
         var trig = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            _ = trig.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem);
+
+        Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
         _ = trig.AddAction(ItemPickup);
         return trig;
     }
@@ -36,8 +37,9 @@ public static class UniqueItems
         var item = @event.ManipulatedItem;
         var player = @event.Player;
         var kitty = @event.Unit;
-        var uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId);
 
+        var uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId);
+        if (item.TypeId == 0) Logger.Warning("Unique item bug, item ID is 0");
         if (uniqueItem == null) return;
         if (Utility.UnitHasItemCount(kitty, item.TypeId) <= 1) return;
 

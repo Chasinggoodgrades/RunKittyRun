@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-public class MetaDictionary : Dictionary<string, object> // doesnt do shit >.<
+/*public class MetaDictionary : Dictionary<string, object> // doesnt do shit >.<
 {
     public bool IsDestroyed { get; set; }
 
@@ -28,7 +28,7 @@ public class MetaDictionary : Dictionary<string, object> // doesnt do shit >.<
             base[key] = value;
         }
     }
-}
+}*/
 
 
 public static class MemoryHandler
@@ -133,7 +133,7 @@ public static class MemoryHandler
 
     private static Dictionary<string, object> GetObjectMeta(string debugName = null)
     {
-        var meta = new MetaDictionary
+        var meta = new Dictionary<string, object>
         {
             ["__gc"] = (Action<object, bool>)DestroyObject,
             ["__destroyed"] = false
@@ -295,7 +295,7 @@ public static class MemoryHandler
         }
     }
 
-    public static List<T> GetEmptyList<T>(string debugName = null, int initialCapacity = 0)
+ /*   public static List<T> GetEmptyList<T>(string debugName = null, int initialCapacity = 0)
     {
         var type = typeof(T);
         if (!cachedLists.TryGetValue(type, out var stackObj))
@@ -359,7 +359,7 @@ public static class MemoryHandler
             }
         }
         list.Clear();
-    }
+    }*/
 
     /// <summary>
     /// Destroys a previously returned object (calls PurgeObject internally) and caches it.

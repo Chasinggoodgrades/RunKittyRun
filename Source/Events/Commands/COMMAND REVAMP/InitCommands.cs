@@ -1074,5 +1074,33 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "ailaser",
+            alias: "lasercolor",
+            group: "admin",
+            argDesc: "[free/blocked] [string ID]",
+            description: "Changes the color of the laser on all the AI, blocked or free",
+            action: (player, args) =>
+            {
+                if (args.Length == 0)
+                {
+                    return;
+                }
+
+                var laserType = args[0].ToLower();
+                if (laserType != "free" && laserType != "blocked")
+                {
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: ailaser [free/blocked] [string ID]");
+                    return;
+                }
+
+                if (laserType == "free") AIController.FREE_LASER_COLOR = args[1].ToUpper();
+                else if (laserType == "blocked") AIController.BLOCKED_LASER_COLOR = args[1].ToUpper();
+
+                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW}Laser color changed: {laserType} laser color is now {args[1].ToUpper()}");
+            }
+        );
+
+
     }
 }

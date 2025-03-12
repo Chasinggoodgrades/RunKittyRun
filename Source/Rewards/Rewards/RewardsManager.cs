@@ -20,7 +20,6 @@ public static class RewardsManager
     public static void Initialize()
     {
         InitializeRewardState();
-        AwardManager.Initialize();
         RegisterTrigger();
         RewardCreation.SetupRewards();
         RewardAbilitiesList();

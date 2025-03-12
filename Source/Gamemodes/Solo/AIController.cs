@@ -13,6 +13,8 @@ public class AIController
     public float DODGE_RADIUS = 160.0f;
     public float REVIVE_RADIUS = 1024.0f;
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
+    public static string FREE_LASER_COLOR = "GRTL";
+    public static string BLOCKED_LASER_COLOR = "RETL";
     public float _timerInterval = 0.1f;
     public float timerInterval
     {
@@ -438,8 +440,7 @@ public class AIController
 
             if (freeLightning == null)
             {
-                freeLightning = AddLightning("DRAM", false, x1, y1, x2, y2);
-                // SetLightningColor(freeLightning, 1, 0, 0, 1); // Red is barely visible
+                freeLightning = AddLightning(BLOCKED_LASER_COLOR, false, x1, y1, x2, y2); // "AFOD" is finger of death code
             }
 
             usedBlockedLightnings.Add(freeLightning);
@@ -474,8 +475,8 @@ public class AIController
 
             if (freeLightning == null)
             {
-                freeLightning = AddLightning("DRAM", false, x1, y1, x2, y2);
-                SetLightningColor(freeLightning, 0, 1, 0, 1);
+                freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
+                //SetLightningColor(freeLightning, 0, 1, 0, 1);
             }
 
             usedClearLightnings.Add(freeLightning);

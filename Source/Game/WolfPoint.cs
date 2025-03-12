@@ -133,7 +133,7 @@ public class WolfPoint
             }
             catch (Exception ex)
             {
-                Logger.Critical(ex.Message);
+                Logger.Critical("Wolf Point: " + ex.Message);
             }
         });
         return IsPausedTrigger;

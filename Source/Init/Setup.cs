@@ -69,10 +69,11 @@ namespace Source.Init
                 Resources.Initialize();
                 Progress.Initialize();
                 Shops.Initialize();
+                UniqueItems.Initialize();
                 WolfArea.Initialize();
+                ItemStacker.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
-                ItemStacker.Initialize();
                 ProtectionOfAncients.Initialize();
                 Multiboard.Initialize();
                 FloatingNameTag.Initialize();
@@ -87,7 +88,6 @@ namespace Source.Init
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
                 ShadowKitty.Initialize();
-                UniqueItems.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();

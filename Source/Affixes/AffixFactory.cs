@@ -18,7 +18,7 @@ public static class AffixFactory
     /// </summary>
     public static void Initialize()
     {
-        if (Program.Debug) Console.WriteLine("Initializing AffixFactory");
+        if (Program.Debug) Logger.Verbose("Initializing AffixFactory");
         AllAffixes = new List<Affix>();
         InitLaneWeights();
     }

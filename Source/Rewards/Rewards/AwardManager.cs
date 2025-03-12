@@ -8,14 +8,7 @@ using static WCSharp.Api.Common;
 /// </summary>
 public static class AwardManager
 {
-    private static Dictionary<player, List<string>> Awarded = new Dictionary<player, List<string>>();
     private static trigger AwardTrigger = trigger.Create();
-    //public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
-    public static void Initialize()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-            Awarded.Add(player, new List<string>());
-    }
 
     /// <summary>
     /// Gives the player an award and enables the ability for them to use.
@@ -26,8 +19,9 @@ public static class AwardManager
     public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
         // Check if the player already has the award
-        if (!Awarded.ContainsKey(player)) Awarded.Add(player, new List<string>());
-        if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award))
+        var awardsList = Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards;
+
+        if (awardsList.Contains(award))
             return;
 
         var saveData = Globals.ALL_KITTIES[player].SaveData;
@@ -48,7 +42,7 @@ public static class AwardManager
         if (earnedPrompt)
         {
             Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
-            Awarded[player].Add(award);
+            awardsList.Add(award);
         }
     }
 
@@ -76,7 +70,7 @@ public static class AwardManager
 
     public static bool ReceivedAwardAlready(player player, string award)
     {
-        return Awarded.TryGetValue(player, out var awards) && awards.Contains(award);
+        return Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards.Contains(award);
     }
 
     /// <summary>

@@ -30,8 +30,7 @@ public static class ItemStacker
     private static trigger RegisterEvents()
     {
         PickupTrigger = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            _ = PickupTrigger.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem, null);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
         _ = PickupTrigger.AddAction(StackActions);
         return PickupTrigger;
     }
