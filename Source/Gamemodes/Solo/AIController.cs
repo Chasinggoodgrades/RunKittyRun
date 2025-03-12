@@ -13,8 +13,8 @@ public class AIController
     public float DODGE_RADIUS = 160.0f;
     public float REVIVE_RADIUS = 1024.0f;
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
-    public static string FREE_LASER_COLOR = "GRTL";
-    public static string BLOCKED_LASER_COLOR = "RETL";
+    public static string FREE_LASER_COLOR = "GRSB";
+    public static string BLOCKED_LASER_COLOR = "RESB";
     public float _timerInterval = 0.1f;
     public float timerInterval
     {
@@ -476,7 +476,6 @@ public class AIController
             if (freeLightning == null)
             {
                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
-                //SetLightningColor(freeLightning, 0, 1, 0, 1);
             }
 
             usedClearLightnings.Add(freeLightning);
@@ -570,27 +569,6 @@ public class AIController
         public void __destroy(bool recursive = false)
         {
             MemoryHandler.DestroyObject(this);
-        }
-    }
-
-    private void AddWallRepulsionStruct(float distance, float nx, float ny, ClusterData[] clusters, float binSize)
-    {
-        float wallThreshold = 20f;
-        float wallRepulsionConstant = 1000f;
-
-        if (distance < wallThreshold && distance > 0)
-        {
-            float weight = (float)Math.Sqrt(wallRepulsionConstant / distance);
-            float angle = (float)Math.Atan2(ny, nx);
-            int bin = (int)Math.Round(angle / binSize);
-            int index = bin + 4;
-            if (!clusters[index].Exists || weight > clusters[index].Weight)
-            {
-                clusters[index].Exists = true;
-                clusters[index].DirX = nx;
-                clusters[index].DirY = ny;
-                clusters[index].Weight = weight;
-            }
         }
     }
 
