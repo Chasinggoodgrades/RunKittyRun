@@ -142,6 +142,11 @@ public class AIController
             if (deadKittySafezoneId != currentSafezoneId)
                 continue;
 
+            if (deadKitty == this.kitty)
+            {
+                continue;
+            }
+
             if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
             {
                 targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
