@@ -7,6 +7,7 @@ public static class CommandHandler
 {
     private static trigger DebugCmdTrigger = trigger.Create();
     private static trigger NewCmdHandler = trigger.Create();
+    private static readonly string[] EmptyStringArray = new string[] { "" };
 
     public static void Initialize()
     {
@@ -45,14 +46,14 @@ public static class CommandHandler
         if (spaceIndex < 0)
         {
             commandName = cmd;
-            args = Array.Empty<string>();
+            args = EmptyStringArray;
         }
         else
         {
             commandName = cmd.Substring(0, spaceIndex);
             var remainder = cmd.Substring(spaceIndex + 1);
             var split = remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            args = split.Length > 0 ? split : Array.Empty<string>();
+            args = split.Length > 0 ? split : EmptyStringArray;
         }
 
         if (GamemodeSetting(@event.PlayerChatString))

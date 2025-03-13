@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection.Emit;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -195,7 +196,7 @@ public static class InitCommands
             description: "Locks your camera to a unit.",
             action: (player, args) =>
             {
-                if (args.Length == 0)
+                if (args[0] == "")
                 {
                     CameraUtil.LockCamera(player);
                     return;
@@ -370,7 +371,7 @@ public static class InitCommands
             description: "Toggle SpinCam.",
             action: (player, args) =>
             {
-                float speed = args.Length > 0 ? float.Parse(args[0]) : 0;
+                float speed = args[0] != "" ? float.Parse(args[0]) : 0;
                 Globals.ALL_KITTIES[player].ToggleSpinCam(speed);
                 player.DisplayTextTo(Colors.COLOR_GOLD + "SpinCam: " + (Globals.ALL_KITTIES[player].IsSpinCamActive() ? "On" : "Off"));
             }
@@ -444,7 +445,7 @@ public static class InitCommands
             description: "Changes the game difficulty.",
             action: (player, args) =>
             {
-                var difficulty = args.Length > 0 ? args[0] : "normal";
+                var difficulty = args[0] != "" ? args[0] : "normal";
                 Difficulty.ChangeDifficulty(difficulty);
                 AffixFactory.DistributeAffixes();
                 MultiboardUtil.RefreshMultiboards();
@@ -462,7 +463,7 @@ public static class InitCommands
             {
                 // if args is null or empty, revive self
                 // else resolve playerid
-                if (args.Length == 0)
+                if (args[0] == "")
                 {
                     Globals.ALL_KITTIES[player].ReviveKitty();
                     return;
@@ -606,8 +607,42 @@ public static class InitCommands
             alias: "pw,pause",
             group: "admin",
             argDesc: "[on][off]",
-            description: "Pauses all wolves.",
-            action: (player, args) => Wolf.PauseAllWolves(CommandsManager.GetBool(args[0]))
+            description: "Pauses all wolves. Defaults to [on]",
+            action: (player, args) =>
+            {
+                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                Wolf.PauseAllWolves(status);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "wolfpause",
+            alias: "wp",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Pauses selected wolf. Defaults to [on]",
+            action: (player, args) =>
+            {
+                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "wolfwalk",
+            alias: "ww",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Sets the selected wolf to walking or not. Defaults to [on]",
+            action: (player, args) =>
+            {
+                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var selected = CustomStatFrame.SelectedUnit[player];
+                if (Globals.ALL_WOLVES.TryGetValue(selected, out var wolf))
+                {
+                    wolf.IsWalking = status;
+                }
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -661,7 +696,7 @@ public static class InitCommands
             description: "Applies the specified affix to all wolves.",
             action: (player, args) =>
             {
-                var affixName = args.Length > 0 ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
+                var affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {affixName} to all wolves.");
                 foreach (var wolf in Globals.ALL_WOLVES)
                 {
@@ -680,7 +715,7 @@ public static class InitCommands
             description: "Applies the specified affix to the currently selected wolf.",
             action: (player, args) =>
             {
-                var affixName = args.Length > 0 ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
+                var affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
                 var selectedUnit = CustomStatFrame.SelectedUnit[player];
                 if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
                 if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[selectedUnit])) return;
@@ -697,7 +732,7 @@ public static class InitCommands
             description: "Removes the specified affix from the currently selected wolf.",
             action: (player, args) =>
             {
-                var affixName = args.Length > 0 ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "";
+                var affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "";
                 var selectedUnit = CustomStatFrame.SelectedUnit[player];
                 if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
                 if (affixName == "") return;
@@ -729,7 +764,7 @@ public static class InitCommands
             description: "Forces a player into observer mode.",
             action: (player, args) =>
             {
-                var name = args.Length > 0 ? args[0] : "??__";
+                var name = args[0] != "" ? args[0] : "??__";
                 foreach (var p in Globals.ALL_PLAYERS)
                 {
                     if (p.Name.ToLower().StartsWith(name))
@@ -766,7 +801,7 @@ public static class InitCommands
             description: "Adjusts the camera field.",
             action: (player, args) =>
             {
-                var value = args.Length > 0 ? float.Parse(args[0]) : 0.0f;
+                var value = args[0] != "" ? float.Parse(args[0]) : 0.0f;
                 if (!player.IsLocal) return;
                 SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0);
             }
@@ -780,7 +815,7 @@ public static class InitCommands
             description: "Sets the current round.",
             action: (player, args) =>
             {
-                var round = args.Length > 0 ? int.Parse(args[0]) : 1;
+                var round = args[0] != "" ? int.Parse(args[0]) : 1;
                 if (round < 1 || round > 5) return;
                 Globals.ROUND = round - 1;
                 RoundManager.RoundEnd();
@@ -809,7 +844,7 @@ public static class InitCommands
             description: "Adds or removes an ability from the kitty.",
             action: (player, args) =>
             {
-                var abilityId = args.Length > 0 ? args[0] : "";
+                var abilityId = args[0] != "" ? args[0] : "";
                 var kitty = Globals.ALL_KITTIES[player];
                 if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
                 {
@@ -834,7 +869,7 @@ public static class InitCommands
             description: "Sets the scale of the kitty.",
             action: (player, args) =>
             {
-                var scale = args.Length > 0 ? float.Parse(args[0]) : 0.6f;
+                var scale = args[0] != "" ? float.Parse(args[0]) : 0.6f;
                 var kitty = Globals.ALL_KITTIES[player];
                 kitty.Unit.SetScale(scale, scale, scale);
             }
@@ -914,7 +949,7 @@ public static class InitCommands
             description: "Executes lua script",
             action: (player, args) =>
             {
-                var script = args.Length > 0 ? string.Join(" ", args) : "";
+                var script = args[0] != "" ? string.Join(" ", args) : "";
                 if (string.IsNullOrEmpty(script)) return;
                 ExecuteLua.LuaCode(player, script);
             }
@@ -1048,7 +1083,7 @@ public static class InitCommands
             description: "Sets up AI parameters.",
             action: (player, args) =>
             {
-                if (args.Length == 0)
+                if (args[0] == "")
                 {
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=160] [reviveRadius=1024] [timerInterval=0.1] [laser=0]");
                     return;
@@ -1082,7 +1117,7 @@ public static class InitCommands
             description: "Changes the color of the laser on all the AI, blocked or free",
             action: (player, args) =>
             {
-                if (args.Length == 0)
+                if (args[0] == "")
                 {
                     return;
                 }
@@ -1101,6 +1136,44 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "aitest",
+            alias: "test33",
+            group: "admin",
+            argDesc: "",
+            description: "Changes the color of the laser on all the AI, blocked or free",
+            action: (player, args) =>
+            {
+                foreach (var compKitty in Globals.ALL_KITTIES)
+                {
+                    if (compKitty.Value.aiController.IsEnabled())
+                    {
+                        compKitty.Value.aiController.DODGE_RADIUS = 160.0f;
+                        compKitty.Value.aiController.REVIVE_RADIUS = 1024.0f;
+                        compKitty.Value.aiController.timerInterval = 0.1f;
+                        compKitty.Value.aiController.laser = true;
+                    }
+                }
+                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW}Test started");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "killunit",
+            alias: "kill",
+            group: "admin",
+            argDesc: "[resolve playerID]",
+            description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    Globals.ALL_KITTIES[player].KillKitty();
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
+            }
+        );
 
     }
 }
