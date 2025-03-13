@@ -1085,11 +1085,11 @@ public static class InitCommands
             {
                 if (args[0] == "")
                 {
-                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=160] [reviveRadius=1024] [timerInterval=0.1] [laser=0]");
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=192] [reviveRadius=1024] [timerInterval=0.1] [laser=0]");
                     return;
                 }
 
-                var dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 160.0f;
+                var dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0f;
                 var reviveRadius = args.Length > 1 ? float.Parse(args[1]) : 1024.0f;
                 var timerInterval = args.Length > 2 ? float.Parse(args[2]) : 0.1f;
                 var laser = args.Length > 3 ? int.Parse(args[3]) : 0;

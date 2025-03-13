@@ -10,7 +10,7 @@ public class AIController
 {
     private Kitty kitty;
     private bool enabled;
-    public float DODGE_RADIUS = 160.0f;
+    public float DODGE_RADIUS = 192.0f;
     public float REVIVE_RADIUS = 1024.0f;
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public static string FREE_LASER_COLOR = "GRSB";
@@ -262,17 +262,18 @@ public class AIController
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
     {
         float forwardAngle = NormalizeAngle(MathF.Atan2(forwardDirection.Y, forwardDirection.X));
+        float requiredClearance = 22.5f * (MathF.PI / 180);
 
         // Calculate the angle interval that each wolf “blocks.”
         foreach (Wolf wolf in wolves)
         {
-            float MIN_TOTAL_BLOCKED_ANGLE = MathF.PI / 4f;  // 45° total
-            float MAX_TOTAL_BLOCKED_ANGLE = MathF.PI / 2f;  // 90° total
+            float MIN_TOTAL_BLOCKED_ANGLE = 45.0f * (MathF.PI / 180);
+            float MAX_TOTAL_BLOCKED_ANGLE = 180.0f * (MathF.PI / 180);
 
             if (!wolf.IsWalking)
             {
-                MIN_TOTAL_BLOCKED_ANGLE = MathF.PI / 8f;  // 22.5° total
-                MAX_TOTAL_BLOCKED_ANGLE = MathF.PI / 4f;  // 45° total
+                MIN_TOTAL_BLOCKED_ANGLE = 30.0f * (MathF.PI / 180);
+                MAX_TOTAL_BLOCKED_ANGLE = 120.0f * (MathF.PI / 180);
             }
 
             float dx = wolf.Unit.X - this.kitty.Unit.X;
@@ -283,15 +284,10 @@ public class AIController
                 continue; // Skip if the wolf is at the same position to avoid division by zero
 
             float centerAngle = MathF.Atan2(wolf.Unit.Y - this.kitty.Unit.Y, wolf.Unit.X - this.kitty.Unit.X);
-            float combinedRadius = DODGE_RADIUS;
-            float ratio = combinedRadius / distance;
+            float clampedDistance = Math.Clamp(distance, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS, DODGE_RADIUS);
+            float ratio = (clampedDistance - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) / (DODGE_RADIUS - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
 
-            // Calculate the angle that would be blocked based solely on distance.
-            float calculatedHalfAngle = MathF.Asin(ratio);
-
-            // Normally the total blocked angle would be 2 * calculatedHalfAngle.
-            // We clamp that value between our min and max, and then recompute the half-angle.
-            float totalBlockedAngle = Math.Clamp(2 * calculatedHalfAngle, MIN_TOTAL_BLOCKED_ANGLE, MAX_TOTAL_BLOCKED_ANGLE);
+            float totalBlockedAngle = MIN_TOTAL_BLOCKED_ANGLE + (MAX_TOTAL_BLOCKED_ANGLE - MIN_TOTAL_BLOCKED_ANGLE) * (1 - ratio);
             float halfAngle = totalBlockedAngle / 2f;
 
             // Create the interval [centerAngle - halfAngle, centerAngle + halfAngle]
@@ -318,6 +314,38 @@ public class AIController
                 a.End = end;
                 blockedIntervals.Add(a);
             }
+        }
+
+        float notInLaneAngle = -500f;
+        float notInLaneAngle2 = -500f;
+
+        float step = 0.1f;
+        float maxAngle = 2f * MathF.PI;
+
+        // loop over all angles
+        for (float angle = 0; angle < maxAngle; angle += step)
+        {
+            float x = this.kitty.Unit.X + DODGE_DISTANCE * MathF.Cos(angle);
+            float y = this.kitty.Unit.Y + DODGE_DISTANCE * MathF.Sin(angle);
+
+            if (notInLaneAngle == -500f && !IsWithinLaneBounds(x, y))
+            {
+                notInLaneAngle = angle;
+            }
+
+            if (notInLaneAngle != -500f && notInLaneAngle2 == -500f && IsWithinLaneBounds(x, y))
+            {
+                notInLaneAngle2 = angle;
+                break;
+            }
+        }
+
+        if (notInLaneAngle != -500f && notInLaneAngle2 != -500f)
+        {
+            var c = MemoryHandler.GetEmptyObject<AngleInterval>();
+            c.Start = Math.Min(notInLaneAngle, notInLaneAngle2);
+            c.End = Math.Max(notInLaneAngle, notInLaneAngle2);
+            blockedIntervals.Add(c);
         }
 
         // Merge any overlapping blocked intervals.
@@ -374,9 +402,56 @@ public class AIController
             VisualizeFreeInterval(interval);
         }
 
-        // Define the required clearance (45° in radians)
-        float requiredClearance = 45.0f * (MathF.PI / 180);
+        float targetX = kitty.Unit.X + MathF.Cos(forwardAngle) * DODGE_DISTANCE;
+        float targetY = kitty.Unit.Y + MathF.Sin(forwardAngle) * DODGE_DISTANCE;
 
+        float[] offsets = { -90f, -45f, 0.0f, 45f, 90f };
+
+        float bestCandidateScore = float.MaxValue;
+        float bestCandidateAngle = -500f; // Default to the original forward angle
+
+        foreach (float offset in offsets)
+        {
+            float candidateAngle = NormalizeAngle(forwardAngle + offset);
+
+            float bestAngle = calcAngle(candidateAngle, requiredClearance);
+
+            if (bestAngle == -500f)
+            {
+                continue;
+            }
+
+            float candX = kitty.Unit.X + MathF.Cos(bestAngle) * DODGE_DISTANCE;
+            float candY = kitty.Unit.Y + MathF.Sin(bestAngle) * DODGE_DISTANCE;
+
+            float dx = Math.Abs(candX - targetX);
+            float dy = Math.Abs(candY - targetY);
+            float score = dx * dx + dy * dy;
+
+            if (score < bestCandidateScore)
+            {
+                bestCandidateScore = score;
+                bestCandidateAngle = bestAngle;
+            }
+        }
+
+        if (bestCandidateAngle == -500f)
+        {
+            cleanArrays();
+            return (kitty.Unit.X, kitty.Unit.Y);
+        }
+
+        // Update the forward direction to the chosen dodge direction.
+        (float X, float Y) forwardDirection2 = (MathF.Cos(bestCandidateAngle), MathF.Sin(bestCandidateAngle));
+
+        cleanArrays();
+
+        // Return the target dodge position (kitty's position plus 128f in the chosen direction).
+        return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.Unit.Y + forwardDirection2.Y * DODGE_DISTANCE);
+    }
+
+    private float calcAngle(float forwardAngle, float requiredClearance)
+    {
         // Initialize bestAngle to the original forward direction
         float bestAngle = -500f;
         bool foundGapContainingForward = false;
@@ -384,6 +459,11 @@ public class AIController
         // First, check if forwardAngle falls within any free gap.
         foreach (AngleInterval gap in freeGaps)
         {
+            if (gap.End - gap.Start < requiredClearance * 2)
+            {
+                continue;
+            }
+
             if (IsAngleInInterval(forwardAngle, gap))
             {
                 foundGapContainingForward = true;
@@ -445,19 +525,7 @@ public class AIController
             }
         }
 
-        if (bestAngle == -500f)
-        {
-            cleanArrays();
-            return (kitty.Unit.X, kitty.Unit.Y);
-        }
-
-        // Update the forward direction to the chosen dodge direction.
-        (float X, float Y) forwardDirection2 = (MathF.Cos(bestAngle), MathF.Sin(bestAngle));
-
-        cleanArrays();
-
-        // Return the target dodge position (kitty's position plus 128f in the chosen direction).
-        return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.Unit.Y + forwardDirection2.Y * DODGE_DISTANCE);
+        return bestAngle;
     }
 
     private bool IsAngleInInterval(float angle, AngleInterval interval)
@@ -531,97 +599,6 @@ public class AIController
             MoveLightning(freeLightning, false, x1, y1, x2, y2);
         }
     }
-
-    // private void VisualizeFreeInterval(AngleInterval interval)
-    // {
-    //     if (!laser)
-    //     {
-    //         return;
-    //     }
-
-    //     float radius = DODGE_RADIUS;
-    //     float step = 0.1f; // Adjust step size for smoother lines
-
-    //     if (interval.Start > interval.End)
-    //     {
-    //         for (float angle = interval.Start; angle < 2 * MathF.PI; angle += step)
-    //         {
-    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
-    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
-    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
-    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
-
-    //             //
-    //             lightning freeLightning = null;
-
-    //             if (availableClearLightnings.Count > 0)
-    //             {
-    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
-    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
-    //             }
-
-    //             if (freeLightning == null)
-    //             {
-    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
-    //             }
-
-    //             usedClearLightnings.Add(freeLightning);
-    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
-    //         }
-
-    //         for (float angle = 0; angle < interval.End; angle += step)
-    //         {
-    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
-    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
-    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
-    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
-
-    //             //
-    //             lightning freeLightning = null;
-
-    //             if (availableClearLightnings.Count > 0)
-    //             {
-    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
-    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
-    //             }
-
-    //             if (freeLightning == null)
-    //             {
-    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
-    //             }
-
-    //             usedClearLightnings.Add(freeLightning);
-    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         for (float angle = interval.Start; angle < interval.End; angle += step)
-    //         {
-    //             float x1 = kitty.Unit.X + radius * MathF.Cos(angle);
-    //             float y1 = kitty.Unit.Y + radius * MathF.Sin(angle);
-    //             float x2 = kitty.Unit.X + radius * MathF.Cos(angle + step);
-    //             float y2 = kitty.Unit.Y + radius * MathF.Sin(angle + step);
-
-    //             //
-    //             lightning freeLightning = null;
-
-    //             if (availableClearLightnings.Count > 0)
-    //             {
-    //                 freeLightning = availableClearLightnings[availableClearLightnings.Count - 1];
-    //                 availableClearLightnings.RemoveAt(availableClearLightnings.Count - 1);
-    //             }
-
-    //             if (freeLightning == null)
-    //             {
-    //                 freeLightning = AddLightning(FREE_LASER_COLOR, false, x1, y1, x2, y2);
-    //             }
-
-    //             usedClearLightnings.Add(freeLightning);
-    //             MoveLightning(freeLightning, false, x1, y1, x2, y2);
-    //         }
-    //     }
-    // }
 
     private void VisualizeFreeInterval(AngleInterval interval)
     {
