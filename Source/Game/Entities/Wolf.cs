@@ -54,6 +54,8 @@ public class Wolf
         {
             wolfArea.Wolves.Add(this);
         }
+
+
     }
 
     /// <summary>
@@ -139,6 +141,7 @@ public class Wolf
             {
                 wolf.Value.WanderTimer.Pause();
                 wolf.Value.Unit.ClearOrders();
+                wolf.Value.IsWalking = false;
                 wolf.Value.Unit.SetPausedEx(pause);
             }
         }
@@ -148,8 +151,27 @@ public class Wolf
             {
                 wolf.Value.WanderTimer.Resume();
                 wolf.Value.Unit.ClearOrders();
+                wolf.Value.IsWalking = true;
                 wolf.Value.Unit.SetPausedEx(pause);
             }
+        }
+    }
+
+    public static void PauseSelectedWolf(unit selectedUnit, bool pause)
+    {
+        if (!Globals.ALL_WOLVES.TryGetValue(selectedUnit, out var wolf)) return;
+
+        if (pause)
+        {
+            wolf.WanderTimer.Pause();
+            wolf.Unit.ClearOrders();
+            wolf.Unit.SetPausedEx(pause);
+        }
+        else
+        {
+            wolf.WanderTimer.Resume();
+            wolf.Unit.ClearOrders();
+            wolf.Unit.SetPausedEx(pause);
         }
     }
 
@@ -169,6 +191,8 @@ public class Wolf
 
         WanderTimer = timer.Create();
         EffectTimer = timer.Create();
+
+        if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }
 
     private bool ShouldStartEffect()

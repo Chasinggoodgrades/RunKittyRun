@@ -694,7 +694,7 @@ public class AIController
     private float AngleDifference(float a, float b)
     {
         float diff = MathF.Abs(NormalizeAngle(a) - NormalizeAngle(b));
-        return diff;
+        return diff > MathF.PI ? 2f * MathF.PI - diff : diff;
     }
 
     /// <summary>
