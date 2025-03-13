@@ -1160,7 +1160,7 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "killunit",
-            alias: "kill",
+            alias: "kill,kl",
             group: "admin",
             argDesc: "[resolve playerID]",
             description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
