@@ -375,7 +375,7 @@ public class AIController
         }
 
         // Define the required clearance (45° in radians)
-        float requiredClearance = MathF.PI / 4; // 45°
+        float requiredClearance = 45.0f * (MathF.PI / 180); // previous was fine too, but this is more flexible
 
         // Initialize bestAngle to the original forward direction
         float bestAngle = -500f;
@@ -428,6 +428,12 @@ public class AIController
                 float diffStart = AngleDifference(candidateFromStart, forwardAngle);
                 float diffEnd = AngleDifference(candidateFromEnd, forwardAngle);
 
+                // if angle is less than requried clearance, then it is not a valid candidate
+                if (diffStart < requiredClearance && diffEnd < requiredClearance) 
+                { 
+                    continue; 
+                }
+
                 if (diffStart < bestScore)
                 {
                     bestScore = diffStart;
@@ -448,6 +454,7 @@ public class AIController
         }
 
         // Update the forward direction to the chosen dodge direction.
+        // Console.WriteLine(bestAngle);
         (float X, float Y) forwardDirection2 = (MathF.Cos(bestAngle), MathF.Sin(bestAngle));
 
         cleanArrays();
