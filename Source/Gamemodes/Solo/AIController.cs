@@ -199,7 +199,18 @@ public class AIController
     {
         var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
         var laneBounds = WolfArea.WolfAreas[currentSafezoneId].Rectangle;
-        return laneBounds.Contains(x, y);
+
+        // Assume a vertical lane if its width is less than its height.
+        if (laneBounds.Width < laneBounds.Height)
+        {
+            // Vertical lane: check only the y coordinate.
+            return (x >= laneBounds.Left) && (x <= laneBounds.Right);
+        }
+        else
+        {
+            // Horizontal lane: check only the x coordinate.
+            return (y >= laneBounds.Bottom) && (y <= laneBounds.Top);
+        }
     }
 
     private void IssueOrder(string command, float x, float y, bool isDodge)
@@ -268,12 +279,12 @@ public class AIController
         foreach (Wolf wolf in wolves)
         {
             float MIN_TOTAL_BLOCKED_ANGLE = 45.0f * (MathF.PI / 180);
-            float MAX_TOTAL_BLOCKED_ANGLE = 180.0f * (MathF.PI / 180);
+            float MAX_TOTAL_BLOCKED_ANGLE = 270.0f * (MathF.PI / 180);
 
             if (!wolf.IsWalking)
             {
                 MIN_TOTAL_BLOCKED_ANGLE = 30.0f * (MathF.PI / 180);
-                MAX_TOTAL_BLOCKED_ANGLE = 120.0f * (MathF.PI / 180);
+                MAX_TOTAL_BLOCKED_ANGLE = 150.0f * (MathF.PI / 180);
             }
 
             float dx = wolf.Unit.X - this.kitty.Unit.X;
@@ -325,15 +336,14 @@ public class AIController
         // loop over all angles
         for (float angle = 0; angle < maxAngle; angle += step)
         {
-            float x = this.kitty.Unit.X + DODGE_DISTANCE * MathF.Cos(angle);
-            float y = this.kitty.Unit.Y + DODGE_DISTANCE * MathF.Sin(angle);
+            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.1f)) * MathF.Cos(angle);
+            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.1f)) * MathF.Sin(angle);
 
             if (notInLaneAngle == -500f && !IsWithinLaneBounds(x, y))
             {
                 notInLaneAngle = angle;
             }
-
-            if (notInLaneAngle != -500f && notInLaneAngle2 == -500f && IsWithinLaneBounds(x, y))
+            else if (notInLaneAngle != -500f && notInLaneAngle2 == -500f && IsWithinLaneBounds(x, y))
             {
                 notInLaneAngle2 = angle;
                 break;
