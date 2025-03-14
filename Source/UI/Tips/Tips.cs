@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 public static class Tips
 {
     private static List<string> TipsList = new List<string>();

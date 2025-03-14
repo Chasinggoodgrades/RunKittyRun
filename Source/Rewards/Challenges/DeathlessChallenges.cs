@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class DeathlessChallenges
@@ -64,12 +63,15 @@ public static class DeathlessChallenges
                     case DifficultyLevel.Normal:
                         NormalDeathlessAward(player);
                         break;
+
                     case DifficultyLevel.Hard:
                         HardDeathlessAward(player);
                         break;
+
                     case DifficultyLevel.Impossible:
                         ImpossibleDeathlessAward(player);
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }*/

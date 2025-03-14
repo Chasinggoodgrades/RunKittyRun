@@ -1,11 +1,12 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
     public new const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private trigger SummonTrigger;
     private trigger TeleTrigger;
     private timer KillTimer;

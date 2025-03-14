@@ -2,6 +2,7 @@
 using System;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
+
 namespace Source
 {
     public static class Program
@@ -18,6 +19,7 @@ namespace Source
                 Start();
             });
         }
+
         private static void Start()
         {
             try
@@ -42,7 +44,6 @@ namespace Source
                 Setup.Initialize();
                 BarrierSetup.Initialize();
                 Quests.Initialize();
-
             }
             catch (Exception ex)
             {

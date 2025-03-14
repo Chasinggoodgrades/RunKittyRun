@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class MissingShoe
 {
     private static trigger TimerEvent;
@@ -50,5 +51,4 @@ public static class MissingShoe
         SpawnChampions.Fieryfox2023.AddItem(Shoe);
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.RedTendrils));
     }
-
 }

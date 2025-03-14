@@ -10,6 +10,7 @@ public static class Shops
     private static List<int> KittyVendorItemList;
     private static Dictionary<unit, List<VendorItem>> VendorsItemList;
     private static trigger Trigger;
+
     public static void Initialize()
     {
         KittyVendors = group.Create();
@@ -50,7 +51,6 @@ public static class Shops
         foreach (var item in items)
         {
             vendorList.Add(new VendorItem(vendor, item, 2, 60));
-
         }
         VendorsItemList.Add(vendor, vendorList);
         RefreshItemsOnVendor(vendor);
@@ -73,7 +73,7 @@ public static class Shops
     }
 
     /// <summary>
-    /// These items can go to the misc shop if we want space for constant items. 
+    /// These items can go to the misc shop if we want space for constant items.
     /// </summary>
     private static void StandardModeItems()
     {
@@ -116,7 +116,7 @@ public static class Shops
         RefreshItemsOnVendor(vendor);
     }
 
-    class VendorItem
+    private class VendorItem
     {
         public unit Vendor { get; set; }
         public int Item { get; set; }

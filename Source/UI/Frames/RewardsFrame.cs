@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class RewardsFrame
 {
     public static framehandle RewardFrame;
@@ -81,6 +82,7 @@ public static class RewardsFrame
         }
         return count;
     }
+
     private static void InitializePanels(string name, float colCount)
     {
         var y = -Padding;
@@ -109,7 +111,7 @@ public static class RewardsFrame
         panel.SetPoint(framePoint1, x, y, parent, framePoint2);
         panel.SetSize(width, height);
 
-        // title above each panel 
+        // title above each panel
         var panelTitle = framehandle.Create("TEXT", "RewardPanelTitle", panel, "", 0);
         panelTitle.SetPoint(framepointtype.TopLeft, 0, Padding, panel, framepointtype.TopLeft);
         panelTitle.Text = title;
@@ -298,6 +300,4 @@ public static class RewardsFrame
             MultiboardUtil.MinMultiboards(player, true);
         }
     }
-
-
 }

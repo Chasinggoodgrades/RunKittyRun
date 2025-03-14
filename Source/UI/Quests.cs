@@ -6,6 +6,7 @@ public static class Quests
     private static quest ContributorsQuest = quest.Create();
     private static quest LeaderboardsQuest = quest.Create();
     private static quest HowToPlay = quest.Create();
+
     public static void Initialize()
     {
         CreateHowToPlayQuest();
@@ -53,7 +54,4 @@ public static class Quests
             $"\n\n{Colors.COLOR_YELLOW}This game has 5 rounds, each getting harder as the game goes on. Teamwork and quick reflexes are the key to success.{Colors.COLOR_RESET}" +
             $"\n\n{Colors.COLOR_YELLOW}Once players hit level 10, they should acquire a relic from the shop {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}(Hotkey: =).{Colors.COLOR_RESET}{Colors.COLOR_YELLOW} Good luck and have fun!{Colors.COLOR_RESET}");
     }
-
-
-
 }

@@ -73,7 +73,6 @@ public static class FandF
         var player = u.Owner;
         player.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:|r |cffffff00Greetings, fellow feline! What paws you hold there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r");
-
     }
 
     private static void BloodVialQuest(unit u)

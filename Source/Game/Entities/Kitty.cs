@@ -31,8 +31,10 @@ public class Kitty
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public timer DiscoTimer { get; set; }
+
     // Camera
     public timer SpinCamTimer { get; set; }
+
     public float SpinCamSpeed { get; set; } = 0;
     public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
@@ -131,6 +133,7 @@ public class Kitty
             throw;
         }
     }
+
     private void InitData()
     {
         try
@@ -148,6 +151,7 @@ public class Kitty
             throw;
         }
     }
+
     private void SpawnEffect()
     {
         WCSharp.Shared.Data.Point spawnCenter = RegionList.SpawnRegions[Player.Id].Center;

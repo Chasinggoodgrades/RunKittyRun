@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-
 public static class CustomStatFrame
 {
     private static int Count = 0;
@@ -96,7 +95,6 @@ public static class CustomStatFrame
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconGold", 5), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconHero", 6), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
-
 
         trigger trig = trigger.Create();
         trig.AddAction(() =>
@@ -234,21 +232,29 @@ public static class CustomStatFrame
         BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
         BlzFrameSetText(Stats[2].Text, $"{Deaths} {Colors.COLOR_RED}{GetPlayerDeaths(selectedUnit)}|r");
     }
+
     private static string GetPlayerTeamName(unit u)
     {
         return Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team) ? team.TeamColor : $"{Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
+
     private static int GetPlayerGold(unit u) => u.Owner.Gold;
+
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundProgress(Globals.ROUND).ToString("F2");
+
     private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Saves;
+
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Deaths;
+
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.SaveStreak;
+
     private static string GetPlayerTime(unit u) => Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundTime(Globals.ROUND));
+
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
+
     private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths;
+
     private static int GetGameTotalSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalSaves;
+
     private static int GetGameTotalDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalDeaths;
-
-
-
 }

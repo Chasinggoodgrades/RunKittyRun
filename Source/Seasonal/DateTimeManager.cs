@@ -1,5 +1,6 @@
 ﻿using System;
 using WCSharp.DateTime;
+
 public static class DateTimeManager
 {
     public static WcDateTime DateTime { get; private set; }
@@ -16,6 +17,4 @@ public static class DateTimeManager
         DateTime = time;
         CurrentMonth = DateTime.Month;
     }
-
-
 }

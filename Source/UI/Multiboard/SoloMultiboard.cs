@@ -229,6 +229,7 @@ public static class SoloMultiboard
                 roundTimes[3] = gameData.RoundFourSolo;
                 roundTimes[4] = gameData.RoundFiveSolo;
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return new float[5];
@@ -251,5 +252,4 @@ public static class SoloMultiboard
             OverallBoard.IsDisplayed = true;
         }
     }
-
 }

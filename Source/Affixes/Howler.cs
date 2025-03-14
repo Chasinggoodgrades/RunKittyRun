@@ -68,5 +68,4 @@ public class Howler : Affix
     }
 
     private static float GetRandomHowlTime() => GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
-
 }

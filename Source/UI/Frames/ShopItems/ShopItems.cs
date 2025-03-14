@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using static WCSharp.Api.Common;
 
-public enum ShopItemType { Relic, Reward, Misc }
+public enum ShopItemType
+{ Relic, Reward, Misc }
 
 public class ShopItem
 {

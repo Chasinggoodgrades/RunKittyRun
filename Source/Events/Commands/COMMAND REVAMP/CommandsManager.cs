@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Commands
 {
     public string Name { get; set; }
@@ -15,6 +16,7 @@ public class Commands
 public static class CommandsManager
 {
     private static Dictionary<string, Commands> AllCommands = new();
+
     public static void RegisterCommand(string name, string alias, string group, string argDesc, string description, Action<player, string[]> action)
     {
         var command = new Commands
@@ -38,7 +40,6 @@ public static class CommandsManager
     {
         return AllCommands.TryGetValue(name, out var command) ? command : null;
     }
-
 
     private static List<Kitty> ResolvePlayerIdArray(string arg)
     {
@@ -138,7 +139,6 @@ public static class CommandsManager
                         commands.Add(cmd);
                     }
                 }
-
             }
         }
         if (commands.Count == 0)

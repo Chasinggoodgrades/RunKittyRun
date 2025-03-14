@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class OldsaveSync
 {
     private const string SYNC_PREFIX = "S";
@@ -39,6 +40,5 @@ public static class OldsaveSync
         }
         savecode.SetRewardValues(SavePlayer);
         MultiboardUtil.RefreshMultiboards();
-
     }
 }

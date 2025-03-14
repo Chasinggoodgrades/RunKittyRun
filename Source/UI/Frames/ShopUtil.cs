@@ -2,7 +2,6 @@
 
 public static class ShopUtil
 {
-
     public static bool IsPlayerInWolfLane(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
@@ -15,5 +14,4 @@ public static class ShopUtil
         }
         return false;
     }
-
 }

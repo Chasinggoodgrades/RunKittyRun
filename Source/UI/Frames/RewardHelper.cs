@@ -22,14 +22,17 @@ public class RewardHelper
             case RewardType.Hats:
                 Hats.Add(reward);
                 break;
+
             case RewardType.Wings:
                 Wings.Add(reward);
                 break;
+
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
                 Trails.Add(reward);
                 break;
+
             case RewardType.Auras:
                 Auras.Add(reward);
                 break;
@@ -50,7 +53,6 @@ public class RewardHelper
         var reward = RewardsManager.Rewards.Find(r => r.Name == awardName);
         return reward != null ? GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name) : -1;
     }
-
 
     /// <summary>
     /// Gets the value of a nested property for GameAwardsSorted.

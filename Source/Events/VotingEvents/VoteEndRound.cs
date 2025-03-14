@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class VoteEndRound
 {
     public static bool VoteActive { get; private set; }

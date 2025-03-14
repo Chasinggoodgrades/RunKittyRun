@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -73,9 +74,9 @@ public static class NamedWolves
                 ExplodingWolfDesc();
             });
         }
-        catch
+        catch (Exception e)
         {
-            Logger.Warning("Error in KillExplodingWolf");
+            Logger.Warning($"Error in KillExplodingWolf {e.Message}");
         }
     }
 
@@ -91,9 +92,9 @@ public static class NamedWolves
             ExplodingWolfNameTag.SetText(ExplodingWolf.Unit.Name, 0.015f);
             DNTNamedWolves.Add(ExplodingWolf);
         }
-        catch
+        catch (Exception e)
         {
-            Logger.Warning("Error in ExplodingWolfDesc");
+            Logger.Warning($"Error in ExplodingWolfDesc {e.Message}");
         }
     }
 
@@ -122,5 +123,4 @@ public static class NamedWolves
     {
         Colors.SetUnitToVertexColor(u, playerID);
     }
-
 }

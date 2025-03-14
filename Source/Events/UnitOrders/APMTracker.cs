@@ -10,6 +10,7 @@ public class APMTracker
 
     private int TotalActions;
     private float TimeOutsideSafeZones;
+
     // private (float X, float Y) LastPosition;
     private Kitty Kitty { get; set; }
 
@@ -92,6 +93,4 @@ public class APMTracker
 
             return LastOrderLocation[unit];
         }*/
-
 }
-

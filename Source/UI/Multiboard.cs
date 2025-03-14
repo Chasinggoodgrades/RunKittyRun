@@ -9,6 +9,7 @@ public static class Multiboard
     private static multiboard SoloOverallStatsMB;
     private static multiboard SoloBestTimesMB;
     private static trigger ESCTrigger;
+
     public static void Initialize()
     {
         SetupMultiboards();
@@ -21,9 +22,11 @@ public static class Multiboard
             case "Standard":
                 StandardMultiboard.Initialize();
                 break;
+
             case "Tournament Solo":
                 SoloMultiboard.Initialize();
                 break;
+
             case "Tournament Team":
                 TeamsMultiboard.Initialize();
                 break;

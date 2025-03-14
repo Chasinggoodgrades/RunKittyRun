@@ -2,7 +2,6 @@
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-
 public static class CommandHandler
 {
     private static trigger DebugCmdTrigger = trigger.Create();
@@ -70,11 +69,8 @@ public static class CommandHandler
         }
     }
 
-
-
     private static bool GamemodeSetting(string chatString)
     {
-
         var player = @event.Player;
         var command = chatString.ToLower();
 
@@ -96,4 +92,3 @@ public static class CommandHandler
         }
     }
 }
-

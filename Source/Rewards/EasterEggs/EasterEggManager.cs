@@ -9,5 +9,4 @@
         CrystalOfFire.Initialize();
         UrnSoul.Initialize();
     }
-
 }

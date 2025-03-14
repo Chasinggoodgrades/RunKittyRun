@@ -71,7 +71,6 @@ public class WolfPoint
         }
     }
 
-
     public void Cleanup()
     {
         try
@@ -123,7 +122,7 @@ public class WolfPoint
         TriggerAddCondition(IsPausedTrigger, Condition(() => GetIssuedOrderId() == AttackOrderID));
         TriggerAddCondition(IsPausedTrigger, Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL));
 
-        // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order. 
+        // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
         TriggerAddAction(IsPausedTrigger, () =>
         {
             try
@@ -140,11 +139,11 @@ public class WolfPoint
     }
 }
 
-
 public class WolfVisitPoints : IDestroyable
 {
     public float X { get; set; }
     public float Y { get; set; }
+
     public WolfVisitPoints()
     {
     }

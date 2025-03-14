@@ -1,5 +1,4 @@
-﻿using Source;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
@@ -44,8 +43,11 @@ public class Savecode
         Digits = 0.0;
         Bignum = new BigNum(BASE());
     }
+
     public int Decode(int max) => Bignum.DivSmall(max + 1);
+
     public void Clean() => Bignum.Clean();
+
     public void FromString(string s)
     {
         var i = s.Length - 1;
@@ -61,6 +63,7 @@ public class Savecode
             i--;
         }
     }
+
     public int Hash()
     {
         var hash = 0;
@@ -246,6 +249,7 @@ public class Savecode
     }
 
     private static int BASE() => OldSavesHelper.charset.Length;
+
     private static int HASHN() => 5000;
 
     private static int Modb(int x)
@@ -254,6 +258,4 @@ public class Savecode
         else if (x < 0) return x + BASE();
         return x;
     }
-
-
 }

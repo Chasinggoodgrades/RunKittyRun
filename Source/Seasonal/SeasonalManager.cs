@@ -47,9 +47,11 @@ public static class SeasonalManager
             /*            case 10:
                             Season = HolidaySeasons.Halloween;
                             break;
+
                         case 4:
                             Season = HolidaySeasons.Easter;
                             break;
+
                         case 2:
                             Season = HolidaySeasons.Valentines;
                             break;*/
@@ -93,6 +95,7 @@ public static class SeasonalManager
             case HolidaySeasons.Christmas:
                 BlzChangeMinimapTerrainTex("snowMap.blp");
                 break;
+
             case HolidaySeasons.None:
                 BlzChangeMinimapTerrainTex("war3mapMap.blp");
                 break;

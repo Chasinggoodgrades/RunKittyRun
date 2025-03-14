@@ -106,5 +106,4 @@ public static class Gamemode
             Team.Initialize();
         }
     }
-
 }

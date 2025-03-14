@@ -146,7 +146,6 @@ public static class ShopFrame
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
         UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
-
     }
 
     private static void LoadItemsIntoPanels()
@@ -359,6 +358,7 @@ public static class ShopFrame
                     AwardManager.GiveReward(player, selectedItem.Award);
                     ReduceGold(player, selectedItem.Cost);
                     break;
+
                 case ShopItemType.Misc:
                     AddItem(player, selectedItem.ItemID);
                     ReduceGold(player, selectedItem.Cost);
@@ -384,7 +384,6 @@ public static class ShopFrame
             if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
             if (selectedItem.Type == ShopItemType.Relic)
             {
-
                 if (!kitty.Alive || kitty.ProtectionActive)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
@@ -415,17 +414,22 @@ public static class ShopFrame
             Utility.RemoveItemFromUnit(kitty.Unit, itemID);
             player.Gold += selectedItem.Cost;
         }
-
     }
 
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
+
     private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
+
     private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
+
     private static bool CanSellRelic(unit unit) => unit.HeroLevel >= Relic.RelicSellLevel;
+
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
+
     public static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
+
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
     private static void SetRewardsFrameHotkey()

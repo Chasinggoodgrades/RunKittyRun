@@ -13,7 +13,6 @@ public class SaveManager
         syncSaveLoad = SyncSaveLoad.Instance;
         foreach (var player in Globals.ALL_PLAYERS) SaveData.Add(player, null);
         LoadAll();
-
     }
 
     public static void Initialize()

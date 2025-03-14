@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class ItemStacker
 {
     private static trigger PickupTrigger;
     private static List<int> StackableItemIDs;
+
     public static void Initialize()
     {
         RegisterItemList();

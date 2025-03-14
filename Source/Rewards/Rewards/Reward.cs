@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 /// <summary>
 /// Reward Class and Enums
 /// * Enums are the different types of rewards. They help designate which category the reward should be in.
@@ -18,6 +19,7 @@ public enum RewardType
     Hats,
     Wings,
 }
+
 public class Reward
 {
     public string Name { get; }
@@ -71,7 +73,7 @@ public class Reward
     }
 
     /// <summary>
-    /// Applies the reward and cosmetic appearance to the player. 
+    /// Applies the reward and cosmetic appearance to the player.
     /// If the <paramref name="setData"/> parameter is true, it also alters the saved data.
     /// </summary>
     /// <param name="player">The player object to which the reward will be applied.</param>
@@ -110,20 +112,25 @@ public class Reward
             case RewardType.Wings:
                 activeRewards.ActiveWings = effectInstance;
                 break;
+
             case RewardType.Hats:
                 activeRewards.ActiveHats = effectInstance;
                 break;
+
             case RewardType.Auras:
                 activeRewards.ActiveAura = effectInstance;
                 break;
+
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
                 activeRewards.ActiveTrail = effectInstance;
                 break;
+
             case RewardType.Tournament:
                 SetTournamentReward(player, effectInstance, true);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
@@ -138,28 +145,32 @@ public class Reward
                 var x = activeRewards.ActiveWings;
                 GC.RemoveEffect(ref x);
                 break;
+
             case RewardType.Hats:
                 var y = activeRewards.ActiveHats;
                 GC.RemoveEffect(ref y);
                 break;
+
             case RewardType.Auras:
                 var z = activeRewards.ActiveAura;
                 GC.RemoveEffect(ref z);
                 break;
+
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
                 var t = activeRewards.ActiveTrail;
                 GC.RemoveEffect(ref t);
                 break;
+
             case RewardType.Tournament:
                 SetTournamentReward(player, null, false);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
         }
     }
-
 
     private bool SetWindwalk(player player)
     {
@@ -196,25 +207,32 @@ public class Reward
             case RewardType.Skins:
                 saveData.SelectedData.SelectedSkin = Name;
                 break;
+
             case RewardType.Windwalks:
                 saveData.SelectedData.SelectedWindwalk = Name;
                 break;
+
             case RewardType.Auras:
                 saveData.SelectedData.SelectedAura = Name;
                 break;
+
             case RewardType.Hats:
                 saveData.SelectedData.SelectedHat = Name;
                 break;
+
             case RewardType.Wings:
                 saveData.SelectedData.SelectedWings = Name;
                 break;
+
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
                 saveData.SelectedData.SelectedTrail = Name;
                 break;
+
             case RewardType.Tournament:
                 break;
+
             default:
                 Logger.Critical("Error with selected data");
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -261,33 +279,42 @@ public class Reward
         return true;
     }
 
-
     public string SetRewardTypeSorted()
     {
         switch (Type)
         {
             case RewardType.Auras:
                 return new Auras().GetType().Name;
+
             case RewardType.Windwalks:
                 return new Windwalks().GetType().Name;
+
             case RewardType.Skins:
                 return new Skins().GetType().Name;
+
             case RewardType.Trails:
                 return new Trails().GetType().Name;
+
             case RewardType.Deathless:
                 return new Deathless().GetType().Name;
+
             case RewardType.Nitros:
                 return new Nitros().GetType().Name;
+
             case RewardType.Hats:
                 return new Hats().GetType().Name;
+
             case RewardType.Wings:
                 return new Wings().GetType().Name;
+
             default:
                 return new Tournament().GetType().Name;
         }
     }
-    public string SystemRewardName() => Name.ToString();
-    public string GetRewardName() => BlzGetAbilityTooltip(AbilityID, 0);
-    public int GetAbilityID() => AbilityID;
 
+    public string SystemRewardName() => Name.ToString();
+
+    public string GetRewardName() => BlzGetAbilityTooltip(AbilityID, 0);
+
+    public int GetAbilityID() => AbilityID;
 }

@@ -8,7 +8,7 @@ public static class ExecuteLua
     {
         player.DisplayTextTo($"Args: {args}");
         var func = Lua.Load(
-            @"return function() 
+            @"return function()
             local self = Globals.ALL_KITTIES:get(GetTriggerPlayer())
             local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
             "
@@ -30,7 +30,6 @@ public static class ExecuteLua
         }
         else player.DisplayTextTo("Syntax Error");
     }
-
 }
 
 namespace DebugUtilities

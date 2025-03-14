@@ -1,6 +1,5 @@
 ﻿using WCSharp.Api;
 
-
 /*
 SHOW PERSONAL BESTS FOR:
 kibble collected in a game
@@ -18,6 +17,7 @@ and all other stats i'd say. so streak/     saves/deaths in 1 game / w/e other s
 public static class PersonalBestAwarder
 {
     public static float TestOne = 0.0f;
+
     public static void BeatRecordTime(player player)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;

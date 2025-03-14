@@ -13,6 +13,7 @@
 
     // Tendrils Wings
     public int RedTendrils { get; set; }
+
     public int WhiteTendrils { get; set; }
     public int DivinityTendrils { get; set; }
     public int GreenTendrils { get; set; }

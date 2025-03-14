@@ -81,7 +81,6 @@ public static class Progress
     {
         try
         {
-
             if (RegionList.PathingPoints == null || RegionList.PathingPoints.Length == 0)
             {
                 Logger.Warning("PathingPoints list is null or empty.");

@@ -38,7 +38,6 @@ public class Wolf
 
     public bool IsWalking { get; set; } = false;
 
-
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
@@ -54,8 +53,6 @@ public class Wolf
         {
             wolfArea.Wolves.Add(this);
         }
-
-
     }
 
     /// <summary>
@@ -244,6 +241,7 @@ public class Wolf
     }
 
     #region AFFIXES
+
     public void AddAffix(Affix affix)
     {
         Affixes.Add(affix);
@@ -287,6 +285,8 @@ public class Wolf
     }
 
     public bool IsAffixed() => Affixes.Count > 0;
+
     public int AffixCount() => Affixes.Count;
-    #endregion
+
+    #endregion AFFIXES
 }

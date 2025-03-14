@@ -1,4 +1,5 @@
 ﻿using static WCSharp.Api.Common;
+
 public class Speedster : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_SPEEDSTER;

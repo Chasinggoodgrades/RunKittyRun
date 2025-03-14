@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class UrnSoul
 {
     private static rect[] UrnRegions { get; set; }
@@ -27,7 +28,7 @@ public static class UrnSoul
     {
         var u = unit.Create(player.NeutralAggressive, UnitType, 0, 0, 0);
         u.HeroName = Name;
-        u.SetPathing(false); // Disable Collision 
+        u.SetPathing(false); // Disable Collision
         u.AddAbility(FourCC("Agho")); // Ghost
         u.AddAbility(FourCC("Augh")); // Shade
         return u;
@@ -129,6 +130,4 @@ public static class UrnSoul
 
         AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue));
     }
-
-
 }

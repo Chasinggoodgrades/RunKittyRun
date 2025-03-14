@@ -56,7 +56,6 @@ public static class CameraUtil
     {
         if (KomotoCamEnabled.Contains(player))
         {
-
             KomotoCamEnabled.Remove(player);
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "KomotoCam disabled!|r");
 

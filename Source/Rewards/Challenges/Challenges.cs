@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using WCSharp.Api;
+﻿using WCSharp.Api;
+
 public static class Challenges
 {
     public const int DIVINITY_TENDRILS_COUNT = 4;
@@ -160,7 +160,6 @@ public static class Challenges
             DivineWindwalk(player);
         });
     }
-
 }
 
 public class YellowLightning
@@ -170,6 +169,7 @@ public class YellowLightning
     public player Player { get; private set; }
     public timer Timer { get; private set; }
     public int SaveCount { get; private set; }
+
     public YellowLightning(player player)
     {
         Player = player;

@@ -28,7 +28,9 @@ public class KittyTime
     {
         ProgressTimer.Start(0.2f, true, () => Progress.CalculateProgress(Kitty));
     }
+
     #region Time Section
+
     public float GetRoundTime(int round)
     {
         return RoundTime.ContainsKey(round) ? RoundTime[round] : 0.0f;
@@ -69,9 +71,11 @@ public class KittyTime
         foreach (var time in RoundTime)
             TotalTime += time.Value;
     }
-    #endregion
+
+    #endregion Time Section
 
     #region Progress Section
+
     public float GetRoundProgress(int round)
     {
         return RoundProgress.ContainsKey(round) ? RoundProgress[round] : 0.0f;
@@ -90,7 +94,6 @@ public class KittyTime
             overallProgress += progress.Value;
         return overallProgress / RoundProgress.Count;
     }
-    #endregion
 
-
+    #endregion Progress Section
 }

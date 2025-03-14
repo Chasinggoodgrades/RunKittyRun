@@ -40,7 +40,6 @@ public static class PropertyEncoder
         return base64String;
     }
 
-
     private static void AppendProperties(object obj, StringBuilder jsonString)
     {
         if (obj == null)
@@ -82,5 +81,4 @@ public static class PropertyEncoder
         var jsonString = WCSharp.Shared.Base64.FromBase64(base64EncodedData.ToString());
         return jsonString;
     }
-
 }

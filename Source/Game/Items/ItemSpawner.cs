@@ -58,7 +58,7 @@ public static class ItemSpawner
 
         if (KibbleEvent.IsEventActive()) return;
 
-        foreach(var kibble in TrackKibbles)
+        foreach (var kibble in TrackKibbles)
         {
             if (kibble.Item == null) continue; // alrady been __destroyed.
             kibble.__destroy();
@@ -66,7 +66,6 @@ public static class ItemSpawner
 
         TrackKibbles.Clear();
     }
-
 
     private static void SpawnKibble()
     {
@@ -99,5 +98,4 @@ public static class ItemSpawner
             Constants.ITEM_ELIXIR
         };
     }
-
 }

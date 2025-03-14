@@ -6,6 +6,7 @@ public static class Gameover
     public static bool WinGame { get; set; } = false;
     private static float EndingTimer { get; set; } = 90.0f;
     public static bool NoEnd { get; set; } = false;
+
     public static bool GameOver()
     {
         return WinningGame() || LosingGameCheck();
@@ -97,9 +98,11 @@ public static class Gameover
             case (int)DifficultyLevel.Normal:
                 stats.NormalGames += 1;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 stats.HardGames += 1;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleGames += 1;
                 break;
@@ -115,9 +118,11 @@ public static class Gameover
             case (int)DifficultyLevel.Normal:
                 stats.NormalWins += 1;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 stats.HardWins += 1;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleWins += 1;
                 break;

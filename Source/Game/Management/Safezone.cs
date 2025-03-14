@@ -68,7 +68,6 @@ public class Safezone
         Globals.ALL_KITTIES[player].Relics.OfType<FangOfShadows>().FirstOrDefault()?.ReduceCooldownAtSafezone(Unit);
     }
 
-
     /// <summary>
     /// Resets progress zones and reached safezones to initial state.
     /// </summary>

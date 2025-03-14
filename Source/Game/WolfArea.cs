@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
+
 public class WolfArea
 {
     public static Dictionary<int, WolfArea> WolfAreas { get; } = new();

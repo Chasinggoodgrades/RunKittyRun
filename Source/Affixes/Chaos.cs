@@ -46,5 +46,4 @@ public class Chaos : Affix
         currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
         currentAffix.Apply();
     }
-
 }

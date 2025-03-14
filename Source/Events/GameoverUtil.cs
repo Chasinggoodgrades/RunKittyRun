@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using WCSharp.Api;
+
 public static class GameoverUtil
 {
     public static void SetBestGameStats()
@@ -11,9 +12,11 @@ public static class GameoverUtil
                 case (int)DifficultyLevel.Normal:
                     SetNormalGameStats(kitty.Value);
                     break;
+
                 case (int)DifficultyLevel.Hard:
                     SetHardGameStats(kitty.Value);
                     break;
+
                 case (int)DifficultyLevel.Impossible:
                     SetImpossibleGameStats(kitty.Value);
                     break;
@@ -52,6 +55,4 @@ public static class GameoverUtil
     {
         return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
     }
-
-
 }

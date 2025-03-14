@@ -79,7 +79,6 @@ public class Colors
         AddColor("peanut", 24, "|cffa56f34", playercolor.Peanut, 165, 111, 52);
     }
 
-
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
@@ -163,7 +162,7 @@ public class Colors
     }
 
     /// <summary>
-    /// Sets the unit's vertex color based on the passed parameter playerID... 
+    /// Sets the unit's vertex color based on the passed parameter playerID...
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="playerID"></param>
@@ -194,6 +193,4 @@ public class Colors
         }
         return null;
     }
-
-
 }

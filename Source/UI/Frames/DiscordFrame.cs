@@ -1,4 +1,5 @@
 ﻿using WCSharp.Api;
+
 public static class DiscordFrame
 {
     private static framehandle EditBox;
@@ -10,6 +11,7 @@ public static class DiscordFrame
     private static trigger ESCTrigger;
     private static string Link = "https://discord.gg/GSu6zkNvx5";
     private static string JoinDiscord = "|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r";
+
     public static void Initialize()
     {
         //BlzLoadTOCFile("war3mapImported\\templates.toc");
@@ -93,5 +95,4 @@ public static class DiscordFrame
         if (!@event.Player.IsLocal) return;
         EditBox.Text = Link;
     }
-
 }

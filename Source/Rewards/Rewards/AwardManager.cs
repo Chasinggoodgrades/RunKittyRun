@@ -4,7 +4,7 @@ using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 /// <summary>
-/// This class handles Awarding functionality. 
+/// This class handles Awarding functionality.
 /// </summary>
 public static class AwardManager
 {
@@ -74,7 +74,7 @@ public static class AwardManager
     }
 
     /// <summary>
-    /// Registers all gamestats for each player to earn rewards. 
+    /// Registers all gamestats for each player to earn rewards.
     /// Ex. If less than 200 saves, itll add every game stat to check periodically. to see if you've hit or gone over said value.
     /// </summary>
     public static void RegisterGamestatEvents()
@@ -186,7 +186,6 @@ public static class AwardManager
                 if (gameStat == nameof(gameStats.NormalGames) && normalPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.HardGames) && hardPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.ImpossibleGames) && impossiblePlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
-
                 else if (gameStat == nameof(gameStats.NormalWins) && normalPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.HardWins) && hardPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.ImpossibleWins) && impossiblePlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);

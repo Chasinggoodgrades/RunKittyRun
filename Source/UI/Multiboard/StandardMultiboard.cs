@@ -14,6 +14,7 @@ public static class StandardMultiboard
     private static string[] PlayerStats = new string[8];
     private static float[] RoundTimes = new float[5];
     private static List<player> PlayersList = new List<player>();
+
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
@@ -183,7 +184,6 @@ public static class StandardMultiboard
 
                 rowIndex++;
             }
-
         }
         catch (Exception ex)
         {
@@ -276,12 +276,12 @@ public static class StandardMultiboard
             rowIndex++;
         }
     }
+
     public static void UpdateOverallStatsMB()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         OverallGameStats();
     }
-
 
     public static void UpdateStandardCurrentStatsMB()
     {
@@ -307,14 +307,17 @@ public static class StandardMultiboard
                 numberOfGames = gameData.NormalGames;
                 numberOfWins = gameData.NormalWins;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 numberOfGames = gameData.HardGames;
                 numberOfWins = gameData.HardWins;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 numberOfGames = gameData.ImpossibleGames;
                 numberOfWins = gameData.ImpossibleWins;
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return (0, 0);
@@ -335,6 +338,7 @@ public static class StandardMultiboard
                 RoundTimes[3] = gameData.RoundFourNormal;
                 RoundTimes[4] = gameData.RoundFiveNormal;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 RoundTimes[0] = gameData.RoundOneHard;
                 RoundTimes[1] = gameData.RoundTwoHard;
@@ -342,6 +346,7 @@ public static class StandardMultiboard
                 RoundTimes[3] = gameData.RoundFourHard;
                 RoundTimes[4] = gameData.RoundFiveHard;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 RoundTimes[0] = gameData.RoundOneImpossible;
                 RoundTimes[1] = gameData.RoundTwoImpossible;
@@ -349,12 +354,12 @@ public static class StandardMultiboard
                 RoundTimes[3] = gameData.RoundFourImpossible;
                 RoundTimes[4] = gameData.RoundFiveImpossible;
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return RoundTimes;
         }
         return RoundTimes;
-
     }
 
     private static void ESCPressed()
@@ -377,5 +382,4 @@ public static class StandardMultiboard
             CurrentStats.IsDisplayed = true;
         }
     }
-
 }

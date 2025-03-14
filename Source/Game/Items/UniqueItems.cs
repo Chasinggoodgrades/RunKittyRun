@@ -6,6 +6,7 @@ public static class UniqueItems
 {
     private static trigger Trigger = trigger.Create();
     private static List<Uniques> UniqueList = new List<Uniques>();
+
     public static void Initialize()
     {
         try
@@ -30,12 +31,12 @@ public static class UniqueItems
             new Uniques(Constants.ITEM_MEDITATION_CLOAK, 375),
         };
     }
+
     private static void RegisterEvents()
     {
         Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.PickupItem);
         Trigger.AddAction(ItemPickup);
     }
-
 
     private static void ItemPickup()
     {

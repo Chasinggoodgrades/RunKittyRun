@@ -1,12 +1,15 @@
 ﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public class Bomber : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BOMBER; // replace with bomber ability in WE later after i make it.
     private const float EXPLOSION_RANGE = 200.0f;
+
     //private const string EXPLOSION_PATH_EFFECT = "";
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
+
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
     private timer ExplodeTimer = timer.Create();
@@ -99,6 +102,5 @@ public class Bomber : Affix
                 ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
             }
         });
-
     }
 }

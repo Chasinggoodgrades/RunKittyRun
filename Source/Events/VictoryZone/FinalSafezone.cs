@@ -1,8 +1,10 @@
 ﻿using WCSharp.Api;
+
 public static class FinalSafezone
 {
     private static trigger Trigger = trigger.Create();
     private static region Region = RegionList.SafeZones[RegionList.SafeZones.Length - 1].Region;
+
     public static void Initialize()
     {
         RegisterEvents();

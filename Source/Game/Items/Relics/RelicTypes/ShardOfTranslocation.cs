@@ -12,7 +12,7 @@ public class ShardOfTranslocation : Relic
     private static float DEFAULT_COOLDOWN = 90.0f;
     private static float CooldownReduction = 15.0f;
     private unit Owner;
-    private static new string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
+    private new static string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
     private trigger CastEventTrigger;
 
@@ -62,7 +62,6 @@ public class ShardOfTranslocation : Relic
         var currentSafezone = Globals.PLAYERS_CURRENT_SAFEZONE[player];
         try
         {
-
             if (!EligibleLocation(targetLoc, currentSafezone))
             {
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Invalid location. Must be within safezone bounds.");
@@ -148,7 +147,4 @@ public class ShardOfTranslocation : Relic
         }
         return false;
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class CrystalOfFire
 {
     private static int ItemID;
@@ -68,8 +69,10 @@ public static class CrystalOfFire
     }
 
     private static string StartMessage(player player) => $"{Colors.COLOR_YELLOW}Greetings {Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW}, you were right to come to me about this. The Crystals of Fire are a sacred anomaly within this universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r {Colors.COLOR_RED}Type {Colors.COLOR_YELLOW_ORANGE}\"yes!\"|r{Colors.COLOR_RED} to accept! (30 seconds)|r";
+
     private static string PartTwoMessage(player player) => $"{Colors.COLOR_YELLOW}It appears you're ready. Heres the formula: Bring forth to the legends of F&F: |r{Colors.COLOR_YELLOW_ORANGE}1 mysterious orb, A shot of lightning, The Crystals of Fire and a pair of Pegasus's.|r" +
         $"{Colors.COLOR_YELLOW} However, this must be done without scratches!|r {Colors.COLOR_RED}(If failed, you'll have to redo the first challenge).|r";
+
     private static void FieryfoxEvent()
     {
         if (!Utility.UnitHasItem(@event.Unit, ItemID)) return;

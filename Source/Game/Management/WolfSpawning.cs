@@ -9,6 +9,7 @@ public static class WolfSpawning
 {
     private static int[] WolvesPerRound = new int[] { 195, 264, 325, 365, 427 };
     private const int MaxWolvesPerLane = 60;
+
     public static void SpawnWolves()
     {
         var totalArea = WolfArea.TotalArea;

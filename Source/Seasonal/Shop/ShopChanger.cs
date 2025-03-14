@@ -1,6 +1,7 @@
 ﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public static class ShopChanger
 {
     private static int SantaSkin = Constants.UNIT_SANTA;
@@ -8,6 +9,7 @@ public static class ShopChanger
     private static int ValentinesSkin;
     private static int EasterSkin;
     private static int NormalSkin = Constants.UNIT_KITTY_VENDOR;
+
     public static void Initialize()
     {
         if (SeasonalManager.Season == HolidaySeasons.None) return;
@@ -21,15 +23,18 @@ public static class ShopChanger
             case HolidaySeasons.None:
                 SetShopsToSkin(NormalSkin);
                 break;
+
             case HolidaySeasons.Christmas:
                 SetShopsToSkin(SantaSkin);
                 break;
                 /*            case HolidaySeasons.Halloween:
                                 HalloweenShop();
                                 break;
+
                             case HolidaySeasons.Easter:
                                 EasterShop();
                                 break;
+
                             case HolidaySeasons.Valentines:
                                 ValentinesShop();
                                 break;*/
@@ -46,5 +51,4 @@ public static class ShopChanger
         GC.RemoveList(ref tempList);
         GC.RemoveGroup(ref tempGroup);
     }
-
 }

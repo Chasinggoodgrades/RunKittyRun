@@ -104,6 +104,4 @@ public class ShadowKitty
         this.wCollision = trigger.Create();
         this.cCollision = trigger.Create();
     }
-
-
 }

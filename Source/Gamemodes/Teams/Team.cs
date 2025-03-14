@@ -22,6 +22,7 @@ public class Team
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
     }
+
     public static void Initialize()
     {
         Globals.ALL_TEAMS = new Dictionary<int, Team>();
@@ -103,6 +104,4 @@ public class Team
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
             Utility.SimpleTimer(1.0f, () => TeamHandler.RandomHandler());
     }
-
 }
-

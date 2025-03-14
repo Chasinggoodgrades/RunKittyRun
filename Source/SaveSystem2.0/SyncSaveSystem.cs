@@ -7,6 +7,7 @@ using static WCSharp.Api.Common;
 public class SyncSaveLoad
 {
     private static SyncSaveLoad instance;
+
     public static SyncSaveLoad Instance
     {
         get
@@ -135,6 +136,7 @@ public class SyncSaveLoad
         }
     }
 }
+
 public class FilePromise
 {
     public player SyncOwner { get; }
@@ -180,6 +182,3 @@ public class FilePromise
         }
     }
 }
-
-
-

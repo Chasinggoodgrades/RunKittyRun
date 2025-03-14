@@ -5,10 +5,8 @@ using static WCSharp.Api.Common;
 
 namespace Source.Init
 {
-
     public static class Setup
     {
-
         private static float timeToChoose = 0.0f;
         private static timer gameModeTimer;
         private static List<player> wolfPlayers { get; set; } = new List<player> { player.NeutralExtra, player.NeutralVictim, player.NeutralAggressive, player.NeutralPassive };
@@ -99,7 +97,6 @@ namespace Source.Init
                 FirstPersonCameraManager.Initialize();
                 Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
 
-
                 for (int i = 0; i < GetBJMaxPlayers(); i++)
                 {
                     if (Player(i).SlotState != playerslotstate.Playing)
@@ -114,7 +111,6 @@ namespace Source.Init
                 throw;
             }
         }
-
 
         public static void GetActivePlayers()
         {

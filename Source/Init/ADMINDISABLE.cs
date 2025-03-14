@@ -1,6 +1,7 @@
 ﻿public static class ADMINDISABLE
 {
     public static bool AdminOnly { get; private set; } = false; // enable if restricted to admins/VIPs only.
+
     public static bool AdminsGame()
     {
         if (!AdminOnly) return true;

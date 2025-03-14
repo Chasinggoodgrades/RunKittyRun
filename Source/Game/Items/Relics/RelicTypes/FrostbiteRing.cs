@@ -2,10 +2,11 @@
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    public static new int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public new static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
@@ -13,7 +14,7 @@ public class FrostbiteRing : Relic
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
     private static float SLOW_DURATION = 5.0f;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
     private trigger Trigger;
 
@@ -138,6 +139,4 @@ public class FrostbiteRing : Relic
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
-
-
 }

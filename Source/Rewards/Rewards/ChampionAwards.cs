@@ -21,5 +21,4 @@ public static class ChampionAwards
         AwardManager.GiveReward(player, nameof(awards.VioletWings), false);
         AwardManager.GiveReward(player, nameof(awards.PenguinSkin), false);
     }
-
 }

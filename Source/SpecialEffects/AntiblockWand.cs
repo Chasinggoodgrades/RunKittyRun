@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
+
 public static class AntiblockWand
 {
     private static trigger CastEvent;
@@ -40,7 +41,6 @@ public static class AntiblockWand
             var wolfUnit = Globals.ALL_WOLVES[wolf];
             wolfUnit.StartWandering(true);
         }
-
 
         GC.RemoveGroup(ref wolvesInArea);
         GC.RemoveList(ref list);

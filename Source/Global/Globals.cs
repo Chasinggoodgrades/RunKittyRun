@@ -18,10 +18,12 @@ public static class Globals
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==" };
+
     public static readonly string[] CHAMPIONS =
         { "Aches#1817", "Fieryfox#21640", "Qoz#11803", "BranFlake64#1127", "BranFlake#1127",
         "Balmydrop#1737", "udo#11673", "MrGheed#1831", "Local Player", "Stan#22399",
         "Omniology#11850", "Danger#24279"};
+
     public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
     public static timer GAME_TIMER = timer.Create();
     public static List<player> ALL_PLAYERS = new List<player>();
@@ -42,6 +44,7 @@ public static class Globals
     public static Dictionary<player, Team> PLAYERS_TEAMS;
     public static Dictionary<Team, string> TEAM_PROGRESS;
     public static Dictionary<player, float> PLAYER_PROGRESS;
+
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
         {
             // Round                         // Lane ,  // # Wolves (10% for first 6 lanes, 5% for others)
@@ -64,6 +67,4 @@ public static class Globals
         { 4, new Dictionary<int, int> { { 0, 5 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } },
         { 5, new Dictionary<int, int> { { 0, 5 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 0 }, { 7, 0 }, { 8, 0 }, { 9, 0 }, { 10, 0 }, { 11, 0 }, { 12, 0 }, { 13, 0 }, { 14, 0 }, { 15, 0 }, { 16, 0 } } }
     };*/
-
-
 }

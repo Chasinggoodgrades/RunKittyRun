@@ -61,7 +61,6 @@ public static class SoloPodium
         Utility.SimpleTimer(5.0f, ProcessNextPodiumAction);
     }
 
-
     private static void ProcessPodiumTypeActions()
     {
         PodiumQueue.Clear();
@@ -71,6 +70,7 @@ public static class SoloPodium
             case "Race":
                 EnqueueTopPlayerTimes();
                 break;
+
             case "Progression":
                 EnqueueTopPlayerProgress();
                 break;
@@ -85,11 +85,12 @@ public static class SoloPodium
         {
             case Time:
                 return stats.GetTotalTimeFormatted();
+
             case Progress:
                 return stats.GetOverallProgress().ToString("F2") + "%";
+
             default:
                 return "n/a";
         }
     }
-
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class NitroChallenges
 {
     private static Dictionary<int, int> NitroRoundTimes;
@@ -21,18 +22,22 @@ public static class NitroChallenges
             case (int)DifficultyLevel.Normal:
                 SetNormalNitroRoundTimes();
                 break;
+
             case (int)DifficultyLevel.Hard:
                 SetHardNitroRoundTimes();
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 SetImpossibleNitroRoundTimes();
                 break;
+
             default:
                 // Gamemode being solo / team;
                 SetNormalNitroRoundTimes();
                 break;
         }
     }
+
     private static void SetNormalNitroRoundTimes()
     {
         NitroRoundTimes.Add(1, 125); // 2:05
@@ -100,23 +105,28 @@ public static class NitroChallenges
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.Nitro));
                 if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
                 break;
+
             case 2:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroBlue));
                 if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.AzureLight));
                 break;
+
             case 3:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroRed));
                 if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.CrimsonLight));
                 break;
+
             case 4:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroGreen));
                 Challenges.ButterflyAura(player);
                 if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.EmeraldLight));
                 break;
+
             case 5:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroPurple));
                 if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
                 break;
+
             default:
                 break;
         }
@@ -143,6 +153,4 @@ public static class NitroChallenges
         Globals.ALL_KITTIES[player].CurrentStats.NitroObtained = true;
         SoundManager.PlaySpeedSound();
     }
-
-
 }

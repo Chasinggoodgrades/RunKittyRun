@@ -6,6 +6,7 @@ using static WCSharp.Api.Common;
 public static class InitCommands
 {
     public static dynamic _G;
+
     public static void InitializeCommands()
     {
         CommandsManager.RegisterCommand(
@@ -1161,6 +1162,5 @@ public static class InitCommands
                 CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
             }
         );
-
     }
 }

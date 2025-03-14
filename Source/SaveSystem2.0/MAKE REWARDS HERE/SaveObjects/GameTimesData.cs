@@ -3,6 +3,7 @@
     public NormalGameTimeData NormalGameTime { get; set; }
     public HardGameTimeData HardGameTime { get; set; }
     public ImpossibleGameTimeData ImpossibleGameTime { get; set; }
+
     public GameTimesData()
     {
         NormalGameTime = new NormalGameTimeData();
@@ -10,7 +11,6 @@
         ImpossibleGameTime = new ImpossibleGameTimeData();
     }
 }
-
 
 public class NormalGameTimeData
 {

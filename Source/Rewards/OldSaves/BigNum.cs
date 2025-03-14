@@ -17,7 +17,6 @@
         _ = (current?.Clean());
     }
 
-
     // DivSmall method
     public int DivSmall(int denom)
     {

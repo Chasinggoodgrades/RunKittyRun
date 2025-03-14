@@ -28,7 +28,6 @@ public static class RoundUtilities
         }
     }
 
-
     public static void RoundResetAll()
     {
         foreach (var kitty in Globals.ALL_KITTIES)

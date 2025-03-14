@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 
-
 public static class Standard
 {
     private static trigger KittyReachedLevelSix;
@@ -10,6 +9,7 @@ public static class Standard
     private const float ALERT_DURATION = 7.0f;
     private static List<player> HitLevel6;
     private static List<player> HitLevel10;
+
     public static void Initialize()
     {
         RoundManager.ROUND_INTERMISSION = Source.Program.Debug ? 0.0f : ROUND_INTERMISSION;

@@ -6,6 +6,7 @@ using WCSharp.Api;
 public static class TeamHandler
 {
     public static bool FreepickEnabled = false;
+
     public static void Handler(player Player, int TeamNumber)
     {
         if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && !RoundManager.GAME_STARTED && FreepickEnabled)
@@ -22,7 +23,6 @@ public static class TeamHandler
     {
         if (CanPlayerJoinTeam(Player, TeamNumber))
         {
-
             ApplyPlayerToTeam(Player, TeamNumber);
             //var timer = CreateTimer();
             //TimerStart(timer, 0.00f, false, () => { ApplyPlayerToTeam(Player, TeamNumber); DestroyTimer(timer); });
@@ -123,7 +123,6 @@ public static class TeamHandler
             new Team(TeamNumber);
         }
         return true;
-
     }
 
     private static void RemoveFromCurrentTeam(player Player)

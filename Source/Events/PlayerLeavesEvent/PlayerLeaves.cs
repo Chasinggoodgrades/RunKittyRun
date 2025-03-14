@@ -4,6 +4,7 @@ using WCSharp.Api;
 public static class PlayerLeaves
 {
     private static trigger Trigger = trigger.Create();
+
     public static void Initialize()
     {
         RegisterTrigger();
@@ -48,6 +49,5 @@ public static class PlayerLeaves
         {
             Console.WriteLine("Error in PlayerLeavesActions: " + e.Message);
         }
-
     }
 }

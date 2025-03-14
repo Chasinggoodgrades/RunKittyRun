@@ -2,6 +2,7 @@
 {
     public Wolf Unit { get; set; }
     public string Name { get; set; }
+
     public Affix(Wolf unit)
     {
         Unit = unit;
@@ -17,4 +18,3 @@
         GC.RemoveAffix(this);
     }
 }
-

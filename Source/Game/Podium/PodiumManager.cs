@@ -2,7 +2,6 @@
 
 public static class PodiumManager
 {
-
     public static Point[] PodiumSpots;
 
     public static void Initialize()
@@ -17,9 +16,11 @@ public static class PodiumManager
             case "Standard":
                 StandardPodium.BeginPodiumActions();
                 break;
+
             case "Tournament Solo":
                 SoloPodium.BeginPodiumActions();
                 break;
+
             case "Tournament Team":
                 TeamPodium.BeginPodiumActions();
                 break;

@@ -2,7 +2,6 @@
 
 public static class SeasonalAwards
 {
-
     private static HolidaySeasons Season { get; set; }
 
     public static void Initialize()

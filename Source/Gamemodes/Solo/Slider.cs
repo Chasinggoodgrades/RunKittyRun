@@ -79,7 +79,6 @@ public class Slider
     {0, 1.5f},
     };
 
-
     public Slider(Kitty kitty)
     {
         this.kitty = kitty;
@@ -138,7 +137,6 @@ public class Slider
                 // Reverse hero
                 BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
             }
-
 
             this.wasSliding = true;
             UpdateSlider();

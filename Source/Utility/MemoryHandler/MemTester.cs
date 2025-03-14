@@ -9,6 +9,7 @@ public static class MemoryHandlerTest
     {
         public string Name { get; set; }
         public int Count { get; set; }
+
         public void __destroy(bool recursive = false)
         {
             Name = null;
@@ -40,4 +41,3 @@ public static class MemoryHandlerTest
         });
     }
 }
-

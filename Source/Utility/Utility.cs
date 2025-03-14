@@ -4,7 +4,6 @@ using WCSharp.Api;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
-
 public static class Utility
 {
     /// <summary>
@@ -58,7 +57,6 @@ public static class Utility
         return Colors.ColorString(timeString, teamID);
     }
 
-
     /// <summary>
     /// Converts a float to time string tenths.
     /// No colorization.
@@ -83,7 +81,6 @@ public static class Utility
 
         return seconds < 10 ? $"{minutes}:0{seconds}" : $"{minutes}:{seconds}";
     }
-
 
     public static bool IsDeveloper(player p)
     {
@@ -273,7 +270,6 @@ public static class Utility
         e.Dispose();
     }
 
-
     /// <summary>
     /// Clears the screen of all messages for the given player.
     /// </summary>
@@ -376,5 +372,4 @@ public static class Utility
     {
         return filterfunc.Create(func);
     }
-
 }

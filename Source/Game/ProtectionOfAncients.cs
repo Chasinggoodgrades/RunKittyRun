@@ -1,10 +1,9 @@
-﻿using Source;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public static class ProtectionOfAncients
 {
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
@@ -25,7 +24,6 @@ public static class ProtectionOfAncients
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
 
-
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
@@ -34,7 +32,7 @@ public static class ProtectionOfAncients
     }
 
     /// <summary>
-    /// Gives the unit the ProtectionOfAncients Ability. 
+    /// Gives the unit the ProtectionOfAncients Ability.
     /// </summary>
     /// <param name="unit"></param>
     public static void AddProtectionOfAncients(unit unit)
@@ -140,7 +138,7 @@ public static class ProtectionOfAncients
 
     private static bool AoEEffectFilter()
     {
-        // Append units only if they're dead and a kitty circle. 
+        // Append units only if they're dead and a kitty circle.
         var unit = GetFilterUnit();
         var player = unit.Owner;
         if (unit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;

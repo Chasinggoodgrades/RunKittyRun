@@ -38,7 +38,6 @@ public static class KibbleEvent
         UpdateEventProgress();
     }
 
-
     private static void EndKibbleEvent()
     {
         EventActive = false;

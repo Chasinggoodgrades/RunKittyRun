@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
@@ -45,7 +46,6 @@ public class Blitzer : Affix
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
         Unit.Unit.SetColor(playercolor.Brown);
         base.Remove();
-
     }
 
     private void RegisterMoveTimer()
@@ -154,7 +154,6 @@ public class Blitzer : Affix
             PreBlitzerTimer.Resume();
             MoveTimer.Resume();
             Unit.IsWalking = !pause;
-
         }
     }
 }

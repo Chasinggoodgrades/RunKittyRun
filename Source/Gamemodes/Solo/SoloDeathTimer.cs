@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class SoloDeathTimer
 {
     private const float TIME_TO_REVIVE = 6.0f;

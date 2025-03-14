@@ -11,6 +11,7 @@ public static class TeamPodium
     private static string Color = Colors.COLOR_YELLOW_ORANGE;
     private const string MVP = "MVP";
     private const string MostSaves = "most saves";
+
     public static void BeginPodiumActions()
     {
         PodiumUtil.SetCameraToPodium();
@@ -72,12 +73,15 @@ public static class TeamPodium
             case "":
                 EnqueueMVPPlayer();
                 break;
+
             case MVP:
                 EnqueueTopSavesPlayer();
                 break;
+
             case MostSaves:
                 PodiumUtil.EndingGameThankyou();
                 return;
+
             default:
                 break;
         }
@@ -91,8 +95,10 @@ public static class TeamPodium
         {
             case MostSaves:
                 return stats.TotalSaves.ToString();
+
             case MVP:
                 return stats.TotalDeaths == 0 ? stats.TotalSaves.ToString("F2") + " ratio." : ((float)stats.TotalSaves / stats.TotalDeaths).ToString("F2") + " ratio";
+
             default:
                 return "n/a";
         }

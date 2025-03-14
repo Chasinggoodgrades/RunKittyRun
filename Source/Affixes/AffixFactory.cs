@@ -20,7 +20,6 @@ public static class AffixFactory
         InitLaneWeights();
     }
 
-
     public static string[] CalculateAffixes()
     {
         var affixCounts = new Dictionary<string, int>();
@@ -59,29 +58,40 @@ public static class AffixFactory
         {
             case "Speedster":
                 return new Speedster(unit);
+
             case "Unpredictable":
                 return new Unpredictable(unit);
+
             case "Fixation":
                 return new Fixation(unit);
+
             case "Frostbite":
                 return new Frostbite(unit);
+
             case "Chaos":
                 return new Chaos(unit);
+
             case "Howler":
                 return new Howler(unit);
+
             case "Blitzer":
                 return new Blitzer(unit);
+
             case "Stealth":
                 return new Stealth(unit);
+
             case "Bomber":
                 return new Bomber(unit);
+
             case "Vortex":
                 return new Vortex(unit);
+
             default:
                 Logger.Warning($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
         }
     }
+
     /// <summary>
     /// Initializes the lane weights for affix distribution.
     /// </summary>
@@ -105,11 +115,12 @@ public static class AffixFactory
         }
     }
 
-    /* summary 
+    /* summary
      * Checks if we can apply affix to Wolf type.
      * @parm unit: Wolf
      * @optional affixName: string
      */
+
     private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
         return unit.AffixCount() < MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName);
@@ -185,7 +196,6 @@ public static class AffixFactory
         }
     }
 
-
     // Conditions for affixing wolves:
     // 1. Must be in the same lane
     // 2. Must have fewer than the maximum number of affixes
@@ -202,6 +212,7 @@ public static class AffixFactory
     {
         return Difficulty.DifficultyValue != (int)DifficultyLevel.Normal;
     }
+
     public static void RemoveAllAffixes()
     {
         foreach (var affix in AllAffixes)

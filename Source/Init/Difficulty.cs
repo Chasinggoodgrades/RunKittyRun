@@ -99,10 +99,12 @@ public static class Difficulty
                 DifficultyChosen = s_NORMAL;
                 DifficultyValue = (int)DifficultyLevel.Normal;
                 break;
+
             case s_HARD:
                 DifficultyChosen = s_HARD;
                 DifficultyValue = (int)DifficultyLevel.Hard;
                 break;
+
             case s_IMPOSSIBLE:
                 DifficultyChosen = s_IMPOSSIBLE;
                 DifficultyValue = (int)DifficultyLevel.Impossible;
@@ -118,7 +120,6 @@ public static class Difficulty
             DifficultyChoosing.SetVisibility(player, false);
     }
 
-
     /// <summary>
     /// Changes the difficulty of the game to the specified difficulty.
     /// </summary>
@@ -130,17 +131,19 @@ public static class Difficulty
             case "normal":
                 SetDifficulty(s_NORMAL);
                 break;
+
             case "hard":
                 SetDifficulty(s_HARD);
                 break;
+
             case "impossible":
                 SetDifficulty(s_IMPOSSIBLE);
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}{Colors.COLOR_RESET}");
                 return false;
         }
         return true;
     }
-
 }

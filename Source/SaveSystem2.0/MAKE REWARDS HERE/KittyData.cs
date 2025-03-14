@@ -8,6 +8,7 @@
     public GameAwardsDataSorted GameAwardsSorted { get; set; }
     public GameTimesData BestGameTimes { get; set; }
     public KibbleCurrency KibbleCurrency { get; set; }
+
     public KittyData()
     {
         GameStats = new GameStatsData();

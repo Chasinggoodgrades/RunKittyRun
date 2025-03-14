@@ -87,7 +87,6 @@ public static class CollisionDetection
             var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
             circle.ReviveKitty(k);
             (k.Relics.Find(r => r is BeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
-
         });
         return k.c_Collision;
     }

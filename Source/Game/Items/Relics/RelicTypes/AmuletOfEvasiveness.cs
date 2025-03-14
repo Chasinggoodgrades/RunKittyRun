@@ -1,4 +1,5 @@
 ﻿using WCSharp.Api;
+
 public class AmuletOfEvasiveness : Relic
 {
     public const int RelicItemID = Constants.ITEM_AMULET_OF_EVASIVENESS;
@@ -6,7 +7,7 @@ public class AmuletOfEvasiveness : Relic
     public static float WINDWALK_COLLISION_DURATION = 5.0f;
     private static float AMULET_UPGRADE_COLLISION_REDUCTION = 0.01f; // 1%
     private static float AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10f; // 10%
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
     private const int RelicCost = 650;
     private static float UnitScale = 0.60f - (0.60f * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0f);
 
@@ -21,7 +22,6 @@ public class AmuletOfEvasiveness : Relic
     {
         Upgrades.Add(new RelicUpgrade(0, $"Collision reduced by 1% per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
-
     }
 
     public override void ApplyEffect(unit Unit)
@@ -91,5 +91,4 @@ public class AmuletOfEvasiveness : Relic
             t.Dispose();
         });
     }
-
 }

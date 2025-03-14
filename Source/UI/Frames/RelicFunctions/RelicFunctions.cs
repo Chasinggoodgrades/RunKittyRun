@@ -84,10 +84,13 @@ public static class RelicFunctions
     }
 
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
+
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
 
     private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
+
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
+
     private static void AddItem(player player, int itemID)
     {
         Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
@@ -123,6 +126,4 @@ public static class RelicFunctions
         }
         return false;
     }
-
-
 }

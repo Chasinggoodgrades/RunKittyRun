@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class NoKittyLeftBehind
 {
     private static int ItemID;
@@ -53,6 +54,4 @@ public static class NoKittyLeftBehind
         }
         return true;
     }
-
-
 }

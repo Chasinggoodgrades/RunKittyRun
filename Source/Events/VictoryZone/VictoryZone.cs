@@ -1,10 +1,10 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-
 public static class VictoryZone
 {
     private static trigger InVictoryArea;
+
     public static void Initialize()
     {
         InVictoryArea = trigger.Create();

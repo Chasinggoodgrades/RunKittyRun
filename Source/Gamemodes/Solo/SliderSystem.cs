@@ -1,5 +1,3 @@
 ﻿public static class SliderSystem
 {
-
-
 }

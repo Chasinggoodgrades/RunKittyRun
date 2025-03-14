@@ -6,7 +6,7 @@ public class ChronoSphere : Relic
 {
     public const int RelicItemID = Constants.ITEM_CHRONO_ORB;
     public new const int RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNChrono Orb.dds";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNChrono Orb.dds";
     private const string LocationSaveEffectPath = "war3mapImported\\ChronoLocationSave.mdx";
     private const int RelicCost = 650;
     private const float SLOW_AURA_RADIUS = 400.0f;
@@ -71,7 +71,7 @@ public class ChronoSphere : Relic
         item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
     }
 
-    // Upgrade level 1, rotating aura slow 
+    // Upgrade level 1, rotating aura slow
     private void RotatingSlowAura()
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
@@ -144,5 +144,4 @@ public class ChronoSphere : Relic
         });
         return true;
     }
-
 }

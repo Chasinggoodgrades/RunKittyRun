@@ -16,6 +16,7 @@ public static class FrameManager
     private static trigger ESCTrigger = trigger.Create();
     private static string TEXT_COLOR = Colors.COLOR_YELLOW;
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
+
     public static void Initialize()
     {
         try
@@ -198,7 +199,4 @@ public static class FrameManager
         foreach (var frame in frames)
             if (frame != currentFrame) frame.Visible = false;
     }
-
 }
-
-

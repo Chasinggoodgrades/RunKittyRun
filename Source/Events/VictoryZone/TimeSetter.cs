@@ -1,5 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
+
 public static class TimeSetter
 {
     /// <summary>
@@ -47,12 +48,15 @@ public static class TimeSetter
             case (int)DifficultyLevel.Normal:
                 roundEnum = GetNormalRoundEnum();
                 break;
+
             case (int)DifficultyLevel.Hard:
                 roundEnum = GetHardRoundEnum();
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 roundEnum = GetImpossibleRoundEnum();
                 break;
+
             default:
                 Console.WriteLine("Invalid difficulty level for GetRoundEnum");
                 return "";
@@ -81,14 +85,19 @@ public static class TimeSetter
         {
             case 1:
                 return nameof(gameTimeData.RoundOneNormal);
+
             case 2:
                 return nameof(gameTimeData.RoundTwoNormal);
+
             case 3:
                 return nameof(gameTimeData.RoundThreeNormal);
+
             case 4:
                 return nameof(gameTimeData.RoundFourNormal);
+
             case 5:
                 return nameof(gameTimeData.RoundFiveNormal);
+
             default:
                 Console.WriteLine("Invalid round number for GetNormalRoundEnum");
                 return "";
@@ -103,14 +112,19 @@ public static class TimeSetter
         {
             case 1:
                 return nameof(gameTimeData.RoundOneHard);
+
             case 2:
                 return nameof(gameTimeData.RoundTwoHard);
+
             case 3:
                 return nameof(gameTimeData.RoundThreeHard);
+
             case 4:
                 return nameof(gameTimeData.RoundFourHard);
+
             case 5:
                 return nameof(gameTimeData.RoundFiveHard);
+
             default:
                 Console.WriteLine("Invalid round number for GetHardRoundEnum");
                 return "";
@@ -125,14 +139,19 @@ public static class TimeSetter
         {
             case 1:
                 return nameof(gameTimeData.RoundOneImpossible);
+
             case 2:
                 return nameof(gameTimeData.RoundTwoImpossible);
+
             case 3:
                 return nameof(gameTimeData.RoundThreeImpossible);
+
             case 4:
                 return nameof(gameTimeData.RoundFourImpossible);
+
             case 5:
                 return nameof(gameTimeData.RoundFiveImpossible);
+
             default:
                 Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
                 return "";
@@ -147,14 +166,19 @@ public static class TimeSetter
         {
             case 1:
                 return nameof(gameTimeData.RoundOneSolo);
+
             case 2:
                 return nameof(gameTimeData.RoundTwoSolo);
+
             case 3:
                 return nameof(gameTimeData.RoundThreeSolo);
+
             case 4:
                 return nameof(gameTimeData.RoundFourSolo);
+
             case 5:
                 return nameof(gameTimeData.RoundFiveSolo);
+
             default:
                 Console.WriteLine("Invalid round number for GetSoloRoundEnum");
                 return "";

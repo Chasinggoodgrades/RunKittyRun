@@ -58,7 +58,7 @@ public class Kibble : IDestroyable
         return trig;
     }
 
-    #endregion
+    #endregion Kibble Initialization
 
     #region Kibble Pickup Logic
 
@@ -149,7 +149,7 @@ public class Kibble : IDestroyable
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
     }
 
-    #endregion
+    #endregion Kibble Pickup Logic
 
     #region Utility Methods
 
@@ -181,6 +181,5 @@ public class Kibble : IDestroyable
         };
     }
 
-
-    #endregion
+    #endregion Utility Methods
 }

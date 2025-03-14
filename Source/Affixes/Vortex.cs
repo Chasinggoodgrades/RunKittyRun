@@ -7,8 +7,8 @@ using static WCSharp.Api.Common;
 /// -- Periodic
 /// -- Pulls Every 30 seconds
 /// -- 500 Yd Range..
-/// 
-/// -- Have to figure out a way to simulate the gravity effect smoothly.. 
+///
+/// -- Have to figure out a way to simulate the gravity effect smoothly..
 /// </summary>
 
 public class Vortex : Affix
@@ -26,7 +26,6 @@ public class Vortex : Affix
     private timer PullStart = timer.Create();
     private int Counter = 0;
     private List<unit> UnitsInRange = new List<unit>();
-
 
     public Vortex(Wolf unit) : base(unit)
     {
@@ -123,5 +122,4 @@ public class Vortex : Affix
         Counter = 0;
         Unit.Unit.SetVertexColor(150, 120, 255);
     }
-
 }

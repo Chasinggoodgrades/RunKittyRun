@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 /*public class MetaDictionary : Dictionary<string, object> // doesnt do shit >.<
 {
     public bool IsDestroyed { get; set; }
@@ -30,7 +29,6 @@ using System.Linq;
     }
 }*/
 
-
 public static class MemoryHandler
 {
     private static int numCreatedObjects;
@@ -42,7 +40,6 @@ public static class MemoryHandler
     private static readonly Dictionary<Type, Stack<List<object>>> cachedLists = new();
     private static readonly Dictionary<Type, List<object>> cachedObjects = new();
     private static readonly List<Array> cachedArrays = new();
-
 
     // BECAUSE NO setmetadata and getmetadata .. got improvise
     private static readonly Dictionary<object, Dictionary<string, object>> MetaTable = new();
@@ -67,7 +64,7 @@ public static class MemoryHandler
                 }
             }
 
-            // 
+            //
             if (MetaTable.TryGetValue(obj, out var meta))
             {
                 if (meta.TryGetValue("__debugName", out var debugNameObj) && debugNameObj is string dbgName)
@@ -141,7 +138,7 @@ public static class MemoryHandler
         cachedArrays.Add(arr);
     }
 
-    #endregion
+    #endregion Core Purge Logic
 
     #region Metatable Creation
 
@@ -176,7 +173,7 @@ public static class MemoryHandler
     private static readonly Dictionary<string, object> defaultObjectMeta = GetObjectMeta();
     private static readonly Dictionary<string, object> defaultArrayMeta = GetArrayMeta();
 
-    #endregion
+    #endregion Metatable Creation
 
     #region Public API
 
@@ -477,5 +474,5 @@ public static class MemoryHandler
         Console.WriteLine($"Most used {title}: {output}");
     }
 
-    #endregion
+    #endregion Public API
 }

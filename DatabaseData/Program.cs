@@ -1,7 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using System.Collections.Generic;
-using WCSharp.Api;
 
 public class Program
 {
@@ -118,8 +115,7 @@ public class Benchmark
     }
 }
 
-
-    public class ActiveAwards
+public class ActiveAwards
 {
     public object ActiveWings { get; set; }
     public object ActiveHats { get; set; }
@@ -127,4 +123,3 @@ public class Benchmark
     public object ActiveAura { get; set; }
     public int WindwalkID { get; set; }
 }
-

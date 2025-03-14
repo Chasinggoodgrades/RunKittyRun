@@ -80,7 +80,6 @@ public static class NitroPacer
                 return;
             }
         }
-
     }
 
     private static void NitroPacerQueueOrders()
@@ -102,5 +101,4 @@ public static class NitroPacer
     }
 
     private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;
-
 }

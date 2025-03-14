@@ -2,6 +2,7 @@
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public class RingOfSummoning : Relic
 {
     public const int RelicItemID = Constants.ITEM_SACRED_RING_OF_SUMMONING;
@@ -10,7 +11,7 @@ public class RingOfSummoning : Relic
     private static float SUMMONING_RING_RADIUS = 300.0f;
     private static float SUMMONING_COOLDOWN = 90.0f;
     private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
-    private static new string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
+    private new static string IconPath = "war3mapImported\\BTNArcaniteNightRing.blp";
     private trigger Trigger;
     private unit Owner;
     private group SummonGroup;
@@ -148,6 +149,6 @@ public class RingOfSummoning : Relic
     }
 
     private static bool KittyFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY;
-    private static bool CircleFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE;
 
+    private static bool CircleFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE;
 }

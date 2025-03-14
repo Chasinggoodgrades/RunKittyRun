@@ -64,7 +64,6 @@ public static class Votekick
         EndVotekick();
     }
 
-
     private static void EndVotekick()
     {
         VoteActive = false;
@@ -92,6 +91,7 @@ public static class Votekick
     {
         return int.TryParse(player, out int playerID) ? playerID - 1 : -1;
     }
+
     private static player GetPlayer(string player)
     {
         // doesnt quite work yet.
@@ -106,7 +106,4 @@ public static class Votekick
         }
         return null;
     }
-
-
-
 }

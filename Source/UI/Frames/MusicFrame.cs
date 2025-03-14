@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class MusicFrame
 {
     public static framehandle MusicFramehandle;
@@ -17,6 +18,7 @@ public static class MusicFrame
     private const float ButtonSpacing = 0.025f; // Space between buttons
     private const float ButtonStartX = 0.40f;  // X coordinate for button positions
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
+
     public static void Initialize()
     {
         try
@@ -168,9 +170,8 @@ public static class MusicFrame
         musicHotkeyTrigger.AddAction(() => MusicFrameActions());
     }
 
-
     /// <summary>
-    /// Whenever the player presses the music button, this function shows the frame for that player using local player. 
+    /// Whenever the player presses the music button, this function shows the frame for that player using local player.
     /// </summary>
     public static void MusicFrameActions()
     {

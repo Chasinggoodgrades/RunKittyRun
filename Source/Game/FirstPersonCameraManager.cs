@@ -112,7 +112,6 @@ public class FirstPersonCamera
                 hero.SetAnimation(0); // 0 is stand for most units
             }
         }
-
         else
         {
             if (this.lastUnitAnimation != "walk")
@@ -121,7 +120,6 @@ public class FirstPersonCamera
                 hero.SetAnimation(6); // POTM is 6 for walk
             }
         }
-
 
         Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, true);
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0);

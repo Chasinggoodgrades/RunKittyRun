@@ -66,6 +66,7 @@ public static class SoundManager
         LAST_MAN_STANDING_SOUND = sounds["LastManStandingSound"];
         FIRST_BLOOD_SOUND = sounds["FirstBloodSound"];
     }
+
     private static void SetSoundAttributes()
     {
         foreach (var sound in sounds)
@@ -75,15 +76,17 @@ public static class SoundManager
             sound.Value.SetPitch(1.0f);
         }
     }
+
     public static void PlaySpeedSound() => SPEED_SOUND.Start();
+
     public static void PlayInvulnerableSound() => INVULNERABLE_SOUND.Start();
+
     /// <summary>
     /// Plays the POTM death sound ontop of the passed unit.
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
     public static void PlayKittyDeathSound(unit Kitty)
     {
-
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
             TeamKittyDeathSound(Kitty);
         else
@@ -109,6 +112,7 @@ public static class SoundManager
         s.AttachToUnit(Kitty);
         s.Start();
     }
+
     private static void TeamKittyDeathSound(unit Kitty)
     {
         var s = KITTY_DEATH_SOUND;
