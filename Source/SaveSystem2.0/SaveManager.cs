@@ -46,7 +46,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.Save: {ex.Message}");
             throw;
         }
     }
@@ -60,7 +60,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
             throw;
         }
     }
@@ -79,7 +79,7 @@ public class SaveManager
 
     public void Load(player player)
     {
-        _ = syncSaveLoad.Read($"{SavePath}/{player.Name}.txt", player, FinishLoading());
+        syncSaveLoad.Read($"{SavePath}/{player.Name}.txt", player, FinishLoading());
     }
 
     public void LoadAll()

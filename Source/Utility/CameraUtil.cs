@@ -17,8 +17,8 @@ public static class CameraUtil
 
     public static void UnlockCamera(player player)
     {
-        _ = LockedCameras.Remove(player);
-        _ = KomotoCamEnabled.Remove(player);
+        LockedCameras.Remove(player);
+        KomotoCamEnabled.Remove(player);
         FirstPersonCameraManager.SetFirstPerson(player, false);
         if (!player.IsLocal) return;
         ResetToGameCamera(0);
@@ -57,7 +57,7 @@ public static class CameraUtil
         if (KomotoCamEnabled.Contains(player))
         {
 
-            _ = KomotoCamEnabled.Remove(player);
+            KomotoCamEnabled.Remove(player);
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "KomotoCam disabled!|r");
 
             UnlockCamera(player);

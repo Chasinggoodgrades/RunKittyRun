@@ -33,16 +33,16 @@ public static class CrystalOfFire
     private static trigger RegisterTurnInFiery()
     {
         var Trigger = trigger.Create();
-        _ = Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
-        _ = Trigger.AddAction(FieryfoxEvent);
+        Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
+        Trigger.AddAction(FieryfoxEvent);
         return Trigger;
     }
 
     private static trigger RegisterTurnInFandF()
     {
         var Trigger = trigger.Create();
-        _ = Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
-        _ = Trigger.AddAction(FandFEvent);
+        Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
+        Trigger.AddAction(FandFEvent);
         return Trigger;
     }
 
@@ -51,9 +51,9 @@ public static class CrystalOfFire
         var Trigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = Trigger.RegisterPlayerChatEvent(player, "yes!", false);
+            Trigger.RegisterPlayerChatEvent(player, "yes!", false);
         }
-        _ = Trigger.AddAction(AcceptedQuest);
+        Trigger.AddAction(AcceptedQuest);
         return Trigger;
     }
 
@@ -81,7 +81,7 @@ public static class CrystalOfFire
             // 30 seconds to accept the quest.
             Utility.SimpleTimer(30.0f, () =>
             {
-                if (QuestEligible.Contains(player)) _ = QuestEligible.Remove(player);
+                if (QuestEligible.Contains(player)) QuestEligible.Remove(player);
             });
         }
         else if (GetDeathAttempts(player) == -1)
@@ -100,7 +100,7 @@ public static class CrystalOfFire
         DeathAttempts[player] = -1;
         Utility.ClearScreen(player);
         player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r");
-        _ = QuestEligible.Remove(player);
+        QuestEligible.Remove(player);
     }
 
     private static void FandFEvent()

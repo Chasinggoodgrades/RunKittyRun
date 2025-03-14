@@ -13,9 +13,9 @@ public static class Utility
     /// <param name="u"></param>
     public static void MakeUnitLocust(unit u)
     {
-        _ = u.AddAbility(FourCC("Aloc"));
+        u.AddAbility(FourCC("Aloc"));
         ShowUnit(u, false);
-        _ = u.RemoveAbility(FourCC("Aloc"));
+        u.RemoveAbility(FourCC("Aloc"));
         ShowUnit(u, true);
     }
 
@@ -294,7 +294,7 @@ public static class Utility
         {
             var item = UnitItemInSlot(Unit, i);
             if (item != null)
-                _ = UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
+                UnitDropItemPoint(Unit, item, Unit.X, Unit.Y);
         }
     }
 
@@ -325,13 +325,13 @@ public static class Utility
         {
             if (i > 0 && char.IsUpper(awardName[i]))
             {
-                _ = stringBuilder.Append(' ');
+                stringBuilder.Append(' ');
             }
-            _ = stringBuilder.Append(awardName[i]);
+            stringBuilder.Append(awardName[i]);
         }
 
         var s = stringBuilder.ToString();
-        _ = stringBuilder.Clear();
+        stringBuilder.Clear();
         return s;
     }
 
@@ -345,7 +345,7 @@ public static class Utility
         PlayerLeaves.TeamRemovePlayer(player);
         Globals.ALL_KITTIES[player].Dispose();
         Globals.ALL_CIRCLES[player].Dispose();
-        _ = Globals.ALL_PLAYERS.Remove(player);
+        Globals.ALL_PLAYERS.Remove(player);
         FloatingNameTag.PlayerNameTags[player].Dispose();
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();

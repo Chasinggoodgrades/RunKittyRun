@@ -178,7 +178,7 @@ public class Colors
         StringBuilder combinedColors = new StringBuilder();
 
         foreach (var color in ColorManager)
-            _ = combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
+            combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
 
         player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
     }

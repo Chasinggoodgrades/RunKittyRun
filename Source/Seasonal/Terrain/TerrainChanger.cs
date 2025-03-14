@@ -23,7 +23,7 @@ public static class TerrainChanger
         }
         catch (Exception e)
         {
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in TerrainChanger.Initialize {e.Message}");
             throw;
         }
     }

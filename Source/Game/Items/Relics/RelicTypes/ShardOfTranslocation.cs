@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class ShardOfTranslocation : Relic
 {
     public const int RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION;
-    public const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
+    public new const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
     private static int RelicCost = 650;
     private static float DEFAULT_BLINK_RANGE = 400.0f;
     private static float UPGRADE_BLINK_RANGE = 600.0f;
@@ -48,8 +48,8 @@ public class ShardOfTranslocation : Relic
     {
         var player = Unit.Owner;
         CastEventTrigger = trigger.Create();
-        _ = CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        _ = CastEventTrigger.AddAction(() => TeleportActions());
+        CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+        CastEventTrigger.AddAction(() => TeleportActions());
     }
 
     private void TeleportActions()
@@ -102,7 +102,7 @@ public class ShardOfTranslocation : Relic
     /// <param name="Unit"></param>
     private void SetAbilityData(unit Unit)
     {
-        _ = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
         var cooldown = upgradeLevel >= 2 // lvl 2 upgrade

@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher", "Launcher\Launch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Source", "Source\Source.csproj", "{F8A8DD28-974D-46AC-91A8-324E2BD1FAE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseData", "DatabaseData\DatabaseData.csproj", "{7073346B-365F-4CB0-85FE-5E3F6911FF21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestArea", "DatabaseData\TestArea.csproj", "{7073346B-365F-4CB0-85FE-5E3F6911FF21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

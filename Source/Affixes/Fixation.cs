@@ -31,7 +31,7 @@ public class Fixation : Affix
         Type = RandomType();
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
-        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.TargetedAs = 16;
         RegisterEvents();
         base.Apply();
@@ -40,7 +40,7 @@ public class Fixation : Affix
     public override void Remove()
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
-        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.TargetedAs = 2;
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
@@ -68,10 +68,10 @@ public class Fixation : Affix
     private void RegisterEvents()
     {
         if (Type == 1) UnitsInRange = group.Create();
-        _ = InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
-        _ = PeriodicSpeed.RegisterTimerEvent(0.1f, true);
-        _ = PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
-        _ = InRangeTrigger.AddAction(() =>
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
+        PeriodicSpeed.RegisterTimerEvent(0.1f, true);
+        PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
+        InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;
             var Region = RegionList.WolfRegions[Unit.RegionIndex];
@@ -102,7 +102,7 @@ public class Fixation : Affix
                 return;
             }
             if (Type == 1) GetClosestTarget();
-            _ = Unit.Unit.IssueOrder("move", Target.X, Target.Y);
+            Unit.Unit.IssueOrder("move", Target.X, Target.Y);
         });
     }
 

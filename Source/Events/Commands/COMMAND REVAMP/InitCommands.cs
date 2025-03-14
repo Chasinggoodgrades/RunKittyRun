@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Reflection.Emit;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -279,10 +278,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kibbleList = "";
-                foreach (var playerx in Kibble.PickedUpKibble)
+                foreach (var kitty in Globals.ALL_KITTIES)
                 {
-                    if (playerx.Value == 0) continue;
-                    kibbleList += $"{Colors.PlayerNameColored(playerx.Key)}: {playerx.Value}\n";
+                    var kibblePicker = kitty.Value.Player;
+                    var kibbleCollected = kitty.Value.CurrentStats.CollectedKibble;
+                    kibbleList += $"{Colors.PlayerNameColored(kibblePicker)}: {kibbleCollected}\n";
                 }
                 player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}|r");
             }
@@ -433,7 +433,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kitty = Globals.ALL_KITTIES[player];
-                _ = kitty.Unit.AddItem(FourCC("desc"));
+                kitty.Unit.AddItem(FourCC("desc"));
             }
         );
 
@@ -541,19 +541,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "showcollision",
-            alias: "col",
-            group: "admin",
-            argDesc: "",
-            description: "Displays the current collision value.",
-            action: (player, args) =>
-            {
-                var collisionValue = CollisionDetection.KITTY_COLLISION_RADIUS[player];
-                player.DisplayTextTo($"Current Collision Value: {collisionValue}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
             name: "award",
             alias: "",
             group: "admin",
@@ -636,7 +623,7 @@ public static class InitCommands
             description: "Sets the selected wolf to walking or not. Defaults to [on]",
             action: (player, args) =>
             {
-                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var status = args[0] == "" || CommandsManager.GetBool(args[0]);
                 var selected = CustomStatFrame.SelectedUnit[player];
                 if (Globals.ALL_WOLVES.TryGetValue(selected, out var wolf))
                 {
@@ -848,13 +835,13 @@ public static class InitCommands
                 var kitty = Globals.ALL_KITTIES[player];
                 if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
                 {
-                    _ = UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
+                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
                     var abilityName = GetObjectName(FourCC(abilityId));
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
                 }
                 else
                 {
-                    _ = UnitAddAbility(kitty.Unit, FourCC(abilityId));
+                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
                     var abilityName = GetObjectName(FourCC(abilityId));
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
                 }
@@ -978,9 +965,9 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
-                        _ = new Circle(compPlayer);
+                        new Circle(compPlayer);
                         var newKitty = new Kitty(compPlayer);
-                        _ = newKitty.Unit.AddItem(FourCC("bspd"));
+                        newKitty.Unit.AddItem(FourCC("bspd"));
                     }
                 }
             }
@@ -1014,7 +1001,7 @@ public static class InitCommands
                             continue;
                         }
 
-                        _ = Globals.ALL_PLAYERS.Remove(compPlayer);
+                        Globals.ALL_PLAYERS.Remove(compPlayer);
 
                         var compKitty = Globals.ALL_KITTIES[compPlayer];
                         compKitty?.Dispose();

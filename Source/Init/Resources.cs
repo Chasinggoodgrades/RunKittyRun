@@ -28,7 +28,7 @@
     public static void StartingItems(Kitty kitty)
     {
         var unit = kitty.Unit;
-        _ = unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
+        unit.AddItem(Constants.ITEM_ADRENALINE_POTION);
     }
 
     public static int SaveGoldBonus(int streak) => SaveGold + (int)(SaveGold * (SaveStreakMultiplier * streak));

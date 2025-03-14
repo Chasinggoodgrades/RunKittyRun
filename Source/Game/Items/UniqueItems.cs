@@ -69,7 +69,7 @@ public class Uniques
     public static List<int> UniqueIDs = new List<int>();
     public int ItemID;
     public int GoldCost;
-    
+
     public Uniques(int itemID, int goldCost)
     {
         ItemID = itemID;

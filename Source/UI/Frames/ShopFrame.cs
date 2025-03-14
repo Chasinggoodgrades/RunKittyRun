@@ -53,7 +53,7 @@ public static class ShopFrame
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in ShopFrame: {ex.Message}");
+            Logger.Critical($"Error in ShopFrame: {ex.Message}");
             throw;
         }
     }
@@ -63,7 +63,7 @@ public static class ShopFrame
         shopFrame = BlzCreateFrameByType("BACKDROP", "Shop Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
         BlzFrameSetAbsPoint(shopFrame, FRAMEPOINT_CENTER, 0.40f, 0.375f);
         BlzFrameSetSize(shopFrame, frameX, frameY);
-        _ = FrameManager.CreateHeaderFrame(shopFrame);
+        FrameManager.CreateHeaderFrame(shopFrame);
     }
 
     private static void InitializePanels()
@@ -136,16 +136,16 @@ public static class ShopFrame
         upgradeButton.Text = "Upgrade";
 
         var BuyTrigger = trigger.Create();
-        _ = BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        _ = BuyTrigger.AddAction(() => BuySelectedItem());
+        BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
+        BuyTrigger.AddAction(() => BuySelectedItem());
 
         var SellTrigger = trigger.Create();
-        _ = SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        _ = SellTrigger.AddAction(() => SellSelectedItem());
+        SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
+        SellTrigger.AddAction(() => SellSelectedItem());
 
         var UpgradeTrigger = trigger.Create();
-        _ = UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        _ = UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
+        UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
+        UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
 
     }
 
@@ -183,8 +183,8 @@ public static class ShopFrame
             var itemDetails = trigger.Create();
             var relic = items[i];
             CreateShopitemTooltips(button, relic);
-            _ = itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            _ = itemDetails.AddAction(() => ShowItemDetails(relic));
+            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
+            itemDetails.AddAction(() => ShowItemDetails(relic));
         }
 
         float panelHeight = (rows * buttonHeight) + panelPadding;
@@ -323,9 +323,9 @@ public static class ShopFrame
                 colorDescription = Colors.COLOR_GREY;
             }
 
-            _ = finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g|r");
-            _ = finalString.AppendLine($"{colorDescription}{upgrade.Description}|r");
-            _ = finalString.AppendLine("----------------------------");
+            finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g|r");
+            finalString.AppendLine($"{colorDescription}{upgrade.Description}|r");
+            finalString.AppendLine("----------------------------");
         }
 
         upgradeTooltip.Text = finalString.ToString();
@@ -408,7 +408,7 @@ public static class ShopFrame
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID);
                 player.Gold += selectedItem.Cost;
                 relic?.RemoveEffect(kitty.Unit);
-                _ = kitty.Relics.Remove(relic);
+                kitty.Relics.Remove(relic);
                 return;
             }
 
@@ -433,9 +433,9 @@ public static class ShopFrame
         var shopFrameHotkey = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
+            shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
         }
-        _ = shopFrameHotkey.AddAction(() => ShopFrameActions());
+        shopFrameHotkey.AddAction(() => ShopFrameActions());
     }
 
     public static void ShopFrameActions()

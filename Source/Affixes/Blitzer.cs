@@ -22,7 +22,7 @@ public class Blitzer : Affix
 
     public override void Apply()
     {
-        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Pause();
         Unit.OVERHEAD_EFFECT_PATH = "";
         Unit.Unit.SetVertexColor(224, 224, 120);
@@ -32,7 +32,7 @@ public class Blitzer : Affix
 
     public override void Remove()
     {
-        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.WanderTimer.Resume();
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
@@ -78,7 +78,7 @@ public class Blitzer : Affix
         var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
         WanderEffect.Dispose();
         BlitzerMove(x, y);
-        _ = Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
+        Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
         Unit.IsWalking = true;
         MoveTimer.Start(randomTime, false, PreBlitzerMove);
@@ -129,7 +129,7 @@ public class Blitzer : Affix
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
         Unit.IsWalking = false;
-        _ = Unit.Unit.AddAbility(FourCC("Aeth"));
+        Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 
     public static Blitzer GetBlitzer(unit unit)

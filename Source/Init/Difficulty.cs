@@ -56,8 +56,8 @@ public static class Difficulty
     private static void RegisterSelectionEvent()
     {
         Trigger = trigger.Create();
-        _ = Trigger.RegisterDialogEvent(DifficultyChoosing);
-        _ = Trigger.AddAction(() =>
+        Trigger.RegisterDialogEvent(DifficultyChoosing);
+        Trigger.AddAction(() =>
         {
             var player = @event.Player;
             var button = @event.ClickedButton;
@@ -65,7 +65,7 @@ public static class Difficulty
             if (!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;
             DifficultyChoosing.SetVisibility(player, false);
-            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.");
+            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.{Colors.COLOR_RESET}");
         });
     }
 
@@ -109,7 +109,7 @@ public static class Difficulty
                 break;
         }
         IsDifficultyChosen = true;
-        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
+        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}{Colors.COLOR_RESET}");
     }
 
     private static void RemoveDifficultyDialog()
@@ -137,7 +137,7 @@ public static class Difficulty
                 SetDifficulty(s_IMPOSSIBLE);
                 break;
             default:
-                Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}");
+                Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}{Colors.COLOR_RESET}");
                 return false;
         }
         return true;

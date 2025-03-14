@@ -28,8 +28,8 @@ public static class UrnSoul
         var u = unit.Create(player.NeutralAggressive, UnitType, 0, 0, 0);
         u.HeroName = Name;
         u.SetPathing(false); // Disable Collision 
-        _ = u.AddAbility(FourCC("Agho")); // Ghost
-        _ = u.AddAbility(FourCC("Augh")); // Shade
+        u.AddAbility(FourCC("Agho")); // Ghost
+        u.AddAbility(FourCC("Augh")); // Shade
         return u;
     }
 
@@ -45,8 +45,8 @@ public static class UrnSoul
     private static trigger RegisterPeriodicTrigger()
     {
         var trig = trigger.Create();
-        _ = trig.RegisterTimerEvent(RotationTime, true);
-        _ = trig.AddAction(() => RotationActions());
+        trig.RegisterTimerEvent(RotationTime, true);
+        trig.AddAction(() => RotationActions());
         return trig;
     }
 
@@ -55,15 +55,15 @@ public static class UrnSoul
         RotationIndex = (RotationIndex + 1) % 4;
         var x = UrnRegions[RotationIndex].CenterX;
         var y = UrnRegions[RotationIndex].CenterY;
-        _ = UrnGhostUnit.IssueOrder("move", x, y);
+        UrnGhostUnit.IssueOrder("move", x, y);
     }
 
     private static trigger RegisterUrnUsage()
     {
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
-        _ = trig.AddAction(() => UrnUsageActions());
+            trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
+        trig.AddAction(() => UrnUsageActions());
         return trig;
     }
 
@@ -87,15 +87,15 @@ public static class UrnSoul
             $"{Colors.COLOR_LAVENDER}The lost soul you seek drifts, untethered and forlorn. Seek them amidst the ever-twisting shadows, and rekindle their essence with the enigmatic touch of an energy stone, a veiled orb of secrets, and the elixir whispered of healing properties..|r"));
 
         // Apply next stage to the item.
-        _ = item.RemoveAbility(FourCC("AIda")); // removes temp armory bonus
-        _ = item.AddAbility(FourCC("AHta")); // adds reveal ability
+        item.RemoveAbility(FourCC("AIda")); // removes temp armory bonus
+        item.AddAbility(FourCC("AHta")); // adds reveal ability
     }
 
     private static trigger RegisterInRangeEvent()
     {
         var trig = trigger.Create();
-        _ = trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
-        _ = trig.AddAction(() => InRangeActions());
+        trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
+        trig.AddAction(() => InRangeActions());
         return trig;
     }
 

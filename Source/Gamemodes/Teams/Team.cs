@@ -44,10 +44,10 @@ public class Team
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         if (!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
-        _ = Globals.PLAYERS_TEAMS.Remove(player);
-        _ = Teammembers.Remove(player);
+        Globals.PLAYERS_TEAMS.Remove(player);
+        Teammembers.Remove(player);
         Globals.ALL_KITTIES[player].TeamID = 0;
-        if (Teammembers.Count == 0) _ = Globals.ALL_TEAMS.Remove(TeamID);
+        if (Teammembers.Count == 0) Globals.ALL_TEAMS.Remove(TeamID);
         TeamsUtil.UpdateTeamsMB();
     }
 

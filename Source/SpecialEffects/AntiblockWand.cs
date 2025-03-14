@@ -21,8 +21,8 @@ public static class AntiblockWand
     {
         var Trigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
-        _ = Trigger.AddAction(SpellActions);
+            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
+        Trigger.AddAction(SpellActions);
         return Trigger;
     }
 

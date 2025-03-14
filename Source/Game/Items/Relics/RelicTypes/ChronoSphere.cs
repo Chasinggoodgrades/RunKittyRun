@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class ChronoSphere : Relic
 {
     public const int RelicItemID = Constants.ITEM_CHRONO_ORB;
-    public const int RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING;
+    public new const int RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING;
     private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNChrono Orb.dds";
     private const string LocationSaveEffectPath = "war3mapImported\\ChronoLocationSave.mdx";
     private const int RelicCost = 650;
@@ -66,8 +66,8 @@ public class ChronoSphere : Relic
         var item = Utility.UnitGetItem(OwnerUnit, RelicItemID);
         Ability = item.GetAbility(RelicAbilityID);
         Magnitude = RandomMagnitude();
-        _ = Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
-        _ = Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
+        Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
+        Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
         item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
     }
 

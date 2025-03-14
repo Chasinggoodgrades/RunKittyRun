@@ -90,7 +90,7 @@ public static class RelicFunctions
     private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
     private static void AddItem(player player, int itemID)
     {
-        _ = Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
+        Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
     }
 
     private static bool RelicMaxedOut(player player)

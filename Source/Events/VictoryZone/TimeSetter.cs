@@ -8,26 +8,34 @@ public static class TimeSetter
     /// <param name="player"></param>
     public static bool SetRoundTime(player player)
     {
-        var standard = Gamemode.CurrentGameMode == "Standard";
-        var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
-        string roundString = "";
-        var currentTime = GameTimer.RoundTime[Globals.ROUND];
+        try
+        {
+            var standard = Gamemode.CurrentGameMode == "Standard";
+            var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
+            string roundString = "";
+            var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
-        if (!standard && !solo) return false;
+            if (!standard && !solo) return false;
 
-        if (standard) roundString = GetRoundEnum();
-        if (solo) roundString = GetSoloEnum();
-        if (currentTime >= 1200.00f) return false; // 20 min cap.
+            if (standard) roundString = GetRoundEnum();
+            if (solo) roundString = GetSoloEnum();
+            if (currentTime >= 1200.00f) return false; // 20 min cap.
 
-        var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
-        var value = (float)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+            var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
+            var value = (float)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
 
-        if (currentTime >= value && value != 0) return false;
+            if (currentTime >= value && value != 0) return false;
 
-        SetSavedTime(player, roundString);
-        PersonalBestAwarder.BeatRecordTime(player);
+            SetSavedTime(player, roundString);
+            PersonalBestAwarder.BeatRecordTime(player);
 
-        return true;
+            return true;
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in TimeSetter.SetRoundTime: {e.Message}");
+            throw;
+        }
     }
 
     public static string GetRoundEnum()

@@ -10,8 +10,8 @@ public static class FinalSafezone
 
     private static void RegisterEvents()
     {
-        _ = Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        _ = Trigger.AddAction(() =>
+        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        Trigger.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;

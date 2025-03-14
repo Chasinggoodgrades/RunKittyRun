@@ -35,14 +35,14 @@ public class Vortex : Affix
 
     public override void Apply()
     {
-        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
         base.Apply();
     }
 
     public override void Remove()
     {
-        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(150, 120, 255);
 
         GC.RemoveTimer(ref PullingInTimer);
@@ -56,9 +56,9 @@ public class Vortex : Affix
 
     private void RegisterEvents()
     {
-        _ = EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
-        _ = EntersRange.AddAction(EnterRegionActions);
-        _ = LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
+        EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
+        EntersRange.AddAction(EnterRegionActions);
+        LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
 
         PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, () => PullBegin());
     }
@@ -74,7 +74,7 @@ public class Vortex : Affix
     {
         var leavingUnit = @event.Unit;
         if (!UnitsInRange.Contains(leavingUnit)) return;
-        _ = UnitsInRange.Remove(leavingUnit);
+        UnitsInRange.Remove(leavingUnit);
     }
 
     private void PullBegin()
@@ -104,7 +104,7 @@ public class Vortex : Affix
                 unit.SetPosition(newX, newY);
                 unit.SetFacing(angle);
                 //var lastOrder = UnitOrders.GetLastOrderLocation(unit);
-                //_ = unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+                //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
                 // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
                 // Setup @event system to acquire last x,y location of this unit.
             }

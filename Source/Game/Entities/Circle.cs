@@ -29,7 +29,7 @@ public class Circle
     {
         Unit.Dispose();
         Collision.Dispose();
-        _ = Globals.ALL_CIRCLES.Remove(Player);
+        Globals.ALL_CIRCLES.Remove(Player);
     }
 
     public void KittyDied(Kitty kitty)

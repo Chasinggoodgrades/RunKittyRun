@@ -19,7 +19,7 @@ public static class Gameover
         GameoverUtil.SetBestGameStats();
         StandardWinChallenges();
         SaveGame();
-        Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
+        Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!{Colors.COLOR_RESET}");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
     }

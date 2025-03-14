@@ -30,14 +30,14 @@ public static class WolfSpawning
 
             for (int i = 0; i < numberOfWolves; i++)
             {
-                _ = new Wolf(laneID);
+                new Wolf(laneID);
             }
         }
 
         while (excessWolves > 0)
         {
             var randomLane = GetRandomInt(6, 12);
-            _ = new Wolf(randomLane);
+            new Wolf(randomLane);
             excessWolves--;
         }
     }

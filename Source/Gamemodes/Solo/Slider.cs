@@ -198,13 +198,13 @@ public class Slider
     {
         ClickTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(ClickTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        _ = ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        _ = ClickTrigger.AddAction(() => HandleTurn(true));
+        ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        ClickTrigger.AddAction(() => HandleTurn(true));
 
         WidgetTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(WidgetTrigger, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
-        _ = WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
-        _ = WidgetTrigger.AddAction(() => HandleTurn(false));
+        WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        WidgetTrigger.AddAction(() => HandleTurn(false));
 
         ClickTrigger.Disable();
         WidgetTrigger.Disable();

@@ -41,7 +41,7 @@ public static class GC
         if (affix == null) return;
         var index = GCAffixes.IndexOf(affix);
         if (index != -1) GCAffixes[index] = null;
-        _ = GCAffixes.Remove(affix);
+        GCAffixes.Remove(affix);
     }
 
     public static void RemoveDictionary<K, V>(ref Dictionary<K, V> dict)

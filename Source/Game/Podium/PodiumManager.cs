@@ -12,7 +12,6 @@ public static class PodiumManager
 
     public static void BeginPodiumEvents()
     {
-        _ = Gamemode.CurrentGameMode;
         switch (Gamemode.CurrentGameMode)
         {
             case "Standard":
@@ -36,8 +35,4 @@ public static class PodiumManager
             Regions.Podium_3.Center
         };
     }
-
-
-
-
 }

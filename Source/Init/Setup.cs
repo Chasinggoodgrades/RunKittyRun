@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -133,7 +132,7 @@ namespace Source.Init
             {
                 if (player.SlotState == playerslotstate.Left)
                 {
-                    _ = Globals.ALL_PLAYERS.Remove(player);
+                    Globals.ALL_PLAYERS.Remove(player);
                     break;
                 }
             }

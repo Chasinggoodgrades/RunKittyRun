@@ -15,7 +15,7 @@ public class PlayerUpgrades
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = new PlayerUpgrades(player);
+            new PlayerUpgrades(player);
     }
 
     public static PlayerUpgrades GetPlayerUpgrades(player player) => Globals.PLAYER_UPGRADES[player];

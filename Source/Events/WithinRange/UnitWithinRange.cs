@@ -59,7 +59,7 @@ public static class UnitWithinRange
         trigger trig = CreateTrigger();
         unitRangeTriggers[unitId][rangeAsInt] = trig;
 
-        _ = TriggerAddAction(trig, () =>
+        TriggerAddAction(trig, () =>
         {
             ActionUnitWithinRange(trig);
         });
@@ -69,19 +69,19 @@ public static class UnitWithinRange
             trigger cleanupTrigger = CreateTrigger();
             unitCleanupTriggers[unitId] = cleanupTrigger;
 
-            _ = TriggerAddAction(cleanupTrigger, () =>
+            TriggerAddAction(cleanupTrigger, () =>
             {
                 ActionUnitWithinCleanOnKilled(GetTriggerUnit());
             });
 
-            _ = TriggerRegisterUnitStateEvent(cleanupTrigger, u, UNIT_STATE_LIFE, LESS_THAN_OR_EQUAL, 0.405f);
+            TriggerRegisterUnitStateEvent(cleanupTrigger, u, UNIT_STATE_LIFE, LESS_THAN_OR_EQUAL, 0.405f);
         }
 
-        _ = TriggerRegisterUnitInRange(trig, u, range, Condition(() => filter()));
+        TriggerRegisterUnitInRange(trig, u, range, Condition(() => filter()));
 
         int trigId = GetUniqueTriggerId(trig);
         unitRangeUnits[trigId] = u;
-        _ = withinRangeUsers.Add(u);
+        withinRangeUsers.Add(u);
 
         udg_WithinRangeHash[trigId] = (eventValue, execution);
 
@@ -110,24 +110,24 @@ public static class UnitWithinRange
             {
                 RemoveTrigger(kvp.Value);
             }
-            _ = unitRangeTriggers.Remove(unitId);
+            unitRangeTriggers.Remove(unitId);
         }
 
         if (unitCleanupTriggers.ContainsKey(unitId))
         {
             RemoveTrigger(unitCleanupTriggers[unitId]);
-            _ = unitCleanupTriggers.Remove(unitId);
+            unitCleanupTriggers.Remove(unitId);
         }
 
-        _ = withinRangeUsers.Remove(u);
+        withinRangeUsers.Remove(u);
     }
 
     private static void RemoveTrigger(trigger trig)
     {
         int trigId = GetUniqueTriggerId(trig);
         // Remove saved handles and cleanup
-        _ = unitRangeUnits.Remove(trigId);
-        _ = udg_WithinRangeHash.Remove(trigId);
+        unitRangeUnits.Remove(trigId);
+        udg_WithinRangeHash.Remove(trigId);
         // Destroy the trigger
         GC.RemoveTrigger(ref trig);
     }

@@ -39,16 +39,16 @@ public static class SpawnChampions
 
     private static void ApplyCosmetics()
     {
-        _ = Fieryfox2023.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
-        _ = Fieryfox2023.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
+        Fieryfox2023.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+        Fieryfox2023.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
 
-        _ = FandF2023.AddSpecialEffect("war3mapImported\\GlaciarAuraPurple.mdx", "origin");
-        _ = FandF2023.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
+        FandF2023.AddSpecialEffect("war3mapImported\\GlaciarAuraPurple.mdx", "origin");
+        FandF2023.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
 
-        _ = Fieryfox2024.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
-        _ = Fieryfox2024.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
+        Fieryfox2024.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+        Fieryfox2024.AddSpecialEffect("war3mapImported\\TurquoiseWings.mdx", "chest");
 
-        _ = Stan2025.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
-        _ = Stan2025.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+        Stan2025.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
+        Stan2025.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
     }
 }

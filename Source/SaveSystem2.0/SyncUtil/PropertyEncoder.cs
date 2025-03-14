@@ -8,7 +8,7 @@ public static class PropertyEncoder
     {
         StringBuilder jsonString = new StringBuilder("{");
         AppendProperties(obj, jsonString);
-        _ = jsonString.Append("}");
+        jsonString.Append("}");
 
         var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
         return base64String;
@@ -18,7 +18,7 @@ public static class PropertyEncoder
     {
         StringBuilder jsonString = new StringBuilder("{");
         AppendProperties(obj, jsonString);
-        _ = jsonString.Append("}");
+        jsonString.Append("}");
 
         return jsonString.ToString();
     }
@@ -26,15 +26,15 @@ public static class PropertyEncoder
     public static string EncodeAllDataToJsonBase64()
     {
         StringBuilder jsonString = new StringBuilder();
-        _ = jsonString.Append("{");
+        jsonString.Append("{");
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var playerData = SaveManager.SaveData[player];
-            _ = jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
+            jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
         }
         if (jsonString.Length > 0 && jsonString[jsonString.Length - 1] == ',')
             jsonString.Length--;
-        _ = jsonString.Append("}");
+        jsonString.Append("}");
 
         var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
         return base64String;
@@ -57,17 +57,17 @@ public static class PropertyEncoder
 
             if (!firstProperty)
             {
-                _ = jsonString.Append(",");
+                jsonString.Append(",");
             }
             firstProperty = false;
 
-            _ = jsonString.Append($"\"{name}\":");
+            jsonString.Append($"\"{name}\":");
 
             if (value != null && property.PropertyType.IsClass && property.PropertyType != typeof(string))
             {
-                _ = jsonString.Append("{");
+                jsonString.Append("{");
                 AppendProperties(value, jsonString);
-                _ = jsonString.Append("}");
+                jsonString.Append("}");
             }
             else
             {

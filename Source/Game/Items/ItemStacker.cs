@@ -6,8 +6,8 @@ public static class ItemStacker
     private static List<int> StackableItemIDs;
     public static void Initialize()
     {
-        _ = RegisterItemList();
-        _ = RegisterEvents();
+        RegisterItemList();
+        RegisterEvents();
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public static class ItemStacker
     {
         PickupTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
-        _ = PickupTrigger.AddAction(StackActions);
+        PickupTrigger.AddAction(StackActions);
         return PickupTrigger;
     }
 

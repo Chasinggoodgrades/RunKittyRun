@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using WCSharp.Api;
 
 public static class StandardMultiboard
@@ -45,12 +43,12 @@ public static class StandardMultiboard
         Updater = trigger.Create();
         ESCTrigger = trigger.Create();
 
-        _ = Updater.RegisterTimerEvent(1.00f, true);
-        _ = Updater.AddAction(CurrentStatsRoundTimes);
+        Updater.RegisterTimerEvent(1.00f, true);
+        Updater.AddAction(CurrentStatsRoundTimes);
 
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        _ = ESCTrigger.AddAction(ESCPressed);
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        ESCTrigger.AddAction(ESCPressed);
     }
 
     private static void MakeMultiboard()

@@ -12,8 +12,8 @@ public static class RollerSkates
         RollerSkaters = new List<player>();
         OnUseTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
-        _ = OnUseTrigger.AddCondition(Condition(() => @event.ManipulatedItem.TypeId == Constants.ITEM_PEGASUS_BOOTS));
-        _ = OnUseTrigger.AddAction(SwitchingBoots);
+        OnUseTrigger.AddCondition(Condition(() => @event.ManipulatedItem.TypeId == Constants.ITEM_PEGASUS_BOOTS));
+        OnUseTrigger.AddAction(SwitchingBoots);
     }
 
     private static void SwitchingBoots()
@@ -26,7 +26,7 @@ public static class RollerSkates
         {
             SetPegasusBoots(item);
             slider.StopSlider();
-            _ = RollerSkaters.Remove(unit.Owner);
+            RollerSkaters.Remove(unit.Owner);
             unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Deactivated|r");
         }
         else

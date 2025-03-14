@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class RingOfSummoning : Relic
 {
     public const int RelicItemID = Constants.ITEM_SACRED_RING_OF_SUMMONING;
-    public const int RelicAbilityID = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
+    public new const int RelicAbilityID = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float SUMMONING_RING_RADIUS = 300.0f;
     private static float SUMMONING_COOLDOWN = 90.0f;
@@ -32,9 +32,9 @@ public class RingOfSummoning : Relic
     private void RegisterTriggers(unit Unit)
     {
         Trigger = trigger.Create();
-        _ = Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        _ = Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        _ = Trigger.AddAction(() => SacredRingOfSummoning());
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => SacredRingOfSummoning());
     }
 
     public override void ApplyEffect(unit Unit)
@@ -63,7 +63,7 @@ public class RingOfSummoning : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
         // Summon radius thingy
-        _ = BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
+        BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, SUMMONING_RING_RADIUS);
 
         var cooldown = upgradeLevel >= 1
             ? SUMMONING_COOLDOWN - UPGRADE_COOLDOWN_REDUCTION
@@ -90,7 +90,7 @@ public class RingOfSummoning : Relic
             var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
             SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
             var units = SummonGroup.ToList();
-            if (SummonGroup.Contains(summoningKittyUnit)) _ = units.Remove(summoningKittyUnit); // remove self from the list
+            if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
 
             for (int i = 0; i < numberOfSummons && i < units.Count; i++)
             {

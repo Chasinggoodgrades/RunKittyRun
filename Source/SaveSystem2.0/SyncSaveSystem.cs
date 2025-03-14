@@ -28,10 +28,10 @@ public class SyncSaveLoad
     {
         for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
-            _ = SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
-            _ = SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
+            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
+            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
         }
-        _ = SyncEvent.AddAction(OnSync);
+        SyncEvent.AddAction(OnSync);
     }
 
     /// <summary>
@@ -57,12 +57,12 @@ public class SyncSaveLoad
         {
             for (int i = 0; i < toCompile.Length; i++)
             {
-                _ = assemble.Append(toCompile[i]);
+                assemble.Append(toCompile[i]);
                 if (assemble.Length >= chunkSize)
                 {
                     string header = EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString((int)Math.Ceiling((double)i / chunkSize));
                     Preload($"\")\ncall BlzSendSyncData(\"{SyncPrefix}\",\"{header + assemble}\")\ncall S2I(\"");
-                    _ = assemble.Clear();
+                    assemble.Clear();
                 }
             }
             if (assemble.Length > 0)
@@ -89,7 +89,7 @@ public class SyncSaveLoad
                 PreloadStart();
                 Preloader(filename);
                 PreloadEnd(1);
-                _ = BlzSendSyncData(SyncPrefixFinish, "");
+                BlzSendSyncData(SyncPrefixFinish, "");
             }
         }
         else
@@ -120,7 +120,7 @@ public class SyncSaveLoad
                 else if (prefix == SyncPrefixFinish)
                 {
                     promise.Finish();
-                    _ = allPromises.Remove(GetPlayerId(promise.SyncOwner));
+                    allPromises.Remove(GetPlayerId(promise.SyncOwner));
                     //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
                 }
             }
@@ -159,7 +159,7 @@ public class FilePromise
             {
                 if (Buffer.ContainsKey(i))
                 {
-                    _ = loadString.Append(Buffer[i]);
+                    loadString.Append(Buffer[i]);
                     //if(Source.Program.Debug) Console.WriteLine($"{Buffer[i]}");
                 }
             }

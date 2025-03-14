@@ -41,8 +41,8 @@ public class WolfArea
     private void RegisterEnterEvents()
     {
         AreaTrigger = trigger.Create();
-        _ = AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        _ = AreaTrigger.AddAction(() =>
+        AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        AreaTrigger.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -59,8 +59,8 @@ public class WolfArea
     private void RegisterLeaveEvents()
     {
         AreaTrigger = trigger.Create();
-        _ = AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
-        _ = AreaTrigger.AddAction(() =>
+        AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
+        AreaTrigger.AddAction(() =>
         {
             var wolf = Globals.ALL_WOLVES[@event.Unit];
             wolf.WolfMove();

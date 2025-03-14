@@ -5,12 +5,10 @@ public static class NitroChallenges
     private static Dictionary<int, int> NitroRoundTimes;
     private static timer NitroTimer = timer.Create();
     private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
-    private static List<player> HitNitroAlready = new List<player>();
-    private static Dictionary<player, int> NitroCount;
+
     public static void Initialize()
     {
         NitroRoundTimes = new Dictionary<int, int>();
-        NitroCount = new Dictionary<player, int>();
     }
 
     public static float GetNitroTimeRemaining() => NitroTimer.Remaining;
@@ -91,7 +89,8 @@ public static class NitroChallenges
 
     private static void AwardingNitroEvents(player player)
     {
-        if (NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
+        var nitroCount = Globals.ALL_KITTIES[player].CurrentStats.NitroCount;
+        if (nitroCount == Globals.ROUND) return; // already awarded
         if (NitroTimer.Remaining <= 0.00 || NitroTimer == null) return;
         var round = Globals.ROUND;
 
@@ -125,10 +124,7 @@ public static class NitroChallenges
         PlayNitroSound(player);
         if (!Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Contains(round))
             Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Add(round);
-        if (NitroCount.TryGetValue(player, out var count))
-            NitroCount[player] = count + 1;
-        else
-            NitroCount.Add(player, 1);
+        Globals.ALL_KITTIES[player].CurrentStats.NitroCount += 1;
     }
 
     private static void AwardingDivineLight(player player)
@@ -137,14 +133,14 @@ public static class NitroChallenges
         var requiredCount = 5;
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
-        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount)
+        if (Globals.ALL_KITTIES[player].CurrentStats.NitroCount == requiredCount)
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
     }
 
     private static void PlayNitroSound(player player)
     {
-        if (HitNitroAlready.Contains(player)) return;
-        HitNitroAlready.Add(player);
+        if (Globals.ALL_KITTIES[player].CurrentStats.NitroObtained) return; // first time
+        Globals.ALL_KITTIES[player].CurrentStats.NitroObtained = true;
         SoundManager.PlaySpeedSound();
     }
 

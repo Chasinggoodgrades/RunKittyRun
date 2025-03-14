@@ -120,7 +120,7 @@ public static class TeamHandler
         else
         {
             RemoveFromCurrentTeam(Player);
-            _ = new Team(TeamNumber);
+            new Team(TeamNumber);
         }
         return true;
 

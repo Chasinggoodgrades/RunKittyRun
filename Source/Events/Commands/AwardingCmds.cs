@@ -152,7 +152,7 @@ public static class AwardingCmds
                 var changeProp = Globals.ALL_KITTIES[selectedPlayer].SaveData.RoundTimes.GetType().GetProperty(prop.Name);
                 changeProp.SetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.RoundTimes, val);
                 player.DisplayTimedTextTo(3.0f,
-                    $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}");
+                    $"{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.ToString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}{Colors.COLOR_RESET}");
                 MultiboardUtil.RefreshMultiboards();
                 return;
             }
@@ -180,6 +180,6 @@ public static class AwardingCmds
             var value = property.GetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(selectedPlayer)}:\n{Colors.HighlightString(combined)}");
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(selectedPlayer)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
     }
 }

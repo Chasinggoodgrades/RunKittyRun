@@ -98,7 +98,7 @@ public class AIController
             moveTimer = null;
         }
 
-        _ = DestroyLightning(lastLightning);
+        DestroyLightning(lastLightning);
         lastLightning = null;
 
         HideAllLightnings();
@@ -210,7 +210,7 @@ public class AIController
         {
             if (lastLightning != null)
             {
-                _ = MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
             }
             else
             {
@@ -238,7 +238,7 @@ public class AIController
         lastY = y;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        _ = kitty.Unit.IssueOrder(command, x, y);
+        kitty.Unit.IssueOrder(command, x, y);
     }
 
     private void IssueOrderBasic(string command)
@@ -248,7 +248,7 @@ public class AIController
         lastY = -1;
         lastOrderTime = elapsedTime;
         hasLastOrder = true;
-        _ = kitty.Unit.IssueOrder(command);
+        kitty.Unit.IssueOrder(command);
     }
 
     private (float X, float Y) GetCenterPositionInSafezone(Safezone safezone)

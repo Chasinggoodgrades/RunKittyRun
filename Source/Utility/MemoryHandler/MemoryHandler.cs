@@ -53,32 +53,39 @@ public static class MemoryHandler
     {
         // Pretend each object is a dictionary of fields to ultimately null
         // obj == metadata .. instead dictionary (fuck dictionaries)
-        if (obj is Dictionary<string, object> dict)
+        try
         {
-            foreach (var key in new List<string>(dict.Keys))
+            if (obj is Dictionary<string, object> dict)
             {
-                if (recursive && dict[key] is IDestroyable destroyable)
+                foreach (var key in new List<string>(dict.Keys))
                 {
-                    destroyable.__destroy(true);
+                    if (recursive && dict[key] is IDestroyable destroyable)
+                    {
+                        destroyable.__destroy(true);
+                    }
+                    dict[key] = null;
                 }
-                dict[key] = null;
+            }
+
+            // 
+            if (MetaTable.TryGetValue(obj, out var meta))
+            {
+                if (meta.TryGetValue("__debugName", out var debugNameObj) && debugNameObj is string dbgName)
+                {
+                    if (debugObjects.ContainsKey(dbgName))
+                    {
+                        debugObjects[dbgName]--;
+                        if (debugObjects[dbgName] <= 0)
+                            debugObjects.Remove(dbgName);
+                    }
+                }
+                meta["__debugName"] = null;
+                meta["__destroyed"] = true;
             }
         }
-
-        // 
-        if (MetaTable.TryGetValue(obj, out var meta))
+        catch (Exception ex)
         {
-            if (meta.TryGetValue("__debugName", out var debugNameObj) && debugNameObj is string dbgName)
-            {
-                if (debugObjects.ContainsKey(dbgName))
-                {
-                    debugObjects[dbgName]--;
-                    if (debugObjects[dbgName] <= 0)
-                        _ = debugObjects.Remove(dbgName);
-                }
-            }
-            meta["__debugName"] = null;
-            meta["__destroyed"] = true;
+            Logger.Critical("Error purging object: " + ex.Message);
         }
     }
 
@@ -102,7 +109,7 @@ public static class MemoryHandler
                 {
                     debugArrays[dbgName]--;
                     if (debugArrays[dbgName] <= 0)
-                        _ = debugArrays.Remove(dbgName);
+                        debugArrays.Remove(dbgName);
                 }
             }
             meta["__debugName"] = null;
@@ -112,13 +119,20 @@ public static class MemoryHandler
 
     private static void DestroyObject(object obj, bool recursive = false)
     {
-        PurgeObject(obj, recursive);
-        var type = obj.GetType();
-        if (!cachedObjects.ContainsKey(type))
+        try
         {
-            cachedObjects[type] = new List<object>();
+            PurgeObject(obj, recursive);
+            var type = obj.GetType();
+            if (!cachedObjects.ContainsKey(type))
+            {
+                cachedObjects[type] = new List<object>();
+            }
+            cachedObjects[type].Add(obj);
         }
-        cachedObjects[type].Add(obj);
+        catch (Exception ex)
+        {
+            Logger.Critical("Error destroying object: " + ex.Message);
+        }
     }
 
     private static void DestroyArray(object[] arr, bool recursive = false)
@@ -303,71 +317,71 @@ public static class MemoryHandler
         }
     }
 
- /*   public static List<T> GetEmptyList<T>(string debugName = null, int initialCapacity = 0)
-    {
-        var type = typeof(T);
-        if (!cachedLists.TryGetValue(type, out var stackObj))
-        {
-            stackObj = new Stack<List<object>>();
-            cachedLists[type] = stackObj;
-        }
+    /*   public static List<T> GetEmptyList<T>(string debugName = null, int initialCapacity = 0)
+       {
+           var type = typeof(T);
+           if (!cachedLists.TryGetValue(type, out var stackObj))
+           {
+               stackObj = new Stack<List<object>>();
+               cachedLists[type] = stackObj;
+           }
 
-        var stack = (Stack<List<object>>)stackObj;
-        if (stack.Count > 0)
-        {
-            var existingList = stack.Pop();
-            var result = new List<T>(existingList.Count);
-            foreach (var item in existingList)
-            {
-                result.Add((T)item);
-            }
-            PurgeList(result, false);
-            if (result.Capacity < initialCapacity)
-                result.Capacity = initialCapacity;
-            return result;
-        }
-        else
-        {
-            return new List<T>(initialCapacity);
-        }
-    }
+           var stack = (Stack<List<object>>)stackObj;
+           if (stack.Count > 0)
+           {
+               var existingList = stack.Pop();
+               var result = new List<T>(existingList.Count);
+               foreach (var item in existingList)
+               {
+                   result.Add((T)item);
+               }
+               PurgeList(result, false);
+               if (result.Capacity < initialCapacity)
+                   result.Capacity = initialCapacity;
+               return result;
+           }
+           else
+           {
+               return new List<T>(initialCapacity);
+           }
+       }
 
-    public static void DestroyList<T>(List<T> list, bool recursive = false)
-    {
-        PurgeList(list, recursive);
-        var type = typeof(T);
-        if (!cachedLists.TryGetValue(type, out var stackObj))
-        {
-            stackObj = new Stack<List<object>>();
-            cachedLists[type] = stackObj;
-        }
+       public static void DestroyList<T>(List<T> list, bool recursive = false)
+       {
+           PurgeList(list, recursive);
+           var type = typeof(T);
+           if (!cachedLists.TryGetValue(type, out var stackObj))
+           {
+               stackObj = new Stack<List<object>>();
+               cachedLists[type] = stackObj;
+           }
 
-        var stack = (Stack<List<object>>)stackObj;
-        // Because we can't push List<T> directly into Stack<List<object>>,
-        // convert it to List<object>.
-        var objectList = new List<object>(list.Count);
-        for (int i = 0; i < list.Count; i++)
-        {
-            objectList.Add(list[i]);
-        }
-        stack.Push(objectList);
-    }
+           var stack = (Stack<List<object>>)stackObj;
+           // Because we can't push List<T> directly into Stack<List<object>>,
+           // convert it to List<object>.
+           var objectList = new List<object>(list.Count);
+           for (int i = 0; i < list.Count; i++)
+           {
+               objectList.Add(list[i]);
+           }
+           stack.Push(objectList);
+       }
 
-    private static void PurgeList<T>(List<T> list, bool recursive)
-    {
-        if (recursive)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i] is IDestroyable destroyable)
-                {
-                    destroyable.__destroy(true);
-                }
-                list[i] = default;
-            }
-        }
-        list.Clear();
-    }*/
+       private static void PurgeList<T>(List<T> list, bool recursive)
+       {
+           if (recursive)
+           {
+               for (int i = 0; i < list.Count; i++)
+               {
+                   if (list[i] is IDestroyable destroyable)
+                   {
+                       destroyable.__destroy(true);
+                   }
+                   list[i] = default;
+               }
+           }
+           list.Clear();
+       }*/
 
     /// <summary>
     /// Destroys a previously returned object (calls PurgeObject internally) and caches it.
@@ -401,7 +415,7 @@ public static class MemoryHandler
                 {
                     debugArrays[dbgName]--;
                     if (debugArrays[dbgName] <= 0)
-                        _ = debugArrays.Remove(dbgName);
+                        debugArrays.Remove(dbgName);
                 }
             }
             meta["__debugName"] = null;

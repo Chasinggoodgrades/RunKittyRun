@@ -5,7 +5,6 @@ using static WCSharp.Api.Common;
 public static class MusicFrame
 {
     public static framehandle MusicFramehandle;
-    private static framehandle MusicFrameTitle;
     private static framehandle MusicSlider;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
@@ -29,7 +28,7 @@ public static class MusicFrame
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in MusicFrame: {ex.Message}");
+            Logger.Critical($"Error in MusicFrame: {ex.Message}");
             throw;
         }
     }
@@ -39,7 +38,7 @@ public static class MusicFrame
         var ySize = MusicManager.MusicList.Count * 0.03f;
         MusicFramehandle.SetSize(0.20f, ySize);
 
-        _ = FrameManager.CreateHeaderFrame(MusicFramehandle);
+        FrameManager.CreateHeaderFrame(MusicFramehandle);
 
         // Slider
         RegisterMusicSlider();
@@ -59,20 +58,21 @@ public static class MusicFrame
         MusicSlider.SetStepSize(1);
 
         foreach (var player in Globals.ALL_PLAYERS)
-            MusicSliderValues.Add(player, 0);
+            if (!MusicSliderValues.ContainsKey(player))
+                MusicSliderValues.Add(player, 0);
 
         var Trigger = trigger.Create();
         var mousewheel = trigger.Create();
-        _ = Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
-        _ = mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        _ = Trigger.AddAction(() =>
+        Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
+        mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
+        Trigger.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
             MusicSliderValues[player] = (int)@event.FrameValue;
             if (player.IsLocal) PopulateMusicFrame(player);
         });
-        _ = mousewheel.AddAction(() =>
+        mousewheel.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
@@ -91,6 +91,7 @@ public static class MusicFrame
         // Create buttons for each music item
         for (var i = 0; i < musicCount; i++)
         {
+            if (MusicButtons.ContainsKey(i)) continue; // Skip if already exists
             var name = MusicManager.MusicList[i].Name;
             MusicButtons[i] = BlzCreateFrameByType("GLUETEXTBUTTON", name, MusicFramehandle, "DebugButton", 0);
             MusicButtons[i].SetSize(ButtonWidth, ButtonHeight);
@@ -99,8 +100,8 @@ public static class MusicFrame
             MusicButtons[i].SetAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - (i * ButtonSpacing));
 
             var trigger = CreateTrigger();
-            _ = trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            _ = trigger.AddAction(() =>
+            trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
+            trigger.AddAction(() =>
             {
                 var frame = @event.Frame;
                 var player = @event.Player;
@@ -162,9 +163,9 @@ public static class MusicFrame
         var musicHotkeyTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
+            musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
         }
-        _ = musicHotkeyTrigger.AddAction(() => MusicFrameActions());
+        musicHotkeyTrigger.AddAction(() => MusicFrameActions());
     }
 
 

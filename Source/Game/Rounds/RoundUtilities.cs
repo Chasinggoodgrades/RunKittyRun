@@ -33,15 +33,13 @@ public static class RoundUtilities
     {
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            _ = kitty.Value.Unit.Revive(RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y, false);
+            kitty.Value.Unit.Revive(RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y, false);
             Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle();
             kitty.Value.Alive = true;
-            kitty.Value.CurrentStats.RoundFinished = false;
             kitty.Value.ProgressZone = 0;
             kitty.Value.Finished = false;
             kitty.Value.Unit.Mana = kitty.Value.Unit.MaxMana;
-            kitty.Value.CurrentStats.RoundSaves = 0;
-            kitty.Value.CurrentStats.RoundDeaths = 0;
+            kitty.Value.CurrentStats.ResetRoundData();
         }
     }
 

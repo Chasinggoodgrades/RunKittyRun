@@ -139,7 +139,7 @@ public static class SoundManager
             5 => ROUND_5_SOUND,
             _ => null
         };
-        sound.Start();
+        sound?.Start();
     }
 
     public static void PlayLastManStandingSound()

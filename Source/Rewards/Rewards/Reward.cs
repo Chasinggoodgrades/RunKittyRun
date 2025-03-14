@@ -104,24 +104,25 @@ public class Reward
 
     private void ApplyEffect(player player, effect effectInstance = null)
     {
+        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
         switch (Type)
         {
             case RewardType.Wings:
-                RewardsManager.ActiveWings[player] = effectInstance;
+                activeRewards.ActiveWings = effectInstance;
                 break;
             case RewardType.Hats:
-                RewardsManager.ActiveHats[player] = effectInstance;
+                activeRewards.ActiveHats = effectInstance;
                 break;
             case RewardType.Auras:
-                RewardsManager.ActiveAuras[player] = effectInstance;
+                activeRewards.ActiveAura = effectInstance;
                 break;
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                RewardsManager.ActiveTrails[player] = effectInstance;
+                activeRewards.ActiveTrail = effectInstance;
                 break;
             case RewardType.Tournament:
-                _ = SetTournamentReward(player, effectInstance, true);
+                SetTournamentReward(player, effectInstance, true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -130,28 +131,29 @@ public class Reward
 
     private void DestroyCurrentEffect(player player)
     {
+        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
         switch (Type)
         {
             case RewardType.Wings:
-                var x = RewardsManager.ActiveWings[player];
+                var x = activeRewards.ActiveWings;
                 GC.RemoveEffect(ref x);
                 break;
             case RewardType.Hats:
-                var y = RewardsManager.ActiveHats[player];
+                var y = activeRewards.ActiveHats;
                 GC.RemoveEffect(ref y);
                 break;
             case RewardType.Auras:
-                var z = RewardsManager.ActiveAuras[player];
+                var z = activeRewards.ActiveAura;
                 GC.RemoveEffect(ref z);
                 break;
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                var t = RewardsManager.ActiveTrails[player];
+                var t = activeRewards.ActiveTrail;
                 GC.RemoveEffect(ref t);
                 break;
             case RewardType.Tournament:
-                _ = SetTournamentReward(player, null, false);
+                SetTournamentReward(player, null, false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
@@ -163,7 +165,7 @@ public class Reward
     {
         if (Type != RewardType.Windwalks) return false;
         var kitty = Globals.ALL_KITTIES[player];
-        kitty.WindwalkID = AbilityID;
+        kitty.ActiveAwards.WindwalkID = AbilityID;
         return true;
     }
 
@@ -224,17 +226,18 @@ public class Reward
         if (Type != RewardType.Tournament)
             return false;
 
+        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
         if (activate)
         {
             if (Name.Contains("Nitro"))
-                RewardsManager.ActiveTrails[player] = e;
+                activeRewards.ActiveTrail = e;
             else if (Name.Contains("Aura"))
-                RewardsManager.ActiveAuras[player] = e;
+                activeRewards.ActiveAura = e;
             else if (Name.Contains("Wings"))
-                RewardsManager.ActiveWings[player] = e;
+                activeRewards.ActiveWings = e;
             else if (Name.Contains("Skin"))
             {
-                _ = SetSkin(player, true);
+                SetSkin(player, true);
                 Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
             }
             else
@@ -246,11 +249,11 @@ public class Reward
         else
         {
             if (Name.Contains("Nitro"))
-                RewardsManager.ActiveTrails[player]?.Dispose();
+                activeRewards.ActiveTrail?.Dispose();
             else if (Name.Contains("Aura"))
-                RewardsManager.ActiveAuras[player]?.Dispose();
+                activeRewards.ActiveAura?.Dispose();
             else if (Name.Contains("Wings"))
-                RewardsManager.ActiveWings[player]?.Dispose();
+                activeRewards.ActiveWings?.Dispose();
             else
                 return false;
         }

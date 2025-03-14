@@ -20,16 +20,16 @@ public static class MissingShoe
         // Between 10 mins - 15mins currently.
         var randomTime = GetRandomReal(600.0f, 900.0f);
         TimerEvent = trigger.Create();
-        _ = TimerEvent.RegisterTimerEvent(randomTime, false);
-        _ = TimerEvent.AddAction(EventStart);
+        TimerEvent.RegisterTimerEvent(randomTime, false);
+        TimerEvent.AddAction(EventStart);
     }
 
     private static void RegisterTurnInEvent()
     {
         TurnInEvent = trigger.Create();
-        _ = TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
-        _ = TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null);
-        _ = TurnInEvent.AddAction(TurnInActions);
+        TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
+        TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null);
+        TurnInEvent.AddAction(TurnInActions);
     }
 
     // Ping Event + Shoe Spawn
@@ -47,7 +47,7 @@ public static class MissingShoe
     {
         if (!@event.Unit.HasItem(Shoe)) return;
         @event.Unit.RemoveItem(Shoe);
-        _ = SpawnChampions.Fieryfox2023.AddItem(Shoe);
+        SpawnChampions.Fieryfox2023.AddItem(Shoe);
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.RedTendrils));
     }
 

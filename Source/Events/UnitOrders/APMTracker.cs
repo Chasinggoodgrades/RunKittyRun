@@ -21,7 +21,7 @@ public class APMTracker
 
     private void Init()
     {
-        var unused = ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
+        ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
         ClicksAction ??= ClicksTrigger.AddAction(() => CaptureActions());
         PeriodicTimer ??= PeriodicCheck();
     }

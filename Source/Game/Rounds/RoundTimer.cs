@@ -22,7 +22,7 @@ public static class RoundTimer
         }
         catch (Exception e)
         {
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Warning($"InitEndRoundTimer {e.Message}");
             throw;
         }
     }

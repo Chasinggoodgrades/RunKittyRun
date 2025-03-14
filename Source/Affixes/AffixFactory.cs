@@ -1,6 +1,4 @@
-﻿using Source;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using static WCSharp.Api.Common;
 
@@ -18,7 +16,6 @@ public static class AffixFactory
     /// </summary>
     public static void Initialize()
     {
-        if (Program.Debug) Logger.Verbose("Initializing AffixFactory");
         AllAffixes = new List<Affix>();
         InitLaneWeights();
     }
@@ -81,7 +78,7 @@ public static class AffixFactory
             case "Vortex":
                 return new Vortex(unit);
             default:
-                if (Program.Debug) Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
+                Logger.Warning($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
                 return null;
         }
     }
@@ -130,11 +127,11 @@ public static class AffixFactory
     {
         var affixes = new List<string>(AffixTypes);
         if (laneNumber > 7 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
-            _ = affixes.Remove("Fixation");
+            affixes.Remove("Fixation");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
-            _ = affixes.Remove("Frostbite");
-            _ = affixes.Remove("Chaos");
+            affixes.Remove("Frostbite");
+            affixes.Remove("Chaos");
         }
         return affixes;
     }

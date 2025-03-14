@@ -32,33 +32,32 @@ public static class FandF
 
     private static void AppendCollectionsUnit()
     {
-        _ = CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
+        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
     }
 
     private static trigger RegisterCollection()
     {
         var trig = trigger.Create();
-        _ = trig.AddAction(CollectionActions);
+        trig.AddAction(CollectionActions);
         return trig;
     }
 
     private static void CollectionActions()
     {
         var unit = @event.Unit;
-        _ = unit.Owner;
 
         if (!Utility.UnitHasItem(unit, EmptyVial)) return;
 
         // Otherwise .. they have item.. Give them blood filled vial.
         Utility.RemoveItemFromUnit(unit, EmptyVial);
-        _ = unit.AddItem(BloodVial);
+        unit.AddItem(BloodVial);
     }
 
     private static trigger RegisterTurnIn()
     {
         var trig = trigger.Create();
-        _ = trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
-        _ = trig.AddAction(TurnInActions);
+        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
+        trig.AddAction(TurnInActions);
         return trig;
     }
 
@@ -92,8 +91,7 @@ public static class FandF
 
     private static bool BloodVialItems(unit u)
     {
-        if (!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
-        return Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) && Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) && Utility.UnitHasItem(u, BloodVial);
+        return Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION) && Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) && Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) && Utility.UnitHasItem(u, BloodVial);
     }
 
     private static void RemoveQuestItems(unit u)

@@ -138,8 +138,7 @@ public class Savecode
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error in loading old code. Must be v4.2.0 or greater.");
-            if (Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in OldSaves.Load, version code must be from v4.2.0 or greater. {e.Message}");
             return false;
         }
     }
@@ -151,6 +150,7 @@ public class Savecode
             Console.WriteLine($"{Colors.COLOR_YELLOW}Old save codes work only in Standard");
             return;
         }
+
         var filePath = "RunKittyRun\\SaveSlot_RKR.pld";
         var sb = new StringBuilder();
         Preloader(filePath);
@@ -166,7 +166,7 @@ public class Savecode
             else
             {
                 BlzSetAbilityTooltip(abilityID, originalTooltip, 0);
-                _ = sb.Append(packet);
+                sb.Append(packet);
             }
         }
         var result = sb.ToString();
@@ -174,8 +174,8 @@ public class Savecode
         if (newLineStart >= 0)
             result = result.Substring(newLineStart + 1);
 
-        _ = sb.Clear().Append(result);
-        _ = OldsaveSync.SyncString(sb.ToString());
+        sb.Clear().Append(result);
+        OldsaveSync.SyncString(sb.ToString());
     }
 
     /// <summary>

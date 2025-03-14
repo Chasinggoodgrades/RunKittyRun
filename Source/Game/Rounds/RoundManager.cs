@@ -34,7 +34,7 @@ public static class RoundManager
         }
         catch (Exception e)
         {
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in RoundManager.RoundSetup {e.Message}");
             throw;
         }
     }
@@ -91,7 +91,7 @@ public static class RoundManager
         }
         catch (Exception e)
         {
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in RoundManager.RoundEnd {e.Message}");
             throw;
         }
     }

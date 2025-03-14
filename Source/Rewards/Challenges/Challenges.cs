@@ -2,7 +2,6 @@
 using WCSharp.Api;
 public static class Challenges
 {
-    public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
     public const int DIVINITY_TENDRILS_COUNT = 4;
     public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
@@ -150,8 +149,8 @@ public static class Challenges
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         var t = trigger.Create();
-        _ = Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
-        _ = t.AddAction(() =>
+        Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
+        t.AddAction(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;

@@ -25,7 +25,7 @@ public class Frostbite : Affix
     public override void Apply()
     {
         Unit.Unit.SetVertexColor(80, 140, 250);
-        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         RegisterEvents();
         base.Apply();
     }
@@ -33,7 +33,7 @@ public class Frostbite : Affix
     public override void Remove()
     {
         Unit.Unit.SetVertexColor(150, 120, 255);
-        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(ref PeriodicRangeTrigger);
         RemoveAllEffects();
@@ -53,10 +53,10 @@ public class Frostbite : Affix
 
     private void RegisterEvents()
     {
-        _ = PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
-        _ = PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
-        _ = InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
-        _ = InRangeTrigger.AddAction(() =>
+        PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
+        PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
+        InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;
             if (!target.Alive) return; // must be alive
@@ -83,7 +83,7 @@ public class Frostbite : Affix
 
         foreach (var target in TempList)
         {
-            _ = Frostbitten.Remove(target);
+            Frostbitten.Remove(target);
             Effects[target].Dispose();
         }
 

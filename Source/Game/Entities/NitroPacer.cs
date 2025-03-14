@@ -45,7 +45,7 @@ public static class NitroPacer
     public static void StartNitroPacer()
     {
         ResetNitroPacer();
-        _ = Unit.UseItem(ghostBoots);
+        Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
         pacerTimer.Start(0.15f, true, UpdateNitroPacer);
     }
@@ -89,7 +89,7 @@ public static class NitroPacer
         for (int i = pathingPoints.Length - 1; i >= 1; i--) // exclude starting point
         {
             Rectangle point = pathingPoints[i];
-            _ = Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
+            Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y);
         }
     }
 

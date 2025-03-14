@@ -83,8 +83,8 @@ public static class CustomStatFrame
 
     public static void Init()
     {
-        _ = BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
-        _ = BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
+        BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
+        BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
 
         var hideParent = BlzCreateFrameByType("SIMPLEFRAME", "HideParent", BlzGetFrameByName("ConsoleUI", 0), "", 0);
         hideParent.Visible = false;
@@ -99,7 +99,7 @@ public static class CustomStatFrame
 
 
         trigger trig = trigger.Create();
-        _ = trig.AddAction(() =>
+        trig.AddAction(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
@@ -107,7 +107,7 @@ public static class CustomStatFrame
         });
 
         foreach (var player in Globals.ALL_PLAYERS)
-            if (player.SlotState == playerslotstate.Playing) _ = trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
+            if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);
         CustomStatFrameBoxF = BlzCreateFrameByType("FRAME", "CustomStatFrameBoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0);

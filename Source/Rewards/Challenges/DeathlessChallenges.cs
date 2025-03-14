@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class DeathlessChallenges
 {
-    private static Dictionary<player, int> DeathlessProgress;
-
     public static void Initialize()
     {
-        DeathlessProgress = new Dictionary<player, int>();
         ResetDeathless();
     }
 
@@ -16,8 +14,8 @@ public static class DeathlessChallenges
     /// </summary>
     public static void ResetDeathless()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
-            DeathlessProgress[player] = 0;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            ResetPlayerDeathless(kitty.Value.Player);
     }
 
     /// <summary>
@@ -38,15 +36,16 @@ public static class DeathlessChallenges
     public static void DeathlessCheck(player player)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        DeathlessProgress[player]++;
-        if (DeathlessProgress[player] == DeathlessPerRound())
+        Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress++;
+        Console.WriteLine(Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress);
+        if (Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress == DeathlessPerRound())
         {
             AwardDeathless(player);
-            DeathlessProgress[player] = 0;
+            ResetPlayerDeathless(player);
         }
     }
 
-    public static void ResetPlayerDeathless(player player) => DeathlessProgress[player] = 0;
+    public static void ResetPlayerDeathless(player player) => Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress = 0;
 
     private static void AwardDeathless(player player)
     {
@@ -58,7 +57,7 @@ public static class DeathlessChallenges
 
     private static void AwardBasedOnDifficulty(player player)
     {
-        _ = (DifficultyLevel)Difficulty.DifficultyValue;
+        var difficulty = (DifficultyLevel)Difficulty.DifficultyValue;
         NormalDeathlessAward(player);
         /*        switch (difficulty)
                 {
@@ -78,21 +77,18 @@ public static class DeathlessChallenges
 
     private static void NormalDeathlessAward(player player)
     {
-        _ = Globals.GAME_AWARDS_SORTED;
         GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.NormalDeathless1), nameof(gameAwards.Deathless.NormalDeathless2), nameof(gameAwards.Deathless.NormalDeathless3), nameof(gameAwards.Deathless.NormalDeathless4), nameof(gameAwards.Deathless.NormalDeathless5));
     }
 
     private static void HardDeathlessAward(player player)
     {
-        _ = Globals.GAME_AWARDS_SORTED;
         GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.HardDeathless1), nameof(gameAwards.Deathless.HardDeathless2), nameof(gameAwards.Deathless.HardDeathless3), nameof(gameAwards.Deathless.HardDeathless4), nameof(gameAwards.Deathless.HardDeathless5));
     }
 
     private static void ImpossibleDeathlessAward(player player)
     {
-        _ = Globals.GAME_AWARDS_SORTED;
         GameAwardsDataSorted gameAwards;
         GiveRoundReward(player, nameof(gameAwards.Deathless.ImpossibleDeathless1), nameof(gameAwards.Deathless.ImpossibleDeathless2), nameof(gameAwards.Deathless.ImpossibleDeathless3), nameof(gameAwards.Deathless.ImpossibleDeathless4), nameof(gameAwards.Deathless.ImpossibleDeathless5));
     }
@@ -114,7 +110,4 @@ public static class DeathlessChallenges
         textTag.SetLifespan(1.0f);
         Utility.SimpleTimer(1.50f, textTag.Dispose);
     }
-
-
-
 }

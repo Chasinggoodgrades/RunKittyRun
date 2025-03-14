@@ -91,10 +91,10 @@ public static class SeasonalManager
         switch (Season)
         {
             case HolidaySeasons.Christmas:
-                _ = BlzChangeMinimapTerrainTex("snowMap.blp");
+                BlzChangeMinimapTerrainTex("snowMap.blp");
                 break;
             case HolidaySeasons.None:
-                _ = BlzChangeMinimapTerrainTex("war3mapMap.blp");
+                BlzChangeMinimapTerrainTex("war3mapMap.blp");
                 break;
         }
     }

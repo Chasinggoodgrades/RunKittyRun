@@ -1,5 +1,4 @@
-﻿using Source;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -9,30 +8,32 @@ public class Kitty
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
     private const float MANA_DEATH_PENALTY = 65.0f;
+
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
+    public ActiveAwards ActiveAwards { get; set; } = new ActiveAwards();
     public YellowLightning YellowLightning { get; set; }
-    public int WindwalkID { get; set; } = 0;
+    public AIController aiController { get; set; }
+    public APMTracker APMTracker { get; set; }
+    public Slider Slider { get; private set; }
     public player Player { get; }
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
     public bool Invulnerable { get; set; } = false;
-    public int TeamID { get; set; } = 0;
-    public int ProgressZone { get; set; } = 0;
+    public bool WasSpinCamReset { get; set; } = false;
     public bool Alive { get; set; } = true;
     public bool Finished { get; set; } = false;
+    public int TeamID { get; set; } = 0;
+    public int ProgressZone { get; set; } = 0;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
-    public Slider Slider { get; private set; }
-    public AIController aiController { get; set; }
-    public APMTracker APMTracker { get; set; }
     public timer DiscoTimer { get; set; }
-    public float SpinCamSpeed { get; set; } = 0;
+    // Camera
     public timer SpinCamTimer { get; set; }
-    public bool WasSpinCamReset = false;
+    public float SpinCamSpeed { get; set; } = 0;
     public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
     public Kitty(player player)
@@ -58,13 +59,13 @@ public class Kitty
         {
             foreach (player player in Globals.ALL_PLAYERS)
             {
-                _ = new Circle(player);
-                _ = new Kitty(player);
+                new Circle(player);
+                new Kitty(player);
             }
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            Logger.Critical($"Error in Kitty.Initalize. {e.StackTrace}");
             throw;
         }
     }
@@ -91,16 +92,14 @@ public class Kitty
 
             if (Gamemode.CurrentGameMode != "Standard") return;
             SoundManager.PlayLastManStandingSound();
-            _ = Gameover.GameOver();
+            Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
             this.Slider.PauseSlider();
             this.aiController.PauseAi();
         }
         catch (Exception e)
         {
-            if (Program.Debug) Console.WriteLine(e.Message);
-            if (Program.Debug) Console.WriteLine(e.StackTrace);
-            throw;
+            Logger.Critical($"Error in InitDatae.Message {e.Message}");
         }
     }
 
@@ -115,7 +114,7 @@ public class Kitty
             Circle circle = Globals.ALL_CIRCLES[Player];
             circle.HideCircle();
             Alive = true;
-            _ = Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
+            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
             Unit.Mana = circle.Unit.Mana;
             Utility.SelectUnitForPlayer(Player, Unit);
             CameraUtil.RelockCamera(Player);
@@ -128,8 +127,7 @@ public class Kitty
         }
         catch (Exception e)
         {
-            if (Program.Debug) Console.WriteLine(e.Message);
-            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            Logger.Critical($"Error in ReviveKitty. {e.Message}");
             throw;
         }
     }
@@ -146,8 +144,7 @@ public class Kitty
         }
         catch (Exception e)
         {
-            if (Program.Debug) Console.WriteLine(e.Message);
-            if (Program.Debug) Console.WriteLine(e.StackTrace);
+            Logger.Critical($"Error in InitData {e.Message}");
             throw;
         }
     }
@@ -170,11 +167,10 @@ public class Kitty
         Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
 
-        // Set Collision to Default
-        CollisionDetection.KITTY_COLLISION_RADIUS.Add(Player, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
+        // Register Collision
         CollisionDetection.KittyRegisterCollisions(this);
 
-        // Set Selected Rewards On Spawn but with a small delay for systems to catchup.
+        // Set Selected Rewards On Spawn but with a small delay for save data to get set.
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
     }
 
@@ -186,7 +182,7 @@ public class Kitty
         c_Collision.Dispose();
         YellowLightning.Dispose();
         if (Gameover.WinGame) return;
-        _ = Globals.ALL_KITTIES.Remove(Player);
+        Globals.ALL_KITTIES.Remove(Player);
     }
 
     private void UpdateSaviorStats(Kitty savior)
@@ -227,7 +223,7 @@ public class Kitty
     private void TrueSightGhostWolves()
     {
         int trueSight = FourCC("Atru");
-        _ = Unit.AddAbility(trueSight);
+        Unit.AddAbility(trueSight);
         Unit.HideAbility(trueSight, true);
     }
 

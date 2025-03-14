@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    public static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public static new int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
@@ -132,9 +132,9 @@ public class FrostbiteRing : Relic
     private void RegisterTriggers(unit Unit)
     {
         Trigger = trigger.Create();
-        _ = Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        _ = Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        _ = Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;

@@ -30,7 +30,7 @@ public class AmuletOfEvasiveness : Relic
         var kitty = Globals.ALL_KITTIES[player];
         var newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = newCollisionRadius;
+        kitty.CurrentStats.CollisonRadius = newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
         Utility.SimpleTimer(0.1f, () => ScaleUnit(Unit));
     }
@@ -40,7 +40,7 @@ public class AmuletOfEvasiveness : Relic
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
+        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
         Unit.SetScale(0.60f, 0.60f, 0.60f);
         CollisionDetection.KittyRegisterCollisions(kitty);
     }
@@ -80,13 +80,13 @@ public class AmuletOfEvasiveness : Relic
         if (upgradeLevel < 2) return;
         var newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(Unit);
-        CollisionDetection.KITTY_COLLISION_RADIUS[player] = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
+        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
 
         var t = timer.Create();
         t.Start(WINDWALK_COLLISION_DURATION, false, () =>
         {
-            CollisionDetection.KITTY_COLLISION_RADIUS[player] = GetCollisionReduction(Unit);
+            kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);
             CollisionDetection.KittyRegisterCollisions(kitty);
             t.Dispose();
         });

@@ -19,8 +19,8 @@ public static class VictoryZone
     private static void VictoryAreaTrigger()
     {
         var VictoryArea = Regions.Victory_Area.Region;
-        _ = InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
-        _ = InVictoryArea.AddAction(VictoryAreaActions);
+        InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
+        InVictoryArea.AddAction(VictoryAreaActions);
     }
 
     private static void VictoryAreaActions()

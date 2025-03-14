@@ -18,9 +18,9 @@ public static class OldsaveSync
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = BlzTriggerRegisterPlayerSyncEvent(Trigger, player, SYNC_PREFIX, false);
+            BlzTriggerRegisterPlayerSyncEvent(Trigger, player, SYNC_PREFIX, false);
         }
-        _ = Trigger.AddAction(() =>
+        Trigger.AddAction(() =>
         {
             SavePlayer = GetTriggerPlayer();
             SaveLoadCode = BlzGetTriggerSyncData();

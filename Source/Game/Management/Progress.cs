@@ -42,7 +42,7 @@ public static class Progress
         try
         {
             var kitty = Globals.ALL_KITTIES[Player];
-            var currentSafezone = kitty.ProgressZone;
+            var currentSafezone = kitty.CurrentStats.ProgressZone;
 
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress
             if (Regions.Victory_Area.Region.Contains(kitty.Unit)) return 100.0f; // if in victory area, 100 progress
@@ -59,9 +59,7 @@ public static class Progress
         }
         catch (Exception e)
         {
-            _ = e.Message;
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
-            if (Source.Program.Debug) Console.WriteLine(e.StackTrace);
+            Logger.Warning($"Error in CalculatePlayerProgress. {e.Message}");
             return 0.0f;
         }
     }
@@ -83,22 +81,29 @@ public static class Progress
     {
         try
         {
+
+            if (RegionList.PathingPoints == null || RegionList.PathingPoints.Length == 0)
+            {
+                Logger.Warning("PathingPoints list is null or empty.");
+                return;
+            }
+
             var totalDistance = 0.0f;
             var count = 0;
             DistancesFromStart.Add(0, 0.0f);
             foreach (var pathPoint in RegionList.PathingPoints)
             {
-                if (count > RegionList.PathingPoints.Count() - 1) break;
+                if (count >= RegionList.PathingPoints.Count() - 1) break;
                 var nextPathPoint = RegionList.PathingPoints[count + 1];
                 totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY, nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);
-                DistancesFromStart.Add(count + 1, totalDistance);
+                if (!DistancesFromStart.ContainsKey(count + 1)) DistancesFromStart.Add(count + 1, totalDistance);
                 count++;
             }
         }
         catch (Exception e)
         {
-            //Console.WriteLine(e.Message);
-            _ = e.Message;
+            Logger.Warning($"Error in CalculateTotalDistance. {e.Message}");
+            throw;
         }
     }
 

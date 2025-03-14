@@ -16,7 +16,7 @@ public class Chaos : Affix
     public override void Apply()
     {
         RegisterTimer();
-        _ = Unit.Unit.AddAbility(AFFIX_ABILITY);
+        Unit.Unit.AddAbility(AFFIX_ABILITY);
         base.Apply();
     }
 
@@ -24,7 +24,7 @@ public class Chaos : Affix
     {
         currentAffix.Remove();
         GC.RemoveTimer(ref RotationTimer);
-        _ = Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }
 

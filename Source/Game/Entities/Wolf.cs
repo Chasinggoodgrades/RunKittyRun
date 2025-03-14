@@ -71,7 +71,7 @@ public class Wolf
                 int numberOfWolves = laneEntry.Value;
 
                 for (int i = 0; i < numberOfWolves; i++)
-                    _ = new Wolf(lane);
+                    new Wolf(lane);
             }
             //WolfSpawning.SpawnWolves();
             FandF.CreateBloodWolf();
@@ -226,7 +226,7 @@ public class Wolf
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
         //OverheadEffect?.Dispose();
-        OverheadEffect??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
+        OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
 
         BlzSetSpecialEffectAlpha(OverheadEffect, 255);
         BlzSetSpecialEffectColor(OverheadEffect, 255, 255, 255);
@@ -253,9 +253,9 @@ public class Wolf
 
     public void RemoveAffix(Affix affix)
     {
-        _ = Affixes.Remove(affix);
+        Affixes.Remove(affix);
         affix.Remove();
-        _ = AffixFactory.AllAffixes.Remove(affix);
+        AffixFactory.AllAffixes.Remove(affix);
     }
 
     public void RemoveAffix(string affixName)
@@ -280,7 +280,7 @@ public class Wolf
         if (AffixCount() == 0) return;
         foreach (var affix in Affixes)
         {
-            _ = AffixFactory.AllAffixes.Remove(affix);
+            AffixFactory.AllAffixes.Remove(affix);
             affix.Remove();
         }
         Affixes.Clear();

@@ -79,32 +79,50 @@ public static class AwardManager
     /// </summary>
     public static void RegisterGamestatEvents()
     {
-        GameStatsData gamestatsx;
-        var gameStatsToIgnore = new List<string>
+        try
         {
-            nameof(gamestatsx.NormalGames),
-            nameof(gamestatsx.HardGames),
-            nameof(gamestatsx.ImpossibleGames),
-            nameof(gamestatsx.NormalWins),
-            nameof(gamestatsx.HardWins),
-            nameof(gamestatsx.ImpossibleWins)
-        };
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
-            if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
-            var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-            var gameStats = kittyStats.GameStats;
-
-            foreach (var gameStatReward in RewardsManager.GameStatRewards)
+            GameStatsData gamestatsx;
+            var gameStatsToIgnore = new List<string>
             {
-                var gamestat = gameStatReward.GameStat;
-                if (gameStatsToIgnore.Contains(gamestat)) continue;
-                HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                nameof(gamestatsx.NormalGames),
+                nameof(gamestatsx.HardGames),
+                nameof(gamestatsx.ImpossibleGames),
+                nameof(gamestatsx.NormalWins),
+                nameof(gamestatsx.HardWins),
+                nameof(gamestatsx.ImpossibleWins)
+            };
+
+            if (Gamemode.CurrentGameMode != "Standard") return;
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
+                if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
+                if (!Globals.ALL_KITTIES.TryGetValue(player, out var kittyProfile))
+                {
+                    if (!SaveManager.SaveData.TryGetValue(player, out var saveData))
+                    {
+                        Logger.Critical($"Save data wasn't finished loading / found. Defaulting SaveData for {player}.");
+                        Globals.ALL_KITTIES[player].SaveData = new KittyData();
+                        continue;
+                    }
+                    Globals.ALL_KITTIES[player].SaveData = saveData;
+                    kittyProfile = Globals.ALL_KITTIES[player];
+                }
+                var gameStats = kittyProfile.SaveData.GameStats;
+
+                foreach (var gameStatReward in RewardsManager.GameStatRewards)
+                {
+                    var gamestat = gameStatReward.GameStat;
+                    if (gameStatsToIgnore.Contains(gamestat)) continue;
+                    HandleGameStatTrigger(player, kittyProfile.SaveData, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                }
             }
+            AwardTrigger.RegisterTimerEvent(1.0f, true);
         }
-        _ = AwardTrigger.RegisterTimerEvent(1.0f, true);
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in AwardManager.RegisterGamestatEvents: {ex.Message}");
+        }
     }
 
     private static void HandleGameStatTrigger(player player, KittyData kittyStats, string gamestat, int requiredValue, string award)
@@ -185,7 +203,6 @@ public static class AwardManager
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
         if (kitty.Player.SlotState != playerslotstate.Playing) return;
         if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
-        _ = kitty.Unit;
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
 
         var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));

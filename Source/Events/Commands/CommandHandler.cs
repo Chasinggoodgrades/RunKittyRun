@@ -17,11 +17,11 @@ public static class CommandHandler
             for (int i = 0; i < GetBJMaxPlayers(); i++)
             {
                 if (Player(i).SlotState != playerslotstate.Playing) continue;
-                _ = TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
-                _ = TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
+                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+                TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
             }
-            _ = TriggerAddAction(DebugCmdTrigger, DebugHandle);
-            _ = TriggerAddAction(NewCmdHandler, HandleCommands);
+            TriggerAddAction(DebugCmdTrigger, DebugHandle);
+            TriggerAddAction(NewCmdHandler, HandleCommands);
         }
         catch (Exception e)
         {

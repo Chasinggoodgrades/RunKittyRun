@@ -63,8 +63,8 @@ public static class DiscordFrame
     private static void RegisterTrigger()
     {
         Trigger = trigger.Create();
-        _ = Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter);
-        _ = Trigger.AddAction(UpdateTextBox);
+        Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter);
+        Trigger.AddAction(UpdateTextBox);
     }
 
     private static void RegisterESCTrigger()
@@ -72,9 +72,9 @@ public static class DiscordFrame
         ESCTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        _ = ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ESCPressed);
     }
 
     private static void ESCPressed()

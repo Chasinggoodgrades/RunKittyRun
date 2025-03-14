@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class OneOfNine : Relic
 {
     public const int RelicItemID = Constants.ITEM_ONE_OF_NINE;
-    public const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    public new const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int RelicCost = 650;
@@ -27,8 +27,8 @@ public class OneOfNine : Relic
     {
         var player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
-        _ = Unit.RemoveAbility(PreviousAbilityID);
-        _ = Unit.AddAbility(RelicAbilityID);
+        Unit.RemoveAbility(PreviousAbilityID);
+        Unit.AddAbility(RelicAbilityID);
         var abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
         RemoveManaCost(Unit, abilityLevel);
@@ -38,9 +38,9 @@ public class OneOfNine : Relic
     {
         var player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
-        _ = Unit.RemoveAbility(RelicAbilityID);
-        _ = Unit.AddAbility(PreviousAbilityID);
-        _ = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
+        Unit.RemoveAbility(RelicAbilityID);
+        Unit.AddAbility(PreviousAbilityID);
+        ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(PreviousAbilityID, cooldown);
     }
 
@@ -76,7 +76,7 @@ public class OneOfNine : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
         if (upgradeLevel < 2) return;
-        _ = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0);
     }
 
@@ -85,10 +85,9 @@ public class OneOfNine : Relic
     {
         var kitty = Globals.ALL_KITTIES[Player];
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false;
-        if (Program.Debug) Console.WriteLine("One of Nine Effect");
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
         {
-            _ = IssueImmediateOrder(kitty.Unit, "divineshield");
+            IssueImmediateOrder(kitty.Unit, "divineshield");
             return true;
         }
         return false;

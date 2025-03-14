@@ -36,7 +36,7 @@ public static class Standard
         // Ultimate, Protection of the Ancients
         KittyReachedLevelSix = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
-        _ = KittyReachedLevelSix.AddAction(() =>
+        KittyReachedLevelSix.AddAction(() =>
         {
             if (HitLevel6.Contains(@event.Unit.Owner)) return;
             if (@event.Unit.HeroLevel < 6) return;
@@ -50,14 +50,14 @@ public static class Standard
         // Ability to Purchase Relics
         KittyReachedLevelTen = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelTen, playerunitevent.HeroLevel);
-        _ = KittyReachedLevelTen.AddAction(() =>
+        KittyReachedLevelTen.AddAction(() =>
         {
             if (HitLevel10.Contains(@event.Unit.Owner)) return;
             if (@event.Unit.HeroLevel < 10) return;
             HitLevel10.Add(@event.Unit.Owner);
             RelicUtil.EnableRelicBook(@event.Unit);
             RelicUtil.DisableRelicAbilities(@event.Unit);
-            _ = ProtectionOfAncients.SetProtectionOfAncientsLevel(@event.Unit);
+            ProtectionOfAncients.SetProtectionOfAncientsLevel(@event.Unit);
             @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}You may now buy relics from the shop!|r");
         });
     }

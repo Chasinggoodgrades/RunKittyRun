@@ -29,7 +29,7 @@ public static class SoloMultiboard
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SoloMultiboard: {ex.Message}");
+            Logger.Critical($"Error in SoloMultiboard: {ex.Message}");
             throw;
         }
     }
@@ -45,8 +45,8 @@ public static class SoloMultiboard
     {
         ESCTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        _ = ESCTrigger.AddAction(ESCPressed);
+            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        ESCTrigger.AddAction(ESCPressed);
     }
 
     private static void OverallMultiboardRacemode()
@@ -238,7 +238,6 @@ public static class SoloMultiboard
 
     private static void ESCPressed()
     {
-        _ = @event.Player;
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo mode
         if (!@event.Player.IsLocal) return;
         if (OverallBoard.IsDisplayed)

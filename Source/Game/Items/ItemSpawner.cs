@@ -58,9 +58,10 @@ public static class ItemSpawner
 
         if (KibbleEvent.IsEventActive()) return;
 
-        for (int i = 0; i < TrackKibbles.Count; i++)
+        foreach(var kibble in TrackKibbles)
         {
-            TrackKibbles[i].__destroy();
+            if (kibble.Item == null) continue; // alrady been __destroyed.
+            kibble.__destroy();
         }
 
         TrackKibbles.Clear();
@@ -71,6 +72,7 @@ public static class ItemSpawner
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (KibbleEvent.IsEventActive()) return;
+
         var kibble = MemoryHandler.GetEmptyObject<Kibble>();
         kibble.SpawnKibble();
         TrackKibbles.Add(kibble);

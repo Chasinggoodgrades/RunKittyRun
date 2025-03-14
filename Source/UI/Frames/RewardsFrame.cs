@@ -30,11 +30,11 @@ public static class RewardsFrame
             CountRewardFrames();
             AppendRewardsToFrames();
             CreateRandomRewardButton();
-            _ = FrameManager.CreateHeaderFrame(RewardFrame);
+            FrameManager.CreateHeaderFrame(RewardFrame);
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in RewardsFrame: {ex.Message}");
+            Logger.Critical($"Error in RewardsFrame: {ex.Message}");
             throw;
         }
     }
@@ -86,7 +86,7 @@ public static class RewardsFrame
         var y = -Padding;
         var width = (FrameWidth - (Padding * 2)) / 2;
         var height = (colCount == 1) ? 0.03f : 0.03f + ((colCount - 1) * 0.02f);
-        _ = CreatePanel(TempHandle, 0, y, width, height, name);
+        CreatePanel(TempHandle, 0, y, width, height, name);
     }
 
     private static framehandle CreatePanel(framehandle parent, float x, float y, float width, float height, string title)
@@ -152,8 +152,8 @@ public static class RewardsFrame
         tooltipText.Text = $"{Colors.COLOR_YELLOW}Randomize Rewards{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}Picks from your rewards list, applying random cosmetics.{Colors.COLOR_RESET}";
 
         var t = trigger.Create();
-        _ = t.RegisterFrameEvent(button, frameeventtype.Click);
-        _ = t.AddAction(RandomRewardsButtonActions);
+        t.RegisterFrameEvent(button, frameeventtype.Click);
+        t.AddAction(RandomRewardsButtonActions);
     }
 
     private static void RandomRewardsButtonActions()
@@ -218,8 +218,8 @@ public static class RewardsFrame
             RewardIcons.Add(icon, reward);
 
             var Trigger = trigger.Create();
-            _ = Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
-            _ = Trigger.AddAction(() => RewardButtonActions(reward));
+            Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
+            Trigger.AddAction(() => RewardButtonActions(reward));
         }
 
         GC.RemoveDictionary(ref count);
@@ -275,9 +275,9 @@ public static class RewardsFrame
         var rewardsHotKey = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            _ = rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
+            rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
         }
-        _ = rewardsHotKey.AddAction(() =>
+        rewardsHotKey.AddAction(() =>
         {
             RewardsFrameActions();
         });

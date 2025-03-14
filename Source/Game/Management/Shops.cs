@@ -98,8 +98,8 @@ public static class Shops
     {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         foreach (var vendor in KittyVendorsList)
-            _ = Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
-        _ = Trigger.AddAction(() => OnVendorSell());
+            Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
+        Trigger.AddAction(() => OnVendorSell());
     }
 
     private static void OnVendorSell()

@@ -22,7 +22,7 @@ public class WolfPoint
     public WolfPoint(Wolf wolf)
     {
         Wolf = wolf;
-        IsPausedTrigger??= InitTrigger();
+        IsPausedTrigger ??= InitTrigger();
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class WolfPoint
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{ex.Message}");
+            Logger.Warning($"WolfPoint.DiagonalRegionCreate {ex.Message}");
         }
     }
 

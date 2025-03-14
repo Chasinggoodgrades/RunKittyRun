@@ -40,7 +40,7 @@ public static class ProtectionOfAncients
     public static void AddProtectionOfAncients(unit unit)
     {
         var player = unit.Owner;
-        _ = unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
     }
 
@@ -65,8 +65,8 @@ public static class ProtectionOfAncients
 
         if (abilityLevel > 0)
         {
-            _ = unit.SetAbilityLevel(POTA_NO_RELIC, abilityLevel);
-            _ = unit.SetAbilityLevel(POTA_WITH_RELIC, abilityLevel);
+            unit.SetAbilityLevel(POTA_NO_RELIC, abilityLevel);
+            unit.SetAbilityLevel(POTA_WITH_RELIC, abilityLevel);
 
             // Display the message only if the player is achieving this level for the first time
             if ((abilityLevel == 2 && !UpgradeLevel2.Contains(player)) ||
@@ -82,7 +82,7 @@ public static class ProtectionOfAncients
             else if (abilityLevel == 3)
             {
                 UpgradeLevel3.Add(player);
-                _ = UpgradeLevel2.Remove(player);  // Ensure the player is only in one list
+                UpgradeLevel2.Remove(player);  // Ensure the player is only in one list
             }
         }
         return abilityLevel;
@@ -92,17 +92,17 @@ public static class ProtectionOfAncients
     {
         LevelUpTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
-        _ = LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
-        _ = LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
+        LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
+        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
     }
 
     private static void RegisterEvents()
     {
         Trigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
-            _ = Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        _ = Trigger.AddAction(ActivationEvent);
-        _ = Trigger.AddCondition(Condition(() =>
+            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+        Trigger.AddAction(ActivationEvent);
+        Trigger.AddCondition(Condition(() =>
         @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
     }
 
@@ -114,7 +114,6 @@ public static class ProtectionOfAncients
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
-        if (Program.Debug) Console.WriteLine("DEBUG: Player: " + player.Name + " activated Protection of the Ancients!");
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
         Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)));

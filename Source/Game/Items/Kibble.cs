@@ -5,7 +5,6 @@ using static WCSharp.Api.Common;
 
 public class Kibble : IDestroyable
 {
-    public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
     public static trigger PickupTrigger;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
@@ -27,7 +26,7 @@ public class Kibble : IDestroyable
 
     public void __destroy(bool recursive = false)
     {
-        Item.Dispose();
+        Item?.Dispose();
         Item = null;
         MemoryHandler.DestroyObject(this, recursive);
     }
@@ -45,8 +44,6 @@ public class Kibble : IDestroyable
     #region Kibble Initialization
 
     private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
-
-
 
     private static trigger KibblePickupEvents()
     {
@@ -91,8 +88,7 @@ public class Kibble : IDestroyable
         }
         catch (Exception e)
         {
-            Logger.Warning(e.Message);
-            Logger.Warning("Kibble Pickup Error");
+            Logger.Warning($"Kibble.KibblePickup Error: {e.Message}");
             throw;
         }
     }
@@ -159,8 +155,7 @@ public class Kibble : IDestroyable
 
     private static void IncrementKibble(player kibblePicker)
     {
-        if (PickedUpKibble.ContainsKey(kibblePicker)) PickedUpKibble[kibblePicker] += 1;
-        else PickedUpKibble.Add(kibblePicker, 1);
+        Globals.ALL_KITTIES[kibblePicker].CurrentStats.CollectedKibble += 1;
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
@@ -174,7 +169,7 @@ public class Kibble : IDestroyable
         {
             HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
             HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
-            _ => new List<int>
+            _ => new List<int> // Default case
             {
                 Constants.ITEM_KIBBLE,
                 Constants.ITEM_KIBBLE_TEAL,
@@ -185,6 +180,7 @@ public class Kibble : IDestroyable
             }
         };
     }
+
 
     #endregion
 }
