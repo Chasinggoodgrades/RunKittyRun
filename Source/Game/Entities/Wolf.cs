@@ -92,6 +92,7 @@ public class Wolf
     /// </summary>
     public void WolfMove()
     {
+        if (IsPaused || IsReviving) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         if (HasAffix("Blitzer")) return;
