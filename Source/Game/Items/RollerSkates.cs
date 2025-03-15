@@ -33,7 +33,7 @@ public static class RollerSkates
         {
             SetRollerSkates(item);
             if (slider.IsEnabled())
-                slider.ResumeSlider();
+                slider.ResumeSlider(false);
             else
                 slider.StartSlider();
             RollerSkaters.Add(unit.Owner);

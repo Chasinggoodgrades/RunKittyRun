@@ -21,6 +21,8 @@ public class Slider
 
     private bool isMirror = false;
     private bool wasSliding = false;
+    private float? forcedSlideSpeed = null;
+    private timer ForcedSlideTimer;
 
     // percentage of maximum speed
     private Dictionary<int, float> SPEED_AT_LEAST_THAN_50_DEGREES = new Dictionary<int, float>()
@@ -83,6 +85,7 @@ public class Slider
     {
         this.kitty = kitty;
         SliderTimer = timer.Create();
+        ForcedSlideTimer = timer.Create();
         enabled = false;
         RegisterClickEvent();
     }
@@ -105,10 +108,10 @@ public class Slider
     public void StartSlider()
     {
         enabled = true;
-        ResumeSlider();
+        ResumeSlider(false);
     }
 
-    public void ResumeSlider()
+    public void ResumeSlider(bool isRevive)
     {
         if (!enabled)
         {
@@ -117,6 +120,22 @@ public class Slider
 
         ClickTrigger.Enable();
         WidgetTrigger.Enable();
+
+        if (isRevive)
+        {
+            this.forcedSlideSpeed = 0;
+            this.kitty.Invulnerable = true;
+
+            this.ForcedSlideTimer.Start(1.4f, false, () =>
+            {
+                this.forcedSlideSpeed = null;
+
+                this.ForcedSlideTimer.Start(0.6f, false, () =>
+                {
+                    this.kitty.Invulnerable = false;
+                });
+            });
+        }
 
         SliderTimer.Start(SLIDE_INTERVAL, true, () =>
         {
@@ -148,6 +167,7 @@ public class Slider
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
         SliderTimer.Pause();
+        ForcedSlideTimer.Pause();
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
         this.wasSliding = false;
@@ -166,8 +186,8 @@ public class Slider
 
     private void UpdateSlider()
     {
-        float moveSpeed = (this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit);
-        float movePerTick = moveSpeed * SLIDE_INTERVAL;
+        float slideSpeed = this.forcedSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
+        float slidePerTick = slideSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);
 
@@ -176,8 +196,8 @@ public class Slider
 
         escaperTurnForOnePeriod();
 
-        float newX = oldX + (movePerTick * Cos(angle));
-        float newY = oldY + (movePerTick * Sin(angle));
+        float newX = oldX + (slidePerTick * Cos(angle));
+        float newY = oldY + (slidePerTick * Sin(angle));
 
         if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
         {
