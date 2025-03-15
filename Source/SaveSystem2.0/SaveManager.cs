@@ -93,12 +93,18 @@ public class SaveManager
 
     private void NewSave(player player)
     {
-        if (player.SlotState != playerslotstate.Playing) return;
-        SaveData[player] = new KittyData();
-        SaveData[player].PlayerName = player.Name;
-        Save(player);
-        if (!Gamemode.IsGameModeChosen) return;
-        Globals.ALL_KITTIES[player].SaveData = SaveData[player];
+        try
+        {
+            if (player.SlotState != playerslotstate.Playing) return;
+            SaveData[player] = new KittyData();
+            SaveData[player].PlayerName = player.Name;
+            if (!Gamemode.IsGameModeChosen) return;
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: {ex.Message}");
+            throw;
+        }
     }
 
     private static Action<FilePromise> FinishLoading()
@@ -127,5 +133,15 @@ public class SaveManager
         }
         kittyData.SetRewardsFromUnavailableToAvailable();
         SaveData[player] = kittyData;
+    }
+
+    public static KittyData GetKittyData(player player)
+    {
+        if (SaveData.TryGetValue(player, out KittyData kittyData) && kittyData != null)
+        {
+            return kittyData;
+        }
+        Globals.SaveSystem.NewSave(player);
+        return SaveData[player];
     }
 }
