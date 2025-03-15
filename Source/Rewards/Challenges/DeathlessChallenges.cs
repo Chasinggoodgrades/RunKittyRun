@@ -36,7 +36,6 @@ public static class DeathlessChallenges
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress++;
-        Console.WriteLine(Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress);
         if (Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress == DeathlessPerRound())
         {
             AwardDeathless(player);
