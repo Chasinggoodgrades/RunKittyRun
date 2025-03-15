@@ -11,7 +11,6 @@ public class AIController
     private Kitty kitty;
     private bool enabled;
     public float DODGE_RADIUS = 192.0f;
-    public float REVIVE_RADIUS = 1024.0f;
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public static string FREE_LASER_COLOR = "GRSB";
     public static string BLOCKED_LASER_COLOR = "RESB";
@@ -42,8 +41,8 @@ public class AIController
     private List<Wolf> wolvesInRange = new List<Wolf>();
     private lightning lastLightning;
 
-    private int lastSafezoneIndexId = -1;
-    private bool reachedLastSafezoneCenter = false;
+    private int lastProgressZoneIndexId = -1;
+    private bool reachedLastProgressZoneCenter = false;
     private List<lightning> availableBlockedLightnings = new List<lightning>();
     private List<lightning> availableClearLightnings = new List<lightning>();
     private List<lightning> usedBlockedLightnings = new List<lightning>();
@@ -51,6 +50,7 @@ public class AIController
     private List<AngleInterval> blockedIntervals = new List<AngleInterval>();
     private List<AngleInterval> freeGaps = new List<AngleInterval>();
     private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
+    private static Dictionary<Kitty, Kitty> claimedKitties = new Dictionary<Kitty, Kitty>();
 
     public AIController(Kitty kitty)
     {
@@ -73,6 +73,12 @@ public class AIController
         {
             moveTimer = CreateTimer();
             TimerStart(moveTimer, this.timerInterval, true, PollMovement);
+        }
+
+        // If I revive release me from the claimedKitties
+        if (claimedKitties.ContainsKey(this.kitty))
+        {
+            claimedKitties.Remove(claimedKitties.FirstOrDefault(x => x.Key == this.kitty).Key);
         }
     }
 
@@ -103,6 +109,12 @@ public class AIController
 
         HideAllLightnings();
         HideAllFreeLightnings();
+
+        // If I die release my target from the claimedKitties
+        if (claimedKitties.ContainsValue(this.kitty))
+        {
+            claimedKitties.Remove(claimedKitties.FirstOrDefault(x => x.Value == this.kitty).Key);
+        }
     }
 
     public bool IsEnabled()
@@ -112,16 +124,16 @@ public class AIController
 
     private void MoveKittyToPosition()
     {
-        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
-        var currentSafezone = Globals.SAFE_ZONES[currentSafezoneId];
-        var nextSafezone = (currentSafezoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentSafezoneId + 1] : Globals.SAFE_ZONES[currentSafezoneId];
+        var currentProgressZoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
+        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : Globals.SAFE_ZONES[currentProgressZoneId];
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        if (currentSafezoneId != lastSafezoneIndexId)
+        if (currentProgressZoneId != lastProgressZoneIndexId)
         {
-            reachedLastSafezoneCenter = false;
-            lastSafezoneIndexId = currentSafezoneId;
+            reachedLastProgressZoneCenter = false;
+            lastProgressZoneIndexId = currentProgressZoneId;
         }
 
         var distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.Unit.Y - currentSafezoneCenter.Y, 2));
@@ -129,32 +141,52 @@ public class AIController
 
         if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD)
         {
-            reachedLastSafezoneCenter = true;
+            reachedLastProgressZoneCenter = true;
         }
 
-        var targetPosition = reachedLastSafezoneCenter ? nextSafezoneCenter : currentSafezoneCenter;
+        bool allKittiesAtSameOrHigherSafezone = Globals.ALL_KITTIES.All(k =>
+        {
+            if (Program.Debug && k.Value.Player == Player(0))
+            {
+                return true;
+            }
+
+            return Globals.PLAYERS_CURRENT_SAFEZONE[k.Value.Player] >= currentProgressZoneId;
+        });
+
+        var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
 
         foreach (var circle in Globals.ALL_CIRCLES)
         {
             var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
-            var deadKittySafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[deadKitty.Player];
+            var deadKittyProgressZoneId = deadKitty.ProgressZone;
 
-            if (deadKittySafezoneId != currentSafezoneId)
+            if (deadKittyProgressZoneId != currentProgressZoneId && !(deadKittyProgressZoneId == currentProgressZoneId - 1 && IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId)))
+            {
                 continue;
+            }
 
             if (deadKitty == this.kitty)
             {
                 continue;
             }
 
-            if (!deadKitty.Alive && IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, circle.Value.Unit.X, circle.Value.Unit.Y, REVIVE_RADIUS))
+            if (!deadKitty.Alive)
             {
-                targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
-                break;
+                if (!claimedKitties.ContainsKey(deadKitty))
+                {
+                    claimedKitties[deadKitty] = this.kitty;
+                }
+
+                if (claimedKitties[deadKitty] == this.kitty)
+                {
+                    targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
+                    break;
+                }
             }
         }
 
-        var wolvesInLane = WolfArea.WolfAreas[currentSafezoneId].Wolves;
+        var wolvesInLane = WolfArea.WolfAreas[currentProgressZoneId].Wolves;
 
         wolvesInRange.Clear();
         foreach (var wolf in wolvesInLane)
@@ -211,6 +243,13 @@ public class AIController
             // Horizontal lane: check only the x coordinate.
             return (y >= laneBounds.Bottom) && (y <= laneBounds.Top);
         }
+    }
+
+    private bool IsInSafeZone(float x, float y, int safeZoneId)
+    {
+        var safezone = Globals.SAFE_ZONES[safeZoneId];
+
+        return x >= safezone.Rect_.MinX && x <= safezone.Rect_.MaxX && y >= safezone.Rect_.MinY && y <= safezone.Rect_.MaxY;
     }
 
     private void IssueOrder(string command, float x, float y, bool isDodge)
