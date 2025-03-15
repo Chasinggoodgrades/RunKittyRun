@@ -43,7 +43,7 @@ public static class Globals
     public static Dictionary<int, Team> ALL_TEAMS;
     public static Dictionary<player, Team> PLAYERS_TEAMS;
     public static Dictionary<Team, string> TEAM_PROGRESS;
-    public static Dictionary<player, float> PLAYER_PROGRESS;
+    public static Dictionary<player, float> PLAYER_PROGRESS { get; set; }
 
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
         {

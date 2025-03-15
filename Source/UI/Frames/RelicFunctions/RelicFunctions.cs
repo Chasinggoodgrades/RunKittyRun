@@ -5,12 +5,6 @@ public static class RelicFunctions
 {
     public static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
     {
-        if (!kitty.Alive || kitty.ProtectionActive)
-        {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You cannot purchase a relic while your kitty is dead!|r");
-            return;
-        }
-
         if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
         {
             AlreadyHaveRelic(player);

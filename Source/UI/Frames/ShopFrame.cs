@@ -336,9 +336,10 @@ public static class ShopFrame
 
         if (player.IsLocal)
         {
-            buyButton.Visible = false; buyButton.Visible = true;
+            buyButton.Visible = false;
+            buyButton.Visible = true;
         }
-        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+        if (!ShopUtil.PlayerIsDead(player) && SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var kitty = Globals.ALL_KITTIES[player];
 
