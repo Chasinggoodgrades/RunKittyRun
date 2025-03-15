@@ -22,6 +22,8 @@ public class Wolf
 
     private timer EffectTimer { get; set; }
 
+    public texttag Texttag { get; set; }
+
     public rect Lane { get; private set; }
 
     public unit Unit { get; set; }
@@ -60,19 +62,27 @@ public class Wolf
     /// </summary>
     public static void SpawnWolves()
     {
-        if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
+        try
         {
-            foreach (var laneEntry in wolvesInRound)
+            if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
             {
-                int lane = laneEntry.Key;
-                int numberOfWolves = laneEntry.Value;
+                foreach (var laneEntry in wolvesInRound)
+                {
+                    int lane = laneEntry.Key;
+                    int numberOfWolves = laneEntry.Value;
 
-                for (int i = 0; i < numberOfWolves; i++)
-                    new Wolf(lane);
+                    for (int i = 0; i < numberOfWolves; i++)
+                        new Wolf(lane);
+                }
+                //WolfSpawning.SpawnWolves();
+                FandF.CreateBloodWolf();
+                NamedWolves.CreateNamedWolves();
             }
-            //WolfSpawning.SpawnWolves();
-            FandF.CreateBloodWolf();
-            NamedWolves.CreateNamedWolves();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in Wolf.SpawnWolves: {e.Message}");
+            throw;
         }
     }
 
