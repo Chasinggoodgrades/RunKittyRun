@@ -148,6 +148,7 @@ public class Wolf
             foreach (var wolf in Globals.ALL_WOLVES)
             {
                 wolf.Value.WanderTimer.Pause();
+                wolf.Value.EffectTimer.Pause();
                 wolf.Value.Unit.ClearOrders();
                 wolf.Value.IsWalking = false;
                 wolf.Value.Unit.SetPausedEx(pause);
@@ -158,6 +159,7 @@ public class Wolf
             foreach (var wolf in Globals.ALL_WOLVES)
             {
                 wolf.Value.WanderTimer.Resume();
+                wolf.Value.EffectTimer.Resume();
                 wolf.Value.Unit.ClearOrders();
                 wolf.Value.IsWalking = true;
                 wolf.Value.Unit.SetPausedEx(pause);
