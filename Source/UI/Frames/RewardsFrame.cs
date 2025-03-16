@@ -155,7 +155,7 @@ public static class RewardsFrame
 
         var t = trigger.Create();
         t.RegisterFrameEvent(button, frameeventtype.Click);
-        t.AddAction(RandomRewardsButtonActions);
+        t.AddAction(ErrorHandler.Wrap(RandomRewardsButtonActions));
     }
 
     private static void RandomRewardsButtonActions()
@@ -221,7 +221,7 @@ public static class RewardsFrame
 
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
-            Trigger.AddAction(() => RewardButtonActions(reward));
+            Trigger.AddAction(ErrorHandler.Wrap(() => RewardButtonActions(reward)));
         }
 
         GC.RemoveDictionary(ref count);
@@ -279,10 +279,10 @@ public static class RewardsFrame
         {
             rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
         }
-        rewardsHotKey.AddAction(() =>
+        rewardsHotKey.AddAction(ErrorHandler.Wrap(() =>
         {
             RewardsFrameActions();
-        });
+        }));
     }
 
     public static void RewardsFrameActions()

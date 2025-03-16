@@ -43,7 +43,7 @@ namespace Source.Init
         private static void StartGameModeTimer()
         {
             gameModeTimer = timer.Create();
-            gameModeTimer.Start(1.0f, true, ChoosingGameMode);
+            gameModeTimer.Start(1.0f, true, ErrorHandler.Wrap(ChoosingGameMode));
         }
 
         private static void ChoosingGameMode()

@@ -35,9 +35,9 @@ public static class MemoryHandlerTest
             t.Pause();
             return;
         }
-        t.Start(1.0f, true, () =>
+        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             MemoryHandler.PrintDebugInfo();
-        });
+        }));
     }
 }

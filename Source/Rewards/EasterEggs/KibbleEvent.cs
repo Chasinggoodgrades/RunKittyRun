@@ -24,7 +24,7 @@ public static class KibbleEvent
         EventTimerDialog = timerdialog.Create(EventTimer);
         EventTimerDialog.SetTitle("Kibble Event");
         EventTimerDialog.IsDisplayed = true;
-        EventTimer.Start(EventLength, false, EndKibbleEvent);
+        EventTimer.Start(EventLength, false, ErrorHandler.Wrap(EndKibbleEvent));
         Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}A Kibble event has started! Collect {TotalEventKibbles} kibbles to earn an award!{Colors.COLOR_RESET}");
 
         // Spawn event kibbles

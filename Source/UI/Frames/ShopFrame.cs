@@ -137,15 +137,15 @@ public static class ShopFrame
 
         var BuyTrigger = trigger.Create();
         BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        BuyTrigger.AddAction(() => BuySelectedItem());
+        BuyTrigger.AddAction(ErrorHandler.Wrap(() => BuySelectedItem()));
 
         var SellTrigger = trigger.Create();
         SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        SellTrigger.AddAction(() => SellSelectedItem());
+        SellTrigger.AddAction(ErrorHandler.Wrap(() => SellSelectedItem()));
 
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
+        UpgradeTrigger.AddAction(ErrorHandler.Wrap(() => RelicFunctions.UpgradeRelic()));
     }
 
     private static void LoadItemsIntoPanels()
@@ -183,7 +183,7 @@ public static class ShopFrame
             var relic = items[i];
             CreateShopitemTooltips(button, relic);
             itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            itemDetails.AddAction(() => ShowItemDetails(relic));
+            itemDetails.AddAction(ErrorHandler.Wrap(() => ShowItemDetails(relic)));
         }
 
         float panelHeight = (rows * buttonHeight) + panelPadding;
@@ -440,7 +440,7 @@ public static class ShopFrame
         {
             shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
         }
-        shopFrameHotkey.AddAction(() => ShopFrameActions());
+        shopFrameHotkey.AddAction(ErrorHandler.Wrap(() => ShopFrameActions()));
     }
 
     public static void ShopFrameActions()

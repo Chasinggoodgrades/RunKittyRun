@@ -47,7 +47,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         trig.RegisterTimerEvent(RotationTime, true);
-        trig.AddAction(() => RotationActions());
+        trig.AddAction(ErrorHandler.Wrap(() => RotationActions()));
         return trig;
     }
 
@@ -64,7 +64,7 @@ public static class UrnSoul
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
-        trig.AddAction(() => UrnUsageActions());
+        trig.AddAction(ErrorHandler.Wrap(() => UrnUsageActions()));
         return trig;
     }
 
@@ -96,7 +96,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
-        trig.AddAction(() => InRangeActions());
+        trig.AddAction(ErrorHandler.Wrap(() => InRangeActions()));
         return trig;
     }
 

@@ -66,7 +66,7 @@ public static class DiscordFrame
     {
         Trigger = trigger.Create();
         Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter);
-        Trigger.AddAction(UpdateTextBox);
+        Trigger.AddAction(ErrorHandler.Wrap(UpdateTextBox));
     }
 
     private static void RegisterESCTrigger()
@@ -76,7 +76,7 @@ public static class DiscordFrame
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void ESCPressed()

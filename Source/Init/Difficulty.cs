@@ -57,7 +57,7 @@ public static class Difficulty
     {
         Trigger = trigger.Create();
         Trigger.RegisterDialogEvent(DifficultyChoosing);
-        Trigger.AddAction(() =>
+        Trigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var player = @event.Player;
             var button = @event.ClickedButton;
@@ -66,7 +66,7 @@ public static class Difficulty
             ButtonTallys[button]++;
             DifficultyChoosing.SetVisibility(player, false);
             Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.{Colors.COLOR_RESET}");
-        });
+        }));
     }
 
     private static void ChooseDifficulty()

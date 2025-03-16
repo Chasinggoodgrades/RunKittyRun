@@ -47,7 +47,7 @@ public static class NitroPacer
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
-        pacerTimer.Start(0.15f, true, UpdateNitroPacer);
+        pacerTimer.Start(0.15f, true, ErrorHandler.Wrap(UpdateNitroPacer));
     }
 
     /// <summary>

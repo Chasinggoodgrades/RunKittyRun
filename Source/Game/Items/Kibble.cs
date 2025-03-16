@@ -49,12 +49,12 @@ public class Kibble : IDestroyable
     {
         var trig = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
-        trig.AddAction(() =>
+        trig.AddAction(ErrorHandler.Wrap(() =>
         {
             var item = @event.ManipulatedItem;
             if (!KibblesColors.Contains(item.TypeId)) return;
             KibblePickup(item);
-        });
+        }));
         return trig;
     }
 

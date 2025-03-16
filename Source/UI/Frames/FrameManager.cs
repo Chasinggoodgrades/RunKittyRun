@@ -74,11 +74,11 @@ public static class FrameManager
         // Close Actions
         var closeTrigger = trigger.Create();
         closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
-        closeTrigger.AddAction(() =>
+        closeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             if (!@event.Player.IsLocal) return;
             parent.Visible = false;
-        });
+        }));
 
         return header;
     }
@@ -102,7 +102,7 @@ public static class FrameManager
         shopText.SetScale(0.9f);
         shopText.Enabled = false;
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
-        RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
+        RewardsTrigger.AddAction(ErrorHandler.Wrap(RewardsFrame.RewardsFrameActions));
         RewardsButton.Visible = false;
     }
 
@@ -117,7 +117,7 @@ public static class FrameManager
         shopText.SetScale(0.98f);
         shopText.Enabled = false;
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
-        StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
+        StatsTrigger.AddAction(ErrorHandler.Wrap(MusicFrame.MusicFrameActions));
         MusicButton.Visible = false;
     }
 
@@ -132,7 +132,7 @@ public static class FrameManager
         shopText.SetScale(1.0f);
         shopText.Enabled = false;
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
-        ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
+        ShopTrigger.AddAction(ErrorHandler.Wrap(ShopFrame.ShopFrameActions));
         ShopButton.Visible = false;
     }
 
@@ -151,7 +151,7 @@ public static class FrameManager
     {
         var t = timer.Create();
         var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
-        t.Start(1.0f, true, () =>
+        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             var x = nameFrame.Width / 4;
             var h = nameFrame.Height / 8;
@@ -159,7 +159,7 @@ public static class FrameManager
             Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
             Backdrop.SetSize(x, h);
             t.Dispose();
-        });
+        }));
     }
 
     private static void ESCHideFrames()
@@ -168,7 +168,7 @@ public static class FrameManager
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCActions);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCActions));
     }
 
     public static void RefreshFrame(framehandle frame)

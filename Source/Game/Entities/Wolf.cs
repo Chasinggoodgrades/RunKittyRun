@@ -94,7 +94,7 @@ public class Wolf
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Start(realTime, false, () => StartWandering());
+        WanderTimer.Start(realTime, false, ErrorHandler.Wrap(() => StartWandering()));
     }
 
     /// <summary>
@@ -236,11 +236,11 @@ public class Wolf
 
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Start(effectDuration, false, () =>
+        EffectTimer.Start(effectDuration, false, ErrorHandler.Wrap(() =>
         {
             WolfMove();
             BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
-        });
+        }));
     }
 
     #region AFFIXES

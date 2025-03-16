@@ -21,11 +21,11 @@ public static class TeamsUtil
     public static void UpdateTeamsMB()
     {
         var t = timer.Create();
-        t.Start(0.1f, false, () =>
+        t.Start(0.1f, false, ErrorHandler.Wrap(() =>
         {
             TeamsMultiboard.UpdateCurrentTeamsMB();
             TeamsMultiboard.UpdateTeamStatsMB();
             t.Dispose();
-        });
+        }));
     }
 }

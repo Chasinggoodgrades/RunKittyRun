@@ -35,7 +35,7 @@ public static class CrystalOfFire
     {
         var Trigger = trigger.Create();
         Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
-        Trigger.AddAction(FieryfoxEvent);
+        Trigger.AddAction(ErrorHandler.Wrap(FieryfoxEvent));
         return Trigger;
     }
 
@@ -43,7 +43,7 @@ public static class CrystalOfFire
     {
         var Trigger = trigger.Create();
         Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
-        Trigger.AddAction(FandFEvent);
+        Trigger.AddAction(ErrorHandler.Wrap(FandFEvent));
         return Trigger;
     }
 
@@ -54,7 +54,7 @@ public static class CrystalOfFire
         {
             Trigger.RegisterPlayerChatEvent(player, "yes!", false);
         }
-        Trigger.AddAction(AcceptedQuest);
+        Trigger.AddAction(ErrorHandler.Wrap(AcceptedQuest));
         return Trigger;
     }
 

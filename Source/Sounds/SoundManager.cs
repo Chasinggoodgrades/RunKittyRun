@@ -148,7 +148,7 @@ public static class SoundManager
 
     public static void PlayLastManStandingSound()
     {
-        LastManStanding.Start(0.8f, false, () =>
+        LastManStanding.Start(0.8f, false, ErrorHandler.Wrap(() =>
         {
             var count = 0;
             unit u = null;
@@ -171,6 +171,6 @@ public static class SoundManager
             {
                 GC.RemoveEffect(ref e);
             });
-        });
+        }));
     }
 }

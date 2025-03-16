@@ -188,7 +188,7 @@ public static class FirstPersonCameraManager
                     var localKey = key.Key; // Create a local copy of the key
                     var localValue = keyState.Key; // Create a local copy of the value
                     Blizzard.TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value);
-                    TriggerAddAction(keyTrigger, () => OnKeyEvent(localKey, localValue));
+                    TriggerAddAction(keyTrigger, ErrorHandler.Wrap(() => OnKeyEvent(localKey, localValue)));
                 }
             }
         }

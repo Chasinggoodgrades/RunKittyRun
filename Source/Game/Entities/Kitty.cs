@@ -246,7 +246,7 @@ public class Kitty
         if (DiscoTimer == null)
         {
             DiscoTimer = timer.Create();
-            DiscoTimer.Start(0.4f, true, DiscoActions);
+            DiscoTimer.Start(0.4f, true, ErrorHandler.Wrap(DiscoActions));
         }
         else
         {
@@ -271,7 +271,7 @@ public class Kitty
             if (SpinCamTimer == null)
             {
                 SpinCamTimer = timer.Create();
-                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
+                SpinCamTimer.Start(0.0075f, true, ErrorHandler.Wrap(SpinCamActions));
             }
         }
         else

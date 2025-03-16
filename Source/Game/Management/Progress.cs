@@ -12,7 +12,7 @@ public static class Progress
     {
         CalculateTotalDistance();
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        TeamProgTimer.Start(0.2f, true, () => TeamProgressTracker());
+        TeamProgTimer.Start(0.2f, true, ErrorHandler.Wrap(() => TeamProgressTracker()));
     }
 
     public static void CalculateProgress(Kitty kitty)
