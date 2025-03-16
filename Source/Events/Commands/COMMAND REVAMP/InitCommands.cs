@@ -469,7 +469,57 @@ public static class InitCommands
                     Globals.ALL_KITTIES[player].ReviveKitty();
                     return;
                 }
+
                 CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty());
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "reviveto",
+            alias: "rto,rposto",
+            group: "admin",
+            argDesc: "",
+            description: "Revives your hero to an other hero, with the same facing angle.",
+            action: (player, args) =>
+            {
+                if (args.Length == 1)
+                {
+                    CommandsManager.ResolvePlayerId(args[0], kitty =>
+                    {
+                        Globals.ALL_KITTIES[player].ReviveKitty();
+                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+                        Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing);
+                    });
+                }
+                else if (args.Length == 2)
+                {
+                    CommandsManager.ResolvePlayerId(args[1], kitty =>
+                    {
+                        CommandsManager.ResolvePlayerId(args[0], kitty2 =>
+                        {
+                            kitty.ReviveKitty();
+                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.Unit.Y);
+                            kitty.Unit.SetFacing(kitty2.Unit.Facing);
+                        });
+                    });
+                }
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "summon",
+            alias: "smn",
+            group: "admin",
+            argDesc: "",
+            description: "Revives another hero to yours, with the same facing angle.",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    kitty.ReviveKitty();
+                    kitty.Unit.SetPosition(Globals.ALL_KITTIES[player].Unit.X, Globals.ALL_KITTIES[player].Unit.Y);
+                    kitty.Unit.SetFacing(Globals.ALL_KITTIES[player].Unit.Facing);
+                });
             }
         );
 

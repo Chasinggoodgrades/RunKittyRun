@@ -41,8 +41,8 @@ public class AIController
     private List<Wolf> wolvesInRange = new List<Wolf>();
     private lightning lastLightning;
 
-    private int lastSafezoneIndexId = -1;
-    private bool reachedLastSafezoneCenter = false;
+    private int lastProgressZoneIndexId = -1;
+    private bool reachedLastProgressZoneCenter = false;
     private List<lightning> availableBlockedLightnings = new List<lightning>();
     private List<lightning> availableClearLightnings = new List<lightning>();
     private List<lightning> usedBlockedLightnings = new List<lightning>();
@@ -124,17 +124,21 @@ public class AIController
 
     private void MoveKittyToPosition()
     {
-        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
         var currentProgressZoneId = this.kitty.ProgressZone;
-        var currentSafezone = Globals.SAFE_ZONES[currentSafezoneId];
-        var nextSafezone = (currentSafezoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentSafezoneId + 1] : Globals.SAFE_ZONES[currentSafezoneId];
+
+        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId + 1))
+        {
+            currentProgressZoneId++;
+        }
+
+        var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
+        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : Globals.SAFE_ZONES[currentProgressZoneId];
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        if (currentSafezoneId != lastSafezoneIndexId)
+        if (currentProgressZoneId != lastProgressZoneIndexId)
         {
-            reachedLastSafezoneCenter = false;
-            lastSafezoneIndexId = currentSafezoneId;
+            lastProgressZoneIndexId = currentProgressZoneId;
         }
 
         var distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.Unit.Y - currentSafezoneCenter.Y, 2));
@@ -142,7 +146,7 @@ public class AIController
 
         if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD)
         {
-            reachedLastSafezoneCenter = true;
+            reachedLastProgressZoneCenter = true;
         }
 
         bool allKittiesAtSameOrHigherSafezone = Globals.ALL_KITTIES.All(k =>
@@ -155,7 +159,7 @@ public class AIController
             return k.Value.ProgressZone >= this.kitty.ProgressZone;
         });
 
-        var targetPosition = reachedLastSafezoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
+        var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
 
         foreach (var circle in Globals.ALL_CIRCLES)
         {
