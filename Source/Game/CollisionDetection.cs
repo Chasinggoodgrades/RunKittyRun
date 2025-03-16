@@ -66,7 +66,7 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionTrigger(Kitty k)
     {
-        TriggerAddAction(k.w_Collision, () =>
+        TriggerAddAction(k.w_Collision, ErrorHandler.Wrap(() =>
         {
             if (!k.Unit.Alive) return;
             if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
@@ -76,18 +76,18 @@ public static class CollisionDetection
             OneOfNine.OneOfNineEffect(k.Player);
             k.KillKitty();
             TeamsUtil.CheckTeamDead(k);
-        });
+        }));
         return k.w_Collision;
     }
 
     private static trigger CircleCollisionTrigger(Kitty k)
     {
-        TriggerAddAction(k.c_Collision, () =>
+        TriggerAddAction(k.c_Collision, ErrorHandler.Wrap(() =>
         {
             var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
             circle.ReviveKitty(k);
             (k.Relics.Find(r => r is BeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
-        });
+        }));
         return k.c_Collision;
     }
 

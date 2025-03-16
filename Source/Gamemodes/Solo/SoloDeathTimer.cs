@@ -44,8 +44,8 @@ public class SoloDeathTimer
     {
         var kitty = Globals.ALL_KITTIES[Player];
         var lastCheckpoint = kitty.CurrentSafeZone;
-        var x = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterX;
-        var y = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterY;
+        var x = lastCheckpoint.Rect_.CenterX;
+        var y = lastCheckpoint.Rect_.CenterY;
         kitty.ReviveKitty();
         kitty.Unit.SetPosition(x, y);
         if (Player.IsLocal) PanCameraToTimed(x, y, 0.00f);

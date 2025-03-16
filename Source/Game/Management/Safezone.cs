@@ -8,14 +8,13 @@ public class Safezone
     private trigger Trigger { get; set; }
     public int ID { get; set; }
     public rect Rect_ { get; set; }
-    public List<player> AwardedPlayers { get; set; }
+    public List<player> AwardedPlayers { get; set; } = new();
 
     public Safezone(int id, region region)
     {
         ID = id;
         Region = region;
         Trigger = trigger.Create();
-        AwardedPlayers = new List<player>();
     }
 
     public static void Initialize()
@@ -44,7 +43,7 @@ public class Safezone
         var player = unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         SafezoneAdditions(kitty);
-        kitty.CurrentSafeZone = ID;
+        kitty.CurrentSafeZone.ID = ID;
         WolfLaneHider.LanesHider();
         if (AwardedPlayers.Contains(player) || ID == 0) return;
         Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
@@ -60,7 +59,7 @@ public class Safezone
     {
         var player = kitty.Player;
 
-        if (kitty.CurrentSafeZone == ID) return;
+        if (kitty.CurrentSafeZone.ID == ID) return;
 
         CameraUtil.UpdateKomotoCam(player, ID);
 
@@ -76,7 +75,7 @@ public class Safezone
     {
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            kitty.Value.CurrentSafeZone = 0;
+            kitty.Value.CurrentSafeZone.ID = 0;
             kitty.Value.ProgressZone = 0;
         }
         foreach (var safezone in Globals.SAFE_ZONES)

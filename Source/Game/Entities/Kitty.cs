@@ -20,6 +20,7 @@ public class Kitty
     public AIController aiController { get; set; }
     public APMTracker APMTracker { get; set; }
     public Slider Slider { get; private set; }
+    public Safezone CurrentSafeZone { get; set; } = Globals.SAFE_ZONES[0];
     public player Player { get; }
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
@@ -29,7 +30,6 @@ public class Kitty
     public bool Finished { get; set; } = false;
     public int TeamID { get; set; } = 0;
     public int ProgressZone { get; set; } = 0;
-    public int CurrentSafeZone { get; set; } = 0;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public timer DiscoTimer { get; set; }
@@ -179,7 +179,7 @@ public class Kitty
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
 
         // Register AI Controller for Computers later.
-        if (Player.Controller == mapcontrol.Computer)
+        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard") // only standard xd
             Utility.SimpleTimer(1.0f, () => aiController.StartAi());
     }
 
@@ -190,6 +190,7 @@ public class Kitty
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
+        aiController.StopAi();
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
     }

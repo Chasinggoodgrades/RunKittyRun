@@ -66,7 +66,7 @@ public static class CameraUtil
             KomotoCamEnabled.Add(player);
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "KomotoCam enabled!|r");
 
-            UpdateKomotoCam(player, Globals.ALL_KITTIES[player].CurrentSafeZone);
+            UpdateKomotoCam(player, Globals.ALL_KITTIES[player].CurrentSafeZone.ID);
         }
     }
 

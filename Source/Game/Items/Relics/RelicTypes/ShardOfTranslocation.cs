@@ -59,7 +59,7 @@ public class ShardOfTranslocation : Relic
         var unit = @event.Unit;
         var targetLoc = @event.SpellTargetLoc;
         var player = unit.Owner;
-        var currentSafezone = Globals.ALL_KITTIES[player].CurrentSafeZone;
+        var currentSafezone = Globals.ALL_KITTIES[player].CurrentSafeZone.ID;
         try
         {
             if (!EligibleLocation(targetLoc, currentSafezone))

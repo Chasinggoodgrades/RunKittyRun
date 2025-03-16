@@ -26,7 +26,7 @@ public static class WolfLaneHider
 
             foreach (var kitty in Globals.ALL_KITTIES)
             {
-                int currentSafezone = kitty.Value.CurrentSafeZone;
+                int currentSafezone = kitty.Value.CurrentSafeZone.ID;
                 AddAdjacentLanes(currentSafezone);
             }
         }

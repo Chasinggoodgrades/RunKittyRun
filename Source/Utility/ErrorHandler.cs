@@ -12,7 +12,7 @@ public static class ErrorHandler
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error caught: " + e.Message + "\n" + e.StackTrace);
+                Logger.Warning("Error caught: " + e.Message + "\n" + e.StackTrace);
                 errorCb?.Invoke(e);
             }
         };
