@@ -157,7 +157,7 @@ public static class ProtectionOfAncients
         if (levelOfRelic > 0) levelOfAbility = levelOfRelic;
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
-        var filter = Utility.CreateFilterFunc(() => AoEEffectFilter());
+        var filter = Utility.CreateFilterFunc(AoEEffectFilter);
 
         kitty.ProtectionActive = false;
         tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);

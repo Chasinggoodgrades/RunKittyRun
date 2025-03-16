@@ -35,7 +35,7 @@ public static class Difficulty
         CreateDialog();
         RegisterSelectionEvent();
 
-        Utility.SimpleTimer(2.0f, () => ChooseDifficulty());
+        Utility.SimpleTimer(2.0f, ChooseDifficulty);
     }
 
     private static void CreateDialog()
@@ -73,7 +73,7 @@ public static class Difficulty
     {
         foreach (var player in Globals.ALL_PLAYERS)
             DifficultyChoosing.SetVisibility(player, true);
-        Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, () => TallyingVotes());
+        Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, TallyingVotes);
     }
 
     private static void TallyingVotes()

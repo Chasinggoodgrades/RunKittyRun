@@ -49,7 +49,7 @@ public class ShardOfTranslocation : Relic
         var player = Unit.Owner;
         CastEventTrigger = trigger.Create();
         CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        CastEventTrigger.AddAction(ErrorHandler.Wrap(() => TeleportActions()));
+        CastEventTrigger.AddAction(ErrorHandler.Wrap(TeleportActions));
     }
 
     private void TeleportActions()

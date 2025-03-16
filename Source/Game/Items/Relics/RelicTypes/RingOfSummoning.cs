@@ -35,7 +35,7 @@ public class RingOfSummoning : Relic
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(ErrorHandler.Wrap(() => SacredRingOfSummoning()));
+        Trigger.AddAction(ErrorHandler.Wrap(SacredRingOfSummoning));
     }
 
     public override void ApplyEffect(unit Unit)

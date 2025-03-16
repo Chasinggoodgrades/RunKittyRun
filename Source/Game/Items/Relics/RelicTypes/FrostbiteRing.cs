@@ -47,7 +47,7 @@ public class FrostbiteRing : Relic
     private void FrostbiteCast(location freezeLocation)
     {
         var tempGroup = group.Create();
-        var filter = Utility.CreateFilterFunc(() => WolvesFilter());
+        var filter = Utility.CreateFilterFunc(WolvesFilter);
         tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
         var list = tempGroup.ToList();
         foreach (var unit in list)

@@ -232,7 +232,7 @@ public static class Utility
         tt.SetPosition(u.X, u.Y, 0);
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
-        SimpleTimer(duration, () => tt.Dispose());
+        SimpleTimer(duration, tt.Dispose);
     }
 
     /// <summary>

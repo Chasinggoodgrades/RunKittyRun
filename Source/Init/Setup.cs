@@ -94,7 +94,7 @@ namespace Source.Init
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
-                Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
+                Utility.SimpleTimer(6.0f, MusicManager.PlayNumb);
 
                 for (int i = 0; i < GetBJMaxPlayers(); i++)
                 {

@@ -18,7 +18,7 @@ public static class Windwalk
         foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
-        Trigger.AddAction(ErrorHandler.Wrap(() => ApplyWindwalkEffect()));
+        Trigger.AddAction(ErrorHandler.Wrap(ApplyWindwalkEffect));
     }
 
     private static void ApplyWindwalkEffect()
@@ -35,7 +35,7 @@ public static class Windwalk
             var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
             var visual = reward.ModelPath;
             var effect = caster.AddSpecialEffect(visual, "origin");
-            Utility.SimpleTimer(duration, () => effect.Dispose());
+            Utility.SimpleTimer(duration, effect.Dispose);
         }
     }
 }

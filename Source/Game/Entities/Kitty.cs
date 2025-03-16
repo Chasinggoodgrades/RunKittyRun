@@ -180,7 +180,7 @@ public class Kitty
 
         // Register AI Controller for Computers later.
         if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard") // only standard xd
-            Utility.SimpleTimer(1.0f, () => aiController.StartAi());
+            Utility.SimpleTimer(1.0f, aiController.StartAi);
     }
 
     public void Dispose()

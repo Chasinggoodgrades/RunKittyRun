@@ -71,7 +71,7 @@ public class Fixation : Affix
         if (Type == 1) UnitsInRange = group.Create();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
-        PeriodicSpeed.AddAction(ErrorHandler.Wrap(() => UpdateChaseSpeed()));
+        PeriodicSpeed.AddAction(ErrorHandler.Wrap(UpdateChaseSpeed));
         InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;

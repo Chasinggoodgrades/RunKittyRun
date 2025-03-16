@@ -27,7 +27,7 @@ public static class RoundManager
 
             RoundTimer.InitEndRoundTimer();
 
-            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(() => { StartRound(); }));
+            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
@@ -87,7 +87,7 @@ public static class RoundManager
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;
             Tips.DisplayTip();
-            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+            Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup);
         }
         catch (Exception e)
         {

@@ -167,7 +167,7 @@ public static class MusicFrame
         {
             musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
         }
-        musicHotkeyTrigger.AddAction(ErrorHandler.Wrap(() => MusicFrameActions()));
+        musicHotkeyTrigger.AddAction(ErrorHandler.Wrap(MusicFrameActions));
     }
 
     /// <summary>

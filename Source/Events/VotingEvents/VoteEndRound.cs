@@ -15,7 +15,7 @@ public static class VoteEndRound
         VoteActive = true;
         Votes.Add(voteStarter);
         Console.WriteLine($"{Colors.COLOR_YELLOW}A vote has been initiated to end the round. If you agree, type \"-yes\" {Colors.COLOR_RED}(Players have 20 seconds to decide).{Colors.COLOR_RESET}");
-        Utility.SimpleTimer(20.0f, () => VoteTally());
+        Utility.SimpleTimer(20.0f, VoteTally);
     }
 
     public static void IncrementVote(player player)

@@ -59,7 +59,7 @@ public class Vortex : Affix
         EntersRange.AddAction(ErrorHandler.Wrap(EnterRegionActions));
         LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
 
-        PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(() => PullBegin()));
+        PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(PullBegin));
     }
 
     private void EnterRegionActions()

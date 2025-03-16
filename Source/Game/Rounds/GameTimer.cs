@@ -14,7 +14,7 @@ public static class GameTimer
         Globals.GAME_TIMER_DIALOG.SetTitle("Elapsed Game Time");
         RoundTime = new float[Gamemode.NumberOfRounds + 1];
         var t = timer.Create();
-        t.Start(RoundSpeedIncrement, true, ErrorHandler.Wrap(() => { StartGameTimer(); }));
+        t.Start(RoundSpeedIncrement, true, ErrorHandler.Wrap(StartGameTimer));
     }
 
     /// <summary>

@@ -137,15 +137,15 @@ public static class ShopFrame
 
         var BuyTrigger = trigger.Create();
         BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        BuyTrigger.AddAction(ErrorHandler.Wrap(() => BuySelectedItem()));
+        BuyTrigger.AddAction(ErrorHandler.Wrap(BuySelectedItem));
 
         var SellTrigger = trigger.Create();
         SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        SellTrigger.AddAction(ErrorHandler.Wrap(() => SellSelectedItem()));
+        SellTrigger.AddAction(ErrorHandler.Wrap(SellSelectedItem));
 
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction(ErrorHandler.Wrap(() => RelicFunctions.UpgradeRelic()));
+        UpgradeTrigger.AddAction(ErrorHandler.Wrap(RelicFunctions.UpgradeRelic));
     }
 
     private static void LoadItemsIntoPanels()

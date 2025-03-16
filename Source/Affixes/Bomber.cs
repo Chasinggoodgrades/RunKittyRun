@@ -59,7 +59,7 @@ public class Bomber : Affix
         Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.015f, 255, 0, 0));
         Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.015f, 255, 0, 0));
         Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.015f, 255, 0, 0));
-        Utility.SimpleTimer(4.0f, () => Explode());
+        Utility.SimpleTimer(4.0f, Explode);
     }
 
     private void Explode()

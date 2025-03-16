@@ -47,7 +47,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         trig.RegisterTimerEvent(RotationTime, true);
-        trig.AddAction(ErrorHandler.Wrap(() => RotationActions()));
+        trig.AddAction(ErrorHandler.Wrap(RotationActions));
         return trig;
     }
 
@@ -64,7 +64,7 @@ public static class UrnSoul
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
-        trig.AddAction(ErrorHandler.Wrap(() => UrnUsageActions()));
+        trig.AddAction(ErrorHandler.Wrap(UrnUsageActions));
         return trig;
     }
 
@@ -96,7 +96,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
-        trig.AddAction(ErrorHandler.Wrap(() => InRangeActions()));
+        trig.AddAction(ErrorHandler.Wrap(InRangeActions));
         return trig;
     }
 
@@ -120,7 +120,7 @@ public static class UrnSoul
             $"|r|cff8080ffRestless Soul:|r |cffc878c8Could it be... Is this the moment I've yearned for? Have you come to release me from this eternal confinement? I can feel the life force coursing through my veins... AHHH...|r");
 
         var e = effect.Create("\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\"", unit, "origin");
-        Utility.SimpleTimer(1.0f, () => e.Dispose());
+        Utility.SimpleTimer(1.0f, e.Dispose);
 
         // Remove Items
         Utility.RemoveItemFromUnit(unit, urn);

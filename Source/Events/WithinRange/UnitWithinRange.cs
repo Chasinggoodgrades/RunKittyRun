@@ -77,7 +77,7 @@ public static class UnitWithinRange
             TriggerRegisterUnitStateEvent(cleanupTrigger, u, UNIT_STATE_LIFE, LESS_THAN_OR_EQUAL, 0.405f);
         }
 
-        TriggerRegisterUnitInRange(trig, u, range, Condition(() => filter()));
+        TriggerRegisterUnitInRange(trig, u, range, Condition(filter));
 
         int trigId = GetUniqueTriggerId(trig);
         unitRangeUnits[trigId] = u;

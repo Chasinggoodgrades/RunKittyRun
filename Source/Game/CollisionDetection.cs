@@ -93,7 +93,7 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.wCollision, ErrorHandler.Wrap(() => sk.KillShadowKitty()));
+        TriggerAddAction(sk.wCollision, ErrorHandler.Wrap(sk.KillShadowKitty));
         return sk.wCollision;
     }
 
