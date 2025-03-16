@@ -1229,7 +1229,6 @@ public static class InitCommands
             {
                 var skin = args.Length > 0 ? FourCC(args[0]) : Constants.UNIT_KITTY;
                 var skinID = Utility.GetItemSkin(skin);
-                Console.WriteLine(skinID);
                 Globals.ALL_KITTIES[player].Unit.Skin = skinID;
             }
         );

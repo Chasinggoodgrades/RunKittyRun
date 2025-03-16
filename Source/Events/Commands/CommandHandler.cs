@@ -36,7 +36,7 @@ public static class CommandHandler
         if (chatString.Length < 2 || chatString[0] != '-')
             return;
 
-        var cmd = chatString.ToLower().Substring(1);
+        var cmd = chatString.Substring(1);
         var spaceIndex = cmd.IndexOf(' ');
 
         string commandName;
@@ -58,7 +58,7 @@ public static class CommandHandler
         if (GamemodeSetting(@event.PlayerChatString))
             return;
 
-        var command = CommandsManager.GetCommand(commandName);
+        var command = CommandsManager.GetCommand(commandName.ToLower());
         if (command != null)
         {
             command.Action?.Invoke(@event.Player, args);
