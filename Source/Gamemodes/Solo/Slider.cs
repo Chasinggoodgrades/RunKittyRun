@@ -126,18 +126,18 @@ public class Slider
             this.forcedSlideSpeed = 0;
             this.kitty.Invulnerable = true;
 
-            this.ForcedSlideTimer.Start(1.4f, false, () =>
+            this.ForcedSlideTimer.Start(1.4f, false, ErrorHandler.Wrap(() =>
             {
                 this.forcedSlideSpeed = null;
 
-                this.ForcedSlideTimer.Start(0.6f, false, () =>
+                this.ForcedSlideTimer.Start(0.6f, false, ErrorHandler.Wrap(() =>
                 {
                     this.kitty.Invulnerable = false;
-                });
-            });
+                }));
+            }));
         }
 
-        SliderTimer.Start(SLIDE_INTERVAL, true, () =>
+        SliderTimer.Start(SLIDE_INTERVAL, true, ErrorHandler.Wrap(() =>
         {
             if (!IsOnSlideTerrain())
             {
@@ -159,7 +159,7 @@ public class Slider
 
             this.wasSliding = true;
             UpdateSlider();
-        });
+        }));
     }
 
     public void PauseSlider()
@@ -217,11 +217,11 @@ public class Slider
     {
         ClickTrigger = trigger.Create();
         ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder);
-        ClickTrigger.AddAction(() => HandleTurn(true));
+        ClickTrigger.AddAction(ErrorHandler.Wrap(() => HandleTurn(true)));
 
         WidgetTrigger = trigger.Create();
         WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder);
-        WidgetTrigger.AddAction(() => HandleTurn(false));
+        WidgetTrigger.AddAction(ErrorHandler.Wrap(() => HandleTurn(false)));
 
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
@@ -352,7 +352,7 @@ public class Slider
     {
         if (!enabled) return;
 
-        foreach(var i in ItemSpawner.TrackKibbles)
+        foreach (var i in ItemSpawner.TrackKibbles)
         {
             if (i.Item == null) continue;
             if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;

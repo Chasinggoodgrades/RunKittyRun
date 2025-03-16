@@ -957,16 +957,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 _G["trackPrintMap"] = true;
-                try
-                {
-                    DebugUtilities.DebugPrinter.PrintDebugNames("globals");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    throw;
-                }
+                DebugUtilities.DebugPrinter.PrintDebugNames("globals");
             }
         );
 

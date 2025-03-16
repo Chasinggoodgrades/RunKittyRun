@@ -70,7 +70,7 @@ public static class NitroChallenges
         NitroDialog.SetTitle("Nitro: ");
         NitroDialog.SetTitleColor(0, 255, 50);
         NitroDialog.IsDisplayed = true;
-        NitroTimer.Start(NitroRoundTimes[Globals.ROUND], false, StopNitroTimer);
+        NitroTimer.Start(NitroRoundTimes[Globals.ROUND], false, ErrorHandler.Wrap(StopNitroTimer));
     }
 
     public static void StopNitroTimer()

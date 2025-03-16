@@ -91,7 +91,7 @@ public static class ProtectionOfAncients
         LevelUpTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
-        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
+        LevelUpTrigger.AddAction(ErrorHandler.Wrap(() => SetProtectionOfAncientsLevel(@event.Unit)));
     }
 
     private static void RegisterEvents()
@@ -99,7 +99,7 @@ public static class ProtectionOfAncients
         Trigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        Trigger.AddAction(ActivationEvent);
+        Trigger.AddAction(ErrorHandler.Wrap(ActivationEvent));
         Trigger.AddCondition(Condition(() =>
         @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
     }
@@ -118,12 +118,12 @@ public static class ProtectionOfAncients
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
         var t = timer.Create();
-        t.Start(EFFECT_DELAY, false, () =>
+        t.Start(EFFECT_DELAY, false, ErrorHandler.Wrap(() =>
         {
             ApplyEffect(Unit);
             GC.RemoveEffect(ref actiEffect);
             GC.RemoveTimer(ref t);
-        });
+        }));
     }
 
     private static void ApplyEffect(unit Unit)

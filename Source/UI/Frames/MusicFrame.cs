@@ -67,14 +67,14 @@ public static class MusicFrame
         var mousewheel = trigger.Create();
         Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
         mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        Trigger.AddAction(() =>
+        Trigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
             MusicSliderValues[player] = (int)@event.FrameValue;
             if (player.IsLocal) PopulateMusicFrame(player);
-        });
-        mousewheel.AddAction(() =>
+        }));
+        mousewheel.AddAction(ErrorHandler.Wrap(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
@@ -83,7 +83,7 @@ public static class MusicFrame
             MusicSlider.Value = frameValue > 0 ? frameValue + 1.0f : frameValue - 1.0f;
             var value = MusicSliderValues[player];
             if (player.IsLocal) PopulateMusicFrame(player);
-        });
+        }));
     }
 
     private static void InitializeMusicButtons()
@@ -103,7 +103,7 @@ public static class MusicFrame
 
             var trigger = CreateTrigger();
             trigger.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            trigger.AddAction(() =>
+            trigger.AddAction(ErrorHandler.Wrap(() =>
             {
                 var frame = @event.Frame;
                 var player = @event.Player;
@@ -115,7 +115,7 @@ public static class MusicFrame
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
                 music?.Play();
                 MusicFramehandle.Visible = !MusicFramehandle.Visible;
-            });
+            }));
         }
     }
 
@@ -167,7 +167,7 @@ public static class MusicFrame
         {
             musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true);
         }
-        musicHotkeyTrigger.AddAction(() => MusicFrameActions());
+        musicHotkeyTrigger.AddAction(ErrorHandler.Wrap(() => MusicFrameActions()));
     }
 
     /// <summary>

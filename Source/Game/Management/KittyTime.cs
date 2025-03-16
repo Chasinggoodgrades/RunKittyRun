@@ -26,7 +26,7 @@ public class KittyTime
 
     private void PeriodicProgressTimer()
     {
-        ProgressTimer.Start(0.2f, true, () => Progress.CalculateProgress(Kitty));
+        ProgressTimer.Start(0.2f, true, ErrorHandler.Wrap(() => Progress.CalculateProgress(Kitty)));
     }
 
     #region Time Section

@@ -55,16 +55,16 @@ public class Frostbite : Affix
     private void RegisterEvents()
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
-        PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
+        PeriodicRangeTrigger.AddAction(ErrorHandler.Wrap(() => PeriodicRangeCheck()));
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
-        InRangeTrigger.AddAction(() =>
+        InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;
             if (!target.Alive) return; // must be alive
             if (Frostbitten.ContainsKey(target)) return; // cannot be bitten already
             if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return; // must be in same lane
             SlowEffect(target);
-        });
+        }));
     }
 
     private void PeriodicRangeCheck()

@@ -52,7 +52,7 @@ public class FangOfShadows : Relic
         SummonTrigger = trigger.Create();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        SummonTrigger.AddAction(() => SummonShadowKitty());
+        SummonTrigger.AddAction(ErrorHandler.Wrap(() => SummonShadowKitty()));
 
         TeleTrigger = trigger.Create();
         KillTimer = timer.Create();
@@ -71,7 +71,7 @@ public class FangOfShadows : Relic
         sk.SummonShadowKitty();
         RegisterTeleportAbility(sk.Unit);
         sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
-        KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, () => sk.KillShadowKitty());
+        KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(() => sk.KillShadowKitty()));
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
     }
 

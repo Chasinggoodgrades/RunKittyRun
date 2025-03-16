@@ -10,24 +10,15 @@ public static class CommandHandler
 
     public static void Initialize()
     {
-        try
+        InitCommands.InitializeCommands();
+        for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
-            InitCommands.InitializeCommands();
-            for (int i = 0; i < GetBJMaxPlayers(); i++)
-            {
-                if (Player(i).SlotState != playerslotstate.Playing) continue;
-                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
-                TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
-            }
-            TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
-            TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
+            if (Player(i).SlotState != playerslotstate.Playing) continue;
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+            TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
         }
-        catch (Exception e)
-        {
-            Logger.Warning(e.Message);
-            Logger.Warning("Command Handler Error");
-            throw;
-        }
+        TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
+        TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
     }
 
     private static void HandleCommands()

@@ -39,11 +39,11 @@ public class FloatingNameTag
 
     private void NamePosTimer()
     {
-        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
+        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, ErrorHandler.Wrap(() =>
         {
             UpdateNameTag();
             Blizzard.SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.Unit.Y);
-        });
+        }));
     }
 
     private void UpdateNameTag() => NameTag.SetPosition(Kitty.Unit, NAME_TAG_HEIGHT);

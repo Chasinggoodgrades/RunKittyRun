@@ -43,7 +43,7 @@ public class WolfArea
     {
         AreaTrigger = trigger.Create();
         AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        AreaTrigger.AddAction(() =>
+        AreaTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -51,7 +51,7 @@ public class WolfArea
             var kitty = Globals.ALL_KITTIES[player];
             kitty.ProgressHelper.CurrentPoint = ID;
             kitty.ProgressZone = ID;
-        });
+        }));
     }
 
     /// <summary>
@@ -61,11 +61,11 @@ public class WolfArea
     {
         AreaTrigger = trigger.Create();
         AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
-        AreaTrigger.AddAction(() =>
+        AreaTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var wolf = Globals.ALL_WOLVES[@event.Unit];
             wolf.WolfMove();
-        });
+        }));
     }
 
     private void CalculateArea()

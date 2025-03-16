@@ -44,7 +44,7 @@ public class Bomber : Affix
 
     private void RegisterTimers()
     {
-        ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
+        ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
     }
 
     private void StartExplosion()
@@ -52,7 +52,7 @@ public class Bomber : Affix
         // Temporary for testing, will add an actual graphic ticker later
         if (Unit.IsPaused)
         {
-            ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
+            ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
             return;
         }
         Unit.PauseSelf(true);
@@ -84,7 +84,7 @@ public class Bomber : Affix
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer.Start(1.0f, true, () =>
+        ReviveAlphaTimer.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             if (ReviveAlpha < 10)
             {
@@ -97,8 +97,8 @@ public class Bomber : Affix
                 ReviveAlphaTimer.Pause();
                 Unit.PauseSelf(false);
                 Unit.IsReviving = false;
-                ExplodeTimer.Start(ExplosionInterval(), false, StartExplosion);
+                ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
             }
-        });
+        }));
     }
 }

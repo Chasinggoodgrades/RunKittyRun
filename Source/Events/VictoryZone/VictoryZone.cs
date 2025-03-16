@@ -20,7 +20,7 @@ public static class VictoryZone
     {
         var VictoryArea = Regions.Victory_Area.Region;
         InVictoryArea.RegisterEnterRegion(VictoryArea, Filter(() => VictoryAreaConditions(GetFilterUnit())));
-        InVictoryArea.AddAction(VictoryAreaActions);
+        InVictoryArea.AddAction(ErrorHandler.Wrap(VictoryAreaActions));
     }
 
     private static void VictoryAreaActions()

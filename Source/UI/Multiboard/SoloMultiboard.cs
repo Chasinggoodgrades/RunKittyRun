@@ -46,7 +46,7 @@ public static class SoloMultiboard
         ESCTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void OverallMultiboardRacemode()

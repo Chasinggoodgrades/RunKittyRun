@@ -31,8 +31,8 @@ public class SoloDeathTimer
 
     private void StartTimers()
     {
-        ReviveTimer.Start(TIME_TO_REVIVE, false, Revive);
-        UpdateTextTimer.Start(0.03f, true, UpdateFloatingText);
+        ReviveTimer.Start(TIME_TO_REVIVE, false, ErrorHandler.Wrap(Revive));
+        UpdateTextTimer.Start(0.03f, true, ErrorHandler.Wrap(UpdateFloatingText));
     }
 
     private void UpdateFloatingText()

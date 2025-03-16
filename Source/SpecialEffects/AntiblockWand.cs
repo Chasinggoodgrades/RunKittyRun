@@ -23,7 +23,7 @@ public static class AntiblockWand
         var Trigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
-        Trigger.AddAction(SpellActions);
+        Trigger.AddAction(ErrorHandler.Wrap(SpellActions));
         return Trigger;
     }
 

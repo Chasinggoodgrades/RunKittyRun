@@ -31,7 +31,7 @@ public class Chaos : Affix
     private void RegisterTimer()
     {
         RotationTimer = timer.Create();
-        RotationTimer.Start(rotationTime, true, RotateAffix);
+        RotationTimer.Start(rotationTime, true, ErrorHandler.Wrap(RotateAffix));
         currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
         currentAffix.Apply();
     }

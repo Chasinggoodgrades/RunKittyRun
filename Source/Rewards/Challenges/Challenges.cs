@@ -150,7 +150,7 @@ public static class Challenges
         if (Gamemode.CurrentGameMode != "Standard") return;
         var t = trigger.Create();
         Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
-        t.AddAction(() =>
+        t.AddAction(ErrorHandler.Wrap(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -158,7 +158,7 @@ public static class Challenges
             if (!Globals.ALL_PLAYERS.Contains(player)) return;
             if (!Globals.ALL_KITTIES[player].CurrentStats.RoundFinished) return;
             DivineWindwalk(player);
-        });
+        }));
     }
 }
 
@@ -178,7 +178,7 @@ public class YellowLightning
 
     public void SaveIncrement()
     {
-        if (Timer.Remaining <= 0) Timer.Start(YELLOW_LIGHTNING_TIMER, false, EndTimer);
+        if (Timer.Remaining <= 0) Timer.Start(YELLOW_LIGHTNING_TIMER, false, ErrorHandler.Wrap(EndTimer));
         SaveCount++;
     }
 

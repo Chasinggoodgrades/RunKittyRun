@@ -22,7 +22,7 @@ public static class MissingShoe
         var randomTime = GetRandomReal(600.0f, 900.0f);
         TimerEvent = trigger.Create();
         TimerEvent.RegisterTimerEvent(randomTime, false);
-        TimerEvent.AddAction(EventStart);
+        TimerEvent.AddAction(ErrorHandler.Wrap(EventStart));
     }
 
     private static void RegisterTurnInEvent()
@@ -30,7 +30,7 @@ public static class MissingShoe
         TurnInEvent = trigger.Create();
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null);
-        TurnInEvent.AddAction(TurnInActions);
+        TurnInEvent.AddAction(ErrorHandler.Wrap(TurnInActions));
     }
 
     // Ping Event + Shoe Spawn

@@ -13,7 +13,7 @@ public static class FinalSafezone
     private static void RegisterEvents()
     {
         Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        Trigger.AddAction(() =>
+        Trigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -28,6 +28,6 @@ public static class FinalSafezone
             Challenges.WhiteFire(player);
             Challenges.GreenLightning(player);
             NoKittyLeftBehind.CheckChallenge();
-        });
+        }));
     }
 }

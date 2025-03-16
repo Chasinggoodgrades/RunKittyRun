@@ -110,12 +110,12 @@ public static class Utility
     public static void SimpleTimer(float duration, Action action)
     {
         var t = timer.Create();
-        t.Start(duration, false, () =>
+        t.Start(duration, false, ErrorHandler.Wrap(() =>
         {
             action();
             t.Dispose();
             t = null;
-        });
+        }));
     }
 
     /// <summary>

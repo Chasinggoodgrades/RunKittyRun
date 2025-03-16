@@ -77,7 +77,7 @@ public class ChronoSphere : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
         MagnitudeTimer = timer.Create();
-        MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, () => SetAbilityData());
+        MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(() => SetAbilityData()));
         SetAbilityData();
     }
 
@@ -87,7 +87,7 @@ public class ChronoSphere : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
         LocationCaptureTimer = timer.Create();
-        LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, () => CaptureLocation());
+        LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(() => CaptureLocation()));
         CaptureLocation();
     }
 

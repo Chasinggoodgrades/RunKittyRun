@@ -23,14 +23,14 @@ public class APMTracker
     private void Init()
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
-        ClicksAction ??= ClicksTrigger.AddAction(() => CaptureActions());
+        ClicksAction ??= ClicksTrigger.AddAction(ErrorHandler.Wrap(() => CaptureActions()));
         PeriodicTimer ??= PeriodicCheck();
     }
 
     private timer PeriodicCheck()
     {
         PeriodicTimer = CreateTimer();
-        PeriodicTimer.Start(CAPTURE_INTERVAL, true, CheckKittyPositions);
+        PeriodicTimer.Start(CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CheckKittyPositions));
         return PeriodicTimer;
     }
 
