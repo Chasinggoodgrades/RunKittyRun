@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class BurntMeat
 {
     private static trigger StanDeath = trigger.Create();
@@ -15,7 +15,7 @@ public static class BurntMeat
     public static void FlamesDropChance(Kitty k)
     {
         var randomRoll = GetRandomInt(1, 100);
-        if (randomRoll > 5) return; // 5% chance
+        if (randomRoll > 8) return; // 8% chance
         k.Unit.AddItem(ITEM_CLOAK_FLAMES);
     }
 
@@ -49,6 +49,4 @@ public static class BurntMeat
             Completed.Remove(unit);
         });
     }
-
-    
 }

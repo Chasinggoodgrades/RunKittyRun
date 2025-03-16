@@ -2,7 +2,6 @@
 
 public static class ShopUtil
 {
-
     public static bool IsPlayerInWolfLane(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
@@ -16,4 +15,14 @@ public static class ShopUtil
         return false;
     }
 
+    public static bool PlayerIsDead(player player)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+        if (kitty == null || !kitty.Alive || kitty.ProtectionActive) // not null, cannot be alive, and pota active
+        {
+            player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_RED}Cannot buy shop items while you are dead! :({Colors.COLOR_RESET}");
+            return true;
+        }
+        return false;
+    }
 }

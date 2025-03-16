@@ -1,11 +1,12 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
 using WCSharp.Shared.Extensions;
+using static WCSharp.Api.Common;
+
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    public static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public new static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
@@ -13,7 +14,7 @@ public class FrostbiteRing : Relic
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
     private static float SLOW_DURATION = 5.0f;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
     private trigger Trigger;
 
@@ -79,13 +80,13 @@ public class FrostbiteRing : Relic
         var fixationUnit = Fixation.GetFixation(Unit);
         try
         {
-            if (blitzUnit != null) blitzUnit.PauseBlitzing(true);
-            if (fixationUnit != null) fixationUnit.PauseFixation(true);
+            blitzUnit?.PauseBlitzing(true);
+            fixationUnit?.PauseFixation(true);
             t.Start(duration, false, () =>
             {
                 PausingWolf(Unit, false);
-                if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
-                if (fixationUnit != null) fixationUnit.PauseFixation(false);
+                blitzUnit?.PauseBlitzing(false);
+                fixationUnit?.PauseFixation(false);
                 SlowWolves(Unit);
                 GC.RemoveEffect(ref effect);
                 GC.RemoveTimer(ref t);
@@ -124,9 +125,8 @@ public class FrostbiteRing : Relic
     private void PausingWolf(unit unit, bool pause = true)
     {
         if (unit == null) return;
-        Globals.ALL_WOLVES[unit].IsPaused = pause;
-        unit.ClearOrders();
-        unit.IsPaused = pause;
+        var wolf = Globals.ALL_WOLVES[unit];
+        Globals.ALL_WOLVES[unit].PauseSelf(pause);
     }
 
     private void RegisterTriggers(unit Unit)
@@ -138,6 +138,4 @@ public class FrostbiteRing : Relic
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
-
-
 }

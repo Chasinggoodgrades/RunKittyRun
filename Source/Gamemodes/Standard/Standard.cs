@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
-
 
 public static class Standard
 {
@@ -11,9 +9,10 @@ public static class Standard
     private const float ALERT_DURATION = 7.0f;
     private static List<player> HitLevel6;
     private static List<player> HitLevel10;
+
     public static void Initialize()
     {
-        RoundManager.ROUND_INTERMISSION = ROUND_INTERMISSION;
+        RoundManager.ROUND_INTERMISSION = Source.Program.Debug ? 0.0f : ROUND_INTERMISSION;
         Difficulty.Initialize();
         Windwalk.Initialize();
         SpawnChampions.Initialize();
@@ -21,7 +20,7 @@ public static class Standard
         RollerSkates.Initialize();
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
-        Utility.SimpleTimer(2.0f, () => RegisterLevelTriggers());
+        RegisterLevelTriggers();
     }
 
     private static void RegisterLevelTriggers()

@@ -1,11 +1,10 @@
-﻿using static WCSharp.Api.Common;
-using WCSharp.Api;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
-public class Kibble
+public class Kibble : IDestroyable
 {
-    public static Dictionary<player, int> PickedUpKibble = new Dictionary<player, int>();
     public static trigger PickupTrigger;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
@@ -14,63 +13,56 @@ public class Kibble
     private static int GoldMax = 150;
     private static int JackpotMin = 600;
     private static int JackpotMax = 1500;
-    private int Type;
-    private int JackPotIndex = 1;
-    private triggeraction TrigActions;
+    private static int JackPotIndex = 1;
+
     public item Item;
+    private int Type;
 
     public Kibble()
     {
         PickupTrigger ??= KibblePickupEvents();
         Type = RandomKibbleType();
-        Item = SpawnKibble();
-        AddKibblePickupActions();
     }
 
-    public void Dispose()
+    public void __destroy(bool recursive = false)
     {
-        Item.Dispose();
+        Item?.Dispose();
         Item = null;
-        PickupTrigger.RemoveAction(TrigActions);
-        TrigActions = null;
+        MemoryHandler.DestroyObject(this, recursive);
     }
 
-    #region Kibble Initialization
-
-    private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
-
-    private item SpawnKibble()
+    public void SpawnKibble()
     {
         var regionNumber = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
         Utility.CreateEffectAndDispose(StarfallEffect, x, y);
-        return CreateItem(Type, x, y);
+        Item = CreateItem(Type, x, y);
     }
 
-    private trigger KibblePickupEvents()
+    #region Kibble Initialization
+
+    private static int RandomKibbleType() => KibblesColors[GetRandomInt(0, KibblesColors.Count - 1)];
+
+    private static trigger KibblePickupEvents()
     {
         var trig = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            trig.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_PICKUP_ITEM, null);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
+        trig.AddAction(() =>
+        {
+            var item = @event.ManipulatedItem;
+            if (!KibblesColors.Contains(item.TypeId)) return;
+            KibblePickup(item);
+        });
         return trig;
     }
 
-    private void AddKibblePickupActions()
-    {
-        TrigActions = PickupTrigger.AddAction(() =>
-        {
-            if (@event.ManipulatedItem != Item) return;
-            KibblePickup();
-        });
-    }
-
-    #endregion
+    #endregion Kibble Initialization
 
     #region Kibble Pickup Logic
 
-    private void KibblePickup()
+    private static void KibblePickup(item item)
     {
         try
         {
@@ -90,20 +82,22 @@ public class Kibble
             KibbleEvent.StartKibbleEvent(randomChance);
             KibbleEvent.CollectEventKibble();
 
-            IncrementKibble(player);
+            IncrementKibble(kitty);
+            PersonalBestAwarder.BeatKibbleCollection(kitty);
+
+            ItemSpawner.TrackKibbles.Find(k => k.Item == item).__destroy();
         }
         catch (Exception e)
         {
-            Logger.Warning(e.Message);
-            Logger.Warning("Kibble Pickup Error");
+            Logger.Warning($"Kibble.KibblePickup Error: {e.Message}");
             throw;
         }
     }
 
-    private void KibbleGoldReward(Kitty kitty)
+    private static void KibbleGoldReward(Kitty kitty)
     {
         var jackPotChance = GetRandomInt(0, 100);
-        var goldAmount = 0;
+        int goldAmount;
         if (jackPotChance <= 3)
         {
             JackpotEffect(kitty);
@@ -114,19 +108,19 @@ public class Kibble
         Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
     }
 
-    private void KibbleXP(Kitty kitty)
+    private static void KibbleXP(Kitty kitty)
     {
         var xpAmount = GetRandomInt(50, XPMax);
         kitty.Unit.Experience += xpAmount;
         SoundManager.PlayKibbleTomeSound(kitty.Unit);
     }
 
-    private void KibbleNothing(Kitty kitty)
+    private static void KibbleNothing(Kitty kitty)
     {
         Utility.CreateSimpleTextTag("Nothing!", 2.0f, kitty.Unit, TextTagHeight, 50, 150, 150);
     }
 
-    private void JackpotEffect(Kitty kitty)
+    private static void JackpotEffect(Kitty kitty)
     {
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
@@ -151,25 +145,23 @@ public class Kibble
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
             if (isSuperJackpot) kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
             else kitty.SaveData.KibbleCurrency.Jackpots += 1;
-            Dispose();
         }
         else
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
     }
 
-    #endregion
+    #endregion Kibble Pickup Logic
 
     #region Utility Methods
 
-    private static void IncrementKibble(player kibblePicker)
+    private static void IncrementKibble(Kitty kibblePicker)
     {
-        if (PickedUpKibble.ContainsKey(kibblePicker)) PickedUpKibble[kibblePicker] += 1;
-        else PickedUpKibble.Add(kibblePicker, 1);
+        kibblePicker.CurrentStats.CollectedKibble += 1;
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
 
-        Globals.ALL_KITTIES[kibblePicker].SaveData.KibbleCurrency.Collected += 1;
+        kibblePicker.SaveData.KibbleCurrency.Collected += 1;
     }
 
     private static List<int> KibbleList()
@@ -178,7 +170,7 @@ public class Kibble
         {
             HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
             HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
-            _ => new List<int>
+            _ => new List<int> // Default case
             {
                 Constants.ITEM_KIBBLE,
                 Constants.ITEM_KIBBLE_TEAL,
@@ -190,5 +182,5 @@ public class Kibble
         };
     }
 
-    #endregion
+    #endregion Utility Methods
 }

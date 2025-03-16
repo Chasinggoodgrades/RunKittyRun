@@ -2,8 +2,6 @@
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_GHOSTAFFIX;
 
-
-
     public Stealth(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_GREY}Stealth|r";
@@ -20,5 +18,4 @@
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }
-
 }

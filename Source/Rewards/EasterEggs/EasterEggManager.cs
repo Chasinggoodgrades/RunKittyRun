@@ -2,12 +2,11 @@
 {
     public static void LoadEasterEggs()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         MissingShoe.Initialize();
         NoKittyLeftBehind.Initialize();
         FandF.Initialize();
         CrystalOfFire.Initialize();
         UrnSoul.Initialize();
     }
-
 }

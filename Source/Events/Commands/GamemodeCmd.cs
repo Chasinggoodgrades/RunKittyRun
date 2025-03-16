@@ -2,7 +2,8 @@
 
 public static class GamemodeCmd
 {
-    private static CommandInfo CmdInfo;
+    private static GamemodeInfo CmdInfo;
+
     public static void Handle(player player, string command)
     {
         if (player != Gamemode.HostPlayer)
@@ -23,9 +24,18 @@ public static class GamemodeCmd
             case "-s":
                 HandleStandardMode(player);
                 break;
+
             case "-t":
                 HandleTeamOrSoloMode(player, parts);
                 break;
+
+            case "-dev":
+                if (!Utility.IsDeveloper(player)) return;
+                string difficulty = parts.Length > 1 ? parts[1] : "normal";
+                Difficulty.ChangeDifficulty(difficulty);
+                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+                break;
+
             default:
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Use: -s, -t solo, -t team");
                 break;
@@ -36,7 +46,7 @@ public static class GamemodeCmd
     {
         if (parts[0] == "-s")
         {
-            CmdInfo = CommandManager.GetCommandInfo(parts[0]);
+            CmdInfo = GamemodeManager.GetCommandInfo(parts[0]);
             return;
         }
         else if (parts.Length < 2)
@@ -44,7 +54,7 @@ public static class GamemodeCmd
         else
         {
             var commandXD = parts[0] + " " + parts[1];
-            CmdInfo = CommandManager.GetCommandInfo(commandXD);
+            CmdInfo = GamemodeManager.GetCommandInfo(commandXD);
         }
     }
 
@@ -52,7 +62,6 @@ public static class GamemodeCmd
     {
         Gamemode.SetGameMode(Globals.GAME_MODES[0]);
     }
-
 
     private static void HandleTeamOrSoloMode(player player, string[] parts)
     {
@@ -67,9 +76,11 @@ public static class GamemodeCmd
             case "solo":
                 HandleSoloMode(player, parts);
                 break;
+
             case "team":
                 HandleTeamMode(player, parts);
                 break;
+
             default:
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> or -t team <fp | freepick | r | random>");
                 break;
@@ -94,9 +105,11 @@ public static class GamemodeCmd
             case "prog":
                 Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[0]);
                 break;
+
             case "race":
                 Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[1]);
                 break;
+
             default:
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
                 break;
@@ -113,14 +126,13 @@ public static class GamemodeCmd
 
         var mode = parts[2];
         int teamSize = Globals.DEFAULT_TEAM_SIZE;
-
-        if (parts.Length == 4 && !int.TryParse(parts[3], out int parsedTeamSize))
+        if (parts.Length == 4 && !int.TryParse(parts[3], out _))
         {
-            var maxTeamSize = Globals.MAX_TEAM_SIZE.ToString();
+            Globals.MAX_TEAM_SIZE.ToString();
             player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
             return;
         }
-        else if (parts.Length == 4 && int.TryParse(parts[3], out parsedTeamSize))
+        else if (parts.Length == 4 && int.TryParse(parts[3], out int parsedTeamSize))
         {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0)
             {
@@ -128,7 +140,7 @@ public static class GamemodeCmd
             }
             else
             {
-                var maxTeamSize = Globals.MAX_TEAM_SIZE.ToString();
+                Globals.MAX_TEAM_SIZE.ToString();
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
                 return;
             }
@@ -140,14 +152,15 @@ public static class GamemodeCmd
             case "freepick":
                 Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[0], teamSize);
                 break;
+
             case "r":
             case "random":
                 Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[1], teamSize);
                 break;
+
             default:
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + CmdInfo.Usage);
                 break;
         }
     }
 }
-

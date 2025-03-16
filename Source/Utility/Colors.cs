@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -80,7 +79,6 @@ public class Colors
         AddColor("peanut", 24, "|cffa56f34", playercolor.Peanut, 165, 111, 52);
     }
 
-
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
@@ -121,13 +119,13 @@ public class Colors
     public static void SetPlayerVertexColor(player p, string[] RGB)
     {
         var kitty = Globals.ALL_KITTIES[p];
-        if (RGB.Length == 4)
-        {
-            var r = int.Parse(RGB[1]);
-            var g = int.Parse(RGB[2]);
-            var b = int.Parse(RGB[3]);
-            kitty.Unit.SetVertexColor(r, g, b, 255);
-        }
+        int r = 0, g = 0, b = 0;
+
+        if (RGB.Length > 0) r = int.Parse(RGB[0]);
+        if (RGB.Length > 1) g = int.Parse(RGB[1]);
+        if (RGB.Length > 2) b = int.Parse(RGB[2]);
+
+        kitty.Unit.SetVertexColor(r, g, b, 255);
     }
 
     /// <summary>
@@ -160,12 +158,11 @@ public class Colors
     /// <returns></returns>
     public static string HighlightString(string text)
     {
-        if(text != null && text.Length > 0) return COLOR_YELLOW + text + COLOR_RESET;
-        else return $"{COLOR_RED}ERROR{COLOR_RESET}";
+        return text != null && text.Length > 0 ? COLOR_YELLOW + text + COLOR_RESET : $"{COLOR_RED}ERROR{COLOR_RESET}";
     }
 
     /// <summary>
-    /// Sets the unit's vertex color based on the passed parameter playerID... 
+    /// Sets the unit's vertex color based on the passed parameter playerID...
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="playerID"></param>
@@ -183,5 +180,17 @@ public class Colors
             combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
 
         player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
+    }
+
+    public static player GetPlayerByColor(string colorName)
+    {
+        foreach (var color in ColorManager)
+        {
+            if (ColorContainsCommand(color, colorName.ToLower()))
+            {
+                return Player(color.colorID - 1);
+            }
+        }
+        return null;
     }
 }

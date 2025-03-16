@@ -1,8 +1,7 @@
 ﻿using WCSharp.Api;
-using System.Collections.Generic;
+
 public static class Challenges
 {
-    public static Dictionary<player, int> FreezeAuraCounts = new Dictionary<player, int>();
     public const int DIVINITY_TENDRILS_COUNT = 4;
     public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
@@ -69,7 +68,7 @@ public static class Challenges
 
     public static void BlueFire()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             var gameDeaths = Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths;
             if (gameDeaths >= BLUE_FIRE_DEATH_REQUIREMENT) continue;
@@ -137,12 +136,12 @@ public static class Challenges
     /// <param name="player"></param>
     public static void ZandalariKitty()
     {
-        if(Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
         if (!Gameover.WinGame) return;
         foreach (var kitty in Globals.ALL_KITTIES)
         {
             if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(4)) continue;
-                AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
+            AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
         }
     }
 
@@ -161,19 +160,19 @@ public static class Challenges
             DivineWindwalk(player);
         });
     }
-
 }
 
 public class YellowLightning
 {
     private const int YELLOW_LIGHTNING_SAVE_REQUIREMENT = 6;
     private const float YELLOW_LIGHTNING_TIMER = 3.0f;
-    public player Player { get; private set; }
+    public Kitty Kitty { get; private set; }
     public timer Timer { get; private set; }
     public int SaveCount { get; private set; }
-    public YellowLightning(player player)
+
+    public YellowLightning(Kitty kitty)
     {
-        Player = player;
+        Kitty = kitty;
         Timer = timer.Create();
     }
 
@@ -185,9 +184,9 @@ public class YellowLightning
 
     private void EndTimer()
     {
-        if(SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
+        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
         {
-            AwardManager.GiveReward(Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
+            AwardManager.GiveReward(Kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
         }
         SaveCount = 0;
     }

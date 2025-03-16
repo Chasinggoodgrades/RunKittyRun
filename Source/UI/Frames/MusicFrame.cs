@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class MusicFrame
 {
     public static framehandle MusicFramehandle;
-    private static framehandle MusicFrameTitle;
     private static framehandle MusicSlider;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
@@ -18,6 +18,7 @@ public static class MusicFrame
     private const float ButtonSpacing = 0.025f; // Space between buttons
     private const float ButtonStartX = 0.40f;  // X coordinate for button positions
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
+
     public static void Initialize()
     {
         try
@@ -29,7 +30,7 @@ public static class MusicFrame
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in MusicFrame: {ex.Message}");
+            Logger.Critical($"Error in MusicFrame: {ex.Message}");
             throw;
         }
     }
@@ -59,7 +60,8 @@ public static class MusicFrame
         MusicSlider.SetStepSize(1);
 
         foreach (var player in Globals.ALL_PLAYERS)
-            MusicSliderValues.Add(player, 0);
+            if (!MusicSliderValues.ContainsKey(player))
+                MusicSliderValues.Add(player, 0);
 
         var Trigger = trigger.Create();
         var mousewheel = trigger.Create();
@@ -78,8 +80,7 @@ public static class MusicFrame
             var player = @event.Player;
             var frameValue = @event.FrameValue;
             if (!player.IsLocal) return;
-            if (frameValue > 0) MusicSlider.Value = frameValue + 1.0f;
-            else MusicSlider.Value = frameValue - 1.0f;
+            MusicSlider.Value = frameValue > 0 ? frameValue + 1.0f : frameValue - 1.0f;
             var value = MusicSliderValues[player];
             if (player.IsLocal) PopulateMusicFrame(player);
         });
@@ -92,6 +93,7 @@ public static class MusicFrame
         // Create buttons for each music item
         for (var i = 0; i < musicCount; i++)
         {
+            if (MusicButtons.ContainsKey(i)) continue; // Skip if already exists
             var name = MusicManager.MusicList[i].Name;
             MusicButtons[i] = BlzCreateFrameByType("GLUETEXTBUTTON", name, MusicFramehandle, "DebugButton", 0);
             MusicButtons[i].SetSize(ButtonWidth, ButtonHeight);
@@ -111,7 +113,7 @@ public static class MusicFrame
                 //MusicManager.StopAllMusic();
 
                 var music = MusicManager.MusicList.Find(m => m.Name == frame.Text);
-                if (music != null) music.Play();
+                music?.Play();
                 MusicFramehandle.Visible = !MusicFramehandle.Visible;
             });
         }
@@ -147,12 +149,7 @@ public static class MusicFrame
         {
             if (i >= start && i < end)
             {
-                float positionY;
-                if (i == end - 1)
-                    positionY = ButtonStartY - ((visibleButtons - 1) * ButtonSpacing);
-                else
-                    positionY = ButtonStartY - ((i - start) * ButtonSpacing);
-
+                float positionY = i == end - 1 ? ButtonStartY - ((visibleButtons - 1) * ButtonSpacing) : ButtonStartY - ((i - start) * ButtonSpacing);
                 MusicButtons[i].SetAbsPoint(framepointtype.Center, ButtonStartX, positionY);
                 MusicButtons[i].Visible = true;
             }
@@ -173,9 +170,8 @@ public static class MusicFrame
         musicHotkeyTrigger.AddAction(() => MusicFrameActions());
     }
 
-
     /// <summary>
-    /// Whenever the player presses the music button, this function shows the frame for that player using local player. 
+    /// Whenever the player presses the music button, this function shows the frame for that player using local player.
     /// </summary>
     public static void MusicFrameActions()
     {

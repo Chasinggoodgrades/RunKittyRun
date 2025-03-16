@@ -1,10 +1,10 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-
 public static class VictoryZone
 {
     private static trigger InVictoryArea;
+
     public static void Initialize()
     {
         InVictoryArea = trigger.Create();
@@ -27,7 +27,7 @@ public static class VictoryZone
     {
         var u = @event.Unit;
         var player = u.Owner;
-        if(u.UnitType != Constants.UNIT_KITTY) return;
+        if (u.UnitType != Constants.UNIT_KITTY) return;
         if (!Globals.GAME_ACTIVE) return;
         if (Gamemode.CurrentGameMode == "Standard") // Standard
         {

@@ -1,6 +1,6 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class UrnSoul
 {
     private static rect[] UrnRegions { get; set; }
@@ -28,7 +28,7 @@ public static class UrnSoul
     {
         var u = unit.Create(player.NeutralAggressive, UnitType, 0, 0, 0);
         u.HeroName = Name;
-        u.SetPathing(false); // Disable Collision 
+        u.SetPathing(false); // Disable Collision
         u.AddAbility(FourCC("Agho")); // Ghost
         u.AddAbility(FourCC("Augh")); // Shade
         return u;
@@ -75,15 +75,15 @@ public static class UrnSoul
         var unit = @event.Unit;
         StartEventRegion = Regions.Urn_Soul_Region.Region;
 
-        if(item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return;
-        if(!StartEventRegion.Contains(unit)) return;
+        if (item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return;
+        if (!StartEventRegion.Contains(unit)) return;
 
         // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
         var e = effect.Create("Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl", unit.X, unit.Y);
         e.Dispose();
 
         // Quest text.. 4 sec delay for next part.
-         player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW}As the dust disappears you notice a faint writing above the brazier...|r");
+        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW}As the dust disappears you notice a faint writing above the brazier...|r");
         Utility.SimpleTimer(4.0f, () => player.DisplayTimedTextTo(15.0f,
             $"{Colors.COLOR_LAVENDER}The lost soul you seek drifts, untethered and forlorn. Seek them amidst the ever-twisting shadows, and rekindle their essence with the enigmatic touch of an energy stone, a veiled orb of secrets, and the elixir whispered of healing properties..|r"));
 
@@ -116,7 +116,7 @@ public static class UrnSoul
         if (!Utility.UnitHasItem(unit, water)) return;
 
         var player = unit.Owner;
-        player.DisplayTimedTextTo(10.0f, 
+        player.DisplayTimedTextTo(10.0f,
             $"|r|cff8080ffRestless Soul:|r |cffc878c8Could it be... Is this the moment I've yearned for? Have you come to release me from this eternal confinement? I can feel the life force coursing through my veins... AHHH...|r");
 
         var e = effect.Create("\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\"", unit, "origin");
@@ -130,6 +130,4 @@ public static class UrnSoul
 
         AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue));
     }
-
-
 }

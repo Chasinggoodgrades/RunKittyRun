@@ -1,6 +1,6 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
+using static WCSharp.Api.Common;
 
 public class BeaconOfUnitedLifeforce : Relic
 {
@@ -9,7 +9,7 @@ public class BeaconOfUnitedLifeforce : Relic
     private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
     private static float EXTRA_REVIVE_CHANCE_ALL = 0.0175f; // 1.75%
     private static float EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE = 0.01f; // 1%
-    private static new string IconPath = "war3mapImported\\BTNTicTac.blp";
+    private new static string IconPath = "war3mapImported\\BTNTicTac.blp";
     private const int RelicCost = 650;
     private float ReviveChance = EXTRA_REVIVE_CHANCE_SINGLE;
 
@@ -54,7 +54,7 @@ public class BeaconOfUnitedLifeforce : Relic
 
         // Revive all kitties if chance <= EXTRA_REVIVE_CHANCE_ALL, otherwise revive one kitty
         bool reviveAll = chance <= EXTRA_REVIVE_CHANCE_ALL;
-        if(upgradeLevel < 2) reviveAll = false;
+        if (upgradeLevel < 2) reviveAll = false;
 
         var color = Colors.COLOR_YELLOW_ORANGE;
         var msgSent = false;
@@ -91,7 +91,4 @@ public class BeaconOfUnitedLifeforce : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(typeof(BeaconOfUnitedLifeforce));
         if (upgradeLevel >= 1) ReviveChance = EXTRA_REVIVE_CHANCE_SINGLE + EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE;
     }
-
-
-
 }

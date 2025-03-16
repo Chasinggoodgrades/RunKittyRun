@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 using WCSharp.Shared.Data;
-using static WCSharp.Api.Common;
 
 public class WolfArea
 {

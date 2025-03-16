@@ -7,8 +7,8 @@ using static WCSharp.Api.Common;
 /// -- Periodic
 /// -- Pulls Every 30 seconds
 /// -- 500 Yd Range..
-/// 
-/// -- Have to figure out a way to simulate the gravity effect smoothly.. 
+///
+/// -- Have to figure out a way to simulate the gravity effect smoothly..
 /// </summary>
 
 public class Vortex : Affix
@@ -26,7 +26,6 @@ public class Vortex : Affix
     private timer PullStart = timer.Create();
     private int Counter = 0;
     private List<unit> UnitsInRange = new List<unit>();
-
 
     public Vortex(Wolf unit) : base(unit)
     {
@@ -66,7 +65,7 @@ public class Vortex : Affix
     private void EnterRegionActions()
     {
         var enteringUnit = @event.Unit;
-        if(UnitsInRange.Contains(enteringUnit)) return;
+        if (UnitsInRange.Contains(enteringUnit)) return;
         UnitsInRange.Add(enteringUnit);
     }
 
@@ -99,18 +98,19 @@ public class Vortex : Affix
                 var x = unit.X;
                 var y = unit.Y;
                 var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
-                var newX = x + distance * Cos(angle);
-                var newY = y + distance * Sin(angle);
+                var newX = x + (distance * Cos(angle));
+                var newY = y + (distance * Sin(angle));
                 unit.SetPosition(newX, newY);
                 unit.SetFacing(angle);
-                var lastOrder = UnitOrders.GetLastOrderLocation(unit);
-                unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+                //var lastOrder = UnitOrders.GetLastOrderLocation(unit);
+                //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
                 // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
                 // Setup @event system to acquire last x,y location of this unit.
             }
             Counter += 1;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Console.WriteLine(e);
             throw;
         }
@@ -122,5 +122,4 @@ public class Vortex : Affix
         Counter = 0;
         Unit.Unit.SetVertexColor(150, 120, 255);
     }
-
 }

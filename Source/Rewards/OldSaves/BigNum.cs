@@ -14,9 +14,8 @@
     public void Clean()
     {
         BigNumL current = List;
-        current?.Clean();
+        _ = (current?.Clean());
     }
-
 
     // DivSmall method
     public int DivSmall(int denom)
@@ -74,7 +73,6 @@ public class BigNumL
 
     public int DivSmall(int baseValue, int denom)
     {
-        int quotient = 0;
         int remainder = 0;
         int num;
 
@@ -83,9 +81,9 @@ public class BigNumL
             remainder = Next.DivSmall(baseValue, denom);
         }
 
-        num = Leaf + remainder * baseValue;
-        quotient = num / denom;
-        remainder = num - quotient * denom;
+        num = Leaf + (remainder * baseValue);
+        int quotient = num / denom;
+        remainder = num - (quotient * denom);
         Leaf = quotient;
         return remainder;
     }

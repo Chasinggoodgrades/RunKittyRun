@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -57,7 +56,6 @@ public static class CameraUtil
     {
         if (KomotoCamEnabled.Contains(player))
         {
-
             KomotoCamEnabled.Remove(player);
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "KomotoCam disabled!|r");
 
@@ -68,7 +66,7 @@ public static class CameraUtil
             KomotoCamEnabled.Add(player);
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "KomotoCam enabled!|r");
 
-            UpdateKomotoCam(player, Globals.PLAYERS_CURRENT_SAFEZONE[player]);
+            UpdateKomotoCam(player, Globals.ALL_KITTIES[player].CurrentSafeZone);
         }
     }
 
@@ -76,8 +74,8 @@ public static class CameraUtil
     {
         if (!KomotoCamEnabled.Contains(player)) return;
 
-        float rotation = (4 - (safezoneIndex % 4)) * 90.0f + 90.0f;
-        if(!player.IsLocal) return;
+        float rotation = ((4 - (safezoneIndex % 4)) * 90.0f) + 90.0f;
+        if (!player.IsLocal) return;
         SetCameraField(CAMERA_FIELD_ROTATION, rotation, 0.0f);
     }
 }

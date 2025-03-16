@@ -1,11 +1,12 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using static WCSharp.Api.Common;
+
 public class Speedster : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_SPEEDSTER;
 
-    public Speedster(Wolf unit) : base(unit) { 
-        Name = $"{Colors.COLOR_ORANGE}Speedster|r"; 
+    public Speedster(Wolf unit) : base(unit)
+    {
+        Name = $"{Colors.COLOR_ORANGE}Speedster|r";
     }
 
     public override void Apply()

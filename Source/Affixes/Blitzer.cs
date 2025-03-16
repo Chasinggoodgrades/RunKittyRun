@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
@@ -45,7 +46,6 @@ public class Blitzer : Affix
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
         Unit.Unit.SetColor(playercolor.Brown);
         base.Remove();
-
     }
 
     private void RegisterMoveTimer()
@@ -80,6 +80,7 @@ public class Blitzer : Affix
         BlitzerMove(x, y);
         Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
+        Unit.IsWalking = true;
         MoveTimer.Start(randomTime, false, PreBlitzerMove);
     }
 
@@ -105,8 +106,8 @@ public class Blitzer : Affix
 
         // 60 fps for smooth movement, step distance
         float stepDistance = speed / 50.0f; // Assuming 60 calls per second
-        float nextX = currentX + directionX * stepDistance;
-        float nextY = currentY + directionY * stepDistance;
+        float nextX = currentX + (directionX * stepDistance);
+        float nextY = currentY + (directionY * stepDistance);
 
         // Move the unit one step
         Unit.Unit.SetPosition(nextX, nextY);
@@ -127,6 +128,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
+        Unit.IsWalking = false;
         Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 
@@ -144,12 +146,14 @@ public class Blitzer : Affix
             PreBlitzerTimer.Pause();
             WanderEffect.Dispose();
             MoveTimer.Pause();
+            Unit.IsWalking = !pause;
         }
         else
         {
             BlitzerTimer.Resume();
             PreBlitzerTimer.Resume();
             MoveTimer.Resume();
+            Unit.IsWalking = !pause;
         }
     }
 }

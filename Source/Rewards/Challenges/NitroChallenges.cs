@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class NitroChallenges
 {
     private static Dictionary<int, int> NitroRoundTimes;
     private static timer NitroTimer = timer.Create();
     private static timerdialog NitroDialog = timerdialog.Create(NitroTimer);
-    private static List<player> HitNitroAlready = new List<player>();
-    private static Dictionary<player, int> NitroCount;
+
     public static void Initialize()
     {
         NitroRoundTimes = new Dictionary<int, int>();
-        NitroCount = new Dictionary<player, int>();
     }
 
     public static float GetNitroTimeRemaining() => NitroTimer.Remaining;
@@ -24,18 +22,22 @@ public static class NitroChallenges
             case (int)DifficultyLevel.Normal:
                 SetNormalNitroRoundTimes();
                 break;
+
             case (int)DifficultyLevel.Hard:
                 SetHardNitroRoundTimes();
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 SetImpossibleNitroRoundTimes();
                 break;
+
             default:
                 // Gamemode being solo / team;
                 SetNormalNitroRoundTimes();
                 break;
         }
     }
+
     private static void SetNormalNitroRoundTimes()
     {
         NitroRoundTimes.Add(1, 125); // 2:05
@@ -92,62 +94,74 @@ public static class NitroChallenges
 
     private static void AwardingNitroEvents(player player)
     {
-        if (NitroCount.TryGetValue(player, out var countx) && countx == Globals.ROUND) return;
-        if (NitroTimer.Remaining <= 0.00 || NitroTimer == null) return;
+        var kittyData = Globals.ALL_KITTIES[player];
+        var nitroCount = kittyData.CurrentStats.NitroCount;
+
+        if (nitroCount == Globals.ROUND) return; // already awarded
+        if (NitroTimer == null || NitroTimer.Remaining <= 0.00) return;
         var round = Globals.ROUND;
 
         switch (round)
         {
             case 1:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.Nitro));
-                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible)
+                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
                 break;
+
             case 2:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroBlue));
-                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.AzureLight));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible)
+                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.AzureLight));
                 break;
+
             case 3:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroRed));
-                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.CrimsonLight));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible)
+                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.CrimsonLight));
                 break;
+
             case 4:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroGreen));
                 Challenges.ButterflyAura(player);
-                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.EmeraldLight));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible)
+                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.EmeraldLight));
                 break;
+
             case 5:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroPurple));
-                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
+                if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible)
+                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
                 break;
+
             default:
                 break;
         }
 
         PlayNitroSound(player);
-        if (!Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Contains(round))
-            Globals.ALL_KITTIES[player].CurrentStats.ObtainedNitros.Add(round);
-        if (NitroCount.TryGetValue(player, out var count))
-            NitroCount[player] = count + 1;
-        else
-            NitroCount.Add(player, 1);
+
+        var currentStats = kittyData.CurrentStats;
+        if (!currentStats.ObtainedNitros.Contains(round))
+            currentStats.ObtainedNitros.Add(round);
+
+        currentStats.NitroCount += 1;
+        kittyData.SaveData.GameStats.NitrosObtained += 1;
     }
 
     private static void AwardingDivineLight(player player)
     {
-        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
         var requiredCount = 5;
-        if(Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
-        if (NitroCount.TryGetValue(player, out var count) && count == requiredCount) 
+        if (Globals.ALL_KITTIES[player].CurrentStats.NitroCount == requiredCount)
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
     }
 
     private static void PlayNitroSound(player player)
     {
-        if (HitNitroAlready.Contains(player)) return;
-        HitNitroAlready.Add(player);
+        if (Globals.ALL_KITTIES[player].CurrentStats.NitroObtained) return; // first time
+        Globals.ALL_KITTIES[player].CurrentStats.NitroObtained = true;
         SoundManager.PlaySpeedSound();
     }
-
-
 }

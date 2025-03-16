@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class VoteEndRound
 {
     public static bool VoteActive { get; private set; }
@@ -52,7 +53,7 @@ public static class VoteEndRound
     /// </summary>
     private static void SetUnfinishedPlayersTimes()
     {
-        foreach(var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
             if (kitty.Value.Finished) continue;
             kitty.Value.TimeProg.SetRoundTime(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1]);

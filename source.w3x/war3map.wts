@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|cffff0000RKR Remastered v1.1.0|r
+|cffff0000RKR Remastered v1.1.5|r
 }
 
 STRING 2
@@ -10,11 +10,10 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.1.0n
-- |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.1.5 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Music, and more! 
 |n|n- Check out our leaderboard in discord!
-|n|n|n|cff00ffffLast updated:|r |c00FF00003/07/2025|r
+|n|n|n|cff00ffffLast updated:|r |c00FF00003/16/2025|r
 }
 
 STRING 4
@@ -794,7 +793,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.1.0
+Run Kitty Run Remastered v1.1.5
 }
 
 STRING 2035
@@ -2693,71 +2692,6 @@ STRING 3417
 Pathing Blocker (Air) (Doodad)
 }
 
-STRING 3425
-{
-Leyenda
-}
-
-STRING 3426
-{
-Stan
-}
-
-STRING 3427
-{
-Totony
-}
-
-STRING 3428
-{
-Omniology
-}
-
-STRING 3437
-{
-Player 21
-}
-
-STRING 3439
-{
-Player 23
-}
-
-STRING 3441
-{
-Cait
-}
-
-STRING 3442
-{
-Spermkagen
-}
-
-STRING 3443
-{
-Gheed
-}
-
-STRING 3444
-{
-Qoz
-}
-
-STRING 3445
-{
-Pizzahut
-}
-
-STRING 3446
-{
-Dominos
-}
-
-STRING 3447
-{
-Fieryfox
-}
-
 STRING 3449
 {
 By: |cff3296ffAches|r
@@ -4260,56 +4194,6 @@ STRING 3741
 |cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
 }
 
-STRING 3742
-{
-Maroony
-}
-
-STRING 3743
-{
-Navy
-}
-
-STRING 3744
-{
-BestColorEver
-}
-
-STRING 3745
-{
-GheedIfHeWasGirly
-}
-
-STRING 3746
-{
-RandomGuy
-}
-
-STRING 3747
-{
-RandomGuyTwo
-}
-
-STRING 3748
-{
-Kanon
-}
-
-STRING 3749
-{
-LightPink
-}
-
-STRING 3750
-{
-snowiguess
-}
-
-STRING 3751
-{
-POOP
-}
-
 STRING 3753
 // Abilities: A00S (Trail_VioletLight), Name (Name)
 {
@@ -4938,5 +4822,64 @@ STRING 3866
 // Items: rwiz (Ritual Mask), Description (Description)
 {
 This ritual mask gathers energy and bestows it upon the bearer. |n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
+}
+
+STRING 3867
+// Abilities: A016 (Test WW), Researchubertip (Tooltip - Learn - Extended)
+{
+Your body turns ethereal allowing you to use the air currents to move faster. |n|n|cffffcc00Level 1:|r +12%ms, last 20s |n|cffffcc00Level 2:|r +24%ms, last 35s |n|cffffcc00Level 3:|r +36%ms, last 50s   
+}
+
+STRING 3868
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++12% movement speed, last for 20 seconds.
+}
+
+STRING 3869
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++24% movement speed, last for 35 seconds.
+}
+
+STRING 3870
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++36% movement speed, last for 50 seconds.
+}
+
+STRING 3871
+// Abilities: A016 (Test WW), Name (Name)
+{
+Test WW
+}
+
+STRING 3872
+// Abilities: A016 (Test WW), Researchtip (Tooltip - Learn)
+{
+Learn Wind Walk - [|cffffcc00Level %d|r]
+}
+
+STRING 3873
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 1|r]
+}
+
+STRING 3874
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 2|r]
+}
+
+STRING 3875
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 3|r]
+}
+
+STRING 3876
+{
+A.I
 }
 

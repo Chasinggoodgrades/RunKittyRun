@@ -1,8 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Security.Cryptography;
-
-/// <summary>
+﻿/// <summary>
 /// This class is the primary location for adding rewards to the Reward System.
 /// * Follow the AddReward functions below to determine what you wish to do.
 /// </summary>

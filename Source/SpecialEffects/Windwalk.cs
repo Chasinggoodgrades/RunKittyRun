@@ -1,5 +1,5 @@
-﻿using WCSharp.Api;
-using System;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class Windwalk
@@ -15,7 +15,7 @@ public static class Windwalk
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
         Trigger.AddAction(() => ApplyWindwalkEffect());
@@ -30,7 +30,7 @@ public static class Windwalk
             var kitty = Globals.ALL_KITTIES[player];
             var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
             var duration = 3.0f + (2.0f * abilityLevel);
-            var wwID = kitty.WindwalkID;
+            var wwID = kitty.ActiveAwards.WindwalkID;
             AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
             if (wwID != 0)
             {

@@ -1,12 +1,12 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
-    public const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    public new const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private trigger SummonTrigger;
     private trigger TeleTrigger;
     private timer KillTimer;
@@ -112,7 +112,7 @@ public class FangOfShadows : Relic
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
-        var ability = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         var reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
         var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;

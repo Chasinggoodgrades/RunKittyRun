@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class GC
 {
     public static List<Affix> GCAffixes = new List<Affix>();
+
     public static void RemoveTrigger(ref trigger t)
     {
         if (t == null) return;
@@ -100,6 +99,5 @@ public static class GC
         if (i == null) return;
         i.Dispose();
         i = null;
-    } 
-
+    }
 }

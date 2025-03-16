@@ -21,6 +21,8 @@ public class Slider
 
     private bool isMirror = false;
     private bool wasSliding = false;
+    private float? forcedSlideSpeed = null;
+    private timer ForcedSlideTimer;
 
     // percentage of maximum speed
     private Dictionary<int, float> SPEED_AT_LEAST_THAN_50_DEGREES = new Dictionary<int, float>()
@@ -79,11 +81,11 @@ public class Slider
     {0, 1.5f},
     };
 
-
     public Slider(Kitty kitty)
     {
         this.kitty = kitty;
         SliderTimer = timer.Create();
+        ForcedSlideTimer = timer.Create();
         enabled = false;
         RegisterClickEvent();
     }
@@ -106,10 +108,10 @@ public class Slider
     public void StartSlider()
     {
         enabled = true;
-        ResumeSlider();
+        ResumeSlider(false);
     }
 
-    public void ResumeSlider()
+    public void ResumeSlider(bool isRevive)
     {
         if (!enabled)
         {
@@ -118,6 +120,22 @@ public class Slider
 
         ClickTrigger.Enable();
         WidgetTrigger.Enable();
+
+        if (isRevive)
+        {
+            this.forcedSlideSpeed = 0;
+            this.kitty.Invulnerable = true;
+
+            this.ForcedSlideTimer.Start(1.4f, false, () =>
+            {
+                this.forcedSlideSpeed = null;
+
+                this.ForcedSlideTimer.Start(0.6f, false, () =>
+                {
+                    this.kitty.Invulnerable = false;
+                });
+            });
+        }
 
         SliderTimer.Start(SLIDE_INTERVAL, true, () =>
         {
@@ -139,7 +157,6 @@ public class Slider
                 BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
             }
 
-
             this.wasSliding = true;
             UpdateSlider();
         });
@@ -150,6 +167,7 @@ public class Slider
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
         SliderTimer.Pause();
+        ForcedSlideTimer.Pause();
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
         this.wasSliding = false;
@@ -168,8 +186,8 @@ public class Slider
 
     private void UpdateSlider()
     {
-        float moveSpeed = (this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit);
-        float movePerTick = moveSpeed * SLIDE_INTERVAL;
+        float slideSpeed = this.forcedSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
+        float slidePerTick = slideSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);
 
@@ -178,8 +196,8 @@ public class Slider
 
         escaperTurnForOnePeriod();
 
-        float newX = oldX + movePerTick * Cos(angle);
-        float newY = oldY + movePerTick * Sin(angle);
+        float newX = oldX + (slidePerTick * Cos(angle));
+        float newY = oldY + (slidePerTick * Sin(angle));
 
         if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
         {
@@ -192,18 +210,17 @@ public class Slider
         }
 
         kitty.Unit.SetPosition(newX, newY);
+        ItemPickup();
     }
 
     private void RegisterClickEvent()
     {
         ClickTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(ClickTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder);
         ClickTrigger.AddAction(() => HandleTurn(true));
 
         WidgetTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(WidgetTrigger, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
-        WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder);
         WidgetTrigger.AddAction(() => HandleTurn(false));
 
         ClickTrigger.Disable();
@@ -212,9 +229,9 @@ public class Slider
 
     private void HandleTurn(bool isToLocation)
     {
+        if (!IsEnabled()) return;
         var unit = @event.Unit;
-        var angle = 0.0f;
-
+        float angle;
         if (isToLocation)
         {
             var orderX = GetOrderPointX();
@@ -282,7 +299,7 @@ public class Slider
             if (diffToApplyAbs > 0.05f)
             {
                 int sens = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1;
-                float maxIncreaseRotationSpeedPerPeriod = Math.Abs((maxSlideTurnPerPeriod * SLIDE_INTERVAL) / rotationTimeForMaximumSpeed);
+                float maxIncreaseRotationSpeedPerPeriod = Math.Abs(maxSlideTurnPerPeriod * SLIDE_INTERVAL / rotationTimeForMaximumSpeed);
 
                 float newSlideTurn;
                 float curSlideTurn = slideCurrentTurnPerPeriod;
@@ -293,7 +310,7 @@ public class Slider
                 {
                     int tableInd = (int)Math.Round((float)Math.Abs(remainingDegrees));
                     float aimedSpeedPercentage = SPEED_AT_LEAST_THAN_50_DEGREES[tableInd];
-                    float aimedNewSpeedPerPeriod = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100;
+                    float aimedNewSpeedPerPeriod = maxSlideTurnPerPeriod * aimedSpeedPercentage * sens / 100;
                     float diffSpeed = aimedNewSpeedPerPeriod - curSlideTurn;
                     if (Math.Abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod)
                     {
@@ -302,7 +319,7 @@ public class Slider
                     else
                     {
                         int sensDiffToApply = diffSpeed > 0 ? 1 : -1;
-                        diffToApply = curSlideTurn + sensDiffToApply * maxIncreaseRotationSpeedPerPeriod;
+                        diffToApply = curSlideTurn + (sensDiffToApply * maxIncreaseRotationSpeedPerPeriod);
                     }
                     slideCurrentTurnPerPeriod = diffToApply;
                 }
@@ -328,6 +345,27 @@ public class Slider
                 float newAngle = currentAngle + diffToApply;
                 BlzSetUnitFacingEx(kitty.Unit, newAngle);
             }
+        }
+    }
+
+    private void ItemPickup()
+    {
+        if (!enabled) return;
+
+        foreach(var i in ItemSpawner.TrackKibbles)
+        {
+            if (i.Item == null) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            kitty.Unit.AddItem(i.Item);
+            break;
+        }
+        foreach (var item in ItemSpawner.TrackItems)
+        {
+            if (item == null) continue;
+            if (item.IsOwned) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            kitty.Unit.AddItem(item);
+            break;
         }
     }
 }

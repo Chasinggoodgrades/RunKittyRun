@@ -30,6 +30,7 @@ public static class Difficulty
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (IsDifficultyChosen) return;
 
         CreateDialog();
         RegisterSelectionEvent();
@@ -61,16 +62,16 @@ public static class Difficulty
             var player = @event.Player;
             var button = @event.ClickedButton;
 
-            if(!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
+            if (!ButtonTallys.ContainsKey(button)) ButtonTallys.Add(button, 0);
             ButtonTallys[button]++;
             DifficultyChoosing.SetVisibility(player, false);
-            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.");
+            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {ButtonNames[button]} difficulty.{Colors.COLOR_RESET}");
         });
     }
 
     private static void ChooseDifficulty()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             DifficultyChoosing.SetVisibility(player, true);
         Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, () => TallyingVotes());
     }
@@ -98,44 +99,51 @@ public static class Difficulty
                 DifficultyChosen = s_NORMAL;
                 DifficultyValue = (int)DifficultyLevel.Normal;
                 break;
+
             case s_HARD:
                 DifficultyChosen = s_HARD;
                 DifficultyValue = (int)DifficultyLevel.Hard;
                 break;
+
             case s_IMPOSSIBLE:
                 DifficultyChosen = s_IMPOSSIBLE;
                 DifficultyValue = (int)DifficultyLevel.Impossible;
                 break;
         }
         IsDifficultyChosen = true;
-        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}");
+        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}{Colors.COLOR_RESET}");
     }
 
     private static void RemoveDifficultyDialog()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             DifficultyChoosing.SetVisibility(player, false);
     }
-
 
     /// <summary>
     /// Changes the difficulty of the game to the specified difficulty.
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
-    public static void ChangeDifficulty(string difficulty)
+    public static bool ChangeDifficulty(string difficulty = "normal")
     {
         switch (difficulty)
         {
             case "normal":
                 SetDifficulty(s_NORMAL);
                 break;
+
             case "hard":
                 SetDifficulty(s_HARD);
                 break;
+
             case "impossible":
                 SetDifficulty(s_IMPOSSIBLE);
                 break;
-        }
-    }
 
+            default:
+                Console.WriteLine($"{Colors.COLOR_RED}Invalid difficulty level: {difficulty}{Colors.COLOR_RESET}");
+                return false;
+        }
+        return true;
+    }
 }

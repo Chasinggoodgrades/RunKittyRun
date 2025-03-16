@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-
-public class GameTimesData
+﻿public class GameTimesData
 {
     public NormalGameTimeData NormalGameTime { get; set; }
     public HardGameTimeData HardGameTime { get; set; }
     public ImpossibleGameTimeData ImpossibleGameTime { get; set; }
+
     public GameTimesData()
     {
         NormalGameTime = new NormalGameTimeData();
@@ -12,7 +11,6 @@ public class GameTimesData
         ImpossibleGameTime = new ImpossibleGameTimeData();
     }
 }
-
 
 public class NormalGameTimeData
 {

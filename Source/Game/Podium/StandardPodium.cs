@@ -4,9 +4,9 @@ using WCSharp.Api;
 using WCSharp.Shared.Data;
 
 /// <summary>
-/// Players are going to be rewarded 
+/// Players are going to be rewarded
 /// </summary>
-public static class StandardPodium 
+public static class StandardPodium
 {
     private static Queue<(player Player, Point position)> PodiumQueue = new Queue<(player Player, Point position)>();
     private static List<unit> MovedUnits = new List<unit>();
@@ -16,6 +16,7 @@ public static class StandardPodium
     private const string MostSaves = "most saves";
     private const string HighestRatio = "highest ratio";
     private const string HighestStreak = "highest streak";
+
     public static void BeginPodiumActions()
     {
         PodiumUtil.SetCameraToPodium();
@@ -103,18 +104,23 @@ public static class StandardPodium
             case "":
                 EnqueueTopScorePlayers();
                 break;
+
             case HighestScore:
                 EnqueueTopSavesPlayers();
                 break;
+
             case MostSaves:
                 EnqueueTopRatioPlayers();
                 break;
+
             case HighestRatio:
                 EnqueueTopStreakPlayers();
                 break;
+
             case HighestStreak:
                 PodiumUtil.EndingGameThankyou();
                 return;
+
             default:
                 break;
         }
@@ -128,16 +134,18 @@ public static class StandardPodium
         {
             case HighestScore:
                 return (stats.TotalSaves - stats.TotalDeaths).ToString();
+
             case MostSaves:
                 return stats.TotalSaves.ToString();
+
             case HighestRatio:
                 return stats.TotalDeaths == 0 ? stats.TotalSaves.ToString("F2") : ((float)stats.TotalSaves / stats.TotalDeaths).ToString("F2");
+
             case HighestStreak:
                 return stats.MaxSaveStreak.ToString();
+
             default:
                 return "n/a";
         }
     }
 }
-
-

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -36,7 +35,7 @@ public class FirstPersonCamera
             if (forceCamTimer == null)
             {
                 forceCamTimer = CreateTimer();
-                TimerStart(forceCamTimer, timerPeriod, true, UpdateCamera);
+                TimerStart(forceCamTimer, timerPeriod, true, ErrorHandler.Wrap(UpdateCamera));
             }
         }
         else
@@ -69,6 +68,13 @@ public class FirstPersonCamera
             float moveSpeed = GetUnitMoveSpeed(hero);
             float movePerTick = moveSpeed * timerPeriod;
 
+            Kitty kitty = Globals.ALL_KITTIES[player];
+
+            if (kitty.Slider.IsEnabled())
+            {
+                movePerTick = 0.2f;
+            }
+
             float angle = Rad2Deg(GetUnitFacing(hero));
             if (keyDownState["UP"]) fwd += movePerTick;
             if (keyDownState["DOWN"]) fwd -= movePerTick;
@@ -76,8 +82,13 @@ public class FirstPersonCamera
             float oldX = GetUnitX(hero);
             float oldY = GetUnitY(hero);
 
-            float newX = oldX + fwd * Cos(angle);
-            float newY = oldY + fwd * Sin(angle);
+            float newX = oldX + (fwd * Cos(angle));
+            float newY = oldY + (fwd * Sin(angle));
+
+            if (!Globals.GAME_ACTIVE && Regions.BarrierRegion.Contains(newX, newY))
+            {
+                return;
+            }
 
             if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY))
             {
@@ -101,7 +112,6 @@ public class FirstPersonCamera
                 hero.SetAnimation(0); // 0 is stand for most units
             }
         }
-
         else
         {
             if (this.lastUnitAnimation != "walk")
@@ -110,7 +120,6 @@ public class FirstPersonCamera
                 hero.SetAnimation(6); // POTM is 6 for walk
             }
         }
-
 
         Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, true);
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0);

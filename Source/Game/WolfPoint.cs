@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class WolfPoint
 {
-    private const float MaxDistance = 300f; // Max distance between points
-    public readonly static int MoveOrderID = OrderId("move");
+    private const float MaxDistance = 128f; // Max distance between points
+    public static readonly int MoveOrderID = OrderId("move");
+    public static readonly int StopOrderID = OrderId("stop");
+    public static readonly int AttackOrderID = OrderId("attack");
+    public static readonly int HoldPositionOrderID = OrderId("holdposition");
+    public static trigger IsPausedTrigger;
+
     private Wolf Wolf { get; set; }
     public List<float[]> PointsToVisit { get; set; } = new List<float[]>();
 
@@ -16,6 +22,7 @@ public class WolfPoint
     public WolfPoint(Wolf wolf)
     {
         Wolf = wolf;
+        IsPausedTrigger ??= InitTrigger();
     }
 
     /// <summary>
@@ -60,16 +67,22 @@ public class WolfPoint
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{ex.Message}");
+            Logger.Warning($"WolfPoint.DiagonalRegionCreate {ex.Message}");
         }
     }
 
-
     public void Cleanup()
     {
-        if (PointsToVisit == null) return;
-        PointsToVisit.Clear();
-        Wolf.Unit.ClearOrders();
+        try
+        {
+            if (PointsToVisit == null) return;
+            PointsToVisit.Clear();
+            Wolf.Unit.ClearOrders();
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical(ex.Message);
+        }
     }
 
     public void Dispose()
@@ -77,15 +90,66 @@ public class WolfPoint
         Cleanup();
         PointsToVisit.Clear();
         PointsToVisit = null;
+        Wolf.Unit.ClearOrders();
     }
 
     private void StartMovingOrders()
     {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
         if (Wolf.IsPaused || Wolf.IsReviving) return;
-        for (int i = PointsToVisit.Count -1; i >= 1; i--)
+
+        try
         {
-            Wolf.Unit.QueueOrder(MoveOrderID, PointsToVisit[i][0], PointsToVisit[i][1]); 
+            for (int i = PointsToVisit.Count - 1; i >= 1; i--)
+            {
+                var moveID = MoveOrderID;
+                if (i == PointsToVisit.Count - 1) moveID = AttackOrderID;
+                Wolf.Unit.QueueOrder(moveID, PointsToVisit[i][0], PointsToVisit[i][1]);
+                if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
+            }
         }
+        catch (Exception ex)
+        {
+            Logger.Critical(ex.Message);
+        }
+    }
+
+    private static trigger InitTrigger()
+    {
+        IsPausedTrigger = CreateTrigger();
+        Blizzard.TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
+
+        TriggerAddCondition(IsPausedTrigger, Condition(() => GetIssuedOrderId() == AttackOrderID));
+        TriggerAddCondition(IsPausedTrigger, Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL));
+
+        // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
+        TriggerAddAction(IsPausedTrigger, () =>
+        {
+            try
+            {
+                Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
+                //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Critical("Wolf Point: " + ex.Message);
+            }
+        });
+        return IsPausedTrigger;
+    }
+}
+
+public class WolfVisitPoints : IDestroyable
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+
+    public WolfVisitPoints()
+    {
+    }
+
+    public void __destroy(bool recursive = false)
+    {
+        MemoryHandler.DestroyObject(this, recursive);
     }
 }

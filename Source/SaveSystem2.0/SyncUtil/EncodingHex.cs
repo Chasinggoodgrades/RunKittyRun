@@ -8,7 +8,6 @@ public static class EncodingHex
         return Convert.ToString(number, 16).PadLeft(8, '0').ToUpper();
     }
 
-
     // Converts a hex string to an integer
     public static int ToNumber(string someHexString)
     {
@@ -21,5 +20,4 @@ public static class EncodingHex
             return 0;
         }
     }
-
 }

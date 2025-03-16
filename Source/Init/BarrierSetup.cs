@@ -8,7 +8,7 @@ public static class BarrierSetup
     private static unit DummyUnitOne;
     private static unit DummyUnitTwo;
     private static unit DummyUnitThree;
-    private static List<destructable> destructables = new List<destructable>();
+    public static List<destructable> destructables = new List<destructable>();
 
     public static void Initialize()
     {
@@ -32,9 +32,9 @@ public static class BarrierSetup
 
         float distanceY = maxY - minY;
         float intervalY = distanceY / 13;
-        for(int i = 1; i < 13; i++ )
+        for (int i = 1; i < 13; i++)
         {
-            float currentY = minY + (i  * intervalY);
+            float currentY = minY + (i * intervalY);
             var des = destructable.Create(FourCC("YTpb"), centerX, currentY);
             destructables.Add(des);
         }
@@ -42,7 +42,7 @@ public static class BarrierSetup
 
     public static void ActivateBarrier()
     {
-        if(BarrierActive) return;
+        if (BarrierActive) return;
         CreateDummyUnits();
         CreateBarrier();
         BarrierActive = true;
@@ -50,11 +50,11 @@ public static class BarrierSetup
 
     public static void DeactivateBarrier()
     {
-        if(!BarrierActive) return;
+        if (!BarrierActive) return;
         DummyUnitOne.Dispose();
         DummyUnitTwo.Dispose();
         DummyUnitThree.Dispose();
-        foreach(var des in destructables)
+        foreach (var des in destructables)
         {
             des.Dispose();
         }

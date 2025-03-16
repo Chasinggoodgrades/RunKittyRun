@@ -1,7 +1,7 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class FrameManager
 {
@@ -16,6 +16,7 @@ public static class FrameManager
     private static trigger ESCTrigger = trigger.Create();
     private static string TEXT_COLOR = Colors.COLOR_YELLOW;
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
+
     public static void Initialize()
     {
         try
@@ -31,7 +32,7 @@ public static class FrameManager
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in FrameManager: {ex.Message}");
+            Logger.Critical($"Error in FrameManager.Initialize: {ex.Message}");
             throw;
         }
     }
@@ -85,7 +86,7 @@ public static class FrameManager
     private static void RemoveUnwantedFrames()
     {
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
-        var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
+        BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
         //timeDayDisplay.Visible = false;
     }
@@ -138,7 +139,7 @@ public static class FrameManager
     private static void ButtonsBackdrop()
     {
         Backdrop = framehandle.Create("BACKDROP", "ButtonsBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
-        var statsFrameParent = BlzGetFrameByName("ResourceBarGoldText", 0);
+        BlzGetFrameByName("ResourceBarGoldText", 0);
         Backdrop.SetPoint(framepointtype.Top, 0, 0, GameUI, framepointtype.Top);
         Backdrop.SetSize(0.16f, 0.035f);
         Backdrop.SetScale(1.0f);
@@ -163,7 +164,7 @@ public static class FrameManager
 
     private static void ESCHideFrames()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
@@ -198,7 +199,4 @@ public static class FrameManager
         foreach (var frame in frames)
             if (frame != currentFrame) frame.Visible = false;
     }
-
 }
-
-

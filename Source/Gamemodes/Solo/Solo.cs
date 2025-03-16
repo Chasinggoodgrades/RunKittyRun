@@ -14,11 +14,10 @@
     public static void RoundEndCheck()
     {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return; // Progression mode
-        foreach(var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
             if (kitty.Value.Alive) return;
         }
         RoundManager.RoundEnd();
     }
-
 }

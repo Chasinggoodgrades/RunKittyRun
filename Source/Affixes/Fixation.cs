@@ -2,6 +2,7 @@
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public class Fixation : Affix
 {
     private const float FIXATION_RADIUS = 500.0f;
@@ -178,13 +179,14 @@ public class Fixation : Affix
         if (pause)
         {
             IsChasing = false;
+            InRangeTrigger.Disable();
             ChaseTimer.Pause();
             GC.RemoveEffect(ref TargetEffect);
         }
         else
         {
+            InRangeTrigger.Enable();
             ChaseTimer.Resume();
         }
     }
-
 }

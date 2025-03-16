@@ -93,18 +93,7 @@ public static class UnitWithinRange
         int trigId = GetUniqueTriggerId(trig);
         var (eventValue, execution) = udg_WithinRangeHash[trigId];
 
-        unit registeredUnit = unitRangeUnits[trigId];
-        unit enteringUnit = GetTriggerUnit();
-
-        if (eventValue != 0.0f)
-        {
-
-        }
-
-        if (execution != null)
-        {
-            execution.Execute();
-        }
+        execution?.Execute();
     }
 
     private static void ActionUnitWithinCleanOnKilled(unit unit)

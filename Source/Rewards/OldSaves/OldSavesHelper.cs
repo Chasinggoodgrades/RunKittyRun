@@ -2,6 +2,7 @@
 {
     public static string charset { get; } = "!$%&'()*+,-.0123456789:;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}`";
     private static string PlayerCharSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     public static int Player_CharToInt(char c)
     {
         for (int i = 0; i < PlayerCharSet.Length; i++)
@@ -13,6 +14,7 @@
         }
         return -1;
     }
+
     public static int ModuloInteger(int x, int n) => ((x % n) + n) % n;
 
     public static int CharToInt(char c)
@@ -38,4 +40,3 @@
 		1097228907, // Afbk
     };
 }
-

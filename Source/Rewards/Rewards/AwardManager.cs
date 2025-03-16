@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 /// <summary>
-/// This class handles Awarding functionality. 
+/// This class handles Awarding functionality.
 /// </summary>
 public static class AwardManager
 {
-    private static Dictionary<player, List<string>> Awarded = new Dictionary<player, List<string>>();
     private static trigger AwardTrigger = trigger.Create();
-    //public static string GetRewardName(Awards award) => Colors.COLOR_YELLOW + award.ToString().Replace("_", " ") + Colors.COLOR_RESET;
-    public static void Initialize()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-            Awarded.Add(player, new List<string>());
-    }
 
     /// <summary>
     /// Gives the player an award and enables the ability for them to use.
@@ -27,7 +19,9 @@ public static class AwardManager
     public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
         // Check if the player already has the award
-        if (Awarded.TryGetValue(player, out var awards) && awards.Contains(award))
+        var awardsList = Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards;
+
+        if (awardsList.Contains(award))
             return;
 
         var saveData = Globals.ALL_KITTIES[player].SaveData;
@@ -48,7 +42,7 @@ public static class AwardManager
         if (earnedPrompt)
         {
             Utility.TimedTextToAllPlayers(5.0f, $"{Colors.PlayerNameColored(player)} has earned {Colors.COLOR_YELLOW}{awardFormatted}.|r");
-            Awarded[player].Add(award);
+            awardsList.Add(award);
         }
     }
 
@@ -76,32 +70,67 @@ public static class AwardManager
 
     public static bool ReceivedAwardAlready(player player, string award)
     {
-        return Awarded.TryGetValue(player, out var awards) && awards.Contains(award);
+        return Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards.Contains(award);
     }
 
     /// <summary>
-    /// Registers all gamestats for each player to earn rewards. 
+    /// Registers all gamestats for each player to earn rewards.
     /// Ex. If less than 200 saves, itll add every game stat to check periodically. to see if you've hit or gone over said value.
     /// </summary>
     public static void RegisterGamestatEvents()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            if(player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
-            if(player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
-            var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-            var gameStats = kittyStats.GameStats;
-
-            foreach(var gameStatReward in RewardsManager.GameStatRewards)
+            GameStatsData gamestatsx;
+            var gameStatsToIgnore = new List<string>
             {
-                var gamestat = gameStatReward.GameStat;
-                if (gamestat == nameof(gameStats.NormalGames) || gamestat == nameof(gameStats.HardGames) || gamestat == nameof(gameStats.ImpossibleGames)) continue;
-                if (gamestat == nameof(gameStats.NormalWins) || gamestat == nameof(gameStats.HardWins) || gamestat == nameof(gameStats.ImpossibleWins)) continue;
-                HandleGameStatTrigger(player, kittyStats, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                nameof(gamestatsx.NormalGames),
+                nameof(gamestatsx.HardGames),
+                nameof(gamestatsx.ImpossibleGames),
+                nameof(gamestatsx.NormalWins),
+                nameof(gamestatsx.HardWins),
+                nameof(gamestatsx.ImpossibleWins),
+                nameof(gamestatsx.NitrosObtained),
+            };
+
+            if (Gamemode.CurrentGameMode != "Standard") return;
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
+                if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
+
+                if (!Globals.ALL_KITTIES.TryGetValue(player, out var kittyProfile))
+                {
+                    if (!SaveManager.SaveData.TryGetValue(player, out var saveData))
+                    {
+                        Logger.Critical($"Save data wasn't finished loading / found. Defaulting SaveData for {player}.");
+                        Globals.ALL_KITTIES[player].SaveData = new KittyData();
+                        continue;
+                    }
+                    Globals.ALL_KITTIES[player].SaveData = saveData;
+                    kittyProfile = Globals.ALL_KITTIES[player];
+                }
+
+                if (kittyProfile.SaveData == null)
+                {
+                    kittyProfile.SaveData = new KittyData();
+                }
+
+                var gameStats = kittyProfile.SaveData.GameStats;
+
+                foreach (var gameStatReward in RewardsManager.GameStatRewards)
+                {
+                    var gamestat = gameStatReward.GameStat;
+                    if (gameStatsToIgnore.Contains(gamestat)) continue;
+                    HandleGameStatTrigger(player, kittyProfile.SaveData, gamestat, gameStatReward.GameStatValue, gameStatReward.Name);
+                }
             }
+            AwardTrigger.RegisterTimerEvent(1.0f, true);
         }
-        AwardTrigger.RegisterTimerEvent(1.0f, true);
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in AwardManager.RegisterGamestatEvents: {ex.Message}");
+        }
     }
 
     private static void HandleGameStatTrigger(player player, KittyData kittyStats, string gamestat, int requiredValue, string award)
@@ -165,7 +194,6 @@ public static class AwardManager
                 if (gameStat == nameof(gameStats.NormalGames) && normalPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.HardGames) && hardPlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.ImpossibleGames) && impossiblePlusGames >= requiredValue) GiveReward(player, gameStatReward.Name);
-
                 else if (gameStat == nameof(gameStats.NormalWins) && normalPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.HardWins) && hardPlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
                 else if (gameStat == nameof(gameStats.ImpossibleWins) && impossiblePlusWins >= requiredValue) GiveReward(player, gameStatReward.Name);
@@ -182,8 +210,6 @@ public static class AwardManager
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
         if (kitty.Player.SlotState != playerslotstate.Playing) return;
         if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
-
-        var unit = kitty.Unit;
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
 
         var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));

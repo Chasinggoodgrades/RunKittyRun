@@ -120,6 +120,7 @@ public static class Constants
 	public const int ABILITY_WW_DIVINE = 1093677362;
 	public const int ABILITY_SKIN_KITTYHUNTRESS = 1093677364;
 	public const int ABILITY_WW_VIOLET = 1093677363;
+	public const int ABILITY_TEST_WW = 1093677366;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;

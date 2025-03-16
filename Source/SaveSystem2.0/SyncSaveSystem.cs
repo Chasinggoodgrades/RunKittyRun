@@ -7,6 +7,7 @@ using static WCSharp.Api.Common;
 public class SyncSaveLoad
 {
     private static SyncSaveLoad instance;
+
     public static SyncSaveLoad Instance
     {
         get
@@ -45,12 +46,7 @@ public class SyncSaveLoad
         PreloadGenClear();
         PreloadGenStart();
 
-        string rawDataString;
-        if (data != null)
-            rawDataString = PropertyEncoder.EncodeToJsonBase64(data);
-        else
-            rawDataString = PropertyEncoder.EncodeAllDataToJsonBase64();
-
+        string rawDataString = data != null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64();
         string toCompile = rawDataString;
         int chunkSize = 180;
         StringBuilder assemble = new StringBuilder();
@@ -110,7 +106,7 @@ public class SyncSaveLoad
         {
             string readData = BlzGetTriggerSyncData();
             string prefix = BlzGetTriggerSyncPrefix();
-            int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0; 
+            int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0;
             int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
             string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
             var promise = allPromises[@event.Player.Id];
@@ -136,10 +132,11 @@ public class SyncSaveLoad
         }
         catch (Exception ex)
         {
-            Console.WriteLine((ex.StackTrace));
+            Console.WriteLine(ex.StackTrace);
         }
     }
 }
+
 public class FilePromise
 {
     public player SyncOwner { get; }
@@ -172,9 +169,9 @@ public class FilePromise
             //FinalString = WCSharp.Shared.Base64.FromBase64(loadString.ToString());
             DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString);
 
-/*            Logger.Verbose("loadString.Length", loadString.Length);
-            Logger.Verbose("Finished: ");
-            Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
+            /*            Logger.Verbose("loadString.Length", loadString.Length);
+                        Logger.Verbose("Finished: ");
+                        Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
             //Logger.Verbose("FinalString: ", FinalString);
 
             onFinish?.Invoke(this);
@@ -185,6 +182,3 @@ public class FilePromise
         }
     }
 }
-
-
-

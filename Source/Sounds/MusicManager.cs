@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class MusicManager
 {
     public static List<Music> MusicList { get; private set; }
+
     public static void Initialize()
     {
         MusicList = RegisterMusicList();

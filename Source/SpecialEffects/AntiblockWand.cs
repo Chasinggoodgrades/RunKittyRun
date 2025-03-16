@@ -1,6 +1,6 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using WCSharp.Shared.Extensions;
+
 public static class AntiblockWand
 {
     private static trigger CastEvent;
@@ -21,7 +21,7 @@ public static class AntiblockWand
     private static trigger RegisterCastEvents()
     {
         var Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast);
         Trigger.AddAction(SpellActions);
         return Trigger;
@@ -41,7 +41,6 @@ public static class AntiblockWand
             var wolfUnit = Globals.ALL_WOLVES[wolf];
             wolfUnit.StartWandering(true);
         }
-
 
         GC.RemoveGroup(ref wolvesInArea);
         GC.RemoveList(ref list);

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using WCSharp.Api;
-using WCSharp.Events;
 using static WCSharp.Api.Common;
 
 public static class ItemSpawner
 {
+    public static List<Kibble> TrackKibbles;
+    public static List<item> TrackItems;
+
     private static List<int> SpawnableItems;
-    private static List<item> TrackItems;
-    private static List<Kibble> TrackKibbles;
     private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS = 15;
 
     public static void Initialize()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         SpawnableItems = StandardItems();
         TrackItems = new List<item>();
         TrackKibbles = new List<Kibble>();
@@ -26,21 +25,24 @@ public static class ItemSpawner
 
     private static void RegisterEvent()
     {
-        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, () => SpawnItems());
+        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, SpawnItems);
     }
 
-    private static Func<bool> SpawnItems()
+    private static void SpawnItems()
     {
-        return () =>
+        try
         {
             RemoveSpawnedItems();
-            for(var i = 0; i < NUMBER_OF_ITEMS; i++)
+            for (var i = 0; i < NUMBER_OF_ITEMS; i++)
             {
-                TrackItems.Add(SpawnRegularItems());
+                SpawnRegularItems();
                 SpawnKibble();
             }
-            return true;
-        };
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"ItemSpawner: SpawnItems: {e.Message}");
+        }
     }
 
     private static void RemoveSpawnedItems()
@@ -50,30 +52,32 @@ public static class ItemSpawner
             var item = TrackItems[i];
             if (item.IsOwned) continue;
             item.Dispose();
-            item = null;
-        }
-
-        for (int i = 0; i < TrackKibbles.Count; i++)
-        {
-            var kibble = TrackKibbles[i];
-            kibble.Dispose();
-            kibble = null;
         }
 
         TrackItems.Clear();
+
+        if (KibbleEvent.IsEventActive()) return;
+
+        foreach (var kibble in TrackKibbles)
+        {
+            if (kibble.Item == null) continue; // alrady been __destroyed.
+            kibble.__destroy();
+        }
+
         TrackKibbles.Clear();
     }
-
 
     private static void SpawnKibble()
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (KibbleEvent.IsEventActive()) return;
-        var kibble = new Kibble();
+
+        var kibble = MemoryHandler.GetEmptyObject<Kibble>();
+        kibble.SpawnKibble();
         TrackKibbles.Add(kibble);
     }
 
-    private static item SpawnRegularItems()
+    private static void SpawnRegularItems()
     {
         var random = GetRandomInt(0, SpawnableItems.Count - 1);
         var item = SpawnableItems[random];
@@ -81,8 +85,8 @@ public static class ItemSpawner
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
-
-        return CreateItem(item, x, y);
+        var i = CreateItem(item, x, y);
+        TrackItems.Add(i);
     }
 
     private static List<int> StandardItems()
@@ -94,5 +98,4 @@ public static class ItemSpawner
             Constants.ITEM_ELIXIR
         };
     }
-
 }

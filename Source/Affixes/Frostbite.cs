@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Frostbite : Affix
 {
     private const float FROSTBITE_RADIUS = 500.0f;

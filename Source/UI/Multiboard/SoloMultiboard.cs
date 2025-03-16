@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using WCSharp.Api;
 
@@ -30,7 +29,7 @@ public static class SoloMultiboard
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SoloMultiboard: {ex.Message}");
+            Logger.Critical($"Error in SoloMultiboard: {ex.Message}");
             throw;
         }
     }
@@ -105,7 +104,7 @@ public static class SoloMultiboard
         BestTimes.GetItem(0, 6).SetText($"{color}Total Time|r");
         BestTimes.SetChildVisibility(true, false);
         BestTimes.SetChildWidth(0.05f);
-        BestTimes.GetItem(0,6).SetWidth(0.06f);
+        BestTimes.GetItem(0, 6).SetWidth(0.06f);
         BestTimes.GetItem(0, 0).SetWidth(0.07f);
         BestTimes.IsDisplayed = false;
         UpdateBestTimesMB();
@@ -217,7 +216,7 @@ public static class SoloMultiboard
     }
 
     private static float[] GetGameRoundTime(KittyData data)
-    {   
+    {
         var gameData = data.RoundTimes;
         var roundTimes = new float[5];
 
@@ -230,6 +229,7 @@ public static class SoloMultiboard
                 roundTimes[3] = gameData.RoundFourSolo;
                 roundTimes[4] = gameData.RoundFiveSolo;
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return new float[5];
@@ -239,7 +239,6 @@ public static class SoloMultiboard
 
     private static void ESCPressed()
     {
-        var player = @event.Player;
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo mode
         if (!@event.Player.IsLocal) return;
         if (OverallBoard.IsDisplayed)
@@ -253,5 +252,4 @@ public static class SoloMultiboard
             OverallBoard.IsDisplayed = true;
         }
     }
-
 }

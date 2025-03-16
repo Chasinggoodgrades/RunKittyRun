@@ -52,7 +52,7 @@ public class Howler : Affix
             var list = NearbyWolves.ToList();
             foreach (var wolf in list)
             {
-                if (NamedWolves.StanWolf.Unit == wolf) continue;
+                if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue; // i swear to christ if this mother fucker moves again
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
                 wolfObject.StartWandering(true);
@@ -67,9 +67,5 @@ public class Howler : Affix
         }
     }
 
-    private float GetRandomHowlTime()
-    {
-        return GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
-    }
-
+    private static float GetRandomHowlTime() => GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
 }

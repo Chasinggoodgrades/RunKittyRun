@@ -1,18 +1,18 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
+using static WCSharp.Api.Common;
 
 public class ShardOfTranslocation : Relic
 {
     public const int RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION;
-    public const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
+    public new const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
     private static int RelicCost = 650;
     private static float DEFAULT_BLINK_RANGE = 400.0f;
     private static float UPGRADE_BLINK_RANGE = 600.0f;
     private static float DEFAULT_COOLDOWN = 90.0f;
     private static float CooldownReduction = 15.0f;
     private unit Owner;
-    private static new string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
+    private new static string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
     private trigger CastEventTrigger;
 
@@ -59,10 +59,9 @@ public class ShardOfTranslocation : Relic
         var unit = @event.Unit;
         var targetLoc = @event.SpellTargetLoc;
         var player = unit.Owner;
-        var currentSafezone = Globals.PLAYERS_CURRENT_SAFEZONE[player];
+        var currentSafezone = Globals.ALL_KITTIES[player].CurrentSafeZone;
         try
         {
-
             if (!EligibleLocation(targetLoc, currentSafezone))
             {
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Invalid location. Must be within safezone bounds.");
@@ -87,7 +86,7 @@ public class ShardOfTranslocation : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType());
         MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE;
-        if(upgradeLevel >= 1) Utility.SimpleTimer(0.1f, () => SetItemTooltip(unit));
+        if (upgradeLevel >= 1) Utility.SimpleTimer(0.1f, () => SetItemTooltip(unit));
     }
 
     private void SetItemTooltip(unit unit)
@@ -102,7 +101,7 @@ public class ShardOfTranslocation : Relic
     /// <param name="Unit"></param>
     private void SetAbilityData(unit Unit)
     {
-        var ability = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
 
         var cooldown = upgradeLevel >= 2 // lvl 2 upgrade
@@ -122,8 +121,8 @@ public class ShardOfTranslocation : Relic
         if (distance > MaxBlinkRange)
         {
             var angle = Atan2(y - unit.Y, x - unit.X);
-            x = unit.X + MaxBlinkRange * Cos(angle);
-            y = unit.Y + MaxBlinkRange * Sin(angle);
+            x = unit.X + (MaxBlinkRange * Cos(angle));
+            y = unit.Y + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
     }
@@ -131,11 +130,7 @@ public class ShardOfTranslocation : Relic
     private static bool EligibleLocation(location targetLoc, int currentSafezone)
     {
         var SAFEZONES = Globals.SAFE_ZONES;
-        if (SAFEZONES[currentSafezone].Region.Contains(targetLoc.X, targetLoc.Y)) return true;
-        if (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.Contains(targetLoc.X, targetLoc.Y)) return true;
-        if (currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13) return true;
-        if (WolfRegionEligible(targetLoc, currentSafezone)) return true;
-        return false;
+        return SAFEZONES[currentSafezone].Region.Contains(targetLoc.X, targetLoc.Y) || (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.Contains(targetLoc.X, targetLoc.Y)) || (currentSafezone < SAFEZONES.Count - 1 && SAFEZONES[currentSafezone + 1].Region.Contains(targetLoc.X, targetLoc.Y) && currentSafezone < 13) || WolfRegionEligible(targetLoc, currentSafezone);
     }
 
     private static bool WolfRegionEligible(location targetLoc, int currentSafezone)
@@ -144,7 +139,7 @@ public class ShardOfTranslocation : Relic
         if (WOLF_AREAS[currentSafezone].Contains(targetLoc.X, targetLoc.Y)) return true;
         if (currentSafezone > 0 && WOLF_AREAS[currentSafezone - 1].Contains(targetLoc.X, targetLoc.Y)) return true;
         if (WOLF_AREAS[currentSafezone + 1].Contains(targetLoc.X, targetLoc.Y)) return true;
-        if(currentSafezone == 13 || currentSafezone == 14)
+        if (currentSafezone == 13 || currentSafezone == 14)
         {
             if (WOLF_AREAS[14].Contains(targetLoc.X, targetLoc.Y)) return true;
             if (WOLF_AREAS[15].Contains(targetLoc.X, targetLoc.Y)) return true;
@@ -152,7 +147,4 @@ public class ShardOfTranslocation : Relic
         }
         return false;
     }
-
-
-
 }

@@ -21,7 +21,7 @@ public static class FandF
 
     public static void CreateBloodWolf()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         var region = GetRandomInt(0, WolfArea.WolfAreas.Count - 1);
         var wolfObject = new Wolf(region);
         BloodWolf = wolfObject.Unit;
@@ -45,7 +45,6 @@ public static class FandF
     private static void CollectionActions()
     {
         var unit = @event.Unit;
-        var player = unit.Owner;
 
         if (!Utility.UnitHasItem(unit, EmptyVial)) return;
 
@@ -74,7 +73,6 @@ public static class FandF
         var player = u.Owner;
         player.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:|r |cffffff00Greetings, fellow feline! What paws you hold there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r");
-
     }
 
     private static void BloodVialQuest(unit u)
@@ -92,11 +90,7 @@ public static class FandF
 
     private static bool BloodVialItems(unit u)
     {
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
-        if(!Utility.UnitHasItem(u, BloodVial)) return false;
-        return true;
+        return Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION) && Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) && Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) && Utility.UnitHasItem(u, BloodVial);
     }
 
     private static void RemoveQuestItems(unit u)

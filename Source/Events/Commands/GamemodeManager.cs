@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-public static class CommandManager
+public static class GamemodeManager
 {
-    private static Dictionary<string, CommandInfo> commands = new Dictionary<string, CommandInfo>();
+    private static Dictionary<string, GamemodeInfo> commands = new Dictionary<string, GamemodeInfo>();
 
     public static void InitializeCommands()
     {
@@ -28,31 +28,24 @@ public static class CommandManager
     {
         desc = Colors.COLOR_YELLOW_ORANGE + desc;
         usage = Colors.COLOR_GOLD + usage;
-        CommandInfo command = new CommandInfo(cmd, desc, usage);
+        GamemodeInfo command = new GamemodeInfo(cmd, desc, usage);
         commands.Add(cmd.ToLower(), command);
     }
 
-    public static CommandInfo GetCommandInfo(string cmd)
+    public static GamemodeInfo GetCommandInfo(string cmd)
     {
-        if (commands.ContainsKey(cmd.ToLower()))
-        {
-            return commands[cmd.ToLower()];
-        }
-        else
-        {
-            return null;
-        }
+        return commands.ContainsKey(cmd.ToLower()) ? commands[cmd.ToLower()] : null;
     }
 }
 
-public class CommandInfo
+public class GamemodeInfo
 {
     public string Cmd { get; }
     public string Desc { get; }
     public string Usage { get; }
     public string Error = Colors.COLOR_YELLOW_ORANGE + "Invalid command or usage " + Colors.COLOR_RESET;
 
-    public CommandInfo(string cmd, string desc, string usage)
+    public GamemodeInfo(string cmd, string desc, string usage)
     {
         Cmd = cmd;
         Desc = desc;

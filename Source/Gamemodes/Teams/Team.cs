@@ -22,6 +22,7 @@ public class Team
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
     }
+
     public static void Initialize()
     {
         Globals.ALL_TEAMS = new Dictionary<int, Team>();
@@ -42,8 +43,8 @@ public class Team
 
     public void RemoveMember(player player)
     {
-        if(Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        if(!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if (!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
         Globals.PLAYERS_TEAMS.Remove(player);
         Teammembers.Remove(player);
         Globals.ALL_KITTIES[player].TeamID = 0;
@@ -53,7 +54,7 @@ public class Team
 
     public void TeamIsDeadActions()
     {
-        foreach(var player in Teammembers)
+        foreach (var player in Teammembers)
         {
             var kitty = Globals.ALL_KITTIES[player];
             kitty.Finished = true;
@@ -79,7 +80,7 @@ public class Team
     public static void UpdateTeamsMB()
     {
         var t = timer.Create();
-        t.Start(0.1f, false, () => 
+        t.Start(0.1f, false, () =>
         {
             TeamsMultiboard.UpdateCurrentTeamsMB();
             TeamsMultiboard.UpdateTeamStatsMB();
@@ -103,6 +104,4 @@ public class Team
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
             Utility.SimpleTimer(1.0f, () => TeamHandler.RandomHandler());
     }
-
 }
-

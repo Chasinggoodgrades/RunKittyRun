@@ -1,4 +1,5 @@
 ﻿using WCSharp.Api;
+
 public static class GameTimer
 {
     public static float[] RoundTime { get; set; }
@@ -34,7 +35,7 @@ public static class GameTimer
 
     private static void UpdatingTimes()
     {
-        if(Globals.ROUND > Gamemode.NumberOfRounds) return;
+        if (Globals.ROUND > Gamemode.NumberOfRounds) return;
         UpdateIndividualTimes();
         UpdateTeamTimes();
     }
@@ -66,7 +67,7 @@ public static class GameTimer
     public static float TeamTotalTime(Team team)
     {
         var totalTime = 0.0f;
-        foreach(var time in team.TeamTimes)
+        foreach (var time in team.TeamTimes)
         {
             totalTime += time.Value;
         }

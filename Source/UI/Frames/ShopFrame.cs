@@ -1,8 +1,8 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Text;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class ShopFrame
 {
@@ -25,9 +25,9 @@ public static class ShopFrame
     private const float panelPadding = 0.015f;
     private const float frameX = 0.4f;
     private const float frameY = 0.25f;
-    private const float panelX = (frameX/2) - panelPadding;
-    private const float panelY = (frameY/3) - panelPadding*2;
-    private const float detailsPanelX = frameX - (panelX + panelPadding * 2);
+    private const float panelX = (frameX / 2) - panelPadding;
+    private const float panelY = (frameY / 3) - (panelPadding * 2);
+    private const float detailsPanelX = frameX - (panelX + (panelPadding * 2));
     private const float detailsPanelY = frameY - (panelPadding * 2);
     private const int ActiveAlpha = 255;
     private const int DisabledAlpha = 150;
@@ -53,7 +53,7 @@ public static class ShopFrame
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in ShopFrame: {ex.Message}");
+            Logger.Critical($"Error in ShopFrame: {ex.Message}");
             throw;
         }
     }
@@ -69,7 +69,7 @@ public static class ShopFrame
     private static void InitializePanels()
     {
         relicsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -panelPadding*2, shopFrame, FRAMEPOINT_TOPLEFT);
+        relicsPanel.SetPoint(FRAMEPOINT_TOPLEFT, panelPadding, -panelPadding * 2, shopFrame, FRAMEPOINT_TOPLEFT);
         relicsPanel.SetSize(panelX, panelY);
         rewardsPanel = CreatePanel(relicsPanel, 0, -panelPadding);
         miscPanel = CreatePanel(rewardsPanel, 0, -panelPadding);
@@ -102,7 +102,7 @@ public static class ShopFrame
     private static void InitializeDetailsPanel()
     {
         detailsPanel = BlzCreateFrame("QuestButtonDisabledBackdropTemplate", shopFrame, 0, 0);
-        var detailsPanelX = frameX - (panelX + panelPadding*2);
+        var detailsPanelX = frameX - (panelX + (panelPadding * 2));
         var detailsPanelY = frameY - (panelPadding * 2);
         detailsPanel.SetPoint(framepointtype.TopRight, -panelPadding, -panelPadding, shopFrame, framepointtype.TopRight);
         detailsPanel.SetSize(detailsPanelX, detailsPanelY);
@@ -110,20 +110,20 @@ public static class ShopFrame
         nameLabel = BlzCreateFrameByType("TEXT", "nameLabel", detailsPanel, "", 0);
         costLabel = BlzCreateFrameByType("TEXT", "costLabel", detailsPanel, "", 0);
         descriptionLabel = BlzCreateFrameByType("TEXT", "descriptionLabel", detailsPanel, "", 0);
-        
+
         buyButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         sellButton = BlzCreateFrame("ScriptDialogButton", detailsPanel, 0, 0);
         upgradeButton = BlzCreateFrame("DebugButton", detailsPanel, 0, 0);
 
-        nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
-        costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY/6);
+        nameLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
+        costLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 6);
         descriptionLabel.SetSize(detailsPanelX - panelPadding, detailsPanelY / 4);
 
-        buyButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
-        sellButton.SetSize(detailsPanelX/3.00f, detailsPanelY/6);
-        upgradeButton.SetSize(detailsPanelX/3.0f, detailsPanelY/6);
+        buyButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
+        sellButton.SetSize(detailsPanelX / 3.00f, detailsPanelY / 6);
+        upgradeButton.SetSize(detailsPanelX / 3.0f, detailsPanelY / 6);
 
-        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding/2, -panelPadding, detailsPanel, framepointtype.TopLeft);
+        nameLabel.SetPoint(framepointtype.TopLeft, panelPadding / 2, -panelPadding, detailsPanel, framepointtype.TopLeft);
         costLabel.SetPoint(framepointtype.TopLeft, 0, -panelPadding, nameLabel, framepointtype.TopLeft);
         descriptionLabel.SetPoint(framepointtype.TopLeft, 0, 0, costLabel, framepointtype.BottomLeft);
 
@@ -137,16 +137,15 @@ public static class ShopFrame
 
         var BuyTrigger = trigger.Create();
         BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        BuyTrigger.AddAction( () => BuySelectedItem() );
+        BuyTrigger.AddAction(() => BuySelectedItem());
 
         var SellTrigger = trigger.Create();
         SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        SellTrigger.AddAction( () => SellSelectedItem() );
+        SellTrigger.AddAction(() => SellSelectedItem());
 
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction( () => RelicFunctions.UpgradeRelic() );
-
+        UpgradeTrigger.AddAction(() => RelicFunctions.UpgradeRelic());
     }
 
     private static void LoadItemsIntoPanels()
@@ -169,8 +168,8 @@ public static class ShopFrame
             var button = BlzCreateFrameByType("BUTTON", name, panel, "ScoreScreenTabButtonTemplate", 0);
             var icon = BlzCreateFrameByType("BACKDROP", name + "icon", button, "", 0);
 
-            var x = column * (buttonWidth);
-            var y = -row * (buttonHeight);
+            var x = column * buttonWidth;
+            var y = -row * buttonHeight;
 
             x += panelPadding / 2;
             y -= panelPadding / 2;
@@ -187,8 +186,8 @@ public static class ShopFrame
             itemDetails.AddAction(() => ShowItemDetails(relic));
         }
 
-        float panelHeight = rows * (buttonHeight) + panelPadding;
-        panel.SetSize(columns * (buttonWidth) + panelPadding, panelHeight);
+        float panelHeight = (rows * buttonHeight) + panelPadding;
+        panel.SetSize((columns * buttonWidth) + panelPadding, panelHeight);
         if (panelHeight > panelY)
         {
             shopFrame.SetSize(frameX, frameY + (panelHeight - panelY));
@@ -205,7 +204,7 @@ public static class ShopFrame
         var kitty = Globals.ALL_KITTIES[player];
 
         upgradeButton.Visible = false;
-        sellButton.Visible = false; 
+        sellButton.Visible = false;
         buyButton.Visible = true;
 
         // basically if type == shopItem, it'll do the buttons.
@@ -337,9 +336,10 @@ public static class ShopFrame
 
         if (player.IsLocal)
         {
-            buyButton.Visible = false; buyButton.Visible = true;
+            buyButton.Visible = false;
+            buyButton.Visible = true;
         }
-        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+        if (!ShopUtil.PlayerIsDead(player) && SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
         {
             var kitty = Globals.ALL_KITTIES[player];
 
@@ -359,6 +359,7 @@ public static class ShopFrame
                     AwardManager.GiveReward(player, selectedItem.Award);
                     ReduceGold(player, selectedItem.Cost);
                     break;
+
                 case ShopItemType.Misc:
                     AddItem(player, selectedItem.ItemID);
                     ReduceGold(player, selectedItem.Cost);
@@ -384,8 +385,7 @@ public static class ShopFrame
             if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
             if (selectedItem.Type == ShopItemType.Relic)
             {
-
-                if(!kitty.Alive || kitty.ProtectionActive)
+                if (!kitty.Alive || kitty.ProtectionActive)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
                     return;
@@ -400,7 +400,7 @@ public static class ShopFrame
                 // Find the shopItem type associated with the selected item that the player owns.
                 var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
                 var CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID);
-                if(CD > 0.0f && relic.RelicAbilityID != 0)
+                if (CD > 0.0f && relic.RelicAbilityID != 0)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
                     return;
@@ -415,17 +415,22 @@ public static class ShopFrame
             Utility.RemoveItemFromUnit(kitty.Unit, itemID);
             player.Gold += selectedItem.Cost;
         }
-
     }
 
     private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
+
     private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
+
     private static List<ShopItem> GetMiscItems() => ShopItem.ShopItemsMisc();
 
     private static bool HasEnoughGold(player player, int cost) => player.Gold >= cost;
+
     private static bool CanSellRelic(unit unit) => unit.HeroLevel >= Relic.RelicSellLevel;
+
     private static void ReduceGold(player player, int amount) => player.Gold -= amount;
+
     public static void NotEnoughGold(player player, int cost) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough gold.|r {Colors.COLOR_YELLOW}({cost} gold)|r");
+
     private static void AddItem(player player, int itemID) => Globals.ALL_KITTIES[player].Unit.AddItem(itemID);
 
     private static void SetRewardsFrameHotkey()

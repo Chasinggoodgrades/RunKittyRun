@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class SoloDeathTimer
 {
     private const float TIME_TO_REVIVE = 6.0f;
@@ -42,9 +43,9 @@ public class SoloDeathTimer
     private void Revive()
     {
         var kitty = Globals.ALL_KITTIES[Player];
-        var lastCheckpoint = Globals.PLAYERS_CURRENT_SAFEZONE[Player];
-        var x = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterX;
-        var y = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterY;
+        var lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone];
+        var x = lastCheckpoint.Rect_.CenterX;
+        var y = lastCheckpoint.Rect_.CenterY;
         kitty.ReviveKitty();
         kitty.Unit.SetPosition(x, y);
         if (Player.IsLocal) PanCameraToTimed(x, y, 0.00f);
