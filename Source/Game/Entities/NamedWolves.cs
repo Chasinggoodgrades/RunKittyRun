@@ -111,6 +111,7 @@ public static class NamedWolves
         if (Gamemode.CurrentGameMode != "Standard") return false;
         if (unit != ExplodingWolf.Unit) return false;
         Utility.GiveGoldFloatingText(25, k.Unit);
+        BurntMeat.FlamesDropChance(k);
         KillExplodingWolf();
         return true;
     }
