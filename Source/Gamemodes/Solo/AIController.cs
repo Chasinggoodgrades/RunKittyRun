@@ -124,15 +124,21 @@ public class AIController
 
     private void MoveKittyToPosition()
     {
-        var currentProgressZoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
+        var currentProgressZoneId = this.kitty.ProgressZone;
+
+        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId + 1))
+        {
+            currentProgressZoneId++;
+        }
+
         var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
-        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : Globals.SAFE_ZONES[currentProgressZoneId];
+        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : currentSafezone;
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
         if (currentProgressZoneId != lastProgressZoneIndexId)
         {
-            reachedLastProgressZoneCenter = false;
+            reachedLastProgressZoneCenter = false; // TODO; need this to make sure kitty runs to center; but when runnin back 1 lane to save previous kitty it makes you run back to start of that lane after saving kitty which is bad :/
             lastProgressZoneIndexId = currentProgressZoneId;
         }
 
@@ -151,7 +157,7 @@ public class AIController
                 return true;
             }
 
-            return Globals.PLAYERS_CURRENT_SAFEZONE[k.Value.Player] >= currentProgressZoneId;
+            return k.Value.ProgressZone >= this.kitty.ProgressZone;
         });
 
         var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
@@ -161,7 +167,7 @@ public class AIController
             var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
             var deadKittyProgressZoneId = deadKitty.ProgressZone;
 
-            if (deadKittyProgressZoneId != currentProgressZoneId && !(deadKittyProgressZoneId == currentProgressZoneId - 1 && IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId)))
+            if (deadKittyProgressZoneId > currentProgressZoneId)
             {
                 continue;
             }
@@ -180,6 +186,20 @@ public class AIController
 
                 if (claimedKitties[deadKitty] == this.kitty)
                 {
+                    if (deadKittyProgressZoneId != currentProgressZoneId)
+                    {
+                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId))
+                        {
+                            targetPosition = (currentProgressZoneId - 1 >= 0) ? GetCenterPositionInSafezone(Globals.SAFE_ZONES[currentProgressZoneId - 1]) : currentSafezoneCenter;
+                        }
+                        else
+                        {
+                            targetPosition = currentSafezoneCenter;
+                        }
+
+                        break;
+                    }
+
                     targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
                     break;
                 }
@@ -229,8 +249,8 @@ public class AIController
 
     private bool IsWithinLaneBounds(float x, float y)
     {
-        var currentSafezoneId = Globals.PLAYERS_CURRENT_SAFEZONE[this.kitty.Player];
-        var laneBounds = WolfArea.WolfAreas[currentSafezoneId].Rectangle;
+        var currentProgressZoneId = this.kitty.ProgressZone;
+        var laneBounds = WolfArea.WolfAreas[currentProgressZoneId].Rectangle;
 
         // Assume a vertical lane if its width is less than its height.
         if (laneBounds.Width < laneBounds.Height)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -120,7 +120,7 @@ public class Kitty
             Unit.Mana = circle.Unit.Mana;
             Utility.SelectUnitForPlayer(Player, Unit);
             CameraUtil.RelockCamera(Player);
-            this.Slider.ResumeSlider();
+            this.Slider.ResumeSlider(true);
             this.aiController.ResumeAi();
 
             if (savior == null) return;

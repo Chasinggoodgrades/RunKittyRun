@@ -19,8 +19,8 @@ public static class CommandHandler
                 TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
                 TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
             }
-            TriggerAddAction(DebugCmdTrigger, DebugHandle);
-            TriggerAddAction(NewCmdHandler, HandleCommands);
+            TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
+            TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
         }
         catch (Exception e)
         {
