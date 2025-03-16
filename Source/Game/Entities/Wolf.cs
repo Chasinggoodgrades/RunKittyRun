@@ -48,7 +48,7 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), StartWandering);
+        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), () => StartWandering());
         Globals.ALL_WOLVES.Add(Unit, this);
 
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
@@ -94,7 +94,7 @@ public class Wolf
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Start(realTime, false, ErrorHandler.Wrap(StartWandering));
+        WanderTimer.Start(realTime, false, ErrorHandler.Wrap(() => StartWandering()));
     }
 
     /// <summary>
