@@ -9,7 +9,7 @@ public static class KibbleEvent
     private static int EventExtraKibbles = 5; // a little extra, the previous ones also don't despawn if theres any left.
     private static timer EventTimer;
     private static timerdialog EventTimerDialog;
-    private const float EventLength = 180.0f; // 3 minutes
+    private const float EventLength = 300.0f; // 5 minutes to collect 200 kibble xd
 
     public static void StartKibbleEvent(float chance)
     {

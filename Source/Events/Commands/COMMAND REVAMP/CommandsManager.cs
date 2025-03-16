@@ -161,7 +161,7 @@ public static class CommandsManager
         GC.RemoveList(ref commands);
     }
 
-    private static string GetPlayerGroup(player player)
+    public static string GetPlayerGroup(player player)
     {
         return Utility.IsDeveloper(player) ? "admin" : player.Id == 0 ? "red" : "all";
     }

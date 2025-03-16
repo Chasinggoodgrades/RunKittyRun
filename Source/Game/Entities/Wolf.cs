@@ -143,43 +143,35 @@ public class Wolf
     /// <param name="pause"></param>
     public static void PauseAllWolves(bool pause)
     {
-        if (pause)
+        foreach (var wolf in Globals.ALL_WOLVES)
         {
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                wolf.Value.WanderTimer.Pause();
-                wolf.Value.EffectTimer.Pause();
-                wolf.Value.Unit.ClearOrders();
-                wolf.Value.IsWalking = false;
-            }
-        }
-        else
-        {
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                wolf.Value.WanderTimer.Resume();
-                wolf.Value.EffectTimer.Resume();
-                wolf.Value.Unit.ClearOrders();
-                wolf.Value.IsWalking = true;
-            }
+            wolf.Value.PauseSelf(pause);
         }
     }
 
     public static void PauseSelectedWolf(unit selectedUnit, bool pause)
     {
         if (!Globals.ALL_WOLVES.TryGetValue(selectedUnit, out var wolf)) return;
+        wolf.PauseSelf(pause);
+    }
 
+    public void PauseSelf(bool pause)
+    {
         if (pause)
         {
-            wolf.WanderTimer.Pause();
-            wolf.Unit.ClearOrders();
-            wolf.Unit.SetPausedEx(pause);
+            WanderTimer.Pause();
+            EffectTimer.Pause();
+            Unit.ClearOrders();
+            IsWalking = false;
+            IsPaused = true;
         }
         else
         {
-            wolf.WanderTimer.Resume();
-            wolf.Unit.ClearOrders();
-            wolf.Unit.SetPausedEx(pause);
+            WanderTimer.Resume();
+            EffectTimer.Resume();
+            Unit.ClearOrders();
+            IsWalking = true;
+            IsPaused = false;
         }
     }
 

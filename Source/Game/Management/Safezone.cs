@@ -39,17 +39,24 @@ public class Safezone
 
     private void EnterSafezoneActions()
     {
-        var unit = @event.Unit;
-        var player = unit.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        SafezoneAdditions(kitty);
-        kitty.CurrentSafeZone.ID = ID;
-        WolfLaneHider.LanesHider();
-        if (AwardedPlayers.Contains(player) || ID == 0) return;
-        Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
-        unit.Experience += Resources.SafezoneExperience;
-        AwardedPlayers.Add(player);
-        DeathlessChallenges.DeathlessCheck(player);
+        try
+        {
+            var unit = @event.Unit;
+            var player = unit.Owner;
+            var kitty = Globals.ALL_KITTIES[player];
+            SafezoneAdditions(kitty);
+            kitty.CurrentSafeZone = ID;
+            WolfLaneHider.LanesHider();
+            if (AwardedPlayers.Contains(player) || ID == 0) return;
+            Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
+            unit.Experience += Resources.SafezoneExperience;
+            AwardedPlayers.Add(player);
+            DeathlessChallenges.DeathlessCheck(player);
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in EnterSafezoneActions: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -59,7 +66,7 @@ public class Safezone
     {
         var player = kitty.Player;
 
-        if (kitty.CurrentSafeZone.ID == ID) return;
+        if (kitty.CurrentSafeZone == ID) return;
 
         CameraUtil.UpdateKomotoCam(player, ID);
 
@@ -75,7 +82,7 @@ public class Safezone
     {
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            kitty.Value.CurrentSafeZone.ID = 0;
+            kitty.Value.CurrentSafeZone = 0;
             kitty.Value.ProgressZone = 0;
         }
         foreach (var safezone in Globals.SAFE_ZONES)

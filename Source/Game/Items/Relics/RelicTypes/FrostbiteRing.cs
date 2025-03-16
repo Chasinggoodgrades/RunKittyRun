@@ -125,9 +125,8 @@ public class FrostbiteRing : Relic
     private void PausingWolf(unit unit, bool pause = true)
     {
         if (unit == null) return;
-        Globals.ALL_WOLVES[unit].IsPaused = pause;
-        unit.ClearOrders();
-        unit.IsPaused = pause;
+        var wolf = Globals.ALL_WOLVES[unit];
+        Globals.ALL_WOLVES[unit].PauseSelf(pause);
     }
 
     private void RegisterTriggers(unit Unit)

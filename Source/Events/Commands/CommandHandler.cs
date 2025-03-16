@@ -59,10 +59,11 @@ public static class CommandHandler
             return;
 
         var command = CommandsManager.GetCommand(commandName.ToLower());
-        if (command != null)
+        if (command != null && (command.Group == CommandsManager.GetPlayerGroup(@event.Player) || command.Group == "all"))
         {
             command.Action?.Invoke(@event.Player, args);
         }
+
         else
         {
             Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");

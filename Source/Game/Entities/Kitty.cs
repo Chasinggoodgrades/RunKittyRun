@@ -20,7 +20,7 @@ public class Kitty
     public AIController aiController { get; set; }
     public APMTracker APMTracker { get; set; }
     public Slider Slider { get; private set; }
-    public Safezone CurrentSafeZone { get; set; } = Globals.SAFE_ZONES[0];
+    public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
@@ -216,6 +216,7 @@ public class Kitty
 
     private void SaveStatUpdate(Kitty savior)
     {
+        if (aiController.IsEnabled()) return;
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
         savior.CurrentStats.SaveStreak += 1;

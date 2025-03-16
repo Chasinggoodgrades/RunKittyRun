@@ -215,8 +215,11 @@ public static class AffixFactory
 
     public static void RemoveAllAffixes()
     {
-        foreach (var affix in AllAffixes)
-            affix.Unit.RemoveAffix(affix);
+
+        foreach(var wolf in Globals.ALL_WOLVES)
+        {
+            wolf.Value.RemoveAllWolfAffixes();
+        }
         AllAffixes.Clear();
     }
 }

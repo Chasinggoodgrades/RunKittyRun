@@ -1220,20 +1220,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "itemskin",
-            alias: "iskin",
-            group: "admin",
-            argDesc: "item id",
-            description: "THIS SHIT SUCKS ASS BUT GO FOR IT",
-            action: (player, args) =>
-            {
-                var skin = args.Length > 0 ? FourCC(args[0]) : Constants.UNIT_KITTY;
-                var skinID = Utility.GetItemSkin(skin);
-                Globals.ALL_KITTIES[player].Unit.Skin = skinID;
-            }
-        );
-
-        CommandsManager.RegisterCommand(
             name: "kibblecurrency",
             alias: "kibbleinfo,kbinfo",
             group: "all",
