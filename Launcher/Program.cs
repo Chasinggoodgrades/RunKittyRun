@@ -115,6 +115,8 @@ namespace Launcher
                 throw new Exception(compileResult.Diagnostics.First(x => x.Severity == DiagnosticSeverity.Error).GetMessage());
             }
 
+            map.Script = LuaScriptProcessor.FixLuaScript(map.Script);
+
             if (mem)
             {
                 map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
@@ -172,6 +174,13 @@ namespace Launcher
 
 public static class LuaScriptProcessor
 {
+    public static string FixLuaScript(string script)
+    {
+        // script = script.Replace(@"  return function(x, y) " + "\r\n" + "    if x == null then x = nil end" + "\r\n" + "    if y == null then y = nil end" + "\r\n" + "    return compare(x, y) < 0" + "\r\n" + "  end", @"  return compare(x, y) < 0");
+
+        return script;
+    }
+
     public static string ProcessLuaScript(string script)
     {
         int counter = 0;
