@@ -190,6 +190,11 @@ public class AIController
 
                     foreach (var otherKitty in Globals.ALL_KITTIES)
                     {
+                        if (Program.Debug && otherKitty.Value.Player == Player(0))
+                        {
+                            continue;
+                        }
+
                         if (otherKitty.Value != this.kitty && otherKitty.Value.Alive)
                         {
                             double otherDistance = Math.Sqrt(Math.Pow(otherKitty.Value.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Value.Unit.Y - deadKitty.Unit.Y, 2));
@@ -422,8 +427,8 @@ public class AIController
         // loop over all angles
         for (float angle = 0; angle < maxAngle; angle += step)
         {
-            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.1f)) * MathF.Cos(angle);
-            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.1f)) * MathF.Sin(angle);
+            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Cos(angle);
+            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Sin(angle);
 
             if (notInLaneAngle == -500f && !IsWithinLaneBounds(x, y))
             {
@@ -774,12 +779,17 @@ public class AIController
         return Math.Abs(diff);
     }
 
+    private int MergeIntervalSort(AngleInterval a, AngleInterval b)
+    {
+        return a.Start.CompareTo(b.Start);
+    }
+
     /// <summary>
     /// Merges overlapping angular intervals.
     /// </summary>
     private void MergeIntervals(List<AngleInterval> intervals)
     {
-        intervals.Sort((a, b) => a.Start.CompareTo(b.Start));
+        intervals.Sort(MergeIntervalSort);
 
         AngleInterval current = intervals[0];
 
