@@ -1091,34 +1091,27 @@ public static class InitCommands
             description: "Toggles AI for the specified player.",
             action: (player, args) =>
             {
-                for (var i = 0; i < 24; i++)
+
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
-                    int target = args.Length > 0 && args[0] != "all" ? int.Parse(args[0]) - 1 : (args.Length > 0 && args[0] == "all" ? i : -1);
-
-                    if (target == i || args[0] == "all")
+                    if (kitty == null) return;
+                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player))
                     {
-                        var compPlayer = Player(target);
-
-                        if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
-                        {
-                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
-                            continue;
-                        }
-
-                        var compKitty = Globals.ALL_KITTIES[compPlayer];
-
-                        if (compKitty.aiController.IsEnabled())
-                        {
-                            compKitty.aiController.StopAi();
-                            player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI deactivated.");
-                        }
-                        else
-                        {
-                            compKitty.aiController.StartAi();
-                            player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI activated.");
-                        }
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
+                        return;
                     }
-                }
+
+                    if (kitty.aiController.IsEnabled())
+                    {
+                        kitty.aiController.StopAi();
+                        player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI deactivated.");
+                    }
+                    else
+                    {
+                        kitty.aiController.StartAi();
+                        player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI activated.");
+                    }
+                });
             }
         );
 
