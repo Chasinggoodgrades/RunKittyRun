@@ -527,15 +527,20 @@ public static class InitCommands
             name: "sharecontrol",
             alias: "share",
             group: "admin",
-            argDesc: "[on][off]",
-            description: "Forces everyone to share control with you.",
+            argDesc: "[player] [on][off]",
+            description: "Sets whether or not to force the player to share control [default: off]",
             action: (player, args) =>
             {
-                var status = CommandsManager.GetBool(args[0]);
-                foreach (var p in Globals.ALL_PLAYERS)
+                if (args.Length < 2)
                 {
-                    p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: sharecontrol [player] [on/off]");
+                    return;
                 }
+                var status = CommandsManager.GetBool(args[1]);
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    kitty.Player.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                });
             }
         );
 
@@ -620,23 +625,27 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "invulnerability",
-            alias: "invul",
+            alias: "invul,godmode,god",
             group: "admin",
-            argDesc: "[on/off]",
+            argDesc: "[player][on/off]",
             description: "Gives invulnerability.",
             action: (player, args) =>
             {
-                var setting = CommandsManager.GetBool(args[0]);
-                var kitty = Globals.ALL_KITTIES[player];
-                if (setting)
+                if (args.Length < 2)
                 {
-                    UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty.Unit);
+                    var setting = CommandsManager.GetBool(args[0]);
+                    var kitty = Globals.ALL_KITTIES[player].Invulnerable = setting;
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Invulnerability: {setting}|r");
                 }
-                else
+                else if (args.Length == 2)
                 {
-                    CollisionDetection.KittyRegisterCollisions(kitty);
+                    CommandsManager.ResolvePlayerId(args[0], kitty =>
+                    {
+                        var setting = CommandsManager.GetBool(args[1]);
+                        kitty.Invulnerable = setting;
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Invulnerability for: {Colors.PlayerNameColored(kitty.Player)} : {setting}|r");
+                    });
                 }
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Invulnerability: {setting}|r");
             }
         );
 

@@ -4940,3 +4940,57 @@ STRING 3866
 This ritual mask gathers energy and bestows it upon the bearer. |n |cffd45e19+50% mana regeneration|r |n|n|cffff0000You can only carry one of this item.|r
 }
 
+STRING 3867
+// Abilities: A016 (Test WW), Researchubertip (Tooltip - Learn - Extended)
+{
+Your body turns ethereal allowing you to use the air currents to move faster. |n|n|cffffcc00Level 1:|r +12%ms, last 20s |n|cffffcc00Level 2:|r +24%ms, last 35s |n|cffffcc00Level 3:|r +36%ms, last 50s   
+}
+
+STRING 3868
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++12% movement speed, last for 20 seconds.
+}
+
+STRING 3869
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++24% movement speed, last for 35 seconds.
+}
+
+STRING 3870
+// Abilities: A016 (Test WW), Ubertip (Tooltip - Normal - Extended)
+{
++36% movement speed, last for 50 seconds.
+}
+
+STRING 3871
+// Abilities: A016 (Test WW), Name (Name)
+{
+Test WW
+}
+
+STRING 3872
+// Abilities: A016 (Test WW), Researchtip (Tooltip - Learn)
+{
+Learn Wind Walk - [|cffffcc00Level %d|r]
+}
+
+STRING 3873
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 1|r]
+}
+
+STRING 3874
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 2|r]
+}
+
+STRING 3875
+// Abilities: A016 (Test WW), Tip (Tooltip - Normal)
+{
+Wind Walk - [|cffffcc00Level 3|r]
+}
+

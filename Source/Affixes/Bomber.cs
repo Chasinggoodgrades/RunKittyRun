@@ -5,9 +5,8 @@ using static WCSharp.Api.Common;
 public class Bomber : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BOMBER; // replace with bomber ability in WE later after i make it.
-    private const float EXPLOSION_RANGE = 200.0f;
+    private const float EXPLOSION_RANGE = 300.0f;
 
-    //private const string EXPLOSION_PATH_EFFECT = "";
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
 
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
@@ -71,7 +70,7 @@ public class Bomber : Affix
         var list = Globals.TempGroup.ToList();
         foreach (unit u in list)
         {
-            if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue;
+            if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
             Globals.ALL_KITTIES[u.Owner].KillKitty();
         }

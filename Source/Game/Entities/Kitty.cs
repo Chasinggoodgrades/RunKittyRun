@@ -79,6 +79,7 @@ public class Kitty
     {
         try
         {
+            if (Invulnerable) return;
             Circle circle = Globals.ALL_CIRCLES[Player];
             Unit.Kill();
             if (!ProtectionActive) Alive = false;
@@ -170,6 +171,7 @@ public class Kitty
         RelicUtil.DisableRelicBook(Unit);
         Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
+
 
         // Register Collision
         CollisionDetection.KittyRegisterCollisions(this);

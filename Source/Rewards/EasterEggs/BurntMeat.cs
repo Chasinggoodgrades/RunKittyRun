@@ -15,7 +15,7 @@ public static class BurntMeat
     public static void FlamesDropChance(Kitty k)
     {
         var randomRoll = GetRandomInt(1, 100);
-        if (randomRoll > 5) return; // 5% chance
+        if (randomRoll > 8) return; // 8% chance
         k.Unit.AddItem(ITEM_CLOAK_FLAMES);
     }
 
