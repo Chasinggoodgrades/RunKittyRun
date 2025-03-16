@@ -39,17 +39,27 @@ public static class ItemStacker
 
     private static void StackActions()
     {
-        var item = @event.ManipulatedItem;
-        var itemID = item.TypeId;
-        if (!StackableItem(itemID)) return;
-        var unit = @event.Unit;
-        var heldItem = Utility.UnitGetItem(unit, itemID);
-        if (heldItem == item) return;
-        if (heldItem == null) return;
-        var itemCharges = item.Charges;
-        if (itemCharges > 1) heldItem.Charges += itemCharges;
-        else heldItem.Charges += 1;
-        item.Dispose();
+        try
+        {
+            var item = @event.ManipulatedItem;
+            var itemID = item.TypeId;
+            if (!StackableItem(itemID)) return;
+            var unit = @event.Unit;
+            var heldItem = Utility.UnitGetItem(unit, itemID);
+            item.Owner = unit.Owner;
+            if (heldItem == item) return;
+            if (heldItem == null) return;
+            var itemCharges = item.Charges;
+            if (itemCharges > 1) heldItem.Charges += itemCharges;
+            else heldItem.Charges += 1;
+            item.Dispose();
+            item = null;
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Stack Actions: {e.Message}");
+            throw;
+        }
     }
 
     private static bool StackableItem(int itemID)

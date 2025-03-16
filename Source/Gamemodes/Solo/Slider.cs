@@ -210,18 +210,17 @@ public class Slider
         }
 
         kitty.Unit.SetPosition(newX, newY);
+        ItemPickup();
     }
 
     private void RegisterClickEvent()
     {
         ClickTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(ClickTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        ClickTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder);
         ClickTrigger.AddAction(() => HandleTurn(true));
 
         WidgetTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(WidgetTrigger, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
-        WidgetTrigger.AddCondition(Condition(() => GetTriggerUnit() == kitty.Unit && IsEnabled()));
+        WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder);
         WidgetTrigger.AddAction(() => HandleTurn(false));
 
         ClickTrigger.Disable();
@@ -230,6 +229,7 @@ public class Slider
 
     private void HandleTurn(bool isToLocation)
     {
+        if (!IsEnabled()) return;
         var unit = @event.Unit;
         float angle;
         if (isToLocation)
@@ -345,6 +345,27 @@ public class Slider
                 float newAngle = currentAngle + diffToApply;
                 BlzSetUnitFacingEx(kitty.Unit, newAngle);
             }
+        }
+    }
+
+    private void ItemPickup()
+    {
+        if (!enabled) return;
+
+        foreach(var i in ItemSpawner.TrackKibbles)
+        {
+            if (i.Item == null) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            kitty.Unit.AddItem(i.Item);
+            break;
+        }
+        foreach (var item in ItemSpawner.TrackItems)
+        {
+            if (item == null) continue;
+            if (item.IsOwned) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            kitty.Unit.AddItem(item);
+            break;
         }
     }
 }

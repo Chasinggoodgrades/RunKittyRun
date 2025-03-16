@@ -34,11 +34,11 @@ public static class PlayerLeaves
             if (!Globals.ALL_PLAYERS.Contains(leavingPlayer)) return;
             var kitty = Globals.ALL_KITTIES[leavingPlayer];
             var circle = Globals.ALL_CIRCLES[leavingPlayer];
-            var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];
+            var nameTag = FloatingNameTag.PlayerNameTags.TryGetValue(leavingPlayer, out var tag) ? tag : null;
             TeamRemovePlayer(leavingPlayer);
             kitty.Dispose();
             circle.Dispose();
-            nameTag.Dispose();
+            nameTag?.Dispose();
             if (!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
             RoundManager.RoundEndCheck();

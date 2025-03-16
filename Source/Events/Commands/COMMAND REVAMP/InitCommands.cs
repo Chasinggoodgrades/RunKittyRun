@@ -1032,32 +1032,30 @@ public static class InitCommands
             description: "Deletes the hero of the specified player.",
             action: (player, args) =>
             {
-                for (var i = 0; i < 24; i++)
+
+                if (args[0] == "") // cannot delete self anyway, but for usage i guess.
                 {
-                    int target = args.Length > 0 && args[0] != "all" ? int.Parse(args[0]) - 1 : (args.Length > 0 && args[0] == "all" ? i : -1);
-
-                    if (target == i || args[0] == "all")
-                    {
-                        var compPlayer = Player(target);
-
-                        if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
-                        {
-                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
-                            continue;
-                        }
-
-                        if (player.SlotState == playerslotstate.Playing)
-                        {
-                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.");
-                            continue;
-                        }
-
-                        Globals.ALL_PLAYERS.Remove(compPlayer);
-
-                        var compKitty = Globals.ALL_KITTIES[compPlayer];
-                        compKitty?.Dispose();
-                    }
+                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: deletehero [player] or [all]|r");
+                    return;
                 }
+
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player))
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.|r");
+                        return;
+                    }
+                    if (kitty.Player.SlotState == playerslotstate.Playing)
+                    {
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.|r");
+                        return;
+                    }
+
+                    PlayerLeaves.PlayerLeavesActions(kitty.Player);
+
+                });
             }
         );
 

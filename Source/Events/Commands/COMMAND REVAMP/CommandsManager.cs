@@ -46,7 +46,11 @@ public static class CommandsManager
         var kitties = new List<Kitty>();
         var larg = arg.ToLower();
 
-        if (larg == "a" || larg == "all")
+        if (arg == "") // no arg for self
+        {
+            kitties.Add(Globals.ALL_KITTIES[GetTriggerPlayer()]);
+        }
+        else if (larg == "a" || larg == "all")
         {
             foreach (var kitty in Globals.ALL_KITTIES)
             {

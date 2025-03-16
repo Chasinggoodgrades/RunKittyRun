@@ -6,9 +6,9 @@ using static WCSharp.Api.Common;
 public static class ItemSpawner
 {
     public static List<Kibble> TrackKibbles;
+    public static List<item> TrackItems;
 
     private static List<int> SpawnableItems;
-    private static List<item> TrackItems;
     private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS = 15;
