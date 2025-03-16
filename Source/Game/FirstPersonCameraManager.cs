@@ -35,7 +35,7 @@ public class FirstPersonCamera
             if (forceCamTimer == null)
             {
                 forceCamTimer = CreateTimer();
-                TimerStart(forceCamTimer, timerPeriod, true, UpdateCamera);
+                TimerStart(forceCamTimer, timerPeriod, true, ErrorHandler.Wrap(UpdateCamera));
             }
         }
         else
