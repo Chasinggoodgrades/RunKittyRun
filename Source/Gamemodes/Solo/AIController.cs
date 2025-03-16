@@ -41,7 +41,7 @@ public class AIController
     private List<Wolf> wolvesInRange = new List<Wolf>();
     private lightning lastLightning;
 
-    private int lastProgressZoneIndexId = -1;
+    private int? lastSafeZoneIndexId = null;
     private bool reachedLastProgressZoneCenter = false;
     private List<lightning> availableBlockedLightnings = new List<lightning>();
     private List<lightning> availableClearLightnings = new List<lightning>();
@@ -72,7 +72,7 @@ public class AIController
         if (moveTimer == null)
         {
             moveTimer = CreateTimer();
-            TimerStart(moveTimer, this.timerInterval, true, PollMovement);
+            TimerStart(moveTimer, this.timerInterval, true, ErrorHandler.Wrap(PollMovement));
         }
 
         // If I revive release me from the claimedKitties
@@ -136,10 +136,12 @@ public class AIController
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        if (currentProgressZoneId != lastProgressZoneIndexId)
+        int? currentSafeZoneId = IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId) ? currentProgressZoneId : null;
+
+        if (currentSafeZoneId != lastSafeZoneIndexId)
         {
-            reachedLastProgressZoneCenter = false; // TODO; need this to make sure kitty runs to center; but when runnin back 1 lane to save previous kitty it makes you run back to start of that lane after saving kitty which is bad :/
-            lastProgressZoneIndexId = currentProgressZoneId;
+            reachedLastProgressZoneCenter = currentSafeZoneId == null;
+            lastSafeZoneIndexId = currentSafeZoneId;
         }
 
         var distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.Unit.Y - currentSafezoneCenter.Y, 2));
@@ -188,7 +190,7 @@ public class AIController
                 {
                     if (deadKittyProgressZoneId != currentProgressZoneId)
                     {
-                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId))
+                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId) && reachedLastProgressZoneCenter)
                         {
                             targetPosition = (currentProgressZoneId - 1 >= 0) ? GetCenterPositionInSafezone(Globals.SAFE_ZONES[currentProgressZoneId - 1]) : currentSafezoneCenter;
                         }
@@ -799,18 +801,11 @@ public class AIController
 
     private void PollMovement()
     {
-        try
-        {
-            if (!enabled) return;
-            elapsedTime += timerInterval;
-            LearnSkills();
-            UseWindWalkIfAvailable();
-            MoveKittyToPosition();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        if (!enabled) return;
+        elapsedTime += timerInterval;
+        LearnSkills();
+        UseWindWalkIfAvailable();
+        MoveKittyToPosition();
     }
 
     private void LearnSkills()
