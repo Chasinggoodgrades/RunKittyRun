@@ -43,7 +43,7 @@ public class SoloDeathTimer
     private void Revive()
     {
         var kitty = Globals.ALL_KITTIES[Player];
-        var lastCheckpoint = Globals.PLAYERS_CURRENT_SAFEZONE[Player];
+        var lastCheckpoint = kitty.CurrentSafeZone;
         var x = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterX;
         var y = Globals.SAFE_ZONES[lastCheckpoint].Rect_.CenterY;
         kitty.ReviveKitty();

@@ -24,36 +24,39 @@ public static class Globals
         "Balmydrop#1737", "udo#11673", "MrGheed#1831", "Local Player", "Stan#22399",
         "Omniology#11850", "Danger#24279"};
 
-    public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
     public static timer GAME_TIMER = timer.Create();
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();
     public static List<player> LockedCamera = new List<player>();
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
-    public static Dictionary<player, int> PLAYERS_CURRENT_SAFEZONE { get; set; } = new Dictionary<player, int>();
+    public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
+
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
+
     public static SaveManager SaveSystem;
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
 
     public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
+
     public static Dictionary<int, Team> ALL_TEAMS;
     public static Dictionary<player, Team> PLAYERS_TEAMS;
     public static Dictionary<Team, string> TEAM_PROGRESS;
-    public static Dictionary<player, float> PLAYER_PROGRESS { get; set; }
 
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
-        {
-            // Round                         // Lane ,  // # Wolves (10% for first 6 lanes, 5% for others)
-            { 1, new Dictionary<int, int> { { 0, 24 }, { 1, 24 }, { 2, 24 }, { 3, 24 }, { 4, 16 }, { 5, 15 }, { 6, 15 }, { 7, 14 }, { 8, 11 }, { 9, 11 }, { 10, 11 }, { 11, 7 }, { 12, 7 }, { 13, 5 }, { 14, 5 }, { 15, 1 }, { 16, 1 } } },
-            { 2, new Dictionary<int, int> { { 0, 32 }, { 1, 32 }, { 2, 32 }, { 3, 32 }, { 4, 22 }, { 5, 21 }, { 6, 19 }, { 7, 18 }, { 8, 14 }, { 9, 14 }, { 10, 13 }, { 11, 9 }, { 12, 9 }, { 13, 7 }, { 14, 6 }, { 15, 3 }, { 16, 3 } } },
-            { 3, new Dictionary<int, int> { { 0, 37 }, { 1, 37 }, { 2, 36 }, { 3, 36 }, { 4, 26 }, { 5, 25 }, { 6, 22 }, { 7, 21 }, { 8, 16 }, { 9, 16 }, { 10, 15 }, { 11, 11 }, { 12, 11 }, { 13, 8 }, { 14, 7 }, { 15, 3 }, { 16, 3 } } },
-            { 4, new Dictionary<int, int> { { 0, 46 }, { 1, 46 }, { 2, 46 }, { 3, 44 }, { 4, 31 }, { 5, 30 }, { 6, 25 }, { 7, 24 }, { 8, 18 }, { 9, 18 }, { 10, 17 }, { 11, 13 }, { 12, 13 }, { 13, 9 }, { 14, 8 }, { 15, 4 }, { 16, 4 } } },
-            { 5, new Dictionary<int, int> { { 0, 54 }, { 1, 54 }, { 2, 54 }, { 3, 54 }, { 4, 35 }, { 5, 34 }, { 6, 28 }, { 7, 27 }, { 8, 20 }, { 9, 20 }, { 10, 19 }, { 11, 15 }, { 12, 15 }, { 13, 10 }, { 14, 9 }, { 15, 5 }, { 16, 5 } } }
-        };
+    {
+        // Round                         // Lane ,  // Updated # Wolves (+5% for all lanes, first 6 + 5%)
+        { 1, new Dictionary<int, int> { { 0, 25 }, { 1, 25 }, { 2, 25 }, { 3, 25 }, { 4, 17 }, { 5, 16 }, { 6, 16 }, { 7, 15 }, { 8, 12 }, { 9, 12 }, { 10, 12 }, { 11, 7 }, { 12, 7 }, { 13, 6 }, { 14, 6 }, { 15, 2 }, { 16, 2 } } },
+        { 2, new Dictionary<int, int> { { 0, 34 }, { 1, 34 }, { 2, 34 }, { 3, 34 }, { 4, 23 }, { 5, 22 }, { 6, 20 }, { 7, 19 }, { 8, 15 }, { 9, 15 }, { 10, 14 }, { 11, 10 }, { 12, 10 }, { 13, 8 }, { 14, 7 }, { 15, 3 }, { 16, 3 } } },
+        { 3, new Dictionary<int, int> { { 0, 39 }, { 1, 39 }, { 2, 38 }, { 3, 38 }, { 4, 27 }, { 5, 26 }, { 6, 24 }, { 7, 22 }, { 8, 17 }, { 9, 17 }, { 10, 16 }, { 11, 12 }, { 12, 12 }, { 13, 8 }, { 14, 8 }, { 15, 3 }, { 16, 3 } } },
+        { 4, new Dictionary<int, int> { { 0, 48 }, { 1, 48 }, { 2, 48 }, { 3, 46 }, { 4, 32 }, { 5, 31 }, { 6, 27 }, { 7, 26 }, { 8, 20 }, { 9, 20 }, { 10, 18 }, { 11, 14 }, { 12, 14 }, { 13, 10 }, { 14, 9 }, { 15, 4 }, { 16, 4 } } },
+        { 5, new Dictionary<int, int> { { 0, 57 }, { 1, 57 }, { 2, 57 }, { 3, 57 }, { 4, 37 }, { 5, 35 }, { 6, 30 }, { 7, 29 }, { 8, 21 }, { 9, 21 }, { 10, 20 }, { 11, 16 }, { 12, 16 }, { 13, 11 }, { 14, 10 }, { 15, 5 }, { 16, 5 } } }
+    };
+
 
     /// <summary>
     /// Mock Data to Test Whatever lanes, and # of wolves as needed.

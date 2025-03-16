@@ -342,7 +342,7 @@ public static class Utility
         Globals.ALL_KITTIES[player].Dispose();
         Globals.ALL_CIRCLES[player].Dispose();
         Globals.ALL_PLAYERS.Remove(player);
-        FloatingNameTag.PlayerNameTags[player].Dispose();
+        Globals.ALL_KITTIES[player].NameTag?.Dispose();
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
     }

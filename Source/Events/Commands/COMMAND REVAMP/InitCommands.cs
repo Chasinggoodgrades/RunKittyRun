@@ -1056,7 +1056,7 @@ public static class InitCommands
                         player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.|r");
                         return;
                     }
-                    if (kitty.Player.SlotState == playerslotstate.Playing)
+                    if (kitty.Player.SlotState == playerslotstate.Playing && kitty.Player.Controller != mapcontrol.Computer) // if slotted, it becomes computer.. this allows for deletion of even slotted comps
                     {
                         player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player is not a computer.|r");
                         return;

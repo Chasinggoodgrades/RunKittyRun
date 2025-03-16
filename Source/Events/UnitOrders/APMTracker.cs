@@ -41,7 +41,7 @@ public class APMTracker
         /*        if (orderID == OrderId("move") || orderID == OrderId("smart"))
                     LastPosition = (@event.OrderPointX, @event.OrderPointY);*/
 
-        if (!IsInSafeZone(Kitty.Unit))
+        if (!IsInSafeZone(Kitty))
             TotalActions++;
     }
 
@@ -49,14 +49,14 @@ public class APMTracker
     {
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            if (IsInSafeZone(kitty.Value.Unit)) continue;
+            if (IsInSafeZone(kitty.Value)) continue;
             kitty.Value.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
         }
     }
 
-    private static bool IsInSafeZone(unit unit)
+    private static bool IsInSafeZone(Kitty kitty)
     {
-        return RegionList.SafeZones[Globals.PLAYERS_CURRENT_SAFEZONE[unit.Owner]].Contains(unit.X, unit.Y);
+        return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.Unit.Y);
     }
 
     private static float CalculateAPM(Kitty kitty)

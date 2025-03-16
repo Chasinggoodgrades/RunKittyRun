@@ -166,13 +166,13 @@ public class YellowLightning
 {
     private const int YELLOW_LIGHTNING_SAVE_REQUIREMENT = 6;
     private const float YELLOW_LIGHTNING_TIMER = 3.0f;
-    public player Player { get; private set; }
+    public Kitty Kitty { get; private set; }
     public timer Timer { get; private set; }
     public int SaveCount { get; private set; }
 
-    public YellowLightning(player player)
+    public YellowLightning(Kitty kitty)
     {
-        Player = player;
+        Kitty = kitty;
         Timer = timer.Create();
     }
 
@@ -186,7 +186,7 @@ public class YellowLightning
     {
         if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
         {
-            AwardManager.GiveReward(Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
+            AwardManager.GiveReward(Kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
         }
         SaveCount = 0;
     }

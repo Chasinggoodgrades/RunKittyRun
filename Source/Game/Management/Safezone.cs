@@ -42,8 +42,9 @@ public class Safezone
     {
         var unit = @event.Unit;
         var player = unit.Owner;
-        SafezoneAdditions(unit);
-        Globals.PLAYERS_CURRENT_SAFEZONE[player] = ID;
+        var kitty = Globals.ALL_KITTIES[player];
+        SafezoneAdditions(kitty);
+        kitty.CurrentSafeZone = ID;
         WolfLaneHider.LanesHider();
         if (AwardedPlayers.Contains(player) || ID == 0) return;
         Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
@@ -55,17 +56,17 @@ public class Safezone
     /// <summary>
     /// Runs if the players current safezone isn't the same as their previously touched safezone.
     /// </summary>
-    private void SafezoneAdditions(unit Unit)
+    private void SafezoneAdditions(Kitty kitty)
     {
-        var player = Unit.Owner;
+        var player = kitty.Player;
 
-        if (Globals.PLAYERS_CURRENT_SAFEZONE[player] == ID) return;
+        if (kitty.CurrentSafeZone == ID) return;
 
         CameraUtil.UpdateKomotoCam(player, ID);
 
         if (Gamemode.CurrentGameMode != "Standard") return;
 
-        Globals.ALL_KITTIES[player].Relics.OfType<FangOfShadows>().FirstOrDefault()?.ReduceCooldownAtSafezone(Unit);
+        kitty.Relics.OfType<FangOfShadows>().FirstOrDefault()?.ReduceCooldownAtSafezone(kitty.Unit);
     }
 
     /// <summary>
@@ -73,10 +74,10 @@ public class Safezone
     /// </summary>
     public static void ResetPlayerSafezones()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            Globals.PLAYERS_CURRENT_SAFEZONE[player] = 0;
-            Globals.ALL_KITTIES[player].ProgressZone = 0;
+            kitty.Value.CurrentSafeZone = 0;
+            kitty.Value.ProgressZone = 0;
         }
         foreach (var safezone in Globals.SAFE_ZONES)
         {

@@ -81,7 +81,6 @@ namespace Source.Init
                 ItemSpawner.Initialize();
                 ProtectionOfAncients.Initialize();
                 Multiboard.Initialize();
-                FloatingNameTag.Initialize();
                 PlayerLeaves.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();

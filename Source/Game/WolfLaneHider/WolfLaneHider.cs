@@ -24,12 +24,9 @@ public static class WolfLaneHider
         {
             lanesToEnable.Clear();
 
-            if (Globals.PLAYERS_CURRENT_SAFEZONE == null)
-                return;
-
-            foreach (var player in Globals.PLAYERS_CURRENT_SAFEZONE)
+            foreach (var kitty in Globals.ALL_KITTIES)
             {
-                int currentSafezone = player.Value;
+                int currentSafezone = kitty.Value.CurrentSafeZone;
                 AddAdjacentLanes(currentSafezone);
             }
         }

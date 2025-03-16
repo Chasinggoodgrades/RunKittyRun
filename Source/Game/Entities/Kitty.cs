@@ -15,6 +15,7 @@ public class Kitty
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public ActiveAwards ActiveAwards { get; set; } = new ActiveAwards();
+    public FloatingNameTag NameTag { get; set; }
     public YellowLightning YellowLightning { get; set; }
     public AIController aiController { get; set; }
     public APMTracker APMTracker { get; set; }
@@ -28,13 +29,11 @@ public class Kitty
     public bool Finished { get; set; } = false;
     public int TeamID { get; set; } = 0;
     public int ProgressZone { get; set; } = 0;
+    public int CurrentSafeZone { get; set; } = 0;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public timer DiscoTimer { get; set; }
-
-    // Camera
     public timer SpinCamTimer { get; set; }
-
     public float SpinCamSpeed { get; set; } = 0;
     public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
@@ -46,10 +45,10 @@ public class Kitty
         CreateKitty();
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
+        YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
         APMTracker = new APMTracker(this);
-
-        Globals.PLAYERS_CURRENT_SAFEZONE[player] = 0;
+        NameTag = new FloatingNameTag(this);
     }
 
     /// <summary>
@@ -140,10 +139,11 @@ public class Kitty
         try
         {
             // Save Data
-            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing) SaveData = SaveManager.GetKittyData(Player);
-            else SaveData = new KittyData(); // dummy data for comps
+            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing)
+                SaveData = SaveManager.GetKittyData(Player);
+            else
+                SaveData = new KittyData(); // dummy data for comps
 
-            YellowLightning = new YellowLightning(Player);
             Relics = new List<Relic>();
         }
         catch (Exception e)
@@ -172,12 +172,15 @@ public class Kitty
         Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
 
-
         // Register Collision
         CollisionDetection.KittyRegisterCollisions(this);
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
+
+        // Register AI Controller for Computers later.
+        if (Player.Controller == mapcontrol.Computer)
+            Utility.SimpleTimer(1.0f, () => aiController.StartAi());
     }
 
     public void Dispose()
