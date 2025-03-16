@@ -151,7 +151,6 @@ public class Wolf
                 wolf.Value.EffectTimer.Pause();
                 wolf.Value.Unit.ClearOrders();
                 wolf.Value.IsWalking = false;
-                wolf.Value.Unit.SetPausedEx(pause);
             }
         }
         else
@@ -162,7 +161,6 @@ public class Wolf
                 wolf.Value.EffectTimer.Resume();
                 wolf.Value.Unit.ClearOrders();
                 wolf.Value.IsWalking = true;
-                wolf.Value.Unit.SetPausedEx(pause);
             }
         }
     }

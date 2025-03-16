@@ -210,6 +210,7 @@ public static class Utility
         var item = CreateItem(itemId, 0, 0);
         var iconPath = item.Icon;
         item.Dispose();
+        item = null;
         return iconPath;
     }
 
@@ -359,6 +360,16 @@ public static class Utility
             }
         }
         return null;
+    }
+
+    public static int GetItemSkin(int itemId)
+    {
+        if (itemId == 0) return 0;
+        var item = CreateItem(itemId, 0, 0);
+        var skin = BlzGetItemSkin(item);
+        item.Dispose();
+        item = null;
+        return skin;
     }
 
     public static string FormattedColorPlayerName(player p)

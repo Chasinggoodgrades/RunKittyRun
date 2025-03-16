@@ -1076,7 +1076,9 @@ public static class InitCommands
             description: "Sets the skin of the kitty.",
             action: (player, args) =>
             {
-                var skin = args.Length > 0 ? FourCC(args[0]) : Constants.UNIT_KITTY;
+                var skin = 0;
+                if (args[0] == "") skin = Constants.UNIT_KITTY;
+                else skin = FourCC(args[0]);
                 BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
             }
         );
@@ -1214,6 +1216,21 @@ public static class InitCommands
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "itemskin",
+            alias: "iskin",
+            group: "admin",
+            argDesc: "item id",
+            description: "THIS SHIT SUCKS ASS BUT GO FOR IT",
+            action: (player, args) =>
+            {
+                var skin = args.Length > 0 ? FourCC(args[0]) : Constants.UNIT_KITTY;
+                var skinID = Utility.GetItemSkin(skin);
+                Console.WriteLine(skinID);
+                Globals.ALL_KITTIES[player].Unit.Skin = skinID;
             }
         );
 
