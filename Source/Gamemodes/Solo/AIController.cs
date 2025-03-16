@@ -20,7 +20,8 @@ public class AIController
         get { return _timerInterval; }
         set
         {
-            _timerInterval = value;
+            _timerInterval = Math.Max(value, 0.01f);
+
             if (this.IsEnabled())
             {
                 this.PauseAi();

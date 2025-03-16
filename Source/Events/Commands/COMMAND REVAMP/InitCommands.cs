@@ -1137,8 +1137,8 @@ public static class InitCommands
                 }
 
                 var dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0f;
-                var timerInterval = args.Length > 2 ? float.Parse(args[2]) : 0.1f;
-                var laser = args.Length > 3 ? int.Parse(args[3]) : 0;
+                var timerInterval = args.Length > 1 ? float.Parse(args[1]) : 0.1f;
+                var laser = args.Length > 2 ? int.Parse(args[2]) : 0;
 
                 foreach (var compKitty in Globals.ALL_KITTIES)
                 {
