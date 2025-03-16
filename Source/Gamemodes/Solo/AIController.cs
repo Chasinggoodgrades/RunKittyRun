@@ -132,12 +132,13 @@ public class AIController
         }
 
         var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
-        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : Globals.SAFE_ZONES[currentProgressZoneId];
+        var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : currentSafezone;
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         var nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
         if (currentProgressZoneId != lastProgressZoneIndexId)
         {
+            reachedLastProgressZoneCenter = false; // TODO; need this to make sure kitty runs to center; but when runnin back 1 lane to save previous kitty it makes you run back to start of that lane after saving kitty which is bad :/
             lastProgressZoneIndexId = currentProgressZoneId;
         }
 
@@ -185,6 +186,20 @@ public class AIController
 
                 if (claimedKitties[deadKitty] == this.kitty)
                 {
+                    if (deadKittyProgressZoneId != currentProgressZoneId)
+                    {
+                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId))
+                        {
+                            targetPosition = (currentProgressZoneId - 1 >= 0) ? GetCenterPositionInSafezone(Globals.SAFE_ZONES[currentProgressZoneId - 1]) : currentSafezoneCenter;
+                        }
+                        else
+                        {
+                            targetPosition = currentSafezoneCenter;
+                        }
+
+                        break;
+                    }
+
                     targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
                     break;
                 }
