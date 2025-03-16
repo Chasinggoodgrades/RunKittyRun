@@ -5,7 +5,7 @@ public static class KibbleEvent
     private static bool EventActive = false;
     private static bool EventPlayed = false;
     private static int EventKibblesCollected = 0;
-    private static int TotalEventKibbles = 50;
+    private static int TotalEventKibbles = 200;
     private static int EventExtraKibbles = 5; // a little extra, the previous ones also don't despawn if theres any left.
     private static timer EventTimer;
     private static timerdialog EventTimerDialog;
