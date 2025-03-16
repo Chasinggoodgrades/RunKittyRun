@@ -171,15 +171,52 @@ public static class AwardingCmds
 
     public static void GetAllGameStats(player player)
     {
-        var selectedUnit = CustomStatFrame.SelectedUnit[player];
-        var selectedPlayer = selectedUnit.Owner;
-        if (!Globals.ALL_PLAYERS.Contains(selectedPlayer)) return;
+        if (!Globals.ALL_PLAYERS.Contains(player)) return;
         var combined = "";
         foreach (var property in Globals.GAME_STATS.GetType().GetProperties())
         {
-            var value = property.GetValue(Globals.ALL_KITTIES[selectedPlayer].SaveData.GameStats);
+            var value = property.GetValue(Globals.ALL_KITTIES[player].SaveData.GameStats);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(selectedPlayer)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
     }
+
+    public static void GetAllGameTimes(player player)
+    {
+        if (!Globals.ALL_PLAYERS.Contains(player)) return;
+        var combined = "";
+        foreach (var property in Globals.GAME_TIMES.GetType().GetProperties())
+        {
+            var value = property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
+        }
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game times for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+    }
+
+    public static void GetAllPersonalBests(player player)
+    {
+        if (!Globals.ALL_PLAYERS.Contains(player)) return;
+        var combined = "";
+        var personalBests = Globals.ALL_KITTIES[player].SaveData.PersonalBests;
+        foreach (var property in personalBests.GetType().GetProperties())
+        {
+            var value = property.GetValue(personalBests);
+            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
+        }
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Personal bests for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+    }
+
+    public static void GetKibbleCurrencyInfo(player player, Kitty kitty)
+    {
+        if (!Globals.ALL_PLAYERS.Contains(kitty.Player)) return;
+        var combined = "";
+        var kibbleCurrency = kitty.SaveData.KibbleCurrency;
+        foreach (var property in kibbleCurrency.GetType().GetProperties())
+        {
+            var value = property.GetValue(kibbleCurrency);
+            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
+        }
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Kibble currency for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+    }
+
 }

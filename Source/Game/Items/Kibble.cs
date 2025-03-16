@@ -82,7 +82,8 @@ public class Kibble : IDestroyable
             KibbleEvent.StartKibbleEvent(randomChance);
             KibbleEvent.CollectEventKibble();
 
-            IncrementKibble(player);
+            IncrementKibble(kitty);
+            PersonalBestAwarder.BeatKibbleCollection(kitty);
 
             ItemSpawner.TrackKibbles.Find(k => k.Item == item).__destroy();
         }
@@ -153,14 +154,14 @@ public class Kibble : IDestroyable
 
     #region Utility Methods
 
-    private static void IncrementKibble(player kibblePicker)
+    private static void IncrementKibble(Kitty kibblePicker)
     {
-        Globals.ALL_KITTIES[kibblePicker].CurrentStats.CollectedKibble += 1;
+        kibblePicker.CurrentStats.CollectedKibble += 1;
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
 
-        Globals.ALL_KITTIES[kibblePicker].SaveData.KibbleCurrency.Collected += 1;
+        kibblePicker.SaveData.KibbleCurrency.Collected += 1;
     }
 
     private static List<int> KibbleList()

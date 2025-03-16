@@ -4,5 +4,4 @@
     public int Deaths { get; set; }
     public int Score { get; set; }
     public int KibbleCollected { get; set; }
-    public int NitrosObtained { get; set; }
 }

@@ -1,14 +1,11 @@
-﻿using WCSharp.Api;
+﻿using System.Collections.Generic;
+using WCSharp.Api;
 
 /*
 SHOW PERSONAL BESTS FOR:
-kibble collected in a game
-best times broken
-most saves gotten in a game
-highest save streak in a game
+
 highest score in a game
 highest KD in a game
-most nitros in a game
 and all other stats i'd say. so streak/     saves/deaths in 1 game / w/e other stats we got
 */
 
@@ -16,8 +13,14 @@ and all other stats i'd say. so streak/     saves/deaths in 1 game / w/e other s
 
 public static class PersonalBestAwarder
 {
-    public static float TestOne = 0.0f;
+    private static List<player> KibbleCollectionBeatenList = new List<player>();
+    private static List<player> BeatenMostSavesList = new List<player>();
+    private static List<player> SaveStreakBeatenList = new List<player>();
 
+    /// <summary>
+    /// Checks if the current round time is higher than the best time and updates it if so. Also notifies all players :).
+    /// </summary>
+    /// <param name="player"></param>
     public static void BeatRecordTime(player player)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
@@ -28,4 +31,56 @@ public static class PersonalBestAwarder
         var timeFormatted = Utility.ConvertFloatToTime(time);
         Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}!|r");
     }
+
+    /// <summary>
+    /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
+    /// </summary>
+    /// <param name="k"></param>
+    public static void BeatKibbleCollection(Kitty k)
+    {
+        if (KibbleCollectionBeatenList.Contains(k.Player)) return;
+        var currentKibble = k.CurrentStats.CollectedKibble;
+        var bestKibble = k.SaveData.PersonalBests.KibbleCollected;
+        if (currentKibble > bestKibble)
+        {
+            k.SaveData.PersonalBests.KibbleCollected = currentKibble;
+            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by collecting {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r");
+            KibbleCollectionBeatenList.Add(k.Player);
+        }
+    }
+
+    /// <summary>
+    /// Check if the current save count is higher than the best save count and update it if so. Also notify all players.
+    /// </summary>
+    /// <param name="k"></param>
+    public static void BeatMostSavesInGame(Kitty k)
+    {
+        if (BeatenMostSavesList.Contains(k.Player)) return;
+        var currentSaves = k.CurrentStats.TotalSaves;
+        var bestSaves = k.SaveData.PersonalBests.Saves;
+        if (currentSaves > bestSaves)
+        {
+            k.SaveData.PersonalBests.Saves = currentSaves;
+            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by saving {Colors.COLOR_YELLOW}{currentSaves} kitties|r in a single game.");
+            BeatenMostSavesList.Add(k.Player);
+        }
+    }
+
+    /// <summary>
+    /// Check if the current save streak is higher than the best save streak and update it if so. Also notify all players.
+    /// </summary>
+    /// <param name="k"></param>
+    public static void BeatenSaveStreak(Kitty k)
+    {
+        if (SaveStreakBeatenList.Contains(k.Player)) return;
+        var currentStreak = k.SaveData.GameStats.SaveStreak;
+        var bestStreak = k.SaveData.GameStats.HighestSaveStreak;
+        if (currentStreak > bestStreak)
+        {
+            k.SaveData.GameStats.HighestSaveStreak = currentStreak;
+            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best save streak of {Colors.COLOR_YELLOW}{currentStreak}!|r");
+            SaveStreakBeatenList.Add(k.Player);
+        }
+    }
+
 }

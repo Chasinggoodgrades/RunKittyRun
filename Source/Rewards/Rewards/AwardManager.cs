@@ -89,7 +89,8 @@ public static class AwardManager
                 nameof(gamestatsx.ImpossibleGames),
                 nameof(gamestatsx.NormalWins),
                 nameof(gamestatsx.HardWins),
-                nameof(gamestatsx.ImpossibleWins)
+                nameof(gamestatsx.ImpossibleWins),
+                nameof(gamestatsx.NitrosObtained),
             };
 
             if (Gamemode.CurrentGameMode != "Standard") return;

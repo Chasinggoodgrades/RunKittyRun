@@ -1147,7 +1147,7 @@ public static class InitCommands
             name: "killunit",
             alias: "kill,kl",
             group: "admin",
-            argDesc: "[resolve playerID]",
+            argDesc: "resolve playerID",
             description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
             action: (player, args) =>
             {
@@ -1157,6 +1157,18 @@ public static class InitCommands
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "kibblecurrency",
+            alias: "kibbleinfo,kbinfo",
+            group: "all",
+            argDesc: "player name, #, selected, or self",
+            description: "Gets the Kibble Currency information on the given player.",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty));
             }
         );
     }

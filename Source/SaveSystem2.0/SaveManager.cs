@@ -7,7 +7,7 @@ public class SaveManager
     private SyncSaveLoad syncSaveLoad;
     private static string SavePath { get; } = "Run-Kitty-Run";
     public static Dictionary<player, KittyData> SaveData { get; set; } = new Dictionary<player, KittyData>();
-
+    public static List<player> PlayersLoaded { get; } = new List<player>();
     public SaveManager()
     {
         syncSaveLoad = SyncSaveLoad.Instance;
@@ -98,6 +98,7 @@ public class SaveManager
             if (player.SlotState != playerslotstate.Playing) return;
             SaveData[player] = new KittyData();
             SaveData[player].PlayerName = player.Name;
+            if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
             if (!Gamemode.IsGameModeChosen) return;
         }
         catch (Exception ex)
@@ -133,6 +134,7 @@ public class SaveManager
         }
         kittyData.SetRewardsFromUnavailableToAvailable();
         SaveData[player] = kittyData;
+        if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
     }
 
     public static KittyData GetKittyData(player player)
@@ -141,7 +143,17 @@ public class SaveManager
         {
             return kittyData;
         }
-        Globals.SaveSystem.NewSave(player);
+        else
+        {
+            if (!PlayersLoaded.Contains(player))
+            {
+                Globals.SaveSystem.Load(player);
+            }
+            else
+            {
+                Globals.SaveSystem.NewSave(player);
+            }
+        }
         return SaveData[player];
     }
 }

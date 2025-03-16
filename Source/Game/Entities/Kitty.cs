@@ -213,13 +213,16 @@ public class Kitty
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
         savior.CurrentStats.SaveStreak += 1;
+
         if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
+
         if (Gamemode.CurrentGameMode != "Standard") return;
+
         savior.SaveData.GameStats.Saves += 1;
         savior.SaveData.GameStats.SaveStreak += 1;
-        if (savior.SaveData.GameStats.SaveStreak > savior.SaveData.GameStats.HighestSaveStreak)
-            savior.SaveData.GameStats.HighestSaveStreak = savior.SaveData.GameStats.SaveStreak;
+        PersonalBestAwarder.BeatMostSavesInGame(savior);
+        PersonalBestAwarder.BeatenSaveStreak(savior);
         Challenges.PurpleLighting(savior);
         savior.YellowLightning.SaveIncrement();
     }

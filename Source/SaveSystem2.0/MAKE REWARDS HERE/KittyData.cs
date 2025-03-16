@@ -8,6 +8,7 @@
     public GameAwardsDataSorted GameAwardsSorted { get; set; }
     public GameTimesData BestGameTimes { get; set; }
     public KibbleCurrency KibbleCurrency { get; set; }
+    public PersonalBests PersonalBests { get; set; }
 
     public KittyData()
     {
@@ -17,6 +18,7 @@
         GameAwardsSorted = new GameAwardsDataSorted();
         BestGameTimes = new GameTimesData();
         KibbleCurrency = new KibbleCurrency();
+        PersonalBests = new PersonalBests();
     }
 
     public void SetRewardsFromUnavailableToAvailable()
