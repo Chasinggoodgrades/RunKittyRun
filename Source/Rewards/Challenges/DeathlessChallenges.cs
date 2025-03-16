@@ -50,7 +50,7 @@ public static class DeathlessChallenges
         var kitty = Globals.ALL_KITTIES[player];
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
         AwardBasedOnDifficulty(player);
-        PlayInvulnerableSoundWithText();
+        PlayInvulnerableSoundWithText(kitty);
     }
 
     private static void AwardBasedOnDifficulty(player player)
@@ -102,13 +102,16 @@ public static class DeathlessChallenges
         }
     }
 
-    private static void PlayInvulnerableSoundWithText()
+    private static void PlayInvulnerableSoundWithText(Kitty k)
     {
         SoundManager.PlayInvulnerableSound();
         var textTag = texttag.Create();
         textTag.SetText($"Deathless {Globals.ROUND}!", 0.015f);
         textTag.SetVelocity(120.0f, 90f);
-        textTag.SetLifespan(1.0f);
-        Utility.SimpleTimer(1.50f, textTag.Dispose);
+        textTag.SetColor(255, 0, 0);
+        textTag.SetPosition(k.Unit, 0.015f);
+        textTag.SetVisibility(true);
+        textTag.SetLifespan(2.0f);
+        Utility.SimpleTimer(2.01f, () => textTag?.Dispose());
     }
 }
