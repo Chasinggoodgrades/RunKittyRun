@@ -98,6 +98,7 @@ public static class AwardManager
             {
                 if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
                 if (player.SlotState != playerslotstate.Playing) continue; // no obs, no leavers.
+
                 if (!Globals.ALL_KITTIES.TryGetValue(player, out var kittyProfile))
                 {
                     if (!SaveManager.SaveData.TryGetValue(player, out var saveData))
@@ -109,6 +110,12 @@ public static class AwardManager
                     Globals.ALL_KITTIES[player].SaveData = saveData;
                     kittyProfile = Globals.ALL_KITTIES[player];
                 }
+
+                if (kittyProfile.SaveData == null)
+                {
+                    kittyProfile.SaveData = new KittyData();
+                }
+
                 var gameStats = kittyProfile.SaveData.GameStats;
 
                 foreach (var gameStatReward in RewardsManager.GameStatRewards)
