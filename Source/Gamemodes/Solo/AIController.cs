@@ -123,15 +123,21 @@ public class AIController
         return enabled;
     }
 
-    private void MoveKittyToPosition()
+    private int CalcProgressZone(Kitty kitty)
     {
-        var currentProgressZoneId = this.kitty.ProgressZone;
+        var currentProgressZoneId = kitty.ProgressZone;
 
-        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId + 1))
+        if (IsInSafeZone(kitty.Unit.X, kitty.Unit.Y, currentProgressZoneId + 1))
         {
             currentProgressZoneId++;
         }
 
+        return currentProgressZoneId;
+    }
+
+    private void MoveKittyToPosition()
+    {
+        var currentProgressZoneId = CalcProgressZone(this.kitty);
         var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
         var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : currentSafezone;
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
@@ -160,7 +166,7 @@ public class AIController
                 return true;
             }
 
-            return k.Value.ProgressZone >= this.kitty.ProgressZone;
+            return CalcProgressZone(k.Value) >= currentProgressZoneId;
         });
 
         var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
