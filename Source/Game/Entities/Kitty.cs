@@ -32,6 +32,7 @@ public class Kitty
     public int ProgressZone { get; set; } = 0;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
+    public Disco Disco { get; set; }
     public timer DiscoTimer { get; set; }
     public timer SpinCamTimer { get; set; }
     public float SpinCamSpeed { get; set; } = 0;
@@ -49,6 +50,7 @@ public class Kitty
         aiController = new AIController(this);
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
+        Disco = new Disco { Unit = this.Unit };
     }
 
     /// <summary>
@@ -186,11 +188,12 @@ public class Kitty
     public void Dispose()
     {
         Alive = false;
-        Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
+        Disco?.__destroy(false);
         aiController.StopAi();
+        Unit.Dispose();
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
     }
@@ -239,26 +242,6 @@ public class Kitty
         int trueSight = FourCC("Atru");
         Unit.AddAbility(trueSight);
         Unit.HideAbility(trueSight, true);
-    }
-
-    public void ToggleDisco()
-    {
-        if (DiscoTimer == null)
-        {
-            DiscoTimer = timer.Create();
-            DiscoTimer.Start(0.4f, true, ErrorHandler.Wrap(DiscoActions));
-        }
-        else
-        {
-            DiscoTimer.Pause();
-            DiscoTimer = null;
-        }
-    }
-
-    private void DiscoActions()
-    {
-        SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
-        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
     }
 
     public void ToggleSpinCam(float speed)

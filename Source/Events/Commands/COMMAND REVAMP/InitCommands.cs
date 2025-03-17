@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -350,9 +351,50 @@ public static class InitCommands
             name: "disco",
             alias: "",
             group: "all",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Toggle disco mode.",
-            action: (player, args) => Globals.ALL_KITTIES[player].ToggleDisco()
+            action: (player, args) =>
+            {
+
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: disco [on/off]|r");
+                    return;
+                }
+
+                var status = CommandsManager.GetBool(args[0]);
+                if (CommandsManager.GetPlayerGroup(player) == "admin" && args.Length > 1)
+                {
+                    if (args[1] == "wolves" || args[1] == "wolf")
+                    {
+                        foreach (var wolf in Globals.ALL_WOLVES)
+                        {
+                            wolf.Value.Disco ??= MemoryHandler.GetEmptyObject<Disco>();
+                            wolf.Value.Disco.Unit = wolf.Value.Unit;
+                            wolf.Value.Disco.ToggleDisco(status);
+                            if (!status)
+                            {
+                                wolf.Value.Disco = null;
+                                wolf.Value.Unit.SetVertexColor(150, 120, 255, 255);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CommandsManager.ResolvePlayerId(args[1], kitty =>
+                        {
+                            kitty.Disco.ToggleDisco(status);
+                        });
+                    }
+                }
+                else
+                {
+                    var playerKitty = Globals.ALL_KITTIES[player];
+                    playerKitty.Disco.ToggleDisco(status);
+                }
+
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Disco: " + (status ? "On" : "Off"));
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -602,7 +644,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[name]",
             description: "Award currently selected player using award [name].",
-            action: (player, args) => AwardingCmds.Awarding(player, args[0])
+            action: (player, args) => AwardingCmds.Awarding(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -611,7 +653,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[stat] [value]",
             description: "Sets the specified game stat for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameStats(player, args[0])
+            action: (player, args) => AwardingCmds.SettingGameStats(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -620,7 +662,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[time]",
             description: "Sets the specified game time for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameTimes(player, args[0])
+            action: (player, args) => AwardingCmds.SettingGameTimes(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -657,7 +699,7 @@ public static class InitCommands
             description: "Pauses all wolves. Defaults to [on]",
             action: (player, args) =>
             {
-                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var status = args[0] == "" || CommandsManager.GetBool(args[0]);
                 Wolf.PauseAllWolves(status);
             }
         );
@@ -670,7 +712,7 @@ public static class InitCommands
             description: "Pauses selected wolf. Defaults to [on]",
             action: (player, args) =>
             {
-                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var status = args[0] == "" || CommandsManager.GetBool(args[0]);
                 Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status);
             }
         );
@@ -1067,9 +1109,7 @@ public static class InitCommands
             description: "Sets the skin of the kitty.",
             action: (player, args) =>
             {
-                var skin = 0;
-                if (args[0] == "") skin = Constants.UNIT_KITTY;
-                else skin = FourCC(args[0]);
+                var skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
                 BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
             }
         );

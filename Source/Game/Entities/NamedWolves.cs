@@ -38,8 +38,7 @@ public static class NamedWolves
         var index = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         StanWolf = new Wolf(index);
 
-        StanWolf.WanderTimer.Pause();
-        StanWolf.WanderTimer = null;
+        StanWolf.PauseSelf(true);
         StanWolf.Unit.SetVertexColor(235, 115, 255);
         StanWolf.Unit.Name = STAN_NAME;
 

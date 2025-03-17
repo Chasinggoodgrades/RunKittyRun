@@ -196,10 +196,9 @@ public static class FirstPersonCameraManager
 
     private static void OnKeyEvent(string key, bool isDown)
     {
-        var player = GetTriggerPlayer();
-        if (cameras.ContainsKey(player))
+        if (cameras.ContainsKey(@event.Player))
         {
-            cameras[player].SetKeyDownState(key, isDown);
+            cameras[@event.Player].SetKeyDownState(key, isDown);
         }
     }
 

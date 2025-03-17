@@ -8,9 +8,9 @@ public static class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static void Awarding(player player, string command)
+    public static void Awarding(player player, string[] args)
     {
-        var award = command.Split(" ")[1];
+        var award = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = GetOwningPlayer(selectedUnit);
 
@@ -78,9 +78,9 @@ public static class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static void SettingGameStats(player player, string command)
+    public static void SettingGameStats(player player, string[] args)
     {
-        var stats = command.Split(" ")[1];
+        var stats = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
 
@@ -90,7 +90,7 @@ public static class AwardingCmds
             return;
         }
 
-        var value = command.Split(" ")[2];
+        var value = args[1];
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         // Then check if the value is actually a proper value.
@@ -124,9 +124,9 @@ public static class AwardingCmds
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game stats: {Colors.HighlightString(combined)}");
     }
 
-    public static void SettingGameTimes(player player, string command)
+    public static void SettingGameTimes(player player, string[] args)
     {
-        var roundTime = command.Split(" ")[1];
+        var roundTime = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
 
@@ -136,7 +136,7 @@ public static class AwardingCmds
             return;
         }
 
-        var value = command.Split(" ")[2];
+        var value = args[1];
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         foreach (var prop in Globals.GAME_TIMES.GetType().GetProperties())

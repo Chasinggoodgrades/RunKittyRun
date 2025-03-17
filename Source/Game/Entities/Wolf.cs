@@ -14,30 +14,22 @@ public class Wolf
     private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
     private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
 
+    private readonly Action _cachedWander;
+
     public int RegionIndex { get; set; }
-
     public string OVERHEAD_EFFECT_PATH { get; set; }
-
     public timer WanderTimer { get; set; }
-
     private timer EffectTimer { get; set; }
-
     public texttag Texttag { get; set; }
-
+    public Disco Disco { get; set; }
     public rect Lane { get; private set; }
-
     public unit Unit { get; set; }
-
     public List<Affix> Affixes { get; private set; }
-
     private effect OverheadEffect { get; set; }
-
+    private effect RandomEffect { get; set; }
     public WolfPoint WolfPoint { get; set; }
-
     public bool IsPaused { get; set; } = false;
-
     public bool IsReviving { get; set; } = false;
-
     public bool IsWalking { get; set; } = false;
 
     public Wolf(int regionIndex)
@@ -48,7 +40,8 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), () => StartWandering());
+        _cachedWander = ErrorHandler.Wrap(() => StartWandering());
+        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
 
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
@@ -94,7 +87,7 @@ public class Wolf
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Start(realTime, false, ErrorHandler.Wrap(() => StartWandering()));
+        WanderTimer.Start(realTime, false, _cachedWander);
     }
 
     /// <summary>
@@ -118,6 +111,7 @@ public class Wolf
         OverheadEffect = null;
         WanderTimer.Dispose();
         WanderTimer = null;
+        Disco?.__destroy(false);
         WolfPoint.Dispose();
         WolfPoint = null;
         Unit.Dispose();
@@ -236,11 +230,11 @@ public class Wolf
 
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Start(effectDuration, false, ErrorHandler.Wrap(() =>
+        EffectTimer.Start(effectDuration, false, () =>
         {
             WolfMove();
             BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
-        }));
+        });
     }
 
     #region AFFIXES

@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using WCSharp.Shared.Data;
 
 public static class NitroPacer
@@ -10,6 +11,7 @@ public static class NitroPacer
     private static timer pacerTimer;
     private static rect spawnRect = RegionList.SpawnRegions[5].Rect;
     private static Rectangle[] pathingPoints = RegionList.PathingPoints;
+    private static Action _cachedNitroPacerUpdate;
     private static effect nitroEffect;
     private static item ghostBoots;
 
@@ -28,6 +30,7 @@ public static class NitroPacer
         Unit.IsInvulnerable = true;
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);
         nitroEffect = effect.Create("war3mapImported\\Nitro.mdx", Unit, "origin");
+        _cachedNitroPacerUpdate = ErrorHandler.Wrap(UpdateNitroPacer);
         VisionShare();
 
         pacerTimer = timer.Create();
@@ -47,7 +50,7 @@ public static class NitroPacer
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
-        pacerTimer.Start(0.15f, true, ErrorHandler.Wrap(UpdateNitroPacer));
+        pacerTimer.Start(0.15f, true, _cachedNitroPacerUpdate);
     }
 
     /// <summary>

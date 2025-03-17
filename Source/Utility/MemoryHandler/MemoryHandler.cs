@@ -37,7 +37,7 @@ public static class MemoryHandler
     private static readonly Dictionary<string, int> debugObjects = new();
     private static readonly Dictionary<string, int> debugArrays = new();
 
-    private static readonly Dictionary<Type, Stack<List<object>>> cachedLists = new();
+    // private static readonly Dictionary<Type, Stack<List<object>>> cachedLists = new();
     private static readonly Dictionary<Type, List<object>> cachedObjects = new();
     private static readonly List<Array> cachedArrays = new();
 
@@ -446,18 +446,18 @@ public static class MemoryHandler
         PrintDebugNames("objects", debugObjects);
         PrintDebugNames("arrays", debugArrays);
 
-        // If you have a trackPrintMap in your environment, you could reference it here.
+/*        // If you have a trackPrintMap in your environment, you could reference it here.
         if (InitCommands._G.trackPrintMap == true)
         {
             PrintDebugNames("globals", InitCommands._G.__fakePrintMap);
-        }
+        }*/
     }
 
     private static void PrintDebugNames(string title, Dictionary<string, int> targets)
     {
-        // Could reuse a typed object list if desired, but we’ll keep it simple
-        var sorted = new List<KeyValuePair<string, int>>(targets);
-        sorted.Sort((a, b) => b.Value.CompareTo(a.Value));
+        // Could reuse a typed object list if desired, but we’ll keep it simple .. 
+        var sorted = new List<KeyValuePair<string, int>>(targets); // LEAK!!!
+        sorted.Sort((a, b) => b.Value.CompareTo(a.Value)); // LEAK!!!
 
         if (sorted.Count <= 0) return;
 

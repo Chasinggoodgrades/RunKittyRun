@@ -57,6 +57,16 @@ public static class CommandsManager
                 kitties.Add(kitty.Value);
             }
         }
+        else if (larg == "ai" || larg == "computer" || larg == "computers")
+        {
+            foreach (var kitty in Globals.ALL_KITTIES)
+            {
+                if (kitty.Key.SlotState != playerslotstate.Playing || kitty.Key.Controller == mapcontrol.Computer)
+                {
+                    kitties.Add(kitty.Value); // add all AI players
+                }
+            }
+        }
         else if (larg == "s" || larg == "sel" || larg == "select" || larg == "selected")
         {
             var selectedUnit = CustomStatFrame.SelectedUnit[GetTriggerPlayer()];

@@ -53,6 +53,7 @@ public class Howler : Affix
             foreach (var wolf in list)
             {
                 if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue; // i swear to christ if this mother fucker moves again
+                if (wolf.IsPaused) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
                 wolfObject.StartWandering(true);
