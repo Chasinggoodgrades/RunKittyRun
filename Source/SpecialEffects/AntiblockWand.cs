@@ -44,6 +44,6 @@ public static class AntiblockWand
 
         GC.RemoveGroup(ref wolvesInArea);
         GC.RemoveList(ref list);
-        GC.RemoveLocation(ref location);
+        location.Dispose();
     }
 }

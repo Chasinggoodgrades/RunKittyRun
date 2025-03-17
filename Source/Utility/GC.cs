@@ -76,7 +76,7 @@ public static class GC
     public static void RemoveLocation(ref location loc)
     {
         if (loc == null) return;
-        loc.Dispose();
+        loc?.Dispose();
         loc = null;
     }
 

@@ -8,7 +8,7 @@ public static class ShopFrame
 {
     public static framehandle shopFrame { get; private set; }
     public static framehandle upgradeButton;
-    public static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
+    public static Dictionary<player, ShopItem> SelectedItems { get; set; } = new Dictionary<player, ShopItem>();
     private static framehandle relicsPanel;
     private static framehandle rewardsPanel;
     private static framehandle miscPanel;
@@ -197,26 +197,33 @@ public static class ShopFrame
 
     private static void UpdateButtonStatus(player player)
     {
-        if (!player.IsLocal) return;
-        if (SelectedItems[player] == null) return;
-
-        var item = SelectedItems[player];
-        var kitty = Globals.ALL_KITTIES[player];
-
-        upgradeButton.Visible = false;
-        sellButton.Visible = false;
-        buyButton.Visible = true;
-
-        // basically if type == shopItem, it'll do the buttons.
-        RelicButtons(player, item);
-
-        if (item.Type == ShopItemType.Misc)
+        try
         {
-            sellButton.Visible = true;
-            sellButton.Alpha = DisabledAlpha;
-            RefreshUpgradeTooltip(item.Relic);
-            if (Utility.UnitHasItem(kitty.Unit, item.ItemID))
-                sellButton.Alpha = ActiveAlpha;
+            if (!player.IsLocal) return;
+            if (!SelectedItems.ContainsKey(player)) return;
+
+            var item = SelectedItems[player];
+            var kitty = Globals.ALL_KITTIES[player];
+
+            upgradeButton.Visible = false;
+            sellButton.Visible = false;
+            buyButton.Visible = true;
+
+            // basically if type == shopItem, it'll do the buttons.
+            RelicButtons(player, item);
+
+            if (item.Type == ShopItemType.Relic)
+            {
+                sellButton.Visible = true;
+                sellButton.Alpha = DisabledAlpha;
+                RefreshUpgradeTooltip(item.Relic);
+                if (Utility.UnitHasItem(kitty.Unit, item.ItemID))
+                    sellButton.Alpha = ActiveAlpha;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"Error in UpdateButtonStatus: {ex.Message}");
         }
     }
 
