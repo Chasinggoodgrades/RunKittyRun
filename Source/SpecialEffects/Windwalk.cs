@@ -34,8 +34,17 @@ public static class Windwalk
         {
             var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
             var visual = reward.ModelPath;
-            var effect = caster.AddSpecialEffect(visual, "origin");
-            Utility.SimpleTimer(duration, effect.Dispose);
+            var e = caster.AddSpecialEffect(visual, "origin");
+            if (e != null)
+            {
+                var t = timer.Create();
+                t.Start(duration, false, () =>
+                {
+                    if (e != null) DestroyEffect(e);
+                    t?.Dispose();
+                    t = null;
+                });
+            }
         }
     }
 }

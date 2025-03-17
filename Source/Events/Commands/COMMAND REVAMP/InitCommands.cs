@@ -1254,5 +1254,20 @@ public static class InitCommands
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty));
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "error",
+            alias: "",
+            group: "all",
+            argDesc: "[on][off]",
+            description: "Turns the error prompts off or on",
+            action: (player, args) =>
+            {
+                var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
+                ErrorHandler.ErrorMessagesOn = status;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
+            }
+        );
+
     }
 }

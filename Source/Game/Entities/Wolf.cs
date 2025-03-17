@@ -41,7 +41,7 @@ public class Wolf
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
         _cachedWander = ErrorHandler.Wrap(() => StartWandering());
-        Utility.SimpleTimer(GetRandomReal(2.0f, 7.0f), _cachedWander);
+        StartWandering();
         Globals.ALL_WOLVES.Add(Unit, this);
 
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))

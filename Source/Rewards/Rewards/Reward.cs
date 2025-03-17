@@ -89,6 +89,8 @@ public class Reward
     {
         try
         {
+            if (!Globals.ALL_KITTIES.ContainsKey(player)) return;
+
             if (SetSkin(player)) return;
             if (SetWindwalk(player)) return;
 
@@ -200,6 +202,8 @@ public class Reward
 
     private void SetSelectedData(player player)
     {
+        if (!Globals.ALL_KITTIES.ContainsKey(player)) return;
+
         var saveData = Globals.ALL_KITTIES[player].SaveData;
 
         switch (Type)

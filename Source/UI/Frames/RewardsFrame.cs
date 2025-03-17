@@ -205,7 +205,10 @@ public static class RewardsFrame
             var rows = (CountNumberOfRewards(reward.Type) / cols) + 1;
             var col = (count[reward.Type] - 1) % cols;
             var row = (count[reward.Type] - 1) / cols;
-            var panel = FrameByName[Enum.GetName(typeof(RewardType), reward.Type)];
+            if (!FrameByName.TryGetValue(Enum.GetName(typeof(RewardType), reward.Type), out var panel))
+            {
+                continue;
+            }
             var rewardButton = framehandle.Create("Button", reward.Name.ToString(), panel, "ScoreScreenTabButtonTemplate", 0);
             if (col == 0)
                 rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);

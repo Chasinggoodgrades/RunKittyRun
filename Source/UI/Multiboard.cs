@@ -2,14 +2,6 @@
 
 public static class Multiboard
 {
-    private static multiboard CurrentTeamsMB;
-    private static multiboard TeamsStatsMB;
-    private static multiboard StandardOverallStatsMB;
-    private static multiboard StandardCurrentStatsMB;
-    private static multiboard SoloOverallStatsMB;
-    private static multiboard SoloBestTimesMB;
-    private static trigger ESCTrigger;
-
     public static void Initialize()
     {
         SetupMultiboards();
