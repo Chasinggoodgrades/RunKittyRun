@@ -567,7 +567,7 @@ public class AIController
         // First, check if forwardAngle falls within any free gap.
         foreach (AngleInterval gap in freeGaps)
         {
-            if (gap.End - gap.Start < requiredClearance * 2)
+            if (gap.End - gap.Start < requiredClearance)
             {
                 continue;
             }
@@ -607,7 +607,7 @@ public class AIController
             float bestScore = float.MaxValue;
             foreach (AngleInterval gap in freeGaps)
             {
-                if (gap.End - gap.Start < requiredClearance * 2)
+                if (gap.End - gap.Start < requiredClearance)
                 {
                     continue;
                 }
