@@ -174,7 +174,7 @@ public class AIController
         foreach (var circle in Globals.ALL_CIRCLES)
         {
             var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
-            var deadKittyProgressZoneId = deadKitty.ProgressZone;
+            var deadKittyProgressZoneId = CalcProgressZone(deadKitty);
 
             if (deadKittyProgressZoneId > currentProgressZoneId)
             {
@@ -191,7 +191,7 @@ public class AIController
                 if (!claimedKitties.ContainsKey(deadKitty))
                 {
                     double thisDistance = Math.Sqrt(Math.Pow(this.kitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(this.kitty.Unit.Y - deadKitty.Unit.Y, 2));
-                    int thisLaneDiff = Math.Abs(currentProgressZoneId - deadKitty.ProgressZone);
+                    int thisLaneDiff = Math.Abs(currentProgressZoneId - deadKittyProgressZoneId);
 
                     bool isNearest = true;
 
@@ -205,7 +205,7 @@ public class AIController
                         if (otherKitty.Value != this.kitty && otherKitty.Value.Alive)
                         {
                             double otherDistance = Math.Sqrt(Math.Pow(otherKitty.Value.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Value.Unit.Y - deadKitty.Unit.Y, 2));
-                            int otherLaneDiff = Math.Abs(otherKitty.Value.ProgressZone - deadKitty.ProgressZone);
+                            int otherLaneDiff = Math.Abs(CalcProgressZone(otherKitty.Value) - deadKittyProgressZoneId);
 
                             // Prioritize by lane difference first, then by distance.
                             // Don't think this works for some reason..
