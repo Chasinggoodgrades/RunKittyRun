@@ -180,9 +180,6 @@ public class Kitty
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
-
-        // Register AI Controller for Computers later.
-
     }
 
     private void StartAIController()
