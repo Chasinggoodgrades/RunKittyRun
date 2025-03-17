@@ -51,6 +51,7 @@ public class Kitty
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         Disco = new Disco { Unit = this.Unit };
+        StartAIController();
     }
 
     /// <summary>
@@ -181,8 +182,15 @@ public class Kitty
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
 
         // Register AI Controller for Computers later.
-        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard") // only standard xd
-            Utility.SimpleTimer(1.0f, aiController.StartAi);
+
+    }
+
+    private void StartAIController()
+    {
+        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
+        {
+            this.aiController?.StartAi();
+        }
     }
 
     public void Dispose()
