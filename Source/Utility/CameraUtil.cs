@@ -41,13 +41,8 @@ public static class CameraUtil
 
     public static void HandleZoomCommand(player p, string[] args)
     {
-        if (args.Length < 2)
-        {
-            p.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Incorrect usage: -zoom (xxxx) or -cam (xxxx)|r");
-            return;
-        }
-
-        float zoom = float.Parse(args[1]);
+        if (args[0] == "") return;
+        float zoom = float.Parse(args[0]);
         if (!p.IsLocal) return;
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0f);
     }

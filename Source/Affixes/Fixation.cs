@@ -71,8 +71,8 @@ public class Fixation : Affix
         if (Type == 1) UnitsInRange = group.Create();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
-        PeriodicSpeed.AddAction(() => UpdateChaseSpeed());
-        InRangeTrigger.AddAction(() =>
+        PeriodicSpeed.AddAction(ErrorHandler.Wrap(UpdateChaseSpeed));
+        InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;
             var Region = RegionList.WolfRegions[Unit.RegionIndex];
@@ -82,7 +82,7 @@ public class Fixation : Affix
                 Target = target;
                 ChasingEvent();
             }
-        });
+        }));
     }
 
     private void ChasingEvent()
@@ -91,7 +91,7 @@ public class Fixation : Affix
         IsChasing = true;
         Unit.WanderTimer.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        ChaseTimer.Start(0.1f, true, () =>
+        ChaseTimer.Start(0.1f, true, ErrorHandler.Wrap(() =>
         {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
@@ -104,7 +104,7 @@ public class Fixation : Affix
             }
             if (Type == 1) GetClosestTarget();
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
-        });
+        }));
     }
 
     private void GetClosestTarget()

@@ -49,7 +49,7 @@ public class ShardOfTranslocation : Relic
         var player = Unit.Owner;
         CastEventTrigger = trigger.Create();
         CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        CastEventTrigger.AddAction(() => TeleportActions());
+        CastEventTrigger.AddAction(ErrorHandler.Wrap(TeleportActions));
     }
 
     private void TeleportActions()
@@ -73,7 +73,7 @@ public class ShardOfTranslocation : Relic
             TeleportUnit(unit, targetLoc);
             RelicUtil.CloseRelicBook(player);
             Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
-            GC.RemoveLocation(ref targetLoc);
+            targetLoc.Dispose();
         }
         catch (Exception e)
         {

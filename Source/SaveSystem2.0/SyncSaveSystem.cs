@@ -32,7 +32,7 @@ public class SyncSaveLoad
             SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
             SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
         }
-        SyncEvent.AddAction(OnSync);
+        SyncEvent.AddAction(ErrorHandler.Wrap(OnSync));
     }
 
     /// <summary>
@@ -102,37 +102,30 @@ public class SyncSaveLoad
 
     private void OnSync()
     {
-        try
-        {
-            string readData = BlzGetTriggerSyncData();
-            string prefix = BlzGetTriggerSyncPrefix();
-            int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0;
-            int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
-            string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
-            var promise = allPromises[@event.Player.Id];
-            //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
+        string readData = BlzGetTriggerSyncData();
+        string prefix = BlzGetTriggerSyncPrefix();
+        int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0;
+        int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
+        string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
+        var promise = allPromises[@event.Player.Id];
+        //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
-            if (promise != null)
+        if (promise != null)
+        {
+            if (prefix == SyncPrefix)
             {
-                if (prefix == SyncPrefix)
-                {
-                    promise.Buffer[currentChunk - 1] = theRest;
-                }
-                else if (prefix == SyncPrefixFinish)
-                {
-                    promise.Finish();
-                    allPromises.Remove(GetPlayerId(promise.SyncOwner));
-                    //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
-                }
+                promise.Buffer[currentChunk - 1] = theRest;
             }
-            else
+            else if (prefix == SyncPrefixFinish)
             {
-                Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {GetPlayerName(GetTriggerPlayer())}");
+                promise.Finish();
+                allPromises.Remove(GetPlayerId(promise.SyncOwner));
+                //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
             }
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine(ex.StackTrace);
+            Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {GetPlayerName(GetTriggerPlayer())}");
         }
     }
 }

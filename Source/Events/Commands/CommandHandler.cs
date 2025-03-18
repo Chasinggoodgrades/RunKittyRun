@@ -10,24 +10,15 @@ public static class CommandHandler
 
     public static void Initialize()
     {
-        try
+        InitCommands.InitializeCommands();
+        for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
-            InitCommands.InitializeCommands();
-            for (int i = 0; i < GetBJMaxPlayers(); i++)
-            {
-                if (Player(i).SlotState != playerslotstate.Playing) continue;
-                TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
-                TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
-            }
-            TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
-            TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
+            if (Player(i).SlotState != playerslotstate.Playing) continue;
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
+            TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
         }
-        catch (Exception e)
-        {
-            Logger.Warning(e.Message);
-            Logger.Warning("Command Handler Error");
-            throw;
-        }
+        TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
+        TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
     }
 
     private static void HandleCommands()
@@ -59,14 +50,15 @@ public static class CommandHandler
             return;
 
         var command = CommandsManager.GetCommand(commandName.ToLower());
-        if (command != null && (command.Group == CommandsManager.GetPlayerGroup(@event.Player) || command.Group == "all"))
+        var playerGroup = CommandsManager.GetPlayerGroup(@event.Player);
+        if (command != null && (command.Group ==  playerGroup || command.Group == "all" || playerGroup == "admin"))
         {
             command.Action?.Invoke(@event.Player, args);
         }
 
         else
         {
-            Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
+            @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
         }
     }
 

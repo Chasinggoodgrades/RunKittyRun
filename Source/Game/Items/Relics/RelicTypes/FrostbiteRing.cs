@@ -46,26 +46,19 @@ public class FrostbiteRing : Relic
 
     private void FrostbiteCast(location freezeLocation)
     {
-        try
-        {
-            var tempGroup = group.Create();
-            var filter = Utility.CreateFilterFunc(() => WolvesFilter());
-            tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
-            var list = tempGroup.ToList();
-            foreach (var unit in list)
-                FrostbiteEffect(unit);
-            GC.RemoveList(ref list);
-            GC.RemoveGroup(ref tempGroup);
-            GC.RemoveFilterFunc(ref filter);
-            Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
-            RelicUtil.CloseRelicBook(Owner);
-            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
-            freezeLocation.Dispose();
-        }
-        catch (Exception e)
-        {
-            Logger.Critical(e.Message);
-        }
+        var tempGroup = group.Create();
+        var filter = Utility.CreateFilterFunc(WolvesFilter);
+        tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
+        var list = tempGroup.ToList();
+        foreach (var unit in list)
+            FrostbiteEffect(unit);
+        GC.RemoveList(ref list);
+        GC.RemoveGroup(ref tempGroup);
+        GC.RemoveFilterFunc(ref filter);
+        Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
+        RelicUtil.CloseRelicBook(Owner);
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
+        freezeLocation.Dispose();
     }
 
     private void FrostbiteEffect(unit Unit)
@@ -82,7 +75,7 @@ public class FrostbiteRing : Relic
         {
             blitzUnit?.PauseBlitzing(true);
             fixationUnit?.PauseFixation(true);
-            t.Start(duration, false, () =>
+            t.Start(duration, false, ErrorHandler.Wrap(() =>
             {
                 PausingWolf(Unit, false);
                 blitzUnit?.PauseBlitzing(false);
@@ -90,7 +83,7 @@ public class FrostbiteRing : Relic
                 SlowWolves(Unit);
                 GC.RemoveEffect(ref effect);
                 GC.RemoveTimer(ref t);
-            });
+            }));
         }
         catch (Exception e)
         {
@@ -108,12 +101,12 @@ public class FrostbiteRing : Relic
         Unit.BaseMovementSpeed = 365.0f / 2.0f;
         var t = timer.Create();
         var effect = AddSpecialEffectTarget(FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
-        t.Start(SLOW_DURATION, false, () =>
+        t.Start(SLOW_DURATION, false, ErrorHandler.Wrap(() =>
         {
             Unit.BaseMovementSpeed = 365.0f;
             GC.RemoveEffect(ref effect);
             GC.RemoveTimer(ref t);
-        });
+        }));
     }
 
     private float GetFreezeDuration()
@@ -134,7 +127,7 @@ public class FrostbiteRing : Relic
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+        Trigger.AddAction(ErrorHandler.Wrap(() => FrostbiteCast(@event.SpellTargetLoc)));
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;

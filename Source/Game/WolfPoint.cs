@@ -123,18 +123,11 @@ public class WolfPoint
         TriggerAddCondition(IsPausedTrigger, Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL));
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, () =>
+        TriggerAddAction(IsPausedTrigger, ErrorHandler.Wrap(() =>
         {
-            try
-            {
-                Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-                //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
-            }
-            catch (Exception ex)
-            {
-                Logger.Critical("Wolf Point: " + ex.Message);
-            }
-        });
+            Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
+            //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
+        }));
         return IsPausedTrigger;
     }
 }

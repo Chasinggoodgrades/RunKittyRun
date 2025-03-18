@@ -93,18 +93,18 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.wCollision, () => sk.KillShadowKitty());
+        TriggerAddAction(sk.wCollision, ErrorHandler.Wrap(sk.KillShadowKitty));
         return sk.wCollision;
     }
 
     private static trigger CircleCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.cCollision, () =>
+        TriggerAddAction(sk.cCollision, ErrorHandler.Wrap(() =>
         {
             var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
             var saviorKitty = Globals.ALL_KITTIES[GetOwningPlayer(sk.Unit)];
             circle.ReviveKitty(saviorKitty);
-        });
+        }));
         return sk.cCollision;
     }
 }

@@ -16,7 +16,7 @@ public static class PlayerLeaves
         {
             Trigger.RegisterPlayerEvent(player, playerevent.Leave);
         }
-        Trigger.AddAction(() => PlayerLeavesActions());
+        Trigger.AddAction(ErrorHandler.Wrap(() => PlayerLeavesActions()));
     }
 
     public static void TeamRemovePlayer(player player)

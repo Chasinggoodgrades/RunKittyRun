@@ -17,6 +17,7 @@ public class Kibble : IDestroyable
 
     public item Item;
     private int Type;
+    private effect StarFallEffect;
 
     public Kibble()
     {
@@ -37,7 +38,9 @@ public class Kibble : IDestroyable
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
-        Utility.CreateEffectAndDispose(StarfallEffect, x, y);
+        StarFallEffect ??= AddSpecialEffect(StarfallEffect, x, y);
+        StarFallEffect.SetPosition(x, y, 0);
+        StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
         Item = CreateItem(Type, x, y);
     }
 
@@ -49,12 +52,12 @@ public class Kibble : IDestroyable
     {
         var trig = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
-        trig.AddAction(() =>
+        trig.AddAction(ErrorHandler.Wrap(() =>
         {
             var item = @event.ManipulatedItem;
             if (!KibblesColors.Contains(item.TypeId)) return;
             KibblePickup(item);
-        });
+        }));
         return trig;
     }
 

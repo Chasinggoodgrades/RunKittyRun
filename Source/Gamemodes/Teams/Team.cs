@@ -28,7 +28,7 @@ public class Team
         Globals.ALL_TEAMS = new Dictionary<int, Team>();
         Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
         TeamTimer = timer.Create();
-        TeamTimer.Start(0.1f, false, TeamSetup);
+        TeamTimer.Start(0.1f, false, ErrorHandler.Wrap(TeamSetup));
     }
 
     public void AddMember(player player)
@@ -80,12 +80,12 @@ public class Team
     public static void UpdateTeamsMB()
     {
         var t = timer.Create();
-        t.Start(0.1f, false, () =>
+        t.Start(0.1f, false, ErrorHandler.Wrap(() =>
         {
             TeamsMultiboard.UpdateCurrentTeamsMB();
             TeamsMultiboard.UpdateTeamStatsMB();
             t.Dispose();
-        });
+        }));
     }
 
     private static void TeamSetup()
@@ -99,9 +99,9 @@ public class Team
                 player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Colors.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
                     " has been enabled. Use " + Colors.COLOR_GOLD + "-team <#> " + Colors.COLOR_YELLOW_ORANGE + "to join a team");
             }
-            Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, () => TeamHandler.RandomHandler());
+            Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, TeamHandler.RandomHandler);
         }
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
-            Utility.SimpleTimer(1.0f, () => TeamHandler.RandomHandler());
+            Utility.SimpleTimer(1.0f, TeamHandler.RandomHandler);
     }
 }

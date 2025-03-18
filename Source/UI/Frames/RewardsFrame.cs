@@ -155,7 +155,7 @@ public static class RewardsFrame
 
         var t = trigger.Create();
         t.RegisterFrameEvent(button, frameeventtype.Click);
-        t.AddAction(RandomRewardsButtonActions);
+        t.AddAction(ErrorHandler.Wrap(RandomRewardsButtonActions));
     }
 
     private static void RandomRewardsButtonActions()
@@ -205,7 +205,10 @@ public static class RewardsFrame
             var rows = (CountNumberOfRewards(reward.Type) / cols) + 1;
             var col = (count[reward.Type] - 1) % cols;
             var row = (count[reward.Type] - 1) / cols;
-            var panel = FrameByName[Enum.GetName(typeof(RewardType), reward.Type)];
+            if (!FrameByName.TryGetValue(Enum.GetName(typeof(RewardType), reward.Type), out var panel))
+            {
+                continue;
+            }
             var rewardButton = framehandle.Create("Button", reward.Name.ToString(), panel, "ScoreScreenTabButtonTemplate", 0);
             if (col == 0)
                 rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);
@@ -221,7 +224,7 @@ public static class RewardsFrame
 
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
-            Trigger.AddAction(() => RewardButtonActions(reward));
+            Trigger.AddAction(ErrorHandler.Wrap(() => RewardButtonActions(reward)));
         }
 
         GC.RemoveDictionary(ref count);
@@ -279,10 +282,10 @@ public static class RewardsFrame
         {
             rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true);
         }
-        rewardsHotKey.AddAction(() =>
+        rewardsHotKey.AddAction(ErrorHandler.Wrap(() =>
         {
             RewardsFrameActions();
-        });
+        }));
     }
 
     public static void RewardsFrameActions()

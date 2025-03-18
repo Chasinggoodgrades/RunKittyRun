@@ -30,13 +30,13 @@ public static class StandardMultiboard
     private static void Init()
     {
         var t = timer.Create();
-        t.Start(1.0f, true, () =>
+        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             if (!Difficulty.IsDifficultyChosen) return;
             MakeMultiboard();
             RegisterTriggers();
             GC.RemoveTimer(ref t);
-        });
+        }));
     }
 
     private static void RegisterTriggers()
@@ -45,11 +45,11 @@ public static class StandardMultiboard
         ESCTrigger = trigger.Create();
 
         Updater.RegisterTimerEvent(1.00f, true);
-        Updater.AddAction(CurrentStatsRoundTimes);
+        Updater.AddAction(ErrorHandler.Wrap(CurrentStatsRoundTimes));
 
         foreach (var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void MakeMultiboard()

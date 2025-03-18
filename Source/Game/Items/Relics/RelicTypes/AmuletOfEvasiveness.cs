@@ -84,11 +84,11 @@ public class AmuletOfEvasiveness : Relic
         CollisionDetection.KittyRegisterCollisions(kitty);
 
         var t = timer.Create();
-        t.Start(WINDWALK_COLLISION_DURATION, false, () =>
+        t.Start(WINDWALK_COLLISION_DURATION, false, ErrorHandler.Wrap(() =>
         {
             kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);
             CollisionDetection.KittyRegisterCollisions(kitty);
             t.Dispose();
-        });
+        }));
     }
 }

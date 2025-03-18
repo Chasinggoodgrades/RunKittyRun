@@ -39,7 +39,7 @@ public static class RoundTimer
     {
         if (Gamemode.CurrentGameMode == "Standard") return;
         TimerDialogDisplay(EndRoundTimerDialog, true);
-        EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, RoundManager.RoundEnd);
+        EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, ErrorHandler.Wrap(RoundManager.RoundEnd));
     }
 
     public static void CountDown()
@@ -47,7 +47,7 @@ public static class RoundTimer
         if (StartRoundTimer.Remaining > 0)
         {
             var t = timer.Create();
-            t.Start(1.0f, false, () =>
+            t.Start(1.0f, false, ErrorHandler.Wrap(() =>
             {
                 string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
                 if (StartRoundTimer.Remaining % 5 <= 0.1 && StartRoundTimer.Remaining > 5)
@@ -56,7 +56,7 @@ public static class RoundTimer
                     Utility.TimedTextToAllPlayers(1.0f, RoundStartingString);
                 CountDown();
                 GC.RemoveTimer(ref t);
-            });
+            }));
         }
     }
 

@@ -140,12 +140,12 @@ public static class AwardManager
         if (value < requiredValue)
         {
             triggeraction abc = null;
-            abc = TriggerAddAction(AwardTrigger, () =>
+            abc = TriggerAddAction(AwardTrigger, ErrorHandler.Wrap(() =>
             {
                 if ((int)property.GetValue(kittyStats.GameStats) < requiredValue) return;
                 GiveReward(player, award);
                 AwardTrigger.RemoveAction(abc);
-            });
+            }));
         }
     }
 

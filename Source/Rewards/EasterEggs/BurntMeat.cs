@@ -24,21 +24,21 @@ public static class BurntMeat
         StanDeath.RegisterUnitEvent(NamedWolves.StanWolf.Unit, unitevent.Death);
         if (StanDeathActions != null) return;
         RegisterTurnInTrigger();
-        StanDeathActions = StanDeath.AddAction(() =>
+        StanDeathActions = StanDeath.AddAction(ErrorHandler.Wrap(() =>
         {
             var killer = @event.KillingUnit;
             if (killer == null) return;
             Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES);
             killer.AddItem(ITEM_BURNT_MEAT);
             Completed.Add(killer);
-        });
+        }));
     }
 
     private static void RegisterTurnInTrigger()
     {
         Blizzard.TriggerRegisterUnitInRangeSimple(StanTurnIn, 200f, SpawnChampions.Stan2025);
         if (StanTurnInActions != null) return;
-        StanTurnInActions = StanTurnIn.AddAction(() =>
+        StanTurnInActions = StanTurnIn.AddAction(ErrorHandler.Wrap(() =>
         {
             var unit = @event.Unit;
             var player = unit.Owner;
@@ -47,6 +47,6 @@ public static class BurntMeat
             Challenges.VioletWindwalk(player);
             Utility.RemoveItemFromUnit(unit, ITEM_BURNT_MEAT);
             Completed.Remove(unit);
-        });
+        }));
     }
 }

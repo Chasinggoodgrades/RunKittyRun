@@ -13,7 +13,7 @@ public static class RollerSkates
         OnUseTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
         OnUseTrigger.AddCondition(Condition(() => @event.ManipulatedItem.TypeId == Constants.ITEM_PEGASUS_BOOTS));
-        OnUseTrigger.AddAction(SwitchingBoots);
+        OnUseTrigger.AddAction(ErrorHandler.Wrap(SwitchingBoots));
     }
 
     private static void SwitchingBoots()

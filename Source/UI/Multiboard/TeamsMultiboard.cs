@@ -142,7 +142,7 @@ public static class TeamsMultiboard
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void ESCPressed()

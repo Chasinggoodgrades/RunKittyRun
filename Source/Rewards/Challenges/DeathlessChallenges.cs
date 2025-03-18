@@ -14,7 +14,7 @@ public static class DeathlessChallenges
     public static void ResetDeathless()
     {
         foreach (var kitty in Globals.ALL_KITTIES)
-            ResetPlayerDeathless(kitty.Value.Player);
+            ResetPlayerDeathless(kitty.Value);
     }
 
     /// <summary>
@@ -32,25 +32,24 @@ public static class DeathlessChallenges
     /// Increments the players progress for deathless and awards them if they've reached the required checkpoints.
     /// </summary>
     /// <param name="player"></param>
-    public static void DeathlessCheck(player player)
+    public static void DeathlessCheck(Kitty kitty)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress++;
-        if (Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress == DeathlessPerRound())
+        kitty.CurrentStats.DeathlessProgress++;
+        if (kitty.CurrentStats.DeathlessProgress == DeathlessPerRound())
         {
-            AwardDeathless(player);
-            ResetPlayerDeathless(player);
+            AwardDeathless(kitty);
+            ResetPlayerDeathless(kitty);
         }
     }
 
-    public static void ResetPlayerDeathless(player player) => Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress = 0;
+    public static void ResetPlayerDeathless(Kitty kitty) => kitty.CurrentStats.DeathlessProgress = 0;
 
-    private static void AwardDeathless(player player)
+    private static void AwardDeathless(Kitty kitty)
     {
-        var kitty = Globals.ALL_KITTIES[player];
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
-        AwardBasedOnDifficulty(player);
-        PlayInvulnerableSoundWithText();
+        AwardBasedOnDifficulty(kitty.Player);
+        PlayInvulnerableSoundWithText(kitty);
     }
 
     private static void AwardBasedOnDifficulty(player player)
@@ -102,13 +101,16 @@ public static class DeathlessChallenges
         }
     }
 
-    private static void PlayInvulnerableSoundWithText()
+    private static void PlayInvulnerableSoundWithText(Kitty k)
     {
         SoundManager.PlayInvulnerableSound();
         var textTag = texttag.Create();
         textTag.SetText($"Deathless {Globals.ROUND}!", 0.015f);
         textTag.SetVelocity(120.0f, 90f);
-        textTag.SetLifespan(1.0f);
-        Utility.SimpleTimer(1.50f, textTag.Dispose);
+        textTag.SetColor(255, 0, 0);
+        textTag.SetPosition(k.Unit, 0.015f);
+        textTag.SetVisibility(true);
+        textTag.SetLifespan(2.0f);
+        Utility.SimpleTimer(2.01f, () => textTag?.Dispose());
     }
 }

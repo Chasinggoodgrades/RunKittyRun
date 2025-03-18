@@ -27,7 +27,7 @@ public static class RoundManager
 
             RoundTimer.InitEndRoundTimer();
 
-            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
+            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
@@ -56,14 +56,14 @@ public static class RoundManager
     private static void HasDifficultyBeenChosen()
     {
         var Timer = timer.Create();
-        Timer.Start(0.35f, true, () =>
+        Timer.Start(0.35f, true, ErrorHandler.Wrap(() =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
                 GC.RemoveTimer(ref Timer);
             }
-        });
+        }));
     }
 
     public static void RoundEnd()
@@ -87,7 +87,7 @@ public static class RoundManager
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;
             Tips.DisplayTip();
-            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+            Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup);
         }
         catch (Exception e)
         {

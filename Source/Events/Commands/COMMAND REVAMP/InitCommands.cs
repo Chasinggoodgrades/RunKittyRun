@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -262,15 +263,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "stats",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "Displays game stats of whoever you currently have selected.",
-            action: (player, args) => AwardingCmds.GetAllGameStats(player)
-        );
-
-        CommandsManager.RegisterCommand(
             name: "kibble",
             alias: "",
             group: "all",
@@ -350,9 +342,50 @@ public static class InitCommands
             name: "disco",
             alias: "",
             group: "all",
-            argDesc: "",
+            argDesc: "[on][off]",
             description: "Toggle disco mode.",
-            action: (player, args) => Globals.ALL_KITTIES[player].ToggleDisco()
+            action: (player, args) =>
+            {
+
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: disco [on/off]|r");
+                    return;
+                }
+
+                var status = CommandsManager.GetBool(args[0]);
+                if (CommandsManager.GetPlayerGroup(player) == "admin" && args.Length > 1)
+                {
+                    if (args[1] == "wolves" || args[1] == "wolf")
+                    {
+                        foreach (var wolf in Globals.ALL_WOLVES)
+                        {
+                            wolf.Value.Disco ??= MemoryHandler.GetEmptyObject<Disco>();
+                            wolf.Value.Disco.Unit = wolf.Value.Unit;
+                            wolf.Value.Disco.ToggleDisco(status);
+                            if (!status)
+                            {
+                                wolf.Value.Disco = null;
+                                wolf.Value.Unit.SetVertexColor(150, 120, 255, 255);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CommandsManager.ResolvePlayerId(args[1], kitty =>
+                        {
+                            kitty.Disco.ToggleDisco(status);
+                        });
+                    }
+                }
+                else
+                {
+                    var playerKitty = Globals.ALL_KITTIES[player];
+                    playerKitty.Disco.ToggleDisco(status);
+                }
+
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Disco: " + (status ? "On" : "Off"));
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -602,7 +635,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[name]",
             description: "Award currently selected player using award [name].",
-            action: (player, args) => AwardingCmds.Awarding(player, args[0])
+            action: (player, args) => AwardingCmds.Awarding(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -611,7 +644,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[stat] [value]",
             description: "Sets the specified game stat for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameStats(player, args[0])
+            action: (player, args) => AwardingCmds.SettingGameStats(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -620,7 +653,7 @@ public static class InitCommands
             group: "admin",
             argDesc: "[time]",
             description: "Sets the specified game time for the selected player.",
-            action: (player, args) => AwardingCmds.SettingGameTimes(player, args[0])
+            action: (player, args) => AwardingCmds.SettingGameTimes(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -657,7 +690,7 @@ public static class InitCommands
             description: "Pauses all wolves. Defaults to [on]",
             action: (player, args) =>
             {
-                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var status = args[0] == "" || CommandsManager.GetBool(args[0]);
                 Wolf.PauseAllWolves(status);
             }
         );
@@ -670,7 +703,7 @@ public static class InitCommands
             description: "Pauses selected wolf. Defaults to [on]",
             action: (player, args) =>
             {
-                var status = args[0] != "" ? CommandsManager.GetBool(args[0]) : true;
+                var status = args[0] == "" || CommandsManager.GetBool(args[0]);
                 Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status);
             }
         );
@@ -957,16 +990,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 _G["trackPrintMap"] = true;
-                try
-                {
-                    DebugUtilities.DebugPrinter.PrintDebugNames("globals");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    throw;
-                }
+                DebugUtilities.DebugPrinter.PrintDebugNames("globals");
             }
         );
 
@@ -1076,9 +1100,7 @@ public static class InitCommands
             description: "Sets the skin of the kitty.",
             action: (player, args) =>
             {
-                var skin = 0;
-                if (args[0] == "") skin = Constants.UNIT_KITTY;
-                else skin = FourCC(args[0]);
+                var skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
                 BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
             }
         );
@@ -1091,34 +1113,27 @@ public static class InitCommands
             description: "Toggles AI for the specified player.",
             action: (player, args) =>
             {
-                for (var i = 0; i < 24; i++)
+
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
-                    int target = args.Length > 0 && args[0] != "all" ? int.Parse(args[0]) - 1 : (args.Length > 0 && args[0] == "all" ? i : -1);
-
-                    if (target == i || args[0] == "all")
+                    if (kitty == null) return;
+                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player))
                     {
-                        var compPlayer = Player(target);
-
-                        if (!Globals.ALL_KITTIES.ContainsKey(compPlayer))
-                        {
-                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
-                            continue;
-                        }
-
-                        var compKitty = Globals.ALL_KITTIES[compPlayer];
-
-                        if (compKitty.aiController.IsEnabled())
-                        {
-                            compKitty.aiController.StopAi();
-                            player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI deactivated.");
-                        }
-                        else
-                        {
-                            compKitty.aiController.StartAi();
-                            player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI activated.");
-                        }
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.");
+                        return;
                     }
-                }
+
+                    if (kitty.aiController.IsEnabled())
+                    {
+                        kitty.aiController.StopAi();
+                        player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI deactivated.");
+                    }
+                    else
+                    {
+                        kitty.aiController.StartAi();
+                        player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_YELLOW}AI activated.");
+                    }
+                });
             }
         );
 
@@ -1137,8 +1152,8 @@ public static class InitCommands
                 }
 
                 var dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0f;
-                var timerInterval = args.Length > 2 ? float.Parse(args[2]) : 0.1f;
-                var laser = args.Length > 3 ? int.Parse(args[3]) : 0;
+                var timerInterval = args.Length > 1 ? float.Parse(args[1]) : 0.1f;
+                var laser = args.Length > 2 ? int.Parse(args[2]) : 0;
 
                 foreach (var compKitty in Globals.ALL_KITTIES)
                 {
@@ -1230,5 +1245,71 @@ public static class InitCommands
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty));
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "error",
+            alias: "",
+            group: "all",
+            argDesc: "[on][off]",
+            description: "Turns the error prompts off or on",
+            action: (player, args) =>
+            {
+                var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
+                ErrorHandler.ErrorMessagesOn = status;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "times",
+            alias: "gettimes",
+            group: "all",
+            argDesc: "[player]",
+            description: "Gets fastest overall times of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "personalbests",
+            alias: "pbs,bests",
+            group: "all",
+            argDesc: "[player]",
+            description: "Gets personal best stats of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "stats",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Gets the game stats of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty));
+            }
+        );
+
     }
 }

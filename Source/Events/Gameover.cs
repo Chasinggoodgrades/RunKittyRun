@@ -46,8 +46,8 @@ public static class Gameover
 
     private static void SaveGame()
     {
-        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAll());
-        Utility.SimpleTimer(2.5f, () => SaveManager.SaveAllDataToFile());
+        Utility.SimpleTimer(1.5f, SaveManager.SaveAll);
+        Utility.SimpleTimer(2.5f, SaveManager.SaveAllDataToFile);
     }
 
     private static void EndGame()

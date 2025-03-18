@@ -38,14 +38,14 @@ public class Howler : Affix
     private void RegisterTimerEvents()
     {
         HowlTimer = timer.Create();
-        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+        HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
     }
 
     private void Howl()
     {
         try
         {
-            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+            HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
             if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
             NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filters.DogFilter);
@@ -53,6 +53,7 @@ public class Howler : Affix
             foreach (var wolf in list)
             {
                 if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue; // i swear to christ if this mother fucker moves again
+                if (wolf.IsPaused) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
                 wolfObject.StartWandering(true);

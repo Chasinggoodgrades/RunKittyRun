@@ -139,6 +139,7 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Trails.PurpleLightning), Constants.ABILITY_TRAIL_LIGHTNINGPURPLE, "origin", "war3mapImported\\PurpleLightning.mdx", RewardType.Trails);
         AddReward(nameof(awardsSorted.Trails.YellowLightning), Constants.ABILITY_TRAIL_LIGHTNINGYELLOW, "origin", "war3mapImported\\YellowLightning.mdx", RewardType.Trails);
         AddReward(nameof(awardsSorted.Trails.GreenLightning), Constants.ABILITY_TRAIL_LIGHTNINGGREEN, "origin", "war3mapImported\\GreenLightning.mdx", RewardType.Trails);
+        // AddReward(nameof(awardsSorted.Tournament.LightningSpeed), Constants.ABILITY_AURA_BUTTERFLY, "origin", "lightning_shield.mdx", RewardType.Tournament);
 
         // WindWalks
         AddReward(nameof(awardsSorted.Windwalks.WWBlood), Constants.ABILITY_WW_BLOOD, "chest", "war3mapImported\\Windwalk Blood.mdx", RewardType.Windwalks);

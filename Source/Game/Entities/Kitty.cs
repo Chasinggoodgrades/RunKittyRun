@@ -32,6 +32,7 @@ public class Kitty
     public int ProgressZone { get; set; } = 0;
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
+    public Disco Disco { get; set; }
     public timer DiscoTimer { get; set; }
     public timer SpinCamTimer { get; set; }
     public float SpinCamSpeed { get; set; } = 0;
@@ -49,6 +50,8 @@ public class Kitty
         aiController = new AIController(this);
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
+        Disco = new Disco { Unit = this.Unit };
+        StartAIController();
     }
 
     /// <summary>
@@ -177,20 +180,28 @@ public class Kitty
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
         Utility.SimpleTimer(1.0f, () => AwardManager.SetPlayerSelectedData(this));
+    }
 
-        // Register AI Controller for Computers later.
-        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard") // only standard xd
-            Utility.SimpleTimer(1.0f, () => aiController.StartAi());
+    private void StartAIController()
+    {
+        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
+        {
+            this.aiController?.StartAi();
+            Unit.AddItem(FourCC("bspd"));
+        }
     }
 
     public void Dispose()
     {
         Alive = false;
-        Unit.Dispose();
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
+        TimeProg.Dispose();
+        APMTracker.Dispose();
+        Disco?.__destroy(false);
         aiController.StopAi();
+        Unit.Dispose();
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
     }
@@ -204,12 +215,13 @@ public class Kitty
 
     private void DeathStatUpdate()
     {
+        DeathlessChallenges.ResetPlayerDeathless(this);
+        if (aiController.IsEnabled()) return;
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
         SoloMultiboard.UpdateDeathCount(Player);
         if (Gamemode.CurrentGameMode != "Standard") return;
-        DeathlessChallenges.ResetPlayerDeathless(Player);
         SaveData.GameStats.Deaths += 1;
         SaveData.GameStats.SaveStreak = 0;
     }
@@ -241,26 +253,6 @@ public class Kitty
         Unit.HideAbility(trueSight, true);
     }
 
-    public void ToggleDisco()
-    {
-        if (DiscoTimer == null)
-        {
-            DiscoTimer = timer.Create();
-            DiscoTimer.Start(0.4f, true, DiscoActions);
-        }
-        else
-        {
-            DiscoTimer.Pause();
-            DiscoTimer = null;
-        }
-    }
-
-    private void DiscoActions()
-    {
-        SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
-        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
-    }
-
     public void ToggleSpinCam(float speed)
     {
         this.SpinCamSpeed = speed / 360;
@@ -271,7 +263,7 @@ public class Kitty
             if (SpinCamTimer == null)
             {
                 SpinCamTimer = timer.Create();
-                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
+                SpinCamTimer.Start(0.0075f, true, ErrorHandler.Wrap(SpinCamActions));
             }
         }
         else

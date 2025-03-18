@@ -35,7 +35,7 @@ public class RingOfSummoning : Relic
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => SacredRingOfSummoning());
+        Trigger.AddAction(ErrorHandler.Wrap(SacredRingOfSummoning));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -76,45 +76,38 @@ public class RingOfSummoning : Relic
 
     private void SacredRingOfSummoning()
     {
-        try
+        var player = @event.Unit.Owner;
+        var targetedPoint = @event.SpellTargetLoc;
+        var summoningKitty = Globals.ALL_KITTIES[player];
+        var summoningKittyUnit = summoningKitty.Unit;
+        var numberOfSummons = GetNumberOfSummons(player);
+        SummonGroup ??= group.Create();
+
+        RelicUtil.CloseRelicBook(player);
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+
+        var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
+        SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
+        var units = SummonGroup.ToList();
+        if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
+
+        for (int i = 0; i < numberOfSummons && i < units.Count; i++)
         {
-            var player = @event.Unit.Owner;
-            var targetedPoint = @event.SpellTargetLoc;
-            var summoningKitty = Globals.ALL_KITTIES[player];
-            var summoningKittyUnit = summoningKitty.Unit;
-            var numberOfSummons = GetNumberOfSummons(player);
-            SummonGroup ??= group.Create();
+            var unit = units[i];
+            var kitty = Globals.ALL_KITTIES[unit.Owner];
 
-            RelicUtil.CloseRelicBook(player);
-            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+            if (!SummonDeadKitty(summoningKitty, kitty)) continue;
 
-            var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
-            SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
-            var units = SummonGroup.ToList();
-            if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
-
-            for (int i = 0; i < numberOfSummons && i < units.Count; i++)
-            {
-                var unit = units[i];
-                var kitty = Globals.ALL_KITTIES[unit.Owner];
-
-                if (!SummonDeadKitty(summoningKitty, kitty)) continue;
-
-                kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
-                Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
-                kitty.ReviveKitty(summoningKitty);
-                Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
-            }
-
-            SummonGroup.Clear();
-            targetedPoint.Dispose(); // dispose, cannot null because of trigger action
-            GC.RemoveList(ref units);
-            GC.RemoveFilterFunc(ref filter);
+            kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+            Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+            kitty.ReviveKitty(summoningKitty);
+            Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
         }
-        catch (Exception e)
-        {
-            Logger.Critical(e.Message);
-        }
+
+        SummonGroup.Clear();
+        targetedPoint.Dispose(); // dispose, cannot null because of trigger action
+        GC.RemoveList(ref units);
+        GC.RemoveFilterFunc(ref filter);
     }
 
     /// <summary>

@@ -31,7 +31,7 @@ public class BeaconOfUnitedLifeforce : Relic
     public override void ApplyEffect(unit Unit)
     {
         Owner = Unit.Owner;
-        Utility.SimpleTimer(0.1f, () => UpgradeReviveChance());
+        Utility.SimpleTimer(0.1f, UpgradeReviveChance);
     }
 
     public override void RemoveEffect(unit Unit)

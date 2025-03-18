@@ -72,6 +72,11 @@ public static class Utility
         return seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
     }
 
+    /// <summary>
+    /// Converts the float to a time string without tenths.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
     public static string ConvertFloatToTimeInt(float time)
     {
         if (time <= 0.0f) return "0:00";
@@ -110,12 +115,12 @@ public static class Utility
     public static void SimpleTimer(float duration, Action action)
     {
         var t = timer.Create();
-        t.Start(duration, false, () =>
+        t.Start(duration, false, ErrorHandler.Wrap(() =>
         {
             action();
             t.Dispose();
             t = null;
-        });
+        }));
     }
 
     /// <summary>
@@ -232,7 +237,7 @@ public static class Utility
         tt.SetPosition(u.X, u.Y, 0);
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
-        SimpleTimer(duration, () => tt.Dispose());
+        SimpleTimer(duration, () => tt?.Dispose());
     }
 
     /// <summary>

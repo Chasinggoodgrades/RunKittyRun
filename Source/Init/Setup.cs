@@ -43,7 +43,7 @@ namespace Source.Init
         private static void StartGameModeTimer()
         {
             gameModeTimer = timer.Create();
-            gameModeTimer.Start(1.0f, true, ChoosingGameMode);
+            gameModeTimer.Start(1.0f, true, ErrorHandler.Wrap(ChoosingGameMode));
         }
 
         private static void ChoosingGameMode()
@@ -94,7 +94,7 @@ namespace Source.Init
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
-                Utility.SimpleTimer(6.0f, () => MusicManager.PlayNumb());
+                Utility.SimpleTimer(6.0f, MusicManager.PlayNumb);
 
                 for (int i = 0; i < GetBJMaxPlayers(); i++)
                 {

@@ -97,12 +97,12 @@ public static class CustomStatFrame
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
 
         trigger trig = trigger.Create();
-        trig.AddAction(() =>
+        trig.AddAction(ErrorHandler.Wrap(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
             SelectedUnit[player] = unit;
-        });
+        }));
 
         foreach (var player in Globals.ALL_PLAYERS)
             if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
@@ -118,7 +118,7 @@ public static class CustomStatFrame
         Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "", "Speed");
 
         t = timer.Create();
-        t.Start(0.1f, true, Update);
+        t.Start(0.1f, true, ErrorHandler.Wrap(Update));
     }
 
     private static void HandleFrameText(unit selectedUnit)

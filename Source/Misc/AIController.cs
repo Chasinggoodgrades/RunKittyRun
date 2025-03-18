@@ -20,7 +20,8 @@ public class AIController
         get { return _timerInterval; }
         set
         {
-            _timerInterval = value;
+            _timerInterval = Math.Max(value, 0.01f);
+
             if (this.IsEnabled())
             {
                 this.PauseAi();
@@ -122,15 +123,21 @@ public class AIController
         return enabled;
     }
 
-    private void MoveKittyToPosition()
+    private int CalcProgressZone(Kitty kitty)
     {
-        var currentProgressZoneId = this.kitty.ProgressZone;
+        var currentProgressZoneId = kitty.ProgressZone;
 
-        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId + 1))
+        if (IsInSafeZone(kitty.Unit.X, kitty.Unit.Y, currentProgressZoneId + 1))
         {
             currentProgressZoneId++;
         }
 
+        return currentProgressZoneId;
+    }
+
+    private void MoveKittyToPosition()
+    {
+        var currentProgressZoneId = CalcProgressZone(this.kitty);
         var currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId];
         var nextSafezone = (currentProgressZoneId + 1 < Globals.SAFE_ZONES.Count - 1) ? Globals.SAFE_ZONES[currentProgressZoneId + 1] : currentSafezone;
         var currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
@@ -159,7 +166,7 @@ public class AIController
                 return true;
             }
 
-            return k.Value.ProgressZone >= this.kitty.ProgressZone;
+            return CalcProgressZone(k.Value) >= currentProgressZoneId;
         });
 
         var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
@@ -167,7 +174,7 @@ public class AIController
         foreach (var circle in Globals.ALL_CIRCLES)
         {
             var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
-            var deadKittyProgressZoneId = deadKitty.ProgressZone;
+            var deadKittyProgressZoneId = CalcProgressZone(deadKitty);
 
             if (deadKittyProgressZoneId > currentProgressZoneId)
             {
@@ -184,7 +191,7 @@ public class AIController
                 if (!claimedKitties.ContainsKey(deadKitty))
                 {
                     double thisDistance = Math.Sqrt(Math.Pow(this.kitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(this.kitty.Unit.Y - deadKitty.Unit.Y, 2));
-                    int thisLaneDiff = Math.Abs(currentProgressZoneId - deadKitty.ProgressZone);
+                    int thisLaneDiff = Math.Abs(currentProgressZoneId - deadKittyProgressZoneId);
 
                     bool isNearest = true;
 
@@ -198,7 +205,7 @@ public class AIController
                         if (otherKitty.Value != this.kitty && otherKitty.Value.Alive)
                         {
                             double otherDistance = Math.Sqrt(Math.Pow(otherKitty.Value.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Value.Unit.Y - deadKitty.Unit.Y, 2));
-                            int otherLaneDiff = Math.Abs(otherKitty.Value.ProgressZone - deadKitty.ProgressZone);
+                            int otherLaneDiff = Math.Abs(CalcProgressZone(otherKitty.Value) - deadKittyProgressZoneId);
 
                             // Prioritize by lane difference first, then by distance.
                             // Don't think this works for some reason..
@@ -299,6 +306,10 @@ public class AIController
 
     private bool IsInSafeZone(float x, float y, int safeZoneId)
     {
+        if (safeZoneId < 0 || safeZoneId >= Globals.SAFE_ZONES.Count)
+        {
+            return false; // prevent out of bounds errors xd
+        }
         var safezone = Globals.SAFE_ZONES[safeZoneId];
 
         return x >= safezone.Rect_.MinX && x <= safezone.Rect_.MaxX && y >= safezone.Rect_.MinY && y <= safezone.Rect_.MaxY;
@@ -560,7 +571,7 @@ public class AIController
         // First, check if forwardAngle falls within any free gap.
         foreach (AngleInterval gap in freeGaps)
         {
-            if (gap.End - gap.Start < requiredClearance * 2)
+            if (gap.End - gap.Start < requiredClearance)
             {
                 continue;
             }
@@ -600,7 +611,7 @@ public class AIController
             float bestScore = float.MaxValue;
             foreach (AngleInterval gap in freeGaps)
             {
-                if (gap.End - gap.Start < requiredClearance * 2)
+                if (gap.End - gap.Start < requiredClearance)
                 {
                     continue;
                 }

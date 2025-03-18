@@ -8,11 +8,13 @@ public static class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static void Awarding(player player, string command)
+    public static void Awarding(player player, string[] args)
     {
-        var award = command.Split(" ")[1];
+        var award = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = GetOwningPlayer(selectedUnit);
+
+        if (args[0] == "") return;
 
         if (award.ToLower() == "help")
         {
@@ -78,11 +80,13 @@ public static class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static void SettingGameStats(player player, string command)
+    public static void SettingGameStats(player player, string[] args)
     {
-        var stats = command.Split(" ")[1];
+        var stats = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
+
+        if (args[0] == "") return;
 
         if (stats.ToLower() == "help")
         {
@@ -90,7 +94,9 @@ public static class AwardingCmds
             return;
         }
 
-        var value = command.Split(" ")[2];
+        if (args.Length < 2) return;
+
+        var value = args[1];
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         // Then check if the value is actually a proper value.
@@ -124,11 +130,13 @@ public static class AwardingCmds
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game stats: {Colors.HighlightString(combined)}");
     }
 
-    public static void SettingGameTimes(player player, string command)
+    public static void SettingGameTimes(player player, string[] args)
     {
-        var roundTime = command.Split(" ")[1];
+        var roundTime = args[0].ToLower();
         var selectedUnit = CustomStatFrame.SelectedUnit[player];
         var selectedPlayer = selectedUnit.Owner;
+
+        if (args[0] == "") return;
 
         if (roundTime.ToLower() == "help")
         {
@@ -136,7 +144,9 @@ public static class AwardingCmds
             return;
         }
 
-        var value = command.Split(" ")[2];
+        if (args.Length < 2) return;
+
+        var value = args[1];
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         foreach (var prop in Globals.GAME_TIMES.GetType().GetProperties())
@@ -169,7 +179,12 @@ public static class AwardingCmds
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW_ORANGE}Valid game times: {Colors.HighlightString(combined)}");
     }
 
-    public static void GetAllGameStats(player player)
+    /// <summary>
+    /// Gets the game stats of the passed Kitty obj, and displays it to the player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="kitty"></param>
+    public static void GetAllGameStats(player player, Kitty kitty)
     {
         if (!Globals.ALL_PLAYERS.Contains(player)) return;
         var combined = "";
@@ -181,31 +196,46 @@ public static class AwardingCmds
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
     }
 
-    public static void GetAllGameTimes(player player)
+    /// <summary>
+    /// Gets the best personal bests of the passed Kitty obj, and displays it to the player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="kitty"></param>
+    public static void GetAllPersonalBests(player player, Kitty kitty)
     {
-        if (!Globals.ALL_PLAYERS.Contains(player)) return;
+        if (!Globals.ALL_PLAYERS.Contains(kitty.Player)) return;
         var combined = "";
-        foreach (var property in Globals.GAME_TIMES.GetType().GetProperties())
-        {
-            var value = property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
-            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
-        }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game times for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
-    }
-
-    public static void GetAllPersonalBests(player player)
-    {
-        if (!Globals.ALL_PLAYERS.Contains(player)) return;
-        var combined = "";
-        var personalBests = Globals.ALL_KITTIES[player].SaveData.PersonalBests;
+        var personalBests = kitty.SaveData.PersonalBests;
         foreach (var property in personalBests.GetType().GetProperties())
         {
             var value = property.GetValue(personalBests);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Personal bests for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Personal bests for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
     }
 
+    /// <summary>
+    /// Gets the best game times of the passed Kitty obj, and displays it to the player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="kitty"></param>
+    public static void GetAllGameTimes(player player, Kitty kitty)
+    {
+        if (!Globals.ALL_PLAYERS.Contains(kitty.Player)) return;
+        var combined = "";
+        foreach (var property in Globals.GAME_TIMES.GetType().GetProperties())
+        {
+            var value = property.GetValue(kitty.SaveData.RoundTimes);
+            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {Utility.ConvertFloatToTimeInt((float)value)}\n";
+        }
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game times for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}", 0, 1);
+    }
+
+    /// <summary>
+    /// Gets the kibble currency of the passed Kitty obj, and displays it to the player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="kitty"></param>
     public static void GetKibbleCurrencyInfo(player player, Kitty kitty)
     {
         if (!Globals.ALL_PLAYERS.Contains(kitty.Player)) return;

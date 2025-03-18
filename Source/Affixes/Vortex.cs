@@ -56,10 +56,10 @@ public class Vortex : Affix
     private void RegisterEvents()
     {
         EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
-        EntersRange.AddAction(EnterRegionActions);
+        EntersRange.AddAction(ErrorHandler.Wrap(EnterRegionActions));
         LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, Filters.KittyFilter);
 
-        PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, () => PullBegin());
+        PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(PullBegin));
     }
 
     private void EnterRegionActions()
@@ -78,42 +78,34 @@ public class Vortex : Affix
 
     private void PullBegin()
     {
-        PullStart.Start(VORTEX_PULSE_RATE, true, PullActions);
+        PullStart.Start(VORTEX_PULSE_RATE, true, ErrorHandler.Wrap(PullActions));
         Unit.Unit.SetVertexColor(255, 0, 255);
     }
 
     private void PullActions()
     {
-        try
+        if (Counter >= (int)(VORTEX_LENGTH / VORTEX_PULSE_RATE))
         {
-            if (Counter >= (int)(VORTEX_LENGTH / VORTEX_PULSE_RATE))
-            {
-                ResetVortex();
-                return; // Exit early if the vortex is reset
-            }
-            var distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE;
-            foreach (var unit in UnitsInRange)
-            {
-                if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue;
-                var x = unit.X;
-                var y = unit.Y;
-                var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
-                var newX = x + (distance * Cos(angle));
-                var newY = y + (distance * Sin(angle));
-                unit.SetPosition(newX, newY);
-                unit.SetFacing(angle);
-                //var lastOrder = UnitOrders.GetLastOrderLocation(unit);
-                //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
-                // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
-                // Setup @event system to acquire last x,y location of this unit.
-            }
-            Counter += 1;
+            ResetVortex();
+            return; // Exit early if the vortex is reset
         }
-        catch (Exception e)
+        var distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE;
+        foreach (var unit in UnitsInRange)
         {
-            Console.WriteLine(e);
-            throw;
+            if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue;
+            var x = unit.X;
+            var y = unit.Y;
+            var angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y);
+            var newX = x + (distance * Cos(angle));
+            var newY = y + (distance * Sin(angle));
+            unit.SetPosition(newX, newY);
+            unit.SetFacing(angle);
+            //var lastOrder = UnitOrders.GetLastOrderLocation(unit);
+            //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
+            // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
+            // Setup @event system to acquire last x,y location of this unit.
         }
+        Counter += 1;
     }
 
     private void ResetVortex()

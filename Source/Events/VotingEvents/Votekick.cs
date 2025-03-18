@@ -43,7 +43,7 @@ public static class Votekick
         Console.WriteLine($"{Colors.COLOR_YELLOW}A votekick has been initiated against {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. If you agree, type \"-yes\" {Colors.COLOR_RED}({VOTE_DURATION} seconds remain){Colors.COLOR_RESET}");
         VoteKickPlayer = target;
         Voters.Add(VoteStarter);
-        VoteTimer.Start(VOTE_DURATION, false, () => ExecuteVotekick(target));
+        VoteTimer.Start(VOTE_DURATION, false, ErrorHandler.Wrap(() => ExecuteVotekick(target)));
     }
 
     private static void ExecuteVotekick(player target)
