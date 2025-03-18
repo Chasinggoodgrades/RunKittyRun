@@ -14,7 +14,7 @@ public static class DeathlessChallenges
     public static void ResetDeathless()
     {
         foreach (var kitty in Globals.ALL_KITTIES)
-            ResetPlayerDeathless(kitty.Value.Player);
+            ResetPlayerDeathless(kitty.Value);
     }
 
     /// <summary>
@@ -32,24 +32,23 @@ public static class DeathlessChallenges
     /// Increments the players progress for deathless and awards them if they've reached the required checkpoints.
     /// </summary>
     /// <param name="player"></param>
-    public static void DeathlessCheck(player player)
+    public static void DeathlessCheck(Kitty kitty)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress++;
-        if (Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress == DeathlessPerRound())
+        kitty.CurrentStats.DeathlessProgress++;
+        if (kitty.CurrentStats.DeathlessProgress == DeathlessPerRound())
         {
-            AwardDeathless(player);
-            ResetPlayerDeathless(player);
+            AwardDeathless(kitty);
+            ResetPlayerDeathless(kitty);
         }
     }
 
-    public static void ResetPlayerDeathless(player player) => Globals.ALL_KITTIES[player].CurrentStats.DeathlessProgress = 0;
+    public static void ResetPlayerDeathless(Kitty kitty) => kitty.CurrentStats.DeathlessProgress = 0;
 
-    private static void AwardDeathless(player player)
+    private static void AwardDeathless(Kitty kitty)
     {
-        var kitty = Globals.ALL_KITTIES[player];
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
-        AwardBasedOnDifficulty(player);
+        AwardBasedOnDifficulty(kitty.Player);
         PlayInvulnerableSoundWithText(kitty);
     }
 

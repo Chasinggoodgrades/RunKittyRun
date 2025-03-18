@@ -215,12 +215,13 @@ public class Kitty
 
     private void DeathStatUpdate()
     {
+        DeathlessChallenges.ResetPlayerDeathless(this);
+        if (aiController.IsEnabled()) return;
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
         SoloMultiboard.UpdateDeathCount(Player);
         if (Gamemode.CurrentGameMode != "Standard") return;
-        DeathlessChallenges.ResetPlayerDeathless(Player);
         SaveData.GameStats.Deaths += 1;
         SaveData.GameStats.SaveStreak = 0;
     }
