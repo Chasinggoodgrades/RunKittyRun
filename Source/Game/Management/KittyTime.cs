@@ -24,6 +24,17 @@ public class KittyTime
         PeriodicProgressTimer();
     }
 
+    public void Dispose()
+    {
+        ProgressTimer.Pause();
+        ProgressTimer?.Dispose();
+        ProgressTimer = null;
+        RoundTime.Clear();
+        RoundProgress.Clear();
+        RoundTime = null;
+        RoundProgress = null;
+    }
+
     private void PeriodicProgressTimer()
     {
         ProgressTimer.Start(0.2f, true, ErrorHandler.Wrap(() => Progress.CalculateProgress(Kitty)));

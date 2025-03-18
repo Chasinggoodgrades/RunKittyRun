@@ -50,7 +50,7 @@ public static class NamedWolves
         StanWolf.Unit.IsInvulnerable = false;
         BurntMeat.RegisterDeathTrigger();
 
-        Utility.SimpleTimer(0.03f, () => StanWolf.Texttag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
+        Utility.SimpleTimer(0.5f, () => StanWolf.Texttag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));
         DNTNamedWolves.Add(StanWolf);
     }
 

@@ -263,15 +263,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "stats",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "Displays game stats of whoever you currently have selected.",
-            action: (player, args) => AwardingCmds.GetAllGameStats(player)
-        );
-
-        CommandsManager.RegisterCommand(
             name: "kibble",
             alias: "",
             group: "all",
@@ -1266,6 +1257,57 @@ public static class InitCommands
                 var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
                 ErrorHandler.ErrorMessagesOn = status;
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "times",
+            alias: "gettimes",
+            group: "all",
+            argDesc: "[player]",
+            description: "Gets fastest overall times of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "personalbests",
+            alias: "pbs,bests",
+            group: "all",
+            argDesc: "[player]",
+            description: "Gets personal best stats of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "stats",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Gets the game stats of the passed parm player, if no parm then yourself.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player]);
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty));
             }
         );
 

@@ -17,9 +17,8 @@ public static class Progress
 
     public static void CalculateProgress(Kitty kitty)
     {
-        var Player = kitty.Player;
         var round = Globals.ROUND;
-        Globals.ALL_KITTIES[Player].TimeProg.SetRoundProgress(round, CalculatePlayerProgress(Player));
+        kitty.TimeProg.SetRoundProgress(round, CalculatePlayerProgress(kitty));
     }
 
     private static void TeamProgressTracker()
@@ -37,11 +36,10 @@ public static class Progress
         return (Team.Teammembers.Sum(player => Globals.ALL_KITTIES[player].TimeProg.GetRoundProgress(Globals.ROUND)) / Team.Teammembers.Count).ToString("F2");
     }
 
-    private static float CalculatePlayerProgress(player Player)
+    private static float CalculatePlayerProgress(Kitty kitty)
     {
         try
         {
-            var kitty = Globals.ALL_KITTIES[Player];
             var currentSafezone = kitty.CurrentStats.ProgressZone;
 
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Region.Contains(kitty.Unit)) return 100.0f; // if at end.. 100 progress

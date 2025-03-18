@@ -148,7 +148,7 @@ public static class CommandsManager
                 }
                 else
                 {
-                    if (cmd.Name.ToLower().Contains(filter) || Array.Exists(cmd.Alias, alias => alias.ToLower().Contains(filter)))
+                    if (cmd.Name.ToLower().Contains(filter) || Array.Exists(cmd.Alias, alias => alias.ToLower().Contains(filter)) || cmd.Description.ToLower().Contains(filter))
                     {
                         commands.Add(cmd);
                     }

@@ -306,6 +306,10 @@ public class AIController
 
     private bool IsInSafeZone(float x, float y, int safeZoneId)
     {
+        if (safeZoneId < 0 || safeZoneId >= Globals.SAFE_ZONES.Count)
+        {
+            return false; // prevent out of bounds errors xd
+        }
         var safezone = Globals.SAFE_ZONES[safeZoneId];
 
         return x >= safezone.Rect_.MinX && x <= safezone.Rect_.MaxX && y >= safezone.Rect_.MinY && y <= safezone.Rect_.MaxY;

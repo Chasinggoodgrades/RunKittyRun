@@ -72,6 +72,11 @@ public static class Utility
         return seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
     }
 
+    /// <summary>
+    /// Converts the float to a time string without tenths.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
     public static string ConvertFloatToTimeInt(float time)
     {
         if (time <= 0.0f) return "0:00";

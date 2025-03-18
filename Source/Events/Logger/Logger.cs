@@ -20,6 +20,6 @@ public static class Logger
     private static void Log(string level, string color, params object[] messages)
     {
         var formattedMessage = string.Join(" ", messages);
-        Console.WriteLine($"{color}[{level}] {formattedMessage}|r");
+        Console.WriteLine($"{Colors.COLOR_TURQUOISE}(Use '-error off' to disable these messages'){Colors.COLOR_RESET}{color}[{level}] {formattedMessage}|r");
     }
 }

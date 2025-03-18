@@ -50,14 +50,15 @@ public static class CommandHandler
             return;
 
         var command = CommandsManager.GetCommand(commandName.ToLower());
-        if (command != null && (command.Group == CommandsManager.GetPlayerGroup(@event.Player) || command.Group == "all"))
+        var playerGroup = CommandsManager.GetPlayerGroup(@event.Player);
+        if (command != null && (command.Group ==  playerGroup || command.Group == "all" || playerGroup == "admin"))
         {
             command.Action?.Invoke(@event.Player, args);
         }
 
         else
         {
-            Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
+            @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
         }
     }
 

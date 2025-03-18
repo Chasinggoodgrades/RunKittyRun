@@ -13,7 +13,7 @@ public static class ErrorHandler
             }
             catch (Exception e)
             {
-                if (ErrorMessagesOn) Logger.Warning("Error caught: " + e.Message + "\n" + e.StackTrace);
+                if (ErrorMessagesOn) Logger.Warning($"Error caught: " + e.Message + "\n" + e.StackTrace);
                 errorCb?.Invoke(e);
             }
         };

@@ -38,13 +38,14 @@ public static class PersonalBestAwarder
     /// <param name="k"></param>
     public static void BeatKibbleCollection(Kitty k)
     {
-        if (KibbleCollectionBeatenList.Contains(k.Player)) return;
         var currentKibble = k.CurrentStats.CollectedKibble;
         var bestKibble = k.SaveData.PersonalBests.KibbleCollected;
-        if (bestKibble < 10) return; // avoid the spam for 1st timers.
+        if (currentKibble < 10) return; // avoid the spam for 1st timers.
         if (currentKibble > bestKibble)
         {
             k.SaveData.PersonalBests.KibbleCollected = currentKibble;
+
+            if (KibbleCollectionBeatenList.Contains(k.Player)) return;
             Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by collecting {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r");
             KibbleCollectionBeatenList.Add(k.Player);
         }
@@ -57,13 +58,14 @@ public static class PersonalBestAwarder
     public static void BeatMostSavesInGame(Kitty k)
     {
         if (k.Player.Controller == mapcontrol.Computer) return;
-        if (BeatenMostSavesList.Contains(k.Player)) return;
         var currentSaves = k.CurrentStats.TotalSaves;
         var bestSaves = k.SaveData.PersonalBests.Saves;
-        if (bestSaves < 10) return; // avoid the spam for 1st timers.
+        if (currentSaves < 10) return; // avoid the spam for 1st timers.
         if (currentSaves > bestSaves)
         {
             k.SaveData.PersonalBests.Saves = currentSaves;
+
+            if (BeatenMostSavesList.Contains(k.Player)) return;
             Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by saving {Colors.COLOR_YELLOW}{currentSaves} kitties|r in a single game.");
             BeatenMostSavesList.Add(k.Player);
         }
@@ -76,13 +78,14 @@ public static class PersonalBestAwarder
     public static void BeatenSaveStreak(Kitty k)
     {
         if (k.Player.Controller == mapcontrol.Computer) return;
-        if (SaveStreakBeatenList.Contains(k.Player)) return;
         var currentStreak = k.SaveData.GameStats.SaveStreak;
         var bestStreak = k.SaveData.GameStats.HighestSaveStreak;
-        if (bestStreak < 5) return; // avoid the spam for 1st timers.
+        if (currentStreak < 5) return; // avoid the spam for 1st timers.
         if (currentStreak > bestStreak)
         {
             k.SaveData.GameStats.HighestSaveStreak = currentStreak;
+
+            if (SaveStreakBeatenList.Contains(k.Player)) return;
             Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best save streak of {Colors.COLOR_YELLOW}{currentStreak}!|r");
             SaveStreakBeatenList.Add(k.Player);
         }

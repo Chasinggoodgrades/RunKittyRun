@@ -187,6 +187,7 @@ public class Kitty
         if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
         {
             this.aiController?.StartAi();
+            Unit.AddItem(FourCC("bspd"));
         }
     }
 
@@ -196,6 +197,8 @@ public class Kitty
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
+        TimeProg.Dispose();
+        APMTracker.Dispose();
         Disco?.__destroy(false);
         aiController.StopAi();
         Unit.Dispose();

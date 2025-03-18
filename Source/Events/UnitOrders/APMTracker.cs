@@ -6,7 +6,7 @@ public class APMTracker
     private const float CAPTURE_INTERVAL = 0.1f;
     private static trigger ClicksTrigger = trigger.Create();
     private static triggeraction ClicksAction;
-    private static timer PeriodicTimer;
+    private timer PeriodicTimer;
 
     private int TotalActions;
     private float TimeOutsideSafeZones;
@@ -24,7 +24,7 @@ public class APMTracker
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
         ClicksAction ??= ClicksTrigger.AddAction(ErrorHandler.Wrap(CaptureActions));
-        PeriodicTimer ??= PeriodicCheck();
+        PeriodicTimer = PeriodicCheck();
     }
 
     private timer PeriodicCheck()
@@ -36,22 +36,14 @@ public class APMTracker
 
     private void CaptureActions()
     {
-        var orderID = @event.IssuedOrderId;
-
-        /*        if (orderID == OrderId("move") || orderID == OrderId("smart"))
-                    LastPosition = (@event.OrderPointX, @event.OrderPointY);*/
-
         if (!IsInSafeZone(Kitty))
             TotalActions++;
     }
 
-    private static void CheckKittyPositions()
+    private void CheckKittyPositions()
     {
-        foreach (var kitty in Globals.ALL_KITTIES)
-        {
-            if (IsInSafeZone(kitty.Value)) continue;
-            kitty.Value.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
-        }
+        if (!IsInSafeZone(Kitty)) return;
+        Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
     }
 
     private static bool IsInSafeZone(Kitty kitty)
@@ -75,6 +67,12 @@ public class APMTracker
             apmString += $"{Colors.PlayerNameColored(kitty.Value.Player)}:  {(int)apm} Active APM\n";
         }
         return apmString;
+    }
+
+    public void Dispose()
+    {
+        PeriodicTimer.Pause();
+        PeriodicTimer?.Dispose();
     }
 
     /*    public static (float x, float y) GetLastOrderLocation(unit unit)

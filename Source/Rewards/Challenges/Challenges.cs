@@ -191,5 +191,9 @@ public class YellowLightning
         SaveCount = 0;
     }
 
-    public void Dispose() => Timer.Dispose();
+    public void Dispose()
+    {
+        Timer.Pause();
+        Timer.Dispose();
+    }
 }
