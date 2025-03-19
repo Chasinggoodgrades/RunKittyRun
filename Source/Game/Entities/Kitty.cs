@@ -83,6 +83,8 @@ public class Kitty
         {
             if (Invulnerable) return;
             Circle circle = Globals.ALL_CIRCLES[Player];
+            this.Slider.PauseSlider();
+            this.aiController.PauseAi();
             Unit.Kill();
             if (!ProtectionActive) Alive = false;
             CrystalOfFire.CrystalOfFireDeath(this);
@@ -99,8 +101,7 @@ public class Kitty
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
-            this.Slider.PauseSlider();
-            this.aiController.PauseAi();
+
         }
         catch (Exception e)
         {
@@ -208,18 +209,20 @@ public class Kitty
 
     private void UpdateSaviorStats(Kitty savior)
     {
-        SaveStatUpdate(savior);
         savior.Player.Gold += Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak);
         savior.Unit.Experience += Resources.SaveExperience;
+        SaveStatUpdate(savior);
     }
 
     private void DeathStatUpdate()
     {
         DeathlessChallenges.ResetPlayerDeathless(this);
-        if (aiController.IsEnabled()) return;
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
+
+        if (aiController.IsEnabled()) return;
+
         SoloMultiboard.UpdateDeathCount(Player);
         if (Gamemode.CurrentGameMode != "Standard") return;
         SaveData.GameStats.Deaths += 1;
@@ -229,6 +232,7 @@ public class Kitty
     private void SaveStatUpdate(Kitty savior)
     {
         if (aiController.IsEnabled()) return;
+
         savior.CurrentStats.TotalSaves += 1;
         savior.CurrentStats.RoundSaves += 1;
         savior.CurrentStats.SaveStreak += 1;
