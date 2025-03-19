@@ -26,7 +26,7 @@ public class Wolf
     public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
-    private effect RandomEffect { get; set; }
+    private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
     public WolfPoint WolfPoint { get; set; }
     public bool IsPaused { get; set; } = false;
     public bool IsReviving { get; set; } = false;
@@ -109,13 +109,14 @@ public class Wolf
         EffectTimer = null;
         OverheadEffect?.Dispose();
         OverheadEffect = null;
-        WanderTimer.Dispose();
+        WanderTimer?.Dispose();
         WanderTimer = null;
         Texttag?.Dispose();
+        Texttag = null;
         Disco?.__destroy(false);
         WolfPoint?.Dispose();
         WolfPoint = null;
-        Unit.Dispose();
+        Unit?.Dispose();
         Unit = null;
     }
 
@@ -124,10 +125,10 @@ public class Wolf
     /// </summary>
     public static void RemoveAllWolves()
     {
-        foreach (var wolfKey in Globals.ALL_WOLVES.Keys.ToList())
+        foreach (var wolfKey in Globals.ALL_WOLVES)
         {
-            Globals.ALL_WOLVES[wolfKey].Dispose();
-            Globals.ALL_WOLVES[wolfKey] = null;
+            Globals.ALL_WOLVES[wolfKey.Key]?.Dispose();
+            Globals.ALL_WOLVES[wolfKey.Key] = null;
         }
         Globals.ALL_WOLVES.Clear();
     }
@@ -213,23 +214,15 @@ public class Wolf
 
         // Cap the probability to the maximum limit
         totalProbability = Math.Min(totalProbability, maxProbability);
-        //Console.WriteLine($"{totalProbability}%");
         return GetRandomReal(0, 100) <= totalProbability;
     }
 
     private void ApplyEffect()
     {
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
-        //OverheadEffect?.Dispose();
+
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
-
-        BlzSetSpecialEffectAlpha(OverheadEffect, 255);
-        BlzSetSpecialEffectColor(OverheadEffect, 255, 255, 255);
-        BlzSetSpecialEffectTime(OverheadEffect, 0);
-        BlzSetSpecialEffectTimeScale(OverheadEffect, 1.0f);
-        BlzSpecialEffectClearSubAnimations(OverheadEffect);
-
-        BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
+        Utility.EffectReplayMagic(OverheadEffect);
 
         EffectTimer.Start(effectDuration, false, () =>
         {

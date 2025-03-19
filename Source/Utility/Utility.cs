@@ -377,6 +377,31 @@ public static class Utility
         return skin;
     }
 
+    /// <summary>
+    /// Replays the passed effect, clearing all sub animations and resetting the time.
+    /// </summary>
+    /// <param name="effect"></param>
+    public static void EffectReplayMagic(effect effect)
+    {
+        BlzSetSpecialEffectAlpha(effect, 255);
+        BlzSetSpecialEffectColor(effect, 255, 255, 255);
+        BlzSetSpecialEffectTime(effect, 0);
+        BlzSetSpecialEffectTimeScale(effect, 1.0f);
+        BlzSpecialEffectClearSubAnimations(effect);
+        BlzPlaySpecialEffect(effect, animtype.Stand);
+    }
+
+    public static void EffectReplayMagic(effect effect, float x, float y, float z)
+    {
+        BlzSetSpecialEffectAlpha(effect, 255);
+        BlzSetSpecialEffectColor(effect, 255, 255, 255);
+        BlzSetSpecialEffectTime(effect, 0);
+        BlzSetSpecialEffectTimeScale(effect, 0.0f);
+        BlzSpecialEffectClearSubAnimations(effect);
+        effect.SetPosition(x, y, z);
+        BlzPlaySpecialEffect(effect, animtype.Birth);
+    }
+
     public static string FormattedColorPlayerName(player p)
     {
         // removes everything after '#' in the player name
