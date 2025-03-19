@@ -13,6 +13,8 @@ public class Disco : IDestroyable
 
     public void __destroy(bool recursive = false)
     {
+        DiscoTimer.Pause();
+        Enabled = false;
         MemoryHandler.DestroyObject(this, recursive);
     }
 

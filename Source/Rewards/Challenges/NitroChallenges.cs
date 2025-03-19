@@ -44,7 +44,7 @@ public static class NitroChallenges
         NitroRoundTimes.Add(2, 140); // 2:20
         NitroRoundTimes.Add(3, 160); // 2:40
         NitroRoundTimes.Add(4, 215); // 3:35
-        NitroRoundTimes.Add(5, 345); // 5:45
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     private static void SetHardNitroRoundTimes()
@@ -52,8 +52,8 @@ public static class NitroChallenges
         NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 145); // 2:25
         NitroRoundTimes.Add(3, 170); // 2:50
-        NitroRoundTimes.Add(4, 230); // 3:50
-        NitroRoundTimes.Add(5, 360); // 6:00
+        NitroRoundTimes.Add(4, 215); // 3:35
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     private static void SetImpossibleNitroRoundTimes()
@@ -61,8 +61,8 @@ public static class NitroChallenges
         NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 150); // 2:30
         NitroRoundTimes.Add(3, 175); // 2:55
-        NitroRoundTimes.Add(4, 230); // 3:50
-        NitroRoundTimes.Add(5, 360); // 6:00
+        NitroRoundTimes.Add(4, 215); // 3:35
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     public static void StartNitroTimer()

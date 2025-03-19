@@ -57,7 +57,7 @@ public static class AwardManager
         foreach (var player in Globals.ALL_PLAYERS)
             GiveReward(player, award, false);
         if (earnedPrompt)
-            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{Utility.FormatAwardName(award)}");
+            Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{Utility.FormatAwardName(award)}.|r");
     }
 
     private static void EnableAbility(player player, string award)

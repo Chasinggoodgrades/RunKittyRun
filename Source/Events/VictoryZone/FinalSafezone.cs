@@ -27,6 +27,7 @@ public static class FinalSafezone
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
             Challenges.GreenLightning(player);
+            Challenges.PatrioticLight(kitty); // transition to using kitty object later.
             NoKittyLeftBehind.CheckChallenge();
         }));
     }
