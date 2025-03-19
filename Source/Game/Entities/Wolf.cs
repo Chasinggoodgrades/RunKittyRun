@@ -105,14 +105,15 @@ public class Wolf
     public void Dispose()
     {
         RemoveAllWolfAffixes();
-        EffectTimer.Dispose();
+        EffectTimer?.Dispose();
         EffectTimer = null;
         OverheadEffect?.Dispose();
         OverheadEffect = null;
         WanderTimer.Dispose();
         WanderTimer = null;
+        Texttag?.Dispose();
         Disco?.__destroy(false);
-        WolfPoint.Dispose();
+        WolfPoint?.Dispose();
         WolfPoint = null;
         Unit.Dispose();
         Unit = null;

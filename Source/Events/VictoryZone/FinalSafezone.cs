@@ -17,11 +17,11 @@ public static class FinalSafezone
         {
             var unit = @event.Unit;
             var player = unit.Owner;
-
+            var kitty = Globals.ALL_KITTIES[player];
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
             if (Gamemode.CurrentGameMode != "Standard") return;
 
-            Globals.ALL_KITTIES[player].CurrentStats.RoundFinished = true;
+            kitty.CurrentStats.RoundFinished = true;
             NitroChallenges.CompletedNitro(unit);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);

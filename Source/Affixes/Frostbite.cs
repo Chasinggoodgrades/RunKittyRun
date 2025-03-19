@@ -47,7 +47,7 @@ public class Frostbite : Affix
     private void RemoveAllEffects()
     {
         foreach (var effect in Effects)
-            effect.Value.Dispose();
+            effect.Value?.Dispose();
         foreach (var target in Frostbitten.Keys)
             target.BaseMovementSpeed = Frostbitten[target];
     }
@@ -85,7 +85,7 @@ public class Frostbite : Affix
         foreach (var target in TempList)
         {
             Frostbitten.Remove(target);
-            Effects[target].Dispose();
+            Effects[target]?.Dispose();
         }
 
         TempList.Clear();

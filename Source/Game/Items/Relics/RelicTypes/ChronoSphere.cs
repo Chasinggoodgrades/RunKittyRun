@@ -98,7 +98,7 @@ public class ChronoSphere : Relic
         CapturedLocation = (unit.X, unit.Y, unit.Facing);
         LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
         LocationEffect.Scale = 0.55f;
-        Utility.SimpleTimer(0.25f, LocationEffect.Dispose);
+        Utility.SimpleTimer(0.25f, () => LocationEffect?.Dispose());
     }
 
     private float RandomMagnitude()
