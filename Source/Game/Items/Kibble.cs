@@ -90,7 +90,11 @@ public class Kibble : IDestroyable
             IncrementKibble(kitty);
             PersonalBestAwarder.BeatKibbleCollection(kitty);
 
-            ItemSpawner.TrackKibbles.Find(k => k.Item == item).__destroy();
+            var kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
+            if (kib != null && kib.Item != null)
+            {
+                kib.__destroy();
+            }
         }
         catch (Exception e)
         {
