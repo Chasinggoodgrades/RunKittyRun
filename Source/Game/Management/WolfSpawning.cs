@@ -3,13 +3,13 @@
  * It technically works just fine, however not each lane is equal in terms of difficulty.
  */
 
-/*using System;
 using static WCSharp.Api.Common;
 
 public static class WolfSpawning
 {
-    private static int[] WolvesPerRound = new int[] { 185, 254, 305, 355, 407 };
+    private static int[] WolvesPerRound = new int[] { 195, 264, 325, 365, 427 };
     private const int MaxWolvesPerLane = 60;
+
     public static void SpawnWolves()
     {
         var totalArea = WolfArea.TotalArea;
@@ -21,7 +21,7 @@ public static class WolfSpawning
         foreach (var lane in WolfArea.WolfAreas)
         {
             int laneID = lane.Value.ID;
-            int numberOfWolves = (int)((lane.Value.Area / (double)totalArea) * totalWolves);
+            int numberOfWolves = (int)(lane.Value.Area / (double)totalArea * totalWolves);
 
             if (numberOfWolves > MaxWolvesPerLane)
             {
@@ -29,7 +29,6 @@ public static class WolfSpawning
                 numberOfWolves = MaxWolvesPerLane;
             }
 
-            Console.WriteLine($"Spawning {numberOfWolves} wolves in lane {laneID}");
             for (int i = 0; i < numberOfWolves; i++)
             {
                 new Wolf(laneID);
@@ -39,10 +38,8 @@ public static class WolfSpawning
         while (excessWolves > 0)
         {
             var randomLane = GetRandomInt(6, 12);
-            Console.WriteLine($"Spawning 1 excess wolf in lane {randomLane}");
             new Wolf(randomLane);
             excessWolves--;
         }
     }
 }
-*/

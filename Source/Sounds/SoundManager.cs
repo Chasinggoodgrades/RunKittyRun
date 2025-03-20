@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -30,6 +29,7 @@ public static class SoundManager
     private static sound FIRST_BLOOD_SOUND;
 
     private static bool FirstBloodSoundPlayed = false;
+    private static timer LastManStanding = timer.Create();
     private static Dictionary<string, sound> sounds;
 
     public static void Initialize()
@@ -66,38 +66,39 @@ public static class SoundManager
         LAST_MAN_STANDING_SOUND = sounds["LastManStandingSound"];
         FIRST_BLOOD_SOUND = sounds["FirstBloodSound"];
     }
+
     private static void SetSoundAttributes()
     {
-        foreach (var sound in sounds.Values)
+        foreach (var sound in sounds)
         {
-            sound.SetChannel(0);
-            sound.SetVolume(127);
-            sound.SetPitch(1.0f);
+            sound.Value.SetChannel(0);
+            sound.Value.SetVolume(127);
+            sound.Value.SetPitch(1.0f);
         }
     }
+
     public static void PlaySpeedSound() => SPEED_SOUND.Start();
+
     public static void PlayInvulnerableSound() => INVULNERABLE_SOUND.Start();
+
     /// <summary>
     /// Plays the POTM death sound ontop of the passed unit.
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
     public static void PlayKittyDeathSound(unit Kitty)
     {
-
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) 
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
             TeamKittyDeathSound(Kitty);
         else
         {
-            var s = KITTY_DEATH_SOUND;
-            s.Stop(false, false);
-            s.AttachToUnit(Kitty);
-            s.Start();
+            Blizzard.StopSoundBJ(KITTY_DEATH_SOUND, false);
+            Blizzard.PlaySoundOnUnitBJ(KITTY_DEATH_SOUND, 127, Kitty);
         }
     }
 
     public static void PlayFirstBloodSound()
     {
-        if(FirstBloodSoundPlayed) return;
+        if (FirstBloodSoundPlayed) return;
         var s = FIRST_BLOOD_SOUND;
         s.Stop(false, false);
         s.Start();
@@ -111,11 +112,12 @@ public static class SoundManager
         s.AttachToUnit(Kitty);
         s.Start();
     }
+
     private static void TeamKittyDeathSound(unit Kitty)
     {
         var s = KITTY_DEATH_SOUND;
         s.AttachToUnit(Kitty);
-        foreach(var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
+        foreach (var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
         {
             if (player.IsLocal)
             {
@@ -141,16 +143,16 @@ public static class SoundManager
             5 => ROUND_5_SOUND,
             _ => null
         };
-        sound.Start();
+        sound?.Start();
     }
 
     public static void PlayLastManStandingSound()
     {
-        Utility.SimpleTimer(0.8f, () =>
+        LastManStanding.Start(0.8f, false, ErrorHandler.Wrap(() =>
         {
             var count = 0;
             unit u = null;
-            foreach(var kitty in Globals.ALL_KITTIES)
+            foreach (var kitty in Globals.ALL_KITTIES)
             {
                 if (kitty.Value.Alive)
                 {
@@ -169,6 +171,6 @@ public static class SoundManager
             {
                 GC.RemoveEffect(ref e);
             });
-        });
+        }));
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public enum HolidaySeasons
@@ -45,15 +44,17 @@ public static class SeasonalManager
             case 12:
                 Season = HolidaySeasons.Christmas;
                 break;
-/*            case 10:
-                Season = HolidaySeasons.Halloween;
-                break;
-            case 4:
-                Season = HolidaySeasons.Easter;
-                break;
-            case 2:
-                Season = HolidaySeasons.Valentines;
-                break;*/
+            /*            case 10:
+                            Season = HolidaySeasons.Halloween;
+                            break;
+
+                        case 4:
+                            Season = HolidaySeasons.Easter;
+                            break;
+
+                        case 2:
+                            Season = HolidaySeasons.Valentines;
+                            break;*/
             default:
                 Season = HolidaySeasons.None;
                 break;
@@ -94,6 +95,7 @@ public static class SeasonalManager
             case HolidaySeasons.Christmas:
                 BlzChangeMinimapTerrainTex("snowMap.blp");
                 break;
+
             case HolidaySeasons.None:
                 BlzChangeMinimapTerrainTex("war3mapMap.blp");
                 break;

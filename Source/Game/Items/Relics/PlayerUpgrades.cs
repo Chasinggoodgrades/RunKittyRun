@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
-using System;
+
 public class PlayerUpgrades
 {
     private player Player;
@@ -18,7 +19,13 @@ public class PlayerUpgrades
             new PlayerUpgrades(player);
     }
 
-    public static PlayerUpgrades GetPlayerUpgrades(player player) => Globals.PLAYER_UPGRADES[player];
+    public static PlayerUpgrades GetPlayerUpgrades(player player)
+    {
+        if (Globals.PLAYER_UPGRADES.ContainsKey(player))
+            return Globals.PLAYER_UPGRADES[player];
+        else
+            return new PlayerUpgrades(player);
+    }
     public void SetUpgradeLevel(Type relicType, int level) => UpgradeLevels[relicType] = level;
 
     public static void IncreaseUpgradeLevel(Type relicType, unit Unit)
@@ -28,5 +35,4 @@ public class PlayerUpgrades
     }
 
     public int GetUpgradeLevel(Type relicType) => UpgradeLevels.TryGetValue(relicType, out var level) ? level : 0;
-
 }

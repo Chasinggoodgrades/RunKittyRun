@@ -1,92 +1,59 @@
-﻿using System.Collections.Generic;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using WCSharp.Api;
 
 public class FloatingNameTag
 {
-    public static Dictionary<player, FloatingNameTag> PlayerNameTags;
-    private static float NAME_TAG_HEIGHT = 0.015f;
-    private static float NAME_TAG_UPDATE_INTERVAL = 0.03f;
-    private static timer NamePosUpdater;
-    private player Player;
+    private const float NAME_TAG_HEIGHT = 0.015f;
+    private const float NAME_TAG_UPDATE_INTERVAL = 0.03f;
+    private timer NamePosUpdater;
+    public Kitty Kitty;
     public texttag NameTag;
-    private Kitty Unit;
 
-    public FloatingNameTag(player player)
+    public FloatingNameTag(Kitty kitty)
     {
-        Player = player;
+        Kitty = kitty;
         NameTag = texttag.Create();
-        Unit = Globals.ALL_KITTIES[Player];
+        Initialize();
     }
 
-    public static void Initialize()
+    public void Initialize()
     {
-        PlayerNameTags = new Dictionary<player, FloatingNameTag>();
         NamePosUpdater = timer.Create();
-        CreateNameTags();
         SetNameTagAttributes();
         NamePosTimer();
-    }
-
-    private static void CreateNameTags()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            PlayerNameTags[player] = new FloatingNameTag(player);
-        }
     }
 
     public void Dispose()
     {
         NameTag.SetVisibility(false);
         NameTag.Dispose();
+        GC.RemoveTimer(ref NamePosUpdater);
     }
 
-    private static void SetNameTagAttributes()
+    private void SetNameTagAttributes()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            // Splitting at the #
-            var name = player.Name.Split('#')[0];
-            PlayerNameTags[player].NameTag.SetText(name, NAME_TAG_HEIGHT);
-            PlayerNameTags[player].NameTag.SetPermanent(true);
-            PlayerNameTags[player].NameTag.SetColor(114, 188, 212, 255);
-            PlayerNameTags[player].NameTag.SetVisibility(true);
-        }
+        NameTag.SetText(Kitty.Player.Name, NAME_TAG_HEIGHT);
+        NameTag.SetPermanent(true);
+        NameTag.SetColor(114, 188, 212, 255);
+        NameTag.SetVisibility(true);
     }
 
-    private static void NamePosTimer()
+    private void NamePosTimer()
     {
-        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
+        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, ErrorHandler.Wrap(() =>
         {
-            foreach (var player in Globals.ALL_PLAYERS)
-            {
-                var kitty = Globals.ALL_KITTIES[player].Unit;
-                PlayerNameTags[player].UpdateNameTag();
-                if (player.IsLocal) SetCameraQuickPosition(kitty.X, kitty.Y); // Spacebar 
-            }
-        });
+            UpdateNameTag();
+            Blizzard.SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.Unit.Y);
+        }));
     }
 
-    private void UpdateNameTag() => NameTag.SetPosition(Unit.Unit, NAME_TAG_HEIGHT);
+    private void UpdateNameTag() => NameTag.SetPosition(Kitty.Unit, NAME_TAG_HEIGHT);
 
-    public static void HideAllNameTags(player Player)
+    public static void ShowAllNameTags(player Player, bool shown)
     {
         if (!Player.IsLocal) return;
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var k in Globals.ALL_KITTIES)
         {
-            PlayerNameTags[player].NameTag.SetVisibility(false);
-            //NamedWolves.ShowWolfNames(false); (desync if wolves havent spawned yet)
-        }
-    }
-
-    public static void ShowAllNameTags(player Player)
-    {
-        if(!Player.IsLocal) return;
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            PlayerNameTags[player].NameTag.SetVisibility(true);
-            //NamedWolves.ShowWolfNames(); (desync if wolves havent spawned yet)
+            k.Value.NameTag.NameTag.SetVisibility(shown);
         }
     }
 }

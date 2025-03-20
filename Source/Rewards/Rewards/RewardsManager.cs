@@ -12,21 +12,14 @@ public static class RewardsManager
     private static List<int> RewardAbilities = new List<int>();
     public static List<Reward> Rewards = new List<Reward>();
     public static List<Reward> GameStatRewards = new List<Reward>();
-    public static Dictionary<player, effect> ActiveWings { get; set; } = new Dictionary<player, effect>();
-    public static Dictionary<player, effect> ActiveAuras = new Dictionary<player, effect>();
-    public static Dictionary<player, effect> ActiveHats = new Dictionary<player, effect>();
-    public static Dictionary<player, effect> ActiveTrails = new Dictionary<player, effect>();
 
     public static void Initialize()
     {
-        InitializeRewardState();
-        AwardManager.Initialize();
         RegisterTrigger();
         RewardCreation.SetupRewards();
         RewardAbilitiesList();
         AwardManager.RegisterGamestatEvents();
         ChampionAwards.AwardAllChampions();
-        Utility.SimpleTimer(2.5f, AwardManager.UpdateRewardsSorted);
     }
 
     private static void RewardAbilitiesList()
@@ -35,24 +28,13 @@ public static class RewardsManager
             RewardAbilities.Add(reward.AbilityID);
     }
 
-    private static void InitializeRewardState()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            ActiveWings.Add(player, null);
-            ActiveAuras.Add(player, null);
-            ActiveHats.Add(player, null);
-            ActiveTrails.Add(player, null);
-        }
-    }
-
     private static void RegisterTrigger()
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         }
-        Trigger.AddAction(() => CastedReward());
+        Trigger.AddAction(ErrorHandler.Wrap(CastedReward));
     }
 
     private static void CastedReward()
@@ -75,17 +57,18 @@ public static class RewardsManager
     {
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
+        var activeRewards = kitty.ActiveAwards;
 
-        var wings = ActiveWings[player];
+        var wings = activeRewards.ActiveWings;
         GC.RemoveEffect(ref wings);
 
-        var auras = ActiveAuras[player];
+        var auras = activeRewards.ActiveAura;
         GC.RemoveEffect(ref auras);
 
-        var hats = ActiveHats[player];
+        var hats = activeRewards.ActiveHats;
         GC.RemoveEffect(ref hats);
 
-        var trails = ActiveTrails[player];
+        var trails = activeRewards.ActiveTrail;
         GC.RemoveEffect(ref trails);
 
         kitty.Unit.Skin = Constants.UNIT_KITTY;
@@ -95,6 +78,6 @@ public static class RewardsManager
             property.SetValue(kitty.SaveData.SelectedData, "");
 
         if (kitty.SaveData.SelectedData.SelectedWindwalk == "")
-            kitty.WindwalkID = 0;
+            kitty.ActiveAwards.WindwalkID = 0;
     }
 }

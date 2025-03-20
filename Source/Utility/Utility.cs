@@ -4,7 +4,6 @@ using WCSharp.Api;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
-
 public static class Utility
 {
     /// <summary>
@@ -21,12 +20,8 @@ public static class Utility
 
     public static void SelectUnitForPlayer(player p, unit u)
     {
-        var localplayer = player.LocalPlayer;
-        if (p == localplayer)
-        {
-            ClearSelection();
-            SelectUnit(u, true);
-        }
+        Blizzard.ClearSelectionForPlayer(p);
+        Blizzard.SelectUnitForPlayerSingle(u, p);
     }
 
     /// <summary>
@@ -56,21 +51,11 @@ public static class Utility
 
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
-        var tenths = (int)((time * 10) % 10);
+        var tenths = (int)(time * 10 % 10);
 
-        string timeString;
-        if (seconds < 10)
-        {
-            timeString = $"{minutes}:0{seconds}.{tenths}";
-        }
-        else
-        {
-            timeString = $"{minutes}:{seconds}.{tenths}";
-        }
-
+        string timeString = seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
         return Colors.ColorString(timeString, teamID);
     }
-
 
     /// <summary>
     /// Converts a float to time string tenths.
@@ -82,15 +67,16 @@ public static class Utility
 
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
-        var tenths = (int)((time * 10) % 10);
+        var tenths = (int)(time * 10 % 10);
 
-        if (seconds < 10)
-        {
-            return $"{minutes}:0{seconds}.{tenths}";
-        }
-        return $"{minutes}:{seconds}.{tenths}";
+        return seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
     }
 
+    /// <summary>
+    /// Converts the float to a time string without tenths.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
     public static string ConvertFloatToTimeInt(float time)
     {
         if (time <= 0.0f) return "0:00";
@@ -98,24 +84,27 @@ public static class Utility
         var minutes = (int)(time / 60);
         var seconds = (int)(time % 60);
 
-        if (seconds < 10)
-        {
-            return $"{minutes}:0{seconds}";
-        }
-        return $"{minutes}:{seconds}";
+        return seconds < 10 ? $"{minutes}:0{seconds}" : $"{minutes}:{seconds}";
     }
-
 
     public static bool IsDeveloper(player p)
     {
-        foreach (var player in Globals.VIPLIST)
+        try
         {
-            if (p.Name == Base64.FromBase64(player))
+            foreach (var player in Globals.VIPLIST)
             {
-                return true;
+                if (p.Name == Base64.FromBase64(player))
+                {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Logger.Warning(ex.StackTrace);
+            return false;
+        }
     }
 
     /// <summary>
@@ -125,13 +114,13 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var t = CreateTimer();
-        TimerStart(t, duration, false, () =>
+        var t = timer.Create();
+        t.Start(duration, false, ErrorHandler.Wrap(() =>
         {
             action();
             t.Dispose();
             t = null;
-        });
+        }));
     }
 
     /// <summary>
@@ -159,7 +148,7 @@ public static class Utility
     public static int UnitHasItemCount(unit u, int itemId)
     {
         var count = 0;
-        for(int i = 0; i < 6; i ++)
+        for (int i = 0; i < 6; i++)
         {
             if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId)
                 count++;
@@ -240,7 +229,7 @@ public static class Utility
     /// <param name="red"></param>
     /// <param name="green"></param>
     /// <param name="blue"></param>
-    public static void CreateSimpleTextTag(string text, float duration, unit u, float height, int red, int green, int blue)
+    public static void CreateSimpleTextTag(string text, float duration, unit u, float height = 0.015f, int red = 255, int green = 255, int blue = 255)
     {
         var tt = texttag.Create();
         tt.SetText(text, height);
@@ -248,7 +237,7 @@ public static class Utility
         tt.SetPosition(u.X, u.Y, 0);
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
-        SimpleTimer(duration, () => tt.Dispose());
+        SimpleTimer(duration, () => tt?.Dispose());
     }
 
     /// <summary>
@@ -273,7 +262,6 @@ public static class Utility
     {
         effect e = effect.Create(path, x, y);
         e.Dispose();
-        e = null;
     }
 
     /// <summary>
@@ -286,9 +274,7 @@ public static class Utility
     {
         effect e = effect.Create(path, u, attachPoint);
         e.Dispose();
-        e = null;
     }
-
 
     /// <summary>
     /// Clears the screen of all messages for the given player.
@@ -296,8 +282,8 @@ public static class Utility
     /// <param name="player"></param>
     public static void ClearScreen(player player)
     {
-        if (!player.IsLocal) return; 
-        ClearTextMessages(); 
+        if (!player.IsLocal) return;
+        ClearTextMessages();
     }
 
     /// <summary>
@@ -325,10 +311,7 @@ public static class Utility
         var currentMana = unit.Mana;
         var newMana = currentMana + amount;
 
-        if (newMana >= maxMana)
-            unit.Mana = maxMana - 1;
-        else
-            unit.Mana = newMana;
+        unit.Mana = newMana >= maxMana ? maxMana - 1 : newMana;
     }
 
     /// <summary>
@@ -351,8 +334,6 @@ public static class Utility
 
         var s = stringBuilder.ToString();
         stringBuilder.Clear();
-        stringBuilder = null;
-
         return s;
     }
 
@@ -367,14 +348,69 @@ public static class Utility
         Globals.ALL_KITTIES[player].Dispose();
         Globals.ALL_CIRCLES[player].Dispose();
         Globals.ALL_PLAYERS.Remove(player);
-        FloatingNameTag.PlayerNameTags[player].Dispose();
+        Globals.ALL_KITTIES[player].NameTag?.Dispose();
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
+    }
+
+    public static player GetPlayerByName(string playerName)
+    {
+        // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
+        if (playerName.Length < 3) return null;
+        foreach (var p in Globals.ALL_PLAYERS)
+        {
+            if (p.Name.ToLower().Contains(playerName.ToLower()))
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public static int GetItemSkin(int itemId)
+    {
+        if (itemId == 0) return 0;
+        var item = CreateItem(itemId, 0, 0);
+        var skin = BlzGetItemSkin(item);
+        item.Dispose();
+        item = null;
+        return skin;
+    }
+
+    /// <summary>
+    /// Replays the passed effect, clearing all sub animations and resetting the time.
+    /// </summary>
+    /// <param name="effect"></param>
+    public static void EffectReplayMagic(effect effect)
+    {
+        BlzSetSpecialEffectAlpha(effect, 255);
+        BlzSetSpecialEffectColor(effect, 255, 255, 255);
+        BlzSetSpecialEffectTime(effect, 0);
+        BlzSetSpecialEffectTimeScale(effect, 1.0f);
+        BlzSpecialEffectClearSubAnimations(effect);
+        BlzPlaySpecialEffect(effect, animtype.Stand);
+    }
+
+    public static void EffectReplayMagic(effect effect, float x, float y, float z)
+    {
+        BlzSetSpecialEffectAlpha(effect, 255);
+        BlzSetSpecialEffectColor(effect, 255, 255, 255);
+        BlzSetSpecialEffectTime(effect, 0);
+        BlzSetSpecialEffectTimeScale(effect, 0.0f);
+        BlzSpecialEffectClearSubAnimations(effect);
+        effect.SetPosition(x, y, z);
+        BlzPlaySpecialEffect(effect, animtype.Birth);
+    }
+
+    public static string FormattedColorPlayerName(player p)
+    {
+        // removes everything after '#' in the player name
+        var name = p.Name.Split('#')[0];
+        return $"{Colors.ColorString(name, p.Id + 1)}";
     }
 
     public static filterfunc CreateFilterFunc(Func<bool> func)
     {
         return filterfunc.Create(func);
     }
-
 }

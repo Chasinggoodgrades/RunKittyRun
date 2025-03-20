@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Blitzer : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
@@ -45,7 +46,6 @@ public class Blitzer : Affix
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
         Unit.Unit.SetColor(playercolor.Brown);
         base.Remove();
-
     }
 
     private void RegisterMoveTimer()
@@ -53,17 +53,22 @@ public class Blitzer : Affix
         MoveTimer = timer.Create();
         PreBlitzerTimer = timer.Create();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
-        MoveTimer.Start(randomFlyTime, false, PreBlitzerMove); // initial move
+        MoveTimer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
         BlitzerTimer = timer.Create();
     }
 
     private void PreBlitzerMove()
     {
+        if (Unit.IsPaused)
+        {
+            MoveTimer.Start(GetRandomReal(3.0f, 10.0f), false, ErrorHandler.Wrap(PreBlitzerMove));
+            return;
+        }
         WanderEffect = effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
         Effect?.Dispose();
         Unit.Unit.SetVertexColor(255, 255, 0);
         Unit.Unit.SetColor(playercolor.Yellow);
-        PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
+        PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, ErrorHandler.Wrap(BeginBlitz));
     }
 
     private void BeginBlitz()
@@ -75,7 +80,8 @@ public class Blitzer : Affix
         BlitzerMove(x, y);
         Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
         Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
-        MoveTimer.Start(randomTime, false, PreBlitzerMove);
+        Unit.IsWalking = true;
+        MoveTimer.Start(randomTime, false, ErrorHandler.Wrap(PreBlitzerMove));
     }
 
     private void BlitzerMove(float targetX, float targetY)
@@ -100,8 +106,8 @@ public class Blitzer : Affix
 
         // 60 fps for smooth movement, step distance
         float stepDistance = speed / 50.0f; // Assuming 60 calls per second
-        float nextX = currentX + directionX * stepDistance;
-        float nextY = currentY + directionY * stepDistance;
+        float nextX = currentX + (directionX * stepDistance);
+        float nextY = currentY + (directionY * stepDistance);
 
         // Move the unit one step
         Unit.Unit.SetPosition(nextX, nextY);
@@ -111,7 +117,7 @@ public class Blitzer : Affix
         var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
-        BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+        BlitzerTimer.Start(stepTime, false, ErrorHandler.Wrap(() => BlitzerMove(targetX, targetY)));
     }
 
     private void EndBlitz()
@@ -122,6 +128,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
+        Unit.IsWalking = false;
         Unit.Unit.AddAbility(FourCC("Aeth"));
     }
 
@@ -139,12 +146,14 @@ public class Blitzer : Affix
             PreBlitzerTimer.Pause();
             WanderEffect.Dispose();
             MoveTimer.Pause();
+            Unit.IsWalking = !pause;
         }
         else
         {
             BlitzerTimer.Resume();
             PreBlitzerTimer.Resume();
             MoveTimer.Resume();
+            Unit.IsWalking = !pause;
         }
     }
 }

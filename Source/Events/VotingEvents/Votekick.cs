@@ -15,10 +15,10 @@ public static class Votekick
 
     public static void InitiateVotekick(player voteStarter, string player)
     {
-        if(VotekickAlreadyActive()) return;
+        if (VotekickAlreadyActive()) return;
         VoteStarter = voteStarter;
         var playerID = GetPlayerID(player);
-        if(playerID != -1) StartVotekick(Player(playerID));
+        if (playerID != -1) StartVotekick(Player(playerID));
         else voteStarter.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_RED}Invalid player syntax. Use the player number: (1 = Red, 2 = Blue, etc.){Colors.COLOR_RESET}");
     }
 
@@ -43,7 +43,7 @@ public static class Votekick
         Console.WriteLine($"{Colors.COLOR_YELLOW}A votekick has been initiated against {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. If you agree, type \"-yes\" {Colors.COLOR_RED}({VOTE_DURATION} seconds remain){Colors.COLOR_RESET}");
         VoteKickPlayer = target;
         Voters.Add(VoteStarter);
-        VoteTimer.Start(VOTE_DURATION, false, () => ExecuteVotekick(target));
+        VoteTimer.Start(VOTE_DURATION, false, ErrorHandler.Wrap(() => ExecuteVotekick(target)));
     }
 
     private static void ExecuteVotekick(player target)
@@ -63,7 +63,6 @@ public static class Votekick
         }
         EndVotekick();
     }
-
 
     private static void EndVotekick()
     {
@@ -90,12 +89,9 @@ public static class Votekick
     /// <returns></returns>
     private static int GetPlayerID(string player)
     {
-        if (int.TryParse(player, out int playerID))
-        {
-            return playerID - 1;
-        }
-        return -1;
+        return int.TryParse(player, out int playerID) ? playerID - 1 : -1;
     }
+
     private static player GetPlayer(string player)
     {
         // doesnt quite work yet.
@@ -110,7 +106,4 @@ public static class Votekick
         }
         return null;
     }
-
-
-
 }

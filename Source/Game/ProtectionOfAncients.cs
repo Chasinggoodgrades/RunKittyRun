@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Source;
 using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
+
 public static class ProtectionOfAncients
 {
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
@@ -18,13 +17,12 @@ public static class ProtectionOfAncients
     private static trigger Trigger;
     private static trigger LevelUpTrigger;
 
-    private static int UPGRADE_LEVEL_2_REQUIREMENT = 9;
-    private static int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    private static readonly int UPGRADE_LEVEL_2_REQUIREMENT = 9;
+    private static readonly int UPGRADE_LEVEL_3_REQUIREMENT = 12;
 
-    private static float INVULNERABLE_DURATION = 1.0f;
+    private static readonly float INVULNERABLE_DURATION = 1.0f;
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
-
 
     public static void Initialize()
     {
@@ -34,7 +32,7 @@ public static class ProtectionOfAncients
     }
 
     /// <summary>
-    /// Gives the unit the ProtectionOfAncients Ability. 
+    /// Gives the unit the ProtectionOfAncients Ability.
     /// </summary>
     /// <param name="unit"></param>
     public static void AddProtectionOfAncients(unit unit)
@@ -53,6 +51,8 @@ public static class ProtectionOfAncients
     {
         var player = unit.Owner;
         var heroLevel = unit.HeroLevel;
+
+        if (unit.UnitType != Constants.UNIT_KITTY) return 0;
 
         // Return early if the hero level is below 6
         if (heroLevel < 6) return 0;
@@ -89,19 +89,18 @@ public static class ProtectionOfAncients
     private static void RegisterUpgradeLevelEvents()
     {
         LevelUpTrigger = trigger.Create();
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            LevelUpTrigger.RegisterUnitEvent(kitty.Unit, unitevent.HeroLevel, null);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
-        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
+        LevelUpTrigger.AddAction(ErrorHandler.Wrap(() => SetProtectionOfAncientsLevel(@event.Unit)));
     }
 
     private static void RegisterEvents()
     {
         Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        Trigger.AddAction(ActivationEvent);
-        Trigger.AddCondition(Condition(() => 
+        Trigger.AddAction(ErrorHandler.Wrap(ActivationEvent));
+        Trigger.AddCondition(Condition(() =>
         @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
     }
 
@@ -113,19 +112,18 @@ public static class ProtectionOfAncients
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
         Globals.ALL_KITTIES[player].ProtectionActive = true;
-        if(Program.Debug) Console.WriteLine("DEBUG: Player: " + player.Name + " activated Protection of the Ancients!");
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
         Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)));
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
         var t = timer.Create();
-        t.Start(EFFECT_DELAY, false, () =>
+        t.Start(EFFECT_DELAY, false, ErrorHandler.Wrap(() =>
         {
             ApplyEffect(Unit);
             GC.RemoveEffect(ref actiEffect);
             GC.RemoveTimer(ref t);
-        });
+        }));
     }
 
     private static void ApplyEffect(unit Unit)
@@ -133,22 +131,20 @@ public static class ProtectionOfAncients
         var owningPlayer = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
-        if(!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
+        if (!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
         GC.RemoveEffect(ref actiEffect);
         EndEffectActions(owningPlayer);
     }
 
     private static bool AoEEffectFilter()
     {
-        // Append units only if they're dead and a kitty circle. 
+        // Append units only if they're dead and a kitty circle.
         var unit = GetFilterUnit();
         var player = unit.Owner;
         if (unit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
 
         var kitty = Globals.ALL_KITTIES[player].Unit;
-        if (kitty.Alive) return false; 
-
-        return true;
+        return !kitty.Alive;
     }
 
     private static void EndEffectActions(player Player)
@@ -158,10 +154,10 @@ public static class ProtectionOfAncients
         var kitty = Globals.ALL_KITTIES[Player];
         var levelOfAbility = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         var levelOfRelic = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
-        if(levelOfRelic > 0) levelOfAbility = levelOfRelic;
+        if (levelOfRelic > 0) levelOfAbility = levelOfRelic;
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
-        var filter = Utility.CreateFilterFunc(() => AoEEffectFilter());
+        var filter = Utility.CreateFilterFunc(AoEEffectFilter);
 
         kitty.ProtectionActive = false;
         tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);

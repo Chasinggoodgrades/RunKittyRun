@@ -1,5 +1,4 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Chaos : Affix
@@ -32,21 +31,19 @@ public class Chaos : Affix
     private void RegisterTimer()
     {
         RotationTimer = timer.Create();
-        RotationTimer.Start(rotationTime, true, RotateAffix);
+        RotationTimer.Start(rotationTime, true, ErrorHandler.Wrap(RotateAffix));
         currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
         currentAffix.Apply();
     }
 
     private void RotateAffix()
     {
-        if (currentAffix != null)
-            currentAffix.Remove();
-        var randomAffixList = AffixFactory.AffixTypes;
-        var randomAffixName = AffixFactory.AffixTypes.Count > 0 ? randomAffixList[GetRandomInt(0, randomAffixList.Count - 1)] : "Speedster";
-        if(randomAffixName == "Chaos")
+        currentAffix?.Remove();
+        System.Collections.Generic.List<string> randomAffixList = AffixFactory.AffixTypes;
+        string randomAffixName = AffixFactory.AffixTypes.Count > 0 ? randomAffixList[GetRandomInt(0, randomAffixList.Count - 1)] : "Speedster";
+        if (randomAffixName == "Chaos")
             randomAffixName = "Speedster";
         currentAffix = AffixFactory.CreateAffix(Unit, randomAffixName);
         currentAffix.Apply();
     }
-
 }

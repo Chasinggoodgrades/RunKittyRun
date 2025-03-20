@@ -1,9 +1,4 @@
-﻿using WCSharp.Api;
-using WCSharp.Events;
-using WCSharp.Shared;
-using WCSharp.Shared.Data;
-using WCSharp.Sync;
-using static WCSharp.Api.Common;
+﻿using WCSharp.Shared.Data;
 
 public static class RegionList
 {

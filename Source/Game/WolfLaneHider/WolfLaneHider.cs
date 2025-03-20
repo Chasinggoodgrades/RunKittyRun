@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using WCSharp.Api;
-using static WCSharp.Api.Common;
+
 public static class WolfLaneHider
 {
-    public static List<int> LanesToEnable { get; set; } = new List<int>();
-    public static List<unit> Units { get; set; } = new List<unit>();
+    private static readonly HashSet<int> lanesToEnable = new HashSet<int>();
+
     public static void LanesHider()
     {
         try
         {
-            DetectLanesToEnable();
+            UpdateLanesToEnable();
+            ApplyLaneVisibility();
         }
         catch (Exception e)
         {
@@ -18,99 +18,92 @@ public static class WolfLaneHider
         }
     }
 
-    private static void DetectLanesToEnable()
+    private static void UpdateLanesToEnable()
     {
         try
         {
-            LanesToEnable.Clear();
+            lanesToEnable.Clear();
 
-            foreach (var player in Globals.PLAYERS_CURRENT_SAFEZONE)
+            foreach (var kitty in Globals.ALL_KITTIES)
             {
-                int currentSafezone = player.Value;
-                AddLaneIfNotInList(currentSafezone);
-                AddLaneIfNotInList(currentSafezone + 1);
-                AddLaneIfNotInList(currentSafezone - 1);
-                if (currentSafezone >= 13)
-                {
-                    AddLaneIfNotInList(currentSafezone + 2);
-                    AddLaneIfNotInList(currentSafezone + 3);
-                }
+                int currentSafezone = kitty.Value.CurrentSafeZone;
+                AddAdjacentLanes(currentSafezone);
             }
-
-            ShowDetectedLanes();
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in DetectLanesToEnable: {e.Message}");
+            Logger.Warning($"Error in UpdateLanesToEnable: {e.Message}");
         }
     }
 
-    private static void AddLaneIfNotInList(int lane)
+    private static void AddAdjacentLanes(int currentSafezone)
     {
-        if (lane >= 0 && !LanesToEnable.Contains(lane) && lane <= 17)
+        AddLane(currentSafezone);
+        AddLane(currentSafezone + 1);
+        AddLane(currentSafezone - 1);
+        AddLane(currentSafezone - 2);
+
+        if (currentSafezone >= 13)
         {
-            LanesToEnable.Add(lane);
+            AddLane(currentSafezone + 2);
+            AddLane(currentSafezone + 3);
+        }
+    }
+
+    private static void AddLane(int lane)
+    {
+        if (lane >= 0 && lane <= 17)
+        {
+            lanesToEnable.Add(lane);
+        }
+    }
+
+    private static void ApplyLaneVisibility()
+    {
+        try
+        {
+            if (WolfArea.WolfAreas == null)
+                return;
+
+            foreach (var lane in WolfArea.WolfAreas)
+            {
+                bool shouldShow = lanesToEnable.Contains(lane.Key);
+                lane.Value.IsEnabled = shouldShow; // wasnt being set lmao
+                SetLaneVisibility(lane.Value, shouldShow);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ApplyLaneVisibility: {e.Message}");
+        }
+    }
+
+    private static void SetLaneVisibility(WolfArea lane, bool isVisible)
+    {
+        foreach (var wolf in lane.Wolves)
+        {
+            wolf.Unit.IsVisible = isVisible;
+            wolf.IsPaused = !isVisible;
+            wolf.Texttag?.SetVisibility(isVisible);
         }
     }
 
     public static void HideAllLanes()
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
-        {
-            ShowUnit(wolf.Value.Unit, false);
-        }
-        foreach (var wolfArea in WolfArea.WolfAreas)
-        {
-            wolfArea.Value.Enabled = false;
-        }
-    }
-
-    private static void ShowDetectedLanes()
-    {
         try
         {
-            foreach (var lane in LanesToEnable)
-            {
-                foreach (var wolf in Globals.ALL_WOLVES)
-                {
-                    if (wolf.Value.RegionIndex == lane)
-                    {
-                        Units.Add(wolf.Value.Unit);
-                    }
-                }
-            }
-            Logger.Verbose($"Showing {Units.Count} wolves in detected lanes");
-            foreach (var unit in Units)
-                ShowUnit(unit, true);
+            if (WolfArea.WolfAreas == null)
+                return;
 
-            Units.Clear();
-            HideUndetectedLanes();
+            foreach (var lane in WolfArea.WolfAreas)
+            {
+                SetLaneVisibility(lane.Value, false);
+                lane.Value.IsEnabled = false;
+            }
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in ShowDetectedLanes: {e.Message}");
-        }
-    }
-
-    private static void HideUndetectedLanes()
-    {
-        try
-        {
-            foreach (var wolf in Globals.ALL_WOLVES)
-            {
-                if (!LanesToEnable.Contains(wolf.Value.RegionIndex))
-                {
-                    Units.Add(wolf.Value.Unit);
-                }
-            }
-            Logger.Verbose($"Hiding {Units.Count} wolves in undetected lanes");
-            foreach (var unit in Units)
-                ShowUnit(unit, false);
-            Units.Clear();
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in HideUndetectedLanes: {e.Message}");
+            Logger.Warning($"Error in HideAllLanes: {e.Message}");
         }
     }
 }

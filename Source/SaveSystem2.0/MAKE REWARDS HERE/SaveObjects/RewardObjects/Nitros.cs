@@ -10,5 +10,5 @@
     public int AzureLight { get; set; }
     public int VioletLight { get; set; }
     public int EmeraldLight { get; set; }
-    public int PatrioticLight { get; set; } = -1;
+    public int PatrioticLight { get; set; }
 }

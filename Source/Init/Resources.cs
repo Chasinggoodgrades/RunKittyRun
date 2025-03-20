@@ -6,8 +6,8 @@
     public static float SaveStreakMultiplier { get; set; } = 0.10f;
     public static int SafezoneExperience { get; set; } = 100;
     public static int SafezoneGold { get; set; } = 20;
-    private static int EndRoundBonusGold { get; set; } = 150 + (50*Globals.ROUND);
-    private static int EndRoundBonusXP { get; set; } = (550*Globals.ROUND);
+    private static int EndRoundBonusGold { get; set; } = 150 + (50 * Globals.ROUND);
+    private static int EndRoundBonusXP { get; set; } = 550 * Globals.ROUND;
 
     public static void Initialize()
     {
@@ -19,10 +19,10 @@
     {
         EndRoundBonusXP = 250 * Globals.ROUND;
         EndRoundBonusGold = 150 + (50 * Globals.ROUND);
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             player.Gold += EndRoundBonusGold;
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
-            kitty.Unit.Experience += EndRoundBonusXP;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            kitty.Value.Unit.Experience += EndRoundBonusXP;
     }
 
     public static void StartingItems(Kitty kitty)
@@ -35,7 +35,7 @@
 
     private static void AdjustStartingGold()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             player.Gold = StartingGold;
         }
@@ -43,9 +43,9 @@
 
     private static void SetResourcesForGamemode()
     {
-        if(Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) StandardResources();
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) SoloResources();
-        else if(Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamResources();
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) StandardResources();
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) SoloResources();
+        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamResources();
     }
 
     private static void StandardResources()

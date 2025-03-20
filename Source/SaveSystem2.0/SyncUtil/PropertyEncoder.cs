@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Reflection;
-using WCSharp.Json;
-using System.Collections;
+using System.Text;
 
 public static class PropertyEncoder
 {
@@ -42,7 +40,6 @@ public static class PropertyEncoder
         return base64String;
     }
 
-
     private static void AppendProperties(object obj, StringBuilder jsonString)
     {
         if (obj == null)
@@ -71,13 +68,9 @@ public static class PropertyEncoder
                 AppendProperties(value, jsonString);
                 jsonString.Append("}");
             }
-            else if (value is string)
-            {
-                jsonString.Append($"\"{value}\"");
-            }
             else
             {
-                jsonString.Append($"{value}");
+                _ = value is string ? jsonString.Append($"\"{value}\"") : jsonString.Append($"{value}");
             }
         }
     }
@@ -88,5 +81,4 @@ public static class PropertyEncoder
         var jsonString = WCSharp.Shared.Base64.FromBase64(base64EncodedData.ToString());
         return jsonString;
     }
-
 }

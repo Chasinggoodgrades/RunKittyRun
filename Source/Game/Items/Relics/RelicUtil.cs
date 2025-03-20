@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class RelicUtil
 {
     public static void DisableRelicBook(unit Unit) => Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true);
@@ -41,7 +42,7 @@ public static class RelicUtil
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="itemID"></param>
@@ -58,7 +59,7 @@ public static class RelicUtil
         float itemCooldown = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0);
 
         cooldown = (cooldown == 0) ? Math.Min(unitCooldown, itemCooldown) : cooldown;
-        if(Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
+        if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.RemoveItem(item);
         unit.SetAbilityCooldownRemaining(abilityID, cooldown);
         unit.AddItem(item);
         unit.DropItem(item, itemSlot);
@@ -77,5 +78,4 @@ public static class RelicUtil
         var itemAbility = item.GetAbility(abilityID);
         BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown);
     }
-
 }

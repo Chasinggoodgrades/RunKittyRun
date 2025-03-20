@@ -3,20 +3,20 @@ using WCSharp.Api;
 
 public static class PlayerLeaves
 {
-    private static trigger Trigger;
+    private static trigger Trigger = trigger.Create();
+
     public static void Initialize()
     {
-        Trigger = trigger.Create();
         RegisterTrigger();
     }
 
     private static void RegisterTrigger()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             Trigger.RegisterPlayerEvent(player, playerevent.Leave);
         }
-        Trigger.AddAction(() => PlayerLeavesActions());
+        Trigger.AddAction(ErrorHandler.Wrap(() => PlayerLeavesActions()));
     }
 
     public static void TeamRemovePlayer(player player)
@@ -34,12 +34,11 @@ public static class PlayerLeaves
             if (!Globals.ALL_PLAYERS.Contains(leavingPlayer)) return;
             var kitty = Globals.ALL_KITTIES[leavingPlayer];
             var circle = Globals.ALL_CIRCLES[leavingPlayer];
-            var nameTag = FloatingNameTag.PlayerNameTags[leavingPlayer];
+            var nameTag = kitty.NameTag;
             TeamRemovePlayer(leavingPlayer);
             kitty.Dispose();
             circle.Dispose();
-            nameTag.Dispose();
-            if(Kibble.PickedUpKibble.ContainsKey(leavingPlayer)) Kibble.PickedUpKibble.Remove(leavingPlayer);
+            nameTag?.Dispose();
             if (!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer);
             Console.WriteLine(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + " has left the game.");
             RoundManager.RoundEndCheck();
@@ -50,6 +49,5 @@ public static class PlayerLeaves
         {
             Console.WriteLine("Error in PlayerLeavesActions: " + e.Message);
         }
-
     }
 }

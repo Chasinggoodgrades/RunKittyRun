@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WCSharp.Api;
+
 public static class Tips
 {
     private static List<string> TipsList = new List<string>();

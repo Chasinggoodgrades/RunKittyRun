@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using WCSharp.Api;
 
@@ -25,17 +24,17 @@ public static class SoloMultiboard
             BestTimes = multiboard.Create();
             sortedDict = new Dictionary<player, Kitty>();
             MBSlot = new Dictionary<player, int>();
-            CreateMultiboards();
+            MakeMultiboard();
             RegisterTriggers();
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SoloMultiboard: {ex.Message}");
+            Logger.Critical($"Error in SoloMultiboard: {ex.Message}");
             throw;
         }
     }
 
-    private static void CreateMultiboards()
+    private static void MakeMultiboard()
     {
         BestTimesMultiboard();
         OverallMultiboardRacemode();
@@ -47,7 +46,7 @@ public static class SoloMultiboard
         ESCTrigger = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        ESCTrigger.AddAction(ESCPressed);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void OverallMultiboardRacemode()
@@ -105,7 +104,7 @@ public static class SoloMultiboard
         BestTimes.GetItem(0, 6).SetText($"{color}Total Time|r");
         BestTimes.SetChildVisibility(true, false);
         BestTimes.SetChildWidth(0.05f);
-        BestTimes.GetItem(0,6).SetWidth(0.06f);
+        BestTimes.GetItem(0, 6).SetWidth(0.06f);
         BestTimes.GetItem(0, 0).SetWidth(0.07f);
         BestTimes.IsDisplayed = false;
         UpdateBestTimesMB();
@@ -127,7 +126,7 @@ public static class SoloMultiboard
         foreach (var player in sortedDict.Keys)
         {
             var times = sortedDict[player].TimeProg;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
             var totalDeaths = sortedDict[player].CurrentStats.TotalDeaths;
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             var status = Globals.ALL_KITTIES[player].Finished ? "Finished" : "Racing";
@@ -177,7 +176,7 @@ public static class SoloMultiboard
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
-            var playerColor = Colors.GetPlayerColor(player.Id + 1);
+            var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var roundTimes = GetGameRoundTime(saveData);
 
@@ -213,11 +212,11 @@ public static class SoloMultiboard
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
         int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
         if (rowIndex == 0) return;
-        OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetPlayerColor(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
+        OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
     }
 
     private static float[] GetGameRoundTime(KittyData data)
-    {   
+    {
         var gameData = data.RoundTimes;
         var roundTimes = new float[5];
 
@@ -230,6 +229,7 @@ public static class SoloMultiboard
                 roundTimes[3] = gameData.RoundFourSolo;
                 roundTimes[4] = gameData.RoundFiveSolo;
                 break;
+
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return new float[5];
@@ -239,7 +239,6 @@ public static class SoloMultiboard
 
     private static void ESCPressed()
     {
-        var player = @event.Player;
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo mode
         if (!@event.Player.IsLocal) return;
         if (OverallBoard.IsDisplayed)
@@ -253,5 +252,4 @@ public static class SoloMultiboard
             OverallBoard.IsDisplayed = true;
         }
     }
-
 }

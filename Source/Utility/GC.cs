@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class GC
 {
     public static List<Affix> GCAffixes = new List<Affix>();
+
     public static void RemoveTrigger(ref trigger t)
     {
         if (t == null) return;
@@ -19,14 +18,14 @@ public static class GC
     {
         if (t == null) return;
         t.Pause();
-        t.Dispose();
+        t?.Dispose();
         t = null;
     }
 
     public static void RemoveEffect(ref effect e)
     {
         if (e == null) return;
-        e.Dispose();
+        e?.Dispose();
         e = null;
     }
 
@@ -34,7 +33,7 @@ public static class GC
     {
         if (g == null) return;
         g.Clear();
-        g.Dispose();
+        g?.Dispose();
         g = null;
     }
 
@@ -77,7 +76,7 @@ public static class GC
     public static void RemoveLocation(ref location loc)
     {
         if (loc == null) return;
-        loc.Dispose();
+        loc?.Dispose();
         loc = null;
     }
 
@@ -88,11 +87,17 @@ public static class GC
         s = null;
     }
 
+    public static void RemoveTimerDialog(ref timerdialog td)
+    {
+        if (td == null) return;
+        td.Dispose();
+        td = null;
+    }
+
     public static void RemoveItem(ref item i)
     {
         if (i == null) return;
         i.Dispose();
         i = null;
-    } 
-
+    }
 }

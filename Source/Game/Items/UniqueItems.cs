@@ -4,12 +4,21 @@ using WCSharp.Api;
 
 public static class UniqueItems
 {
-    private static trigger Trigger;
-    private static List<Uniques> UniqueList;
+    private static trigger Trigger = trigger.Create();
+    private static List<Uniques> UniqueList = new List<Uniques>();
+
     public static void Initialize()
     {
-        UniqueList = UniqueItemList();
-        Trigger = RegisterEvents();
+        try
+        {
+            UniqueList = UniqueItemList();
+            RegisterEvents();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in UniqueItems.Initialize. {e.Message}");
+            throw;
+        }
     }
 
     private static List<Uniques> UniqueItemList()
@@ -22,35 +31,35 @@ public static class UniqueItems
             new Uniques(Constants.ITEM_MEDITATION_CLOAK, 375),
         };
     }
-    private static trigger RegisterEvents()
-    {
-        var trig = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
-            trig.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem);
-        trig.AddAction(ItemPickup);
-        return trig;
-    }
 
+    private static void RegisterEvents()
+    {
+        Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.PickupItem);
+        Trigger.AddAction(ErrorHandler.Wrap(ItemPickup));
+    }
 
     private static void ItemPickup()
     {
         var item = @event.ManipulatedItem;
         var player = @event.Player;
         var kitty = @event.Unit;
-        var uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId);
 
+        if (item.TypeId == 0) Logger.Warning("Unique item bug, item ID is 0");
+
+        if (!Uniques.UniqueIDs.Contains(item.TypeId)) return;
+        var uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId);
         if (uniqueItem == null) return;
         if (Utility.UnitHasItemCount(kitty, item.TypeId) <= 1) return;
 
         player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}You may only carry one of each unique item.|r");
         player.Gold += uniqueItem.GoldCost;
         item.Dispose();
-        return;
     }
 }
 
 public class Uniques
 {
+    public static List<int> UniqueIDs = new List<int>();
     public int ItemID;
     public int GoldCost;
 
@@ -58,5 +67,6 @@ public class Uniques
     {
         ItemID = itemID;
         GoldCost = goldCost;
+        UniqueIDs.Add(itemID);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 
 public static class Quests
 {
@@ -8,24 +6,22 @@ public static class Quests
     private static quest ContributorsQuest = quest.Create();
     private static quest LeaderboardsQuest = quest.Create();
     private static quest HowToPlay = quest.Create();
+
     public static void Initialize()
     {
         CreateHowToPlayQuest();
         CreateCommandsQuest();
         CreateContributorsQuest();
-        CreateLeaderboardsQuest();
+        WebsiteQuest();
     }
 
     private static void CreateCommandsQuest()
     {
-        var commands = GeneralCmds.DisplayCommands();
         CommandsQuest.SetTitle("Commands");
         CommandsQuest.SetIcon("war3mapImported\\BTNArcaniteNightRing.blp");
         CommandsQuest.IsRequired = false;
 
-        var commandLines = commands.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        string description = string.Join($"\n{Colors.COLOR_YELLOW}", commandLines);
-
+        string description = "Commands can be retrieved with -help, and they have a filter so you can type -help <command> to get more information about a specific command.\n\n";
         CommandsQuest.SetDescription($"{Colors.COLOR_YELLOW}{description}|r");
     }
 
@@ -36,10 +32,11 @@ public static class Quests
         ContributorsQuest.SetDescription($"{Colors.COLOR_YELLOW}Special thank you to each of the previous developers and clans such as F0LK, WaR, RD, and many more for their inspiration for this map.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Also a huge thank you to all of the previous developers of those versions, you've made a great difference.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Contributors: |r{Colors.COLOR_GREEN}Aches, Leyenda, Geek. Stan, Yoshimaru|r\n\n" +
-            $"{Colors.COLOR_YELLOW}Several assets within the map are from Hiveworkshop, if your asset is within this map ; Thank you! If you'd like to be specially named, please let me know!|r");
+            $"{Colors.COLOR_YELLOW}Several assets within the map are from Hiveworkshop, if your asset is within this map ; Thank you! If you'd like to be specially named, please let me know!|r\n\n" +
+            $"{Colors.COLOR_YELLOW}Huge thank you to both Stan & Maxiglider for use of their magical slide code!|r");
     }
 
-    private static void CreateLeaderboardsQuest()
+    private static void WebsiteQuest()
     {
         LeaderboardsQuest.SetTitle("Leaderboards");
         LeaderboardsQuest.SetIcon("war3mapImported\\DiscordIcon.dds");
@@ -57,7 +54,4 @@ public static class Quests
             $"\n\n{Colors.COLOR_YELLOW}This game has 5 rounds, each getting harder as the game goes on. Teamwork and quick reflexes are the key to success.{Colors.COLOR_RESET}" +
             $"\n\n{Colors.COLOR_YELLOW}Once players hit level 10, they should acquire a relic from the shop {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}(Hotkey: =).{Colors.COLOR_RESET}{Colors.COLOR_YELLOW} Good luck and have fun!{Colors.COLOR_RESET}");
     }
-
-
-
 }

@@ -6,6 +6,7 @@ using WCSharp.Api;
 public static class TeamHandler
 {
     public static bool FreepickEnabled = false;
+
     public static void Handler(player Player, int TeamNumber)
     {
         if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && !RoundManager.GAME_STARTED && FreepickEnabled)
@@ -22,7 +23,6 @@ public static class TeamHandler
     {
         if (CanPlayerJoinTeam(Player, TeamNumber))
         {
-
             ApplyPlayerToTeam(Player, TeamNumber);
             //var timer = CreateTimer();
             //TimerStart(timer, 0.00f, false, () => { ApplyPlayerToTeam(Player, TeamNumber); DestroyTimer(timer); });
@@ -62,11 +62,11 @@ public static class TeamHandler
                 bool addedToExistingTeam = false;
 
                 // Attempt to add player to an existing team
-                foreach (var team in Globals.ALL_TEAMS.Values)
+                foreach (var team in Globals.ALL_TEAMS)
                 {
-                    if (team.Teammembers.Count < Gamemode.PlayersPerTeam)
+                    if (team.Value.Teammembers.Count < Gamemode.PlayersPerTeam)
                     {
-                        team.AddMember(player);
+                        team.Value.AddMember(player);
                         addedToExistingTeam = true;
                         break;
                     }
@@ -123,14 +123,13 @@ public static class TeamHandler
             new Team(TeamNumber);
         }
         return true;
-
     }
 
     private static void RemoveFromCurrentTeam(player Player)
     {
-        if(Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team team))
+        if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team team))
         {
             team.RemoveMember(Player);
-        }   
+        }
     }
 }

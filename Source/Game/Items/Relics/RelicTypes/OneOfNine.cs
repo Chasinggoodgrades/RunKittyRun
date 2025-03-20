@@ -1,15 +1,16 @@
-﻿using Source;
-using System;
+﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class OneOfNine : Relic
 {
     public const int RelicItemID = Constants.ITEM_ONE_OF_NINE;
-    public const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    public new const int RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
     private const int PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int RelicCost = 650;
-    private static new string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
+    private new static string IconPath = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
+
     public OneOfNine() : base(
         $"|cffff4500One of Nine|r",
         $"Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r",
@@ -17,7 +18,7 @@ public class OneOfNine : Relic
         RelicItemID,
         RelicCost,
         IconPath
-        ) 
+        )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Cooldown of your ultimate is reduced by an additional 3 seconds per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Your ultimate no longer costs mana.", 20, 1000));
@@ -51,7 +52,7 @@ public class OneOfNine : Relic
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
         var reduction = GetOneOfNineReduction(Player);
 
-        // remaining cooldown depending on relic or no relic 
+        // remaining cooldown depending on relic or no relic
         float cooldown = kitty.GetAbilityCooldownRemaining(noRelic) > 0.0f
             ? kitty.GetAbilityCooldownRemaining(noRelic)
             : kitty.GetAbilityCooldownRemaining(relic);
@@ -60,7 +61,6 @@ public class OneOfNine : Relic
 
         return Math.Max(0.0f, cooldown); // gotta make sure its not negative
     }
-
 
     public static float GetOneOfNineReduction(player Player)
     {
@@ -76,16 +76,14 @@ public class OneOfNine : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
         if (upgradeLevel < 2) return;
-        var ability = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0);
     }
-
 
     public static bool OneOfNineEffect(player Player)
     {
         var kitty = Globals.ALL_KITTIES[Player];
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false;
-        if (Program.Debug) Console.WriteLine("One of Nine Effect");
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
         {
             IssueImmediateOrder(kitty.Unit, "divineshield");

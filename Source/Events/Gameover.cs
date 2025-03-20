@@ -1,27 +1,26 @@
-﻿using WCSharp.Api;
-using System;
+﻿using System;
+using WCSharp.Api;
 
 public static class Gameover
 {
     public static bool WinGame { get; set; } = false;
     private static float EndingTimer { get; set; } = 90.0f;
     public static bool NoEnd { get; set; } = false;
+
     public static bool GameOver()
     {
-        if(WinningGame()) return true;
-        if (LosingGameCheck()) return true;
-        return false;
+        return WinningGame() || LosingGameCheck();
     }
 
     private static bool WinningGame()
     {
-        if(!WinGame) return false;
+        if (!WinGame) return false;
         SendWinMessage();
         GameStats(true);
         GameoverUtil.SetBestGameStats();
         StandardWinChallenges();
         SaveGame();
-        Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!");
+        Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!{Colors.COLOR_RESET}");
         Utility.SimpleTimer(5.0f, PodiumManager.BeginPodiumEvents);
         return true;
     }
@@ -47,13 +46,13 @@ public static class Gameover
 
     private static void SaveGame()
     {
-        Utility.SimpleTimer(1.5f, () => SaveManager.SaveAll());
-        Utility.SimpleTimer(2.5f, () => SaveManager.SaveAllDataToFile());
+        Utility.SimpleTimer(1.5f, SaveManager.SaveAll);
+        Utility.SimpleTimer(2.5f, SaveManager.SaveAllDataToFile);
     }
 
     private static void EndGame()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
             Blizzard.CustomVictoryBJ(player, true, true);
     }
 
@@ -61,15 +60,15 @@ public static class Gameover
     {
         if (Gamemode.CurrentGameMode != "Standard") return false;
         if (NoEnd) return false;
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
-            if (kitty.Alive) return false;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            if (kitty.Value.Alive) return false;
         LosingGame();
         return true;
     }
 
     private static void SendWinMessage()
     {
-        if(Gamemode.CurrentGameMode == "Standard")
+        if (Gamemode.CurrentGameMode == "Standard")
             Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyChosen}!{Colors.COLOR_RESET}");
         else
             Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for playing RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
@@ -81,11 +80,11 @@ public static class Gameover
     /// <param name="win"></param>
     private static void GameStats(bool win)
     {
-        foreach(var kitty in Globals.ALL_KITTIES.Values)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
-            IncrementGameStats(kitty);
-            if(win) IncrementWins(kitty);
-            IncrementWinStreak(kitty, win);
+            IncrementGameStats(kitty.Value);
+            if (win) IncrementWins(kitty.Value);
+            IncrementWinStreak(kitty.Value, win);
         }
         AwardManager.AwardGameStatRewards();
     }
@@ -99,9 +98,11 @@ public static class Gameover
             case (int)DifficultyLevel.Normal:
                 stats.NormalGames += 1;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 stats.HardGames += 1;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleGames += 1;
                 break;
@@ -117,9 +118,11 @@ public static class Gameover
             case (int)DifficultyLevel.Normal:
                 stats.NormalWins += 1;
                 break;
+
             case (int)DifficultyLevel.Hard:
                 stats.HardWins += 1;
                 break;
+
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleWins += 1;
                 break;

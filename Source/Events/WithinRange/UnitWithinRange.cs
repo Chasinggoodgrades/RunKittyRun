@@ -59,25 +59,25 @@ public static class UnitWithinRange
         trigger trig = CreateTrigger();
         unitRangeTriggers[unitId][rangeAsInt] = trig;
 
-        TriggerAddAction(trig, () =>
+        TriggerAddAction(trig, ErrorHandler.Wrap(() =>
         {
             ActionUnitWithinRange(trig);
-        });
+        }));
 
         if (cleanOnKilled && !unitCleanupTriggers.ContainsKey(unitId))
         {
             trigger cleanupTrigger = CreateTrigger();
             unitCleanupTriggers[unitId] = cleanupTrigger;
 
-            TriggerAddAction(cleanupTrigger, () =>
+            TriggerAddAction(cleanupTrigger, ErrorHandler.Wrap(() =>
             {
                 ActionUnitWithinCleanOnKilled(GetTriggerUnit());
-            });
+            }));
 
             TriggerRegisterUnitStateEvent(cleanupTrigger, u, UNIT_STATE_LIFE, LESS_THAN_OR_EQUAL, 0.405f);
         }
 
-        TriggerRegisterUnitInRange(trig, u, range, Condition(() => filter()));
+        TriggerRegisterUnitInRange(trig, u, range, Condition(filter));
 
         int trigId = GetUniqueTriggerId(trig);
         unitRangeUnits[trigId] = u;
@@ -93,18 +93,7 @@ public static class UnitWithinRange
         int trigId = GetUniqueTriggerId(trig);
         var (eventValue, execution) = udg_WithinRangeHash[trigId];
 
-        unit registeredUnit = unitRangeUnits[trigId];
-        unit enteringUnit = GetTriggerUnit();
-
-        if (eventValue != 0.0f)
-        {
-
-        }
-
-        if (execution != null)
-        {
-            execution.Execute();
-        }
+        execution?.Execute();
     }
 
     private static void ActionUnitWithinCleanOnKilled(unit unit)

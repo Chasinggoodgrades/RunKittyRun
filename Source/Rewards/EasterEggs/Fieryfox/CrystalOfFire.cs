@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
+
 public static class CrystalOfFire
 {
     private static int ItemID;
@@ -26,8 +26,8 @@ public static class CrystalOfFire
 
     public static void CrystalOfFireDeath(Kitty kitty)
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
-        if(!DeathAttempts.ContainsKey(kitty.Player)) return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (!DeathAttempts.ContainsKey(kitty.Player)) return;
         DeathAttempts[kitty.Player]++;
     }
 
@@ -35,7 +35,7 @@ public static class CrystalOfFire
     {
         var Trigger = trigger.Create();
         Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
-        Trigger.AddAction(FieryfoxEvent);
+        Trigger.AddAction(ErrorHandler.Wrap(FieryfoxEvent));
         return Trigger;
     }
 
@@ -43,24 +43,24 @@ public static class CrystalOfFire
     {
         var Trigger = trigger.Create();
         Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
-        Trigger.AddAction(FandFEvent);
+        Trigger.AddAction(ErrorHandler.Wrap(FandFEvent));
         return Trigger;
     }
 
     private static trigger RegisterChatEvent()
     {
         var Trigger = trigger.Create();
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             Trigger.RegisterPlayerChatEvent(player, "yes!", false);
         }
-        Trigger.AddAction(AcceptedQuest);
+        Trigger.AddAction(ErrorHandler.Wrap(AcceptedQuest));
         return Trigger;
     }
 
     private static int GetDeathAttempts(player player)
     {
-        if(DeathAttempts.TryGetValue(player, out var attempts) == false)
+        if (DeathAttempts.TryGetValue(player, out var attempts) == false)
         {
             DeathAttempts[player] = 0;
             return 0;
@@ -69,8 +69,10 @@ public static class CrystalOfFire
     }
 
     private static string StartMessage(player player) => $"{Colors.COLOR_YELLOW}Greetings {Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW}, you were right to come to me about this. The Crystals of Fire are a sacred anomaly within this universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r {Colors.COLOR_RED}Type {Colors.COLOR_YELLOW_ORANGE}\"yes!\"|r{Colors.COLOR_RED} to accept! (30 seconds)|r";
+
     private static string PartTwoMessage(player player) => $"{Colors.COLOR_YELLOW}It appears you're ready. Heres the formula: Bring forth to the legends of F&F: |r{Colors.COLOR_YELLOW_ORANGE}1 mysterious orb, A shot of lightning, The Crystals of Fire and a pair of Pegasus's.|r" +
         $"{Colors.COLOR_YELLOW} However, this must be done without scratches!|r {Colors.COLOR_RED}(If failed, you'll have to redo the first challenge).|r";
+
     private static void FieryfoxEvent()
     {
         if (!Utility.UnitHasItem(@event.Unit, ItemID)) return;
@@ -82,10 +84,10 @@ public static class CrystalOfFire
             // 30 seconds to accept the quest.
             Utility.SimpleTimer(30.0f, () =>
             {
-                if(QuestEligible.Contains(player)) QuestEligible.Remove(player);
+                if (QuestEligible.Contains(player)) QuestEligible.Remove(player);
             });
         }
-        else if(GetDeathAttempts(player) == -1)
+        else if (GetDeathAttempts(player) == -1)
         {
             player.DisplayTextTo(PartTwoMessage(player));
         }
@@ -107,7 +109,7 @@ public static class CrystalOfFire
     private static void FandFEvent()
     {
         var unit = @event.Unit;
-        if(!Utility.UnitHasItem(unit, ItemID)) return;
+        if (!Utility.UnitHasItem(unit, ItemID)) return;
         var player = unit.Owner;
         if (GetDeathAttempts(player) != -1) return;
 
@@ -119,7 +121,7 @@ public static class CrystalOfFire
         if (!Utility.UnitHasItem(unit, boots)) return;
         if (!Utility.UnitHasItem(unit, orb)) return;
         if (!Utility.UnitHasItem(unit, lightningShot)) return;
-        
+
         // Remove Items
         Utility.RemoveItemFromUnit(unit, ItemID);
         Utility.RemoveItemFromUnit(unit, boots);
@@ -128,6 +130,6 @@ public static class CrystalOfFire
 
         // ADD TEXT DISPLAY HERE FOR F&F
 
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS.WWFire));
+        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWFire));
     }
 }

@@ -1,11 +1,12 @@
-﻿using static WCSharp.Api.Common;
+﻿using System;
 using WCSharp.Api;
-using System;
 using WCSharp.Shared.Extensions;
+using static WCSharp.Api.Common;
+
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    public static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public new static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     private const int RelicCost = 650;
     private static float FROSTBITE_RING_RADIUS = 400.0f;
     private const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
@@ -13,7 +14,7 @@ public class FrostbiteRing : Relic
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
     private static float SLOW_DURATION = 5.0f;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
     private trigger Trigger;
 
@@ -45,26 +46,19 @@ public class FrostbiteRing : Relic
 
     private void FrostbiteCast(location freezeLocation)
     {
-        try
-        {
-            var tempGroup = group.Create();
-            var filter = Utility.CreateFilterFunc(() => WolvesFilter());
-            tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
-            var list = tempGroup.ToList();
-            foreach (var unit in list)
-                FrostbiteEffect(unit);
-            GC.RemoveList(ref list);
-            GC.RemoveGroup(ref tempGroup);
-            GC.RemoveFilterFunc(ref filter);
-            Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
-            RelicUtil.CloseRelicBook(Owner);
-            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
-            freezeLocation.Dispose();
-        }
-        catch (Exception e)
-        {
-            Logger.Critical(e.Message);
-        }
+        var tempGroup = group.Create();
+        var filter = Utility.CreateFilterFunc(WolvesFilter);
+        tempGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, filter);
+        var list = tempGroup.ToList();
+        foreach (var unit in list)
+            FrostbiteEffect(unit);
+        GC.RemoveList(ref list);
+        GC.RemoveGroup(ref tempGroup);
+        GC.RemoveFilterFunc(ref filter);
+        Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
+        RelicUtil.CloseRelicBook(Owner);
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
+        freezeLocation.Dispose();
     }
 
     private void FrostbiteEffect(unit Unit)
@@ -79,17 +73,17 @@ public class FrostbiteRing : Relic
         var fixationUnit = Fixation.GetFixation(Unit);
         try
         {
-            if (blitzUnit != null) blitzUnit.PauseBlitzing(true);
-            if (fixationUnit != null) fixationUnit.PauseFixation(true);
-            t.Start(duration, false, () =>
+            blitzUnit?.PauseBlitzing(true);
+            fixationUnit?.PauseFixation(true);
+            t.Start(duration, false, ErrorHandler.Wrap(() =>
             {
                 PausingWolf(Unit, false);
-                if (blitzUnit != null) blitzUnit.PauseBlitzing(false);
-                if (fixationUnit != null) fixationUnit.PauseFixation(false);
+                blitzUnit?.PauseBlitzing(false);
+                fixationUnit?.PauseFixation(false);
                 SlowWolves(Unit);
                 GC.RemoveEffect(ref effect);
                 GC.RemoveTimer(ref t);
-            });
+            }));
         }
         catch (Exception e)
         {
@@ -107,12 +101,12 @@ public class FrostbiteRing : Relic
         Unit.BaseMovementSpeed = 365.0f / 2.0f;
         var t = timer.Create();
         var effect = AddSpecialEffectTarget(FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
-        t.Start(SLOW_DURATION, false, () =>
+        t.Start(SLOW_DURATION, false, ErrorHandler.Wrap(() =>
         {
             Unit.BaseMovementSpeed = 365.0f;
             GC.RemoveEffect(ref effect);
             GC.RemoveTimer(ref t);
-        });
+        }));
     }
 
     private float GetFreezeDuration()
@@ -124,9 +118,8 @@ public class FrostbiteRing : Relic
     private void PausingWolf(unit unit, bool pause = true)
     {
         if (unit == null) return;
-        Globals.ALL_WOLVES[unit].IsPaused = pause;
-        unit.ClearOrders();
-        unit.IsPaused = pause;
+        var wolf = Globals.ALL_WOLVES[unit];
+        Globals.ALL_WOLVES[unit].PauseSelf(pause);
     }
 
     private void RegisterTriggers(unit Unit)
@@ -134,10 +127,8 @@ public class FrostbiteRing : Relic
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(() => FrostbiteCast(@event.SpellTargetLoc));
+        Trigger.AddAction(ErrorHandler.Wrap(() => FrostbiteCast(@event.SpellTargetLoc)));
     }
 
     private static bool WolvesFilter() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_CUSTOM_DOG;
-
-
 }

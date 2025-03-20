@@ -38,24 +38,27 @@ public class Howler : Affix
     private void RegisterTimerEvents()
     {
         HowlTimer = timer.Create();
-        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+        HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
     }
 
     private void Howl()
     {
         try
         {
+            HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
+            if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
             NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filters.DogFilter);
             var list = NearbyWolves.ToList();
             foreach (var wolf in list)
             {
-                var wolfObject = Globals.ALL_WOLVES[wolf];
+                if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue; // i swear to christ if this mother fucker moves again
+                if (wolf.IsPaused) continue;
+                if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
                 wolfObject.StartWandering(true);
             }
             NearbyWolves.Clear();
-            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
             GC.RemoveList(ref list);
         }
         catch (Exception e)
@@ -65,9 +68,5 @@ public class Howler : Affix
         }
     }
 
-    private float GetRandomHowlTime()
-    {
-        return GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
-    }
-
+    private static float GetRandomHowlTime() => GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME);
 }

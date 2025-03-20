@@ -56,7 +56,7 @@ public static class MultiboardUtil
         foreach (var player in Globals.ALL_PLAYERS)
         {
             var name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
-            mb.GetItem(rowIndex, 0).SetText($"{Colors.GetPlayerColor(player.Id+1)}{name}|r");
+            mb.GetItem(rowIndex, 0).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{name}|r");
             mb.GetItem(rowIndex, 0).SetWidth(0.07f);
             rowIndex++;
         }

@@ -23,12 +23,14 @@ public static class TeamsMultiboard
     }
 
     #region Teams Multiboards
+
     private static void TeamsStatsMultiboard()
     {
         TeamsStatsMB = multiboard.Create();
         TeamsStatsMB.Title = $"Teams Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         TeamsStatsMB.IsDisplayed = false;
     }
+
     public static void CurrentTeamsMultiboard()
     {
         CurrentTeamsMB = multiboard.Create();
@@ -129,17 +131,18 @@ public static class TeamsMultiboard
             rowIndex++;
         }
     }
-    #endregion
+
+    #endregion Teams Multiboards
 
     #region ESC Key Event & Actions
+
     private static void ESCInit()
     {
         foreach (var player in Globals.ALL_PLAYERS)
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCPressed);
-
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed));
     }
 
     private static void ESCPressed()
@@ -159,6 +162,6 @@ public static class TeamsMultiboard
             CurrentTeamsMB.IsDisplayed = true;
         }
     }
-    #endregion
 
+    #endregion ESC Key Event & Actions
 }

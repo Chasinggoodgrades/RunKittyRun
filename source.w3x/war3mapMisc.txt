@@ -1,0 +1,14 @@
+[Misc]
+AgiMoveBonus=0.0
+AttackNotifyDelay=4000.0
+AttackNotifyRange=5000.0
+GuardDistance=0.0
+GuardReturnTime=10000.0
+IntManaBonus=25.0
+IntRegenBonus=0.08
+MaxGuardDistance=30000.0
+MaxHeroLevel=100
+MaxUnitLevel=100
+MaxUnitSpeed=522.0
+MinUnitSpeed=15.0
+

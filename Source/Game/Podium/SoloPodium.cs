@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using WCSharp.Shared.Data;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
-using System;
+using WCSharp.Shared.Data;
 
 public static class SoloPodium
 {
@@ -61,7 +61,6 @@ public static class SoloPodium
         Utility.SimpleTimer(5.0f, ProcessNextPodiumAction);
     }
 
-
     private static void ProcessPodiumTypeActions()
     {
         PodiumQueue.Clear();
@@ -71,6 +70,7 @@ public static class SoloPodium
             case "Race":
                 EnqueueTopPlayerTimes();
                 break;
+
             case "Progression":
                 EnqueueTopPlayerProgress();
                 break;
@@ -85,11 +85,12 @@ public static class SoloPodium
         {
             case Time:
                 return stats.GetTotalTimeFormatted();
+
             case Progress:
                 return stats.GetOverallProgress().ToString("F2") + "%";
+
             default:
                 return "n/a";
         }
     }
-
 }

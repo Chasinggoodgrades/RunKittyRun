@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using WCSharp.Api;
-using static WCSharp.Api.Common;
+
 public static class ItemStacker
 {
     private static trigger PickupTrigger;
     private static List<int> StackableItemIDs;
+
     public static void Initialize()
     {
         RegisterItemList();
@@ -23,7 +24,7 @@ public static class ItemStacker
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,
             Constants.ITEM_ELIXIR,
-            Constants.ITEM_ANTI_BLOCK_WAND
+            Constants.ITEM_ANTI_BLOCK_WAND,
         };
         return StackableItemIDs;
     }
@@ -31,9 +32,8 @@ public static class ItemStacker
     private static trigger RegisterEvents()
     {
         PickupTrigger = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            PickupTrigger.RegisterPlayerUnitEvent(player, playerunitevent.PickupItem, null);
-        PickupTrigger.AddAction(StackActions);
+        Blizzard.TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
+        PickupTrigger.AddAction(ErrorHandler.Wrap(StackActions));
         return PickupTrigger;
     }
 
@@ -44,6 +44,7 @@ public static class ItemStacker
         if (!StackableItem(itemID)) return;
         var unit = @event.Unit;
         var heldItem = Utility.UnitGetItem(unit, itemID);
+        item.Owner = unit.Owner;
         if (heldItem == item) return;
         if (heldItem == null) return;
         var itemCharges = item.Charges;

@@ -23,18 +23,18 @@ public static class RoundManager
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
             Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
-            if(Globals.ROUND > 1) TerrainChanger.SetTerrain();
+            if (Globals.ROUND > 1) TerrainChanger.SetTerrain();
 
             RoundTimer.InitEndRoundTimer();
 
-            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, () => { StartRound(); });
+            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
         }
         catch (Exception e)
         {
-            if(Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in RoundManager.RoundSetup {e.Message}");
             throw;
         }
     }
@@ -56,14 +56,14 @@ public static class RoundManager
     private static void HasDifficultyBeenChosen()
     {
         var Timer = timer.Create();
-        Timer.Start(0.35f, true, () =>
+        Timer.Start(0.35f, true, ErrorHandler.Wrap(() =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
                 GC.RemoveTimer(ref Timer);
             }
-        });
+        }));
     }
 
     public static void RoundEnd()
@@ -78,8 +78,8 @@ public static class RoundManager
             BarrierSetup.ActivateBarrier();
             Resources.BonusResources();
             RoundUtilities.MovedTimedCameraToStart();
-            RoundUtilities.MoveAllPlayersToStart();
             RoundUtilities.RoundResetAll();
+            RoundUtilities.MoveAllPlayersToStart();
             TeamsUtil.RoundResetAllTeams();
             NitroPacer.ResetNitroPacer();
             DeathlessChallenges.ResetDeathless();
@@ -87,11 +87,11 @@ public static class RoundManager
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;
             Tips.DisplayTip();
-            Utility.SimpleTimer(END_ROUND_DELAY, () => RoundSetup());
+            Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup);
         }
         catch (Exception e)
         {
-            if (Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in RoundManager.RoundEnd {e.Message}");
             throw;
         }
     }
@@ -99,8 +99,8 @@ public static class RoundManager
     public static void RoundEndCheck()
     {
         // Always returns for standard mode, and solo progression mode.
-        foreach (var kitty in Globals.ALL_KITTIES.Values)
-            if (!kitty.Finished) return;
+        foreach (var kitty in Globals.ALL_KITTIES)
+            if (!kitty.Value.Finished) return;
         RoundEnd();
     }
 }

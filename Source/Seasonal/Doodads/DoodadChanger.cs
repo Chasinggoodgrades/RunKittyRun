@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class DoodadChanger
 {
     private static int SafezoneLanterns = FourCC("B005");
@@ -21,6 +20,7 @@ public static class DoodadChanger
     private static int SuperChristmasTree = FourCC("B00D");
     private static List<int> ChristmasDecor = InitChristmasDecor();
     private static List<destructable> AllDestructables { get; set; } = new();
+
     public static void Initialize()
     {
         CreateInitDestructiables();
@@ -85,7 +85,6 @@ public static class DoodadChanger
         GC.RemoveList(ref positions);
     }
 
-
     private static void CreateInitDestructiables()
     {
         int counter = 0;
@@ -113,11 +112,11 @@ public static class DoodadChanger
     }
 
     public static void ShowSeasonalDoodads(bool show = false) => EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => HideDoodads(show));
+
     private static void HideDoodads(bool show)
     {
         var des = GetEnumDestructable();
         if (ChristmasDecor.Contains(des.Type))
             des.SetVisibility(show);
     }
-
 }

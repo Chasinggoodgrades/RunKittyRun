@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using static WCSharp.Api.Common;
 
-public enum ShopItemType { Relic, Reward, Misc }
+public enum ShopItemType
+{ Relic, Reward, Misc }
 
 public class ShopItem
 {
@@ -58,11 +59,11 @@ public class ShopItem
     public static List<ShopItem> ShopItemsReward()
     {
         var shopItems = new List<ShopItem>();
-        var gameAwards = Globals.GAME_AWARDS;
+        var gameAwards = Globals.GAME_AWARDS_SORTED;
 
         var reward = RewardsManager.Rewards.Find(x => x.Name == "GreenTendrils");
-        shopItems.Add(new ShopItem(nameof(gameAwards.GreenTendrils), 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
-        
+        shopItems.Add(new ShopItem(nameof(gameAwards.Wings.GreenTendrils), 8000, reward.AbilityID, "Wings designed for those whom are economically stable."));
+
         return shopItems;
     }
 

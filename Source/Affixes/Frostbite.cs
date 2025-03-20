@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class Frostbite : Affix
 {
     private const float FROSTBITE_RADIUS = 500.0f;
@@ -46,8 +46,8 @@ public class Frostbite : Affix
 
     private void RemoveAllEffects()
     {
-        foreach (var effect in Effects.Values)
-            effect.Dispose();
+        foreach (var effect in Effects)
+            effect.Value?.Dispose();
         foreach (var target in Frostbitten.Keys)
             target.BaseMovementSpeed = Frostbitten[target];
     }
@@ -55,16 +55,16 @@ public class Frostbite : Affix
     private void RegisterEvents()
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
-        PeriodicRangeTrigger.AddAction(() => PeriodicRangeCheck());
+        PeriodicRangeTrigger.AddAction(ErrorHandler.Wrap(PeriodicRangeCheck));
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
-        InRangeTrigger.AddAction(() =>
+        InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;
             if (!target.Alive) return; // must be alive
             if (Frostbitten.ContainsKey(target)) return; // cannot be bitten already
             if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return; // must be in same lane
             SlowEffect(target);
-        });
+        }));
     }
 
     private void PeriodicRangeCheck()
@@ -85,7 +85,7 @@ public class Frostbite : Affix
         foreach (var target in TempList)
         {
             Frostbitten.Remove(target);
-            Effects[target].Dispose();
+            Effects[target]?.Dispose();
         }
 
         TempList.Clear();

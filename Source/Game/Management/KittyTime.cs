@@ -17,30 +17,39 @@ public class KittyTime
 
     private void Initialize()
     {
-        for(int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
             RoundTime.Add(i, 0.0f);
-        for(int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
             RoundProgress.Add(i, 0.0f);
         PeriodicProgressTimer();
     }
 
+    public void Dispose()
+    {
+        ProgressTimer.Pause();
+        ProgressTimer?.Dispose();
+        ProgressTimer = null;
+        RoundTime.Clear();
+        RoundProgress.Clear();
+        RoundTime = null;
+        RoundProgress = null;
+    }
+
     private void PeriodicProgressTimer()
     {
-        ProgressTimer.Start(0.2f, true, () => Progress.CalculateProgress(Kitty));
+        ProgressTimer.Start(0.2f, true, ErrorHandler.Wrap(() => Progress.CalculateProgress(Kitty)));
     }
+
     #region Time Section
+
     public float GetRoundTime(int round)
     {
-        if(RoundTime.ContainsKey(round))
-            return RoundTime[round];
-        return 0.0f;
+        return RoundTime.ContainsKey(round) ? RoundTime[round] : 0.0f;
     }
 
     public string GetRoundTimeFormatted(int round)
     {
-        if(RoundTime.ContainsKey(round))
-            return Utility.ConvertFloatToTime(RoundTime[round]);
-        return "0:00";
+        return RoundTime.ContainsKey(round) ? Utility.ConvertFloatToTime(RoundTime[round]) : "0:00";
     }
 
     public float GetTotalTime()
@@ -55,14 +64,14 @@ public class KittyTime
 
     public void SetRoundTime(int round, float time)
     {
-        if(RoundTime.ContainsKey(round))
+        if (RoundTime.ContainsKey(round))
             RoundTime[round] = time;
         SetTotalTime();
     }
 
     public void IncrementRoundTime(int round)
     {
-        if(RoundTime.ContainsKey(round))
+        if (RoundTime.ContainsKey(round))
             RoundTime[round] += GameTimer.RoundSpeedIncrement;
         SetTotalTime();
     }
@@ -70,33 +79,32 @@ public class KittyTime
     private void SetTotalTime()
     {
         TotalTime = 0.0f;
-        foreach(var time in RoundTime.Values)
-            TotalTime += time;
+        foreach (var time in RoundTime)
+            TotalTime += time.Value;
     }
-    #endregion
+
+    #endregion Time Section
 
     #region Progress Section
+
     public float GetRoundProgress(int round)
     {
-        if(RoundProgress.ContainsKey(round))
-            return RoundProgress[round];
-        return 0.0f;
+        return RoundProgress.ContainsKey(round) ? RoundProgress[round] : 0.0f;
     }
 
     public void SetRoundProgress(int round, float progress)
     {
-        if(RoundProgress.ContainsKey(round))
+        if (RoundProgress.ContainsKey(round))
             RoundProgress[round] = progress;
     }
 
     public float GetOverallProgress()
     {
         float overallProgress = 0.0f;
-        foreach(var progress in RoundProgress.Values)
-            overallProgress += progress;
+        foreach (var progress in RoundProgress)
+            overallProgress += progress.Value;
         return overallProgress / RoundProgress.Count;
     }
-    #endregion
 
-
+    #endregion Progress Section
 }

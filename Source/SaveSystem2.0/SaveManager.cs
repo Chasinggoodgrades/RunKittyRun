@@ -7,13 +7,12 @@ public class SaveManager
     private SyncSaveLoad syncSaveLoad;
     private static string SavePath { get; } = "Run-Kitty-Run";
     public static Dictionary<player, KittyData> SaveData { get; set; } = new Dictionary<player, KittyData>();
-
+    public static List<player> PlayersLoaded { get; } = new List<player>();
     public SaveManager()
     {
         syncSaveLoad = SyncSaveLoad.Instance;
         foreach (var player in Globals.ALL_PLAYERS) SaveData.Add(player, null);
         LoadAll();
-
     }
 
     public static void Initialize()
@@ -26,8 +25,8 @@ public class SaveManager
         var date = DateTimeManager.DateTime.ToString();
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            if(player.Controller == mapcontrol.Computer) continue;
-            if(player.SlotState != playerslotstate.Playing) continue;
+            if (player.Controller == mapcontrol.Computer) continue;
+            if (player.SlotState != playerslotstate.Playing) continue;
             SaveData[player].Date = date;
             Globals.SaveSystem.Save(player);
         }
@@ -46,7 +45,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.Save: {ex.Message}");
             throw;
         }
     }
@@ -60,7 +59,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            if (Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
             throw;
         }
     }
@@ -94,12 +93,19 @@ public class SaveManager
 
     private void NewSave(player player)
     {
-        if (player.SlotState != playerslotstate.Playing) return;
-        SaveData[player] = new KittyData();
-        SaveData[player].PlayerName = player.Name;
-        Save(player);
-        if (!Gamemode.IsGameModeChosen) return;
-        Globals.ALL_KITTIES[player].SaveData = SaveData[player];
+        try
+        {
+            if (player.SlotState != playerslotstate.Playing) return;
+            SaveData[player] = new KittyData();
+            SaveData[player].PlayerName = player.Name;
+            if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
+            if (!Gamemode.IsGameModeChosen) return;
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: {ex.Message}");
+            throw;
+        }
     }
 
     private static Action<FilePromise> FinishLoading()
@@ -126,6 +132,28 @@ public class SaveManager
             Globals.SaveSystem.NewSave(player);
             return;
         }
+        kittyData.SetRewardsFromUnavailableToAvailable();
         SaveData[player] = kittyData;
+        if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
+    }
+
+    public static KittyData GetKittyData(player player)
+    {
+        if (SaveData.TryGetValue(player, out KittyData kittyData) && kittyData != null)
+        {
+            return kittyData;
+        }
+        else
+        {
+            if (!PlayersLoaded.Contains(player))
+            {
+                Globals.SaveSystem.Load(player);
+            }
+            else
+            {
+                Globals.SaveSystem.NewSave(player);
+            }
+        }
+        return SaveData[player];
     }
 }

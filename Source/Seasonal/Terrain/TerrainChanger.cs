@@ -23,7 +23,7 @@ public static class TerrainChanger
         }
         catch (Exception e)
         {
-            if(Source.Program.Debug) Console.WriteLine(e.Message);
+            Logger.Critical($"Error in TerrainChanger.Initialize {e.Message}");
             throw;
         }
     }
@@ -57,7 +57,8 @@ public static class TerrainChanger
         Terrains[3] = FourCC("Xhdg");
         Terrains[4] = FourCC("Ywmb");
 
-        for(int i = 0; i < Gamemode.NumberOfRounds; i++) {
+        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
+        {
             SafezoneTerrain[i] = FourCC("Xblm");
         }
         SetTerrain();
@@ -66,24 +67,25 @@ public static class TerrainChanger
     private static void ChristmasTerrain()
     {
         if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
-/*        SafezoneTerrain[0] = FourCC("Xblm");
-        SafezoneTerrain[1] = FourCC("Ksmb");
-        SafezoneTerrain[2] = FourCC("Drds");
-        SafezoneTerrain[3] = FourCC("Kdkt");
-        SafezoneTerrain[4] = FourCC("Oaby");*/
+        /*        SafezoneTerrain[0] = FourCC("Xblm");
+                SafezoneTerrain[1] = FourCC("Ksmb");
+                SafezoneTerrain[2] = FourCC("Drds");
+                SafezoneTerrain[3] = FourCC("Kdkt");
+                SafezoneTerrain[4] = FourCC("Oaby");*/
 
-        for(int i = 0; i < Gamemode.NumberOfRounds; i ++)
+        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
         {
             SafezoneTerrain[i] = FourCC("Ibsq"); // Icecrown Glaicer (Black Squares)
         }
-        for(int i = 0; i < Gamemode.NumberOfRounds; i++) {
+        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
+        {
             Terrains[i] = FourCC("Nrck");
         }
     }
 
     private static void SetWolfRegionTerrain()
     {
-        var round = Globals.ROUND > 1 ? Globals.ROUND-1: 0;
+        var round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0;
         ChangeMapTerrain(LastWolfTerrain, Terrains[round]);
         LastWolfTerrain = Terrains[round];
     }
@@ -114,5 +116,4 @@ public static class TerrainChanger
             }
         }
     }
-
 }

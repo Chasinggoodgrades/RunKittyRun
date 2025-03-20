@@ -11,5 +11,4 @@
     public int YellowLightning { get; set; }
     public int GreenLightning { get; set; }
     public int SnowTrail2023 { get; set; }
-
 }

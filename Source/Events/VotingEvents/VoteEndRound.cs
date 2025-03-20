@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
+
 public static class VoteEndRound
 {
     public static bool VoteActive { get; private set; }
@@ -14,7 +15,7 @@ public static class VoteEndRound
         VoteActive = true;
         Votes.Add(voteStarter);
         Console.WriteLine($"{Colors.COLOR_YELLOW}A vote has been initiated to end the round. If you agree, type \"-yes\" {Colors.COLOR_RED}(Players have 20 seconds to decide).{Colors.COLOR_RESET}");
-        Utility.SimpleTimer(20.0f, () => VoteTally());
+        Utility.SimpleTimer(20.0f, VoteTally);
     }
 
     public static void IncrementVote(player player)
@@ -52,7 +53,7 @@ public static class VoteEndRound
     /// </summary>
     private static void SetUnfinishedPlayersTimes()
     {
-        foreach(var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES)
         {
             if (kitty.Value.Finished) continue;
             kitty.Value.TimeProg.SetRoundTime(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1]);

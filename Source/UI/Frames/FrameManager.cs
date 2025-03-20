@@ -1,7 +1,7 @@
-﻿using WCSharp.Api;
-using static WCSharp.Api.Common;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class FrameManager
 {
@@ -12,10 +12,16 @@ public static class FrameManager
     public static framehandle ShopButton;
     public static framehandle RewardsButton;
     public static framehandle Backdrop;
+
+    private const float ButtonWidth = 0.053f;
+    private const float ButtonHeight = 0.028f;
+
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static trigger ESCTrigger = trigger.Create();
     private static string TEXT_COLOR = Colors.COLOR_YELLOW;
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
+
+
     public static void Initialize()
     {
         try
@@ -31,7 +37,7 @@ public static class FrameManager
         }
         catch (Exception ex)
         {
-            if(Source.Program.Debug) Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in FrameManager: {ex.Message}");
+            Logger.Critical($"Error in FrameManager.Initialize: {ex.Message}");
             throw;
         }
     }
@@ -73,11 +79,11 @@ public static class FrameManager
         // Close Actions
         var closeTrigger = trigger.Create();
         closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
-        closeTrigger.AddAction(() =>
+        closeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             if (!@event.Player.IsLocal) return;
             parent.Visible = false;
-        });
+        }));
 
         return header;
     }
@@ -85,7 +91,7 @@ public static class FrameManager
     private static void RemoveUnwantedFrames()
     {
         var resourceBarText = BlzGetFrameByName("ResourceBarSupplyText", 0);
-        var timeDayDisplay = BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
+        BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
         //timeDayDisplay.Visible = false;
     }
@@ -94,14 +100,14 @@ public static class FrameManager
     {
         RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "ScriptDialogButton", 0);
         RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
-        RewardsButton.SetSize(0.0545f, 0.025f);
+        RewardsButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "RewardsText", RewardsButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r";
         shopText.SetPoint(framepointtype.Center, 0, 0, RewardsButton, framepointtype.Center);
         shopText.SetScale(0.9f);
         shopText.Enabled = false;
         RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click);
-        RewardsTrigger.AddAction(RewardsFrame.RewardsFrameActions);
+        RewardsTrigger.AddAction(ErrorHandler.Wrap(RewardsFrame.RewardsFrameActions));
         RewardsButton.Visible = false;
     }
 
@@ -109,14 +115,14 @@ public static class FrameManager
     {
         MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "ScriptDialogButton", 0);
         MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
-        MusicButton.SetSize(0.0525f, 0.025f);
+        MusicButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "MusicText", MusicButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Music{HOTKEY_COLOR}(0)";
         shopText.SetPoint(framepointtype.Center, 0, 0, MusicButton, framepointtype.Center);
         shopText.SetScale(0.98f);
         shopText.Enabled = false;
         StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click);
-        StatsTrigger.AddAction(MusicFrame.MusicFrameActions);
+        StatsTrigger.AddAction(ErrorHandler.Wrap(MusicFrame.MusicFrameActions));
         MusicButton.Visible = false;
     }
 
@@ -124,21 +130,21 @@ public static class FrameManager
     {
         ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "ScriptDialogButton", 0);
         ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
-        ShopButton.SetSize(0.0525f, 0.025f);
+        ShopButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "ShopText", ShopButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)";
         shopText.SetPoint(framepointtype.Center, 0, 0, ShopButton, framepointtype.Center);
         shopText.SetScale(1.0f);
         shopText.Enabled = false;
         ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click);
-        ShopTrigger.AddAction(ShopFrame.ShopFrameActions);
+        ShopTrigger.AddAction(ErrorHandler.Wrap(ShopFrame.ShopFrameActions));
         ShopButton.Visible = false;
     }
 
     private static void ButtonsBackdrop()
     {
         Backdrop = framehandle.Create("BACKDROP", "ButtonsBackdrop", GameUI, "QuestButtonDisabledBackdropTemplate", 0);
-        var statsFrameParent = BlzGetFrameByName("ResourceBarGoldText", 0);
+        BlzGetFrameByName("ResourceBarGoldText", 0);
         Backdrop.SetPoint(framepointtype.Top, 0, 0, GameUI, framepointtype.Top);
         Backdrop.SetSize(0.16f, 0.035f);
         Backdrop.SetScale(1.0f);
@@ -150,7 +156,7 @@ public static class FrameManager
     {
         var t = timer.Create();
         var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
-        t.Start(1.0f, true, () =>
+        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             var x = nameFrame.Width / 4;
             var h = nameFrame.Height / 8;
@@ -158,16 +164,16 @@ public static class FrameManager
             Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
             Backdrop.SetSize(x, h);
             t.Dispose();
-        });
+        }));
     }
 
     private static void ESCHideFrames()
     {
-        foreach(var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS)
         {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ESCActions);
+        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCActions));
     }
 
     public static void RefreshFrame(framehandle frame)
@@ -198,7 +204,4 @@ public static class FrameManager
         foreach (var frame in frames)
             if (frame != currentFrame) frame.Visible = false;
     }
-
 }
-
-

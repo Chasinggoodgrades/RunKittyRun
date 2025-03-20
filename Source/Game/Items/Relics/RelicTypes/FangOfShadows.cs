@@ -1,12 +1,12 @@
-﻿using System;
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
-    public const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    public new const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
-    private static new string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
+    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private trigger SummonTrigger;
     private trigger TeleTrigger;
     private timer KillTimer;
@@ -52,7 +52,7 @@ public class FangOfShadows : Relic
         SummonTrigger = trigger.Create();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        SummonTrigger.AddAction(() => SummonShadowKitty());
+        SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty));
 
         TeleTrigger = trigger.Create();
         KillTimer = timer.Create();
@@ -71,7 +71,7 @@ public class FangOfShadows : Relic
         sk.SummonShadowKitty();
         RegisterTeleportAbility(sk.Unit);
         sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
-        KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, () => sk.KillShadowKitty());
+        KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(sk.KillShadowKitty));
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
     }
 
@@ -88,7 +88,7 @@ public class FangOfShadows : Relic
     {
         TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
-        TeleTrigger.AddAction(() => TeleportToShadowKitty());
+        TeleTrigger.AddAction(TeleportToShadowKitty);
     }
 
     /// <summary>
@@ -112,7 +112,7 @@ public class FangOfShadows : Relic
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
-        var ability = Unit.GetAbility(RelicAbilityID);
+        Unit.GetAbility(RelicAbilityID);
         var reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
         var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;

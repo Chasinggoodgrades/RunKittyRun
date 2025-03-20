@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Source;
 using System.Collections.Generic;
-using System.Reflection;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
-
 
 public static class CustomStatFrame
 {
@@ -75,9 +73,8 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        var localPlayer = player.LocalPlayer;
-        var selectedUnit = SelectedUnit[localPlayer];
-        
+        if (!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
+
         HandleFrameText(selectedUnit);
 
         CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
@@ -85,6 +82,9 @@ public static class CustomStatFrame
 
     public static void Init()
     {
+        BlzLoadTOCFile("war3mapImported\\CustomStat.toc");
+        BlzLoadTOCFile("war3mapImported\\BoxedText.toc");
+
         var hideParent = BlzCreateFrameByType("SIMPLEFRAME", "HideParent", BlzGetFrameByName("ConsoleUI", 0), "", 0);
         hideParent.Visible = false;
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconDamage", 0), hideParent);
@@ -95,24 +95,20 @@ public static class CustomStatFrame
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconGold", 5), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconHero", 6), hideParent);
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
-        
 
         trigger trig = trigger.Create();
-        trig.AddAction( () =>
+        trig.AddAction(ErrorHandler.Wrap(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
             SelectedUnit[player] = unit;
-        });
+        }));
 
-        foreach(var player in Globals.ALL_PLAYERS)
-            if(player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
+        foreach (var player in Globals.ALL_PLAYERS)
+            if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);
 
         CustomStatFrameBoxS = BlzCreateFrameByType("SIMPLEFRAME", "CustomStatFrameBoxSBoss", BlzGetFrameByName("SimpleUnitStatsPanel", 0), "", 0);
         CustomStatFrameBoxF = BlzCreateFrameByType("FRAME", "CustomStatFrameBoxFBoss", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0);
-
-        BlzLoadTOCFile("war3mapimported\\CustomStat.toc");
-        BlzLoadTOCFile("war3mapimported\\BoxedText.toc");
 
         Add("war3mapImported\\BTNStopwatch.blp", "", "Score");
         Add("ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp", "", "Revives");
@@ -122,17 +118,21 @@ public static class CustomStatFrame
         Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "", "Speed");
 
         t = timer.Create();
-        t.Start(0.1f, true, Update);
+        t.Start(0.1f, true, ErrorHandler.Wrap(Update));
     }
 
     private static void HandleFrameText(unit selectedUnit)
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
         else if (SetChampionFrameText(selectedUnit)) { }
-        else
+        else if (selectedUnit.UnitType == Constants.UNIT_KITTY)
         {
             SetCommonFrameText(selectedUnit);
             SetGamemodeFrameText(selectedUnit);
+        }
+        else
+        {
+            // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.
         }
     }
 
@@ -184,16 +184,19 @@ public static class CustomStatFrame
         Stats[1].Text.Text = "";
         Stats[2].Text.Text = "";
         Stats[3].Text.Text = "";
-        Stats[4].Text.Text = "";
-        if(selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
+        //Stats[4].Text.Text = "";
+        if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
+        if (Program.Debug) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
         Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 
     private static void SetWolfAffixTexts(unit selectedUnit)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        var wolf = Globals.ALL_WOLVES[selectedUnit];
+        if (!Globals.ALL_WOLVES.TryGetValue(selectedUnit, out var wolf)) return;
+
         var affixes = wolf.Affixes;
+
         for (var i = 0; i < affixes.Count; i++)
         {
             Stats[i].Text.Text = affixes[i].Name;
@@ -229,22 +232,29 @@ public static class CustomStatFrame
         BlzFrameSetText(Stats[5].Text, $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}");
         BlzFrameSetText(Stats[2].Text, $"{Deaths} {Colors.COLOR_RED}{GetPlayerDeaths(selectedUnit)}|r");
     }
+
     private static string GetPlayerTeamName(unit u)
     {
-        if (Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team)) return team.TeamColor;
-        return $"{ Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
+        return Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team) ? team.TeamColor : $"{Colors.COLOR_YELLOW_ORANGE}Team Aches|r";
     }
+
     private static int GetPlayerGold(unit u) => u.Owner.Gold;
+
     private static string GetPlayerProgress(unit u) => Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundProgress(Globals.ROUND).ToString("F2");
+
     private static int GetPlayerSaves(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Saves;
+
     private static int GetPlayerDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Deaths;
+
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.SaveStreak;
+
     private static string GetPlayerTime(unit u) => Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundTime(Globals.ROUND));
+
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
+
     private static int GetCurrentRoundDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths;
+
     private static int GetGameTotalSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalSaves;
+
     private static int GetGameTotalDeaths(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalDeaths;
-
-
-
 }

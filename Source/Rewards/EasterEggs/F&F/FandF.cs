@@ -21,7 +21,7 @@ public static class FandF
 
     public static void CreateBloodWolf()
     {
-        if(Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return;
         var region = GetRandomInt(0, WolfArea.WolfAreas.Count - 1);
         var wolfObject = new Wolf(region);
         BloodWolf = wolfObject.Unit;
@@ -32,21 +32,19 @@ public static class FandF
 
     private static void AppendCollectionsUnit()
     {
-        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, 
-            Filter( () => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
+        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
     }
 
     private static trigger RegisterCollection()
     {
         var trig = trigger.Create();
-        trig.AddAction(CollectionActions);
+        trig.AddAction(ErrorHandler.Wrap(CollectionActions));
         return trig;
     }
 
     private static void CollectionActions()
     {
         var unit = @event.Unit;
-        var player = unit.Owner;
 
         if (!Utility.UnitHasItem(unit, EmptyVial)) return;
 
@@ -58,9 +56,8 @@ public static class FandF
     private static trigger RegisterTurnIn()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, 
-            Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY));
-        trig.AddAction(TurnInActions);
+        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
+        trig.AddAction(ErrorHandler.Wrap(TurnInActions));
         return trig;
     }
 
@@ -76,7 +73,6 @@ public static class FandF
         var player = u.Owner;
         player.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:|r |cffffff00Greetings, fellow feline! What paws you hold there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r");
-
     }
 
     private static void BloodVialQuest(unit u)
@@ -86,7 +82,7 @@ public static class FandF
         if (BloodVialItems(u))
         {
             RemoveQuestItems(u);
-            AwardManager.GiveReward(u.Owner, nameof(Globals.GAME_AWARDS.WWBlood));
+            AwardManager.GiveReward(u.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlood));
         }
         else u.Owner.DisplayTimedTextTo(20.0f,
             "|cff00ffffFast & Furriest:| r |cffffff00Ah, splendid! You've recovered the sample. Your prowess is truly remarkable. Evidently, the potential within this sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r");
@@ -94,11 +90,7 @@ public static class FandF
 
     private static bool BloodVialItems(unit u)
     {
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK)) return false;
-        if(!Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES)) return false;
-        if(!Utility.UnitHasItem(u, BloodVial)) return false;
-        return true;
+        return Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION) && Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) && Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) && Utility.UnitHasItem(u, BloodVial);
     }
 
     private static void RemoveQuestItems(unit u)

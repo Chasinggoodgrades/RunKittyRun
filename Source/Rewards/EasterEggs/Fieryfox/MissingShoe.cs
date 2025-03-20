@@ -1,5 +1,6 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+
 public static class MissingShoe
 {
     private static trigger TimerEvent;
@@ -21,7 +22,7 @@ public static class MissingShoe
         var randomTime = GetRandomReal(600.0f, 900.0f);
         TimerEvent = trigger.Create();
         TimerEvent.RegisterTimerEvent(randomTime, false);
-        TimerEvent.AddAction(EventStart);
+        TimerEvent.AddAction(ErrorHandler.Wrap(EventStart));
     }
 
     private static void RegisterTurnInEvent()
@@ -29,7 +30,7 @@ public static class MissingShoe
         TurnInEvent = trigger.Create();
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null);
-        TurnInEvent.AddAction(TurnInActions);
+        TurnInEvent.AddAction(ErrorHandler.Wrap(TurnInActions));
     }
 
     // Ping Event + Shoe Spawn
@@ -48,7 +49,6 @@ public static class MissingShoe
         if (!@event.Unit.HasItem(Shoe)) return;
         @event.Unit.RemoveItem(Shoe);
         SpawnChampions.Fieryfox2023.AddItem(Shoe);
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS.RedTendrils));
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.RedTendrils));
     }
-
 }
