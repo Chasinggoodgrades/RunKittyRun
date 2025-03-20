@@ -432,22 +432,30 @@ public class AIController
         float notInLaneAngle = -500f;
         float notInLaneAngle2 = -500f;
 
+        var currentProgressZoneId = this.kitty.ProgressZone;
+        var laneBounds = WolfArea.WolfAreas[currentProgressZoneId].Rectangle;
+        var vertical = laneBounds.Width < laneBounds.Height;
+
         float step = 0.1f;
-        float maxAngle = 2f * MathF.PI;
+        float initialAngle = vertical ? -(MathF.PI / 2) : 0f;
+        float maxAngle = initialAngle + 2f * MathF.PI;
+
+        Console.WriteLine($"Initial angle: {initialAngle}");
 
         // loop over all angles
-        for (float angle = 0; angle < maxAngle; angle += step)
+        for (float angle = initialAngle; angle < maxAngle; angle += step)
         {
-            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Cos(angle);
-            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Sin(angle);
+            float nAngle = NormalizeAngle(angle);
+            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Cos(nAngle);
+            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Sin(nAngle);
 
             if (notInLaneAngle == -500f && !IsWithinLaneBounds(x, y))
             {
-                notInLaneAngle = angle;
+                notInLaneAngle = nAngle;
             }
             else if (notInLaneAngle != -500f && notInLaneAngle2 == -500f && IsWithinLaneBounds(x, y))
             {
-                notInLaneAngle2 = angle;
+                notInLaneAngle2 = nAngle;
                 break;
             }
         }
