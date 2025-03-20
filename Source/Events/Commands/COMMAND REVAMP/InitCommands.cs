@@ -1311,5 +1311,41 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "shop",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the shop frame.",
+            action: (player, args) =>
+            {
+                ShopFrame.ShopFrameActions();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "rewards",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the rewards frame.",
+            action: (player, args) =>
+            {
+                RewardsFrame.RewardsFrameActions();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "music",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the music frame.",
+            action: (player, args) =>
+            {
+                MusicFrame.MusicFrameActions();
+            }
+        );
+
     }
 }

@@ -167,7 +167,8 @@ public class Slider
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
         SliderTimer.Pause();
-        ForcedSlideTimer.Pause();
+        // ForcedSlideTimer.Pause(); don't see a reason to pause this actually?
+        this.kitty.Invulnerable = false;
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
         this.wasSliding = false;
