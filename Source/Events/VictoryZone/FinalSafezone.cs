@@ -22,7 +22,7 @@ public static class FinalSafezone
             if (Gamemode.CurrentGameMode != "Standard") return;
 
             kitty.CurrentStats.RoundFinished = true;
-            NitroChallenges.CompletedNitro(unit);
+            NitroChallenges.CompletedNitro(kitty);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
