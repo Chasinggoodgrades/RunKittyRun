@@ -71,7 +71,7 @@ public static class CollisionDetection
             if (!k.Unit.Alive) return;
             if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
             if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
-            if (ChronoSphere.RewindDeath(k.Unit)) return;
+            if (ChronoSphere.RewindDeath(k)) return;
             if (k.Invulnerable) return;
             OneOfNine.OneOfNineEffect(k.Player);
             k.KillKitty();

@@ -406,12 +406,9 @@ public static class ShopFrame
 
                 // Find the shopItem type associated with the selected item that the player owns.
                 var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
-                var CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID);
-                if (CD > 0.0f && relic.RelicAbilityID != 0)
-                {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
-                    return;
-                }
+
+                if (!RelicFunctions.CannotSellOnCD(kitty, relic)) return;
+
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID);
                 player.Gold += selectedItem.Cost;
                 relic?.RemoveEffect(kitty.Unit);

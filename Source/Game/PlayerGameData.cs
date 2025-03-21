@@ -20,6 +20,7 @@ public class PlayerGameData
     public bool NitroObtained { get; set; } = false;
     public int CollectedKibble { get; set; }
     public int ProgressZone { get; set; }
+    public bool ChronoSphereCD { get; set; } = false;
     public float CollisonRadius { get; set; } = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
 
     public PlayerGameData()
