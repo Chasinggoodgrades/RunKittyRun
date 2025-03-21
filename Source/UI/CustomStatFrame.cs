@@ -186,7 +186,7 @@ public static class CustomStatFrame
         Stats[3].Text.Text = "";
         //Stats[4].Text.Text = "";
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
-        if (Program.Debug) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
+        if (Program.Debug && selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
         Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 

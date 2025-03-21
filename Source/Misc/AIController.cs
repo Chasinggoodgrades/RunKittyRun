@@ -482,7 +482,8 @@ public class AIController
         else
         {
             // Ensure the merged intervals are sorted by their start angle.
-            mergedIntervals.Sort((a, b) => a.Start.CompareTo(b.Start));
+            //mergedIntervals.Sort((a, b) => a.Start.CompareTo(b.Start));
+            SortAngleIntervals(mergedIntervals);
 
             // The gap between the end of the last interval and the start of the first (accounting for wrap-around).
             float wrapGap = (mergedIntervals[0].Start + 2f * MathF.PI) - mergedIntervals[mergedIntervals.Count - 1].End;
@@ -790,17 +791,30 @@ public class AIController
         return Math.Abs(diff);
     }
 
-    private int MergeIntervalSort(AngleInterval a, AngleInterval b)
+    private void SortAngleIntervals(List<AngleInterval> intervals)
     {
-        return a.Start.CompareTo(b.Start);
+        for (int i = 0; i < intervals.Count - 1; i++)
+        {
+            for (int j = 0; j < intervals.Count - i - 1; j++)
+            {
+                if (intervals[j].Start > intervals[j + 1].Start)
+                {
+                    // Swap intervals[j] and intervals[j + 1]
+                    var temp = intervals[j];
+                    intervals[j] = intervals[j + 1];
+                    intervals[j + 1] = temp;
+                }
+            }
+        }
     }
+
 
     /// <summary>
     /// Merges overlapping angular intervals.
     /// </summary>
     private void MergeIntervals(List<AngleInterval> intervals)
     {
-        intervals.Sort(MergeIntervalSort);
+        SortAngleIntervals(intervals);
 
         AngleInterval current = intervals[0];
 
