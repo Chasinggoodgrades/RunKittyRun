@@ -11,6 +11,7 @@ public class AIController
     private Kitty kitty;
     private bool enabled;
     public float DODGE_RADIUS = 192.0f;
+    public float DODGE_RADIUS_STILL = 128.0f;
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public static string FREE_LASER_COLOR = "GRSB";
     public static string BLOCKED_LASER_COLOR = "RESB";
@@ -52,6 +53,8 @@ public class AIController
     private List<AngleInterval> freeGaps = new List<AngleInterval>();
     private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
     private static Dictionary<Kitty, Kitty> claimedKitties = new Dictionary<Kitty, Kitty>();
+    private List<Point> wallPoints = new List<Point>();
+
 
     public AIController(Kitty kitty)
     {
@@ -250,7 +253,7 @@ public class AIController
         wolvesInRange.Clear();
         foreach (var wolf in wolvesInLane)
         {
-            if (IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, wolf.Unit.X, wolf.Unit.Y, DODGE_RADIUS))
+            if (IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, wolf.Unit.X, wolf.Unit.Y, wolf.IsWalking ? DODGE_RADIUS : DODGE_RADIUS_STILL))
             {
                 wolvesInRange.Add(wolf);
             }
@@ -371,6 +374,97 @@ public class AIController
         return (centerX, centerY);
     }
 
+    /**
+	* For the wall to be within range of the kitty, basically what has to happen is that a line passes through the circle at two points. 
+	* Using the mathematical formula for a line passing through two points on a circle, this can be calculated.
+	*/
+    void CalcCrossingPoints()
+    {
+        foreach (var point in wallPoints)
+        {
+            point.__destroy();
+        }
+
+        wallPoints.Clear();
+
+        var dodgeRange = (DODGE_DISTANCE * (timerInterval + 0.2f));
+        var currentProgressZoneId = this.kitty.ProgressZone;
+        var laneBounds = WolfArea.WolfAreas[currentProgressZoneId].Rectangle;
+        bool isVertical = laneBounds.Width < laneBounds.Height;
+
+        if (isVertical)
+        {
+            // Handle vertical walls (left/right) as before.
+            float constant = float.NaN;
+            if (this.kitty.Unit.X - dodgeRange < laneBounds.Left)
+                constant = laneBounds.Left;
+            else if (this.kitty.Unit.X + dodgeRange > laneBounds.Right)
+                constant = laneBounds.Right;
+            else
+                return;
+
+            float relativeY = (float)Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.Unit.X - constant, 2));
+            if (!float.IsNaN(relativeY) && relativeY != 0)
+            {
+                var a = MemoryHandler.GetEmptyObject<Point>();
+                a.X = constant;
+                a.Y = relativeY + this.kitty.Unit.Y;
+                wallPoints.Add(a);
+
+                var b = MemoryHandler.GetEmptyObject<Point>();
+                b.X = constant;
+                b.Y = -relativeY + this.kitty.Unit.Y;
+                wallPoints.Add(b);
+            }
+        }
+        else
+        {
+            float constant = float.NaN;
+            if (this.kitty.Unit.Y + dodgeRange > laneBounds.Top)
+                constant = laneBounds.Top;
+            else if (this.kitty.Unit.Y - dodgeRange < laneBounds.Bottom)
+                constant = laneBounds.Bottom;
+            else
+                return;
+
+            float relativeX = (float)Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.Unit.Y - constant, 2));
+            if (!float.IsNaN(relativeX) && relativeX != 0)
+            {
+                var a = MemoryHandler.GetEmptyObject<Point>();
+                a.X = relativeX + this.kitty.Unit.X;
+                a.Y = constant;
+                wallPoints.Add(a);
+
+                var b = MemoryHandler.GetEmptyObject<Point>();
+                b.X = -relativeX + this.kitty.Unit.X;
+                b.Y = constant;
+                wallPoints.Add(b);
+            }
+        }
+
+        return;
+    }
+
+
+    /**
+	* This function find the angle formed among two points of the circumference
+	* and the center on the X axis
+	*/
+    (float, float) AnglesFromCenter((float X, float Y) pointA, (float X, float Y) pointB)
+    {
+        float angleA = AngleOf(pointA, (this.kitty.Unit.X, this.kitty.Unit.Y));
+        float angleB = AngleOf(pointB, (this.kitty.Unit.X, this.kitty.Unit.Y));
+        return (angleA, angleB);
+    }
+
+    float AngleOf((float X, float Y) point, (float X, float Y) center)
+    {
+        float deltaX = point.X - center.X;
+        float deltaY = point.Y - center.Y;
+        float radians = (float)Math.Atan2(deltaY, deltaX);
+        return NormalizeAngle(radians);
+    }
+
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
     private (float X, float Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (float X, float Y) forwardDirection)
     {
@@ -429,35 +523,53 @@ public class AIController
             }
         }
 
-        float notInLaneAngle = -500f;
-        float notInLaneAngle2 = -500f;
+        CalcCrossingPoints();
 
-        float step = 0.1f;
-        float maxAngle = 2f * MathF.PI;
-
-        // loop over all angles
-        for (float angle = 0; angle < maxAngle; angle += step)
+        if (wallPoints.Count == 2)
         {
-            float x = this.kitty.Unit.X + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Cos(angle);
-            float y = this.kitty.Unit.Y + (DODGE_DISTANCE * (timerInterval + 0.2f)) * MathF.Sin(angle);
+            var (angleA, angleB) = AnglesFromCenter((wallPoints[0].X, wallPoints[0].Y), (wallPoints[1].X, wallPoints[1].Y));
 
-            if (notInLaneAngle == -500f && !IsWithinLaneBounds(x, y))
+            if (angleA > angleB)
             {
-                notInLaneAngle = angle;
+                float temp = angleA;
+                angleA = angleB;
+                angleB = temp;
             }
-            else if (notInLaneAngle != -500f && notInLaneAngle2 == -500f && IsWithinLaneBounds(x, y))
-            {
-                notInLaneAngle2 = angle;
-                break;
-            }
-        }
 
-        if (notInLaneAngle != -500f && notInLaneAngle2 != -500f)
-        {
-            var c = MemoryHandler.GetEmptyObject<AngleInterval>();
-            c.Start = Math.Min(notInLaneAngle, notInLaneAngle2);
-            c.End = Math.Max(notInLaneAngle, notInLaneAngle2);
-            blockedIntervals.Add(c);
+            float start;
+            float end;
+
+            if (angleB - angleA > 180.0f * (MathF.PI / 180))
+            {
+                start = angleB;
+                end = angleA;
+            }
+            else
+            {
+                start = angleA;
+                end = angleB;
+            }
+
+            // If the interval wraps around 0, split it into two parts.
+            if (start > end)
+            {
+                var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                a.Start = start;
+                a.End = 2f * MathF.PI;
+                blockedIntervals.Add(a);
+
+                var b = MemoryHandler.GetEmptyObject<AngleInterval>();
+                b.Start = 0;
+                b.End = end;
+                blockedIntervals.Add(b);
+            }
+            else
+            {
+                var a = MemoryHandler.GetEmptyObject<AngleInterval>();
+                a.Start = start;
+                a.End = end;
+                blockedIntervals.Add(a);
+            }
         }
 
         // Merge any overlapping blocked intervals.
@@ -820,7 +932,7 @@ public class AIController
 
         for (int i = 1; i < intervals.Count; i++)
         {
-            if (intervals[i].Start <= current.End)
+            if (IsAngleInInterval(intervals[i].Start, current))
             {
                 // Extend the current interval if needed.
                 current.End = MathF.Max(current.End, intervals[i].End);
@@ -844,6 +956,21 @@ public class AIController
         public float End;
 
         public AngleInterval()
+        {
+        }
+
+        public void __destroy(bool recursive = false)
+        {
+            MemoryHandler.DestroyObject(this);
+        }
+    }
+
+    private class Point : IDestroyable
+    {
+        public float X;
+        public float Y;
+
+        public Point()
         {
         }
 
