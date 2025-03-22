@@ -124,12 +124,12 @@ public static class CustomStatFrame
     private static void HandleFrameText(unit selectedUnit)
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
-        else if (SetChampionFrameText(selectedUnit)) { }
         else if (selectedUnit.UnitType == Constants.UNIT_KITTY)
         {
             SetCommonFrameText(selectedUnit);
             SetGamemodeFrameText(selectedUnit);
         }
+        else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
             // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.

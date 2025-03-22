@@ -8,6 +8,8 @@ public class Kitty
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
     private const float MANA_DEATH_PENALTY = 65.0f;
+    private const float InvulDuration = 0.6f;
+    public static bool InvulTest = false;
 
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
@@ -33,8 +35,8 @@ public class Kitty
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public Disco Disco { get; set; }
-    public timer DiscoTimer { get; set; }
     public timer SpinCamTimer { get; set; }
+    public timer InvulTimer { get; set; } = timer.Create();
     public float SpinCamSpeed { get; set; } = 0;
     public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
 
@@ -101,7 +103,6 @@ public class Kitty
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();
-
         }
         catch (Exception e)
         {
@@ -119,6 +120,7 @@ public class Kitty
             if (Unit.Alive) return;
             Circle circle = Globals.ALL_CIRCLES[Player];
             circle.HideCircle();
+            InvulnerableKitty();
             Alive = true;
             Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
             Unit.Mana = circle.Unit.Mana;
@@ -136,6 +138,17 @@ public class Kitty
             Logger.Critical($"Error in ReviveKitty. {e.Message}");
             throw;
         }
+    }
+
+    private void InvulnerableKitty()
+    {
+        if (!InvulTest) return;
+        Invulnerable = true;
+        InvulTimer.Start(InvulDuration, false, ErrorHandler.Wrap(() =>
+        {
+            Invulnerable = false;
+            InvulTimer.Pause();
+        }));
     }
 
     private void InitData()
@@ -200,6 +213,7 @@ public class Kitty
         YellowLightning.Dispose();
         TimeProg.Dispose();
         APMTracker.Dispose();
+        InvulTimer.Dispose();
         Disco?.__destroy(false);
         aiController.StopAi();
         Unit.Dispose();

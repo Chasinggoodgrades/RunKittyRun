@@ -58,7 +58,7 @@ public static class PersonalBestAwarder
     /// <param name="k"></param>
     public static void BeatMostSavesInGame(Kitty k)
     {
-        if (k.Player.Controller == mapcontrol.Computer) return;
+        if (k.aiController.IsEnabled()) return;
         var currentSaves = k.CurrentStats.TotalSaves;
         var bestSaves = k.SaveData.PersonalBests.Saves;
         if (currentSaves < 10) return; // avoid the spam for 1st timers.
@@ -78,7 +78,7 @@ public static class PersonalBestAwarder
     /// <param name="k"></param>
     public static void BeatenSaveStreak(Kitty k)
     {
-        if (k.Player.Controller == mapcontrol.Computer) return;
+        if (k.aiController.IsEnabled()) return;
         var currentStreak = k.SaveData.GameStats.SaveStreak;
         var bestStreak = k.SaveData.GameStats.HighestSaveStreak;
         if (currentStreak < 5) return; // avoid the spam for 1st timers.
