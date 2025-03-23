@@ -84,6 +84,7 @@ public class Kitty
         try
         {
             if (Invulnerable) return;
+            if (!Alive) return;
             Circle circle = Globals.ALL_CIRCLES[Player];
             this.Slider.PauseSlider();
             this.aiController.PauseAi();
@@ -213,6 +214,7 @@ public class Kitty
         YellowLightning.Dispose();
         TimeProg.Dispose();
         APMTracker.Dispose();
+        InvulTimer.Pause();
         InvulTimer.Dispose();
         Disco?.__destroy(false);
         aiController.StopAi();
