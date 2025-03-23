@@ -109,6 +109,7 @@ public class Fixation : Affix
 
     private void GetClosestTarget()
     {
+        UnitsInRange.Clear();
         UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filters.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
         var newTarget = GetClosestUnitInRange();

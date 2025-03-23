@@ -16,6 +16,7 @@ public static class PersonalBestAwarder
     private static List<player> KibbleCollectionBeatenList = new List<player>();
     private static List<player> BeatenMostSavesList = new List<player>();
     private static List<player> SaveStreakBeatenList = new List<player>();
+    private static float MessageTime = 3.0f;
 
     /// <summary>
     /// Checks if the current round time is higher than the best time and updates it if so. Also notifies all players :).
@@ -29,7 +30,7 @@ public static class PersonalBestAwarder
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) roundEnum = TimeSetter.GetSoloEnum();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
-        Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}!|r");
+        Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}!|r");
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public static class PersonalBestAwarder
             k.SaveData.PersonalBests.KibbleCollected = currentKibble;
 
             if (KibbleCollectionBeatenList.Contains(k.Player)) return;
-            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by collecting {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r");
+            Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by collecting {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r");
             KibbleCollectionBeatenList.Add(k.Player);
         }
     }
@@ -57,7 +58,7 @@ public static class PersonalBestAwarder
     /// <param name="k"></param>
     public static void BeatMostSavesInGame(Kitty k)
     {
-        if (k.Player.Controller == mapcontrol.Computer) return;
+        if (k.aiController.IsEnabled()) return;
         var currentSaves = k.CurrentStats.TotalSaves;
         var bestSaves = k.SaveData.PersonalBests.Saves;
         if (currentSaves < 10) return; // avoid the spam for 1st timers.
@@ -66,7 +67,7 @@ public static class PersonalBestAwarder
             k.SaveData.PersonalBests.Saves = currentSaves;
 
             if (BeatenMostSavesList.Contains(k.Player)) return;
-            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by saving {Colors.COLOR_YELLOW}{currentSaves} kitties|r in a single game.");
+            Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best by saving {Colors.COLOR_YELLOW}{currentSaves} kitties|r in a single game.");
             BeatenMostSavesList.Add(k.Player);
         }
     }
@@ -77,7 +78,7 @@ public static class PersonalBestAwarder
     /// <param name="k"></param>
     public static void BeatenSaveStreak(Kitty k)
     {
-        if (k.Player.Controller == mapcontrol.Computer) return;
+        if (k.aiController.IsEnabled()) return;
         var currentStreak = k.SaveData.GameStats.SaveStreak;
         var bestStreak = k.SaveData.GameStats.HighestSaveStreak;
         if (currentStreak < 5) return; // avoid the spam for 1st timers.
@@ -86,7 +87,7 @@ public static class PersonalBestAwarder
             k.SaveData.GameStats.HighestSaveStreak = currentStreak;
 
             if (SaveStreakBeatenList.Contains(k.Player)) return;
-            Utility.TimedTextToAllPlayers(7.0f, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best save streak of {Colors.COLOR_YELLOW}{currentStreak}!|r");
+            Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(k.Player)} has set a new personal best save streak of {Colors.COLOR_YELLOW}{currentStreak}!|r");
             SaveStreakBeatenList.Add(k.Player);
         }
     }

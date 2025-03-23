@@ -17,16 +17,17 @@ public static class FinalSafezone
         {
             var unit = @event.Unit;
             var player = unit.Owner;
-
+            var kitty = Globals.ALL_KITTIES[player];
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
             if (Gamemode.CurrentGameMode != "Standard") return;
 
-            Globals.ALL_KITTIES[player].CurrentStats.RoundFinished = true;
-            NitroChallenges.CompletedNitro(unit);
+            kitty.CurrentStats.RoundFinished = true;
+            NitroChallenges.CompletedNitro(kitty);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
             Challenges.GreenLightning(player);
+            Challenges.PatrioticLight(kitty); // transition to using kitty object later.
             NoKittyLeftBehind.CheckChallenge();
         }));
     }

@@ -7,4 +7,5 @@
     public int AncientKitty { get; set; }
     public int ZandalariKitty { get; set; }
     public int HuntressKitty { get; set; }
+    public int KibbleSkin { get; set; } = -1;
 }

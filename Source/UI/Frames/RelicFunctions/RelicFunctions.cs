@@ -1,6 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
-
+using static WCSharp.Api.Common;
 public static class RelicFunctions
 {
     public static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
@@ -120,4 +120,22 @@ public static class RelicFunctions
         }
         return false;
     }
+
+    public static bool CannotSellOnCD(Kitty kitty, Relic relic)
+    {
+        var CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID);
+        if (CD > 0.0f && relic.RelicAbilityID != 0)
+        {
+            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
+            return false;
+        }
+        if (relic.GetType() == typeof(ChronoSphere) && kitty.CurrentStats.ChronoSphereCD) // chrono sphere
+        {
+            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
+            return false;
+        }
+
+        return true;
+    }
+
 }

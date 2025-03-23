@@ -69,6 +69,8 @@ public class Kibble : IDestroyable
     {
         try
         {
+            if (item == null) return;
+
             var unit = @event.Unit;
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
@@ -88,7 +90,11 @@ public class Kibble : IDestroyable
             IncrementKibble(kitty);
             PersonalBestAwarder.BeatKibbleCollection(kitty);
 
-            ItemSpawner.TrackKibbles.Find(k => k.Item == item).__destroy();
+            var kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
+            if (kib != null && kib.Item != null)
+            {
+                kib.__destroy();
+            }
         }
         catch (Exception e)
         {

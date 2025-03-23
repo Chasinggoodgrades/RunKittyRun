@@ -17,14 +17,12 @@ public class ChronoSphere : Relic
     private const float REWIND_COOLDOWN = 150.0f;
 
     private ability Ability;
-    private player Owner;
-    private unit OwnerUnit;
+    private Kitty Kitty;
     private float Magnitude;
     private timer MagnitudeTimer;
     private timer LocationCaptureTimer;
     private effect LocationEffect = null;
     private (float, float, float) CapturedLocation; // x, y, facing
-    private bool OnCooldown = false;
 
     public ChronoSphere() : base(
         $"{Colors.COLOR_YELLOW}Chrono Sphere",
@@ -41,17 +39,9 @@ public class ChronoSphere : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        try
-        {
-            Owner = Unit.Owner;
-            OwnerUnit = Unit;
-            Utility.SimpleTimer(0.1f, RotatingSlowAura);
-            RotatingLocationCapture();
-        }
-        catch (Exception)
-        {
-            //error tied to location
-        }
+        Kitty = Globals.ALL_KITTIES[Unit.Owner];
+        Utility.SimpleTimer(0.1f, RotatingSlowAura);
+        RotatingLocationCapture();
     }
 
     public override void RemoveEffect(unit Unit)
@@ -63,7 +53,7 @@ public class ChronoSphere : Relic
 
     private void SetAbilityData()
     {
-        var item = Utility.UnitGetItem(OwnerUnit, RelicItemID);
+        var item = Utility.UnitGetItem(Kitty.Unit, RelicItemID);
         Ability = item.GetAbility(RelicAbilityID);
         Magnitude = RandomMagnitude();
         Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
@@ -74,7 +64,7 @@ public class ChronoSphere : Relic
     // Upgrade level 1, rotating aura slow
     private void RotatingSlowAura()
     {
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
         MagnitudeTimer = timer.Create();
         MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
@@ -84,7 +74,7 @@ public class ChronoSphere : Relic
     // Upgrade Level 2 Location Capture
     private void RotatingLocationCapture()
     {
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
         LocationCaptureTimer = timer.Create();
         LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
@@ -93,17 +83,17 @@ public class ChronoSphere : Relic
 
     private void CaptureLocation()
     {
-        if (OnCooldown) return; // let's not proc if on cooldown
-        var unit = Globals.ALL_KITTIES[Owner].Unit;
+        if (Kitty.CurrentStats.ChronoSphereCD) return; // let's not proc if on cooldown
+        var unit = Kitty.Unit;
         CapturedLocation = (unit.X, unit.Y, unit.Facing);
         LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
         LocationEffect.Scale = 0.55f;
-        Utility.SimpleTimer(0.25f, LocationEffect.Dispose);
+        Utility.SimpleTimer(0.25f, () => LocationEffect?.Dispose());
     }
 
     private float RandomMagnitude()
     {
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Globals.ALL_KITTIES[Owner].Player).GetUpgradeLevel(typeof(ChronoSphere));
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         var lowerBound = MAGNITUDE_LOWER_BOUND / 100.0f * -1.0f;
         var upperBound = MAGNITUDE_UPPER_BOUND / 100.0f * -1.0f;
         if (upgradeLevel == 0) return lowerBound;
@@ -112,34 +102,33 @@ public class ChronoSphere : Relic
 
     private void RewindTime()
     {
-        var kitty = Globals.ALL_KITTIES[Owner];
-        kitty.Invulnerable = true;
-        kitty.Unit.SetPosition(CapturedLocation.Item1, CapturedLocation.Item2);
-        kitty.Unit.SetFacing(CapturedLocation.Item3);
-        kitty.Unit.IsPaused = true;
+        Kitty.Invulnerable = true;
+        Kitty.Unit.SetPosition(CapturedLocation.Item1, CapturedLocation.Item2);
+        Kitty.Unit.SetFacing(CapturedLocation.Item3);
+        Kitty.Unit.IsPaused = true;
 
-        if (kitty.Player.IsLocal) PanCameraToTimed(kitty.Unit.X, kitty.Unit.Y, 0.0f);
+        if (Kitty.Player.IsLocal) PanCameraToTimed(Kitty.Unit.X, Kitty.Unit.Y, 0.0f);
         Utility.SimpleTimer(2.0f, () =>
         {
-            kitty.Unit.IsPaused = false;
-            Utility.SimpleTimer(1.0f, () => kitty.Invulnerable = false);
+            Kitty.Unit.IsPaused = false;
+            Utility.SimpleTimer(1.0f, () => Kitty.Invulnerable = false);
         });
     }
 
-    public static bool RewindDeath(unit unit)
+    public static bool RewindDeath(Kitty kitty)
     {
         if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
-        var relic = Globals.ALL_KITTIES[unit.Owner].Relics.Find(r => r is ChronoSphere) as ChronoSphere;
+        var relic = kitty.Relics.Find(r => r is ChronoSphere) as ChronoSphere;
         if (relic == null) return false;
-        if (relic.OnCooldown) return false;
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(typeof(ChronoSphere));
+        if (kitty.CurrentStats.ChronoSphereCD) return false;
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel < 2) return false;
         relic.RewindTime();
-        relic.OnCooldown = true;
+        kitty.CurrentStats.ChronoSphereCD = true;
         Utility.SimpleTimer(REWIND_COOLDOWN, () =>
         {
-            relic.OnCooldown = false;
-            unit.Owner.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
+            kitty.CurrentStats.ChronoSphereCD = false;
+            kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
             relic.CaptureLocation();
         });
         return true;

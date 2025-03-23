@@ -168,6 +168,8 @@ public class Slider
         WidgetTrigger.Disable();
         SliderTimer.Pause();
         ForcedSlideTimer.Pause();
+        this.forcedSlideSpeed = null;
+        this.kitty.Invulnerable = false;
         remainingDegreesToTurn = 0;
         slideCurrentTurnPerPeriod = 0;
         this.wasSliding = false;

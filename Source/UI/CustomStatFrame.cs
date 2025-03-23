@@ -124,12 +124,12 @@ public static class CustomStatFrame
     private static void HandleFrameText(unit selectedUnit)
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
-        else if (SetChampionFrameText(selectedUnit)) { }
         else if (selectedUnit.UnitType == Constants.UNIT_KITTY)
         {
             SetCommonFrameText(selectedUnit);
             SetGamemodeFrameText(selectedUnit);
         }
+        else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
             // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.
@@ -138,7 +138,8 @@ public static class CustomStatFrame
 
     private static bool SetChampionFrameText(unit selectedUnit)
     {
-        if (selectedUnit.Name == "|cffffff00Solo Tournament 2023|r")
+        // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
+        if (selectedUnit == SpawnChampions.Fieryfox2023)
         {
             Stats[1].Text.Text = "|cffff0000Fieryfox|r";
             Stats[2].Text.Text = "|cffffff00Region:|r EU";
@@ -147,7 +148,7 @@ public static class CustomStatFrame
             Stats[5].Text.Text = "|cffffff00Region:|r US";
             Stats[3].Text.Text = "|cffffff00Time:|r 15:36";
         }
-        else if (selectedUnit.Name == "|cffffff00Team Tournament 2023|r")
+        else if (selectedUnit == SpawnChampions.FandF2023)
         {
             Stats[2].Text.Text = "|cffffff00Region:|r US";
             Stats[1].Text.Text = "|cff00ffffAches|r";
@@ -156,7 +157,7 @@ public static class CustomStatFrame
             Stats[4].Text.Text = "|cff00ffffBalmydrop|r";
             Stats[0].Text.Text = "|cff00ffffUdo|r";
         }
-        else if (selectedUnit.Name == "|cffffff00Solo Tournament 2024|r")
+        else if (selectedUnit == SpawnChampions.Fieryfox2024)
         {
             Stats[1].Text.Text = "|cffff0000Fieryfox|r";
             Stats[2].Text.Text = "|cffffff00Region:|r EU";
@@ -165,7 +166,7 @@ public static class CustomStatFrame
             Stats[5].Text.Text = "|cffffff00Region:|r US";
             Stats[3].Text.Text = "|cffffff00Time:|r 16:31";
         }
-        else if (selectedUnit.Name == "|cffffff00Solo Tournament 2025|r")
+        else if (selectedUnit == SpawnChampions.Stan2025)
         {
             Stats[0].Text.Text = "|cffffff00Time:|r 14:25";
             Stats[1].Text.Text = "|cffa471e3Stan|r";
@@ -186,7 +187,7 @@ public static class CustomStatFrame
         Stats[3].Text.Text = "";
         //Stats[4].Text.Text = "";
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) SetWolfAffixTexts(selectedUnit);
-        if (Program.Debug) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
+        if (Program.Debug && selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG) Stats[4].Text.Text = $"Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}";
         Stats[5].Text.Text = $"{MoveSpeed} {(int)GetUnitMoveSpeed(selectedUnit)}";
     }
 

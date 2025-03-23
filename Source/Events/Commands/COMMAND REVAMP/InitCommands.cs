@@ -929,13 +929,13 @@ public static class InitCommands
                 if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
                 {
                     UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
-                    var abilityName = GetObjectName(FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
                 }
                 else
                 {
                     UnitAddAbility(kitty.Unit, FourCC(abilityId));
-                    var abilityName = GetObjectName(FourCC(abilityId));
+                    var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
                     player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
                 }
             }
@@ -1308,6 +1308,57 @@ public static class InitCommands
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "shop",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the shop frame.",
+            action: (player, args) =>
+            {
+                ShopFrame.ShopFrameActions();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "rewards",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the rewards frame.",
+            action: (player, args) =>
+            {
+                RewardsFrame.RewardsFrameActions();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "music",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Opens the music frame.",
+            action: (player, args) =>
+            {
+                MusicFrame.MusicFrameActions();
+            }
+        );
+
+
+        CommandsManager.RegisterCommand(
+            name: "revivetest",
+            alias: "yoshi",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Activates the revive invul for 0.6 seconds. Served as a test run.",
+            action: (player, args) =>
+            {
+                var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
+                Kitty.InvulTest = status;
+                player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Revive invul test: {status}");
             }
         );
 

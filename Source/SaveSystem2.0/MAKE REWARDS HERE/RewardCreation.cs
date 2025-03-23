@@ -132,6 +132,7 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Nitros.CrimsonLight), Constants.ABILITY_TRAIL_CRIMSONLIGHT, "origin", "CrimsonLight.mdx", RewardType.Nitros);
         AddReward(nameof(awardsSorted.Nitros.EmeraldLight), Constants.ABILITY_TRAIL_EMERALDLIGHT, "origin", "EmeraldLight.mdx", RewardType.Nitros);
         AddReward(nameof(awardsSorted.Nitros.VioletLight), Constants.ABILITY_TRAIL_VIOLETLIGHT, "origin", "VioletLight.mdx", RewardType.Nitros);
+        AddReward(nameof(awardsSorted.Nitros.PatrioticLight), Constants.ABILITY_TRAIL_PATRIOTICLIGHT, "origin", "PatrioticLight.mdx", RewardType.Nitros);
 
         // Lightning
         AddReward(nameof(awardsSorted.Trails.BlueLightning), Constants.ABILITY_TRAIL_LIGHTNINGBLUE, "origin", "war3mapImported\\GreatElderHydraLightningOrbV3.mdx", RewardType.Trails, nameof(stats.Saves), 2000);

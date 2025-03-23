@@ -248,5 +248,4 @@ public static class AwardingCmds
         }
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Kibble currency for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
     }
-
 }

@@ -28,6 +28,7 @@ public static class BurntMeat
         {
             var killer = @event.KillingUnit;
             if (killer == null) return;
+            NamedWolves.StanWolf.Texttag?.Dispose();
             Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES);
             killer.AddItem(ITEM_BURNT_MEAT);
             Completed.Add(killer);

@@ -50,6 +50,14 @@ public static class Challenges
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Skins.HuntressKitty));
     }
 
+    public static void PatrioticLight(Kitty kitty)
+    {
+        if (Globals.ROUND != 5) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
+        if (Globals.GAME_TIMER.Remaining > 995) return;
+        AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.PatrioticLight));
+    }
+
     public static void ButterflyAura(player player)
     {
         if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;

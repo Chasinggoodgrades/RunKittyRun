@@ -44,7 +44,7 @@ public static class NitroChallenges
         NitroRoundTimes.Add(2, 140); // 2:20
         NitroRoundTimes.Add(3, 160); // 2:40
         NitroRoundTimes.Add(4, 215); // 3:35
-        NitroRoundTimes.Add(5, 345); // 5:45
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     private static void SetHardNitroRoundTimes()
@@ -52,8 +52,8 @@ public static class NitroChallenges
         NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 145); // 2:25
         NitroRoundTimes.Add(3, 170); // 2:50
-        NitroRoundTimes.Add(4, 230); // 3:50
-        NitroRoundTimes.Add(5, 360); // 6:00
+        NitroRoundTimes.Add(4, 215); // 3:35
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     private static void SetImpossibleNitroRoundTimes()
@@ -61,8 +61,8 @@ public static class NitroChallenges
         NitroRoundTimes.Add(1, 125); // 2:05
         NitroRoundTimes.Add(2, 150); // 2:30
         NitroRoundTimes.Add(3, 175); // 2:55
-        NitroRoundTimes.Add(4, 230); // 3:50
-        NitroRoundTimes.Add(5, 360); // 6:00
+        NitroRoundTimes.Add(4, 215); // 3:35
+        NitroRoundTimes.Add(5, 330); // 5:30
     }
 
     public static void StartNitroTimer()
@@ -79,26 +79,25 @@ public static class NitroChallenges
         NitroTimer.Pause();
     }
 
-    public static void CompletedNitro(unit unit)
+    public static void CompletedNitro(Kitty kitty)
     {
         if (NitroTimer.Remaining <= 0.00) return;
-        if (Safezone.CountHitSafezones(unit.Owner) <= 12)
+        if (Safezone.CountHitSafezones(kitty.Player) <= 12)
         {
-            unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You didn't hit enough safezones on your own to obtain nitro.");
+            kitty.Player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You didn't hit enough safezones on your own to obtain nitro.");
             return;
         }
 
-        AwardingNitroEvents(unit.Owner);
-        AwardingDivineLight(unit.Owner);
+        AwardingNitroEvents(kitty);
+        AwardingDivineLight(kitty);
     }
 
-    private static void AwardingNitroEvents(player player)
+    private static void AwardingNitroEvents(Kitty kitty)
     {
-        var kittyData = Globals.ALL_KITTIES[player];
-        var nitroCount = kittyData.CurrentStats.NitroCount;
-
+        var nitroCount = kitty.CurrentStats.NitroCount;
+        var player = kitty.Player;
         if (nitroCount == Globals.ROUND) return; // already awarded
-        if (NitroTimer == null || NitroTimer.Remaining <= 0.00) return;
+        if (NitroTimer == null || NitroTimer.Remaining <= 0.00 || !NitroDialog.IsDisplayed) return;
         var round = Globals.ROUND;
 
         switch (round)
@@ -140,22 +139,22 @@ public static class NitroChallenges
 
         PlayNitroSound(player);
 
-        var currentStats = kittyData.CurrentStats;
+        var currentStats = kitty.CurrentStats;
         if (!currentStats.ObtainedNitros.Contains(round))
             currentStats.ObtainedNitros.Add(round);
 
         currentStats.NitroCount += 1;
-        kittyData.SaveData.GameStats.NitrosObtained += 1;
+        kitty.SaveData.GameStats.NitrosObtained += 1;
     }
 
-    private static void AwardingDivineLight(player player)
+    private static void AwardingDivineLight(Kitty kitty)
     {
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Impossible) return;
         var requiredCount = 5;
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
 
-        if (Globals.ALL_KITTIES[player].CurrentStats.NitroCount == requiredCount)
-            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
+        if (kitty.CurrentStats.NitroCount == requiredCount)
+            AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
     }
 
     private static void PlayNitroSound(player player)

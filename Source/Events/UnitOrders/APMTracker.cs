@@ -4,8 +4,8 @@ using static WCSharp.Api.Common;
 public class APMTracker
 {
     private const float CAPTURE_INTERVAL = 0.1f;
-    private static trigger ClicksTrigger = trigger.Create();
-    private static triggeraction ClicksAction;
+    private trigger ClicksTrigger = trigger.Create();
+    private triggeraction ClicksAction;
     private timer PeriodicTimer;
 
     private int TotalActions;
@@ -23,7 +23,7 @@ public class APMTracker
     private void Init()
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
-        ClicksAction ??= ClicksTrigger.AddAction(ErrorHandler.Wrap(CaptureActions));
+        ClicksAction = ClicksTrigger.AddAction(ErrorHandler.Wrap(CaptureActions));
         PeriodicTimer = PeriodicCheck();
     }
 
@@ -73,6 +73,8 @@ public class APMTracker
     {
         PeriodicTimer.Pause();
         PeriodicTimer?.Dispose();
+        ClicksTrigger.RemoveAction(ClicksAction);
+        ClicksTrigger.Dispose();
     }
 
     /*    public static (float x, float y) GetLastOrderLocation(unit unit)

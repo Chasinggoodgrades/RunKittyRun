@@ -12,10 +12,15 @@ public static class FrameManager
     public static framehandle ShopButton;
     public static framehandle RewardsButton;
     public static framehandle Backdrop;
+
+    private const float ButtonWidth = 0.053f;
+    private const float ButtonHeight = 0.028f;
+
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
     private static trigger ESCTrigger = trigger.Create();
     private static string TEXT_COLOR = Colors.COLOR_YELLOW;
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
+
 
     public static void Initialize()
     {
@@ -95,7 +100,7 @@ public static class FrameManager
     {
         RewardsButton = framehandle.Create("GLUETEXTBUTTON", "RewardsButton", Backdrop, "ScriptDialogButton", 0);
         RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center);
-        RewardsButton.SetSize(0.0545f, 0.025f);
+        RewardsButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "RewardsText", RewardsButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r";
         shopText.SetPoint(framepointtype.Center, 0, 0, RewardsButton, framepointtype.Center);
@@ -110,7 +115,7 @@ public static class FrameManager
     {
         MusicButton = framehandle.Create("GLUETEXTBUTTON", "MusicButton", Backdrop, "ScriptDialogButton", 0);
         MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft);
-        MusicButton.SetSize(0.0525f, 0.025f);
+        MusicButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "MusicText", MusicButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Music{HOTKEY_COLOR}(0)";
         shopText.SetPoint(framepointtype.Center, 0, 0, MusicButton, framepointtype.Center);
@@ -125,7 +130,7 @@ public static class FrameManager
     {
         ShopButton = framehandle.Create("GLUETEXTBUTTON", "ShopButton", Backdrop, "ScriptDialogButton", 0);
         ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight);
-        ShopButton.SetSize(0.0525f, 0.025f);
+        ShopButton.SetSize(ButtonWidth, ButtonHeight);
         var shopText = framehandle.Create("TEXT", "ShopText", ShopButton, "", 0);
         shopText.Text = $"{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)";
         shopText.SetPoint(framepointtype.Center, 0, 0, ShopButton, framepointtype.Center);
