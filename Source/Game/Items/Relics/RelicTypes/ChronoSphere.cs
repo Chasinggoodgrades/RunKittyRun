@@ -118,6 +118,7 @@ public class ChronoSphere : Relic
     public static bool RewindDeath(Kitty kitty)
     {
         if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
+        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false;
         var relic = kitty.Relics.Find(r => r is ChronoSphere) as ChronoSphere;
         if (relic == null) return false;
         if (kitty.CurrentStats.ChronoSphereCD) return false;

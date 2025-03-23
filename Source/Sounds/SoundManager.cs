@@ -91,8 +91,10 @@ public static class SoundManager
             TeamKittyDeathSound(Kitty);
         else
         {
-            Blizzard.StopSoundBJ(KITTY_DEATH_SOUND, false);
-            Blizzard.PlaySoundOnUnitBJ(KITTY_DEATH_SOUND, 127, Kitty);
+            var s = KITTY_DEATH_SOUND;
+            s.Stop(false, false);
+            s.AttachToUnit(Kitty);
+            s.Start();
         }
     }
 
