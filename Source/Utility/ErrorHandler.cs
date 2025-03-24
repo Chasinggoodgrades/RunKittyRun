@@ -9,7 +9,7 @@ public static class ErrorHandler
         {
             try
             {
-                cb();
+                cb.Invoke();
             }
             catch (Exception e)
             {

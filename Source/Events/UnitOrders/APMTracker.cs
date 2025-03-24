@@ -48,7 +48,8 @@ public class APMTracker
 
     private static bool IsInSafeZone(Kitty kitty)
     {
-        return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.Unit.Y);
+        return false;
+        //return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.Unit.Y);
     }
 
     private static float CalculateAPM(Kitty kitty)

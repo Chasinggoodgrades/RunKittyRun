@@ -41,9 +41,9 @@ public static class MultiboardUtil
     private static void MinStandardMultiboards(bool minimize)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        StandardMultiboard.CurrentStats.IsMinimized = minimize;
-        StandardMultiboard.BestTimes.IsMinimized = minimize;
-        StandardMultiboard.OverallStats.IsMinimized = minimize;
+        StandardMultiboard.CurrentStats.IsMinimized = minimize; // Possible Desync
+        StandardMultiboard.BestTimes.IsMinimized = minimize; // Possible Desync
+        StandardMultiboard.OverallStats.IsMinimized = minimize; // Possible Desync
     }
 
     /// <summary>

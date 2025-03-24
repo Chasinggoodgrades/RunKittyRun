@@ -20,8 +20,9 @@ public static class Utility
 
     public static void SelectUnitForPlayer(player p, unit u)
     {
-        Blizzard.ClearSelectionForPlayer(p);
-        Blizzard.SelectUnitForPlayerSingle(u, p);
+        if (!p.IsLocal) return;
+        ClearSelection();
+        SelectUnit(u, true);
     }
 
     /// <summary>

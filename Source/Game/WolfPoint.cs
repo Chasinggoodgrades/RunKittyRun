@@ -13,7 +13,7 @@ public class WolfPoint
     public static trigger IsPausedTrigger;
 
     private Wolf Wolf { get; set; }
-    public List<float[]> PointsToVisit { get; set; } = new List<float[]>();
+    public List<WolfVisitPoints> PointsToVisit { get; set; } = new List<WolfVisitPoints>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -50,15 +50,19 @@ public class WolfPoint
 
             for (int i = 0; i < numRegions; i++)
             {
+                var wPoint = MemoryHandler.GetEmptyObject<WolfVisitPoints>();
                 var regionX = startX + (i * stepX);
                 var regionY = startY + (i * stepY);
-                var pointInfo = new float[] { regionX, regionY };
-                PointsToVisit.Add(pointInfo);
+                wPoint.X = regionX;
+                wPoint.Y = regionY;
+                PointsToVisit.Add(wPoint);
             }
 
             // Ensure the last point is exactly the end point
-            float[] lastPointInfo = new float[] { endX, endY };
-            PointsToVisit.Add(lastPointInfo);
+            var lastPoint = MemoryHandler.GetEmptyObject<WolfVisitPoints>();
+            lastPoint.X = endX;
+            lastPoint.Y = endY;
+            PointsToVisit.Add(lastPoint);
 
             if (PointsToVisit != null && PointsToVisit.Count > 0)
             {
@@ -76,8 +80,12 @@ public class WolfPoint
         try
         {
             if (PointsToVisit == null) return;
-            PointsToVisit.Clear();
             Wolf.Unit.ClearOrders();
+            foreach(var point in PointsToVisit)
+            {
+                point.__destroy();
+            }
+            PointsToVisit.Clear();
         }
         catch (Exception ex)
         {
@@ -88,7 +96,6 @@ public class WolfPoint
     public void Dispose()
     {
         Cleanup();
-        PointsToVisit.Clear();
         PointsToVisit = null;
         Wolf.Unit.ClearOrders();
     }
@@ -104,7 +111,7 @@ public class WolfPoint
             {
                 var moveID = MoveOrderID;
                 if (i == PointsToVisit.Count - 1) moveID = AttackOrderID;
-                Wolf.Unit.QueueOrder(moveID, PointsToVisit[i][0], PointsToVisit[i][1]);
+                Wolf.Unit.QueueOrder(moveID, PointsToVisit[i].X, PointsToVisit[i].Y);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
         }

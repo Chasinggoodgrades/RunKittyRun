@@ -8,7 +8,7 @@ public class Kitty
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
     private const float MANA_DEATH_PENALTY = 65.0f;
-    private const float InvulDuration = 0.6f;
+    private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
     public KittyData SaveData { get; set; }
