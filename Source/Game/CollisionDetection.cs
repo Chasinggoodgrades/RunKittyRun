@@ -50,16 +50,18 @@ public static class CollisionDetection
     public static void KittyRegisterCollisions(Kitty k)
     {
         var WOLF_COLL_RADIUS = k.CurrentStats.CollisonRadius;
-        k.w_Collision.ClearActions();
-        k.c_Collision.ClearActions();
+        k.w_Collision ??= CreateTrigger();
+        k.c_Collision ??= CreateTrigger();
+
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, WOLF_COLL_RADIUS, WolfCollisionFilter(k), WolfCollisionTrigger(k));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, CIRCLE_COLLISION_RADIUS, CircleCollisionFilter(k), CircleCollisionTrigger(k));
     }
 
     public static void ShadowKittyRegisterCollision(ShadowKitty sk)
     {
-        sk.wCollision.ClearActions();
-        sk.cCollision.ClearActions();
+        sk.wCollision ??= CreateTrigger();
+        sk.cCollision ??= CreateTrigger();
+
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, DEFAULT_WOLF_COLLISION_RADIUS, ShadowRelicWolvesFilter(sk), WolfCollisionShadowTrigger(sk));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, CIRCLE_COLLISION_RADIUS, ShadowRelicCircleFilter(sk), CircleCollisionShadowTrigger(sk));
     }

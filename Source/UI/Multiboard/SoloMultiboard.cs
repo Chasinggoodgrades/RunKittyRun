@@ -209,10 +209,18 @@ public static class SoloMultiboard
 
     public static void UpdateDeathCount(player player)
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
-        int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
-        if (rowIndex == 0) return;
-        OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
+        try
+        {
+            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
+            if (rowIndex == 0) return;
+            OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in SoloMultiboard.UpdateDeathCount: {ex.Message}");
+            throw;
+        }
     }
 
     private static float[] GetGameRoundTime(KittyData data)

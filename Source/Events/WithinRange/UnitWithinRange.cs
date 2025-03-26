@@ -1,144 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class UnitWithinRange
 {
-    private static int currentUnitId = 1;
-    private static int currentTriggerId = 1;
-    private static readonly Dictionary<unit, int> unitIds = new();
-    private static readonly Dictionary<trigger, int> triggerIds = new();
-    private static readonly Dictionary<int, Dictionary<int, trigger>> unitRangeTriggers = new();
-    private static readonly Dictionary<int, trigger> unitCleanupTriggers = new();
-    private static readonly Dictionary<int, unit> unitRangeUnits = new();
-    private static readonly Dictionary<int, (float eventValue, trigger execution)> udg_WithinRangeHash = new();
-    private static readonly HashSet<unit> withinRangeUsers = new();
-
-    private static int GetUniqueUnitId(unit u)
+    private static bool RegisterUnitWithinRangeSuper(unit u, float range, bool cleanOnKilled, Func<bool> filter, trigger execution)
     {
-        if (!unitIds.TryGetValue(u, out int id))
-        {
-            id = currentUnitId++;
-            unitIds[u] = id;
-        }
-        return id;
-    }
-
-    private static int GetUniqueTriggerId(trigger trig)
-    {
-        if (!triggerIds.TryGetValue(trig, out int id))
-        {
-            id = currentTriggerId++;
-            triggerIds[trig] = id;
-        }
-        return id;
-    }
-
-    private static bool RegisterUnitWithinRangeSuper(unit u, float range, bool cleanOnKilled, Func<bool> filter, trigger execution, float eventValue, bool destroyFilterWhenDone)
-    {
-        int unitId = GetUniqueUnitId(u);
-        int rangeAsInt = (int)range;
-
         if (range <= 0)
         {
             return false;
         }
 
-        if (!unitRangeTriggers.ContainsKey(unitId))
-        {
-            unitRangeTriggers[unitId] = new Dictionary<int, trigger>();
-        }
-
-        // Check if this range is already registered
-        if (unitRangeTriggers[unitId].ContainsKey(rangeAsInt))
-        {
-            return false;
-        }
-
-        trigger trig = CreateTrigger();
-        unitRangeTriggers[unitId][rangeAsInt] = trig;
-
-        TriggerAddAction(trig, ErrorHandler.Wrap(() =>
-        {
-            ActionUnitWithinRange(trig);
-        }));
-
-        if (cleanOnKilled && !unitCleanupTriggers.ContainsKey(unitId))
-        {
-            trigger cleanupTrigger = CreateTrigger();
-            unitCleanupTriggers[unitId] = cleanupTrigger;
-
-            TriggerAddAction(cleanupTrigger, ErrorHandler.Wrap(() =>
-            {
-                ActionUnitWithinCleanOnKilled(GetTriggerUnit());
-            }));
-
-            TriggerRegisterUnitStateEvent(cleanupTrigger, u, UNIT_STATE_LIFE, LESS_THAN_OR_EQUAL, 0.405f);
-        }
-
-        TriggerRegisterUnitInRange(trig, u, range, Condition(filter));
-
-        int trigId = GetUniqueTriggerId(trig);
-        unitRangeUnits[trigId] = u;
-        withinRangeUsers.Add(u);
-
-        udg_WithinRangeHash[trigId] = (eventValue, execution);
+        TriggerRegisterUnitInRange(execution, u, range, Condition(filter));
 
         return true;
     }
 
-    private static void ActionUnitWithinRange(trigger trig)
+    public static void DeRegisterUnitWithinRangeUnit(Kitty kitty)
     {
-        int trigId = GetUniqueTriggerId(trig);
-        var (eventValue, execution) = udg_WithinRangeHash[trigId];
-
-        execution?.Execute();
+        kitty.w_Collision.ClearActions();
+        kitty.c_Collision.ClearActions();
+        kitty.w_Collision.Dispose();
+        kitty.c_Collision.Dispose();
+        kitty.w_Collision = null;
+        kitty.c_Collision = null;
     }
 
-    private static void ActionUnitWithinCleanOnKilled(unit unit)
+    public static void DeRegisterUnitWithinRangeUnit(ShadowKitty kitty)
     {
-        DeRegisterUnitWithinRangeUnit(unit);
-    }
-
-    public static void DeRegisterUnitWithinRangeUnit(unit u)
-    {
-        int unitId = GetUniqueUnitId(u);
-        if (unitRangeTriggers.ContainsKey(unitId))
-        {
-            foreach (var kvp in unitRangeTriggers[unitId])
-            {
-                RemoveTrigger(kvp.Value);
-            }
-            unitRangeTriggers.Remove(unitId);
-        }
-
-        if (unitCleanupTriggers.ContainsKey(unitId))
-        {
-            RemoveTrigger(unitCleanupTriggers[unitId]);
-            unitCleanupTriggers.Remove(unitId);
-        }
-
-        withinRangeUsers.Remove(u);
-    }
-
-    private static void RemoveTrigger(trigger trig)
-    {
-        int trigId = GetUniqueTriggerId(trig);
-        // Remove saved handles and cleanup
-        unitRangeUnits.Remove(trigId);
-        udg_WithinRangeHash.Remove(trigId);
-        // Destroy the trigger
-        GC.RemoveTrigger(ref trig);
-    }
-
-    public static bool RegisterUnitWithinRangeEvent(unit u, float range, Func<bool> filter, float eventValue)
-    {
-        return RegisterUnitWithinRangeSuper(u, range, false, filter, null, eventValue, true);
+        kitty.cCollision.ClearActions();
+        kitty.wCollision.ClearActions();
+        kitty.wCollision.Dispose();
+        kitty.cCollision.Dispose();
+        kitty.wCollision = null;
+        kitty.cCollision = null;
     }
 
     public static bool RegisterUnitWithinRangeTrigger(unit u, float range, Func<bool> filter, trigger execution)
     {
-        return RegisterUnitWithinRangeSuper(u, range, false, filter, execution, 1.0f, true);
+        return RegisterUnitWithinRangeSuper(u, range, false, filter, execution);
     }
 }

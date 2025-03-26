@@ -8,6 +8,7 @@ public class Slider
 {
     private const float SLIDE_INTERVAL = 0.0075f;
     private const float SLIDE_ANGLE_PER_PERIOD = 0.3f;
+    private const float ITEM_PICKUP_RADIUS = 48;
 
     private Kitty kitty;
     private timer SliderTimer;
@@ -357,7 +358,7 @@ public class Slider
         foreach (var i in ItemSpawner.TrackKibbles)
         {
             if (i.Item == null) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
             kitty.Unit.AddItem(i.Item);
             break;
         }
@@ -365,7 +366,7 @@ public class Slider
         {
             if (item == null) continue;
             if (item.IsOwned) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > 32) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
             kitty.Unit.AddItem(item);
             break;
         }

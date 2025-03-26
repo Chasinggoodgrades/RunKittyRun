@@ -20,7 +20,7 @@ public static class Utility
 
     public static void SelectUnitForPlayer(player p, unit u)
     {
-        if (!p.IsLocal) return;
+        if (GetLocalPlayer() != p) return;
         ClearSelection();
         SelectUnit(u, true);
     }

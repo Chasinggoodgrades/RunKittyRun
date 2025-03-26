@@ -236,13 +236,13 @@ public class Kitty
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
+        SaveData.GameStats.SaveStreak = 0;
 
         if (aiController.IsEnabled()) return;
 
         SoloMultiboard.UpdateDeathCount(Player);
         if (Gamemode.CurrentGameMode != "Standard") return;
         SaveData.GameStats.Deaths += 1;
-        SaveData.GameStats.SaveStreak = 0;
     }
 
     private void SaveStatUpdate(Kitty savior)

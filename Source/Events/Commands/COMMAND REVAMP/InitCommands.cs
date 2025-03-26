@@ -1362,5 +1362,25 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "col",
+            alias: "collision",
+            group: "admin",
+            argDesc: "[player]",
+            description: "Gets collision of passed player, or yourself if no args.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Globals.ALL_KITTIES[player].CurrentStats.CollisonRadius}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Colors.PlayerNameColored(kitty.Player)} : {kitty.CurrentStats.CollisonRadius}");
+                });
+            }
+        );
+
     }
 }

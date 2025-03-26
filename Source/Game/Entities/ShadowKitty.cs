@@ -64,7 +64,7 @@ public class ShadowKitty
     /// </summary>
     public void KillShadowKitty()
     {
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Unit);
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this);
         this.Unit.Kill();
         this.Unit.Dispose();
         this.Unit = null;
@@ -79,8 +79,6 @@ public class ShadowKitty
     public void SelectReselectShadowKitty()
     {
         var kitty = Globals.ALL_KITTIES[this.Player].Unit;
-        Utility.SelectUnitForPlayer(this.Player, this.Unit);
-        Utility.SelectUnitForPlayer(this.Player, kitty);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
     }
 
