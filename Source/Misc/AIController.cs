@@ -162,15 +162,20 @@ public class AIController
             reachedLastProgressZoneCenter = true;
         }
 
-        bool allKittiesAtSameOrHigherSafezone = Globals.ALL_KITTIES.All(k =>
+        bool allKittiesAtSameOrHigherSafezone = true; // IEnumberable is dog shit for C# -> Lua conversion, this should -help-
+        foreach (var k in Globals.ALL_KITTIES)
         {
             if (Program.Debug && k.Value.Player == Player(0))
             {
-                return true;
+                continue;
             }
 
-            return CalcProgressZone(k.Value) >= currentProgressZoneId;
-        });
+            if (CalcProgressZone(k.Value) < currentProgressZoneId)
+            {
+                allKittiesAtSameOrHigherSafezone = false;
+                break;
+            }
+        }
 
         var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
 

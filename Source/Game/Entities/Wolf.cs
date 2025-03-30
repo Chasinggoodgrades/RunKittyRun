@@ -221,7 +221,7 @@ public class Wolf
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
 
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
-        Utility.EffectReplayMagic(OverheadEffect);
+        BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
         EffectTimer.Start(effectDuration, false, () =>
         {

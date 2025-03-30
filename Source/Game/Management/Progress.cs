@@ -50,7 +50,7 @@ public static class Progress
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X, ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
-            var progress = totalProgress / DistancesFromStart[RegionList.PathingPoints.Count() - 1] * 100;
+            var progress = totalProgress / DistancesFromStart[RegionList.PathingPoints.Length - 1] * 100;
             if (progress > 100) progress = 100.00f;
 
             return progress;
@@ -90,7 +90,7 @@ public static class Progress
             DistancesFromStart.Add(0, 0.0f);
             foreach (var pathPoint in RegionList.PathingPoints)
             {
-                if (count >= RegionList.PathingPoints.Count() - 1) break;
+                if (count >= RegionList.PathingPoints.Length - 1) break;
                 var nextPathPoint = RegionList.PathingPoints[count + 1];
                 totalDistance += DistanceBetweenPoints(pathPoint.Rect.CenterX, pathPoint.Rect.CenterY, nextPathPoint.Rect.CenterX, nextPathPoint.Rect.CenterY);
                 if (!DistancesFromStart.ContainsKey(count + 1)) DistancesFromStart.Add(count + 1, totalDistance);
