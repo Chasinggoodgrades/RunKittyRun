@@ -1,4 +1,4 @@
-﻿using CSharpLua;
+using CSharpLua;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Configuration;
@@ -45,6 +45,7 @@ namespace Launcher
             Console.WriteLine("2. Compile map");
             Console.WriteLine("3. Compile and run map");
             Console.WriteLine("4. Compile and run map and track memory usage");
+            Console.WriteLine("5. Run map without compiling");
             MakeDecision();
         }
 
@@ -72,6 +73,10 @@ namespace Launcher
                     Build(true, true);
                     break;
 
+                case ConsoleKey.D5:
+                    Build(true, true, true); // Run map without compiling
+                    break;
+
                 default:
                     Console.WriteLine($"{Environment.NewLine}Invalid input. Please choose again.");
                     MakeDecision();
@@ -79,7 +84,7 @@ namespace Launcher
             }
         }
 
-        public static void Build(bool launch, bool mem = false)
+        public static void Build(bool launch = false, bool mem = false, bool skipCompile = false)
         {
             // Ensure these folders exist
             Directory.CreateDirectory(OUTPUT_FOLDER_PATH);
@@ -89,41 +94,48 @@ namespace Launcher
             var builder = new MapBuilder(map);
             builder.AddFiles(BASE_MAP_PATH, "*", SearchOption.AllDirectories);
 
-            // Set debug options if necessary, configure compiler
-            var csc = DEBUG ? "-debug -define:DEBUG" : null;
-            var csproj = Directory.EnumerateFiles(SOURCE_CODE_PROJECT_FOLDER_PATH, "*.csproj", SearchOption.TopDirectoryOnly).Single();
-            var compiler = new Compiler(csproj, OUTPUT_FOLDER_PATH, string.Empty, null, "War3Api.*;WCSharp.*", "", csc, false, null, string.Empty)
+            if (!skipCompile)
             {
-                IsExportMetadata = true,
-                IsModule = false,
-                IsInlineSimpleProperty = false,
-                IsPreventDebugObject = true,
-                IsCommentsDisabled = !DEBUG,
-            };
+                // Set debug options if necessary, configure compiler
+                var csc = DEBUG ? "-debug -define:DEBUG" : null;
+                var csproj = Directory.EnumerateFiles(SOURCE_CODE_PROJECT_FOLDER_PATH, "*.csproj", SearchOption.TopDirectoryOnly).Single();
+                var compiler = new Compiler(csproj, OUTPUT_FOLDER_PATH, string.Empty, null, "War3Api.*;WCSharp.*", "", csc, false, null, string.Empty)
+                {
+                    IsExportMetadata = true,
+                    IsModule = false,
+                    IsInlineSimpleProperty = false,
+                    IsPreventDebugObject = true,
+                    IsCommentsDisabled = !DEBUG,
+                };
 
-            // Collect required paths and compile
-            var coreSystemFiles = CSharpLua.CoreSystem.CoreSystemProvider.GetCoreSystemFiles()
-                .Where(x => !x.EndsWith("Common.lua"))
-                .Concat(new[] { "CoreSystem/WCSharp.lua", "PriorityQueue.lua", "SortedDictionary.lua", "SortedList.lua" });
-            var blizzardJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/Blizzard.j");
-            var commonJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/common.j");
-            var compileResult = map.CompileScript(compiler, coreSystemFiles, blizzardJ, commonJ);
+                // Collect required paths and compile
+                var coreSystemFiles = CSharpLua.CoreSystem.CoreSystemProvider.GetCoreSystemFiles()
+                    .Where(x => !x.EndsWith("Common.lua"))
+                    .Concat(new[] { "CoreSystem/WCSharp.lua", "PriorityQueue.lua", "SortedDictionary.lua", "SortedList.lua" });
+                var blizzardJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/Blizzard.j");
+                var commonJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/common.j");
+                var compileResult = map.CompileScript(compiler, coreSystemFiles, blizzardJ, commonJ);
 
-            // If compilation failed, output an error
-            if (!compileResult.Success)
-            {
-                throw new Exception(compileResult.Diagnostics.First(x => x.Severity == DiagnosticSeverity.Error).GetMessage());
+                // If compilation failed, output an error
+                if (!compileResult.Success)
+                {
+                    throw new Exception(compileResult.Diagnostics.First(x => x.Severity == DiagnosticSeverity.Error).GetMessage());
+                }
+
+                map.Script = LuaScriptProcessor.FixLuaScript(map.Script);
+
+                if (mem)
+                {
+                    map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
+                }
+
+                // Update war3map.lua so you can inspect the generated Lua code easily
+                File.WriteAllText(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_SCRIPT_NAME), map.Script);
             }
-
-            map.Script = LuaScriptProcessor.FixLuaScript(map.Script);
-
-            if (mem)
+            else
             {
-                map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
+                map.Script = File.ReadAllText(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_SCRIPT_NAME));
             }
-
-            // Update war3map.lua so you can inspect the generated Lua code easily
-            File.WriteAllText(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_SCRIPT_NAME), map.Script);
 
             // Build w3x file
             var archiveCreateOptions = new MpqArchiveCreateOptions
