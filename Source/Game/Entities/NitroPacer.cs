@@ -103,5 +103,5 @@ public static class NitroPacer
         }
     }
 
-    private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;
+    private static void SetSpeed(float speed) => Unit.MovementSpeed = speed;
 }

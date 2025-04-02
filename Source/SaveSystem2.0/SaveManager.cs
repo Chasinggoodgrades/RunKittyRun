@@ -83,11 +83,19 @@ public class SaveManager
 
     public void LoadAll()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            if (player.Controller == mapcontrol.Computer) continue;
-            if (player.SlotState != playerslotstate.Playing) continue;
-            Load(player);
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                if (player.Controller == mapcontrol.Computer) continue;
+                if (player.SlotState != playerslotstate.Playing) continue;
+                Load(player);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: {ex.Message}");
+            throw;
         }
     }
 

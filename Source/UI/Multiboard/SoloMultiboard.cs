@@ -187,7 +187,7 @@ public static class SoloMultiboard
                 else
                     BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
             }
-            var sum = roundTimes.Sum();
+            var sum = roundTimes.Sum(); // IEnumerable
             BestTimes.GetItem(rowIndex, 6).SetText($"{playerColor}{Utility.ConvertFloatToTime(sum)}");
             rowIndex++;
             roundTimes = null;

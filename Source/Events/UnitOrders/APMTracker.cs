@@ -61,10 +61,11 @@ public class APMTracker
     public static string CalculateAllAPM()
     {
         string apmString = "";
-        foreach (var kitty in Globals.ALL_KITTIES)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
-            var apm = CalculateAPM(kitty.Value);
-            apmString += $"{Colors.PlayerNameColored(kitty.Value.Player)}:  {(int)apm} Active APM\n";
+            var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+            var apm = CalculateAPM(kitty);
+            apmString += $"{Colors.PlayerNameColored(kitty.Player)}:  {(int)apm} Active APM\n";
         }
         return apmString;
     }

@@ -40,7 +40,7 @@ public class Fixation : Affix
 
     public override void Remove()
     {
-        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
+        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.DefaultMovementSpeed);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         Unit.Unit.TargetedAs = 2;
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
@@ -123,17 +123,20 @@ public class Fixation : Affix
 
     private unit GetClosestUnitInRange()
     {
-        var rangeList = UnitsInRange.ToList();
         var unitX = Unit.Unit.X;
         var unitY = Unit.Unit.Y;
 
         // Determine closest unit in list
-        var closestUnit = rangeList[0];
+        var closestUnit = UnitsInRange.First;
         var closestDistance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, closestUnit.X, closestUnit.Y);
         if (closestDistance > 0)
         {
-            foreach (var unit in rangeList)
+
+            while (true)
             {
+                var unit = UnitsInRange.First;
+                if (unit == null) break;
+                UnitsInRange.Remove(unit);
                 var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
                 if (distance < closestDistance)
                 {
@@ -142,7 +145,6 @@ public class Fixation : Affix
                 }
             }
         }
-        GC.RemoveList(ref rangeList);
         return closestUnit;
     }
 

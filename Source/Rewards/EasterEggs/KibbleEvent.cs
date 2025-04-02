@@ -44,10 +44,11 @@ public static class KibbleEvent
         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(ref EventTimer);
 
-        foreach (var kibble in ItemSpawner.TrackKibbles)
+        for (int i = 0; i < ItemSpawner.TrackKibbles.Count; i++)
         {
+            var kibble = ItemSpawner.TrackKibbles[i];
             if (kibble.Item == null) continue;
-            kibble.__destroy();
+            kibble.Dispose();
         }
 
         ItemSpawner.TrackKibbles.Clear();

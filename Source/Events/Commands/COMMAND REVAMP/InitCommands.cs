@@ -1382,5 +1382,25 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "fortest",
+            alias: "",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Foreach memory test",
+            action: (player, args) =>
+            {
+                // Roughly 3MB of memory per 20k iterations.
+                for (int i = 0; i < 20000; i++)
+                {
+                    foreach (var k in Globals.ALL_KITTIES)
+                    {
+                        k.Value.Alive = true;
+                    }
+                }
+                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
+            }
+        );
+
     }
 }

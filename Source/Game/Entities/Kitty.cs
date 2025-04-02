@@ -216,7 +216,7 @@ public class Kitty
         APMTracker.Dispose();
         InvulTimer.Pause();
         InvulTimer.Dispose();
-        Disco?.__destroy(false);
+        Disco?.Dispose();
         aiController.StopAi();
         Unit.Dispose();
         if (Gameover.WinGame) return;

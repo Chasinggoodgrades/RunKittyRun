@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -13,7 +12,9 @@ public class WolfPoint
     public static trigger IsPausedTrigger;
 
     private Wolf Wolf { get; set; }
-    public List<WolfVisitPoints> PointsToVisit { get; set; } = new List<WolfVisitPoints>();
+    private float[] XPoints { get; set; } = new float[50];
+    private float[] YPoints { get; set; } = new float[50];
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -36,7 +37,7 @@ public class WolfPoint
     {
         try
         {
-            if (PointsToVisit == null) return;
+            if (XPoints == null) return;
             Cleanup();
 
             // Calculate the distance between points
@@ -50,21 +51,17 @@ public class WolfPoint
 
             for (int i = 0; i < numRegions; i++)
             {
-                var wPoint = MemoryHandler.GetEmptyObject<WolfVisitPoints>();
                 var regionX = startX + (i * stepX);
                 var regionY = startY + (i * stepY);
-                wPoint.X = regionX;
-                wPoint.Y = regionY;
-                PointsToVisit.Add(wPoint);
+                XPoints[i] = regionX;
+                YPoints[i] = regionY;
             }
 
             // Ensure the last point is exactly the end point
-            var lastPoint = MemoryHandler.GetEmptyObject<WolfVisitPoints>();
-            lastPoint.X = endX;
-            lastPoint.Y = endY;
-            PointsToVisit.Add(lastPoint);
+            XPoints[numRegions] = endX;
+            YPoints[numRegions] = endY;
 
-            if (PointsToVisit != null && PointsToVisit.Count > 0)
+            if (XPoints != null && XPoints.Length > 0)
             {
                 StartMovingOrders();
             }
@@ -79,24 +76,26 @@ public class WolfPoint
     {
         try
         {
-            if (PointsToVisit == null) return;
+            if (XPoints == null) return;
             Wolf.Unit.ClearOrders();
-            foreach(var point in PointsToVisit)
+
+            for (int i = 0; i < XPoints.Length; i++)
             {
-                point.__destroy();
+                XPoints[i] = 0;
+                YPoints[i] = 0;
             }
-            PointsToVisit.Clear();
         }
         catch (Exception ex)
         {
-            Logger.Critical(ex.Message);
+            Logger.Critical($"Clean up error: WolfPoint: {ex.Message}");
         }
     }
 
     public void Dispose()
     {
         Cleanup();
-        PointsToVisit = null;
+        XPoints = null;
+        YPoints = null;
         Wolf.Unit.ClearOrders();
     }
 
@@ -107,11 +106,12 @@ public class WolfPoint
 
         try
         {
-            for (int i = PointsToVisit.Count - 1; i >= 1; i--)
+            for (int i = XPoints.Length - 1; i >= 1; i--)
             {
+                if (XPoints[i] == 0 && YPoints[i] == 0) continue;
                 var moveID = MoveOrderID;
-                if (i == PointsToVisit.Count - 1) moveID = AttackOrderID;
-                Wolf.Unit.QueueOrder(moveID, PointsToVisit[i].X, PointsToVisit[i].Y);
+                if (i == XPoints.Length - 1) moveID = AttackOrderID;
+                Wolf.Unit.QueueOrder(moveID, XPoints[i], YPoints[i]);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
         }
@@ -136,20 +136,5 @@ public class WolfPoint
             //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
         }));
         return IsPausedTrigger;
-    }
-}
-
-public class WolfVisitPoints : IDestroyable
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-
-    public WolfVisitPoints()
-    {
-    }
-
-    public void __destroy(bool recursive = false)
-    {
-        MemoryHandler.DestroyObject(this, recursive);
     }
 }

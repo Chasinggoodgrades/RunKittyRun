@@ -60,8 +60,12 @@ public static class Gameover
     {
         if (Gamemode.CurrentGameMode != "Standard") return false;
         if (NoEnd) return false;
-        foreach (var kitty in Globals.ALL_KITTIES)
-            if (kitty.Value.Alive) return false;
+
+        for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+        {
+            var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+            if (kitty.Alive) return false;
+        }
         LosingGame();
         return true;
     }

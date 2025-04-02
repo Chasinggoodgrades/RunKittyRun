@@ -96,8 +96,9 @@ public class Colors
     /// </summary>
     public static string GetStringColorOfPlayer(int playerColorID)
     {
-        foreach (var color in ColorManager)
+        for (int i = 0; i < ColorManager.Count; i++)
         {
+            var color = ColorManager[i];
             if (color.colorID == playerColorID)
             {
                 return color.colorcode;

@@ -1,6 +1,7 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
-public class Disco : IDestroyable
+public class Disco : IDisposable
 {
     public timer DiscoTimer { get; set; }
     public bool Enabled { get; set; } = false;
@@ -11,11 +12,11 @@ public class Disco : IDestroyable
         DiscoTimer = timer.Create();
     }
 
-    public void __destroy(bool recursive = false)
+    public void Dispose()
     {
         DiscoTimer.Pause();
         Enabled = false;
-        MemoryHandler.DestroyObject(this, recursive);
+        MemoryHandler.DestroyObject(this);
     }
 
     public void ToggleDisco(bool enable)
@@ -33,7 +34,7 @@ public class Disco : IDestroyable
             DiscoTimer.Pause();
             Enabled = false;
             if (Unit.UnitType == Constants.UNIT_KITTY) return;
-            __destroy(false);
+            Dispose();
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class Kibble : IDestroyable
+public class Kibble : IDisposable
 {
     public static trigger PickupTrigger;
     private static List<int> KibblesColors = KibbleList();
@@ -25,11 +25,11 @@ public class Kibble : IDestroyable
         Type = RandomKibbleType();
     }
 
-    public void __destroy(bool recursive = false)
+    public void Dispose()
     {
         Item?.Dispose();
         Item = null;
-        MemoryHandler.DestroyObject(this, recursive);
+        MemoryHandler.DestroyObject(this);
     }
 
     public void SpawnKibble()
@@ -93,7 +93,7 @@ public class Kibble : IDestroyable
             var kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
             if (kib != null && kib.Item != null)
             {
-                kib.__destroy();
+                kib.Dispose();
             }
         }
         catch (Exception e)

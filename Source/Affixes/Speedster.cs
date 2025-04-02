@@ -18,7 +18,7 @@ public class Speedster : Affix
 
     public override void Remove()
     {
-        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.BaseMovementSpeed);
+        SetUnitMoveSpeed(Unit.Unit, Unit.Unit.MovementSpeed);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }

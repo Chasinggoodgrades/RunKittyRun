@@ -385,9 +385,10 @@ public class AIController
 	*/
     void CalcCrossingPoints()
     {
-        foreach (var point in wallPoints)
+        for (int i = 0; i < wallPoints.Count; i++)
         {
-            point.__destroy();
+            var point = wallPoints[i];
+            point.Dispose();
         }
 
         wallPoints.Clear();
@@ -779,14 +780,14 @@ public class AIController
     {
         foreach (var blockedInterval in blockedIntervals)
         {
-            blockedInterval.__destroy();
+            blockedInterval.Dispose();
         }
 
         blockedIntervals.Clear();
 
         foreach (var freeGap in freeGaps)
         {
-            freeGap.__destroy();
+            freeGap.Dispose();
         }
 
         freeGaps.Clear();
@@ -955,7 +956,7 @@ public class AIController
     /// <summary>
     /// Helper class representing an angular interval [Start, End] in radians.
     /// </summary>
-    private class AngleInterval : IDestroyable
+    private class AngleInterval : IDisposable
     {
         public float Start;
         public float End;
@@ -964,13 +965,13 @@ public class AIController
         {
         }
 
-        public void __destroy(bool recursive = false)
+        public void Dispose()
         {
             MemoryHandler.DestroyObject(this);
         }
     }
 
-    private class Point : IDestroyable
+    private class Point : IDisposable
     {
         public float X;
         public float Y;
@@ -979,7 +980,7 @@ public class AIController
         {
         }
 
-        public void __destroy(bool recursive = false)
+        public void Dispose()
         {
             MemoryHandler.DestroyObject(this);
         }
@@ -1027,7 +1028,7 @@ public class AIController
 }
 
 // Define a struct for cluster data to avoid per-call allocations.
-public class ClusterData : IDestroyable
+public class ClusterData : IDisposable
 {
     public float DirX;
     public float DirY;
@@ -1042,7 +1043,7 @@ public class ClusterData : IDestroyable
         Exists = false;
     }
 
-    public void __destroy(bool recursive = false)
+    public void Dispose()
     {
         MemoryHandler.DestroyObject(this);
     }

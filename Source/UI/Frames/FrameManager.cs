@@ -163,7 +163,7 @@ public static class FrameManager
             var yOffSet = nameFrame.Height / 8;
             Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
             Backdrop.SetSize(x, h);
-            t.Dispose();
+            // t.Dispose();
         }));
     }
 
@@ -201,7 +201,11 @@ public static class FrameManager
         };
 
         // Hide all frames except the current one
-        foreach (var frame in frames)
-            if (frame != currentFrame) frame.Visible = false;
+
+        for(int i = 0; i < frames.Count; i++)
+        {
+            if (frames[i] != currentFrame) frames[i].Visible = false;
+        }
+
     }
 }

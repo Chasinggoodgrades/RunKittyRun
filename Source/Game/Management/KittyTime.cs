@@ -79,7 +79,7 @@ public class KittyTime
     private void SetTotalTime()
     {
         TotalTime = 0.0f;
-        foreach (var time in RoundTime)
+        foreach (var time in RoundTime) // IEnumberable
             TotalTime += time.Value;
     }
 
@@ -101,7 +101,7 @@ public class KittyTime
     public float GetOverallProgress()
     {
         float overallProgress = 0.0f;
-        foreach (var progress in RoundProgress)
+        foreach (var progress in RoundProgress) // IEnumberable
             overallProgress += progress.Value;
         return overallProgress / RoundProgress.Count;
     }

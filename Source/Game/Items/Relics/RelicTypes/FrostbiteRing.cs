@@ -98,12 +98,12 @@ public class FrostbiteRing : Relic
     private void SlowWolves(unit Unit)
     {
         if (PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType()) < 2) return;
-        Unit.BaseMovementSpeed = 365.0f / 2.0f;
+        Unit.MovementSpeed = 365.0f / 2.0f;
         var t = timer.Create();
         var effect = AddSpecialEffectTarget(FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
         t.Start(SLOW_DURATION, false, ErrorHandler.Wrap(() =>
         {
-            Unit.BaseMovementSpeed = 365.0f;
+            Unit.MovementSpeed = 365.0f;
             GC.RemoveEffect(ref effect);
             GC.RemoveTimer(ref t);
         }));

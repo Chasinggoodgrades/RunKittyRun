@@ -6,15 +6,18 @@ using static WCSharp.Api.Common;
 
 public static class Utility
 {
+    private static int Locust = FourCC("Aloc");
+    private static StringBuilder stringBuilder = new StringBuilder();
+
     /// <summary>
     /// Makes the unit unclickable while remaining selectable.
     /// </summary>
     /// <param name="u"></param>
     public static void MakeUnitLocust(unit u)
     {
-        u.AddAbility(FourCC("Aloc"));
+        u.AddAbility(Locust);
         ShowUnit(u, false);
-        u.RemoveAbility(FourCC("Aloc"));
+        u.RemoveAbility(Locust);
         ShowUnit(u, true);
     }
 
@@ -32,9 +35,9 @@ public static class Utility
     /// <param name="message">Whats the message?</param>
     public static void TimedTextToAllPlayers(float duration, string message)
     {
-        foreach (var p in Globals.ALL_PLAYERS)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
-            p.DisplayTimedTextTo(duration, message);
+            Globals.ALL_PLAYERS[i].DisplayTimedTextTo(duration, message);
         }
     }
 
@@ -92,9 +95,9 @@ public static class Utility
     {
         try
         {
-            foreach (var player in Globals.VIPLIST)
+            for (int i = 0; i < Globals.VIPLIST.Length;  i++)
             {
-                if (p.Name == Base64.FromBase64(player))
+                if (p.Name == Base64.FromBase64(Globals.VIPLIST[i]))
                 {
                     return true;
                 }
@@ -115,13 +118,7 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var t = timer.Create();
-        t.Start(duration, false, ErrorHandler.Wrap(() =>
-        {
-            action();
-            t.Dispose();
-            t = null;
-        }));
+        AchesHandles.SimpleTimer(duration, action);
     }
 
     /// <summary>
@@ -322,8 +319,7 @@ public static class Utility
     /// <returns>The formatted award name.</returns>
     public static string FormatAwardName(string awardName)
     {
-        var stringBuilder = new StringBuilder();
-
+        stringBuilder.Clear();
         for (int i = 0; i < awardName.Length; i++)
         {
             if (i > 0 && char.IsUpper(awardName[i]))
@@ -334,7 +330,6 @@ public static class Utility
         }
 
         var s = stringBuilder.ToString();
-        stringBuilder.Clear();
         return s;
     }
 
@@ -358,8 +353,9 @@ public static class Utility
     {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.Length < 3) return null;
-        foreach (var p in Globals.ALL_PLAYERS)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
+            var p = Globals.ALL_PLAYERS[i];
             if (p.Name.ToLower().Contains(playerName.ToLower()))
             {
                 return p;

@@ -43,7 +43,7 @@ public class ShadowKitty
         // Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
         Utility.MakeUnitLocust(this.Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
-        this.Unit.BaseMovementSpeed = 522;
+        this.Unit.MovementSpeed = 522;
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(this.Player, true);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);

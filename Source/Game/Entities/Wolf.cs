@@ -43,6 +43,8 @@ public class Wolf
         _cachedWander = ErrorHandler.Wrap(() => StartWandering());
         StartWandering();
         Globals.ALL_WOLVES.Add(Unit, this);
+
+
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
         {
             wolfArea.Wolves.Add(this);
@@ -95,9 +97,9 @@ public class Wolf
     public void WolfMove()
     {
         if (IsPaused || IsReviving) return;
+        if (HasAffix("Blitzer")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if (HasAffix("Blitzer")) return;
         WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
@@ -112,7 +114,7 @@ public class Wolf
         WanderTimer = null;
         Texttag?.Dispose();
         Texttag = null;
-        Disco?.__destroy(false);
+        Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;
         Unit?.Dispose();
@@ -154,16 +156,16 @@ public class Wolf
     {
         if (pause)
         {
-            WanderTimer.Pause();
-            EffectTimer.Pause();
+            WanderTimer?.Pause();
+            EffectTimer?.Pause();
             Unit.ClearOrders();
             IsWalking = false;
             IsPaused = true;
         }
         else
         {
-            WanderTimer.Resume();
-            EffectTimer.Resume();
+            WanderTimer?.Resume();
+            EffectTimer?.Resume();
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;
@@ -244,33 +246,40 @@ public class Wolf
         Affixes.Remove(affix);
         affix.Remove();
         AffixFactory.AllAffixes.Remove(affix);
+        
     }
 
     public void RemoveAffix(string affixName)
     {
-        var affixToRemove = Affixes.FirstOrDefault(a => a.GetType().Name == affixName);
-        if (affixToRemove != null)
+        for (int i = 0; i < Affixes.Count; i++)
         {
-            RemoveAffix(affixToRemove);
+            if (Affixes[i].GetType().Name == affixName)
+            {
+                RemoveAffix(Affixes[i]);
+                break;
+            }
         }
     }
 
     public bool HasAffix(string affixName)
     {
         if (Affixes.Count == 0) return false;
-        foreach (var affix in Affixes)
-            if (affix.GetType().Name == affixName) return true;
+        for(int i = 0; i < Affixes.Count; i++)
+            if (Affixes[i].GetType().Name == affixName) return true;
+
         return false;
     }
 
     public void RemoveAllWolfAffixes()
     {
         if (AffixCount() == 0) return;
-        foreach (var affix in Affixes)
+
+        for (int i = 0; i < Affixes.Count; i++)
         {
-            AffixFactory.AllAffixes.Remove(affix);
-            affix.Remove();
+            AffixFactory.AllAffixes.Remove(Affixes[i]);
+            Affixes[i].Remove();
         }
+
         Affixes.Clear();
     }
 
