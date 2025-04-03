@@ -1,4 +1,5 @@
 ﻿using Source;
+using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -19,6 +20,8 @@ public static class CustomStatFrame
     private static string Gold = $"{Colors.COLOR_YELLOW_ORANGE}Gold:|r";
     private static string Ratio = $"{Colors.COLOR_YELLOW_ORANGE}S/D:|r";
     private static string Progress = $"{Colors.COLOR_YELLOW_ORANGE}Prog.:|r";
+
+    private static readonly Action _cacheUpdate = Update;
 
     private static timer t;
 
@@ -73,11 +76,19 @@ public static class CustomStatFrame
 
     public static void Update()
     {
-        if (!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
+        try
+        {
+            if (!SelectedUnit.TryGetValue(player.LocalPlayer, out var selectedUnit)) return;
 
-        HandleFrameText(selectedUnit);
+            HandleFrameText(selectedUnit);
 
-        CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
+            CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible;
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in CustomStatFrame.Update: {e.Message}");
+            throw;
+        }
     }
 
     public static void Init()
@@ -118,7 +129,7 @@ public static class CustomStatFrame
         Add("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp", "", "Speed");
 
         t = timer.Create();
-        t.Start(0.1f, true, ErrorHandler.Wrap(Update));
+        t.Start(0.1f, true, _cacheUpdate);
     }
 
     private static void HandleFrameText(unit selectedUnit)

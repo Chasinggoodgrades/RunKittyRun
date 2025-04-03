@@ -59,7 +59,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: {ex.Message}");
             throw;
         }
     }
@@ -71,7 +71,7 @@ public class SaveManager
         {
             if (player.Controller == mapcontrol.Computer) continue;
             if (player.SlotState != playerslotstate.Playing) continue;
-            SaveData[player].Date = date;
+            SaveData[player].Date = date; // Gotta make sure save data exists.. If not, then create new and make it exist. (TODO )
             Globals.SaveSystem.SaveAllDataToFile(player);
         }
     }

@@ -56,7 +56,7 @@ public class Frostbite : Affix
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
         PeriodicRangeTrigger.AddAction(ErrorHandler.Wrap(PeriodicRangeCheck));
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, FilterList.KittyFilter);
         InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;

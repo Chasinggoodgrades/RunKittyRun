@@ -1,8 +1,10 @@
 ﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
+using System;
 
 public class APMTracker
 {
+    private readonly Action _cachedPositions;
     private const float CAPTURE_INTERVAL = 0.1f;
     private trigger ClicksTrigger = trigger.Create();
     private triggeraction ClicksAction;
@@ -18,6 +20,7 @@ public class APMTracker
     {
         Kitty = kitty;
         Init();
+        _cachedPositions = () => CheckKittyPositions(); // cache the method for periodic timer use
     }
 
     private void Init()
@@ -30,7 +33,7 @@ public class APMTracker
     private timer PeriodicCheck()
     {
         PeriodicTimer = CreateTimer();
-        PeriodicTimer.Start(CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CheckKittyPositions));
+        PeriodicTimer.Start(CAPTURE_INTERVAL, true, _cachedPositions);
         return PeriodicTimer;
     }
 
@@ -42,8 +45,16 @@ public class APMTracker
 
     private void CheckKittyPositions()
     {
-        if (!IsInSafeZone(Kitty)) return;
-        Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
+        try
+        {
+            if (!IsInSafeZone(Kitty)) return;
+            Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in APMTracker.CheckKittyPositions: {e.Message}");
+            throw;
+        }
     }
 
     private static bool IsInSafeZone(Kitty kitty)

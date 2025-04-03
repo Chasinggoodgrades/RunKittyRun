@@ -95,7 +95,7 @@ public static class UrnSoul
     private static trigger RegisterInRangeEvent()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, Filters.KittyFilter);
+        trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, FilterList.KittyFilter);
         trig.AddAction(ErrorHandler.Wrap(InRangeActions));
         return trig;
     }

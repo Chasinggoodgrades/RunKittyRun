@@ -65,7 +65,7 @@ public class Bomber : Affix
     private void Explode()
     {
         Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
-        Globals.TempGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, Filters.KittyFilter);
+        Globals.TempGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
         var list = Globals.TempGroup.ToList();
         foreach (unit u in list)
         {

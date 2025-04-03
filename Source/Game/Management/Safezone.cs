@@ -36,7 +36,7 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
         Trigger.AddAction(ErrorHandler.Wrap(EnterSafezoneActions));
     }
 

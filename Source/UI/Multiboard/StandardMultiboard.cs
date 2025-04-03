@@ -45,7 +45,7 @@ public static class StandardMultiboard
         ESCTrigger = trigger.Create();
 
         Updater.RegisterTimerEvent(1.00f, true);
-        Updater.AddAction(ErrorHandler.Wrap(CurrentStatsRoundTimes));
+        Updater.AddAction(CurrentStatsRoundTimes);
 
         foreach (var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);

@@ -12,7 +12,7 @@ public static class FinalSafezone
 
     private static void RegisterEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
         Trigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var unit = @event.Unit;

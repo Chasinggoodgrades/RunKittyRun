@@ -69,7 +69,7 @@ public class Fixation : Affix
     private void RegisterEvents()
     {
         if (Type == 1) UnitsInRange = group.Create();
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, Filters.KittyFilter);
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, FilterList.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(ErrorHandler.Wrap(UpdateChaseSpeed));
         InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
@@ -110,7 +110,7 @@ public class Fixation : Affix
     private void GetClosestTarget()
     {
         UnitsInRange.Clear();
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, Filters.KittyFilter);
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, FilterList.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
         var newTarget = GetClosestUnitInRange();
         if (newTarget != Target)

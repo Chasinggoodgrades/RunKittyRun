@@ -1,7 +1,9 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 
 public static class GameTimer
 {
+    private static readonly Action _cachedGameTimer = () => StartGameTimer();
     public static float[] RoundTime { get; set; }
     public static float RoundSpeedIncrement { get; set; } = 0.12f;
     private static framehandle GameTimeBar { get; set; } = framehandle.Get("ResourceBarSupplyText", 0);
@@ -14,7 +16,7 @@ public static class GameTimer
         Globals.GAME_TIMER_DIALOG.SetTitle("Elapsed Game Time");
         RoundTime = new float[Gamemode.NumberOfRounds + 1];
         var t = timer.Create();
-        t.Start(RoundSpeedIncrement, true, ErrorHandler.Wrap(StartGameTimer));
+        t.Start(RoundSpeedIncrement, true, _cachedGameTimer);
     }
 
     /// <summary>

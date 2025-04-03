@@ -126,14 +126,13 @@ public class WolfPoint
         IsPausedTrigger = CreateTrigger();
         Blizzard.TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
 
-        TriggerAddCondition(IsPausedTrigger, Condition(() => GetIssuedOrderId() == AttackOrderID));
-        TriggerAddCondition(IsPausedTrigger, Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL));
+        TriggerAddCondition(IsPausedTrigger, FilterList.IssuedOrderAtkOrder);
+        TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
         TriggerAddAction(IsPausedTrigger, ErrorHandler.Wrap(() =>
         {
             Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-            //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
         }));
         return IsPausedTrigger;
     }

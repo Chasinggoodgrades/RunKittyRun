@@ -21,6 +21,8 @@ public static class FrameManager
     private static string TEXT_COLOR = Colors.COLOR_YELLOW;
     private static string HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE;
 
+    private static readonly Action _cachedUIPosition = RepositionBackdropAction();
+    private static List<framehandle> _frames = new List<framehandle>();
 
     public static void Initialize()
     {
@@ -47,6 +49,7 @@ public static class FrameManager
         ShopFrame.Initialize();
         RewardsFrame.Initialize();
         InitalizeButtons();
+        InitFramesList();
     }
 
     public static void InitalizeButtons()
@@ -94,6 +97,13 @@ public static class FrameManager
         BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0);
         resourceBarText.Text = "0:00";
         //timeDayDisplay.Visible = false;
+    }
+
+    private static void InitFramesList()
+    {
+        _frames.Add(ShopFrame.shopFrame);
+        _frames.Add(RewardsFrame.RewardFrame);
+        _frames.Add(MusicFrame.MusicFramehandle);
     }
 
     private static void CreateRewardsButton()
@@ -156,21 +166,34 @@ public static class FrameManager
     {
         var t = timer.Create();
         var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
-        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
-        {
-            var x = nameFrame.Width / 4;
-            var h = nameFrame.Height / 8;
-            var yOffSet = nameFrame.Height / 8;
-            Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
-            Backdrop.SetSize(x, h);
-            // t.Dispose();
-        }));
+
+        t.Start(1.0f, true, _cachedUIPosition);
+    }
+
+    private static Action RepositionBackdropAction()
+    {
+        return () => {
+            try
+            {
+                var nameFrame = BlzGetFrameByName("ConsoleUIBackdrop", 0);
+                var x = nameFrame.Width / 4;
+                var h = nameFrame.Height / 8;
+                var yOffSet = nameFrame.Height / 8;
+                Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top);
+                Backdrop.SetSize(x, h);
+            }
+            catch (Exception e)
+            {
+                Logger.Critical($"Error in RepositionBackdropAction: {e.Message}");
+            }
+        };
     }
 
     private static void ESCHideFrames()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
+            var player = Globals.ALL_PLAYERS[i];
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
         ESCTrigger.AddAction(ErrorHandler.Wrap(ESCActions));
@@ -193,19 +216,9 @@ public static class FrameManager
 
     public static void HideOtherFrames(framehandle currentFrame)
     {
-        var frames = new List<framehandle>
+        for(int i = 0; i < _frames.Count; i++)
         {
-            RewardsFrame.RewardFrame,
-            ShopFrame.shopFrame,
-            MusicFrame.MusicFramehandle
-        };
-
-        // Hide all frames except the current one
-
-        for(int i = 0; i < frames.Count; i++)
-        {
-            if (frames[i] != currentFrame) frames[i].Visible = false;
+            if (_frames[i] != currentFrame) _frames[i].Visible = false;
         }
-
     }
 }

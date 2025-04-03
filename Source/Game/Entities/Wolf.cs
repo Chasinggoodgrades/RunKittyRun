@@ -15,6 +15,7 @@ public class Wolf
     private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
 
     private readonly Action _cachedWander;
+    private readonly Action _cachedEffect;
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
@@ -40,7 +41,8 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        _cachedWander = ErrorHandler.Wrap(() => StartWandering());
+        _cachedWander = () => StartWandering();
+        _cachedEffect = () => WolfMoveCancelEffect();
         StartWandering();
         Globals.ALL_WOLVES.Add(Unit, this);
 
@@ -225,11 +227,13 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Start(effectDuration, false, () =>
-        {
-            WolfMove();
-            BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
-        });
+        EffectTimer.Start(effectDuration, false, _cachedEffect);
+    }
+
+    private void WolfMoveCancelEffect()
+    {
+        WolfMove();
+        BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
     }
 
     #region AFFIXES

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 public class KittyTime
 {
+    private readonly Action _cachedProgress;
     private Dictionary<int, float> RoundTime { get; set; } = new Dictionary<int, float>();
     private Dictionary<int, float> RoundProgress { get; set; } = new Dictionary<int, float>();
     private timer ProgressTimer { get; set; } = timer.Create();
@@ -13,6 +15,7 @@ public class KittyTime
     {
         Kitty = kitty;
         Initialize();
+        _cachedProgress = () => Progress.CalculateProgress(Kitty);
     }
 
     private void Initialize()
@@ -37,7 +40,7 @@ public class KittyTime
 
     private void PeriodicProgressTimer()
     {
-        ProgressTimer.Start(0.2f, true, ErrorHandler.Wrap(() => Progress.CalculateProgress(Kitty)));
+        ProgressTimer.Start(0.2f, true, _cachedProgress);
     }
 
     #region Time Section
