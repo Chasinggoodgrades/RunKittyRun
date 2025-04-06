@@ -41,11 +41,11 @@ public class SaveManager
             playerData.Date = date;
             if (!player.IsLocal) return;
             syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
-            player.DisplayTimedTextTo(4.0f, Colors.COLOR_GOLD + "Stats have been saved.");
+            player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_GOLD}Stats have been saved.{Colors.COLOR_RESET}");
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.Save: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.Save: {ex.Message}{Colors.COLOR_RESET}");
             throw;
         }
     }
@@ -59,7 +59,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: {ex.Message}{Colors.COLOR_RESET}");
             throw;
         }
     }
@@ -71,7 +71,9 @@ public class SaveManager
         {
             if (player.Controller == mapcontrol.Computer) continue;
             if (player.SlotState != playerslotstate.Playing) continue;
-            SaveData[player].Date = date; // Gotta make sure save data exists.. If not, then create new and make it exist. (TODO )
+            if (!SaveData.ContainsKey(player) || SaveData[player] == null)
+                Globals.SaveSystem.NewSave(player); // Ensure save data exists for this player before saving.
+            SaveData[player].Date = date;
             Globals.SaveSystem.SaveAllDataToFile(player);
         }
     }
@@ -94,7 +96,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: {ex.Message}{Colors.COLOR_RESET}");
             throw;
         }
     }
@@ -111,7 +113,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: {ex.Message}");
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: {ex.Message} {Colors.COLOR_RESET}");
             throw;
         }
     }
@@ -125,7 +127,7 @@ public class SaveManager
              if (data.Length < 1)
              {
                  Globals.SaveSystem.NewSave(player);
-                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.|r");
+                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.{Colors.COLOR_RESET}");
                  return;
              }
              ConvertJsonToSaveData(data, player);
@@ -136,7 +138,7 @@ public class SaveManager
     {
         if (!WCSharp.Json.JsonConvert.TryDeserialize(data, out KittyData kittyData))
         {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}Failed to deserialize data. Creating new save.|r");
+            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}Failed to deserialize data. Creating new save.{Colors.COLOR_RESET}");
             Globals.SaveSystem.NewSave(player);
             return;
         }

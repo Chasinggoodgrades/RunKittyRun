@@ -256,8 +256,9 @@ public class AIController
         var wolvesInLane = WolfArea.WolfAreas[currentProgressZoneId].Wolves;
 
         wolvesInRange.Clear();
-        foreach (var wolf in wolvesInLane)
+        for (int i = 0; i < wolvesInLane.Count; i++)
         {
+            var wolf = wolvesInLane[i];
             if (IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, wolf.Unit.X, wolf.Unit.Y, wolf.IsWalking ? DODGE_RADIUS : DODGE_RADIUS_STILL))
             {
                 wolvesInRange.Add(wolf);
@@ -583,9 +584,9 @@ public class AIController
 
         // Visualize the blocked intervals
         HideAllLightnings();
-        foreach (var interval in mergedIntervals)
+        for (int i = 0; i < mergedIntervals.Count; i++)
         {
-            VisualizeBlockedInterval(interval);
+            VisualizeBlockedInterval(mergedIntervals[i]);
         }
 
         // Determine free angular gaps on the circle.
@@ -868,8 +869,9 @@ public class AIController
 
     private void HideAllLightnings()
     {
-        foreach (var lightning in usedBlockedLightnings)
+        for (int i = 0; i < usedBlockedLightnings.Count; i++)
         {
+            var lightning = usedBlockedLightnings[i];
             MoveLightning(lightning, false, 0.0f, 0.0f, 0.0f, 0.0f);
             availableBlockedLightnings.Add(lightning);
         }
@@ -879,8 +881,9 @@ public class AIController
 
     private void HideAllFreeLightnings()
     {
-        foreach (var lightning in usedClearLightnings)
+        for (int i = 0; i < usedClearLightnings.Count; i++)
         {
+            var lightning = usedClearLightnings[i];
             MoveLightning(lightning, false, 0.0f, 0.0f, 0.0f, 0.0f);
             availableClearLightnings.Add(lightning);
         }
