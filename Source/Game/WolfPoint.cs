@@ -130,10 +130,10 @@ public class WolfPoint
         TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, ErrorHandler.Wrap(() =>
+        TriggerAddAction(IsPausedTrigger, () =>
         {
             Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-        }));
+        });
         return IsPausedTrigger;
     }
 }

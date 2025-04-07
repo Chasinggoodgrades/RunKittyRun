@@ -9,6 +9,7 @@ public class Fixation : Affix
     private const float FIXATION_MS = 325.0f;
     private const float FIXATION_MAX_MS = 410.0f;
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
+    private static readonly Predicate<Affix> IsFixation = x => x is Fixation;
     private const int AFFIX_ABILITY = Constants.ABILITY_FIXATION;
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
@@ -71,18 +72,25 @@ public class Fixation : Affix
         if (Type == 1) UnitsInRange = group.Create();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, FilterList.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
-        PeriodicSpeed.AddAction(ErrorHandler.Wrap(UpdateChaseSpeed));
-        InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
+        PeriodicSpeed.AddAction(UpdateChaseSpeed);
+        InRangeTrigger.AddAction(() =>
         {
-            var target = @event.Unit;
-            var Region = RegionList.WolfRegions[Unit.RegionIndex];
-            if (!Region.Contains(target.X, target.Y)) return;
-            if (target != Unit.Unit && !IsChasing)
+            try
             {
-                Target = target;
-                ChasingEvent();
+                var target = @event.Unit;
+                var Region = RegionList.WolfRegions[Unit.RegionIndex];
+                if (!Region.Contains(target.X, target.Y)) return;
+                if (target != Unit.Unit && !IsChasing)
+                {
+                    Target = target;
+                    ChasingEvent();
+                }
             }
-        }));
+            catch (Exception e)
+            {
+                Logger.Warning($"Error in Fixation.InRangeTrigger: {e.Message}");
+            }
+        });
     }
 
     private void ChasingEvent()
@@ -91,7 +99,7 @@ public class Fixation : Affix
         IsChasing = true;
         Unit.WanderTimer.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        ChaseTimer.Start(0.1f, true, ErrorHandler.Wrap(() =>
+        ChaseTimer.Start(0.1f, true, () =>
         {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
@@ -104,7 +112,7 @@ public class Fixation : Affix
             }
             if (Type == 1) GetClosestTarget();
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
-        }));
+        });
     }
 
     private void GetClosestTarget()
@@ -173,7 +181,7 @@ public class Fixation : Affix
 
     public static Fixation GetFixation(unit Unit)
     {
-        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(a => a is Fixation);
+        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(IsFixation);
         return affix is Fixation fixation ? fixation : null;
     }
 

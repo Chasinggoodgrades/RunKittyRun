@@ -81,9 +81,9 @@ public static class RelicFunctions
 
     private static bool RelicLevel(unit unit) => unit.Level >= Relic.RequiredLevel;
 
-    private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel})");
+    private static void NotHighEnoughLevel(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You are not high enough level to purchase this shopItem!|r {Colors.COLOR_YELLOW}(Level {Relic.RequiredLevel}){Colors.COLOR_RESET}");
 
-    private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!");
+    private static void AlreadyHaveRelic(player player) => player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already own this shopItem!{Colors.COLOR_RESET}");
 
     private static void AddItem(player player, int itemID)
     {
@@ -94,7 +94,7 @@ public static class RelicFunctions
     {
         var relics = Globals.ALL_KITTIES[player].Relics;
         if (relics.Count < Relic.MaxRelics) return false;
-        player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!");
+        player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!{Colors.COLOR_RESET}");
         return true;
     }
 
@@ -104,7 +104,7 @@ public static class RelicFunctions
         if (relicCount < 1) return true; // can get a first relic ofc.
         if (Relic.GetRelicCountForLevel(unit.HeroLevel) < relicCount)
         {
-            unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You must have reached {Relic.RelicIncrease} to obtain a second relic. Then +1 for each level after up to {Relic.MaxRelics} relics.");
+            unit.Owner.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}You must have reached {Relic.RelicIncrease} to obtain a second relic. Then +1 for each level after up to {Relic.MaxRelics} relics.{Colors.COLOR_RESET}");
             return false;
         }
         return true;
@@ -115,7 +115,7 @@ public static class RelicFunctions
         var shadowkitty = ShadowKitty.ALL_SHADOWKITTIES[player];
         if (shadowkitty.Active)
         {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You cannot upgrade your while your shadow kitty is active!|r");
+            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You cannot upgrade your while your shadow kitty is active!{Colors.COLOR_RESET}");
             return true;
         }
         return false;
@@ -126,12 +126,12 @@ public static class RelicFunctions
         var CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID);
         if (CD > 0.0f && relic.RelicAbilityID != 0)
         {
-            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
+            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.{Colors.COLOR_RESET}");
             return false;
         }
         if (relic.GetType() == typeof(ChronoSphere) && kitty.CurrentStats.ChronoSphereCD) // chrono sphere
         {
-            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.|r");
+            kitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell {relic.Name}{Colors.COLOR_RED} while it is on cooldown.{Colors.COLOR_RESET}");
             return false;
         }
 

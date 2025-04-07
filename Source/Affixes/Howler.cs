@@ -38,14 +38,14 @@ public class Howler : Affix
     private void RegisterTimerEvents()
     {
         HowlTimer = timer.Create();
-        HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
+        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
     }
 
     private void Howl()
     {
         try
         {
-            HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
+            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
             if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
             NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, FilterList.DogFilter);

@@ -116,6 +116,7 @@ public class Wolf
         WanderTimer = null;
         Texttag?.Dispose();
         Texttag = null;
+        WolfArea.WolfAreas[RegionIndex].Wolves.Remove(this);
         Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;

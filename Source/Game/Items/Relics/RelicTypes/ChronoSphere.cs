@@ -7,6 +7,7 @@ public class ChronoSphere : Relic
     public const int RelicItemID = Constants.ITEM_CHRONO_ORB;
     public new const int RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING;
     private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNChrono Orb.dds";
+    private static readonly Predicate<Relic> IsChronoSphere = r => r is ChronoSphere;
     private const string LocationSaveEffectPath = "war3mapImported\\ChronoLocationSave.mdx";
     private const int RelicCost = 650;
     private const float SLOW_AURA_RADIUS = 400.0f;
@@ -121,7 +122,7 @@ public class ChronoSphere : Relic
         if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
         if (kitty.ProtectionActive) return false; // Don't rewind if ultimate has been casted.
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false;
-        var relic = kitty.Relics.Find(r => r is ChronoSphere) as ChronoSphere;
+        var relic = kitty.Relics.Find(IsChronoSphere) as ChronoSphere;
         if (relic == null) return false;
         if (kitty.CurrentStats.ChronoSphereCD) return false;
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));

@@ -7,6 +7,8 @@ public static class CollisionDetection
     public const float DEFAULT_WOLF_COLLISION_RADIUS = 74.0f;
     private const float CIRCLE_COLLISION_RADIUS = 77.0f;
 
+    private static Predicate<Relic> IsBeaconOfUnitedLifeforce = r => r is BeaconOfUnitedLifeforce;
+
     private static Func<bool> WolfCollisionFilter(Kitty k)
     {
         return () =>
@@ -84,12 +86,20 @@ public static class CollisionDetection
 
     private static trigger CircleCollisionTrigger(Kitty k)
     {
-        TriggerAddAction(k.c_Collision, ErrorHandler.Wrap(() =>
+        TriggerAddAction(k.c_Collision, () =>
         {
-            var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
-            circle.ReviveKitty(k);
-            (k.Relics.Find(r => r is BeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
-        }));
+            try
+            {
+                var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
+                circle.ReviveKitty(k);
+                (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
+            }
+            catch (Exception e)
+            {
+                Logger.Warning($"CircleCollisionTrigger Error: {e.Message}");
+                throw;
+            }
+        });
         return k.c_Collision;
     }
 

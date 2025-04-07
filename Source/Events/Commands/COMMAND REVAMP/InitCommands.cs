@@ -144,12 +144,21 @@ public static class InitCommands
             name: "wolfinfo",
             alias: "lnbm",
             group: "all",
-            argDesc: "",
+            argDesc: "[lane #] (1-17)",
             description: "Displays the current wolf count.",
             action: (player, args) =>
             {
-                var nbWolfs = Globals.ALL_WOLVES.Count;
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Wolf Count: " + nbWolfs);
+                int laneIndex;
+                int nbWolves;
+                if (args[0] != "") {
+                    laneIndex = int.Parse(args[0]);
+                    if (laneIndex <= 0 || laneIndex > 17) return;
+                    nbWolves = WolfArea.WolfAreas[laneIndex-1].Wolves.Count;
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"Current Wolf Count for Lane {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}");
+                    return;
+                }
+                else nbWolves = Globals.ALL_WOLVES.Count;
+                player.DisplayTextTo(Colors.COLOR_GOLD + $"Current Wolf Count: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}");
             }
         );
 
@@ -481,7 +490,7 @@ public static class InitCommands
             {
                 var difficulty = args[0] != "" ? args[0] : "normal";
                 Difficulty.ChangeDifficulty(difficulty);
-                AffixFactory.DistributeAffixes();
+                AffixFactory.DistAffixes();
                 MultiboardUtil.RefreshMultiboards();
                 NitroChallenges.SetNitroRoundTimes();
             }

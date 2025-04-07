@@ -22,7 +22,7 @@ public static class RoundManager
             NitroChallenges.SetNitroRoundTimes();
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
-            Utility.SimpleTimer(1.0f, AffixFactory.DistributeAffixes);
+            Utility.SimpleTimer(1.0f, AffixFactory.DistAffixes);
             if (Globals.ROUND > 1) TerrainChanger.SetTerrain();
 
             RoundTimer.InitEndRoundTimer();
