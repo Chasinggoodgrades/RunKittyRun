@@ -29,7 +29,7 @@ public static class NamedWolves
         var index = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         ExplodingWolf = new Wolf(index);
         ExplodingWolf.Texttag.SetPermanent(true);
-        ExplodingTexttagTimer.Start(0.03f, true, ErrorHandler.Wrap(() => ExplodingWolf.Texttag.SetPosition(ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 0.015f)));
+        ExplodingTexttagTimer.Start(0.03f, true, () => ExplodingWolf.Texttag.SetPosition(ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 0.015f));
         ExplodingWolfDesc();
     }
 

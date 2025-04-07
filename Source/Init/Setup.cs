@@ -25,7 +25,7 @@ namespace Source.Init
                 //if (!ADMINDISABLE.AdminsGame()) return;
                 Safezone.Initialize();
                 Savecode.Initialize();
-                StartGameModeTimer();
+                Utility.SimpleTimer(2.0f, () => StartGameModeTimer()); // Gives some delay time for the save system to sync
                 StopMusic(false);
                 ClearMapMusic();
 

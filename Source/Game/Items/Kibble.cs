@@ -181,6 +181,7 @@ public class Kibble : IDisposable
         return SeasonalManager.Season switch
         {
             HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
+            // HolidaySeasons.Easter => new List<int> { Constants.ITEM_EASTER_EGG },
             HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
             _ => new List<int> // Default case
             {

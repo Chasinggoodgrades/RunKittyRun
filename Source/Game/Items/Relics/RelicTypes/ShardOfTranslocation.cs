@@ -64,7 +64,7 @@ public class ShardOfTranslocation : Relic
         {
             if (!EligibleLocation(targetLoc, currentSafezone))
             {
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Invalid location. Must be within safezone bounds.");
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}Invalid location. Must be within safezone bounds.{Colors.COLOR_RESET}");
                 Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID, 1));
                 Utility.SimpleTimer(0.15f, () => Utility.UnitAddMana(Owner, 200));
                 return;
