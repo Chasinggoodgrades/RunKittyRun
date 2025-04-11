@@ -88,25 +88,25 @@ public class RingOfSummoning : Relic
 
         var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
         SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
-        var units = SummonGroup.ToList();
-        if (SummonGroup.Contains(summoningKittyUnit)) units.Remove(summoningKittyUnit); // remove self from the list
+        if (SummonGroup.Contains(summoningKittyUnit)) SummonGroup.Remove(summoningKittyUnit); // remove self from the list
 
-        for (int i = 0; i < numberOfSummons && i < units.Count; i++)
+
+        while (true)
         {
-            var unit = units[i];
-            var kitty = Globals.ALL_KITTIES[unit.Owner];
+            var unit = SummonGroup.First;
+            if (unit == null) break;
+            SummonGroup.Remove(unit);
 
+            var kitty = Globals.ALL_KITTIES[unit.Owner];
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
 
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
-            Console.WriteLine($"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
+            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
         }
 
-        SummonGroup.Clear();
-        targetedPoint.Dispose(); // dispose, cannot null because of trigger action
-        GC.RemoveList(ref units);
+        targetedPoint.Dispose(); // dispose, cannot null because of trigger action / ref
         GC.RemoveFilterFunc(ref filter);
     }
 
@@ -119,12 +119,12 @@ public class RingOfSummoning : Relic
     private bool SummonDeadKitty(Kitty summoner, Kitty summoned)
     {
         var round = Globals.ROUND;
-        var sumProg = summoner.TimeProg.GetRoundProgress(round);
+        var summoersProgress = summoner.TimeProg.GetRoundProgress(round);
         var deadProg = summoned.TimeProg.GetRoundProgress(round);
 
-        if (sumProg > deadProg && !summoned.Alive)
+        if (summoersProgress > deadProg && !summoned.Alive)
         {
-            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!");
+            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!{Colors.COLOR_RESET}");
             return false;
         }
         return true;

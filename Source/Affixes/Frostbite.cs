@@ -49,14 +49,14 @@ public class Frostbite : Affix
         foreach (var effect in Effects)
             effect.Value?.Dispose();
         foreach (var target in Frostbitten.Keys)
-            target.BaseMovementSpeed = Frostbitten[target];
+            target.MovementSpeed = Frostbitten[target];
     }
 
     private void RegisterEvents()
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
         PeriodicRangeTrigger.AddAction(ErrorHandler.Wrap(PeriodicRangeCheck));
-        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, Filters.KittyFilter);
+        InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, FilterList.KittyFilter);
         InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
         {
             var target = @event.Unit;
@@ -78,14 +78,18 @@ public class Frostbite : Affix
 
             if (target.IsInRange(Unit.Unit, FROSTBITE_RADIUS)) continue;
 
-            target.BaseMovementSpeed = originalSpeed;
+            target.MovementSpeed = originalSpeed;
             TempList.Add(target);
         }
 
-        foreach (var target in TempList)
+        for (int i = 0; i < TempList.Count; i++)
         {
+            var target = TempList[i];
             Frostbitten.Remove(target);
-            Effects[target]?.Dispose();
+            if (Effects.ContainsKey(target))
+            {
+                Effects[target]?.Dispose();
+            }
         }
 
         TempList.Clear();
@@ -95,8 +99,8 @@ public class Frostbite : Affix
     {
         if (target.GetAbilityLevel(FourCC("Bspe")) > 0) return; // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return; // Frostbite ring
-        Frostbitten.Add(target, target.BaseMovementSpeed);
+        Frostbitten.Add(target, target.MovementSpeed);
         Effects[target] = effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
-        target.BaseMovementSpeed = target.BaseMovementSpeed * FROSTBITE_SPEED_REDUCTION;
+        target.MovementSpeed = target.MovementSpeed * FROSTBITE_SPEED_REDUCTION;
     }
 }

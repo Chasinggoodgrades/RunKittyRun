@@ -74,7 +74,7 @@ public class SyncSaveLoad
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Logger.Critical($"Error in SyncSaveSystem.WriteFileObjects");
         }
         PreloadGenEnd(filename);
     }

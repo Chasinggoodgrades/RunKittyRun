@@ -13,6 +13,7 @@ public class Bomber : Affix
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
     private timer ExplodeTimer = timer.Create();
     private timer ReviveAlphaTimer = timer.Create();
+    private group ExplodeGroup = group.Create();
     private int ReviveAlpha = 1;
 
     public Bomber(Wolf unit) : base(unit)
@@ -65,16 +66,18 @@ public class Bomber : Affix
     private void Explode()
     {
         Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
-        Globals.TempGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, Filters.KittyFilter);
-        var list = Globals.TempGroup.ToList();
-        foreach (unit u in list)
+        ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
+
+        while (true)
         {
+            var u = ExplodeGroup.First;
+            if (u == null) break;
+            ExplodeGroup.Remove(u);
+
             if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
             Globals.ALL_KITTIES[u.Owner].KillKitty();
         }
-        GC.RemoveList(ref list);
-        Globals.TempGroup.Clear();
         Revive();
         Unit.Unit.SetVertexColor(204, 102, 0, 25);
     }
@@ -84,21 +87,32 @@ public class Bomber : Affix
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer.Start(1.0f, true, ErrorHandler.Wrap(() =>
+        ReviveAlphaTimer.Start(1.0f, true, () =>
         {
-            if (ReviveAlpha < 10)
+            try
             {
-                ReviveAlpha++;
-                Unit.Unit.SetVertexColor(204, 102, 0, 25 * ReviveAlpha);
+                if (ReviveAlpha < 10)
+                {
+                    ReviveAlpha++;
+                    Unit.Unit.SetVertexColor(204, 102, 0, 25 * ReviveAlpha);
+                }
+                else
+                {
+                    ReviveAlpha = 1;
+                    ReviveAlphaTimer.Pause();
+                    Unit.PauseSelf(false);
+                    Unit.IsReviving = false;
+                    ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+                }
             }
-            else
+            catch (System.Exception e)
             {
-                ReviveAlpha = 1;
+                Logger.Warning($"Error in Bomber.Revive: {e.Message}");
+                // fallback to ensure timers can be restarted
                 ReviveAlphaTimer.Pause();
                 Unit.PauseSelf(false);
                 Unit.IsReviving = false;
-                ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
             }
-        }));
+        });
     }
 }

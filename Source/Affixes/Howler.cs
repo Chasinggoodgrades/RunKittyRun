@@ -38,28 +38,29 @@ public class Howler : Affix
     private void RegisterTimerEvents()
     {
         HowlTimer = timer.Create();
-        HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
+        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
     }
 
     private void Howl()
     {
         try
         {
-            HowlTimer.Start(GetRandomHowlTime(), false, ErrorHandler.Wrap(Howl));
+            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
             if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
-            NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, Filters.DogFilter);
-            var list = NearbyWolves.ToList();
-            foreach (var wolf in list)
+            NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, FilterList.DogFilter);
+            while (true)
             {
-                if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue; // i swear to christ if this mother fucker moves again
+                var wolf = NearbyWolves.First;
+                if (wolf == null) break;
+                NearbyWolves.Remove(wolf);
+                if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue;
                 if (wolf.IsPaused) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;
-                wolfObject.StartWandering(true);
+                wolfObject.StartWandering(true); // Start wandering
             }
             NearbyWolves.Clear();
-            GC.RemoveList(ref list);
         }
         catch (Exception e)
         {

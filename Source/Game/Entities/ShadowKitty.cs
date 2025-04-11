@@ -43,7 +43,7 @@ public class ShadowKitty
         // Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
         Utility.MakeUnitLocust(this.Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
-        this.Unit.BaseMovementSpeed = 522;
+        this.Unit.MovementSpeed = 522;
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(this.Player, true);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
@@ -64,7 +64,7 @@ public class ShadowKitty
     /// </summary>
     public void KillShadowKitty()
     {
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Unit);
+        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this);
         this.Unit.Kill();
         this.Unit.Dispose();
         this.Unit = null;
@@ -79,8 +79,6 @@ public class ShadowKitty
     public void SelectReselectShadowKitty()
     {
         var kitty = Globals.ALL_KITTIES[this.Player].Unit;
-        Utility.SelectUnitForPlayer(this.Player, this.Unit);
-        Utility.SelectUnitForPlayer(this.Player, kitty);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
     }
 

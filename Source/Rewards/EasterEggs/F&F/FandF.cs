@@ -32,7 +32,7 @@ public static class FandF
 
     private static void AppendCollectionsUnit()
     {
-        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, Filters.KittyFilter);
+        CollectionTrigger.RegisterUnitInRange(BloodWolf, CollectionRange, FilterList.KittyFilter);
     }
 
     private static trigger RegisterCollection()
@@ -56,7 +56,7 @@ public static class FandF
     private static trigger RegisterTurnIn()
     {
         var trig = trigger.Create();
-        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, Filters.KittyFilter);
+        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, FilterList.KittyFilter);
         trig.AddAction(ErrorHandler.Wrap(TurnInActions));
         return trig;
     }

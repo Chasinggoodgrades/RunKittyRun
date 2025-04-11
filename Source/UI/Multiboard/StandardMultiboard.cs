@@ -45,7 +45,7 @@ public static class StandardMultiboard
         ESCTrigger = trigger.Create();
 
         Updater.RegisterTimerEvent(1.00f, true);
-        Updater.AddAction(ErrorHandler.Wrap(CurrentStatsRoundTimes));
+        Updater.AddAction(CurrentStatsRoundTimes);
 
         foreach (var player in Globals.ALL_PLAYERS)
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
@@ -133,13 +133,14 @@ public static class StandardMultiboard
 
             // Use a list to hold keys for manual sorting
             PlayersList.Clear();
-            foreach (var key in Globals.ALL_KITTIES)
+
+            for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
-                PlayersList.Add(key.Key);
+                PlayersList.Add(Globals.ALL_PLAYERS[i]);
             }
 
             // Sort the array of keys based on custom criteria
-            for (int i = 0; i < PlayersList.Count - 1; i++)
+            for (int i = 0; i < PlayersList.Count; i++)
             {
                 for (int j = i + 1; j < PlayersList.Count; j++)
                 {
@@ -157,8 +158,9 @@ public static class StandardMultiboard
                 }
             }
 
-            foreach (var player in PlayersList)
+            for (int i = 0; i < PlayersList.Count; i++)
             {
+                var player = PlayersList[i];
                 var currentStats = Globals.ALL_KITTIES[player].CurrentStats;
                 var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
@@ -176,10 +178,10 @@ public static class StandardMultiboard
                 PlayerStats[5] = kda;
                 PlayerStats[6] = $"{currentStats.RoundSaves} / {currentStats.RoundDeaths}";
 
-                for (int i = 0; i < PlayerStats.Length - 1; i++) // skip last element
+                for (int j = 0; j < PlayerStats.Length - 1; j++) // skip last element
                 {
-                    CurrentStats.GetItem(rowIndex, i).SetText($"{playerColor}{PlayerStats[i]}{Colors.COLOR_RESET}");
-                    if (i == 0) CurrentStats.GetItem(rowIndex, i).SetWidth(0.07f);
+                    CurrentStats.GetItem(rowIndex, j).SetText($"{playerColor}{PlayerStats[j]}{Colors.COLOR_RESET}");
+                    if (j == 0) CurrentStats.GetItem(rowIndex, j).SetWidth(0.07f);
                 }
 
                 rowIndex++;
@@ -198,13 +200,13 @@ public static class StandardMultiboard
         var rowIndex = 1;
 
         PlayersList.Clear();
-        foreach (var key in Globals.ALL_KITTIES)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
-            PlayersList.Add(key.Key);
+            PlayersList.Add(Globals.ALL_PLAYERS[i]);
         }
 
         // Sort the array of keys based on custom criteria
-        for (int i = 0; i < PlayersList.Count - 1; i++)
+        for (int i = 0; i < PlayersList.Count; i++)
         {
             for (int j = i + 1; j < PlayersList.Count; j++)
             {
@@ -222,8 +224,9 @@ public static class StandardMultiboard
             }
         }
 
-        foreach (var player in PlayersList)
+        for(int i = 0; i < PlayersList.Count; i++)
         {
+            var player = PlayersList[i];
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
@@ -243,10 +246,10 @@ public static class StandardMultiboard
             PlayerStats[6] = games.ToString();
             PlayerStats[7] = wins.ToString();
 
-            for (int i = 0; i < PlayerStats.Length; i++)
+            for (int j = 0; j < PlayerStats.Length; j++)
             {
-                OverallStats.GetItem(rowIndex, i).SetText($"{playerColor}{PlayerStats[i]}{Colors.COLOR_RESET}");
-                if (i == 0) OverallStats.GetItem(rowIndex, i).SetWidth(0.07f);
+                OverallStats.GetItem(rowIndex, j).SetText($"{playerColor}{PlayerStats[j]}{Colors.COLOR_RESET}");
+                if (j == 0) OverallStats.GetItem(rowIndex, j).SetWidth(0.07f);
             }
 
             rowIndex++;
@@ -259,19 +262,20 @@ public static class StandardMultiboard
         BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
-        foreach (var player in Globals.ALL_PLAYERS)
+        for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
+            var player = Globals.ALL_PLAYERS[i];
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
 
             var roundTimes = GetGameRoundTime(saveData);
 
-            for (int i = 0; i < roundTimes.Length; i++)
+            for (int j = 0; j < roundTimes.Length; j++)
             {
-                if (roundTimes[i] != 0)
-                    BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}");
+                if (roundTimes[j] != 0)
+                    BestTimes.GetItem(rowIndex, j + 1).SetText($"{playerColor}{Utility.ConvertFloatToTime(roundTimes[j])}{Colors.COLOR_RESET}");
                 else
-                    BestTimes.GetItem(rowIndex, i + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
+                    BestTimes.GetItem(rowIndex, j + 1).SetText($"{playerColor}---{Colors.COLOR_RESET}");
             }
             rowIndex++;
         }

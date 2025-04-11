@@ -42,16 +42,24 @@ public class WolfArea
     private void RegisterEnterEvents()
     {
         AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterEnterRegion(Region, Filters.KittyFilter);
-        AreaTrigger.AddAction(ErrorHandler.Wrap(() =>
+        AreaTrigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
+        AreaTrigger.AddAction(() =>
         {
-            var unit = @event.Unit;
-            var player = unit.Owner;
+            try
+            {
+                var unit = @event.Unit;
+                var player = unit.Owner;
 
-            var kitty = Globals.ALL_KITTIES[player];
-            kitty.ProgressHelper.CurrentPoint = ID;
-            kitty.ProgressZone = ID;
-        }));
+                var kitty = Globals.ALL_KITTIES[player];
+                kitty.ProgressHelper.CurrentPoint = ID;
+                kitty.ProgressZone = ID;
+            }
+            catch (System.Exception e)
+            {
+                Logger.Warning($"Error in WolfArea.RegisterEnterEvents: {e.Message}");
+                throw;
+            }
+        });
     }
 
     /// <summary>
@@ -60,12 +68,19 @@ public class WolfArea
     private void RegisterLeaveEvents()
     {
         AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterLeaveRegion(Region, Filters.DogFilter);
-        AreaTrigger.AddAction(ErrorHandler.Wrap(() =>
+        AreaTrigger.RegisterLeaveRegion(Region, FilterList.DogFilter);
+        AreaTrigger.AddAction(() =>
         {
-            var wolf = Globals.ALL_WOLVES[@event.Unit];
-            wolf.WolfMove();
-        }));
+            try
+            {
+                var wolf = Globals.ALL_WOLVES[@event.Unit];
+                wolf.WolfMove();
+            }
+            catch (System.Exception e)
+            {
+                Logger.Critical($"Error in WolfArea.RegisterLeaveEvents: {e.Message}");
+            }
+        });
     }
 
     private void CalculateArea()

@@ -30,7 +30,7 @@ public static class NitroPacer
         Unit.IsInvulnerable = true;
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);
         nitroEffect = effect.Create("war3mapImported\\Nitro.mdx", Unit, "origin");
-        _cachedNitroPacerUpdate = ErrorHandler.Wrap(UpdateNitroPacer);
+        _cachedNitroPacerUpdate = UpdateNitroPacer;
         VisionShare();
 
         pacerTimer = timer.Create();
@@ -67,21 +67,29 @@ public static class NitroPacer
 
     private static void UpdateNitroPacer()
     {
-        currentDistance = Progress.CalculateNitroPacerProgress();
-        float remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Length - 1] - currentDistance;
-        float remainingTime = NitroChallenges.GetNitroTimeRemaining();
-        float speed = remainingTime != 0.0f ? remainingDistance / remainingTime : 350.0f;
-        SetSpeed(speed);
-
-        if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
+        try
         {
-            currentCheckpoint++;
-            if (currentCheckpoint >= pathingPoints.Length - 1)
+            currentDistance = Progress.CalculateNitroPacerProgress();
+            float remainingDistance = Progress.DistancesFromStart[RegionList.PathingPoints.Length - 1] - currentDistance;
+            float remainingTime = NitroChallenges.GetNitroTimeRemaining();
+            float speed = remainingTime != 0.0f ? remainingDistance / remainingTime : 350.0f;
+            SetSpeed(speed);
+
+            if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
             {
-                pacerTimer.Pause();
-                Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
-                return;
+                currentCheckpoint++;
+                if (currentCheckpoint >= pathingPoints.Length - 1)
+                {
+                    pacerTimer.Pause();
+                    Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
+                    return;
+                }
             }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in UpdateNitroPacer. {e.Message}");
+            throw;
         }
     }
 
@@ -103,5 +111,5 @@ public static class NitroPacer
         }
     }
 
-    private static void SetSpeed(float speed) => Unit.BaseMovementSpeed = speed;
+    private static void SetSpeed(float speed) => Unit.MovementSpeed = speed;
 }

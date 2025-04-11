@@ -1,16 +1,17 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 
 public static class MemoryHandlerTest
 {
     public static int cylceCount = 0;
     private static timer t = timer.Create();
 
-    private class TestDestroyable : IDestroyable
+    private class TestDestroyable : IDisposable
     {
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public void __destroy(bool recursive = false)
+        public void Dispose()
         {
             Name = null;
             Count = 0;

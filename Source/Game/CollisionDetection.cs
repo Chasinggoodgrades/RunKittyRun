@@ -7,6 +7,8 @@ public static class CollisionDetection
     public const float DEFAULT_WOLF_COLLISION_RADIUS = 74.0f;
     private const float CIRCLE_COLLISION_RADIUS = 77.0f;
 
+    private static Predicate<Relic> IsBeaconOfUnitedLifeforce = r => r is BeaconOfUnitedLifeforce;
+
     private static Func<bool> WolfCollisionFilter(Kitty k)
     {
         return () =>
@@ -50,16 +52,18 @@ public static class CollisionDetection
     public static void KittyRegisterCollisions(Kitty k)
     {
         var WOLF_COLL_RADIUS = k.CurrentStats.CollisonRadius;
-        k.w_Collision.ClearActions();
-        k.c_Collision.ClearActions();
+        k.w_Collision ??= CreateTrigger();
+        k.c_Collision ??= CreateTrigger();
+
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, WOLF_COLL_RADIUS, WolfCollisionFilter(k), WolfCollisionTrigger(k));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(k.Unit, CIRCLE_COLLISION_RADIUS, CircleCollisionFilter(k), CircleCollisionTrigger(k));
     }
 
     public static void ShadowKittyRegisterCollision(ShadowKitty sk)
     {
-        sk.wCollision.ClearActions();
-        sk.cCollision.ClearActions();
+        sk.wCollision ??= CreateTrigger();
+        sk.cCollision ??= CreateTrigger();
+
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, DEFAULT_WOLF_COLLISION_RADIUS, ShadowRelicWolvesFilter(sk), WolfCollisionShadowTrigger(sk));
         UnitWithinRange.RegisterUnitWithinRangeTrigger(sk.Unit, CIRCLE_COLLISION_RADIUS, ShadowRelicCircleFilter(sk), CircleCollisionShadowTrigger(sk));
     }
@@ -73,7 +77,7 @@ public static class CollisionDetection
             if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
             if (ChronoSphere.RewindDeath(k)) return;
             if (k.Invulnerable) return;
-            OneOfNine.OneOfNineEffect(k.Player);
+            OneOfNine.OneOfNineEffect(k);
             k.KillKitty();
             TeamsUtil.CheckTeamDead(k);
         }));
@@ -82,12 +86,20 @@ public static class CollisionDetection
 
     private static trigger CircleCollisionTrigger(Kitty k)
     {
-        TriggerAddAction(k.c_Collision, ErrorHandler.Wrap(() =>
+        TriggerAddAction(k.c_Collision, () =>
         {
-            var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
-            circle.ReviveKitty(k);
-            (k.Relics.Find(r => r is BeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
-        }));
+            try
+            {
+                var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
+                circle.ReviveKitty(k);
+                (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
+            }
+            catch (Exception e)
+            {
+                Logger.Warning($"CircleCollisionTrigger Error: {e.Message}");
+                throw;
+            }
+        });
         return k.c_Collision;
     }
 

@@ -8,7 +8,7 @@ public class Kitty
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
     private const float MANA_DEATH_PENALTY = 65.0f;
-    private const float InvulDuration = 0.6f;
+    private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
     public KittyData SaveData { get; set; }
@@ -84,6 +84,7 @@ public class Kitty
         try
         {
             if (Invulnerable) return;
+            if (!Alive) return;
             Circle circle = Globals.ALL_CIRCLES[Player];
             this.Slider.PauseSlider();
             this.aiController.PauseAi();
@@ -213,8 +214,9 @@ public class Kitty
         YellowLightning.Dispose();
         TimeProg.Dispose();
         APMTracker.Dispose();
+        InvulTimer.Pause();
         InvulTimer.Dispose();
-        Disco?.__destroy(false);
+        Disco?.Dispose();
         aiController.StopAi();
         Unit.Dispose();
         if (Gameover.WinGame) return;
@@ -234,13 +236,13 @@ public class Kitty
         CurrentStats.TotalDeaths += 1;
         CurrentStats.RoundDeaths += 1;
         CurrentStats.SaveStreak = 0;
+        SaveData.GameStats.SaveStreak = 0;
 
         if (aiController.IsEnabled()) return;
 
         SoloMultiboard.UpdateDeathCount(Player);
         if (Gamemode.CurrentGameMode != "Standard") return;
         SaveData.GameStats.Deaths += 1;
-        SaveData.GameStats.SaveStreak = 0;
     }
 
     private void SaveStatUpdate(Kitty savior)

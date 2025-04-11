@@ -19,6 +19,7 @@ public class PlayerGameData
     public bool RoundFinished { get; set; } = false;
     public bool NitroObtained { get; set; } = false;
     public int CollectedKibble { get; set; }
+    public int CrystalOfFireAttempts { get; set; } = 0;
     public int ProgressZone { get; set; }
     public bool ChronoSphereCD { get; set; } = false;
     public float CollisonRadius { get; set; } = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;

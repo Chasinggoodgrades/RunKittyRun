@@ -80,9 +80,8 @@ public class OneOfNine : Relic
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0);
     }
 
-    public static bool OneOfNineEffect(player Player)
+    public static bool OneOfNineEffect(Kitty kitty)
     {
-        var kitty = Globals.ALL_KITTIES[Player];
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false;
         if (kitty.Unit.GetAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0f)
         {

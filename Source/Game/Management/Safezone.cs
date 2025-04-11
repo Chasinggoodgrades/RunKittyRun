@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using WCSharp.Api;
 
@@ -8,6 +9,7 @@ public class Safezone
     private trigger Trigger { get; set; }
     public int ID { get; set; }
     public rect Rect_ { get; set; }
+    public WCSharp.Shared.Data.Rectangle Rectangle { get; set; }
     public List<player> AwardedPlayers { get; set; } = new();
 
     public Safezone(int id, region region)
@@ -26,6 +28,7 @@ public class Safezone
             Globals.SAFE_ZONES.Add(safezone);
             safezone.EnterSafezoneEvents();
             safezone.Rect_ = safeZone.Rect;
+            safezone.Rectangle = safeZone;
             count++;
         }
         FinalSafezone.Initialize();
@@ -33,7 +36,7 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, Filters.KittyFilter);
+        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
         Trigger.AddAction(ErrorHandler.Wrap(EnterSafezoneActions));
     }
 
@@ -65,7 +68,16 @@ public class Safezone
 
         if (Gamemode.CurrentGameMode != "Standard") return;
 
-        kitty.Relics.OfType<FangOfShadows>().FirstOrDefault()?.ReduceCooldownAtSafezone(kitty.Unit);
+        for (int i = 0; i < kitty.Relics.Count; i++)
+        {
+            var relic = kitty.Relics[i];
+            if (relic is FangOfShadows)
+            {
+                FangOfShadows fangOfShadows = (FangOfShadows)relic;
+                fangOfShadows.ReduceCooldownAtSafezone(kitty.Unit);
+                break;
+            }
+        }
     }
 
     /// <summary>

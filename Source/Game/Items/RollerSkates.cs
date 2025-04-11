@@ -27,7 +27,7 @@ public static class RollerSkates
             SetPegasusBoots(item);
             slider.StopSlider();
             RollerSkaters.Remove(unit.Owner);
-            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Deactivated|r");
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Deactivated{Colors.COLOR_RESET}");
         }
         else
         {
@@ -37,7 +37,7 @@ public static class RollerSkates
             else
                 slider.StartSlider();
             RollerSkaters.Add(unit.Owner);
-            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Activated|r");
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW}Roller Skates Activated{Colors.COLOR_RESET}");
         }
     }
 

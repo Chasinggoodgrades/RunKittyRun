@@ -52,17 +52,17 @@ public static class MemoryHandler
         // obj == metadata .. instead dictionary (fuck dictionaries)
         try
         {
-            if (obj is Dictionary<string, object> dict)
+/*            if (obj is Dictionary<string, object> dict)
             {
                 foreach (var key in new List<string>(dict.Keys))
                 {
-                    if (recursive && dict[key] is IDestroyable destroyable)
+                    if (recursive && dict[key] is IDisposable destroyable)
                     {
-                        destroyable.__destroy(true);
+                        destroyable.Dispose();
                     }
                     dict[key] = null;
                 }
-            }
+            }*/
 
             //
             if (MetaTable.TryGetValue(obj, out var meta))
@@ -90,9 +90,9 @@ public static class MemoryHandler
     {
         for (int i = 0; i < arr.Length; i++)
         {
-            if (recursive && arr[i] is IDestroyable destroyable)
+            if (recursive && arr[i] is IDisposable destroyable)
             {
-                destroyable.__destroy(true);
+                destroyable.Dispose();
             }
             arr[i] = null;
         }
@@ -182,7 +182,7 @@ public static class MemoryHandler
     /// If debugName is set, attaches it to the created or reused object's metadata.
     /// </summary>
     public static T GetEmptyObject<T>(string debugName = null)
-        where T : class, IDestroyable, new()
+        where T : class, IDisposable, new()
     {
         try
         {
@@ -385,7 +385,7 @@ public static class MemoryHandler
     /// </summary>
     public static void DestroyObject<T>(T obj, bool recursive = false) where T : class
     {
-        DestroyObject((object)obj, recursive);
+            DestroyObject((object)obj, recursive);
     }
 
     /// <summary>
@@ -396,9 +396,9 @@ public static class MemoryHandler
         // Purge the array elements
         for (int i = 0; i < arr.Length; i++)
         {
-            if (recursive && arr[i] is IDestroyable destroyable)
+            if (recursive && arr[i] is IDisposable destroyable)
             {
-                destroyable.__destroy(true);
+                destroyable.Dispose();
             }
             arr[i] = default;
         }

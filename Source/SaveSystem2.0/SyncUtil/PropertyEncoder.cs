@@ -6,12 +6,21 @@ public static class PropertyEncoder
 {
     public static string EncodeToJsonBase64(object obj)
     {
-        StringBuilder jsonString = new StringBuilder("{");
-        AppendProperties(obj, jsonString);
-        jsonString.Append("}");
+        try
+        {
+            StringBuilder jsonString = new StringBuilder("{");
+            AppendProperties(obj, jsonString);
+            jsonString.Append("}");
 
-        var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
-        return base64String;
+            var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
+            return base64String;
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions that may occur during encoding
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: {ex.Message}");
+            throw;
+        }
     }
 
     private static string GetJsonData(object obj)
@@ -25,19 +34,27 @@ public static class PropertyEncoder
 
     public static string EncodeAllDataToJsonBase64()
     {
-        StringBuilder jsonString = new StringBuilder();
-        jsonString.Append("{");
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            var playerData = SaveManager.SaveData[player];
-            jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
-        }
-        if (jsonString.Length > 0 && jsonString[jsonString.Length - 1] == ',')
-            jsonString.Length--;
-        jsonString.Append("}");
+            StringBuilder jsonString = new StringBuilder();
+            jsonString.Append("{");
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                if (!SaveManager.SaveData.TryGetValue(player, out var playerData)) continue;
+                jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
+            }
+            if (jsonString.Length > 0 && jsonString[jsonString.Length - 1] == ',')
+                jsonString.Length--;
+            jsonString.Append("}");
 
-        var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
-        return base64String;
+            var base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString());
+            return base64String;
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: {ex.Message}");
+            throw;
+        }
     }
 
     private static void AppendProperties(object obj, StringBuilder jsonString)

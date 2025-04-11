@@ -162,8 +162,8 @@ public static class ProtectionOfAncients
         kitty.ProtectionActive = false;
         tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);
 
-        var list = tempGroup.ToList();
-        foreach (var unit in list)
+        var list = tempGroup.ToList(); // BAD
+        foreach (var unit in list) // BAD
         {
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
             if (kitty.Unit == playerToRevive.Unit)

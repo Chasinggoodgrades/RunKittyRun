@@ -14,19 +14,27 @@ public class Savecode
 
     public static void Initialize()
     {
-        OldsaveSync.Initialize();
-        for (int i = 0; i < OldSavesHelper.AbilityList.Length; i++)
+        try
         {
-            var ability = OldSavesHelper.AbilityList[i];
-            var tooltip = BlzGetAbilityTooltip(ability, 0);
-            if (tooltip != "Tool tip missing!")
-                OriginalToolTips.Add(tooltip);
-            else
-                throw new ArgumentException($"Error, tooltip not available: {ability}");
+            OldsaveSync.Initialize();
+            for (int i = 0; i < OldSavesHelper.AbilityList.Length; i++)
+            {
+                var ability = OldSavesHelper.AbilityList[i];
+                var tooltip = BlzGetAbilityTooltip(ability, 0);
+                if (tooltip != "Tool tip missing!")
+                    OriginalToolTips.Add(tooltip);
+                else
+                    throw new ArgumentException($"Error, tooltip not available: {ability}");
+            }
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                InitializeSaveCode(player);
+            }
         }
-        foreach (var player in Globals.ALL_PLAYERS)
+        catch (Exception e)
         {
-            InitializeSaveCode(player);
+            Logger.Critical($"Error in OldSaves.Initialize: {e.Message}");
+            throw;
         }
     }
 

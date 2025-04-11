@@ -8,7 +8,6 @@ public static class CrystalOfFire
     private static trigger TurnInEventFieryfox;
     private static trigger TurnInEventFandF;
     private static trigger QuestAccept;
-    private static Dictionary<player, int> DeathAttempts;
     private static List<player> QuestEligible;
 
     public static void Initialize()
@@ -18,7 +17,6 @@ public static class CrystalOfFire
         TurnInEventFieryfox = RegisterTurnInFiery();
         TurnInEventFandF = RegisterTurnInFandF();
         QuestAccept = RegisterChatEvent();
-        DeathAttempts = new Dictionary<player, int>();
         QuestEligible = new List<player>();
     }
 
@@ -27,8 +25,7 @@ public static class CrystalOfFire
     public static void CrystalOfFireDeath(Kitty kitty)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
-        if (!DeathAttempts.ContainsKey(kitty.Player)) return;
-        DeathAttempts[kitty.Player]++;
+        kitty.CurrentStats.CrystalOfFireAttempts++;
     }
 
     private static trigger RegisterTurnInFiery()
@@ -60,12 +57,8 @@ public static class CrystalOfFire
 
     private static int GetDeathAttempts(player player)
     {
-        if (DeathAttempts.TryGetValue(player, out var attempts) == false)
-        {
-            DeathAttempts[player] = 0;
-            return 0;
-        }
-        return attempts;
+        var kitty = Globals.ALL_KITTIES[player];
+        return kitty.CurrentStats.CrystalOfFireAttempts;
     }
 
     private static string StartMessage(player player) => $"{Colors.COLOR_YELLOW}Greetings {Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW}, you were right to come to me about this. The Crystals of Fire are a sacred anomaly within this universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r {Colors.COLOR_RED}Type {Colors.COLOR_YELLOW_ORANGE}\"yes!\"|r{Colors.COLOR_RED} to accept! (30 seconds)|r";
@@ -97,10 +90,10 @@ public static class CrystalOfFire
     {
         var player = @event.Player;
         if (!QuestEligible.Contains(player)) return;
-        var kitty = Globals.ALL_KITTIES[player].Unit;
+        var kitty = Globals.ALL_KITTIES[player];
         var region = Regions.Spawn_Area_05.Center;
-        kitty.SetPosition(region.X, region.Y);
-        DeathAttempts[player] = -1;
+        kitty.Unit.SetPosition(region.X, region.Y);
+        kitty.CurrentStats.CrystalOfFireAttempts = -1;
         Utility.ClearScreen(player);
         player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r");
         QuestEligible.Remove(player);

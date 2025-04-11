@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class Kibble : IDestroyable
+public class Kibble : IDisposable
 {
     public static trigger PickupTrigger;
     private static List<int> KibblesColors = KibbleList();
@@ -13,10 +13,10 @@ public class Kibble : IDestroyable
     private static int GoldMax = 150;
     private static int JackpotMin = 600;
     private static int JackpotMax = 1500;
-    private static int JackPotIndex = 1;
 
     public item Item;
     private int Type;
+    private int JackPotIndex;
     private effect StarFallEffect;
 
     public Kibble()
@@ -25,11 +25,11 @@ public class Kibble : IDestroyable
         Type = RandomKibbleType();
     }
 
-    public void __destroy(bool recursive = false)
+    public void Dispose()
     {
         Item?.Dispose();
         Item = null;
-        MemoryHandler.DestroyObject(this, recursive);
+        MemoryHandler.DestroyObject(this);
     }
 
     public void SpawnKibble()
@@ -41,6 +41,7 @@ public class Kibble : IDestroyable
         StarFallEffect ??= AddSpecialEffect(StarfallEffect, x, y);
         StarFallEffect.SetPosition(x, y, 0);
         StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
+        JackPotIndex = 1;
         Item = CreateItem(Type, x, y);
     }
 
@@ -76,8 +77,10 @@ public class Kibble : IDestroyable
             var kitty = Globals.ALL_KITTIES[player];
             effect effect = null;
             var randomChance = GetRandomReal(0, 100);
+            var kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
 
-            if (randomChance <= 30) KibbleGoldReward(kitty);
+
+            if (randomChance <= 30) KibbleGoldReward(kitty, kib);
             else if (randomChance <= 60) KibbleXP(kitty);
             else KibbleNothing(kitty);
 
@@ -90,10 +93,9 @@ public class Kibble : IDestroyable
             IncrementKibble(kitty);
             PersonalBestAwarder.BeatKibbleCollection(kitty);
 
-            var kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
             if (kib != null && kib.Item != null)
             {
-                kib.__destroy();
+                kib.Dispose();
             }
         }
         catch (Exception e)
@@ -103,13 +105,13 @@ public class Kibble : IDestroyable
         }
     }
 
-    private static void KibbleGoldReward(Kitty kitty)
+    private static void KibbleGoldReward(Kitty kitty, Kibble kib)
     {
         var jackPotChance = GetRandomInt(0, 100);
         int goldAmount;
         if (jackPotChance <= 3)
         {
-            JackpotEffect(kitty);
+            JackpotEffect(kitty, kib);
             return;
         }
         else goldAmount = GetRandomInt(1, GoldMax);
@@ -129,18 +131,19 @@ public class Kibble : IDestroyable
         Utility.CreateSimpleTextTag("Nothing!", 2.0f, kitty.Unit, TextTagHeight, 50, 150, 150);
     }
 
-    private static void JackpotEffect(Kitty kitty)
+    private static void JackpotEffect(Kitty kitty, Kibble kibble)
     {
+        var jackpotIndex = kibble.JackPotIndex;
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
-        var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, JackPotIndex * 36.0f);
-        var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, JackPotIndex * 36.0f);
+        var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, jackpotIndex * 36.0f);
+        var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, jackpotIndex * 36.0f);
 
         var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", newX, newY);
         GC.RemoveEffect(ref effect);
-        JackPotIndex += 1;
+        jackpotIndex += 1;
 
-        if (JackPotIndex >= 20)
+        if (jackpotIndex >= 20)
         {
             var goldAmount = GetRandomInt(JackpotMin, JackpotMax);
             var isSuperJackpot = GetRandomInt(1, 10) == 1;
@@ -156,7 +159,7 @@ public class Kibble : IDestroyable
             else kitty.SaveData.KibbleCurrency.Jackpots += 1;
         }
         else
-            Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty));
+            Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty, kibble));
     }
 
     #endregion Kibble Pickup Logic
@@ -178,6 +181,7 @@ public class Kibble : IDestroyable
         return SeasonalManager.Season switch
         {
             HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
+            // HolidaySeasons.Easter => new List<int> { Constants.ITEM_EASTER_EGG },
             HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
             _ => new List<int> // Default case
             {

@@ -24,9 +24,10 @@ public static class WolfLaneHider
         {
             lanesToEnable.Clear();
 
-            foreach (var kitty in Globals.ALL_KITTIES)
+            for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
-                int currentSafezone = kitty.Value.CurrentSafeZone;
+                var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+                int currentSafezone = kitty.CurrentSafeZone;
                 AddAdjacentLanes(currentSafezone);
             }
         }
@@ -80,8 +81,9 @@ public static class WolfLaneHider
 
     private static void SetLaneVisibility(WolfArea lane, bool isVisible)
     {
-        foreach (var wolf in lane.Wolves)
+        for (int i = 0; i < lane.Wolves.Count; i++)
         {
+            var wolf = lane.Wolves[i];
             wolf.Unit.IsVisible = isVisible;
             wolf.IsPaused = !isVisible;
             wolf.Texttag?.SetVisibility(isVisible);

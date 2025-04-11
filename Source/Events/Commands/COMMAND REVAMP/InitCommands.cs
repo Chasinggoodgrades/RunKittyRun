@@ -144,12 +144,21 @@ public static class InitCommands
             name: "wolfinfo",
             alias: "lnbm",
             group: "all",
-            argDesc: "",
+            argDesc: "[lane #] (1-17)",
             description: "Displays the current wolf count.",
             action: (player, args) =>
             {
-                var nbWolfs = Globals.ALL_WOLVES.Count;
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Wolf Count: " + nbWolfs);
+                int laneIndex;
+                int nbWolves;
+                if (args[0] != "") {
+                    laneIndex = int.Parse(args[0]);
+                    if (laneIndex <= 0 || laneIndex > 17) return;
+                    nbWolves = WolfArea.WolfAreas[laneIndex-1].Wolves.Count;
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"Current Wolf Count for Lane {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}");
+                    return;
+                }
+                else nbWolves = Globals.ALL_WOLVES.Count;
+                player.DisplayTextTo(Colors.COLOR_GOLD + $"Current Wolf Count: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}");
             }
         );
 
@@ -481,7 +490,7 @@ public static class InitCommands
             {
                 var difficulty = args[0] != "" ? args[0] : "normal";
                 Difficulty.ChangeDifficulty(difficulty);
-                AffixFactory.DistributeAffixes();
+                AffixFactory.DistAffixes();
                 MultiboardUtil.RefreshMultiboards();
                 NitroChallenges.SetNitroRoundTimes();
             }
@@ -1359,6 +1368,46 @@ public static class InitCommands
                 var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
                 Kitty.InvulTest = status;
                 player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Revive invul test: {status}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "col",
+            alias: "collision",
+            group: "admin",
+            argDesc: "[player]",
+            description: "Gets collision of passed player, or yourself if no args.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Globals.ALL_KITTIES[player].CurrentStats.CollisonRadius}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    player.DisplayTimedTextTo(3.0f, $"{Colors.PlayerNameColored(kitty.Player)} : {kitty.CurrentStats.CollisonRadius}");
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "fortest",
+            alias: "",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Foreach memory test",
+            action: (player, args) =>
+            {
+                // Roughly 3MB of memory per 20k iterations.
+                for (int i = 0; i < 20000; i++)
+                {
+                    foreach (var k in Globals.ALL_KITTIES)
+                    {
+                        k.Value.Alive = true;
+                    }
+                }
+                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
             }
         );
 

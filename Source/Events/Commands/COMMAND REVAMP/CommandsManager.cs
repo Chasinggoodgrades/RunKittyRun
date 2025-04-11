@@ -102,7 +102,7 @@ public static class CommandsManager
         }
         else
         {
-            Console.WriteLine($"{Colors.COLOR_YELLOW}Invalid player ID:|r {arg}");
+            GetTriggerPlayer().DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}Invalid player ID:|r {arg}.{Colors.COLOR_RESET}");
         }
         return kitties;
     }
@@ -110,9 +110,10 @@ public static class CommandsManager
     public static void ResolvePlayerId(string arg, Action<Kitty> action)
     {
         var kittyArray = ResolvePlayerIdArray(arg);
-        foreach (var k in kittyArray)
+
+        for (int i = 0; i < kittyArray.Count; i++)
         {
-            action(k);
+            action(kittyArray[i]);
         }
         GC.RemoveList(ref kittyArray);
     }

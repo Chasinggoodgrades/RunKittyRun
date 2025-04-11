@@ -31,7 +31,7 @@ namespace Source
             /*                PeriodicEvents.EnableDebug();
                             PlayerUnitEvents.EnableDebug();
                             SyncSystem.EnableDebug();*/
-            Delay.EnableDebug();
+            // Delay.EnableDebug();
 #endif
             Setup.GetActivePlayers();
             DateTimeManager.Initialize();

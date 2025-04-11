@@ -91,8 +91,10 @@ public static class SoundManager
             TeamKittyDeathSound(Kitty);
         else
         {
-            Blizzard.StopSoundBJ(KITTY_DEATH_SOUND, false);
-            Blizzard.PlaySoundOnUnitBJ(KITTY_DEATH_SOUND, 127, Kitty);
+            var s = KITTY_DEATH_SOUND;
+            s.Stop(false, false);
+            s.AttachToUnit(Kitty);
+            s.Start();
         }
     }
 
@@ -152,15 +154,18 @@ public static class SoundManager
         {
             var count = 0;
             unit u = null;
-            foreach (var kitty in Globals.ALL_KITTIES)
+
+            for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
-                if (kitty.Value.Alive)
+                var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+                if (kitty.Alive)
                 {
                     count += 1;
-                    u = kitty.Value.Unit;
+                    u = kitty.Unit;
                 }
                 if (count > 1) return;
             }
+
             if (count == 0) return;
             var s = LAST_MAN_STANDING_SOUND;
             var e = u.AddSpecialEffect("TalkToMe.mdx", "head");

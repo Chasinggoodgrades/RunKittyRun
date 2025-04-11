@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -13,7 +12,9 @@ public class WolfPoint
     public static trigger IsPausedTrigger;
 
     private Wolf Wolf { get; set; }
-    public List<float[]> PointsToVisit { get; set; } = new List<float[]>();
+    private float[] XPoints { get; set; } = new float[50];
+    private float[] YPoints { get; set; } = new float[50];
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -36,7 +37,7 @@ public class WolfPoint
     {
         try
         {
-            if (PointsToVisit == null) return;
+            if (XPoints == null) return;
             Cleanup();
 
             // Calculate the distance between points
@@ -52,15 +53,15 @@ public class WolfPoint
             {
                 var regionX = startX + (i * stepX);
                 var regionY = startY + (i * stepY);
-                var pointInfo = new float[] { regionX, regionY };
-                PointsToVisit.Add(pointInfo);
+                XPoints[i] = regionX;
+                YPoints[i] = regionY;
             }
 
             // Ensure the last point is exactly the end point
-            float[] lastPointInfo = new float[] { endX, endY };
-            PointsToVisit.Add(lastPointInfo);
+            XPoints[numRegions] = endX;
+            YPoints[numRegions] = endY;
 
-            if (PointsToVisit != null && PointsToVisit.Count > 0)
+            if (XPoints != null && XPoints.Length > 0)
             {
                 StartMovingOrders();
             }
@@ -75,21 +76,26 @@ public class WolfPoint
     {
         try
         {
-            if (PointsToVisit == null) return;
-            PointsToVisit.Clear();
+            if (XPoints == null) return;
             Wolf.Unit.ClearOrders();
+
+            for (int i = 0; i < XPoints.Length; i++)
+            {
+                XPoints[i] = 0;
+                YPoints[i] = 0;
+            }
         }
         catch (Exception ex)
         {
-            Logger.Critical(ex.Message);
+            Logger.Critical($"Clean up error: WolfPoint: {ex.Message}");
         }
     }
 
     public void Dispose()
     {
         Cleanup();
-        PointsToVisit.Clear();
-        PointsToVisit = null;
+        XPoints = null;
+        YPoints = null;
         Wolf.Unit.ClearOrders();
     }
 
@@ -100,11 +106,12 @@ public class WolfPoint
 
         try
         {
-            for (int i = PointsToVisit.Count - 1; i >= 1; i--)
+            for (int i = XPoints.Length - 1; i >= 1; i--)
             {
+                if (XPoints[i] == 0 && YPoints[i] == 0) continue;
                 var moveID = MoveOrderID;
-                if (i == PointsToVisit.Count - 1) moveID = AttackOrderID;
-                Wolf.Unit.QueueOrder(moveID, PointsToVisit[i][0], PointsToVisit[i][1]);
+                if (i == XPoints.Length - 1) moveID = AttackOrderID;
+                Wolf.Unit.QueueOrder(moveID, XPoints[i], YPoints[i]);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
         }
@@ -119,30 +126,14 @@ public class WolfPoint
         IsPausedTrigger = CreateTrigger();
         Blizzard.TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
 
-        TriggerAddCondition(IsPausedTrigger, Condition(() => GetIssuedOrderId() == AttackOrderID));
-        TriggerAddCondition(IsPausedTrigger, Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL));
+        TriggerAddCondition(IsPausedTrigger, FilterList.IssuedOrderAtkOrder);
+        TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, ErrorHandler.Wrap(() =>
+        TriggerAddAction(IsPausedTrigger, () =>
         {
             Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-            //Console.WriteLine($"Wolf: {Globals.ALL_WOLVES[@event.Unit].Unit.Name} is walking: {Globals.ALL_WOLVES[@event.Unit].IsWalking}");
-        }));
+        });
         return IsPausedTrigger;
-    }
-}
-
-public class WolfVisitPoints : IDestroyable
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-
-    public WolfVisitPoints()
-    {
-    }
-
-    public void __destroy(bool recursive = false)
-    {
-        MemoryHandler.DestroyObject(this, recursive);
     }
 }

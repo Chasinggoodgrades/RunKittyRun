@@ -15,6 +15,7 @@ public class Wolf
     private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
 
     private readonly Action _cachedWander;
+    private readonly Action _cachedEffect;
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
@@ -40,9 +41,11 @@ public class Wolf
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
         InitializeWolf();
-        _cachedWander = ErrorHandler.Wrap(() => StartWandering());
+        _cachedWander = () => StartWandering();
+        _cachedEffect = () => WolfMoveCancelEffect();
         StartWandering();
         Globals.ALL_WOLVES.Add(Unit, this);
+
 
         if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
         {
@@ -96,9 +99,9 @@ public class Wolf
     public void WolfMove()
     {
         if (IsPaused || IsReviving) return;
+        if (HasAffix("Blitzer")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
-        if (HasAffix("Blitzer")) return;
         WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
@@ -113,7 +116,8 @@ public class Wolf
         WanderTimer = null;
         Texttag?.Dispose();
         Texttag = null;
-        Disco?.__destroy(false);
+        WolfArea.WolfAreas[RegionIndex].Wolves.Remove(this);
+        Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;
         Unit?.Dispose();
@@ -155,16 +159,16 @@ public class Wolf
     {
         if (pause)
         {
-            WanderTimer.Pause();
-            EffectTimer.Pause();
+            WanderTimer?.Pause();
+            EffectTimer?.Pause();
             Unit.ClearOrders();
             IsWalking = false;
             IsPaused = true;
         }
         else
         {
-            WanderTimer.Resume();
-            EffectTimer.Resume();
+            WanderTimer?.Resume();
+            EffectTimer?.Resume();
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;
@@ -222,13 +226,15 @@ public class Wolf
         var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
 
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
-        Utility.EffectReplayMagic(OverheadEffect);
+        BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Start(effectDuration, false, () =>
-        {
-            WolfMove();
-            BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
-        });
+        EffectTimer.Start(effectDuration, false, _cachedEffect);
+    }
+
+    private void WolfMoveCancelEffect()
+    {
+        WolfMove();
+        BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
     }
 
     #region AFFIXES
@@ -245,33 +251,40 @@ public class Wolf
         Affixes.Remove(affix);
         affix.Remove();
         AffixFactory.AllAffixes.Remove(affix);
+        
     }
 
     public void RemoveAffix(string affixName)
     {
-        var affixToRemove = Affixes.FirstOrDefault(a => a.GetType().Name == affixName);
-        if (affixToRemove != null)
+        for (int i = 0; i < Affixes.Count; i++)
         {
-            RemoveAffix(affixToRemove);
+            if (Affixes[i].GetType().Name == affixName)
+            {
+                RemoveAffix(Affixes[i]);
+                break;
+            }
         }
     }
 
     public bool HasAffix(string affixName)
     {
         if (Affixes.Count == 0) return false;
-        foreach (var affix in Affixes)
-            if (affix.GetType().Name == affixName) return true;
+        for(int i = 0; i < Affixes.Count; i++)
+            if (Affixes[i].GetType().Name == affixName) return true;
+
         return false;
     }
 
     public void RemoveAllWolfAffixes()
     {
         if (AffixCount() == 0) return;
-        foreach (var affix in Affixes)
+
+        for (int i = 0; i < Affixes.Count; i++)
         {
-            AffixFactory.AllAffixes.Remove(affix);
-            affix.Remove();
+            AffixFactory.AllAffixes.Remove(Affixes[i]);
+            Affixes[i].Remove();
         }
+
         Affixes.Clear();
     }
 

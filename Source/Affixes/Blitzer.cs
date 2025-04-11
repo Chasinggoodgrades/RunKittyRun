@@ -4,6 +4,8 @@ using static WCSharp.Api.Common;
 
 public class Blitzer : Affix
 {
+    private static readonly int GHOST_VISIBLE = FourCC("Aeth");
+    private static readonly Predicate<Affix> IsBlitzer = x => x is Blitzer;
     private const int AFFIX_ABILITY = Constants.ABILITY_BLITZER;
     private const string BLITZER_EFFECT = "war3mapImported\\ChargerCasterArt.mdx";
     private const float BLITZER_SPEED = 650.0f;
@@ -59,29 +61,48 @@ public class Blitzer : Affix
 
     private void PreBlitzerMove()
     {
-        if (Unit.IsPaused)
+        try
         {
-            MoveTimer.Start(GetRandomReal(3.0f, 10.0f), false, ErrorHandler.Wrap(PreBlitzerMove));
-            return;
+            if (Unit.IsPaused)
+            {
+                MoveTimer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
+                return;
+            }
+            WanderEffect ??= effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
+            WanderEffect.PlayAnimation(ANIM_TYPE_STAND);
+            Unit.Unit.SetVertexColor(255, 255, 0);
+            Unit.Unit.SetColor(playercolor.Yellow);
+            PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
         }
-        WanderEffect = effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
-        Effect?.Dispose();
-        Unit.Unit.SetVertexColor(255, 255, 0);
-        Unit.Unit.SetColor(playercolor.Yellow);
-        PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, ErrorHandler.Wrap(BeginBlitz));
+        catch (Exception e)
+        {
+            // Handle exceptions gracefully, log them
+            Logger.Warning($"Error in PreBlitzerMove: {e.Message}");
+            throw;
+        }
     }
 
     private void BeginBlitz()
     {
-        var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
-        var x = GetRandomReal(Unit.Lane.MinX, Unit.Lane.MaxX);
-        var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
-        WanderEffect.Dispose();
-        BlitzerMove(x, y);
-        Unit.Unit.RemoveAbility(FourCC("Aeth")); // ghost visible
-        Effect = effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
-        Unit.IsWalking = true;
-        MoveTimer.Start(randomTime, false, ErrorHandler.Wrap(PreBlitzerMove));
+        try
+        {
+            var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
+            var x = GetRandomReal(Unit.Lane.MinX, Unit.Lane.MaxX);
+            var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
+            WanderEffect.PlayAnimation(ANIM_TYPE_DEATH);
+            BlitzerMove(x, y);
+            Unit.Unit.RemoveAbility(GHOST_VISIBLE); // ghost visible
+            Effect ??= effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
+            Effect.PlayAnimation(ANIM_TYPE_STAND);
+            Unit.IsWalking = true;
+            MoveTimer.Start(randomTime, false, PreBlitzerMove);
+        }
+        catch (Exception e)
+        {
+            // Handle exceptions gracefully, log them
+            Logger.Warning($"Error in BeginBlitz: {e.Message}");
+            throw;
+        }
     }
 
     private void BlitzerMove(float targetX, float targetY)
@@ -117,24 +138,23 @@ public class Blitzer : Affix
         var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
-        BlitzerTimer.Start(stepTime, false, ErrorHandler.Wrap(() => BlitzerMove(targetX, targetY)));
+        BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
     }
 
     private void EndBlitz()
     {
         BlitzerTimer.Pause();
-        Effect.Dispose();
-        Effect = null;
+        Effect.PlayAnimation(ANIM_TYPE_DEATH);
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
         Unit.IsWalking = false;
-        Unit.Unit.AddAbility(FourCC("Aeth"));
+        Unit.Unit.AddAbility(GHOST_VISIBLE);
     }
 
     public static Blitzer GetBlitzer(unit unit)
     {
-        var affix = Globals.ALL_WOLVES[unit].Affixes.Find(a => a is Blitzer);
+        var affix = Globals.ALL_WOLVES[unit].Affixes.Find(IsBlitzer);
         return affix is Blitzer blitzer ? blitzer : null;
     }
 
@@ -144,7 +164,7 @@ public class Blitzer : Affix
         {
             BlitzerTimer.Pause();
             PreBlitzerTimer.Pause();
-            WanderEffect.Dispose();
+            WanderEffect.PlayAnimation(ANIM_TYPE_DEATH);
             MoveTimer.Pause();
             Unit.IsWalking = !pause;
         }
