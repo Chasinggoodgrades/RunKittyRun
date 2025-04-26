@@ -43,6 +43,7 @@ public class Safezone
     private void EnterSafezoneActions()
     {
         var unit = @event.Unit;
+        if (WolfEntersSafezoneActions(unit)) return;
         var player = unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
         SafezoneAdditions(kitty);
@@ -110,5 +111,19 @@ public class Safezone
                 count++;
         }
         return count;
+    }
+
+    /// <summary>
+    /// If the unit type is a wolf, it'll tell the wolf to MOVE back to its wolf area.
+    /// Primary purpose is to make it so "wander" wolves dont get into the safezones.
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <returns>bool [true/false] if unit type is infact a wolf</returns>
+    public static bool WolfEntersSafezoneActions(unit unit)
+    {
+        if (unit.UnitType != Wolf.WOLF_MODEL) return false;
+        var wolf = Globals.ALL_WOLVES[unit];
+        wolf.WolfMove(true); // forced move
+        return true;
     }
 }
