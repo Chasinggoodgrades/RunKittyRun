@@ -108,7 +108,6 @@ public class Bomber : Affix
             catch (System.Exception e)
             {
                 Logger.Warning($"Error in Bomber.Revive: {e.Message}");
-                // fallback to ensure timers can be restarted
                 ReviveAlphaTimer.Pause();
                 Unit.PauseSelf(false);
                 Unit.IsReviving = false;

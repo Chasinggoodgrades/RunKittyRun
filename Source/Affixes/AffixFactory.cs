@@ -121,7 +121,6 @@ public static class AffixFactory
      * @parm unit: Wolf
      * @optional affixName: string
      */
-
     private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
         return unit.AffixCount() < MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName);
@@ -216,7 +215,6 @@ public static class AffixFactory
         catch (System.Exception ex)
         {
             Logger.Critical($"{Colors.COLOR_RED}Error in DistributeAffixes: {ex.Message}{Colors.COLOR_RESET}");
-            // Fallback to remove all affixes in case of an error
             RemoveAllAffixes();
         }
     }
