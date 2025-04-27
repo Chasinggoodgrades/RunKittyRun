@@ -21,13 +21,14 @@ public static class AffixFactory
         InitLaneWeights();
     }
 
-    public static string[] CalculateAffixes()
+    public static string[] CalculateAffixes(int laneIndex = -1)
     {
         var affixCounts = new Dictionary<string, int>();
 
         foreach (var affix in AllAffixes)
         {
             if (affixCounts.ContainsKey(affix.Name)) continue;
+            if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
             affixCounts[affix.Name] = 0;
         }
 
@@ -35,6 +36,7 @@ public static class AffixFactory
         {
             if (affixCounts.ContainsKey(affix.Name))
             {
+                if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
                 affixCounts[affix.Name]++;
             }
         }

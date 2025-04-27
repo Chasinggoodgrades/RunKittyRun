@@ -70,6 +70,7 @@ public class Bomber : Affix
     private void Explode()
     {
         RangeIndicator.Dispose();
+        RangeIndicator = null;
         Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
         ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
 

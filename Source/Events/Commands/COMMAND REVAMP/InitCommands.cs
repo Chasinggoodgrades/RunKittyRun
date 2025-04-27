@@ -129,14 +129,23 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "affixinfo",
-            alias: "",
+            alias: "ainfo",
             group: "all",
-            argDesc: "",
+            argDesc: "[lane #] (1-17)",
             description: "Displays current round affixes.",
             action: (player, args) =>
             {
-                var affixes = AffixFactory.CalculateAffixes();
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}Total: {AffixFactory.AllAffixes.Count}");
+                string[] affixes;
+
+                if (args[0] != "")
+                {
+                    affixes = AffixFactory.CalculateAffixes(int.Parse(args[0]) - 1);
+                }
+                else
+                {
+                    affixes = AffixFactory.CalculateAffixes();
+                }
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}All Lanes Count: {AffixFactory.AllAffixes.Count}");
             }
         );
 
