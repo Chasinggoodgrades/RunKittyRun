@@ -34,7 +34,7 @@ public class AchesHandles : IDisposable
     public void Dispose()
     {
         Timer.Pause();
-        MemoryHandler.DestroyObject(this);
+        ObjectPool.ReturnObject(this);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public class AchesHandles : IDisposable
     /// <param name="action"></param>
     public static AchesHandles SimpleTimer(float time, Action action)
     {
-        var timer = MemoryHandler.GetEmptyObject<AchesHandles>();       // MEMORY HANDLER IS ASS ... C# IS ASS, EVERYTHING SUCKS
+        var timer = ObjectPool.GetEmptyObject<AchesHandles>();       // MEMORY HANDLER IS ASS ... C# IS ASS, EVERYTHING SUCKS
         timer.Start(time, false, action);
         return timer;
     }

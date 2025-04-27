@@ -29,7 +29,7 @@ public class Kibble : IDisposable
     {
         Item?.Dispose();
         Item = null;
-        MemoryHandler.DestroyObject(this);
+        ObjectPool.ReturnObject(this);
     }
 
     public void SpawnKibble()

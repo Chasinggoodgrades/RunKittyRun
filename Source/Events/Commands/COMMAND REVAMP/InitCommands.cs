@@ -369,7 +369,7 @@ public static class InitCommands
                     {
                         foreach (var wolf in Globals.ALL_WOLVES)
                         {
-                            wolf.Value.Disco ??= MemoryHandler.GetEmptyObject<Disco>();
+                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>();
                             wolf.Value.Disco.Unit = wolf.Value.Unit;
                             wolf.Value.Disco.ToggleDisco(status);
                             if (!status)
@@ -1410,6 +1410,19 @@ public static class InitCommands
                 player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
             }
         );
+
+            CommandsManager.RegisterCommand(
+        name: "test5",
+        alias: "",
+        group: "admin",
+        argDesc: "[on][off]",
+        description: "Testing memory handler.. Observe how much memory is created",
+        action: (player, args) =>
+        {
+            MemoryHandlerTest.SomeTest();
+            player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
+        }
+    );
 
     }
 }

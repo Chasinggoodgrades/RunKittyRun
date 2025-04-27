@@ -16,7 +16,7 @@ public class Disco : IDisposable
     {
         DiscoTimer.Pause();
         Enabled = false;
-        MemoryHandler.DestroyObject(this);
+        ObjectPool.ReturnObject(this);
     }
 
     public void ToggleDisco(bool enable)
