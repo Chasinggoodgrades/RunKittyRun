@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 public abstract class Relic
@@ -31,7 +32,12 @@ public abstract class Relic
 
     public abstract void RemoveEffect(unit Unit);
 
-    public RelicUpgrade GetCurrentUpgrade() => Upgrades[UpgradeLevel];
+    public RelicUpgrade GetCurrentUpgrade()
+    {
+        if (Upgrades.Count == 0) return null;
+        if (UpgradeLevel >= Upgrades.Count) return Upgrades[Upgrades.Count - 1];
+        return Upgrades[UpgradeLevel];
+    }
 
     public bool CanUpgrade(player player) => PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(GetType()) < MaxUpgradeLevel;
 
