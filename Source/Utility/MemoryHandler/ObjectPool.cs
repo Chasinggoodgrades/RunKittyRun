@@ -5,6 +5,11 @@ public static class ObjectPool
 {
     private static readonly Dictionary<Type, Queue<object>> _pools = new Dictionary<Type, Queue<object>>();
 
+    /// <summary>
+    /// Returns an empty object of type <typeparamref name="T"/> from the pool if available, otherwise creates a new instance.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns><typeparamref name="T"/></returns>
     public static T GetEmptyObject<T>() where T : class, new()
     {
         // Gotta check if we have the type && some objects in the pool, then return it.
@@ -17,6 +22,11 @@ public static class ObjectPool
         return new T();
     }
 
+    /// <summary>
+    /// Puts an object of type <typeparamref name="T"/> back to the pool to be recycled.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
     public static void ReturnObject<T>(T obj) where T : class
     {
         // if we don't got a queue object to represent the pool, create a new 1
@@ -30,6 +40,9 @@ public static class ObjectPool
         pool.Enqueue(obj);
     }
 
+    /// <summary>
+    /// Prints debug information about all the object pools, including their counts.
+    /// </summary>
     public static void PrintDebugInfo()
     {
         foreach (var kvp in _pools)
