@@ -118,13 +118,7 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var t = timer.Create();
-        t.Start(duration, false, () =>
-        {
-            action?.Invoke();
-            t.Dispose();
-            t = null;
-        });
+        AchesHandles.SimpleTimer(duration, action);
     }
 
     /// <summary>

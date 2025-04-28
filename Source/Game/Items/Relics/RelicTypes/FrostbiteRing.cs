@@ -99,14 +99,12 @@ public class FrostbiteRing : Relic
     {
         if (PlayerUpgrades.GetPlayerUpgrades(Owner).GetUpgradeLevel(GetType()) < 2) return;
         Unit.MovementSpeed = 365.0f / 2.0f;
-        var t = timer.Create();
         var effect = AddSpecialEffectTarget(FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
-        t.Start(SLOW_DURATION, false, ErrorHandler.Wrap(() =>
+        Utility.SimpleTimer(SLOW_DURATION, () =>
         {
             Unit.MovementSpeed = 365.0f;
             GC.RemoveEffect(ref effect);
-            GC.RemoveTimer(ref t);
-        }));
+        });
     }
 
     private float GetFreezeDuration()

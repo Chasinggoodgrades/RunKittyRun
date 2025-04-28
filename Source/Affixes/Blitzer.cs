@@ -12,9 +12,9 @@ public class Blitzer : Affix
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
     private const float BLITZER_LOWEND = 6.0f;
     private const float BLITZER_HIGHEND = 11.0f;
-    private timer MoveTimer;
-    private timer BlitzerTimer;
-    private timer PreBlitzerTimer;
+    private AchesHandles MoveTimer;
+    private AchesHandles BlitzerTimer;
+    private AchesHandles PreBlitzerTimer;
     private effect Effect;
     private effect WanderEffect;
 
@@ -40,9 +40,9 @@ public class Blitzer : Affix
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
         GC.RemoveEffect(ref WanderEffect);
-        GC.RemoveTimer(ref BlitzerTimer);
-        GC.RemoveTimer(ref MoveTimer);
-        GC.RemoveTimer(ref PreBlitzerTimer);
+        BlitzerTimer.Dispose();
+        MoveTimer.Dispose();
+        PreBlitzerTimer.Dispose();
         GC.RemoveEffect(ref Effect);
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
@@ -52,11 +52,11 @@ public class Blitzer : Affix
 
     private void RegisterMoveTimer()
     {
-        MoveTimer = timer.Create();
-        PreBlitzerTimer = timer.Create();
+        MoveTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        PreBlitzerTimer = ObjectPool<AchesHandles>.GetEmptyObject();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
         MoveTimer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
-        BlitzerTimer = timer.Create();
+        BlitzerTimer = ObjectPool<AchesHandles>.GetEmptyObject();
     }
 
     private void PreBlitzerMove()

@@ -20,8 +20,8 @@ public class ChronoSphere : Relic
     private ability Ability;
     private Kitty Kitty;
     private float Magnitude;
-    private timer MagnitudeTimer;
-    private timer LocationCaptureTimer;
+    private AchesHandles MagnitudeTimer;
+    private AchesHandles LocationCaptureTimer;
     private effect LocationEffect = null;
     private (float, float, float) CapturedLocation; // x, y, facing
 
@@ -47,8 +47,8 @@ public class ChronoSphere : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        GC.RemoveTimer(ref MagnitudeTimer);
-        GC.RemoveTimer(ref LocationCaptureTimer);
+        MagnitudeTimer.Dispose();
+        LocationCaptureTimer.Dispose();
         GC.RemoveEffect(ref LocationEffect);
     }
 
@@ -67,7 +67,7 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
-        MagnitudeTimer = timer.Create();
+        MagnitudeTimer = ObjectPool<AchesHandles>.GetEmptyObject();
         MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
         SetAbilityData();
     }
@@ -77,7 +77,7 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
-        LocationCaptureTimer = timer.Create();
+        LocationCaptureTimer = ObjectPool<AchesHandles>.GetEmptyObject();
         LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
         CaptureLocation();
     }

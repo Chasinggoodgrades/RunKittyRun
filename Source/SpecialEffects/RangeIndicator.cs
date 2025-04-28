@@ -65,6 +65,7 @@ public class RangeIndicator
             LightningObjects[i].Dispose();
             LightningObjects[i] = null;
         }
+        LightningObjects.Clear();
 
         ObjectPool.ReturnObject(this);
     }

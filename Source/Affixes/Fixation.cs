@@ -13,7 +13,7 @@ public class Fixation : Affix
     private const int AFFIX_ABILITY = Constants.ABILITY_FIXATION;
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
-    private timer ChaseTimer;
+    private AchesHandles ChaseTimer;
     private group UnitsInRange;
     private unit Target;
     private int Type;
@@ -24,7 +24,7 @@ public class Fixation : Affix
     {
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
-        ChaseTimer = timer.Create();
+        ChaseTimer = ObjectPool<AchesHandles>.GetEmptyObject();
         Name = $"{Colors.COLOR_RED}Fixation|r";
     }
 
@@ -49,7 +49,7 @@ public class Fixation : Affix
 
         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(ref PeriodicSpeed);
-        GC.RemoveTimer(ref ChaseTimer);
+        ChaseTimer.Dispose();
         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(ref TargetEffect);
         Unit.WanderTimer.Resume();
