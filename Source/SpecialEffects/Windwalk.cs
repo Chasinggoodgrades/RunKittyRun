@@ -37,12 +37,9 @@ public static class Windwalk
             var e = caster.AddSpecialEffect(visual, "origin");
             if (e != null)
             {
-                var t = timer.Create();
-                t.Start(duration, false, () =>
+                Utility.SimpleTimer(duration, () =>
                 {
                     if (e != null) DestroyEffect(e);
-                    t?.Dispose();
-                    t = null;
                 });
             }
         }

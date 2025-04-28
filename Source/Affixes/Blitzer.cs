@@ -52,11 +52,11 @@ public class Blitzer : Affix
 
     private void RegisterMoveTimer()
     {
-        MoveTimer = ObjectPool<AchesHandles>.GetEmptyObject();
-        PreBlitzerTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        MoveTimer = ObjectPool.GetEmptyObject<AchesHandles>();
+        PreBlitzerTimer = ObjectPool.GetEmptyObject<AchesHandles>();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
         MoveTimer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
-        BlitzerTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        BlitzerTimer = ObjectPool.GetEmptyObject<AchesHandles>();
     }
 
     private void PreBlitzerMove()

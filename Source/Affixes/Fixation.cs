@@ -24,7 +24,7 @@ public class Fixation : Affix
     {
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
-        ChaseTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        ChaseTimer = ObjectPool.GetEmptyObject<AchesHandles>();
         Name = $"{Colors.COLOR_RED}Fixation|r";
     }
 

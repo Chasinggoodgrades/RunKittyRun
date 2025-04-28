@@ -67,7 +67,7 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
-        MagnitudeTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        MagnitudeTimer = ObjectPool.GetEmptyObject<AchesHandles>();
         MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
         SetAbilityData();
     }
@@ -77,7 +77,7 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
-        LocationCaptureTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+        LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesHandles>();
         LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
         CaptureLocation();
     }

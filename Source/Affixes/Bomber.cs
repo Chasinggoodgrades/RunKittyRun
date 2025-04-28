@@ -11,8 +11,8 @@ public class Bomber : Affix
 
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
-    private AchesHandles ExplodeTimer = ObjectPool<AchesHandles>.GetEmptyObject();
-    private AchesHandles ReviveAlphaTimer = ObjectPool<AchesHandles>.GetEmptyObject();
+    private AchesHandles ExplodeTimer = ObjectPool.GetEmptyObject<AchesHandles>();
+    private AchesHandles ReviveAlphaTimer = ObjectPool.GetEmptyObject<AchesHandles>();
     private group ExplodeGroup = group.Create();
     private int ReviveAlpha = 1;
     private RangeIndicator RangeIndicator = null;
@@ -59,7 +59,7 @@ public class Bomber : Affix
             return;
         }
         Unit.PauseSelf(true);
-        RangeIndicator = ObjectPool<RangeIndicator>.GetEmptyObject();
+        RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>();
         RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE);
         Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
         Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
