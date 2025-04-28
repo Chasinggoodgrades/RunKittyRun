@@ -5,6 +5,7 @@ public static class MemoryHandlerTest
 {
     public static int cylceCount = 0;
     private static timer t = timer.Create();
+    private static TestDestroyable[] KibbleTest = new TestDestroyable[2000];
 
     private class TestDestroyable : IDisposable
     {
@@ -13,20 +14,25 @@ public static class MemoryHandlerTest
 
         public void Dispose()
         {
-            Name = null;
+            Name = "";
             Count = 0;
+            ObjectPool.ReturnObject(this);
         }
     }
 
-    public static void RunTest()
+    public static void SomeTest()
     {
-        var arr = MemoryHandler.GetEmptyArray<ClusterData>(null, 9);
-        for (int i = 0; i < arr.Length; i++)
+        for (int i = 0; i < 2000; i++)
         {
-            arr[i] = new ClusterData();
+            KibbleTest[i] = ObjectPool.GetEmptyObject<TestDestroyable>();
+            KibbleTest[i].Name = "Kibble" + i;
+            KibbleTest[i].Count = i;
         }
 
-        MemoryHandler.PrintDebugInfo();
+        for (int i = 0; i < 2000; i++)
+        {
+            KibbleTest[i].Dispose();
+        }
     }
 
     public static void PeriodicTest(bool on)
@@ -38,7 +44,7 @@ public static class MemoryHandlerTest
         }
         t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
-            MemoryHandler.PrintDebugInfo();
+            ObjectPool.PrintDebugInfo();
         }));
     }
 }

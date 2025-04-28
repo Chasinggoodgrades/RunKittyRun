@@ -76,7 +76,6 @@ public class Blitzer : Affix
         }
         catch (Exception e)
         {
-            // Handle exceptions gracefully, log them
             Logger.Warning($"Error in PreBlitzerMove: {e.Message}");
             throw;
         }
@@ -99,7 +98,6 @@ public class Blitzer : Affix
         }
         catch (Exception e)
         {
-            // Handle exceptions gracefully, log them
             Logger.Warning($"Error in BeginBlitz: {e.Message}");
             throw;
         }

@@ -21,13 +21,14 @@ public static class AffixFactory
         InitLaneWeights();
     }
 
-    public static string[] CalculateAffixes()
+    public static string[] CalculateAffixes(int laneIndex = -1)
     {
         var affixCounts = new Dictionary<string, int>();
 
         foreach (var affix in AllAffixes)
         {
             if (affixCounts.ContainsKey(affix.Name)) continue;
+            if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
             affixCounts[affix.Name] = 0;
         }
 
@@ -35,6 +36,7 @@ public static class AffixFactory
         {
             if (affixCounts.ContainsKey(affix.Name))
             {
+                if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
                 affixCounts[affix.Name]++;
             }
         }
@@ -121,7 +123,6 @@ public static class AffixFactory
      * @parm unit: Wolf
      * @optional affixName: string
      */
-
     private static bool CanApplyAffix(Wolf unit, string affixName = "x")
     {
         return unit.AffixCount() < MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName);
@@ -216,7 +217,6 @@ public static class AffixFactory
         catch (System.Exception ex)
         {
             Logger.Critical($"{Colors.COLOR_RED}Error in DistributeAffixes: {ex.Message}{Colors.COLOR_RESET}");
-            // Fallback to remove all affixes in case of an error
             RemoveAllAffixes();
         }
     }

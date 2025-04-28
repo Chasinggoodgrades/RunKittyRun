@@ -96,9 +96,9 @@ public class Wolf
     /// <summary>
     /// Wolf moves to a random location within its lane.
     /// </summary>
-    public void WolfMove()
+    public void WolfMove(bool forced = false)
     {
-        if (IsPaused || IsReviving) return;
+        if ( (IsPaused || IsReviving) && !forced) return;
         if (HasAffix("Blitzer")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);

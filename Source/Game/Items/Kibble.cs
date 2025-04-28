@@ -29,7 +29,7 @@ public class Kibble : IDisposable
     {
         Item?.Dispose();
         Item = null;
-        MemoryHandler.DestroyObject(this);
+        ObjectPool.ReturnObject(this);
     }
 
     public void SpawnKibble()
@@ -133,17 +133,16 @@ public class Kibble : IDisposable
 
     private static void JackpotEffect(Kitty kitty, Kibble kibble)
     {
-        var jackpotIndex = kibble.JackPotIndex;
         var unitX = kitty.Unit.X;
         var unitY = kitty.Unit.Y;
-        var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, jackpotIndex * 36.0f);
-        var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, jackpotIndex * 36.0f);
+        var newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0f, kibble.JackPotIndex * 36.0f);
+        var newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0f, kibble.JackPotIndex * 36.0f);
 
         var effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", newX, newY);
         GC.RemoveEffect(ref effect);
-        jackpotIndex += 1;
+        kibble.JackPotIndex += 1;
 
-        if (jackpotIndex >= 20)
+        if (kibble.JackPotIndex >= 20)
         {
             var goldAmount = GetRandomInt(JackpotMin, JackpotMax);
             var isSuperJackpot = GetRandomInt(1, 10) == 1;

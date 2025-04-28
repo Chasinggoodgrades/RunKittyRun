@@ -73,7 +73,7 @@ public static class ItemSpawner
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (KibbleEvent.IsEventActive()) return;
 
-        var kibble = MemoryHandler.GetEmptyObject<Kibble>();
+        var kibble = ObjectPool.GetEmptyObject<Kibble>();
         kibble.SpawnKibble();
         TrackKibbles.Add(kibble);
     }

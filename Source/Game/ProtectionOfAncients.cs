@@ -162,22 +162,32 @@ public static class ProtectionOfAncients
         kitty.ProtectionActive = false;
         tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);
 
-        var list = tempGroup.ToList(); // BAD
-        foreach (var unit in list) // BAD
+        while (true)
         {
+            var unit = tempGroup.First;
+            if (unit == null) break;
+            tempGroup.Remove(unit);
+
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
+            // SELF.. Shouldn't get save points for reviving yourself.
             if (kitty.Unit == playerToRevive.Unit)
+            {
                 kitty.ReviveKitty();
-            else
+            }
+            else // Other players get revived and then kitty (person casting ult, gets the save points)
+            {
+                playerToRevive.Invulnerable = true; // players that are dead nearby that get revived will have invul for 1 sec as well.
+                Utility.SimpleTimer(INVULNERABLE_DURATION, () => playerToRevive.Invulnerable = false);
                 playerToRevive.ReviveKitty(kitty);
+            }
             reviveCount++;
             // Give Divinity Tendrils if meets challenge requiremnet.
             if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
         }
+
         Utility.SimpleTimer(INVULNERABLE_DURATION, () => kitty.Invulnerable = false);
 
         GC.RemoveGroup(ref tempGroup);
         GC.RemoveFilterFunc(ref filter);
-        GC.RemoveList(ref list);
     }
 }

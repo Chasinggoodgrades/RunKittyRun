@@ -30,7 +30,7 @@ public static class KibbleEvent
         // Spawn event kibbles
         for (int i = 0; i < TotalEventKibbles + EventExtraKibbles; i++)
         {
-            var kibble = MemoryHandler.GetEmptyObject<Kibble>();
+            var kibble = ObjectPool.GetEmptyObject<Kibble>();
             kibble.SpawnKibble();
             ItemSpawner.TrackKibbles.Add(kibble);
         }

@@ -51,9 +51,13 @@ public static class RelicFunctions
             var relicType = selectedItem.Relic.GetType();
             var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
             var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
+            var playerUpgradesRelic = playerRelic.GetCurrentUpgrade();
+
             if (playerRelic == null) return;
-            var goldCost = playerRelic.GetCurrentUpgrade().Cost;
+            if (playerUpgradesRelic == null) return;
             if (ActiveShadowKitty(player)) return;
+
+            var goldCost = playerUpgradesRelic.Cost;
             if (player.Gold < goldCost)
             {
                 ShopFrame.NotEnoughGold(player, goldCost);

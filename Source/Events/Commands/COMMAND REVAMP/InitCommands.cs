@@ -129,14 +129,25 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "affixinfo",
-            alias: "",
+            alias: "ainfo",
             group: "all",
-            argDesc: "",
+            argDesc: "[lane #] (1-17)",
             description: "Displays current round affixes.",
             action: (player, args) =>
             {
-                var affixes = AffixFactory.CalculateAffixes();
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}Total: {AffixFactory.AllAffixes.Count}");
+                string[] affixes;
+                int laneIndex;
+                if (args[0] != "")
+                {
+                    laneIndex = int.Parse(args[0]);
+                    if (laneIndex <= 0 || laneIndex > 17) return;
+                    affixes = AffixFactory.CalculateAffixes(laneIndex - 1);
+                }
+                else
+                {
+                    affixes = AffixFactory.CalculateAffixes();
+                }
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Current Affixes:\n" + string.Join("\n", affixes) + $"\n{Colors.COLOR_LAVENDER}All Lanes Count: {AffixFactory.AllAffixes.Count}");
             }
         );
 
@@ -211,10 +222,6 @@ public static class InitCommands
                     CameraUtil.LockCamera(player);
                     return;
                 }
-                /*                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                                {
-                                    CameraUtil.LockCamera(kitty.Player);
-                                });*/
             }
         );
 
@@ -249,7 +256,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 PlayerLeaves.PlayerLeavesActions(player);
-                Blizzard.CustomDefeatBJ(player, $"{Colors.COLOR_RED}You kicked yourself!|r");
+                Blizzard.CustomDefeatBJ(player, $"{Colors.COLOR_RED}You kicked yourself!{Colors.COLOR_RESET}");
             }
         );
 
@@ -286,7 +293,7 @@ public static class InitCommands
                     var kibbleCollected = kitty.Value.CurrentStats.CollectedKibble;
                     kibbleList += $"{Colors.PlayerNameColored(kibblePicker)}: {kibbleCollected}\n";
                 }
-                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}|r");
+                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}{Colors.COLOR_RESET}");
             }
         );
 
@@ -369,7 +376,7 @@ public static class InitCommands
                     {
                         foreach (var wolf in Globals.ALL_WOLVES)
                         {
-                            wolf.Value.Disco ??= MemoryHandler.GetEmptyObject<Disco>();
+                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>();
                             wolf.Value.Disco.Unit = wolf.Value.Unit;
                             wolf.Value.Disco.ToggleDisco(status);
                             if (!status)
@@ -1396,7 +1403,7 @@ public static class InitCommands
             alias: "",
             group: "admin",
             argDesc: "[on][off]",
-            description: "Foreach memory test",
+            description: "Foreach memory test, executes 20k iterations of foreach loop.",
             action: (player, args) =>
             {
                 // Roughly 3MB of memory per 20k iterations.
@@ -1404,9 +1411,22 @@ public static class InitCommands
                 {
                     foreach (var k in Globals.ALL_KITTIES)
                     {
-                        k.Value.Alive = true;
+                        k.Value.TeamID = k.Value.TeamID;
                     }
                 }
+                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test5",
+            alias: "",
+            group: "admin",
+            argDesc: "[on][off]",
+            description: "Testing memory handler.. Observe how much memory is created",
+            action: (player, args) =>
+            {
+                MemoryHandlerTest.SomeTest();
                 player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
             }
         );
