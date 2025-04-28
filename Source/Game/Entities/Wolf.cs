@@ -161,9 +161,9 @@ public class Wolf
         {
             WanderTimer?.Pause();
             EffectTimer?.Pause();
-            Unit.ClearOrders();
             IsWalking = false;
             IsPaused = true;
+            Unit.ClearOrders();
         }
         else
         {

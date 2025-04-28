@@ -192,6 +192,7 @@ public class Fixation : Affix
             IsChasing = false;
             InRangeTrigger.Disable();
             ChaseTimer.Pause();
+            Unit.Unit.ClearOrders();
             GC.RemoveEffect(ref TargetEffect);
         }
         else

@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
@@ -6,6 +7,7 @@ public class Bomber : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_BOMBER; // replace with bomber ability in WE later after i make it.
     private const float EXPLOSION_RANGE = 250.0f;
+    private static readonly Predicate<Affix> IsBomber = x => x is Bomber;
 
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
 
@@ -89,6 +91,12 @@ public class Bomber : Affix
     }
 
     private static float ExplosionInterval() => GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL);
+
+    public static Bomber GetBomber(unit Unit)
+    {
+        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(IsBomber);
+        return affix is Bomber bomber ? bomber : null;
+    }
 
     private void Revive()
     {
