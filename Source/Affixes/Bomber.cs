@@ -13,8 +13,8 @@ public class Bomber : Affix
 
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
-    private AchesHandles ExplodeTimer = ObjectPool.GetEmptyObject<AchesHandles>();
-    private AchesHandles ReviveAlphaTimer = ObjectPool.GetEmptyObject<AchesHandles>();
+    private AchesTimers ExplodeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+    private AchesTimers ReviveAlphaTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     private group ExplodeGroup = group.Create();
     private int ReviveAlpha = 1;
     private RangeIndicator RangeIndicator = null;
@@ -49,7 +49,7 @@ public class Bomber : Affix
 
     private void RegisterTimers()
     {
-        ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+        ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
     }
 
     private void StartExplosion()
@@ -57,7 +57,7 @@ public class Bomber : Affix
         // Temporary for testing, will add an actual graphic ticker later
         if (Unit.IsPaused)
         {
-            ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+            ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
             return;
         }
         Unit.PauseSelf(true);
@@ -101,7 +101,7 @@ public class Bomber : Affix
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer.Start(1.0f, true, () =>
+        ReviveAlphaTimer.Timer.Start(1.0f, true, () =>
         {
             try
             {
@@ -116,7 +116,7 @@ public class Bomber : Affix
                     ReviveAlphaTimer.Pause();
                     Unit.PauseSelf(false);
                     Unit.IsReviving = false;
-                    ExplodeTimer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+                    ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
                 }
             }
             catch (System.Exception e)

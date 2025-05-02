@@ -4,7 +4,7 @@ public class FloatingNameTag
 {
     private const float NAME_TAG_HEIGHT = 0.015f;
     private const float NAME_TAG_UPDATE_INTERVAL = 0.03f;
-    private AchesHandles NamePosUpdater;
+    private AchesTimers NamePosUpdater;
     public Kitty Kitty;
     public texttag NameTag;
 
@@ -17,7 +17,7 @@ public class FloatingNameTag
 
     public void Initialize()
     {
-        NamePosUpdater = ObjectPool.GetEmptyObject<AchesHandles>();
+        NamePosUpdater = ObjectPool.GetEmptyObject<AchesTimers>();
         SetNameTagAttributes();
         NamePosTimer();
     }
@@ -39,7 +39,7 @@ public class FloatingNameTag
 
     private void NamePosTimer()
     {
-        NamePosUpdater.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
+        NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
         {
             UpdateNameTag();
             Blizzard.SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.Unit.Y);

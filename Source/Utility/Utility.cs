@@ -118,7 +118,16 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        AchesHandles.SimpleTimer(duration, action);
+        var handle = ObjectPool.GetEmptyObject<AchesTimers>();
+        var actionHandle = ObjectPool.GetEmptyObject<AchesActions>();
+        actionHandle.Action = action;
+
+        handle.Timer.Start(duration, false, () =>
+        {
+            actionHandle.Action();
+            actionHandle.Dispose();
+            handle.Dispose();
+        });
     }
 
     /// <summary>

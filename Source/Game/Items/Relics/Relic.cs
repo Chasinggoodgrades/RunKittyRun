@@ -34,7 +34,7 @@ public abstract class Relic
 
     public RelicUpgrade GetCurrentUpgrade()
     {
-        if (Upgrades.Count == 0) return null;
+        if (Upgrades == null || Upgrades.Count == 0) return null;
         if (UpgradeLevel >= Upgrades.Count) return Upgrades[Upgrades.Count - 1];
         return Upgrades[UpgradeLevel];
     }

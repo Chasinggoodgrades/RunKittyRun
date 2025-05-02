@@ -20,8 +20,8 @@ public class ChronoSphere : Relic
     private ability Ability;
     private Kitty Kitty;
     private float Magnitude;
-    private AchesHandles MagnitudeTimer;
-    private AchesHandles LocationCaptureTimer;
+    private AchesTimers MagnitudeTimer;
+    private AchesTimers LocationCaptureTimer;
     private effect LocationEffect = null;
     private (float, float, float) CapturedLocation; // x, y, facing
 
@@ -67,8 +67,8 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
-        MagnitudeTimer = ObjectPool.GetEmptyObject<AchesHandles>();
-        MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
+        MagnitudeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
         SetAbilityData();
     }
 
@@ -77,8 +77,8 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
-        LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesHandles>();
-        LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
+        LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
         CaptureLocation();
     }
 
