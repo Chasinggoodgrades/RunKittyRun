@@ -90,17 +90,19 @@ public class RingOfSummoning : Relic
         SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
         if (SummonGroup.Contains(summoningKittyUnit)) SummonGroup.Remove(summoningKittyUnit); // remove self from the list
 
-
+        var count = 0;
         while (true)
         {
             var unit = SummonGroup.First;
-            if (unit == null) break;
+            count += 1;
+            if (unit == null || count > numberOfSummons) break;
             SummonGroup.Remove(unit);
 
             var kitty = Globals.ALL_KITTIES[unit.Owner];
             if (!SummonDeadKitty(summoningKitty, kitty)) continue;
 
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+            kitty.ProgressZone = summoningKitty.ProgressZone; // put them in same progress zone for progress purposes.
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
             Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
@@ -121,6 +123,8 @@ public class RingOfSummoning : Relic
         var round = Globals.ROUND;
         var summoersProgress = summoner.TimeProg.GetRoundProgress(round);
         var deadProg = summoned.TimeProg.GetRoundProgress(round);
+
+        if (Source.Program.Debug) Logger.Verbose($"Summoner: {summoner.Player.Name} | Summoner Progress: {summoersProgress} | Summoned: {summoned.Player.Name} | Summoned Progress: {deadProg}");
 
         if (summoersProgress > deadProg && !summoned.Alive)
         {

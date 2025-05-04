@@ -40,7 +40,7 @@ public static class Progress
     {
         try
         {
-            var currentSafezone = kitty.CurrentStats.ProgressZone;
+            var currentSafezone = kitty.ProgressZone;
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y)) return 100.0f; // if at end.. 100 progress
             if (Regions.Victory_Area.Contains(kitty.Unit.X, kitty.Unit.Y)) return 100.0f; // if in victory area, 100 progress
             if (Globals.SAFE_ZONES[0].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y) && !kitty.Finished) return 0.0f; // if at start, 0 progress

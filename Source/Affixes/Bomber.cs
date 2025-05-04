@@ -57,12 +57,12 @@ public class Bomber : Affix
         // Temporary for testing, will add an actual graphic ticker later
         if (Unit.IsPaused)
         {
-            ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+            ExplodeTimer.Timer.Start(ExplosionInterval(), false, (StartExplosion));
             return;
         }
         Unit.PauseSelf(true);
         RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>();
-        RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE);
+        RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
         Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
         Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
         Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
@@ -83,6 +83,7 @@ public class Bomber : Affix
             ExplodeGroup.Remove(u);
 
             if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
+            if (!Globals.ALL_KITTIES[u.Owner].Alive) continue; // ignore if they're dead lol
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
             Globals.ALL_KITTIES[u.Owner].KillKitty();
         }
@@ -116,7 +117,7 @@ public class Bomber : Affix
                     ReviveAlphaTimer.Pause();
                     Unit.PauseSelf(false);
                     Unit.IsReviving = false;
-                    ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+                    ExplodeTimer.Timer.Start(ExplosionInterval(), false, StartExplosion);
                 }
             }
             catch (System.Exception e)
