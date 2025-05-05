@@ -85,7 +85,7 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving))
+        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving) && (this != NamedWolves.StanWolf))
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
@@ -213,7 +213,7 @@ public class Wolf
             throw new ArgumentOutOfRangeException(nameof(currentRound), "Round must be between 1 and 5.");
 
         var linearProbability = baseChance + (increasePerRound * (currentRound - 1));
-        var randomAdjustment = (float)GetRandomReal(0, 4); // Random adjustment between 0 and 4%
+        var randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%
         var totalProbability = linearProbability + randomAdjustment;
 
         // Cap the probability to the maximum limit
