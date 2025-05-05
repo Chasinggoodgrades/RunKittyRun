@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -161,10 +160,11 @@ public static class InitCommands
             {
                 int laneIndex;
                 int nbWolves;
-                if (args[0] != "") {
+                if (args[0] != "")
+                {
                     laneIndex = int.Parse(args[0]);
                     if (laneIndex <= 0 || laneIndex > 17) return;
-                    nbWolves = WolfArea.WolfAreas[laneIndex-1].Wolves.Count;
+                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.Count;
                     player.DisplayTextTo(Colors.COLOR_GOLD + $"Current Wolf Count for Lane {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}");
                     return;
                 }
@@ -1270,7 +1270,7 @@ public static class InitCommands
             description: "Turns the error prompts off or on",
             action: (player, args) =>
             {
-                var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
+                var status = args[0] != "" && CommandsManager.GetBool(args[0]);
                 ErrorHandler.ErrorMessagesOn = status;
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
             }
@@ -1372,7 +1372,7 @@ public static class InitCommands
             description: "Activates the revive invul for 0.6 seconds. Served as a test run.",
             action: (player, args) =>
             {
-                var status = args[0] == "" ? false : CommandsManager.GetBool(args[0]);
+                var status = args[0] != "" && CommandsManager.GetBool(args[0]);
                 Kitty.InvulTest = status;
                 player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Revive invul test: {status}");
             }

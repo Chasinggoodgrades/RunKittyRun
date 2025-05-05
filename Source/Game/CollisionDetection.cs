@@ -70,17 +70,25 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionTrigger(Kitty k)
     {
-        TriggerAddAction(k.w_Collision, ErrorHandler.Wrap(() =>
+        TriggerAddAction(k.w_Collision, () =>
         {
-            if (!k.Unit.Alive) return;
-            if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
-            if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
-            if (ChronoSphere.RewindDeath(k)) return;
-            if (k.Invulnerable) return;
-            OneOfNine.OneOfNineEffect(k);
-            k.KillKitty();
-            TeamsUtil.CheckTeamDead(k);
-        }));
+            try
+            {
+                if (!k.Unit.Alive) return;
+                if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
+                if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
+                if (ChronoSphere.RewindDeath(k)) return;
+                if (k.Invulnerable) return;
+                OneOfNine.OneOfNineEffect(k);
+                k.KillKitty();
+                TeamsUtil.CheckTeamDead(k);
+            }
+            catch (Exception e)
+            {
+                Logger.Warning($"WolfCollisionTrigger Error: {e.Message}");
+                throw;
+            }
+        });
         return k.w_Collision;
     }
 
@@ -105,18 +113,26 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.wCollision, ErrorHandler.Wrap(sk.KillShadowKitty));
+        TriggerAddAction(sk.wCollision, sk.KillShadowKitty);
         return sk.wCollision;
     }
 
     private static trigger CircleCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.cCollision, ErrorHandler.Wrap(() =>
+        TriggerAddAction(sk.cCollision, () =>
         {
-            var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
-            var saviorKitty = Globals.ALL_KITTIES[GetOwningPlayer(sk.Unit)];
-            circle.ReviveKitty(saviorKitty);
-        }));
+            try
+            {
+                var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
+                var saviorKitty = Globals.ALL_KITTIES[GetOwningPlayer(sk.Unit)];
+                circle.ReviveKitty(saviorKitty);
+            }
+            catch (Exception e)
+            {
+                Logger.Warning($"CircleCollisionShadowTrigger Error: {e.Message}");
+                throw;
+            }
+        });
         return sk.cCollision;
     }
 }

@@ -119,13 +119,10 @@ public static class Utility
     public static void SimpleTimer(float duration, Action action)
     {
         var handle = ObjectPool.GetEmptyObject<AchesTimers>();
-        var actionHandle = ObjectPool.GetEmptyObject<AchesActions>();
-        actionHandle.Action = action;
 
         handle.Timer.Start(duration, false, () =>
         {
-            actionHandle.Action();
-            actionHandle.Dispose();
+            action();
             handle.Dispose();
         });
     }
