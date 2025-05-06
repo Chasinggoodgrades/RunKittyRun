@@ -28,6 +28,7 @@ public class Bomber : Affix
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.SetVertexColor(204, 102, 0);
+        RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>();
         RegisterTimers();
         base.Apply();
     }
@@ -61,7 +62,6 @@ public class Bomber : Affix
             return;
         }
         Unit.PauseSelf(true);
-        RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>();
         RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
         Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
         Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
@@ -71,8 +71,7 @@ public class Bomber : Affix
 
     private void Explode()
     {
-        RangeIndicator.Dispose();
-        RangeIndicator = null;
+        RangeIndicator.DestroyIndicator();
         Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
         ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
 

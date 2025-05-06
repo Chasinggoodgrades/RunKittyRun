@@ -43,7 +43,7 @@ public class Wolf
         InitializeWolf();
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
-        StartWandering();
+        Utility.SimpleTimer(2.0f, () => StartWandering());
         Globals.ALL_WOLVES.Add(Unit, this);
 
 
@@ -169,7 +169,7 @@ public class Wolf
         else
         {
             WanderTimer?.Resume();
-            if (EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
+            if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;
@@ -237,6 +237,11 @@ public class Wolf
     {
         WolfMove();
         BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
+        if (IsAffixed())
+        {
+            OverheadEffect.Dispose();
+            OverheadEffect = null;
+        }
     }
 
     #region AFFIXES

@@ -58,10 +58,7 @@ public class RangeIndicator
         }
     }
 
-    /// <summary>
-    /// Disposes of the range indicator by destroying all associated lightning effects and releasing the object back to the pool
-    /// </summary>
-    public void Dispose()
+    public void DestroyIndicator()
     {
         for (int i = 0; i < LightningObjects.Count; i++)
         {
@@ -69,7 +66,14 @@ public class RangeIndicator
             LightningObjects[i] = null;
         }
         LightningObjects.Clear();
+    }
 
+    /// <summary>
+    /// Disposes of the range indicator by destroying all associated lightning effects and releasing the object back to the pool
+    /// </summary>
+    public void Dispose()
+    {
+        DestroyIndicator();
         ObjectPool.ReturnObject(this);
     }
 }
