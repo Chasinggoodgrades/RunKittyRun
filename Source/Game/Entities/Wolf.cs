@@ -27,7 +27,7 @@ public class Wolf
     public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
-    private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
+    // private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
     public WolfPoint WolfPoint { get; set; }
     public bool IsPaused { get; set; } = false;
     public bool IsReviving { get; set; } = false;
@@ -168,7 +168,7 @@ public class Wolf
         else
         {
             WanderTimer?.Resume();
-            EffectTimer?.Resume();
+            if (EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;

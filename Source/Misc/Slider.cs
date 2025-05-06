@@ -355,15 +355,18 @@ public class Slider
     {
         if (!enabled) return;
 
-        foreach (var i in ItemSpawner.TrackKibbles)
+        for (int i = 0; i < ItemSpawner.TrackKibbles.Count; i++)
         {
-            if (i.Item == null) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(i.Item.X, i.Item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
-            kitty.Unit.AddItem(i.Item);
+            var k = ItemSpawner.TrackKibbles[i];
+            if (k == null) continue;
+            if (WCSharp.Shared.Util.DistanceBetweenPoints(k.Item.X, k.Item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
+            kitty.Unit.AddItem(k.Item);
             break;
         }
-        foreach (var item in ItemSpawner.TrackItems)
+
+        for (int i = 0; i < ItemSpawner.TrackItems.Count; i++)
         {
+            var item = ItemSpawner.TrackItems[i];
             if (item == null) continue;
             if (item.IsOwned) continue;
             if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;

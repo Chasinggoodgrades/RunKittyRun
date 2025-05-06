@@ -80,6 +80,7 @@ public class Fixation : Affix
                 var target = @event.Unit;
                 var Region = RegionList.WolfRegions[Unit.RegionIndex];
                 if (!Region.Contains(target.X, target.Y)) return;
+                if (Unit.IsPaused) return;
                 if (target != Unit.Unit && !IsChasing)
                 {
                     Target = target;

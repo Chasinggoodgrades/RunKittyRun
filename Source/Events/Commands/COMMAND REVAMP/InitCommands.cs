@@ -1426,8 +1426,7 @@ public static class InitCommands
             description: "Testing memory handler.. Observe how much memory is created",
             action: (player, args) =>
             {
-                MemoryHandlerTest.SomeTest();
-                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
+                //var luaFrame = new LuaEditor();
             }
         );
 
