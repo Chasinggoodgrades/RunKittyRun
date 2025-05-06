@@ -163,6 +163,7 @@ public class Wolf
             EffectTimer?.Pause();
             IsWalking = false;
             IsPaused = true;
+            Unit.IsPaused = true; // Wander Wolf
             Unit.ClearOrders();
         }
         else
@@ -172,6 +173,7 @@ public class Wolf
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;
+            Unit.IsPaused = false;
         }
     }
 
