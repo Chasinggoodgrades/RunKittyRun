@@ -12,9 +12,9 @@ public class Blitzer : Affix
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
     private const float BLITZER_LOWEND = 6.0f;
     private const float BLITZER_HIGHEND = 11.0f;
-    private timer MoveTimer;
-    private timer BlitzerTimer;
-    private timer PreBlitzerTimer;
+    private AchesTimers MoveTimer;
+    private AchesTimers BlitzerTimer;
+    private AchesTimers PreBlitzerTimer;
     private effect Effect;
     private effect WanderEffect;
 
@@ -40,9 +40,9 @@ public class Blitzer : Affix
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
         GC.RemoveEffect(ref WanderEffect);
-        GC.RemoveTimer(ref BlitzerTimer);
-        GC.RemoveTimer(ref MoveTimer);
-        GC.RemoveTimer(ref PreBlitzerTimer);
+        BlitzerTimer.Dispose();
+        MoveTimer.Dispose();
+        PreBlitzerTimer.Dispose();
         GC.RemoveEffect(ref Effect);
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
@@ -52,11 +52,11 @@ public class Blitzer : Affix
 
     private void RegisterMoveTimer()
     {
-        MoveTimer = timer.Create();
-        PreBlitzerTimer = timer.Create();
+        MoveTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        PreBlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
-        MoveTimer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
-        BlitzerTimer = timer.Create();
+        MoveTimer.Timer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
+        BlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     }
 
     private void PreBlitzerMove()
@@ -65,14 +65,14 @@ public class Blitzer : Affix
         {
             if (Unit.IsPaused)
             {
-                MoveTimer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
+                MoveTimer.Timer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
                 return;
             }
             WanderEffect ??= effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
             WanderEffect.PlayAnimation(ANIM_TYPE_STAND);
             Unit.Unit.SetVertexColor(255, 255, 0);
             Unit.Unit.SetColor(playercolor.Yellow);
-            PreBlitzerTimer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
+            PreBlitzerTimer.Timer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
         }
         catch (Exception e)
         {
@@ -94,7 +94,7 @@ public class Blitzer : Affix
             Effect ??= effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
             Effect.PlayAnimation(ANIM_TYPE_STAND);
             Unit.IsWalking = true;
-            MoveTimer.Start(randomTime, false, PreBlitzerMove);
+            MoveTimer.Timer.Start(randomTime, false, PreBlitzerMove);
         }
         catch (Exception e)
         {
@@ -136,7 +136,7 @@ public class Blitzer : Affix
         var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
-        BlitzerTimer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+        BlitzerTimer.Timer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
     }
 
     private void EndBlitz()

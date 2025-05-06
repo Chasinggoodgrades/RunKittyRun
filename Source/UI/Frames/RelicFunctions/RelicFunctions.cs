@@ -50,10 +50,10 @@ public static class RelicFunctions
             var itemID = selectedItem.ItemID;
             var relicType = selectedItem.Relic.GetType();
             var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
+            if (playerRelic == null) return;
             var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
             var playerUpgradesRelic = playerRelic.GetCurrentUpgrade();
 
-            if (playerRelic == null) return;
             if (playerUpgradesRelic == null) return;
             if (ActiveShadowKitty(player)) return;
 

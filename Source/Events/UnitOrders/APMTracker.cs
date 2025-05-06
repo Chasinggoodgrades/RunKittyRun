@@ -6,7 +6,7 @@ public class APMTracker
 {
     private readonly Action _cachedPositions;
     private const float CAPTURE_INTERVAL = 0.1f;
-    private trigger ClicksTrigger = trigger.Create();
+    private trigger ClicksTrigger = CreateTrigger();
     private triggeraction ClicksAction;
     private timer PeriodicTimer;
 
@@ -19,14 +19,14 @@ public class APMTracker
     public APMTracker(Kitty kitty)
     {
         Kitty = kitty;
-        Init();
         _cachedPositions = () => CheckKittyPositions(); // cache the method for periodic timer use
+        Init();
     }
 
     private void Init()
     {
-        ClicksTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.IssuedPointOrder);
-        ClicksAction = ClicksTrigger.AddAction(ErrorHandler.Wrap(CaptureActions));
+        ClicksTrigger.RegisterUnitEvent(Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER);
+        ClicksAction = ClicksTrigger.AddAction(CaptureActions);
         PeriodicTimer = PeriodicCheck();
     }
 

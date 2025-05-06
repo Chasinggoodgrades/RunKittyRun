@@ -19,15 +19,15 @@ public class Wolf
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
-    public timer WanderTimer { get; set; }
-    private timer EffectTimer { get; set; }
+    public AchesTimers WanderTimer { get; set; }
+    private AchesTimers EffectTimer { get; set; }
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
     public rect Lane { get; private set; }
     public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
-    private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
+    // private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
     public WolfPoint WolfPoint { get; set; }
     public bool IsPaused { get; set; } = false;
     public bool IsReviving { get; set; } = false;
@@ -85,12 +85,12 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving))
+        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving) && (this != NamedWolves.StanWolf))
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Start(realTime, false, _cachedWander);
+        WanderTimer.Timer.Start(realTime, false, _cachedWander);
     }
 
     /// <summary>
@@ -161,17 +161,19 @@ public class Wolf
         {
             WanderTimer?.Pause();
             EffectTimer?.Pause();
-            Unit.ClearOrders();
             IsWalking = false;
             IsPaused = true;
+            Unit.IsPaused = true; // Wander Wolf
+            Unit.ClearOrders();
         }
         else
         {
             WanderTimer?.Resume();
-            EffectTimer?.Resume();
+            if (EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
             Unit.ClearOrders();
             IsWalking = true;
             IsPaused = false;
+            Unit.IsPaused = false;
         }
     }
 
@@ -189,8 +191,8 @@ public class Wolf
         Unit.IsInvulnerable = true;
         Unit.SetColor(ConvertPlayerColor(24));
 
-        WanderTimer = timer.Create();
-        EffectTimer = timer.Create();
+        WanderTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        EffectTimer = ObjectPool.GetEmptyObject<AchesTimers>();
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }
@@ -213,7 +215,7 @@ public class Wolf
             throw new ArgumentOutOfRangeException(nameof(currentRound), "Round must be between 1 and 5.");
 
         var linearProbability = baseChance + (increasePerRound * (currentRound - 1));
-        var randomAdjustment = (float)GetRandomReal(0, 4); // Random adjustment between 0 and 4%
+        var randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%
         var totalProbability = linearProbability + randomAdjustment;
 
         // Cap the probability to the maximum limit
@@ -228,7 +230,7 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Start(effectDuration, false, _cachedEffect);
+        EffectTimer.Timer.Start(effectDuration, false, _cachedEffect);
     }
 
     private void WolfMoveCancelEffect()

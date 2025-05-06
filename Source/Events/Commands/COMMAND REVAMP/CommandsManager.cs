@@ -118,12 +118,6 @@ public static class CommandsManager
         GC.RemoveList(ref kittyArray);
     }
 
-    public static bool IsBool(string arg)
-    {
-        var lower = arg.ToLower();
-        return lower == "true" || lower == "false" || lower == "on" || lower == "off" || lower == "0" || lower == "1";
-    }
-
     public static bool GetBool(string arg)
     {
         if (string.IsNullOrEmpty(arg)) return false;

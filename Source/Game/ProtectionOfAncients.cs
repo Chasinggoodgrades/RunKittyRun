@@ -117,13 +117,12 @@ public static class ProtectionOfAncients
         Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)));
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
-        var t = timer.Create();
-        t.Start(EFFECT_DELAY, false, ErrorHandler.Wrap(() =>
+
+        Utility.SimpleTimer(EFFECT_DELAY, () =>
         {
             ApplyEffect(Unit);
             GC.RemoveEffect(ref actiEffect);
-            GC.RemoveTimer(ref t);
-        }));
+        });
     }
 
     private static void ApplyEffect(unit Unit)

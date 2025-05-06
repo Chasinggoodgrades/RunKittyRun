@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class Chaos : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_CHAOS;
-    private timer RotationTimer;
+    private AchesTimers RotationTimer;
     private Affix currentAffix;
     private float rotationTime = GetRandomReal(25f, 45f);
 
@@ -24,15 +24,15 @@ public class Chaos : Affix
     public override void Remove()
     {
         currentAffix.Remove();
-        GC.RemoveTimer(ref RotationTimer);
+        RotationTimer.Dispose();
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }
 
     private void RegisterTimer()
     {
-        RotationTimer = timer.Create();
-        RotationTimer.Start(rotationTime, true, RotateAffix);
+        RotationTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        RotationTimer.Timer.Start(rotationTime, true, RotateAffix);
         currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
         currentAffix.Apply();
     }

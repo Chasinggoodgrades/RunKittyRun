@@ -13,7 +13,7 @@ public class Fixation : Affix
     private const int AFFIX_ABILITY = Constants.ABILITY_FIXATION;
     private trigger InRangeTrigger;
     private trigger PeriodicSpeed;
-    private timer ChaseTimer;
+    private AchesTimers ChaseTimer;
     private group UnitsInRange;
     private unit Target;
     private int Type;
@@ -24,7 +24,7 @@ public class Fixation : Affix
     {
         InRangeTrigger = trigger.Create();
         PeriodicSpeed = trigger.Create();
-        ChaseTimer = timer.Create();
+        ChaseTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         Name = $"{Colors.COLOR_RED}Fixation|r";
     }
 
@@ -49,7 +49,7 @@ public class Fixation : Affix
 
         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(ref PeriodicSpeed);
-        GC.RemoveTimer(ref ChaseTimer);
+        ChaseTimer.Dispose();
         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(ref TargetEffect);
         Unit.WanderTimer.Resume();
@@ -80,6 +80,7 @@ public class Fixation : Affix
                 var target = @event.Unit;
                 var Region = RegionList.WolfRegions[Unit.RegionIndex];
                 if (!Region.Contains(target.X, target.Y)) return;
+                if (Unit.IsPaused) return;
                 if (target != Unit.Unit && !IsChasing)
                 {
                     Target = target;
@@ -99,7 +100,7 @@ public class Fixation : Affix
         IsChasing = true;
         Unit.WanderTimer.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        ChaseTimer.Start(0.1f, true, () =>
+        ChaseTimer.Timer.Start(0.1f, true, () =>
         {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
@@ -192,6 +193,7 @@ public class Fixation : Affix
             IsChasing = false;
             InRangeTrigger.Disable();
             ChaseTimer.Pause();
+            Unit.Unit.ClearOrders();
             GC.RemoveEffect(ref TargetEffect);
         }
         else

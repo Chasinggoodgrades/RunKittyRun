@@ -64,12 +64,20 @@ public class ShadowKitty
     /// </summary>
     public void KillShadowKitty()
     {
-        UnitWithinRange.DeRegisterUnitWithinRangeUnit(this);
-        this.Unit.Kill();
-        this.Unit.Dispose();
-        this.Unit = null;
-        this.Active = false;
-        PauseKitty(this.Player, false);
+        try
+        {
+            UnitWithinRange.DeRegisterUnitWithinRangeUnit(this);
+            this.Unit.Kill();
+            this.Unit.Dispose();
+            this.Unit = null;
+            this.Active = false;
+            PauseKitty(this.Player, false);
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"ShadowKitty.KillShadowKitty: {e.Message}");
+            throw;
+        }
     }
 
     /// <summary>

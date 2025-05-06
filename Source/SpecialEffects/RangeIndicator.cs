@@ -9,6 +9,8 @@ public class RangeIndicator
 {
     /// <summary>
     /// The type of lightning used to create the range indicator. Default is "BLNL" (Blue Lightning).
+    /// "BLNL" (Blue Lightning), "FINL" (Orange Lightning), "MYNL" (Purple Lightning), "RENL" (Red Lightning).
+    /// "GRNL" (Green Lightning) "SPNL" (Tealish Spirit Lightning)
     /// </summary>
     public const string LIGHTNING_TYPE = "BLNL";
 
@@ -32,7 +34,8 @@ public class RangeIndicator
     /// <param name="unit">The unit around which the range indicator will be displayed.</param>
     /// <param name="range">The radius of the range indicator in game units.</param>
     /// <param name="segments">The number of segments into which the range indicator is divided. Higher values produce a smoother circle. Default is 20.</param>
-    public void CreateIndicator(unit unit, float range, int segments = 20)
+    /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
+    public void CreateIndicator(unit unit, float range, int segments = 20, string lightningType = LIGHTNING_TYPE)
     {
         float x = unit.X;
         float y = unit.Y;
@@ -50,7 +53,7 @@ public class RangeIndicator
             float endX = x + (range * Cos(angle2));
             float endY = y + (range * Sin(angle2));
 
-            var lightning = AddLightning(LIGHTNING_TYPE, true, startX, startY, endX, endY);
+            var lightning = AddLightning(lightningType, true, startX, startY, endX, endY);
             LightningObjects.Add(lightning);
         }
     }
@@ -65,6 +68,7 @@ public class RangeIndicator
             LightningObjects[i].Dispose();
             LightningObjects[i] = null;
         }
+        LightningObjects.Clear();
 
         ObjectPool.ReturnObject(this);
     }

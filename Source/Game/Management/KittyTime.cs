@@ -14,8 +14,8 @@ public class KittyTime
     public KittyTime(Kitty kitty)
     {
         Kitty = kitty;
-        Initialize();
         _cachedProgress = () => Progress.CalculateProgress(Kitty);
+        Initialize();
     }
 
     private void Initialize()

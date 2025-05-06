@@ -10,7 +10,7 @@ public class Howler : Affix
     private const string ROAR_EFFECT = "Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl";
     private const float MIN_HOWL_TIME = 10.0f;
     private const float MAX_HOWL_TIME = 20.0f;
-    private timer HowlTimer;
+    private AchesTimers HowlTimer;
     private group NearbyWolves = group.Create();
 
     public Howler(Wolf unit) : base(unit)
@@ -30,22 +30,22 @@ public class Howler : Affix
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        GC.RemoveTimer(ref HowlTimer);
+        HowlTimer.Dispose();
         GC.RemoveGroup(ref NearbyWolves);
         base.Remove();
     }
 
     private void RegisterTimerEvents()
     {
-        HowlTimer = timer.Create();
-        HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+        HowlTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        HowlTimer.Timer.Start(GetRandomHowlTime(), false, Howl);
     }
 
     private void Howl()
     {
         try
         {
-            HowlTimer.Start(GetRandomHowlTime(), false, Howl);
+            HowlTimer.Timer.Start(GetRandomHowlTime(), false, Howl);
             if (Unit.IsPaused) return;
             Utility.CreateEffectAndDispose(ROAR_EFFECT, Unit.Unit, "origin");
             NearbyWolves.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, HOWL_RADIUS, FilterList.DogFilter);
