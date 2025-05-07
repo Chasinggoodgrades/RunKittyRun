@@ -145,11 +145,11 @@ public class Kitty
     {
         if (!InvulTest) return;
         Invulnerable = true;
-        InvulTimer.Start(InvulDuration, false, ErrorHandler.Wrap(() =>
+        InvulTimer.Start(InvulDuration, false, () =>
         {
             Invulnerable = false;
             InvulTimer.Pause();
-        }));
+        });
     }
 
     private void InitData()
@@ -202,7 +202,7 @@ public class Kitty
         if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
         {
             this.aiController?.StartAi();
-            Unit.AddItem(FourCC("bspd"));
+            Unit.AddItem(FourCC("bspd")); // boots
         }
     }
 
@@ -281,9 +281,9 @@ public class Kitty
         if (this.SpinCamSpeed != 0)
         {
             if (SpinCamTimer == null)
-            {
+            {   
                 SpinCamTimer = timer.Create();
-                SpinCamTimer.Start(0.0075f, true, ErrorHandler.Wrap(SpinCamActions));
+                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
             }
         }
         else

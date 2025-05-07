@@ -31,8 +31,8 @@ public class SoloDeathTimer
 
     private void StartTimers()
     {
-        ReviveTimer.Start(TIME_TO_REVIVE, false, ErrorHandler.Wrap(Revive));
-        UpdateTextTimer.Start(0.03f, true, ErrorHandler.Wrap(UpdateFloatingText));
+        ReviveTimer.Start(TIME_TO_REVIVE, false, Revive);
+        UpdateTextTimer.Start(0.03f, true, UpdateFloatingText);
     }
 
     private void UpdateFloatingText()
@@ -42,15 +42,23 @@ public class SoloDeathTimer
 
     private void Revive()
     {
-        var kitty = Globals.ALL_KITTIES[Player];
-        var lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone];
-        var x = lastCheckpoint.Rect_.CenterX;
-        var y = lastCheckpoint.Rect_.CenterY;
-        kitty.ReviveKitty();
-        kitty.Unit.SetPosition(x, y);
-        if (Player.IsLocal) PanCameraToTimed(x, y, 0.00f);
-        CameraUtil.RelockCamera(Player);
-        Dispose();
+        try
+        {
+            var kitty = Globals.ALL_KITTIES[Player];
+            var lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone];
+            var x = lastCheckpoint.Rect_.CenterX;
+            var y = lastCheckpoint.Rect_.CenterY;
+            kitty.ReviveKitty();
+            kitty.Unit.SetPosition(x, y);
+            if (Player.IsLocal) PanCameraToTimed(x, y, 0.00f);
+            CameraUtil.RelockCamera(Player);
+            Dispose();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in SoloDeathTimer.Revive: {e.Message}");
+            Dispose();
+        }
     }
 
     private void Dispose()

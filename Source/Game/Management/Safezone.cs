@@ -37,23 +37,30 @@ public class Safezone
     private void EnterSafezoneEvents()
     {
         Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
-        Trigger.AddAction(ErrorHandler.Wrap(EnterSafezoneActions));
+        Trigger.AddAction(EnterSafezoneActions);
     }
 
     private void EnterSafezoneActions()
     {
-        var unit = @event.Unit;
-        if (WolfEntersSafezoneActions(unit)) return;
-        var player = unit.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
-        SafezoneAdditions(kitty);
-        kitty.CurrentSafeZone = ID;
-        WolfLaneHider.LanesHider();
-        if (AwardedPlayers.Contains(player) || ID == 0) return;
-        Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
-        unit.Experience += Resources.SafezoneExperience;
-        AwardedPlayers.Add(player);
-        DeathlessChallenges.DeathlessCheck(kitty);
+        try
+        {
+            var unit = @event.Unit;
+            if (WolfEntersSafezoneActions(unit)) return;
+            var player = unit.Owner;
+            var kitty = Globals.ALL_KITTIES[player];
+            SafezoneAdditions(kitty);
+            kitty.CurrentSafeZone = ID;
+            WolfLaneHider.LanesHider();
+            if (AwardedPlayers.Contains(player) || ID == 0) return;
+            Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
+            unit.Experience += Resources.SafezoneExperience;
+            AwardedPlayers.Add(player);
+            DeathlessChallenges.DeathlessCheck(kitty);
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in EnterSafezoneActions: {e.Message}");
+        }
     }
 
     /// <summary>

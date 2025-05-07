@@ -82,11 +82,11 @@ public static class FrameManager
         // Close Actions
         var closeTrigger = trigger.Create();
         closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click);
-        closeTrigger.AddAction(ErrorHandler.Wrap(() =>
+        closeTrigger.AddAction( () =>
         {
             if (!@event.Player.IsLocal) return;
             parent.Visible = false;
-        }));
+        });
 
         return header;
     }
@@ -196,7 +196,7 @@ public static class FrameManager
             var player = Globals.ALL_PLAYERS[i];
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
         }
-        ESCTrigger.AddAction(ErrorHandler.Wrap(ESCActions));
+        ESCTrigger.AddAction(ESCActions);
     }
 
     public static void RefreshFrame(framehandle frame)

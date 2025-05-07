@@ -55,7 +55,7 @@ public class Blitzer : Affix
         MoveTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         PreBlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
-        MoveTimer.Timer.Start(randomFlyTime, false, ErrorHandler.Wrap(PreBlitzerMove)); // initial move
+        MoveTimer.Timer.Start(randomFlyTime, false, PreBlitzerMove); // initial move
         BlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     }
 

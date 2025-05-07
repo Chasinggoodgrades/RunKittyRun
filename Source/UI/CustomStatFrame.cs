@@ -108,12 +108,12 @@ public static class CustomStatFrame
         BlzFrameSetParent(BlzGetFrameByName("SimpleInfoPanelIconAlly", 7), hideParent);
 
         trigger trig = trigger.Create();
-        trig.AddAction(ErrorHandler.Wrap(() =>
+        trig.AddAction(() =>
         {
             var player = @event.Player;
             var unit = @event.Unit;
             SelectedUnit[player] = unit;
-        }));
+        });
 
         foreach (var player in Globals.ALL_PLAYERS)
             if (player.SlotState == playerslotstate.Playing) trig.RegisterPlayerUnitEvent(player, playerunitevent.Selected, null);

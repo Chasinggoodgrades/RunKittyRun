@@ -87,7 +87,7 @@ public class FrostbiteRing : Relic
         }
         catch (Exception e)
         {
-            Logger.Warning(e.Message);
+            Logger.Warning($"Error in FrostbiteRing.FrostbiteEffect {e.Message}");
         }
     }
 

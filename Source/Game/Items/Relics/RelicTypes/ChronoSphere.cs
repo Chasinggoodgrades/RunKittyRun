@@ -68,7 +68,7 @@ public class ChronoSphere : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
 
-        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
+        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, (SetAbilityData));
         SetAbilityData();
     }
 
@@ -77,18 +77,25 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
-        LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
+        LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, (CaptureLocation));
         CaptureLocation();
     }
 
     private void CaptureLocation()
     {
-        if (Kitty.CurrentStats.ChronoSphereCD) return; // let's not proc if on cooldown
-        var unit = Kitty.Unit;
-        CapturedLocation = (unit.X, unit.Y, unit.Facing);
-        LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
-        LocationEffect.Scale = 0.55f;
-        Utility.SimpleTimer(0.25f, () => LocationEffect?.Dispose());
+        try
+        {
+            if (Kitty.CurrentStats.ChronoSphereCD) return; // let's not proc if on cooldown
+            var unit = Kitty.Unit;
+            CapturedLocation = (unit.X, unit.Y, unit.Facing);
+            LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
+            LocationEffect.Scale = 0.55f;
+            Utility.SimpleTimer(0.25f, () => LocationEffect?.Dispose());
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.CaptureLocation: {e.Message}");
+        }
     }
 
     private float RandomMagnitude()

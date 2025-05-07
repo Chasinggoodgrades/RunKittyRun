@@ -102,7 +102,11 @@ public class WolfPoint
     private void StartMovingOrders()
     {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
-        if (Wolf.IsPaused || Wolf.IsReviving) return;
+        if (Wolf.IsPaused || Wolf.IsReviving)
+        {
+            Wolf.Unit.ClearOrders();
+            return;
+        }
 
         try
         {
@@ -117,7 +121,7 @@ public class WolfPoint
         }
         catch (Exception ex)
         {
-            Logger.Critical(ex.Message);
+            Logger.Critical($"WolfPoint.StartMovingOrders {ex.Message}");
         }
     }
 

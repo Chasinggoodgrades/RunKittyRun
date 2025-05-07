@@ -62,7 +62,7 @@ public class Bomber : Affix
 
     private void RegisterTimers()
     {
-        ExplodeTimer.Timer.Start(ExplosionInterval(), false, ErrorHandler.Wrap(StartExplosion));
+        ExplodeTimer.Timer.Start(ExplosionInterval(), false, StartExplosion);
     }
 
     private void StartExplosion()

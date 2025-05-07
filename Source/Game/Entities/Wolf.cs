@@ -1,7 +1,6 @@
 ﻿using Source.Init;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -43,7 +42,7 @@ public class Wolf
         InitializeWolf();
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
-        Utility.SimpleTimer(2.0f, () => StartWandering());
+        WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
 
 
@@ -98,8 +97,9 @@ public class Wolf
     /// </summary>
     public void WolfMove(bool forced = false)
     {
-        if ( (IsPaused || IsReviving) && !forced) return;
+        if ((IsPaused || IsReviving) && !forced) return;
         if (HasAffix("Blitzer")) return;
+        if (IsPaused && HasAffix("Bomber")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
         var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
         WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
@@ -258,7 +258,7 @@ public class Wolf
         Affixes.Remove(affix);
         affix.Remove();
         AffixFactory.AllAffixes.Remove(affix);
-        
+
     }
 
     public void RemoveAffix(string affixName)
@@ -276,7 +276,7 @@ public class Wolf
     public bool HasAffix(string affixName)
     {
         if (Affixes.Count == 0) return false;
-        for(int i = 0; i < Affixes.Count; i++)
+        for (int i = 0; i < Affixes.Count; i++)
             if (Affixes[i].GetType().Name == affixName) return true;
 
         return false;

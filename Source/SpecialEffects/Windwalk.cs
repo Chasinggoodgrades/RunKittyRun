@@ -18,7 +18,7 @@ public static class Windwalk
         foreach (var player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
-        Trigger.AddAction(ErrorHandler.Wrap(ApplyWindwalkEffect));
+        Trigger.AddAction(ApplyWindwalkEffect);
     }
 
     private static void ApplyWindwalkEffect()
@@ -29,19 +29,26 @@ public static class Windwalk
         var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
         var duration = 3.0f + (2.0f * abilityLevel);
         var wwID = kitty.ActiveAwards.WindwalkID;
-        AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
-        if (wwID != 0)
+        try
         {
-            var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
-            var visual = reward.ModelPath;
-            var e = caster.AddSpecialEffect(visual, "origin");
-            if (e != null)
+            AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
+            if (wwID != 0)
             {
-                Utility.SimpleTimer(duration, () =>
+                var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
+                var visual = reward.ModelPath;
+                var e = caster.AddSpecialEffect(visual, "origin");
+                if (e != null)
                 {
-                    if (e != null) DestroyEffect(e);
-                });
+                    Utility.SimpleTimer(duration, () =>
+                    {
+                        if (e != null) DestroyEffect(e);
+                    });
+                }
             }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in Windwalk.ApplyWindwalkEffect: {e.Message}");
         }
     }
 }
