@@ -20,8 +20,8 @@ public class ChronoSphere : Relic
     private ability Ability;
     private Kitty Kitty;
     private float Magnitude;
-    private AchesTimers MagnitudeTimer;
-    private AchesTimers LocationCaptureTimer;
+    private AchesTimers MagnitudeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+    private AchesTimers LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     private effect LocationEffect = null;
     private (float, float, float) CapturedLocation; // x, y, facing
 
@@ -47,8 +47,8 @@ public class ChronoSphere : Relic
 
     public override void RemoveEffect(unit Unit)
     {
-        MagnitudeTimer.Dispose();
-        LocationCaptureTimer.Dispose();
+        MagnitudeTimer?.Dispose();
+        LocationCaptureTimer?.Dispose();
         GC.RemoveEffect(ref LocationEffect);
     }
 
@@ -67,7 +67,7 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
-        MagnitudeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+
         MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, ErrorHandler.Wrap(SetAbilityData));
         SetAbilityData();
     }
@@ -77,7 +77,6 @@ public class ChronoSphere : Relic
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 1) return;
-        LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, ErrorHandler.Wrap(CaptureLocation));
         CaptureLocation();
     }
@@ -103,18 +102,32 @@ public class ChronoSphere : Relic
 
     private void RewindTime()
     {
-        Kitty.Invulnerable = true;
-        Kitty.Unit.SetPosition(CapturedLocation.Item1, CapturedLocation.Item2);
-        Kitty.Unit.SetFacing(CapturedLocation.Item3);
-        Kitty.Unit.IsPaused = true;
-        Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit);
-
-        if (Kitty.Player.IsLocal) PanCameraToTimed(Kitty.Unit.X, Kitty.Unit.Y, 0.0f);
-        Utility.SimpleTimer(2.0f, () =>
+        try
         {
-            Kitty.Unit.IsPaused = false;
-            Utility.SimpleTimer(1.0f, () => Kitty.Invulnerable = false);
-        });
+            Kitty.Invulnerable = true;
+            var x = CapturedLocation.Item1;
+            var y = CapturedLocation.Item2;
+            if (x == 0 && y == 0)
+            {
+                x = Kitty.Unit.X;
+                y = Kitty.Unit.Y;
+            }
+            Kitty.Unit.SetPosition(x, y);
+            Kitty.Unit.SetFacing(CapturedLocation.Item3);
+            Kitty.Unit.IsPaused = true;
+            Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit);
+
+            if (Kitty.Player.IsLocal) PanCameraToTimed(Kitty.Unit.X, Kitty.Unit.Y, 0.0f);
+            Utility.SimpleTimer(2.0f, () =>
+            {
+                Kitty.Unit.IsPaused = false;
+                Utility.SimpleTimer(1.0f, () => Kitty.Invulnerable = false);
+            });
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.RewindTime: {e.Message}");
+        }
     }
 
     public static bool RewindDeath(Kitty kitty)

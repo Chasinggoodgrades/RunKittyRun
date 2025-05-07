@@ -23,18 +23,36 @@ public class Chaos : Affix
 
     public override void Remove()
     {
-        currentAffix.Remove();
-        RotationTimer.Dispose();
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        base.Remove();
+        try
+        {
+            currentAffix.Remove();
+            RotationTimer.Dispose();
+            Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+            base.Remove();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Chaos.Remove: {e.Message}");
+            base.Remove();
+        }
     }
 
     private void RegisterTimer()
     {
-        RotationTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-        RotationTimer.Timer.Start(rotationTime, true, RotateAffix);
-        currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
-        currentAffix.Apply();
+        try
+        {
+            RotationTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+            RotationTimer.Timer.Start(rotationTime, true, RotateAffix);
+            currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
+            currentAffix.Apply();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Chaos.RegisterTimer: {e.Message}");
+            RotationTimer.Dispose();
+            currentAffix?.Remove();
+            currentAffix = null;
+        }
     }
 
     private void RotateAffix()
