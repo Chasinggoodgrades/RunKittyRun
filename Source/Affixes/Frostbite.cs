@@ -55,44 +55,50 @@ public class Frostbite : Affix
     private void RegisterEvents()
     {
         PeriodicRangeTrigger.RegisterTimerEvent(0.3f, true);
-        PeriodicRangeTrigger.AddAction(ErrorHandler.Wrap(PeriodicRangeCheck));
+        PeriodicRangeTrigger.AddAction(PeriodicRangeCheck);
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, FilterList.KittyFilter);
-        InRangeTrigger.AddAction(ErrorHandler.Wrap(() =>
+        InRangeTrigger.AddAction(() =>
         {
             var target = @event.Unit;
             if (!target.Alive) return; // must be alive
             if (Frostbitten.ContainsKey(target)) return; // cannot be bitten already
             if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return; // must be in same lane
             SlowEffect(target);
-        }));
+        });
     }
 
     private void PeriodicRangeCheck()
     {
         if (Frostbitten.Count == 0) return;
-
-        foreach (var kvp in Frostbitten)
+        try
         {
-            var target = kvp.Key;
-            var originalSpeed = kvp.Value;
-
-            if (target.IsInRange(Unit.Unit, FROSTBITE_RADIUS)) continue;
-
-            target.MovementSpeed = originalSpeed;
-            TempList.Add(target);
-        }
-
-        for (int i = 0; i < TempList.Count; i++)
-        {
-            var target = TempList[i];
-            Frostbitten.Remove(target);
-            if (Effects.ContainsKey(target))
+            foreach (var kvp in Frostbitten)
             {
-                Effects[target]?.Dispose();
-            }
-        }
+                var target = kvp.Key;
+                var originalSpeed = kvp.Value;
 
-        TempList.Clear();
+                if (target.IsInRange(Unit.Unit, FROSTBITE_RADIUS)) continue;
+
+                target.MovementSpeed = originalSpeed;
+                TempList.Add(target);
+            }
+
+            for (int i = 0; i < TempList.Count; i++)
+            {
+                var target = TempList[i];
+                Frostbitten.Remove(target);
+                if (Effects.ContainsKey(target))
+                {
+                    Effects[target]?.Dispose();
+                }
+            }
+
+            TempList.Clear();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Frostbite.PeriodicRangeCheck: {e.Message}");
+        }
     }
 
     private void SlowEffect(unit target)

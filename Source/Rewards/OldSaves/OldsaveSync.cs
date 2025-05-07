@@ -21,12 +21,12 @@ public static class OldsaveSync
         {
             BlzTriggerRegisterPlayerSyncEvent(Trigger, player, SYNC_PREFIX, false);
         }
-        Trigger.AddAction(ErrorHandler.Wrap(() =>
+        Trigger.AddAction(() =>
         {
             SavePlayer = GetTriggerPlayer();
             SaveLoadCode = BlzGetTriggerSyncData();
             LoadActions();
-        }));
+        });
     }
 
     public static void LoadActions()

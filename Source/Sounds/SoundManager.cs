@@ -150,32 +150,39 @@ public static class SoundManager
 
     public static void PlayLastManStandingSound()
     {
-        LastManStanding.Start(0.8f, false, ErrorHandler.Wrap(() =>
+        LastManStanding.Start(0.8f, false, () =>
         {
             var count = 0;
             unit u = null;
 
-            for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+            try
             {
-                var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
-                if (kitty.Alive)
+                for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
                 {
-                    count += 1;
-                    u = kitty.Unit;
+                    var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+                    if (kitty.Alive)
+                    {
+                        count += 1;
+                        u = kitty.Unit;
+                    }
+                    if (count > 1) return;
                 }
-                if (count > 1) return;
-            }
 
-            if (count == 0) return;
-            var s = LAST_MAN_STANDING_SOUND;
-            var e = u.AddSpecialEffect("TalkToMe.mdx", "head");
-            Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!|r");
-            s.Stop(false, false);
-            s.Start();
-            Utility.SimpleTimer(2.0f, () =>
+                if (count == 0) return;
+                var s = LAST_MAN_STANDING_SOUND;
+                var e = u.AddSpecialEffect("TalkToMe.mdx", "head");
+                Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!|r");
+                s.Stop(false, false);
+                s.Start();
+                Utility.SimpleTimer(2.0f, () =>
+                {
+                    GC.RemoveEffect(ref e);
+                });
+            }
+            catch (System.Exception e)
             {
-                GC.RemoveEffect(ref e);
-            });
-        }));
+                Logger.Warning($"Error in SoundManager.PlayLastManStandingSound: {e.Message}");
+            }
+        });
     }
 }

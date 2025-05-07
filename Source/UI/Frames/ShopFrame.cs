@@ -137,15 +137,15 @@ public static class ShopFrame
 
         var BuyTrigger = trigger.Create();
         BuyTrigger.RegisterFrameEvent(buyButton, frameeventtype.Click);
-        BuyTrigger.AddAction(ErrorHandler.Wrap(BuySelectedItem));
+        BuyTrigger.AddAction(BuySelectedItem);
 
         var SellTrigger = trigger.Create();
         SellTrigger.RegisterFrameEvent(sellButton, frameeventtype.Click);
-        SellTrigger.AddAction(ErrorHandler.Wrap(SellSelectedItem));
+        SellTrigger.AddAction(SellSelectedItem);
 
         var UpgradeTrigger = trigger.Create();
         UpgradeTrigger.RegisterFrameEvent(upgradeButton, frameeventtype.Click);
-        UpgradeTrigger.AddAction(ErrorHandler.Wrap(RelicFunctions.UpgradeRelic));
+        UpgradeTrigger.AddAction(RelicFunctions.UpgradeRelic);
     }
 
     private static void LoadItemsIntoPanels()
@@ -183,7 +183,7 @@ public static class ShopFrame
             var relic = items[i];
             CreateShopitemTooltips(button, relic);
             itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
-            itemDetails.AddAction(ErrorHandler.Wrap(() => ShowItemDetails(relic)));
+            itemDetails.AddAction( () => ShowItemDetails(relic));
         }
 
         float panelHeight = (rows * buttonHeight) + panelPadding;
@@ -340,84 +340,98 @@ public static class ShopFrame
     private static void BuySelectedItem()
     {
         var player = @event.Player;
-
-        if (player.IsLocal)
+        try
         {
-            buyButton.Visible = false;
-            buyButton.Visible = true;
+            if (player.IsLocal)
+            {
+                buyButton.Visible = false;
+                buyButton.Visible = true;
+            }
+            if (!ShopUtil.PlayerIsDead(player) && SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+
+                if (!HasEnoughGold(player, selectedItem.Cost))
+                {
+                    NotEnoughGold(player, selectedItem.Cost);
+                    return;
+                }
+
+                switch (selectedItem.Type)
+                {
+                    case ShopItemType.Relic:
+                        RelicFunctions.HandleRelicPurchase(player, selectedItem, kitty);
+                        break;
+
+                    case ShopItemType.Reward:
+                        AwardManager.GiveReward(player, selectedItem.Award);
+                        ReduceGold(player, selectedItem.Cost);
+                        break;
+
+                    case ShopItemType.Misc:
+                        AddItem(player, selectedItem.ItemID);
+                        ReduceGold(player, selectedItem.Cost);
+                        break;
+                }
+            }
+            // hide shop after purchase
+            if (player.IsLocal)
+                shopFrame.Visible = !shopFrame.Visible;
+
         }
-        if (!ShopUtil.PlayerIsDead(player) && SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+        catch (Exception ex)
         {
-            var kitty = Globals.ALL_KITTIES[player];
-
-            if (!HasEnoughGold(player, selectedItem.Cost))
-            {
-                NotEnoughGold(player, selectedItem.Cost);
-                return;
-            }
-
-            switch (selectedItem.Type)
-            {
-                case ShopItemType.Relic:
-                    RelicFunctions.HandleRelicPurchase(player, selectedItem, kitty);
-                    break;
-
-                case ShopItemType.Reward:
-                    AwardManager.GiveReward(player, selectedItem.Award);
-                    ReduceGold(player, selectedItem.Cost);
-                    break;
-
-                case ShopItemType.Misc:
-                    AddItem(player, selectedItem.ItemID);
-                    ReduceGold(player, selectedItem.Cost);
-                    break;
-            }
+            Logger.Warning($"Error in BuySelectedItem: {ex.Message}");
         }
-        // hide shop after purchase
-        if (player.IsLocal)
-            shopFrame.Visible = !shopFrame.Visible;
     }
 
     private static void SellSelectedItem()
     {
         var player = @event.Player;
-        if (player.IsLocal)
+        try
         {
-            sellButton.Visible = false; sellButton.Visible = true;
-        }
-        if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
-        {
-            var itemID = selectedItem.ItemID;
-            var kitty = Globals.ALL_KITTIES[player];
-            if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
-            if (selectedItem.Type == ShopItemType.Relic)
+            if (player.IsLocal)
             {
-                if (!kitty.Alive || kitty.ProtectionActive)
+                sellButton.Visible = false; sellButton.Visible = true;
+            }
+            if (SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+            {
+                var itemID = selectedItem.ItemID;
+                var kitty = Globals.ALL_KITTIES[player];
+                if (!Utility.UnitHasItem(kitty.Unit, itemID)) return;
+                if (selectedItem.Type == ShopItemType.Relic)
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
+                    if (!kitty.Alive || kitty.ProtectionActive)
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
+                        return;
+                    }
+
+                    if (!CanSellRelic(kitty.Unit))
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.|r");
+                        return;
+                    }
+
+                    // Find the shopItem type associated with the selected item that the player owns.
+                    var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
+
+                    if (!RelicFunctions.CannotSellOnCD(kitty, relic)) return;
+
+                    Utility.RemoveItemFromUnit(kitty.Unit, itemID);
+                    player.Gold += selectedItem.Cost;
+                    relic?.RemoveEffect(kitty.Unit);
+                    kitty.Relics.Remove(relic);
                     return;
                 }
-
-                if (!CanSellRelic(kitty.Unit))
-                {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.|r");
-                    return;
-                }
-
-                // Find the shopItem type associated with the selected item that the player owns.
-                var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());
-
-                if (!RelicFunctions.CannotSellOnCD(kitty, relic)) return;
 
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID);
                 player.Gold += selectedItem.Cost;
-                relic?.RemoveEffect(kitty.Unit);
-                kitty.Relics.Remove(relic);
-                return;
             }
-
-            Utility.RemoveItemFromUnit(kitty.Unit, itemID);
-            player.Gold += selectedItem.Cost;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"Error in SellSelectedItem: {ex.Message}");
         }
     }
 

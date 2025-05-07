@@ -5,72 +5,86 @@ public static class RelicFunctions
 {
     public static void HandleRelicPurchase(player player, ShopItem selectedItem, Kitty kitty)
     {
-        if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
+        try
         {
-            AlreadyHaveRelic(player);
-            return;
+            if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID))
+            {
+                AlreadyHaveRelic(player);
+                return;
+            }
+
+            if (!RelicLevel(kitty.Unit))
+            {
+                NotHighEnoughLevel(player);
+                return;
+            }
+
+            if (!HasInventorySpace(kitty.Unit))
+            {
+                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
+                return;
+            }
+
+            if (!CanGetAnotherRelic(kitty.Unit)) return;
+
+            if (RelicMaxedOut(player)) return;
+
+            ReduceGold(player, selectedItem.Cost);
+            var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
+            if (newRelic != null)
+            {
+                kitty.Relics.Add(newRelic);
+                newRelic.ApplyEffect(kitty.Unit);
+                AddItem(player, selectedItem.ItemID);
+                Utility.SimpleTimer(0.21f, () => newRelic.SetUpgradeLevelDesc(kitty.Unit));
+            }
         }
-
-        if (!RelicLevel(kitty.Unit))
+        catch (Exception e)
         {
-            NotHighEnoughLevel(player);
-            return;
-        }
-
-        if (!HasInventorySpace(kitty.Unit))
-        {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
-            return;
-        }
-
-        if (!CanGetAnotherRelic(kitty.Unit)) return;
-
-        if (RelicMaxedOut(player)) return;
-
-        ReduceGold(player, selectedItem.Cost);
-        var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
-        if (newRelic != null)
-        {
-            kitty.Relics.Add(newRelic);
-            newRelic.ApplyEffect(kitty.Unit);
-            AddItem(player, selectedItem.ItemID);
-            Utility.SimpleTimer(0.21f, () => newRelic.SetUpgradeLevelDesc(kitty.Unit));
+            Logger.Warning($"Error in HandleRelicPurchase: {e.Message}");
         }
     }
 
     public static void UpgradeRelic()
     {
-        var player = @event.Player;
-        if (player.IsLocal)
+        try
         {
-            ShopFrame.upgradeButton.Visible = false; ShopFrame.upgradeButton.Visible = true;
+            var player = @event.Player;
+            if (player.IsLocal)
+            {
+                ShopFrame.upgradeButton.Visible = false; ShopFrame.upgradeButton.Visible = true;
+            }
+            if (ShopFrame.SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+            {
+                var itemID = selectedItem.ItemID;
+                var relicType = selectedItem.Relic.GetType();
+                var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
+                if (playerRelic == null) return;
+                var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
+                var playerUpgradesRelic = playerRelic.GetCurrentUpgrade();
+
+                if (playerUpgradesRelic == null) return;
+                if (ActiveShadowKitty(player)) return;
+
+                var goldCost = playerUpgradesRelic.Cost;
+                if (player.Gold < goldCost)
+                {
+                    ShopFrame.NotEnoughGold(player, goldCost);
+                    return;
+                }
+                if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
+                    player.Gold -= goldCost;
+                    if (player.IsLocal) ShopFrame.RefreshUpgradeTooltip(playerRelic);
+                }
+                else
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
+            }
         }
-        if (ShopFrame.SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
+        catch (Exception e)
         {
-            var itemID = selectedItem.ItemID;
-            var relicType = selectedItem.Relic.GetType();
-            var playerRelic = Globals.ALL_KITTIES[player].Relics.Find(x => x.GetType() == relicType);
-            if (playerRelic == null) return;
-            var playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player);
-            var playerUpgradesRelic = playerRelic.GetCurrentUpgrade();
-
-            if (playerUpgradesRelic == null) return;
-            if (ActiveShadowKitty(player)) return;
-
-            var goldCost = playerUpgradesRelic.Cost;
-            if (player.Gold < goldCost)
-            {
-                ShopFrame.NotEnoughGold(player, goldCost);
-                return;
-            }
-            if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
-            {
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
-                player.Gold -= goldCost;
-                if (player.IsLocal) ShopFrame.RefreshUpgradeTooltip(playerRelic);
-            }
-            else
-                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
+            Logger.Warning($"Error in UpgradeRelic: {e.Message}");
         }
     }
 

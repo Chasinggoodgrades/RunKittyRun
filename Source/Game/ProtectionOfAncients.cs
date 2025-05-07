@@ -91,17 +91,15 @@ public static class ProtectionOfAncients
         LevelUpTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
-        LevelUpTrigger.AddAction(ErrorHandler.Wrap(() => SetProtectionOfAncientsLevel(@event.Unit)));
+        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
     }
 
     private static void RegisterEvents()
     {
         Trigger = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
-        Trigger.AddAction(ErrorHandler.Wrap(ActivationEvent));
-        Trigger.AddCondition(Condition(() =>
-        @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
+        Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
+        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
+        Trigger.AddAction(ActivationEvent);
     }
 
     private static void ActivationEvent()

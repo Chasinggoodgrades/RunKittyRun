@@ -25,7 +25,7 @@ public static class ItemSpawner
 
     private static void RegisterEvent()
     {
-        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, ErrorHandler.Wrap(SpawnItems));
+        SpawnTimer.Start(ITEM_SPAWN_INTERVAL, true, SpawnItems);
     }
 
     private static void SpawnItems()

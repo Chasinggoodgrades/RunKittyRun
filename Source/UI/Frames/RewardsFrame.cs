@@ -155,37 +155,43 @@ public static class RewardsFrame
 
         var t = trigger.Create();
         t.RegisterFrameEvent(button, frameeventtype.Click);
-        t.AddAction(ErrorHandler.Wrap(RandomRewardsButtonActions));
+        t.AddAction(RandomRewardsButtonActions);
     }
 
     private static void RandomRewardsButtonActions()
     {
         var player = @event.Player;
         var frame = @event.Frame;
-
-        RewardHelp.ClearRewards();
-
-        foreach (var reward in RewardsManager.Rewards)
+        try
         {
-            var stats = Globals.ALL_KITTIES[player].SaveData;
-            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
-            if (value <= 0) continue;
+            RewardHelp.ClearRewards();
 
-            RewardHelp.AddReward(reward);
+            foreach (var reward in RewardsManager.Rewards)
+            {
+                var stats = Globals.ALL_KITTIES[player].SaveData;
+                var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
+                if (value <= 0) continue;
+
+                RewardHelp.AddReward(reward);
+            }
+
+            Reward selectedHat = (RewardHelp.Hats.Count > 0) ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.Count - 1)] : null;
+            Reward selectedWings = (RewardHelp.Wings.Count > 0) ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.Count - 1)] : null;
+            Reward selectedTrail = (RewardHelp.Trails.Count > 0) ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null;
+            Reward selectedAura = (RewardHelp.Auras.Count > 0) ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null;
+
+            selectedHat?.ApplyReward(player);
+            selectedWings?.ApplyReward(player);
+            selectedTrail?.ApplyReward(player);
+            selectedAura?.ApplyReward(player);
+
+            if (!player.IsLocal) return;
+            FrameManager.RefreshFrame(frame);
         }
-
-        Reward selectedHat = (RewardHelp.Hats.Count > 0) ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.Count - 1)] : null;
-        Reward selectedWings = (RewardHelp.Wings.Count > 0) ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.Count - 1)] : null;
-        Reward selectedTrail = (RewardHelp.Trails.Count > 0) ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null;
-        Reward selectedAura = (RewardHelp.Auras.Count > 0) ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null;
-
-        selectedHat?.ApplyReward(player);
-        selectedWings?.ApplyReward(player);
-        selectedTrail?.ApplyReward(player);
-        selectedAura?.ApplyReward(player);
-
-        if (!player.IsLocal) return;
-        FrameManager.RefreshFrame(frame);
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in RandomRewardsButtonActions: {e.Message}");
+        }
     }
 
     private static void AppendRewardsToFrames()
@@ -224,7 +230,7 @@ public static class RewardsFrame
 
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
-            Trigger.AddAction(ErrorHandler.Wrap(() => RewardButtonActions(reward)));
+            Trigger.AddAction(() => RewardButtonActions(reward));
         }
 
         GC.RemoveDictionary(ref count);

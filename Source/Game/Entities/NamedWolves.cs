@@ -41,6 +41,7 @@ public static class NamedWolves
         StanWolf.PauseSelf(true);
         StanWolf.Unit.SetVertexColor(235, 115, 255);
         StanWolf.Unit.Name = STAN_NAME;
+        StanWolf.OVERHEAD_EFFECT_PATH = "";
 
         StanWolf.Texttag ??= texttag.Create();
         StanWolf.Texttag.SetText(StanWolf.Unit.Name, 0.015f);

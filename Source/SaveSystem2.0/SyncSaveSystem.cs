@@ -32,7 +32,7 @@ public class SyncSaveLoad
             SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
             SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false);
         }
-        SyncEvent.AddAction(ErrorHandler.Wrap(OnSync));
+        SyncEvent.AddAction(OnSync);
     }
 
     /// <summary>

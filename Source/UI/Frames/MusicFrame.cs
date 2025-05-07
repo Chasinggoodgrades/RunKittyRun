@@ -67,14 +67,14 @@ public static class MusicFrame
         var mousewheel = trigger.Create();
         Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
         mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        Trigger.AddAction(ErrorHandler.Wrap(() =>
+        Trigger.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
             MusicSliderValues[player] = (int)@event.FrameValue;
             if (player.IsLocal) PopulateMusicFrame(player);
-        }));
-        mousewheel.AddAction(ErrorHandler.Wrap(() =>
+        });
+        mousewheel.AddAction(() =>
         {
             var frame = @event.Frame;
             var player = @event.Player;
@@ -83,7 +83,7 @@ public static class MusicFrame
             MusicSlider.Value = frameValue > 0 ? frameValue + 1.0f : frameValue - 1.0f;
             var value = MusicSliderValues[player];
             if (player.IsLocal) PopulateMusicFrame(player);
-        }));
+        });
     }
 
     private static void InitializeMusicButtons()

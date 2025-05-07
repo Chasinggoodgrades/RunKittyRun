@@ -12,7 +12,7 @@ public static class Progress
     {
         CalculateTotalDistance();
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        TeamProgTimer.Start(0.2f, true, ErrorHandler.Wrap(TeamProgressTracker));
+        TeamProgTimer.Start(0.2f, true, TeamProgressTracker);
     }
 
     public static void CalculateProgress(Kitty kitty)
@@ -24,11 +24,18 @@ public static class Progress
     private static void TeamProgressTracker()
     {
         if (!Globals.GAME_ACTIVE) return;
-        foreach (var Team in Globals.ALL_TEAMS)
+        try
         {
-            Team.Value.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team.Value));
+            foreach (var Team in Globals.ALL_TEAMS)
+            {
+                Team.Value.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team.Value));
+            }
+            TeamsMultiboard.UpdateTeamStatsMB();
         }
-        TeamsMultiboard.UpdateTeamStatsMB();
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in TeamProgressTracker. {e.Message}");
+        }
     }
 
     private static string CalculateTeamProgress(Team Team)

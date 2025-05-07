@@ -47,7 +47,7 @@ public static class UrnSoul
     {
         var trig = trigger.Create();
         trig.RegisterTimerEvent(RotationTime, true);
-        trig.AddAction(ErrorHandler.Wrap(RotationActions));
+        trig.AddAction(RotationActions);
         return trig;
     }
 
@@ -64,39 +64,47 @@ public static class UrnSoul
         var trig = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
             trig.RegisterPlayerUnitEvent(player, playerunitevent.UseItem, null);
-        trig.AddAction(ErrorHandler.Wrap(UrnUsageActions));
+        trig.AddAction(UrnUsageActions);
         return trig;
     }
 
     private static void UrnUsageActions()
     {
-        var item = @event.ManipulatedItem;
-        var player = @event.Player;
-        var unit = @event.Unit;
-        StartEventRegion = Regions.Urn_Soul_Region.Region;
+        try
+        {
+            var item = @event.ManipulatedItem;
+            var player = @event.Player;
+            var unit = @event.Unit;
+            StartEventRegion = Regions.Urn_Soul_Region.Region;
 
-        if (item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return;
-        if (!StartEventRegion.Contains(unit)) return;
+            if (item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return;
+            if (!StartEventRegion.Contains(unit)) return;
 
-        // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
-        var e = effect.Create("Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl", unit.X, unit.Y);
-        e.Dispose();
+            // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
+            var e = effect.Create("Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl", unit.X, unit.Y);
+            e.Dispose();
 
-        // Quest text.. 4 sec delay for next part.
-        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW}As the dust disappears you notice a faint writing above the brazier...|r");
-        Utility.SimpleTimer(4.0f, () => player.DisplayTimedTextTo(15.0f,
-            $"{Colors.COLOR_LAVENDER}The lost soul you seek drifts, untethered and forlorn. Seek them amidst the ever-twisting shadows, and rekindle their essence with the enigmatic touch of an energy stone, a veiled orb of secrets, and the elixir whispered of healing properties..|r"));
+            // Quest text.. 4 sec delay for next part.
+            player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW}As the dust disappears you notice a faint writing above the brazier...|r");
+            Utility.SimpleTimer(4.0f, () => player.DisplayTimedTextTo(15.0f,
+                $"{Colors.COLOR_LAVENDER}The lost soul you seek drifts, untethered and forlorn. Seek them amidst the ever-twisting shadows, and rekindle their essence with the enigmatic touch of an energy stone, a veiled orb of secrets, and the elixir whispered of healing properties..|r"));
 
-        // Apply next stage to the item.
-        item.RemoveAbility(FourCC("AIda")); // removes temp armory bonus
-        item.AddAbility(FourCC("AHta")); // adds reveal ability
+            // Apply next stage to the item.
+            item.RemoveAbility(FourCC("AIda")); // removes temp armory bonus
+            item.AddAbility(FourCC("AHta")); // adds reveal ability
+        }
+        catch (System.Exception e)
+        {
+            Logger.Critical($"Error in UrnSoul.UrnUsageActions {e.Message}");
+            throw;
+        }
     }
 
     private static trigger RegisterInRangeEvent()
     {
         var trig = trigger.Create();
         trig.RegisterUnitInRange(UrnGhostUnit, InRangeDistance, FilterList.KittyFilter);
-        trig.AddAction(ErrorHandler.Wrap(InRangeActions));
+        trig.AddAction(InRangeActions);
         return trig;
     }
 

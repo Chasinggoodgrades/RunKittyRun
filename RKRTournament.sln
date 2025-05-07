@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BEDA3054-0F91-4506-AE00-10F20D7320C6}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		source.w3x\war3map.wts = source.w3x\war3map.wts
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher", "Launcher\Launcher.csproj", "{4F1BE747-D911-42B6-A540-4A96E023A865}"

@@ -83,12 +83,12 @@ public class AmuletOfEvasiveness : Relic
         kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
         CollisionDetection.KittyRegisterCollisions(kitty);
 
-        var t = timer.Create();
-        t.Start(WINDWALK_COLLISION_DURATION, false, ErrorHandler.Wrap(() =>
+        var t = ObjectPool.GetEmptyObject<AchesTimers>();
+        t.Timer.Start(WINDWALK_COLLISION_DURATION, false, () =>
         {
             kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);
             CollisionDetection.KittyRegisterCollisions(kitty);
             t.Dispose();
-        }));
+        });
     }
 }

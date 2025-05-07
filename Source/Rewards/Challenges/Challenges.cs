@@ -186,7 +186,7 @@ public class YellowLightning
 
     public void SaveIncrement()
     {
-        if (Timer.Remaining <= 0) Timer.Start(YELLOW_LIGHTNING_TIMER, false, ErrorHandler.Wrap(EndTimer));
+        if (Timer.Remaining <= 0) Timer.Start(YELLOW_LIGHTNING_TIMER, false, EndTimer);
         SaveCount++;
     }
 

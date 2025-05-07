@@ -25,8 +25,8 @@ namespace Launcher
         // Output
         private const string OUTPUT_FOLDER_PATH = @"..\..\..\..\artifacts";
 
-        private const string OUTPUT_SCRIPT_NAME = @"war3map.lua";
-        private const string OUTPUT_MAP_NAME = @"target.w3x";
+        private static string OUTPUT_SCRIPT_NAME = @$"war3map_{MapDesc.VERSION}.lua";
+        private static string OUTPUT_MAP_NAME = @$"RKR_Remastered_{MapDesc.VERSION}.w3x";
 
         // Warcraft III
         private const string GRAPHICS_API = "Direct3D9";
@@ -87,6 +87,7 @@ namespace Launcher
         public static void Build(bool launch = false, bool mem = false, bool skipCompile = false)
         {
             // Ensure these folders exist
+            MapDesc.UpdateWTSFile();
             Directory.CreateDirectory(OUTPUT_FOLDER_PATH);
 
             // Load existing map data

@@ -31,7 +31,7 @@ public class FloatingNameTag
 
     private void SetNameTagAttributes()
     {
-        NameTag.SetText(Kitty.Player.Name, NAME_TAG_HEIGHT);
+        NameTag.SetText(Kitty.Player.Name.Split('#')[0], NAME_TAG_HEIGHT);
         NameTag.SetPermanent(true);
         NameTag.SetColor(114, 188, 212, 255);
         NameTag.SetVisibility(true);

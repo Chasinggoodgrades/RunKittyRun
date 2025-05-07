@@ -220,11 +220,11 @@ public class Slider
     {
         ClickTrigger = trigger.Create();
         ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder);
-        ClickTrigger.AddAction(ErrorHandler.Wrap(() => HandleTurn(true)));
+        ClickTrigger.AddAction(() => HandleTurn(true));
 
         WidgetTrigger = trigger.Create();
         WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder);
-        WidgetTrigger.AddAction(ErrorHandler.Wrap(() => HandleTurn(false)));
+        WidgetTrigger.AddAction(() => HandleTurn(false));
 
         ClickTrigger.Disable();
         WidgetTrigger.Disable();
