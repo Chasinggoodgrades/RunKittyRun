@@ -11,6 +11,7 @@ public class Kitty
     private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
+    public string Name { get; set; }
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
@@ -43,6 +44,7 @@ public class Kitty
     public Kitty(player player)
     {
         Player = player;
+        Name = Player.Name.Split('#')[0];
         InitData();
         SpawnEffect();
         CreateKitty();

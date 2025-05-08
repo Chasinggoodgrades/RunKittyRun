@@ -33,23 +33,39 @@ public class Frostbite : Affix
 
     public override void Remove()
     {
-        Unit.Unit.SetVertexColor(150, 120, 255);
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        GC.RemoveTrigger(ref InRangeTrigger);
-        GC.RemoveTrigger(ref PeriodicRangeTrigger);
-        RemoveAllEffects();
-        GC.RemoveDictionary(ref Frostbitten);
-        GC.RemoveDictionary(ref Effects);
-        GC.RemoveList(ref TempList);
-        base.Remove();
+        try
+        {
+            Unit.Unit.SetVertexColor(150, 120, 255);
+            Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+            GC.RemoveTrigger(ref InRangeTrigger);
+            GC.RemoveTrigger(ref PeriodicRangeTrigger);
+            RemoveAllEffects();
+            GC.RemoveDictionary(ref Frostbitten);
+            GC.RemoveDictionary(ref Effects);
+            GC.RemoveList(ref TempList);
+            base.Remove();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Frostbite.Remove: {e.Message}");
+            throw;
+        }
     }
 
     private void RemoveAllEffects()
     {
-        foreach (var effect in Effects)
-            effect.Value?.Dispose();
-        foreach (var target in Frostbitten.Keys)
-            target.MovementSpeed = Frostbitten[target];
+        try
+        {
+            foreach (var effect in Effects)
+                effect.Value?.Dispose();
+            foreach (var target in Frostbitten.Keys)
+                target.MovementSpeed = Frostbitten[target];
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in Frostbite.RemoveAllEffects: {e.Message}");
+            throw;
+        }
     }
 
     private void RegisterEvents()

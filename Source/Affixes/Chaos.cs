@@ -16,9 +16,17 @@ public class Chaos : Affix
 
     public override void Apply()
     {
-        RegisterTimer();
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
-        base.Apply();
+        try
+        {
+            RegisterTimer();
+            Unit.Unit.AddAbility(AFFIX_ABILITY);
+            base.Apply();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Chaos.Apply: {e.Message}");
+            throw;
+        }
     }
 
     public override void Remove()

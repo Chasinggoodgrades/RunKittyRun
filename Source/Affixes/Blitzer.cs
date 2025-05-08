@@ -26,7 +26,7 @@ public class Blitzer : Affix
     public override void Apply()
     {
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.WanderTimer.Pause();
+        Unit.WanderTimer?.Pause();
         Unit.OVERHEAD_EFFECT_PATH = "";
         Unit.Unit.SetVertexColor(224, 224, 120);
         RegisterMoveTimer();
@@ -36,7 +36,7 @@ public class Blitzer : Affix
     public override void Remove()
     {
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Unit.WanderTimer.Resume();
+        Unit.WanderTimer?.Resume();
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
         GC.RemoveEffect(ref WanderEffect);

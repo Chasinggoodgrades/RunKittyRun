@@ -7,7 +7,7 @@ public class KittyTime
     private readonly Action _cachedProgress;
     private Dictionary<int, float> RoundTime { get; set; } = new Dictionary<int, float>();
     private Dictionary<int, float> RoundProgress { get; set; } = new Dictionary<int, float>();
-    private timer ProgressTimer { get; set; } = timer.Create();
+    private AchesTimers ProgressTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
     private float TotalTime { get; set; }
     private Kitty Kitty { get; set; }
 
@@ -40,7 +40,7 @@ public class KittyTime
 
     private void PeriodicProgressTimer()
     {
-        ProgressTimer.Start(0.2f, true, _cachedProgress);
+        ProgressTimer.Timer.Start(0.2f, true, _cachedProgress);
     }
 
     #region Time Section

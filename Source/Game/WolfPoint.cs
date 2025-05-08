@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -12,8 +13,7 @@ public class WolfPoint
     public static trigger IsPausedTrigger;
 
     private Wolf Wolf { get; set; }
-    private float[] XPoints { get; set; } = new float[50];
-    private float[] YPoints { get; set; } = new float[50];
+    private List<WolfPointInfo> PointInfo { get; set; }
 
 
     /// <summary>
@@ -37,7 +37,7 @@ public class WolfPoint
     {
         try
         {
-            if (XPoints == null) return;
+            PointInfo ??= WolfPointInfo.GetWolfPointList();
             Cleanup();
 
             // Calculate the distance between points
@@ -53,15 +53,15 @@ public class WolfPoint
             {
                 var regionX = startX + (i * stepX);
                 var regionY = startY + (i * stepY);
-                XPoints[i] = regionX;
-                YPoints[i] = regionY;
+                PointInfo[i].X = regionX;
+                PointInfo[i].Y = regionY;
             }
 
             // Ensure the last point is exactly the end point
-            XPoints[numRegions] = endX;
-            YPoints[numRegions] = endY;
+            PointInfo[numRegions].X = endX;
+            PointInfo[numRegions].Y = endY;
 
-            if (XPoints != null && XPoints.Length > 0)
+            if (PointInfo != null && PointInfo.Count > 0)
             {
                 StartMovingOrders();
             }
@@ -76,13 +76,13 @@ public class WolfPoint
     {
         try
         {
-            if (XPoints == null) return;
+            if (PointInfo == null) return;
             Wolf.Unit.ClearOrders();
 
-            for (int i = 0; i < XPoints.Length; i++)
+            for (int i = 0; i < PointInfo.Count; i++)
             {
-                XPoints[i] = 0;
-                YPoints[i] = 0;
+                PointInfo[i].X = 0;
+                PointInfo[i].Y = 0;
             }
         }
         catch (Exception ex)
@@ -94,8 +94,7 @@ public class WolfPoint
     public void Dispose()
     {
         Cleanup();
-        XPoints = null;
-        YPoints = null;
+        WolfPointInfo.ClearWolfPointList(PointInfo);
         Wolf.Unit.ClearOrders();
     }
 
@@ -110,12 +109,12 @@ public class WolfPoint
 
         try
         {
-            for (int i = XPoints.Length - 1; i >= 1; i--)
+            for (int i = PointInfo.Count - 1; i >= 1; i--)
             {
-                if (XPoints[i] == 0 && YPoints[i] == 0) continue;
+                if (PointInfo[i].X == 0 && PointInfo[i].Y == 0) continue;
                 var moveID = MoveOrderID;
-                if (i == XPoints.Length - 1) moveID = AttackOrderID;
-                Wolf.Unit.QueueOrder(moveID, XPoints[i], YPoints[i]);
+                if (i == PointInfo.Count - 1) moveID = AttackOrderID;
+                Wolf.Unit.QueueOrder(moveID, PointInfo[i].X, PointInfo[i].Y);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
         }
@@ -139,5 +138,39 @@ public class WolfPoint
             Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
         });
         return IsPausedTrigger;
+    }
+
+    private class WolfPointInfo
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+
+        public WolfPointInfo()
+        {
+            X = 0;
+            Y = 0;
+        }
+
+        public static List<WolfPointInfo> GetWolfPointList()
+        {
+            var list = ObjectPool.GetEmptyList<WolfPointInfo>();
+            for (int i = 0; i < 48; i++)
+            {
+                list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
+            }
+            return list;
+        }
+
+        public static void ClearWolfPointList(List<WolfPointInfo> list)
+        {
+            if (list == null) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                ObjectPool.ReturnObject(item);
+            }
+            list.Clear();
+            ObjectPool.ReturnList(list);
+        }
     }
 }

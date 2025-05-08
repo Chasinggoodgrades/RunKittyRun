@@ -46,8 +46,8 @@ public static class RoundTimer
     {
         if (StartRoundTimer.Remaining > 0)
         {
-            var t = timer.Create();
-            t.Start(1.0f, false, ErrorHandler.Wrap(() =>
+            var t = ObjectPool.GetEmptyObject<AchesTimers>();
+            t.Timer.Start(1.0f, false, ErrorHandler.Wrap(() =>
             {
                 string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
                 if (StartRoundTimer.Remaining % 5 <= 0.1 && StartRoundTimer.Remaining > 5)
@@ -55,7 +55,7 @@ public static class RoundTimer
                 if (StartRoundTimer.Remaining <= 5 && StartRoundTimer.Remaining > 0)
                     Utility.TimedTextToAllPlayers(1.0f, RoundStartingString);
                 CountDown();
-                GC.RemoveTimer(ref t);
+                t.Dispose();
             }));
         }
     }

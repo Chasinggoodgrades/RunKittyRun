@@ -47,8 +47,8 @@ public class Bomber : Affix
             Unit.Unit.RemoveAbility(AFFIX_ABILITY);
             Unit.Unit.SetVertexColor(150, 120, 255, 255);
 
-            ExplodeTimer.Dispose();
-            ReviveAlphaTimer.Dispose();
+            ExplodeTimer?.Dispose();
+            ReviveAlphaTimer?.Dispose();
             RangeIndicator?.Dispose();
 
             Unit.IsReviving = false;

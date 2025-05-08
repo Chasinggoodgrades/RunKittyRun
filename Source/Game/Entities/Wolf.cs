@@ -212,7 +212,7 @@ public class Wolf
 
         var currentRound = Globals.ROUND;
         if (currentRound < 1 || currentRound > 5)
-            throw new ArgumentOutOfRangeException(nameof(currentRound), "Round must be between 1 and 5.");
+            return false;
 
         var linearProbability = baseChance + (increasePerRound * (currentRound - 1));
         var randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%

@@ -29,13 +29,13 @@ public static class StandardMultiboard
     /// </summary>
     private static void Init()
     {
-        var t = timer.Create();
-        t.Start(1.0f, true, ErrorHandler.Wrap(() =>
+        var t = ObjectPool.GetEmptyObject<AchesTimers>();
+        t.Timer.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             if (!Difficulty.IsDifficultyChosen) return;
             MakeMultiboard();
             RegisterTriggers();
-            GC.RemoveTimer(ref t);
+            t.Dispose();
         }));
     }
 

@@ -52,7 +52,7 @@ public class Fixation : Affix
         ChaseTimer.Dispose();
         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(ref TargetEffect);
-        Unit.WanderTimer.Resume();
+        Unit.WanderTimer?.Resume();
         base.Remove();
     }
 
@@ -98,7 +98,7 @@ public class Fixation : Affix
     {
         var Region = RegionList.WolfRegions[Unit.RegionIndex];
         IsChasing = true;
-        Unit.WanderTimer.Pause();
+        Unit.WanderTimer?.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         ChaseTimer.Timer.Start(0.1f, true, () =>
         {

@@ -40,6 +40,29 @@ public static class ObjectPool
         pool.Enqueue(obj);
     }
 
+    public static List<T> GetEmptyList<T>() where T : class, new()
+    {
+        if (_pools.TryGetValue(typeof(List<T>), out var pool) && pool.Count > 0)
+        {
+            return (List<T>)pool.Dequeue();
+        }
+
+        return new List<T>();
+    }
+
+    public static void ReturnList<T>(List<T> list) where T : class
+    {
+        list.Clear(); // Make sure to clear the list before returning it
+
+        if (!_pools.TryGetValue(typeof(List<T>), out var pool))
+        {
+            pool = new Queue<object>();
+            _pools[typeof(List<T>)] = pool;
+        }
+
+        pool.Enqueue(list);
+    }
+
     /// <summary>
     /// Prints debug information about all the object pools, including their counts.
     /// </summary>
