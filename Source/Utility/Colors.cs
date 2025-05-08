@@ -194,4 +194,40 @@ public class Colors
         }
         return null;
     }
+
+    /// <summary>
+    /// This function only calls at the end of the game for SaveData purposes. So it should be okay to run and update all player colors accordingly.
+    /// </summary>
+    /// <param name="kitty"></param>
+    public static void UpdateColors(Kitty kitty)
+    {
+        var colorData = new Dictionary<string, string>();
+
+    }
+
+    public static string GetMostPlayedColor(Kitty kitty)
+    {
+        var colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+        if (string.IsNullOrEmpty(colorData)) return null;
+
+        string[] pairs = colorData.Split(','); // splits like .. "red:5", "blue:6", etc.
+        string mostPlayedColor = "";
+        int maxCount = 0;
+
+        for (int i = 0; i < pairs.Length; i++)
+        {
+            var pair = pairs[i];
+            string[] parts = pair.Split(':');
+            if (parts.Length == 2 && int.TryParse(parts[1], out int count))
+            {
+                if (count > maxCount)
+                {
+                    mostPlayedColor = parts[0];
+                    maxCount = count;
+                }
+            }
+        }
+        return mostPlayedColor;
+    }
+
 }

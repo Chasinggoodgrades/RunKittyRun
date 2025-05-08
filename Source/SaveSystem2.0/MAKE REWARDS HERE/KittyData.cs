@@ -14,6 +14,7 @@ public class KittyData
     public GameTimesData BestGameTimes { get; set; }
     public KibbleCurrency KibbleCurrency { get; set; }
     public PersonalBests PersonalBests { get; set; }
+    public PlayerColorData PlayerColorData { get; set; }
 
     public KittyData()
     {
@@ -24,6 +25,7 @@ public class KittyData
         BestGameTimes = new GameTimesData();
         KibbleCurrency = new KibbleCurrency();
         PersonalBests = new PersonalBests();
+        PlayerColorData = new PlayerColorData();
     }
 
     /// <summary>
