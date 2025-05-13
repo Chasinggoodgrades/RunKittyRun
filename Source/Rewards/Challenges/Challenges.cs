@@ -175,18 +175,18 @@ public class YellowLightning
     private const int YELLOW_LIGHTNING_SAVE_REQUIREMENT = 6;
     private const float YELLOW_LIGHTNING_TIMER = 3.0f;
     public Kitty Kitty { get; private set; }
-    public timer Timer { get; private set; }
+    public AchesTimers Timer { get; private set; }
     public int SaveCount { get; private set; }
 
     public YellowLightning(Kitty kitty)
     {
         Kitty = kitty;
-        Timer = timer.Create();
+        Timer = ObjectPool.GetEmptyObject<AchesTimers>();
     }
 
     public void SaveIncrement()
     {
-        if (Timer.Remaining <= 0) Timer.Start(YELLOW_LIGHTNING_TIMER, false, ErrorHandler.Wrap(EndTimer));
+        if (Timer.Timer.Remaining <= 0) Timer.Timer.Start(YELLOW_LIGHTNING_TIMER, false, EndTimer);
         SaveCount++;
     }
 

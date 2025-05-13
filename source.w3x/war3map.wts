@@ -1,6 +1,6 @@
-﻿STRING 1
+STRING 1
 {
-|cffff0000RKR Remastered v1.2.3|r
+|cffff0000RKR Remastered v1.2.6|r
 }
 
 STRING 2
@@ -10,10 +10,10 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.2.3 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.2.6 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Music, and more! 
 |n|n- Check out our leaderboard in discord!
-|n|n|n|cff00ffffLast updated:|r |c00FF00005/04/2025|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000005/11/2025|r
 }
 
 STRING 4
@@ -793,7 +793,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.2.3
+Run Kitty Run Remastered v1.2.6
 }
 
 STRING 2035
@@ -4895,9 +4895,10 @@ STRING 3880
 |cffff0000P|r|cffed0711a|r|cffdb0e23t|r|cffc91535r|r|cffb71c47i|r|cffa4235ao|r|cff922a6ct|r|cff80317ei|r|cff6e3890c|r|cff5c3fa2 |r|cff4947b5L|r|cff374ec7i|r|cff2555d9g|r|cff135cebh|r|cff0063fet|r
 }
 
-STRING 3882
+STRING 3883
 // Abilities: A017 (Trail_PatrioticLight), Ubertip (Tooltip - Normal - Extended)
 {
-Obtained by reaching the end for Round 5 on |cff800000Impossible|r difficulty in under |cffffff0020 minutes|r of total game time.
+Obtained by reaching the end for Round 5 on |cff800000Impossible|r difficulty in under |cffffff0016 minutes and 35 seconds|r of total game time.
+
 }
 

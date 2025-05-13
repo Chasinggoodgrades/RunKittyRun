@@ -67,21 +67,37 @@ public class FangOfShadows : Relic
 
     private void SummonShadowKitty()
     {
-        var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
-        sk.SummonShadowKitty();
-        RegisterTeleportAbility(sk.Unit);
-        sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
-        KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(sk.KillShadowKitty));
-        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+        try
+        {
+            var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
+            sk.SummonShadowKitty();
+            RegisterTeleportAbility(sk.Unit);
+            sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
+            KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(sk.KillShadowKitty));
+            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in FangOfShadows.SummonShadowKitty: {e}");
+            return;
+        }
     }
 
     private void TeleportToShadowKitty()
     {
-        var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
-        sk.TeleportToShadowKitty();
-        Utility.DropAllItems(@event.Unit);
-        Utility.SimpleTimer(0.09f, sk.KillShadowKitty);
-        KillTimer.Pause();
+        try
+        {
+            var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
+            sk.TeleportToShadowKitty();
+            Utility.DropAllItems(@event.Unit);
+            Utility.SimpleTimer(0.09f, sk.KillShadowKitty);
+            KillTimer.Pause();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in FangOfShadows.TeleportToShadowKitty: {e}");
+            return;
+        }
     }
 
     private void RegisterTeleportAbility(unit Unit)

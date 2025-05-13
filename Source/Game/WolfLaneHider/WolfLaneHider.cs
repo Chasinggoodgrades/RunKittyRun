@@ -85,7 +85,8 @@ public static class WolfLaneHider
         {
             var wolf = lane.Wolves[i];
             wolf.Unit.IsVisible = isVisible;
-            wolf.IsPaused = !isVisible;
+            // wolf.IsPaused = !isVisible;
+            wolf.PauseSelf(!isVisible);
             wolf.Texttag?.SetVisibility(isVisible);
         }
     }

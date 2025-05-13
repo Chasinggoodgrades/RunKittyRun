@@ -124,7 +124,7 @@ public static class CollisionDetection
             try
             {
                 var circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())];
-                var saviorKitty = Globals.ALL_KITTIES[GetOwningPlayer(sk.Unit)];
+                var saviorKitty = Globals.ALL_KITTIES[sk.Player];
                 circle.ReviveKitty(saviorKitty);
             }
             catch (Exception e)

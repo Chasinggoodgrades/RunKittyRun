@@ -33,25 +33,33 @@ public static class ItemStacker
     {
         PickupTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
-        PickupTrigger.AddAction(ErrorHandler.Wrap(StackActions));
+        PickupTrigger.AddAction(StackActions);
         return PickupTrigger;
     }
 
     private static void StackActions()
     {
-        var item = @event.ManipulatedItem;
-        var itemID = item.TypeId;
-        if (!StackableItem(itemID)) return;
-        var unit = @event.Unit;
-        var heldItem = Utility.UnitGetItem(unit, itemID);
-        item.Owner = unit.Owner;
-        if (heldItem == item) return;
-        if (heldItem == null) return;
-        var itemCharges = item.Charges;
-        if (itemCharges > 1) heldItem.Charges += itemCharges;
-        else heldItem.Charges += 1;
-        item.Dispose();
-        item = null;
+        try
+        {
+            var item = @event.ManipulatedItem;
+            var itemID = item.TypeId;
+            if (!StackableItem(itemID)) return;
+            var unit = @event.Unit;
+            var heldItem = Utility.UnitGetItem(unit, itemID);
+            item.Owner = unit.Owner;
+            if (heldItem == item) return;
+            if (heldItem == null) return;
+            var itemCharges = item.Charges;
+            if (itemCharges > 1) heldItem.Charges += itemCharges;
+            else heldItem.Charges += 1;
+            item.Dispose();
+            item = null;
+        }
+        catch (System.Exception e)
+        {
+            Logger.Critical(e.Message);
+            throw;
+        }
     }
 
     private static bool StackableItem(int itemID)

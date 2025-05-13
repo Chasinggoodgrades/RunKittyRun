@@ -55,13 +55,13 @@ public static class RoundManager
 
     private static void HasDifficultyBeenChosen()
     {
-        var Timer = timer.Create();
-        Timer.Start(0.35f, true, ErrorHandler.Wrap(() =>
+        var Timer = ObjectPool.GetEmptyObject<AchesTimers>();
+        Timer.Timer.Start(0.35f, true, ErrorHandler.Wrap(() =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
-                GC.RemoveTimer(ref Timer);
+                Timer.Dispose();
             }
         }));
     }

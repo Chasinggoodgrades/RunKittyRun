@@ -34,7 +34,7 @@ public static class RewardsManager
         {
             Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         }
-        Trigger.AddAction(ErrorHandler.Wrap(CastedReward));
+        Trigger.AddAction(CastedReward);
     }
 
     private static void CastedReward()

@@ -8,7 +8,7 @@ namespace Source.Init
     public static class Setup
     {
         private static float timeToChoose = 0.0f;
-        private static timer gameModeTimer;
+        private static AchesTimers gameModeTimer;
         private static List<player> wolfPlayers { get; set; } = new List<player> { player.NeutralExtra, player.NeutralVictim, player.NeutralAggressive, player.NeutralPassive };
         private static int wolfPlayerIndex = 0;
 
@@ -42,8 +42,8 @@ namespace Source.Init
 
         private static void StartGameModeTimer()
         {
-            gameModeTimer = timer.Create();
-            gameModeTimer.Start(1.0f, true, ErrorHandler.Wrap(ChoosingGameMode));
+            gameModeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+            gameModeTimer.Timer.Start(1.0f, true, ErrorHandler.Wrap(ChoosingGameMode));
         }
 
         private static void ChoosingGameMode()
@@ -54,7 +54,7 @@ namespace Source.Init
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();
-                GC.RemoveTimer(ref gameModeTimer);
+                gameModeTimer.Dispose();
             }
         }
 

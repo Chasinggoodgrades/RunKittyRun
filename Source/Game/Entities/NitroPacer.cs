@@ -8,7 +8,7 @@ public static class NitroPacer
 
     private static float currentDistance = 0;
     private static int currentCheckpoint = 0;
-    private static timer pacerTimer;
+    private static AchesTimers pacerTimer;
     private static rect spawnRect = RegionList.SpawnRegions[5].Rect;
     private static Rectangle[] pathingPoints = RegionList.PathingPoints;
     private static Action _cachedNitroPacerUpdate;
@@ -33,7 +33,7 @@ public static class NitroPacer
         _cachedNitroPacerUpdate = UpdateNitroPacer;
         VisionShare();
 
-        pacerTimer = timer.Create();
+        pacerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public static class NitroPacer
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
-        pacerTimer.Start(0.15f, true, _cachedNitroPacerUpdate);
+        pacerTimer.Timer.Start(0.15f, true, _cachedNitroPacerUpdate);
     }
 
     /// <summary>

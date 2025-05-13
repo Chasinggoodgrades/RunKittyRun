@@ -99,23 +99,29 @@ public static class Shops
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         foreach (var vendor in KittyVendorsList)
             Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
-        Trigger.AddAction(ErrorHandler.Wrap(OnVendorSell));
+        Trigger.AddAction(OnVendorSell);
     }
 
     private static void OnVendorSell()
     {
-        var item = @event.SoldItem;
-        var vendor = @event.SellingUnit;
-        var player = @event.BuyingUnit.Owner;
-        var itemID = item.TypeId;
+        try
+        {
+            var item = @event.SoldItem;
+            var vendor = @event.SellingUnit;
+            var player = @event.BuyingUnit.Owner;
+            var itemID = item.TypeId;
 
-        var vendorItems = VendorsItemList[vendor];
-        var vendorItem = vendorItems.Find(vi => vi.Item == itemID);
-        if (vendorItem == null) return;
+            var vendorItems = VendorsItemList[vendor];
+            var vendorItem = vendorItems.Find(vi => vi.Item == itemID);
+            if (vendorItem == null) return;
 
-        RefreshItemsOnVendor(vendor);
+            RefreshItemsOnVendor(vendor);
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in OnVendorSell: {e.Message}");
+        }
     }
-
     private class VendorItem
     {
         public unit Vendor { get; set; }
