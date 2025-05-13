@@ -35,6 +35,11 @@ public class Howler : Affix
         base.Remove();
     }
 
+    public override void Pause(bool pause)
+    {
+        HowlTimer.Pause(pause);
+    }
+
     private void RegisterTimerEvents()
     {
         HowlTimer = ObjectPool.GetEmptyObject<AchesTimers>();

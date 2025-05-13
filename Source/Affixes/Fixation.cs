@@ -49,7 +49,8 @@ public class Fixation : Affix
 
         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(ref PeriodicSpeed);
-        ChaseTimer.Dispose();
+        ChaseTimer?.Dispose();
+        ChaseTimer = null;
         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(ref TargetEffect);
         Unit.WanderTimer?.Resume();
@@ -182,18 +183,19 @@ public class Fixation : Affix
 
     public static Fixation GetFixation(unit Unit)
     {
+        if (Unit == null) return null;
         var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(IsFixation);
         return affix is Fixation fixation ? fixation : null;
     }
 
-    public void PauseFixation(bool pause)
+    public override void Pause(bool pause)
     {
         if (pause)
         {
-            IsChasing = false;
-            InRangeTrigger.Disable();
-            ChaseTimer.Pause();
             Unit.Unit.ClearOrders();
+            ChaseTimer.Pause();
+            InRangeTrigger.Disable();
+            IsChasing = false;
             GC.RemoveEffect(ref TargetEffect);
         }
         else

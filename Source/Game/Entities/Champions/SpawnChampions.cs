@@ -20,21 +20,25 @@ public static class SpawnChampions
         var x = rect.CenterX;
         var y = rect.CenterY;
         Fieryfox2023 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2023, x, y, 135.0f);
+        Fieryfox2023.IsInvulnerable = true;
 
         rect = Regions.Team2023.Rect;
         x = rect.CenterX;
         y = rect.CenterY;
         FandF2023 = unit.Create(player.NeutralPassive, Constants.UNIT_TEAM_TOURNAMENT_2023, x, y, 45.0f);
+        FandF2023.IsInvulnerable = true;
 
         rect = Regions.Solo2024.Rect;
         x = rect.CenterX;
         y = rect.CenterY;
         Fieryfox2024 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2024, x, y, 315.0f);
+        Fieryfox2024.IsInvulnerable = true;
 
         rect = Regions.UrnSoulRegion1.Rect;
         x = rect.CenterX;
         y = rect.CenterY;
         Stan2025 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2025, x, y, 230.0f);
+        Stan2025.IsInvulnerable = true;
     }
 
     private static void ApplyCosmetics()

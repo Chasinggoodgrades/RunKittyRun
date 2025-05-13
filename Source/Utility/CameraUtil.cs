@@ -9,6 +9,7 @@ public static class CameraUtil
 
     public static void LockCamera(player player)
     {
+        if (LockedCameras.Contains(player)) return;
         var kitty = Globals.ALL_KITTIES[player];
         LockedCameras.Add(player);
         if (!player.IsLocal) return;

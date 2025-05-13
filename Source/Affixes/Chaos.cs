@@ -33,9 +33,9 @@ public class Chaos : Affix
     {
         try
         {
-            currentAffix.Remove();
-            RotationTimer.Dispose();
-            Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+            currentAffix?.Remove();
+            RotationTimer?.Dispose();
+            Unit?.Unit?.RemoveAbility(AFFIX_ABILITY);
             base.Remove();
         }
         catch (System.Exception e)
@@ -50,7 +50,7 @@ public class Chaos : Affix
         try
         {
             RotationTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-            RotationTimer.Timer.Start(rotationTime, true, RotateAffix);
+            RotationTimer?.Timer.Start(rotationTime, true, RotateAffix);
             currentAffix = AffixFactory.CreateAffix(Unit, "Speedster");
             currentAffix.Apply();
         }
@@ -78,9 +78,14 @@ public class Chaos : Affix
         {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning($"Error in Chaos.RotateAffix: {e.Message}");
-            if (currentAffix != null)
-                currentAffix.Remove();
+            currentAffix?.Remove();
             currentAffix = null;
         }
     }
+
+    public override void Pause(bool pause)
+    {
+        currentAffix.Pause(pause);
+    }
+
 }

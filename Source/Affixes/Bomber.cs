@@ -1,6 +1,5 @@
 ﻿using System;
 using WCSharp.Api;
-using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
 public class Bomber : Affix
@@ -49,12 +48,15 @@ public class Bomber : Affix
 
             ExplodeTimer?.Dispose();
             ReviveAlphaTimer?.Dispose();
+            ExplodeTimer = null;
+            ReviveAlphaTimer = null;
             RangeIndicator?.Dispose();
+            RangeIndicator = null;
 
             Unit.IsReviving = false;
             Unit.IsPaused = false;
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             base.Remove();
         }
@@ -72,10 +74,12 @@ public class Bomber : Affix
         {
             if (Unit.IsPaused)
             {
-                ExplodeTimer.Timer.Start(ExplosionInterval(), false, (StartExplosion));
+                ExplodeTimer?.Timer.Start(ExplosionInterval(), false, StartExplosion);
                 return;
             }
             Unit.PauseSelf(true);
+            if (RangeIndicator == null) return;
+            if (Unit.Unit == null) return;
             RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
             Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
@@ -92,6 +96,7 @@ public class Bomber : Affix
     {
         try
         {
+            if (RangeIndicator == null) return;
             RangeIndicator.DestroyIndicator();
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
             ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
@@ -121,16 +126,10 @@ public class Bomber : Affix
 
     private static float ExplosionInterval() => GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL);
 
-    public static Bomber GetBomber(unit Unit)
-    {
-        var affix = Globals.ALL_WOLVES[Unit].Affixes.Find(IsBomber);
-        return affix is Bomber bomber ? bomber : null;
-    }
-
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer.Timer.Start(1.0f, true, () =>
+        ReviveAlphaTimer?.Timer.Start(1.0f, true, () =>
         {
             try
             {
@@ -145,16 +144,23 @@ public class Bomber : Affix
                     ReviveAlphaTimer.Pause();
                     Unit.PauseSelf(false);
                     Unit.IsReviving = false;
-                    ExplodeTimer.Timer.Start(ExplosionInterval(), false, StartExplosion);
+                    ExplodeTimer?.Timer.Start(ExplosionInterval(), false, StartExplosion);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Logger.Warning($"Error in Bomber.Revive: {e.Message}");
-                ReviveAlphaTimer.Pause();
-                Unit.PauseSelf(false);
+                ReviveAlphaTimer?.Pause();
+                Unit?.PauseSelf(false);
                 Unit.IsReviving = false;
             }
         });
+    }
+
+    public override void Pause(bool pause)
+    {
+        // For now.. Bomber wolves cannot really be frozen once the explosion timer starts..
+        // But in the future.. Need to move the explosion timers to be 1 timer instead of 4 Utility.SimpleTimers. 
+        RangeIndicator.DestroyIndicator();
     }
 }

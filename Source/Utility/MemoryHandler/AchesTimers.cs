@@ -4,15 +4,18 @@ using static WCSharp.Api.Common;
 
 public class AchesTimers : IDisposable
 {
-    public timer Timer { get; set; } = timer.Create();
+    public timer Timer { get; set; }
     public AchesTimers()
     {
-
+        Timer = CreateTimer();
     }
 
-    public void Pause()
+    public void Pause(bool pause = true)
     {
-        Timer?.Pause();
+        if (pause)
+            Timer?.Pause();
+        else
+            Timer?.Resume();
     }
 
     public void Resume()
@@ -22,7 +25,7 @@ public class AchesTimers : IDisposable
 
     public void Dispose()
     {
-        Timer?.Pause();
+        Pause();
         ObjectPool.ReturnObject(this);
     }
 }
