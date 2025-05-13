@@ -185,8 +185,8 @@ public class FrozenWolf
         {
             if (unit == null) return;
             if (unit == NamedWolves.StanWolf.Unit) return;
-            var wolf = Globals.ALL_WOLVES[unit];
-            if (Globals.ALL_WOLVES.ContainsKey(unit)) Globals.ALL_WOLVES[unit].PauseSelf(pause);
+            if (Globals.ALL_WOLVES.ContainsKey(unit))
+                Globals.ALL_WOLVES[unit].PauseSelf(pause);
         }
         catch (Exception e)
         {

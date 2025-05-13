@@ -24,6 +24,16 @@ public static class GameoverUtil
         }
     }
 
+    public static void SetColorData()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
+        {
+            Colors.PopulateColorsData(kitty); // make sure its populated
+            Colors.UpdateColors(kitty); // 
+            Colors.GetMostPlayedColor(kitty);
+        }
+    }
+
     private static void SetNormalGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
