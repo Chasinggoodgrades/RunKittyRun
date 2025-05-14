@@ -128,7 +128,8 @@ public static class UrnSoul
             $"|r|cff8080ffRestless Soul:|r |cffc878c8Could it be... Is this the moment I've yearned for? Have you come to release me from this eternal confinement? I can feel the life force coursing through my veins... AHHH...|r");
 
         var e = effect.Create("\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\"", unit, "origin");
-        Utility.SimpleTimer(1.0f, e.Dispose);
+        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue));
+
 
         // Remove Items
         Utility.RemoveItemFromUnit(unit, urn);
@@ -136,6 +137,6 @@ public static class UrnSoul
         Utility.RemoveItemFromUnit(unit, energyStone);
         Utility.RemoveItemFromUnit(unit, water);
 
-        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue));
+        e.Dispose();
     }
 }
