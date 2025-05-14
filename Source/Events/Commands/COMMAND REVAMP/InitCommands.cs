@@ -1382,7 +1382,7 @@ public static class InitCommands
             description: "Activates the revive invul for 0.6 seconds. Served as a test run.",
             action: (player, args) =>
             {
-                var status = args[0] != "" && CommandsManager.GetBool(args[0]);
+                bool status = args[0] != "" && CommandsManager.GetBool(args[0]);
                 Kitty.InvulTest = status;
                 player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Revive invul test: {status}");
             }
