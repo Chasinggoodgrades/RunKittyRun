@@ -77,16 +77,16 @@ public class Bomber : Affix
                 ExplodeTimer?.Timer.Start(ExplosionInterval(), false, StartExplosion);
                 return;
             }
-            Unit.PauseSelf(true);
             if (RangeIndicator == null) return;
             if (Unit.Unit == null) return;
+            Unit.PauseSelf(true);
             RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
             Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(4.0f, Explode);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Logger.Warning($"Error in Bomber.StartExplosion: {e.Message}");
         }
@@ -115,11 +115,11 @@ public class Bomber : Affix
             Revive();
             Unit.Unit.SetVertexColor(204, 102, 0, 25);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Logger.Warning($"Error in Bomber.Explode: {e.Message}");
             ReviveAlphaTimer.Pause();
-            Unit.PauseSelf(false);
+            Unit?.PauseSelf(false);
             Unit.IsReviving = false;
         }
     }
