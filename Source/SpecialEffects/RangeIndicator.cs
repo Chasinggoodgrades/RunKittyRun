@@ -60,12 +60,19 @@ public class RangeIndicator
 
     public void DestroyIndicator()
     {
-        for (int i = 0; i < LightningObjects.Count; i++)
+        try
         {
-            LightningObjects[i].Dispose();
-            LightningObjects[i] = null;
+            for (int i = 0; i < LightningObjects.Count; i++)
+            {
+                LightningObjects[i].Dispose();
+                LightningObjects[i] = null;
+            }
+            LightningObjects.Clear();
         }
-        LightningObjects.Clear();
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in RangeIndicator.DestroyIndicator: {e.Message}");
+        }
     }
 
     /// <summary>

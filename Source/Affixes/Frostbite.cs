@@ -7,11 +7,12 @@ public class Frostbite : Affix
     private const float FROSTBITE_RADIUS = 500.0f;
     private const float FROSTBITE_SPEED_REDUCTION = 0.83f;
     private const int AFFIX_ABILITY = Constants.ABILITY_FROSTBITE;
+    private static int ADRENALINE_POTION_ABILITY = FourCC("Bspe");
     private const string FROSTBITE_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     private trigger InRangeTrigger;
     private trigger PeriodicRangeTrigger;
-    private Dictionary<unit, float> Frostbitten;
-    private Dictionary<unit, effect> Effects;
+    private Dictionary<unit, float> Frostbitten = new Dictionary<unit, float>();
+    private Dictionary<unit, effect> Effects = new Dictionary<unit, effect>();
     private List<unit> TempList = new List<unit>();
 
     public Frostbite(Wolf unit) : base(unit)
@@ -19,8 +20,6 @@ public class Frostbite : Affix
         Name = $"{Colors.COLOR_LIGHTBLUE}Frostbite|r";
         InRangeTrigger = trigger.Create();
         PeriodicRangeTrigger = trigger.Create();
-        Frostbitten = new Dictionary<unit, float>();
-        Effects = new Dictionary<unit, effect>();
     }
 
     public override void Apply()
@@ -56,6 +55,7 @@ public class Frostbite : Affix
     {
         try
         {
+            if (Effects == null || Frostbitten == null) return;
             foreach (var effect in Effects)
                 effect.Value?.Dispose();
             foreach (var target in Frostbitten.Keys)
@@ -119,10 +119,15 @@ public class Frostbite : Affix
 
     private void SlowEffect(unit target)
     {
-        if (target.GetAbilityLevel(FourCC("Bspe")) > 0) return; // Adrenaline Potion
+        if (target.GetAbilityLevel(ADRENALINE_POTION_ABILITY) > 0) return; // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return; // Frostbite ring
-        Frostbitten.Add(target, target.MovementSpeed);
+        Frostbitten.Add(target, target.DefaultMovementSpeed);
         Effects[target] = effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
-        target.MovementSpeed = target.MovementSpeed * FROSTBITE_SPEED_REDUCTION;
+        target.MovementSpeed = target.DefaultMovementSpeed * FROSTBITE_SPEED_REDUCTION;
+    }
+
+    public override void Pause(bool pause)
+    {
+        // no logic needed atm.
     }
 }

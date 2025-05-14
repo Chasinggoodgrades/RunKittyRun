@@ -84,7 +84,7 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving) && (this != NamedWolves.StanWolf))
+        if ((ShouldStartEffect() || forced) && (!IsPaused && !IsReviving) && (this != NamedWolves.StanWolf))
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
@@ -97,7 +97,7 @@ public class Wolf
     /// </summary>
     public void WolfMove(bool forced = false)
     {
-        if ((IsPaused || IsReviving) && !forced) return;
+        if ((IsPaused || IsReviving) && forced) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
@@ -157,23 +157,38 @@ public class Wolf
 
     public void PauseSelf(bool pause)
     {
-        if (pause)
+        try
         {
-            Unit.ClearOrders();
-            WanderTimer?.Pause();
-            EffectTimer?.Pause();
-            IsWalking = false;
-            IsPaused = true;
-            Unit.IsPaused = true; // Wander Wolf
+            if (pause)
+            {
+                Unit.ClearOrders();
+                for (int i = 0; i < Affixes.Count; i++)
+                {
+                    Affixes[i].Pause(true);
+                }
+                WanderTimer?.Pause();
+                EffectTimer?.Pause();
+                IsWalking = false;
+                IsPaused = true;
+                Unit.IsPaused = true; // Wander Wolf
+            }
+            else
+            {
+                Unit.ClearOrders();
+                for (int i = 0; i < Affixes.Count; i++)
+                {
+                    Affixes[i].Pause(false);
+                }
+                WanderTimer?.Resume();
+                if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
+                IsWalking = true;
+                IsPaused = false;
+                Unit.IsPaused = false;
+            }
         }
-        else
+        catch (Exception e)
         {
-            Unit.ClearOrders();
-            WanderTimer?.Resume();
-            if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
-            IsWalking = true;
-            IsPaused = false;
-            Unit.IsPaused = false;
+            Logger.Warning($"Error in Wolf.PauseSelf: {e.Message}");
         }
     }
 
@@ -286,10 +301,17 @@ public class Wolf
     {
         if (AffixCount() == 0) return;
 
-        for (int i = 0; i < Affixes.Count; i++)
+        try
         {
-            AffixFactory.AllAffixes.Remove(Affixes[i]);
-            Affixes[i].Remove();
+            for (int i = 0; i < Affixes.Count; i++)
+            {
+                Affixes[i].Remove();
+                AffixFactory.AllAffixes.Remove(Affixes[i]);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in RemoveAllWolfAffixes: {e.Message}");
         }
 
         Affixes.Clear();

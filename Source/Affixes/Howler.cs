@@ -30,9 +30,14 @@ public class Howler : Affix
     {
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        HowlTimer.Dispose();
+        HowlTimer?.Dispose();
         GC.RemoveGroup(ref NearbyWolves);
         base.Remove();
+    }
+
+    public override void Pause(bool pause)
+    {
+        HowlTimer.Pause(pause);
     }
 
     private void RegisterTimerEvents()
