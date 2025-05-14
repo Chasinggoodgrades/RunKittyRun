@@ -18,4 +18,10 @@
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
         base.Remove();
     }
+
+    public override void Pause(bool pause)
+    {
+        // no logic needed atm
+    }
+
 }

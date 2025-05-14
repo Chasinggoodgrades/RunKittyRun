@@ -12,14 +12,22 @@ public static class ObjectPool
     /// <returns><typeparamref name="T"/></returns>
     public static T GetEmptyObject<T>() where T : class, new()
     {
-        // Gotta check if we have the type && some objects in the pool, then return it.
-        if (_pools.TryGetValue(typeof(T), out var pool) && pool.Count > 0)
+        try
         {
-            return (T)pool.Dequeue();
-        }
+            // Gotta check if we have the type && some objects in the pool, then return it.
+            if (_pools.TryGetValue(typeof(T), out var pool) && pool.Count > 0)
+            {
+                return (T)pool.Dequeue();
+            }
 
-        // we got no objects in pool, lets return a new one of <T>
-        return new T();
+            // we got no objects in pool, lets return a new one of <T>
+            return new T();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in ObjectPool.GetEmptyObject: {e.Message}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -29,38 +37,62 @@ public static class ObjectPool
     /// <param name="obj"></param>
     public static void ReturnObject<T>(T obj) where T : class
     {
-        // if we don't got a queue object to represent the pool, create a new 1
-        if (!_pools.TryGetValue(typeof(T), out var pool))
+        try
         {
-            pool = new Queue<object>();
-            _pools[typeof(T)] = pool;
-        }
+            // if we don't got a queue object to represent the pool, create a new 1
+            if (!_pools.TryGetValue(typeof(T), out var pool))
+            {
+                pool = new Queue<object>();
+                _pools[typeof(T)] = pool;
+            }
 
-        // put the object back in the pool <T>
-        pool.Enqueue(obj);
+            // put the object back in the pool <T>
+            pool.Enqueue(obj);
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in ObjectPool.ReturnObject: {e.Message}");
+            throw;
+        }
     }
 
     public static List<T> GetEmptyList<T>() where T : class, new()
     {
-        if (_pools.TryGetValue(typeof(List<T>), out var pool) && pool.Count > 0)
+        try
         {
-            return (List<T>)pool.Dequeue();
-        }
+            if (_pools.TryGetValue(typeof(List<T>), out var pool) && pool.Count > 0)
+            {
+                return (List<T>)pool.Dequeue();
+            }
 
-        return new List<T>();
+            return new List<T>();
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in ObjectPool.GetEmptyList: {e.Message}");
+            throw;
+        }
     }
 
     public static void ReturnList<T>(List<T> list) where T : class
     {
-        list.Clear(); // Make sure to clear the list before returning it
-
-        if (!_pools.TryGetValue(typeof(List<T>), out var pool))
+        try
         {
-            pool = new Queue<object>();
-            _pools[typeof(List<T>)] = pool;
-        }
+            list.Clear(); // Make sure to clear the list before returning it
 
-        pool.Enqueue(list);
+            if (!_pools.TryGetValue(typeof(List<T>), out var pool))
+            {
+                pool = new Queue<object>();
+                _pools[typeof(List<T>)] = pool;
+            }
+
+            pool.Enqueue(list);
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in ObjectPool.ReturnList: {e.Message}");
+            throw;
+        }
     }
 
     /// <summary>
@@ -72,7 +104,7 @@ public static class ObjectPool
         {
             var type = kvp.Key;
             var count = kvp.Value.Count;
-            Console.WriteLine($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{type.Name}, {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{count}{Colors.COLOR_RESET}");
+            Logger.Critical($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{type.Name}, {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{count}{Colors.COLOR_RESET}");
         }
     }
 }

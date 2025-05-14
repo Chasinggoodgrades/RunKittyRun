@@ -211,6 +211,7 @@ public static class AwardManager
         if (kitty.Player.SlotState != playerslotstate.Playing) return;
         if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
+        Colors.SetColorJoinedAs(kitty.Player);
 
         var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));
         var skinValue = (string)skinProperty.GetValue(selectedData);

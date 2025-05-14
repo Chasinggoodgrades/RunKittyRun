@@ -53,6 +53,11 @@ public class Vortex : Affix
         base.Remove();
     }
 
+    public override void Pause(bool pause)
+    {
+
+    }
+
     private void RegisterEvents()
     {
         EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter);

@@ -240,7 +240,6 @@ public static class AffixFactory
 
     public static void RemoveAllAffixes()
     {
-
         foreach(var wolf in Globals.ALL_WOLVES)
         {
             wolf.Value.RemoveAllWolfAffixes();

@@ -465,7 +465,6 @@ public static class ShopFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
-        if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.ShopButton.Visible = false;
         FrameManager.ShopButton.Visible = true;
         FrameManager.HideOtherFrames(shopFrame);

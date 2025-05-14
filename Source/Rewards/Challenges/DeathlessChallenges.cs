@@ -105,12 +105,6 @@ public static class DeathlessChallenges
     {
         SoundManager.PlayInvulnerableSound();
         var textTag = texttag.Create();
-        textTag.SetText($"Deathless {Globals.ROUND}!", 0.015f);
-        textTag.SetVelocity(120.0f, 90f);
-        textTag.SetColor(255, 0, 0);
-        textTag.SetPosition(k.Unit, 0.015f);
-        textTag.SetVisibility(true);
-        textTag.SetLifespan(2.0f);
-        Utility.SimpleTimer(2.01f, () => textTag?.Dispose());
+        Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Deathless {Globals.ROUND}!", 2.0f, k.Unit);
     }
 }
