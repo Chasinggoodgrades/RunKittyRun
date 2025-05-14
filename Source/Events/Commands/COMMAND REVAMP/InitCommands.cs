@@ -961,13 +961,17 @@ public static class InitCommands
             name: "scale",
             alias: "",
             group: "admin",
-            argDesc: "[scale]",
-            description: "Sets the scale of the kitty.",
+            argDesc: "[scale], [player]",
+            description: "Sets the scale of the passed player's kitty parameter.",
             action: (player, args) =>
             {
                 var scale = args[0] != "" ? float.Parse(args[0]) : 0.6f;
-                var kitty = Globals.ALL_KITTIES[player];
-                kitty.Unit.SetScale(scale, scale, scale);
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    kitty.Unit.SetScale(scale, scale, scale);
+                });
             }
         );
 
@@ -1112,12 +1116,18 @@ public static class InitCommands
             name: "skin",
             alias: "",
             group: "admin",
-            argDesc: "[skinId]",
-            description: "Sets the skin of the kitty.",
+            argDesc: "[skinId], [player]",
+            description: "Sets the skin of the passed player parameter.",
             action: (player, args) =>
             {
-                var skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
-                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                int skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    BlzSetUnitSkin(kitty.Unit, skin);
+                });
+                return;
             }
         );
 

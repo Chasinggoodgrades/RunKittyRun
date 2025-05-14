@@ -208,7 +208,7 @@ public class FrozenWolf
             var effect = AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit, "origin");
             Utility.SimpleTimer(FrostbiteRing.SLOW_DURATION, () =>
             {
-                Unit.MovementSpeed = 365.0f;
+                Unit.MovementSpeed = Unit.DefaultMovementSpeed;
                 GC.RemoveEffect(ref effect);
             });
         }

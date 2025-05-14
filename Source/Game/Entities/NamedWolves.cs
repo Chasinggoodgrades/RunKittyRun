@@ -67,6 +67,7 @@ public static class NamedWolves
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, ExplodingWolf.Unit, "origin");
             ExplodingWolfRevive.Start(25.0f, false, ErrorHandler.Wrap(() =>
             {
+                if (ExplodingWolf.Unit == null) return;
                 DNTNamedWolves.Remove(ExplodingWolf);
                 ExplodingWolf.IsReviving = false;
                 ExplodingWolf.Unit?.Dispose();
