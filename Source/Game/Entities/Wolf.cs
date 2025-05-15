@@ -303,7 +303,7 @@ public class Wolf
 
         try
         {
-            for (int i = 0; i < Affixes.Count; i++)
+            for (int i = Affixes.Count - 1; i >= 0; i--)
             {
                 Affixes[i].Remove();
                 AffixFactory.AllAffixes.Remove(Affixes[i]);

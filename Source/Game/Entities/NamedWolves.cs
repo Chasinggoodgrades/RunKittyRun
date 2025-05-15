@@ -103,7 +103,7 @@ public static class NamedWolves
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in ExplodingWolfDesc {e.Message}");
+            Logger.Warning($"Error in ExplodingWolfDesc {e.Message} {e.StackTrace}");
         }
     }
 

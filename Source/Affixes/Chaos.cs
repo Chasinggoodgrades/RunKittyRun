@@ -31,7 +31,8 @@ public class Chaos : Affix
     {
         try
         {
-            currentAffix?.Remove();
+            Unit.RemoveAffix(currentAffix);
+            currentAffix = null;
             RotationTimer?.Dispose();
             Unit?.Unit?.RemoveAbility(AFFIX_ABILITY);
             base.Remove();
@@ -50,13 +51,13 @@ public class Chaos : Affix
             RotationTimer?.Timer.Start(rotationTime, true, RotateAffix);
             string randomAffix = GenRandomAffixName();
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix);
-            currentAffix.Apply();
+            Unit.AddAffix(currentAffix);
         }
         catch (System.Exception e)
         {
             Logger.Warning($"Error in Chaos.RegisterTimer: {e.Message}");
             RotationTimer.Dispose();
-            currentAffix?.Remove();
+            Unit.RemoveAffix(currentAffix);
             currentAffix = null;
         }
     }
@@ -65,16 +66,17 @@ public class Chaos : Affix
     {
         try
         {
-            currentAffix?.Remove();
+            Unit.RemoveAffix(currentAffix);
+            currentAffix = null;
             string randomAffix = GenRandomAffixName();
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix);
-            currentAffix.Apply();
+            Unit.AddAffix(currentAffix);
         }
         catch (System.Exception e)
         {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning($"Error in Chaos.RotateAffix: {e.Message}");
-            currentAffix?.Remove();
+            Unit.RemoveAffix(currentAffix);
             currentAffix = null;
         }
     }
@@ -89,6 +91,7 @@ public class Chaos : Affix
 
     public override void Pause(bool pause)
     {
+        RotationTimer.Pause(pause);
         currentAffix.Pause(pause);
     }
 

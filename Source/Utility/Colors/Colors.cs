@@ -184,6 +184,7 @@ public class Colors
     {
         Colors color = ColorManager[playerID];
         unit.SetVertexColor(color.red, color.green, color.blue, 255);
+        if (unit.UnitType == Constants.UNIT_CUSTOM_DOG) return;
         Globals.ALL_KITTIES[unit.Owner].SaveData.PlayerColorData.VortexColor = $"{color.red},{color.green},{color.blue}";
     }
 
