@@ -68,23 +68,30 @@ public class ChronoSphere : Relic
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
         if (upgradeLevel <= 0) return;
 
-        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, (SetAbilityData));
+        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, SetAbilityData);
         SetAbilityData();
     }
 
     // Upgrade Level 2 Location Capture
     private void RotatingLocationCapture()
     {
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
-        if (upgradeLevel <= 1) return;
-        LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, (CaptureLocation));
-        CaptureLocation();
+        try
+        {
+            var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
+            if (upgradeLevel <= 1) return;
+            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, CaptureLocation);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.RotatingLocationCapture: {e.Message}");
+        }
     }
 
     private void CaptureLocation()
     {
         try
         {
+            // Console.WriteLine($"Capturing Location {Kitty.CurrentStats.ChronoSphereCD}");
             if (Kitty.CurrentStats.ChronoSphereCD) return; // let's not proc if on cooldown
             var unit = Kitty.Unit;
             CapturedLocation = (unit.X, unit.Y, unit.Facing);

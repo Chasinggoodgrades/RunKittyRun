@@ -31,6 +31,7 @@ public static class UrnSoul
         u.SetPathing(false); // Disable Collision
         u.AddAbility(FourCC("Agho")); // Ghost
         u.AddAbility(FourCC("Augh")); // Shade
+        u.IsInvulnerable = true;
         return u;
     }
 
