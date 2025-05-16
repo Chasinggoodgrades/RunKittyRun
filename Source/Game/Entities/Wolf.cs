@@ -69,7 +69,6 @@ public class Wolf
                     for (int i = 0; i < numberOfWolves; i++)
                         new Wolf(lane);
                 }
-                //WolfSpawning.SpawnWolves();
                 FandF.CreateBloodWolf();
                 NamedWolves.CreateNamedWolves();
             }
@@ -161,26 +160,26 @@ public class Wolf
         {
             if (pause)
             {
-                Unit.ClearOrders();
+                WanderTimer?.Pause();
+                EffectTimer?.Pause();
                 for (int i = 0; i < Affixes.Count; i++)
                 {
                     Affixes[i].Pause(true);
                 }
-                WanderTimer?.Pause();
-                EffectTimer?.Pause();
+                Unit?.ClearOrders();
                 IsWalking = false;
                 IsPaused = true;
                 Unit.IsPaused = true; // Wander Wolf
             }
             else
             {
-                Unit.ClearOrders();
+                Unit?.ClearOrders();
                 for (int i = 0; i < Affixes.Count; i++)
                 {
                     Affixes[i].Pause(false);
                 }
                 WanderTimer?.Resume();
-                if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
+                if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer.Resume();
                 IsWalking = true;
                 IsPaused = false;
                 Unit.IsPaused = false;
@@ -208,6 +207,8 @@ public class Wolf
 
         WanderTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         EffectTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+
+        
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }
