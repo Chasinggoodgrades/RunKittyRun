@@ -15,6 +15,7 @@ public class AIController
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public static string FREE_LASER_COLOR = "GRSB";
     public static string BLOCKED_LASER_COLOR = "RESB";
+    private static float[] offsets = { -90f, -45f, 0.0f, 45f, 90f };
     public float _timerInterval = 0.1f;
     public float timerInterval
     {
@@ -629,15 +630,14 @@ public class AIController
 
         // Visualize the free intervals
         HideAllFreeLightnings();
-        foreach (var interval in freeGaps)
+        for (int i = 0; i < freeGaps.Count; i++)
         {
+            var interval = freeGaps[i];
             VisualizeFreeInterval(interval);
         }
 
         float targetX = kitty.Unit.X + MathF.Cos(forwardAngle) * DODGE_DISTANCE;
         float targetY = kitty.Unit.Y + MathF.Sin(forwardAngle) * DODGE_DISTANCE;
-
-        float[] offsets = { -90f, -45f, 0.0f, 45f, 90f };
 
         float bestCandidateScore = float.MaxValue;
         float bestCandidateAngle = -500f; // Default to the original forward angle

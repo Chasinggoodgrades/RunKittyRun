@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using WCSharp.Api;
-using WCSharp.Shared.Extensions;
 using static WCSharp.Api.Common;
 
 public class FrostbiteRing : Relic
 {
     public const int RelicItemID = Constants.ITEM_FROSTBITE_RING;
-    public new static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
-    public static Dictionary<unit, FrozenWolf> FrozenWolves = new Dictionary<unit, FrozenWolf>();
-    private const int RelicCost = 650;
-    private static float FROSTBITE_RING_RADIUS = 400.0f;
+    public static float SLOW_DURATION = 5.0f;
     public const string FROSTBITE_FREEZE_RING_EFFECT = "war3mapImported\\FreezingBreathTargetArt.mdl";
     public const string FROSTBITE_SLOW_TARGET_EFFECT = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
+    public new static int RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public static Dictionary<unit, FrozenWolf> FrozenWolves = new Dictionary<unit, FrozenWolf>();
+
+    private const int RelicCost = 650;
+    private static float FROSTBITE_RING_RADIUS = 400.0f;
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
-    public static float SLOW_DURATION = 5.0f;
     private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
     private trigger Trigger;
@@ -118,6 +117,7 @@ public class FrozenWolf
     public AchesTimers Timer { get; set; }
     private effect FreezeEffect { get; set; }
     private player Caster { get; set; }
+    private bool Active { get; set; } = false;
 
     public FrozenWolf()
     {
@@ -127,14 +127,15 @@ public class FrozenWolf
     {
         try
         {
-            Timer ??= ObjectPool.GetEmptyObject<AchesTimers>();
+            if (!Active) Timer = ObjectPool.GetEmptyObject<AchesTimers>();
             Unit = wolfToFreeze;
             FreezeEffect ??= AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
             Caster = castingPlayer;
 
-            PausingWolf(Unit, true);
+            PausingWolf(Unit);
 
             Timer.Timer.Start(duration, false, EndingFreezeActions);
+            Active = true;
         }
         catch (Exception e)
         {
@@ -148,7 +149,6 @@ public class FrozenWolf
         try
         {
             FreezeEffect?.Dispose();
-            FreezeEffect = null;
             PausingWolf(Unit, false);
             SlowWolves(Unit);
             Dispose();
@@ -168,8 +168,8 @@ public class FrozenWolf
             {
                 FrostbiteRing.FrozenWolves.Remove(Unit);
             }
-            ObjectPool.ReturnObject(Timer);
-            Timer = null;
+            Timer.Dispose(); // returns timer object.
+            Active = false;
             ObjectPool.ReturnObject(this);
         }
         catch (Exception e)
