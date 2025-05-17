@@ -80,7 +80,8 @@ public class Bomber : Affix
             if (RangeIndicator == null) return;
             if (Unit.Unit == null) return;
             Unit.PauseSelf(true);
-            RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
+            if (Unit.Unit.IsVisible)
+                RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
             Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
@@ -160,7 +161,7 @@ public class Bomber : Affix
     public override void Pause(bool pause)
     {
         // For now.. Bomber wolves cannot really be frozen once the explosion timer starts..
-        // But in the future.. Need to move the explosion timers to be 1 timer instead of 4 Utility.SimpleTimers. 
+        // But in the future.. Need to move the explosion timers to be 1 timer instead of 4 Utility.SimpleTimers.
         RangeIndicator.DestroyIndicator();
     }
 }

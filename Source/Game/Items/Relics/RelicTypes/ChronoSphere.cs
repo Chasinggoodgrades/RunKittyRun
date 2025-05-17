@@ -79,7 +79,8 @@ public class ChronoSphere : Relic
         {
             var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 1) return;
-            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, true, CaptureLocation);
+            CapturedLocation = (Kitty.Unit.X, Kitty.Unit.Y, Kitty.Unit.Facing); // reset to current location on buy
+            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
         }
         catch (Exception e)
         {
@@ -92,16 +93,17 @@ public class ChronoSphere : Relic
         try
         {
             // Console.WriteLine($"Capturing Location {Kitty.CurrentStats.ChronoSphereCD}");
-            if (Kitty.CurrentStats.ChronoSphereCD) return; // let's not proc if on cooldown
+            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
+            if (Kitty.CurrentStats.ChronoSphereCD) return;
             var unit = Kitty.Unit;
             CapturedLocation = (unit.X, unit.Y, unit.Facing);
             LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
             LocationEffect.Scale = 0.55f;
-            Utility.SimpleTimer(0.25f, () => LocationEffect?.Dispose());
+            LocationEffect.Dispose();
         }
-        catch (Exception e)
+        catch (Exception er)
         {
-            Logger.Warning($"Error in ChronoSphere.CaptureLocation: {e.Message}");
+            Logger.Warning($"Error in ChronoSphere.CaptureLocation: {er.Message}");
         }
     }
 
@@ -146,22 +148,30 @@ public class ChronoSphere : Relic
 
     public static bool RewindDeath(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
-        if (kitty.ProtectionActive) return false; // Don't rewind if ultimate has been casted.
-        if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false;
-        var relic = kitty.Relics.Find(IsChronoSphere) as ChronoSphere;
-        if (relic == null) return false;
-        if (kitty.CurrentStats.ChronoSphereCD) return false;
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
-        if (upgradeLevel < 2) return false;
-        relic.RewindTime();
-        kitty.CurrentStats.ChronoSphereCD = true;
-        Utility.SimpleTimer(REWIND_COOLDOWN, () =>
+        try
         {
-            kitty.CurrentStats.ChronoSphereCD = false;
-            kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
-            relic.CaptureLocation();
-        });
-        return true;
+            if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
+            if (kitty.ProtectionActive) return false; // Don't rewind if ultimate has been casted.
+            if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false;
+            var relic = kitty.Relics.Find(IsChronoSphere) as ChronoSphere;
+            if (relic == null) return false;
+            if (kitty.CurrentStats.ChronoSphereCD) return false;
+            var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
+            if (upgradeLevel < 2) return false;
+            relic.RewindTime();
+            kitty.CurrentStats.ChronoSphereCD = true;
+            Utility.SimpleTimer(REWIND_COOLDOWN, () =>
+            {
+                kitty.CurrentStats.ChronoSphereCD = false;
+                kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
+                relic?.LocationCaptureTimer?.Timer.Start(0, false, relic.CaptureLocation);
+            });
+            return true;
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.RewindDeath: {e.Message}");
+            return false;
+        }
     }
 }

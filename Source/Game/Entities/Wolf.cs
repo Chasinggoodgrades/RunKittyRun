@@ -39,9 +39,11 @@ public class Wolf
         Affixes = new List<Affix>();
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
-        InitializeWolf();
+
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
+
+        InitializeWolf();
         WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
 
@@ -88,7 +90,7 @@ public class Wolf
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Timer.Start(realTime, false, _cachedWander);
+        WanderTimer?.Timer?.Start(realTime, false, _cachedWander);
     }
 
     /// <summary>
@@ -96,7 +98,7 @@ public class Wolf
     /// </summary>
     public void WolfMove(bool forced = false)
     {
-        if ((IsPaused || IsReviving) && forced) return;
+        if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
         var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
@@ -173,7 +175,6 @@ public class Wolf
             }
             else
             {
-                Unit?.ClearOrders();
                 for (int i = 0; i < Affixes.Count; i++)
                 {
                     Affixes[i].Pause(false);
@@ -246,7 +247,7 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Timer.Start(effectDuration, false, _cachedEffect);
+        EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect);
     }
 
     private void WolfMoveCancelEffect()

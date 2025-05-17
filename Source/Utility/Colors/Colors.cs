@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -211,19 +211,26 @@ public class Colors
 
     public static void PopulateColorsData(Kitty kitty)
     {
-        string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
-        if (!string.IsNullOrEmpty(colorData)) return; // already populated
-        sb.Clear();
-
-        for (int i = 0; i < ColorManager.Count; i++) // else populate it
+        try
         {
-            string[] colorName = ColorManager[i].colorname.Split(',');
-            sb.Append(colorName[0]).Append(":0");
-            if (i < ColorManager.Count - 1)
-                sb.Append(",");
-        }
+            string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+            if (!string.IsNullOrEmpty(colorData)) return; // already populated
+            sb.Clear();
 
-        kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
+            for (int i = 0; i < ColorManager.Count; i++) // else populate it
+            {
+                string[] colorName = ColorManager[i].colorname.Split(',');
+                sb.Append(colorName[0]).Append(":0");
+                if (i < ColorManager.Count - 1)
+                    sb.Append(",");
+            }
+
+            kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in PopulateColorsData: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -232,20 +239,39 @@ public class Colors
     /// <param name="kitty"></param>
     public static void UpdateColors(Kitty kitty)
     {
-        string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
-        if (string.IsNullOrEmpty(colorData)) return;
-        string[] pairs = colorData.Split(',');
-        for (int i = 0; i < pairs.Length; i++)
+        try
         {
-            string pair = pairs[i];
-            string[] parts = pair.Split(':');
-            if (parts.Length == 2 && int.TryParse(parts[1], out int count))
+            string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+            string currentColor = kitty.SaveData.PlayerColorData.LastPlayedColor;
+
+            if (string.IsNullOrEmpty(colorData) || string.IsNullOrEmpty(currentColor)) return;
+
+            sb.Clear();
+            string[] pairs = colorData.Split(',');
+
+            for (int i = 0; i < pairs.Length; i++)
             {
-                if (count > 0)
+                string[] parts = pairs[i].Split(':');
+                if (parts.Length == 2 && int.TryParse(parts[1], out int count))
                 {
-                    kitty.SaveData.PlayerColorData.PlayedColors += $"{parts[0]}:{count + 1},";
+                    if (parts[0] == currentColor)
+                    {
+                        count++;
+                    }
+                    sb.Append($"{parts[0]}:{count},");
                 }
             }
+
+            if (sb.Length > 0)
+            {
+                sb.Length--;
+            }
+
+            kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in UpdateColors: {e.Message}");
         }
     }
 

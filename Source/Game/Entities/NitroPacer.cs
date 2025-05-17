@@ -20,10 +20,7 @@ public static class NitroPacer
     /// </summary>
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard")
-        {
-            return;
-        }
+        if (Gamemode.CurrentGameMode != "Standard") return;
 
         Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
@@ -47,6 +44,8 @@ public static class NitroPacer
     /// </summary>
     public static void StartNitroPacer()
     {
+        if (Gamemode.CurrentGameMode != "Standard") return;
+
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
         NitroPacerQueueOrders();
@@ -58,7 +57,9 @@ public static class NitroPacer
     /// </summary>
     public static void ResetNitroPacer()
     {
-        pacerTimer.Pause();
+        if (Gamemode.CurrentGameMode != "Standard") return;
+
+        pacerTimer?.Pause();
         Unit.IsPaused = false;
         Unit.SetPosition(spawnRect.CenterX, spawnRect.CenterY);
         currentCheckpoint = 0;
@@ -80,7 +81,7 @@ public static class NitroPacer
                 currentCheckpoint++;
                 if (currentCheckpoint >= pathingPoints.Length - 1)
                 {
-                    pacerTimer.Pause();
+                    pacerTimer?.Pause();
                     Utility.SimpleTimer(2.0f, () => Unit.IsPaused = true); // this is actually ok since we reset pacer before starting it again
                     return;
                 }

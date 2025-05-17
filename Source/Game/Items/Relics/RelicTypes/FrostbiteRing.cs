@@ -112,7 +112,6 @@ public class FrostbiteRing : Relic
 
 public class FrozenWolf
 {
-
     public unit Unit { get; set; }
     public AchesTimers Timer { get; set; }
     private effect FreezeEffect { get; set; }
@@ -149,6 +148,7 @@ public class FrozenWolf
         try
         {
             FreezeEffect?.Dispose();
+            FreezeEffect = null;
             PausingWolf(Unit, false);
             SlowWolves(Unit);
             Dispose();
@@ -168,7 +168,7 @@ public class FrozenWolf
             {
                 FrostbiteRing.FrozenWolves.Remove(Unit);
             }
-            Timer.Dispose(); // returns timer object.
+            Timer.Dispose();
             Active = false;
             ObjectPool.ReturnObject(this);
         }

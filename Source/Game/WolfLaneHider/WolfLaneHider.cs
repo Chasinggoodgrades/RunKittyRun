@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public static class WolfLaneHider
 {
     private static readonly HashSet<int> lanesToEnable = new HashSet<int>();
+    private static readonly HashSet<int> currentlyVisibleLanes = new HashSet<int>();
 
     public static void LanesHider()
     {
@@ -66,12 +67,30 @@ public static class WolfLaneHider
             if (WolfArea.WolfAreas == null)
                 return;
 
-            foreach (var lane in WolfArea.WolfAreas)
+            // Show lanes that are now visible but weren't before
+            foreach (var laneId in lanesToEnable)
             {
-                bool shouldShow = lanesToEnable.Contains(lane.Key);
-                lane.Value.IsEnabled = shouldShow; // wasnt being set lmao
-                SetLaneVisibility(lane.Value, shouldShow);
+                if (!currentlyVisibleLanes.Contains(laneId) && WolfArea.WolfAreas.TryGetValue(laneId, out var lane))
+                {
+                    lane.IsEnabled = true;
+                    SetLaneVisibility(lane, true);
+                }
             }
+
+            // Hide lanes that are no longer visible
+            foreach (var laneId in currentlyVisibleLanes)
+            {
+                if (!lanesToEnable.Contains(laneId) && WolfArea.WolfAreas.TryGetValue(laneId, out var lane))
+                {
+                    lane.IsEnabled = false;
+                    SetLaneVisibility(lane, false);
+                }
+            }
+
+            // Update the set for next time
+            currentlyVisibleLanes.Clear();
+            foreach (var laneId in lanesToEnable)
+                currentlyVisibleLanes.Add(laneId);
         }
         catch (Exception e)
         {
@@ -85,7 +104,6 @@ public static class WolfLaneHider
         {
             var wolf = lane.Wolves[i];
             wolf.Unit.IsVisible = isVisible;
-            // wolf.IsPaused = !isVisible;
             wolf.PauseSelf(!isVisible);
             wolf.Texttag?.SetVisibility(isVisible);
         }

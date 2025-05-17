@@ -17,6 +17,7 @@ public static class Gameover
         if (!WinGame) return false;
         SendWinMessage();
         GameStats(true);
+        GameoverUtil.SetColorData();
         GameoverUtil.SetBestGameStats();
         StandardWinChallenges();
         SaveGame();
@@ -39,6 +40,7 @@ public static class Gameover
     private static void LosingGame()
     {
         Wolf.RemoveAllWolves();
+        GameoverUtil.SetColorData();
         GameStats(false);
         SaveGame();
         NotifyEndingGame();
