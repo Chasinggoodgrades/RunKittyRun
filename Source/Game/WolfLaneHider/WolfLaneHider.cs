@@ -127,4 +127,25 @@ public static class WolfLaneHider
             Logger.Warning($"Error in HideAllLanes: {e.Message}");
         }
     }
+
+    public static void ResetLanes()
+    {
+        try
+        {
+            lanesToEnable.Clear();
+            currentlyVisibleLanes.Clear();
+            if (WolfArea.WolfAreas == null)
+                return;
+            foreach (var lane in WolfArea.WolfAreas)
+            {
+                lane.Value.IsEnabled = true;
+                SetLaneVisibility(lane.Value, true);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ResetLanes: {e.Message}");
+        }
+    }
+
 }

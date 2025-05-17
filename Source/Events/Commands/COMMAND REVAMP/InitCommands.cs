@@ -1429,14 +1429,49 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "test5",
-            alias: "",
+            name: "spawnkibble",
+            alias: "skb",
             group: "admin",
-            argDesc: "[on][off]",
-            description: "Testing memory handler.. Observe how much memory is created",
+            argDesc: "[# of kibble]",
+            description: "Spawns {int #} of kibbles ",
             action: (player, args) =>
             {
-                //var luaFrame = new LuaEditor();
+                var amount = args[0] != "" ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS;
+                ItemSpawner.SpawnKibble(amount);
+
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "savedvc",
+            alias: "svc, ssc",
+            group: "all",
+            argDesc: "",
+            description: "Sets you to your previously last saved vortex color if you have one.",
+            action: (player, args) =>
+            {
+                Kitty kitty = Globals.ALL_KITTIES[player];
+                string vortexColor = kitty.SaveData.PlayerColorData.VortexColor;
+                if (vortexColor == "") return;
+                string[] rgb = vortexColor.Split(',');
+                Colors.SetPlayerVertexColor(kitty.Player, rgb);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "sendtostart",
+            alias: "sts",
+            group: "admin",
+            argDesc: "[resolvePlayerId]",
+            description: "Sends the passed player to the start",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    var spawnCenter = RegionList.SpawnRegions[1];
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                });
             }
         );
 
