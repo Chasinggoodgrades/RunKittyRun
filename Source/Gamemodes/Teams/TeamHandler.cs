@@ -54,6 +54,7 @@ public static class TeamHandler
         {
             foreach (var player in shuffled)
             {
+
                 if (Globals.PLAYERS_TEAMS.TryGetValue(player, out Team currentTeam))
                 {
                     continue;
@@ -72,6 +73,7 @@ public static class TeamHandler
                     }
                 }
 
+
                 if (!addedToExistingTeam)
                 {
                     // Create new teams as needed
@@ -81,12 +83,14 @@ public static class TeamHandler
                         teamNumber++;
                     }
 
+
                     // Check if the team exists, if not create it
                     if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out Team team))
                     {
                         team = new Team(teamNumber);
                         Globals.ALL_TEAMS[teamNumber] = team;
                     }
+
 
                     // Add the player to the new team
                     team.AddMember(player);
@@ -95,7 +99,7 @@ public static class TeamHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine($"{Colors.COLOR_RED}TeamHandler, RandomHandler: " + e.Message);
+            Logger.Critical($"Error in TeamHandler.RandomHandler: {e.Message}");
         }
     }
 

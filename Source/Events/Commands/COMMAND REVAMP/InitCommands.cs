@@ -1475,5 +1475,22 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "team",
+            alias: "t",
+            group: "all",
+            argDesc: "[team #]",
+            description: "Assigns you to the provided team arg #, (TEAM MODE ONLY)",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: team [team #]{Colors.COLOR_RESET}");
+                    return;
+                }
+                TeamHandler.Handler(player, int.Parse(args[0]));
+            }
+        );
+
     }
 }

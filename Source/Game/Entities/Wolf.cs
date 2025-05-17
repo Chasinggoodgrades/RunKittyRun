@@ -22,7 +22,7 @@ public class Wolf
     private AchesTimers EffectTimer { get; set; }
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
-    public rect Lane { get; private set; }
+    public WolfArea WolfArea { get; private set; }
     public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
@@ -35,7 +35,7 @@ public class Wolf
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
-        Lane = RegionList.WolfRegions[RegionIndex].Rect;
+        WolfArea = WolfArea.WolfAreas[regionIndex];
         Affixes = new List<Affix>();
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
@@ -101,8 +101,8 @@ public class Wolf
         if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
-        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
-        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
+        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
@@ -196,8 +196,8 @@ public class Wolf
     {
         var selectedPlayer = Setup.getNextWolfPlayer();
 
-        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
-        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
+        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         var facing = GetRandomReal(0, 360);
 
         Unit = unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
