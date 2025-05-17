@@ -110,7 +110,7 @@ public class Bomber : Affix
                 if (u == null) break;
                 ExplodeGroup.Remove(u);
 
-                if (!WolfArea.WolfAreas[Unit.RegionIndex].Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
+                if (!Unit.WolfArea.Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
                 if (!Globals.ALL_KITTIES[u.Owner].Alive) continue; // ignore if they're dead lol
                 Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
                 Globals.ALL_KITTIES[u.Owner].KillKitty();

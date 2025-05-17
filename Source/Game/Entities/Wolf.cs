@@ -47,11 +47,7 @@ public class Wolf
         WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
 
-
-        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
-        {
-            wolfArea.Wolves.Add(this);
-        }
+        WolfArea.Wolves.Add(this);
     }
 
     /// <summary>
@@ -117,7 +113,7 @@ public class Wolf
         WanderTimer = null;
         Texttag?.Dispose();
         Texttag = null;
-        WolfArea.WolfAreas[RegionIndex].Wolves.Remove(this);
+        WolfArea.Wolves.Remove(this);
         Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;
