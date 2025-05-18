@@ -40,14 +40,14 @@ public class APMTracker
     private void CaptureActions()
     {
         if (!IsInSafeZone(Kitty))
-            TotalActions++;
+            TotalActions += 1;
     }
 
     private void CheckKittyPositions()
     {
         try
         {
-            if (!IsInSafeZone(Kitty)) return;
+            if (IsInSafeZone(Kitty)) return;
             Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
         }
         catch (Exception e)
@@ -66,7 +66,7 @@ public class APMTracker
     {
         var totalActions = kitty.APMTracker.TotalActions;
         var timeOutsideSafeZones = kitty.APMTracker.TimeOutsideSafeZones / 60.0f; // put in mins (APM)
-        return timeOutsideSafeZones == 0.0f ? 0.0f : totalActions / timeOutsideSafeZones;
+        return timeOutsideSafeZones > 0.0f ? totalActions / timeOutsideSafeZones : 0.0f;
     }
 
     public static string CalculateAllAPM()
