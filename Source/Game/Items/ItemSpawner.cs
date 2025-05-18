@@ -11,7 +11,7 @@ public static class ItemSpawner
     private static List<int> SpawnableItems;
     private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
-    public static int NUMBER_OF_ITEMS = 15;
+    public static int NUMBER_OF_ITEMS { get; set; } = 15;
 
     public static void Initialize()
     {
@@ -36,8 +36,9 @@ public static class ItemSpawner
             for (var i = 0; i < NUMBER_OF_ITEMS; i++)
             {
                 SpawnRegularItems();
-                SpawnKibble();
             }
+            SpawnKibble(NUMBER_OF_ITEMS);
+
         }
         catch (Exception e)
         {
@@ -68,14 +69,17 @@ public static class ItemSpawner
         TrackKibbles.Clear();
     }
 
-    private static void SpawnKibble()
+    public static void SpawnKibble(int numberOfItems)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
         if (KibbleEvent.IsEventActive()) return;
 
-        var kibble = ObjectPool.GetEmptyObject<Kibble>();
-        kibble.SpawnKibble();
-        TrackKibbles.Add(kibble);
+        for (int i = 0; i < numberOfItems; i++)
+        {
+            var kibble = ObjectPool.GetEmptyObject<Kibble>();
+            kibble.SpawnKibble();
+            TrackKibbles.Add(kibble);
+        }
     }
 
     private static void SpawnRegularItems()

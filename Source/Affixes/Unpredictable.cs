@@ -25,4 +25,10 @@ public class Unpredictable : Affix
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
         base.Remove();
     }
+
+    public override void Pause(bool pause)
+    {
+
+    }
+
 }

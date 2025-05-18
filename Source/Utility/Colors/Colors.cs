@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -27,6 +28,7 @@ public class Colors
     public const string COLOR_LIGHTBLUE = "|c006969FF";
     public const string COLOR_RESET = "|r";
     private static List<Colors> ColorManager = new List<Colors>();
+    private static StringBuilder sb = new StringBuilder();
     private string colorname;
     private int colorID;
     private string colorcode;
@@ -98,7 +100,7 @@ public class Colors
     {
         for (int i = 0; i < ColorManager.Count; i++)
         {
-            var color = ColorManager[i];
+            Colors color = ColorManager[i];
             if (color.colorID == playerColorID)
             {
                 return color.colorcode;
@@ -109,17 +111,27 @@ public class Colors
 
     public static void SetPlayerColor(player p, string color)
     {
-        var kitty = Globals.ALL_KITTIES[p];
+        Kitty kitty = Globals.ALL_KITTIES[p];
         foreach (var c in ColorManager)
         {
             if (ColorContainsCommand(c, color))
+            {
                 kitty.Unit.SetColor(playercolor.Convert(c.colorID - 1));
+                kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.Split(',')[0];
+            }
         }
+    }
+
+    public static void SetColorJoinedAs(player p)
+    {
+        Kitty kitty = Globals.ALL_KITTIES[p];
+        var color = ColorManager[p.Id];
+        kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.Split(',')[0];
     }
 
     public static void SetPlayerVertexColor(player p, string[] RGB)
     {
-        var kitty = Globals.ALL_KITTIES[p];
+        Kitty kitty = Globals.ALL_KITTIES[p];
         int r = 0, g = 0, b = 0;
 
         if (RGB.Length > 0) r = int.Parse(RGB[0]);
@@ -127,6 +139,7 @@ public class Colors
         if (RGB.Length > 2) b = int.Parse(RGB[2]);
 
         kitty.Unit.SetVertexColor(r, g, b, 255);
+        Globals.ALL_KITTIES[p].SaveData.PlayerColorData.VortexColor = $"{r},{g},{b}";
     }
 
     /// <summary>
@@ -135,10 +148,10 @@ public class Colors
     /// <param name="p">The player object</param>
     public static void SetPlayerRandomVertexColor(player p)
     {
-        var kitty = Globals.ALL_KITTIES[p];
-        var r = GetRandomInt(0, 255);
-        var g = GetRandomInt(0, 255);
-        var b = GetRandomInt(0, 255);
+        Kitty kitty = Globals.ALL_KITTIES[p];
+        int r = GetRandomInt(0, 255);
+        int g = GetRandomInt(0, 255);
+        int b = GetRandomInt(0, 255);
         kitty.Unit.SetVertexColor(r, g, b, 255);
         p.DisplayTimedTextTo(5.0f, $"{COLOR_RED}Red: {COLOR_RESET}{r}, {COLOR_GREEN}Green: {COLOR_RESET}{g}, {COLOR_BLUE}Blue: {COLOR_RESET}{b}");
     }
@@ -169,23 +182,24 @@ public class Colors
     /// <param name="playerID"></param>
     public static void SetUnitToVertexColor(unit unit, int playerID)
     {
-        var color = ColorManager[playerID];
+        Colors color = ColorManager[playerID];
         unit.SetVertexColor(color.red, color.green, color.blue, 255);
+        if (unit.UnitType == Constants.UNIT_CUSTOM_DOG) return;
+        Globals.ALL_KITTIES[unit.Owner].SaveData.PlayerColorData.VortexColor = $"{color.red},{color.green},{color.blue}";
     }
 
     public static void ListColorCommands(player player)
     {
-        StringBuilder combinedColors = new StringBuilder();
+        sb.Clear();
+        foreach (Colors color in ColorManager)
+            sb.Append($"{color.colorcode}{color.colorname}|r, ");
 
-        foreach (var color in ColorManager)
-            combinedColors.Append($"{color.colorcode}{color.colorname}|r, ");
-
-        player.DisplayTimedTextTo(10.0f, combinedColors.ToString());
+        player.DisplayTimedTextTo(10.0f, sb.ToString());
     }
 
     public static player GetPlayerByColor(string colorName)
     {
-        foreach (var color in ColorManager)
+        foreach (Colors color in ColorManager)
         {
             if (ColorContainsCommand(color, colorName.ToLower()))
             {
@@ -195,28 +209,90 @@ public class Colors
         return null;
     }
 
+    public static void PopulateColorsData(Kitty kitty)
+    {
+        try
+        {
+            string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+            if (!string.IsNullOrEmpty(colorData)) return; // already populated
+            sb.Clear();
+
+            for (int i = 0; i < ColorManager.Count; i++) // else populate it
+            {
+                string[] colorName = ColorManager[i].colorname.Split(',');
+                sb.Append(colorName[0]).Append(":0");
+                if (i < ColorManager.Count - 1)
+                    sb.Append(",");
+            }
+
+            kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in PopulateColorsData: {e.Message}");
+        }
+    }
+
     /// <summary>
     /// This function only calls at the end of the game for SaveData purposes. So it should be okay to run and update all player colors accordingly.
     /// </summary>
     /// <param name="kitty"></param>
     public static void UpdateColors(Kitty kitty)
     {
-        var colorData = new Dictionary<string, string>();
+        try
+        {
+            string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+            string currentColor = kitty.SaveData.PlayerColorData.LastPlayedColor;
 
+            if (string.IsNullOrEmpty(colorData) || string.IsNullOrEmpty(currentColor)) return;
+
+            sb.Clear();
+            string[] pairs = colorData.Split(',');
+
+            for (int i = 0; i < pairs.Length; i++)
+            {
+                string[] parts = pairs[i].Split(':');
+                if (parts.Length == 2 && int.TryParse(parts[1], out int count))
+                {
+                    if (parts[0] == currentColor)
+                    {
+                        count++;
+                    }
+                    sb.Append($"{parts[0]}:{count},");
+                }
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Length--;
+            }
+
+            kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in UpdateColors: {e.Message}");
+        }
     }
 
+    /// <summary>
+    /// Returns the string of the most played color and also updates the PlayerColorData.MostPlayedColor to that color.
+    /// </summary>
+    /// <param name="kitty"></param>
+    /// <returns></returns>
     public static string GetMostPlayedColor(Kitty kitty)
     {
-        var colorData = kitty.SaveData.PlayerColorData.PlayedColors;
+        string colorData = kitty.SaveData.PlayerColorData.PlayedColors;
         if (string.IsNullOrEmpty(colorData)) return null;
 
         string[] pairs = colorData.Split(','); // splits like .. "red:5", "blue:6", etc.
-        string mostPlayedColor = "";
+        string[] names = colorData.Split(':'); // splits like .. "red", "5", "blue", "6", etc.
+        string mostPlayedColor = names[0]; // default to first color
         int maxCount = 0;
 
         for (int i = 0; i < pairs.Length; i++)
         {
-            var pair = pairs[i];
+            string pair = pairs[i];
             string[] parts = pair.Split(':');
             if (parts.Length == 2 && int.TryParse(parts[1], out int count))
             {
@@ -227,6 +303,10 @@ public class Colors
                 }
             }
         }
+
+        // Set the save data to the most played color
+        kitty.SaveData.PlayerColorData.MostPlayedColor = mostPlayedColor;
+
         return mostPlayedColor;
     }
 

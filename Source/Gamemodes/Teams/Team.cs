@@ -102,6 +102,6 @@ public class Team
             Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, TeamHandler.RandomHandler);
         }
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
-            Utility.SimpleTimer(1.0f, TeamHandler.RandomHandler);
+            Utility.SimpleTimer(2.5f, TeamHandler.RandomHandler);
     }
 }

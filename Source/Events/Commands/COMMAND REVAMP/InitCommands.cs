@@ -961,13 +961,17 @@ public static class InitCommands
             name: "scale",
             alias: "",
             group: "admin",
-            argDesc: "[scale]",
-            description: "Sets the scale of the kitty.",
+            argDesc: "[scale], [player]",
+            description: "Sets the scale of the passed player's kitty parameter.",
             action: (player, args) =>
             {
                 var scale = args[0] != "" ? float.Parse(args[0]) : 0.6f;
-                var kitty = Globals.ALL_KITTIES[player];
-                kitty.Unit.SetScale(scale, scale, scale);
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    kitty.Unit.SetScale(scale, scale, scale);
+                });
             }
         );
 
@@ -1112,12 +1116,18 @@ public static class InitCommands
             name: "skin",
             alias: "",
             group: "admin",
-            argDesc: "[skinId]",
-            description: "Sets the skin of the kitty.",
+            argDesc: "[skinId], [player]",
+            description: "Sets the skin of the passed player parameter.",
             action: (player, args) =>
             {
-                var skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
-                BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                int skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    BlzSetUnitSkin(kitty.Unit, skin);
+                });
+                return;
             }
         );
 
@@ -1372,7 +1382,7 @@ public static class InitCommands
             description: "Activates the revive invul for 0.6 seconds. Served as a test run.",
             action: (player, args) =>
             {
-                var status = args[0] != "" && CommandsManager.GetBool(args[0]);
+                bool status = args[0] != "" && CommandsManager.GetBool(args[0]);
                 Kitty.InvulTest = status;
                 player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Revive invul test: {status}");
             }
@@ -1419,14 +1429,66 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "test5",
-            alias: "",
+            name: "spawnkibble",
+            alias: "skb",
             group: "admin",
-            argDesc: "[on][off]",
-            description: "Testing memory handler.. Observe how much memory is created",
+            argDesc: "[# of kibble]",
+            description: "Spawns {int #} of kibbles ",
             action: (player, args) =>
             {
-                //var luaFrame = new LuaEditor();
+                var amount = args[0] != "" ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS;
+                ItemSpawner.SpawnKibble(amount);
+
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "savedvc",
+            alias: "svc, ssc",
+            group: "all",
+            argDesc: "",
+            description: "Sets you to your previously last saved vortex color if you have one.",
+            action: (player, args) =>
+            {
+                Kitty kitty = Globals.ALL_KITTIES[player];
+                string vortexColor = kitty.SaveData.PlayerColorData.VortexColor;
+                if (vortexColor == "") return;
+                string[] rgb = vortexColor.Split(',');
+                Colors.SetPlayerVertexColor(kitty.Player, rgb);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "sendtostart",
+            alias: "sts",
+            group: "admin",
+            argDesc: "[resolvePlayerId]",
+            description: "Sends the passed player to the start",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    var spawnCenter = RegionList.SpawnRegions[1];
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "team",
+            alias: "t",
+            group: "all",
+            argDesc: "[team #]",
+            description: "Assigns you to the provided team arg #, (TEAM MODE ONLY)",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: team [team #]{Colors.COLOR_RESET}");
+                    return;
+                }
+                TeamHandler.Handler(player, int.Parse(args[0]));
             }
         );
 

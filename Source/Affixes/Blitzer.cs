@@ -40,9 +40,12 @@ public class Blitzer : Affix
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
 
         GC.RemoveEffect(ref WanderEffect);
-        BlitzerTimer.Dispose();
-        MoveTimer.Dispose();
-        PreBlitzerTimer.Dispose();
+        BlitzerTimer?.Dispose();
+        MoveTimer?.Dispose();
+        PreBlitzerTimer?.Dispose();
+        BlitzerTimer = null;
+        MoveTimer = null;
+        PreBlitzerTimer = null;
         GC.RemoveEffect(ref Effect);
         EndBlitz();
         Unit.Unit.SetVertexColor(150, 120, 255, 255);
@@ -55,7 +58,7 @@ public class Blitzer : Affix
         MoveTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         PreBlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         var randomFlyTime = GetRandomReal(4.0f, 10.0f); // random time to move before blitzing
-        MoveTimer.Timer.Start(randomFlyTime, false, PreBlitzerMove); // initial move
+        MoveTimer?.Timer.Start(randomFlyTime, false, PreBlitzerMove); // initial move
         BlitzerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
     }
 
@@ -65,14 +68,14 @@ public class Blitzer : Affix
         {
             if (Unit.IsPaused)
             {
-                MoveTimer.Timer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
+                MoveTimer?.Timer.Start(GetRandomReal(3.0f, 10.0f), false, PreBlitzerMove);
                 return;
             }
             WanderEffect ??= effect.Create(Wolf.DEFAULT_OVERHEAD_EFFECT, Unit.Unit, "overhead");
             WanderEffect.PlayAnimation(ANIM_TYPE_STAND);
             Unit.Unit.SetVertexColor(255, 255, 0);
             Unit.Unit.SetColor(playercolor.Yellow);
-            PreBlitzerTimer.Timer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
+            PreBlitzerTimer?.Timer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
         }
         catch (Exception e)
         {
@@ -86,15 +89,15 @@ public class Blitzer : Affix
         try
         {
             var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
-            var x = GetRandomReal(Unit.Lane.MinX, Unit.Lane.MaxX);
-            var y = GetRandomReal(Unit.Lane.MinY, Unit.Lane.MaxY);
-            WanderEffect.PlayAnimation(ANIM_TYPE_DEATH);
+            var x = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
+            var y = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
+            WanderEffect?.PlayAnimation(ANIM_TYPE_DEATH);
             BlitzerMove(x, y);
             Unit.Unit.RemoveAbility(GHOST_VISIBLE); // ghost visible
             Effect ??= effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
-            Effect.PlayAnimation(ANIM_TYPE_STAND);
+            Effect?.PlayAnimation(ANIM_TYPE_STAND);
             Unit.IsWalking = true;
-            MoveTimer.Timer.Start(randomTime, false, PreBlitzerMove);
+            MoveTimer?.Timer.Start(randomTime, false, PreBlitzerMove);
         }
         catch (Exception e)
         {
@@ -136,13 +139,13 @@ public class Blitzer : Affix
         var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
-        BlitzerTimer.Timer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+        BlitzerTimer?.Timer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
     }
 
     private void EndBlitz()
     {
-        BlitzerTimer.Pause();
-        Effect.PlayAnimation(ANIM_TYPE_DEATH);
+        BlitzerTimer?.Pause();
+        Effect?.PlayAnimation(ANIM_TYPE_DEATH);
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
@@ -152,25 +155,26 @@ public class Blitzer : Affix
 
     public static Blitzer GetBlitzer(unit unit)
     {
+        if (unit == null) return null;
         var affix = Globals.ALL_WOLVES[unit].Affixes.Find(IsBlitzer);
         return affix is Blitzer blitzer ? blitzer : null;
     }
 
-    public void PauseBlitzing(bool pause)
+    public override void Pause(bool pause)
     {
         if (pause)
         {
-            BlitzerTimer.Pause();
-            PreBlitzerTimer.Pause();
-            WanderEffect.PlayAnimation(ANIM_TYPE_DEATH);
-            MoveTimer.Pause();
+            BlitzerTimer?.Pause();
+            PreBlitzerTimer?.Pause();
+            WanderEffect?.PlayAnimation(ANIM_TYPE_DEATH);
+            MoveTimer?.Pause();
             Unit.IsWalking = !pause;
         }
         else
         {
-            BlitzerTimer.Resume();
-            PreBlitzerTimer.Resume();
-            MoveTimer.Resume();
+            BlitzerTimer?.Resume();
+            PreBlitzerTimer?.Resume();
+            MoveTimer?.Resume();
             Unit.IsWalking = !pause;
         }
     }

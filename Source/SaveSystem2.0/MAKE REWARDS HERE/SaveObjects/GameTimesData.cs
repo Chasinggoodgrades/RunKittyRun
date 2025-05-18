@@ -17,6 +17,11 @@ public class NormalGameTimeData
     public string Date { get; set; } = "";
     public float Time { get; set; }
     public string TeamMembers { get; set; } = "";
+/*    public float RoundOneTime { get; set; }
+    public float RoundTwoTime { get; set; }
+    public float RoundThreeTime { get; set; }
+    public float RoundFourTime { get; set; }
+    public float RoundFiveTime { get; set; }*/
 }
 
 public class HardGameTimeData
@@ -24,6 +29,11 @@ public class HardGameTimeData
     public string Date { get; set; } = "";
     public float Time { get; set; }
     public string TeamMembers { get; set; } = "";
+/*    public float RoundOneTime { get; set; }
+    public float RoundTwoTime { get; set; }
+    public float RoundThreeTime { get; set; }
+    public float RoundFourTime { get; set; }
+    public float RoundFiveTime { get; set; }*/
 }
 
 public class ImpossibleGameTimeData
@@ -31,4 +41,9 @@ public class ImpossibleGameTimeData
     public string Date { get; set; } = "";
     public float Time { get; set; }
     public string TeamMembers { get; set; } = "";
+/*    public float RoundOneTime { get; set; }
+    public float RoundTwoTime { get; set; }
+    public float RoundThreeTime { get; set; }
+    public float RoundFourTime { get; set; }
+    public float RoundFiveTime { get; set; }*/
 }

@@ -17,4 +17,6 @@
     {
         GC.RemoveAffix(this);
     }
+
+    public abstract void Pause(bool pause);
 }

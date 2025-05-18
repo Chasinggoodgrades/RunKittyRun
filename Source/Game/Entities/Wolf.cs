@@ -22,7 +22,7 @@ public class Wolf
     private AchesTimers EffectTimer { get; set; }
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
-    public rect Lane { get; private set; }
+    public WolfArea WolfArea { get; private set; }
     public unit Unit { get; set; }
     public List<Affix> Affixes { get; private set; }
     private effect OverheadEffect { get; set; }
@@ -35,21 +35,19 @@ public class Wolf
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
-        Lane = RegionList.WolfRegions[RegionIndex].Rect;
+        WolfArea = WolfArea.WolfAreas[regionIndex];
         Affixes = new List<Affix>();
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
         WolfPoint = new WolfPoint(this);
-        InitializeWolf();
+
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
+
+        InitializeWolf();
         WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
 
-
-        if (WolfArea.WolfAreas.TryGetValue(regionIndex, out var wolfArea))
-        {
-            wolfArea.Wolves.Add(this);
-        }
+        WolfArea.Wolves.Add(this);
     }
 
     /// <summary>
@@ -69,7 +67,6 @@ public class Wolf
                     for (int i = 0; i < numberOfWolves; i++)
                         new Wolf(lane);
                 }
-                //WolfSpawning.SpawnWolves();
                 FandF.CreateBloodWolf();
                 NamedWolves.CreateNamedWolves();
             }
@@ -84,12 +81,12 @@ public class Wolf
     public void StartWandering(bool forced = false)
     {
         var realTime = GetRandomReal(1.00f, 1.12f);
-        if ((ShouldStartEffect() || forced) && (!IsPaused || !IsReviving) && (this != NamedWolves.StanWolf))
+        if ((ShouldStartEffect() || forced) && (!IsPaused && !IsReviving) && (this != NamedWolves.StanWolf))
         {
             ApplyEffect();
             realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer.Timer.Start(realTime, false, _cachedWander);
+        WanderTimer?.Timer?.Start(realTime, false, _cachedWander);
     }
 
     /// <summary>
@@ -97,11 +94,11 @@ public class Wolf
     /// </summary>
     public void WolfMove(bool forced = false)
     {
-        if ((IsPaused || IsReviving) && !forced) return;
+        if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
-        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
-        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
+        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
     }
 
@@ -116,7 +113,7 @@ public class Wolf
         WanderTimer = null;
         Texttag?.Dispose();
         Texttag = null;
-        WolfArea.WolfAreas[RegionIndex].Wolves.Remove(this);
+        WolfArea.Wolves.Remove(this);
         Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;
@@ -157,23 +154,37 @@ public class Wolf
 
     public void PauseSelf(bool pause)
     {
-        if (pause)
+        try
         {
-            Unit.ClearOrders();
-            WanderTimer?.Pause();
-            EffectTimer?.Pause();
-            IsWalking = false;
-            IsPaused = true;
-            Unit.IsPaused = true; // Wander Wolf
+            if (pause)
+            {
+                WanderTimer?.Pause();
+                EffectTimer?.Pause();
+                for (int i = 0; i < Affixes.Count; i++)
+                {
+                    Affixes[i].Pause(true);
+                }
+                Unit?.ClearOrders();
+                IsWalking = false;
+                IsPaused = true;
+                Unit.IsPaused = true; // Wander Wolf
+            }
+            else
+            {
+                for (int i = 0; i < Affixes.Count; i++)
+                {
+                    Affixes[i].Pause(false);
+                }
+                WanderTimer?.Resume();
+                if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer.Resume();
+                IsWalking = true;
+                IsPaused = false;
+                Unit.IsPaused = false;
+            }
         }
-        else
+        catch (Exception e)
         {
-            Unit.ClearOrders();
-            WanderTimer?.Resume();
-            if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer?.Resume();
-            IsWalking = true;
-            IsPaused = false;
-            Unit.IsPaused = false;
+            Logger.Warning($"Error in Wolf.PauseSelf: {e.Message}");
         }
     }
 
@@ -181,8 +192,8 @@ public class Wolf
     {
         var selectedPlayer = Setup.getNextWolfPlayer();
 
-        var randomX = GetRandomReal(Lane.MinX, Lane.MaxX);
-        var randomY = GetRandomReal(Lane.MinY, Lane.MaxY);
+        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
+        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         var facing = GetRandomReal(0, 360);
 
         Unit = unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
@@ -193,6 +204,8 @@ public class Wolf
 
         WanderTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         EffectTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+
+        
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }
@@ -230,7 +243,7 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
-        EffectTimer.Timer.Start(effectDuration, false, _cachedEffect);
+        EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect);
     }
 
     private void WolfMoveCancelEffect()
@@ -286,10 +299,17 @@ public class Wolf
     {
         if (AffixCount() == 0) return;
 
-        for (int i = 0; i < Affixes.Count; i++)
+        try
         {
-            AffixFactory.AllAffixes.Remove(Affixes[i]);
-            Affixes[i].Remove();
+            for (int i = Affixes.Count - 1; i >= 0; i--)
+            {
+                Affixes[i].Remove();
+                AffixFactory.AllAffixes.Remove(Affixes[i]);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in RemoveAllWolfAffixes: {e.Message}");
         }
 
         Affixes.Clear();

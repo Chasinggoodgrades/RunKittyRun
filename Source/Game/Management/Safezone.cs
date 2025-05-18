@@ -50,7 +50,7 @@ public class Safezone
             var kitty = Globals.ALL_KITTIES[player];
             SafezoneAdditions(kitty);
             kitty.CurrentSafeZone = ID;
-            WolfLaneHider.LanesHider();
+            if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider();
             if (AwardedPlayers.Contains(player) || ID == 0) return;
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;

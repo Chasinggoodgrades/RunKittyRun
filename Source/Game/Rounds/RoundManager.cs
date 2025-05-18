@@ -83,6 +83,7 @@ public static class RoundManager
             TeamsUtil.RoundResetAllTeams();
             NitroPacer.ResetNitroPacer();
             DeathlessChallenges.ResetDeathless();
+            WolfLaneHider.ResetLanes();
             SaveManager.SaveAll();
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;

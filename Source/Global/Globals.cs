@@ -40,11 +40,11 @@ public static class Globals
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
+    // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
     public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
-
-    public static Dictionary<int, Team> ALL_TEAMS;
-    public static Dictionary<player, Team> PLAYERS_TEAMS;
+    public static Dictionary<int, Team> ALL_TEAMS { get; set; }
+    public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }
     public static Dictionary<Team, string> TEAM_PROGRESS;
 
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
