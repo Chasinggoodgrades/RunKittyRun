@@ -40,6 +40,7 @@ public static class Globals
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
     public static RoundTimesData GAME_TIMES = new RoundTimesData();
     public static GameStatsData GAME_STATS = new GameStatsData();
+    // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
     public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
     public static Dictionary<int, Team> ALL_TEAMS { get; set; }
