@@ -132,7 +132,7 @@ public class Bomber : Affix
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer?.Timer.Start(1.0f, true, () =>
+        ReviveAlphaTimer?.Timer?.Start(1.0f, true, () =>
         {
             try
             {
@@ -144,10 +144,10 @@ public class Bomber : Affix
                 else
                 {
                     ReviveAlpha = 1;
-                    ReviveAlphaTimer.Pause();
+                    ReviveAlphaTimer?.Pause();
                     Unit.PauseSelf(false);
                     Unit.IsReviving = false;
-                    ExplodeTimer?.Timer.Start(ExplosionInterval(), false, StartExplosion);
+                    ExplodeTimer?.Timer?.Start(ExplosionInterval(), false, StartExplosion);
                 }
             }
             catch (Exception e)
