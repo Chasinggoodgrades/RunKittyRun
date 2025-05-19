@@ -17,7 +17,7 @@
 
     public static void BonusResources()
     {
-        EndRoundBonusXP = 250 * Globals.ROUND;
+        EndRoundBonusXP = 750 * Globals.ROUND;
         EndRoundBonusGold = 150 + (50 * Globals.ROUND);
         foreach (var player in Globals.ALL_PLAYERS)
             player.Gold += EndRoundBonusGold;
