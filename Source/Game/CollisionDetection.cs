@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public static class CollisionDetection
 {
     public const float DEFAULT_WOLF_COLLISION_RADIUS = 74.0f;
-    private const float CIRCLE_COLLISION_RADIUS = 77.0f;
+    private const float CIRCLE_COLLISION_RADIUS = 78.0f;
 
     private static Predicate<Relic> IsBeaconOfUnitedLifeforce = r => r is BeaconOfUnitedLifeforce;
 
