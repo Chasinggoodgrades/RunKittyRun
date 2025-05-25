@@ -29,6 +29,7 @@ public static class RoundManager
 
             RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
+            TeamDeathless.StartEvent();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
         }

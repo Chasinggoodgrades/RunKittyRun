@@ -1492,5 +1492,17 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "test5",
+            alias: "t5",
+            group: "admin",
+            argDesc: "",
+            description: "Creates TeamDeathless Effect",
+            action: (player, args) =>
+            {
+                var e = effect.Create("war3mapImported\\TeamDeathless.mdx", Globals.ALL_KITTIES[player].Unit, "origin");
+            }
+        );
+
     }
 }

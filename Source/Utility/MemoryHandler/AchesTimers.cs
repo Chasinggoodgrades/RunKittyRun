@@ -12,6 +12,7 @@ public class AchesTimers : IDisposable
 
     public void Pause(bool pause = true)
     {
+        if (Timer == null) Console.WriteLine("TIMER IS NULL");
         if (pause)
             Timer?.Pause();
         else
@@ -20,6 +21,7 @@ public class AchesTimers : IDisposable
 
     public void Resume()
     {
+        if (Timer == null) Console.WriteLine("TIMER IS NULL");
         Timer?.Resume();
     }
 

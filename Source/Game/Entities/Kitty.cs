@@ -103,6 +103,7 @@ public class Kitty
             DeathStatUpdate();
 
             if (Gamemode.CurrentGameMode != "Standard") return;
+            TeamDeathless.DiedWithOrb(this);
             SoundManager.PlayLastManStandingSound();
             Gameover.GameOver();
             MultiboardUtil.RefreshMultiboards();

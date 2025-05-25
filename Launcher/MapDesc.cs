@@ -7,7 +7,7 @@ namespace Launcher
 {
     public static class MapDesc
     {
-        public static readonly string VERSION = "1.2.8";
+        public static readonly string VERSION = "1.2.9";
         private static readonly string DISCORD = "discord.gg/GSu6zkNvx5";
         private static readonly string TITLE = $"|cffff0000RKR Remastered v{VERSION}|r";
         private static readonly string DATE = DateTime.Now.ToString("MM/dd/yyyy");
@@ -26,11 +26,12 @@ namespace Launcher
         };
 
         private static readonly string FilePath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                         @"Warcraft III\Maps\WCSharpTemplate\source.w3x\war3map.wts");
+            Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)!.Parent!.Parent!.Parent!.Parent!.FullName,
+                         @"source.w3x\war3map.wts");
 
         public static void UpdateWTSFile()
         {
+            Console.WriteLine(FilePath);
             if (!File.Exists(FilePath))
             {
                 Console.WriteLine("Error: war3map.wts not found!");
