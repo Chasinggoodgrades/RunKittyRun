@@ -21,6 +21,7 @@ public class Kitty
     public FloatingNameTag NameTag { get; set; }
     public YellowLightning YellowLightning { get; set; }
     public AIController aiController { get; set; }
+    public SpinCam SpinCam { get; set; }
     public APMTracker APMTracker { get; set; }
     public Slider Slider { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
@@ -28,7 +29,6 @@ public class Kitty
     public unit Unit { get; set; }
     public bool ProtectionActive { get; set; } = false;
     public bool Invulnerable { get; set; } = false;
-    public bool WasSpinCamReset { get; set; } = false;
     public bool Alive { get; set; } = true;
     public bool Finished { get; set; } = false;
     public int TeamID { get; set; } = 0;
@@ -36,10 +36,8 @@ public class Kitty
     public trigger w_Collision { get; set; } = trigger.Create();
     public trigger c_Collision { get; set; } = trigger.Create();
     public Disco Disco { get; set; }
-    public timer SpinCamTimer { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
-    public float SpinCamSpeed { get; set; } = 0;
-    public float SpinCamRotation { get; set; } = 0; // Should just read current value but it doesn't seem to work :/
+
 
     public Kitty(player player)
     {
@@ -52,6 +50,7 @@ public class Kitty
         Slider = new Slider(this);
         YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
+        SpinCam = new SpinCam(this);
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         Disco = new Disco { Unit = this.Unit };
@@ -276,47 +275,5 @@ public class Kitty
         Unit.HideAbility(trueSight, true);
     }
 
-    public void ToggleSpinCam(float speed)
-    {
-        this.SpinCamSpeed = speed / 360;
-        this.WasSpinCamReset = false;
 
-        if (this.SpinCamSpeed != 0)
-        {
-            if (SpinCamTimer == null)
-            {   
-                SpinCamTimer = timer.Create();
-                SpinCamTimer.Start(0.0075f, true, SpinCamActions);
-            }
-        }
-        else
-        {
-            SpinCamTimer?.Pause();
-            SpinCamTimer = null;
-            CameraUtil.UnlockCamera(Player);
-        }
-    }
-
-    public bool IsSpinCamActive()
-    {
-        return SpinCamTimer != null;
-    }
-
-    private void SpinCamActions()
-    {
-        if (!this.Slider.IsOnSlideTerrain() || !this.Alive)
-        {
-            if (!this.Alive && !this.WasSpinCamReset)
-            {
-                this.WasSpinCamReset = true;
-                this.SpinCamRotation = 0;
-                Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, 0, 0);
-            }
-
-            return;
-        }
-
-        SpinCamRotation = this.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed);
-        Blizzard.SetCameraFieldForPlayer(Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0);
-    }
 }

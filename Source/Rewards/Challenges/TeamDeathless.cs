@@ -61,7 +61,6 @@ public static class TeamDeathless
         if (DeathlessChallenges.DeathlessCount < DeathlessToActivate) return; // Not enough players have achieved deathless.
         EventTriggered = true;
         AlreadyCarriedOrb = new List<player>();
-        CurrentSafezone = Globals.SAFE_ZONES[0];
         Timer = CreateTimer();
         DummyUnit = unit.Create(player.NeutralAggressive, Constants.UNIT_SPELLDUMMY, 0, 0);
         RangeTrigger = CreateTrigger();
@@ -77,6 +76,7 @@ public static class TeamDeathless
             if (!EventTriggered) return; // event hasn't been triggered yet.
             EventStarted = true;
             CurrentHolder = null;
+            CurrentSafezone = Globals.SAFE_ZONES[0];
             AlreadyCarriedOrb.Clear();
 
             float x = RegionList.SafeZones[0].Center.X;
@@ -101,12 +101,12 @@ public static class TeamDeathless
         if (!EventStarted) return;
         if (CurrentHolder == null) return; // No one holding orb.
         if (safezone.ID <= CurrentSafezone.ID) return;
+        if (safezone.ID > CurrentSafezone.ID + 1) return; // no skipping safezones
         if (!AlreadyCarriedOrb.Contains(CurrentHolder.Player))
             AlreadyCarriedOrb.Add(CurrentHolder.Player);
 
         CurrentSafezone = safezone;
         CurrentHolder = null;
-
 
         OrbEffect.SetX(safezone.Rect_.CenterX);
         OrbEffect.SetY(safezone.Rect_.CenterY);
