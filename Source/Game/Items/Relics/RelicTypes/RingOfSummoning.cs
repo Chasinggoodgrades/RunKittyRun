@@ -76,39 +76,49 @@ public class RingOfSummoning : Relic
 
     private void SacredRingOfSummoning()
     {
-        var player = @event.Unit.Owner;
-        var targetedPoint = @event.SpellTargetLoc;
-        var summoningKitty = Globals.ALL_KITTIES[player];
-        var summoningKittyUnit = summoningKitty.Unit;
-        var numberOfSummons = GetNumberOfSummons(player);
+        // Retrieve event details
+        player player = @event.Unit.Owner;
+        location targetedPoint = @event.SpellTargetLoc;
+        Kitty summoningKitty = Globals.ALL_KITTIES[player];
+        unit summoningKittyUnit = summoningKitty.Unit;
+        int numberOfSummons = GetNumberOfSummons(player);
+
+        // Ensure SummonGroup exists
         SummonGroup ??= group.Create();
 
+        // Prepare relic mechanics
         RelicUtil.CloseRelicBook(player);
         Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
 
+        // Filter eligible summon targets
         var filter = Utility.CreateFilterFunc(() => CircleFilter() || KittyFilter());
         SummonGroup.EnumUnitsInRange(targetedPoint.X, targetedPoint.Y, SUMMONING_RING_RADIUS, filter);
-        if (SummonGroup.Contains(summoningKittyUnit)) SummonGroup.Remove(summoningKittyUnit); // remove self from the list
+        SummonGroup.Remove(summoningKittyUnit); // Ensure self is not included
 
-        var count = 0;
-        while (true)
+        // Summon loop
+        int count = 0;
+        while (SummonGroup.First != null && count < numberOfSummons)
         {
-            var unit = SummonGroup.First;
-            count += 1;
-            if (unit == null || count > numberOfSummons) break;
+            unit unit = SummonGroup.First;
             SummonGroup.Remove(unit);
 
-            var kitty = Globals.ALL_KITTIES[unit.Owner];
-            if (!SummonDeadKitty(summoningKitty, kitty)) continue;
+            Kitty kitty = Globals.ALL_KITTIES[unit.Owner];
+            if (!SummonDeadKitty(summoningKitty, kitty) || TeamDeathless.CurrentHolder == kitty) continue;
 
+            // Position adjustments and revival
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
-            kitty.ProgressZone = summoningKitty.ProgressZone; // put them in same progress zone for progress purposes.
+            kitty.ProgressZone = summoningKitty.ProgressZone;
             Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
+
+            // Notify players
             Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");
+
+            count++;
         }
 
-        targetedPoint.Dispose(); // dispose, cannot null because of trigger action / ref
+        // Cleanup
+        targetedPoint.Dispose();
         GC.RemoveFilterFunc(ref filter);
     }
 

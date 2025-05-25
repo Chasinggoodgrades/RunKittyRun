@@ -7,20 +7,35 @@ using static WCSharp.Api.Common;
 public static class TeamDeathless
 {
     /// <summary>
-    /// The path string for the model of the effect that we'll be using. Should be a fiery orb.
+    /// The path string of the orb model used for the event.
     /// </summary>
     private const string EFFECT_MODEL = "war3mapImported\\OrbFireX.mdx";
 
+    /// <summary>
+    /// The path string of the ripple effect used for the event.
+    /// </summary>
     private const string RIPPLE_MODEL = "war3mapImported\\FireNova2.mdx";
 
+    /// <summary>
+    /// Range in which the orb can be picked up from.
+    /// </summary>
     private const float PICKUP_RANGE = 75f;
 
+    /// <summary>
+    /// Chance that the orb will drop when the player dies with it. This is a percentage chance (0-100).
+    /// </summary>
     private const float ORB_DROP_CHANCE = 50f; // 50% chance that event / orb resets whenever die with orb.
 
     /// <summary>
     /// Flag to check if the event has been triggered. This is set to true when the # of DeathlessToActivate players have achieved deathless.
     /// </summary>
     private static bool EventTriggered { get; set; } = false;
+
+    /// <summary>
+    /// The Kitty object of the player who is currently holding the orb / effect.
+    /// </summary>
+    public static Kitty CurrentHolder { get; set; }
+
     /// <summary>
     /// Flag to check if the event has started. This is set to true when the event is started.
     /// </summary>
@@ -29,11 +44,10 @@ public static class TeamDeathless
     /// The number of players that need to achieve deathless in order to activate the event.
     /// </summary>
     private static int DeathlessToActivate { get; set; } = 0;
-    /// <summary>
-    /// The Kitty object of the player who is currently holding the orb / effect.
-    /// </summary>
-    private static Kitty CurrentHolder { get; set; }
 
+    /// <summary>
+    /// The current safezone that the orb last touched / was in.
+    /// </summary>
     private static Safezone CurrentSafezone { get; set; }
     /// <summary>
     /// List of players that have already carried the orb. Prevents players from picking up the orb after they've already carried it.
@@ -43,17 +57,31 @@ public static class TeamDeathless
     /// The primary effect (the orb) that is being moved around constantly with players / safezone location
     /// </summary>
     private static effect OrbEffect { get; set; }
+
     /// <summary>
     /// The timer that will be moving the effect on a specific interval of time (0.03 maybe?)
     /// </summary>
-    ///
-    private static effect RippleEffect { get; set; }
     private static timer Timer { get; set; }
 
+    /// <summary>
+    /// The effect object for the ripple whenever orb is picked up.
+    /// </summary>
+    private static effect RippleEffect { get; set; }
+
+    /// <summary>
+    /// The trigger that will be used to detect when a player is in range of the orb.
+    /// </summary>
     private static trigger RangeTrigger { get; set; }
 
+    /// <summary>
+    /// The dummy unit that will be used to detect when a player is in range of the orb.
+    /// </summary>
     private static unit DummyUnit { get; set; }
 
+    /// <summary>
+    /// This method should be fully executed whenever players meet the conditions to start the event.
+    /// Then the next round will begin the StartEvent method.
+    /// </summary>
     public static void PrestartingEvent()
     {
         if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
@@ -69,6 +97,10 @@ public static class TeamDeathless
         Console.WriteLine("-- EVENT TRIGGERED TEXT GOES HERE -- [PLACEHOLDER]");
     }
 
+    /// <summary>
+    /// This method is called whenever the event has been triggered and will begin on the following round.
+    /// Starts the event, sets the orb in place, and puts the dummy unit to detect InRangeEvents
+    /// </summary>
     public static void StartEvent()
     {
         try
@@ -96,6 +128,10 @@ public static class TeamDeathless
         }
     }
 
+    /// <summary>
+    /// Whenever a player with the orb reaches the proper safezone, this method calls to set the OrbEffect to the center of the passed safezone.
+    /// </summary>
+    /// <param name="safezone"></param>
     public static void ReachedSafezone(Safezone safezone)
     {
         if (!EventStarted) return;
@@ -120,11 +156,16 @@ public static class TeamDeathless
         Console.WriteLine("DEBUG: Reached Safezone");
     }
 
+    /// <summary>
+    /// Whenever a player dies with the deathless orb, this dictates whether the event should restart or if they got lucky to hold onto it for a bit longer.
+    /// </summary>
+    /// <param name="k"></param>
     public static void DiedWithOrb(Kitty k)
     {
         try
         {
             if (!EventStarted) return; // event hasn't started yet.
+            if (k.ProtectionActive) return; // Player protected.
             if (CurrentHolder == null) return;
 
             float RandomChance = GetRandomReal(0, 100); // 0-100 .. If it's less than 50, orb drops and is reset.

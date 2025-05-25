@@ -6,6 +6,10 @@
         this.Kitty = kitty;
     }
 
+    /// <summary>
+    /// Updates the resources of the savior kitty then calls to update their save stats data.
+    /// </summary>
+    /// <param name="savior"></param>
     public void UpdateSaviorStats(Kitty savior)
     {
         savior.Player.Gold += Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak);
@@ -13,6 +17,9 @@
         SaveStatUpdate(savior);
     }
 
+    /// <summary>
+    /// This is called whenever the kitty dies, updating their death stats, resetting save streak, and deathless progress.
+    /// </summary>
     public void DeathStatUpdate()
     {
         DeathlessChallenges.ResetPlayerDeathless(Kitty);
@@ -30,6 +37,10 @@
         Kitty.SaveData.GameStats.Deaths += 1;
     }
 
+    /// <summary>
+    /// Updates the savior kitty's stats when they save another kitty. This includes updating their save streak, total saves, and round saves.
+    /// </summary>
+    /// <param name="savior"></param>
     public void SaveStatUpdate(Kitty savior)
     {
         if (Kitty.aiController.IsEnabled()) return;

@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class FangOfShadows : Relic
@@ -69,17 +70,31 @@ public class FangOfShadows : Relic
     {
         try
         {
-            var sk = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
-            sk.SummonShadowKitty();
-            RegisterTeleportAbility(sk.Unit);
-            sk.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
-            KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(sk.KillShadowKitty));
+            Kitty summoner = Globals.ALL_KITTIES[@event.Unit.Owner];
+
+            // Prevent summoning if holding the orb
+            if (TeamDeathless.CurrentHolder == summoner)
+            {
+                summoner.Player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Cannot summon shadow kitty while holding the orb!{Colors.COLOR_RESET}");
+                return;
+            }
+
+            ShadowKitty shadowKitty = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
+
+            // Summon and configure Shadow Kitty
+            shadowKitty.SummonShadowKitty();
+            RegisterTeleportAbility(shadowKitty.Unit);
+            shadowKitty.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
+
+            // Set kill timer
+            KillTimer.Start(SHADOW_KITTY_SUMMON_DURATION, false, ErrorHandler.Wrap(shadowKitty.KillShadowKitty));
+
+            // Apply relic cooldowns with a slight delay
             Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            Logger.Warning($"Error in FangOfShadows.SummonShadowKitty: {e}");
-            return;
+            Logger.Warning($"Error in SummonShadowKitty: {e}");
         }
     }
 
@@ -127,12 +142,12 @@ public class FangOfShadows : Relic
     {
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
+        int upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
         Unit.GetAbility(RelicAbilityID);
-        var reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
-        var remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
+        float reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
+        float remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;
-        var newCooldown = remainingCooldown * (1.00f - reduction);
+        float newCooldown = remainingCooldown * (1.00f - reduction);
         //Unit.SetAbilityCooldownRemaining(RelicAbilityID, newCooldown);
         RelicUtil.SetRelicCooldowns(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
