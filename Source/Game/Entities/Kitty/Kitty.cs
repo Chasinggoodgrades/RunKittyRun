@@ -18,6 +18,7 @@ public class Kitty
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public ActiveAwards ActiveAwards { get; set; } = new ActiveAwards();
+    public KittyStatsManager StatsManager { get; set; }
     public FloatingNameTag NameTag { get; set; }
     public YellowLightning YellowLightning { get; set; }
     public AIController aiController { get; set; }
@@ -48,6 +49,7 @@ public class Kitty
         CreateKitty();
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
+        StatsManager = new KittyStatsManager(this);
         YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
         SpinCam = new SpinCam(this);
@@ -84,32 +86,45 @@ public class Kitty
     {
         try
         {
-            if (Invulnerable) return;
-            if (!Alive) return;
+            if (Invulnerable || !Alive) return;
+
             Circle circle = Globals.ALL_CIRCLES[Player];
-            this.Slider.PauseSlider();
-            this.aiController.PauseAi();
+
+            // Pause processes before unit death
+            Slider.PauseSlider();
+            aiController.PauseAi();
             Unit.Kill();
-            if (!ProtectionActive) Alive = false;
+
+            // Update status flags
+            if (!ProtectionActive)
+                Alive = false;
+
+            // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
             circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             circle.KittyDied(this);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();
 
+            // Death Sounds
             SoundManager.PlayKittyDeathSound(Unit);
             SoundManager.PlayFirstBloodSound();
-            DeathStatUpdate();
 
-            if (Gamemode.CurrentGameMode != "Standard") return;
-            TeamDeathless.DiedWithOrb(this);
-            SoundManager.PlayLastManStandingSound();
-            Gameover.GameOver();
-            MultiboardUtil.RefreshMultiboards();
+            // Update stats
+            StatsManager.DeathStatUpdate();
+
+            // Handle game mode specific logic
+            if (Gamemode.CurrentGameMode == "Standard")
+            {
+                TeamDeathless.DiedWithOrb(this);
+                SoundManager.PlayLastManStandingSound();
+                Gameover.GameOver();
+                MultiboardUtil.RefreshMultiboards();
+            }
         }
         catch (Exception e)
         {
-            Logger.Critical($"Error in InitDatae.Message {e.Message}");
+            Logger.Critical($"Error in KillKitty: {e.Message}");
         }
     }
 
@@ -121,24 +136,36 @@ public class Kitty
         try
         {
             if (Unit.Alive) return;
+
             Circle circle = Globals.ALL_CIRCLES[Player];
+
+            // Hide visual indicators before revival
             circle.HideCircle();
             InvulnerableKitty();
             Alive = true;
+
+            // Revive the unit at its respective position
             Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
             Unit.Mana = circle.Unit.Mana;
+
+            // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
             CameraUtil.RelockCamera(Player);
-            this.Slider.ResumeSlider(true);
-            this.aiController.ResumeAi();
 
-            if (savior == null) return;
-            UpdateSaviorStats(savior);
-            MultiboardUtil.RefreshMultiboards();
+            // Resume processes
+            Slider.ResumeSlider(true);
+            aiController.ResumeAi();
+
+            // Update savior stats if applicable
+            if (savior != null)
+            {
+                StatsManager.UpdateSaviorStats(savior);
+                MultiboardUtil.RefreshMultiboards();
+            }
         }
         catch (Exception e)
         {
-            Logger.Critical($"Error in ReviveKitty. {e.Message}");
+            Logger.Critical($"Error in ReviveKitty: {e.Message}");
             throw;
         }
     }
@@ -181,18 +208,20 @@ public class Kitty
 
     private void CreateKitty()
     {
-        // Spawn, Create, Locust
+        // Spawn Location
         WCSharp.Shared.Data.Point spawnCenter = RegionList.SpawnRegions[Player.Id].Center;
+
+        // Creation of Unit
         Unit = unit.Create(Player, KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360);
         Utility.MakeUnitLocust(Unit);
         Utility.SelectUnitForPlayer(Player, Unit);
+
+        // Initialize Kitty
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
         Unit.Name = $"{Colors.PlayerNameColored(Player)}";
         TrueSightGhostWolves();
-
-        // Register Collision
         CollisionDetection.KittyRegisterCollisions(this);
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
@@ -223,49 +252,6 @@ public class Kitty
         Unit.Dispose();
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES.Remove(Player);
-    }
-
-    private void UpdateSaviorStats(Kitty savior)
-    {
-        savior.Player.Gold += Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak);
-        savior.Unit.Experience += Resources.SaveExperience;
-        SaveStatUpdate(savior);
-    }
-
-    private void DeathStatUpdate()
-    {
-        DeathlessChallenges.ResetPlayerDeathless(this);
-        CurrentStats.TotalDeaths += 1;
-        CurrentStats.RoundDeaths += 1;
-        CurrentStats.SaveStreak = 0;
-        SaveData.GameStats.SaveStreak = 0;
-
-        if (aiController.IsEnabled()) return;
-
-        SoloMultiboard.UpdateDeathCount(Player);
-        if (Gamemode.CurrentGameMode != "Standard") return;
-        SaveData.GameStats.Deaths += 1;
-    }
-
-    private void SaveStatUpdate(Kitty savior)
-    {
-        if (aiController.IsEnabled()) return;
-
-        savior.CurrentStats.TotalSaves += 1;
-        savior.CurrentStats.RoundSaves += 1;
-        savior.CurrentStats.SaveStreak += 1;
-
-        if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
-            savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
-
-        if (Gamemode.CurrentGameMode != "Standard") return;
-
-        savior.SaveData.GameStats.Saves += 1;
-        savior.SaveData.GameStats.SaveStreak += 1;
-        PersonalBestAwarder.BeatMostSavesInGame(savior);
-        PersonalBestAwarder.BeatenSaveStreak(savior);
-        Challenges.PurpleLighting(savior);
-        savior.YellowLightning.SaveIncrement();
     }
 
     private void TrueSightGhostWolves()

@@ -31,7 +31,7 @@ namespace Launcher
 
         public static void UpdateWTSFile()
         {
-            Console.WriteLine(FilePath);
+            // Console.WriteLine(FilePath);
             if (!File.Exists(FilePath))
             {
                 Console.WriteLine("Error: war3map.wts not found!");
