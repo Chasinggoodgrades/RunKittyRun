@@ -122,6 +122,9 @@ public static class Constants
 	public const int ABILITY_WW_VIOLET = 1093677363;
 	public const int ABILITY_TEST_WW = 1093677366;
 	public const int ABILITY_TRAIL_PATRIOTICLIGHT = 1093677367;
+	public const int ABILITY_NORMAL_TEAM_DEATHLESS = 1093677379;
+	public const int ABILITY_HARD_TEAM_DEATHLESS = 1093677380;
+	public const int ABILITY_IMPOSSIBLE_TEAM_DEATHLESS = 1093677381;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;

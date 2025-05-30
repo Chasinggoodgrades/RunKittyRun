@@ -15,7 +15,7 @@
     public int ImpossibleDeathless3 { get; set; } = -1;
     public int ImpossibleDeathless4 { get; set; } = -1;
     public int ImpossibleDeathless5 { get; set; } = -1;
-    public int NoramlTeamDeathless { get; set; }
+    public int NormalTeamDeathless { get; set; }
     public int HardTeamDeathless { get; set; }
     public int ImpossibleTeamDeathless { get; set; }
 }

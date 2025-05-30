@@ -16,7 +16,7 @@ public static class RewardsFrame
     private static float FrameX = 0.4f;
     private static float FrameY = 0.35f;
     private static float FrameWidth = 0.30f;
-    private static float FrameHeight = 0.28f;
+    private static float FrameHeight = 0.29f;
     private static float Padding = 0.01f;
     private static float IconSize = 0.02f;
     private static int FrameCount = 0;

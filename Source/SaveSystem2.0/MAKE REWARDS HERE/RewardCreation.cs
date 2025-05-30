@@ -158,9 +158,9 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Deathless.NormalDeathless5), Constants.ABILITY_DEATHLESS_FIRE_1_05, "origin", "war3mapImported\\Deathless5.mdx", RewardType.Deathless);
 
         // Team Deathless
-        AddReward(nameof(awardsSorted.Deathless.NoramlTeamDeathless), Constants.ABILITY_AGILITY_AURA_WITH_RELIC, "origin", "war3mapImported\\NormalTeamDeathless.mdx", RewardType.Deathless);
-        AddReward(nameof(awardsSorted.Deathless.HardTeamDeathless), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "war3mapImported\\HardTeamDeathless.mdx", RewardType.Deathless);
-        AddReward(nameof(awardsSorted.Deathless.ImpossibleTeamDeathless), Constants.ABILITY_DEATHLESS_FIRE_1_01, "origin", "war3mapImported\\ImpossibleTeamDeathless.mdx", RewardType.Deathless);
+        AddReward(nameof(awardsSorted.Deathless.NormalTeamDeathless), Constants.ABILITY_NORMAL_TEAM_DEATHLESS, "origin", "war3mapImported\\NormalTeamDeathless.mdx", RewardType.Deathless);
+        AddReward(nameof(awardsSorted.Deathless.HardTeamDeathless), Constants.ABILITY_HARD_TEAM_DEATHLESS, "origin", "war3mapImported\\HardTeamDeathless.mdx", RewardType.Deathless);
+        AddReward(nameof(awardsSorted.Deathless.ImpossibleTeamDeathless), Constants.ABILITY_IMPOSSIBLE_TEAM_DEATHLESS, "origin", "war3mapImported\\ImpossibleTeamDeathless.mdx", RewardType.Deathless);
 
         // Skins
         AddReward(nameof(awardsSorted.Skins.UndeadKitty), Constants.ABILITY_SKIN_KITTYUNDEAD, Constants.UNIT_UNDEAD_KITTY, RewardType.Skins, nameof(stats.NormalWins), 30);

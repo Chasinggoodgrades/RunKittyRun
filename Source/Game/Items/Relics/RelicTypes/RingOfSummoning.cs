@@ -103,7 +103,7 @@ public class RingOfSummoning : Relic
             SummonGroup.Remove(unit);
 
             Kitty kitty = Globals.ALL_KITTIES[unit.Owner];
-            if (!SummonDeadKitty(summoningKitty, kitty) || TeamDeathless.CurrentHolder == kitty) continue;
+            if (!SummonDeadKitty(summoningKitty, kitty) || !DeathlessKitty(summoningKitty, kitty)) continue;
 
             // Position adjustments and revival
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
@@ -142,6 +142,14 @@ public class RingOfSummoning : Relic
             return false;
         }
         return true;
+    }
+
+    private bool DeathlessKitty(Kitty summonerKitty, Kitty summonedKittyUnit)
+    {
+        if (TeamDeathless.CurrentHolder != summonedKittyUnit) return true;
+
+        summonerKitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot summon kitties holding the deathless orb!{Colors.COLOR_RESET}");
+        return false;
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -24,7 +23,7 @@ public static class TeamDeathless
     /// <summary>
     /// Chance that the orb will drop when the player dies with it. This is a percentage chance (0-100).
     /// </summary>
-    private const float ORB_DROP_CHANCE = 50f; // 50% chance that event / orb resets whenever die with orb.
+    private const float ORB_DROP_CHANCE = 75f; // 70% chance to reset on death
 
     /// <summary>
     /// Flag to check if the event has been triggered. This is set to true when the # of DeathlessToActivate players have achieved deathless.
@@ -34,7 +33,7 @@ public static class TeamDeathless
     /// <summary>
     /// The Kitty object of the player who is currently holding the orb / effect.
     /// </summary>
-    public static Kitty CurrentHolder { get; set; }
+    public static Kitty CurrentHolder { get; set; } = null;
 
     /// <summary>
     /// Flag to check if the event has started. This is set to true when the event is started.
@@ -43,7 +42,7 @@ public static class TeamDeathless
     /// <summary>
     /// The number of players that need to achieve deathless in order to activate the event.
     /// </summary>
-    private static int DeathlessToActivate { get; set; } = 0;
+    private static int DeathlessToActivate { get; set; } = 4;
 
     /// <summary>
     /// The current safezone that the orb last touched / was in.
@@ -94,7 +93,8 @@ public static class TeamDeathless
         RangeTrigger = CreateTrigger();
         RangeTrigger.RegisterUnitInRange(DummyUnit, PICKUP_RANGE, FilterList.KittyFilter);
         RangeTrigger.AddAction(InRangeEvent);
-        Console.WriteLine("-- EVENT TRIGGERED TEXT GOES HERE -- [PLACEHOLDER]");
+
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Team Deathless Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
     }
 
     /// <summary>
@@ -119,8 +119,9 @@ public static class TeamDeathless
             OrbEffect.SetY(y);
             DummyUnit.SetPosition(x, y);
 
-            Console.WriteLine("DEBUG: Team Deathless Event Activated");
+            Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}The Deathless Orb has been spawned! As a team, bring it to the end without dying!{Colors.COLOR_RESET}");
         }
+
         catch (Exception e)
         {
             Logger.Warning($"Error in TeamDeathless.StartEvent {e.Message}");
@@ -152,8 +153,8 @@ public static class TeamDeathless
 
         Timer?.Pause();
 
-        if (CurrentSafezone.ID == RegionList.SafeZones.Length - 1) Console.WriteLine("GIVING AWAY!! HURRAY");
-        Console.WriteLine("DEBUG: Reached Safezone");
+        if (CurrentSafezone.ID == RegionList.SafeZones.Length - 1)
+            AwardTeamDeathless();
     }
 
     /// <summary>
@@ -176,7 +177,7 @@ public static class TeamDeathless
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error in TeamDeathless.DiedWithOrb: {e.Message}");
+            Logger.Warning($"Error in TeamDeathless.DiedWithOrb: {e.Message}");
         }
     }
 
@@ -210,7 +211,6 @@ public static class TeamDeathless
     {
         if (CurrentHolder == null)
         {
-            Console.WriteLine("DEBUG: CurrentHolder is null");
             Timer?.Pause();
             return;
         }
@@ -223,7 +223,7 @@ public static class TeamDeathless
 
     private static void CheckOrbList()
     {
-        for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
             var player = Globals.ALL_PLAYERS[i];
             if (!AlreadyCarriedOrb.Contains(player)) return;
@@ -231,4 +231,20 @@ public static class TeamDeathless
 
         AlreadyCarriedOrb.Clear();
     }
+
+    /// <summary>
+    /// This method is called to award the team deathless rewards based on the difficulty level. Accounts for doing harder difficulties so that the rewards are given accordingly.
+    /// </summary>
+    private static void AwardTeamDeathless()
+    {
+        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Normal)
+            AwardManager.GiveRewardAll(nameof(Deathless.NormalTeamDeathless));
+
+        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Hard)
+            AwardManager.GiveRewardAll(nameof(Deathless.HardTeamDeathless));
+
+        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+            AwardManager.GiveRewardAll(nameof(Deathless.ImpossibleTeamDeathless));
+    }
+
 }
