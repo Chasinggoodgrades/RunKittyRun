@@ -71,8 +71,8 @@ public static class RoundManager
     {
         try
         {
-            MultiboardUtil.RefreshMultiboards();
             Globals.GAME_ACTIVE = false;
+            MultiboardUtil.RefreshMultiboards();
             RoundTimer.EndRoundTimer.Pause();
             NitroChallenges.StopNitroTimer();
             Wolf.RemoveAllWolves();
