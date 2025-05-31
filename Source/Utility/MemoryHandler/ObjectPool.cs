@@ -104,7 +104,7 @@ public static class ObjectPool
         {
             var type = kvp.Key;
             var count = kvp.Value.Count;
-            Logger.Critical($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{type.Name}, {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{count}{Colors.COLOR_RESET}");
+            Console.WriteLine($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{type.Name}, {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{count}{Colors.COLOR_RESET}");
         }
     }
 }

@@ -133,12 +133,13 @@ public static class TeamDeathless
     /// Whenever a player with the orb reaches the proper safezone, this method calls to set the OrbEffect to the center of the passed safezone.
     /// </summary>
     /// <param name="safezone"></param>
-    public static void ReachedSafezone(Safezone safezone)
+    public static void ReachedSafezone(unit unit, Safezone safezone)
     {
         if (!EventStarted) return;
         if (CurrentHolder == null) return; // No one holding orb.
         if (safezone.ID <= CurrentSafezone.ID) return;
         if (safezone.ID > CurrentSafezone.ID + 1) return; // no skipping safezones
+        if (CurrentHolder.Unit != unit) return; // The unit that reached the safezone is not the current holder of the orb.
         if (!AlreadyCarriedOrb.Contains(CurrentHolder.Player))
             AlreadyCarriedOrb.Add(CurrentHolder.Player);
 

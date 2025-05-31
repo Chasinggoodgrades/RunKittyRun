@@ -42,7 +42,7 @@ public class ShadowKitty
 
         // Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
         Unit.AddAbility(Constants.ABILITY_WIND_WALK);
-        Unit.SetAbilityLevel(Constants.ABILITY_WIND_WALK, 2);
+        Unit.SetAbilityLevel(Constants.ABILITY_WIND_WALK, 3);
         Utility.MakeUnitLocust(this.Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
         this.Unit.MovementSpeed = 522;

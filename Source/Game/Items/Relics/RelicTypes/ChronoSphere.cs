@@ -94,6 +94,11 @@ public class ChronoSphere : Relic
         {
             // Console.WriteLine($"Capturing Location {Kitty.CurrentStats.ChronoSphereCD}");
             LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
+            if (LocationCaptureTimer.Timer.Remaining <= 0.00f)
+            {
+                Logger.Warning($"ChronoSphere.CaptureLocation: Timer remaining is less than or equal to 0.00f, not capturing location.");
+                LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
+            }
             if (Kitty.CurrentStats.ChronoSphereCD) return;
             var unit = Kitty.Unit;
             CapturedLocation = (unit.X, unit.Y, unit.Facing);

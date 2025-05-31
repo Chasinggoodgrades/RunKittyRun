@@ -117,6 +117,8 @@ public static class ProtectionOfAncients
 
         if (!k.Alive) return; // cannot cast if dead obviously.
         IssueImmediateOrder(k.Unit, "divineshield");
+        //k.Unit.QueueInstantOrder()
+        // k.Unit.QueueOrder()
     }
 
     private static void ActivationEvent()
