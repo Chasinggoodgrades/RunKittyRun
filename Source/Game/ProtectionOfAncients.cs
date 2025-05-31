@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
-using WCSharp.Shared.Extensions;
+using WCSharp.Api.Enums;
 using static WCSharp.Api.Common;
 
 public static class ProtectionOfAncients
@@ -16,6 +16,7 @@ public static class ProtectionOfAncients
 
     private static trigger Trigger;
     private static trigger LevelUpTrigger;
+    private static trigger HotkeyTrigger;
 
     private static readonly int UPGRADE_LEVEL_2_REQUIREMENT = 9;
     private static readonly int UPGRADE_LEVEL_3_REQUIREMENT = 12;
@@ -100,6 +101,22 @@ public static class ProtectionOfAncients
         Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
         Trigger.AddCondition(Condition(() => @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
         Trigger.AddAction(ActivationEvent);
+
+        HotkeyTrigger = CreateTrigger();
+        foreach(var p in Globals.ALL_PLAYERS)
+        {
+            HotkeyTrigger.RegisterPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true);
+        }
+        HotkeyTrigger.AddAction(RegisterHotKeyEvents);
+    }
+
+    private static void RegisterHotKeyEvents()
+    {
+        player p = @event.Player;
+        Kitty k = Globals.ALL_KITTIES[p];
+
+        if (!k.Alive) return; // cannot cast if dead obviously.
+        IssueImmediateOrder(k.Unit, "divineshield");
     }
 
     private static void ActivationEvent()

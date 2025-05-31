@@ -162,9 +162,16 @@ public class ChronoSphere : Relic
             kitty.CurrentStats.ChronoSphereCD = true;
             Utility.SimpleTimer(REWIND_COOLDOWN, () =>
             {
-                kitty.CurrentStats.ChronoSphereCD = false;
-                kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
-                relic?.LocationCaptureTimer?.Timer.Start(0, false, relic.CaptureLocation);
+                try
+                {
+                    kitty.CurrentStats.ChronoSphereCD = false;
+                    kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
+                    relic?.LocationCaptureTimer?.Timer.Start(0, false, relic.CaptureLocation);
+                }
+                catch (Exception e)
+                {
+                    Logger.Warning($"Error in ChronoSphere.RewindDeath: {e.Message}");
+                }
             });
             return true;
         }
