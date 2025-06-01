@@ -1504,5 +1504,42 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "deathless",
+            alias: "dl",
+            group: "admin",
+            argDesc: "[player]",
+            description: "Teleports the ResolvePlayerId to each safezone all the way to the end",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    var safeZones = RegionList.SafeZones;
+                    foreach (var safeZone in safeZones)
+                    {
+                        kitty.Unit.SetPosition(safeZone.Center.X, safeZone.Center.Y);
+                    }
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "restart",
+            alias: "rst",
+            group: "admin",
+            argDesc: "",
+            description: "Restarts the current round and time to 0:00",
+            action: (player, args) =>
+            {
+
+            }
+        );
+
     }
 }

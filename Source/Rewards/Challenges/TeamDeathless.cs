@@ -78,6 +78,11 @@ public static class TeamDeathless
     private static unit DummyUnit { get; set; }
 
     /// <summary>
+    /// Flag to check if the event has been won. This is set to true when the orb reaches the final safezone.
+    /// </summary>
+    private static bool EventWon { get; set; } = false;
+
+    /// <summary>
     /// This method should be fully executed whenever players meet the conditions to start the event.
     /// Then the next round will begin the StartEvent method.
     /// </summary>
@@ -105,7 +110,7 @@ public static class TeamDeathless
     {
         try
         {
-            if (!EventTriggered) return; // event hasn't been triggered yet.
+            if (!EventTriggered || EventWon) return; // event hasn't been triggered yet.
             EventStarted = true;
             CurrentHolder = null;
             CurrentSafezone = Globals.SAFE_ZONES[0];
@@ -238,6 +243,8 @@ public static class TeamDeathless
     /// </summary>
     private static void AwardTeamDeathless()
     {
+        EventWon = true;
+
         if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Normal)
             AwardManager.GiveRewardAll(nameof(Deathless.NormalTeamDeathless));
 
@@ -246,6 +253,10 @@ public static class TeamDeathless
 
         if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
             AwardManager.GiveRewardAll(nameof(Deathless.ImpossibleTeamDeathless));
+
+        OrbEffect?.Dispose();
+        Timer?.Pause();
+        Timer?.Dispose();
     }
 
 }

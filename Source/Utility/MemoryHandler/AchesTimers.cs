@@ -4,10 +4,9 @@ using static WCSharp.Api.Common;
 
 public class AchesTimers : IDisposable
 {
-    public timer Timer { get; set; }
+    public timer Timer { get; set; } = CreateTimer();
     public AchesTimers()
     {
-        Timer = CreateTimer();
     }
 
     public void Pause(bool pause = true)

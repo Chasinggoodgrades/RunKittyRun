@@ -116,9 +116,7 @@ public static class ProtectionOfAncients
         Kitty k = Globals.ALL_KITTIES[p];
 
         if (!k.Alive) return; // cannot cast if dead obviously.
-        IssueImmediateOrder(k.Unit, "divineshield");
-        //k.Unit.QueueInstantOrder()
-        // k.Unit.QueueOrder()
+        k.Unit.IssueOrder("divineshield");
     }
 
     private static void ActivationEvent()

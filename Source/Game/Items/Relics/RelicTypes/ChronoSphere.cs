@@ -13,17 +13,17 @@ public class ChronoSphere : Relic
     private const float SLOW_AURA_RADIUS = 400.0f;
     private const float MAGNITUDE_CHANGE_INTERVAL = 15.0f;
     private const float MAGNITUDE_LOWER_BOUND = 10.0f;
-    private const float MAGNITUDE_UPPER_BOUND = 14.0f;
+    private const float MAGNITUDE_UPPER_BOUND = 17.0f;
     private const float LOCATION_CAPTURE_INTERVAL = 5.0f;
     private const float REWIND_COOLDOWN = 150.0f;
 
     private ability Ability;
     private Kitty Kitty;
     private float Magnitude;
-    private AchesTimers MagnitudeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-    private AchesTimers LocationCaptureTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+    private timer MagnitudeTimer = timer.Create();
+    private timer LocationCaptureTimer = timer.Create();
     private effect LocationEffect = null;
-    private (float, float, float) CapturedLocation; // x, y, facing
+    private (float, float, float) CapturedLocation = (100, 100, 100);
 
     public ChronoSphere() : base(
         $"{Colors.COLOR_YELLOW}Chrono Sphere",
@@ -40,36 +40,71 @@ public class ChronoSphere : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        Kitty = Globals.ALL_KITTIES[Unit.Owner];
-        Utility.SimpleTimer(0.1f, RotatingSlowAura);
-        RotatingLocationCapture();
+        try
+        {
+            Kitty = Globals.ALL_KITTIES[Unit.Owner];
+            Utility.SimpleTimer(0.1f, RotatingSlowAura);
+            Utility.SimpleTimer(0.1f, RotatingLocationCapture);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.ApplyEffect: {e.Message}");
+        }
     }
 
     public override void RemoveEffect(unit Unit)
     {
-        MagnitudeTimer?.Dispose();
-        LocationCaptureTimer?.Dispose();
-        GC.RemoveEffect(ref LocationEffect);
+        try
+        {
+            MagnitudeTimer?.Pause();
+            MagnitudeTimer?.Dispose();
+            MagnitudeTimer = null;
+            LocationCaptureTimer?.Pause();
+            LocationCaptureTimer?.Dispose();
+            LocationCaptureTimer = null;
+            LocationEffect?.Dispose();
+            LocationEffect = null;
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.RemoveEffect: {e.Message}");
+        }
     }
 
     private void SetAbilityData()
     {
-        var item = Utility.UnitGetItem(Kitty.Unit, RelicItemID);
-        Ability = item.GetAbility(RelicAbilityID);
-        Magnitude = RandomMagnitude();
-        Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
-        Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
-        item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
+        try
+        {
+            var item = Utility.UnitGetItem(Kitty.Unit, RelicItemID);
+            Ability = item.GetAbility(RelicAbilityID);
+            Magnitude = RandomMagnitude();
+            Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
+            Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
+            item.ExtendedDescription = $"{Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n";
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.SetAbilityData: {e.Message}");
+        }
     }
 
     // Upgrade level 1, rotating aura slow
     private void RotatingSlowAura()
     {
-        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
-        if (upgradeLevel <= 0) return;
+        try
+        {
+            var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
+            if (upgradeLevel <= 0) return;
 
-        MagnitudeTimer.Timer.Start(MAGNITUDE_CHANGE_INTERVAL, true, SetAbilityData);
-        SetAbilityData();
+            MagnitudeTimer ??= timer.Create();
+
+            MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, SetAbilityData);
+            SetAbilityData();
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChronoSphere.RotatingSlowAura: {e.Message}");
+        }
     }
 
     // Upgrade Level 2 Location Capture
@@ -79,8 +114,10 @@ public class ChronoSphere : Relic
         {
             var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 1) return;
+            LocationCaptureTimer ??= timer.Create();
             CapturedLocation = (Kitty.Unit.X, Kitty.Unit.Y, Kitty.Unit.Facing); // reset to current location on buy
-            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
+            LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
+
         }
         catch (Exception e)
         {
@@ -92,19 +129,14 @@ public class ChronoSphere : Relic
     {
         try
         {
-            // Console.WriteLine($"Capturing Location {Kitty.CurrentStats.ChronoSphereCD}");
-            LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
-            if (LocationCaptureTimer.Timer.Remaining <= 0.00f)
-            {
-                Logger.Warning($"ChronoSphere.CaptureLocation: Timer remaining is less than or equal to 0.00f, not capturing location.");
-                LocationCaptureTimer.Timer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
-            }
+            LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
             if (Kitty.CurrentStats.ChronoSphereCD) return;
             var unit = Kitty.Unit;
             CapturedLocation = (unit.X, unit.Y, unit.Facing);
-            LocationEffect = effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
+            LocationEffect ??= effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
             LocationEffect.Scale = 0.55f;
             LocationEffect.Dispose();
+            LocationEffect = null;
         }
         catch (Exception er)
         {
@@ -165,13 +197,17 @@ public class ChronoSphere : Relic
             if (upgradeLevel < 2) return false;
             relic.RewindTime();
             kitty.CurrentStats.ChronoSphereCD = true;
+/*            var relicItem = Utility.UnitGetItem(kitty.Unit, RelicItemID);
+            relicItem.ActivelyUsed = true;
+            relicItem.AddAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE);
+            kitty.Unit.UseItem(relicItem);*/
             Utility.SimpleTimer(REWIND_COOLDOWN, () =>
             {
                 try
                 {
                     kitty.CurrentStats.ChronoSphereCD = false;
                     kitty.Player.DisplayTimedTextTo(1.0f, $"{Colors.COLOR_LAVENDER}Chrono Sphere recharged|r");
-                    relic?.LocationCaptureTimer?.Timer.Start(0, false, relic.CaptureLocation);
+                    relic?.LocationCaptureTimer?.Start(0, false, relic.CaptureLocation);
                 }
                 catch (Exception e)
                 {

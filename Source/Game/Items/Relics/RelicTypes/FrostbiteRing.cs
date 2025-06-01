@@ -59,7 +59,8 @@ public class FrostbiteRing : Relic
                 var unit = FreezeGroup.First;
                 if (unit == null) break;
                 FreezeGroup.Remove(unit);
-                if (Globals.ALL_WOLVES.ContainsKey(unit) && Globals.ALL_WOLVES[unit].IsReviving) continue; // reviving bomber wolves will not be allowed to be frozen.
+                if (Globals.ALL_WOLVES.ContainsKey(unit) && Globals.ALL_WOLVES[unit].IsReviving) continue; // reviving bomber wolves will not be allowed to be frozen.)
+                if (Globals.ALL_WOLVES[unit].HasAffix("Frostbite")) continue;
                 FrostbiteEffect(unit);
             }
 
