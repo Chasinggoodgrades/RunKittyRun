@@ -162,6 +162,7 @@ public static class Challenges
         {
             var unit = @event.Unit;
             var player = unit.Owner;
+            if (!Globals.GAME_ACTIVE) return;
             if (unit.UnitType != Constants.UNIT_KITTY) return;
             if (!Globals.ALL_PLAYERS.Contains(player)) return;
             if (!Globals.ALL_KITTIES[player].CurrentStats.RoundFinished) return;

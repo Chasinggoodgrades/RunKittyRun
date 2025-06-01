@@ -3,6 +3,8 @@ using WCSharp.Api;
 
 public static class DeathlessChallenges
 {
+    public static int DeathlessCount { get; private set; } = 0; // Number of deaths allowed for the current round.
+
     public static void Initialize()
     {
         ResetDeathless();
@@ -13,6 +15,7 @@ public static class DeathlessChallenges
     /// </summary>
     public static void ResetDeathless()
     {
+        DeathlessCount = 0;
         foreach (var kitty in Globals.ALL_KITTIES)
             ResetPlayerDeathless(kitty.Value);
     }
@@ -47,6 +50,7 @@ public static class DeathlessChallenges
 
     private static void AwardDeathless(Kitty kitty)
     {
+        DeathlessCount += 1;
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
         AwardBasedOnDifficulty(kitty.Player);
         PlayInvulnerableSoundWithText(kitty);

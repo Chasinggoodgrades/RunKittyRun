@@ -422,8 +422,8 @@ public static class InitCommands
             action: (player, args) =>
             {
                 float speed = args[0] != "" ? float.Parse(args[0]) : 0;
-                Globals.ALL_KITTIES[player].ToggleSpinCam(speed);
-                player.DisplayTextTo(Colors.COLOR_GOLD + "SpinCam: " + (Globals.ALL_KITTIES[player].IsSpinCamActive() ? "On" : "Off"));
+                Globals.ALL_KITTIES[player].SpinCam.ToggleSpinCam(speed);
+                player.DisplayTextTo(Colors.COLOR_GOLD + "SpinCam: " + (Globals.ALL_KITTIES[player].SpinCam.IsSpinCamActive() ? "On" : "Off"));
             }
         );
 
@@ -1489,6 +1489,55 @@ public static class InitCommands
                     return;
                 }
                 TeamHandler.Handler(player, int.Parse(args[0]));
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test5",
+            alias: "t5",
+            group: "admin",
+            argDesc: "",
+            description: "Creates TeamDeathless Effect",
+            action: (player, args) =>
+            {
+                var e = effect.Create("war3mapImported\\TeamDeathless.mdx", Globals.ALL_KITTIES[player].Unit, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "deathless",
+            alias: "dl",
+            group: "admin",
+            argDesc: "[player]",
+            description: "Teleports the ResolvePlayerId to each safezone all the way to the end",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    var safeZones = RegionList.SafeZones;
+                    foreach (var safeZone in safeZones)
+                    {
+                        kitty.Unit.SetPosition(safeZone.Center.X, safeZone.Center.Y);
+                    }
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "restart",
+            alias: "rst",
+            group: "admin",
+            argDesc: "",
+            description: "Restarts the current round and time to 0:00",
+            action: (player, args) =>
+            {
+
             }
         );
 

@@ -41,7 +41,7 @@ public static class ItemStacker
     {
         try
         {
-            var item = @event.ManipulatedItem;
+            item item = @event.ManipulatedItem;
             var itemID = item.TypeId;
             if (!StackableItem(itemID)) return;
             var unit = @event.Unit;

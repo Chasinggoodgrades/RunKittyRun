@@ -66,7 +66,7 @@ public class Chaos : Affix
     {
         try
         {
-            Unit.RemoveAffix(currentAffix);
+            if (currentAffix != null) Unit.RemoveAffix(currentAffix); // look at later..
             currentAffix = null;
             string randomAffix = GenRandomAffixName();
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix);

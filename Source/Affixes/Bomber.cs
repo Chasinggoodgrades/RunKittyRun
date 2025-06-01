@@ -9,6 +9,7 @@ public class Bomber : Affix
     private static readonly Predicate<Affix> IsBomber = x => x is Bomber;
 
     private static string BLOOD_EFFECT_PATH = "war3mapImported\\Bloodstrike.mdx";
+    private static string RING_TIMER_INDICATOR = "war3mapImported\\RingProgress.mdx";
 
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
@@ -17,6 +18,7 @@ public class Bomber : Affix
     private group ExplodeGroup = group.Create();
     private int ReviveAlpha = 1;
     private RangeIndicator RangeIndicator = null;
+    private effect TimerIndicator;
 
     public Bomber(Wolf unit) : base(unit)
     {
@@ -53,6 +55,7 @@ public class Bomber : Affix
             RangeIndicator?.Dispose();
             RangeIndicator = null;
 
+            if (Unit.IsPaused) Unit?.PauseSelf(false);
             Unit.IsReviving = false;
             Unit.IsPaused = false;
         }
@@ -83,10 +86,11 @@ public class Bomber : Affix
             if (Unit.WolfArea.IsEnabled)
             {
                 RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
+                Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
+                Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
+                Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             }
-            Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
-            Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
-            Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
+
             Utility.SimpleTimer(4.0f, Explode);
         }
         catch (Exception e)
@@ -132,22 +136,32 @@ public class Bomber : Affix
     private void Revive()
     {
         Unit.IsReviving = true;
-        ReviveAlphaTimer?.Timer.Start(1.0f, true, () =>
+        if (Unit.WolfArea.IsEnabled)
+        {
+            TimerIndicator ??= effect.Create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.Unit.Y);
+            TimerIndicator.SetTime(0);
+            TimerIndicator.PlayAnimation(animtype.Birth);
+            TimerIndicator.SetX(Unit.Unit.X);
+            TimerIndicator.SetY(Unit.Unit.Y);
+        }
+        ReviveAlphaTimer?.Timer?.Start(1.0f, true, () =>
         {
             try
             {
                 if (ReviveAlpha < 10)
                 {
                     ReviveAlpha++;
-                    Unit.Unit.SetVertexColor(204, 102, 0, 25 * ReviveAlpha);
+                    Unit.Unit.SetVertexColor(204, 102, 0, 25);
                 }
                 else
                 {
                     ReviveAlpha = 1;
-                    ReviveAlphaTimer.Pause();
+                    ReviveAlphaTimer?.Pause();
                     Unit.PauseSelf(false);
                     Unit.IsReviving = false;
-                    ExplodeTimer?.Timer.Start(ExplosionInterval(), false, StartExplosion);
+                    TimerIndicator?.PlayAnimation(animtype.Death);
+                    Unit.Unit.SetVertexColor(204, 102, 0);
+                    ExplodeTimer?.Timer?.Start(ExplosionInterval(), false, StartExplosion);
                 }
             }
             catch (Exception e)
@@ -164,6 +178,6 @@ public class Bomber : Affix
     {
         // For now.. Bomber wolves cannot really be frozen once the explosion timer starts..
         // But in the future.. Need to move the explosion timers to be 1 timer instead of 4 Utility.SimpleTimers.
-        RangeIndicator.DestroyIndicator();
+        RangeIndicator?.DestroyIndicator();
     }
 }

@@ -29,6 +29,7 @@ public static class RoundManager
 
             RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
+            TeamDeathless.StartEvent();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
         }
@@ -70,8 +71,8 @@ public static class RoundManager
     {
         try
         {
-            MultiboardUtil.RefreshMultiboards();
             Globals.GAME_ACTIVE = false;
+            MultiboardUtil.RefreshMultiboards();
             RoundTimer.EndRoundTimer.Pause();
             NitroChallenges.StopNitroTimer();
             Wolf.RemoveAllWolves();

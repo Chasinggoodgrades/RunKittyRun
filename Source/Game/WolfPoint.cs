@@ -126,7 +126,7 @@ public class WolfPoint
 
     private static trigger InitTrigger()
     {
-        IsPausedTrigger = CreateTrigger();
+        IsPausedTrigger ??= CreateTrigger();
         Blizzard.TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
 
         TriggerAddCondition(IsPausedTrigger, FilterList.IssuedOrderAtkOrder);

@@ -26,18 +26,18 @@ public class OneOfNine : Relic
 
     public override void ApplyEffect(unit Unit)
     {
-        var player = Unit.Owner;
-        var cooldown = GetOneOfNineCooldown(player);
+        player player = Unit.Owner;
+        float cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(PreviousAbilityID);
         Unit.AddAbility(RelicAbilityID);
-        var abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
+        int abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
         Unit.SetAbilityCooldownRemaining(RelicAbilityID, cooldown);
         RemoveManaCost(Unit, abilityLevel);
     }
 
     public override void RemoveEffect(unit Unit)
     {
-        var player = Unit.Owner;
+        player player = Unit.Owner;
         var cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(RelicAbilityID);
         Unit.AddAbility(PreviousAbilityID);
@@ -47,7 +47,7 @@ public class OneOfNine : Relic
 
     public static float GetOneOfNineCooldown(player Player)
     {
-        var kitty = Globals.ALL_KITTIES[Player].Unit;
+        unit kitty = Globals.ALL_KITTIES[Player].Unit;
         var noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
         var reduction = GetOneOfNineReduction(Player);

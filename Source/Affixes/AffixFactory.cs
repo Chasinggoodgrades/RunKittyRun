@@ -143,7 +143,6 @@ public static class AffixFactory
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
-            affixes = affixes.Replace("Frostbite, ", "").Replace(", Frostbite", "").Replace("Frostbite", "");
             affixes = affixes.Replace("Chaos, ", "").Replace(", Chaos", "").Replace("Chaos", "");
         }
         return affixes.Trim();

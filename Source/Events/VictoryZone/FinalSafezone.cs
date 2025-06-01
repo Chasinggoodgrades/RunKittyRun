@@ -28,6 +28,7 @@ public static class FinalSafezone
             Challenges.WhiteFire(player);
             Challenges.GreenLightning(player);
             Challenges.PatrioticLight(kitty); // transition to using kitty object later.
+            TeamDeathless.PrestartingEvent();
             NoKittyLeftBehind.CheckChallenge();
         }));
     }
