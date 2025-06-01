@@ -767,6 +767,19 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "moretime",
+            alias: "mt",
+            group: "all",
+            argDesc: "",
+            description: "Adds 20 secondsd to the round timer. Can only happen once per round.",
+            action: (player, args) =>
+            {
+                if (!RoundManager.AddMoreRoundTime()) return;
+                Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "unpauseround",
             alias: "roundunpause,rup",
             group: "admin",
@@ -1537,9 +1550,26 @@ public static class InitCommands
             description: "Restarts the current round and time to 0:00",
             action: (player, args) =>
             {
+                if (Globals.ROUND <= 0) return;
+                Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND];
+                GameTimer.RoundTime[Globals.ROUND] = 0.0f; // reset the round end time
+                Globals.ROUND = Globals.ROUND - 1;
+                RoundManager.RoundEnd();
 
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "disableKibble",
+            alias: "dkb",
+            group: "red",
+            argDesc: "",
+            description: "Disables Kibble",
+            action: (player, args) =>
+            {
+                Kibble.SpawningKibble = !Kibble.SpawningKibble;
+                Console.WriteLine($"Kibble spawning is now: {Kibble.SpawningKibble}");
+            }
+        );
     }
 }

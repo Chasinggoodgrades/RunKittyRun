@@ -72,6 +72,7 @@ public static class ItemSpawner
     public static void SpawnKibble(int numberOfItems)
     {
         if (Gamemode.CurrentGameMode != "Standard") return;
+        if (!Kibble.SpawningKibble) return;
         if (KibbleEvent.IsEventActive()) return;
 
         for (int i = 0; i < numberOfItems; i++)

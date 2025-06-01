@@ -6,11 +6,23 @@ public static class RoundManager
     public static float ROUND_INTERMISSION { get; set; } = 30.0f;
     public static float END_ROUND_DELAY { get; set; } = 3.0f;
     public static bool GAME_STARTED { get; private set; } = false;
+    private static bool AddedTimeAlready { get; set; } = false;
 
     public static void Initialize()
     {
         if (Gamemode.CurrentGameMode == "Standard") HasDifficultyBeenChosen();
         else RoundSetup();
+    }
+
+    public static bool AddMoreRoundTime()
+    {
+        if (AddedTimeAlready) return false;
+        var remainingTime = RoundTimer.StartRoundTimer.Remaining;
+        if (remainingTime <= 0.0f) return false;
+        AddedTimeAlready = true;
+        var tempTime = remainingTime + 20.0f; // 20 seconds
+        RoundTimer.StartRoundTimer.Start(tempTime, false, StartRound);
+        return true;
     }
 
     private static void RoundSetup()
@@ -23,11 +35,12 @@ public static class RoundManager
             Safezone.ResetPlayerSafezones();
             Wolf.SpawnWolves();
             Utility.SimpleTimer(1.0f, AffixFactory.DistAffixes);
+            AddedTimeAlready = false;
             if (Globals.ROUND > 1) TerrainChanger.SetTerrain();
 
             RoundTimer.InitEndRoundTimer();
+            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, StartRound);
 
-            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, ErrorHandler.Wrap(StartRound));
             RoundTimer.CountDown();
             TeamDeathless.StartEvent();
             WolfLaneHider.HideAllLanes();
@@ -57,14 +70,14 @@ public static class RoundManager
     private static void HasDifficultyBeenChosen()
     {
         var Timer = ObjectPool.GetEmptyObject<AchesTimers>();
-        Timer.Timer.Start(0.35f, true, ErrorHandler.Wrap(() =>
+        Timer.Timer.Start(0.35f, true, () =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
                 Timer.Dispose();
             }
-        }));
+        });
     }
 
     public static void RoundEnd()
