@@ -6,6 +6,7 @@ using static WCSharp.Api.Common;
 public class Kibble : IDisposable
 {
     public static trigger PickupTrigger;
+    public static bool SpawningKibble = true;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
@@ -34,6 +35,7 @@ public class Kibble : IDisposable
 
     public void SpawnKibble()
     {
+
         var regionNumber = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         var region = RegionList.WolfRegions[regionNumber];
         var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);

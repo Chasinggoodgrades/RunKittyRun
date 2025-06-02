@@ -79,7 +79,7 @@ public static class CommandHandler
         var chatString = @event.PlayerChatString;
         var command = chatString.ToLower();
 
-        if (command.StartsWith("?") && Utility.IsDeveloper(player))
+        if (command.StartsWith("?") && Globals.VIPLISTUNFILTERED.Contains(player))
         {
             if (command.ToLower().StartsWith("?exec")) ExecuteLua.LuaCode(player, chatString);
         }

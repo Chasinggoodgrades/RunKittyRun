@@ -260,9 +260,9 @@ public static class ShopFrame
 
         if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
-        nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:|r {shopItem.Name}";
-        costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:|r {shopItem.Cost}";
-        descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:|r {shopItem.Description}";
+        nameLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Name:{Colors.COLOR_RESET} {shopItem.Name}";
+        costLabel.Text = $"{Colors.COLOR_YELLOW}Cost:{Colors.COLOR_RESET} {shopItem.Cost}";
+        descriptionLabel.Text = $"{Colors.COLOR_YELLOW_ORANGE}Description:{Colors.COLOR_RESET} {shopItem.Description}";
         UpdateButtonStatus(player);
         if (shopItem.Type == ShopItemType.Relic)
             RefreshUpgradeTooltip(shopItem.Relic);
@@ -329,8 +329,8 @@ public static class ShopFrame
                 colorDescription = Colors.COLOR_GREY;
             }
 
-            finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g|r");
-            finalString.AppendLine($"{colorDescription}{upgrade.Description}|r");
+            finalString.AppendLine($"{color}[Upgrade {i + 1}] {upgrade.Cost}g{Colors.COLOR_RESET}");
+            finalString.AppendLine($"{colorDescription}{upgrade.Description}{Colors.COLOR_RESET}");
             finalString.AppendLine("----------------------------");
         }
 
@@ -403,13 +403,13 @@ public static class ShopFrame
                 {
                     if (!kitty.Alive || kitty.ProtectionActive)
                     {
-                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!|r");
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!{Colors.COLOR_RESET}");
                         return;
                     }
 
                     if (!CanSellRelic(kitty.Unit))
                     {
-                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.|r");
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.{Colors.COLOR_RESET}");
                         return;
                     }
 
@@ -453,7 +453,7 @@ public static class ShopFrame
 
     private static void SetRewardsFrameHotkey()
     {
-        var shopFrameHotkey = trigger.Create();
+        trigger shopFrameHotkey = trigger.Create();
         foreach (var player in Globals.ALL_PLAYERS)
         {
             shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
@@ -470,7 +470,7 @@ public static class ShopFrame
         FrameManager.HideOtherFrames(shopFrame);
         if (Gamemode.CurrentGameMode != "Standard")
         {
-            player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is only accessible in Standard mode.");
+            player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is only accessible in Standard mode.{Colors.COLOR_RESET}");
             return;
         }
         shopFrame.Visible = !shopFrame.Visible;

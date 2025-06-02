@@ -21,7 +21,7 @@ public static class RelicFunctions
 
             if (!HasInventorySpace(kitty.Unit))
             {
-                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!|r");
+                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You do not have enough inventory space to purchase this relic!{Colors.COLOR_RESET}");
                 return;
             }
 
@@ -74,12 +74,12 @@ public static class RelicFunctions
                 }
                 if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.{Colors.COLOR_RESET}");
                     player.Gold -= goldCost;
                     if (player.IsLocal) ShopFrame.RefreshUpgradeTooltip(playerRelic);
                 }
                 else
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.{Colors.COLOR_RESET}");
             }
         }
         catch (Exception e)

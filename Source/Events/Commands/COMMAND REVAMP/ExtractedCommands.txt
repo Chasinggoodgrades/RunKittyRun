@@ -1,0 +1,108 @@
+**admin Commands**
+- ability [[abilityId]] - Adds or removes an ability from the kitty.
+- activatebarrier [] - Activates the barrier.
+- activatechristmas [] - Activates the Christmas terrain.
+- ai [[playerNumber]] - Toggles AI for the specified player.
+- ailaser [[free/blocked] [string ID]] - Changes the color of the laser on all the AI, blocked or free
+- aisetup [[dodgeRadius] [timerInterval] [laser]] - Sets up AI parameters.
+- aishare [] - Shares control with all AI players.
+- aitest [] - Changes the color of the laser on all the AI, blocked or free
+- applyaffix [[affix]] - Applies the specified affix to the currently selected wolf.
+- applyaffixall [[affix]] - Applies the specified affix to all wolves.
+- award [[name]] - Award currently selected player using award [name].
+- blink [] - Adds a blink item to the kitty.
+- camfield [[value]] - Adjusts the camera field.
+- clearaffixes [] - Clears all affixes from all wolves.
+- col [[player]] - Gets collision of passed player, or yourself if no args.
+- createhero [[playerNumber]] - Creates a hero for the specified player.
+- deactivatebarrier [] - Deactivates the barrier.
+- deactivateseason [] - Deactivates any current seasons.
+- deathless [[player]] - Teleports the ResolvePlayerId to each safezone all the way to the end
+- deletehero [[playerNumber]] - Deletes the hero of the specified player.
+- difficulty [[difficulty]] - Changes the game difficulty.
+- en [] - Hides the lanes.
+- endround [] - Ends the current round.
+- exec [] - Executes lua script
+- fortest [[on][off]] - Foreach memory test, executes 20k iterations of foreach loop.
+- gold [amount] - Gives the player gold.
+- invulnerability [[player][on/off]] - Gives invulnerability.
+- killunit [resolve playerID] - Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES
+- level [[level][player/selected]] - Sets the level of the selected unit.
+- mem [] - Prints debug names.
+- memtest [[on][off]] - Memory Handler Periodic Message
+- noend [[on/off]] - Game won't end if turned on and all kitties die.
+- observer [[playerNameMatch]] - Forces a player into observer mode.
+- pauseround [] - Pauses the round timer.
+- pausewolves [[on][off]] - Pauses all wolves. Defaults to [on]
+- removeaffix [[affix]] - Removes the specified affix from the currently selected wolf.
+- resetcooldowns [] - Resets the cooldowns of the selected unit.
+- restart [] - Restarts the current round and time to 0:00
+- revive [] - Revives yourself.
+- revivetest [[on][off]] - Activates the revive invul for 0.6 seconds. Served as a test run.
+- reviveto [] - Revives your hero to an other hero, with the same facing angle.
+- roundset [[round]] - Sets the current round.
+- scale [[scale], [player]] - Sets the scale of the passed player's kitty parameter.
+- sendtostart [[resolvePlayerId]] - Sends the passed player to the start
+- sharecontrol [[player] [on][off]] - Sets whether or not to force the player to share control [default: off]
+- skin [[skinId], [player]] - Sets the skin of the passed player parameter.
+- spawnkibble [[# of kibble]] - Spawns {int #} of kibbles 
+- spawnlocation [] - Moves all kitties to the spawn location.
+- stat [[stat] [value]] - Sets the specified game stat for the selected player.
+- summon [] - Revives another hero to yours, with the same facing angle.
+- summonall [] - Summons all players to your location.
+- test5 [] - Creates TeamDeathless Effect
+- time [[time]] - Sets the specified game time for the selected player.
+- unpauseround [] - Unpauses the round timer.
+- wolfeffects [[true][false]] - Disables the wolves overhead ! effects
+- wolfpause [[on][off]] - Pauses selected wolf. Defaults to [on]
+- wolfshare [[on][off]] - Gives you control of all the wolves.
+- wolfwalk [[on][off]] - Sets the selected wolf to walking or not. Defaults to [on]
+
+**all Commands**
+- affixinfo [[lane #] (1-17)] - Displays current round affixes.
+- animate [[index]] - Set unit animation by index.
+- apm [] - Displays your APM for ACTIVE game time. (not counting intermissions)
+- clear [] - Clears your screen.
+- color [[color]] - Set your player color.
+- colors [] - Display all available colors.
+- disco [[on][off]] - Toggle disco mode.
+- error [[on][off]] - Turns the error prompts off or on
+- firstperson [] - Toggle first person camera.
+- glow [[true/false]] - Toggle unit glow.
+- help [] - Displays all available commands.
+- kc [] - Kicks yourself from the game.
+- kibble [] - Displays the kibble collected by each player.
+- kibblecurrency [player name, #, selected, or self] - Gets the Kibble Currency information on the given player.
+- kick [[playerNumber]] - Initiate a votekick against a player.
+- komotocam [] - Toggle KomotoCam.
+- lockcamera [] - Locks your camera to a unit.
+- mirror [] - Toggle mirror mode.
+- moretime [] - Adds 20 secondsd to the round timer. Can only happen once per round.
+- music [] - Opens the music frame.
+- names [] - Hide all floating name tags.
+- oldcode [] - Loads a previous save from RKR 4.2.0+.
+- overheadcam [] - Gives an overhead view.
+- personalbests [[player]] - Gets personal best stats of the passed parm player, if no parm then yourself.
+- reset [] - Resets your camera to default.
+- rewards [] - Opens the rewards frame.
+- save [] - Save your current game stats.
+- savedvc [] - Sets you to your previously last saved vortex color if you have one.
+- setcolor [[rgb]] - Set your player vertex color.
+- shop [] - Opens the shop frame.
+- spincam [[speed]] - Toggle SpinCam.
+- stats [] - Gets the game stats of the passed parm player, if no parm then yourself.
+- team [[team #]] - Assigns you to the provided team arg #, (TEAM MODE ONLY)
+- times [[player]] - Gets fastest overall times of the passed parm player, if no parm then yourself.
+- voteend [] - Initiate a vote to end the round (Solo Tournament Only).
+- watcher [] - Removes all units from game and you become an observer/spectator.
+- wild [] - Set a random vertex color.
+- wolfinfo [[lane #] (1-17)] - Displays the current wolf count.
+- yes [] - Vote yes for the current vote.
+- zoom [[xxxx]] - Adjust the camera zoom level.
+
+**red Commands**
+- day [] - Sets the time of day to day.
+- disablekibble [] - Disables Kibble
+- night [] - Sets the time of day to night.
+- weather [[weather]] - Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none
+

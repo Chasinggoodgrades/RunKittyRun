@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
+using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
 namespace Source.Init
@@ -21,6 +22,7 @@ namespace Source.Init
                 Colors.Initialize();
                 DoodadChanger.ShowSeasonalDoodads(false);
                 Gamemode.Initialize();
+                SetupVIPList();
                 SetAlliedPlayers();
                 //if (!ADMINDISABLE.AdminsGame()) return;
                 Safezone.Initialize();
@@ -149,12 +151,27 @@ namespace Source.Init
                 }
             }
         }
-
+            
         public static player getNextWolfPlayer()
         {
             var selectedPlayer = wolfPlayers[wolfPlayerIndex];
             wolfPlayerIndex = (wolfPlayerIndex + 1) % wolfPlayers.Count;
             return selectedPlayer;
+        }
+
+        public static void SetupVIPList()
+        {
+            for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+            {
+                for (int j = 0; j < Globals.VIPLIST.Length; j++)
+                {
+                    var fromBase64Name = Base64.FromBase64(Globals.VIPLIST[j]);
+                    if (Globals.ALL_PLAYERS[i].Name == fromBase64Name)
+                    {
+                        Globals.VIPLISTUNFILTERED.Add(Globals.ALL_PLAYERS[i]);
+                    }
+                }
+            }
         }
     }
 }
