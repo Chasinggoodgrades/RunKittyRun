@@ -168,7 +168,6 @@ namespace Source.Init
                     var fromBase64Name = Base64.FromBase64(Globals.VIPLIST[j]);
                     if (Globals.ALL_PLAYERS[i].Name == fromBase64Name)
                     {
-                        Console.WriteLine($"{Colors.COLOR_GREEN}Adding {Globals.ALL_PLAYERS[i].Name} to VIP list.{Colors.COLOR_RESET}");
                         Globals.VIPLISTUNFILTERED.Add(Globals.ALL_PLAYERS[i]);
                     }
                 }
