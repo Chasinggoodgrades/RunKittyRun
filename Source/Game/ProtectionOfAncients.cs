@@ -117,6 +117,7 @@ public static class ProtectionOfAncients
 
         if (!k.Alive) return; // cannot cast if dead obviously.
         k.Unit.IssueOrder("divineshield");
+        k.Unit.IssueOrder(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY);
     }
 
     private static void ActivationEvent()

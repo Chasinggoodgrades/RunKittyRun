@@ -9,6 +9,8 @@ public class APMTracker
     private trigger ClicksTrigger = CreateTrigger();
     private triggeraction ClicksAction;
     private timer PeriodicTimer;
+    public float LastX;
+    public float LastY;
 
     private int TotalActions;
     private float TimeOutsideSafeZones;
@@ -40,7 +42,11 @@ public class APMTracker
     private void CaptureActions()
     {
         if (!IsInSafeZone(Kitty))
+        {
             TotalActions += 1;
+            LastX = @event.OrderPointX;
+            LastY = @event.OrderPointY;
+        }
     }
 
     private void CheckKittyPositions()
