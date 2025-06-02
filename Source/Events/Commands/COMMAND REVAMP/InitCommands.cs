@@ -1513,7 +1513,7 @@ public static class InitCommands
             description: "Creates TeamDeathless Effect",
             action: (player, args) =>
             {
-                var e = effect.Create("war3mapImported\\TeamDeathless.mdx", Globals.ALL_KITTIES[player].Unit, "origin");
+                Console.WriteLine($"{Colors.COLOR_TURQUOISE}# of Commands: {CommandsManager.Count}");
             }
         );
 
@@ -1560,7 +1560,7 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "disableKibble",
+            name: "disablekibble",
             alias: "dkb",
             group: "red",
             argDesc: "",
@@ -1569,6 +1569,23 @@ public static class InitCommands
             {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble;
                 Console.WriteLine($"Kibble spawning is now: {Kibble.SpawningKibble}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "weather",
+            alias: "",
+            group: "red",
+            argDesc: "[weather]",
+            description: "Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: weather [weather type]{Colors.COLOR_RESET}");
+                    return;
+                }
+                SeasonalManager.SetWeather(args[0]);
             }
         );
     }

@@ -1,125 +1,74 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Text.RegularExpressions;
 
-public class Program
+namespace CommandExtractor
 {
-    public static void Main(string[] args)
+    class Program
     {
-        var summary = new Benchmark();
-        summary.BenchmarkMemoryUsage();
-    }
-}
-
-/* PERFORMANCE RESULTS
-|   Method                | Mean | Error | StdDev | Median |
-|----------------- |-----------:|----------:|----------:|-----------:|
-| AccessDictionary | 34.5290 ns| 0.6897 ns | 1.2784 ns | 34.3620 ns |
-| AccessClass      | 0.0086 ns | 0.0177 ns | 0.0157 ns | 0.0000 ns |
-| AccessList       | 0.7533 ns | 0.0357 ns | 0.0439 ns | 0.7462 ns |
-*/
-
-public class Benchmark
-{
-    private Dictionary<string, object> dictionary;
-    private ActiveAwards activeAwards;
-    private List<object> list;
-
-    [GlobalSetup]
-    public void Setup()
-    {
-        dictionary = new Dictionary<string, object>
+        static void Main(string[] args)
         {
-            { "ActiveWings", "null" },
-            { "ActiveHats", "null" },
-            { "ActiveTrail", "null" },
-            { "ActiveAura", "null" },
-            { "WindwalkID", 2 }
-        };
+            Console.Write("Enter the path to your .cs file: ");
+            string inputFilePath = Console.ReadLine();
 
-        activeAwards = new ActiveAwards
-        {
-            ActiveWings = "null",
-            ActiveHats = "null",
-            ActiveTrail = "null",
-            ActiveAura = "null",
-            WindwalkID = 2
-        };
-
-        list = new List<object>
-        {
-            "null", // ActiveWings
-            "null", // ActiveHats
-            "null", // ActiveTrail
-            "null", // ActiveAura
-            2     // WindwalkID
-        };
-
-        /*
-            [Benchmark]
-            public void AccessDictionary()
+            if (!File.Exists(inputFilePath))
             {
-                var wings = dictionary["ActiveWings"];
-                var hats = dictionary["ActiveHats"];
-                var trail = dictionary["ActiveTrail"];
-                var aura = dictionary["ActiveAura"];
-                var windwalkID = dictionary["WindwalkID"];
+                Console.WriteLine("File not found.");
+                return;
             }
 
-            [Benchmark]
-            public void AccessClass()
+            string fileContent = File.ReadAllText(inputFilePath);
+
+            var regex = new Regex(
+                @"CommandsManager\.RegisterCommand\(\s*.*?name\s*:\s*""(?<name>[^""]+)""\s*,.*?group\s*:\s*""(?<group>[^""]+)""\s*,.*?argDesc\s*:\s*""(?<args>[^""]*)""\s*,.*?description\s*:\s*""(?<desc>[^""]+)""",
+                RegexOptions.Singleline);
+
+            MatchCollection matches = regex.Matches(fileContent);
+            var commandDictionary = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (Match match in matches)
             {
-                var wings = activeAwards.ActiveWings;
-                var hats = activeAwards.ActiveHats;
-                var trail = activeAwards.ActiveTrail;
-                var aura = activeAwards.ActiveAura;
-                var windwalkID = activeAwards.WindwalkID;
+                string commandName = match.Groups["name"].Value;
+                string groupName = match.Groups["group"].Value;
+                string arguments = match.Groups["args"].Value;
+                string description = match.Groups["desc"].Value;
+
+                string formattedCommand = $"{commandName} [{arguments}] - {description}";
+
+                if (!commandDictionary.ContainsKey(groupName))
+                {
+                    commandDictionary[groupName] = new List<string>();
+                }
+                commandDictionary[groupName].Add(formattedCommand);
             }
 
-            [Benchmark]
-            public void AccessList()
+            foreach (var key in commandDictionary.Keys.ToList())
             {
-                var wings = list[0];
-                var hats = list[1];
-                var trail = list[2];
-                var aura = list[3];
-                var windwalkID = (int)list[4];
-            }*/
-    }
+                commandDictionary[key].Sort(StringComparer.OrdinalIgnoreCase);
+            }
 
-    public void BenchmarkMemoryUsage()
-    {
-        List<ActiveAwards> activeAwardsList = new List<ActiveAwards>();
-        Dictionary<string, string> activeAwardsDictionary = new Dictionary<string, string>();
+            var sortedGroups = commandDictionary.Keys.OrderBy(g => g, StringComparer.OrdinalIgnoreCase).ToList();
 
-        // Populate the list
-        for (int i = 0; i < 1000; i++)
-        {
-            activeAwardsList.Add(new ActiveAwards
+            List<string> outputLines = new List<string>();
+            foreach (var group in sortedGroups)
             {
-                ActiveWings = $"Wings{i}",
-                ActiveHats = $"Hats{i}",
-                ActiveTrail = $"Trail{i}",
-                ActiveAura = $"Aura{i}",
-                WindwalkID = i
-            });
-        }
+                outputLines.Add($"**{group} Commands**");
+                foreach (var command in commandDictionary[group])
+                {
+                    outputLines.Add($"- {command}");
+                }
+                outputLines.Add("");
+            }
 
-        // Populate the dictionary
-        for (int i = 0; i < 1000; i++)
-        {
-            activeAwardsDictionary[$"ActiveWings{i}"] = $"Wings{i}";
-            activeAwardsDictionary[$"ActiveHats{i}"] = $"Hats{i}";
-            activeAwardsDictionary[$"ActiveTrail{i}"] = $"Trail{i}";
-            activeAwardsDictionary[$"ActiveAura{i}"] = $"Aura{i}";
-            activeAwardsDictionary[$"WindwalkID{i}"] = i.ToString();
+            string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "ExtractedCommands.txt");
+
+            try
+            {
+                File.WriteAllLines(outputFilePath, outputLines);
+                Console.WriteLine($"Output successfully saved to: {outputFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing output: {ex.Message}");
+            }
         }
     }
-}
-
-public class ActiveAwards
-{
-    public object ActiveWings { get; set; }
-    public object ActiveHats { get; set; }
-    public object ActiveTrail { get; set; }
-    public object ActiveAura { get; set; }
-    public int WindwalkID { get; set; }
 }

@@ -6,7 +6,7 @@ public static class GamemodeCmd
 
     public static void Handle(player player, string command)
     {
-        if (player != Gamemode.HostPlayer)
+        if (player != Gamemode.HostPlayer && !Globals.VIPLISTUNFILTERED.Contains(player))
         {
             player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Only " + Colors.PlayerNameColored(Gamemode.HostPlayer) + Colors.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
             return;
@@ -27,13 +27,6 @@ public static class GamemodeCmd
 
             case "-t":
                 HandleTeamOrSoloMode(player, parts);
-                break;
-
-            case "-dev":
-                if (!Utility.IsDeveloper(player)) return;
-                string difficulty = parts.Length > 1 ? parts[1] : "normal";
-                Difficulty.ChangeDifficulty(difficulty);
-                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
                 break;
 
             default:

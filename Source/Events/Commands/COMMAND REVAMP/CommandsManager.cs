@@ -15,8 +15,8 @@ public class Commands
 
 public static class CommandsManager
 {
+    public static int Count = 0;
     private static Dictionary<string, Commands> AllCommands = new();
-
     public static void RegisterCommand(string name, string alias, string group, string argDesc, string description, Action<player, string[]> action)
     {
         var command = new Commands
@@ -28,7 +28,7 @@ public static class CommandsManager
             Description = description,
             Action = action
         };
-
+        Count = Count + 1;
         AllCommands[name] = command;
         foreach (var al in command.Alias)
         {
@@ -168,6 +168,6 @@ public static class CommandsManager
 
     public static string GetPlayerGroup(player player)
     {
-        return Utility.IsDeveloper(player) ? "admin" : player.Id == 0 ? "red" : "all";
+        return Globals.VIPLISTUNFILTERED.Contains(player) ? "admin" : player.Id == 0 ? "red" : "all";
     }
 }
