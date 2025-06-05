@@ -7,8 +7,8 @@ public static class TerrainChanger
     public static int[] SafezoneTerrain { get; set; }
     public static string NormalCliff = "cXc1";
     public static string DirtCliff = "cXc2";
-    private static int LastWolfTerrain = 0;
-    private static int LastSafezoneTerrain = 0;
+    public static int LastWolfTerrain = 0;
+    public static int LastSafezoneTerrain = 0;
 
     public static void Initialize()
     {
