@@ -65,15 +65,28 @@ public static class InitCommands
             alias: "g",
             group: "admin",
             argDesc: "amount",
-            description: "Gives the player gold.",
+            description: "Gives the resolvePlayerID gold",
             action: (player, args) =>
             {
-                if (!int.TryParse(args[0], out int amount))
+                if (args[0] == "")
                 {
-                    player.DisplayTimedTextTo(5.0f, "Invalid amount.");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: gold [amount] [resolvePlayerId]|r");
                     return;
                 }
-                player.Gold += amount;
+
+                var amount = int.Parse(args[0]);
+
+                if (args.Length < 2)
+                {
+                    player.Gold += amount;
+                    return;
+                }
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                    {
+                        kitty.Player.Gold += amount;
+                    });
+
             }
         );
 
@@ -1586,6 +1599,19 @@ public static class InitCommands
                     return;
                 }
                 SeasonalManager.SetWeather(args[0]);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test9",
+            alias: "",
+            group: "admin",
+            argDesc: "[weather]",
+            description: "Sand Test",
+            action: (player, args) =>
+            {
+                TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC("Zdrg"));
+                Console.WriteLine("Changed Terrain");
             }
         );
     }
