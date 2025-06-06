@@ -23,6 +23,7 @@ Visit [This Link](https://rkr-w3.vercel.app/) to see current stats and the lates
 - **Geek.**
 - **Leyenda**
 - **Stan**
+- **Yoshimaru**
 
 ### License:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
