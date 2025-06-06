@@ -21,10 +21,15 @@ public static class Utility
         ShowUnit(u, true);
     }
 
+    /// <summary>
+    /// Selects the passed unit for the passed player parmeter. (adds to current unit group)
+    /// </summary>
+    /// <param name="p"></param>
+    /// <param name="u"></param>
     public static void SelectUnitForPlayer(player p, unit u)
     {
         if (GetLocalPlayer() != p) return;
-        ClearSelection();
+        // ClearSelection();
         SelectUnit(u, true);
     }
 
