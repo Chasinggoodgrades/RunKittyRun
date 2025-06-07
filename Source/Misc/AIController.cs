@@ -480,8 +480,10 @@ public class AIController
         float requiredClearance = 22.5f * (MathF.PI / 180);
 
         // Calculate the angle interval that each wolf “blocks.”
-        foreach (Wolf wolf in wolves)
+        for (int i = 0; i < wolves.Count; i++)
         {
+            Wolf wolf = wolves[i];
+
             float MIN_TOTAL_BLOCKED_ANGLE = 45.0f * (MathF.PI / 180);
             float MAX_TOTAL_BLOCKED_ANGLE = 270.0f * (MathF.PI / 180);
 
@@ -642,8 +644,9 @@ public class AIController
         float bestCandidateScore = float.MaxValue;
         float bestCandidateAngle = -500f; // Default to the original forward angle
 
-        foreach (float offset in offsets)
+        for (int i = 0; i < offsets.Length; i++)
         {
+            float offset = offsets[i];
             float candidateAngle = NormalizeAngle(forwardAngle + offset);
 
             float bestAngle = calcAngle(candidateAngle, requiredClearance);

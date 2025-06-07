@@ -19,6 +19,7 @@ public static class Gameover
         GameStats(true);
         GameoverUtil.SetColorData();
         GameoverUtil.SetBestGameStats();
+        GameoverUtil.SetFriendData();
         StandardWinChallenges();
         SaveGame();
         Console.WriteLine($"{Colors.COLOR_GREEN}Stay a while for the end game awards!!{Colors.COLOR_RESET}");
@@ -41,6 +42,7 @@ public static class Gameover
     {
         Wolf.RemoveAllWolves();
         GameoverUtil.SetColorData();
+        GameoverUtil.SetFriendData();
         GameStats(false);
         SaveGame();
         NotifyEndingGame();

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using WCSharp.Api;
 
 public static class GameoverUtil
@@ -34,6 +36,53 @@ public static class GameoverUtil
         }
     }
 
+    public static void SetFriendData()
+    {
+        var friendDict = new Dictionary<string, int>();
+
+        foreach (var kitty in Globals.ALL_KITTIES)
+        {
+            var friendsPlayedWith = kitty.Value.SaveData.FriendsData.FriendsPlayedWith;
+
+            friendDict.Clear();
+
+            // Splitting / Parsing the data of playerName:count pairs
+            if (!string.IsNullOrWhiteSpace(friendsPlayedWith))
+            {
+                foreach (var entry in friendsPlayedWith.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var parts = entry.Split(':');
+                    if (parts.Length == 2 && int.TryParse(parts[1].Trim(), out int count))
+                    {
+                        friendDict[parts[0].Trim()] = count;
+                    }
+                }
+            }
+
+            // takes all in-game kitties, increments count if they're present in dictionary else set to 1
+            foreach (var other in Globals.ALL_KITTIES)
+            {
+                if (other.Value == kitty.Value) continue;
+                string friendName = other.Value.Player.Name; // Get their full battle tag
+
+                if (friendDict.ContainsKey(friendName))
+                {
+                    friendDict[friendName]++;
+                }
+                else
+                {
+                    friendDict[friendName] = 1;
+                }
+            }
+
+            // Yoshi said if this wasn't sorted she was gonna hurt me, SO HERE IT IS .. Order By DESC!!
+            kitty.Value.SaveData.FriendsData.FriendsPlayedWith =
+                string.Join(", ",
+                    friendDict.OrderByDescending(kvp => kvp.Value)
+                              .Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+        }
+    }
+
     private static void SetNormalGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
@@ -60,6 +109,8 @@ public static class GameoverUtil
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
+
+
 
     private static string GetTeamMembers()
     {

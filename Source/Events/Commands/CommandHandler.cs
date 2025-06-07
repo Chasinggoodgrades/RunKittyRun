@@ -17,8 +17,8 @@ public static class CommandHandler
             TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), "?", false);
             TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), "-", false);
         }
-        TriggerAddAction(DebugCmdTrigger, ErrorHandler.Wrap(DebugHandle));
-        TriggerAddAction(NewCmdHandler, ErrorHandler.Wrap(HandleCommands));
+        TriggerAddAction(DebugCmdTrigger, DebugHandle);
+        TriggerAddAction(NewCmdHandler, HandleCommands);
     }
 
     private static void HandleCommands()
@@ -49,16 +49,24 @@ public static class CommandHandler
         if (GamemodeSetting(@event.PlayerChatString))
             return;
 
-        var command = CommandsManager.GetCommand(commandName.ToLower());
-        var playerGroup = CommandsManager.GetPlayerGroup(@event.Player);
-        if (command != null && (command.Group ==  playerGroup || command.Group == "all" || playerGroup == "admin"))
+        try
         {
-            command.Action?.Invoke(@event.Player, args);
-        }
 
-        else
+            var command = CommandsManager.GetCommand(commandName.ToLower());
+            var playerGroup = CommandsManager.GetPlayerGroup(@event.Player);
+            if (command != null && (command.Group == playerGroup || command.Group == "all" || playerGroup == "admin"))
+            {
+                command.Action?.Invoke(@event.Player, args);
+            }
+            else
+            {
+                @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
+            }
+        }
+        catch (Exception ex)
         {
-            @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
+            @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error executing command:{Colors.COLOR_RESET} {Colors.COLOR_RED}{ex.Message} {ex.StackTrace}{Colors.COLOR_RESET}");
+            return;
         }
     }
 

@@ -54,6 +54,8 @@ public class Bomber : Affix
             ReviveAlphaTimer = null;
             RangeIndicator?.Dispose();
             RangeIndicator = null;
+            TimerIndicator?.Dispose();
+            TimerIndicator = null;
 
             if (Unit.IsPaused) Unit?.PauseSelf(false);
             Unit.IsReviving = false;
