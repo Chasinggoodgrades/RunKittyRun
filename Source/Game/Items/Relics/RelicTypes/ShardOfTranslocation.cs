@@ -7,10 +7,10 @@ public class ShardOfTranslocation : Relic
     public const int RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION;
     public new const int RelicAbilityID = Constants.ABILITY_TRANSLOCATE;
     private static int RelicCost = 650;
-    private static float DEFAULT_BLINK_RANGE = 400.0f;
-    private static float UPGRADE_BLINK_RANGE = 600.0f;
+    private static float DEFAULT_BLINK_RANGE = 450.0f;
+    private static float UPGRADE_BLINK_RANGE = 650.0f;
     private static float DEFAULT_COOLDOWN = 90.0f;
-    private static float CooldownReduction = 15.0f;
+    private static float CooldownReduction = 30.0f;
     private unit Owner;
     private new static string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
@@ -26,7 +26,7 @@ public class ShardOfTranslocation : Relic
         )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Extends the teleport range to {UPGRADE_BLINK_RANGE} yrds within lane bounds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced by 15 seconds.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"Cooldown reduced by {(int)CooldownReduction} seconds.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
