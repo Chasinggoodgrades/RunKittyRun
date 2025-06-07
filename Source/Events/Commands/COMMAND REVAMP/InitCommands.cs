@@ -993,6 +993,12 @@ public static class InitCommands
             {
                 var scale = args[0] != "" ? float.Parse(args[0]) : 0.6f;
 
+                if (args.Length < 2 || args[1] == "")
+                {
+                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale);
+                    return;
+                }
+
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
                     if (kitty == null) return;
@@ -1143,10 +1149,16 @@ public static class InitCommands
             alias: "",
             group: "admin",
             argDesc: "[skinId], [player]",
-            description: "Sets the skin of the passed player parameter.",
+            description: "Sets the skin of the passed player parameter. Use \"none\" for default skin.",
             action: (player, args) =>
             {
-                int skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
+                int skin = (args[0] == "" || args[0] == "none") ? Constants.UNIT_KITTY : FourCC(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                    return;
+                }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
