@@ -65,15 +65,28 @@ public static class InitCommands
             alias: "g",
             group: "admin",
             argDesc: "amount",
-            description: "Gives the player gold.",
+            description: "Gives the resolvePlayerID gold",
             action: (player, args) =>
             {
-                if (!int.TryParse(args[0], out int amount))
+                if (args[0] == "")
                 {
-                    player.DisplayTimedTextTo(5.0f, "Invalid amount.");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: gold [amount] [resolvePlayerId]|r");
                     return;
                 }
-                player.Gold += amount;
+
+                var amount = int.Parse(args[0]);
+
+                if (args.Length < 2)
+                {
+                    player.Gold += amount;
+                    return;
+                }
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                    {
+                        kitty.Player.Gold += amount;
+                    });
+
             }
         );
 
@@ -576,13 +589,13 @@ public static class InitCommands
             name: "sharecontrol",
             alias: "share",
             group: "admin",
-            argDesc: "[player] [on][off]",
+            argDesc: "[resolvePlayerId] [on/off]",
             description: "Sets whether or not to force the player to share control [default: off]",
             action: (player, args) =>
             {
                 if (args.Length < 2)
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: sharecontrol [player] [on/off]");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: sharecontrol [player] [on/off]{Colors.COLOR_RESET}");
                     return;
                 }
                 var status = CommandsManager.GetBool(args[1]);
@@ -980,6 +993,12 @@ public static class InitCommands
             {
                 var scale = args[0] != "" ? float.Parse(args[0]) : 0.6f;
 
+                if (args.Length < 2 || args[1] == "")
+                {
+                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale);
+                    return;
+                }
+
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
                     if (kitty == null) return;
@@ -1130,10 +1149,16 @@ public static class InitCommands
             alias: "",
             group: "admin",
             argDesc: "[skinId], [player]",
-            description: "Sets the skin of the passed player parameter.",
+            description: "Sets the skin of the passed player parameter. Use \"none\" for default skin.",
             action: (player, args) =>
             {
-                int skin = args[0] == "" ? Constants.UNIT_KITTY : FourCC(args[0]);
+                int skin = (args[0] == "" || args[0] == "none") ? Constants.UNIT_KITTY : FourCC(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                    return;
+                }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
@@ -1586,6 +1611,19 @@ public static class InitCommands
                     return;
                 }
                 SeasonalManager.SetWeather(args[0]);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test9",
+            alias: "",
+            group: "admin",
+            argDesc: "[weather]",
+            description: "Sand Test",
+            action: (player, args) =>
+            {
+                TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC("Zdrg"));
+                Console.WriteLine("Changed Terrain");
             }
         );
     }

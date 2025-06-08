@@ -15,6 +15,7 @@ public class KittyData
     public KibbleCurrency KibbleCurrency { get; set; }
     public PersonalBests PersonalBests { get; set; }
     public PlayerColorData PlayerColorData { get; set; }
+    public GameFriendsData FriendsData { get; set; } = new GameFriendsData();
 
     public KittyData()
     {
@@ -26,6 +27,7 @@ public class KittyData
         KibbleCurrency = new KibbleCurrency();
         PersonalBests = new PersonalBests();
         PlayerColorData = new PlayerColorData();
+        FriendsData = new GameFriendsData();
     }
 
     /// <summary>

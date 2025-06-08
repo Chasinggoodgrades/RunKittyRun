@@ -44,7 +44,7 @@ public static class RewardsManager
         if (IsResetSpell(spellID))
         {
             ResetRewardSettings(unit);
-            AmuletOfEvasiveness.ScaleUnit(unit); // changes scale of unit if they have amulet.
+            Globals.ALL_KITTIES[unit.Owner].KittyMorphosis.ScaleUnit(); // changes scale of unit if they have amulet.
             return;
         }
     }

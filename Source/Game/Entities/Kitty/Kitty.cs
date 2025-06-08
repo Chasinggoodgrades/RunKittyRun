@@ -24,6 +24,7 @@ public class Kitty
     public AIController aiController { get; set; }
     public SpinCam SpinCam { get; set; }
     public APMTracker APMTracker { get; set; }
+    public KittyMorphosis KittyMorphosis { get; set; }
     public Slider Slider { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
@@ -55,6 +56,7 @@ public class Kitty
         SpinCam = new SpinCam(this);
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
+        KittyMorphosis = new KittyMorphosis(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();
     }

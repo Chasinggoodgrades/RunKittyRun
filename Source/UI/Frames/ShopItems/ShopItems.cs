@@ -49,7 +49,7 @@ public class ShopItem
         new ShopItem(new OneOfNine()),
         new ShopItem(new FangOfShadows()),
         new ShopItem(new RingOfSummoning()),
-        new ShopItem(new AmuletOfEvasiveness()),
+        // new ShopItem(new AmuletOfEvasiveness()),
         new ShopItem(new FrostbiteRing()),
         new ShopItem(new BeaconOfUnitedLifeforce()),
         new ShopItem(new ShardOfTranslocation()),

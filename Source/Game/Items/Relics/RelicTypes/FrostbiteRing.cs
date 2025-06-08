@@ -13,8 +13,9 @@ public class FrostbiteRing : Relic
     public static Dictionary<unit, FrozenWolf> FrozenWolves = new Dictionary<unit, FrozenWolf>();
 
     private const int RelicCost = 650;
-    private static float FROSTBITE_RING_RADIUS = 400.0f;
+    private static float FROSTBITE_RING_RADIUS = 450.0f;
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
+    private static float UPGRADE_COOLDOWN_REDUCTION = 15.0f;
     private float FREEZE_DURATION = 5.0f;
     private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private player Owner;
@@ -32,6 +33,7 @@ public class FrostbiteRing : Relic
     {
         Upgrades.Add(new RelicUpgrade(0, $"Freeze duration is increased by 1 second per upgrade level.", 15, 800));
         Upgrades.Add(new RelicUpgrade(1, $"Wolves that've been frozen will have 50% reduced movespeed for {SLOW_DURATION} seconds after being unfrozen.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(2, $"Cooldown is reduced by {(int)UPGRADE_COOLDOWN_REDUCTION} seconds.", 20, 1200));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -39,6 +41,7 @@ public class FrostbiteRing : Relic
         RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
         Owner = Unit.Owner;
+        SetAbilityCooldown(Unit);
     }
 
     public override void RemoveEffect(unit Unit)
@@ -94,6 +97,17 @@ public class FrostbiteRing : Relic
             frozenWolf.BeginFreezeActions(Owner, Unit, duration);
             FrozenWolves[Unit] = frozenWolf;
         }
+    }
+
+    private void SetAbilityCooldown(unit Unit)
+    {
+        var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
+        var currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0);
+        var newCooldown = upgradeLevel >= 3
+            ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION
+            : currentCooldown;
+
+        RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
 
     private float GetFreezeDuration()

@@ -31,7 +31,7 @@ public static class Windwalk
         var wwID = kitty.ActiveAwards.WindwalkID;
         try
         {
-            AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
+            // AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
             if (wwID != 0)
             {
                 var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);

@@ -16,6 +16,8 @@ public static class TimeSetter
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
+            if (currentTime <= 90) return false; // Below 90 seconds is impossible and not valid.. Don't save
+
             if (!standard && !solo) return false;
 
             if (standard) roundString = GetRoundEnum();
