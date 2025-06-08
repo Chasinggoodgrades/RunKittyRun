@@ -589,13 +589,13 @@ public static class InitCommands
             name: "sharecontrol",
             alias: "share",
             group: "admin",
-            argDesc: "[player] [on][off]",
+            argDesc: "[resolvePlayerId] [on/off]",
             description: "Sets whether or not to force the player to share control [default: off]",
             action: (player, args) =>
             {
                 if (args.Length < 2)
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: sharecontrol [player] [on/off]");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: sharecontrol [player] [on/off]{Colors.COLOR_RESET}");
                     return;
                 }
                 var status = CommandsManager.GetBool(args[1]);
