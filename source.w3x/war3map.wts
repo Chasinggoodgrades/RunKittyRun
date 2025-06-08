@@ -4008,12 +4008,6 @@ STRING 3710
 Blitzer
 }
 
-STRING 3711
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Level 1|r]
-}
-
 STRING 3712
 // Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
 {
@@ -4032,18 +4026,6 @@ STRING 3714
 Revive all Kitties in a small area after 3 seconds.  Improved AoE.
 }
 
-STRING 3715
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 2|r]
-}
-
-STRING 3716
-// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 3|r]
-}
-
 STRING 3717
 // Abilities: A00A (Protection of the Ancients), Ubertip (Tooltip - Normal - Extended)
 {
@@ -4056,28 +4038,10 @@ STRING 3718
 Revive all Kitties in a small area after 3 seconds. |cffd45e19(80 Second Cooldown)|r Use before dying.
 }
 
-STRING 3719
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of Ancients (|cffffcc00M|r) - [|cffffcc00Level 1|r]
-}
-
 STRING 3720
 // Abilities: A00C (Protection of the Ancients with Relic), Ubertip (Tooltip - Normal - Extended)
 {
 Revive all Kitties in a small area after 3 seconds. |cffd45e19(85 Second Cooldown)|r Use before dying.
-}
-
-STRING 3721
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 2|r]
-}
-
-STRING 3722
-// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
-{
-Protection of the Ancients (|cffffcc00M|r) - [|cffffcc00Level 3|r]
 }
 
 STRING 3723
@@ -4957,5 +4921,41 @@ STRING 3892
 {
 Obtained by completeing the team deathless challenge on |cff960000Impossible|r.
 
+}
+
+STRING 3893
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 1|r]
+}
+
+STRING 3894
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 2|r]
+}
+
+STRING 3895
+// Abilities: A00A (Protection of the Ancients), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 3|r]
+}
+
+STRING 3896
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 1|r]
+}
+
+STRING 3897
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 2|r]
+}
+
+STRING 3898
+// Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
+{
+Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 3|r]
 }
 
