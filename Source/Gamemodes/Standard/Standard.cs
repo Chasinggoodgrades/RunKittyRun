@@ -8,7 +8,7 @@ public static class Standard
     private const float ROUND_INTERMISSION = 10.0f;
     private const float ALERT_DURATION = 7.0f;
     private static List<player> HitLevel6;
-    private static List<player> HitLevel10;
+    private static List<player> CanBuyRelics;
 
     public static void Initialize()
     {
@@ -26,7 +26,7 @@ public static class Standard
     private static void RegisterLevelTriggers()
     {
         HitLevel6 = new List<player>();
-        HitLevel10 = new List<player>();
+        CanBuyRelics = new List<player>();
         RegisterLevelSixTrigger();
         RegisterLevelTenTrigger();
     }
@@ -54,13 +54,13 @@ public static class Standard
         {
             try
             {
-                if (HitLevel10.Contains(@event.Unit.Owner)) return;
-                if (@event.Unit.HeroLevel < 10) return;
-                HitLevel10.Add(@event.Unit.Owner);
+                if (CanBuyRelics.Contains(@event.Unit.Owner)) return;
+                if (@event.Unit.HeroLevel < Relic.RequiredLevel) return;
+                CanBuyRelics.Add(@event.Unit.Owner);
                 RelicUtil.EnableRelicBook(@event.Unit);
                 RelicUtil.DisableRelicAbilities(@event.Unit);
                 ProtectionOfAncients.SetProtectionOfAncientsLevel(@event.Unit);
-                @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_YELLOW_ORANGE}You may now buy relics from the shop!|r");
+                @event.Unit.Owner.DisplayTimedTextTo(ALERT_DURATION, $"{Colors.COLOR_TURQUOISE}You may now buy relics from the shop!{Colors.COLOR_RESET}");
             }
             catch (System.Exception e)
             {

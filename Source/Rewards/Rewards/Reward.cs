@@ -186,12 +186,12 @@ public class Reward
     {
         if (Type != RewardType.Skins && tournament == false) return false;
 
-        var kitty = Globals.ALL_KITTIES[player].Unit;
+        var kitty = Globals.ALL_KITTIES[player];
 
         if (SkinID != 0)
         {
-            kitty.Skin = SkinID;
-            AmuletOfEvasiveness.ScaleUnit(kitty);
+            kitty.Unit.Skin = SkinID;
+            kitty.KittyMorphosis.ScaleUnit();
             kitty.Name = $"{Colors.PlayerNameColored(player)}";
         }
         else
