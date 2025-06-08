@@ -13,7 +13,7 @@ public class FrostbiteRing : Relic
     public static Dictionary<unit, FrozenWolf> FrozenWolves = new Dictionary<unit, FrozenWolf>();
 
     private const int RelicCost = 650;
-    private static float FROSTBITE_RING_RADIUS = 400.0f;
+    private static float FROSTBITE_RING_RADIUS = 450.0f;
     private static float DEFAULT_FREEZE_DURATION = 5.0f;
     private float FREEZE_DURATION = 5.0f;
     private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
