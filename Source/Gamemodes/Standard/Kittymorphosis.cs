@@ -60,6 +60,7 @@ public class KittyMorphosis
         Kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0f - COLLISION_REDUCTION);
         CollisionDetection.KittyRegisterCollisions(Kitty);
         Utility.SimpleTimer(0.1f, ScaleUnit);
+        Kitty.Player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_YELLOW}You've adapted to the environment!{Colors.COLOR_RESET} {Colors.COLOR_TURQUOISE}Collision radius reduced by {COLLISION_REDUCTION * 100}%!{Colors.COLOR_RESET}");
         Active = true;
     }
 
