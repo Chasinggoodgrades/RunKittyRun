@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -114,7 +115,19 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => Votekick.InitiateVotekick(player, args?[0])
+            action: (player, args) => {
+
+                if (Globals.VIPLISTUNFILTERED.Contains(player))
+                {
+                    CommandsManager.ResolvePlayerId(args[0], kitty =>
+                    {
+                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
+                        PlayerLeaves.PlayerLeavesActions(kitty.Player);
+                    });
+                }
+                else
+                    Votekick.InitiateVotekick(player, args?[0]);
+            }
         );
 
         CommandsManager.RegisterCommand(

@@ -39,6 +39,11 @@ public static class Votekick
 
     private static void StartVotekick(player target)
     {
+        if (Globals.VIPLISTUNFILTERED.Contains(target))
+        {
+            Console.WriteLine($"{Colors.COLOR_YELLOW}You cannot votekick {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. They are a VIP.{Colors.COLOR_RESET}");
+            return;
+        }
         VoteActive = true;
         Console.WriteLine($"{Colors.COLOR_YELLOW}A votekick has been initiated against {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. If you agree, type \"-yes\" {Colors.COLOR_RED}({VOTE_DURATION} seconds remain){Colors.COLOR_RESET}");
         VoteKickPlayer = target;

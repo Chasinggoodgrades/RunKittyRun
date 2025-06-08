@@ -38,7 +38,7 @@ public class OneOfNine : Relic
     public override void RemoveEffect(unit Unit)
     {
         player player = Unit.Owner;
-        var cooldown = GetOneOfNineCooldown(player);
+        float cooldown = GetOneOfNineCooldown(player);
         Unit.RemoveAbility(RelicAbilityID);
         Unit.AddAbility(PreviousAbilityID);
         ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit);
