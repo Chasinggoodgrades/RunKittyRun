@@ -98,6 +98,7 @@ public static class TeamDeathless
         RangeTrigger = CreateTrigger();
         RangeTrigger.RegisterUnitInRange(DummyUnit, PICKUP_RANGE, FilterList.KittyFilter);
         RangeTrigger.AddAction(InRangeEvent);
+        RangeTrigger.Disable();
 
         Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Team Deathless Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
     }
@@ -114,6 +115,7 @@ public static class TeamDeathless
             EventStarted = true;
             CurrentHolder = null;
             CurrentSafezone = Globals.SAFE_ZONES[0];
+            RangeTrigger.Enable();
             AlreadyCarriedOrb.Clear();
 
             float x = RegionList.SafeZones[0].Center.X;
@@ -155,6 +157,7 @@ public static class TeamDeathless
         OrbEffect.SetY(safezone.Rect_.CenterY);
         OrbEffect.Scale = 1.0f;
 
+        RangeTrigger.Enable();
         DummyUnit.SetPosition(safezone.Rect_.CenterX, safezone.Rect_.CenterY);
 
         Timer?.Pause();
@@ -208,6 +211,7 @@ public static class TeamDeathless
         RippleEffect.SetX(CurrentHolder.Unit.X);
         RippleEffect.SetY(CurrentHolder.Unit.Y);
         RippleEffect.PlayAnimation(animtype.Birth);
+        RangeTrigger.Disable();
 
         OrbEffect.Scale = 0.5f;
         Timer.Start(0.03f, true, OrbFollow);
@@ -234,7 +238,7 @@ public static class TeamDeathless
             var player = Globals.ALL_PLAYERS[i];
             if (!AlreadyCarriedOrb.Contains(player)) return;
         }
-
+        Console.WriteLine($"{Colors.COLOR_TURQUOISE}Orb List has been reset!{Colors.COLOR_RESET}");
         AlreadyCarriedOrb.Clear();
     }
 

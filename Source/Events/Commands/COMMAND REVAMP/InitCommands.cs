@@ -1639,5 +1639,18 @@ public static class InitCommands
                 Console.WriteLine("Changed Terrain");
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "test8",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Puts an effect test on for some nitro thingy",
+            action: (player, args) =>
+            {
+                var unitKitty = Globals.ALL_KITTIES[player].Unit;
+                effect.Create("NitroTest.mdx", unitKitty, "origin");
+            }
+        );
     }
 }

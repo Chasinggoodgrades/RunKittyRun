@@ -127,7 +127,7 @@ public static class StandardMultiboard
     {
         try
         {
-            CurrentStats.Title = $"Current Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+            CurrentStats.Title = $"Current Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
             CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
             var rowIndex = 2;
 
@@ -195,7 +195,7 @@ public static class StandardMultiboard
 
     private static void OverallGameStats()
     {
-        OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
@@ -258,7 +258,7 @@ public static class StandardMultiboard
 
     private static void BestTimesStats()
     {
-        BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyChosen}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
         BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
