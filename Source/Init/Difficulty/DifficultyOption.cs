@@ -23,8 +23,7 @@ public class DifficultyOption
 
     public button AddButton()
     {
-        _OptionCount++;
-        return DifficultyChoosing.AddButton($"{Color}{Name}|r", _OptionCount);
+        return DifficultyChoosing.AddButton($"{Color}{Name}|r", ++_OptionCount);
     }
 
     public override string ToString()
