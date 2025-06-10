@@ -5,7 +5,7 @@ using WCSharp.Api;
 public abstract class Relic
 {
     public static int RequiredLevel { get; } = 12;
-    public static int RelicIncrease { get; } = 20;
+    public static int RelicIncrease { get; } = 16;
     public static int RelicSellLevel { get; } = 15;
     public static int MaxRelics { get; } = 2;
     public string Name { get; }

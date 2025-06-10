@@ -123,6 +123,7 @@ public static class InitCommands
                     {
                         if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
                         PlayerLeaves.PlayerLeavesActions(kitty.Player);
+                        kitty.Player.Remove(playergameresult.Defeat);
                     });
                 }
                 else

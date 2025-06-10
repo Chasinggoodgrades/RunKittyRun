@@ -23,6 +23,7 @@ public static class CommandHandler
 
     private static void HandleCommands()
     {
+        if (!Globals.GAME_INITIALIZED) return;
         var chatString = @event.PlayerChatString;
         if (chatString.Length < 2 || chatString[0] != '-')
             return;

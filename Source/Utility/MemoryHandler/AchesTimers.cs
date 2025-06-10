@@ -30,17 +30,3 @@ public class AchesTimers : IDisposable
         ObjectPool.ReturnObject(this);
     }
 }
-
-public class AchesActions : IDisposable
-{
-
-    public Action Action { get; set; }
-    public AchesActions()
-    {
-    }
-    public void Dispose()
-    {
-        Action = null;
-        ObjectPool.ReturnObject(this);
-    }
-}

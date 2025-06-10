@@ -30,7 +30,7 @@ namespace Source.Init
                 Utility.SimpleTimer(2.0f, () => StartGameModeTimer()); // Gives some delay time for the save system to sync
                 StopMusic(false);
                 ClearMapMusic();
-
+                Globals.GAME_INITIALIZED = true;
                 if (!Source.Program.Debug) return;
                 Difficulty.ChangeDifficulty("normal");
                 Gamemode.SetGameMode(Globals.GAME_MODES[0]);

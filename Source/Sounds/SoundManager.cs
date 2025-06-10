@@ -153,7 +153,7 @@ public static class SoundManager
         LastManStanding.Start(0.8f, false, () =>
         {
             var count = 0;
-            unit u = null;
+            Kitty k = null;
 
             try
             {
@@ -163,14 +163,15 @@ public static class SoundManager
                     if (kitty.Alive)
                     {
                         count += 1;
-                        u = kitty.Unit;
+                        k = kitty;
                     }
                     if (count > 1) return;
                 }
 
                 if (count == 0) return;
+                if (k.ProtectionActive) return; // no reason to play if pota is active.
                 var s = LAST_MAN_STANDING_SOUND;
-                var e = u.AddSpecialEffect("TalkToMe.mdx", "head");
+                var e = k.Unit.AddSpecialEffect("TalkToMe.mdx", "head");
                 Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!|r");
                 s.Stop(false, false);
                 s.Start();

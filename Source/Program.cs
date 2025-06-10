@@ -39,9 +39,32 @@ namespace Source
             CommandHandler.Initialize();
             GamemodeManager.InitializeCommands();
             SaveManager.Initialize();
-            Setup.Initialize();
             BarrierSetup.Initialize();
             Quests.Initialize();
+
+            var t = CreateTimer();
+            int count = 0;
+            Console.WriteLine($"{Colors.COLOR_RED}Loading . . . Please wait while everyone synchronizes.{Colors.COLOR_RESET}");
+            t.Start(1.0f, true, () =>
+            {
+                count++;
+                if (!Globals.DATE_TIME_LOADED) return;
+                if (count < 10)
+                {
+                    for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+                    {
+                        if (!SaveManager.PlayersLoaded.Contains(Globals.ALL_PLAYERS[i]))
+                        {
+                            Console.WriteLine($"Waiting on {Colors.PlayerNameColored(Globals.ALL_PLAYERS[i])} to synchronize.");
+                            return;
+                        }
+                    }
+                }
+                Setup.Initialize();
+                t.Pause();
+                t.Dispose();
+                t = null;
+            });
         }
     }
 }
