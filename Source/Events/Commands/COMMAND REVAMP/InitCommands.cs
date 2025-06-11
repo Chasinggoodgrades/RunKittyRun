@@ -1342,16 +1342,17 @@ public static class InitCommands
             name: "times",
             alias: "gettimes",
             group: "all",
-            argDesc: "[player]",
-            description: "Gets fastest overall times of the passed parm player, if no parm then yourself.",
+            argDesc: "[player] [difficulty]",
+            description: "Gets fastest overall times of the passed parm player and difficulty, if no parm then yourself and current difficulty.",
             action: (player, args) =>
             {
+                var difficulty = args.Length > 1 && args[1] != "" ? args[1] : Difficulty.DifficultyOption.Name;
                 if (args[0] == "")
                 {
-                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player]);
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty);
                     return;
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty));
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty, difficulty));
             }
         );
 
