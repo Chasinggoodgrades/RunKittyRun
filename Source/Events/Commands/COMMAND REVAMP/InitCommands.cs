@@ -123,7 +123,7 @@ public static class InitCommands
                     {
                         if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
                         PlayerLeaves.PlayerLeavesActions(kitty.Player);
-                        kitty.Player.Remove(playergameresult.Defeat);
+                        Blizzard.CustomDefeatBJ(kitty.Player, $"{Colors.COLOR_RED}You have been kicked from the game!{Colors.COLOR_RESET}");
                     });
                 }
                 else

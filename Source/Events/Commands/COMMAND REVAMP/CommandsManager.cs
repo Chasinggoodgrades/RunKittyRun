@@ -17,6 +17,8 @@ public static class CommandsManager
 {
     public static int Count = 0;
     private static Dictionary<string, Commands> AllCommands = new();
+    private static List<Commands> CommandsList = new List<Commands>();
+
     public static void RegisterCommand(string name, string alias, string group, string argDesc, string description, Action<player, string[]> action)
     {
         var command = new Commands
@@ -128,42 +130,41 @@ public static class CommandsManager
     public static void HelpCommands(player player, string arg = "")
     {
         var filter = string.IsNullOrEmpty(arg) ? "" : arg.ToLower();
-        var commands = new List<Commands>();
+        CommandsList.Clear(); // instead of creating a new list each time, just use 1 and clear it
         var playerGroup = GetPlayerGroup(player);
 
         foreach (var command in AllCommands)
         {
             var cmd = command.Value;
-            if (commands.Contains(cmd)) continue; // already got cmd / alias
+            if (CommandsList.Contains(cmd)) continue; // already got cmd / alias
             if (cmd.Group == playerGroup || cmd.Group == "all" || playerGroup == "admin") // admins get ALL DUH
             {
                 if (string.IsNullOrEmpty(arg) || arg.Length == 0)
                 {
-                    commands.Add(cmd);
+                    CommandsList.Add(cmd);
                 }
                 else
                 {
                     if (cmd.Name.ToLower().Contains(filter) || Array.Exists(cmd.Alias, alias => alias.ToLower().Contains(filter)) || cmd.Description.ToLower().Contains(filter))
                     {
-                        commands.Add(cmd);
+                        CommandsList.Add(cmd);
                     }
                 }
             }
         }
-        if (commands.Count == 0)
+        if (CommandsList.Count == 0)
         {
             player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No commands found for filter: {Colors.COLOR_GOLD}{filter}|r");
             return;
         }
 
         var commandList = "";
-        foreach (var cmd in commands)
+        foreach (var cmd in CommandsList)
         {
             commandList += $"{Colors.COLOR_YELLOW}( {cmd.Name} | {string.Join(", ", cmd.Alias)} )|r{Colors.COLOR_RED}[{cmd.ArgDesc}]{Colors.COLOR_RESET} - {Colors.COLOR_GOLD}{cmd.Description}|r\n";
         }
 
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_TURQUOISE}Available Commands:|r\n{commandList}", 0, 0);
-        GC.RemoveList(ref commands);
     }
 
     public static string GetPlayerGroup(player player)
