@@ -22,6 +22,8 @@ public class PlayerGameData
     public int CrystalOfFireAttempts { get; set; } = 0;
     public bool ChronoSphereCD { get; set; } = false;
     public float CollisonRadius { get; set; } = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
+    public int CollectedJackpots { get; set; } = 0;
+    public int CollectedSuperJackpots { get; set; } = 0;
 
     public PlayerGameData()
     {

@@ -272,6 +272,16 @@ public static class AwardingCmds
             var value = property.GetValue(kibbleCurrency);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Kibble currency for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+        var nameColored = Colors.PlayerNameColored(kitty.Player);
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Overall Kibble Info|r ({nameColored})\n{Colors.HighlightString(combined)}\n{Colors.COLOR_YELLOW}Current Game Info:|r ({nameColored})\n{CurrentKibbleInfo(kitty)}{Colors.COLOR_RESET}");
+    }
+
+    private static string CurrentKibbleInfo(Kitty kitty)
+    {
+        string combined = "";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Collected:|r {kitty.CurrentStats.CollectedKibble}\n";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Jackpots:|r {kitty.CurrentStats.CollectedJackpots}\n";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Super Jackpots:|r {kitty.CurrentStats.CollectedSuperJackpots}\n";
+        return combined;
     }
 }
