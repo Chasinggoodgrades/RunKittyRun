@@ -258,6 +258,8 @@ public static class TeamDeathless
         if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
             AwardManager.GiveRewardAll(nameof(Deathless.ImpossibleTeamDeathless));
 
+        RangeTrigger.Disable();
+        RangeTrigger.Dispose();
         OrbEffect?.Dispose();
         Timer?.Pause();
         Timer?.Dispose();
