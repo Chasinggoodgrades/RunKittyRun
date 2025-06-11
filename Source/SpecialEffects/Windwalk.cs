@@ -6,7 +6,7 @@ using static WCSharp.Api.Common;
 public static class Windwalk
 {
     private static trigger Trigger;
-    private static trigger HotkeyTrigger = CreateTrigger();
+    private static trigger HotkeyTrigger;
     private static int WindwalkID = FourCC("BOwk"); // Windwalk buff ID
     public static void Initialize()
     {
