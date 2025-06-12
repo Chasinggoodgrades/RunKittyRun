@@ -48,6 +48,9 @@ public static class Globals
     public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }
     public static Dictionary<Team, string> TEAM_PROGRESS;
 
+    public static bool DATE_TIME_LOADED { get; set; }
+    public static bool GAME_INITIALIZED { get; set; }
+
     public static Dictionary<int, Dictionary<int, int>> WolvesPerRound = new Dictionary<int, Dictionary<int, int>>
     {
         // Round                         // Lane ,  // Updated # Wolves (+5% for all lanes, first 6 + 5%)

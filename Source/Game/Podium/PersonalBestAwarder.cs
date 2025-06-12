@@ -30,7 +30,8 @@ public static class PersonalBestAwarder
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) roundEnum = TimeSetter.GetSoloEnum();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
-        Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {Difficulty.DifficultyChosen}|r");
+        var difficulty = Gamemode.CurrentGameMode == "Standard" ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
+        Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {difficulty}|r");
     }
 
     /// <summary>

@@ -156,8 +156,16 @@ public class Kibble : IDisposable
 
             Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
-            if (isSuperJackpot) kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
-            else kitty.SaveData.KibbleCurrency.Jackpots += 1;
+            if (isSuperJackpot)
+            {
+                kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
+                kitty.CurrentStats.CollectedSuperJackpots += 1;
+            }
+            else
+            {
+                kitty.SaveData.KibbleCurrency.Jackpots += 1;
+                kitty.CurrentStats.CollectedJackpots += 1;
+            }
         }
         else
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty, kibble));

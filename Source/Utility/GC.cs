@@ -66,38 +66,10 @@ public static class GC
         filter = null;
     }
 
-    public static void RemoveTextTag(ref texttag tt)
-    {
-        if (tt == null) return;
-        tt.Dispose();
-        tt = null;
-    }
-
-    public static void RemoveLocation(ref location loc)
-    {
-        if (loc == null) return;
-        loc?.Dispose();
-        loc = null;
-    }
-
-    public static void RemoveSound(ref sound s)
-    {
-        if (s == null) return;
-        s.Dispose();
-        s = null;
-    }
-
     public static void RemoveTimerDialog(ref timerdialog td)
     {
         if (td == null) return;
         td.Dispose();
         td = null;
-    }
-
-    public static void RemoveItem(ref item i)
-    {
-        if (i == null) return;
-        i.Dispose();
-        i = null;
     }
 }

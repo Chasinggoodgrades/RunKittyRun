@@ -1,4 +1,6 @@
-﻿using WCSharp.Api;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class AwardingCmds
@@ -219,16 +221,40 @@ public static class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="kitty"></param>
-    public static void GetAllGameTimes(player player, Kitty kitty)
+    public static void GetAllGameTimes(player player, Kitty kitty, string difficultyArg)
     {
         if (!Globals.ALL_PLAYERS.Contains(kitty.Player)) return;
-        var combined = "";
-        foreach (var property in Globals.GAME_TIMES.GetType().GetProperties())
+        string combined = "";
+
+        // Previously this wasn't sorted by round number, so i had to hard code the order with one two three etc.. but ye its sorted now
+        var properties = Globals.GAME_TIMES.GetType().GetProperties()
+            .Where(p => string.IsNullOrEmpty(difficultyArg) || p.Name.ToLower().Contains(difficultyArg.ToLower()))
+            .OrderBy(p => GetRoundNumber(p.Name));
+
+        foreach (var property in properties)
         {
             var value = property.GetValue(kitty.SaveData.RoundTimes);
-            combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {Utility.ConvertFloatToTimeInt((float)value)}\n";
+
+            string color = property.Name.Contains("Normal") ? Colors.COLOR_YELLOW :
+                           property.Name.Contains("Hard") ? Colors.COLOR_RED :
+                           property.Name.Contains("Impossible") ? Colors.COLOR_DARK_RED :
+                           Colors.COLOR_YELLOW_ORANGE; // Default fallback
+
+            combined += $"{color}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {Utility.ConvertFloatToTimeInt((float)value)}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game times for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}", 0, 1);
+
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game times for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}", 0, 0);
+    }
+
+    private static int GetRoundNumber(string propertyName)
+    {
+        if (propertyName.Contains("One")) return 1;
+        if (propertyName.Contains("Two")) return 2;
+        if (propertyName.Contains("Three")) return 3;
+        if (propertyName.Contains("Four")) return 4;
+        if (propertyName.Contains("Five")) return 5;
+
+        return int.MaxValue;
     }
 
     /// <summary>
@@ -246,6 +272,16 @@ public static class AwardingCmds
             var value = property.GetValue(kibbleCurrency);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Kibble currency for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+        var nameColored = Colors.PlayerNameColored(kitty.Player);
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Overall Kibble Info|r ({nameColored})\n{Colors.HighlightString(combined)}\n{Colors.COLOR_YELLOW}Current Game Info:|r ({nameColored})\n{CurrentKibbleInfo(kitty)}{Colors.COLOR_RESET}");
+    }
+
+    private static string CurrentKibbleInfo(Kitty kitty)
+    {
+        string combined = "";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Collected:|r {kitty.CurrentStats.CollectedKibble}\n";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Jackpots:|r {kitty.CurrentStats.CollectedJackpots}\n";
+        combined += $"{Colors.COLOR_YELLOW_ORANGE}Super Jackpots:|r {kitty.CurrentStats.CollectedSuperJackpots}\n";
+        return combined;
     }
 }

@@ -16,5 +16,6 @@ public static class DateTimeManager
         Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Lobby date:|r {Colors.COLOR_LAVENDER}{time.ToString()}");
         DateTime = time;
         CurrentMonth = DateTime.Month;
+        Globals.DATE_TIME_LOADED = true;
     }
 }

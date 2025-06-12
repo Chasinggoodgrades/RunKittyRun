@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -114,7 +115,20 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => Votekick.InitiateVotekick(player, args?[0])
+            action: (player, args) => {
+
+                if (Globals.VIPLISTUNFILTERED.Contains(player))
+                {
+                    CommandsManager.ResolvePlayerId(args[0], kitty =>
+                    {
+                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
+                        PlayerLeaves.PlayerLeavesActions(kitty.Player);
+                        Blizzard.CustomDefeatBJ(kitty.Player, $"{Colors.COLOR_RED}You have been kicked from the game!{Colors.COLOR_RESET}");
+                    });
+                }
+                else
+                    Votekick.InitiateVotekick(player, args?[0]);
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -1328,16 +1342,17 @@ public static class InitCommands
             name: "times",
             alias: "gettimes",
             group: "all",
-            argDesc: "[player]",
-            description: "Gets fastest overall times of the passed parm player, if no parm then yourself.",
+            argDesc: "[player] [difficulty]",
+            description: "Gets fastest overall times of the passed parm player and difficulty, if no parm then yourself and current difficulty.",
             action: (player, args) =>
             {
+                var difficulty = args.Length > 1 && args[1] != "" ? args[1] : Difficulty.DifficultyOption.Name;
                 if (args[0] == "")
                 {
-                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player]);
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty);
                     return;
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty));
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty, difficulty));
             }
         );
 
@@ -1624,6 +1639,19 @@ public static class InitCommands
             {
                 TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC("Zdrg"));
                 Console.WriteLine("Changed Terrain");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test8",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Puts an effect test on for some nitro thingy",
+            action: (player, args) =>
+            {
+                var unitKitty = Globals.ALL_KITTIES[player].Unit;
+                effect.Create("NitroTest.mdx", unitKitty, "origin");
             }
         );
     }

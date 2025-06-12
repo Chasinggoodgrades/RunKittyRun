@@ -15,6 +15,7 @@ public class AIController
     private const float DODGE_DISTANCE = 128f; // Amount to walk away
     public static string FREE_LASER_COLOR = "GRSB";
     public static string BLOCKED_LASER_COLOR = "RESB";
+    private static int WindwalkID = FourCC("BOwk");
     private static float[] offsets = { -90f, -45f, 0.0f, 45f, 90f };
     public float _timerInterval = 0.1f;
     public float timerInterval
@@ -1027,9 +1028,8 @@ public class AIController
             return;
         }
 
-        if (!Blizzard.UnitHasBuffBJ(kitty.Unit, FourCC("BOwk")))
-        {
-            IssueOrderBasic("windwalk");
-        }
+        if (Blizzard.UnitHasBuffBJ(kitty.Unit, WindwalkID)) return;
+
+        IssueOrderBasic("windwalk");
     }
 }

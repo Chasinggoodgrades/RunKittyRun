@@ -29,7 +29,7 @@ public static class Utility
     public static void SelectUnitForPlayer(player p, unit u)
     {
         if (GetLocalPlayer() != p) return;
-        // ClearSelection();
+        ClearSelection();
         SelectUnit(u, true);
     }
 

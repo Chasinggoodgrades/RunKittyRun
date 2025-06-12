@@ -25,6 +25,7 @@ public static class NitroPacer
         Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
         Unit.IsInvulnerable = true;
+        Unit.Name = $"{Colors.COLOR_TURQUOISE}Nitro Pacer{Colors.COLOR_RESET}";
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS);
         nitroEffect = effect.Create("war3mapImported\\Nitro.mdx", Unit, "origin");
         _cachedNitroPacerUpdate = UpdateNitroPacer;
