@@ -151,9 +151,8 @@ public class Kibble : IDisposable
             if (isSuperJackpot) goldAmount *= 10;
 
             kitty.Player.Gold += goldAmount;
-            string jackpotString = isSuperJackpot ? $"{Colors.COLOR_RED}Super Jackpot" : "jackpot";
-            string msg = $"{Colors.PlayerNameColored(kitty.Player)}{Colors.HighlightString($" has won the {jackpotString} for ")}{Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r";
-
+            string jackpotString = isSuperJackpot ? $"{Colors.COLOR_RED}Super Jackpot{Colors.COLOR_RESET}" : "jackpot";
+            string msg = $"{Colors.PlayerNameColored(kitty.Player)}{Colors.HighlightString($" has won the {jackpotString}")} {Colors.HighlightString("for")} {Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r";
             Console.WriteLine(msg);
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
             if (isSuperJackpot)
@@ -168,41 +167,7 @@ public class Kibble : IDisposable
             }
         }
         else
-            Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty, kibble));
-    }
-
-    #endregion Kibble Pickup Logic
-
-    #region Utility Methods
-
-    private static void IncrementKibble(Kitty kibblePicker)
-    {
-        kibblePicker.CurrentStats.CollectedKibble += 1;
-
-        foreach (var player in Globals.ALL_PLAYERS)
-            player.Lumber += 1;
-
-        kibblePicker.SaveData.KibbleCurrency.Collected += 1;
-    }
-
-    private static List<int> KibbleList()
-    {
-        return SeasonalManager.Season switch
         {
-            HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
-            // HolidaySeasons.Easter => new List<int> { Constants.ITEM_EASTER_EGG },
-            HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
-            _ => new List<int> // Default case
-            {
-                Constants.ITEM_KIBBLE,
-                Constants.ITEM_KIBBLE_TEAL,
-                Constants.ITEM_KIBBLE_GREEN,
-                Constants.ITEM_KIBBLE_PURPLE,
-                Constants.ITEM_KIBBLE_RED,
-                Constants.ITEM_KIBBLE_YELLOW
-            }
-        };
+            Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty, kibble));
+        }
     }
-
-    #endregion Utility Methods
-}
