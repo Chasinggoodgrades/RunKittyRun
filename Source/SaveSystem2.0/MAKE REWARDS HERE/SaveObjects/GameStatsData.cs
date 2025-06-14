@@ -13,4 +13,6 @@
     public int NormalGames { get; set; }
     public int HardGames { get; set; }
     public int ImpossibleGames { get; set; }
+    public int NightmareGames { get; set; }
+    public int NightmareWins { get; set; }
 }

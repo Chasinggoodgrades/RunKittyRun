@@ -22,6 +22,9 @@ public static class GameoverUtil
                 case (int)DifficultyLevel.Impossible:
                     SetImpossibleGameStats(kitty.Value);
                     break;
+                case (int)DifficultyLevel.Nightmare:
+                    SetNightmareGameStats(kitty.Value);
+                    break;
             }
         }
     }
@@ -110,7 +113,14 @@ public static class GameoverUtil
         stats.TeamMembers = GetTeamMembers();
     }
 
-
+    private static void SetNightmareGameStats(Kitty kitty)
+    {
+        var stats = kitty.SaveData.BestGameTimes.NightmareGameTime;
+        if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
+        stats.Time = Globals.GAME_TIMER.Remaining;
+        stats.Date = DateTimeManager.DateTime.ToString();
+        stats.TeamMembers = GetTeamMembers();
+    }
 
     private static string GetTeamMembers()
     {

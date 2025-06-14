@@ -58,7 +58,9 @@ public static class TimeSetter
             case (int)DifficultyLevel.Impossible:
                 roundEnum = GetImpossibleRoundEnum();
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                roundEnum = GetNightmareRoundEnum();
+                break;
             default:
                 Console.WriteLine("Invalid difficulty level for GetRoundEnum");
                 return "";
@@ -153,6 +155,33 @@ public static class TimeSetter
 
             case 5:
                 return nameof(gameTimeData.RoundFiveImpossible);
+
+            default:
+                Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
+                return "";
+        }
+    }
+
+    private static string GetNightmareRoundEnum()
+    {
+        var round = Globals.ROUND;
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
+        {
+            case 1:
+                return nameof(gameTimeData.RoundOneNightmare);
+
+            case 2:
+                return nameof(gameTimeData.RoundTwoNightmare);
+
+            case 3:
+                return nameof(gameTimeData.RoundThreeNightmare);
+
+            case 4:
+                return nameof(gameTimeData.RoundFourNightmare);
+
+            case 5:
+                return nameof(gameTimeData.RoundFiveNightmare);
 
             default:
                 Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");

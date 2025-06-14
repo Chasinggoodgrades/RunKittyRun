@@ -175,8 +175,15 @@ public static class AffixFactory
             if (Gamemode.CurrentGameMode != "Standard") return;
             if (!CanDistributeAffixes()) return;
 
-            NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
-            var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
+            if (Difficulty.DifficultyValue < (int)DifficultyLevel.Nightmare)
+            {
+                NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+            }
+            else
+            {
+                NUMBER_OF_AFFIXED_WOLVES = Globals.ALL_WOLVES.Count;
+            }
+                var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
             var count = 0;
             var iterations = 0;
 
@@ -213,7 +220,7 @@ public static class AffixFactory
                 }
             }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Logger.Critical($"{Colors.COLOR_RED}Error in DistributeAffixes: {ex.Message}{Colors.COLOR_RESET}");
             RemoveAllAffixes();

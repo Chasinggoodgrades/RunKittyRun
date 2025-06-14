@@ -321,7 +321,10 @@ public static class StandardMultiboard
                 numberOfGames = gameData.ImpossibleGames;
                 numberOfWins = gameData.ImpossibleWins;
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                numberOfGames = gameData.NightmareGames;
+                numberOfWins = gameData.NightmareWins;
+                break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return (0, 0);
@@ -358,7 +361,13 @@ public static class StandardMultiboard
                 RoundTimes[3] = gameData.RoundFourImpossible;
                 RoundTimes[4] = gameData.RoundFiveImpossible;
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                RoundTimes[0] = gameData.RoundOneNightmare;
+                RoundTimes[1] = gameData.RoundTwoNightmare;
+                RoundTimes[2] = gameData.RoundThreeNightmare;
+                RoundTimes[3] = gameData.RoundFourNightmare;
+                RoundTimes[4] = gameData.RoundFiveNightmare;
+                break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return RoundTimes;
