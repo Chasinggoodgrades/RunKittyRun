@@ -11,7 +11,7 @@ public static class AffixFactory
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 6;
-
+    private static int MAX_FIXIATION_PER_LANE = 3;
     /// <summary>
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
     /// </summary>
@@ -139,7 +139,9 @@ public static class AffixFactory
     private static string AvailableAffixes(int laneNumber)
     {
         var affixes = string.Join(", ", AffixTypes); // Start with all affixes in a single string
-        if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
+        var fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount;
+        Console.WriteLine($"Fixation count for lane {laneNumber}: {fixationCount}");
+        if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE)
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
@@ -175,54 +177,62 @@ public static class AffixFactory
             if (Gamemode.CurrentGameMode != "Standard") return;
             if (!CanDistributeAffixes()) return;
 
+            // Determine how many wolves will be affixed in total
             if (Difficulty.DifficultyValue < (int)DifficultyLevel.Nightmare)
             {
                 NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
             }
             else
             {
+                MAX_AFFIXED_PER_LANE = int.MaxValue; // No limit for Nightmare
                 NUMBER_OF_AFFIXED_WOLVES = Globals.ALL_WOLVES.Count;
             }
-                var affixedWolvesInLane = new int[RegionList.WolfRegions.Length];
-            var count = 0;
-            var iterations = 0;
 
-            while (count < NUMBER_OF_AFFIXED_WOLVES && iterations < 2000)
+            // # per lane based on the weights
+            float totalWeight = LaneWeights.Sum(); // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
+            var laneDistribution = new int[LaneWeights.Length];
+            int totalAssigned = 0;
+
+            for (int i = 0; i < LaneWeights.Length; i++)
             {
-                for (int i = 0; i < LaneWeights.Length; i++)
+                // Set proportions based on lane weights
+                float ratio = LaneWeights[i] / totalWeight;
+                laneDistribution[i] = (int)Math.Floor(NUMBER_OF_AFFIXED_WOLVES * ratio);
+                totalAssigned += laneDistribution[i];
+            }
+
+            // ^ rounding can cause some left overs so here we are 
+            int leftover = NUMBER_OF_AFFIXED_WOLVES - totalAssigned;
+            for (int i = 0; i < LaneWeights.Length && leftover > 0; i++)
+            {
+                if (laneDistribution[i] < MAX_AFFIXED_PER_LANE)
                 {
-                    if (GetRandomReal(0, 100) <= LaneWeights[i])
-                    {
-                        if (affixedWolvesInLane[i] < MAX_AFFIXED_PER_LANE)
-                        {
-                            var wolvesInLane = WolfArea.WolfAreas[i].Wolves;
-                            for (int j = 0; j < wolvesInLane.Count; j++)
-                            {
-                                var wolf = wolvesInLane[j];
+                    laneDistribution[i]++;
+                    leftover--;
+                }
+            }
 
-                                if (!ShouldAffixWolves(wolf, i))
-                                {
-                                    continue;
-                                }
+            // Go thru and apply affixes to each lane
+            for (int i = 0; i < laneDistribution.Length; i++)
+            {
+                int affixTarget = Math.Min(laneDistribution[i], MAX_AFFIXED_PER_LANE);
+                var wolvesInLane = WolfArea.WolfAreas[i].Wolves;
 
-                                var affix = ApplyRandomAffix(wolf, i);
-                                if (affix != null)
-                                {
-                                    count++;
-                                    affixedWolvesInLane[i]++;
-                                    break; // Affix only one wolf per iteration
-                                }
-                            }
-                        }
-                    }
-                    iterations++;
-                    if (count >= NUMBER_OF_AFFIXED_WOLVES) break;
+                // Add affixes to random wolves until the {affixTarget} is reached
+                int appliedCount = 0;
+                for (int j = 0; j < wolvesInLane.Count && appliedCount < affixTarget; j++)
+                {
+                    var wolf = wolvesInLane[j];
+                    if (!ShouldAffixWolves(wolf, i)) continue;
+
+                    var affix = ApplyRandomAffix(wolf, i);
+                    if (affix != null) appliedCount++;
                 }
             }
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_RED}Error in DistributeAffixes: {ex.Message}{Colors.COLOR_RESET}");
+            Logger.Critical($"{Colors.COLOR_RED}Error in DistAffixes: {ex.Message}{Colors.COLOR_RESET}");
             RemoveAllAffixes();
         }
     }

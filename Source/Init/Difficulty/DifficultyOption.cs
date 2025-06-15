@@ -46,5 +46,5 @@ public enum DifficultyLevel
     Normal = 4,
     Hard = 6,
     Impossible = 9,
-    Nightmare = 12
+    Nightmare = 11
 }
