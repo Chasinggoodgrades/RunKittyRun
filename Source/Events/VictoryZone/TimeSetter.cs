@@ -62,7 +62,7 @@ public static class TimeSetter
                 roundEnum = GetNightmareRoundEnum();
                 break;
             default:
-                Console.WriteLine("Invalid difficulty level for GetRoundEnum");
+                Logger.Critical("Invalid difficulty level for GetRoundEnum");
                 return "";
         }
         return roundEnum;
@@ -103,7 +103,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveNormal);
 
             default:
-                Console.WriteLine("Invalid round number for GetNormalRoundEnum");
+                Logger.Critical("Invalid round number for GetNormalRoundEnum");
                 return "";
         }
     }
@@ -130,7 +130,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveHard);
 
             default:
-                Console.WriteLine("Invalid round number for GetHardRoundEnum");
+                Logger.Critical("Invalid round number for GetHardRoundEnum");
                 return "";
         }
     }
@@ -157,7 +157,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveImpossible);
 
             default:
-                Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
+                Logger.Critical("Invalid round number for GetImpossibleRoundEnum");
                 return "";
         }
     }
@@ -184,7 +184,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveNightmare);
 
             default:
-                Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
+                Logger.Critical("Invalid round number for GetNightmareRoundEnum");
                 return "";
         }
     }
