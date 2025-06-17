@@ -165,7 +165,7 @@ public static class ProtectionOfAncients
     private static void EndEffectActions(player Player)
     {
         // Get all units within range of the player unit (kitty) and revive them
-        var tempGroup = group.Create();
+        var tempGroup = group.Create(); // consider changing this to a static group
         var kitty = Globals.ALL_KITTIES[Player];
         var levelOfAbility = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         var levelOfRelic = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
