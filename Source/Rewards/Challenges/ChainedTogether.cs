@@ -7,8 +7,8 @@ public static class ChainedTogether
 {
 
     private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
-
     private static float timerInterval = 0.1f; 
+    private static Random rng = new Random();
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
     /// <summary>
@@ -24,7 +24,7 @@ public static class ChainedTogether
             for (int i = 0; i < kittyGroups.Count; i++)
             {
                 var group = kittyGroups[i];
-                ChainClosestKitties(group[0], group.GetRange(1, group.Count - 1));
+                ChainKitties(group[0], group.GetRange(1, group.Count - 1));
 
                 for (int j = 0; j < group.Count; j++)
                 {
@@ -52,16 +52,18 @@ public static class ChainedTogether
 
     private static void MoveChain()
     {
-        var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
+        var kitties = Globals.ALL_KITTIES_LIST;
 
         for (int i = 0; i < kitties.Count; i++)
         {
             var kitty = kitties[i];
             var chainedKitty = kitty.ChainedKitty;
-            
+
             if (KittyLightnings.ContainsKey(kitty.Name))
             {
-                var lightning = MoveLightning(KittyLightnings[kitty.Name], true, kitty.Unit.X, kitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
+                var lightning = KittyLightnings[kitty.Name];
+                MoveLightning(lightning, true, kitty.Unit.X, kitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
+              //  SetLightningColor(lightning, 255, 255, 0, 255);
             }
         }
 
@@ -69,10 +71,19 @@ public static class ChainedTogether
 
     private static List<List<Kitty>> SetGroups()
     {
-        var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
+        var kitties =  Globals.ALL_KITTIES_LIST;
         var groups = new List<List<Kitty>>();
         int count = kitties.Count;
 
+        // Shuffle the kitties list to ensure randomness
+        for (int i = kitties.Count - 1; i > 0; i--)
+        {
+            int j = rng.Next(i + 1);
+            Kitty temp = kitties[i];
+            kitties[i] = kitties[j];
+            kitties[j] = temp;
+        }
+        
         if (count < 3)
         {
             groups.Add(kitties);
@@ -110,30 +121,13 @@ public static class ChainedTogether
     }
 
 
-    private static void ChainClosestKitties(Kitty currentKitty, List<Kitty> remainingKitties)
+    private static void ChainKitties(Kitty currentKitty, List<Kitty> remainingKitties)
     {
         if (remainingKitties == null || remainingKitties.Count == 0) return;
 
-        Kitty closestKitty = null;
-        float minDistance = float.MaxValue;
-
-        foreach (var kitty in remainingKitties)
-        {
-            if (kitty.Unit == null || !kitty.Alive) continue;
-
-            float distance = Math.Abs(currentKitty.Unit.X - kitty.Unit.X) + Math.Abs(currentKitty.Unit.Y - kitty.Unit.Y);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                closestKitty = kitty;
-            }
-        }
-
-        if (closestKitty != null)
-        {
-            remainingKitties.Remove(closestKitty);
-            currentKitty.ChainedKitty = closestKitty;
-            ChainClosestKitties(closestKitty, remainingKitties);
-        }
+        var nextKitty = remainingKitties[0];
+        currentKitty.ChainedKitty = nextKitty;
+        remainingKitties.Remove(nextKitty);
+        ChainKitties(nextKitty, remainingKitties);
     }
 }
