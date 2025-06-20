@@ -1654,5 +1654,22 @@ public static class InitCommands
                 effect.Create("NitroTest.mdx", unitKitty, "origin");
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "kittylist",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Puts an effect test on for some nitro thingy",
+            action: (player, args) =>
+            {
+                string x = "";
+                foreach (var k in Globals.ALL_KITTIES_LIST)
+                {
+                    x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
+                }
+                Console.WriteLine(x);
+            }
+        );
     }
 }
