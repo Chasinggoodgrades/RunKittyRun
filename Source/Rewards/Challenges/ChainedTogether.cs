@@ -31,8 +31,7 @@ public static class ChainedTogether
                     var kitty = group[j];
                     if (kitty.ChainedKitty != null && kitty.ChainedKitty.Unit != null)
                     {
-                        // TODO: the color might vary based on conditions
-                        var lightning = AddLightning("GRCH", true, kitty.Unit.X, kitty.Unit.Y, kitty.ChainedKitty.Unit.X, kitty.ChainedKitty.Unit.Y);
+                        var lightning = AddLightning("WHCH", true, kitty.Unit.X, kitty.Unit.Y, kitty.ChainedKitty.Unit.X, kitty.ChainedKitty.Unit.Y);
                         KittyLightnings[kitty.Name] = lightning;
                     }
                 }
@@ -57,21 +56,55 @@ public static class ChainedTogether
         for (int i = 0; i < kitties.Count; i++)
         {
             var kitty = kitties[i];
-            var chainedKitty = kitty.ChainedKitty;
-
-            if (KittyLightnings.ContainsKey(kitty.Name))
+            var kittyName = kitty.Name;
+            if (!KittyLightnings.ContainsKey(kittyName))
             {
-                var lightning = KittyLightnings[kitty.Name];
-                MoveLightning(lightning, true, kitty.Unit.X, kitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
-              //  SetLightningColor(lightning, 255, 255, 0, 255);
+                continue;
             }
+
+            var chainedKitty = kitty.ChainedKitty;
+            var x1 = kitty.Unit.X;
+            var y1 = kitty.Unit.Y;
+            var x2 = chainedKitty.Unit.X;
+            var y2 = chainedKitty.Unit.Y;
+
+            var lightning = KittyLightnings[kittyName];
+            MoveLightning(lightning, true, x1, y1, x2, y2);
+
+            float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
+
+            ChangeChainColor(lightning, distance, kittyName);
+        }
+    }
+
+    private static void ChangeChainColor(lightning lightning, float distance, string kittyName)
+    {
+        float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
+
+        // TODO: remove referece to chained kitty + add destroy effect + show failed quest message
+        if (distance > 800)
+        {
+            // Check if there's a way to decrease alhpa over time when chain is about to break
+            lightning.Dispose();
+            KittyLightnings.Remove(kittyName);
+            return;
+        }
+        else if (distance > 600)
+        {
+            red = 1.0f; green = 0.0f; blue = 0.0f; // Red
+        }
+        else if (distance > 400)
+        {
+            red = 1.0f; green = 1.0f; blue = 0.0f; // Yellow
         }
 
+        SetLightningColor(lightning, red, green, blue, alpha);
     }
+
 
     private static List<List<Kitty>> SetGroups()
     {
-        var kitties =  Globals.ALL_KITTIES_LIST;
+        var kitties = Globals.ALL_KITTIES_LIST;
         var groups = new List<List<Kitty>>();
         int count = kitties.Count;
 
@@ -83,7 +116,7 @@ public static class ChainedTogether
             kitties[i] = kitties[j];
             kitties[j] = temp;
         }
-        
+
         if (count < 3)
         {
             groups.Add(kitties);
