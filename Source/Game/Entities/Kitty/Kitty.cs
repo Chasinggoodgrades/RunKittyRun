@@ -57,6 +57,7 @@ public class Kitty
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         KittyMorphosis = new KittyMorphosis(this);
+        Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();
     }
@@ -253,6 +254,7 @@ public class Kitty
         aiController.StopAi();
         Unit.Dispose();
         if (Gameover.WinGame) return;
+        Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);
     }
 
