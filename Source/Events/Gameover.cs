@@ -114,6 +114,9 @@ public static class Gameover
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleGames += 1;
                 break;
+            case (int)DifficultyLevel.Nightmare:
+                stats.NightmareGames += 1;
+                break;
         }
     }
 
@@ -133,6 +136,9 @@ public static class Gameover
 
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleWins += 1;
+                break;
+            case (int)DifficultyLevel.Nightmare:
+                stats.NightmareWins += 1;
                 break;
         }
     }

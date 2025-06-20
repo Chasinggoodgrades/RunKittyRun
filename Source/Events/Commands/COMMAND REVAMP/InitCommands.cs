@@ -314,11 +314,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kibbleList = "";
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    var kibblePicker = kitty.Value.Player;
-                    var kibbleCollected = kitty.Value.CurrentStats.CollectedKibble;
-                    kibbleList += $"{Colors.PlayerNameColored(kibblePicker)}: {kibbleCollected}\n";
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    var kibbleCollected = kitty.CurrentStats.CollectedKibble;
+                    kibbleList += $"{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n";
                 }
                 player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}{Colors.COLOR_RESET}");
             }
@@ -777,9 +777,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    kitty.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 }
             }
         );
@@ -1652,6 +1653,23 @@ public static class InitCommands
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
                 effect.Create("NitroTest.mdx", unitKitty, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "kittylist",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Puts an effect test on for some nitro thingy",
+            action: (player, args) =>
+            {
+                string x = "";
+                foreach (var k in Globals.ALL_KITTIES_LIST)
+                {
+                    x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
+                }
+                Console.WriteLine(x);
             }
         );
     }

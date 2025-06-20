@@ -36,6 +36,7 @@ public class Fixation : Affix
         Unit.Unit.AddAbility(AFFIX_ABILITY);
         Unit.Unit.TargetedAs = 16;
         RegisterEvents();
+        Unit.WolfArea.FixationCount += 1;
         base.Apply();
     }
 
@@ -53,6 +54,7 @@ public class Fixation : Affix
         ChaseTimer = null;
         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(ref TargetEffect);
+        if (Unit.WolfArea.FixationCount > 0) Unit.WolfArea.FixationCount -= 1;
         Unit.WanderTimer?.Resume();
         base.Remove();
     }
