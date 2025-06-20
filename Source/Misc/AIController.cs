@@ -165,14 +165,15 @@ public class AIController
         }
 
         bool allKittiesAtSameOrHigherSafezone = true; // IEnumberable is dog shit for C# -> Lua conversion, this should -help-
-        foreach (var k in Globals.ALL_KITTIES)
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
         {
-            if (Program.Debug && k.Value.Player == Player(0))
+            var k = Globals.ALL_KITTIES_LIST[i];
+            if (Program.Debug && k.Player == Player(0))
             {
                 continue;
             }
 
-            if (CalcProgressZone(k.Value) < currentProgressZoneId)
+            if (CalcProgressZone(k) < currentProgressZoneId)
             {
                 allKittiesAtSameOrHigherSafezone = false;
                 break;
@@ -205,17 +206,18 @@ public class AIController
 
                     bool isNearest = true;
 
-                    foreach (var otherKitty in Globals.ALL_KITTIES)
+                    for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                     {
-                        if (Program.Debug && otherKitty.Value.Player == Player(0))
+                        var otherKitty = Globals.ALL_KITTIES_LIST[i];
+                        if (Program.Debug && otherKitty.Player == Player(0))
                         {
                             continue;
                         }
 
-                        if (otherKitty.Value != this.kitty && otherKitty.Value.Alive)
+                        if (otherKitty != this.kitty && otherKitty.Alive)
                         {
-                            double otherDistance = Math.Sqrt(Math.Pow(otherKitty.Value.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Value.Unit.Y - deadKitty.Unit.Y, 2));
-                            int otherLaneDiff = Math.Abs(CalcProgressZone(otherKitty.Value) - deadKittyProgressZoneId);
+                            double otherDistance = Math.Sqrt(Math.Pow(otherKitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Unit.Y - deadKitty.Unit.Y, 2));
+                            int otherLaneDiff = Math.Abs(CalcProgressZone(otherKitty) - deadKittyProgressZoneId);
 
                             // Prioritize by lane difference first, then by distance.
                             // Don't think this works for some reason..
