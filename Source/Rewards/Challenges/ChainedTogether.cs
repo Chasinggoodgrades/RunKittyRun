@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using WCSharp.Api;
 using static WCSharp.Api.Common;
+using WCSharp.Api;
 
 public static class ChainedTogether
 {
 
+    private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
+
+    private static float timerInterval = 0.1f; 
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
     /// <summary>
@@ -15,19 +18,28 @@ public static class ChainedTogether
     {
         try
         {
-            Utility.TimedTextToAllPlayers(4.0f, $"TOGHETHER WE STAND, DIVIDED WE FALL!");
-
             // When the event starts, each kitty gets attached to the closest player. It doesn't change over time
-            var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
+            var kittyGroups = SetGroups();
 
-            ChainClosestKitties(kitties[0], kitties.GetRange(1, kitties.Count - 1));
-
-            Utility.TimedTextToAllPlayers(4.0f, $"kitties chain:");
-
-            foreach (var kitty in kitties)
+            for (int i = 0; i < kittyGroups.Count; i++)
             {
-                Utility.TimedTextToAllPlayers(4.0f, $"kitty: {kitty.Name}");
+                var group = kittyGroups[i];
+                ChainClosestKitties(group[0], group.GetRange(1, group.Count - 1));
+
+                for (int j = 0; j < group.Count; j++)
+                {
+                    var kitty = group[j];
+                    if (kitty.ChainedKitty != null && kitty.ChainedKitty.Unit != null)
+                    {
+                        // TODO: the color might vary based on conditions
+                        var lightning = AddLightning("GRCH", true, kitty.Unit.X, kitty.Unit.Y, kitty.ChainedKitty.Unit.X, kitty.ChainedKitty.Unit.Y);
+                        KittyLightnings[kitty.Name] = lightning;
+                    }
+                }
             }
+
+            timer moveTimer = CreateTimer();
+            TimerStart(moveTimer, timerInterval, true, ErrorHandler.Wrap(MoveChain));
 
         }
 
@@ -36,6 +48,65 @@ public static class ChainedTogether
             Logger.Warning($"Error in ChainedTogether.StartEvent {e.Message}");
             throw;
         }
+    }
+
+    private static void MoveChain()
+    {
+        var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
+
+        for (int i = 0; i < kitties.Count; i++)
+        {
+            var kitty = kitties[i];
+            var chainedKitty = kitty.ChainedKitty;
+            
+            if (KittyLightnings.ContainsKey(kitty.Name))
+            {
+                var lightning = MoveLightning(KittyLightnings[kitty.Name], true, kitty.Unit.X, kitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
+            }
+        }
+
+    }
+
+    private static List<List<Kitty>> SetGroups()
+    {
+        var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
+        var groups = new List<List<Kitty>>();
+        int count = kitties.Count;
+
+        if (count < 3)
+        {
+            groups.Add(kitties);
+            return groups;
+        }
+
+        int index = 0;
+        int groupsOfThree = count / 3;
+        int remainder = count % 3;
+
+        if (remainder == 1)
+        {
+            // convert two groups of 3 into two groups of 4 to avoid a group of 1
+            groupsOfThree -= 1;
+            remainder += 3;
+        }
+
+        for (int i = 0; i < groupsOfThree; i++)
+        {
+            groups.Add(new List<Kitty> { kitties[index], kitties[index + 1], kitties[index + 2] });
+            index += 3;
+        }
+
+        if (remainder > 0)
+        {
+            var lastGroup = new List<Kitty>();
+            for (int i = index; i < kitties.Count; i++)
+            {
+                lastGroup.Add(kitties[i]);
+            }
+            groups.Add(lastGroup);
+        }
+
+        return groups;
     }
 
 
@@ -64,39 +135,5 @@ public static class ChainedTogether
             currentKitty.ChainedKitty = closestKitty;
             ChainClosestKitties(closestKitty, remainingKitties);
         }
-    }
-
-    /// <summary>
-    /// Finds the two kitties that are the farthest apart from each other.
-    /// Is this really needed? Maybe we can just use the first and last kitty in the list?
-    /// </summary>
-    private static (Kitty, Kitty) GetChainEnds()
-    {
-        var kitties = new List<Kitty>(Globals.ALL_KITTIES.Values);
-        Kitty farthestA = null;
-        Kitty farthestB = null;
-        float maxDistance = float.MinValue;
-
-        for (int i = 0; i < kitties.Count; i++)
-        {
-            var kittyA = kitties[i];
-            if (kittyA.Unit == null || !kittyA.Alive) continue;
-
-            for (int j = i + 1; j < kitties.Count; j++)
-            {
-                var kittyB = kitties[j];
-                if (kittyB.Unit == null || !kittyB.Alive) continue;
-
-                float distance = Math.Abs(kittyA.Unit.X - kittyB.Unit.X) + Math.Abs(kittyA.Unit.Y - kittyB.Unit.Y);
-                if (distance > maxDistance)
-                {
-                    maxDistance = distance;
-                    farthestA = kittyA;
-                    farthestB = kittyB;
-                }
-            }
-        }
-
-        return (farthestA, farthestB);
     }
 }
