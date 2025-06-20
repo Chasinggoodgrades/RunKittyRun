@@ -43,6 +43,7 @@ public static class RoundManager
 
             RoundTimer.CountDown();
             TeamDeathless.StartEvent();
+            ChainedTogether.StartEvent(); // TODO: Define trigger for this event
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
         }
