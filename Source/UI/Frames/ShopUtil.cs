@@ -15,6 +15,11 @@ public static class ShopUtil
         return false;
     }
 
+    /// <summary>
+    /// Returns true if the player is dead, false otherwise.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
     public static bool PlayerIsDead(player player)
     {
         var kitty = Globals.ALL_KITTIES[player];
