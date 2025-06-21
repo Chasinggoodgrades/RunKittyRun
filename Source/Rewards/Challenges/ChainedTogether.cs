@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using static WCSharp.Api.Common;
 using WCSharp.Api;
+using System.Linq;
 
 public static class ChainedTogether
 {
 
     private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
+    private static List<List<Kitty>> kittyGroups;
+
     private static float timerInterval = 0.1f; 
     private static Random rng = new Random();
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
@@ -19,7 +22,7 @@ public static class ChainedTogether
         try
         {
             // When the event starts, each kitty gets attached to the closest player. It doesn't change over time
-            var kittyGroups = SetGroups();
+            kittyGroups = SetGroups();
 
             for (int i = 0; i < kittyGroups.Count; i++)
             {
@@ -52,6 +55,7 @@ public static class ChainedTogether
     private static void MoveChain()
     {
         var kitties = Globals.ALL_KITTIES_LIST;
+        string kittyNameOutSideRange = "";
 
         for (int i = 0; i < kitties.Count; i++)
         {
@@ -73,23 +77,55 @@ public static class ChainedTogether
 
             float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
 
-            ChangeChainColor(lightning, distance, kittyName);
+            if (distance > 800)
+            {
+                kittyNameOutSideRange = kittyName;
+            }
+
+            ChangeChainColor(distance, kittyName);
+        }
+
+        // TODO: check how to apply pull mechanics
+        if (kittyNameOutSideRange != "")
+        {
+            LoseEvent(kittyNameOutSideRange);
         }
     }
 
-    private static void ChangeChainColor(lightning lightning, float distance, string kittyName)
+    public static void LoseEvent(string kittyNameOutSideRange)
     {
+        try
+        {
+            var currentGroup = kittyGroups
+            .FirstOrDefault(group => group.Any(kitty => kitty.Name == kittyNameOutSideRange));
+
+            for (int i = 0; i < currentGroup.Count; i++)
+            {
+                var kitty = currentGroup[i];
+                kitty.ChainedKitty = null;
+                if (KittyLightnings.ContainsKey(kitty.Name))
+                {
+                    var lightning = KittyLightnings[kitty.Name];
+                    lightning.Dispose();
+                    KittyLightnings.Remove(kitty.Name);
+                }
+            }
+
+            Utility.TimedTextToAllPlayers(5.0f, $"Challenge lost");
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
+            throw;
+        }
+    }
+
+    private static void ChangeChainColor(float distance, string kittyName)
+    {
+        var lightning = KittyLightnings[kittyName];
         float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
 
-        // TODO: remove referece to chained kitty + add destroy effect + show failed quest message
-        if (distance > 800)
-        {
-            // Check if there's a way to decrease alhpa over time when chain is about to break
-            lightning.Dispose();
-            KittyLightnings.Remove(kittyName);
-            return;
-        }
-        else if (distance > 600)
+        if (distance > 600)
         {
             red = 1.0f; green = 0.0f; blue = 0.0f; // Red
         }
