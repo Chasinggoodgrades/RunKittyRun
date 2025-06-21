@@ -119,6 +119,7 @@ public class Kitty
             if (Gamemode.CurrentGameMode == "Standard")
             {
                 TeamDeathless.DiedWithOrb(this);
+                ChainedTogether.LoseEvent(this.Name); // For now, might change later to re-create groups
                 SoundManager.PlayLastManStandingSound();
                 Gameover.GameOver();
                 MultiboardUtil.RefreshMultiboards();
