@@ -10,7 +10,7 @@ public static class ChainedTogether
     private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
     private static List<List<Kitty>> kittyGroups;
 
-    private static float timerInterval = 0.1f; 
+    private static float timerInterval = 0.1f;
     private static Random rng = new Random();
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
@@ -96,21 +96,7 @@ public static class ChainedTogether
     {
         try
         {
-            var currentGroup = kittyGroups
-            .FirstOrDefault(group => group.Any(kitty => kitty.Name == kittyNameOutSideRange));
-
-            for (int i = 0; i < currentGroup.Count; i++)
-            {
-                var kitty = currentGroup[i];
-                kitty.ChainedKitty = null;
-                if (KittyLightnings.ContainsKey(kitty.Name))
-                {
-                    var lightning = KittyLightnings[kitty.Name];
-                    lightning.Dispose();
-                    KittyLightnings.Remove(kitty.Name);
-                }
-            }
-
+            FreeKittiesFromGroup(kittyNameOutSideRange, false);
             Utility.TimedTextToAllPlayers(5.0f, $"Challenge lost");
         }
         catch (Exception e)
@@ -125,6 +111,7 @@ public static class ChainedTogether
         var lightning = KittyLightnings[kittyName];
         float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
 
+        // Change this values based on difficulty maybe?
         if (distance > 600)
         {
             red = 1.0f; green = 0.0f; blue = 0.0f; // Red
@@ -135,6 +122,37 @@ public static class ChainedTogether
         }
 
         SetLightningColor(lightning, red, green, blue, alpha);
+    }
+
+    private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
+    {
+        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName));
+        if (groupIndex < 0)
+        {
+            return;
+        }
+
+        var currentGroup = kittyGroups[groupIndex];
+
+        for (int i = 0; i < currentGroup.Count; i++)
+        {
+            var kitty = currentGroup[i];
+            kitty.ChainedKitty = null;
+            
+            if(isVictory)
+            {
+                // Check if function needs to be passed by param instead.
+                Utility.TimedTextToAllPlayers(5.0f, $"Award for {kitty.Name} kitty");
+            }
+
+            if (KittyLightnings.ContainsKey(kitty.Name))
+            {
+                KittyLightnings[kitty.Name].Dispose();
+                KittyLightnings.Remove(kitty.Name);
+            }
+        }
+
+        kittyGroups.RemoveAt(groupIndex);
     }
 
 
@@ -199,4 +217,24 @@ public static class ChainedTogether
         remainingKitties.Remove(nextKitty);
         ChainKitties(nextKitty, remainingKitties);
     }
+
+    public static void ReachedSafezone(Kitty kitty, Safezone safezone)
+    {
+        if (safezone.ID != RegionList.SafeZones.Length - 1)
+        {
+            return;
+        }
+
+        try
+        {
+            FreeKittiesFromGroup(kitty.Name, true);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
+            throw;
+        }
+
+    }
+
 }
