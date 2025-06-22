@@ -6,10 +6,8 @@ using System.Linq;
 
 public static class ChainedTogether
 {
-
     private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
     private static List<List<Kitty>> kittyGroups;
-
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
@@ -21,7 +19,6 @@ public static class ChainedTogether
     {
         try
         {
-            // When the event starts, each kitty gets attached to the closest player. It doesn't change over time
             kittyGroups = SetGroups();
 
             for (int i = 0; i < kittyGroups.Count; i++)
@@ -96,7 +93,6 @@ public static class ChainedTogether
         try
         {
             FreeKittiesFromGroup(kittyNameOutSideRange, false);
-            Utility.TimedTextToAllPlayers(5.0f, $"Challenge lost");
         }
         catch (Exception e)
         {
@@ -138,10 +134,9 @@ public static class ChainedTogether
             var kitty = currentGroup[i];
             kitty.IsChained = false;
 
-            if(isVictory)
+            if (isVictory)
             {
-                // Check if function needs to be passed by param instead.
-                Utility.TimedTextToAllPlayers(5.0f, $"Award for {kitty.Name} kitty");
+                AwardChainedTogether(kitty);
             }
 
             if (KittyLightnings.ContainsKey(kitty.Name))
@@ -219,10 +214,17 @@ public static class ChainedTogether
         }
         catch (Exception e)
         {
-            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
+            Logger.Warning($"Error in ChainedTogether.ReachedSafezone {e.Message}");
             throw;
         }
 
     }
 
+    private static void AwardChainedTogether(Kitty kitty)
+    {
+        var textTag = texttag.Create();
+
+        Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
+        // AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED... TBD);
+    }
 }
