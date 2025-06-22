@@ -12,6 +12,7 @@ public static class AffixFactory
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 6;
     private static int MAX_FIXIATION_PER_LANE = 3;
+    private static Random Random = Globals.RANDOM_GEN; // Seeded for consistency
     /// <summary>
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
     /// </summary>
@@ -159,7 +160,7 @@ public static class AffixFactory
         if (affixArray.Length == 0)
             return null;
 
-        var randomIndex = GetRandomInt(0, affixArray.Length-1);
+        var randomIndex = Random.Next(0, affixArray.Length-1);
         var randomAffix = affixArray[randomIndex];
 
         return ApplyAffix(unit, randomAffix);
