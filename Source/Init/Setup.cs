@@ -92,6 +92,7 @@ namespace Source.Init
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
+                UnitSharing.Initialize();
                 ShadowKitty.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
