@@ -10,6 +10,13 @@ public static class ChainedTogether
     private static List<List<Kitty>> kittyGroups;
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
+
+    private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
+    {
+        { DifficultyLevel.Normal,     (400, 600, 800) },
+        { DifficultyLevel.Hard,       (450, 650, 850) },
+        { DifficultyLevel.Impossible, (500, 700, 900) }
+    };
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
     /// <summary>
@@ -53,6 +60,8 @@ public static class ChainedTogether
         var kitties = Globals.ALL_KITTIES_LIST;
         string kittyNameOutOfRange = "";
 
+        int outOfRange = CalculateRangeByDifficulty("breakPoint");
+
         for (int i = 0; i < kitties.Count - 1; i++)
         {
             var kitty = kitties[i];
@@ -73,7 +82,7 @@ public static class ChainedTogether
 
             float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
 
-            if (distance > 800)
+            if (distance > outOfRange)
             {
                 kittyNameOutOfRange = kittyName;
             }
@@ -106,12 +115,14 @@ public static class ChainedTogether
         var lightning = KittyLightnings[kittyName];
         float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
 
-        // Change this values based on difficulty maybe?
-        if (distance > 600)
+        int far = CalculateRangeByDifficulty("far");
+        int good = CalculateRangeByDifficulty("good");
+
+        if (distance > far)
         {
             red = 1.0f; green = 0.0f; blue = 0.0f; // Red
         }
-        else if (distance > 400)
+        else if (distance > good)
         {
             red = 1.0f; green = 1.0f; blue = 0.0f; // Yellow
         }
@@ -226,5 +237,37 @@ public static class ChainedTogether
 
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
         // AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED... TBD);
+    }
+
+    public static int CalculateRangeByDifficulty(string rangeType)
+    {
+        DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
+
+        (int good, int far, int breakPoint) selectedRange;
+
+        switch (level)
+        {
+            case >= DifficultyLevel.Impossible:
+                selectedRange = ranges[DifficultyLevel.Impossible];
+                break;
+            case >= DifficultyLevel.Hard:
+                selectedRange = ranges[DifficultyLevel.Hard];
+                break;
+            default:
+                selectedRange = ranges[DifficultyLevel.Normal];
+                break;
+        }
+
+        switch (rangeType)
+        {
+            case "good":
+                return selectedRange.good;
+            case "far":
+                return selectedRange.far;
+            case "breakPoint":
+                return selectedRange.breakPoint;
+            default:
+                throw new ArgumentException($"Invalid rangeType '{rangeType}'");
+        }
     }
 }
