@@ -435,7 +435,7 @@ public static class ShopFrame
         }
     }
 
-    private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic;
+    private static List<ShopItem> GetRelicItems() => ShopItem.ShopItemsRelic();
 
     private static List<ShopItem> GetRewardItems() => ShopItem.ShopItemsReward();
 
@@ -468,11 +468,11 @@ public static class ShopFrame
         FrameManager.ShopButton.Visible = false;
         FrameManager.ShopButton.Visible = true;
         FrameManager.HideOtherFrames(shopFrame);
-        if (Gamemode.CurrentGameMode != "Standard")
+/*        if (Gamemode.CurrentGameMode != "Standard")
         {
             player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is only accessible in Standard mode.{Colors.COLOR_RESET}");
             return;
-        }
+        }*/
         shopFrame.Visible = !shopFrame.Visible;
         UpdateButtonStatus(player);
         if (shopFrame.Visible)
