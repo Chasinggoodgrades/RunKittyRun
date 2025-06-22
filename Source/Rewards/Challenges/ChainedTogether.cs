@@ -11,7 +11,7 @@ public static class ChainedTogether
     private static List<List<Kitty>> kittyGroups;
 
     private static float timerInterval = 0.1f;
-    private static Random rng = new Random();
+    private static Random rng = Globals.RANDOM_GEN;
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
     /// <summary>
@@ -27,16 +27,15 @@ public static class ChainedTogether
             for (int i = 0; i < kittyGroups.Count; i++)
             {
                 var group = kittyGroups[i];
-                ChainKitties(group[0], group.GetRange(1, group.Count - 1));
 
-                for (int j = 0; j < group.Count; j++)
+                for (int j = 0; j < group.Count - 1; j++)
                 {
-                    var kitty = group[j];
-                    if (kitty.ChainedKitty != null && kitty.ChainedKitty.Unit != null)
-                    {
-                        var lightning = AddLightning("WHCH", true, kitty.Unit.X, kitty.Unit.Y, kitty.ChainedKitty.Unit.X, kitty.ChainedKitty.Unit.Y);
-                        KittyLightnings[kitty.Name] = lightning;
-                    }
+                    var currentKitty = group[j];
+                    var chainedKitty = group[j + 1];
+
+                    currentKitty.IsChained = true;
+                    var lightning = AddLightning("WHCH", true, currentKitty.Unit.X, currentKitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
+                    KittyLightnings[currentKitty.Name] = lightning;
                 }
             }
 
@@ -55,9 +54,9 @@ public static class ChainedTogether
     private static void MoveChain()
     {
         var kitties = Globals.ALL_KITTIES_LIST;
-        string kittyNameOutSideRange = "";
+        string kittyNameOutOfRange = "";
 
-        for (int i = 0; i < kitties.Count; i++)
+        for (int i = 0; i < kitties.Count - 1; i++)
         {
             var kitty = kitties[i];
             var kittyName = kitty.Name;
@@ -66,7 +65,7 @@ public static class ChainedTogether
                 continue;
             }
 
-            var chainedKitty = kitty.ChainedKitty;
+            var chainedKitty = kitties[i + 1];
             var x1 = kitty.Unit.X;
             var y1 = kitty.Unit.Y;
             var x2 = chainedKitty.Unit.X;
@@ -79,16 +78,16 @@ public static class ChainedTogether
 
             if (distance > 800)
             {
-                kittyNameOutSideRange = kittyName;
+                kittyNameOutOfRange = kittyName;
             }
 
             ChangeChainColor(distance, kittyName);
         }
 
         // TODO: check how to apply pull mechanics
-        if (kittyNameOutSideRange != "")
+        if (kittyNameOutOfRange != "")
         {
-            LoseEvent(kittyNameOutSideRange);
+            LoseEvent(kittyNameOutOfRange);
         }
     }
 
@@ -137,8 +136,8 @@ public static class ChainedTogether
         for (int i = 0; i < currentGroup.Count; i++)
         {
             var kitty = currentGroup[i];
-            kitty.ChainedKitty = null;
-            
+            kitty.IsChained = false;
+
             if(isVictory)
             {
                 // Check if function needs to be passed by param instead.
@@ -205,17 +204,6 @@ public static class ChainedTogether
         }
 
         return groups;
-    }
-
-
-    private static void ChainKitties(Kitty currentKitty, List<Kitty> remainingKitties)
-    {
-        if (remainingKitties == null || remainingKitties.Count == 0) return;
-
-        var nextKitty = remainingKitties[0];
-        currentKitty.ChainedKitty = nextKitty;
-        remainingKitties.Remove(nextKitty);
-        ChainKitties(nextKitty, remainingKitties);
     }
 
     public static void ReachedSafezone(Kitty kitty, Safezone safezone)

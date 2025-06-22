@@ -39,7 +39,8 @@ public class Kitty
     public trigger c_Collision { get; set; } = trigger.Create();
     public Disco Disco { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
-    public Kitty ChainedKitty { get; set; } = null;
+    public bool IsChained = false;
+
     public Kitty(player player)
     {
         Player = player;
