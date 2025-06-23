@@ -1652,7 +1652,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("NitroTest.mdx", unitKitty, "origin");
+                effect.Create("TestThing.mdx", unitKitty, "origin");
             }
         );
 
