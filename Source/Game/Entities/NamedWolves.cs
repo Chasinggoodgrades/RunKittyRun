@@ -47,6 +47,7 @@ public static class NamedWolves
         StanWolf.Texttag.SetText(StanWolf.Unit.Name, 0.015f);
         StanWolf.Texttag.SetPermanent(true);
         StanWolf.IsPaused = true;
+        StanWolf.Unit.IsInvulnerable = false;
 
         Utility.SimpleTimer(0.5f, () => StanWolf.Unit.IsInvulnerable = false);
         BurntMeat.RegisterDeathTrigger();

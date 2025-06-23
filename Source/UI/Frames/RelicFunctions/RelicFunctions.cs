@@ -54,6 +54,7 @@ public static class RelicFunctions
             {
                 ShopFrame.upgradeButton.Visible = false; ShopFrame.upgradeButton.Visible = true;
             }
+
             if (ShopFrame.SelectedItems.TryGetValue(player, out var selectedItem) && selectedItem != null)
             {
                 var itemID = selectedItem.ItemID;
@@ -66,20 +67,26 @@ public static class RelicFunctions
                 if (playerUpgradesRelic == null) return;
                 if (ActiveShadowKitty(player)) return;
 
+                // Check if they can upgrade.. 
+                if (!playerRelic.CanUpgrade(player))
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You have reached the maximum upgrade level for {playerRelic.Name}.{Colors.COLOR_RESET}");
+                    return;
+                }
+
+                // Check if enough goldies
                 var goldCost = playerUpgradesRelic.Cost;
                 if (player.Gold < goldCost)
                 {
                     ShopFrame.NotEnoughGold(player, goldCost);
                     return;
                 }
-                if (playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit))
-                {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.{Colors.COLOR_RESET}");
-                    player.Gold -= goldCost;
-                    if (player.IsLocal) ShopFrame.RefreshUpgradeTooltip(playerRelic);
-                }
-                else
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've reached the maximum upgrade level for {playerRelic.Name}.{Colors.COLOR_RESET}");
+
+                // Ok upgrade em! pog
+                playerRelic.Upgrade(Globals.ALL_KITTIES[player].Unit);
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}You've upgraded {playerRelic.Name}.{Colors.COLOR_RESET}");
+                player.Gold -= goldCost;
+                if (player.IsLocal) ShopFrame.RefreshUpgradeTooltip(playerRelic);
             }
         }
         catch (Exception e)

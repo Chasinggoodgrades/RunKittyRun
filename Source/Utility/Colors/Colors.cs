@@ -227,7 +227,7 @@ public class Colors
 
             kitty.SaveData.PlayerColorData.PlayedColors = sb.ToString();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Logger.Warning($"Error in PopulateColorsData: {e.Message}");
         }

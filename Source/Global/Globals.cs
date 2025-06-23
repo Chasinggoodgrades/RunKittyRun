@@ -26,10 +26,13 @@ public static class Globals
         "Omniology#11850", "Danger#24279"};
 
     public static timer GAME_TIMER = timer.Create();
+    public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();
     public static List<player> LockedCamera = new List<player>();
-    public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+    public static List<Kitty> ALL_KITTIES_LIST = new List<Kitty>();
+
 
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();

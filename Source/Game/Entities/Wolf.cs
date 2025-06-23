@@ -97,9 +97,7 @@ public class Wolf
         if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
-        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
-        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
-        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
+        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX), GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY));
     }
 
     public void Dispose()

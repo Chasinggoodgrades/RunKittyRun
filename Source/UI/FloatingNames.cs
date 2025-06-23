@@ -51,9 +51,10 @@ public class FloatingNameTag
     public static void ShowAllNameTags(player Player, bool shown)
     {
         if (!Player.IsLocal) return;
-        foreach (var k in Globals.ALL_KITTIES)
+        for(int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
         {
-            k.Value.NameTag.NameTag.SetVisibility(shown);
+            var k = Globals.ALL_KITTIES_LIST[i];
+            k.NameTag.NameTag.SetVisibility(shown);
         }
     }
 }
