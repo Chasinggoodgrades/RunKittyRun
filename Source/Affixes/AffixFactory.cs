@@ -140,7 +140,6 @@ public static class AffixFactory
     {
         var affixes = string.Join(", ", AffixTypes); // Start with all affixes in a single string
         var fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount;
-        Console.WriteLine($"Fixation count for lane {laneNumber}: {fixationCount}");
         if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE)
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)

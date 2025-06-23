@@ -18,6 +18,7 @@ public static class CommandsManager
     public static int Count = 0;
     private static Dictionary<string, Commands> AllCommands = new();
     private static List<Commands> CommandsList = new List<Commands>();
+    private static List<Kitty> KittiesList = new List<Kitty>();
 
     public static void RegisterCommand(string name, string alias, string group, string argDesc, string description, Action<player, string[]> action)
     {
@@ -45,7 +46,8 @@ public static class CommandsManager
 
     private static List<Kitty> ResolvePlayerIdArray(string arg)
     {
-        var kitties = new List<Kitty>();
+        KittiesList.Clear();
+        var kitties = KittiesList;
         var larg = arg.ToLower();
 
         if (arg == "") // no arg for self
@@ -54,18 +56,20 @@ public static class CommandsManager
         }
         else if (larg == "a" || larg == "all")
         {
-            foreach (var kitty in Globals.ALL_KITTIES)
+            for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
-                kitties.Add(kitty.Value);
+                var kitty = Globals.ALL_KITTIES_LIST[i];
+                kitties.Add(kitty); // add all players
             }
         }
         else if (larg == "ai" || larg == "computer" || larg == "computers")
         {
-            foreach (var kitty in Globals.ALL_KITTIES)
+            for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
-                if (kitty.Key.SlotState != playerslotstate.Playing || kitty.Key.Controller == mapcontrol.Computer)
+                var kitty = Globals.ALL_KITTIES_LIST[i];
+                if (kitty.Player.SlotState == playerslotstate.Playing && kitty.Player.Controller == mapcontrol.Computer)
                 {
-                    kitties.Add(kitty.Value); // add all AI players
+                    kitties.Add(kitty); // add all AI players
                 }
             }
         }
@@ -117,7 +121,6 @@ public static class CommandsManager
         {
             action(kittyArray[i]);
         }
-        GC.RemoveList(ref kittyArray);
     }
 
     public static bool GetBool(string arg)

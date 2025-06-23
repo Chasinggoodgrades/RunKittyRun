@@ -16,8 +16,11 @@ public static class DeathlessChallenges
     public static void ResetDeathless()
     {
         DeathlessCount = 0;
-        foreach (var kitty in Globals.ALL_KITTIES)
-            ResetPlayerDeathless(kitty.Value);
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            ResetPlayerDeathless(kitty);
+        }
     }
 
     /// <summary>
