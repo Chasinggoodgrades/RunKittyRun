@@ -6,7 +6,7 @@ using System.Linq;
 
 public static class ChainedTogether
 {
-    private static Dictionary<string, lightning> KittyLightnings = new Dictionary<string, lightning>();
+    private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
     private static List<List<Kitty>> kittyGroups;
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
@@ -15,14 +15,15 @@ public static class ChainedTogether
     {
         { DifficultyLevel.Normal,     (400, 600, 800) },
         { DifficultyLevel.Hard,       (450, 650, 850) },
-        { DifficultyLevel.Impossible, (500, 700, 900) }
+        { DifficultyLevel.Impossible, (500, 700, 900) },
+        { DifficultyLevel.Nightmare,  (550, 750, 950) }
     };
     // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
 
     /// <summary>
     /// Starts the event, TBD how
     /// </summary>
-    public static void StartEvent()
+    public static void StartEvent() 
     {
         try
         {
@@ -35,11 +36,11 @@ public static class ChainedTogether
                 for (int j = 0; j < group.Count - 1; j++)
                 {
                     var currentKitty = group[j];
-                    var chainedKitty = group[j + 1];
+                    var nextKitty = group[j + 1];
 
                     currentKitty.IsChained = true;
-                    var lightning = AddLightning("WHCH", true, currentKitty.Unit.X, currentKitty.Unit.Y, chainedKitty.Unit.X, chainedKitty.Unit.Y);
-                    KittyLightnings[currentKitty.Name] = lightning;
+                    Chain chain = new(currentKitty, nextKitty);
+                    KittyLightnings[currentKitty.Name] = chain;
                 }
             }
 
@@ -58,9 +59,8 @@ public static class ChainedTogether
     private static void MoveChain()
     {
         var kitties = Globals.ALL_KITTIES_LIST;
-        string kittyNameOutOfRange = "";
-
-        int outOfRange = CalculateRangeByDifficulty("breakPoint");
+        bool isOutOfRange = false;
+        string kittyOutOfRange = "";
 
         for (int i = 0; i < kitties.Count - 1; i++)
         {
@@ -71,29 +71,15 @@ public static class ChainedTogether
                 continue;
             }
 
-            var chainedKitty = kitties[i + 1];
-            var x1 = kitty.Unit.X;
-            var y1 = kitty.Unit.Y;
-            var x2 = chainedKitty.Unit.X;
-            var y2 = chainedKitty.Unit.Y;
-
-            var lightning = KittyLightnings[kittyName];
-            MoveLightning(lightning, true, x1, y1, x2, y2);
-
-            float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
-
-            if (distance > outOfRange)
-            {
-                kittyNameOutOfRange = kittyName;
-            }
-
-            ChangeChainColor(distance, kittyName);
+            var chain = KittyLightnings[kittyName];
+            isOutOfRange = chain.Move();
+            kittyOutOfRange = kittyName;
         }
 
         // TODO: check how to apply pull mechanics
-        if (kittyNameOutOfRange != "")
+        if (isOutOfRange)
         {
-            LoseEvent(kittyNameOutOfRange);
+            LoseEvent(kittyOutOfRange);
         }
     }
 
@@ -108,26 +94,6 @@ public static class ChainedTogether
             Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
             throw;
         }
-    }
-
-    private static void ChangeChainColor(float distance, string kittyName)
-    {
-        var lightning = KittyLightnings[kittyName];
-        float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
-
-        int far = CalculateRangeByDifficulty("far");
-        int good = CalculateRangeByDifficulty("good");
-
-        if (distance > far)
-        {
-            red = 1.0f; green = 0.0f; blue = 0.0f; // Red
-        }
-        else if (distance > good)
-        {
-            red = 1.0f; green = 1.0f; blue = 0.0f; // Yellow
-        }
-
-        SetLightningColor(lightning, red, green, blue, alpha);
     }
 
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
@@ -238,6 +204,76 @@ public static class ChainedTogether
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
         // AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED... TBD);
     }
+}
+
+public class Chain
+{
+    public Kitty FirstKitty { get; set; }
+    public Kitty SecondKitty { get; set; }
+    public lightning Lightning { get; set; }
+
+    private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
+    {
+        { DifficultyLevel.Normal,     (400, 600, 800) },
+        { DifficultyLevel.Hard,       (450, 650, 850) },
+        { DifficultyLevel.Impossible, (500, 700, 900) },
+        { DifficultyLevel.Nightmare,  (550, 750, 950) }
+    };
+
+    public Chain(Kitty firstKitty, Kitty secondKitty)
+    {
+        FirstKitty = firstKitty;
+        SecondKitty = secondKitty;
+        Lightning = AddLightning("WHCH", true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        FirstKitty.IsChained = true;
+        SecondKitty.IsChained = true;
+    }
+
+    public bool Move()
+    {
+        int outOfRange = CalculateRangeByDifficulty("breakPoint");
+        bool isOutOfRange = false;
+        var x1 = FirstKitty.Unit.X;
+        var y1 = FirstKitty.Unit.Y;
+        var x2 = SecondKitty.Unit.X;
+        var y2 = SecondKitty.Unit.Y;
+        MoveLightning(Lightning, true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
+
+        if (distance > outOfRange)
+        {
+            isOutOfRange = true;
+        }
+
+        ChangeChainColor(distance);
+        return isOutOfRange;
+    }
+
+    public void Dispose()
+    {
+        Lightning?.Dispose();
+        FirstKitty.IsChained = false;
+        SecondKitty.IsChained = false;
+    }
+
+    public void ChangeChainColor(float distance)
+    {
+        float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
+
+        int far = CalculateRangeByDifficulty("far");
+        int good = CalculateRangeByDifficulty("good");
+
+        if (distance > far)
+        {
+            red = 1.0f; green = 0.0f; blue = 0.0f; // Red
+        }
+        else if (distance > good)
+        {
+            red = 1.0f; green = 1.0f; blue = 0.0f; // Yellow
+        }
+
+        SetLightningColor(Lightning, red, green, blue, alpha);
+    }
 
     public static int CalculateRangeByDifficulty(string rangeType)
     {
@@ -247,6 +283,9 @@ public static class ChainedTogether
 
         switch (level)
         {
+            case >= DifficultyLevel.Nightmare:
+                selectedRange = ranges[DifficultyLevel.Nightmare];
+                break;
             case >= DifficultyLevel.Impossible:
                 selectedRange = ranges[DifficultyLevel.Impossible];
                 break;
