@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using static WCSharp.Api.Common;
-using WCSharp.Api;
 using System.Linq;
+using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public static class ChainedTogether
 {
@@ -10,20 +10,12 @@ public static class ChainedTogether
     private static List<List<Kitty>> kittyGroups;
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
-
-    private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
-    {
-        { DifficultyLevel.Normal,     (400, 600, 800) },
-        { DifficultyLevel.Hard,       (450, 650, 850) },
-        { DifficultyLevel.Impossible, (500, 700, 900) },
-        { DifficultyLevel.Nightmare,  (550, 750, 950) }
-    };
-    // Evaluate if this will be a one time thing for particular people .. or an instanced type of object.. Perhaps change this to use OOP instead? 
+    private static timer MoveChainTimer;
 
     /// <summary>
     /// Starts the event, TBD how
     /// </summary>
-    public static void StartEvent() 
+    public static void StartEvent()
     {
         try
         {
@@ -39,13 +31,14 @@ public static class ChainedTogether
                     var nextKitty = group[j + 1];
 
                     currentKitty.IsChained = true;
-                    Chain chain = new(currentKitty, nextKitty);
+                    Chain chain = ObjectPool.GetEmptyObject<Chain>();
+                    chain.SetKitties(currentKitty, nextKitty);
                     KittyLightnings[currentKitty.Name] = chain;
                 }
             }
 
-            timer moveTimer = CreateTimer();
-            TimerStart(moveTimer, timerInterval, true, ErrorHandler.Wrap(MoveChain));
+            MoveChainTimer ??= CreateTimer();
+            TimerStart(MoveChainTimer, timerInterval, true, ErrorHandler.Wrap(MoveChain));
 
         }
 
@@ -98,7 +91,7 @@ public static class ChainedTogether
 
     public static void RegenerateGroup(string kittyName)
     {
-        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName));
+        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); // IEnumerable "Any" leaks
         if (groupIndex < 0)
         {
             return;
@@ -106,7 +99,7 @@ public static class ChainedTogether
 
         try
         {
-            var currentGroup = kittyGroups[groupIndex].Where(kitty => kitty.Name != kittyName).ToList();
+            var currentGroup = kittyGroups[groupIndex].Where(kitty => kitty.Name != kittyName).ToList(); // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
 
             FreeKittiesFromGroup(kittyName, false);
 
@@ -116,10 +109,11 @@ public static class ChainedTogether
                 var nextKitty = currentGroup[j + 1];
 
                 currentKitty.IsChained = true;
-                Chain chain = new(currentKitty, nextKitty);
+                Chain chain = ObjectPool.GetEmptyObject<Chain>();
+                chain.SetKitties(currentKitty, nextKitty);
                 KittyLightnings[currentKitty.Name] = chain;
             }
-            
+
             kittyGroups.Add(currentGroup);
         }
         catch (Exception e)
@@ -131,7 +125,7 @@ public static class ChainedTogether
 
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
     {
-        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName));
+        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); //IEnumerable with "Any" leaks
         if (groupIndex < 0)
         {
             return;
@@ -163,7 +157,7 @@ public static class ChainedTogether
     private static List<List<Kitty>> SetGroups()
     {
         var kitties = Globals.ALL_KITTIES_LIST;
-        var groups = new List<List<Kitty>>();
+        var groups = new List<List<Kitty>>();    // I imagine theres a better way to write this function such that you don't need to create 3 new lists
         int count = kitties.Count;
 
         // Shuffle the kitties list to ensure randomness
@@ -253,10 +247,15 @@ public class Chain
         { DifficultyLevel.Nightmare,  (550, 750, 950) }
     };
 
-    public Chain(Kitty firstKitty, Kitty secondKitty)
+    public Chain()
+    {
+    }
+
+    public void SetKitties(Kitty firstKitty, Kitty secondKitty)
     {
         FirstKitty = firstKitty;
         SecondKitty = secondKitty;
+        Lightning?.Dispose(); // just incase
         Lightning = AddLightning("WHCH", true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
         FirstKitty.IsChained = true;
         SecondKitty.IsChained = true;
@@ -287,6 +286,7 @@ public class Chain
         Lightning?.Dispose();
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
+        ObjectPool.ReturnObject(this);
     }
 
     public void ChangeChainColor(float distance)
