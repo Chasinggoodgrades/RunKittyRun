@@ -120,7 +120,7 @@ public class Kitty
             if (Gamemode.CurrentGameMode == "Standard")
             {
                 TeamDeathless.DiedWithOrb(this);
-                ChainedTogether.LoseEvent(this.Name); // For now, might change later to re-create groups
+                ChainedTogether.LoseEvent(this.Name);
                 SoundManager.PlayLastManStandingSound();
                 Gameover.GameOver();
                 MultiboardUtil.RefreshMultiboards();
@@ -254,6 +254,7 @@ public class Kitty
         Disco?.Dispose();
         aiController.StopAi();
         Unit.Dispose();
+        ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);

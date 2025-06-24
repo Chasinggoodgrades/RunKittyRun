@@ -115,7 +115,8 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => {
+            action: (player, args) =>
+            {
 
                 if (Globals.VIPLISTUNFILTERED.Contains(player))
                 {
@@ -1670,6 +1671,18 @@ public static class InitCommands
                     x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
                 }
                 Console.WriteLine(x);
+            }
+        );
+        
+        CommandsManager.RegisterCommand(
+            name: "chainedtest",
+            alias: "chainedtest",
+            group: "admin",
+            argDesc: "",
+            description: "Starts chained together test",
+            action: (player, args) =>
+            {
+                ChainedTogether.StartEvent();
             }
         );
     }

@@ -96,6 +96,39 @@ public static class ChainedTogether
         }
     }
 
+    public static void RegenerateGroup(string kittyName)
+    {
+        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName));
+        if (groupIndex < 0)
+        {
+            return;
+        }
+
+        try
+        {
+            var currentGroup = kittyGroups[groupIndex].Where(kitty => kitty.Name != kittyName).ToList();
+
+            FreeKittiesFromGroup(kittyName, false);
+
+            for (int j = 0; j < currentGroup.Count - 1; j++)
+            {
+                var currentKitty = currentGroup[j];
+                var nextKitty = currentGroup[j + 1];
+
+                currentKitty.IsChained = true;
+                Chain chain = new(currentKitty, nextKitty);
+                KittyLightnings[currentKitty.Name] = chain;
+            }
+            
+            kittyGroups.Add(currentGroup);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
+            throw;
+        }
+    }
+
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
     {
         int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName));
