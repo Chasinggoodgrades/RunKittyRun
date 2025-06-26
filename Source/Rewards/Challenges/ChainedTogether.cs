@@ -11,12 +11,56 @@ public static class ChainedTogether
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
     private static timer MoveChainTimer;
+    private static bool EventTriggered { get; set; } = false;
+    private static bool EventStarted { get; set; } = false;
+    private static bool IsStartingContidionValid = true;
+
+    public static void PrestartingEvent(bool skippedSafezone, int currentSafezone)
+    {
+        if (skippedSafezone)
+        {
+            IsStartingContidionValid = false;
+            return;
+        }
+        var kitties = Globals.ALL_KITTIES_LIST;
+
+        if (currentSafezone != RegionList.SafeZones.Length - 1) return;
+
+        bool allKittiesAtTheEnd = true;
+        for (int i = 0; i < kitties.Count - 1; i++)
+        {
+            var kittySafeZone = kitties[i].CurrentSafeZone;
+            if (kittySafeZone != RegionList.SafeZones.Length - 1)
+            {
+                allKittiesAtTheEnd = false;
+                break;
+            }
+        }
+
+        if (!allKittiesAtTheEnd) return;
+
+        if (!IsStartingContidionValid)
+        {
+            IsStartingContidionValid = true;
+            return;
+        }
+        
+        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
+        if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
+        EventTriggered = true;
+
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+    }
 
     /// <summary>
-    /// Starts the event, TBD how
+    /// Starts the event
     /// </summary>
     public static void StartEvent()
     {
+
+        if (!EventTriggered) return;
+        EventStarted = true;
+
         try
         {
             kittyGroups = SetGroups();
@@ -69,7 +113,6 @@ public static class ChainedTogether
             kittyOutOfRange = kittyName;
         }
 
-        // TODO: check how to apply pull mechanics
         if (isOutOfRange)
         {
             LoseEvent(kittyOutOfRange);
@@ -78,6 +121,11 @@ public static class ChainedTogether
 
     public static void LoseEvent(string kittyNameOutSideRange)
     {
+        if (!EventStarted)
+        {
+            return; // Event not started or already ended.
+        }
+
         try
         {
             FreeKittiesFromGroup(kittyNameOutSideRange, false);
@@ -207,6 +255,10 @@ public static class ChainedTogether
 
     public static void ReachedSafezone(Kitty kitty, Safezone safezone)
     {
+        if (!EventStarted)
+        {
+            return; // Event not started or already ended.
+        }
         if (safezone.ID != RegionList.SafeZones.Length - 1)
         {
             return;
