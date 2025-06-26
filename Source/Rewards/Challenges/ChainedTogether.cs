@@ -281,7 +281,28 @@ public static class ChainedTogether
         var textTag = texttag.Create();
 
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
-        // AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED... TBD);
+
+        DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
+
+        int award;
+
+        switch (level)
+        {
+            case >= DifficultyLevel.Nightmare:
+                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura;
+                break;
+            case >= DifficultyLevel.Impossible:
+                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura;
+                break;
+            case >= DifficultyLevel.Hard:
+                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura;
+                break;
+            default:
+                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
+                break;
+        }
+        
+        AwardManager.GiveReward(kitty.Player, nameof(award));
     }
 }
 

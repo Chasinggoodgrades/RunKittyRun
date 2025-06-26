@@ -77,7 +77,6 @@ public class Safezone
             var currentKitty = kitties[i];
             if (currentKitty.CurrentSafeZone != currentSafezone - 1 && currentKitty.CurrentSafeZone != currentSafezone)
             {
-                Logger.Warning($"Skipped safezone, event will not run.");
                 skippedSafezone = true;
                 break;
             }
