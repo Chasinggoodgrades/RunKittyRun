@@ -15,16 +15,19 @@ public static class ChainedTogether
     private static bool EventStarted { get; set; } = false;
     private static bool IsStartingContidionValid = true;
 
-    public static void PrestartingEvent(bool skippedSafezone, int currentSafezone)
+    public static void TriggerEventTest()
     {
-        if (skippedSafezone)
-        {
-            IsStartingContidionValid = false;
-            return;
-        }
-        var kitties = Globals.ALL_KITTIES_LIST;
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Test - Activating next round!{Colors.COLOR_RESET}");
+        EventTriggered = true;
+    }
 
-        if (currentSafezone != RegionList.SafeZones.Length - 1) return;
+    private static void TriggerEvent()
+    {
+        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
+        if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
+        if (!IsStartingContidionValid) return;
+
+        var kitties = Globals.ALL_KITTIES_LIST;
 
         bool allKittiesAtTheEnd = true;
         for (int i = 0; i < kitties.Count - 1; i++)
@@ -37,19 +40,33 @@ public static class ChainedTogether
             }
         }
 
-        if (!allKittiesAtTheEnd) return;
+        if (!allKittiesAtTheEnd) return; // Only triggers if all kitties reached the end.
 
-        if (!IsStartingContidionValid)
-        {
-            IsStartingContidionValid = true;
-            return;
-        }
-        
-        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
-        if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         EventTriggered = true;
 
         Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+    }
+
+    private static void UpdateStartingCondition(Kitty kitty)
+    {
+        var currentSafezone = kitty.CurrentSafeZone;
+        var kitties = Globals.ALL_KITTIES_LIST;
+        var skippedSafezone = false;
+
+        for (int i = 0; i < kitties.Count; i++)
+        {
+            var currentKitty = kitties[i];
+            if (currentKitty.CurrentSafeZone != currentSafezone - 1 && currentKitty.CurrentSafeZone != currentSafezone)
+            {
+                skippedSafezone = true;
+                break;
+            }
+        }
+
+        if (skippedSafezone)
+        {
+            IsStartingContidionValid = false;
+        }
     }
 
     /// <summary>
@@ -57,8 +74,12 @@ public static class ChainedTogether
     /// </summary>
     public static void StartEvent()
     {
-
-        if (!EventTriggered) return;
+        if (!EventTriggered)
+        {
+            IsStartingContidionValid = true;
+            return;
+        }
+        
         EventStarted = true;
 
         try
@@ -253,19 +274,26 @@ public static class ChainedTogether
         return groups;
     }
 
-    public static void ReachedSafezone(Kitty kitty, Safezone safezone)
+    public static void ReachedSafezone(Kitty kitty)
     {
         if (!EventStarted)
         {
+            UpdateStartingCondition(kitty);
+
+            if (kitty.CurrentSafeZone == RegionList.SafeZones.Length - 1)
+            {
+                TriggerEvent();
+            }
             return; // Event not started or already ended.
         }
-        if (safezone.ID != RegionList.SafeZones.Length - 1)
+        if (kitty.CurrentSafeZone != RegionList.SafeZones.Length - 1)
         {
             return;
         }
 
         try
         {
+            //finish event
             FreeKittiesFromGroup(kitty.Name, true);
         }
         catch (Exception e)

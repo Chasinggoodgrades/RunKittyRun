@@ -52,9 +52,8 @@ public class Safezone
             kitty.CurrentSafeZone = ID;
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider();
             TeamDeathless.ReachedSafezone(unit, this);
-            ChainedTogether.ReachedSafezone(kitty, this);
             if (AwardedPlayers.Contains(player) || ID == 0) return;
-            CheckAllKittiesInSafeZone(kitty);
+            ChainedTogether.ReachedSafezone(kitty);
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;
             AwardedPlayers.Add(player);
@@ -64,25 +63,6 @@ public class Safezone
         {
             Logger.Warning($"Error in EnterSafezoneActions: {e.Message}");
         }
-    }
-
-    private void CheckAllKittiesInSafeZone(Kitty kitty)
-    {
-        var currentSafezone = kitty.CurrentSafeZone;
-        var kitties = Globals.ALL_KITTIES_LIST;
-        var skippedSafezone = false;
-
-        for (int i = 0; i < kitties.Count; i++)
-        {
-            var currentKitty = kitties[i];
-            if (currentKitty.CurrentSafeZone != currentSafezone - 1 && currentKitty.CurrentSafeZone != currentSafezone)
-            {
-                skippedSafezone = true;
-                break;
-            }
-        }
-
-        ChainedTogether.PrestartingEvent(skippedSafezone, currentSafezone);       
     }
 
     /// <summary>
