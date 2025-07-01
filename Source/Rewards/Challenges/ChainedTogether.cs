@@ -7,7 +7,7 @@ using static WCSharp.Api.Common;
 public static class ChainedTogether
 {
     private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
-    private static List<List<Kitty>> kittyGroups;
+    private static List<List<Kitty>> kittyGroups = new List<List<Kitty>>(); // Convert this into a dictionary
     private static float timerInterval = 0.1f;
     private static Random rng = Globals.RANDOM_GEN;
     private static timer MoveChainTimer;
@@ -15,25 +15,19 @@ public static class ChainedTogether
     private static bool EventStarted { get; set; } = false;
     private static bool IsStartingContidionValid = true;
 
-    public static void TriggerEventTest()
-    {
-        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Test - Activating next round!{Colors.COLOR_RESET}");
-        EventTriggered = true;
-    }
 
-    private static void TriggerEvent()
+    private static void TriggerEventOnLastSafeZone()
     {
         if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (!IsStartingContidionValid) return;
 
-        var kitties = Globals.ALL_KITTIES_LIST;
+        var allKitties = Globals.ALL_KITTIES_LIST;
 
         bool allKittiesAtTheEnd = true;
-        for (int i = 0; i < kitties.Count - 1; i++)
+        for (int i = 0; i < allKitties.Count - 1; i++)
         {
-            var kittySafeZone = kitties[i].CurrentSafeZone;
-            if (kittySafeZone != RegionList.SafeZones.Length - 1)
+            if (!IsInLastSafezone(allKitties[i]))
             {
                 allKittiesAtTheEnd = false;
                 break;
@@ -42,10 +36,15 @@ public static class ChainedTogether
 
         if (!allKittiesAtTheEnd) return; // Only triggers if all kitties reached the end.
 
-        EventTriggered = true;
-
-        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+        TriggerEvent();
     }
+
+    public static void TriggerEvent()
+    {
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+        EventTriggered = true;
+    }
+
 
     private static void UpdateStartingCondition(Kitty kitty)
     {
@@ -79,29 +78,12 @@ public static class ChainedTogether
             IsStartingContidionValid = true;
             return;
         }
-        
+
         EventStarted = true;
 
         try
         {
-            kittyGroups = SetGroups();
-
-            for (int i = 0; i < kittyGroups.Count; i++)
-            {
-                var group = kittyGroups[i];
-
-                for (int j = 0; j < group.Count - 1; j++)
-                {
-                    var currentKitty = group[j];
-                    var nextKitty = group[j + 1];
-
-                    currentKitty.IsChained = true;
-                    Chain chain = ObjectPool.GetEmptyObject<Chain>();
-                    chain.SetKitties(currentKitty, nextKitty);
-                    KittyLightnings[currentKitty.Name] = chain;
-                }
-            }
-
+            SetGroups();
             MoveChainTimer ??= CreateTimer();
             TimerStart(MoveChainTimer, timerInterval, true, ErrorHandler.Wrap(MoveChain));
 
@@ -124,14 +106,14 @@ public static class ChainedTogether
         {
             var kitty = kitties[i];
             var kittyName = kitty.Name;
-            if (!KittyLightnings.ContainsKey(kittyName))
-            {
-                continue;
-            }
+
+            if (!KittyLightnings.ContainsKey(kittyName)) continue;
 
             var chain = KittyLightnings[kittyName];
             isOutOfRange = chain.Move();
             kittyOutOfRange = kittyName;
+
+            if (isOutOfRange) break;
         }
 
         if (isOutOfRange)
@@ -142,10 +124,7 @@ public static class ChainedTogether
 
     public static void LoseEvent(string kittyNameOutSideRange)
     {
-        if (!EventStarted)
-        {
-            return; // Event not started or already ended.
-        }
+        if (!EventStarted) return; // Event not started or already ended.
 
         try
         {
@@ -161,10 +140,7 @@ public static class ChainedTogether
     public static void RegenerateGroup(string kittyName)
     {
         int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); // IEnumerable "Any" leaks
-        if (groupIndex < 0)
-        {
-            return;
-        }
+        if (groupIndex < 0) return;
 
         try
         {
@@ -195,10 +171,7 @@ public static class ChainedTogether
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
     {
         int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); //IEnumerable with "Any" leaks
-        if (groupIndex < 0)
-        {
-            return;
-        }
+        if (groupIndex < 0) return;
 
         var currentGroup = kittyGroups[groupIndex];
 
@@ -223,25 +196,25 @@ public static class ChainedTogether
     }
 
 
-    private static List<List<Kitty>> SetGroups()
+    private static void SetGroups()
     {
-        var kitties = Globals.ALL_KITTIES_LIST;
-        var groups = new List<List<Kitty>>();    // I imagine theres a better way to write this function such that you don't need to create 3 new lists
-        int count = kitties.Count;
+        var allKitties = Globals.ALL_KITTIES_LIST;
+        int count = allKitties.Count;
 
         // Shuffle the kitties list to ensure randomness
-        for (int i = kitties.Count - 1; i > 0; i--)
+        for (int i = allKitties.Count - 1; i > 0; i--)
         {
             int j = rng.Next(i + 1);
-            Kitty temp = kitties[i];
-            kitties[i] = kitties[j];
-            kitties[j] = temp;
+            Kitty temp = allKitties[i];
+            allKitties[i] = allKitties[j];
+            allKitties[j] = temp;
         }
 
         if (count < 3)
         {
-            groups.Add(kitties);
-            return groups;
+            kittyGroups.Add(allKitties);
+            ChainGroup(allKitties);
+
         }
 
         int index = 0;
@@ -257,42 +230,55 @@ public static class ChainedTogether
 
         for (int i = 0; i < groupsOfThree; i++)
         {
-            groups.Add(new List<Kitty> { kitties[index], kitties[index + 1], kitties[index + 2] });
+            var group = new List<Kitty> { allKitties[index], allKitties[index + 1], allKitties[index + 2] };
+            kittyGroups.Add(group);
+            ChainGroup(group);
             index += 3;
         }
 
         if (remainder > 0)
         {
             var lastGroup = new List<Kitty>();
-            for (int i = index; i < kitties.Count; i++)
+            for (int i = index; i < allKitties.Count; i++)
             {
-                lastGroup.Add(kitties[i]);
+                lastGroup.Add(allKitties[i]);
             }
-            groups.Add(lastGroup);
+            kittyGroups.Add(lastGroup);
+            ChainGroup(lastGroup);
         }
+    }
+    
+    private static void ChainGroup(List<Kitty> group)
+    {
+        for (int j = 0; j < group.Count - 1; j++)
+        {
+            var currentKitty = group[j];
+            var nextKitty = group[j + 1];
 
-        return groups;
+            currentKitty.IsChained = true;
+            Chain chain = ObjectPool.GetEmptyObject<Chain>();
+            chain.SetKitties(currentKitty, nextKitty);
+            KittyLightnings[currentKitty.Name] = chain;
+        }
     }
 
     public static void ReachedSafezone(Kitty kitty)
     {
-        if (!EventStarted)
-        {
-            UpdateStartingCondition(kitty);
-
-            if (kitty.CurrentSafeZone == RegionList.SafeZones.Length - 1)
-            {
-                TriggerEvent();
-            }
-            return; // Event not started or already ended.
-        }
-        if (kitty.CurrentSafeZone != RegionList.SafeZones.Length - 1)
-        {
-            return;
-        }
-
         try
         {
+            if (!EventStarted)
+            {
+                UpdateStartingCondition(kitty);
+
+                if (IsInLastSafezone(kitty))
+                {
+                    TriggerEventOnLastSafeZone();
+                }
+                return; // Event not started or already ended.
+            }
+
+            if (!IsInLastSafezone(kitty)) return;
+
             //finish event
             FreeKittiesFromGroup(kitty.Name, true);
         }
@@ -329,9 +315,18 @@ public static class ChainedTogether
                 award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
                 break;
         }
-        
+
         AwardManager.GiveReward(kitty.Player, nameof(award));
     }
+    
+    private static bool IsInLastSafezone(Kitty kitty)
+    {
+        // Check if the checks made with this function can be removed by calling the
+        // functions TriggerEventOnLastSafeZone and ReachedSafezone on Source\Events\VictoryZone\FinalSafezone.cs
+        // I'm afraid there could be a race condition by doing so
+        return kitty.CurrentSafeZone == RegionList.SafeZones.Length - 1;
+    }
+
 }
 
 public class Chain

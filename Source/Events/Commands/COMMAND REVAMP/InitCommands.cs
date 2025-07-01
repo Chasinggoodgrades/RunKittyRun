@@ -1682,7 +1682,7 @@ public static class InitCommands
             description: "Starts chained together test",
             action: (player, args) =>
             {
-                ChainedTogether.TriggerEventTest();
+                ChainedTogether.TriggerEvent();
                 ChainedTogether.StartEvent();
             }
         );
