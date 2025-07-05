@@ -36,9 +36,9 @@ public class Wolf
     {
         RegionIndex = regionIndex;
         WolfArea = WolfArea.WolfAreas[regionIndex];
-        Affixes = new List<Affix>();
+        Affixes = new List<Affix>(); // Consider creating a new object that contains List<Affix> so we're not making a new one each wolf.
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
-        WolfPoint = new WolfPoint(this);
+        WolfPoint = new WolfPoint(this); // Consider changing this to be a part of the memory handler. Remove the parameter
 
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
@@ -194,7 +194,7 @@ public class Wolf
         var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         var facing = GetRandomReal(0, 360);
 
-        Unit = unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
+        Unit ??= unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
         Unit.IsInvulnerable = true;
