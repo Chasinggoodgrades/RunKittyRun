@@ -292,8 +292,6 @@ public static class ChainedTogether
 
     private static void AwardChainedTogether(Kitty kitty)
     {
-        var textTag = texttag.Create();
-
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
 
         DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
