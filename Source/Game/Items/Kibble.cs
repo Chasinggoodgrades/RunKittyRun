@@ -155,7 +155,7 @@ public class Kibble : IDisposable
             string jackpotString = isSuperJackpot ? $"{Colors.COLOR_RED}Super Jackpot{Colors.COLOR_RESET}" : "jackpot";
             string msg = $"{Colors.PlayerNameColored(kitty.Player)}{Colors.HighlightString($" has won the {jackpotString}")} {Colors.HighlightString("for")} {Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r";
 
-            Console.WriteLine(msg);
+            Utility.TimedTextToAllPlayers(3.0f, msg); // was too long previously.
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
             if (isSuperJackpot)
             {

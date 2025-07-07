@@ -1653,7 +1653,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("NitroTest.mdx", unitKitty, "origin");
+                effect.Create("TestThing.mdx", unitKitty, "origin");
             }
         );
 
@@ -1676,7 +1676,7 @@ public static class InitCommands
         
         CommandsManager.RegisterCommand(
             name: "chainedtest",
-            alias: "chainedtest",
+            alias: "",
             group: "admin",
             argDesc: "",
             description: "Starts chained together test",
@@ -1684,6 +1684,19 @@ public static class InitCommands
             {
                 ChainedTogether.TriggerEvent();
                 ChainedTogether.StartEvent();
+            }
+        );
+      
+        CommandsManager.RegisterCommand(
+            name: "chaineffect",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Testing the chain effect model",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                effect.Create("ChainTest.mdx", kitty.Unit, "origin");
             }
         );
     }
