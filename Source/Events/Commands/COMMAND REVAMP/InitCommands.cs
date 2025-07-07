@@ -1672,5 +1672,31 @@ public static class InitCommands
                 Console.WriteLine(x);
             }
         );
+        
+        CommandsManager.RegisterCommand(
+            name: "chainedtest",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Starts chained together test",
+            action: (player, args) =>
+            {
+                ChainedTogether.TriggerEvent();
+                ChainedTogether.StartEvent();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "chaineffect",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Testing the chain effect model",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                effect.Create("ChainTest.mdx", kitty.Unit, "origin");
+            }
+        );
     }
 }
