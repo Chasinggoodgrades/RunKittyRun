@@ -72,7 +72,7 @@ public static class TeamsMultiboard
         // Actual Stats
         int rowIndex = 1;
         float overallProgress;
-        foreach (var team in Globals.ALL_TEAMS)
+        foreach (var team in Globals.ALL_TEAMS) // Change this to match the Standard Multiboard layout.. Foreach constantly is bad.... Consider making a Globals.ALL_TEAMS list and then update that.. Probably better approach
         {
             // Team Name / Colors
             overallProgress = 0.0f;
@@ -90,7 +90,7 @@ public static class TeamsMultiboard
             // Overall Progress
             for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
             {
-                overallProgress = overallProgress + float.Parse(team.Value.RoundProgress[i], CultureInfo.InvariantCulture);
+                overallProgress = overallProgress + float.Parse(team.Value.RoundProgress[i], CultureInfo.InvariantCulture);  // possibly bad?
             }
             TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetText((overallProgress / Gamemode.NumberOfRounds).ToString("F2") + "%");
             TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
@@ -111,10 +111,10 @@ public static class TeamsMultiboard
 
         var widthSize = 0.05f * Gamemode.PlayersPerTeam;
         int rowIndex = 0;
-        foreach (var team in Globals.ALL_TEAMS)
+        foreach (var team in Globals.ALL_TEAMS) // For each constantly is bad ...  Consider making a Globals.ALL_TEAMS list and then update that.. Probably better approach
         {
-            string teamMembers = string.Join(", ", team.Value.Teammembers
-                .Where(member => member != null && member.Name != null)
+            string teamMembers = string.Join(", ", team.Value.Teammembers // also bad.      --- Consider making a variable in the team class thats a formatted string of the teammates.. That way this isn't being called constantly. 
+                .Where(member => member != null && member.Name != null) // IEnumerable stuff is really bad.
                 .Select(member =>
                 {
                     string name = member.Name.Split('#')[0];

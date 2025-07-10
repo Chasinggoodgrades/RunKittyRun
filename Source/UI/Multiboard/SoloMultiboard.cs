@@ -119,7 +119,7 @@ public static class SoloMultiboard
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         var sortedPlayers = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
             ? Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.TimeProg.GetOverallProgress()).ThenBy(kvp => kvp.Key.Id) // Progression mode
-            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode
+            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode       -- Holy BAD LEAKS
 
         sortedDict = sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Avoid pass by reference
 
@@ -173,7 +173,7 @@ public static class SoloMultiboard
         BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         var rowIndex = 1;
 
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS) // bad
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
