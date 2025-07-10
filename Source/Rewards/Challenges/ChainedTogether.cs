@@ -6,6 +6,7 @@ using static WCSharp.Api.Common;
 
 public static class ChainedTogether
 {
+    private const int REQUIRED_PLAYERS = 2;
     private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
     private static List<List<Kitty>> kittyGroups = new List<List<Kitty>>(); // Convert this into a dictionary
     private static float timerInterval = 0.1f;
@@ -24,7 +25,7 @@ public static class ChainedTogether
 
         List<Kitty> allKitties = Globals.ALL_KITTIES_LIST;
 
-        if (allKitties.Count < 2) return; // Need at least 2 players to trigger event.
+        if (allKitties.Count < REQUIRED_PLAYERS) return; // Need at least 2 players to trigger event.
 
         for (int i = 0; i < allKitties.Count - 1; i++)
         {
