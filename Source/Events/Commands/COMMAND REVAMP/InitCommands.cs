@@ -115,7 +115,8 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => {
+            action: (player, args) =>
+            {
 
                 if (Globals.VIPLISTUNFILTERED.Contains(player))
                 {
@@ -1685,7 +1686,7 @@ public static class InitCommands
                 ChainedTogether.StartEvent();
             }
         );
-
+      
         CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",

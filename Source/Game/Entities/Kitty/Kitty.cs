@@ -39,7 +39,7 @@ public class Kitty
     public trigger c_Collision { get; set; } = trigger.Create();
     public Disco Disco { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
-
+    public bool IsChained = false;
 
     public Kitty(player player)
     {
@@ -120,6 +120,7 @@ public class Kitty
             if (Gamemode.CurrentGameMode == "Standard")
             {
                 TeamDeathless.DiedWithOrb(this);
+                ChainedTogether.LoseEvent(this.Name);
                 SoundManager.PlayLastManStandingSound();
                 Gameover.GameOver();
                 MultiboardUtil.RefreshMultiboards();
@@ -253,6 +254,7 @@ public class Kitty
         Disco?.Dispose();
         aiController.StopAi();
         Unit.Dispose();
+        ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);
