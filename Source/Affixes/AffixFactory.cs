@@ -176,15 +176,17 @@ public static class AffixFactory
             if (Gamemode.CurrentGameMode != "Standard") return;
             if (!CanDistributeAffixes()) return;
 
-            // Determine how many wolves will be affixed in total
-            if (Difficulty.DifficultyValue < (int)DifficultyLevel.Nightmare)
+            NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+
+            // Nightmare Difficulty Adjustment.. All Wolves get affixed
+            if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)
             {
-                NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
-            }
-            else
-            {
-                MAX_AFFIXED_PER_LANE = int.MaxValue; // No limit for Nightmare
-                NUMBER_OF_AFFIXED_WOLVES = Globals.ALL_WOLVES.Count;
+                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                {
+                    if (!ShouldAffixWolves(wolf, wolf.RegionIndex)) continue;
+                    ApplyRandomAffix(wolf, wolf.RegionIndex);
+                }
+                return;
             }
 
             // # per lane based on the weights

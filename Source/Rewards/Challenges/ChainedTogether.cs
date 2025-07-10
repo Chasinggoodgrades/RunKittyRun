@@ -22,19 +22,17 @@ public static class ChainedTogether
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (!IsStartingContidionValid) return;
 
-        var allKitties = Globals.ALL_KITTIES_LIST;
+        List<Kitty> allKitties = Globals.ALL_KITTIES_LIST;
 
-        bool allKittiesAtTheEnd = true;
+        if (allKitties.Count < 2) return; // Need at least 2 players to trigger event.
+
         for (int i = 0; i < allKitties.Count - 1; i++)
         {
             if (!IsInLastSafezone(allKitties[i]))
             {
-                allKittiesAtTheEnd = false;
-                break;
+                return;
             }
         }
-
-        if (!allKittiesAtTheEnd) return; // Only triggers if all kitties reached the end.
 
         TriggerEvent();
     }
@@ -48,13 +46,13 @@ public static class ChainedTogether
 
     private static void UpdateStartingCondition(Kitty kitty)
     {
-        var currentSafezone = kitty.CurrentSafeZone;
-        var kitties = Globals.ALL_KITTIES_LIST;
-        var skippedSafezone = false;
+        int currentSafezone = kitty.CurrentSafeZone;
+        List<Kitty> kitties = Globals.ALL_KITTIES_LIST;
+        bool skippedSafezone = false;
 
         for (int i = 0; i < kitties.Count; i++)
         {
-            var currentKitty = kitties[i];
+            Kitty currentKitty = kitties[i];
             if (currentKitty.CurrentSafeZone != currentSafezone - 1 && currentKitty.CurrentSafeZone != currentSafezone)
             {
                 skippedSafezone = true;
@@ -137,6 +135,10 @@ public static class ChainedTogether
         }
     }
 
+    /// <summary>
+    /// Purpose is to regenerate the group chains if a player leaves the game or disconnects.
+    /// </summary>
+    /// <param name="kittyName"></param>
     public static void RegenerateGroup(string kittyName)
     {
         int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); // IEnumerable "Any" leaks
@@ -292,7 +294,7 @@ public static class ChainedTogether
 
     private static void AwardChainedTogether(Kitty kitty)
     {
-        Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!", 2.0f, kitty.Unit);
+        Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!{Colors.COLOR_RESET}", 2.0f, kitty.Unit);
 
         DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
 
