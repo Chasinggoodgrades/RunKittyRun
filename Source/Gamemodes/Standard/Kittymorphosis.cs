@@ -43,7 +43,7 @@ public class KittyMorphosis
     /// </summary>
     private void RegisterTriggers()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return; // TODO: Allow for this to work in Team Tournament mode
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Kitty.Unit, unitevent.HeroLevel);
         Trigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= REQUIRED_LEVEL));

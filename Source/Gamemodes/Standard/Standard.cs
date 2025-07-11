@@ -16,7 +16,7 @@ public static class Standard
         Difficulty.Initialize();
         Windwalk.Initialize();
         SpawnChampions.Initialize();
-        PlayerUpgrades.Initialize();
+        PlayerUpgrades.Initialize(); // TODO: This will need to be moved to work with Team Tournament 
         RollerSkates.Initialize();
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
@@ -27,8 +27,8 @@ public static class Standard
     {
         HitLevel6 = new List<player>();
         CanBuyRelics = new List<player>();
-        RegisterLevelSixTrigger();
-        RegisterLevelTenTrigger();
+        RegisterLevelSixTrigger(); // TODO: Both of the triggers here will need to work in Team Tournament Mode for POTA and Relic Purchase.     (Probably move to a different file and have it ititialize depending on gamemode).
+        RegisterLevelTenTrigger(); // TODO: Both of the triggers here will need to work in Team Tournament Mode for POTA and Relic Purchase.
     }
 
     private static void RegisterLevelSixTrigger()

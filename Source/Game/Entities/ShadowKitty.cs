@@ -26,7 +26,7 @@ public class ShadowKitty
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != "Standard") return; // ALlow this to work in Team Tournament Mode
         ALL_SHADOWKITTIES = new Dictionary<player, ShadowKitty>();
         CreateShadowKitties();
     }
