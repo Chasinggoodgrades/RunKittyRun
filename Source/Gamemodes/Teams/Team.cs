@@ -8,6 +8,7 @@ public class Team
     public string TeamColor { get; private set; }
     public Dictionary<int, float> TeamTimes { get; set; }
     public List<player> Teammembers { get; private set; }
+    public string TeamMembersString { get; private set; }
     public Dictionary<int, string> RoundProgress { get; private set; }
     public bool Finished { get; set; }
     private static timer TeamTimer { get; set; }
@@ -21,11 +22,13 @@ public class Team
         TeamColor = Colors.GetStringColorOfPlayer(TeamID) + "Team " + TeamID;
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
+        Globals.ALL_TEAMS_LIST.Add(this);
     }
 
     public static void Initialize()
     {
         Globals.ALL_TEAMS = new Dictionary<int, Team>();
+        Globals.ALL_TEAMS_LIST = new List<Team>();
         Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
         TeamTimer = timer.Create();
         TeamTimer.Start(0.1f, false, ErrorHandler.Wrap(TeamSetup));
@@ -33,10 +36,7 @@ public class Team
 
     public void AddMember(player player)
     {
-        Teammembers.Add(player);
-        Globals.ALL_KITTIES[player].TeamID = TeamID;
-        Globals.ALL_KITTIES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
-        Globals.ALL_CIRCLES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
+        AssignTeamMember(player, true);
         Globals.PLAYERS_TEAMS.Add(player, this);
         TeamsUtil.UpdateTeamsMB();
     }
@@ -45,10 +45,12 @@ public class Team
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         if (!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
-        Globals.PLAYERS_TEAMS.Remove(player);
-        Teammembers.Remove(player);
-        Globals.ALL_KITTIES[player].TeamID = 0;
-        if (Teammembers.Count == 0) Globals.ALL_TEAMS.Remove(TeamID);
+        AssignTeamMember(player, false);
+        if (Teammembers.Count == 0)
+        {
+            Globals.ALL_TEAMS.Remove(TeamID);
+            Globals.ALL_TEAMS_LIST.Remove(this);
+        }
         TeamsUtil.UpdateTeamsMB();
     }
 
@@ -103,5 +105,44 @@ public class Team
         }
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
             Utility.SimpleTimer(2.5f, TeamHandler.RandomHandler);
+    }
+
+    /// <summary>
+    /// Assigns or removes a player from a team and updates their color accordingly.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="adding"></param>
+    private void AssignTeamMember(player player, bool adding)
+    {
+        if (adding)
+        {
+            Teammembers.Add(player);
+            Globals.ALL_KITTIES[player].TeamID = TeamID;
+            Globals.ALL_KITTIES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
+            Globals.ALL_CIRCLES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
+            Globals.PLAYERS_TEAMS.Add(player, this);
+        }
+        else
+        {
+            Teammembers.Remove(player);
+            Globals.ALL_KITTIES[player].TeamID = 0;
+            Globals.PLAYERS_TEAMS.Remove(player);
+        }
+
+        // Sets the team member string whenever someone is added or removed.
+        for (int i = 0; i < Teammembers.Count; i++)
+        {
+            var member = Teammembers[i];
+            string name = member.Name.Split('#')[0];
+            if (name.Length > 7)
+                name = name.Substring(0, 7);
+
+            if (TeamMembersString.Length > 0)
+                TeamMembersString += ", ";
+
+                TeamMembersString += name;
+            }
+        }
+
     }
 }

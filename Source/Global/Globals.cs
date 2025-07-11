@@ -48,6 +48,7 @@ public static class Globals
 
     public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
     public static Dictionary<int, Team> ALL_TEAMS { get; set; }
+    public static List<Team> ALL_TEAMS_LIST { get; set; }
     public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }
     public static Dictionary<Team, string> TEAM_PROGRESS;
 
