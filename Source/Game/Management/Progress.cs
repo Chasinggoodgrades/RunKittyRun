@@ -26,9 +26,11 @@ public static class Progress
         if (!Globals.GAME_ACTIVE) return;
         try
         {
-            foreach (var Team in Globals.ALL_TEAMS)
+
+            for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
             {
-                Team.Value.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(Team.Value));
+                var team = Globals.ALL_TEAMS_LIST[i];
+                team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(team));
             }
             TeamsMultiboard.UpdateTeamStatsMB();
         }
@@ -40,7 +42,17 @@ public static class Progress
 
     private static string CalculateTeamProgress(Team Team)
     {
-        return (Team.Teammembers.Sum(player => Globals.ALL_KITTIES[player].TimeProg.GetRoundProgress(Globals.ROUND)) / Team.Teammembers.Count).ToString("F2");
+        float totalProgress = 0.0f;
+
+        if (Team.Teammembers.Count == 0) return "0.00";
+
+        for (int i = 0; i < Team.Teammembers.Count; i++)
+        {
+            var player = Team.Teammembers[i];
+            totalProgress += Globals.ALL_KITTIES[player].TimeProg.GetRoundProgress(Globals.ROUND);
+        }
+
+        return (totalProgress / Team.Teammembers.Count).ToString("F2");
     }
 
     private static float CalculatePlayerProgress(Kitty kitty)

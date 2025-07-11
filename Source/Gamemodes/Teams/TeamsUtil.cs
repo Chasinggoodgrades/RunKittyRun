@@ -13,8 +13,10 @@ public static class TeamsUtil
     {
         if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
         var team = Globals.ALL_TEAMS[k.TeamID];
-        foreach (var player in team.Teammembers)
-            if (Globals.ALL_KITTIES[player].Alive) return;
+        for (int i = 0; i < team.Teammembers.Count; i++)
+        {
+            if (Globals.ALL_KITTIES[team.Teammembers[i]].Alive) return;
+        }
         team.TeamIsDeadActions();
     }
 

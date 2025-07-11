@@ -47,7 +47,7 @@ public static class TeamHandler
         var random = Globals.RANDOM_GEN;
         List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
 
-        shuffled = shuffled.OrderBy(x => random.Next()).ToList(); // seeded random shuffle, no desyncs
+        shuffled = shuffled.OrderBy(x => random.Next()).ToList(); // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
         var teamNumber = 1;
 
         try

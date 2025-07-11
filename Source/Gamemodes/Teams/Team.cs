@@ -56,9 +56,9 @@ public class Team
 
     public void TeamIsDeadActions()
     {
-        foreach (var player in Teammembers)
+        for (int i = 0; i < Teammembers.Count; i++)
         {
-            var kitty = Globals.ALL_KITTIES[player];
+            var kitty = Globals.ALL_KITTIES[Teammembers[i]];
             kitty.Finished = true;
         }
         Finished = true;
@@ -140,9 +140,8 @@ public class Team
             if (TeamMembersString.Length > 0)
                 TeamMembersString += ", ";
 
-                TeamMembersString += name;
-            }
+            TeamMembersString += name;
         }
-
     }
+
 }
