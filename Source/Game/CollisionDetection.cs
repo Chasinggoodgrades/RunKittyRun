@@ -33,7 +33,9 @@ public static class CollisionDetection
         {
             return GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
                     && GetFilterUnit().Owner != sk.Player // Not Same Player
-                    && sk.Unit.Alive; // Has to Be Alive
+                    && sk.Unit.Alive // Has to Be Alive
+                    && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[sk.Player].TeamID; // Must be same team
+
         };
     }
 

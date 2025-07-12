@@ -29,7 +29,6 @@ public static class TeamHandler
 
     private static void ApplyPlayerToTeam(player Player, int TeamNumber)
     {
-        Logger.Warning($"Player {Player.Name} APPLY PLAYER TEAM");
         if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
         {
             team.AddMember(Player);
