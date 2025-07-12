@@ -115,7 +115,8 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => {
+            action: (player, args) =>
+            {
 
                 if (Globals.VIPLISTUNFILTERED.Contains(player))
                 {
@@ -314,11 +315,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kibbleList = "";
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    var kibblePicker = kitty.Value.Player;
-                    var kibbleCollected = kitty.Value.CurrentStats.CollectedKibble;
-                    kibbleList += $"{Colors.PlayerNameColored(kibblePicker)}: {kibbleCollected}\n";
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    var kibbleCollected = kitty.CurrentStats.CollectedKibble;
+                    kibbleList += $"{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n";
                 }
                 player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}{Colors.COLOR_RESET}");
             }
@@ -777,9 +778,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    kitty.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 }
             }
         );
@@ -1651,7 +1653,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("NitroTest.mdx", unitKitty, "origin");
+                effect.Create("TestThing.mdx", unitKitty, "origin");
             }
         );
 
@@ -1669,6 +1671,32 @@ public static class InitCommands
                     x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
                 }
                 Console.WriteLine(x);
+            }
+        );
+        
+        CommandsManager.RegisterCommand(
+            name: "chainedtest",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Starts chained together test",
+            action: (player, args) =>
+            {
+                ChainedTogether.TriggerEvent();
+                ChainedTogether.StartEvent();
+            }
+        );
+      
+        CommandsManager.RegisterCommand(
+            name: "chaineffect",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Testing the chain effect model",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                effect.Create("ChainTest.mdx", kitty.Unit, "origin");
             }
         );
 
@@ -1714,9 +1742,5 @@ public static class InitCommands
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Max Players Per Team set to {maxPlayersPerTeam}|r");
             }
         );
-
-
-
-
     }
 }
