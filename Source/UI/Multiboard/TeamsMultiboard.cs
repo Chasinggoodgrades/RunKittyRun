@@ -10,10 +10,18 @@ public static class TeamsMultiboard
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        ESCTrigger = trigger.Create();
-        TeamsMultiboardInit();
-        ESCInit();
+        try
+        {
+            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+            ESCTrigger = trigger.Create();
+            TeamsMultiboardInit();
+            ESCInit();
+        }
+        catch (System.Exception e)
+        {
+            Logger.Critical($"Error in TeamsMultiboard.Initialize: {e.Message}");
+            throw;
+        }
     }
 
     private static void TeamsMultiboardInit()

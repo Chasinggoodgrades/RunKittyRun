@@ -3,6 +3,7 @@ using WCSharp.Api;
 
 public class ShadowKitty
 {
+    public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES;
     public unit Unit { get; set; }
 
     public player Player { get; }
@@ -15,7 +16,6 @@ public class ShadowKitty
 
     public int ID;
 
-    public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES;
 
     public ShadowKitty(player Player)
     {
@@ -26,7 +26,6 @@ public class ShadowKitty
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return; // ALlow this to work in Team Tournament Mode
         ALL_SHADOWKITTIES = new Dictionary<player, ShadowKitty>();
         CreateShadowKitties();
     }

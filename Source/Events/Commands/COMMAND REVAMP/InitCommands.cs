@@ -1671,5 +1671,52 @@ public static class InitCommands
                 Console.WriteLine(x);
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "teammove",
+            alias: "tm",
+            group: "admin",
+            argDesc: "[ResolvePlayerId] [Team #]",
+            description: "Swaps the passed ResolvePlayerId to the provided Team #, no restrictions",
+            action: (player, args) =>
+            {
+                if (args.Length < 2 || args[0] == "" || args[1] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    TeamHandler.Handler(kitty.Player, int.Parse(args[1]), true);
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "playersperteam",
+            alias: "ppt",
+            group: "admin",
+            argDesc: "[# Allowed Per Team]",
+            description: "Sets the maximum # of people allowed per team to passed parm.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Allowed Per Team]{Colors.COLOR_RESET}");
+                    return;
+                }
+                if (!int.TryParse(args[0], out int maxPlayersPerTeam) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid number of players per team. (1-24)|r");
+                    return;
+                }
+                Gamemode.PlayersPerTeam = maxPlayersPerTeam;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Max Players Per Team set to {maxPlayersPerTeam}|r");
+            }
+        );
+
+
+
+
     }
 }

@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public class Team
 {
+    private static timer TeamTimer { get; set; }
     public int TeamID { get; private set; }
     public string TeamColor { get; private set; }
     public Dictionary<int, float> TeamTimes { get; set; }
     public List<player> Teammembers { get; private set; }
-    public string TeamMembersString { get; private set; }
+    public string TeamMembersString { get; private set; } = "";
     public Dictionary<int, string> RoundProgress { get; private set; }
     public bool Finished { get; set; }
-    private static timer TeamTimer { get; set; }
 
     public Team(int id)
     {
@@ -27,23 +28,33 @@ public class Team
 
     public static void Initialize()
     {
-        Globals.ALL_TEAMS = new Dictionary<int, Team>();
-        Globals.ALL_TEAMS_LIST = new List<Team>();
-        Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
-        TeamTimer = timer.Create();
-        TeamTimer.Start(0.1f, false, ErrorHandler.Wrap(TeamSetup));
+        try
+        {
+            ShadowKitty.Initialize();
+            ProtectionOfAncients.Initialize();
+            Relic.RegisterRelicEnabler();
+
+            Globals.ALL_TEAMS = new Dictionary<int, Team>();
+            Globals.ALL_TEAMS_LIST = new List<Team>();
+            Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
+            TeamTimer ??= timer.Create();
+            TeamTimer.Start(0.1f, false, ErrorHandler.Wrap(TeamSetup));
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in Team.Initialize: {e.Message}");
+            throw;
+        }
     }
 
     public void AddMember(player player)
     {
         AssignTeamMember(player, true);
-        Globals.PLAYERS_TEAMS.Add(player, this);
-        TeamsUtil.UpdateTeamsMB();
     }
 
     public void RemoveMember(player player)
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return; // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
         AssignTeamMember(player, false);
         if (Teammembers.Count == 0)
@@ -51,7 +62,6 @@ public class Team
             Globals.ALL_TEAMS.Remove(TeamID);
             Globals.ALL_TEAMS_LIST.Remove(this);
         }
-        TeamsUtil.UpdateTeamsMB();
     }
 
     public void TeamIsDeadActions()
@@ -98,10 +108,14 @@ public class Team
             TeamHandler.FreepickEnabled = true;
             foreach (var player in Globals.ALL_PLAYERS)
             {
-                player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 5.0f, Colors.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
+                player.DisplayTimedTextTo(RoundManager.ROUND_INTERMISSION - 30.0f, Colors.COLOR_YELLOW_ORANGE + Globals.TEAM_MODES[0] +
                     " has been enabled. Use " + Colors.COLOR_GOLD + "-team <#> " + Colors.COLOR_YELLOW_ORANGE + "to join a team");
             }
-            Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, TeamHandler.RandomHandler);
+            Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, () =>
+            {
+                Utility.TimedTextToAllPlayers(5.0f, $"{Colors.COLOR_TURQUOISE}Remaining players have been randomly assigned to teams and picking has been ddisabled.{Colors.COLOR_RESET}");
+                TeamHandler.RandomHandler();
+            });
         }
         else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
             Utility.SimpleTimer(2.5f, TeamHandler.RandomHandler);
@@ -130,18 +144,22 @@ public class Team
         }
 
         // Sets the team member string whenever someone is added or removed.
+        TeamMembersString = ""; // Reset TeamMembersString
         for (int i = 0; i < Teammembers.Count; i++)
         {
             var member = Teammembers[i];
             string name = member.Name.Split('#')[0];
             if (name.Length > 7)
-                name = name.Substring(0, 7);
+                name = Colors.ColorString(member.Name.Substring(0, 7), member.Id + 1);
 
             if (TeamMembersString.Length > 0)
                 TeamMembersString += ", ";
 
             TeamMembersString += name;
+
         }
+
+        TeamsUtil.UpdateTeamsMB();
     }
 
 }

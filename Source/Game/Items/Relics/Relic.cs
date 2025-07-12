@@ -4,6 +4,9 @@ using WCSharp.Api;
 
 public abstract class Relic
 {
+    private static trigger CanBuyRelicsTrigger;
+    private static List<player> CanBuyRelics;
+
     public static int RequiredLevel { get; } = 12;
     public static int RelicIncrease { get; } = 16;
     public static int RelicSellLevel { get; } = 15;
@@ -76,5 +79,31 @@ public abstract class Relic
         }
 
         item.Name = $"{newUpgradeText} {tempName}";
+    }
+
+    public static void RegisterRelicEnabler()
+    {
+        // Ability to Purchase Relics
+        PlayerUpgrades.Initialize();
+        CanBuyRelicsTrigger ??= trigger.Create();
+        CanBuyRelics ??= new List<player>();
+        Blizzard.TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel);
+        CanBuyRelicsTrigger.AddAction(() =>
+        {
+            try
+            {
+                if (CanBuyRelics.Contains(@event.Unit.Owner)) return;
+                if (@event.Unit.HeroLevel < RequiredLevel) return;
+                CanBuyRelics.Add(@event.Unit.Owner);
+                RelicUtil.EnableRelicBook(@event.Unit);
+                RelicUtil.DisableRelicAbilities(@event.Unit);
+                ProtectionOfAncients.SetProtectionOfAncientsLevel(@event.Unit);
+                @event.Unit.Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_TURQUOISE}You may now buy relics from the shop!{Colors.COLOR_RESET}");
+            }
+            catch (Exception e)
+            {
+                Logger.Warning($"Error in RegisterLevelTenTrigger {e.Message}");
+            }
+        });
     }
 }

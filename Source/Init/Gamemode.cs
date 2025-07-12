@@ -8,7 +8,7 @@ public static class Gamemode
     public static string CurrentGameMode { get; private set; } = "";
     public static string CurrentGameModeType { get; private set; } = "";
     public static bool IsGameModeChosen { get; private set; } = false;
-    public static int PlayersPerTeam { get; private set; } = 0;
+    public static int PlayersPerTeam { get; set; } = 0;
     public static int NumberOfRounds { get; private set; } = 5;
 
     public static void Initialize()

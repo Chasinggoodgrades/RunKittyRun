@@ -81,7 +81,6 @@ namespace Source.Init
                 ItemStacker.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
-                ProtectionOfAncients.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();
                 VictoryZone.Initialize();
@@ -93,7 +92,6 @@ namespace Source.Init
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
                 UnitSharing.Initialize();
-                ShadowKitty.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
