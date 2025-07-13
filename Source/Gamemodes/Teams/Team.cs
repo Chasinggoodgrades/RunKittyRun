@@ -113,7 +113,7 @@ public class Team
             }
             Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0f, () =>
             {
-                Utility.TimedTextToAllPlayers(5.0f, $"{Colors.COLOR_TURQUOISE}Remaining players have been randomly assigned to teams and picking has been ddisabled.{Colors.COLOR_RESET}");
+                Utility.TimedTextToAllPlayers(5.0f, $"{Colors.COLOR_TURQUOISE}Remaining players have been randomly assigned to teams and picking has been disabled.{Colors.COLOR_RESET}");
                 TeamHandler.RandomHandler();
             });
         }

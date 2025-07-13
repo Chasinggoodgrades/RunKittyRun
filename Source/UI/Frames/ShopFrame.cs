@@ -468,11 +468,11 @@ public static class ShopFrame
         FrameManager.ShopButton.Visible = false;
         FrameManager.ShopButton.Visible = true;
         FrameManager.HideOtherFrames(shopFrame);
-/*        if (Gamemode.CurrentGameMode != "Standard")
+        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // solo mode.
         {
-            player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is only accessible in Standard mode.{Colors.COLOR_RESET}");
+            player.DisplayTimedTextTo(6.0f, $"{Colors.COLOR_RED}The shop is not accessible in this mode.{Colors.COLOR_RESET}");
             return;
-        }*/
+        }
         shopFrame.Visible = !shopFrame.Visible;
         UpdateButtonStatus(player);
         if (shopFrame.Visible)
