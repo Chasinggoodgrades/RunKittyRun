@@ -52,8 +52,8 @@ public class Safezone
             kitty.CurrentSafeZone = ID;
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider();
             TeamDeathless.ReachedSafezone(unit, this);
-            ChainedTogether.ReachedSafezone(kitty, this);
             if (AwardedPlayers.Contains(player) || ID == 0) return;
+            ChainedTogether.ReachedSafezone(kitty);
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;
             AwardedPlayers.Add(player);

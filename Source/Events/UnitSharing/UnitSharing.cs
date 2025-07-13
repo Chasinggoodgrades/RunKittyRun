@@ -63,7 +63,7 @@ public static class UnitSharing
     {
         if (Gamemode.CurrentGameMode != "Standard") return false; // Tournament Modes Disable Sharing
 
-        // if (Globals.ALL_KITTIES[player].IsChained) return false; // Chained Kitties Disable Sharing
+        if (Globals.ALL_KITTIES[player].IsChained) return false; // Chained Kitties Disable Sharing
 
         return true;
     }

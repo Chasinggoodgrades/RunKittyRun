@@ -178,7 +178,7 @@ public static class TeamDeathless
             if (k.ProtectionActive) return; // Player protected.
             if (CurrentHolder != k) return;
 
-            float RandomChance = GetRandomReal(0, 100); // 0-100 .. If it's less than 50, orb drops and is reset.
+            float RandomChance = GetRandomReal(0, 100); // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
             if (RandomChance > ORB_DROP_CHANCE) return;
 
             Timer?.Pause();

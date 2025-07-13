@@ -103,7 +103,7 @@ public static class SeasonalManager
                 BlzChangeMinimapTerrainTex("snowMap.blp");
                 break;
 
-            case HolidaySeasons.None:
+            default:
                 BlzChangeMinimapTerrainTex("war3mapMap.blp");
                 break;
         }
