@@ -117,7 +117,7 @@ public class Kitty
             StatsManager.DeathStatUpdate();
 
             // Handle game mode specific logic
-            if (Gamemode.CurrentGameMode == "Standard")
+            if (Gamemode.CurrentGameMode == GameMode.Standard)
             {
                 TeamDeathless.DiedWithOrb(this);
                 ChainedTogether.LoseEvent(this.Name);
@@ -234,7 +234,7 @@ public class Kitty
 
     private void StartAIController()
     {
-        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
+        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == GameMode.Standard)
         {
             this.aiController?.StartAi();
             Unit.AddItem(FourCC("bspd")); // boots

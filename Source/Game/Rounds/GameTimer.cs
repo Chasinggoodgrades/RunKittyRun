@@ -44,7 +44,7 @@ public static class GameTimer
 
     private static void UpdateIndividualTimes()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
         {
             var kitty = Globals.ALL_KITTIES_LIST[i];
@@ -55,7 +55,7 @@ public static class GameTimer
 
     private static void UpdateTeamTimes()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
         for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
         {
             var team = Globals.ALL_TEAMS_LIST[i];

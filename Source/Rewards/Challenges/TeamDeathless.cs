@@ -88,7 +88,7 @@ public static class TeamDeathless
     /// </summary>
     public static void PrestartingEvent()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Only occurs in Standard Gamemode.
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (DeathlessChallenges.DeathlessCount < DeathlessToActivate) return; // Not enough players have achieved deathless.
         EventTriggered = true;

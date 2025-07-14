@@ -154,17 +154,25 @@ public static class AffixFactory
 
     private static Affix ApplyRandomAffix(Wolf unit, int laneNumber)
     {
-        var affixes = AvailableAffixes(laneNumber);
+        try
+        {
+            var affixes = AvailableAffixes(laneNumber);
 
-        var affixArray = affixes.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            var affixArray = affixes.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
 
-        if (affixArray.Length == 0)
+            if (affixArray.Length == 0)
+                return null;
+
+            var randomIndex = Random.Next(0, affixArray.Length); // max value is exclusive
+            var randomAffix = affixArray[randomIndex];
+            return ApplyAffix(unit, randomAffix);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"{Colors.COLOR_RED}Error in ApplyRandomAffix: {ex.Message}{Colors.COLOR_RESET}");
             return null;
+        }
 
-        var randomIndex = Random.Next(0, affixArray.Length-1);
-        var randomAffix = affixArray[randomIndex];
-
-        return ApplyAffix(unit, randomAffix);
     }
 
 
@@ -176,10 +184,12 @@ public static class AffixFactory
         try
         {
             RemoveAllAffixes();
-            if (Gamemode.CurrentGameMode != "Standard") return;
+            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Return.. Team tournament should work.
             if (!CanDistributeAffixes()) return;
 
-            NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+            if (Gamemode.CurrentGameMode == GameMode.Standard)
+                NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+            else NUMBER_OF_AFFIXED_WOLVES = 26 + (Globals.ROUND * 8);
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)

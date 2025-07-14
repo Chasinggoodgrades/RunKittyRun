@@ -11,7 +11,7 @@ public static class Difficulty
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (IsDifficultyChosen) return;
 
         DifficultyOption.Initialize();

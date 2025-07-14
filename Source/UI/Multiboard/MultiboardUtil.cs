@@ -13,7 +13,7 @@ public static class MultiboardUtil
 
     private static void RefreshStandardMbs()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (!Difficulty.IsDifficultyChosen) return; // Init first.
         StandardMultiboard.UpdateStandardCurrentStatsMB();
         StandardMultiboard.UpdateOverallStatsMB();
@@ -22,7 +22,7 @@ public static class MultiboardUtil
 
     private static void RefreshSoloMbs()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo Tournament
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return; // Solo Tournament
         SoloMultiboard.UpdateOverallStatsMB();
         SoloMultiboard.UpdateBestTimesMB();
     }
@@ -40,7 +40,7 @@ public static class MultiboardUtil
 
     private static void MinStandardMultiboards(bool minimize)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         StandardMultiboard.CurrentStats.IsMinimized = minimize; // Possible Desync
         StandardMultiboard.BestTimes.IsMinimized = minimize; // Possible Desync
         StandardMultiboard.OverallStats.IsMinimized = minimize; // Possible Desync

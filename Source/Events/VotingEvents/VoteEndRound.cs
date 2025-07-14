@@ -9,7 +9,7 @@ public static class VoteEndRound
 
     public static void InitiateVote(player voteStarter)
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         if (VoteAlreadyActive()) return;
         if (!GameActive()) return;
         VoteActive = true;

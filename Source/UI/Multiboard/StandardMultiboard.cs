@@ -17,7 +17,7 @@ public static class StandardMultiboard
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         BestTimes = multiboard.Create();
         OverallStats = multiboard.Create();
         CurrentStats = multiboard.Create();
@@ -283,19 +283,19 @@ public static class StandardMultiboard
 
     public static void UpdateOverallStatsMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         OverallGameStats();
     }
 
     public static void UpdateStandardCurrentStatsMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         CurrentGameStats();
     }
 
     public static void UpdateBestTimesMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimesStats();
     }
@@ -377,7 +377,7 @@ public static class StandardMultiboard
 
     private static void ESCPressed()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (!@event.Player.IsLocal) return;
         if (CurrentStats.IsDisplayed)
         {

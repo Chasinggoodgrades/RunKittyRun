@@ -21,7 +21,7 @@ public static class FandF
 
     public static void CreateBloodWolf()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var region = GetRandomInt(0, WolfArea.WolfAreas.Count - 1);
         var wolfObject = new Wolf(region);
         BloodWolf = wolfObject.Unit;

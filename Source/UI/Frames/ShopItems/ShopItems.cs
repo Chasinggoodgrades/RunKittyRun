@@ -48,7 +48,7 @@ public class ShopItem
     {
         var shopItems = new List<ShopItem>();
 
-        if (Gamemode.CurrentGameMode == "Standard")
+        if (Gamemode.CurrentGameMode == GameMode.Standard)
         {
             shopItems.Add(new ShopItem(new OneOfNine()));
             shopItems.Add(new ShopItem(new RingOfSummoning()));

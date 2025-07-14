@@ -93,7 +93,7 @@ public static class AwardManager
                 nameof(gamestatsx.NitrosObtained),
             };
 
-            if (Gamemode.CurrentGameMode != "Standard") return;
+            if (Gamemode.CurrentGameMode != GameMode.Standard) return;
             foreach (var player in Globals.ALL_PLAYERS)
             {
                 if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers;
@@ -151,7 +151,7 @@ public static class AwardManager
 
     public static void AwardGameStatRewards()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         foreach (var player in Globals.ALL_PLAYERS)
         {
             if (player.Controller != mapcontrol.User) continue; // no bots, reduce triggers
@@ -209,7 +209,7 @@ public static class AwardManager
     {
         if (kitty.Player.Controller != mapcontrol.User) return; // just reduce load, dont include bots.
         if (kitty.Player.SlotState != playerslotstate.Playing) return;
-        if (Gamemode.CurrentGameMode != "Standard") return; // only apply awards in standard mode (not in tournament modes).
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // only apply awards in standard mode (not in tournament modes).
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
         Colors.SetColorJoinedAs(kitty.Player);
 

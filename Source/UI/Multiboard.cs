@@ -11,15 +11,15 @@ public static class Multiboard
     {
         switch (Gamemode.CurrentGameMode)
         {
-            case "Standard":
+            case GameMode.Standard:
                 StandardMultiboard.Initialize();
                 break;
 
-            case "Tournament Solo":
+            case GameMode.SoloTournament:
                 SoloMultiboard.Initialize();
                 break;
 
-            case "Tournament Team":
+            case GameMode.TeamTournament:
                 TeamsMultiboard.Initialize();
                 break;
         }

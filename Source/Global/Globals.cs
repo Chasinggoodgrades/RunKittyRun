@@ -14,7 +14,7 @@ public static class Globals
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED = GetRandomInt(1, 900000);
     public static group TempGroup = group.Create();
-    public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
+    public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.SoloTournament, GameMode.TeamTournament };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };

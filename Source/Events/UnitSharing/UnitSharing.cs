@@ -61,7 +61,7 @@ public static class UnitSharing
     /// <returns></returns>
     private static bool AllowSharing(player player)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return false; // Tournament Modes Disable Sharing
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return false; // Tournament Modes Disable Sharing
 
         if (Globals.ALL_KITTIES[player].IsChained) return false; // Chained Kitties Disable Sharing
 

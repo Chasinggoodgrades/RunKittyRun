@@ -32,7 +32,7 @@
 
         SoloMultiboard.UpdateDeathCount(Kitty.Player);
 
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         Kitty.SaveData.GameStats.Deaths += 1;
     }
@@ -52,7 +52,7 @@
         if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak;
 
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         savior.SaveData.GameStats.Saves += 1;
         savior.SaveData.GameStats.SaveStreak += 1;

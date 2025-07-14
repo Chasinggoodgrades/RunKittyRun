@@ -11,8 +11,8 @@ public static class TimeSetter
     {
         try
         {
-            var standard = Gamemode.CurrentGameMode == "Standard";
-            var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
+            var standard = Gamemode.CurrentGameMode == GameMode.Standard;
+            var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
 

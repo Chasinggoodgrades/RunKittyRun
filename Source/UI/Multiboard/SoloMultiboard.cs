@@ -19,7 +19,7 @@ public static class SoloMultiboard
     {
         try
         {
-            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
             OverallBoard = multiboard.Create();
             BestTimes = multiboard.Create();
             sortedDict = new Dictionary<player, Kitty>();
@@ -196,13 +196,13 @@ public static class SoloMultiboard
 
     public static void UpdateOverallStatsMB()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         OverallStats();
     }
 
     public static void UpdateBestTimesMB()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimeStats();
     }
@@ -211,7 +211,7 @@ public static class SoloMultiboard
     {
         try
         {
-            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
             int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
             if (rowIndex == 0) return;
             OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
@@ -230,7 +230,7 @@ public static class SoloMultiboard
 
         switch (Gamemode.CurrentGameMode)
         {
-            case "Tournament Solo":
+            case GameMode.SoloTournament:
                 roundTimes[0] = gameData.RoundOneSolo;
                 roundTimes[1] = gameData.RoundTwoSolo;
                 roundTimes[2] = gameData.RoundThreeSolo;
@@ -247,7 +247,7 @@ public static class SoloMultiboard
 
     private static void ESCPressed()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo mode
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return; // Solo mode
         if (!@event.Player.IsLocal) return;
         if (OverallBoard.IsDisplayed)
         {

@@ -59,7 +59,7 @@ public class Howler : Affix
                 var wolf = NearbyWolves.First;
                 if (wolf == null) break;
                 NearbyWolves.Remove(wolf);
-                if (NamedWolves.StanWolf.Unit == wolf || wolf.Name == NamedWolves.STAN_NAME) continue;
+                if (NamedWolves.StanWolf != null && NamedWolves.StanWolf.Unit == wolf) continue;
                 if (wolf.IsPaused) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(wolf, out var wolfObject)) continue;
                 if (wolfObject.RegionIndex != Unit.RegionIndex) continue;

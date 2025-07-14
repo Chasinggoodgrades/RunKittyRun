@@ -210,7 +210,7 @@ public class Wolf
 
     private bool ShouldStartEffect()
     {
-        return Gamemode.CurrentGameMode != "Standard"
+        return Gamemode.CurrentGameMode != GameMode.Standard
             ? TournamentChance()
             : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
     }

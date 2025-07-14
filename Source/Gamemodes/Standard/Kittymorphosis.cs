@@ -43,7 +43,7 @@ public class KittyMorphosis
     /// </summary>
     private void RegisterTriggers()
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) return; // Solo Mode
+        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Mode
         Trigger ??= trigger.Create();
         Trigger.RegisterUnitEvent(Kitty.Unit, unitevent.HeroLevel);
         Trigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= REQUIRED_LEVEL));

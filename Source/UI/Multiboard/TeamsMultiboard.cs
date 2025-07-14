@@ -12,7 +12,7 @@ public static class TeamsMultiboard
     {
         try
         {
-            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+            if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
             ESCTrigger = trigger.Create();
             TeamsMultiboardInit();
             ESCInit();
@@ -55,7 +55,7 @@ public static class TeamsMultiboard
     public static void UpdateTeamStatsMB()
     {
         // Top Portion Setup
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
         TeamsStatsMB.Rows = Globals.ALL_TEAMS_LIST.Count + 1;
         TeamsStatsMB.Columns = 3 + Gamemode.NumberOfRounds;
         TeamsStatsMB.GetItem(0, 0).SetText("Team");

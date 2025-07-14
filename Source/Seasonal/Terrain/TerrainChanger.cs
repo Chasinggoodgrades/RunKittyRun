@@ -17,7 +17,7 @@ public static class TerrainChanger
             Terrains = new int[Gamemode.NumberOfRounds];
             SafezoneTerrain = new int[Gamemode.NumberOfRounds];
             NoSeason();
-            if (Gamemode.CurrentGameMode != "Standard") return;
+            if (Gamemode.CurrentGameMode != GameMode.Standard) return;
             ChristmasTerrain();
             SetTerrain();
         }

@@ -20,7 +20,7 @@ public static class NitroPacer
     /// </summary>
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
@@ -45,7 +45,7 @@ public static class NitroPacer
     /// </summary>
     public static void StartNitroPacer()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         ResetNitroPacer();
         Unit.UseItem(ghostBoots);
@@ -58,7 +58,7 @@ public static class NitroPacer
     /// </summary>
     public static void ResetNitroPacer()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         pacerTimer?.Pause();
         Unit.IsPaused = false;

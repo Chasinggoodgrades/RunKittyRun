@@ -11,7 +11,7 @@ public static class Progress
     public static void Initialize()
     {
         CalculateTotalDistance();
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
+        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
         TeamProgTimer.Start(0.2f, true, TeamProgressTracker);
     }
 

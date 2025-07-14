@@ -52,7 +52,7 @@ namespace Source.Init
         {
             timeToChoose += 1.0f;
             if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE)
-                Gamemode.SetGameMode("Standard");
+                Gamemode.SetGameMode(GameMode.Standard);
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();

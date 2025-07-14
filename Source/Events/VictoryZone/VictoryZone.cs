@@ -29,18 +29,18 @@ public static class VictoryZone
         var player = u.Owner;
         if (u.UnitType != Constants.UNIT_KITTY) return;
         if (!Globals.GAME_ACTIVE) return;
-        if (Gamemode.CurrentGameMode == "Standard") // Standard
+        if (Gamemode.CurrentGameMode == GameMode.Standard) // Standard
         {
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             RoundManager.RoundEnd();
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
             MoveAndFinish(player);
             RoundManager.RoundEndCheck();
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
+        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
             // Move all team members to the start, save their time. Wait for all teams to finish.
             foreach (var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
@@ -55,18 +55,18 @@ public static class VictoryZone
 
     private static bool VictoryAreaConditionsStandard(unit u)
     {
-        return Gamemode.CurrentGameMode == "Standard";
+        return Gamemode.CurrentGameMode == GameMode.Standard;
     }
 
     private static bool VictoryAreaConditionsSolo(unit u)
     {
-        return Gamemode.CurrentGameMode == Globals.GAME_MODES[1];
+        return Gamemode.CurrentGameMode == GameMode.SoloTournament;
     }
 
     private static bool VictoryAreaConditionsTeam(unit u)
     {
         // If a team enters the area, check if all the members of the team are in the area.
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return false;
+        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return false;
         var team = Globals.ALL_KITTIES[u.Owner].TeamID;
         foreach (var player in Globals.ALL_TEAMS[team].Teammembers)
         {
