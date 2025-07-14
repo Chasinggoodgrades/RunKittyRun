@@ -15,7 +15,7 @@ public static class ItemSpawner
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         SpawnableItems = StandardItems();
         TrackItems = new List<item>();
         TrackKibbles = new List<Kibble>();
@@ -71,7 +71,7 @@ public static class ItemSpawner
 
     public static void SpawnKibble(int numberOfItems)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (!Kibble.SpawningKibble) return;
         if (KibbleEvent.IsEventActive()) return;
 

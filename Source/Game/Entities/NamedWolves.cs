@@ -18,7 +18,7 @@ public static class NamedWolves
     /// </summary>
     public static void CreateNamedWolves()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         DNTNamedWolves.Clear();
         CreateStanWolf();
         CreateExplodingWolf();
@@ -110,7 +110,7 @@ public static class NamedWolves
 
     public static bool ExplodingWolfCollision(unit unit, Kitty k)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return false;
         if (unit != ExplodingWolf.Unit) return false;
         Utility.GiveGoldFloatingText(25, k.Unit);
         BurntMeat.FlamesDropChance(k);

@@ -76,7 +76,7 @@ public class Safezone
 
         CameraUtil.UpdateKomotoCam(player, ID);
 
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         for (int i = 0; i < kitty.Relics.Count; i++)
         {

@@ -19,7 +19,7 @@ public static class SoloMultiboard
     {
         try
         {
-            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
             OverallBoard = multiboard.Create();
             BestTimes = multiboard.Create();
             sortedDict = new Dictionary<player, Kitty>();
@@ -119,7 +119,7 @@ public static class SoloMultiboard
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         var sortedPlayers = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
             ? Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.TimeProg.GetOverallProgress()).ThenBy(kvp => kvp.Key.Id) // Progression mode
-            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode
+            : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode       -- Holy BAD LEAKS
 
         sortedDict = sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Avoid pass by reference
 
@@ -173,7 +173,7 @@ public static class SoloMultiboard
         BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         var rowIndex = 1;
 
-        foreach (var player in Globals.ALL_PLAYERS)
+        foreach (var player in Globals.ALL_PLAYERS) // bad
         {
             var saveData = Globals.ALL_KITTIES[player].SaveData;
             var playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
@@ -196,13 +196,13 @@ public static class SoloMultiboard
 
     public static void UpdateOverallStatsMB()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         OverallStats();
     }
 
     public static void UpdateBestTimesMB()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
         MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimeStats();
     }
@@ -211,7 +211,7 @@ public static class SoloMultiboard
     {
         try
         {
-            if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
+            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
             int rowIndex = MBSlot.TryGetValue(player, out int value) ? value : 0;
             if (rowIndex == 0) return;
             OverallBoard.GetItem(rowIndex, 1).SetText($"{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
@@ -230,7 +230,7 @@ public static class SoloMultiboard
 
         switch (Gamemode.CurrentGameMode)
         {
-            case "Tournament Solo":
+            case GameMode.SoloTournament:
                 roundTimes[0] = gameData.RoundOneSolo;
                 roundTimes[1] = gameData.RoundTwoSolo;
                 roundTimes[2] = gameData.RoundThreeSolo;
@@ -247,7 +247,7 @@ public static class SoloMultiboard
 
     private static void ESCPressed()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return; // Solo mode
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return; // Solo mode
         if (!@event.Player.IsLocal) return;
         if (OverallBoard.IsDisplayed)
         {

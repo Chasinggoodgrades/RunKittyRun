@@ -44,17 +44,24 @@ public class ShopItem
         Type = type;
     }
 
-    public static List<ShopItem> ShopItemsRelic => new List<ShopItem>
+    public static List<ShopItem> ShopItemsRelic()
     {
-        new ShopItem(new OneOfNine()),
-        new ShopItem(new FangOfShadows()),
-        new ShopItem(new RingOfSummoning()),
-        // new ShopItem(new AmuletOfEvasiveness()),
-        new ShopItem(new FrostbiteRing()),
-        new ShopItem(new BeaconOfUnitedLifeforce()),
-        new ShopItem(new ShardOfTranslocation()),
-        new ShopItem(new ChronoSphere())
-    };
+        var shopItems = new List<ShopItem>();
+
+        if (Gamemode.CurrentGameMode == GameMode.Standard)
+        {
+            shopItems.Add(new ShopItem(new OneOfNine()));
+            shopItems.Add(new ShopItem(new RingOfSummoning()));
+            shopItems.Add(new ShopItem(new FrostbiteRing()));
+            shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
+            shopItems.Add(new ShopItem(new ShardOfTranslocation()));
+            shopItems.Add(new ShopItem(new ChronoSphere()));
+        }
+        shopItems.Add(new ShopItem(new FangOfShadows()));
+        shopItems.Add(new ShopItem(new FrostbiteRing()));
+
+        return shopItems;
+    }
 
     public static List<ShopItem> ShopItemsReward()
     {

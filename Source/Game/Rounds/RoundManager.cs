@@ -10,7 +10,7 @@ public static class RoundManager
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode == "Standard") HasDifficultyBeenChosen();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) HasDifficultyBeenChosen();
         else RoundSetup();
     }
 

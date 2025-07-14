@@ -155,7 +155,7 @@ public static class Challenges
 
     private static void DoubleBackingTrigger()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var t = trigger.Create();
         Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
         t.AddAction(ErrorHandler.Wrap(() =>
@@ -193,7 +193,7 @@ public class YellowLightning
 
     private void EndTimer()
     {
-        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
+        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == GameMode.Standard)
         {
             AwardManager.GiveReward(Kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
         }

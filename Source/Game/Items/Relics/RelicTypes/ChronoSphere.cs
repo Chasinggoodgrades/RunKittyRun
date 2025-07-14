@@ -187,7 +187,7 @@ public class ChronoSphere : Relic
     {
         try
         {
-            if (Gamemode.CurrentGameMode != "Standard") return false; // Only for Standard.
+            if (Gamemode.CurrentGameMode != GameMode.Standard) return false; // Only for Standard.
             if (kitty.ProtectionActive) return false; // Don't rewind if ultimate has been casted.
             if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false;
             var relic = kitty.Relics.Find(IsChronoSphere) as ChronoSphere;

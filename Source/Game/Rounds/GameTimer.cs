@@ -44,20 +44,22 @@ public static class GameTimer
 
     private static void UpdateIndividualTimes()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[1]) return;
-        foreach (var kitty in Globals.ALL_KITTIES)
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
         {
-            if (!kitty.Value.Finished) kitty.Value.TimeProg.IncrementRoundTime(Globals.ROUND);
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND);
         }
         //MultiboardUtil.RefreshMultiboards();
     }
 
     private static void UpdateTeamTimes()
     {
-        if (Gamemode.CurrentGameMode != Globals.GAME_MODES[2]) return;
-        foreach (var team in Globals.ALL_TEAMS)
+        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
+        for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
         {
-            if (!team.Value.Finished) team.Value.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
+            var team = Globals.ALL_TEAMS_LIST[i];
+            if (!team.Finished) team.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
         }
     }
 

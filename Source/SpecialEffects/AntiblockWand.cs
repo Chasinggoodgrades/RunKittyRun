@@ -12,7 +12,7 @@ public static class AntiblockWand
     /// </summary>
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM;
         Radius = 250.0f;
         CastEvent = RegisterCastEvents();

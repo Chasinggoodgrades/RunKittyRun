@@ -24,7 +24,7 @@ public static class DoodadChanger
     public static void Initialize()
     {
         CreateInitDestructiables();
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         SeasonalDoodads();
     }
 

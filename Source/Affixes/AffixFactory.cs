@@ -8,10 +8,15 @@ public static class AffixFactory
     public static List<Affix> AllAffixes = new List<Affix>();
     public static readonly List<string> AffixTypes = new List<string> { "Speedster", "Unpredictable", "Fixation", "Frostbite", "Chaos", "Howler", "Blitzer", "Stealth", "Bomber" };
     private static float[] LaneWeights;
+
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 6;
     private static int MAX_FIXIATION_PER_LANE = 3;
+    private static Random Random = Globals.RANDOM_GEN; // Seeded for consistency
+
+    private static List<string> TempAffixesList = new List<string>();
+    private static Dictionary<string, int> TempAffixCounts = new Dictionary<string, int>();
     /// <summary>
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
     /// </summary>
@@ -23,35 +28,33 @@ public static class AffixFactory
 
     public static string[] CalculateAffixes(int laneIndex = -1)
     {
-        var affixCounts = new Dictionary<string, int>();
 
         foreach (var affix in AllAffixes)
         {
-            if (affixCounts.ContainsKey(affix.Name)) continue;
+            if (TempAffixCounts.ContainsKey(affix.Name)) continue;
             if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
-            affixCounts[affix.Name] = 0;
+            TempAffixCounts[affix.Name] = 0;
         }
 
         foreach (var affix in AllAffixes)
         {
-            if (affixCounts.ContainsKey(affix.Name))
+            if (TempAffixCounts.ContainsKey(affix.Name))
             {
                 if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
-                affixCounts[affix.Name]++;
+                TempAffixCounts[affix.Name]++;
             }
         }
 
-        var affixes = new List<string>();
-        foreach (var affix in affixCounts)
+        foreach (var affix in TempAffixCounts)
         {
             if (affix.Value > 0)
             {
-                affixes.Add($"{affix.Key} x{affix.Value}");
+                TempAffixesList.Add($"{affix.Key} x{affix.Value}");
             }
         }
-        var arr = affixes.ToArray();
-        GC.RemoveDictionary(ref affixCounts);
-        GC.RemoveList(ref affixes);
+        var arr = TempAffixesList.ToArray();
+        TempAffixCounts.Clear();
+        TempAffixesList.Clear();
         return arr;
     }
 
@@ -151,17 +154,25 @@ public static class AffixFactory
 
     private static Affix ApplyRandomAffix(Wolf unit, int laneNumber)
     {
-        var affixes = AvailableAffixes(laneNumber);
+        try
+        {
+            var affixes = AvailableAffixes(laneNumber);
 
-        var affixArray = affixes.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            var affixArray = affixes.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
 
-        if (affixArray.Length == 0)
+            if (affixArray.Length == 0)
+                return null;
+
+            var randomIndex = Random.Next(0, affixArray.Length); // max value is exclusive
+            var randomAffix = affixArray[randomIndex];
+            return ApplyAffix(unit, randomAffix);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"{Colors.COLOR_RED}Error in ApplyRandomAffix: {ex.Message}{Colors.COLOR_RESET}");
             return null;
+        }
 
-        var randomIndex = GetRandomInt(0, affixArray.Length-1);
-        var randomAffix = affixArray[randomIndex];
-
-        return ApplyAffix(unit, randomAffix);
     }
 
 
@@ -173,10 +184,12 @@ public static class AffixFactory
         try
         {
             RemoveAllAffixes();
-            if (Gamemode.CurrentGameMode != "Standard") return;
+            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Return.. Team tournament should work.
             if (!CanDistributeAffixes()) return;
 
-            NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+            if (Gamemode.CurrentGameMode == GameMode.Standard)
+                NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
+            else NUMBER_OF_AFFIXED_WOLVES = 26 + (Globals.ROUND * 8);
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)

@@ -199,7 +199,7 @@ public class FrozenWolf
         try
         {
             if (unit == null) return;
-            if (unit == NamedWolves.StanWolf.Unit) return;
+            if (NamedWolves.StanWolf != null && unit == NamedWolves.StanWolf.Unit) return;
             if (Globals.ALL_WOLVES.ContainsKey(unit))
                 Globals.ALL_WOLVES[unit].PauseSelf(pause);
         }

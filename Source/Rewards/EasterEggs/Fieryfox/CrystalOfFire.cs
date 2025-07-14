@@ -24,7 +24,7 @@ public static class CrystalOfFire
 
     public static void CrystalOfFireDeath(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         kitty.CurrentStats.CrystalOfFireAttempts++;
     }
 

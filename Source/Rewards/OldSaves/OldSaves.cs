@@ -156,7 +156,7 @@ public class Savecode
 
     public static void LoadString()
     {
-        if (Gamemode.CurrentGameMode != "Standard")
+        if (Gamemode.CurrentGameMode != GameMode.Standard)
         {
             Console.WriteLine($"{Colors.COLOR_YELLOW}Old save codes work only in Standard");
             return;

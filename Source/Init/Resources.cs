@@ -44,8 +44,8 @@
     private static void SetResourcesForGamemode()
     {
         if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) StandardResources();
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) SoloResources();
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) TeamResources();
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) SoloResources();
+        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) TeamResources();
     }
 
     private static void StandardResources()

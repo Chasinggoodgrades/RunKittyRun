@@ -19,7 +19,7 @@ public static class ChainedTogether
 
     private static void TriggerEventOnLastSafeZone()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Only occurs in Standard Gamemode.
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (!IsStartingContidionValid) return;
 

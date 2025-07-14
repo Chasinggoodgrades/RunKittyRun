@@ -9,7 +9,6 @@ highest KD in a game
 and all other stats i'd say. so streak/     saves/deaths in 1 game / w/e other stats we got
 */
 
-// TODO: Add a way to save personal bests to a file and load them when the game starts
 
 public static class PersonalBestAwarder
 {
@@ -26,11 +25,11 @@ public static class PersonalBestAwarder
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var roundEnum = "";
-        if (Gamemode.CurrentGameMode == "Standard") roundEnum = TimeSetter.GetRoundEnum();
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) roundEnum = TimeSetter.GetSoloEnum();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum();
+        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
-        var difficulty = Gamemode.CurrentGameMode == "Standard" ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
+        var difficulty = Gamemode.CurrentGameMode == GameMode.Standard ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
         Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {difficulty}|r");
     }
 

@@ -40,7 +40,7 @@ public static class DeathlessChallenges
     /// <param name="player"></param>
     public static void DeathlessCheck(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         kitty.CurrentStats.DeathlessProgress++;
         if (kitty.CurrentStats.DeathlessProgress == DeathlessPerRound())
         {

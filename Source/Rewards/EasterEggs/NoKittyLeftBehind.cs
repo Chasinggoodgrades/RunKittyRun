@@ -16,7 +16,7 @@ public static class NoKittyLeftBehind
 
     public static void CheckChallenge()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (!NoOneLeftBehind()) return;
         IncrementCompletedCount();
         SendMessage();

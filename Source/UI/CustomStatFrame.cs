@@ -204,7 +204,7 @@ public static class CustomStatFrame
 
     private static void SetWolfAffixTexts(unit selectedUnit)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return;
         if (!Globals.ALL_WOLVES.TryGetValue(selectedUnit, out var wolf)) return;
 
         var affixes = wolf.Affixes;
@@ -217,19 +217,19 @@ public static class CustomStatFrame
 
     private static void SetGamemodeFrameText(unit selectedUnit)
     {
-        if (Gamemode.CurrentGameMode == "Standard") // Standard
+        if (Gamemode.CurrentGameMode == GameMode.Standard) // Standard
         {
             BlzFrameSetText(Stats[3].Text, $"{Streak} {GetPlayerSaveStreak(selectedUnit)}");
             BlzFrameSetText(Stats[0].Text, $"{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r");
             BlzFrameSetText(Stats[1].Text, $"{Saves} {Colors.COLOR_GREEN}{GetPlayerSaves(selectedUnit)}|r");
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             BlzFrameSetText(Stats[0].Text, $"{Time} {GetPlayerTime(selectedUnit)}");
             BlzFrameSetText(Stats[1].Text, $"{Progress} {GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[2].Text, $"{Deaths} {GetGameTotalDeaths(selectedUnit)}");
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
+        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
             BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");

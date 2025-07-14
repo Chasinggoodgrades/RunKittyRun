@@ -13,15 +13,15 @@ public static class PodiumManager
     {
         switch (Gamemode.CurrentGameMode)
         {
-            case "Standard":
+            case GameMode.Standard:
                 StandardPodium.BeginPodiumActions();
                 break;
 
-            case "Tournament Solo":
+            case GameMode.SoloTournament:
                 SoloPodium.BeginPodiumActions();
                 break;
 
-            case "Tournament Team":
+            case GameMode.TeamTournament:
                 TeamPodium.BeginPodiumActions();
                 break;
         }
