@@ -36,9 +36,9 @@ public class Wolf
     {
         RegionIndex = regionIndex;
         WolfArea = WolfArea.WolfAreas[regionIndex];
-        Affixes = new List<Affix>();
+        Affixes = new List<Affix>(); // Consider creating a new object that contains List<Affix> so we're not making a new one each wolf.
         OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
-        WolfPoint = new WolfPoint(this);
+        WolfPoint = new WolfPoint(this); // Consider changing this to be a part of the memory handler. Remove the parameter
 
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
@@ -97,9 +97,7 @@ public class Wolf
         if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
         if (IsPaused && HasAffix("Bomber")) return;
-        var randomX = GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX);
-        var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
-        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, randomX, randomY);
+        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX), GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY));
     }
 
     public void Dispose()
@@ -196,7 +194,7 @@ public class Wolf
         var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         var facing = GetRandomReal(0, 360);
 
-        Unit = unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
+        Unit ??= unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
         Unit.IsInvulnerable = true;
@@ -212,7 +210,7 @@ public class Wolf
 
     private bool ShouldStartEffect()
     {
-        return Gamemode.CurrentGameMode != "Standard"
+        return Gamemode.CurrentGameMode != GameMode.Standard
             ? TournamentChance()
             : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
     }

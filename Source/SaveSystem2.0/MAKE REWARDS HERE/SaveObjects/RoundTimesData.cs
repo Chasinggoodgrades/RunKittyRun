@@ -23,4 +23,10 @@
     public float RoundThreeSolo { get; set; }
     public float RoundFourSolo { get; set; }
     public float RoundFiveSolo { get; set; }
+
+    public float RoundOneNightmare { get; set; }
+    public float RoundTwoNightmare { get; set; }
+    public float RoundThreeNightmare { get; set; }
+    public float RoundFourNightmare { get; set; }
+    public float RoundFiveNightmare { get; set; }
 }

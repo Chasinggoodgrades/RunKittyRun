@@ -53,7 +53,7 @@ public static class GamemodeCmd
 
     private static void HandleStandardMode(player player)
     {
-        Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+        Gamemode.SetGameMode(GameMode.Standard);
     }
 
     private static void HandleTeamOrSoloMode(player player, string[] parts)
@@ -96,11 +96,11 @@ public static class GamemodeCmd
             case "progression":
             case "progress":
             case "prog":
-                Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[0]);
+                Gamemode.SetGameMode(GameMode.SoloTournament, Globals.SOLO_MODES[0]);
                 break;
 
             case "race":
-                Gamemode.SetGameMode(Globals.GAME_MODES[1], Globals.SOLO_MODES[1]);
+                Gamemode.SetGameMode(GameMode.SoloTournament, Globals.SOLO_MODES[1]);
                 break;
 
             default:
@@ -143,12 +143,12 @@ public static class GamemodeCmd
         {
             case "fp":
             case "freepick":
-                Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[0], teamSize);
+                Gamemode.SetGameMode(GameMode.TeamTournament, Globals.TEAM_MODES[0], teamSize);
                 break;
 
             case "r":
             case "random":
-                Gamemode.SetGameMode(Globals.GAME_MODES[2], Globals.TEAM_MODES[1], teamSize);
+                Gamemode.SetGameMode(GameMode.TeamTournament, Globals.TEAM_MODES[1], teamSize);
                 break;
 
             default:

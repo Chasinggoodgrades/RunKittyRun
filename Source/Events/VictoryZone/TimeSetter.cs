@@ -11,8 +11,8 @@ public static class TimeSetter
     {
         try
         {
-            var standard = Gamemode.CurrentGameMode == "Standard";
-            var solo = Gamemode.CurrentGameMode == Globals.GAME_MODES[1]; // Solo
+            var standard = Gamemode.CurrentGameMode == GameMode.Standard;
+            var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
@@ -58,9 +58,11 @@ public static class TimeSetter
             case (int)DifficultyLevel.Impossible:
                 roundEnum = GetImpossibleRoundEnum();
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                roundEnum = GetNightmareRoundEnum();
+                break;
             default:
-                Console.WriteLine("Invalid difficulty level for GetRoundEnum");
+                Logger.Critical("Invalid difficulty level for GetRoundEnum");
                 return "";
         }
         return roundEnum;
@@ -101,7 +103,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveNormal);
 
             default:
-                Console.WriteLine("Invalid round number for GetNormalRoundEnum");
+                Logger.Critical("Invalid round number for GetNormalRoundEnum");
                 return "";
         }
     }
@@ -128,7 +130,7 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveHard);
 
             default:
-                Console.WriteLine("Invalid round number for GetHardRoundEnum");
+                Logger.Critical("Invalid round number for GetHardRoundEnum");
                 return "";
         }
     }
@@ -155,7 +157,34 @@ public static class TimeSetter
                 return nameof(gameTimeData.RoundFiveImpossible);
 
             default:
-                Console.WriteLine("Invalid round number for GetImpossibleRoundEnum");
+                Logger.Critical("Invalid round number for GetImpossibleRoundEnum");
+                return "";
+        }
+    }
+
+    private static string GetNightmareRoundEnum()
+    {
+        var round = Globals.ROUND;
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
+        {
+            case 1:
+                return nameof(gameTimeData.RoundOneNightmare);
+
+            case 2:
+                return nameof(gameTimeData.RoundTwoNightmare);
+
+            case 3:
+                return nameof(gameTimeData.RoundThreeNightmare);
+
+            case 4:
+                return nameof(gameTimeData.RoundFourNightmare);
+
+            case 5:
+                return nameof(gameTimeData.RoundFiveNightmare);
+
+            default:
+                Logger.Critical("Invalid round number for GetNightmareRoundEnum");
                 return "";
         }
     }

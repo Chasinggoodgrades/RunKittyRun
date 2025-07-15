@@ -10,7 +10,7 @@ public static class RoundManager
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode == "Standard") HasDifficultyBeenChosen();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) HasDifficultyBeenChosen();
         else RoundSetup();
     }
 
@@ -43,6 +43,7 @@ public static class RoundManager
 
             RoundTimer.CountDown();
             TeamDeathless.StartEvent();
+            ChainedTogether.StartEvent();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
         }
@@ -114,8 +115,10 @@ public static class RoundManager
     public static void RoundEndCheck()
     {
         // Always returns for standard mode, and solo progression mode.
-        foreach (var kitty in Globals.ALL_KITTIES)
-            if (!kitty.Value.Finished) return;
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            if (!kitty.Finished) return;
+        }
         RoundEnd();
     }
 }

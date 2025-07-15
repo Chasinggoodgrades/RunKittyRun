@@ -21,14 +21,17 @@ public static class ProtectionOfAncients
     private static readonly int UPGRADE_LEVEL_2_REQUIREMENT = 9;
     private static readonly int UPGRADE_LEVEL_3_REQUIREMENT = 12;
 
+    private static trigger KittyReachedLevelSix;
     private static readonly float INVULNERABLE_DURATION = 1.0f;
+
+    private static List<player> HitLevel6;
     private static List<player> UpgradeLevel2 = new List<player>();
     private static List<player> UpgradeLevel3 = new List<player>();
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
         RegisterEvents();
+        RegisterUltimateGain();
         RegisterUpgradeLevelEvents();
     }
 
@@ -36,11 +39,26 @@ public static class ProtectionOfAncients
     /// Gives the unit the ProtectionOfAncients Ability.
     /// </summary>
     /// <param name="unit"></param>
-    public static void AddProtectionOfAncients(unit unit)
+    private static void AddProtectionOfAncients(unit unit)
     {
         var player = unit.Owner;
         unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!|r");
+        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!{Colors.COLOR_RESET}");
+    }
+
+    private static void RegisterUltimateGain()
+    {
+        // Ultimate, Protection of the Ancients
+        KittyReachedLevelSix ??= trigger.Create();
+        HitLevel6 ??= new List<player>();
+        Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
+        KittyReachedLevelSix.AddAction(() =>
+        {
+            if (HitLevel6.Contains(@event.Unit.Owner)) return;
+            if (@event.Unit.HeroLevel < 6) return;
+            HitLevel6.Add(@event.Unit.Owner);
+            AddProtectionOfAncients(@event.Unit);
+        });
     }
 
     /// <summary>
@@ -165,7 +183,7 @@ public static class ProtectionOfAncients
     private static void EndEffectActions(player Player)
     {
         // Get all units within range of the player unit (kitty) and revive them
-        var tempGroup = group.Create();
+        var tempGroup = group.Create(); // consider changing this to a static group
         var kitty = Globals.ALL_KITTIES[Player];
         var levelOfAbility = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
         var levelOfRelic = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);

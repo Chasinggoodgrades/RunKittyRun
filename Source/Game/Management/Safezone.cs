@@ -53,6 +53,7 @@ public class Safezone
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider();
             TeamDeathless.ReachedSafezone(unit, this);
             if (AwardedPlayers.Contains(player) || ID == 0) return;
+            ChainedTogether.ReachedSafezone(kitty);
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;
             AwardedPlayers.Add(player);
@@ -75,7 +76,7 @@ public class Safezone
 
         CameraUtil.UpdateKomotoCam(player, ID);
 
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         for (int i = 0; i < kitty.Relics.Count; i++)
         {

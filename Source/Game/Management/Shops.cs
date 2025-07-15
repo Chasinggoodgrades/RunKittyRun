@@ -27,7 +27,7 @@ public static class Shops
     {
         ConstantItems();
 
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
         StandardModeItems();
     }

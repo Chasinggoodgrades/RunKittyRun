@@ -87,7 +87,7 @@ public static class SoundManager
     /// </summary>
     public static void PlayKittyDeathSound(unit Kitty)
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2])
+        if (Gamemode.CurrentGameMode == GameMode.TeamTournament)
             TeamKittyDeathSound(Kitty);
         else
         {
@@ -157,9 +157,9 @@ public static class SoundManager
 
             try
             {
-                for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    var kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
                     if (kitty.Alive)
                     {
                         count += 1;

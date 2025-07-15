@@ -41,7 +41,7 @@ public static class SeasonalManager
 
     public static void DetermineSeason()
     {
-        if (Gamemode.CurrentGameMode != "Standard")
+        if (Gamemode.CurrentGameMode != GameMode.Standard)
         {
             Season = HolidaySeasons.None;
             return;
@@ -73,7 +73,7 @@ public static class SeasonalManager
     /// </summary>
     public static void ActivateChristmas()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         Season = HolidaySeasons.Christmas;
         TerrainChanger.ActivateChristmasTerrain();
         DoodadChanger.ChristmasDoodads();
@@ -103,7 +103,7 @@ public static class SeasonalManager
                 BlzChangeMinimapTerrainTex("snowMap.blp");
                 break;
 
-            case HolidaySeasons.None:
+            default:
                 BlzChangeMinimapTerrainTex("war3mapMap.blp");
                 break;
         }

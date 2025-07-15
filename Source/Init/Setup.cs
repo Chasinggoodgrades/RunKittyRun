@@ -52,7 +52,7 @@ namespace Source.Init
         {
             timeToChoose += 1.0f;
             if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE)
-                Gamemode.SetGameMode("Standard");
+                Gamemode.SetGameMode(GameMode.Standard);
             if (Gamemode.IsGameModeChosen)
             {
                 StartGame();
@@ -81,7 +81,6 @@ namespace Source.Init
                 ItemStacker.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
-                ProtectionOfAncients.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();
                 VictoryZone.Initialize();
@@ -92,7 +91,7 @@ namespace Source.Init
                 Challenges.Initialize();
                 SoundManager.Initialize();
                 ShopFrame.FinishInitialization();
-                ShadowKitty.Initialize();
+                UnitSharing.Initialize();
                 NitroPacer.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();

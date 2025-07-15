@@ -16,7 +16,7 @@ public static class RoundTimer
     {
         try
         {
-            if (Gamemode.CurrentGameMode == "Standard") return;
+            if (Gamemode.CurrentGameMode == GameMode.Standard) return;
             SetEndRoundTimes();
             EndRoundTimerDialog.SetTitle("Round Time Remaining");
             EndRoundTimerDialogs();
@@ -38,7 +38,7 @@ public static class RoundTimer
 
     public static void StartEndRoundTimer()
     {
-        if (Gamemode.CurrentGameMode == "Standard") return;
+        if (Gamemode.CurrentGameMode == GameMode.Standard) return;
         TimerDialogDisplay(EndRoundTimerDialog, true);
         EndRoundTimer.Start(ROUND_ENDTIMES[Globals.ROUND - 1], false, ErrorHandler.Wrap(RoundManager.RoundEnd));
     }
@@ -61,7 +61,7 @@ public static class RoundTimer
 
     private static void SetEndRoundTimes()
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[2]) // Team
+        if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
             ROUND_ENDTIMES.Add(420.0f);
             ROUND_ENDTIMES.Add(420.0f);
@@ -69,7 +69,7 @@ public static class RoundTimer
             ROUND_ENDTIMES.Add(720.0f);
             ROUND_ENDTIMES.Add(720.0f);
         }
-        else if (Gamemode.CurrentGameMode == Globals.GAME_MODES[1]) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             ROUND_ENDTIMES.Add(420.0f);
             ROUND_ENDTIMES.Add(420.0f);

@@ -9,7 +9,7 @@ public static class SpawnChampions
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         SpawnUnits();
         ApplyCosmetics();
     }

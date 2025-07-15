@@ -14,7 +14,7 @@ public static class Globals
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED = GetRandomInt(1, 900000);
     public static group TempGroup = group.Create();
-    public static readonly string[] GAME_MODES = { "Standard", "Tournament Solo", "Tournament Team" };
+    public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.SoloTournament, GameMode.TeamTournament };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };
@@ -26,10 +26,13 @@ public static class Globals
         "Omniology#11850", "Danger#24279"};
 
     public static timer GAME_TIMER = timer.Create();
+    public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+
     public static List<player> ALL_PLAYERS = new List<player>();
     public static List<Safezone> SAFE_ZONES = new List<Safezone>();
     public static List<player> LockedCamera = new List<player>();
-    public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
+    public static List<Kitty> ALL_KITTIES_LIST = new List<Kitty>();
+
 
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
@@ -45,6 +48,7 @@ public static class Globals
 
     public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
     public static Dictionary<int, Team> ALL_TEAMS { get; set; }
+    public static List<Team> ALL_TEAMS_LIST { get; set; }
     public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }
     public static Dictionary<Team, string> TEAM_PROGRESS;
 

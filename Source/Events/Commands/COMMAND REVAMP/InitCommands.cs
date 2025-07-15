@@ -115,7 +115,8 @@ public static class InitCommands
             group: "all",
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
-            action: (player, args) => {
+            action: (player, args) =>
+            {
 
                 if (Globals.VIPLISTUNFILTERED.Contains(player))
                 {
@@ -314,11 +315,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kibbleList = "";
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    var kibblePicker = kitty.Value.Player;
-                    var kibbleCollected = kitty.Value.CurrentStats.CollectedKibble;
-                    kibbleList += $"{Colors.PlayerNameColored(kibblePicker)}: {kibbleCollected}\n";
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    var kibbleCollected = kitty.CurrentStats.CollectedKibble;
+                    kibbleList += $"{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n";
                 }
                 player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_GOLD}Kibble Collected:\n{kibbleList}{Colors.COLOR_RESET}");
             }
@@ -777,9 +778,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var spawnCenter = RegionList.SpawnRegions[1];
-                foreach (var kitty in Globals.ALL_KITTIES)
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
-                    kitty.Value.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
                 }
             }
         );
@@ -1651,7 +1653,93 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("NitroTest.mdx", unitKitty, "origin");
+                effect.Create("TestThing.mdx", unitKitty, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "kittylist",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Puts an effect test on for some nitro thingy",
+            action: (player, args) =>
+            {
+                string x = "";
+                foreach (var k in Globals.ALL_KITTIES_LIST)
+                {
+                    x += $"{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
+                }
+                Console.WriteLine(x);
+            }
+        );
+        
+        CommandsManager.RegisterCommand(
+            name: "chainedtest",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Starts chained together test",
+            action: (player, args) =>
+            {
+                ChainedTogether.TriggerEvent();
+                ChainedTogether.StartEvent();
+            }
+        );
+      
+        CommandsManager.RegisterCommand(
+            name: "chaineffect",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Testing the chain effect model",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                effect.Create("ChainTest.mdx", kitty.Unit, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "teammove",
+            alias: "tm",
+            group: "admin",
+            argDesc: "[ResolvePlayerId] [Team #]",
+            description: "Swaps the passed ResolvePlayerId to the provided Team #, no restrictions",
+            action: (player, args) =>
+            {
+                if (args.Length < 2 || args[0] == "" || args[1] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    TeamHandler.Handler(kitty.Player, int.Parse(args[1]), true);
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "playersperteam",
+            alias: "ppt",
+            group: "admin",
+            argDesc: "[# Allowed Per Team]",
+            description: "Sets the maximum # of people allowed per team to passed parm.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Allowed Per Team]{Colors.COLOR_RESET}");
+                    return;
+                }
+                if (!int.TryParse(args[0], out int maxPlayersPerTeam) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid number of players per team. (1-24)|r");
+                    return;
+                }
+                Gamemode.PlayersPerTeam = maxPlayersPerTeam;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Max Players Per Team set to {maxPlayersPerTeam}|r");
             }
         );
     }

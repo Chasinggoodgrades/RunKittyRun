@@ -2,7 +2,7 @@
 {
     public static void LoadEasterEggs()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         MissingShoe.Initialize();
         NoKittyLeftBehind.Initialize();
         FandF.Initialize();

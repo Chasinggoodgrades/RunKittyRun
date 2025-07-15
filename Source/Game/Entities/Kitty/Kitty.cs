@@ -39,7 +39,7 @@ public class Kitty
     public trigger c_Collision { get; set; } = trigger.Create();
     public Disco Disco { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
-
+    public bool IsChained { get; set; } = false;
 
     public Kitty(player player)
     {
@@ -57,6 +57,7 @@ public class Kitty
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         KittyMorphosis = new KittyMorphosis(this);
+        Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();
     }
@@ -116,9 +117,10 @@ public class Kitty
             StatsManager.DeathStatUpdate();
 
             // Handle game mode specific logic
-            if (Gamemode.CurrentGameMode == "Standard")
+            if (Gamemode.CurrentGameMode == GameMode.Standard)
             {
                 TeamDeathless.DiedWithOrb(this);
+                ChainedTogether.LoseEvent(this.Name);
                 SoundManager.PlayLastManStandingSound();
                 Gameover.GameOver();
                 MultiboardUtil.RefreshMultiboards();
@@ -232,7 +234,7 @@ public class Kitty
 
     private void StartAIController()
     {
-        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == "Standard")
+        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == GameMode.Standard)
         {
             this.aiController?.StartAi();
             Unit.AddItem(FourCC("bspd")); // boots
@@ -252,7 +254,9 @@ public class Kitty
         Disco?.Dispose();
         aiController.StopAi();
         Unit.Dispose();
+        ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
+        Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);
     }
 

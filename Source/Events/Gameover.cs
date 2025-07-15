@@ -29,7 +29,7 @@ public static class Gameover
 
     private static void StandardWinChallenges()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         Challenges.NecroWindwalk();
         Challenges.BlueFire();
         Challenges.PinkFire();
@@ -62,7 +62,7 @@ public static class Gameover
 
     private static bool LosingGameCheck()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return false;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return false;
         if (NoEnd) return false;
 
         for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
@@ -76,7 +76,7 @@ public static class Gameover
 
     private static void SendWinMessage()
     {
-        if (Gamemode.CurrentGameMode == "Standard")
+        if (Gamemode.CurrentGameMode == GameMode.Standard)
             Console.WriteLine($"{Colors.COLOR_GREEN}Congratulations on winning the game on {Difficulty.DifficultyOption.ToString()}!{Colors.COLOR_RESET}");
         else
             Console.WriteLine($"{Colors.COLOR_GREEN}The game is over. Thank you for playing RKR on {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}");
@@ -99,7 +99,7 @@ public static class Gameover
 
     private static void IncrementGameStats(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var stats = kitty.SaveData.GameStats;
         switch (Difficulty.DifficultyValue)
         {
@@ -114,12 +114,15 @@ public static class Gameover
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleGames += 1;
                 break;
+            case (int)DifficultyLevel.Nightmare:
+                stats.NightmareGames += 1;
+                break;
         }
     }
 
     private static void IncrementWins(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var stats = kitty.SaveData.GameStats;
         switch (Difficulty.DifficultyValue)
         {
@@ -134,12 +137,15 @@ public static class Gameover
             case (int)DifficultyLevel.Impossible:
                 stats.ImpossibleWins += 1;
                 break;
+            case (int)DifficultyLevel.Nightmare:
+                stats.NightmareWins += 1;
+                break;
         }
     }
 
     private static void IncrementWinStreak(Kitty kitty, bool win)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var stats = kitty.SaveData.GameStats;
 
         if (win)

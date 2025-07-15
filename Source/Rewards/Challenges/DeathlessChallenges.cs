@@ -16,8 +16,11 @@ public static class DeathlessChallenges
     public static void ResetDeathless()
     {
         DeathlessCount = 0;
-        foreach (var kitty in Globals.ALL_KITTIES)
-            ResetPlayerDeathless(kitty.Value);
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            ResetPlayerDeathless(kitty);
+        }
     }
 
     /// <summary>
@@ -37,7 +40,7 @@ public static class DeathlessChallenges
     /// <param name="player"></param>
     public static void DeathlessCheck(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         kitty.CurrentStats.DeathlessProgress++;
         if (kitty.CurrentStats.DeathlessProgress == DeathlessPerRound())
         {

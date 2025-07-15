@@ -33,7 +33,9 @@ public static class CollisionDetection
         {
             return GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
                     && GetFilterUnit().Owner != sk.Player // Not Same Player
-                    && sk.Unit.Alive; // Has to Be Alive
+                    && sk.Unit.Alive // Has to Be Alive
+                    && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[sk.Player].TeamID; // Must be same team
+
         };
     }
 
@@ -45,7 +47,7 @@ public static class CollisionDetection
                     && GetFilterUnit().Owner != k.Player // Not Same Player
                     && k.Alive // Has to Be Alive
                     && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[k.Player].TeamID // Must be same team
-                    && Gamemode.CurrentGameMode != Globals.GAME_MODES[1]; // Not Solo Mode
+                    && Gamemode.CurrentGameMode != GameMode.SoloTournament; // Not Solo Mode
         };
     }
 

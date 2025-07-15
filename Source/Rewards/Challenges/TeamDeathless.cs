@@ -88,7 +88,7 @@ public static class TeamDeathless
     /// </summary>
     public static void PrestartingEvent()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return; // Only occurs in Standard Gamemode.
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Only occurs in Standard Gamemode.
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (DeathlessChallenges.DeathlessCount < DeathlessToActivate) return; // Not enough players have achieved deathless.
         EventTriggered = true;
@@ -178,7 +178,7 @@ public static class TeamDeathless
             if (k.ProtectionActive) return; // Player protected.
             if (CurrentHolder != k) return;
 
-            float RandomChance = GetRandomReal(0, 100); // 0-100 .. If it's less than 50, orb drops and is reset.
+            float RandomChance = GetRandomReal(0, 100); // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
             if (RandomChance > ORB_DROP_CHANCE) return;
 
             Timer?.Pause();

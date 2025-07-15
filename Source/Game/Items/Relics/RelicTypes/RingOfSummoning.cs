@@ -103,7 +103,7 @@ public class RingOfSummoning : Relic
             SummonGroup.Remove(unit);
 
             Kitty kitty = Globals.ALL_KITTIES[unit.Owner];
-            if (!SummonDeadKitty(summoningKitty, kitty) || !DeathlessKitty(summoningKitty, kitty)) continue;
+            if (!SummonDeadKitty(summoningKitty, kitty) || !DeathlessKitty(summoningKitty, kitty) || !ChainedKitty(summoningKitty, kitty)) continue;
 
             // Position adjustments and revival
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
@@ -149,6 +149,13 @@ public class RingOfSummoning : Relic
         if (TeamDeathless.CurrentHolder != summonedKittyUnit) return true;
 
         summonerKitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot summon kitties holding the deathless orb!{Colors.COLOR_RESET}");
+        return false;
+    }
+
+    private bool ChainedKitty(Kitty summonerKitty, Kitty summonedKittyUnit)
+    {
+        if (!summonedKittyUnit.IsChained) return true;
+        summonerKitty.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot summon kitties that are chained!{Colors.COLOR_RESET}");
         return false;
     }
 

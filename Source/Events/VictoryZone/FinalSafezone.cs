@@ -19,7 +19,7 @@ public static class FinalSafezone
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
             if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
-            if (Gamemode.CurrentGameMode != "Standard") return;
+            if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
             kitty.CurrentStats.RoundFinished = true;
             NitroChallenges.CompletedNitro(kitty);

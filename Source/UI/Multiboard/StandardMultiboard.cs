@@ -17,7 +17,7 @@ public static class StandardMultiboard
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         BestTimes = multiboard.Create();
         OverallStats = multiboard.Create();
         CurrentStats = multiboard.Create();
@@ -283,19 +283,19 @@ public static class StandardMultiboard
 
     public static void UpdateOverallStatsMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         OverallGameStats();
     }
 
     public static void UpdateStandardCurrentStatsMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         CurrentGameStats();
     }
 
     public static void UpdateBestTimesMB()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         MultiboardUtil.FillPlayers(BestTimes, 1);
         BestTimesStats();
     }
@@ -321,7 +321,10 @@ public static class StandardMultiboard
                 numberOfGames = gameData.ImpossibleGames;
                 numberOfWins = gameData.ImpossibleWins;
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                numberOfGames = gameData.NightmareGames;
+                numberOfWins = gameData.NightmareWins;
+                break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return (0, 0);
@@ -358,7 +361,13 @@ public static class StandardMultiboard
                 RoundTimes[3] = gameData.RoundFourImpossible;
                 RoundTimes[4] = gameData.RoundFiveImpossible;
                 break;
-
+            case (int)DifficultyLevel.Nightmare:
+                RoundTimes[0] = gameData.RoundOneNightmare;
+                RoundTimes[1] = gameData.RoundTwoNightmare;
+                RoundTimes[2] = gameData.RoundThreeNightmare;
+                RoundTimes[3] = gameData.RoundFourNightmare;
+                RoundTimes[4] = gameData.RoundFiveNightmare;
+                break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
                 return RoundTimes;
@@ -368,7 +377,7 @@ public static class StandardMultiboard
 
     private static void ESCPressed()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (!@event.Player.IsLocal) return;
         if (CurrentStats.IsDisplayed)
         {

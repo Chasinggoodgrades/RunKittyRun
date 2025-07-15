@@ -79,7 +79,7 @@ public class KittyTime
         SetTotalTime();
     }
 
-    private void SetTotalTime()
+    private void SetTotalTime() // Solo Tournament Issue
     {
         TotalTime = 0.0f;
         foreach (var time in RoundTime) // IEnumberable
@@ -101,7 +101,7 @@ public class KittyTime
             RoundProgress[round] = progress;
     }
 
-    public float GetOverallProgress()
+    public float GetOverallProgress() // Solo Tournament Issue
     {
         float overallProgress = 0.0f;
         foreach (var progress in RoundProgress) // IEnumberable

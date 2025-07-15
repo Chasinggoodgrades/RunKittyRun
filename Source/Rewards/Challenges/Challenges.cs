@@ -20,7 +20,7 @@ public static class Challenges
 
     public static void WhiteTendrils()
     {
-        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.WhiteTendrils));
     }
 
@@ -60,7 +60,7 @@ public static class Challenges
 
     public static void ButterflyAura(player player)
     {
-        if (Difficulty.DifficultyValue != (int)DifficultyLevel.Impossible) return;
+        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
         if (currentDeaths > 5) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Auras.ButterflyAura));
@@ -155,7 +155,7 @@ public static class Challenges
 
     private static void DoubleBackingTrigger()
     {
-        if (Gamemode.CurrentGameMode != "Standard") return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         var t = trigger.Create();
         Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region);
         t.AddAction(ErrorHandler.Wrap(() =>
@@ -193,7 +193,7 @@ public class YellowLightning
 
     private void EndTimer()
     {
-        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == "Standard")
+        if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == GameMode.Standard)
         {
             AwardManager.GiveReward(Kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning));
         }
