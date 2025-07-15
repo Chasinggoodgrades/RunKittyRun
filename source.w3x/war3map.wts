@@ -13,7 +13,7 @@ STRING 3
 |cff00ffffRun Kitty Run|r v1.3.6 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Music, and more! 
 |n|n- Check out our leaderboard in discord!
-|n|n|n|cff00ffffLast updated:|r |c00FF000007/12/2025|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000007/14/2025|r
 }
 
 STRING 4
@@ -4236,12 +4236,6 @@ STRING 3765
 Obtained by beating the nitro timer for |cffffff00ALL|r rounds in a single game OR |cffffff00Round 1|r |cff800000Impossible+|r.
 }
 
-STRING 3766
-// Abilities: A03W (Aura_Butterfly), Ubertip (Tooltip - Normal - Extended)
-{
-Obtained by beating the |cffffff00Round 4|r nitro on |cff960000Impossible|r with 5 or less deaths.
-}
-
 STRING 3767
 // Abilities: A00W (Aura_Freeze), Name (Name)
 {
@@ -4957,5 +4951,83 @@ STRING 3898
 // Abilities: A00C (Protection of the Ancients with Relic), Tip (Tooltip - Normal)
 {
 Protection of the Ancients (|cffffcc00M|r) (|cffffcc00Right CTRL|r) - [|cffffcc00Level 3|r]
+}
+
+STRING 3899
+// Abilities: A03W (Aura_Butterfly), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the |cffffff00Round 4|r nitro on |cff960000Impossible+|r with 5 or less deaths.
+}
+
+STRING 3900
+// Abilities: A01G (Aura_ChainedNormal), Name (Name)
+{
+Aura_ChainedNormal
+}
+
+STRING 3901
+// Abilities: A01G (Aura_ChainedNormal), Tip (Tooltip - Normal)
+{
+|cff00ff00Chained Aura Normal|r
+}
+
+STRING 3902
+// Abilities: A01G (Aura_ChainedNormal), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the Chained Together Event on |cffffff00Normal+|r
+}
+
+STRING 3903
+// Abilities: A01M (Aura_ChainedHard), Name (Name)
+{
+Aura_ChainedHard
+}
+
+STRING 3904
+// Abilities: A01M (Aura_ChainedHard), Tip (Tooltip - Normal)
+{
+|cffffff00Chained Aura Hard|r
+}
+
+STRING 3905
+// Abilities: A01M (Aura_ChainedHard), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the Chained Together Event on |cffff0000Hard+|r
+}
+
+STRING 3906
+// Abilities: A01N (Aura_ChainedImpossible), Name (Name)
+{
+Aura_ChainedImpossible
+}
+
+STRING 3907
+// Abilities: A01N (Aura_ChainedImpossible), Tip (Tooltip - Normal)
+{
+|cffff0000Chained Aura Impossible|r
+}
+
+STRING 3908
+// Abilities: A01N (Aura_ChainedImpossible), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the Chained Together Event on |cff960000Impossible+|r
+}
+
+STRING 3909
+// Abilities: A01O (Aura_ChainedNightmare), Name (Name)
+{
+Aura_ChainedNightmare
+}
+
+STRING 3910
+// Abilities: A01O (Aura_ChainedNightmare), Tip (Tooltip - Normal)
+{
+|cffff00ffChained Aura Nightmare|r
+}
+
+STRING 3911
+// Abilities: A01O (Aura_ChainedNightmare), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by beating the Chained Together Event on |cffff00ffNightmare|r
 }
 

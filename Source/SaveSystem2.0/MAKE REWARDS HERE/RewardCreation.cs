@@ -90,6 +90,11 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Auras.ButterflyAura), Constants.ABILITY_AURA_BUTTERFLY, "origin", "war3mapImported\\ButterflyAura.mdx", RewardType.Auras);
         AddReward(nameof(awardsSorted.Auras.FreezeAura), Constants.ABILITY_AURA_FREEZE, "origin", "war3mapImported\\HolyFreezeAuraD2.mdx", RewardType.Auras);
         AddReward(nameof(awardsSorted.Tournament.VioletAura), Constants.ABILITY_CHAMPION_AURAPURPLERUNIC, "origin", "war3mapImported\\GlaciarAuraPurple.mdx", RewardType.Tournament);
+        // Chained Together Awards
+        AddReward(nameof(awardsSorted.Auras.ChainedNormalAura), Constants.ABILITY_AURA_CHAINEDNORMAL, "origin", "war3mapImported\\ChainedNormalAura.mdx", RewardType.Auras);
+        AddReward(nameof(awardsSorted.Auras.ChainedHardAura), Constants.ABILITY_AURA_CHAINEDHARD, "origin", "war3mapImported\\ChainedHardAura.mdx", RewardType.Auras);
+        AddReward(nameof(awardsSorted.Auras.ChainedImpossibleAura), Constants.ABILITY_AURA_CHAINEDIMPOSSIBLE, "origin", "war3mapImported\\ChainedImpossibleAura.mdx", RewardType.Auras);
+        AddReward(nameof(awardsSorted.Auras.ChainedNightmareAura), Constants.ABILITY_AURA_CHAINEDNIGHTMARE, "origin", "war3mapImported\\ChainedNightmareAura.mdx", RewardType.Auras);
 
         // Wings
         AddReward(nameof(awardsSorted.Wings.PhoenixWings), Constants.ABILITY_WINGS_PHOENIX, "chest", "war3mapImported\\PhoenixWing2.mdx", RewardType.Wings, nameof(stats.Saves), 375);

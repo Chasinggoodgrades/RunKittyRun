@@ -84,7 +84,7 @@ public static class ChainedTogether
         {
             SetGroups();
             MoveChainTimer ??= CreateTimer();
-            TimerStart(MoveChainTimer, timerInterval, true, ErrorHandler.Wrap(MoveChain));
+            TimerStart(MoveChainTimer, timerInterval, true, MoveChain);
 
         }
 
