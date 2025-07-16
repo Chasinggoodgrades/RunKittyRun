@@ -50,8 +50,6 @@ public class Bomber : Affix
 
             ExplodeTimer?.Dispose();
             ReviveAlphaTimer?.Dispose();
-            ExplodeTimer = null;
-            ReviveAlphaTimer = null;
             RangeIndicator?.Dispose();
             RangeIndicator = null;
             TimerIndicator?.Dispose();

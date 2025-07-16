@@ -40,7 +40,7 @@ public static class ChainedTogether
 
     public static void TriggerEvent()
     {
-        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_TURQUOISE}Chained Togheter Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
         EventTriggered = true;
     }
 
