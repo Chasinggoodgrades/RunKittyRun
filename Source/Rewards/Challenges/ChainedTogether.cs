@@ -338,10 +338,10 @@ public class Chain
 
     private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
     {
-        { DifficultyLevel.Normal,     (400, 600, 800) },
-        { DifficultyLevel.Hard,       (450, 650, 850) },
-        { DifficultyLevel.Impossible, (500, 700, 900) },
-        { DifficultyLevel.Nightmare,  (550, 750, 950) }
+        { DifficultyLevel.Normal,     (600, 700, 800) },
+        { DifficultyLevel.Hard,       (650, 750, 850) },
+        { DifficultyLevel.Impossible, (700, 800, 900) },
+        { DifficultyLevel.Nightmare,  (750, 850, 950) }
     };
 
     public Chain()

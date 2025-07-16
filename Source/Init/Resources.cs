@@ -43,14 +43,14 @@
 
     private static void SetResourcesForGamemode()
     {
-        if (Gamemode.CurrentGameMode == Globals.GAME_MODES[0]) StandardResources();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) StandardResources();
         else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) SoloResources();
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) TeamResources();
     }
 
     private static void StandardResources()
     {
-        StartingGold = 200;
+        StartingGold = 200; 
         SaveExperience = 80;
         SaveGold = 25;
     }
