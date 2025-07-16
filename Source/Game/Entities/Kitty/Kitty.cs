@@ -26,6 +26,7 @@ public class Kitty
     public APMTracker APMTracker { get; set; }
     public KittyMorphosis KittyMorphosis { get; set; }
     public Slider Slider { get; private set; }
+    public RTR RTR { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
     public unit Unit { get; set; }
@@ -50,6 +51,7 @@ public class Kitty
         CreateKitty();
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
+        RTR = new RTR(this);
         StatsManager = new KittyStatsManager(this);
         YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
@@ -95,6 +97,7 @@ public class Kitty
 
             // Pause processes before unit death
             Slider.PauseSlider();
+            RTR.PauseRTR();
             aiController.PauseAi();
             Unit.Kill();
 
@@ -158,6 +161,7 @@ public class Kitty
 
             // Resume processes
             Slider.ResumeSlider(true);
+            RTR.ResumeRTR();
             aiController.ResumeAi();
 
             // Update savior stats if applicable

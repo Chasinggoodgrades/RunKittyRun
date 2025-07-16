@@ -465,6 +465,53 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "rtr",
+            alias: "",
+            group: "all",
+            argDesc: "[player]",
+            description: "Toggle RTR mode.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    if (Globals.ALL_KITTIES[player].RTR.IsEnabled())
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR();
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: Off");
+                    }
+                    else
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR();
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: On");
+                    }
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+
+                    if (kitty.RTR.IsEnabled())
+                    {
+                        kitty.RTR.StopRTR();
+                    }
+                    else
+                    {
+                        kitty.RTR.StartRTR();
+                    }
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTextTo(Colors.COLOR_GOLD + "RTR toggled for target player");
+                }
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "deactivatebarrier",
             alias: "db",
             group: "admin",
@@ -1784,7 +1831,7 @@ public static class InitCommands
                 float speed = float.Parse(args[0]);
                 if (args.Length < 2 || args[1] == "")
                 {
-                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed;
+                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set your slide speed to {speed}|r");
                     return;
                 }
@@ -1795,7 +1842,7 @@ public static class InitCommands
                 {
                     if (kitty == null) return;
                     isMatch = true;
-                    kitty.Slider.absoluteSlideSpeed = speed;
+                    kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
                 });
 
                 if (isMatch)
@@ -1805,5 +1852,42 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+           name: "movespeed",
+           alias: "ms",
+           group: "admin",
+           argDesc: "[speed] [player]",
+           description: "Sets the absolute move speed of the passed player, or yourself if no player is provided.",
+           action: (player, args) =>
+           {
+               if (args[0] == "")
+               {
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r");
+                   return;
+               }
+
+               float speed = float.Parse(args[0]);
+               if (args.Length < 2 || args[1] == "")
+               {
+                   Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set your move speed to {speed}|r");
+                   return;
+               }
+
+               bool isMatch = false;
+
+               CommandsManager.ResolvePlayerId(args[1], kitty =>
+               {
+                   if (kitty == null) return;
+                   isMatch = true;
+                   kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
+               });
+
+               if (isMatch)
+               {
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set their move speed to {speed}|r");
+               }
+           }
+       );
     }
 }
