@@ -55,11 +55,13 @@ public class WolfPoint
                 var regionY = startY + (i * stepY);
                 PointInfo[i].X = regionX;
                 PointInfo[i].Y = regionY;
+                PointInfo[i].LastPoint = false;
             }
 
             // Ensure the last point is exactly the end point
             PointInfo[numRegions].X = endX;
             PointInfo[numRegions].Y = endY;
+            PointInfo[numRegions].LastPoint = true;
 
             if (PointInfo != null && PointInfo.Count > 0)
             {
@@ -112,8 +114,8 @@ public class WolfPoint
             for (int i = PointInfo.Count - 1; i >= 1; i--)
             {
                 if (PointInfo[i].X == 0 && PointInfo[i].Y == 0) continue;
-                var moveID = MoveOrderID;
-                if (i == PointInfo.Count - 1) moveID = AttackOrderID;
+                var moveID = PointInfo[i].LastPoint ? AttackOrderID : MoveOrderID;
+
                 Wolf.Unit.QueueOrder(moveID, PointInfo[i].X, PointInfo[i].Y);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
@@ -144,6 +146,7 @@ public class WolfPoint
     {
         public float X { get; set; }
         public float Y { get; set; }
+        public bool LastPoint { get; set; }
 
         public WolfPointInfo()
         {

@@ -47,6 +47,12 @@ public static class ObjectPool
             }
 
             // put the object back in the pool <T>
+            if (obj == null)
+            {
+                Logger.Critical($"Attempted to return a null object of type {typeof(T).Name} to the pool.");
+                return;
+            }
+
             pool.Enqueue(obj);
         }
         catch (Exception e)
@@ -84,6 +90,12 @@ public static class ObjectPool
             {
                 pool = new Queue<object>();
                 _pools[typeof(List<T>)] = pool;
+            }
+
+            if (list == null)
+            {
+                Logger.Critical($"Attempted to return a null list of type {typeof(List<T>).Name} to the pool.");
+                return;
             }
 
             pool.Enqueue(list);

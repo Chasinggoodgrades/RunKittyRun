@@ -18,8 +18,10 @@ public class Wolf
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
-    public AchesTimers WanderTimer { get; set; }
-    private AchesTimers EffectTimer { get; set; }
+    public AchesTimers WanderTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
+
+    public AchesTimers EffectTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
+
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
     public WolfArea WolfArea { get; private set; }
@@ -199,11 +201,6 @@ public class Wolf
         Unit.Name = $"Lane: {RegionIndex + 1}";
         Unit.IsInvulnerable = true;
         Unit.SetColor(ConvertPlayerColor(24));
-
-        WanderTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-        EffectTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-
-        
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }

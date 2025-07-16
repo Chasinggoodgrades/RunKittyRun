@@ -1742,5 +1742,29 @@ public static class InitCommands
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Max Players Per Team set to {maxPlayersPerTeam}|r");
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "test10",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Testing how many wolves may have null timers",
+            action: (player, args) =>
+            {
+                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                {
+                    if (wolf.WanderTimer == null || wolf.EffectTimer == null)
+                    {
+                        Logger.Warning($"Wolf {wolf.Unit.Name} has a null timer.");
+                        wolf.Unit.SetVertexColor(255, 0, 255);
+                    }
+                    if (wolf.WanderTimer.Timer == null || wolf.EffectTimer.Timer == null)
+                    {
+                        Logger.Warning($"Wolf {wolf.Unit.Name} has a null timer.Timer.");
+                        wolf.Unit.SetVertexColor(0, 255, 0);
+                    }
+                }
+            }
+        );
     }
 }

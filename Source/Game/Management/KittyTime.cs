@@ -31,7 +31,6 @@ public class KittyTime
     {
         ProgressTimer.Pause();
         ProgressTimer?.Dispose();
-        ProgressTimer = null;
         RoundTime.Clear();
         RoundProgress.Clear();
         RoundTime = null;

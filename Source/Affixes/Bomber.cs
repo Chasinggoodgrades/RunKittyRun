@@ -50,6 +50,8 @@ public class Bomber : Affix
 
             ExplodeTimer?.Dispose();
             ReviveAlphaTimer?.Dispose();
+            ExplodeTimer = null; // These two timers are needed as it prevents the start explosion from continuing
+            ReviveAlphaTimer = null;
             RangeIndicator?.Dispose();
             RangeIndicator = null;
             TimerIndicator?.Dispose();
