@@ -23,6 +23,7 @@ public class Slider
     private bool isMirror = false;
     private bool wasSliding = false;
     private float? forcedSlideSpeed = null;
+    public float? absoluteSlideSpeed = null;
     private timer ForcedSlideTimer;
 
     // percentage of maximum speed
@@ -195,7 +196,7 @@ public class Slider
 
     private void UpdateSlider()
     {
-        float slideSpeed = this.forcedSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
+        float slideSpeed = this.forcedSlideSpeed ?? this.absoluteSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
         float slidePerTick = slideSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);

@@ -1673,7 +1673,7 @@ public static class InitCommands
                 Console.WriteLine(x);
             }
         );
-        
+
         CommandsManager.RegisterCommand(
             name: "chainedtest",
             alias: "",
@@ -1686,7 +1686,7 @@ public static class InitCommands
                 ChainedTogether.StartEvent();
             }
         );
-      
+
         CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",
@@ -1766,5 +1766,44 @@ public static class InitCommands
                 }
             }
         );
+
+        CommandsManager.RegisterCommand(
+            name: "slidespeed",
+            alias: "ss",
+            group: "admin",
+            argDesc: "[speed] [player]",
+            description: "Sets the absolute slide speed of the passed player, or yourself if no player is provided.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r");
+                    return;
+                }
+
+                float speed = float.Parse(args[0]);
+                if (args.Length < 2 || args[1] == "")
+                {
+                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed;
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set your slide speed to {speed}|r");
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+                    kitty.Slider.absoluteSlideSpeed = speed;
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set their slide speed to {speed}|r");
+                }
+            }
+        );
+
     }
 }
