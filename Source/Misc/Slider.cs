@@ -149,6 +149,12 @@ public class Slider
                 }
 
                 this.wasSliding = false;
+
+                if (this.remainingDegreesToTurn != 0)
+                {
+                    escaperTurnForOnePeriod();
+                }
+
                 return;
             }
 
@@ -233,6 +239,8 @@ public class Slider
     private void HandleTurn(bool isToLocation)
     {
         if (!IsEnabled()) return;
+        if (!IsOnSlideTerrain()) return;
+
         var unit = @event.Unit;
         float angle;
         if (isToLocation)
@@ -249,15 +257,8 @@ public class Slider
             angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
         }
 
-        // if (kitty.SlidingMode == "max")
-        // {
         var currentAngle = GetUnitFacing(unit);
         this.setRemainingDegreesToTurn(AnglesDiff(angle, currentAngle));
-        // }
-        // else
-        // {
-        // SetUnitFacing(unit, angle);
-        // }
     }
 
     public float ForceAngleBetween0And360(float angle)
