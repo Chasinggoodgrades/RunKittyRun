@@ -49,10 +49,7 @@ public class RTR
         ClickTrigger.Enable();
         WidgetTrigger.Enable();
 
-        RTRTimer.Start(RTR_INTERVAL, true, ErrorHandler.Wrap(() =>
-        {
-            UpdateRTR();
-        }));
+        RTRTimer.Start(RTR_INTERVAL, true, ErrorHandler.Wrap(UpdateRTR));
     }
 
     public void PauseRTR()
