@@ -468,45 +468,54 @@ public static class InitCommands
             name: "rtr",
             alias: "",
             group: "all",
-            argDesc: "[player]",
-            description: "Toggle RTR mode.",
+            argDesc: "[on/off] [player]",
+            description: "Set RTR mode on/off.",
             action: (player, args) =>
             {
                 if (args[0] == "")
                 {
-                    if (Globals.ALL_KITTIES[player].RTR.IsEnabled())
-                    {
-                        Globals.ALL_KITTIES[player].RTR.StopRTR();
-                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: Off");
-                    }
-                    else
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: rtr [on/off] [player]|r");
+                    return;
+                }
+
+                bool mode = CommandsManager.GetBool(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    // Apply to self
+                    if (mode)
                     {
                         Globals.ALL_KITTIES[player].RTR.StartRTR();
                         player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: On");
+                    }
+                    else
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR();
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: Off");
                     }
                     return;
                 }
 
                 bool isMatch = false;
 
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
                     if (kitty == null) return;
                     isMatch = true;
 
-                    if (kitty.RTR.IsEnabled())
+                    if (mode)
                     {
-                        kitty.RTR.StopRTR();
+                        kitty.RTR.StartRTR();
                     }
                     else
                     {
-                        kitty.RTR.StartRTR();
+                        kitty.RTR.StopRTR();
                     }
                 });
 
                 if (isMatch)
                 {
-                    player.DisplayTextTo(Colors.COLOR_GOLD + "RTR toggled for target player");
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"RTR set to {(mode ? "On" : "Off")} for target player");
                 }
             }
         );
@@ -1889,5 +1898,64 @@ public static class InitCommands
                }
            }
        );
+
+        CommandsManager.RegisterCommand(
+            name: "speededit",
+            alias: "se",
+            group: "admin",
+            argDesc: "[on/off] [player]",
+            description: "Turns on RTR and sets move speed to 800 for the specified player.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r");
+                    return;
+                }
+
+                bool mode = CommandsManager.GetBool(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    // Apply to self
+                    if (mode)
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR();
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = 800f;
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "Speed Edit: On (RTR + 800 speed)");
+                    }
+                    else
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR();
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = null;
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "Speed Edit: Off");
+                    }
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+                    if (mode)
+                    {
+                        kitty.RTR.StartRTR();
+                        kitty.RTR.absoluteMoveSpeed = 800f;
+                    }
+                    else
+                    {
+                        kitty.RTR.StopRTR();
+                        kitty.RTR.absoluteMoveSpeed = null;
+                    }
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"Speed Edit set to {(mode ? "On (RTR + 800 speed)" : "Off")} for target player");
+                }
+            }
+        );
     }
 }
