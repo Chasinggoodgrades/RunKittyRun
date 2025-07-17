@@ -377,8 +377,8 @@ public static class InitCommands
                     player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "You can't toggle mirror mode while sliding!");
                     return;
                 }
-                Globals.ALL_KITTIES[player].Slider.ToggleMirror();
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (Globals.ALL_KITTIES[player].Slider.IsMirror() ? "On" : "Off"));
+                Globals.ALL_KITTIES[player].ToggleMirror();
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (Globals.ALL_KITTIES[player].IsMirror ? "On" : "Off"));
             }
         );
 

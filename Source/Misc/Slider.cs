@@ -20,7 +20,6 @@ public class Slider
     private float remainingDegreesToTurn = 0;
     private float slideCurrentTurnPerPeriod = 0;
 
-    private bool isMirror = false;
     private bool wasSliding = false;
     private float? forcedSlideSpeed = null;
     public float? absoluteSlideSpeed = null;
@@ -97,16 +96,6 @@ public class Slider
         return enabled;
     }
 
-    public bool IsMirror()
-    {
-        return isMirror;
-    }
-
-    public void ToggleMirror()
-    {
-        isMirror = !isMirror;
-    }
-
     public void StartSlider()
     {
         enabled = true;
@@ -143,7 +132,7 @@ public class Slider
         {
             if (!IsOnSlideTerrain())
             {
-                if (this.wasSliding && this.isMirror)
+                if (this.wasSliding && this.kitty.IsMirror)
                 {
                     // Reverse hero
                     BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
@@ -159,7 +148,7 @@ public class Slider
                 return;
             }
 
-            if (!this.wasSliding && this.isMirror)
+            if (!this.wasSliding && this.kitty.IsMirror)
             {
                 // Reverse hero
                 BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
@@ -196,7 +185,7 @@ public class Slider
 
     private void UpdateSlider()
     {
-        float slideSpeed = this.forcedSlideSpeed ?? this.absoluteSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
+        float slideSpeed = this.forcedSlideSpeed ?? this.absoluteSlideSpeed ?? ((this.kitty.IsMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
         float slidePerTick = slideSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);

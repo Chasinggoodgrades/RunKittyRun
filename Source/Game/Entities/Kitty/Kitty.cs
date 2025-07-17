@@ -27,6 +27,7 @@ public class Kitty
     public KittyMorphosis KittyMorphosis { get; set; }
     public Slider Slider { get; private set; }
     public RTR RTR { get; private set; }
+    public MirrorMovementHandler MirrorHandler { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
     public unit Unit { get; set; }
@@ -41,6 +42,7 @@ public class Kitty
     public Disco Disco { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
     public bool IsChained { get; set; } = false;
+    public bool IsMirror { get; set; } = false;
 
     public Kitty(player player)
     {
@@ -52,6 +54,7 @@ public class Kitty
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
         RTR = new RTR(this);
+        MirrorHandler = new MirrorMovementHandler(this);
         StatsManager = new KittyStatsManager(this);
         YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
@@ -189,6 +192,11 @@ public class Kitty
         });
     }
 
+    public void ToggleMirror()
+    {
+        IsMirror = !IsMirror;
+    }
+
     private void InitData()
     {
         try
@@ -253,6 +261,7 @@ public class Kitty
         YellowLightning.Dispose();
         TimeProg.Dispose();
         APMTracker.Dispose();
+        MirrorHandler.Dispose();
         InvulTimer.Pause();
         InvulTimer.Dispose();
         Disco?.Dispose();
