@@ -36,6 +36,7 @@ public class RTR
     public void StartRTR()
     {
         enabled = true;
+        kitty.CanEarnAwards = false;
         ResumeRTR();
     }
 
@@ -68,6 +69,7 @@ public class RTR
     public void StopRTR()
     {
         enabled = false;
+        kitty.CanEarnAwards = false;
         this.PauseRTR();
     }
 

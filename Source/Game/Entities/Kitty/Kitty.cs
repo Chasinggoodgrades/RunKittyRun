@@ -43,6 +43,7 @@ public class Kitty
     public timer InvulTimer { get; set; } = timer.Create();
     public bool IsChained { get; set; } = false;
     public bool IsMirror { get; set; } = false;
+    public bool CanEarnAwards { get; set; } = true;
 
     public Kitty(player player)
     {

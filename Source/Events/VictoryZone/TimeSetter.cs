@@ -15,6 +15,7 @@ public static class TimeSetter
             var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
+            if (!Globals.ALL_KITTIES[player].CanEarnAwards) return false;
 
             if (currentTime <= 90) return false; // Below 90 seconds is impossible and not valid.. Don't save
 
