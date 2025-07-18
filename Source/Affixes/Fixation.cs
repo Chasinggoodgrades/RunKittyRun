@@ -1,6 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
-using WCSharp.Shared.Extensions;
+using WCSharp.Api.Enums;
 using static WCSharp.Api.Common;
 
 public class Fixation : Affix
@@ -34,7 +34,7 @@ public class Fixation : Affix
         SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
         SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.Unit.TargetedAs = 16;
+        Unit.Unit.TargetedAs = TargetTypes.Ward;
         RegisterEvents();
         Unit.WolfArea.FixationCount += 1;
         base.Apply();
@@ -44,7 +44,7 @@ public class Fixation : Affix
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.DefaultMovementSpeed);
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Unit.Unit.TargetedAs = 2;
+        Unit.Unit.TargetedAs = TargetTypes.Ground;
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
 

@@ -1803,23 +1803,14 @@ public static class InitCommands
             name: "test10",
             alias: "",
             group: "admin",
-            argDesc: "",
-            description: "Testing how many wolves may have null timers",
+            argDesc: "[on][off]",
+            description: "Turns pathing on or off",
             action: (player, args) =>
             {
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
-                {
-                    if (wolf.WanderTimer == null || wolf.EffectTimer == null)
-                    {
-                        Logger.Warning($"Wolf {wolf.Unit.Name} has a null timer.");
-                        wolf.Unit.SetVertexColor(255, 0, 255);
-                    }
-                    if (wolf.WanderTimer.Timer == null || wolf.EffectTimer.Timer == null)
-                    {
-                        Logger.Warning($"Wolf {wolf.Unit.Name} has a null timer.Timer.");
-                        wolf.Unit.SetVertexColor(0, 255, 0);
-                    }
-                }
+                bool status = CommandsManager.GetBool(args[0]);
+
+                var kitty = Globals.ALL_KITTIES[player];
+                kitty.Unit.SetPathing(status);
             }
         );
 
