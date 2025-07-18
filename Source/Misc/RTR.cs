@@ -69,7 +69,7 @@ public class RTR
     public void StopRTR()
     {
         enabled = false;
-        kitty.CanEarnAwards = false;
+        kitty.CanEarnAwards = true;
         this.PauseRTR();
     }
 
