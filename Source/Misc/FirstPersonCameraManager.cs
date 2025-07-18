@@ -42,6 +42,7 @@ public class FirstPersonCamera
         {
             if (forceCamTimer != null)
             {
+                forceCamTimer.Pause();
                 DestroyTimer(forceCamTimer);
                 forceCamTimer = null;
                 ResetCamera();
@@ -142,6 +143,7 @@ public class FirstPersonCamera
     private void ResetCamera()
     {
         if (!player.IsLocal) return;
+        Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, false);
         ResetToGameCamera(0);
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0f, 0.0f);
     }
