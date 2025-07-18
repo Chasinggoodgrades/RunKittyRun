@@ -167,23 +167,29 @@ public class RTR
     {
         if (!enabled) return;
 
-        for (int i = 0; i < ItemSpawner.TrackKibbles.Count; i++)
+        var kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.X, kitty.Unit.Y);
+        var itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.X, kitty.Unit.Y);
+
+        if (kibbleList != null && kibbleList.Count > 0)
         {
-            var k = ItemSpawner.TrackKibbles[i];
-            if (k == null) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(k.Item.X, k.Item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
-            kitty.Unit.AddItem(k.Item);
-            break;
+            for (int i = 0; i < kibbleList.Count; i++)
+            {
+                var k = kibbleList[i];
+                if (k == null) continue;
+                kitty.Unit.AddItem(k.Item);
+            }
         }
 
-        for (int i = 0; i < ItemSpawner.TrackItems.Count; i++)
+        if (itemList != null && itemList.Count > 0)
         {
-            var item = ItemSpawner.TrackItems[i];
-            if (item == null) continue;
-            if (item.IsOwned) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
-            kitty.Unit.AddItem(item);
-            break;
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                var item = itemList[i];
+                if (item == null) continue;
+                if (item.IsOwned) continue;
+                kitty.Unit.AddItem(item);
+                break;
+            }
         }
     }
 }
