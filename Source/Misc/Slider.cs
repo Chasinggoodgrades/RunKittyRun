@@ -130,6 +130,11 @@ public class Slider
 
         SliderTimer.Start(SLIDE_INTERVAL, true, ErrorHandler.Wrap(() =>
         {
+            if (this.kitty.Unit.IsPaused)
+            {
+                return;
+            }
+
             if (!IsOnSlideTerrain())
             {
                 if (this.wasSliding && this.kitty.IsMirror)
