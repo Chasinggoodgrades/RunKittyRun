@@ -208,7 +208,9 @@ public class Slider
             newY = oldY;
         }
 
+        kitty.Unit.SetPathing(false);
         kitty.Unit.SetPosition(newX, newY);
+        kitty.Unit.SetPathing(true);
         ItemPickup();
     }
 
@@ -345,30 +347,6 @@ public class Slider
     private void ItemPickup()
     {
         if (!enabled) return;
-
-        var kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.X, kitty.Unit.Y);
-        var itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.X, kitty.Unit.Y);
-
-        if (kibbleList != null && kibbleList.Count > 0)
-        {
-            for (int i = 0; i < kibbleList.Count; i++)
-            {
-                var k = kibbleList[i];
-                if (k == null) continue;
-                kitty.Unit.AddItem(k.Item);
-            }
-        }
-
-        if (itemList != null && itemList.Count > 0)
-        {
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                var item = itemList[i];
-                if (item == null) continue;
-                if (item.IsOwned) continue;
-                kitty.Unit.AddItem(item);
-                break;
-            }
-        }
+        ItemSpatialGrid.KittyItemPickup(kitty);
     }
 }

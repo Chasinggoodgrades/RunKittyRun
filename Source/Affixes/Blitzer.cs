@@ -132,7 +132,10 @@ public class Blitzer : Affix
         float nextY = currentY + (directionY * stepDistance);
 
         // Move the unit one step
+        Unit.Unit.SetPathing(false);
         Unit.Unit.SetPosition(nextX, nextY);
+        Unit.Unit.SetPathing(true);
+
         Unit.Unit.SetFacing((float)(Math.Atan2(directionY, directionX) * 180.0 / Math.PI));
         Unit.Unit.SetAnimation(2); // running animation
 

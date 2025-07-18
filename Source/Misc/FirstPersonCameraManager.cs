@@ -100,8 +100,9 @@ public class FirstPersonCamera
                 newY = oldY;
             }
 
-            SetUnitX(hero, newX);
-            SetUnitY(hero, newY);
+            hero.SetPathing(false);
+            SetUnitPosition(hero, newX, newY);
+            hero.SetPathing(true);
         }
 
         if (fwd == 0)
@@ -126,6 +127,8 @@ public class FirstPersonCamera
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_FIELD_OF_VIEW, 1500, 0);
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ROTATION, GetUnitFacing(hero), 0);
         Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ZOFFSET, 100, 0);
+
+        ItemPickup();
     }
 
     public void SetKeyDownState(string key, bool state)
@@ -141,6 +144,12 @@ public class FirstPersonCamera
         if (!player.IsLocal) return;
         ResetToGameCamera(0);
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0f, 0.0f);
+    }
+
+    private void ItemPickup()
+    {
+        Kitty kitty = Globals.ALL_KITTIES[player];
+        ItemSpatialGrid.KittyItemPickup(kitty);
     }
 }
 

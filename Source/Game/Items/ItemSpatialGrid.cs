@@ -61,7 +61,7 @@ public static class ItemSpatialGrid
     {
         var cell = GetCell(x, y);
         if (kibbleCells.TryGetValue(cell, out var list))
-                return list;
+            return list;
         return null;
     }
 
@@ -71,5 +71,33 @@ public static class ItemSpatialGrid
         if (itemCells.TryGetValue(cell, out var list))
             return list;
         return null;
+    }
+
+    public static void KittyItemPickup(Kitty kitty)
+    {
+        var kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.Unit.Y);
+        var itemList = GetNearbyItems(kitty.Unit.X, kitty.Unit.Y);
+
+        if (kibbleList != null && kibbleList.Count > 0)
+        {
+            for (int i = 0; i < kibbleList.Count; i++)
+            {
+                var k = kibbleList[i];
+                if (k == null) continue;
+                kitty.Unit.AddItem(k.Item);
+            }
+        }
+
+        if (itemList != null && itemList.Count > 0)
+        {
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                var item = itemList[i];
+                if (item == null) continue;
+                if (item.IsOwned) continue;
+                kitty.Unit.AddItem(item);
+                break;
+            }
+        }
     }
 }
