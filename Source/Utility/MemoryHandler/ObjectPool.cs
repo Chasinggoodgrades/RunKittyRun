@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public static class ObjectPool
 {
     private static readonly Dictionary<Type, Queue<object>> _pools = new Dictionary<Type, Queue<object>>();
+    private static object lastObject;
 
     /// <summary>
     /// Returns an empty object of type <typeparamref name="T"/> from the pool if available, otherwise creates a new instance.
@@ -17,7 +18,14 @@ public static class ObjectPool
             // Gotta check if we have the type && some objects in the pool, then return it.
             if (_pools.TryGetValue(typeof(T), out var pool) && pool.Count > 0)
             {
-                return (T)pool.Dequeue();
+                var obj = (T)pool.Dequeue();
+                if (ReferenceEquals(lastObject, obj))
+                {
+                    // Logger.Warning($"ObjectPool: Returning the same object of type {typeof(T).Name} as last time.................................... lol");
+                    return new T();
+                }
+                lastObject = obj;
+                return obj;
             }
 
             // we got no objects in pool, lets return a new one of <T>

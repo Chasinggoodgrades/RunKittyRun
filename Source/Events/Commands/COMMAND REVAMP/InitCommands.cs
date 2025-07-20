@@ -1803,14 +1803,15 @@ public static class InitCommands
             name: "test10",
             alias: "",
             group: "admin",
-            argDesc: "[on][off]",
-            description: "Turns pathing on or off",
+            argDesc: "",
+            description: "Getting wolf timer address Information",
             action: (player, args) =>
             {
-                bool status = CommandsManager.GetBool(args[0]);
-
-                var kitty = Globals.ALL_KITTIES[player];
-                kitty.Unit.SetPathing(status);
+                var selectedUnit = CustomStatFrame.SelectedUnit[player];
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
+                var wolf = Globals.ALL_WOLVES[selectedUnit];
+                string timerAddress = $"WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}";
+                Console.WriteLine($"{timerAddress}");
             }
         );
 
