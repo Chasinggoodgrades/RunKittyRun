@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -8,20 +7,19 @@ public static class ChainedTogether
 {
     private const int REQUIRED_PLAYERS = 2;
     private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
-    private static List<List<Kitty>> kittyGroups = new List<List<Kitty>>(); // Convert this into a dictionary
-    private static float timerInterval = 0.1f;
+    private static Dictionary<string, List<Kitty>> kittyGroups = new Dictionary<string, List<Kitty>>();
+    private static float timerInterval = 0.01f;
     private static Random rng = Globals.RANDOM_GEN;
     private static timer MoveChainTimer;
     private static bool EventTriggered { get; set; } = false;
     private static bool EventStarted { get; set; } = false;
-    private static bool IsStartingContidionValid = true;
-
+    private static bool IsStartingConditionValid = true;
 
     private static void TriggerEventOnLastSafeZone()
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Only occurs in Standard Gamemode.
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
-        if (!IsStartingContidionValid) return;
+        if (!IsStartingConditionValid) return;
 
         List<Kitty> allKitties = Globals.ALL_KITTIES_LIST;
 
@@ -40,11 +38,9 @@ public static class ChainedTogether
 
     public static void TriggerEvent()
     {
-        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_TURQUOISE}Chained Togheter Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_TURQUOISE}Chained Together Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
         EventTriggered = true;
     }
-
-
     private static void UpdateStartingCondition(Kitty kitty)
     {
         int currentSafezone = kitty.CurrentSafeZone;
@@ -63,18 +59,15 @@ public static class ChainedTogether
 
         if (skippedSafezone)
         {
-            IsStartingContidionValid = false;
+            IsStartingConditionValid = false;
         }
     }
 
-    /// <summary>
-    /// Starts the event
-    /// </summary>
     public static void StartEvent()
     {
         if (!EventTriggered)
         {
-            IsStartingContidionValid = true;
+            IsStartingConditionValid = true;
             return;
         }
 
@@ -85,9 +78,7 @@ public static class ChainedTogether
             SetGroups();
             MoveChainTimer ??= CreateTimer();
             TimerStart(MoveChainTimer, timerInterval, true, MoveChain);
-
         }
-
         catch (Exception e)
         {
             Logger.Warning($"Error in ChainedTogether.StartEvent {e.Message}");
@@ -97,171 +88,85 @@ public static class ChainedTogether
 
     private static void MoveChain()
     {
-        var kitties = Globals.ALL_KITTIES_LIST;
-        bool isOutOfRange = false;
-        string kittyOutOfRange = "";
-
-        for (int i = 0; i < kitties.Count - 1; i++)
+        foreach (var chain in KittyLightnings.Values)
         {
-            var kitty = kitties[i];
-            var kittyName = kitty.Name;
-
-            if (!KittyLightnings.ContainsKey(kittyName)) continue;
-
-            var chain = KittyLightnings[kittyName];
-            isOutOfRange = chain.Move();
-            kittyOutOfRange = kittyName;
-
-            if (isOutOfRange) break;
-        }
-
-        if (isOutOfRange)
-        {
-            LoseEvent(kittyOutOfRange);
+            chain.Constrain();
         }
     }
 
-    public static void LoseEvent(string kittyNameOutSideRange)
+    private static void RegenerateGroup(string kittyName)
     {
-        if (!EventStarted) return; // Event not started or already ended.
-
-        try
-        {
-            FreeKittiesFromGroup(kittyNameOutSideRange, false);
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Purpose is to regenerate the group chains if a player leaves the game or disconnects.
-    /// </summary>
-    /// <param name="kittyName"></param>
-    public static void RegenerateGroup(string kittyName)
-    {
-        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); // IEnumerable "Any" leaks
-        if (groupIndex < 0) return;
-
-        try
-        {
-            var currentGroup = kittyGroups[groupIndex].Where(kitty => kitty.Name != kittyName).ToList(); // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
-
-            FreeKittiesFromGroup(kittyName, false);
-
-            for (int j = 0; j < currentGroup.Count - 1; j++)
-            {
-                var currentKitty = currentGroup[j];
-                var nextKitty = currentGroup[j + 1];
-
-                currentKitty.IsChained = true;
-                Chain chain = ObjectPool.GetEmptyObject<Chain>();
-                chain.SetKitties(currentKitty, nextKitty);
-                KittyLightnings[currentKitty.Name] = chain;
-            }
-
-            kittyGroups.Add(currentGroup);
-        }
-        catch (Exception e)
-        {
-            Logger.Warning($"Error in ChainedTogether.LoseEvent {e.Message}");
-            throw;
-        }
+        if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
+        group.RemoveAll(k => k.Name == kittyName);
+        RechainGroup(group);
     }
 
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
     {
-        int groupIndex = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)); //IEnumerable with "Any" leaks
-        if (groupIndex < 0) return;
-
-        var currentGroup = kittyGroups[groupIndex];
-
-        for (int i = 0; i < currentGroup.Count; i++)
+        if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
+        foreach (var k in group)
         {
-            var kitty = currentGroup[i];
-            kitty.IsChained = false;
-
-            if (isVictory)
+            k.IsChained = false;
+            if (KittyLightnings.TryGetValue(k.Name, out var c))
             {
-                AwardChainedTogether(kitty);
+                c.Dispose();
+                KittyLightnings.Remove(k.Name);
             }
-
-            if (KittyLightnings.ContainsKey(kitty.Name))
-            {
-                KittyLightnings[kitty.Name].Dispose();
-                KittyLightnings.Remove(kitty.Name);
-            }
+            if (isVictory) AwardChainedTogether(k);
         }
-
-        kittyGroups.RemoveAt(groupIndex);
+        foreach (var k in group) kittyGroups.Remove(k.Name);
     }
-
 
     private static void SetGroups()
     {
-        var allKitties = Globals.ALL_KITTIES_LIST;
-        int count = allKitties.Count;
-
-        // Shuffle the kitties list to ensure randomness
-        for (int i = allKitties.Count - 1; i > 0; i--)
+        var all = new List<Kitty>(Globals.ALL_KITTIES_LIST);
+        int count = all.Count;
+        for (int i = count - 1; i > 0; i--)
         {
             int j = rng.Next(i + 1);
-            Kitty temp = allKitties[i];
-            allKitties[i] = allKitties[j];
-            allKitties[j] = temp;
+            var temp = all[i];
+            all[i] = all[j];
+            all[j] = temp;
         }
 
+        List<List<Kitty>> groups = new();
         if (count < 3)
+            groups.Add(all);
+        else
         {
-            kittyGroups.Add(allKitties);
-            ChainGroup(allKitties);
-
-        }
-
-        int index = 0;
-        int groupsOfThree = count / 3;
-        int remainder = count % 3;
-
-        if (remainder == 1)
-        {
-            // convert two groups of 3 into two groups of 4 to avoid a group of 1
-            groupsOfThree -= 1;
-            remainder += 3;
-        }
-
-        for (int i = 0; i < groupsOfThree; i++)
-        {
-            var group = new List<Kitty> { allKitties[index], allKitties[index + 1], allKitties[index + 2] };
-            kittyGroups.Add(group);
-            ChainGroup(group);
-            index += 3;
-        }
-
-        if (remainder > 0)
-        {
-            var lastGroup = new List<Kitty>();
-            for (int i = index; i < allKitties.Count; i++)
+            int groupsOfThree = count / 3;
+            int rem = count % 3;
+            if (rem == 1)
             {
-                lastGroup.Add(allKitties[i]);
+                groupsOfThree--;
+                rem += 3;
             }
-            kittyGroups.Add(lastGroup);
-            ChainGroup(lastGroup);
+            int idx = 0;
+            for (int i = 0; i < groupsOfThree; i++)
+            {
+                groups.Add(all.GetRange(idx, 3));
+                idx += 3;
+            }
+            if (idx < count)
+                groups.Add(all.GetRange(idx, count - idx));
         }
-    }
-    
-    private static void ChainGroup(List<Kitty> group)
-    {
-        for (int j = 0; j < group.Count - 1; j++)
-        {
-            var currentKitty = group[j];
-            var nextKitty = group[j + 1];
 
-            currentKitty.IsChained = true;
-            Chain chain = ObjectPool.GetEmptyObject<Chain>();
-            chain.SetKitties(currentKitty, nextKitty);
-            KittyLightnings[currentKitty.Name] = chain;
+        foreach (var g in groups)
+            RechainGroup(g);
+    }
+
+    private static void RechainGroup(List<Kitty> group)
+    {
+        for (int i = 0; i < group.Count - 1; i++)
+        {
+            var a = group[i];
+            var b = group[i + 1];
+            a.IsChained = b.IsChained = true;
+            var chain = ObjectPool.GetEmptyObject<Chain>();
+            chain.SetKitties(a, b);
+            KittyLightnings[a.Name] = chain;
+            kittyGroups[a.Name] = group;
+            kittyGroups[b.Name] = group;
         }
     }
 
@@ -272,17 +177,11 @@ public static class ChainedTogether
             if (!EventStarted)
             {
                 UpdateStartingCondition(kitty);
-
                 if (IsInLastSafezone(kitty))
-                {
                     TriggerEventOnLastSafeZone();
-                }
-                return; // Event not started or already ended.
+                return;
             }
-
             if (!IsInLastSafezone(kitty)) return;
-
-            //finish event
             FreeKittiesFromGroup(kitty.Name, true);
         }
         catch (Exception e)
@@ -290,7 +189,6 @@ public static class ChainedTogether
             Logger.Warning($"Error in ChainedTogether.ReachedSafezone {e.Message}");
             throw;
         }
-
     }
 
     private static void AwardChainedTogether(Kitty kitty)
@@ -319,7 +217,7 @@ public static class ChainedTogether
 
         AwardManager.GiveReward(kitty.Player, nameof(award));
     }
-    
+
     private static bool IsInLastSafezone(Kitty kitty)
     {
         // Check if the checks made with this function can be removed by calling the
@@ -327,16 +225,15 @@ public static class ChainedTogether
         // I'm afraid there could be a race condition by doing so
         return kitty.CurrentSafeZone == RegionList.SafeZones.Length - 1;
     }
-
 }
 
 public class Chain
 {
-    public Kitty FirstKitty { get; set; }
-    public Kitty SecondKitty { get; set; }
-    public lightning Lightning { get; set; }
+    public Kitty FirstKitty { get; private set; }
+    public Kitty SecondKitty { get; private set; }
+    public lightning Lightning { get; private set; }
 
-    private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
+    private static readonly Dictionary<DifficultyLevel, (int good, int far, int max)> Ranges = new()
     {
         { DifficultyLevel.Normal,     (600, 700, 800) },
         { DifficultyLevel.Hard,       (650, 750, 850) },
@@ -344,38 +241,105 @@ public class Chain
         { DifficultyLevel.Nightmare,  (750, 850, 950) }
     };
 
-    public Chain()
+    public void SetKitties(Kitty a, Kitty b)
     {
+        FirstKitty = a;
+        SecondKitty = b;
+        Lightning?.Dispose();
+        Lightning = AddLightning("WHCH", true,
+            a.Unit.X, a.Unit.Y, b.Unit.X, b.Unit.Y);
     }
 
-    public void SetKitties(Kitty firstKitty, Kitty secondKitty)
+    public void Constrain()
     {
-        FirstKitty = firstKitty;
-        SecondKitty = secondKitty;
-        Lightning?.Dispose(); // just incase
-        Lightning = AddLightning("WHCH", true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
-        FirstKitty.IsChained = true;
-        SecondKitty.IsChained = true;
-    }
+        float x1 = FirstKitty.Unit.X, y1 = FirstKitty.Unit.Y;
+        float x2 = SecondKitty.Unit.X, y2 = SecondKitty.Unit.Y;
+        float dx = x2 - x1, dy = y2 - y1;
+        float dist = (float)Math.Sqrt(dx * dx + dy * dy);
+        int max = GetRange("max");
 
-    public bool Move()
-    {
-        int outOfRange = CalculateRangeByDifficulty("breakPoint");
-        bool isOutOfRange = false;
-        var x1 = FirstKitty.Unit.X;
-        var y1 = FirstKitty.Unit.Y;
-        var x2 = SecondKitty.Unit.X;
-        var y2 = SecondKitty.Unit.Y;
-        MoveLightning(Lightning, true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
-        float distance = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
-
-        if (distance > outOfRange)
+        if (dist > max && dist > 0f)
         {
-            isOutOfRange = true;
+            float excess = dist - max;
+            float nx = dx / dist, ny = dy / dist;
+            bool firstCanMove = FirstKitty.Alive && !FirstKitty.Unit.IsPaused;
+            bool secondCanMove = SecondKitty.Alive && !SecondKitty.Unit.IsPaused;
+            float w1 = firstCanMove ? (secondCanMove ? 0.5f : 1f) : 0f;
+            float w2 = secondCanMove ? (firstCanMove ? 0.5f : 1f) : 0f;
+
+            // Move FirstKitty with terrain check
+            float newX1 = nx * excess * w1;
+            float newY1 = ny * excess * w1;
+
+            if (IsTerrainPathable(FirstKitty.Unit.X + newX1, y1, PATHING_TYPE_WALKABILITY))
+            {
+                newX1 = 0;
+            }
+
+            if (IsTerrainPathable(x1, FirstKitty.Unit.Y + newY1, PATHING_TYPE_WALKABILITY))
+            {
+                newY1 = 0;
+            }
+
+            FirstKitty.Unit.SetPathing(false);
+            FirstKitty.Unit.X += newX1;
+            FirstKitty.Unit.Y += newY1;
+            FirstKitty.Unit.SetPathing(true);
+
+            // Move SecondKitty with terrain check
+            float newX2 = nx * excess * w2;
+            float newY2 = ny * excess * w2;
+            if (IsTerrainPathable(SecondKitty.Unit.X + newX2, y2, PATHING_TYPE_WALKABILITY))
+            {
+                newX2 = 0;
+            }
+
+            if (IsTerrainPathable(x2, SecondKitty.Unit.Y + newY2, PATHING_TYPE_WALKABILITY))
+            {
+                newY2 = 0;
+            }
+
+            SecondKitty.Unit.SetPathing(false);
+            SecondKitty.Unit.X -= newX2;
+            SecondKitty.Unit.Y -= newY2;
+            SecondKitty.Unit.SetPathing(true);
         }
 
-        ChangeChainColor(distance);
-        return isOutOfRange;
+        // update lightning and color
+        MoveLightning(Lightning, true,
+            FirstKitty.Unit.X, FirstKitty.Unit.Y,
+            SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        UpdateColor(dist);
+    }
+
+
+    private void UpdateColor(float dist)
+    {
+        int good = GetRange("good"), far = GetRange("far");
+        float r = 0f, g = 1f, b = 0f, a = 1f;
+        if (dist > far) { r = 1f; g = 0f; b = 0f; }
+        else if (dist > good) { r = 1f; g = 1f; b = 0f; }
+        SetLightningColor(Lightning, r, g, b, a);
+    }
+
+    private static int GetRange(string type)
+    {
+        DifficultyLevel lvl = (DifficultyLevel)Difficulty.DifficultyValue;
+        var key = lvl >= DifficultyLevel.Nightmare
+            ? DifficultyLevel.Nightmare
+            : lvl >= DifficultyLevel.Impossible
+                ? DifficultyLevel.Impossible
+                : lvl >= DifficultyLevel.Hard
+                    ? DifficultyLevel.Hard
+                    : DifficultyLevel.Normal;
+        var tuple = Ranges[key];
+        return type switch
+        {
+            "good" => tuple.good,
+            "far" => tuple.far,
+            "max" => tuple.max,
+            _ => throw new ArgumentException($"Invalid range type {type}")
+        };
     }
 
     public void Dispose()
@@ -384,59 +348,5 @@ public class Chain
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
         ObjectPool.ReturnObject(this);
-    }
-
-    public void ChangeChainColor(float distance)
-    {
-        float red = 0.0f, green = 1.0f, blue = 0.0f, alpha = 1.0f; // Default color is green
-
-        int far = CalculateRangeByDifficulty("far");
-        int good = CalculateRangeByDifficulty("good");
-
-        if (distance > far)
-        {
-            red = 1.0f; green = 0.0f; blue = 0.0f; // Red
-        }
-        else if (distance > good)
-        {
-            red = 1.0f; green = 1.0f; blue = 0.0f; // Yellow
-        }
-
-        SetLightningColor(Lightning, red, green, blue, alpha);
-    }
-
-    public static int CalculateRangeByDifficulty(string rangeType)
-    {
-        DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
-
-        (int good, int far, int breakPoint) selectedRange;
-
-        switch (level)
-        {
-            case >= DifficultyLevel.Nightmare:
-                selectedRange = ranges[DifficultyLevel.Nightmare];
-                break;
-            case >= DifficultyLevel.Impossible:
-                selectedRange = ranges[DifficultyLevel.Impossible];
-                break;
-            case >= DifficultyLevel.Hard:
-                selectedRange = ranges[DifficultyLevel.Hard];
-                break;
-            default:
-                selectedRange = ranges[DifficultyLevel.Normal];
-                break;
-        }
-
-        switch (rangeType)
-        {
-            case "good":
-                return selectedRange.good;
-            case "far":
-                return selectedRange.far;
-            case "breakPoint":
-                return selectedRange.breakPoint;
-            default:
-                throw new ArgumentException($"Invalid rangeType '{rangeType}'");
-        }
     }
 }
