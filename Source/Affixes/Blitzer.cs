@@ -12,6 +12,8 @@ public class Blitzer : Affix
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
     private const float BLITZER_LOWEND = 6.0f;
     private const float BLITZER_HIGHEND = 11.0f;
+    private float TargetX;
+    private float TargetY;
     private AchesTimers MoveTimer;
     private AchesTimers BlitzerTimer;
     private AchesTimers PreBlitzerTimer;
@@ -89,10 +91,10 @@ public class Blitzer : Affix
         try
         {
             var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
-            var x = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
-            var y = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
+            TargetX = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
+            TargetY = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
             WanderEffect?.PlayAnimation(ANIM_TYPE_DEATH);
-            BlitzerMove(x, y);
+            BlitzerMove();
             Unit.Unit.RemoveAbility(GHOST_VISIBLE); // ghost visible
             Effect ??= effect.Create(BLITZER_EFFECT, Unit.Unit, "origin");
             Effect?.PlayAnimation(ANIM_TYPE_STAND);
@@ -106,14 +108,14 @@ public class Blitzer : Affix
         }
     }
 
-    private void BlitzerMove(float targetX, float targetY)
+    private void BlitzerMove()
     {
         var speed = BLITZER_SPEED; // speed in yards per second
         float currentX = Unit.Unit.X;
         float currentY = Unit.Unit.Y;
 
         // Distance between current and target pos
-        float distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(currentX, currentY, targetX, targetY);
+        float distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(currentX, currentY, TargetX, TargetY);
 
         // stop if its within range of the target / collision thingy
         if (distance <= CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS)
@@ -123,8 +125,8 @@ public class Blitzer : Affix
         }
 
         // determine direction
-        float directionX = (targetX - currentX) / distance;
-        float directionY = (targetY - currentY) / distance;
+        float directionX = (TargetX - currentX) / distance;
+        float directionY = (TargetY - currentY) / distance;
 
         // 60 fps for smooth movement, step distance
         float stepDistance = speed / 50.0f; // Assuming 60 calls per second
@@ -142,7 +144,7 @@ public class Blitzer : Affix
         var stepTime = 1.0f / 50.0f;
 
         // Set a timer to call this method again after a short delay
-        BlitzerTimer?.Timer.Start(stepTime, false, () => BlitzerMove(targetX, targetY));
+        BlitzerTimer?.Timer.Start(stepTime, false, BlitzerMove);
     }
 
     private void EndBlitz()

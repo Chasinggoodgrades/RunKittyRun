@@ -72,7 +72,7 @@ public class Fixation : Affix
 
     private void RegisterEvents()
     {
-        if (Type == 1) UnitsInRange = group.Create();
+        if (Type == 1) UnitsInRange ??= group.Create();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, FilterList.KittyFilter);
         PeriodicSpeed.RegisterTimerEvent(0.1f, true);
         PeriodicSpeed.AddAction(UpdateChaseSpeed);

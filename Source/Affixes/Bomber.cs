@@ -88,7 +88,7 @@ public class Bomber : Affix
             if (Unit.WolfArea.IsEnabled)
             {
                 RangeIndicator.CreateIndicator(Unit.Unit, EXPLOSION_RANGE, 20, "FINL"); // "FINL" is an orange indicator.
-                Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
+                Utility.SimpleTimer(1.0f, () => Utility.CreateSimpleTextTag("3...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0)); // This approach needs to be changed into a class object or something.. This is garbage. 3 lambdas per timer too .. christ.
                 Utility.SimpleTimer(2.0f, () => Utility.CreateSimpleTextTag("2...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
                 Utility.SimpleTimer(3.0f, () => Utility.CreateSimpleTextTag("1...", 1.0f, Unit.Unit, 0.025f, 255, 0, 0));
             }
@@ -146,34 +146,26 @@ public class Bomber : Affix
             TimerIndicator.SetX(Unit.Unit.X);
             TimerIndicator.SetY(Unit.Unit.Y);
         }
-        ReviveAlphaTimer?.Timer?.Start(1.0f, true, () =>
+        ReviveAlphaTimer?.Timer?.Start(1.0f, true, ReviveActions);
+    }
+
+    private void ReviveActions()
+    {
+        if (ReviveAlpha < 10)
         {
-            try
-            {
-                if (ReviveAlpha < 10)
-                {
-                    ReviveAlpha++;
-                    Unit.Unit.SetVertexColor(204, 102, 0, 25);
-                }
-                else
-                {
-                    ReviveAlpha = 1;
-                    ReviveAlphaTimer?.Pause();
-                    Unit.PauseSelf(false);
-                    Unit.IsReviving = false;
-                    TimerIndicator?.PlayAnimation(animtype.Death);
-                    Unit.Unit.SetVertexColor(204, 102, 0);
-                    ExplodeTimer?.Timer?.Start(ExplosionInterval(), false, StartExplosion);
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Warning($"Error in Bomber.Revive: {e.Message}");
-                ReviveAlphaTimer?.Pause();
-                Unit?.PauseSelf(false);
-                Unit.IsReviving = false;
-            }
-        });
+            ReviveAlpha++;
+            Unit.Unit.SetVertexColor(204, 102, 0, 25);
+        }
+        else
+        {
+            ReviveAlpha = 1;
+            ReviveAlphaTimer?.Pause();
+            Unit.PauseSelf(false);
+            Unit.IsReviving = false;
+            TimerIndicator?.PlayAnimation(animtype.Death);
+            Unit.Unit.SetVertexColor(204, 102, 0);
+            ExplodeTimer?.Timer?.Start(ExplosionInterval(), false, StartExplosion);
+        }
     }
 
     public override void Pause(bool pause)

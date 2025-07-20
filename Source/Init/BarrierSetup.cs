@@ -4,6 +4,7 @@ using static WCSharp.Api.Common;
 
 public static class BarrierSetup
 {
+    private static int BARRIERID = FourCC("YTpb"); // changed to call native only once
     private static bool BarrierActive { get; set; }
     private static unit DummyUnitOne;
     private static unit DummyUnitTwo;
@@ -35,7 +36,7 @@ public static class BarrierSetup
         for (int i = 1; i < 13; i++)
         {
             float currentY = minY + (i * intervalY);
-            var des = destructable.Create(FourCC("YTpb"), centerX, currentY);
+            var des = destructable.Create(BARRIERID, centerX, currentY);
             destructables.Add(des);
         }
     }

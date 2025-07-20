@@ -88,7 +88,7 @@ public class Frostbite : Affix
         if (Frostbitten.Count == 0) return;
         try
         {
-            foreach (var kvp in Frostbitten)
+            foreach (var kvp in Frostbitten) // This approach should be rewritten to avoid foreach and also dictionaries / list allocations and modificatons
             {
                 var target = kvp.Key;
                 var originalSpeed = kvp.Value;
@@ -122,7 +122,7 @@ public class Frostbite : Affix
         if (target.GetAbilityLevel(ADRENALINE_POTION_ABILITY) > 0) return; // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return; // Frostbite ring
         Frostbitten.Add(target, target.DefaultMovementSpeed);
-        Effects[target] = effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
+        Effects[target] ??= effect.Create(FROSTBITE_TARGET_EFFECT, target, "chest");
         target.MovementSpeed = target.DefaultMovementSpeed * FROSTBITE_SPEED_REDUCTION;
     }
 

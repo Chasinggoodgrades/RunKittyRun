@@ -117,7 +117,7 @@ public class Kitty
             Solo.RoundEndCheck();
 
             // Death Sounds
-            SoundManager.PlayKittyDeathSound(Unit);
+            SoundManager.PlayKittyDeathSound(this);
             SoundManager.PlayFirstBloodSound();
 
             // Update stats
