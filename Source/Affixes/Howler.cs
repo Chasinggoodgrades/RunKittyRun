@@ -42,7 +42,7 @@ public class Howler : Affix
 
     private void RegisterTimerEvents()
     {
-        HowlTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        HowlTimer = ObjectPool<AchesTimers>.GetEmptyObject();
         HowlTimer.Timer.Start(GetRandomHowlTime(), false, Howl);
     }
 

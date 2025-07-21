@@ -157,7 +157,7 @@ public static class ChainedTogether
                 var nextKitty = currentGroup[j + 1];
 
                 currentKitty.IsChained = true;
-                Chain chain = ObjectPool.GetEmptyObject<Chain>();
+                Chain chain = ObjectPool<Chain>.GetEmptyObject();
                 chain.SetKitties(currentKitty, nextKitty);
                 KittyLightnings[currentKitty.Name] = chain;
             }
@@ -259,7 +259,7 @@ public static class ChainedTogether
             var nextKitty = group[j + 1];
 
             currentKitty.IsChained = true;
-            Chain chain = ObjectPool.GetEmptyObject<Chain>();
+            Chain chain = ObjectPool<Chain>.GetEmptyObject();
             chain.SetKitties(currentKitty, nextKitty);
             KittyLightnings[currentKitty.Name] = chain;
         }
@@ -384,7 +384,7 @@ public class Chain
         Lightning?.Dispose();
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
-        ObjectPool.ReturnObject(this);
+        ObjectPool<Chain>.ReturnObject(this);
     }
 
     public void ChangeChainColor(float distance)

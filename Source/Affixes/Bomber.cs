@@ -13,8 +13,8 @@ public class Bomber : Affix
 
     private const float MIN_EXPLODE_INTERVAL = 10.0f;
     private const float MAX_EXPLODE_INTERVAL = 15.0f;
-    private AchesTimers ExplodeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-    private AchesTimers ReviveAlphaTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+    private AchesTimers ExplodeTimer = ObjectPool<AchesTimers>.GetEmptyObject();
+    private AchesTimers ReviveAlphaTimer = ObjectPool<AchesTimers>.GetEmptyObject();
     private group ExplodeGroup = group.Create();
     private int ReviveAlpha = 1;
     private RangeIndicator RangeIndicator = null;
@@ -31,7 +31,7 @@ public class Bomber : Affix
         {
             Unit.Unit.AddAbility(AFFIX_ABILITY);
             Unit.Unit.SetVertexColor(204, 102, 0);
-            RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>();
+            RangeIndicator = ObjectPool<RangeIndicator>.GetEmptyObject();
             RegisterTimers();
             base.Apply();
         }

@@ -16,7 +16,7 @@ public static class MemoryHandlerTest
         {
             Name = "";
             Count = 0;
-            ObjectPool.ReturnObject(this);
+            ObjectPool<TestDestroyable>.ReturnObject(this);
         }
     }
 
@@ -24,7 +24,7 @@ public static class MemoryHandlerTest
     {
         for (int i = 0; i < 2000; i++)
         {
-            KibbleTest[i] = ObjectPool.GetEmptyObject<TestDestroyable>();
+            KibbleTest[i] = ObjectPool<TestDestroyable>.GetEmptyObject();
             KibbleTest[i].Name = "Kibble" + i;
             KibbleTest[i].Count = i;
         }
@@ -44,7 +44,7 @@ public static class MemoryHandlerTest
         }
         t.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
-            ObjectPool.PrintDebugInfo();
+            //ObjectPool.PrintDebugInfo();
         }));
     }
 }

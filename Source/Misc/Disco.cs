@@ -16,7 +16,7 @@ public class Disco : IDisposable
     {
         DiscoTimer.Pause();
         Enabled = false;
-        ObjectPool.ReturnObject(this);
+        ObjectPool<Disco>.ReturnObject(this);
     }
 
     public void ToggleDisco(bool enable)

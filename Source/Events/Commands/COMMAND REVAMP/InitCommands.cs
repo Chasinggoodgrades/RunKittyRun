@@ -404,7 +404,7 @@ public static class InitCommands
                     {
                         foreach (var wolf in Globals.ALL_WOLVES)
                         {
-                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>();
+                            wolf.Value.Disco ??= ObjectPool<Disco>.GetEmptyObject();
                             wolf.Value.Disco.Unit = wolf.Value.Unit;
                             wolf.Value.Disco.ToggleDisco(status);
                             if (!status)

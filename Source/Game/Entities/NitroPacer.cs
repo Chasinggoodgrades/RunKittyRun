@@ -31,7 +31,7 @@ public static class NitroPacer
         _cachedNitroPacerUpdate = UpdateNitroPacer;
         VisionShare();
 
-        pacerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        pacerTimer = ObjectPool<AchesTimers>.GetEmptyObject();
     }
 
     /// <summary>

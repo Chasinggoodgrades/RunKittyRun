@@ -123,7 +123,7 @@ public static class Utility
     /// <param name="action"></param>
     public static void SimpleTimer(float duration, Action action)
     {
-        var handle = ObjectPool.GetEmptyObject<AchesTimers>();
+        var handle = ObjectPool<AchesTimers>.GetEmptyObject();
         handle.Timer.Start(duration, false, () =>
         {
             action();

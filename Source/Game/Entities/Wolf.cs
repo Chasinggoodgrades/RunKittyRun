@@ -18,9 +18,9 @@ public class Wolf
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
-    public AchesTimers WanderTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
+    public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
 
-    public AchesTimers EffectTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
+    public AchesTimers EffectTimer { get; set; }
 
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
@@ -238,6 +238,7 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
+        EffectTimer ??= ObjectPool<AchesTimers>.GetEmptyObject();
         EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect);
     }
 

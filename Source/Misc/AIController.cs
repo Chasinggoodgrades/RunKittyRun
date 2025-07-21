@@ -417,12 +417,12 @@ public class AIController
             float relativeY = (float)Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.Unit.X - constant, 2));
             if (!float.IsNaN(relativeY) && relativeY != 0)
             {
-                var a = ObjectPool.GetEmptyObject<Point>();
+                var a = ObjectPool<Point>.GetEmptyObject();
                 a.X = constant;
                 a.Y = relativeY + this.kitty.Unit.Y;
                 wallPoints.Add(a);
 
-                var b = ObjectPool.GetEmptyObject<Point>();
+                var b = ObjectPool<Point>.GetEmptyObject();
                 b.X = constant;
                 b.Y = -relativeY + this.kitty.Unit.Y;
                 wallPoints.Add(b);
@@ -441,12 +441,12 @@ public class AIController
             float relativeX = (float)Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.Unit.Y - constant, 2));
             if (!float.IsNaN(relativeX) && relativeX != 0)
             {
-                var a = ObjectPool.GetEmptyObject<Point>();
+                var a = ObjectPool<Point>.GetEmptyObject();
                 a.X = relativeX + this.kitty.Unit.X;
                 a.Y = constant;
                 wallPoints.Add(a);
 
-                var b = ObjectPool.GetEmptyObject<Point>();
+                var b = ObjectPool<Point>.GetEmptyObject();
                 b.X = -relativeX + this.kitty.Unit.X;
                 b.Y = constant;
                 wallPoints.Add(b);
@@ -517,19 +517,19 @@ public class AIController
             // If the interval wraps around 0, split it into two parts.
             if (start > end)
             {
-                var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                var a = ObjectPool<AngleInterval>.GetEmptyObject();
                 a.Start = start;
                 a.End = 2f * MathF.PI;
                 blockedIntervals.Add(a);
 
-                var b = ObjectPool.GetEmptyObject<AngleInterval>();
+                var b = ObjectPool<AngleInterval>.GetEmptyObject();
                 b.Start = 0;
                 b.End = end;
                 blockedIntervals.Add(b);
             }
             else
             {
-                var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                var a = ObjectPool<AngleInterval>.GetEmptyObject();
                 a.Start = start;
                 a.End = end;
                 blockedIntervals.Add(a);
@@ -566,19 +566,19 @@ public class AIController
             // If the interval wraps around 0, split it into two parts.
             if (start > end)
             {
-                var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                var a = ObjectPool<AngleInterval>.GetEmptyObject();
                 a.Start = start;
                 a.End = 2f * MathF.PI;
                 blockedIntervals.Add(a);
 
-                var b = ObjectPool.GetEmptyObject<AngleInterval>();
+                var b = ObjectPool<AngleInterval>.GetEmptyObject();
                 b.Start = 0;
                 b.End = end;
                 blockedIntervals.Add(b);
             }
             else
             {
-                var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                var a = ObjectPool<AngleInterval>.GetEmptyObject();
                 a.Start = start;
                 a.End = end;
                 blockedIntervals.Add(a);
@@ -599,7 +599,7 @@ public class AIController
         if (mergedIntervals.Count == 0)
         {
             // No wolves blocking any direction; entire circle is free.
-            var a = ObjectPool.GetEmptyObject<AngleInterval>();
+            var a = ObjectPool<AngleInterval>.GetEmptyObject();
             a.Start = 0;
             a.End = 2f * MathF.PI;
             freeGaps.Add(a);
@@ -614,7 +614,7 @@ public class AIController
             float wrapGap = (mergedIntervals[0].Start + 2f * MathF.PI) - mergedIntervals[mergedIntervals.Count - 1].End;
             if (wrapGap > 0)
             {
-                var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                var a = ObjectPool<AngleInterval>.GetEmptyObject();
                 a.Start = mergedIntervals[mergedIntervals.Count - 1].End;
                 a.End = mergedIntervals[0].Start + 2f * MathF.PI;
                 freeGaps.Add(a);
@@ -625,7 +625,7 @@ public class AIController
                 float gapSize = mergedIntervals[i + 1].Start - mergedIntervals[i].End;
                 if (gapSize > 0)
                 {
-                    var a = ObjectPool.GetEmptyObject<AngleInterval>();
+                    var a = ObjectPool<AngleInterval>.GetEmptyObject();
                     a.Start = mergedIntervals[i].End;
                     a.End = mergedIntervals[i + 1].Start;
                     freeGaps.Add(a);
@@ -977,7 +977,7 @@ public class AIController
 
         public void Dispose()
         {
-            ObjectPool.ReturnObject(this);
+            ObjectPool<AngleInterval>.ReturnObject(this);
         }
     }
 
@@ -992,7 +992,7 @@ public class AIController
 
         public void Dispose()
         {
-            ObjectPool.ReturnObject(this);
+            ObjectPool<Point>.ReturnObject(this);
         }
     }
 

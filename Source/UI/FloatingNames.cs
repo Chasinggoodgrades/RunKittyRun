@@ -17,7 +17,7 @@ public class FloatingNameTag
 
     public void Initialize()
     {
-        NamePosUpdater = ObjectPool.GetEmptyObject<AchesTimers>();
+        NamePosUpdater = ObjectPool<AchesTimers>.GetEmptyObject();
         SetNameTagAttributes();
         NamePosTimer();
     }

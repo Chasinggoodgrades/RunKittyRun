@@ -158,10 +158,10 @@ public class WolfPoint
 
         public static List<WolfPointInfo> GetWolfPointList()
         {
-            var list = ObjectPool.GetEmptyList<WolfPointInfo>();
+            var list = ObjectPool<WolfPointInfo>.GetEmptyList();
             for (int i = 0; i < 48; i++)
             {
-                list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
+                list.Add(ObjectPool<WolfPointInfo>.GetEmptyObject());
             }
             return list;
         }
@@ -172,10 +172,10 @@ public class WolfPoint
             for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
-                ObjectPool.ReturnObject(item);
+                ObjectPool<WolfPointInfo>.ReturnObject(item);
             }
             list.Clear();
-            ObjectPool.ReturnList(list);
+            ObjectPool<WolfPointInfo>.ReturnList(list);
         }
     }
 }
