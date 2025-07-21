@@ -41,7 +41,7 @@ public class Frostbite : Affix
             GC.RemoveList(ref FrostbittenKitties);
             base.Remove();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Logger.Warning($"Error in Frostbite.Remove: {e.Message}");
             throw;

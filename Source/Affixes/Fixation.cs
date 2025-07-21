@@ -22,8 +22,8 @@ public class Fixation : Affix
 
     public Fixation(Wolf unit) : base(unit)
     {
-        InRangeTrigger = trigger.Create();
-        PeriodicSpeed = trigger.Create();
+        InRangeTrigger ??= trigger.Create();
+        PeriodicSpeed ??= trigger.Create();
         ChaseTimer = ObjectPool<AchesTimers>.GetEmptyObject();
         Name = $"{Colors.COLOR_RED}Fixation|r";
     }
