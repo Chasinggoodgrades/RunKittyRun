@@ -15,9 +15,11 @@ public class Kitty
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
+    public ShadowKitty ShadowKitty { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public ActiveAwards ActiveAwards { get; set; } = new ActiveAwards();
+    public KittyMiscInfo KittyMiscInfo { get; set; } = new KittyMiscInfo();
     public KittyStatsManager StatsManager { get; set; }
     public FloatingNameTag NameTag { get; set; }
     public YellowLightning YellowLightning { get; set; }
@@ -63,6 +65,7 @@ public class Kitty
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         KittyMorphosis = new KittyMorphosis(this);
+        ShadowKitty = new ShadowKitty(this);
         Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();

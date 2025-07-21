@@ -3,7 +3,7 @@ using WCSharp.Api;
 
 public class ShadowKitty
 {
-    public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES;
+    public static Dictionary<player, ShadowKitty> ALL_SHADOWKITTIES { get; set; }
     public unit Unit { get; set; }
 
     public player Player { get; }
@@ -19,18 +19,18 @@ public class ShadowKitty
     public int ID;
 
 
-    public ShadowKitty(player Player)
+    public ShadowKitty(Kitty kitty)
     {
-        this.Player = Player;
-        ID = Player.Id;
-        Kitty = Globals.ALL_KITTIES[Player];
+        this.Kitty = kitty;
+        this.Player = kitty.Player;
+        ID = kitty.Player.Id;
+        ALL_SHADOWKITTIES[Player] = this;
         this.RegisterTriggers();
     }
 
     public static void Initialize()
     {
         ALL_SHADOWKITTIES = new Dictionary<player, ShadowKitty>();
-        CreateShadowKitties();
     }
 
     /// <summary>
@@ -98,15 +98,6 @@ public class ShadowKitty
     {
         var kitty = Globals.ALL_KITTIES[player].Unit;
         kitty.IsPaused = paused;
-    }
-
-    private static void CreateShadowKitties()
-    {
-        foreach (var player in Globals.ALL_PLAYERS)
-        {
-            var shadowKitty = new ShadowKitty(player);
-            ALL_SHADOWKITTIES.Add(player, shadowKitty);
-        }
     }
 
     private void RegisterTriggers()
