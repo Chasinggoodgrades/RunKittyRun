@@ -70,7 +70,7 @@ public static class RoundManager
 
     private static void HasDifficultyBeenChosen()
     {
-        var Timer = ObjectPool.GetEmptyObject<AchesTimers>();
+        var Timer = ObjectPool<AchesTimers>.GetEmptyObject();
         Timer.Timer.Start(0.35f, true, () =>
         {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)

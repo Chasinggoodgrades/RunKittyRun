@@ -182,7 +182,7 @@ public class YellowLightning
     public YellowLightning(Kitty kitty)
     {
         Kitty = kitty;
-        Timer = ObjectPool.GetEmptyObject<AchesTimers>();
+        Timer = ObjectPool<AchesTimers>.GetEmptyObject();
     }
 
     public void SaveIncrement()

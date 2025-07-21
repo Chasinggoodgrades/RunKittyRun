@@ -85,15 +85,15 @@ public static class SoundManager
     /// Plays the POTM death sound ontop of the passed unit.
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
-    public static void PlayKittyDeathSound(unit Kitty)
+    public static void PlayKittyDeathSound(Kitty k)
     {
         if (Gamemode.CurrentGameMode == GameMode.TeamTournament)
-            TeamKittyDeathSound(Kitty);
+            TeamKittyDeathSound(k);
         else
         {
             var s = KITTY_DEATH_SOUND;
             s.Stop(false, false);
-            s.AttachToUnit(Kitty);
+            s.AttachToUnit(k.Unit);
             s.Start();
         }
     }
@@ -115,12 +115,15 @@ public static class SoundManager
         s.Start();
     }
 
-    private static void TeamKittyDeathSound(unit Kitty)
+    private static void TeamKittyDeathSound(Kitty k)
     {
         var s = KITTY_DEATH_SOUND;
-        s.AttachToUnit(Kitty);
-        foreach (var player in Globals.ALL_TEAMS[Globals.ALL_KITTIES[Kitty.Owner].TeamID].Teammembers)
+        s.AttachToUnit(k.Unit);
+        int teamID = k.TeamID;
+        Team team = Globals.ALL_TEAMS[teamID];
+        for (int i = 0; i < team.Teammembers.Count; i++)
         {
+            var player = team.Teammembers[i];
             if (player.IsLocal)
             {
                 s.Stop(false, false);
@@ -150,40 +153,42 @@ public static class SoundManager
 
     public static void PlayLastManStandingSound()
     {
-        LastManStanding.Start(0.8f, false, () =>
+        LastManStanding.Start(0.8f, false, LastManStandingActions);
+    }
+
+    private static void LastManStandingActions()
+    {
+        var count = 0;
+        Kitty k = null;
+
+        try
         {
-            var count = 0;
-            Kitty k = null;
-
-            try
+            for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
-                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+                var kitty = Globals.ALL_KITTIES_LIST[i];
+                if (kitty.Alive)
                 {
-                    var kitty = Globals.ALL_KITTIES_LIST[i];
-                    if (kitty.Alive)
-                    {
-                        count += 1;
-                        k = kitty;
-                    }
-                    if (count > 1) return;
+                    count += 1;
+                    k = kitty;
                 }
+                if (count > 1) return;
+            }
 
-                if (count == 0) return;
-                if (k.ProtectionActive) return; // no reason to play if pota is active.
-                var s = LAST_MAN_STANDING_SOUND;
-                var e = k.Unit.AddSpecialEffect("TalkToMe.mdx", "head");
-                Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!|r");
-                s.Stop(false, false);
-                s.Start();
-                Utility.SimpleTimer(2.0f, () =>
-                {
-                    GC.RemoveEffect(ref e);
-                });
-            }
-            catch (System.Exception e)
+            if (count == 0) return;
+            if (k.ProtectionActive) return; // no reason to play if pota is active.
+            var s = LAST_MAN_STANDING_SOUND;
+            var e = k.Unit.AddSpecialEffect("TalkToMe.mdx", "head");
+            Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!{Colors.COLOR_RESET}");
+            s.Stop(false, false);
+            s.Start();
+            Utility.SimpleTimer(2.0f, () =>
             {
-                Logger.Warning($"Error in SoundManager.PlayLastManStandingSound: {e.Message}");
-            }
-        });
+                GC.RemoveEffect(ref e);
+            });
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in SoundManager.PlayLastManStandingSound: {e.Message}");
+        }
     }
 }

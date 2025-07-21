@@ -15,6 +15,7 @@ public static class TimeSetter
             var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
+            if (!Globals.ALL_KITTIES[player].CanEarnAwards) return false;
 
             if (currentTime <= 90) return false; // Below 90 seconds is impossible and not valid.. Don't save
 
@@ -22,7 +23,7 @@ public static class TimeSetter
 
             if (standard) roundString = GetRoundEnum();
             if (solo) roundString = GetSoloEnum();
-            if (currentTime >= 1200.00f) return false; // 20 min cap.
+            if (currentTime >= 3599.00f) return false; // 59min 59 second cap
 
             var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
             var value = (float)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);

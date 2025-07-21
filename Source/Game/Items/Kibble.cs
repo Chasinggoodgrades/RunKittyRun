@@ -30,7 +30,7 @@ public class Kibble : IDisposable
     {
         Item?.Dispose();
         Item = null;
-        ObjectPool.ReturnObject(this);
+        ObjectPool<Kibble>.ReturnObject(this);
     }
 
     public void SpawnKibble()

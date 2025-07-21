@@ -7,7 +7,7 @@ public class KittyTime
     private readonly Action _cachedProgress;
     private Dictionary<int, float> RoundTime { get; set; } = new Dictionary<int, float>();
     private Dictionary<int, float> RoundProgress { get; set; } = new Dictionary<int, float>();
-    private AchesTimers ProgressTimer { get; set; } = ObjectPool.GetEmptyObject<AchesTimers>();
+    private AchesTimers ProgressTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
     private float TotalTime { get; set; }
     private Kitty Kitty { get; set; }
 
@@ -31,7 +31,6 @@ public class KittyTime
     {
         ProgressTimer.Pause();
         ProgressTimer?.Dispose();
-        ProgressTimer = null;
         RoundTime.Clear();
         RoundProgress.Clear();
         RoundTime = null;

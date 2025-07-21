@@ -377,8 +377,8 @@ public static class InitCommands
                     player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "You can't toggle mirror mode while sliding!");
                     return;
                 }
-                Globals.ALL_KITTIES[player].Slider.ToggleMirror();
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (Globals.ALL_KITTIES[player].Slider.IsMirror() ? "On" : "Off"));
+                Globals.ALL_KITTIES[player].ToggleMirror();
+                player.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (Globals.ALL_KITTIES[player].IsMirror ? "On" : "Off"));
             }
         );
 
@@ -404,7 +404,7 @@ public static class InitCommands
                     {
                         foreach (var wolf in Globals.ALL_WOLVES)
                         {
-                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>();
+                            wolf.Value.Disco ??= ObjectPool<Disco>.GetEmptyObject();
                             wolf.Value.Disco.Unit = wolf.Value.Unit;
                             wolf.Value.Disco.ToggleDisco(status);
                             if (!status)
@@ -462,6 +462,62 @@ public static class InitCommands
             argDesc: "",
             description: "Activates the barrier.",
             action: (player, args) => BarrierSetup.ActivateBarrier()
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "rtr",
+            alias: "",
+            group: "all",
+            argDesc: "[on/off] [player]",
+            description: "Set RTR mode on/off.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: rtr [on/off] [player]|r");
+                    return;
+                }
+
+                bool mode = CommandsManager.GetBool(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    // Apply to self
+                    if (mode)
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR();
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: On");
+                    }
+                    else
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR();
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: Off");
+                    }
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+
+                    if (mode)
+                    {
+                        kitty.RTR.StartRTR();
+                    }
+                    else
+                    {
+                        kitty.RTR.StopRTR();
+                    }
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"RTR set to {(mode ? "On" : "Off")} for target player");
+                }
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -1673,7 +1729,7 @@ public static class InitCommands
                 Console.WriteLine(x);
             }
         );
-        
+
         CommandsManager.RegisterCommand(
             name: "chainedtest",
             alias: "",
@@ -1686,7 +1742,7 @@ public static class InitCommands
                 ChainedTogether.StartEvent();
             }
         );
-      
+
         CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",
@@ -1740,6 +1796,157 @@ public static class InitCommands
                 }
                 Gamemode.PlayersPerTeam = maxPlayersPerTeam;
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Max Players Per Team set to {maxPlayersPerTeam}|r");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "test10",
+            alias: "",
+            group: "admin",
+            argDesc: "",
+            description: "Getting wolf timer address Information",
+            action: (player, args) =>
+            {
+                var selectedUnit = CustomStatFrame.SelectedUnit[player];
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
+                var wolf = Globals.ALL_WOLVES[selectedUnit];
+                string timerAddress = $"WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}";
+                Console.WriteLine($"{timerAddress}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "slidespeed",
+            alias: "ss",
+            group: "admin",
+            argDesc: "[speed] [player]",
+            description: "Sets the absolute slide speed of the passed player, or yourself if no player is provided.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r");
+                    return;
+                }
+
+                float speed = float.Parse(args[0]);
+                if (args.Length < 2 || args[1] == "")
+                {
+                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set your slide speed to {speed}|r");
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+                    kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set their slide speed to {speed}|r");
+                }
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+           name: "movespeed",
+           alias: "ms",
+           group: "admin",
+           argDesc: "[speed] [player]",
+           description: "Sets the absolute move speed of the passed player, or yourself if no player is provided.",
+           action: (player, args) =>
+           {
+               if (args[0] == "")
+               {
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r");
+                   return;
+               }
+
+               float speed = float.Parse(args[0]);
+               if (args.Length < 2 || args[1] == "")
+               {
+                   Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set your move speed to {speed}|r");
+                   return;
+               }
+
+               bool isMatch = false;
+
+               CommandsManager.ResolvePlayerId(args[1], kitty =>
+               {
+                   if (kitty == null) return;
+                   isMatch = true;
+                   kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
+               });
+
+               if (isMatch)
+               {
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set their move speed to {speed}|r");
+               }
+           }
+       );
+
+        CommandsManager.RegisterCommand(
+            name: "speededit",
+            alias: "se",
+            group: "admin",
+            argDesc: "[on/off] [player]",
+            description: "Turns on RTR and sets move speed to 800 for the specified player.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r");
+                    return;
+                }
+
+                bool mode = CommandsManager.GetBool(args[0]);
+
+                if (args.Length < 2 || args[1] == "")
+                {
+                    // Apply to self
+                    if (mode)
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR();
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = 800f;
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "Speed Edit: On (RTR + 800 speed)");
+                    }
+                    else
+                    {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR();
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = null;
+                        player.DisplayTextTo(Colors.COLOR_GOLD + "Speed Edit: Off");
+                    }
+                    return;
+                }
+
+                bool isMatch = false;
+
+                CommandsManager.ResolvePlayerId(args[1], kitty =>
+                {
+                    if (kitty == null) return;
+                    isMatch = true;
+                    if (mode)
+                    {
+                        kitty.RTR.StartRTR();
+                        kitty.RTR.absoluteMoveSpeed = 800f;
+                    }
+                    else
+                    {
+                        kitty.RTR.StopRTR();
+                        kitty.RTR.absoluteMoveSpeed = null;
+                    }
+                });
+
+                if (isMatch)
+                {
+                    player.DisplayTextTo(Colors.COLOR_GOLD + $"Speed Edit set to {(mode ? "On (RTR + 800 speed)" : "Off")} for target player");
+                }
             }
         );
     }

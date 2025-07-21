@@ -15,9 +15,11 @@ public class Kitty
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
     public KittyTime TimeProg { get; set; }
+    public ShadowKitty ShadowKitty { get; set; }
     public PlayerGameData CurrentStats { get; set; } = new PlayerGameData();
     public ProgressPointHelper ProgressHelper { get; set; } = new ProgressPointHelper();
     public ActiveAwards ActiveAwards { get; set; } = new ActiveAwards();
+    public KittyMiscInfo KittyMiscInfo { get; set; } = new KittyMiscInfo();
     public KittyStatsManager StatsManager { get; set; }
     public FloatingNameTag NameTag { get; set; }
     public YellowLightning YellowLightning { get; set; }
@@ -26,6 +28,8 @@ public class Kitty
     public APMTracker APMTracker { get; set; }
     public KittyMorphosis KittyMorphosis { get; set; }
     public Slider Slider { get; private set; }
+    public RTR RTR { get; private set; }
+    public MirrorMovementHandler MirrorHandler { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
     public unit Unit { get; set; }
@@ -40,6 +44,8 @@ public class Kitty
     public Disco Disco { get; set; }
     public timer InvulTimer { get; set; } = timer.Create();
     public bool IsChained { get; set; } = false;
+    public bool IsMirror { get; set; } = false;
+    public bool CanEarnAwards { get; set; } = true;
 
     public Kitty(player player)
     {
@@ -50,6 +56,8 @@ public class Kitty
         CreateKitty();
         TimeProg = new KittyTime(this);
         Slider = new Slider(this);
+        RTR = new RTR(this);
+        MirrorHandler = new MirrorMovementHandler(this);
         StatsManager = new KittyStatsManager(this);
         YellowLightning = new YellowLightning(this);
         aiController = new AIController(this);
@@ -57,6 +65,7 @@ public class Kitty
         APMTracker = new APMTracker(this);
         NameTag = new FloatingNameTag(this);
         KittyMorphosis = new KittyMorphosis(this);
+        ShadowKitty = new ShadowKitty(this);
         Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();
@@ -95,6 +104,7 @@ public class Kitty
 
             // Pause processes before unit death
             Slider.PauseSlider();
+            RTR.PauseRTR();
             aiController.PauseAi();
             Unit.Kill();
 
@@ -110,7 +120,7 @@ public class Kitty
             Solo.RoundEndCheck();
 
             // Death Sounds
-            SoundManager.PlayKittyDeathSound(Unit);
+            SoundManager.PlayKittyDeathSound(this);
             SoundManager.PlayFirstBloodSound();
 
             // Update stats
@@ -158,6 +168,7 @@ public class Kitty
 
             // Resume processes
             Slider.ResumeSlider(true);
+            RTR.ResumeRTR();
             aiController.ResumeAi();
 
             // Update savior stats if applicable
@@ -183,6 +194,11 @@ public class Kitty
             Invulnerable = false;
             InvulTimer.Pause();
         });
+    }
+
+    public void ToggleMirror()
+    {
+        IsMirror = !IsMirror;
     }
 
     private void InitData()
@@ -249,6 +265,7 @@ public class Kitty
         YellowLightning.Dispose();
         TimeProg.Dispose();
         APMTracker.Dispose();
+        MirrorHandler.Dispose();
         InvulTimer.Pause();
         InvulTimer.Dispose();
         Disco?.Dispose();

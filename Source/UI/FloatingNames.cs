@@ -17,16 +17,16 @@ public class FloatingNameTag
 
     public void Initialize()
     {
-        NamePosUpdater = ObjectPool.GetEmptyObject<AchesTimers>();
+        NamePosUpdater = ObjectPool<AchesTimers>.GetEmptyObject();
         SetNameTagAttributes();
         NamePosTimer();
     }
 
     public void Dispose()
     {
-        NameTag.SetVisibility(false);
-        NameTag.Dispose();
-        NamePosUpdater.Dispose();
+        NameTag?.SetVisibility(false);
+        NameTag?.Dispose();
+        NamePosUpdater?.Dispose();
     }
 
     private void SetNameTagAttributes()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static WCSharp.Api.Common;
 
 public static class AffixFactory
 {
@@ -187,9 +186,9 @@ public static class AffixFactory
             if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Return.. Team tournament should work.
             if (!CanDistributeAffixes()) return;
 
-            if (Gamemode.CurrentGameMode == GameMode.Standard)
-                NUMBER_OF_AFFIXED_WOLVES = (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8);
-            else NUMBER_OF_AFFIXED_WOLVES = 26 + (Globals.ROUND * 8);
+            NUMBER_OF_AFFIXED_WOLVES = Gamemode.CurrentGameMode == GameMode.Standard
+                ? (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8)
+                : 26 + (Globals.ROUND * 8);
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)
@@ -270,7 +269,7 @@ public static class AffixFactory
 
     public static void RemoveAllAffixes()
     {
-        foreach(var wolf in Globals.ALL_WOLVES)
+        foreach (var wolf in Globals.ALL_WOLVES)
         {
             wolf.Value.RemoveAllWolfAffixes();
         }

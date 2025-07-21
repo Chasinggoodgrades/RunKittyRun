@@ -29,7 +29,7 @@ public static class StandardMultiboard
     /// </summary>
     private static void Init()
     {
-        var t = ObjectPool.GetEmptyObject<AchesTimers>();
+        var t = ObjectPool<AchesTimers>.GetEmptyObject();
         t.Timer.Start(1.0f, true, ErrorHandler.Wrap(() =>
         {
             if (!Difficulty.IsDifficultyChosen) return;

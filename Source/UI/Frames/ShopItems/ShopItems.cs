@@ -52,7 +52,6 @@ public class ShopItem
         {
             shopItems.Add(new ShopItem(new OneOfNine()));
             shopItems.Add(new ShopItem(new RingOfSummoning()));
-            shopItems.Add(new ShopItem(new FrostbiteRing()));
             shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
             shopItems.Add(new ShopItem(new ShardOfTranslocation()));
             shopItems.Add(new ShopItem(new ChronoSphere()));

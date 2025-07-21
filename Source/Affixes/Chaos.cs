@@ -3,7 +3,7 @@
 public class Chaos : Affix
 {
     private const int AFFIX_ABILITY = Constants.ABILITY_CHAOS;
-    private AchesTimers RotationTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+    private AchesTimers RotationTimer = ObjectPool<AchesTimers>.GetEmptyObject();
     private Affix currentAffix;
     private float rotationTime = GetRandomReal(25f, 45f);
 

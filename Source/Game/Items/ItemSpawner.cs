@@ -51,6 +51,7 @@ public static class ItemSpawner
         for (int i = 0; i < TrackItems.Count; i++)
         {
             var item = TrackItems[i];
+            ItemSpatialGrid.UnregisterItem(item);
             if (item.IsOwned) continue;
             item.Dispose();
         }
@@ -62,6 +63,7 @@ public static class ItemSpawner
         for (int i = 0; i < TrackKibbles.Count; i++)
         {
             var kibble = TrackKibbles[i];
+            ItemSpatialGrid.UnregisterKibble(kibble);
             if (kibble.Item == null) continue; // Already been __destroyed.
             kibble.Dispose();
         }
@@ -77,9 +79,10 @@ public static class ItemSpawner
 
         for (int i = 0; i < numberOfItems; i++)
         {
-            var kibble = ObjectPool.GetEmptyObject<Kibble>();
+            var kibble = ObjectPool<Kibble>.GetEmptyObject();
             kibble.SpawnKibble();
             TrackKibbles.Add(kibble);
+            ItemSpatialGrid.RegisterKibble(kibble);
         }
     }
 
@@ -93,6 +96,7 @@ public static class ItemSpawner
         var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
         var i = CreateItem(item, x, y);
         TrackItems.Add(i);
+        ItemSpatialGrid.RegisterItem(i);
     }
 
     private static List<int> StandardItems()

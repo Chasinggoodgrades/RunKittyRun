@@ -115,7 +115,11 @@ public static class CollisionDetection
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)
     {
-        TriggerAddAction(sk.wCollision, sk.KillShadowKitty);
+        TriggerAddAction(sk.wCollision, () =>
+        {
+            if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), sk.Kitty, true)) return; // Floating text will appear on kitty instead of SK tho.
+            sk.KillShadowKitty();
+        });
         return sk.wCollision;
     }
 

@@ -40,7 +40,7 @@ public static class ChainedTogether
 
     public static void TriggerEvent()
     {
-        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Togheter Event Requirements Complete! Activating next round!{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_TURQUOISE}Chained Togheter Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
         EventTriggered = true;
     }
 
@@ -157,7 +157,7 @@ public static class ChainedTogether
                 var nextKitty = currentGroup[j + 1];
 
                 currentKitty.IsChained = true;
-                Chain chain = ObjectPool.GetEmptyObject<Chain>();
+                Chain chain = ObjectPool<Chain>.GetEmptyObject();
                 chain.SetKitties(currentKitty, nextKitty);
                 KittyLightnings[currentKitty.Name] = chain;
             }
@@ -259,7 +259,7 @@ public static class ChainedTogether
             var nextKitty = group[j + 1];
 
             currentKitty.IsChained = true;
-            Chain chain = ObjectPool.GetEmptyObject<Chain>();
+            Chain chain = ObjectPool<Chain>.GetEmptyObject();
             chain.SetKitties(currentKitty, nextKitty);
             KittyLightnings[currentKitty.Name] = chain;
         }
@@ -299,25 +299,26 @@ public static class ChainedTogether
 
         DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
 
-        int award;
+        var awards = Globals.GAME_AWARDS_SORTED.Auras;
+        string nameOfAward;
 
         switch (level)
         {
             case >= DifficultyLevel.Nightmare:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura;
+                nameOfAward = nameof(awards.ChainedNightmareAura);
                 break;
             case >= DifficultyLevel.Impossible:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura;
+                nameOfAward = nameof(awards.ChainedImpossibleAura);
                 break;
             case >= DifficultyLevel.Hard:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura;
+                nameOfAward = nameof(awards.ChainedHardAura);
                 break;
             default:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
+                nameOfAward = nameof(awards.ChainedNormalAura);
                 break;
         }
 
-        AwardManager.GiveReward(kitty.Player, nameof(award));
+        AwardManager.GiveReward(kitty.Player, nameOfAward);
     }
     
     private static bool IsInLastSafezone(Kitty kitty)
@@ -338,10 +339,10 @@ public class Chain
 
     private static readonly Dictionary<DifficultyLevel, (int good, int far, int breakPoint)> ranges = new()
     {
-        { DifficultyLevel.Normal,     (400, 600, 800) },
-        { DifficultyLevel.Hard,       (450, 650, 850) },
-        { DifficultyLevel.Impossible, (500, 700, 900) },
-        { DifficultyLevel.Nightmare,  (550, 750, 950) }
+        { DifficultyLevel.Normal,     (600, 700, 800) },
+        { DifficultyLevel.Hard,       (650, 750, 850) },
+        { DifficultyLevel.Impossible, (700, 800, 900) },
+        { DifficultyLevel.Nightmare,  (750, 850, 950) }
     };
 
     public Chain()
@@ -383,7 +384,7 @@ public class Chain
         Lightning?.Dispose();
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
-        ObjectPool.ReturnObject(this);
+        ObjectPool<Chain>.ReturnObject(this);
     }
 
     public void ChangeChainColor(float distance)

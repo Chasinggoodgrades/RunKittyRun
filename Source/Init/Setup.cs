@@ -44,7 +44,7 @@ namespace Source.Init
 
         private static void StartGameModeTimer()
         {
-            gameModeTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+            gameModeTimer = ObjectPool<AchesTimers>.GetEmptyObject();
             gameModeTimer.Timer.Start(1.0f, true, ErrorHandler.Wrap(ChoosingGameMode));
         }
 

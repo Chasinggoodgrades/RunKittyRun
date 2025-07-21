@@ -14,8 +14,8 @@ public class SoloDeathTimer
     public SoloDeathTimer(player player)
     {
         Player = player;
-        ReviveTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-        UpdateTextTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        ReviveTimer = ObjectPool<AchesTimers>.GetEmptyObject();
+        UpdateTextTimer = ObjectPool<AchesTimers>.GetEmptyObject();
         FloatingTimer = CreateFloatingTimer();
         StartTimers();
     }

@@ -81,6 +81,6 @@ public class RangeIndicator
     public void Dispose()
     {
         DestroyIndicator();
-        ObjectPool.ReturnObject(this);
+        ObjectPool<RangeIndicator>.ReturnObject(this);
     }
 }

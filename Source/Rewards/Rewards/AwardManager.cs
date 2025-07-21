@@ -19,6 +19,7 @@ public static class AwardManager
     public static void GiveReward(player player, string award, bool earnedPrompt = true)
     {
         // Check if the player already has the award
+        if (!Globals.ALL_KITTIES[player].CanEarnAwards) return;
         var awardsList = Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards;
 
         if (awardsList.Contains(award))

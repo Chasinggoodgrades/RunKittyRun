@@ -20,9 +20,9 @@ public class Slider
     private float remainingDegreesToTurn = 0;
     private float slideCurrentTurnPerPeriod = 0;
 
-    private bool isMirror = false;
     private bool wasSliding = false;
     private float? forcedSlideSpeed = null;
+    public float? absoluteSlideSpeed = null;
     private timer ForcedSlideTimer;
 
     // percentage of maximum speed
@@ -96,16 +96,6 @@ public class Slider
         return enabled;
     }
 
-    public bool IsMirror()
-    {
-        return isMirror;
-    }
-
-    public void ToggleMirror()
-    {
-        isMirror = !isMirror;
-    }
-
     public void StartSlider()
     {
         enabled = true;
@@ -140,19 +130,30 @@ public class Slider
 
         SliderTimer.Start(SLIDE_INTERVAL, true, ErrorHandler.Wrap(() =>
         {
+            if (this.kitty.Unit.IsPaused)
+            {
+                return;
+            }
+
             if (!IsOnSlideTerrain())
             {
-                if (this.wasSliding && this.isMirror)
+                if (this.wasSliding && this.kitty.IsMirror)
                 {
                     // Reverse hero
                     BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
                 }
 
                 this.wasSliding = false;
+
+                if (this.remainingDegreesToTurn != 0)
+                {
+                    escaperTurnForOnePeriod();
+                }
+
                 return;
             }
 
-            if (!this.wasSliding && this.isMirror)
+            if (!this.wasSliding && this.kitty.IsMirror)
             {
                 // Reverse hero
                 BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180);
@@ -189,7 +190,7 @@ public class Slider
 
     private void UpdateSlider()
     {
-        float slideSpeed = this.forcedSlideSpeed ?? ((this.isMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
+        float slideSpeed = this.forcedSlideSpeed ?? this.absoluteSlideSpeed ?? ((this.kitty.IsMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit));
         float slidePerTick = slideSpeed * SLIDE_INTERVAL;
 
         float angle = Rad2Deg(kitty.Unit.Facing);
@@ -212,7 +213,9 @@ public class Slider
             newY = oldY;
         }
 
+        kitty.Unit.SetPathing(false);
         kitty.Unit.SetPosition(newX, newY);
+        kitty.Unit.SetPathing(true);
         ItemPickup();
     }
 
@@ -233,6 +236,8 @@ public class Slider
     private void HandleTurn(bool isToLocation)
     {
         if (!IsEnabled()) return;
+        if (!IsOnSlideTerrain()) return;
+
         var unit = @event.Unit;
         float angle;
         if (isToLocation)
@@ -249,15 +254,8 @@ public class Slider
             angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * Blizzard.bj_RADTODEG;
         }
 
-        // if (kitty.SlidingMode == "max")
-        // {
         var currentAngle = GetUnitFacing(unit);
         this.setRemainingDegreesToTurn(AnglesDiff(angle, currentAngle));
-        // }
-        // else
-        // {
-        // SetUnitFacing(unit, angle);
-        // }
     }
 
     public float ForceAngleBetween0And360(float angle)
@@ -354,24 +352,6 @@ public class Slider
     private void ItemPickup()
     {
         if (!enabled) return;
-
-        for (int i = 0; i < ItemSpawner.TrackKibbles.Count; i++)
-        {
-            var k = ItemSpawner.TrackKibbles[i];
-            if (k == null) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(k.Item.X, k.Item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
-            kitty.Unit.AddItem(k.Item);
-            break;
-        }
-
-        for (int i = 0; i < ItemSpawner.TrackItems.Count; i++)
-        {
-            var item = ItemSpawner.TrackItems[i];
-            if (item == null) continue;
-            if (item.IsOwned) continue;
-            if (WCSharp.Shared.Util.DistanceBetweenPoints(item.X, item.Y, kitty.Unit.X, kitty.Unit.Y) > ITEM_PICKUP_RADIUS) continue;
-            kitty.Unit.AddItem(item);
-            break;
-        }
+        ItemSpatialGrid.KittyItemPickup(kitty);
     }
 }

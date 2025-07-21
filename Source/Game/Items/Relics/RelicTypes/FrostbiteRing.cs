@@ -93,7 +93,7 @@ public class FrostbiteRing : Relic
         }
         else
         {
-            var frozenWolf = ObjectPool.GetEmptyObject<FrozenWolf>();
+            var frozenWolf = ObjectPool<FrozenWolf>.GetEmptyObject();
             frozenWolf.BeginFreezeActions(Owner, Unit, duration);
             FrozenWolves[Unit] = frozenWolf;
         }
@@ -141,7 +141,7 @@ public class FrozenWolf
     {
         try
         {
-            if (!Active) Timer = ObjectPool.GetEmptyObject<AchesTimers>();
+            if (!Active) Timer = ObjectPool<AchesTimers>.GetEmptyObject();
             Unit = wolfToFreeze;
             FreezeEffect ??= AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_FREEZE_RING_EFFECT, Unit, "origin");
             Caster = castingPlayer;
@@ -185,7 +185,7 @@ public class FrozenWolf
             }
             Timer.Dispose();
             Active = false;
-            ObjectPool.ReturnObject(this);
+            ObjectPool<FrozenWolf>.ReturnObject(this);
         }
         catch (Exception e)
         {

@@ -55,11 +55,13 @@ public class WolfPoint
                 var regionY = startY + (i * stepY);
                 PointInfo[i].X = regionX;
                 PointInfo[i].Y = regionY;
+                PointInfo[i].LastPoint = false;
             }
 
             // Ensure the last point is exactly the end point
             PointInfo[numRegions].X = endX;
             PointInfo[numRegions].Y = endY;
+            PointInfo[numRegions].LastPoint = true;
 
             if (PointInfo != null && PointInfo.Count > 0)
             {
@@ -112,8 +114,8 @@ public class WolfPoint
             for (int i = PointInfo.Count - 1; i >= 1; i--)
             {
                 if (PointInfo[i].X == 0 && PointInfo[i].Y == 0) continue;
-                var moveID = MoveOrderID;
-                if (i == PointInfo.Count - 1) moveID = AttackOrderID;
+                var moveID = PointInfo[i].LastPoint ? AttackOrderID : MoveOrderID;
+
                 Wolf.Unit.QueueOrder(moveID, PointInfo[i].X, PointInfo[i].Y);
                 if (!Wolf.IsWalking) Wolf.IsWalking = true; // ensure its set after queued order.
             }
@@ -133,17 +135,20 @@ public class WolfPoint
         TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, () =>
-        {
-            Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-        });
+        TriggerAddAction(IsPausedTrigger, QueueOrderActions);
         return IsPausedTrigger;
+    }
+
+    private static void QueueOrderActions()
+    {
+        Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
     }
 
     private class WolfPointInfo
     {
         public float X { get; set; }
         public float Y { get; set; }
+        public bool LastPoint { get; set; }
 
         public WolfPointInfo()
         {
@@ -153,10 +158,10 @@ public class WolfPoint
 
         public static List<WolfPointInfo> GetWolfPointList()
         {
-            var list = ObjectPool.GetEmptyList<WolfPointInfo>();
+            var list = ObjectPool<WolfPointInfo>.GetEmptyList();
             for (int i = 0; i < 48; i++)
             {
-                list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
+                list.Add(ObjectPool<WolfPointInfo>.GetEmptyObject());
             }
             return list;
         }
@@ -167,10 +172,10 @@ public class WolfPoint
             for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
-                ObjectPool.ReturnObject(item);
+                ObjectPool<WolfPointInfo>.ReturnObject(item);
             }
             list.Clear();
-            ObjectPool.ReturnList(list);
+            ObjectPool<WolfPointInfo>.ReturnList(list);
         }
     }
 }

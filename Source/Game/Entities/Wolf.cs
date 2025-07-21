@@ -18,8 +18,10 @@ public class Wolf
 
     public int RegionIndex { get; set; }
     public string OVERHEAD_EFFECT_PATH { get; set; }
-    public AchesTimers WanderTimer { get; set; }
-    private AchesTimers EffectTimer { get; set; }
+    public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
+
+    public AchesTimers EffectTimer { get; set; }
+
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
     public WolfArea WolfArea { get; private set; }
@@ -200,11 +202,6 @@ public class Wolf
         Unit.IsInvulnerable = true;
         Unit.SetColor(ConvertPlayerColor(24));
 
-        WanderTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-        EffectTimer = ObjectPool.GetEmptyObject<AchesTimers>();
-
-        
-
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);
     }
 
@@ -241,6 +238,7 @@ public class Wolf
         OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
 
+        EffectTimer ??= ObjectPool<AchesTimers>.GetEmptyObject();
         EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect);
     }
 
