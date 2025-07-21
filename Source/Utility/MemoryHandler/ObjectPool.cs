@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public static class ObjectPool<T> where T : class, new()
 {
     private static readonly Queue<T> _pool = new Queue<T>();
-    private static List<T> _lastListObject;
 
     /// <summary>
     /// Returns an empty object of type <typeparamref name="T"/> from the pool if available, otherwise creates a new instance.
