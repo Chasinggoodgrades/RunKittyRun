@@ -113,12 +113,13 @@ public static class NamedWolves
         }
     }
 
-    public static bool ExplodingWolfCollision(unit unit, Kitty k)
+    public static bool ExplodingWolfCollision(unit unit, Kitty k, bool shadowKitty = false)
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return false;
         if (unit != ExplodingWolf.Unit) return false;
-        Utility.GiveGoldFloatingText(25, k.Unit);
-        BurntMeat.FlamesDropChance(k);
+        if (!shadowKitty) Utility.GiveGoldFloatingText(25, k.Unit);
+        else Utility.GiveGoldFloatingText(25, k.ShadowKitty.Unit);
+            BurntMeat.FlamesDropChance(k);
         KillExplodingWolf();
         return true;
     }
