@@ -8,6 +8,8 @@ public class ShadowKitty
 
     public player Player { get; }
 
+    public Kitty Kitty { get; set; }
+
     public bool Active { get; set; }
 
     public trigger wCollision { get; set; }
@@ -21,6 +23,7 @@ public class ShadowKitty
     {
         this.Player = Player;
         ID = Player.Id;
+        Kitty = Globals.ALL_KITTIES[Player];
         this.RegisterTriggers();
     }
 
