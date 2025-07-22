@@ -88,7 +88,7 @@ public static class ChainedTogether
 
     private static void MoveChain()
     {
-        foreach (var chain in KittyLightnings.Values)
+        foreach (var chain in KittyLightnings.Values) // prolly change this later
         {
             chain.Constrain();
         }
@@ -110,12 +110,17 @@ public static class ChainedTogether
             k.IsChained = false;
             if (KittyLightnings.TryGetValue(k.Name, out var c))
             {
-                c.Dispose();
+                c?.Dispose();
                 KittyLightnings.Remove(k.Name);
             }
             if (isVictory) AwardChainedTogether(k);
         }
-        foreach (var k in group) kittyGroups.Remove(k.Name);
+
+        for (int i = 0; i < group.Count; i++)
+        {
+            var k = group[i];
+            kittyGroups.Remove(k.Name);
+        }
     }
 
     private static void SetGroups()
@@ -152,8 +157,11 @@ public static class ChainedTogether
                 groups.Add(all.GetRange(idx, count - idx));
         }
 
-        foreach (var g in groups)
+        for (int i = 0; i < groups.Count; i++)
+        {
+            var g = groups[i];
             RechainGroup(g);
+        }
     }
 
     private static void RechainGroup(List<Kitty> group)
@@ -163,7 +171,7 @@ public static class ChainedTogether
             var a = group[i];
             var b = group[i + 1];
             a.IsChained = b.IsChained = true;
-            var chain = ObjectPool.GetEmptyObject<Chain>();
+            var chain = ObjectPool<Chain>.GetEmptyObject();
             chain.SetKitties(a, b);
             KittyLightnings[a.Name] = chain;
             kittyGroups[a.Name] = group;
@@ -326,21 +334,24 @@ public class Chain
 
     private static int GetRange(string type)
     {
-        DifficultyLevel lvl = (DifficultyLevel)Difficulty.DifficultyValue;
-        var key = lvl >= DifficultyLevel.Nightmare
-            ? DifficultyLevel.Nightmare
-            : lvl >= DifficultyLevel.Impossible
-                ? DifficultyLevel.Impossible
-                : lvl >= DifficultyLevel.Hard
-                    ? DifficultyLevel.Hard
-                    : DifficultyLevel.Normal;
-        var tuple = Ranges[key];
+        var difficultyValue = (DifficultyLevel)Difficulty.DifficultyValue;
+
+        DifficultyLevel key = difficultyValue switch
+        {
+            >= DifficultyLevel.Nightmare => DifficultyLevel.Nightmare,
+            >= DifficultyLevel.Impossible => DifficultyLevel.Impossible,
+            >= DifficultyLevel.Hard => DifficultyLevel.Hard,
+            _ => DifficultyLevel.Normal
+        };
+
+        var (good, far, max) = Ranges[key];
+
         return type switch
         {
-            "good" => tuple.good,
-            "far" => tuple.far,
-            "max" => tuple.max,
-            _ => throw new ArgumentException($"Invalid range type {type}")
+            "good" => good,
+            "far" => far,
+            "max" => max,
+            _ => throw new ArgumentException($"Invalid range type: {type}")
         };
     }
 
@@ -349,6 +360,6 @@ public class Chain
         Lightning?.Dispose();
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
-        ObjectPool.ReturnObject(this);
+        ObjectPool<Chain>.ReturnObject(this);
     }
 }
