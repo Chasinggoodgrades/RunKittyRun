@@ -10,12 +10,12 @@
 
     public virtual void Apply()
     {
-        GC.GCAffixes.Add(this);
+        // GC.GCAffixes.Add(this);
     }
 
     public virtual void Remove()
     {
-        GC.RemoveAffix(this);
+        // GC.RemoveAffix(this);
     }
 
     public abstract void Pause(bool pause);

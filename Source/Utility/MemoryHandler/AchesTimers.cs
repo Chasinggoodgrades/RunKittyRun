@@ -27,6 +27,6 @@ public class AchesTimers : IDisposable
     public void Dispose()
     {
         Pause();
-        ObjectPool.ReturnObject(this);
+        ObjectPool<AchesTimers>.ReturnObject(this);
     }
 }

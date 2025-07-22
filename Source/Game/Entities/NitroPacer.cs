@@ -22,7 +22,7 @@ public static class NitroPacer
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
-        Unit = unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
+        Unit ??= unit.Create(player.NeutralPassive, Constants.UNIT_NITRO_PACER, spawnRect.CenterX, spawnRect.CenterY, 360);
         Utility.MakeUnitLocust(Unit);
         Unit.IsInvulnerable = true;
         Unit.Name = $"{Colors.COLOR_TURQUOISE}Nitro Pacer{Colors.COLOR_RESET}";
@@ -31,7 +31,7 @@ public static class NitroPacer
         _cachedNitroPacerUpdate = UpdateNitroPacer;
         VisionShare();
 
-        pacerTimer = ObjectPool.GetEmptyObject<AchesTimers>();
+        pacerTimer = ObjectPool<AchesTimers>.GetEmptyObject();
     }
 
     /// <summary>

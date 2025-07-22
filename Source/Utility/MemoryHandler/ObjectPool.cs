@@ -1,34 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public static class ObjectPool
+public static class ObjectPool<T> where T : class, new()
 {
-    private static readonly Dictionary<Type, Queue<object>> _pools = new Dictionary<Type, Queue<object>>();
-    private static object lastObject;
+    private static readonly Queue<T> _pool = new Queue<T>();
 
     /// <summary>
     /// Returns an empty object of type <typeparamref name="T"/> from the pool if available, otherwise creates a new instance.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns><typeparamref name="T"/></returns>
-    public static T GetEmptyObject<T>() where T : class, new()
+    public static T GetEmptyObject()
     {
         try
         {
-            // Gotta check if we have the type && some objects in the pool, then return it.
-            if (_pools.TryGetValue(typeof(T), out var pool) && pool.Count > 0)
+            if (_pool.Count > 0)
             {
-                var obj = (T)pool.Dequeue();
-                if (ReferenceEquals(lastObject, obj))
-                {
-                    // Logger.Warning($"ObjectPool: Returning the same object of type {typeof(T).Name} as last time.................................... lol");
-                    return new T();
-                }
-                lastObject = obj;
+                var obj = _pool.Dequeue();
                 return obj;
             }
 
-            // we got no objects in pool, lets return a new one of <T>
             return new T();
         }
         catch (Exception e)
@@ -41,27 +30,17 @@ public static class ObjectPool
     /// <summary>
     /// Puts an object of type <typeparamref name="T"/> back to the pool to be recycled.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="obj"></param>
-    public static void ReturnObject<T>(T obj) where T : class
+    public static void ReturnObject(T obj)
     {
         try
         {
-            // if we don't got a queue object to represent the pool, create a new 1
-            if (!_pools.TryGetValue(typeof(T), out var pool))
-            {
-                pool = new Queue<object>();
-                _pools[typeof(T)] = pool;
-            }
-
-            // put the object back in the pool <T>
             if (obj == null)
             {
                 Logger.Critical($"Attempted to return a null object of type {typeof(T).Name} to the pool.");
                 return;
             }
 
-            pool.Enqueue(obj);
+            _pool.Enqueue(obj);
         }
         catch (Exception e)
         {
@@ -70,13 +49,17 @@ public static class ObjectPool
         }
     }
 
-    public static List<T> GetEmptyList<T>() where T : class, new()
+    /// <summary>
+    /// Returns a pooled list of type <typeparamref name="T"/>. Clears the list before returning.
+    /// </summary>
+    public static List<T> GetEmptyList()
     {
         try
         {
-            if (_pools.TryGetValue(typeof(List<T>), out var pool) && pool.Count > 0)
+            if (_listPool.Count > 0)
             {
-                return (List<T>)pool.Dequeue();
+                var list = _listPool.Dequeue();
+                return list;
             }
 
             return new List<T>();
@@ -88,25 +71,21 @@ public static class ObjectPool
         }
     }
 
-    public static void ReturnList<T>(List<T> list) where T : class
+    /// <summary>
+    /// Puts a list of type <typeparamref name="T"/> back to the pool to be recycled.
+    /// </summary>
+    public static void ReturnList(List<T> list)
     {
         try
         {
-            list.Clear(); // Make sure to clear the list before returning it
-
-            if (!_pools.TryGetValue(typeof(List<T>), out var pool))
-            {
-                pool = new Queue<object>();
-                _pools[typeof(List<T>)] = pool;
-            }
-
             if (list == null)
             {
                 Logger.Critical($"Attempted to return a null list of type {typeof(List<T>).Name} to the pool.");
                 return;
             }
 
-            pool.Enqueue(list);
+            list.Clear();
+            _listPool.Enqueue(list);
         }
         catch (Exception e)
         {
@@ -115,16 +94,12 @@ public static class ObjectPool
         }
     }
 
-    /// <summary>
-    /// Prints debug information about all the object pools, including their counts.
-    /// </summary>
     public static void PrintDebugInfo()
     {
-        foreach (var kvp in _pools)
-        {
-            var type = kvp.Key;
-            var count = kvp.Value.Count;
-            Console.WriteLine($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{type.Name}, {Colors.COLOR_RESET}{Colors.COLOR_LAVENDER}Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{count}{Colors.COLOR_RESET}");
-        }
+        Console.WriteLine($"{Colors.COLOR_LAVENDER}Type: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{typeof(T).Name}, {Colors.COLOR_RESET}" +
+                          $"{Colors.COLOR_LAVENDER}Object Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{_pool.Count}{Colors.COLOR_RESET}, " +
+                          $"{Colors.COLOR_LAVENDER}List Count: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{_listPool.Count}{Colors.COLOR_RESET}");
     }
+
+    private static readonly Queue<List<T>> _listPool = new Queue<List<T>>();
 }

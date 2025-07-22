@@ -1,12 +1,6 @@
-﻿using System.Collections.Generic;
-using WCSharp.Api;
-
-public static class Standard
+﻿public static class Standard
 {
-    private static trigger KittyReachedLevelSix;
-    private static trigger KittyReachedLevelTen;
     private const float ROUND_INTERMISSION = 10.0f;
-    private const float ALERT_DURATION = 7.0f;
 
     public static void Initialize()
     {

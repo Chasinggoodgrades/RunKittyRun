@@ -93,7 +93,8 @@ public static class ChainedTogether
             chain.Constrain();
         }
     }
-
+    
+    // Unused anyway
     private static void RegenerateGroup(string kittyName)
     {
         if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
@@ -197,25 +198,26 @@ public static class ChainedTogether
 
         DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
 
-        int award;
+        var awards = Globals.GAME_AWARDS_SORTED.Auras;
+        string nameOfAward;
 
         switch (level)
         {
             case >= DifficultyLevel.Nightmare:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura;
+                nameOfAward = nameof(awards.ChainedNightmareAura);
                 break;
             case >= DifficultyLevel.Impossible:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura;
+                nameOfAward = nameof(awards.ChainedImpossibleAura);
                 break;
             case >= DifficultyLevel.Hard:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura;
+                nameOfAward = nameof(awards.ChainedHardAura);
                 break;
             default:
-                award = Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
+                nameOfAward = nameof(awards.ChainedNormalAura);
                 break;
         }
 
-        AwardManager.GiveReward(kitty.Player, nameof(award));
+        AwardManager.GiveReward(kitty.Player, nameOfAward);
     }
 
     private static bool IsInLastSafezone(Kitty kitty)
@@ -280,7 +282,7 @@ public class Chain
             {
                 newY1 = 0;
             }
-
+          
             FirstKitty.Unit.SetPathing(false);
             FirstKitty.Unit.X += newX1;
             FirstKitty.Unit.Y += newY1;

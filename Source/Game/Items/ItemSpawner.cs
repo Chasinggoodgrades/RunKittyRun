@@ -79,7 +79,7 @@ public static class ItemSpawner
 
         for (int i = 0; i < numberOfItems; i++)
         {
-            var kibble = ObjectPool.GetEmptyObject<Kibble>();
+            var kibble = ObjectPool<Kibble>.GetEmptyObject();
             kibble.SpawnKibble();
             TrackKibbles.Add(kibble);
             ItemSpatialGrid.RegisterKibble(kibble);

@@ -135,11 +135,13 @@ public class WolfPoint
         TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, () =>
-        {
-            Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
-        });
+        TriggerAddAction(IsPausedTrigger, QueueOrderActions);
         return IsPausedTrigger;
+    }
+
+    private static void QueueOrderActions()
+    {
+        Globals.ALL_WOLVES[@event.Unit].IsWalking = !Globals.ALL_WOLVES[@event.Unit].IsWalking;
     }
 
     private class WolfPointInfo
@@ -156,10 +158,10 @@ public class WolfPoint
 
         public static List<WolfPointInfo> GetWolfPointList()
         {
-            var list = ObjectPool.GetEmptyList<WolfPointInfo>();
+            var list = ObjectPool<WolfPointInfo>.GetEmptyList();
             for (int i = 0; i < 48; i++)
             {
-                list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
+                list.Add(ObjectPool<WolfPointInfo>.GetEmptyObject());
             }
             return list;
         }
@@ -170,10 +172,10 @@ public class WolfPoint
             for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
-                ObjectPool.ReturnObject(item);
+                ObjectPool<WolfPointInfo>.ReturnObject(item);
             }
             list.Clear();
-            ObjectPool.ReturnList(list);
+            ObjectPool<WolfPointInfo>.ReturnList(list);
         }
     }
 }

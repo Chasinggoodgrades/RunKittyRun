@@ -11,19 +11,27 @@ public static class Difficulty
 
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        if (IsDifficultyChosen) return;
+        try
+        {
+            if (Gamemode.CurrentGameMode != GameMode.Standard) return;
+            if (IsDifficultyChosen) return;
 
-        DifficultyOption.Initialize();
-        DifficultyOption.DifficultyChoosing.SetMessage($"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}");
-        RegisterSelectionEvent();
+            DifficultyOption.Initialize();
+            DifficultyOption.DifficultyChoosing.SetMessage($"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}");
+            RegisterSelectionEvent();
 
-        Utility.SimpleTimer(2.0f, ChooseDifficulty);
+            Utility.SimpleTimer(2.0f, ChooseDifficulty);
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in Difficulty.Initialize: {e.Message}");
+            throw;
+        }
     }
 
     private static void RegisterSelectionEvent()
     {
-        Trigger = trigger.Create();
+        Trigger ??= trigger.Create();
         Trigger.RegisterDialogEvent(DifficultyOption.DifficultyChoosing);
         Trigger.AddAction(() =>
         {
