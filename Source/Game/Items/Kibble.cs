@@ -45,6 +45,7 @@ public class Kibble : IDisposable
         StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
         JackPotIndex = 1;
         Item = CreateItem(Type, x, y);
+        ItemSpatialGrid.RegisterKibble(this);
     }
 
     #region Kibble Initialization
