@@ -26,9 +26,9 @@ public static class GameSeed
         {
             return false;
         }
-
-        Globals.GAME_SEED = 458266;
-        Globals.RANDOM_GEN = new Random(Globals.GAME_SEED);
+        var OmnisSeed = 458266; // Omnis' Seed for the Team Tournament 2025
+        Globals.GAME_SEED = OmnisSeed;
+        Globals.RANDOM_GEN = new Random(OmnisSeed);
 
         return true;
     }
