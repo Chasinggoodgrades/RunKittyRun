@@ -235,7 +235,8 @@ public static class StandardMultiboard
             var allDeaths = saveData.GameStats.Deaths;
             var score = allSaves - allDeaths;
             var kda = allDeaths == 0 ? allSaves.ToString("F2") : (allSaves / (double)allDeaths).ToString("F2");
-            var (games, wins) = GetGameStatData(saveData);
+            var gameCount = GetGameCount(saveData);
+            var winCount = GetWinCount(saveData);
 
             PlayerStats[0] = name;
             PlayerStats[1] = score.ToString();
@@ -243,8 +244,8 @@ public static class StandardMultiboard
             PlayerStats[3] = allDeaths.ToString();
             PlayerStats[4] = saveData.GameStats.HighestSaveStreak.ToString();
             PlayerStats[5] = kda;
-            PlayerStats[6] = games.ToString();
-            PlayerStats[7] = wins.ToString();
+            PlayerStats[6] = gameCount.ToString();
+            PlayerStats[7] = winCount.ToString();
 
             for (int j = 0; j < PlayerStats.Length; j++)
             {
@@ -300,36 +301,42 @@ public static class StandardMultiboard
         BestTimesStats();
     }
 
-    private static (int gameCount, int winCount) GetGameStatData(KittyData data)
+    private static int GetGameCount(KittyData data)
     {
         var gameData = data.GameStats;
-        int numberOfGames;
-        int numberOfWins;
-        switch (Difficulty.DifficultyValue)
+        switch ((DifficultyLevel)Difficulty.DifficultyValue)
         {
-            case (int)DifficultyLevel.Normal:
-                numberOfGames = gameData.NormalGames;
-                numberOfWins = gameData.NormalWins;
-                break;
-
-            case (int)DifficultyLevel.Hard:
-                numberOfGames = gameData.HardGames;
-                numberOfWins = gameData.HardWins;
-                break;
-
-            case (int)DifficultyLevel.Impossible:
-                numberOfGames = gameData.ImpossibleGames;
-                numberOfWins = gameData.ImpossibleWins;
-                break;
-            case (int)DifficultyLevel.Nightmare:
-                numberOfGames = gameData.NightmareGames;
-                numberOfWins = gameData.NightmareWins;
-                break;
+            case DifficultyLevel.Normal:
+                return gameData.NormalGames;
+            case DifficultyLevel.Hard:
+                return gameData.HardGames;
+            case DifficultyLevel.Impossible:
+                return gameData.ImpossibleGames;
+            case DifficultyLevel.Nightmare:
+                return gameData.NightmareGames;
             default:
-                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
-                return (0, 0);
+                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting game count.");
+                return 0;
         }
-        return (numberOfGames, numberOfWins);
+    }
+
+    private static int GetWinCount(KittyData data)
+    {
+        var gameData = data.GameStats;
+        switch ((DifficultyLevel)Difficulty.DifficultyValue)
+        {
+            case DifficultyLevel.Normal:
+                return gameData.NormalWins;
+            case DifficultyLevel.Hard:
+                return gameData.HardWins;
+            case DifficultyLevel.Impossible:
+                return gameData.ImpossibleWins;
+            case DifficultyLevel.Nightmare:
+                return gameData.NightmareWins;
+            default:
+                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting win count.");
+                return 0;
+        }
     }
 
     private static float[] GetGameRoundTime(KittyData data)

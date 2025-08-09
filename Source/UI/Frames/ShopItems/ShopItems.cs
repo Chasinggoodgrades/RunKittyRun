@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using static WCSharp.Api.Common;
 
 public enum ShopItemType
@@ -18,6 +19,9 @@ public class ShopItem
 
     public ShopItem(Relic relic)
     {
+        if (relic == null)
+            throw new ArgumentNullException(nameof(relic));
+
         InitializeShopItem(relic.Name, relic.Cost, relic.ItemID, relic.Description, relic.IconPath, ShopItemType.Relic);
         Relic = relic;
     }
@@ -48,18 +52,32 @@ public class ShopItem
     {
         var shopItems = new List<ShopItem>();
 
-        if (Gamemode.CurrentGameMode == GameMode.Standard)
+        try
         {
-            shopItems.Add(new ShopItem(new OneOfNine()));
-            shopItems.Add(new ShopItem(new RingOfSummoning()));
-            shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
-            shopItems.Add(new ShopItem(new ShardOfTranslocation()));
-            shopItems.Add(new ShopItem(new ChronoSphere()));
-        }
-        shopItems.Add(new ShopItem(new FangOfShadows()));
-        shopItems.Add(new ShopItem(new FrostbiteRing()));
+            if (Gamemode.CurrentGameMode == GameMode.Standard)
+            {
+                shopItems.Add(new ShopItem(new OneOfNine()));
 
-        return shopItems;
+                shopItems.Add(new ShopItem(new RingOfSummoning()));
+
+                shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
+
+                shopItems.Add(new ShopItem(new ShardOfTranslocation()));
+
+                // shopItems.Add(new ShopItem(new ChronoSphere()));
+            }
+
+            shopItems.Add(new ShopItem(new FangOfShadows()));
+
+            shopItems.Add(new ShopItem(new FrostbiteRing()));
+
+            return shopItems;
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in ShopItemsRelic: {ex}");
+            throw;
+        }
     }
 
     public static List<ShopItem> ShopItemsReward()

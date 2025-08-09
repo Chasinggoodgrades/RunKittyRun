@@ -13,7 +13,7 @@ public static class TeamsMultiboard
         try
         {
             if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
-            ESCTrigger = trigger.Create();
+            ESCTrigger ??= trigger.Create();
             TeamsMultiboardInit();
             ESCInit();
         }
@@ -34,14 +34,14 @@ public static class TeamsMultiboard
 
     private static void TeamsStatsMultiboard()
     {
-        TeamsStatsMB = multiboard.Create();
+        TeamsStatsMB ??= multiboard.Create();
         TeamsStatsMB.Title = $"Teams Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         TeamsStatsMB.IsDisplayed = false;
     }
 
     public static void CurrentTeamsMultiboard()
     {
-        CurrentTeamsMB = multiboard.Create();
+        CurrentTeamsMB ??= multiboard.Create();
         CurrentTeamsMB.Title = $"Current Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         CurrentTeamsMB.IsDisplayed = true;
         CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;

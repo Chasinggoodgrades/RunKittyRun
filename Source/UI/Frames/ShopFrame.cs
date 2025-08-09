@@ -150,16 +150,23 @@ public static class ShopFrame
 
     private static void LoadItemsIntoPanels()
     {
-        AddItemsToPanel(relicsPanel, GetRelicItems());
-        AddItemsToPanel(rewardsPanel, GetRewardItems());
-        AddItemsToPanel(miscPanel, GetMiscItems());
+        try
+        {
+            AddItemsToPanel(relicsPanel, GetRelicItems());
+            AddItemsToPanel(rewardsPanel, GetRewardItems());
+            AddItemsToPanel(miscPanel, GetMiscItems());
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in LoadItemsIntoPanels: {ex}");
+            throw;
+        }
     }
 
     private static void AddItemsToPanel(framehandle panel, List<ShopItem> items)
     {
         int columns = 6;
         int rows = (int)Math.Ceiling((double)items.Count / columns);
-
         for (int i = 0; i < items.Count; i++)
         {
             int row = i / columns;
@@ -270,32 +277,46 @@ public static class ShopFrame
 
     private static void CreateUpgradeTooltip()
     {
-        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-        upgradeTooltip = framehandle.Create("TEXT", $"UpgradeTooltip", background, "", 0);
+        try
+        {
+            var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
+            upgradeTooltip = framehandle.Create("TEXT", $"UpgradeTooltip", background, "", 0);
 
-        upgradeTooltip.SetSize(0.25f, 0);
-        background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, upgradeTooltip, framepointtype.BottomLeft);
-        background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, upgradeTooltip, framepointtype.TopRight);
+            upgradeTooltip.SetSize(0.25f, 0);
+            background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, upgradeTooltip, framepointtype.BottomLeft);
+            background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, upgradeTooltip, framepointtype.TopRight);
 
-        upgradeButton.SetTooltip(background);
-        upgradeTooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, upgradeButton, framepointtype.Top);
-        upgradeTooltip.Enabled = false;
+            upgradeButton.SetTooltip(background);
+            upgradeTooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, upgradeButton, framepointtype.Top);
+            upgradeTooltip.Enabled = false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"Error in CreateUpgradeTooltip: {ex}");
+        }
     }
 
     private static void CreateShopitemTooltips(framehandle parent, ShopItem item)
     {
-        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-        var tooltip = framehandle.Create("TEXT", $"{parent.Name}Tooltip", background, "", 0);
+        try
+        {
+            var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
+            var tooltip = framehandle.Create("TEXT", $"{parent.Name}Tooltip", background, "", 0);
 
-        tooltip.SetSize(0.10f, 0);
-        background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, tooltip, framepointtype.BottomLeft);
-        background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, tooltip, framepointtype.TopRight);
+            tooltip.SetSize(0.10f, 0);
+            background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, tooltip, framepointtype.BottomLeft);
+            background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, tooltip, framepointtype.TopRight);
 
-        parent.SetTooltip(background);
-        tooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);
-        tooltip.Enabled = false;
+            parent.SetTooltip(background);
+            tooltip.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);
+            tooltip.Enabled = false;
 
-        tooltip.Text = item.Name;
+            tooltip.Text = item.Name;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"Error in CreateShopitemTooltips: {ex}");
+        }
     }
 
     public static void RefreshUpgradeTooltip(Relic relic)
@@ -453,12 +474,19 @@ public static class ShopFrame
 
     private static void SetRewardsFrameHotkey()
     {
-        trigger shopFrameHotkey = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
+        try
         {
-            shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
+            trigger shopFrameHotkey = trigger.Create();
+            foreach (var player in Globals.ALL_PLAYERS)
+            {
+                shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true);
+            }
+            shopFrameHotkey.AddAction(ErrorHandler.Wrap(() => ShopFrameActions()));
         }
-        shopFrameHotkey.AddAction(ErrorHandler.Wrap(() => ShopFrameActions()));
+        catch (Exception ex)
+        {
+            Logger.Warning($"Error in SetRewardsFrameHotkey: {ex}");
+        }
     }
 
     public static void ShopFrameActions()

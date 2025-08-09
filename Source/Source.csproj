@@ -5,12 +5,12 @@
 		<Configurations>Debug;Release;DatabaseEnum</Configurations>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="WCSharp.Api" Version="3.2.2" />
-		<PackageReference Include="WCSharp.DateTime" Version="3.2.2" />
-		<PackageReference Include="WCSharp.Effects" Version="3.2.2" />
-		<PackageReference Include="WCSharp.Events" Version="3.2.2" />
-		<PackageReference Include="WCSharp.Json" Version="3.2.2" />
-		<PackageReference Include="WCSharp.Shared" Version="3.2.2" />
-		<PackageReference Include="WCSharp.Sync" Version="3.2.2" />
+		<PackageReference Include="WCSharp.Api" Version="3.2.6" />
+		<PackageReference Include="WCSharp.DateTime" Version="3.2.6" />
+		<PackageReference Include="WCSharp.Effects" Version="3.2.6" />
+		<PackageReference Include="WCSharp.Events" Version="3.2.6" />
+		<PackageReference Include="WCSharp.Json" Version="3.2.6" />
+		<PackageReference Include="WCSharp.Shared" Version="3.2.6" />
+		<PackageReference Include="WCSharp.Sync" Version="3.2.6" />
 	</ItemGroup>
 </Project>

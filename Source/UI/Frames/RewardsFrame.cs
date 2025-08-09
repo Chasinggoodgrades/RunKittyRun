@@ -269,15 +269,22 @@ public static class RewardsFrame
 
     private static void UnavilableRewardIcons(player player)
     {
-        var stats = Globals.ALL_KITTIES[player].SaveData;
-        var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
-        foreach (var reward in RewardIcons)
+        try
         {
-            var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.Value.TypeSorted, reward.Value.Name);
-            if (value <= 0) // Doesnt have reward
-                reward.Key.SetTexture(unavailablePath, 0, false);
-            else
-                reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);
+            var stats = Globals.ALL_KITTIES[player].SaveData;
+            var unavailablePath = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn";
+            foreach (var reward in RewardIcons)
+            {
+                var value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.Value.TypeSorted, reward.Value.Name);
+                if (value <= 0) // Doesnt have reward
+                    reward.Key.SetTexture(unavailablePath, 0, false);
+                else
+                    reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in UnavilableRewardIcons: {e}");
         }
     }
 
@@ -298,7 +305,11 @@ public static class RewardsFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Let's not activate rewards in tournament.
+        if (Gamemode.CurrentGameMode != GameMode.Standard)
+        {
+            player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Rewards are only available in Standard Mode{Colors.COLOR_RESET}");
+            return; // Let's not activate rewards in tournament.
+        }
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.RewardsButton.Visible = false;
         FrameManager.RewardsButton.Visible = true;

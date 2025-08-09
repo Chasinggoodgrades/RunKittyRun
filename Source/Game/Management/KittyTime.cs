@@ -96,8 +96,7 @@ public class KittyTime
 
     public void SetRoundProgress(int round, float progress)
     {
-        if (RoundProgress.ContainsKey(round))
-            RoundProgress[round] = progress;
+        RoundProgress[round] = progress;
     }
 
     public float GetOverallProgress() // Solo Tournament Issue

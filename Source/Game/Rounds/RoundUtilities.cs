@@ -14,10 +14,13 @@ public static class RoundUtilities
 
     public static void MoveTeamToStart(Team team)
     {
-        foreach (var player in team.Teammembers)
+        for (int i = 0; i < team.Teammembers.Count; i++)
         {
+            var player = team.Teammembers[i];
+            var kitty = Globals.ALL_KITTIES[player].Finished = true;
             MovePlayerToStart(player);
         }
+        team.Finished = true;
     }
 
     public static void MoveAllPlayersToStart()
