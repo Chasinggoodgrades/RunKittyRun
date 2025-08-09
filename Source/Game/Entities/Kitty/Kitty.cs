@@ -270,6 +270,7 @@ public class Kitty
         InvulTimer.Dispose();
         Disco?.Dispose();
         aiController.StopAi();
+        RTR.StopRTR();
         Unit.Dispose();
         ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
