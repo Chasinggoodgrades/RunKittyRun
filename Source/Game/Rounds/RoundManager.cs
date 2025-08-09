@@ -115,10 +115,24 @@ public static class RoundManager
     public static void RoundEndCheck()
     {
         // Always returns for standard mode, and solo progression mode.
-        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
             var kitty = Globals.ALL_KITTIES_LIST[i];
             if (!kitty.Finished) return;
         }
         RoundEnd();
+    }
+    
+    public static bool DidTeamEnd(int teamId)
+    {
+        var teamMemebers = Globals.ALL_TEAMS[teamId].Teammembers;
+        // Always returns for standard mode, and solo progression mode.
+        for (int i = 0; i < teamMemebers.Count; i++)
+        {
+            var member = teamMemebers[i];
+            var kitty = Globals.ALL_KITTIES[member];
+            if (!kitty.Finished) return false;
+        }
+        return true;
     }
 }
