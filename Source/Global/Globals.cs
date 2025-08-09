@@ -5,14 +5,14 @@ using static WCSharp.Api.Common;
 
 public static class Globals
 {
-    public const int MAX_TEAM_SIZE = 12;
+    public const int MAX_TEAM_SIZE = 24;
     public const float TIME_TO_PICK_GAMEMODE = 20.0f;
     public const int DEFAULT_TEAM_SIZE = 3;
     public static int ROUND = 0;
     public static bool GAME_ACTIVE { get; set; } = false;
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
-    public static int GAME_SEED = GetRandomInt(1, 900000);
+    public static int GAME_SEED { get; set; }
     public static group TempGroup = group.Create();
     public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.SoloTournament, GameMode.TeamTournament };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
@@ -46,7 +46,7 @@ public static class Globals
     public static GameStatsData GAME_STATS = new GameStatsData();
     // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
-    public static Random RANDOM_GEN { get; } = new Random(GAME_SEED);
+    public static Random RANDOM_GEN { get; set; }
     public static Dictionary<int, Team> ALL_TEAMS { get; set; }
     public static List<Team> ALL_TEAMS_LIST { get; set; }
     public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }

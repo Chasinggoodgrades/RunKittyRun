@@ -20,6 +20,7 @@ namespace Source.Init
                 SetGameSpeed(gamespeed.Fastest);
                 Blizzard.LockGameSpeedBJ();
                 Colors.Initialize();
+                GameSeed.Initialize();
                 DoodadChanger.ShowSeasonalDoodads(false);
                 Gamemode.Initialize();
                 SetupVIPList();

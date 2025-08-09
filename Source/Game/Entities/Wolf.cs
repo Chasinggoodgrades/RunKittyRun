@@ -129,7 +129,6 @@ public class Wolf
         foreach (var wolfKey in Globals.ALL_WOLVES)
         {
             Globals.ALL_WOLVES[wolfKey.Key]?.Dispose();
-            Globals.ALL_WOLVES[wolfKey.Key] = null;
         }
         Globals.ALL_WOLVES.Clear();
     }

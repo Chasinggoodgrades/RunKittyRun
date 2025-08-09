@@ -36,7 +36,7 @@ public class Safezone
 
     private void EnterSafezoneEvents()
     {
-        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
+        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilterOrShadow);
         Trigger.AddAction(EnterSafezoneActions);
     }
 
@@ -46,6 +46,11 @@ public class Safezone
         {
             var unit = @event.Unit;
             if (WolfEntersSafezoneActions(unit)) return;
+            if (unit.UnitType == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON)
+            {
+                WolfLaneHider.ShadowKittyLaneAdd(ID);
+                return;
+            }
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
             SafezoneAdditions(kitty);

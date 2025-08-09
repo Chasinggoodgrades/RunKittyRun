@@ -38,6 +38,12 @@ public static class WolfLaneHider
         }
     }
 
+    public static void ShadowKittyLaneAdd(int safezone)
+    {
+        AddAdjacentLanes(safezone);
+        ApplyLaneVisibility();
+    }
+
     private static void AddAdjacentLanes(int currentSafezone)
     {
         AddLane(currentSafezone);

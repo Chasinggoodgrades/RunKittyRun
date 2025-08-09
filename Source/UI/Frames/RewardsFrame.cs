@@ -298,6 +298,7 @@ public static class RewardsFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return; // Let's not activate rewards in tournament.
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.RewardsButton.Visible = false;
         FrameManager.RewardsButton.Visible = true;
