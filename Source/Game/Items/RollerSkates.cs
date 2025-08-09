@@ -22,6 +22,12 @@ public static class RollerSkates
         var item = @event.ManipulatedItem;
         var slider = Globals.ALL_KITTIES[unit.Owner].Slider;
 
+        if (Gamemode.CurrentGameMode != GameMode.Standard)
+        {
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Roller Skates are only available in Standard Mode{Colors.COLOR_RESET}");
+            return;
+        }
+
         if (RollerSkaters.Contains(unit.Owner))
         {
             SetPegasusBoots(item);

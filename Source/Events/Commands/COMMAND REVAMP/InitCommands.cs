@@ -1816,6 +1816,18 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "getdate",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Gets the current date, time, day, month, etc.",
+            action: (player, args) =>
+            {
+                player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Date: {DateTimeManager.DateTime.ToString()}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "slidespeed",
             alias: "ss",
             group: "admin",
