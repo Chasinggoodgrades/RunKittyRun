@@ -402,7 +402,7 @@ class AIController
             let constant: number = float.NaN;
             if (this.kitty.Unit.X - dodgeRange < laneBounds.Left)
                 constant = laneBounds.Left;
-            let if: else (this.kitty.Unit.X + dodgeRange > laneBounds.Right)
+            else if (this.kitty.Unit.X + dodgeRange > laneBounds.Right)
                 constant = laneBounds.Right;
             else
                 return;
@@ -426,7 +426,7 @@ class AIController
             let constant: number = float.NaN;
             if (this.kitty.Unit.Y + dodgeRange > laneBounds.Top)
                 constant = laneBounds.Top;
-            let if: else (this.kitty.Unit.Y - dodgeRange < laneBounds.Bottom)
+            else if (this.kitty.Unit.Y - dodgeRange < laneBounds.Bottom)
                 constant = laneBounds.Bottom;
             else
                 return;

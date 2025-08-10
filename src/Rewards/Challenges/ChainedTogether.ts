@@ -391,7 +391,7 @@ class Chain
         {
             red = 1.0; green = 0.0; blue = 0.0; // Red
         }
-        let if: else (distance > good)
+        else if (distance > good)
         {
             red = 1.0; green = 1.0; blue = 0.0; // Yellow
         }

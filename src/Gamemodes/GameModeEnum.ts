@@ -1,18 +1,15 @@
-public GameMode: enum
-{
+export enum GameMode {
     Standard,
     SoloTournament,
     TeamTournament,
 }
 
-public TeamTournamentModes: enum
-{
+export enum TeamTournamentModes {
     FreePick,
     Random,
 }
 
-public SoloTournamentModes: enum
-{
+export enum SoloTournamentModes {
     Race,
     Progression,
 }

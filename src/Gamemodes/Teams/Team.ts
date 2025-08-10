@@ -114,7 +114,7 @@ class Team
                 TeamHandler.RandomHandler();
             });
         }
-        let if: else (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
+        else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1]) // random
             Utility.SimpleTimer(2.5, TeamHandler.RandomHandler);
     }
 

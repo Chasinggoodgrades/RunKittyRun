@@ -66,7 +66,7 @@ class RoundTimer
             ROUND_ENDTIMES.Add(1500.0);
             ROUND_ENDTIMES.Add(1500.0);
         }
-        let if: else (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             ROUND_ENDTIMES.Add(420.0);
             ROUND_ENDTIMES.Add(420.0);

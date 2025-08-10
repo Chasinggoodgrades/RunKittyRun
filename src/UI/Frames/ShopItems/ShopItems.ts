@@ -1,6 +1,6 @@
 
 
-public ShopItemType: enum
+export enum ShopItemType
 { Relic, Reward, Misc }
 
 class ShopItem

@@ -51,7 +51,7 @@ class CommandsManager
         {
             kitties.Add(Globals.ALL_KITTIES[GetTriggerPlayer()]);
         }
-        let if: else (larg == "a" || larg == "all")
+        else if (larg == "a" || larg == "all")
         {
             for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
@@ -59,7 +59,7 @@ class CommandsManager
                 kitties.Add(kitty); // add all players
             }
         }
-        let if: else (larg == "ai" || larg == "computer" || larg == "computers")
+        else if (larg == "ai" || larg == "computer" || larg == "computers")
         {
             for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
@@ -70,7 +70,7 @@ class CommandsManager
                 }
             }
         }
-        let if: else (larg == "s" || larg == "sel" || larg == "select" || larg == "selected")
+        else if (larg == "s" || larg == "sel" || larg == "select" || larg == "selected")
         {
             let selectedUnit = CustomStatFrame.SelectedUnit[GetTriggerPlayer()];
             if (selectedUnit != null)
@@ -82,21 +82,21 @@ class CommandsManager
                 }
             }
         }
-        let if: else (int.TryParse(arg, number: playerId: out))
+        else if (int.TryParse(arg, number: playerId: out))
         {
             if (kitty = Globals.ALL_KITTIES.TryGetValue(Player(playerId - 1)) /* TODO; Prepend: let */) // assume player ids 1-24
             {
                 kitties.Add(kitty);
             }
         }
-        let if: else (Utility.GetPlayerByName(larg) is p: player)
+        else if (Utility.GetPlayerByName(larg) is p: player)
         {
             if (kitty = Globals.ALL_KITTIES.TryGetValue(p) /* TODO; Prepend: let */)
             {
                 kitties.Add(kitty);
             }
         }
-        let if: else (Colors.GetPlayerByColor(larg) is pl: player)
+        else if (Colors.GetPlayerByColor(larg) is pl: player)
         {
             if (kitty = Globals.ALL_KITTIES.TryGetValue(pl) /* TODO; Prepend: let */)
             {

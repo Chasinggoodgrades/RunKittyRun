@@ -92,7 +92,7 @@ class ProtectionOfAncients
             {
                 UpgradeLevel2.Add(player);
             }
-            let if: else (abilityLevel == 3)
+            else if (abilityLevel == 3)
             {
                 UpgradeLevel3.Add(player);
                 UpgradeLevel2.Remove(player);  // Ensure the player is only in one list

@@ -53,7 +53,7 @@ class CustomStatFrame
 
         if (Count == 1)
             fh.SetPoint(framepointtype.TopLeft, 0.015, -0.035, CustomStatFrameBoxS, framepointtype.TopLeft);
-        let if: else (Count == 4)
+        else if (Count == 4)
             fh.SetPoint(framepointtype.TopRight, -0.060, -0.035, CustomStatFrameBoxS, framepointtype.TopRight);
         else
             fh.SetPoint(framepointtype.TopLeft, 0, -0.005, BlzGetFrameByName("CustomStat", Count - 1), framepointtype.BottomLeft);
@@ -131,12 +131,12 @@ class CustomStatFrame
     private static HandleFrameText(selectedUnit: unit)
     {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER) SetWolfFrameText(selectedUnit);
-        let if: else (selectedUnit.UnitType == Constants.UNIT_KITTY)
+        else if (selectedUnit.UnitType == Constants.UNIT_KITTY)
         {
             SetCommonFrameText(selectedUnit);
             SetGamemodeFrameText(selectedUnit);
         }
-        let if: else (SetChampionFrameText(selectedUnit)) { }
+        else if (SetChampionFrameText(selectedUnit)) { }
         else
         {
             // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.
@@ -155,7 +155,7 @@ class CustomStatFrame
             Stats[5].Text.Text = "|cffffff00Region:|US: r";
             Stats[3].Text.Text = "|cffffff00Time:|15: r:36";
         }
-        let if: else (selectedUnit == SpawnChampions.FandF2023)
+        else if (selectedUnit == SpawnChampions.FandF2023)
         {
             Stats[2].Text.Text = "|cffffff00Region:|US: r";
             Stats[1].Text.Text = "|cff00fffAches|r";
@@ -164,7 +164,7 @@ class CustomStatFrame
             Stats[4].Text.Text = "|cff00fffBalmydrop|r";
             Stats[0].Text.Text = "|cff00fffUdo|r";
         }
-        let if: else (selectedUnit == SpawnChampions.Fieryfox2024)
+        else if (selectedUnit == SpawnChampions.Fieryfox2024)
         {
             Stats[1].Text.Text = "|cffff0000Fieryfox|r";
             Stats[2].Text.Text = "|cffffff00Region:|EU: r";
@@ -173,7 +173,7 @@ class CustomStatFrame
             Stats[5].Text.Text = "|cffffff00Region:|US: r";
             Stats[3].Text.Text = "|cffffff00Time:|16: r:31";
         }
-        let if: else (selectedUnit == SpawnChampions.Stan2025)
+        else if (selectedUnit == SpawnChampions.Stan2025)
         {
             Stats[0].Text.Text = "|cffffff00Time:|14: r:25";
             Stats[1].Text.Text = "|cffa471e3Stan|r";
@@ -219,13 +219,13 @@ class CustomStatFrame
             BlzFrameSetText(Stats[0].Text, "{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r");
             BlzFrameSetText(Stats[1].Text, "{Saves} {Colors.COLOR_GREEN}{GetPlayerSaves(selectedUnit)}|r");
         }
-        let if: else (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             BlzFrameSetText(Stats[0].Text, "{Time} {GetPlayerTime(selectedUnit)}");
             BlzFrameSetText(Stats[1].Text, "{Progress} {GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[2].Text, "{Deaths} {GetGameTotalDeaths(selectedUnit)}");
         }
-        let if: else (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
+        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
             BlzFrameSetText(Stats[0].Text, "{GetPlayerTeamName(selectedUnit)}");
             BlzFrameSetText(Stats[4].Text, "{GetPlayerProgress(selectedUnit)}%");

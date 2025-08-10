@@ -112,7 +112,7 @@ class SyncSaveLoad
             {
                 promise.Buffer[currentChunk - 1] = theRest;
             }
-            let if: else (prefix == SyncPrefixFinish)
+            else if (prefix == SyncPrefixFinish)
             {
                 promise.Finish();
                 allPromises.Remove(GetPlayerId(promise.SyncOwner));

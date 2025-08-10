@@ -40,7 +40,7 @@ class DifficultyOption
     }
 }
 
-public DifficultyLevel: enum
+export enum DifficultyLevel
 {
     Normal = 4,
     Hard = 6,

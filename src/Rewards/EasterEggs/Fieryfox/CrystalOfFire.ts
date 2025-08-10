@@ -79,7 +79,7 @@ class CrystalOfFire
                 if (QuestEligible.Contains(player)) QuestEligible.Remove(player);
             });
         }
-        let if: else (GetDeathAttempts(player) == -1)
+        else if (GetDeathAttempts(player) == -1)
         {
             player.DisplayTextTo(PartTwoMessage(player));
         }

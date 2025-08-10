@@ -42,7 +42,7 @@ class GamemodeCmd
             CmdInfo = GamemodeManager.GetCommandInfo(parts[0]);
             return;
         }
-        let if: else (parts.Length < 2)
+        else if (parts.Length < 2)
             return;
         else
         {
@@ -125,7 +125,7 @@ class GamemodeCmd
             player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage);
             return;
         }
-        let if: else (parts.Length == 4 && int.TryParse(parts[3], number: parsedTeamSize: out))
+        else if (parts.Length == 4 && int.TryParse(parts[3], number: parsedTeamSize: out))
         {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0)
             {

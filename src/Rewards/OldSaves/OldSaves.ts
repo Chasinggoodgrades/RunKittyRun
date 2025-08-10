@@ -259,7 +259,7 @@ class Savecode
     private static Modb(x: number)
     {
         if (x >= BASE()) return x - BASE();
-        let if: else (x < 0) return x + BASE();
+        else if (x < 0) return x + BASE();
         return x;
     }
 }

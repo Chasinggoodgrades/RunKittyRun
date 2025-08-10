@@ -330,12 +330,12 @@ class ShopFrame
                 color = Colors.COLOR_GREY;  // Grey out past upgrades
                 colorDescription = Colors.COLOR_GREY;
             }
-            let if: else (i == playersUpgradeLevel - 1)
+            else if (i == playersUpgradeLevel - 1)
             {
                 color = Colors.COLOR_GREY;  // INCASE WE WANT TO CHANGE THE COLOR OF THE CURRENT UPGRADE OR ADD DETAILS
                 colorDescription = Colors.COLOR_GREY;
             }
-            let if: else (i == playersUpgradeLevel)
+            else if (i == playersUpgradeLevel)
             {
                 color = Colors.COLOR_YELLOW;  // Yellow for the next available upgrade
                 colorDescription = Colors.COLOR_YELLOW_ORANGE;

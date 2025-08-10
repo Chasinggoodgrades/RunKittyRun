@@ -80,7 +80,7 @@ class Kibble extends IDisposable
             let kib = ItemSpawner.TrackKibbles.Find(k => k.Item == item);
 
             if (randomChance <= 30) KibbleGoldReward(kitty, kib);
-            let if: else (randomChance <= 60) KibbleXP(kitty);
+            else if (randomChance <= 60) KibbleXP(kitty);
             let KibbleNothing: else(kitty);
 
             if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);

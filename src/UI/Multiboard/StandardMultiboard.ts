@@ -389,12 +389,12 @@ class StandardMultiboard
             CurrentStats.IsDisplayed = false;
             OverallStats.IsDisplayed = true;
         }
-        let if: else (OverallStats.IsDisplayed)
+        else if (OverallStats.IsDisplayed)
         {
             OverallStats.IsDisplayed = false;
             BestTimes.IsDisplayed = true;
         }
-        let if: else (BestTimes.IsDisplayed)
+        else if (BestTimes.IsDisplayed)
         {
             BestTimes.IsDisplayed = false;
             CurrentStats.IsDisplayed = true;

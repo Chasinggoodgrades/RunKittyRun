@@ -620,7 +620,7 @@ class InitCommands
                         Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing);
                     });
                 }
-                let if: else (args.Length == 2)
+                else if (args.Length == 2)
                 {
                     CommandsManager.ResolvePlayerId(args[1], kitty =>
                     {
@@ -766,7 +766,7 @@ class InitCommands
                     let kitty = Globals.ALL_KITTIES[player].Invulnerable = setting;
                     player.DisplayTimedTextTo(5.0, "{Colors.COLOR_GOLD}Invulnerability: {setting}|r");
                 }
-                let if: else (args.Length == 2)
+                else if (args.Length == 2)
                 {
                     CommandsManager.ResolvePlayerId(args[0], kitty =>
                     {
@@ -1322,7 +1322,7 @@ class InitCommands
                 }
 
                 if (laserType == "free") AIController.FREE_LASER_COLOR = args[1].ToUpper();
-                let if: else (laserType == "blocked") AIController.BLOCKED_LASER_COLOR = args[1].ToUpper();
+                else if (laserType == "blocked") AIController.BLOCKED_LASER_COLOR = args[1].ToUpper();
 
                 player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW}color: changed: Laser: {laserType} color: laser is now {args[1].ToUpper()}");
             }
