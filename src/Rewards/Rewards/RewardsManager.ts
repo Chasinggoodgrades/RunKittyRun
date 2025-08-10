@@ -1,0 +1,82 @@
+
+
+/// <summary>
+/// This class handles:
+/// * Activation / Deactivation of Rewards (Based on Spell Cast Event)
+/// * Any activated reward including the Reset ability so long as it's added within the RewardCreation class.
+/// </summary>
+class RewardsManager
+{
+    private static Trigger: trigger = trigger.Create();
+    private static List<int> RewardAbilities = new List<int>();
+    public static List<Reward> Rewards = new List<Reward>();
+    public static List<Reward> GameStatRewards = new List<Reward>();
+
+    public static Initialize()
+    {
+        RegisterTrigger();
+        RewardCreation.SetupRewards();
+        RewardAbilitiesList();
+        AwardManager.RegisterGamestatEvents();
+        ChampionAwards.AwardAllChampions();
+    }
+
+    private static RewardAbilitiesList()
+    {
+        for (let reward in Rewards)
+            RewardAbilities.Add(reward.AbilityID);
+    }
+
+    private static RegisterTrigger()
+    {
+        for (let player in Globals.ALL_PLAYERS)
+        {
+            Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
+        }
+        Trigger.AddAction(CastedReward);
+    }
+
+    private static CastedReward()
+    {
+        let spellID = @event.SpellAbilityId;
+        let unit = GetTriggerUnit();
+        if (IsResetSpell(spellID))
+        {
+            ResetRewardSettings(unit);
+            Globals.ALL_KITTIES[unit.Owner].KittyMorphosis.ScaleUnit(); // changes scale of unit if they have amulet.
+            return;
+        }
+    }
+
+    private static IsRewardAbility(spellID: number)  { return RewardAbilities.Contains(spellID); }
+
+    private static IsResetSpell(spellID: number)  { return spellID == Constants.ABILITY_RESET; }
+
+    private static ResetRewardSettings(Unit: unit)
+    {
+        let player = Unit.Owner;
+        let kitty = Globals.ALL_KITTIES[player];
+        let activeRewards = kitty.ActiveAwards;
+
+        let wings = activeRewards.ActiveWings;
+        GC.RemoveEffect( wings); // TODO; Cleanup:         GC.RemoveEffect(ref wings);
+
+        let auras = activeRewards.ActiveAura;
+        GC.RemoveEffect( auras); // TODO; Cleanup:         GC.RemoveEffect(ref auras);
+
+        let hats = activeRewards.ActiveHats;
+        GC.RemoveEffect( hats); // TODO; Cleanup:         GC.RemoveEffect(ref hats);
+
+        let trails = activeRewards.ActiveTrail;
+        GC.RemoveEffect( trails); // TODO; Cleanup:         GC.RemoveEffect(ref trails);
+
+        kitty.Unit.Skin = Constants.UNIT_KITTY;
+        kitty.Unit.SetVertexColor(255, 255, 255);
+
+        for (let property in kitty.SaveData.SelectedData.GetType().GetProperties())
+            property.SetValue(kitty.SaveData.SelectedData, "");
+
+        if (kitty.SaveData.SelectedData.SelectedWindwalk == "")
+            kitty.ActiveAwards.WindwalkID = 0;
+    }
+}
