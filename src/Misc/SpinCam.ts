@@ -34,13 +34,13 @@ class SpinCam {
             if (!this.Kitty.Alive && !this.WasSpinCamReset) {
                 this.WasSpinCamReset = true
                 this.SpinCamRotation = 0
-                Blizzard.SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, 0, 0)
+                SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, 0, 0)
             }
 
             return
         }
 
         SpinCamRotation = this.Kitty.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed)
-        Blizzard.SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0)
+        SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0)
     }
 }

@@ -4,7 +4,7 @@ class CommandHandler
 {
     private static DebugCmdTrigger: trigger = trigger.Create();
     private static NewCmdHandler: trigger = trigger.Create();
-    private static readonly string[] EmptyStringArray = new string[] [""]
+    private static readonly EmptyStringArray = new string[] [""]
 
     public static Initialize()
     {
@@ -30,7 +30,7 @@ class CommandHandler
         let spaceIndex = cmd.IndexOf(' ');
 
         let commandName: string;
-        string[] args;
+        let args: string[];
 
         if (spaceIndex < 0)
         {
@@ -41,7 +41,7 @@ class CommandHandler
         {
             commandName = cmd.Substring(0, spaceIndex);
             let remainder = cmd.Substring(spaceIndex + 1);
-            let split = remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            let split = remainder.split(' ').filter(Boolean);
             args = split.Length > 0 ? split : EmptyStringArray;
         }
 

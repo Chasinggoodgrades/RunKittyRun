@@ -30,7 +30,7 @@ class TimeSetter {
             return true
         } catch (e: Error) {
             Logger.Critical('Error in TimeSetter.SetRoundTime: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

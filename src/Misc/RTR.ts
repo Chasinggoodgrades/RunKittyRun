@@ -109,7 +109,7 @@ class RTR
         let movePerTick: number = moveSpeed * RTR_INTERVAL;
 
         let angle: number = Atan2(targetY - currentY, targetX - currentX);
-        SetUnitFacing(kitty.Unit, angle * Blizzard.bj_RADTODEG);
+        SetUnitFacing(kitty.Unit, angle * bj_RADTODEG);
 
         let newX: number = currentX + (movePerTick * Cos(angle));
         let newY: number = currentY + (movePerTick * Sin(angle));

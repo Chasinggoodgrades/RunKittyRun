@@ -22,7 +22,7 @@ class ObjectPool<T> T: where : class, new()
         catch (e: Error)
         {
             Logger.Critical("Error in ObjectPool.GetEmptyObject: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -44,14 +44,14 @@ class ObjectPool<T> T: where : class, new()
         catch (e: Error)
         {
             Logger.Critical("Error in ObjectPool.ReturnObject: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
     /// <summary>
     /// Returns a pooled list of type <typeparam name="T"/>. Clears the list before returning. // TODO; Cleanup:     /// Returns a pooled list of type <typeparamref name="T"/>. Clears the list before returning.
     /// </summary>
-    public static List<T> GetEmptyList()
+    public static GetEmptyList(): T[]
     {
         try
         {
@@ -61,25 +61,25 @@ class ObjectPool<T> T: where : class, new()
                 return list;
             }
 
-            return new List<T>();
+            return [];
         }
         catch (e: Error)
         {
             Logger.Critical("Error in ObjectPool.GetEmptyList: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
     /// <summary>
     /// Puts a list of type <typeparam name="T"/> back to the pool to be recycled. // TODO; Cleanup:     /// Puts a list of type <typeparamref name="T"/> back to the pool to be recycled.
     /// </summary>
-    public static ReturnList(List<T> list)
+    public static ReturnList(list: T[])
     {
         try
         {
             if (list == null)
             {
-                Logger.Critical("to: Attempted return null: list: a of type {typeof(List<T>).Name} the: pool: to.");
+                Logger.Critical("to: Attempted return null: list: a of type {typeof(T[]).Name} the: pool: to.");
                 return;
             }
 
@@ -89,7 +89,7 @@ class ObjectPool<T> T: where : class, new()
         catch (e: Error)
         {
             Logger.Critical("Error in ObjectPool.ReturnList: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -100,5 +100,5 @@ class ObjectPool<T> T: where : class, new()
                           "{Colors.COLOR_LAVENDER}Count: List: {Colors.COLOR_RESET}{Colors.COLOR_YELLOW}{_listPool.Count}{Colors.COLOR_RESET}");
     }
 
-    private static readonly Queue<List<T>> _listPool = new Queue<List<T>>();
+    private static readonly Queue<T[]> _listPool = new Queue<T[]>();
 }

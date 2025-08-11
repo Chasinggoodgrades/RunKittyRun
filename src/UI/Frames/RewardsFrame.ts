@@ -5,8 +5,8 @@ class RewardsFrame
     public static RewardFrame: framehandle;
     private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0);
     private static TempHandle: framehandle;
-    private static Dictionary<string, framehandle> FrameByName = new Dictionary<string, framehandle>();
-    private static Dictionary<framehandle, Reward> RewardIcons = new Dictionary<framehandle, Reward>();
+    private static  FrameByName : {[x: string]: framehandle} = {}
+    private static  RewardIcons : {[x: framehandle]: Reward} = {}
     private static RewardHelp: RewardHelper = new RewardHelper();
     private static RewardsPerRow: number = 6;
     private static FrameX: number = 0.4;
@@ -32,7 +32,7 @@ class RewardsFrame
         catch (ex: Error)
         {
             Logger.Critical("Error in RewardsFrame: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
@@ -157,7 +157,7 @@ class RewardsFrame
     private static RandomRewardsButtonActions()
     {
         let player = GetTriggerPlayer();
-        let frame = @event.Frame;
+        let frame =BlzGetTriggerFrame();
         try
         {
             RewardHelp.ClearRewards();
@@ -193,7 +193,7 @@ class RewardsFrame
     private static AppendRewardsToFrames()
     {
         let cols = RewardsPerRow;
-        let count = new Dictionary<RewardType, int>();
+        let count : {[x: RewardType]: number} = {}
 
         // Initialize the count dictionary with zeros
         for (let type: RewardType in Enum.GetValues(typeof(RewardType)))
@@ -254,7 +254,7 @@ class RewardsFrame
     private static RewardButtonActions(reward: Reward)
     {
         let player = GetTriggerPlayer();
-        let frame = @event.Frame;
+        let frame = BlzGetTriggerFrame();
         let stats = Globals.ALL_KITTIES[player].SaveData;
         let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name);
         if (value <= 0) return; // Doesnt have the reward , dont apply.

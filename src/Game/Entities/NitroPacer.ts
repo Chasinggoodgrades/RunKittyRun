@@ -89,7 +89,7 @@ class NitroPacer
         catch (e: Error)
         {
             Logger.Warning("Error in UpdateNitroPacer. {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

@@ -40,7 +40,7 @@ class Disco extends IDisposable
     private DiscoActions()
     {
         SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
-        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
+        SetUnitVertexColorBJ(this.Unit, GetRandomPercentageBJ(), GetRandomPercentageBJ(), GetRandomPercentageBJ(), GetRandomReal(0, 25));
     }
 
 }

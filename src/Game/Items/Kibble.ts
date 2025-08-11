@@ -4,7 +4,7 @@ class Kibble extends IDisposable
 {
     public static PickupTrigger: trigger;
     public static SpawningKibble: boolean = true;
-    private static List<int> KibblesColors = KibbleList();
+    private static  KibblesColors:int[] = KibbleList();
     private static StarfallEffect: string = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static TextTagHeight: number = 0.018;
     private static XPMax: number = 350;
@@ -52,7 +52,7 @@ class Kibble extends IDisposable
     private static KibblePickupEvents(): trigger
     {
         let trig = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
+        TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
         trig.AddAction(() =>
         {
             let item = GetManipulatedItem();
@@ -100,7 +100,7 @@ class Kibble extends IDisposable
         catch (e: Error)
         {
             Logger.Warning("Kibble.Error: KibblePickup: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -183,23 +183,37 @@ class Kibble extends IDisposable
         kibblePicker.SaveData.KibbleCurrency.Collected += 1;
     }
 
-    private static List<int> KibbleList()
+    private static KibbleList():int[]
     {
-        return SeasonalManager.Season switch
-        {
-            HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
-            // HolidaySeasons.Easter => new List<int> { Constants.ITEM_EASTER_EGG },
-            HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
-            _ => new List<int> // Default case
-            {
+
+        switch(SeasonalManager.Season) {
+          case HolidaySeasons.Christmas: {
+            return [ Constants.ITEM_PRESENT ]
+          }
+
+            // case HolidaySeasons.Easter: {
+            //     return [Constants.ITEM_EASTER_EGG]
+            // }
+
+            case HolidaySeasons.Valentines: {
+                return [ Constants.ITEM_HEART ]
+            }
+
+            default: {
+                return [ // Default case
                 Constants.ITEM_KIBBLE,
                 Constants.ITEM_KIBBLE_TEAL,
                 Constants.ITEM_KIBBLE_GREEN,
                 Constants.ITEM_KIBBLE_PURPLE,
                 Constants.ITEM_KIBBLE_RED,
                 Constants.ITEM_KIBBLE_YELLOW
+            ]
             }
-        };
+
+           
+        }
+
+   
     }
 
     // #endregion Utility Methods

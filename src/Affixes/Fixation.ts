@@ -6,7 +6,14 @@ class Fixation extends Affix
     private FIXATION_MS: number = 325.0;
     private FIXATION_MAX_MS: number = 410.0;
     private FIXATION_TARGET_EFFECT: string = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
-// TODO; Restore:     private static readonly Predicate<Affix> IsFixation = x  { return x is Fixation; }
+
+private static readonly IsFixation = (r: Affix): r is Fixation => {
+        return r instanceof Fixation
+    }
+
+
+
+    
     private AFFIX_ABILITY: number = Constants.ABILITY_FIXATION;
     private InRangeTrigger: trigger;
     private PeriodicSpeed: trigger;
@@ -17,8 +24,9 @@ class Fixation extends Affix
     private IsChasing: boolean = false;
     private TargetEffect: effect;
 
-    public Fixation(unit: Wolf) // TODO; CALL super(unit)
+    public constructor(unit: Wolf) 
     {
+        super(unit);
         InRangeTrigger ??= trigger.Create();
         PeriodicSpeed ??= trigger.Create();
         ChaseTimer = ObjectPool.GetEmptyObject<AchesTimers>();
@@ -180,10 +188,10 @@ class Fixation extends Affix
         }
     }
 
-    public static GetFixation: Fixation(Unit: unit)
+    public static GetFixation(Unit: unit):Fixation
     {
         if (Unit == null) return null;
-        let affix = Globals.ALL_WOLVES[Unit].Affixes.Find(IsFixation);
+        let affix = Globals.ALL_WOLVES[Unit].Affixes.Find(Fixation.IsFixation);
         return affix is fixation: Fixation ? fixation : null;
     }
 

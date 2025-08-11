@@ -2,8 +2,8 @@ class Unpredictable extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_UNPREDICTABLE
     private static WANDER_ABILITY: number = FourCC('Awan')
 
-    public Unpredictable(unit: Wolf) {
-        // TODO; CALL super(unit)
+    public constructor(unit: Wolf) {
+        super(unit)
         Name = 'Unpredictable'
     }
 

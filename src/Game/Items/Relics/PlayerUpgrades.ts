@@ -3,7 +3,7 @@
 class PlayerUpgrades
 {
     private Player: player;
-    private Dictionary<Type, int> UpgradeLevels = new Dictionary<Type, int>();
+    private UpgradeLevels : {[x: Type]: number} = {}
 
     public PlayerUpgrades(player: player)
     {

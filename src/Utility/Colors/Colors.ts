@@ -23,8 +23,8 @@ class Colors
     public COLOR_DARK_RED: string = "|c008B0000";
     public COLOR_LIGHTBLUE: string = "|c006969FF";
     public COLOR_RESET: string = "|r";
-    private static List<Colors> ColorManager = new List<Colors>();
-    private static sb: StringBuilder = new StringBuilder();
+    private static  ColorManager:Colors[] = []
+      private static sb: StringBuilder = new StringBuilder();
     private colorname: string;
     private colorID: number;
     private colorcode: string;
@@ -33,7 +33,7 @@ class Colors
     private green: number;
     private blue: number;
 
-    public Colors(colorname: string, colorID: number, colorcode: string, playercolor: playercolor, red: number, green: number, blue: number)
+    public constructor(colorname: string, colorID: number, colorcode: string, playercolor: playercolor, red: number, green: number, blue: number)
     {
         this.colorname = colorname;
         this.colorcode = colorcode;
@@ -46,47 +46,47 @@ class Colors
 
     public static AddColor(colorname: string, colorID: number, colorcode: string, playercolor: playercolor, redValue: number, greenValue: number, blueValue: number)
     {
-        ColorManager.Add(new Colors(colorname, colorID, colorcode, playercolor, redValue, greenValue, blueValue));
+        Colors.ColorManager.push(new Colors(colorname, colorID, colorcode, playercolor, redValue, greenValue, blueValue));
     }
 
     public static Initialize()
     {
-        AddColor("red", 1, "|cffff0303", playercolor.Red, 255, 3, 3);
-        AddColor("blue", 2, "|cff0042f", playercolor.Blue, 0, 66, 255);
-        AddColor("teal", 3, "|cff1be7ba", playercolor.Cyan, 27, 231, 186);
-        AddColor("purple", 4, "|cff550081", playercolor.Purple, 85, 0, 129);
-        AddColor("yellow", 5, "|cfffefc00", playercolor.Yellow, 254, 252, 0);
-        AddColor("orange", 6, "|cfffe890d", playercolor.Orange, 254, 137, 13);
-        AddColor("green", 7, "|cff21bf00", playercolor.Green, 33, 191, 0);
-        AddColor("pink", 8, "|cffe45caf", playercolor.Pink, 228, 92, 175);
-        AddColor("gray", 9, "|cff939596", playercolor.LightGray, 147, 149, 150);
-        AddColor("lightblue,lb,light-blue", 10, "|cff7ebff1", playercolor.LightBlue, 126, 191, 241);
-        AddColor("darkgreen,dg,dark-green", 11, "|cff106247", playercolor.Emerald, 16, 98, 71);
-        AddColor("brown", 12, "|cff42b05", playercolor.Brown, 79, 43, 5);
-        AddColor("maroon", 13, "|cff9c0000", playercolor.Maroon, 156, 0, 0);
-        AddColor("navy", 14, "|cff0000c3", playercolor.Navy, 0, 0, 195);
-        AddColor("turquoise", 15, "|cff00ebff", playercolor.Turquoise, 0, 235, 255);
-        AddColor("violet", 16, "|cffbd00f", playercolor.Violet, 189, 0, 255);
-        AddColor("wheat", 17, "|cffecce87", playercolor.Wheat, 236, 206, 135);
-        AddColor("peach", 18, "|cfff7a58b", playercolor.Peach, 247, 165, 139);
-        AddColor("mint", 19, "|cffbfff81", playercolor.Mint, 191, 255, 129);
-        AddColor("lavender", 20, "|cffdbb8eb", playercolor.Lavender, 219, 184, 235);
-        AddColor("coal", 21, "|cff45055", playercolor.Coal, 79, 80, 85);
-        AddColor("snow,white", 22, "|cffecf0f", playercolor.Snow, 236, 240, 255);
-        AddColor("emerald", 23, "|cff00781e", playercolor.Emerald, 0, 120, 30);
-        AddColor("peanut", 24, "|cffa5634", playercolor.Peanut, 165, 111, 52);
+        AddColor("red", 1, "|cffff0303", PLAYER_COLOR_RED, 255, 3, 3);
+        AddColor("blue", 2, "|cff0042f", PLAYER_COLOR_BLUE, 0, 66, 255);
+        AddColor("teal", 3, "|cff1be7ba", PLAYER_COLOR_CYAN, 27, 231, 186);
+        AddColor("purple", 4, "|cff550081", PLAYER_COLOR_PURPLE, 85, 0, 129);
+        AddColor("yellow", 5, "|cfffefc00", PLAYER_COLOR_YELLOW, 254, 252, 0);
+        AddColor("orange", 6, "|cfffe890d", PLAYER_COLOR_ORANGE, 254, 137, 13);
+        AddColor("green", 7, "|cff21bf00", PLAYER_COLOR_GREEN, 33, 191, 0);
+        AddColor("pink", 8, "|cffe45caf", PLAYER_COLOR_PINK, 228, 92, 175);
+        AddColor("gray", 9, "|cff939596", PLAYER_COLOR_LIGHT_GRAY, 147, 149, 150);
+        AddColor("lightblue,lb,light-blue", 10, "|cff7ebff1", PLAYER_COLOR_LIGHT_BLUE, 126, 191, 241);
+        AddColor("darkgreen,dg,dark-green", 11, "|cff106247", PLAYER_COLOR_EMERALD, 16, 98, 71);
+        AddColor("brown", 12, "|cff42b05", PLAYER_COLOR_BROWN, 79, 43, 5);
+        AddColor("maroon", 13, "|cff9c0000", PLAYER_COLOR_MAROON, 156, 0, 0);
+        AddColor("navy", 14, "|cff0000c3", PLAYER_COLOR_NAVY, 0, 0, 195);
+        AddColor("turquoise", 15, "|cff00ebff", PLAYER_COLOR_TURQUOISE, 0, 235, 255);
+        AddColor("violet", 16, "|cffbd00f", PLAYER_COLOR_VIOLET, 189, 0, 255);
+        AddColor("wheat", 17, "|cffecce87", PLAYER_COLOR_WHEAT, 236, 206, 135);
+        AddColor("peach", 18, "|cfff7a58b", PLAYER_COLOR_PEACH, 247, 165, 139);
+        AddColor("mint", 19, "|cffbfff81", PLAYER_COLOR_MINT, 191, 255, 129);
+        AddColor("lavender", 20, "|cffdbb8eb", PLAYER_COLOR_LAVENDER, 219, 184, 235);
+        AddColor("coal", 21, "|cff45055", PLAYER_COLOR_COAL, 79, 80, 85);
+        AddColor("snow,white", 22, "|cffecf0f", PLAYER_COLOR_SNOW, 236, 240, 255);
+        AddColor("emerald", 23, "|cff00781e", PLAYER_COLOR_EMERALD, 0, 120, 30);
+        AddColor("peanut", 24, "|cffa5634", PLAYER_COLOR_PEANUT, 165, 111, 52);
     }
 
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
-    public static PlayerNameColored(p: player)  { return GetStringColorOfPlayer(GetPlayerId(p) + 1) + p.Name + COLOR_RESET; }
+    public static PlayerNameColored(p: player) { return Colors.GetStringColorOfPlayer(GetPlayerId(p) + 1) + GetPlayerName(p) + Colors.COLOR_RESET; }
 
     /// <summary>
     /// Colorizes a string based on integer value of player color ID.
     /// Use (1-24) for player colors.
     /// </summary>
-    public static ColorString(text: string, playerColorID: number)  { return GetStringColorOfPlayer(playerColorID) + text + COLOR_RESET; }
+    public static ColorString(text: string, playerColorID: number) { return Colors.GetStringColorOfPlayer(playerColorID) + text + Colors.COLOR_RESET; }
 
     /// <summary>
     /// Returns the color code string for that particular color.
@@ -94,9 +94,9 @@ class Colors
     /// </summary>
     public static GetStringColorOfPlayer(playerColorID: number)
     {
-        for (let i: number = 0; i < ColorManager.Count; i++)
+        for (let i: number = 0; i < Colors.ColorManager.length; i++)
         {
-            let color: Colors = ColorManager[i];
+            let color: Colors = Colors.ColorManager[i];
             if (color.colorID == playerColorID)
             {
                 return color.colorcode;
@@ -108,12 +108,12 @@ class Colors
     public static SetPlayerColor(p: player, color: string)
     {
         let kitty: Kitty = Globals.ALL_KITTIES[p];
-        for (let c in ColorManager)
+        for (let c of Colors.ColorManager)
         {
-            if (ColorContainsCommand(c, color))
+            if (Colors.ColorContainsCommand(c, color))
             {
                 kitty.Unit.SetColor(playercolor.Convert(c.colorID - 1));
-                kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.Split(',')[0];
+                kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.split(',')[0];
             }
         }
     }
@@ -122,10 +122,10 @@ class Colors
     {
         let kitty: Kitty = Globals.ALL_KITTIES[p];
         let color = ColorManager[p.Id];
-        kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.Split(',')[0];
+        kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.split(',')[0];
     }
 
-    public static SetPlayerVertexColor(p: player, string[] RGB)
+    public static SetPlayerVertexColor(p: player,  RGB:string[])
     {
         let kitty: Kitty = Globals.ALL_KITTIES[p];
         let r: number = 0, g = 0, b = 0;
@@ -154,7 +154,7 @@ class Colors
 
     private static ColorContainsCommand(color: Colors, inputColor: string)
     {
-        let colorCommands = color.colorname.Split(",");
+        let colorCommands = color.colorname.split(",");
         for (let command in colorCommands)
             if (command == inputColor)
                 return true;
@@ -187,13 +187,13 @@ class Colors
     public static ListColorCommands(player: player)
     {
         sb.Clear();
-        for (let color: Colors in ColorManager)
+        for (let color: Colors in Colors.ColorManager)
             sb.Append("{color.colorcode}{color.colorname}|r, ");
 
         player.DisplayTimedTextTo(10.0, sb.ToString());
     }
 
-    public static GetPlayerByColor: player(colorName: string)
+    public static GetPlayerByColor(colorName: string):player
     {
         for (let color: Colors in ColorManager)
         {
@@ -215,7 +215,7 @@ class Colors
 
             for (let i: number = 0; i < ColorManager.Count; i++) // else populate it
             {
-                string[] colorName = ColorManager[i].colorname.Split(',');
+                let colorName = ColorManager[i].colorname.split(',');
                 sb.Append(colorName[0]).Append(":0");
                 if (i < ColorManager.Count - 1)
                     sb.Append(",");
@@ -243,12 +243,12 @@ class Colors
             if (string.IsNullOrEmpty(colorData) || string.IsNullOrEmpty(currentColor)) return;
 
             sb.Clear();
-            string[] pairs = colorData.Split(',');
+            let pairs = colorData.split(',');
 
             for (let i: number = 0; i < pairs.Length; i++)
             {
-                string[] parts = pairs[i].Split(':');
-                if (parts.Length == 2 && int.TryParse(parts[1], number: count: out))
+                let parts = pairs[i].split(':');
+                if (parts.Length == 2 && int.TryParse(parts[1], out int count))
                 {
                     if (parts[0] == currentColor)
                     {
@@ -281,16 +281,16 @@ class Colors
         let colorData: string = kitty.SaveData.PlayerColorData.PlayedColors;
         if (string.IsNullOrEmpty(colorData)) return null;
 
-        string[] pairs = colorData.Split(','); // splits like .. "red:5", "blue:6", etc.
-        string[] names = colorData.Split(':'); // splits like .. "red", "5", "blue", "6", etc.
+        let pairs = colorData.split(','); // splits like .. "red:5", "blue:6", etc.
+        let names = colorData.split(':'); // splits like .. "red", "5", "blue", "6", etc.
         let mostPlayedColor: string = names[0]; // default to first color
         let maxCount: number = 0;
 
         for (let i: number = 0; i < pairs.Length; i++)
         {
             let pair: string = pairs[i];
-            string[] parts = pair.Split(':');
-            if (parts.Length == 2 && int.TryParse(parts[1], number: count: out))
+            let parts = pair.split(':');
+            if (parts.Length == 2 && int.TryParse(parts[1], out int count))
             {
                 if (count > maxCount)
                 {

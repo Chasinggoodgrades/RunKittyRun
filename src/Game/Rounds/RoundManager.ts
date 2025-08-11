@@ -49,7 +49,7 @@ class RoundManager
         catch (e: Error)
         {
             Logger.Critical("Error in RoundManager.RoundSetup {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -107,7 +107,7 @@ class RoundManager
         catch (e: Error)
         {
             Logger.Critical("Error in RoundManager.RoundEnd {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

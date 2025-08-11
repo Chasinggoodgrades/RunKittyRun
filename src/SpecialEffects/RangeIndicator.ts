@@ -15,7 +15,7 @@ class RangeIndicator
     /// <summary>
     /// A list to store the lightning objects that make up the range indicator.
     /// </summary>
-    public List<lightning> LightningObjects 
+    public LightningObjects: lightning[]
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RangeIndicator"/> class.
@@ -23,7 +23,7 @@ class RangeIndicator
     /// </summary>
     public RangeIndicator()
     {
-        LightningObjects ??= new List<lightning>();
+        LightningObjects ??: lightning[] = []
     }
 
     /// <summary>
@@ -43,8 +43,8 @@ class RangeIndicator
         // Creating a circular range indicator around the unit
         for (let i: number = 0; i < segments; i++)
         {
-            let angle1: number = i * angleStep * Blizzard.bj_DEGTORAD;
-            let angle2: number = (i + 1) * angleStep * Blizzard.bj_DEGTORAD;
+            let angle1: number = i * angleStep * bj_DEGTORAD;
+            let angle2: number = (i + 1) * angleStep * bj_DEGTORAD;
 
             let startX: number = x + (range * Cos(angle1));
             let startY: number = y + (range * Sin(angle1));

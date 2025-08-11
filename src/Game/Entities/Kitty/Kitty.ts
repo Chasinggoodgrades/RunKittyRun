@@ -10,7 +10,7 @@ class Kitty
 
     public Name: string 
     public SaveData: KittyData 
-    public List<Relic> Relics 
+    public  Relics :Relic[]
     public TimeProg: KittyTime 
     public ShadowKitty: ShadowKitty 
     public CurrentStats: PlayerGameData = new PlayerGameData();
@@ -47,7 +47,7 @@ class Kitty
     public Kitty(player: player)
     {
         Player = player;
-        Name = Player.Name.Split('#')[0];
+        Name = Player.Name.split('#')[0];
         InitData();
         SpawnEffect();
         CreateKitty();
@@ -84,7 +84,7 @@ class Kitty
         catch (e: Error)
         {
             Logger.Critical("Error in Kitty.Initalize. {e.StackTrace}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -178,7 +178,7 @@ class Kitty
         catch (e: Error)
         {
             Logger.Critical("Error in ReviveKitty: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -208,12 +208,12 @@ class Kitty
             else
                 SaveData = new KittyData(); // dummy data for comps
 
-            Relics = new List<Relic>();
+            Relics : Relic[] = []
         }
         catch (e: Error)
         {
             Logger.Critical("Error in InitData {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

@@ -7,7 +7,7 @@ class Safezone
     public ID: number 
     public Rect_: rect 
     public WCSharp.Shared.Data.Rectangle: Rectangle 
-    public List<player> AwardedPlayers = new();
+    public AwardedPlayers: player[] = [];
 
     public Safezone(id: number, region: region)
     {

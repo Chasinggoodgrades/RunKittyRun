@@ -7,7 +7,7 @@ class FrostbiteRing extends Relic
     public FROSTBITE_FREEZE_RING_EFFECT: string = "war3mapImported\\FreezingBreathTargetArt.mdl";
     public FROSTBITE_SLOW_TARGET_EFFECT: string = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
     public new static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
-    public static Dictionary<unit, FrozenWolf> FrozenWolves = new Dictionary<unit, FrozenWolf>();
+    public static  FrozenWolves : {[x: unit]: FrozenWolf} = {}
 
     private RelicCost: number = 650;
     private static FROSTBITE_RING_RADIUS: number = 450.0;
@@ -117,8 +117,8 @@ class FrostbiteRing extends Relic
     {
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
-        Trigger.AddAction(ErrorHandler.Wrap(() => FrostbiteCast(@event.SpellTargetLoc)));
+        Trigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
+        Trigger.AddAction(ErrorHandler.Wrap(() => FrostbiteCast(GetSpellTargetLoc())));
     }
 }
 

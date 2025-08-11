@@ -48,7 +48,7 @@ class TeamDeathless
     /// <summary>
     /// List of players that have already carried the orb. Prevents players from picking up the orb after they've already carried it.
     /// </summary>
-    private static List<player> AlreadyCarriedOrb 
+    private static AlreadyCarriedOrb: player[] 
     /// <summary>
     /// The primary effect (the orb) that is being moved around constantly with players / safezone location
     /// </summary>
@@ -89,7 +89,7 @@ class TeamDeathless
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (DeathlessChallenges.DeathlessCount < DeathlessToActivate) return; // Not enough players have achieved deathless.
         EventTriggered = true;
-        AlreadyCarriedOrb = new List<player>();
+        AlreadyCarriedOrb : player[] = []
         Timer = CreateTimer();
         DummyUnit = unit.Create(player.NeutralAggressive, Constants.UNIT_SPELLDUMMY, 0, 0);
         RangeTrigger = CreateTrigger();
@@ -129,7 +129,7 @@ class TeamDeathless
         catch (e: Error)
         {
             Logger.Warning("Error in TeamDeathless.StartEvent {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

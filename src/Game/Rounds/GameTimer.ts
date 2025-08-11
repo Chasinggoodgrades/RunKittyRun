@@ -2,7 +2,7 @@
 
 class GameTimer
 {
-    private static readonly _cachedGameTimer: Action = ()  { return StartGameTimer(); }
+    private static readonly _cachedGameTimer: Action = () => { return StartGameTimer(); }
     public static number[] RoundTime 
     public static RoundSpeedIncrement: number = 0.12;
     private static GameTimeBar: framehandle = framehandle.Get("ResourceBarSupplyText", 0);
@@ -13,7 +13,7 @@ class GameTimer
     public static Initialize()
     {
         Globals.GAME_TIMER_DIALOG.SetTitle("Game: Time: Elapsed");
-        RoundTime = new number[Gamemode.NumberOfRounds + 1];
+        RoundTime = []
         let t = timer.Create();
         t.Start(RoundSpeedIncrement, true, _cachedGameTimer);
     }

@@ -121,11 +121,11 @@ class FirstPersonCamera
             }
         }
 
-        Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, true);
-        Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0);
-        Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_FIELD_OF_VIEW, 1500, 0);
-        Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ROTATION, GetUnitFacing(hero), 0);
-        Blizzard.SetCameraFieldForPlayer(player, CAMERA_FIELD_ZOFFSET, 100, 0);
+        SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, true);
+        SetCameraFieldForPlayer(player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0);
+        SetCameraFieldForPlayer(player, CAMERA_FIELD_FIELD_OF_VIEW, 1500, 0);
+        SetCameraFieldForPlayer(player, CAMERA_FIELD_ROTATION, GetUnitFacing(hero), 0);
+        SetCameraFieldForPlayer(player, CAMERA_FIELD_ZOFFSET, 100, 0);
 
         ItemPickup();
     }
@@ -141,7 +141,7 @@ class FirstPersonCamera
     private ResetCamera()
     {
         if (!player.IsLocal) return;
-        Blizzard.SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, false);
+        SetCameraTargetControllerNoZForPlayer(player, hero, 0, 0, false);
         ResetToGameCamera(0);
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0, 0.0);
     }
@@ -155,7 +155,7 @@ class FirstPersonCamera
 
 class FirstPersonCameraManager
 {
-    private static Dictionary<player, FirstPersonCamera> cameras = new Dictionary<player, FirstPersonCamera>();
+    private static  cameras : {[x: player]: FirstPersonCamera} = {}
 
     public static Initialize()
     {
@@ -175,16 +175,16 @@ class FirstPersonCameraManager
     {
         let keyStates = new Dictionary<bool, int>
     {
-        { true, Blizzard.bj_KEYEVENTTYPE_DEPRESS },
-        { false, Blizzard.bj_KEYEVENTTYPE_RELEASE }
+        { true, bj_KEYEVENTTYPE_DEPRESS },
+        { false, bj_KEYEVENTTYPE_RELEASE }
     };
 
         let keys = new Dictionary<string, int>
     {
-        { "UP", Blizzard.bj_KEYEVENTKEY_UP },
-        { "DOWN", Blizzard.bj_KEYEVENTKEY_DOWN },
-        { "LEFT", Blizzard.bj_KEYEVENTKEY_LEFT },
-        { "RIGHT", Blizzard.bj_KEYEVENTKEY_RIGHT }
+        { "UP", bj_KEYEVENTKEY_UP },
+        { "DOWN", bj_KEYEVENTKEY_DOWN },
+        { "LEFT", bj_KEYEVENTKEY_LEFT },
+        { "RIGHT", bj_KEYEVENTKEY_RIGHT }
     };
 
         for (let keyState in keyStates)
@@ -196,7 +196,7 @@ class FirstPersonCameraManager
                     let keyTrigger = CreateTrigger();
                     let localKey = key.Key; // Create a local copy of the key
                     let localValue = keyState.Key; // Create a local copy of the value
-                    Blizzard.TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value);
+                    TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value);
                     TriggerAddAction(keyTrigger, () => OnKeyEvent(localKey, localValue));
                 }
             }

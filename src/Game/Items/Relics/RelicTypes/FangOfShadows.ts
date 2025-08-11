@@ -50,7 +50,7 @@ class FangOfShadows extends Relic
     {
         SummonTrigger = trigger.Create();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        SummonTrigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        SummonTrigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty));
 
         TeleTrigger = trigger.Create();
@@ -116,7 +116,7 @@ class FangOfShadows extends Relic
     private RegisterTeleportAbility(Unit: unit)
     {
         TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
-        TeleTrigger.AddCondition(Condition(() => @event.SpellAbilityId == TeleportAbilityID));
+        TeleTrigger.AddCondition(Condition(() => GetSpellAbilityId() == TeleportAbilityID));
         TeleTrigger.AddAction(TeleportToShadowKitty);
     }
 

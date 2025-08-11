@@ -4,7 +4,7 @@ class ShopFrame
 {
     public static shopFrame: framehandle 
     public static upgradeButton: framehandle;
-    public static Dictionary<player, ShopItem> SelectedItems = new Dictionary<player, ShopItem>();
+    public static  SelectedItems : {[x: player]: ShopItem} = {}
     private static relicsPanel: framehandle;
     private static rewardsPanel: framehandle;
     private static miscPanel: framehandle;
@@ -50,7 +50,7 @@ class ShopFrame
         catch (ex: Error)
         {
             Logger.Critical("Error in ShopFrame: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
@@ -155,11 +155,11 @@ class ShopFrame
         catch (ex: Error)
         {
             Logger.Critical("Error in LoadItemsIntoPanels: {ex}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
-    private static AddItemsToPanel(panel: framehandle, List<ShopItem> items)
+    private static AddItemsToPanel(panel: framehandle, items: ShopItem[])
     {
         let columns: number = 6;
         let rows: number = Math.Ceiling(items.Count / columns);
@@ -256,7 +256,7 @@ class ShopFrame
     private static ShowItemDetails(shopItem: ShopItem)
     {
         let player = GetTriggerPlayer();
-        let frame = @event.Frame; 
+        let frame = BlzGetTriggerFrame(); 
 
         if (SelectedItems.ContainsKey(player)) SelectedItems[player] = shopItem;
         let SelectedItems: else.Add(player, shopItem);
@@ -452,11 +452,11 @@ class ShopFrame
         }
     }
 
-    private static List<ShopItem> GetRelicItems()  { return ShopItem.ShopItemsRelic(); }
+    private static GetRelicItems(): ShopItem[]  { return ShopItem.ShopItemsRelic(); }
 
-    private static List<ShopItem> GetRewardItems()  { return ShopItem.ShopItemsReward(); }
+    private static GetRewardItems(): ShopItem[]  { return ShopItem.ShopItemsReward(); }
 
-    private static List<ShopItem> GetMiscItems()  { return ShopItem.ShopItemsMisc(); }
+    private static GetMiscItems(): ShopItem[]  { return ShopItem.ShopItemsMisc(); }
 
     private static HasEnoughGold(player: player, cost: number)  { return player.Gold >= cost; }
 

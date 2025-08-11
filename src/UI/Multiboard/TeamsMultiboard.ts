@@ -11,7 +11,7 @@ class TeamsMultiboard {
             ESCInit()
         } catch (e: Error) {
             Logger.Critical('Error in TeamsMultiboard.Initialize: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

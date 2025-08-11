@@ -3,7 +3,7 @@
 class ItemStacker
 {
     private static PickupTrigger: trigger;
-    private static List<int> StackableItemIDs;
+    private static  StackableItemIDs:int[];
 
     public static Initialize()
     {
@@ -15,23 +15,23 @@ class ItemStacker
     /// List of all the stackable items... Easy way to add more if needed.
     /// </summary>
     /// <returns></returns>
-    private static List<int> RegisterItemList()
+    private static  RegisterItemList():int[]
     {
         if (StackableItemIDs != null) return StackableItemIDs;
-        StackableItemIDs = new List<int>
-        {
+        StackableItemIDs = 
+        [
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,
             Constants.ITEM_ELIXIR,
             Constants.ITEM_ANTI_BLOCK_WAND,
-        };
+        ];
         return StackableItemIDs;
     }
 
     private static RegisterEvents(): trigger
     {
         PickupTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
+        TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
         PickupTrigger.AddAction(StackActions);
         return PickupTrigger;
     }
@@ -57,7 +57,7 @@ class ItemStacker
         catch (e: Error)
         {
             Logger.Critical(e.Message);
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

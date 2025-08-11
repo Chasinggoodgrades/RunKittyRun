@@ -1,1960 +1,1840 @@
+class InitCommands {
+    public static _G: dynamic
 
+    public static InitializeCommands() {
+        CommandsManager.RegisterCommand({
+            name: 'help',
+            alias: 'commands,?',
+            group: 'all',
+            argDesc: '',
+            description: 'all: available: commands: Displays.',
+            action: (player, args) => {
+                CommandsManager.HelpCommands(player, args?.FirstOrDefault())
+            },
+        })
 
-class InitCommands
-{
-    public static _G: dynamic;
+        CommandsManager.RegisterCommand({
+            name: 'memtest',
+            alias: '',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'Handler: Periodic: Message: Memory',
+            action: (player, args) => {
+                MemoryHandlerTest.PeriodicTest(CommandsManager.GetBool(args[0]))
+            },
+        })
 
-    public static InitializeCommands()
-    {
-        CommandsManager.RegisterCommand(
-            name: "help",
-            alias: "commands,?",
-            group: "all",
-            argDesc: "",
-            description: "all: available: commands: Displays.",
-            action: (player, args) =>
-            {
-                CommandsManager.HelpCommands(player, args?.FirstOrDefault());
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'save',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'your: current: game: stats: Save.',
+            action: (player, args) => Globals.SaveSystem.Save(player),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "memtest",
-            alias: "",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "Handler: Periodic: Message: Memory",
-            action: (player, args) =>
-            {
-                MemoryHandlerTest.PeriodicTest(CommandsManager.GetBool(args[0]));
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'wolfeffects',
+            alias: 'we,wolfe',
+            group: 'admin',
+            argDesc: '[true][false]',
+            description: 'the: wolves: overhead: Disables ! effects',
+            action: (player, args) => (Wolf.DisableEffects = CommandsManager.GetBool(args[0])),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "save",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "your: current: game: stats: Save.",
-            action: (player, args) => Globals.SaveSystem.Save(player)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'clear',
+            alias: 'clear,clr,c',
+            group: 'all',
+            argDesc: '',
+            description: 'your: screen: Clears.',
+            action: (player, args) => Utility.ClearScreen(player),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "wolfeffects",
-            alias: "we,wolfe",
-            group: "admin",
-            argDesc: "[true][false]",
-            description: "the: wolves: overhead: Disables ! effects",
-            action: (player, args) => Wolf.DisableEffects = CommandsManager.GetBool(args[0])
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "clear",
-            alias: "clear,clr,c",
-            group: "all",
-            argDesc: "",
-            description: "your: screen: Clears.",
-            action: (player, args) => Utility.ClearScreen(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "gold",
-            alias: "g",
-            group: "admin",
-            argDesc: "amount",
-            description: "the: resolvePlayerID: gold: Gives",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: gold [amount] [resolvePlayerId]|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'gold',
+            alias: 'g',
+            group: 'admin',
+            argDesc: 'amount',
+            description: 'the: resolvePlayerID: gold: Gives',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: gold [amount] [resolvePlayerId]|r'
+                    )
+                    return
                 }
 
-                let amount = int.Parse(args[0]);
+                let amount = int.Parse(args[0])
 
-                if (args.Length < 2)
-                {
-                    player.Gold += amount;
-                    return;
+                if (args.Length < 2) {
+                    player.Gold += amount
+                    return
                 }
 
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                    {
-                        kitty.Player.Gold += amount;
-                    });
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    kitty.Player.Gold += amount
+                })
+            },
+        })
 
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'colors',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'all: available: colors: Display.',
+            action: (player, args) => Colors.ListColorCommands(player),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "colors",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "all: available: colors: Display.",
-            action: (player, args) => Colors.ListColorCommands(player)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'color',
+            alias: '',
+            group: 'all',
+            argDesc: '[color]',
+            description: 'your: player: color: Set.',
+            action: (player, args) => Colors.SetPlayerColor(player, args?.[0]),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "color",
-            alias: "",
-            group: "all",
-            argDesc: "[color]",
-            description: "your: player: color: Set.",
-            action: (player, args) => Colors.SetPlayerColor(player, args?[0])
-        );
+        CommandsManager.RegisterCommand({
+            name: 'kick',
+            alias: 'k',
+            group: 'all',
+            argDesc: '[playerNumber]',
+            description: 'a: votekick: against: a: player: Initiate.',
+            action: (player, args) => {
+                if (Globals.VIPLISTUNFILTERED.Contains(player)) {
+                    CommandsManager.ResolvePlayerId(args[0], kitty => {
+                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return
+                        PlayerLeaves.PlayerLeavesActions(kitty.Player)
+                        CustomDefeatBJ(
+                            kitty.Player,
+                            '{Colors.COLOR_RED}have: been: kicked: from: the: game: You!{Colors.COLOR_RESET}'
+                        )
+                    })
+                } else Votekick.InitiateVotekick(player, args?.[0])
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "kick",
-            alias: "k",
-            group: "all",
-            argDesc: "[playerNumber]",
-            description: "a: votekick: against: a: player: Initiate.",
-            action: (player, args) =>
-            {
+        CommandsManager.RegisterCommand({
+            name: 'voteend',
+            alias: 've',
+            group: 'all',
+            argDesc: '',
+            description: 'a: vote: to: end: the: round: Initiate (Tournament: Only: Solo).',
+            action: (player, args) => VoteEndRound.InitiateVote(player),
+        })
 
-                if (Globals.VIPLISTUNFILTERED.Contains(player))
-                {
-                    CommandsManager.ResolvePlayerId(args[0], kitty =>
-                    {
-                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
-                        PlayerLeaves.PlayerLeavesActions(kitty.Player);
-                        Blizzard.CustomDefeatBJ(kitty.Player, "{Colors.COLOR_RED}have: been: kicked: from: the: game: You!{Colors.COLOR_RESET}");
-                    });
+        CommandsManager.RegisterCommand({
+            name: 'yes',
+            alias: 'y',
+            group: 'all',
+            argDesc: '',
+            description: 'yes: for: the: current: vote: Vote.',
+            action: (player, args) => {
+                Votekick.IncrementTally()
+                VoteEndRound.IncrementVote(player)
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'affixinfo',
+            alias: 'ainfo',
+            group: 'all',
+            argDesc: '[lane #] (1-17)',
+            description: 'current: round: affixes: Displays.',
+            action: (player, args) => {
+                let affixes: string[]
+                let laneIndex: number
+                if (args[0] != '') {
+                    laneIndex = int.Parse(args[0])
+                    if (laneIndex <= 0 || laneIndex > 17) return
+                    affixes = AffixFactory.CalculateAffixes(laneIndex - 1)
+                } else {
+                    affixes = AffixFactory.CalculateAffixes()
                 }
-                else
-                    Votekick.InitiateVotekick(player, args?[0]);
-            }
-        );
+                player.DisplayTextTo(
+                    Colors.COLOR_GOLD +
+                        'Affixes: Current:\n' +
+                        string.Join('\n', affixes) +
+                        '\n{Colors.COLOR_LAVENDER}Lanes: Count: All: {AffixFactory.AllAffixes.Count}'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "voteend",
-            alias: "ve",
-            group: "all",
-            argDesc: "",
-            description: "a: vote: to: end: the: round: Initiate (Tournament: Only: Solo).",
-            action: (player, args) => VoteEndRound.InitiateVote(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "yes",
-            alias: "y",
-            group: "all",
-            argDesc: "",
-            description: "yes: for: the: current: vote: Vote.",
-            action: (player, args) =>
-            {
-                Votekick.IncrementTally();
-                VoteEndRound.IncrementVote(player);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "affixinfo",
-            alias: "ainfo",
-            group: "all",
-            argDesc: "[lane #] (1-17)",
-            description: "current: round: affixes: Displays.",
-            action: (player, args) =>
-            {
-                string[] affixes;
-                let laneIndex: number;
-                if (args[0] != "")
-                {
-                    laneIndex = int.Parse(args[0]);
-                    if (laneIndex <= 0 || laneIndex > 17) return;
-                    affixes = AffixFactory.CalculateAffixes(laneIndex - 1);
+        CommandsManager.RegisterCommand({
+            name: 'wolfinfo',
+            alias: 'lnbm',
+            group: 'all',
+            argDesc: '[lane #] (1-17)',
+            description: 'the: current: wolf: count: Displays.',
+            action: (player, args) => {
+                let laneIndex: number
+                let nbWolves: number
+                if (args[0] != '') {
+                    laneIndex = int.Parse(args[0])
+                    if (laneIndex <= 0 || laneIndex > 17) return
+                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.Count
+                    player.DisplayTextTo(
+                        Colors.COLOR_GOLD +
+                            'Wolf: Count: for: Lane: Current {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-                else
-                {
-                    affixes = AffixFactory.CalculateAffixes();
+                let nbWolves: else = Globals.ALL_WOLVES.Count
+                player.DisplayTextTo(
+                    Colors.COLOR_GOLD + 'Wolf: Count: Current: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}'
+                )
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'setcolor',
+            alias: 'sc,vc',
+            group: 'all',
+            argDesc: '[rgb]',
+            description: 'your: player: vertex: color: Set.',
+            action: (player, args) => Colors.SetPlayerVertexColor(player, args),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'wild',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'a: random: vertex: color: Set.',
+            action: (player, args) => Colors.SetPlayerRandomVertexColor(player),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'names',
+            alias: 'n',
+            group: 'all',
+            argDesc: '',
+            description: 'all: floating: name: tags: Hide.',
+            action: (player, args) => FloatingNameTag.ShowAllNameTags(player, CommandsManager.GetBool(args[0])),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'zoom',
+            alias: 'cam',
+            group: 'all',
+            argDesc: '[xxxx]',
+            description: 'the: camera: zoom: level: Adjust.',
+            action: (player, args) => CameraUtil.HandleZoomCommand(player, args),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'lockcamera',
+            alias: 'lc,spectate',
+            group: 'all',
+            argDesc: '',
+            description: 'your: camera: to: a: unit: Locks.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    CameraUtil.LockCamera(player)
+                    return
                 }
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Affixes: Current:\n" + string.Join("\n", affixes) + "\n{Colors.COLOR_LAVENDER}Lanes: Count: All: {AffixFactory.AllAffixes.Count}");
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "wolfinfo",
-            alias: "lnbm",
-            group: "all",
-            argDesc: "[lane #] (1-17)",
-            description: "the: current: wolf: count: Displays.",
-            action: (player, args) =>
-            {
-                let laneIndex: number;
-                let nbWolves: number;
-                if (args[0] != "")
-                {
-                    laneIndex = int.Parse(args[0]);
-                    if (laneIndex <= 0 || laneIndex > 17) return;
-                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.Count;
-                    player.DisplayTextTo(Colors.COLOR_GOLD + "Wolf: Count: for: Lane: Current {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'firstperson',
+            alias: 'fpc,firstpersoncamera',
+            group: 'all',
+            argDesc: '',
+            description: 'first: person: camera: Toggle.',
+            action: (player, args) => FirstPersonCameraManager.ToggleFirstPerson(player),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'reset',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'your: camera: to: default: Resets.',
+            action: (player, args) => {
+                CameraUtil.UnlockCamera(player)
+                FrameManager.InitalizeButtons()
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'kc',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'yourself: from: the: game: Kicks.',
+            action: (player, args) => {
+                PlayerLeaves.PlayerLeavesActions(player)
+                CustomDefeatBJ(player, '{Colors.COLOR_RED}kicked: yourself: You!{Colors.COLOR_RESET}')
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'oldcode',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'a: previous: save: from: RKR: 4: Loads.2.0+.',
+            action: (player, args) => Savecode.LoadString(),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'apm',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'your: APM: for: ACTIVE: game: time: Displays. (counting: intermissions: not)',
+            action: (player, args) => player.DisplayTimedTextTo(10.0, APMTracker.CalculateAllAPM()),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'kibble',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: kibble: collected: by: each: player: Displays.',
+            action: (player, args) => {
+                let kibbleList = ''
+                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+                    let kitty = Globals.ALL_KITTIES_LIST[i]
+                    let kibbleCollected = kitty.CurrentStats.CollectedKibble
+                    kibbleList += '{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n'
                 }
-                let nbWolves: else = Globals.ALL_WOLVES.Count;
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Wolf: Count: Current: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}");
-            }
-        );
+                player.DisplayTimedTextTo(
+                    7.0,
+                    '{Colors.COLOR_GOLD}Collected: Kibble:\n{kibbleList}{Colors.COLOR_RESET}'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "setcolor",
-            alias: "sc,vc",
-            group: "all",
-            argDesc: "[rgb]",
-            description: "your: player: vertex: color: Set.",
-            action: (player, args) => Colors.SetPlayerVertexColor(player, args)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'watcher',
+            alias: 'watching',
+            group: 'all',
+            argDesc: '',
+            description: 'all: units: from: game: and: you: become: an: observer: Removes/spectator.',
+            action: (player, args) => Utility.MakePlayerSpectator(player),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "wild",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "a: random: vertex: color: Set.",
-            action: (player, args) => Colors.SetPlayerRandomVertexColor(player)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'overheadcam',
+            alias: 'overhead,topdown,ohc',
+            group: 'all',
+            argDesc: '',
+            description: 'an: overhead: view: Gives.',
+            action: (player, args) => CameraUtil.OverheadCamera(player, 280),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "names",
-            alias: "n",
-            group: "all",
-            argDesc: "",
-            description: "all: floating: name: tags: Hide.",
-            action: (player, args) => FloatingNameTag.ShowAllNameTags(player, CommandsManager.GetBool(args[0]))
-        );
+        CommandsManager.RegisterCommand({
+            name: 'komotocam',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'KomotoCam: Toggle.',
+            action: (player, args) => CameraUtil.ToggleKomotoCam(player),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "zoom",
-            alias: "cam",
-            group: "all",
-            argDesc: "[xxxx]",
-            description: "the: camera: zoom: level: Adjust.",
-            action: (player, args) => CameraUtil.HandleZoomCommand(player, args)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'glow',
+            alias: '',
+            group: 'all',
+            argDesc: '[true/false]',
+            description: 'unit: glow: Toggle.',
+            action: (player, args) => {
+                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, CommandsManager.GetBool(args[0]))
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "lockcamera",
-            alias: "lc,spectate",
-            group: "all",
-            argDesc: "",
-            description: "your: camera: to: a: unit: Locks.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    CameraUtil.LockCamera(player);
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'mirror',
+            alias: 'reverse',
+            group: 'all',
+            argDesc: '',
+            description: 'mirror: mode: Toggle.',
+            action: (player, args) => {
+                if (Globals.ALL_KITTIES[player].Slider.IsOnSlideTerrain()) {
+                    player.DisplayTextTo(
+                        Colors.COLOR_YELLOW_ORANGE + "can: You'toggle: mirror: mode: while: sliding: t!"
+                    )
+                    return
                 }
-            }
-        );
+                Globals.ALL_KITTIES[player].ToggleMirror()
+                player.DisplayTextTo(
+                    Colors.COLOR_GOLD + 'Mirror: ' + (Globals.ALL_KITTIES[player].IsMirror ? 'On' : 'Off')
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "firstperson",
-            alias: "fpc,firstpersoncamera",
-            group: "all",
-            argDesc: "",
-            description: "first: person: camera: Toggle.",
-            action: (player, args) => FirstPersonCameraManager.ToggleFirstPerson(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "reset",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "your: camera: to: default: Resets.",
-            action: (player, args) =>
-            {
-                CameraUtil.UnlockCamera(player);
-                FrameManager.InitalizeButtons();
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "kc",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "yourself: from: the: game: Kicks.",
-            action: (player, args) =>
-            {
-                PlayerLeaves.PlayerLeavesActions(player);
-                Blizzard.CustomDefeatBJ(player, "{Colors.COLOR_RED}kicked: yourself: You!{Colors.COLOR_RESET}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "oldcode",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "a: previous: save: from: RKR: 4: Loads.2.0+.",
-            action: (player, args) => Savecode.LoadString()
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "apm",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "your: APM: for: ACTIVE: game: time: Displays. (counting: intermissions: not)",
-            action: (player, args) => player.DisplayTimedTextTo(10.0, APMTracker.CalculateAllAPM())
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "kibble",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: kibble: collected: by: each: player: Displays.",
-            action: (player, args) =>
-            {
-                let kibbleList = "";
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
-                {
-                    let kitty = Globals.ALL_KITTIES_LIST[i];
-                    let kibbleCollected = kitty.CurrentStats.CollectedKibble;
-                    kibbleList += "{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n";
-                }
-                player.DisplayTimedTextTo(7.0, "{Colors.COLOR_GOLD}Collected: Kibble:\n{kibbleList}{Colors.COLOR_RESET}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "watcher",
-            alias: "watching",
-            group: "all",
-            argDesc: "",
-            description: "all: units: from: game: and: you: become: an: observer: Removes/spectator.",
-            action: (player, args) => Utility.MakePlayerSpectator(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "overheadcam",
-            alias: "overhead,topdown,ohc",
-            group: "all",
-            argDesc: "",
-            description: "an: overhead: view: Gives.",
-            action: (player, args) => CameraUtil.OverheadCamera(player, 280)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "komotocam",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "KomotoCam: Toggle.",
-            action: (player, args) => CameraUtil.ToggleKomotoCam(player)
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "glow",
-            alias: "",
-            group: "all",
-            argDesc: "[true/false]",
-            description: "unit: glow: Toggle.",
-            action: (player, args) =>
-            {
-                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, CommandsManager.GetBool(args[0]));
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "mirror",
-            alias: "reverse",
-            group: "all",
-            argDesc: "",
-            description: "mirror: mode: Toggle.",
-            action: (player, args) =>
-            {
-                if (Globals.ALL_KITTIES[player].Slider.IsOnSlideTerrain())
-                {
-                    player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "can: You'toggle: mirror: mode: while: sliding: t!");
-                    return;
-                }
-                Globals.ALL_KITTIES[player].ToggleMirror();
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Mirror: " + (Globals.ALL_KITTIES[player].IsMirror ? "On" : "Off"));
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "disco",
-            alias: "",
-            group: "all",
-            argDesc: "[on][off]",
-            description: "disco: mode: Toggle.",
-            action: (player, args) =>
-            {
-
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: disco [on/off]|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'disco',
+            alias: '',
+            group: 'all',
+            argDesc: '[on][off]',
+            description: 'disco: mode: Toggle.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: disco [on/off]|r'
+                    )
+                    return
                 }
 
-                let status = CommandsManager.GetBool(args[0]);
-                if (CommandsManager.GetPlayerGroup(player) == "admin" && args.Length > 1)
-                {
-                    if (args[1] == "wolves" || args[1] == "wolf")
-                    {
-                        for (let wolf in Globals.ALL_WOLVES)
-                        {
-                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>();
-                            wolf.Value.Disco.Unit = wolf.Value.Unit;
-                            wolf.Value.Disco.ToggleDisco(status);
-                            if (!status)
-                            {
-                                wolf.Value.Disco = null;
-                                wolf.Value.Unit.SetVertexColor(150, 120, 255, 255);
+                let status = CommandsManager.GetBool(args[0])
+                if (CommandsManager.GetPlayerGroup(player) == 'admin' && args.Length > 1) {
+                    if (args[1] == 'wolves' || args[1] == 'wolf') {
+                        for (let wolf in Globals.ALL_WOLVES) {
+                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>()
+                            wolf.Value.Disco.Unit = wolf.Value.Unit
+                            wolf.Value.Disco.ToggleDisco(status)
+                            if (!status) {
+                                wolf.Value.Disco = null
+                                wolf.Value.Unit.SetVertexColor(150, 120, 255, 255)
                             }
                         }
+                    } else {
+                        CommandsManager.ResolvePlayerId(args[1], kitty => {
+                            kitty.Disco.ToggleDisco(status)
+                        })
                     }
-                    else
-                    {
-                        CommandsManager.ResolvePlayerId(args[1], kitty =>
-                        {
-                            kitty.Disco.ToggleDisco(status);
-                        });
-                    }
-                }
-                else
-                {
-                    let playerKitty = Globals.ALL_KITTIES[player];
-                    playerKitty.Disco.ToggleDisco(status);
+                } else {
+                    let playerKitty = Globals.ALL_KITTIES[player]
+                    playerKitty.Disco.ToggleDisco(status)
                 }
 
-                player.DisplayTextTo(Colors.COLOR_GOLD + "Disco: " + (status ? "On" : "Off"));
-            }
-        );
+                player.DisplayTextTo(Colors.COLOR_GOLD + 'Disco: ' + (status ? 'On' : 'Off'))
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "animate",
-            alias: "animation,an",
-            group: "all",
-            argDesc: "[index]",
-            description: "unit: animation: by: index: Set.",
-            action: (player, args) => SetUnitAnimationByIndex(Globals.ALL_KITTIES[player].Unit, int.Parse(args[0]))
-        );
+        CommandsManager.RegisterCommand({
+            name: 'animate',
+            alias: 'animation,an',
+            group: 'all',
+            argDesc: '[index]',
+            description: 'unit: animation: by: index: Set.',
+            action: (player, args) => SetUnitAnimationByIndex(Globals.ALL_KITTIES[player].Unit, int.Parse(args[0])),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "spincam",
-            alias: "",
-            group: "all",
-            argDesc: "[speed]",
-            description: "SpinCam: Toggle.",
-            action: (player, args) =>
-            {
-                let speed: number = args[0] != "" ? float.Parse(args[0]) : 0;
-                Globals.ALL_KITTIES[player].SpinCam.ToggleSpinCam(speed);
-                player.DisplayTextTo(Colors.COLOR_GOLD + "SpinCam: " + (Globals.ALL_KITTIES[player].SpinCam.IsSpinCamActive() ? "On" : "Off"));
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'spincam',
+            alias: '',
+            group: 'all',
+            argDesc: '[speed]',
+            description: 'SpinCam: Toggle.',
+            action: (player, args) => {
+                let speed: number = args[0] != '' ? float.Parse(args[0]) : 0
+                Globals.ALL_KITTIES[player].SpinCam.ToggleSpinCam(speed)
+                player.DisplayTextTo(
+                    Colors.COLOR_GOLD +
+                        'SpinCam: ' +
+                        (Globals.ALL_KITTIES[player].SpinCam.IsSpinCamActive() ? 'On' : 'Off')
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "activatebarrier",
-            alias: "ab",
-            group: "admin",
-            argDesc: "",
-            description: "the: barrier: Activates.",
-            action: (player, args) => BarrierSetup.ActivateBarrier()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'activatebarrier',
+            alias: 'ab',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: barrier: Activates.',
+            action: (player, args) => BarrierSetup.ActivateBarrier(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "rtr",
-            alias: "",
-            group: "all",
-            argDesc: "[on/off] [player]",
-            description: "RTR: mode: on: Set/off.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: rtr [on/off] [player]|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'rtr',
+            alias: '',
+            group: 'all',
+            argDesc: '[on/off] [player]',
+            description: 'RTR: mode: on: Set/off.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: rtr [on/off] [player]|r'
+                    )
+                    return
                 }
 
-                let mode: boolean = CommandsManager.GetBool(args[0]);
+                let mode: boolean = CommandsManager.GetBool(args[0])
 
-                if (args.Length < 2 || args[1] == "")
-                {
+                if (args.Length < 2 || args[1] == '') {
                     // Apply to self
-                    if (mode)
-                    {
-                        Globals.ALL_KITTIES[player].RTR.StartRTR();
-                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: On");
+                    if (mode) {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR()
+                        player.DisplayTextTo(Colors.COLOR_GOLD + 'RTR: On')
+                    } else {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR()
+                        player.DisplayTextTo(Colors.COLOR_GOLD + 'RTR: Off')
                     }
-                    else
-                    {
-                        Globals.ALL_KITTIES[player].RTR.StopRTR();
-                        player.DisplayTextTo(Colors.COLOR_GOLD + "RTR: Off");
-                    }
-                    return;
+                    return
                 }
 
-                let isMatch: boolean = false;
+                let isMatch: boolean = false
 
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    if (kitty == null) return;
-                    isMatch = true;
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    isMatch = true
 
-                    if (mode)
-                    {
-                        kitty.RTR.StartRTR();
+                    if (mode) {
+                        kitty.RTR.StartRTR()
+                    } else {
+                        kitty.RTR.StopRTR()
                     }
-                    else
-                    {
-                        kitty.RTR.StopRTR();
-                    }
-                });
+                })
 
-                if (isMatch)
-                {
-                    player.DisplayTextTo(Colors.COLOR_GOLD + "set: to: RTR {(mode ? "On" : "Off")} target: player: for");
+                if (isMatch) {
+                    player.DisplayTextTo(Colors.COLOR_GOLD + `RTR set to ${mode ? 'On' : 'Off'} for target player`)
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "deactivatebarrier",
-            alias: "db",
-            group: "admin",
-            argDesc: "",
-            description: "the: barrier: Deactivates.",
-            action: (player, args) => BarrierSetup.DeactivateBarrier()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'deactivatebarrier',
+            alias: 'db',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: barrier: Deactivates.',
+            action: (player, args) => BarrierSetup.DeactivateBarrier(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "endround",
-            alias: "er",
-            group: "admin",
-            argDesc: "",
-            description: "the: current: round: Ends.",
-            action: (player, args) => RoundManager.RoundEnd()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'endround',
+            alias: 'er',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: current: round: Ends.',
+            action: (player, args) => RoundManager.RoundEnd(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "level",
-            alias: "lvl",
-            group: "admin",
-            argDesc: "[level][player/selected]",
-            description: "the: level: Sets of selected: unit: the.",
-            action: (player, args) =>
-            {
-                if (args.Length < 2)
-                {
-                    let kitty = Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]);
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'level',
+            alias: 'lvl',
+            group: 'admin',
+            argDesc: '[level][player/selected]',
+            description: 'the: level: Sets of selected: unit: the.',
+            action: (player, args) => {
+                if (args.Length < 2) {
+                    let kitty = (Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]))
+                    return
                 }
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    kitty.Unit.HeroLevel = int.Parse(args[0]);
-                });
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    kitty.Unit.HeroLevel = int.Parse(args[0])
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "blink",
-            alias: "tele",
-            group: "admin",
-            argDesc: "",
-            description: "a: blink: item: to: the: kitty: Adds.",
-            action: (player, args) =>
-            {
-                let kitty = Globals.ALL_KITTIES[player];
-                kitty.Unit.AddItem(FourCC("desc"));
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'blink',
+            alias: 'tele',
+            group: 'admin',
+            argDesc: '',
+            description: 'a: blink: item: to: the: kitty: Adds.',
+            action: (player, args) => {
+                let kitty = Globals.ALL_KITTIES[player]
+                kitty.Unit.AddItem(FourCC('desc'))
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "difficulty",
-            alias: "diff",
-            group: "admin",
-            argDesc: "[difficulty]",
-            description: "the: game: difficulty: Changes.",
-            action: (player, args) =>
-            {
-                let difficulty = args[0] != "" ? args[0] : "normal";
-                Difficulty.ChangeDifficulty(difficulty);
-                AffixFactory.DistAffixes();
-                MultiboardUtil.RefreshMultiboards();
-                NitroChallenges.SetNitroRoundTimes();
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'difficulty',
+            alias: 'diff',
+            group: 'admin',
+            argDesc: '[difficulty]',
+            description: 'the: game: difficulty: Changes.',
+            action: (player, args) => {
+                let difficulty = args[0] != '' ? args[0] : 'normal'
+                Difficulty.ChangeDifficulty(difficulty)
+                AffixFactory.DistAffixes()
+                MultiboardUtil.RefreshMultiboards()
+                NitroChallenges.SetNitroRoundTimes()
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "revive",
-            alias: "rpos",
-            group: "admin",
-            argDesc: "",
-            description: "yourself: Revives.",
-            action: (player, args) =>
-            {
+        CommandsManager.RegisterCommand({
+            name: 'revive',
+            alias: 'rpos',
+            group: 'admin',
+            argDesc: '',
+            description: 'yourself: Revives.',
+            action: (player, args) => {
                 // if args is null or empty, revive self
                 // else resolve playerid
-                if (args[0] == "")
-                {
-                    Globals.ALL_KITTIES[player].ReviveKitty();
-                    return;
+                if (args[0] == '') {
+                    Globals.ALL_KITTIES[player].ReviveKitty()
+                    return
                 }
 
-                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty());
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty())
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "reviveto",
-            alias: "rto,rposto",
-            group: "admin",
-            argDesc: "",
-            description: "your: hero: to: an: other: hero: Revives, the: same: facing: angle: with.",
-            action: (player, args) =>
-            {
-                if (args.Length == 1)
-                {
-                    CommandsManager.ResolvePlayerId(args[0], kitty =>
-                    {
-                        Globals.ALL_KITTIES[player].ReviveKitty();
-                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
-                        Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing);
-                    });
+        CommandsManager.RegisterCommand({
+            name: 'reviveto',
+            alias: 'rto,rposto',
+            group: 'admin',
+            argDesc: '',
+            description: 'your: hero: to: an: other: hero: Revives, the: same: facing: angle: with.',
+            action: (player, args) => {
+                if (args.Length == 1) {
+                    CommandsManager.ResolvePlayerId(args[0], kitty => {
+                        Globals.ALL_KITTIES[player].ReviveKitty()
+                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y)
+                        Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing)
+                    })
+                } else if (args.Length == 2) {
+                    CommandsManager.ResolvePlayerId(args[1], kitty => {
+                        CommandsManager.ResolvePlayerId(args[0], kitty2 => {
+                            kitty.ReviveKitty()
+                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.Unit.Y)
+                            kitty.Unit.SetFacing(kitty2.Unit.Facing)
+                        })
+                    })
                 }
-                else if (args.Length == 2)
-                {
-                    CommandsManager.ResolvePlayerId(args[1], kitty =>
-                    {
-                        CommandsManager.ResolvePlayerId(args[0], kitty2 =>
-                        {
-                            kitty.ReviveKitty();
-                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.Unit.Y);
-                            kitty.Unit.SetFacing(kitty2.Unit.Facing);
-                        });
-                    });
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'summon',
+            alias: 'smn',
+            group: 'admin',
+            argDesc: '',
+            description: 'another: hero: to: yours: Revives, the: same: facing: angle: with.',
+            action: (player, args) => {
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    kitty.ReviveKitty()
+                    kitty.Unit.SetPosition(Globals.ALL_KITTIES[player].Unit.X, Globals.ALL_KITTIES[player].Unit.Y)
+                    kitty.Unit.SetFacing(Globals.ALL_KITTIES[player].Unit.Facing)
+                })
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'sharecontrol',
+            alias: 'share',
+            group: 'admin',
+            argDesc: '[resolvePlayerId] [on/off]',
+            description: 'whether: or: not: to: force: the: player: to: share: control: Sets [default: off]',
+            action: (player, args) => {
+                if (args.Length < 2) {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: sharecontrol [player] [on/off]{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-            }
-        );
+                let status = CommandsManager.GetBool(args[1])
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    kitty.Player.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "summon",
-            alias: "smn",
-            group: "admin",
-            argDesc: "",
-            description: "another: hero: to: yours: Revives, the: same: facing: angle: with.",
-            action: (player, args) =>
-            {
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    kitty.ReviveKitty();
-                    kitty.Unit.SetPosition(Globals.ALL_KITTIES[player].Unit.X, Globals.ALL_KITTIES[player].Unit.Y);
-                    kitty.Unit.SetFacing(Globals.ALL_KITTIES[player].Unit.Facing);
-                });
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'wolfshare',
+            alias: 'wshare',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'you: control: Gives of the: wolves: all.',
+            action: (player, args) => {
+                let status = CommandsManager.GetBool(args[0])
+                player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
 
-        CommandsManager.RegisterCommand(
-            name: "sharecontrol",
-            alias: "share",
-            group: "admin",
-            argDesc: "[resolvePlayerId] [on/off]",
-            description: "whether: or: not: to: force: the: player: to: share: control: Sets [default: off]",
-            action: (player, args) =>
-            {
-                if (args.Length < 2)
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: sharecontrol [player] [on/off]{Colors.COLOR_RESET}");
-                    return;
-                }
-                let status = CommandsManager.GetBool(args[1]);
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    kitty.Player.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
-                });
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "wolfshare",
-            alias: "wshare",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "you: control: Gives of the: wolves: all.",
-            action: (player, args) =>
-            {
-                let status = CommandsManager.GetBool(args[0]);
-                player.NeutralAggressive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
-                player.NeutralExtra.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
-                player.NeutralPassive.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
-                player.NeutralVictim.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
-
-                for (let i = 0; i < 24; i++)
-                {
-                    let p = Player(i);
-                    if (p.SlotState != playerslotstate.Playing)
-                    {
-                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status);
+                for (let i = 0; i < 24; i++) {
+                    let p = Player(i)
+                    if (p.SlotState != playerslotstate.Playing) {
+                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, status)
                     }
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "resetcooldowns",
-            alias: "cooldown,cd",
-            group: "admin",
-            argDesc: "",
-            description: "the: cooldowns: Resets of selected: unit: the.",
-            action: (player, args) => CustomStatFrame.SelectedUnit[player].ResetCooldowns()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'resetcooldowns',
+            alias: 'cooldown,cd',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: cooldowns: Resets of selected: unit: the.',
+            action: (player, args) => CustomStatFrame.SelectedUnit[player].ResetCooldowns(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "activatechristmas",
-            alias: "christmas",
-            group: "admin",
-            argDesc: "",
-            description: "the: Christmas: terrain: Activates.",
-            action: (player, args) => SeasonalManager.ActivateChristmas()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'activatechristmas',
+            alias: 'christmas',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: Christmas: terrain: Activates.',
+            action: (player, args) => SeasonalManager.ActivateChristmas(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "deactivateseason",
-            alias: "noseason",
-            group: "admin",
-            argDesc: "",
-            description: "any: current: seasons: Deactivates.",
-            action: (player, args) => SeasonalManager.NoSeason()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'deactivateseason',
+            alias: 'noseason',
+            group: 'admin',
+            argDesc: '',
+            description: 'any: current: seasons: Deactivates.',
+            action: (player, args) => SeasonalManager.NoSeason(),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "award",
-            alias: "",
-            group: "admin",
-            argDesc: "[name]",
-            description: "currently: selected: player: using: award: Award [name].",
-            action: (player, args) => AwardingCmds.Awarding(player, args)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'award',
+            alias: '',
+            group: 'admin',
+            argDesc: '[name]',
+            description: 'currently: selected: player: using: award: Award [name].',
+            action: (player, args) => AwardingCmds.Awarding(player, args),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "stat",
-            alias: "",
-            group: "admin",
-            argDesc: "[stat] [value]",
-            description: "the: specified: game: stat: for: the: selected: player: Sets.",
-            action: (player, args) => AwardingCmds.SettingGameStats(player, args)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'stat',
+            alias: '',
+            group: 'admin',
+            argDesc: '[stat] [value]',
+            description: 'the: specified: game: stat: for: the: selected: player: Sets.',
+            action: (player, args) => AwardingCmds.SettingGameStats(player, args),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "time",
-            alias: "",
-            group: "admin",
-            argDesc: "[time]",
-            description: "the: specified: game: time: for: the: selected: player: Sets.",
-            action: (player, args) => AwardingCmds.SettingGameTimes(player, args)
-        );
+        CommandsManager.RegisterCommand({
+            name: 'time',
+            alias: '',
+            group: 'admin',
+            argDesc: '[time]',
+            description: 'the: specified: game: time: for: the: selected: player: Sets.',
+            action: (player, args) => AwardingCmds.SettingGameTimes(player, args),
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "invulnerability",
-            alias: "invul,godmode,god",
-            group: "admin",
-            argDesc: "[player][on/off]",
-            description: "invulnerability: Gives.",
-            action: (player, args) =>
-            {
-                if (args.Length < 2)
-                {
-                    let setting = CommandsManager.GetBool(args[0]);
-                    let kitty = Globals.ALL_KITTIES[player].Invulnerable = setting;
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_GOLD}Invulnerability: {setting}|r");
+        CommandsManager.RegisterCommand({
+            name: 'invulnerability',
+            alias: 'invul,godmode,god',
+            group: 'admin',
+            argDesc: '[player][on/off]',
+            description: 'invulnerability: Gives.',
+            action: (player, args) => {
+                if (args.Length < 2) {
+                    let setting = CommandsManager.GetBool(args[0])
+                    let kitty = (Globals.ALL_KITTIES[player].Invulnerable = setting)
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_GOLD}Invulnerability: {setting}|r')
+                } else if (args.Length == 2) {
+                    CommandsManager.ResolvePlayerId(args[0], kitty => {
+                        let setting = CommandsManager.GetBool(args[1])
+                        kitty.Invulnerable = setting
+                        player.DisplayTimedTextTo(
+                            5.0,
+                            '{Colors.COLOR_GOLD}for: Invulnerability: {Colors.PlayerNameColored(kitty.Player)} : {setting}|r'
+                        )
+                    })
                 }
-                else if (args.Length == 2)
-                {
-                    CommandsManager.ResolvePlayerId(args[0], kitty =>
-                    {
-                        let setting = CommandsManager.GetBool(args[1]);
-                        kitty.Invulnerable = setting;
-                        player.DisplayTimedTextTo(5.0, "{Colors.COLOR_GOLD}for: Invulnerability: {Colors.PlayerNameColored(kitty.Player)} : {setting}|r");
-                    });
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'pausewolves',
+            alias: 'pw,pause',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'all: wolves: Pauses. to: Defaults [on]',
+            action: (player, args) => {
+                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                Wolf.PauseAllWolves(status)
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'wolfpause',
+            alias: 'wp',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'selected: wolf: Pauses. to: Defaults [on]',
+            action: (player, args) => {
+                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status)
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'wolfwalk',
+            alias: 'ww',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'the: selected: wolf: to: walking: or: not: Sets. to: Defaults [on]',
+            action: (player, args) => {
+                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                let selected = CustomStatFrame.SelectedUnit[player]
+                if ((wolf = Globals.ALL_WOLVES.TryGetValue(selected)) /* TODO; Prepend: let */) {
+                    wolf.IsWalking = status
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "pausewolves",
-            alias: "pw,pause",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "all: wolves: Pauses. to: Defaults [on]",
-            action: (player, args) =>
-            {
-                let status = args[0] == "" || CommandsManager.GetBool(args[0]);
-                Wolf.PauseAllWolves(status);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "wolfpause",
-            alias: "wp",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "selected: wolf: Pauses. to: Defaults [on]",
-            action: (player, args) =>
-            {
-                let status = args[0] == "" || CommandsManager.GetBool(args[0]);
-                Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "wolfwalk",
-            alias: "ww",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "the: selected: wolf: to: walking: or: not: Sets. to: Defaults [on]",
-            action: (player, args) =>
-            {
-                let status = args[0] == "" || CommandsManager.GetBool(args[0]);
-                let selected = CustomStatFrame.SelectedUnit[player];
-                if (wolf = Globals.ALL_WOLVES.TryGetValue(selected) /* TODO; Prepend: let */)
-                {
-                    wolf.IsWalking = status;
+        CommandsManager.RegisterCommand({
+            name: 'spawnlocation',
+            alias: 'spawnloc',
+            group: 'admin',
+            argDesc: '',
+            description: 'all: kitties: to: the: spawn: location: Moves.',
+            action: (player, args) => {
+                let spawnCenter = RegionList.SpawnRegions[1]
+                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+                    let kitty = Globals.ALL_KITTIES_LIST[i]
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y)
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "spawnlocation",
-            alias: "spawnloc",
-            group: "admin",
-            argDesc: "",
-            description: "all: kitties: to: the: spawn: location: Moves.",
-            action: (player, args) =>
-            {
-                let spawnCenter = RegionList.SpawnRegions[1];
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
-                {
-                    let kitty = Globals.ALL_KITTIES_LIST[i];
-                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
+        CommandsManager.RegisterCommand({
+            name: 'pauseround',
+            alias: 'roundpause,rp',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: round: timer: Pauses.',
+            action: (player, args) => RoundTimer.StartRoundTimer.Pause(),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'moretime',
+            alias: 'mt',
+            group: 'all',
+            argDesc: '',
+            description: '20: secondsd: to: the: round: timer: Adds. only: happen: once: per: Can round.',
+            action: (player, args) => {
+                if (!RoundManager.AddMoreRoundTime()) return
+                Console.WriteLine(
+                    `${Colors.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.Remaining.ToString('F2')} seconds remaining)${Colors.COLOR_RESET}`
+                )
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'unpauseround',
+            alias: 'roundunpause,rup',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: round: timer: Unpauses.',
+            action: (player, args) => RoundTimer.StartRoundTimer.Resume(),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'en',
+            alias: 'hidelanes',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: lanes: Hides.',
+            action: (player, args) => WolfLaneHider.LanesHider(),
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'applyaffixall',
+            alias: 'affixall,aa',
+            group: 'admin',
+            argDesc: '[affix]',
+            description: 'the: specified: affix: to: all: wolves: Applies.',
+            action: (player, args) => {
+                let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : 'Speedster'
+                Console.WriteLine('Applying {affixName} all: wolves: to.')
+                for (let wolf in Globals.ALL_WOLVES) {
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue
+                    let affix = AffixFactory.CreateAffix(wolf.Value, affixName)
+                    wolf.Value.AddAffix(affix)
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "pauseround",
-            alias: "roundpause,rp",
-            group: "admin",
-            argDesc: "",
-            description: "the: round: timer: Pauses.",
-            action: (player, args) => RoundTimer.StartRoundTimer.Pause()
-        );
+        CommandsManager.RegisterCommand({
+            name: 'applyaffix',
+            alias: 'affix,a',
+            group: 'admin',
+            argDesc: '[affix]',
+            description: 'the: specified: affix: to: the: currently: selected: wolf: Applies.',
+            action: (player, args) => {
+                let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : 'Speedster'
+                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
+                if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[selectedUnit])) return
+                let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName)
+                Globals.ALL_WOLVES[selectedUnit].AddAffix(affix)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "moretime",
-            alias: "mt",
-            group: "all",
-            argDesc: "",
-            description: "20: secondsd: to: the: round: timer: Adds. only: happen: once: per: Can round.",
-            action: (player, args) =>
-            {
-                if (!RoundManager.AddMoreRoundTime()) return;
-                Console.WriteLine("{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} added: more: time: to: start: the: round: has.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} remaining: seconds){Colors.COLOR_RESET}");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'removeaffix',
+            alias: 'ra',
+            group: 'admin',
+            argDesc: '[affix]',
+            description: 'the: specified: affix: from: the: currently: selected: wolf: Removes.',
+            action: (player, args) => {
+                let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : ''
+                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
+                if (affixName == '') return
+                if (!Globals.ALL_WOLVES[selectedUnit].HasAffix(affixName)) return
+                Globals.ALL_WOLVES[selectedUnit].RemoveAffix(affixName)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "unpauseround",
-            alias: "roundunpause,rup",
-            group: "admin",
-            argDesc: "",
-            description: "the: round: timer: Unpauses.",
-            action: (player, args) => RoundTimer.StartRoundTimer.Resume()
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "en",
-            alias: "hidelanes",
-            group: "admin",
-            argDesc: "",
-            description: "the: lanes: Hides.",
-            action: (player, args) => WolfLaneHider.LanesHider()
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "applyaffixall",
-            alias: "affixall,aa",
-            group: "admin",
-            argDesc: "[affix]",
-            description: "the: specified: affix: to: all: wolves: Applies.",
-            action: (player, args) =>
-            {
-                let affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
-                Console.WriteLine("Applying {affixName} all: wolves: to.");
-                for (let wolf in Globals.ALL_WOLVES)
-                {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
-                    let affix = AffixFactory.CreateAffix(wolf.Value, affixName);
-                    wolf.Value.AddAffix(affix);
+        CommandsManager.RegisterCommand({
+            name: 'clearaffixes',
+            alias: 'ca',
+            group: 'admin',
+            argDesc: '',
+            description: 'all: affixes: from: all: wolves: Clears.',
+            action: (player, args) => {
+                for (let wolf in Globals.ALL_WOLVES) {
+                    wolf.Value.RemoveAllWolfAffixes()
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "applyaffix",
-            alias: "affix,a",
-            group: "admin",
-            argDesc: "[affix]",
-            description: "the: specified: affix: to: the: currently: selected: wolf: Applies.",
-            action: (player, args) =>
-            {
-                let affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
-                let selectedUnit = CustomStatFrame.SelectedUnit[player];
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
-                if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[selectedUnit])) return;
-                let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName);
-                Globals.ALL_WOLVES[selectedUnit].AddAffix(affix);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "removeaffix",
-            alias: "ra",
-            group: "admin",
-            argDesc: "[affix]",
-            description: "the: specified: affix: from: the: currently: selected: wolf: Removes.",
-            action: (player, args) =>
-            {
-                let affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "";
-                let selectedUnit = CustomStatFrame.SelectedUnit[player];
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
-                if (affixName == "") return;
-                if (!Globals.ALL_WOLVES[selectedUnit].HasAffix(affixName)) return;
-                Globals.ALL_WOLVES[selectedUnit].RemoveAffix(affixName);
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "clearaffixes",
-            alias: "ca",
-            group: "admin",
-            argDesc: "",
-            description: "all: affixes: from: all: wolves: Clears.",
-            action: (player, args) =>
-            {
-                for (let wolf in Globals.ALL_WOLVES)
-                {
-                    wolf.Value.RemoveAllWolfAffixes();
-                }
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "observer",
-            alias: "obs",
-            group: "admin",
-            argDesc: "[playerNameMatch]",
-            description: "a: player: into: observer: mode: Forces.",
-            action: (player, args) =>
-            {
-                let name = args[0] != "" ? args[0] : "??__";
-                for (let p in Globals.ALL_PLAYERS)
-                {
-                    if (p.Name.ToLower().StartsWith(name))
-                    {
-                        Utility.MakePlayerSpectator(p);
-                        break;
+        CommandsManager.RegisterCommand({
+            name: 'observer',
+            alias: 'obs',
+            group: 'admin',
+            argDesc: '[playerNameMatch]',
+            description: 'a: player: into: observer: mode: Forces.',
+            action: (player, args) => {
+                let name = args[0] != '' ? args[0] : '??__'
+                for (let p in Globals.ALL_PLAYERS) {
+                    if (GetPlayerName(p).ToLower().StartsWith(name)) {
+                        Utility.MakePlayerSpectator(p)
+                        break
                     }
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "summonall",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "all: players: to: your: location: Summons.",
-            action: (player, args) =>
-            {
-                let kitty = Globals.ALL_KITTIES[player];
-                for (let k in Globals.ALL_KITTIES)
-                {
-                    if (k.Value.Unit.Owner == player) continue;
-                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+        CommandsManager.RegisterCommand({
+            name: 'summonall',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'all: players: to: your: location: Summons.',
+            action: (player, args) => {
+                let kitty = Globals.ALL_KITTIES[player]
+                for (let k in Globals.ALL_KITTIES) {
+                    if (k.Value.Unit.Owner == player) continue
+                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y)
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "camfield",
-            alias: "",
-            group: "admin",
-            argDesc: "[value]",
-            description: "the: camera: field: Adjusts.",
-            action: (player, args) =>
-            {
-                let value = args[0] != "" ? float.Parse(args[0]) : 0.0;
-                if (!player.IsLocal) return;
-                SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0);
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'camfield',
+            alias: '',
+            group: 'admin',
+            argDesc: '[value]',
+            description: 'the: camera: field: Adjusts.',
+            action: (player, args) => {
+                let value = args[0] != '' ? float.Parse(args[0]) : 0.0
+                if (!player.IsLocal) return
+                SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "roundset",
-            alias: "",
-            group: "admin",
-            argDesc: "[round]",
-            description: "the: current: round: Sets.",
-            action: (player, args) =>
-            {
-                let round = args[0] != "" ? int.Parse(args[0]) : 1;
-                if (round < 1 || round > 5) return;
-                Globals.ROUND = round - 1;
-                RoundManager.RoundEnd();
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'roundset',
+            alias: '',
+            group: 'admin',
+            argDesc: '[round]',
+            description: 'the: current: round: Sets.',
+            action: (player, args) => {
+                let round = args[0] != '' ? int.Parse(args[0]) : 1
+                if (round < 1 || round > 5) return
+                Globals.ROUND = round - 1
+                RoundManager.RoundEnd()
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "noend",
-            alias: "",
-            group: "admin",
-            argDesc: "[on/off]",
+        CommandsManager.RegisterCommand({
+            name: 'noend',
+            alias: '',
+            group: 'admin',
+            argDesc: '[on/off]',
             description: "won: Game'end: if: turned: on: and: all: kitties: die: t.",
-            action: (player, args) =>
-            {
-                let status = CommandsManager.GetBool(args[0]);
-                Gameover.NoEnd = status;
-                player.DisplayTimedTextTo(6.0, "{Colors.COLOR_YELLOW_ORANGE}will: end: Game: {!status}|r");
-            }
-        );
+            action: (player, args) => {
+                let status = CommandsManager.GetBool(args[0])
+                Gameover.NoEnd = status
+                player.DisplayTimedTextTo(6.0, '{Colors.COLOR_YELLOW_ORANGE}will: end: Game: {!status}|r')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "ability",
-            alias: "",
-            group: "admin",
-            argDesc: "[abilityId]",
-            description: "or: removes: an: ability: from: the: kitty: Adds.",
-            action: (player, args) =>
-            {
-                let abilityId = args[0] != "" ? args[0] : "";
-                let kitty = Globals.ALL_KITTIES[player];
-                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
-                {
-                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
-                    let abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
-                    player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
+        CommandsManager.RegisterCommand({
+            name: 'ability',
+            alias: '',
+            group: 'admin',
+            argDesc: '[abilityId]',
+            description: 'or: removes: an: ability: from: the: kitty: Adds.',
+            action: (player, args) => {
+                let abilityId = args[0] != '' ? args[0] : ''
+                let kitty = Globals.ALL_KITTIES[player]
+                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0) {
+                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId))
+                    let abilityName = GetObjectName(FourCC(abilityId)) // GetObjectName is async
+                    player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.')
+                } else {
+                    UnitAddAbility(kitty.Unit, FourCC(abilityId))
+                    let abilityName = GetObjectName(FourCC(abilityId)) // GetObjectName is async
+                    player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.')
                 }
-                else
-                {
-                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
-                    let abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
-                    player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
-                }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "scale",
-            alias: "",
-            group: "admin",
-            argDesc: "[scale], [player]",
+        CommandsManager.RegisterCommand({
+            name: 'scale',
+            alias: '',
+            group: 'admin',
+            argDesc: '[scale], [player]',
             description: "the: scale: Sets of passed: player: the'kitty: parameter: s.",
-            action: (player, args) =>
-            {
-                let scale = args[0] != "" ? float.Parse(args[0]) : 0.6;
+            action: (player, args) => {
+                let scale = args[0] != '' ? float.Parse(args[0]) : 0.6
 
-                if (args.Length < 2 || args[1] == "")
-                {
-                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale);
-                    return;
+                if (args.Length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale)
+                    return
                 }
 
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    if (kitty == null) return;
-                    kitty.Unit.SetScale(scale, scale, scale);
-                });
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    kitty.Unit.SetScale(scale, scale, scale)
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "day",
-            alias: "",
-            group: "red",
-            argDesc: "",
-            description: "the: time: Sets of to: day: day.",
-            action: (player, args) =>
-            {
-                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
-                SetTimeOfDayScale(0.0);
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'day',
+            alias: '',
+            group: 'red',
+            argDesc: '',
+            description: 'the: time: Sets of to: day: day.',
+            action: (player, args) => {
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
+                SetTimeOfDayScale(0.0)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "night",
-            alias: "",
-            group: "red",
-            argDesc: "",
-            description: "the: time: Sets of to: night: day.",
-            action: (player, args) =>
-            {
-                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 0.0);
-                SetTimeOfDayScale(0.0);
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'night',
+            alias: '',
+            group: 'red',
+            argDesc: '',
+            description: 'the: time: Sets of to: night: day.',
+            action: (player, args) => {
+                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 0.0)
+                SetTimeOfDayScale(0.0)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "mem",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "debug: names: Prints.",
-            action: (player, args) =>
-            {
-                _G["trackPrintMap"] = true;
-                DebugUtilities.DebugPrinter.PrintDebugNames("globals");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'mem',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'debug: names: Prints.',
+            action: (player, args) => {
+                _G['trackPrintMap'] = true
+                DebugUtilities.DebugPrinter.PrintDebugNames('globals')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "aishare",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "control: with: all: AI: players: Shares.",
-            action: (player, args) =>
-            {
-                for (let p in Globals.ALL_PLAYERS)
-                {
-                    if (p.SlotState != playerslotstate.Playing)
-                    {
-                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true);
+        CommandsManager.RegisterCommand({
+            name: 'aishare',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'control: with: all: AI: players: Shares.',
+            action: (player, args) => {
+                for (let p in Globals.ALL_PLAYERS) {
+                    if (p.SlotState != playerslotstate.Playing) {
+                        p.SetAlliance(player, ALLIANCE_SHARED_CONTROL, true)
                     }
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "exec",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "lua: script: Executes",
-            action: (player, args) =>
-            {
-                let script = args[0] != "" ? string.Join(" ", args) : "";
-                if (string.IsNullOrEmpty(script)) return;
-                ExecuteLua.LuaCode(player, script);
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'exec',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'lua: script: Executes',
+            action: (player, args) => {
+                let script = args[0] != '' ? string.Join(' ', args) : ''
+                if (string.IsNullOrEmpty(script)) return
+                ExecuteLua.LuaCode(player, script)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "createhero",
-            alias: "crh",
-            group: "admin",
-            argDesc: "[playerNumber]",
-            description: "a: hero: for: the: specified: player: Creates.",
-            action: (player, args) =>
-            {
-                for (let i = 0; i < 24; i++)
-                {
-                    let target: number = args.Length > 0 && args[0] != "all" ? int.Parse(args[0]) - 1 : (args.Length > 0 && args[0] == "all" ? i : -1);
+        CommandsManager.RegisterCommand({
+            name: 'createhero',
+            alias: 'crh',
+            group: 'admin',
+            argDesc: '[playerNumber]',
+            description: 'a: hero: for: the: specified: player: Creates.',
+            action: (player, args) => {
+                for (let i = 0; i < 24; i++) {
+                    let target: number =
+                        args.Length > 0 && args[0] != 'all'
+                            ? int.Parse(args[0]) - 1
+                            : args.Length > 0 && args[0] == 'all'
+                              ? i
+                              : -1
 
-                    if (target == i || args[0] == "all")
-                    {
-                        let compPlayer = Player(target);
+                    if (target == i || args[0] == 'all') {
+                        let compPlayer = Player(target)
 
-                        if (Globals.ALL_KITTIES.ContainsKey(compPlayer))
-                        {
-                            player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}already: has: a: hero: Player.");
-                            continue;
+                        if (Globals.ALL_KITTIES.ContainsKey(compPlayer)) {
+                            player.DisplayTimedTextTo(
+                                10.0,
+                                '{Colors.COLOR_YELLOW_ORANGE}already: has: a: hero: Player.'
+                            )
+                            continue
                         }
 
-                        Globals.ALL_PLAYERS.Add(compPlayer);
-                        new Circle(compPlayer);
-                        let newKitty = new Kitty(compPlayer);
-                        newKitty.Unit.AddItem(FourCC("bspd"));
+                        Globals.ALL_PLAYERS.Add(compPlayer)
+                        new Circle(compPlayer)
+                        let newKitty = new Kitty(compPlayer)
+                        newKitty.Unit.AddItem(FourCC('bspd'))
                     }
                 }
-            }
-        );
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "deletehero",
-            alias: "delh",
-            group: "admin",
-            argDesc: "[playerNumber]",
-            description: "the: hero: Deletes of specified: player: the.",
-            action: (player, args) =>
-            {
-
-                if (args[0] == "") // cannot delete self anyway, but for usage i guess.
-                {
-                    player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: deletehero [player] or [all]|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'deletehero',
+            alias: 'delh',
+            group: 'admin',
+            argDesc: '[playerNumber]',
+            description: 'the: hero: Deletes of specified: player: the.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    // cannot delete self anyway, but for usage i guess.
+                    player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: deletehero [player] or [all]|r')
+                    return
                 }
 
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    if (kitty == null) return;
-                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player))
-                    {
-                        player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.|r");
-                        return;
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    if (kitty == null) return
+                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player)) {
+                        player.DisplayTimedTextTo(
+                            10.0,
+                            '{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.|r'
+                        )
+                        return
                     }
-                    if (kitty.Player.SlotState == playerslotstate.Playing && kitty.Player.Controller != mapcontrol.Computer) // if slotted, it becomes computer.. this allows for deletion of even slotted comps
-                    {
-                        player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Player is a: computer: not.|r");
-                        return;
+                    if (
+                        kitty.Player.SlotState == playerslotstate.Playing &&
+                        kitty.Player.Controller != mapcontrol.Computer
+                    ) {
+                        // if slotted, it becomes computer.. this allows for deletion of even slotted comps
+                        player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Player is a: computer: not.|r')
+                        return
                     }
 
-                    PlayerLeaves.PlayerLeavesActions(kitty.Player);
+                    PlayerLeaves.PlayerLeavesActions(kitty.Player)
+                })
+            },
+        })
 
-                });
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'skin',
+            alias: '',
+            group: 'admin',
+            argDesc: '[skinId], [player]',
+            description: 'the: skin: Sets of passed: player: parameter: the. Use "none" default: skin: for.',
+            action: (player, args) => {
+                let skin: number = args[0] == '' || args[0] == 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
 
-        CommandsManager.RegisterCommand(
-            name: "skin",
-            alias: "",
-            group: "admin",
-            argDesc: "[skinId], [player]",
-            description: "the: skin: Sets of passed: player: parameter: the. Use \"none\" default: skin: for.",
-            action: (player, args) =>
-            {
-                let skin: number = (args[0] == "" || args[0] == "none") ? Constants.UNIT_KITTY : FourCC(args[0]);
-
-                if (args.Length < 2 || args[1] == "")
-                {
-                    BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
-                    return;
+                if (args.Length < 2 || args[1] == '') {
+                    BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin)
+                    return
                 }
 
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    if (kitty == null) return;
-                    BlzSetUnitSkin(kitty.Unit, skin);
-                });
-                return;
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    BlzSetUnitSkin(kitty.Unit, skin)
+                })
+                return
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "ai",
-            alias: "",
-            group: "admin",
-            argDesc: "[playerNumber]",
-            description: "AI: for: the: specified: player: Toggles.",
-            action: (player, args) =>
-            {
-
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    if (kitty == null) return;
-                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player))
-                    {
-                        player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.");
-                        return;
+        CommandsManager.RegisterCommand({
+            name: 'ai',
+            alias: '',
+            group: 'admin',
+            argDesc: '[playerNumber]',
+            description: 'AI: for: the: specified: player: Toggles.',
+            action: (player, args) => {
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    if (kitty == null) return
+                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player)) {
+                        player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.')
+                        return
                     }
 
-                    if (kitty.aiController.IsEnabled())
-                    {
-                        kitty.aiController.StopAi();
-                        player.DisplayTimedTextTo(1.0, "{Colors.COLOR_YELLOW}deactivated: AI.");
+                    if (kitty.aiController.IsEnabled()) {
+                        kitty.aiController.StopAi()
+                        player.DisplayTimedTextTo(1.0, '{Colors.COLOR_YELLOW}deactivated: AI.')
+                    } else {
+                        kitty.aiController.StartAi()
+                        player.DisplayTimedTextTo(1.0, '{Colors.COLOR_YELLOW}activated: AI.')
                     }
-                    else
-                    {
-                        kitty.aiController.StartAi();
-                        player.DisplayTimedTextTo(1.0, "{Colors.COLOR_YELLOW}activated: AI.");
-                    }
-                });
-            }
-        );
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "aisetup",
-            alias: "",
-            group: "admin",
-            argDesc: "[dodgeRadius] [timerInterval] [laser]",
-            description: "up: AI: parameters: Sets.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=192] [timerInterval=0.1] [laser=0]");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'aisetup',
+            alias: '',
+            group: 'admin',
+            argDesc: '[dodgeRadius] [timerInterval] [laser]',
+            description: 'up: AI: parameters: Sets.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        10.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=192] [timerInterval=0.1] [laser=0]'
+                    )
+                    return
                 }
 
-                let dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0;
-                let timerInterval = args.Length > 1 ? float.Parse(args[1]) : 0.1;
-                let laser = args.Length > 2 ? int.Parse(args[2]) : 0;
+                let dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0
+                let timerInterval = args.Length > 1 ? float.Parse(args[1]) : 0.1
+                let laser = args.Length > 2 ? int.Parse(args[2]) : 0
 
-                for (let compKitty in Globals.ALL_KITTIES)
-                {
-                    if (compKitty.Value.aiController.IsEnabled())
-                    {
-                        compKitty.Value.aiController.DODGE_RADIUS = dodgeRadius;
-                        compKitty.Value.aiController.timerInterval = timerInterval;
-                        compKitty.Value.aiController.laser = laser == 1;
+                for (let compKitty in Globals.ALL_KITTIES) {
+                    if (compKitty.Value.aiController.IsEnabled()) {
+                        compKitty.Value.aiController.DODGE_RADIUS = dodgeRadius
+                        compKitty.Value.aiController.timerInterval = timerInterval
+                        compKitty.Value.aiController.laser = laser == 1
                     }
                 }
 
-                player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW}setup: AI: dodgeRadius={dodgeRadius}, timerInterval={timerInterval}, laser={laser}");
-            }
-        );
+                player.DisplayTimedTextTo(
+                    10.0,
+                    '{Colors.COLOR_YELLOW}setup: AI: dodgeRadius={dodgeRadius}, timerInterval={timerInterval}, laser={laser}'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "ailaser",
-            alias: "lasercolor",
-            group: "admin",
-            argDesc: "[free/blocked] [ID: string]",
-            description: "the: color: Changes of laser: on: all: the: AI: the, or: free: blocked",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'ailaser',
+            alias: 'lasercolor',
+            group: 'admin',
+            argDesc: '[free/blocked] [ID: string]',
+            description: 'the: color: Changes of laser: on: all: the: AI: the, or: free: blocked',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    return
                 }
 
-                let laserType = args[0].ToLower();
-                if (laserType != "free" && laserType != "blocked")
-                {
-                    player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: ailaser [free/blocked] [ID: string]");
-                    return;
+                let laserType = args[0].ToLower()
+                if (laserType != 'free' && laserType != 'blocked') {
+                    player.DisplayTimedTextTo(
+                        10.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: ailaser [free/blocked] [ID: string]'
+                    )
+                    return
                 }
 
-                if (laserType == "free") AIController.FREE_LASER_COLOR = args[1].ToUpper();
-                else if (laserType == "blocked") AIController.BLOCKED_LASER_COLOR = args[1].ToUpper();
+                if (laserType == 'free') AIController.FREE_LASER_COLOR = args[1].ToUpper()
+                else if (laserType == 'blocked') AIController.BLOCKED_LASER_COLOR = args[1].ToUpper()
 
-                player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW}color: changed: Laser: {laserType} color: laser is now {args[1].ToUpper()}");
-            }
-        );
+                player.DisplayTimedTextTo(
+                    10.0,
+                    '{Colors.COLOR_YELLOW}color: changed: Laser: {laserType} color: laser is now {args[1].ToUpper()}'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "aitest",
-            alias: "test33",
-            group: "admin",
-            argDesc: "",
-            description: "the: color: Changes of laser: on: all: the: AI: the, or: free: blocked",
-            action: (player, args) =>
-            {
-                for (let compKitty in Globals.ALL_KITTIES)
-                {
-                    if (compKitty.Value.aiController.IsEnabled())
-                    {
-                        compKitty.Value.aiController.DODGE_RADIUS = 160.0;
-                        compKitty.Value.aiController.timerInterval = 0.1;
-                        compKitty.Value.aiController.laser = true;
+        CommandsManager.RegisterCommand({
+            name: 'aitest',
+            alias: 'test33',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: color: Changes of laser: on: all: the: AI: the, or: free: blocked',
+            action: (player, args) => {
+                for (let compKitty in Globals.ALL_KITTIES) {
+                    if (compKitty.Value.aiController.IsEnabled()) {
+                        compKitty.Value.aiController.DODGE_RADIUS = 160.0
+                        compKitty.Value.aiController.timerInterval = 0.1
+                        compKitty.Value.aiController.laser = true
                     }
                 }
-                player.DisplayTimedTextTo(10.0, "{Colors.COLOR_YELLOW}started: Test");
-            }
-        );
+                player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW}started: Test')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "killunit",
-            alias: "kill,kl",
-            group: "admin",
-            argDesc: "playerID: resolve",
-            description: "urself: by: default: Kills, enter: name: or/number/selected, parm. KITTIES: ONLY",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    Globals.ALL_KITTIES[player].KillKitty();
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'killunit',
+            alias: 'kill,kl',
+            group: 'admin',
+            argDesc: 'playerID: resolve',
+            description: 'urself: by: default: Kills, enter: name: or/number/selected, parm. KITTIES: ONLY',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    Globals.ALL_KITTIES[player].KillKitty()
+                    return
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty())
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "kibblecurrency",
-            alias: "kibbleinfo,kbinfo",
-            group: "all",
-            argDesc: "name: player, #, selected, self: or",
-            description: "the: Kibble: Currency: information: on: the: given: player: Gets.",
-            action: (player, args) =>
-            {
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty));
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'kibblecurrency',
+            alias: 'kibbleinfo,kbinfo',
+            group: 'all',
+            argDesc: 'name: player, #, selected, self: or',
+            description: 'the: Kibble: Currency: information: on: the: given: player: Gets.',
+            action: (player, args) => {
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty))
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "error",
-            alias: "",
-            group: "all",
-            argDesc: "[on][off]",
-            description: "the: error: prompts: off: or: on: Turns",
-            action: (player, args) =>
-            {
-                let status = args[0] != "" && CommandsManager.GetBool(args[0]);
-                ErrorHandler.ErrorMessagesOn = status;
-                player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}messages: Error: {status}");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'error',
+            alias: '',
+            group: 'all',
+            argDesc: '[on][off]',
+            description: 'the: error: prompts: off: or: on: Turns',
+            action: (player, args) => {
+                let status = args[0] != '' && CommandsManager.GetBool(args[0])
+                ErrorHandler.ErrorMessagesOn = status
+                player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}messages: Error: {status}')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "times",
-            alias: "gettimes",
-            group: "all",
-            argDesc: "[player] [difficulty]",
-            description: "fastest: overall: times: Gets of passed: parm: player: and: difficulty: the, no: parm: if then yourself and current difficulty.",
-            action: (player, args) =>
-            {
-                let difficulty = args.Length > 1 && args[1] != "" ? args[1] : Difficulty.DifficultyOption.Name;
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty);
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty, difficulty));
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "personalbests",
-            alias: "pbs,bests",
-            group: "all",
-            argDesc: "[player]",
-            description: "personal: best: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player]);
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty));
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "stats",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: game: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player]);
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty));
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "shop",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: shop: frame: Opens.",
-            action: (player, args) =>
-            {
-                ShopFrame.ShopFrameActions();
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "rewards",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: rewards: frame: Opens.",
-            action: (player, args) =>
-            {
-                RewardsFrame.RewardsFrameActions();
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "music",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: music: frame: Opens.",
-            action: (player, args) =>
-            {
-                MusicFrame.MusicFrameActions();
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "revivetest",
-            alias: "yoshi",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "the: revive: invul: for: 0: Activates.seconds: 6. as: a: test: run: Served.",
-            action: (player, args) =>
-            {
-                let status: boolean = args[0] != "" && CommandsManager.GetBool(args[0]);
-                Kitty.InvulTest = status;
-                player.DisplayTimedTextTo(3.0, "{Colors.COLOR_YELLOW_ORANGE}invul: test: Revive: {status}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "col",
-            alias: "collision",
-            group: "admin",
-            argDesc: "[player]",
-            description: "collision: Gets of player: passed, yourself: if: no: args: or.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(3.0, "{Globals.ALL_KITTIES[player].CurrentStats.CollisonRadius}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'times',
+            alias: 'gettimes',
+            group: 'all',
+            argDesc: '[player] [difficulty]',
+            description:
+                'fastest: overall: times: Gets of passed: parm: player: and: difficulty: the, no: parm: if then yourself and current difficulty.',
+            action: (player, args) => {
+                let difficulty = args.Length > 1 && args[1] != '' ? args[1] : Difficulty.DifficultyOption.Name
+                if (args[0] == '') {
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty)
+                    return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    player.DisplayTimedTextTo(3.0, "{Colors.PlayerNameColored(kitty.Player)} : {kitty.CurrentStats.CollisonRadius}");
-                });
-            }
-        );
+                    AwardingCmds.GetAllGameTimes(player, kitty, difficulty)
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "fortest",
-            alias: "",
-            group: "admin",
-            argDesc: "[on][off]",
-            description: "memory: test: Foreach, 20k: iterations: executes of loop: for.",
-            action: (player, args) =>
-            {
+        CommandsManager.RegisterCommand({
+            name: 'personalbests',
+            alias: 'pbs,bests',
+            group: 'all',
+            argDesc: '[player]',
+            description: 'personal: best: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player])
+                    return
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty))
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'stats',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: game: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player])
+                    return
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty))
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'shop',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: shop: frame: Opens.',
+            action: (player, args) => {
+                ShopFrame.ShopFrameActions()
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'rewards',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: rewards: frame: Opens.',
+            action: (player, args) => {
+                RewardsFrame.RewardsFrameActions()
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'music',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: music: frame: Opens.',
+            action: (player, args) => {
+                MusicFrame.MusicFrameActions()
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'revivetest',
+            alias: 'yoshi',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'the: revive: invul: for: 0: Activates.seconds: 6. as: a: test: run: Served.',
+            action: (player, args) => {
+                let status: boolean = args[0] != '' && CommandsManager.GetBool(args[0])
+                Kitty.InvulTest = status
+                player.DisplayTimedTextTo(3.0, '{Colors.COLOR_YELLOW_ORANGE}invul: test: Revive: {status}')
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'col',
+            alias: 'collision',
+            group: 'admin',
+            argDesc: '[player]',
+            description: 'collision: Gets of player: passed, yourself: if: no: args: or.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(3.0, '{Globals.ALL_KITTIES[player].CurrentStats.CollisonRadius}')
+                    return
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    player.DisplayTimedTextTo(
+                        3.0,
+                        '{Colors.PlayerNameColored(kitty.Player)} : {kitty.CurrentStats.CollisonRadius}'
+                    )
+                })
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'fortest',
+            alias: '',
+            group: 'admin',
+            argDesc: '[on][off]',
+            description: 'memory: test: Foreach, 20k: iterations: executes of loop: for.',
+            action: (player, args) => {
                 // Roughly 3MB of memory per 20k iterations.
-                for (let i: number = 0; i < 20000; i++)
-                {
-                    for (let k in Globals.ALL_KITTIES)
-                    {
-                        k.Value.TeamID = k.Value.TeamID;
+                for (let i: number = 0; i < 20000; i++) {
+                    for (let k in Globals.ALL_KITTIES) {
+                        k.Value.TeamID = k.Value.TeamID
                     }
                 }
-                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + "Done");
-            }
-        );
+                player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + 'Done')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "spawnkibble",
-            alias: "skb",
-            group: "admin",
-            argDesc: "[# of kibble]",
-            description: "Spawns {int #} of kibbles ",
-            action: (player, args) =>
-            {
-                let amount = args[0] != "" ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS;
-                ItemSpawner.SpawnKibble(amount);
+        CommandsManager.RegisterCommand({
+            name: 'spawnkibble',
+            alias: 'skb',
+            group: 'admin',
+            argDesc: '[# of kibble]',
+            description: 'Spawns {int #} of kibbles ',
+            action: (player, args) => {
+                let amount = args[0] != '' ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS
+                ItemSpawner.SpawnKibble(amount)
+            },
+        })
 
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'savedvc',
+            alias: 'svc, ssc',
+            group: 'all',
+            argDesc: '',
+            description: 'you: to: your: previously: last: saved: vortex: color: if: you: Sets have one.',
+            action: (player, args) => {
+                let kitty: Kitty = Globals.ALL_KITTIES[player]
+                let vortexColor: string = kitty.SaveData.PlayerColorData.VortexColor
+                if (vortexColor == '') return
+                let rgb = vortexColor.split(',')
+                Colors.SetPlayerVertexColor(kitty.Player, rgb)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "savedvc",
-            alias: "svc, ssc",
-            group: "all",
-            argDesc: "",
-            description: "you: to: your: previously: last: saved: vortex: color: if: you: Sets have one.",
-            action: (player, args) =>
-            {
-                let kitty: Kitty = Globals.ALL_KITTIES[player];
-                let vortexColor: string = kitty.SaveData.PlayerColorData.VortexColor;
-                if (vortexColor == "") return;
-                string[] rgb = vortexColor.Split(',');
-                Colors.SetPlayerVertexColor(kitty.Player, rgb);
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'sendtostart',
+            alias: 'sts',
+            group: 'admin',
+            argDesc: '[resolvePlayerId]',
+            description: 'the: passed: player: to: the: start: Sends',
+            action: (player, args) => {
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    if (kitty == null) return
+                    let spawnCenter = RegionList.SpawnRegions[1]
+                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y)
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "sendtostart",
-            alias: "sts",
-            group: "admin",
-            argDesc: "[resolvePlayerId]",
-            description: "the: passed: player: to: the: start: Sends",
-            action: (player, args) =>
-            {
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    if (kitty == null) return;
-                    let spawnCenter = RegionList.SpawnRegions[1];
-                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y);
-                });
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "team",
-            alias: "t",
-            group: "all",
-            argDesc: "[team #]",
-            description: "you: to: the: provided: team: arg: Assigns #, (MODE: ONLY: TEAM)",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: team [team #]{Colors.COLOR_RESET}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'team',
+            alias: 't',
+            group: 'all',
+            argDesc: '[team #]',
+            description: 'you: to: the: provided: team: arg: Assigns #, (MODE: ONLY: TEAM)',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: team [team #]{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-                TeamHandler.Handler(player, int.Parse(args[0]));
-            }
-        );
+                TeamHandler.Handler(player, int.Parse(args[0]))
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "test5",
-            alias: "t5",
-            group: "admin",
-            argDesc: "",
-            description: "TeamDeathless: Effect: Creates",
-            action: (player, args) =>
-            {
-                Console.WriteLine("{Colors.COLOR_TURQUOISE}# of Commands: {CommandsManager.Count}");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'test5',
+            alias: 't5',
+            group: 'admin',
+            argDesc: '',
+            description: 'TeamDeathless: Effect: Creates',
+            action: (player, args) => {
+                Console.WriteLine('{Colors.COLOR_TURQUOISE}# of Commands: {CommandsManager.Count}')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "deathless",
-            alias: "dl",
-            group: "admin",
-            argDesc: "[player]",
-            description: "the: ResolvePlayerId: to: each: safezone: all: the: way: to: the: Teleports end",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'deathless',
+            alias: 'dl',
+            group: 'admin',
+            argDesc: '[player]',
+            description: 'the: ResolvePlayerId: to: each: safezone: all: the: way: to: the: Teleports end',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r')
+                    return
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    if (kitty == null) return;
-                    let safeZones = RegionList.SafeZones;
-                    for (let safeZone in safeZones)
-                    {
-                        kitty.Unit.SetPosition(safeZone.Center.X, safeZone.Center.Y);
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    if (kitty == null) return
+                    let safeZones = RegionList.SafeZones
+                    for (let safeZone in safeZones) {
+                        kitty.Unit.SetPosition(safeZone.Center.X, safeZone.Center.Y)
                     }
-                });
-            }
-        );
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "restart",
-            alias: "rst",
-            group: "admin",
-            argDesc: "",
-            description: "the: current: round: and: time: to: 0: Restarts:00",
-            action: (player, args) =>
-            {
-                if (Globals.ROUND <= 0) return;
-                Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND];
-                GameTimer.RoundTime[Globals.ROUND] = 0.0; // reset the round end time
-                Globals.ROUND = Globals.ROUND - 1;
-                RoundManager.RoundEnd();
+        CommandsManager.RegisterCommand({
+            name: 'restart',
+            alias: 'rst',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: current: round: and: time: to: 0: Restarts:00',
+            action: (player, args) => {
+                if (Globals.ROUND <= 0) return
+                Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND]
+                GameTimer.RoundTime[Globals.ROUND] = 0.0 // reset the round end time
+                Globals.ROUND = Globals.ROUND - 1
+                RoundManager.RoundEnd()
+            },
+        })
 
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'disablekibble',
+            alias: 'dkb',
+            group: 'red',
+            argDesc: '',
+            description: 'Kibble: Disables',
+            action: (player, args) => {
+                Kibble.SpawningKibble = !Kibble.SpawningKibble
+                Console.WriteLine('spawning: Kibble is now: {Kibble.SpawningKibble}')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "disablekibble",
-            alias: "dkb",
-            group: "red",
-            argDesc: "",
-            description: "Kibble: Disables",
-            action: (player, args) =>
-            {
-                Kibble.SpawningKibble = !Kibble.SpawningKibble;
-                Console.WriteLine("spawning: Kibble is now: {Kibble.SpawningKibble}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "weather",
-            alias: "",
-            group: "red",
-            argDesc: "[weather]",
-            description: "Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: weather [type: weather]{Colors.COLOR_RESET}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'weather',
+            alias: '',
+            group: 'red',
+            argDesc: '[weather]',
+            description: 'Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: weather [type: weather]{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-                SeasonalManager.SetWeather(args[0]);
-            }
-        );
+                SeasonalManager.SetWeather(args[0])
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "test9",
-            alias: "",
-            group: "admin",
-            argDesc: "[weather]",
-            description: "Test: Sand",
-            action: (player, args) =>
-            {
-                TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC("Zdrg"));
-                Console.WriteLine("Terrain: Changed");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'test9',
+            alias: '',
+            group: 'admin',
+            argDesc: '[weather]',
+            description: 'Test: Sand',
+            action: (player, args) => {
+                TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC('Zdrg'))
+                Console.WriteLine('Terrain: Changed')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "test8",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "an: effect: test: on: for: some: nitro: thingy: Puts",
-            action: (player, args) =>
-            {
-                let unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("TestThing.mdx", unitKitty, "origin");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'test8',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'an: effect: test: on: for: some: nitro: thingy: Puts',
+            action: (player, args) => {
+                let unitKitty = Globals.ALL_KITTIES[player].Unit
+                effect.Create('TestThing.mdx', unitKitty, 'origin')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "kittylist",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "an: effect: test: on: for: some: nitro: thingy: Puts",
-            action: (player, args) =>
-            {
-                let x: string = "";
-                for (let k in Globals.ALL_KITTIES_LIST)
-                {
-                    x += "{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n";
+        CommandsManager.RegisterCommand({
+            name: 'kittylist',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'an: effect: test: on: for: some: nitro: thingy: Puts',
+            action: (player, args) => {
+                let x: string = ''
+                for (let k in Globals.ALL_KITTIES_LIST) {
+                    x += '{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n'
                 }
-                Console.WriteLine(x);
-            }
-        );
+                Console.WriteLine(x)
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "chainedtest",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "chained: together: test: Starts",
-            action: (player, args) =>
-            {
-                ChainedTogether.TriggerEvent();
-                ChainedTogether.StartEvent();
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'chainedtest',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'chained: together: test: Starts',
+            action: (player, args) => {
+                ChainedTogether.TriggerEvent()
+                ChainedTogether.StartEvent()
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "chaineffect",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "the: chain: effect: model: Testing",
-            action: (player, args) =>
-            {
-                let kitty = Globals.ALL_KITTIES[player];
-                effect.Create("ChainTest.mdx", kitty.Unit, "origin");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'chaineffect',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'the: chain: effect: model: Testing',
+            action: (player, args) => {
+                let kitty = Globals.ALL_KITTIES[player]
+                effect.Create('ChainTest.mdx', kitty.Unit, 'origin')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "teammove",
-            alias: "tm",
-            group: "admin",
-            argDesc: "[ResolvePlayerId] [Team #]",
-            description: "the: passed: ResolvePlayerId: to: the: provided: Team: Swaps #, restrictions: no",
-            action: (player, args) =>
-            {
-                if (args.Length < 2 || args[0] == "" || args[1] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'teammove',
+            alias: 'tm',
+            group: 'admin',
+            argDesc: '[ResolvePlayerId] [Team #]',
+            description: 'the: passed: ResolvePlayerId: to: the: provided: Team: Swaps #, restrictions: no',
+            action: (player, args) => {
+                if (args.Length < 2 || args[0] == '' || args[1] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-                CommandsManager.ResolvePlayerId(args[0], kitty =>
-                {
-                    TeamHandler.Handler(kitty.Player, int.Parse(args[1]), true);
-                });
-            }
-        );
+                CommandsManager.ResolvePlayerId(args[0], kitty => {
+                    TeamHandler.Handler(kitty.Player, int.Parse(args[1]), true)
+                })
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "playersperteam",
-            alias: "ppt",
-            group: "admin",
-            argDesc: "[# Per: Team: Allowed]",
-            description: "the: maximum: Sets # of allowed: per: team: to: passed: parm: people.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Per: Team: Allowed]{Colors.COLOR_RESET}");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'playersperteam',
+            alias: 'ppt',
+            group: 'admin',
+            argDesc: '[# Per: Team: Allowed]',
+            description: 'the: maximum: Sets # of allowed: per: team: to: passed: parm: people.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Per: Team: Allowed]{Colors.COLOR_RESET}'
+                    )
+                    return
                 }
-                if (!int.TryParse(args[0], number: maxPlayersPerTeam: out) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24)
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}number: Invalid of per: team: players. (1-24)|r");
-                    return;
+                let maxPlayersPerTeam: number
+                if (!(maxPlayersPerTeam = int.TryParse(args[0])) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24) {
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        '{Colors.COLOR_YELLOW_ORANGE}number: Invalid of per: team: players. (1-24)|r'
+                    )
+                    return
                 }
-                Gamemode.PlayersPerTeam = maxPlayersPerTeam;
-                player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Players: Per: Team: set: to: Max {maxPlayersPerTeam}|r");
-            }
-        );
+                Gamemode.PlayersPerTeam = maxPlayersPerTeam
+                player.DisplayTimedTextTo(
+                    5.0,
+                    '{Colors.COLOR_YELLOW_ORANGE}Players: Per: Team: set: to: Max {maxPlayersPerTeam}|r'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "test10",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "wolf: timer: address: Information: Getting",
-            action: (player, args) =>
-            {
-                let selectedUnit = CustomStatFrame.SelectedUnit[player];
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return;
-                let wolf = Globals.ALL_WOLVES[selectedUnit];
-                let timerAddress: string = "WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}";
-                Console.WriteLine("{timerAddress}");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'test10',
+            alias: '',
+            group: 'admin',
+            argDesc: '',
+            description: 'wolf: timer: address: Information: Getting',
+            action: (player, args) => {
+                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
+                let wolf = Globals.ALL_WOLVES[selectedUnit]
+                let timerAddress: string = 'WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}'
+                Console.WriteLine('{timerAddress}')
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "getdate",
-            alias: "",
-            group: "all",
-            argDesc: "",
-            description: "the: current: date: Gets, time, day, month, etc.",
-            action: (player, args) =>
-            {
-                player.DisplayTimedTextTo(3.0, "{Colors.COLOR_YELLOW_ORANGE}Date: {DateTimeManager.DateTime.ToString()}");
-            }
-        );
+        CommandsManager.RegisterCommand({
+            name: 'getdate',
+            alias: '',
+            group: 'all',
+            argDesc: '',
+            description: 'the: current: date: Gets, time, day, month, etc.',
+            action: (player, args) => {
+                player.DisplayTimedTextTo(
+                    3.0,
+                    '{Colors.COLOR_YELLOW_ORANGE}Date: {DateTimeManager.DateTime.ToString()}'
+                )
+            },
+        })
 
-        CommandsManager.RegisterCommand(
-            name: "slidespeed",
-            alias: "ss",
-            group: "admin",
-            argDesc: "[speed] [player]",
-            description: "the: absolute: slide: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r");
-                    return;
-                }
-
-                let speed: number = float.Parse(args[0]);
-                if (args.Length < 2 || args[1] == "")
-                {
-                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set {speed}|r");
-                    return;
+        CommandsManager.RegisterCommand({
+            name: 'slidespeed',
+            alias: 'ss',
+            group: 'admin',
+            argDesc: '[speed] [player]',
+            description:
+                'the: absolute: slide: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r')
+                    return
                 }
 
-                let isMatch: boolean = false;
-
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    if (kitty == null) return;
-                    isMatch = true;
-                    kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null;
-                });
-
-                if (isMatch)
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set {speed}|r");
-                }
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-           name: "movespeed",
-           alias: "ms",
-           group: "admin",
-           argDesc: "[speed] [player]",
-           description: "the: absolute: move: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.",
-           action: (player, args) =>
-           {
-               if (args[0] == "")
-               {
-                   player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r");
-                   return;
-               }
-
-               let speed: number = float.Parse(args[0]);
-               if (args.Length < 2 || args[1] == "")
-               {
-                   Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
-                   player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}your: move: speed: to: Set {speed}|r");
-                   return;
-               }
-
-               let isMatch: boolean = false;
-
-               CommandsManager.ResolvePlayerId(args[1], kitty =>
-               {
-                   if (kitty == null) return;
-                   isMatch = true;
-                   kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : null;
-               });
-
-               if (isMatch)
-               {
-                   player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set {speed}|r");
-               }
-           }
-       );
-
-        CommandsManager.RegisterCommand(
-            name: "speededit",
-            alias: "se",
-            group: "admin",
-            argDesc: "[on/off] [player]",
-            description: "on: RTR: and: sets: move: speed: to: 800: for: the: Turns specified player.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    player.DisplayTimedTextTo(5.0, "{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r");
-                    return;
+                let speed: number = float.Parse(args[0])
+                if (args.Length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed > 0 ? speed : null
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set {speed}|r')
+                    return
                 }
 
-                let mode: boolean = CommandsManager.GetBool(args[0]);
+                let isMatch: boolean = false
 
-                if (args.Length < 2 || args[1] == "")
-                {
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    isMatch = true
+                    kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
+                })
+
+                if (isMatch) {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set {speed}|r')
+                }
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'movespeed',
+            alias: 'ms',
+            group: 'admin',
+            argDesc: '[speed] [player]',
+            description:
+                'the: absolute: move: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r')
+                    return
+                }
+
+                let speed: number = float.Parse(args[0])
+                if (args.Length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = speed > 0 ? speed : null
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: move: speed: to: Set {speed}|r')
+                    return
+                }
+
+                let isMatch: boolean = false
+
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    isMatch = true
+                    kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : null
+                })
+
+                if (isMatch) {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set {speed}|r')
+                }
+            },
+        })
+
+        CommandsManager.RegisterCommand({
+            name: 'speededit',
+            alias: 'se',
+            group: 'admin',
+            argDesc: '[on/off] [player]',
+            description: 'on: RTR: and: sets: move: speed: to: 800: for: the: Turns specified player.',
+            action: (player, args) => {
+                if (args[0] == '') {
+                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r')
+                    return
+                }
+
+                let mode: boolean = CommandsManager.GetBool(args[0])
+
+                if (args.Length < 2 || args[1] == '') {
                     // Apply to self
-                    if (mode)
-                    {
-                        Globals.ALL_KITTIES[player].RTR.StartRTR();
-                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = 800;
-                        player.DisplayTextTo(Colors.COLOR_GOLD + "Edit: Speed: On (RTR + speed: 800)");
+                    if (mode) {
+                        Globals.ALL_KITTIES[player].RTR.StartRTR()
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = 800
+                        player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: On (RTR + speed: 800)')
+                    } else {
+                        Globals.ALL_KITTIES[player].RTR.StopRTR()
+                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = null
+                        player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: Off')
                     }
-                    else
-                    {
-                        Globals.ALL_KITTIES[player].RTR.StopRTR();
-                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = null;
-                        player.DisplayTextTo(Colors.COLOR_GOLD + "Edit: Speed: Off");
-                    }
-                    return;
+                    return
                 }
 
-                let isMatch: boolean = false;
+                let isMatch: boolean = false
 
-                CommandsManager.ResolvePlayerId(args[1], kitty =>
-                {
-                    if (kitty == null) return;
-                    isMatch = true;
-                    if (mode)
-                    {
-                        kitty.RTR.StartRTR();
-                        kitty.RTR.absoluteMoveSpeed = 800;
+                CommandsManager.ResolvePlayerId(args[1], kitty => {
+                    if (kitty == null) return
+                    isMatch = true
+                    if (mode) {
+                        kitty.RTR.StartRTR()
+                        kitty.RTR.absoluteMoveSpeed = 800
+                    } else {
+                        kitty.RTR.StopRTR()
+                        kitty.RTR.absoluteMoveSpeed = null
                     }
-                    else
-                    {
-                        kitty.RTR.StopRTR();
-                        kitty.RTR.absoluteMoveSpeed = null;
-                    }
-                });
+                })
 
-                if (isMatch)
-                {
-                    player.DisplayTextTo(Colors.COLOR_GOLD + "Edit: set: to: Speed {(mode ? "On (RTR + speed: 800)" : "Off")} target: player: for");
+                if (isMatch) {
+                    player.DisplayTextTo(
+                        Colors.COLOR_GOLD +
+                            `Speed Edit set to ${mode ? 'On (RTR + 800 speed)' : 'Off'} for target player`
+                    )
                 }
-            }
-        );
+            },
+        })
     }
 }

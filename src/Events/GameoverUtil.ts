@@ -38,7 +38,7 @@ class GameoverUtil
 
     public static SetFriendData()
     {
-        let friendDict = new Dictionary<string, int>();
+        let friendDict : {[x: string]: number} = {}
 
         for (let kitty in Globals.ALL_KITTIES)
         {
@@ -49,10 +49,10 @@ class GameoverUtil
             // Splitting / Parsing the data of playerName:count pairs
             if (!string.IsNullOrWhiteSpace(friendsPlayedWith))
             {
-                for (let entry in friendsPlayedWith.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                for (let entry in friendsPlayedWith.split(  ',' ,).filter(Boolean))
                 {
-                    let parts = entry.Split(':');
-                    if (parts.Length == 2 && int.TryParse(parts[1].Trim(), number: count: out))
+                    let parts = entry.split(':');
+                    if (parts.Length == 2 && int.TryParse(parts[1].Trim(), out int count))
                     {
                         friendDict[parts[0].Trim()] = count;
                     }

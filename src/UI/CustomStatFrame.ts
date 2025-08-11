@@ -6,8 +6,8 @@ class CustomStatFrame
     private static CustomStatFrameBoxS: framehandle;
     private static CustomStatFrameBoxF: framehandle;
 
-    public static Dictionary<player, unit> SelectedUnit = new Dictionary<player, unit>();
-    private static List<CustomStat> Stats = new List<CustomStat>();
+    public static  SelectedUnit : {[x: player]: unit} = {}
+    private static Stats : CustomStat[] = []
     private static MoveSpeed: string = "{Colors.COLOR_YELLOW_ORANGE}MS:|r";
     private static Time: string = "{Colors.COLOR_YELLOW_ORANGE}Time:|r";
     private static Saves: string = "{Colors.COLOR_YELLOW_ORANGE}Saves:|r";
@@ -83,7 +83,7 @@ class CustomStatFrame
         catch (e: Error)
         {
             Logger.Critical("Error in CustomStatFrame.Update: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

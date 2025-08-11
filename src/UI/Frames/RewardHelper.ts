@@ -1,57 +1,51 @@
+import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
 
+class RewardHelper {
+    public Hats: Reward[]
+    public Wings: Reward[]
+    public Trails: Reward[]
+    public Auras: Reward[]
 
-class RewardHelper
-{
-    public List<Reward> Hats;
-    public List<Reward> Wings;
-    public List<Reward> Trails;
-    public List<Reward> Auras;
-
-    public RewardHelper()
-    {
-        Hats = new List<Reward>();
-        Wings = new List<Reward>();
-        Trails = new List<Reward>();
-        Auras = new List<Reward>();
+    public constructor() {
+        this.Hats = []
+        this.Wings = []
+        this.Trails = []
+        this.Auras = []
     }
 
-    public AddReward(reward: Reward)
-    {
-        switch (reward.Type)
-        {
+    public AddReward(reward: Reward) {
+        switch (reward.Type) {
             case RewardType.Hats:
-                Hats.Add(reward);
-                break;
+                this.Hats.push(reward)
+                break
 
             case RewardType.Wings:
-                Wings.Add(reward);
-                break;
+                this.Wings.push(reward)
+                break
 
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                Trails.Add(reward);
-                break;
+                this.Trails.push(reward)
+                break
 
             case RewardType.Auras:
-                Auras.Add(reward);
-                break;
+                this.Auras.push(reward)
+                break
         }
     }
 
-    public ClearRewards()
-    {
-        Hats.Clear();
-        Wings.Clear();
-        Trails.Clear();
-        Auras.Clear();
+    public ClearRewards() {
+        this.Hats.Clear()
+        this.Wings.Clear()
+        this.Trails.Clear()
+        this.Auras.Clear()
     }
 
-    public static GetAwardNestedValue(saveData: object, awardName: string)
-    {
+    public static GetAwardNestedValue(saveData: object, awardName: string) {
         // search rewardsList for this award name, then return getawardNestedvalue
-        let reward = RewardsManager.Rewards.Find(r => r.Name == awardName);
-        return reward != null ? GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name) : -1;
+        let reward = RewardsManager.Rewards.Find(r => r.Name == awardName)
+        return reward != null ? GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name) : -1
     }
 
     /// <summary>
@@ -61,22 +55,18 @@ class RewardHelper
     /// <param name="nestedPropertyName">The Reward.TypeSorted</param>
     /// <param name="propertyName">Reward.Name</param>
     /// <returns></returns>
-    public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string)
-    {
-        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName);
-        if (nestedProperty != null)
-        {
-            let nestedObject = nestedProperty.GetValue(obj);
-            if (nestedObject != null)
-            {
-                let property = nestedObject.GetType().GetProperty(propertyName);
-                if (property != null)
-                {
-                    return property.GetValue(nestedObject);
+    public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
+        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName)
+        if (nestedProperty != null) {
+            let nestedObject = nestedProperty.GetValue(obj)
+            if (nestedObject != null) {
+                let property = nestedObject.GetType().GetProperty(propertyName)
+                if (property != null) {
+                    return property.GetValue(nestedObject)
                 }
             }
         }
-        return 0;
+        return 0
     }
 
     /// <summary>
@@ -86,33 +76,24 @@ class RewardHelper
     /// <param name="nestedPropertyName">reward.TypeSorted</param>
     /// <param name="propertyName">the name of reward.</param>
     /// <param name="value">value to set it to</param>
-    public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: object)
-    {
-        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName);
-        if (nestedProperty != null)
-        {
-            let nestedObject = nestedProperty.GetValue(obj);
-            if (nestedObject != null)
-            {
-                UpdateProperty(nestedObject, propertyName, value);
+    public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: object) {
+        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName)
+        if (nestedProperty != null) {
+            let nestedObject = nestedProperty.GetValue(obj)
+            if (nestedObject != null) {
+                UpdateProperty(nestedObject, propertyName, value)
             }
-        }
-        else
-        {
-            Logger.Warning("property: Nested {nestedPropertyName} found: not.");
+        } else {
+            Logger.Warning('property: Nested {nestedPropertyName} found: not.')
         }
     }
 
-    private static UpdateProperty(obj: object, propertyName: string, value: object)
-    {
-        let property = obj.GetType().GetProperty(propertyName);
-        if (property != null)
-        {
-            property.SetValue(obj, value);
-        }
-        else
-        {
-            Logger.Warning("Property {propertyName} found: not.");
+    private static UpdateProperty(obj: object, propertyName: string, value: object) {
+        let property = obj.GetType().GetProperty(propertyName)
+        if (property != null) {
+            property.SetValue(obj, value)
+        } else {
+            Logger.Warning('Property {propertyName} found: not.')
         }
     }
 }

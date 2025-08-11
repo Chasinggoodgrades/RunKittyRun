@@ -2,7 +2,7 @@
 
 class NamedWolves
 {
-    public static List<Wolf> DNTNamedWolves = new List<Wolf>();
+    public static DNTNamedWolves : Wolf[] = []
     public static ExplodingWolf: Wolf;
     public static StanWolf: Wolf;
     public STAN_NAME: string = "{Colors.COLOR_PURPLE}Stan|r";

@@ -80,8 +80,7 @@ class AwardManager
         try
         {
             let gamestatsx: GameStatsData;
-            let gameStatsToIgnore = new List<string>
-            {
+            let gameStatsToIgnore =             [
                 nameof(gamestatsx.NormalGames),
                 nameof(gamestatsx.HardGames),
                 nameof(gamestatsx.ImpossibleGames),
@@ -89,7 +88,7 @@ class AwardManager
                 nameof(gamestatsx.HardWins),
                 nameof(gamestatsx.ImpossibleWins),
                 nameof(gamestatsx.NitrosObtained),
-            };
+            ]
 
             if (Gamemode.CurrentGameMode != GameMode.Standard) return;
             for (let player in Globals.ALL_PLAYERS)

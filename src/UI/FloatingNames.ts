@@ -33,7 +33,7 @@ class FloatingNameTag {
     private NamePosTimer() {
         NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () => {
             UpdateNameTag()
-            Blizzard.SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.Unit.Y)
+            SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.Unit.Y)
         })
     }
 

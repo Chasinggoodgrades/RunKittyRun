@@ -75,9 +75,9 @@ class SoundManager
         }
     }
 
-    public static PlaySpeedSound()  { return SPEED_SOUND.Start(); }
+    public static PlaySpeedSound() => { return SPEED_SOUND.Start(); }
 
-    public static PlayInvulnerableSound()  { return INVULNERABLE_SOUND.Start(); }
+    public static PlayInvulnerableSound() => { return INVULNERABLE_SOUND.Start(); }
 
     /// <summary>
     /// Plays the POTM death sound ontop of the passed unit.

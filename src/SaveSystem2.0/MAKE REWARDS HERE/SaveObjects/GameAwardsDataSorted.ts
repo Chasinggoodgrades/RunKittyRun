@@ -9,15 +9,15 @@ class GameAwardsDataSorted {
     public Deathless: Deathless
     public Wings: Wings
 
-    public GameAwardsDataSorted() {
-        Auras = new Auras()
-        Wings = new Wings()
-        Deathless = new Deathless()
-        Hats = new Hats()
-        Nitros = new Nitros()
-        Skins = new Skins()
-        Trails = new Trails()
-        Windwalks = new Windwalks()
-        Tournament = new Tournament()
+    public constructor() {
+        this.Auras = new Auras()
+        this.Wings = new Wings()
+        this.Deathless = new Deathless()
+        this.Hats = new Hats()
+        this.Nitros = new Nitros()
+        this.Skins = new Skins()
+        this.Trails = new Trails()
+        this.Windwalks = new Windwalks()
+        this.Tournament = new Tournament()
     }
 }

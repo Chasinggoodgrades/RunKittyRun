@@ -12,12 +12,12 @@ class Globals
     public static GAME_SEED: number 
     public static TempGroup: group = group.Create();
     public static readonly GameMode[] GAME_MODES = [GameMode.Standard, GameMode.SoloTournament, GameMode.TeamTournament]
-    public static readonly string[] TEAM_MODES = ["Pick: Free", "Random"]
-    public static readonly string[] SOLO_MODES = ["Progression", "Race"]
-    public static readonly string[] VIPLIST = ["QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2"]
-    public static List<player> VIPLISTUNFILTERED = new List<player>();
+    public static readonly  TEAM_MODES = ["Pick: Free", "Random"]
+    public static readonly  SOLO_MODES = ["Progression", "Race"]
+    public static readonly  VIPLIST = ["QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2"]
+    public static VIPLISTUNFILTERED : player[] = []
 
-    public static readonly string[] CHAMPIONS =
+    public static readonly  CHAMPIONS =
         { "Aches#1817", "Fieryfox#21640", "Qoz#11803", "BranFlake64#1127", "BranFlake#1127",
         "Balmydrop#1737", "udo#11673", "MrGheed#1831", "Player: Local", "Stan#22399",
         "Omniology#11850", "Danger#24279"};
@@ -25,16 +25,16 @@ class Globals
     public static GAME_TIMER: timer = timer.Create();
     public static GAME_TIMER_DIALOG: timerdialog = CreateTimerDialog(GAME_TIMER);
 
-    public static List<player> ALL_PLAYERS = new List<player>();
-    public static List<Safezone> SAFE_ZONES = new List<Safezone>();
-    public static List<player> LockedCamera = new List<player>();
-    public static List<Kitty> ALL_KITTIES_LIST = new List<Kitty>();
+    public static ALL_PLAYERS : player[] = []
+    public static SAFE_ZONES : Safezone[] = []
+    public static LockedCamera : player[] = []
+    public static ALL_KITTIES_LIST : Kitty[] = []
 
-    public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
-    public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
-    public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
+    public static ALL_KITTIES : {[x: player]: Kitty} = {}
+    public static  ALL_CIRCLES : {[x: player]: Circle} = {}
+    public static  ALL_WOLVES : {[x: unit]: Wolf} = {}
 
-    public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
+    public static PLAYER_UPGRADES : {[x: player]: PlayerUpgrades} = {}
 
     public static SaveSystem: SaveManager;
     public static GAME_AWARDS_SORTED: GameAwardsDataSorted  = new GameAwardsDataSorted();
@@ -44,7 +44,7 @@ class Globals
 
     public static RANDOM_GEN: Random 
     public static Dictionary<int, Team> ALL_TEAMS 
-    public static List<Team> ALL_TEAMS_LIST 
+    public static  ALL_TEAMS_LIST:Team[] 
     public static Dictionary<player, Team> PLAYERS_TEAMS 
     public static Dictionary<Team, string> TEAM_PROGRESS;
 

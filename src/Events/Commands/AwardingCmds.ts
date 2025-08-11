@@ -7,7 +7,7 @@ class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static Awarding(player: player, string[] args)
+    public static Awarding(player: player,  args:string[])
     {
         let award = args[0].ToLower();
         let selectedUnit = CustomStatFrame.SelectedUnit[player];
@@ -79,7 +79,7 @@ class AwardingCmds
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static SettingGameStats(player: player, string[] args)
+    public static SettingGameStats(player: player,  args:string[])
     {
         let stats = args[0].ToLower();
         let selectedUnit = CustomStatFrame.SelectedUnit[player];
@@ -103,7 +103,8 @@ class AwardingCmds
         {
             if (prop.Name.ToLower() == stats.ToLower())
             {
-                if (!int.TryParse(value, number: val: out))
+                let val: number
+                if (!val = int.TryParse(value))
                 {
                     player.DisplayTimedTextTo(3.0, "{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.ToString())}");
                     return;
@@ -129,7 +130,7 @@ class AwardingCmds
         player.DisplayTimedTextTo(15.0, "{Colors.COLOR_YELLOW_ORANGE}game: stats: Valid: {Colors.HighlightString(combined)}");
     }
 
-    public static SettingGameTimes(player: player, string[] args)
+    public static SettingGameTimes(player: player,  args:string[])
     {
         let roundTime = args[0].ToLower();
         let selectedUnit = CustomStatFrame.SelectedUnit[player];
@@ -152,7 +153,8 @@ class AwardingCmds
         {
             if (prop.Name.ToLower() == roundTime.ToLower())
             {
-                if (!float.TryParse(value, number: val: out))
+                let val:number
+                if (!(val = float.TryParse(value)))
                 {
                     player.DisplayTimedTextTo(3.0, "{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.ToString())}");
                     return;
@@ -225,8 +227,8 @@ class AwardingCmds
 
         // Previously this wasn't sorted by round number, so i had to hard code the order with one two three etc.. but ye its sorted now
         let properties = Globals.GAME_TIMES.GetType().GetProperties()
-            .Where(p => string.IsNullOrEmpty(difficultyArg) || p.Name.ToLower().Contains(difficultyArg.ToLower()))
-            .OrderBy(p => GetRoundNumber(p.Name));
+            .Where(p => string.IsNullOrEmpty(difficultyArg) || GetPlayerName(p).ToLower().Contains(difficultyArg.ToLower()))
+            .OrderBy(p => GetRoundNumber(GetPlayerName(p)));
 
         for (let property in properties)
         {

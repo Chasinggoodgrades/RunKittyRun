@@ -1,8 +1,8 @@
 class Stealth extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_GHOSTAFFIX
 
-    public Stealth(unit: Wolf) {
-        // TODO; CALL super(unit)
+    public constructor(unit: Wolf) {
+        super(unit)
         Name = '{Colors.COLOR_GREY}Stealth|r'
     }
 

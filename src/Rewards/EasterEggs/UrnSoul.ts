@@ -96,7 +96,7 @@ class UrnSoul
         catch (e: Error)
         {
             Logger.Critical("Error in UrnSoul.UrnUsageActions {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

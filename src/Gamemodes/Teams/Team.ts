@@ -5,18 +5,18 @@ class Team
     private static TeamTimer: timer 
     public TeamID: number 
     public TeamColor: string 
-    public Dictionary<int, float> TeamTimes 
-    public List<player> Teammembers 
+    public TeamTimes : {[x: number]: number}
+    public  Teammembers :player[]
     public TeamMembersString: string = "";
-    public Dictionary<int, string> RoundProgress 
+    public  RoundProgress : {[x: number]: string}
     public Finished: boolean 
 
     public Team(id: number)
     {
         TeamID = id;
-        Teammembers = new List<player>();
-        RoundProgress = new Dictionary<int, string>();
-        TeamTimes = new Dictionary<int, float>();
+        Teammembers : player[] = []
+        RoundProgress  = {}
+        TeamTimes  = {}
         TeamColor = Colors.GetStringColorOfPlayer(TeamID) + "Team " + TeamID;
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
@@ -31,16 +31,16 @@ class Team
             ProtectionOfAncients.Initialize();
             Relic.RegisterRelicEnabler();
 
-            Globals.ALL_TEAMS = new Dictionary<int, Team>();
-            Globals.ALL_TEAMS_LIST = new List<Team>();
-            Globals.PLAYERS_TEAMS = new Dictionary<player, Team>();
+            Globals.ALL_TEAMS = {}
+            Globals.ALL_TEAMS_LIST= []
+            Globals.PLAYERS_TEAMS = {}
             TeamTimer ??= timer.Create();
             TeamTimer.Start(0.1, false, ErrorHandler.Wrap(TeamSetup));
         }
         catch (e: Error)
         {
             Logger.Critical("Error in Team.Initialize: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -145,7 +145,7 @@ class Team
         for (let i: number = 0; i < Teammembers.Count; i++)
         {
             let member = Teammembers[i];
-            let name: string = member.Name.Split('#')[0];
+            let name: string = member.Name.split('#')[0];
             if (name.Length > 7)
                 name = Colors.ColorString(member.Name.Substring(0, 7), member.Id + 1);
 

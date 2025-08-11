@@ -4,7 +4,7 @@ class Votekick
 {
     public static VoteActive: boolean = false;
     private static VoteTimer: timer = timer.Create();
-    private static List<player> Voters = new List<player>();
+    private static Voters : player[] = []
     private static VoteKickPlayer: player;
     private static VoteStarter: player;
     private VOTE_DURATION: number = 30.0;
@@ -90,20 +90,21 @@ class Votekick
     /// <returns></returns>
     private static GetPlayerID(player: string)
     {
-        return int.TryParse(player, number: playerID: out) ? playerID - 1 : -1;
+        let playerID: number
+        return (playerID = int.TryParse(player)) ? playerID - 1 : -1;
     }
 
-    private static GetPlayer: player(player: string)
+    private static GetPlayer(player: string):player
     {
         // doesnt quite work yet.
         let basePlayerName: string = Regex.Match(player, @"^[^\W_]+").Value;
         for (let p in Globals.ALL_PLAYERS)
         {
-            if (p.Name.IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (GetPlayerName(p).IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 return p;
             }
-            Console.WriteLine(p.Name.IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase));
+            Console.WriteLine(GetPlayerName(p).IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase));
         }
         return null;
     }

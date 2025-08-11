@@ -4,8 +4,8 @@ class Chaos extends Affix {
     private currentAffix: Affix
     private rotationTime: number = GetRandomReal(25, 45)
 
-    public Chaos(unit: Wolf) {
-        // TODO; CALL super(unit)
+    public constructor(unit: Wolf) {
+        super(unit)
         Name = '{Colors.COLOR_GREEN}Chaos|r'
     }
 
@@ -16,7 +16,7 @@ class Chaos extends Affix {
             base.Apply()
         } catch (e: Error) {
             Logger.Warning('Chaos.Apply: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

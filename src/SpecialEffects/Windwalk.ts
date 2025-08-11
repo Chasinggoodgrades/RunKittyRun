@@ -29,7 +29,7 @@ class Windwalk {
         let k: Kitty = Globals.ALL_KITTIES[p]
 
         if (!k.Alive) return // cannot cast if dead obviously.
-        if (Blizzard.UnitHasBuffBJ(k.Unit, WindwalkID)) return
+        if (UnitHasBuffBJ(k.Unit, WindwalkID)) return
         k.Unit.IssueOrder('windwalk')
         k.Unit.IssueOrder(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY)
     }

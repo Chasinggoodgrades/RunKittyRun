@@ -1,8 +1,8 @@
 class Speedster extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_SPEEDSTER
 
-    public Speedster(unit: Wolf) {
-        // TODO; CALL super(unit)
+    public constructor(unit: Wolf) {
+        super(unit)
         Name = '{Colors.COLOR_ORANGE}Speedster|r'
     }
 

@@ -53,9 +53,9 @@ class ShardOfTranslocation extends Relic
     private TeleportActions()
     {
         if (!Globals.GAME_ACTIVE) return;
-        if (@event.SpellAbilityId != RelicAbilityID) return;
+        if (GetSpellAbilityId() != RelicAbilityID) return;
         let unit = GetTriggerUnit();
-        let targetLoc = @event.SpellTargetLoc;
+        let targetLoc = GetSpellTargetLoc();
         let player = unit.Owner;
         let currentSafezone = Globals.ALL_KITTIES[player].CurrentSafeZone;
         try
@@ -76,7 +76,7 @@ class ShardOfTranslocation extends Relic
         catch (e: Error)
         {
             Logger.Critical(e.Message);
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

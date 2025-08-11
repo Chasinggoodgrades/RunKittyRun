@@ -19,7 +19,7 @@ class FrameManager
     private static HOTKEY_COLOR: string = Colors.COLOR_YELLOW_ORANGE;
 
     private static readonly _cachedUIPosition: Action = RepositionBackdropAction();
-    private static List<framehandle> _frames = new List<framehandle>();
+    private static _frames : framehandle[] = []
 
     public static Initialize()
     {
@@ -37,7 +37,7 @@ class FrameManager
         catch (ex: Error)
         {
             Logger.Critical("Error in FrameManager.Initialize: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 

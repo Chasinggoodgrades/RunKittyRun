@@ -3,13 +3,13 @@
 class RollerSkates
 {
     private static OnUseTrigger: trigger;
-    private static List<player> RollerSkaters;
+    private static  RollerSkaters:player[];
 
     public static Initialize()
     {
-        RollerSkaters = new List<player>();
+        RollerSkaters : player[] = []
         OnUseTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
+        TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
         OnUseTrigger.AddCondition(Condition(() => GetManipulatedItem().TypeId == Constants.ITEM_PEGASUS_BOOTS));
         OnUseTrigger.AddAction(ErrorHandler.Wrap(SwitchingBoots));
     }

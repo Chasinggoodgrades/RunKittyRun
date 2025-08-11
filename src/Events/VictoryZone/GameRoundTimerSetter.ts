@@ -14,7 +14,7 @@
 
 //        let difficultyProperty = saveData.GetType().GetProperty(difficultyString);
 //        let difficultyData = difficultyProperty.GetValue(saveData);
-//        let roundProperty = difficultyData.GetType().GetProperty(roundString.Split('.').Last());
+//        let roundProperty = difficultyData.GetType().GetProperty(roundString.split('.').Last());
 //        let roundTimeValue = roundProperty.GetValue(difficultyData);
 
 //        Console.WriteLine("Round Time for {difficultyString} - {Globals.ROUND}: {roundTimeValue}");

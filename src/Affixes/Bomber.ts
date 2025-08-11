@@ -1,7 +1,10 @@
 class Bomber extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_BOMBER // replace with bomber ability in WE later after i make it.
     private EXPLOSION_RANGE: number = 250.0
-    // TODO; Restore:     private static readonly Predicate<Affix> IsBomber = x  { return x is Bomber; }
+
+    private static readonly IsBomber = (r: Affix): r is Bomber => {
+        return r instanceof Bomber
+    }
 
     private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
     private static RING_TIMER_INDICATOR: string = 'war3mapImported\\RingProgress.mdx'
@@ -15,8 +18,8 @@ class Bomber extends Affix {
     private RangeIndicator: RangeIndicator = null
     private TimerIndicator: effect
 
-    public Bomber(unit: Wolf) {
-        // TODO; CALL super(unit)
+    public constructor(unit: Wolf) {
+        super(unit)
         Name = '{Colors.COLOR_ORANGE}Bomber|r'
     }
 

@@ -11,7 +11,7 @@ class WolfArea
     public Area: number 
     public IsEnabled: boolean = true;
     private AreaTrigger: trigger 
-    public List<Wolf> Wolves = new List<Wolf>();
+    public  Wolves : Wolf[] = []
     public FixationCount: number 
 
     public WolfArea(id: number, region: region)
@@ -56,7 +56,7 @@ class WolfArea
             catch (e: Error)
             {
                 Logger.Warning("Error in WolfArea.RegisterEnterEvents: {e.Message}");
-                throw new Error() // TODO; Rethrow actual error
+                throw e
             }
         });
     }

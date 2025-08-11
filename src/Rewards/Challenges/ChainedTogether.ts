@@ -3,8 +3,8 @@
 class ChainedTogether
 {
     private REQUIRED_PLAYERS: number = 2;
-    private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
-    private static List<List<Kitty>> kittyGroups = new List<List<Kitty>>(); // Convert this into a dictionary
+    private static  KittyLightnings : {[x: string]: Chain} = {}
+    private static kittyGroups : Kitty[][] = [] // Convert this into a dictionary
     private static timerInterval: number = 0.1;
     private static rng: Random = Globals.RANDOM_GEN;
     private static MoveChainTimer: timer;
@@ -18,7 +18,7 @@ class ChainedTogether
         if (EventStarted || EventTriggered) return; // Don't trigger multiple times.
         if (!IsStartingContidionValid) return;
 
-        List<Kitty> allKitties = Globals.ALL_KITTIES_LIST;
+        let allKitties = Globals.ALL_KITTIES_LIST;
 
         if (allKitties.Count < REQUIRED_PLAYERS) return; // Need at least 2 players to trigger event.
 
@@ -42,7 +42,7 @@ class ChainedTogether
     private static UpdateStartingCondition(kitty: Kitty)
     {
         let currentSafezone: number = kitty.CurrentSafeZone;
-        List<Kitty> kitties = Globals.ALL_KITTIES_LIST;
+        let kitties = Globals.ALL_KITTIES_LIST;
         let skippedSafezone: boolean = false;
 
         for (let i: number = 0; i < kitties.Count; i++)
@@ -85,7 +85,7 @@ class ChainedTogether
         catch (e: Error)
         {
             Logger.Warning("Error in ChainedTogether.StartEvent {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -126,7 +126,7 @@ class ChainedTogether
         catch (e: Error)
         {
             Logger.Warning("Error in ChainedTogether.LoseEvent {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -161,7 +161,7 @@ class ChainedTogether
         catch (e: Error)
         {
             Logger.Warning("Error in ChainedTogether.LoseEvent {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -226,7 +226,7 @@ class ChainedTogether
 
         for (let i: number = 0; i < groupsOfThree; i++)
         {
-            let group = new List<Kitty> [allKitties[index], allKitties[index + 1], allKitties[index + 2]]
+            let group =  [allKitties[index], allKitties[index + 1], allKitties[index + 2]]
             kittyGroups.Add(group);
             ChainGroup(group);
             index += 3;
@@ -234,7 +234,7 @@ class ChainedTogether
 
         if (remainder > 0)
         {
-            let lastGroup = new List<Kitty>();
+            let lastGroup : Kitty[] = []
             for (let i: number = index; i < allKitties.Count; i++)
             {
                 lastGroup.Add(allKitties[i]);
@@ -244,7 +244,7 @@ class ChainedTogether
         }
     }
 
-    private static ChainGroup(List<Kitty> group)
+    private static ChainGroup( group:Kitty[])
     {
         for (let j: number = 0; j < group.Count - 1; j++)
         {
@@ -281,7 +281,7 @@ class ChainedTogether
         catch (e: Error)
         {
             Logger.Warning("Error in ChainedTogether.ReachedSafezone {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
 
     }

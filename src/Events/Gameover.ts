@@ -46,7 +46,7 @@ class Gameover {
     }
 
     private static EndGame() {
-        for (let player in Globals.ALL_PLAYERS) Blizzard.CustomVictoryBJ(player, true, true)
+        for (let player in Globals.ALL_PLAYERS) CustomVictoryBJ(player, true, true)
     }
 
     private static LosingGameCheck(): boolean {

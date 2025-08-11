@@ -31,7 +31,7 @@ class RingOfSummoning extends Relic
     {
         Trigger = trigger.Create();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == RelicAbilityID));
+        Trigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         Trigger.AddAction(ErrorHandler.Wrap(SacredRingOfSummoning));
     }
 
@@ -75,7 +75,7 @@ class RingOfSummoning extends Relic
     {
         // Retrieve event details
         let player: player = GetTriggerUnit().Owner;
-        let targetedPoint: location = @event.SpellTargetLoc;
+        let targetedPoint: location = GetSpellTargetLoc();
         let summoningKitty: Kitty = Globals.ALL_KITTIES[player];
         let summoningKittyUnit: unit = summoningKitty.Unit;
         let numberOfSummons: number = GetNumberOfSummons(player);

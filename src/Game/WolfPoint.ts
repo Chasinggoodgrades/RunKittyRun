@@ -10,7 +10,7 @@ class WolfPoint
     public static IsPausedTrigger: trigger;
 
     private Wolf: Wolf 
-    private List<WolfPointInfo> PointInfo 
+    private  PointInfo :WolfPointInfo[]
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -125,7 +125,7 @@ class WolfPoint
     private static InitTrigger(): trigger
     {
         IsPausedTrigger ??= CreateTrigger();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
+        TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
 
         TriggerAddCondition(IsPausedTrigger, FilterList.IssuedOrderAtkOrder);
         TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
@@ -152,7 +152,7 @@ class WolfPoint
             Y = 0;
         }
 
-        public static List<WolfPointInfo> GetWolfPointList()
+        public static  GetWolfPointList():WolfPointInfo[]
         {
             let list = ObjectPool<WolfPointInfo>.GetEmptyList();
             for (let i: number = 0; i < 48; i++)
@@ -162,7 +162,7 @@ class WolfPoint
             return list;
         }
 
-        public static ClearWolfPointList(List<WolfPointInfo> list)
+        public static ClearWolfPointList( list:WolfPointInfo[])
         {
             if (list == null) return;
             for (let i: number = 0; i < list.Count; i++)

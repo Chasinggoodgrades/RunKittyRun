@@ -9,9 +9,9 @@ class StandardMultiboard
     private static ESCTrigger: trigger;
 
     private static color: string = Colors.COLOR_YELLOW_ORANGE;
-    private static string[] PlayerStats = new string[8];
-    private static number[] RoundTimes = new number[5];
-    private static List<player> PlayersList = new List<player>();
+    private static  PlayerStats:string[] = []
+    private static  RoundTimes:number[] = []
+    private static PlayersList : player[] = []
 
     public static Initialize()
     {

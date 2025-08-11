@@ -3,7 +3,7 @@
 class TeamPodium
 {
     private static Queue<(Player: player, position: Point)> PodiumQueue = new Queue<(Player: player, position: Point)>();
-    private static List<unit> MovedUnits = new List<unit>();
+    private static MovedUnits : unit[] = []
     private static PodiumType: string = "";
     private static Color: string = Colors.COLOR_YELLOW_ORANGE;
     private MVP: string = "MVP";

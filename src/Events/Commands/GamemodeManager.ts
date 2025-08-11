@@ -2,7 +2,7 @@
 
 class GamemodeManager
 {
-    private static Dictionary<string, GamemodeInfo> commands = new Dictionary<string, GamemodeInfo>();
+    private static commands : {[x: string]: GamemodeInfo} = {}
 
     public static InitializeCommands()
     {

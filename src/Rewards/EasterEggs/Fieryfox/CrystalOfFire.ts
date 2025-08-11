@@ -7,7 +7,7 @@ class CrystalOfFire
     private static TurnInEventFieryfox: trigger;
     private static TurnInEventFandF: trigger;
     private static QuestAccept: trigger;
-    private static List<player> QuestEligible;
+    private static QuestEligible: player[]
 
     public static Initialize()
     {
@@ -16,7 +16,7 @@ class CrystalOfFire
         TurnInEventFieryfox = RegisterTurnInFiery();
         TurnInEventFandF = RegisterTurnInFandF();
         QuestAccept = RegisterChatEvent();
-        QuestEligible = new List<player>();
+        QuestEligible : player[] = []
     }
 
     public static AwardCrystalOfFire(unit: unit)  { return unit.AddItem(ItemID); }

@@ -1,18 +1,18 @@
 abstract class Affix {
     public Unit: Wolf
-    public Name: string
+    public Name: string | undefined
 
-    public Affix(unit: Wolf) {
-        Unit = unit
+    public constructor(unit: Wolf) {
+        this.Unit = unit
     }
 
-    public Apply(): virtual {
+    public Apply() {
         // GC.GCAffixes.Add(this);
     }
 
-    public Remove(): virtual {
+    public Remove() {
         // GC.RemoveAffix(this);
     }
 
-    public abstract Pause(pause: boolean)
+    public abstract Pause(pause: boolean): void
 }

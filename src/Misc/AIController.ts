@@ -36,20 +36,20 @@ class AIController
     private elapsedTime: number = 0;
 
     private moveTimer: timer;
-    private List<Wolf> wolvesInRange = new List<Wolf>();
+    private  wolvesInRange : Wolf[] = []
     private lastLightning: lightning;
 
     private int? lastSafeZoneIndexId = null;
     private reachedLastProgressZoneCenter: boolean = false;
-    private List<lightning> availableBlockedLightnings = new List<lightning>();
-    private List<lightning> availableClearLightnings = new List<lightning>();
-    private List<lightning> usedBlockedLightnings = new List<lightning>();
-    private List<lightning> usedClearLightnings = new List<lightning>();
-    private List<AngleInterval> blockedIntervals = new List<AngleInterval>();
-    private List<AngleInterval> freeGaps = new List<AngleInterval>();
-    private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
-    private static Dictionary<Kitty, Kitty> claimedKitties = new Dictionary<Kitty, Kitty>();
-    private List<Point> wallPoints = new List<Point>();
+    private  availableBlockedLightnings : lightning[] = []
+    private  availableClearLightnings : lightning[] = []
+    private  usedBlockedLightnings : lightning[] = []
+    private  usedClearLightnings : lightning[] = []
+    private  blockedIntervals : AngleInterval[] = []
+    private  freeGaps : AngleInterval[] = []
+    private  mergedIntervals : AngleInterval[] = []
+    private static  claimedKitties : {[x: Kitty]: Kitty} = {}
+    private  wallPoints : Point[] = []
 
     public AIController(kitty: Kitty)
     {
@@ -469,7 +469,7 @@ class AIController
     }
 
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
-    private (X: number, Y: number) GetCompositeDodgePosition(List<Wolf> wolves,  (X: number, Y: number) forwardDirection) // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(List<Wolf> wolves, ref (number X, number Y) forwardDirection)
+    private (X: number, Y: number) GetCompositeDodgePosition( wolves:Wolf[],  (X: number, Y: number) forwardDirection) // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
     {
         let forwardAngle: number = NormalizeAngle(MathF.Atan2(forwardDirection.Y, forwardDirection.X));
         let requiredClearance: number = 22.5 * (MathF.PI / 180);
@@ -911,7 +911,7 @@ class AIController
         return Math.Abs(diff);
     }
 
-    private SortAngleIntervals(List<AngleInterval> intervals)
+    private SortAngleIntervals(intervals: AngleInterval[])
     {
         for (let i: number = 0; i < intervals.Count - 1; i++)
         {
@@ -931,7 +931,7 @@ class AIController
     /// <summary>
     /// Merges overlapping angular intervals.
     /// </summary>
-    private MergeIntervals(List<AngleInterval> intervals)
+    private MergeIntervals(intervals: AngleInterval[])
     {
         SortAngleIntervals(intervals);
 
@@ -1021,7 +1021,7 @@ class AIController
             return;
         }
 
-        if (Blizzard.UnitHasBuffBJ(kitty.Unit, WindwalkID)) return;
+        if (UnitHasBuffBJ(kitty.Unit, WindwalkID)) return;
 
         IssueOrderBasic("windwalk");
     }

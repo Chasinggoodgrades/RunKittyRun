@@ -15,7 +15,7 @@ export enum RewardType {
     Wings,
 }
 
-class Reward {
+export class Reward {
     public Name: string
     public AbilityID: number
     public OriginPoint: string = ''

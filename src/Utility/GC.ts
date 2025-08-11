@@ -2,7 +2,7 @@
 
 class GC
 {
-    public static List<Affix> GCAffixes = new List<Affix>();
+    public static  GCAffixes : Affix[] = []
 
     public static RemoveTrigger( t: trigger) // TODO; Cleanup:     public static RemoveTrigger(ref trigger t)
     {
@@ -30,6 +30,9 @@ class GC
 
     public static RemoveGroup( g: group) // TODO; Cleanup:     public static RemoveGroup(ref group g)
     {
+
+
+        
         if (g == null) return;
         g.Clear();
         g?.Dispose();
@@ -51,7 +54,7 @@ class GC
         dict = null;
     }
 
-    public static RemoveList<T>( List<T> list) // TODO; Cleanup:     public static RemoveList<T>(ref List<T> list)
+    public static RemoveList<T>(  list: T[]) // TODO; Cleanup:     public static RemoveList<T>(ref list: T[])
     {
         if (list == null) return;
         list.Clear();

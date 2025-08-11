@@ -13,8 +13,8 @@ class TerrainChanger
     {
         try
         {
-            Terrains = new number[Gamemode.NumberOfRounds];
-            SafezoneTerrain = new number[Gamemode.NumberOfRounds];
+            Terrains = []
+            SafezoneTerrain =[]
             NoSeason();
             if (Gamemode.CurrentGameMode != GameMode.Standard) return;
             ChristmasTerrain();
@@ -23,7 +23,7 @@ class TerrainChanger
         catch (e: Error)
         {
             Logger.Critical("Error in TerrainChanger.Initialize {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

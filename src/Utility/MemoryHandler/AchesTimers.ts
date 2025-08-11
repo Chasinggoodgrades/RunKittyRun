@@ -9,7 +9,7 @@ class AchesTimers extends IDisposable
 
     public Pause(pause: boolean = true)
     {
-        if (Timer == null) Logger.Warning("IS: NULL: TIMER in {nameof(AchesTimers)}.Pause()");
+        if (Timer == null) Logger.Warning("TIMER IS NULL in {nameof(AchesTimers)}.Pause()");
         if (pause)
             Timer?.Pause();
         else
@@ -18,7 +18,7 @@ class AchesTimers extends IDisposable
 
     public Resume()
     {
-        if (Timer == null) Logger.Warning("IS: NULL: TIMER in {nameof(AchesTimers)}.Resume()");
+        if (Timer == null) Logger.Warning("TIMER IS NULL in {nameof(AchesTimers)}.Resume()");
         Timer?.Resume();
     }
 

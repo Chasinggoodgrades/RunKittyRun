@@ -5,8 +5,8 @@ class SoloMultiboard
     private static OverallBoard: multiboard;
     private static BestTimes: multiboard;
     private static ESCTrigger: trigger;
-    private static Dictionary<player, Kitty> sortedDict;
-    private static Dictionary<player, int> MBSlot;
+    private static sortedDict: {[x: player]: Kitty};
+    private static  MBSlot: {[x:player]: number};
     private static color: string = Colors.COLOR_YELLOW_ORANGE;
 
     /// <summary>
@@ -17,100 +17,100 @@ class SoloMultiboard
         try
         {
             if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
-            OverallBoard = multiboard.Create();
-            BestTimes = multiboard.Create();
-            sortedDict = new Dictionary<player, Kitty>();
-            MBSlot = new Dictionary<player, int>();
-            MakeMultiboard();
-            RegisterTriggers();
+            SoloMultiboard.OverallBoard = multiboard.Create();
+            SoloMultiboard.BestTimes = multiboard.Create();
+            SoloMultiboard.sortedDict = {}
+            SoloMultiboard.MBSlot  = {}
+            SoloMultiboard.MakeMultiboard();
+            SoloMultiboard.RegisterTriggers();
         }
         catch (ex: Error)
         {
             Logger.Critical("Error in SoloMultiboard: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
     private static MakeMultiboard()
     {
-        BestTimesMultiboard();
-        OverallMultiboardRacemode();
-        OverallMultiboardProgressmode();
+        SoloMultiboard.BestTimesMultiboard();
+        SoloMultiboard.OverallMultiboardRacemode();
+        SoloMultiboard.OverallMultiboardProgressmode();
     }
 
     private static RegisterTriggers()
     {
-        ESCTrigger = trigger.Create();
+        SoloMultiboard.ESCTrigger = trigger.Create();
         for (let player in Globals.ALL_PLAYERS)
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
-        ESCTrigger.AddAction(ESCPressed);
+            SoloMultiboard.ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic);
+        SoloMultiboard.ESCTrigger.AddAction(SoloMultiboard.ESCPressed);
     }
 
     private static OverallMultiboardRacemode()
     {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[1]) return; // Race mode
-        OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
-        OverallBoard.Columns = 9;
-        OverallBoard.GetItem(0, 0).SetText("{color}Player|r");
-        OverallBoard.GetItem(0, 1).SetText("{color}Deaths|r");
-        OverallBoard.GetItem(0, 2).SetText("{color}1: Round|r");
-        OverallBoard.GetItem(0, 3).SetText("{color}2: Round|r");
-        OverallBoard.GetItem(0, 4).SetText("{color}3: Round|r");
-        OverallBoard.GetItem(0, 5).SetText("{color}4: Round|r");
-        OverallBoard.GetItem(0, 6).SetText("{color}5: Round|r");
-        OverallBoard.GetItem(0, 7).SetText("{color}Total|r");
-        OverallBoard.GetItem(0, 8).SetText("{color}Status|r");
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
+        SoloMultiboard.OverallBoard.Columns = 9;
+        SoloMultiboard.OverallBoard.GetItem(0, 0).SetText("{color}Player|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 1).SetText("{color}Deaths|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 2).SetText("{color}1: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 3).SetText("{color}2: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 4).SetText("{color}3: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 5).SetText("{color}4: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 6).SetText("{color}5: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 7).SetText("{color}Total|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 8).SetText("{color}Status|r");
 
-        OverallBoard.SetChildVisibility(true, false);
-        OverallBoard.SetChildWidth(0.05);
-        OverallBoard.GetItem(0, 0).SetWidth(0.07);
-        OverallBoard.IsDisplayed = true;
-        UpdateOverallStatsMB();
+        SoloMultiboard.OverallBoard.SetChildVisibility(true, false);
+        SoloMultiboard.OverallBoard.SetChildWidth(0.05);
+        SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07);
+        SoloMultiboard.OverallBoard.IsDisplayed = true;
+        SoloMultiboard.UpdateOverallStatsMB();
     }
 
     private static OverallMultiboardProgressmode()
     {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return; // Progression mode
-        OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
-        OverallBoard.Columns = 7;
-        OverallBoard.GetItem(0, 0).SetText("{color}Player|r");
-        OverallBoard.GetItem(0, 1).SetText("{color}1: Round|r");
-        OverallBoard.GetItem(0, 2).SetText("{color}2: Round|r");
-        OverallBoard.GetItem(0, 3).SetText("{color}3: Round|r");
-        OverallBoard.GetItem(0, 4).SetText("{color}4: Round|r");
-        OverallBoard.GetItem(0, 5).SetText("{color}5: Round|r");
-        OverallBoard.GetItem(0, 6).SetText("{color}Total|r");
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
+        SoloMultiboard.OverallBoard.Columns = 7;
+        SoloMultiboard.OverallBoard.GetItem(0, 0).SetText("{color}Player|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 1).SetText("{color}1: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 2).SetText("{color}2: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 3).SetText("{color}3: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 4).SetText("{color}4: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 5).SetText("{color}5: Round|r");
+        SoloMultiboard.OverallBoard.GetItem(0, 6).SetText("{color}Total|r");
 
-        OverallBoard.SetChildVisibility(true, false);
-        OverallBoard.SetChildWidth(0.05);
-        OverallBoard.GetItem(0, 0).SetWidth(0.07);
-        OverallBoard.IsDisplayed = true;
-        OverallStats();
+        SoloMultiboard.OverallBoard.SetChildVisibility(true, false);
+        SoloMultiboard.OverallBoard.SetChildWidth(0.05);
+        SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07);
+        SoloMultiboard.OverallBoard.IsDisplayed = true;
+        SoloMultiboard.OverallStats();
     }
 
     private static BestTimesMultiboard()
     {
-        BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
-        BestTimes.Columns = 7;
-        BestTimes.GetItem(0, 0).SetText("{color}Player|r");
-        BestTimes.GetItem(0, 1).SetText("{color}1: Round|r");
-        BestTimes.GetItem(0, 2).SetText("{color}2: Round|r");
-        BestTimes.GetItem(0, 3).SetText("{color}3: Round|r");
-        BestTimes.GetItem(0, 4).SetText("{color}4: Round|r");
-        BestTimes.GetItem(0, 5).SetText("{color}5: Round|r");
-        BestTimes.GetItem(0, 6).SetText("{color}Time: Total|r");
-        BestTimes.SetChildVisibility(true, false);
-        BestTimes.SetChildWidth(0.05);
-        BestTimes.GetItem(0, 6).SetWidth(0.06);
-        BestTimes.GetItem(0, 0).SetWidth(0.07);
-        BestTimes.IsDisplayed = false;
-        UpdateBestTimesMB();
+        SoloMultiboard.BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
+        SoloMultiboard.BestTimes.Columns = 7;
+        SoloMultiboard.BestTimes.GetItem(0, 0).SetText("{color}Player|r");
+        SoloMultiboard.BestTimes.GetItem(0, 1).SetText("{color}1: Round|r");
+        SoloMultiboard.BestTimes.GetItem(0, 2).SetText("{color}2: Round|r");
+        SoloMultiboard.BestTimes.GetItem(0, 3).SetText("{color}3: Round|r");
+        SoloMultiboard.BestTimes.GetItem(0, 4).SetText("{color}4: Round|r");
+        SoloMultiboard.BestTimes.GetItem(0, 5).SetText("{color}5: Round|r");
+        SoloMultiboard.BestTimes.GetItem(0, 6).SetText("{color}Time: Total|r");
+        SoloMultiboard.BestTimes.SetChildVisibility(true, false);
+        SoloMultiboard.BestTimes.SetChildWidth(0.05);
+        SoloMultiboard.BestTimes.GetItem(0, 6).SetWidth(0.06);
+        SoloMultiboard.BestTimes.GetItem(0, 0).SetWidth(0.07);
+        SoloMultiboard.BestTimes.IsDisplayed = false;
+        SoloMultiboard.UpdateBestTimesMB();
     }
 
     private static OverallStats()
     {
-        OverallBoard.Title = "Game: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r";
-        OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
+        SoloMultiboard.OverallBoard.Title = "Game: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r";
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1;
         let rowIndex = 1;
 
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
@@ -118,19 +118,19 @@ class SoloMultiboard
             ? Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.TimeProg.GetOverallProgress()).ThenBy(kvp => kvp.Key.Id) // Progression mode
             : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime()).ThenBy(kvp => kvp.Key.Id).ThenBy(kvp => kvp.Value.Finished); // Race Mode       -- Holy BAD LEAKS
 
-        sortedDict = sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Avoid pass by reference
+        SoloMultiboard.sortedDict = sortedPlayers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // Avoid pass by reference
 
-        for (let player in sortedDict.Keys)
+        for (let player in SoloMultiboard.sortedDict.Keys)
         {
-            let times = sortedDict[player].TimeProg;
+            let times = SoloMultiboard.sortedDict[player].TimeProg;
             let playerColor = Colors.GetStringColorOfPlayer(player.Id + 1);
-            let totalDeaths = sortedDict[player].CurrentStats.TotalDeaths;
+            let totalDeaths = SoloMultiboard.sortedDict[player].CurrentStats.TotalDeaths;
             let name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name;
             let status = Globals.ALL_KITTIES[player].Finished ? "Finished" : "Racing";
-            MBSlot[player] = rowIndex;
+            SoloMultiboard.MBSlot[player] = rowIndex;
             let stats = (Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0])
-                ? new[]
-                {
+                ? 
+                [
                     name,
                     times.GetRoundProgress(1).ToString("F2") + "%",
                     times.GetRoundProgress(2).ToString("F2") + "%",
@@ -138,9 +138,9 @@ class SoloMultiboard
                     times.GetRoundProgress(4).ToString("F2") + "%",
                     times.GetRoundProgress(5).ToString("F2") + "%",
                     times.GetOverallProgress().ToString("F2") + "%"
-                }
-                : new[]
-                {
+                ]
+                : 
+                [
                     name,
                     totalDeaths.ToString(),
                     times.GetRoundTimeFormatted(1),
@@ -150,24 +150,24 @@ class SoloMultiboard
                     times.GetRoundTimeFormatted(5),
                     times.GetTotalTimeFormatted(),
                     status
-                };
+                ]
 
             for (let i: number = 0; i < stats.Length; i++)
             {
-                OverallBoard.GetItem(rowIndex, i).SetText("{playerColor}{stats[i]}{Colors.COLOR_RESET}");
-                if (i == 0) OverallBoard.GetItem(rowIndex, i).SetWidth(0.07);
+                SoloMultiboard.OverallBoard.GetItem(rowIndex, i).SetText("{playerColor}{stats[i]}{Colors.COLOR_RESET}");
+                if (i == 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).SetWidth(0.07);
             }
 
             rowIndex++;
             stats = null;
         }
 
-        sortedDict.Clear();
+        SoloMultiboard.sortedDict.Clear();
     }
 
     private static BestTimeStats()
     {
-        BestTimes.Title = "Times: Best {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r";
+        SoloMultiboard.BestTimes.Title = "Times: Best {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r";
         let rowIndex = 1;
 
         for (let player in Globals.ALL_PLAYERS) // bad
@@ -180,12 +180,12 @@ class SoloMultiboard
             for (let i: number = 0; i < roundTimes.Length; i++)
             {
                 if (roundTimes[i] != 0)
-                    BestTimes.GetItem(rowIndex, i + 1).SetText("{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}");
+                    SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).SetText("{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}");
                 else
-                    BestTimes.GetItem(rowIndex, i + 1).SetText("{playerColor}---{Colors.COLOR_RESET}");
+                    SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).SetText("{playerColor}---{Colors.COLOR_RESET}");
             }
             let sum = roundTimes.Sum(); // IEnumerable
-            BestTimes.GetItem(rowIndex, 6).SetText("{playerColor}{Utility.ConvertFloatToTime(sum)}");
+            SoloMultiboard.BestTimes.GetItem(rowIndex, 6).SetText("{playerColor}{Utility.ConvertFloatToTime(sum)}");
             rowIndex++;
             roundTimes = null;
         }
@@ -194,14 +194,14 @@ class SoloMultiboard
     public static UpdateOverallStatsMB()
     {
         if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
-        OverallStats();
+        SoloMultiboard.OverallStats();
     }
 
     public static UpdateBestTimesMB()
     {
         if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
-        MultiboardUtil.FillPlayers(BestTimes, 1);
-        BestTimeStats();
+        MultiboardUtil.FillPlayers(SoloMultiboard.BestTimes, 1);
+        SoloMultiboard.BestTimeStats();
     }
 
     public static UpdateDeathCount(player: player)
@@ -209,21 +209,21 @@ class SoloMultiboard
         try
         {
             if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
-            let rowIndex: number = value = MBSlot.TryGetValue(player) /* TODO; Prepend: number */ ? value : 0;
+            let rowIndex: number = value = SoloMultiboard.MBSlot.TryGetValue(player) /* TODO; Prepend: number */ ? value : 0;
             if (rowIndex == 0) return;
-            OverallBoard.GetItem(rowIndex, 1).SetText("{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
+            SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).SetText("{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}");
         }
         catch (ex: Error)
         {
             Logger.Critical("Error in SoloMultiboard.UpdateDeathCount: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
     private static number[] GetGameRoundTime(data: KittyData)
     {
         let gameData = data.RoundTimes;
-        let roundTimes = new number[5];
+        let roundTimes = []
 
         switch (Gamemode.CurrentGameMode)
         {
@@ -237,7 +237,7 @@ class SoloMultiboard
 
             default:
                 Console.WriteLine("{Colors.COLOR_DARK_RED}multiboard: getting: gamestat: data: Error.");
-                return new number[5];
+                return []
         }
         return roundTimes;
     }
@@ -246,15 +246,15 @@ class SoloMultiboard
     {
         if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return; // Solo mode
         if (!GetTriggerPlayer().IsLocal) return;
-        if (OverallBoard.IsDisplayed)
+        if (SoloMultiboard.OverallBoard.IsDisplayed)
         {
-            OverallBoard.IsDisplayed = false;
-            BestTimes.IsDisplayed = true;
+            SoloMultiboard.OverallBoard.IsDisplayed = false;
+            SoloMultiboard.BestTimes.IsDisplayed = true;
         }
         else
         {
-            BestTimes.IsDisplayed = false;
-            OverallBoard.IsDisplayed = true;
+            SoloMultiboard.BestTimes.IsDisplayed = false;
+            SoloMultiboard.OverallBoard.IsDisplayed = true;
         }
     }
 }

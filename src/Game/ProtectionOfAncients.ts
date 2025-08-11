@@ -20,9 +20,9 @@ class ProtectionOfAncients
     private static KittyReachedLevelSix: trigger;
     private static readonly INVULNERABLE_DURATION: number = 1.0;
 
-    private static List<player> HitLevel6;
-    private static List<player> UpgradeLevel2 = new List<player>();
-    private static List<player> UpgradeLevel3 = new List<player>();
+    private static  HitLevel6: player[] = [];
+    private static UpgradeLevel2 : player[] = []
+    private static UpgradeLevel3 : player[] = []
 
     public static Initialize()
     {
@@ -46,8 +46,8 @@ class ProtectionOfAncients
     {
         // Ultimate, Protection of the Ancients
         KittyReachedLevelSix ??= trigger.Create();
-        HitLevel6 ??= new List<player>();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
+        HitLevel6 ??: player[] = []
+        TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
         {
             if (HitLevel6.Contains(GetTriggerUnit().Owner)) return;
@@ -104,7 +104,7 @@ class ProtectionOfAncients
     private static RegisterUpgradeLevelEvents()
     {
         LevelUpTrigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
+        TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => GetTriggerUnit().HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
         LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(GetTriggerUnit()));
     }
@@ -112,8 +112,8 @@ class ProtectionOfAncients
     private static RegisterEvents()
     {
         Trigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
+        TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
+        Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
         Trigger.AddAction(ActivationEvent);
 
         HotkeyTrigger = CreateTrigger();

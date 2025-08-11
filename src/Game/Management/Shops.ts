@@ -3,18 +3,18 @@
 class Shops
 {
     private static KittyVendors: group;
-    private static List<unit> KittyVendorsList;
-    private static List<int> KittyVendorItemList;
-    private static Dictionary<unit, List<VendorItem>> VendorsItemList;
+    private static  KittyVendorsList:unit[];
+    private static  KittyVendorItemList:int[];
+    private static  VendorsItemList:{[x: unit]: VendorItem[]};
     private static Trigger: trigger;
 
     public static Initialize()
     {
         KittyVendors = group.Create();
         Trigger = trigger.Create();
-        KittyVendorsList = new List<unit>();
-        KittyVendorItemList = new List<int>();
-        VendorsItemList = new Dictionary<unit, List<VendorItem>>();
+        KittyVendorsList = []
+        KittyVendorItemList = []
+        VendorsItemList = {}
         CollectAllVendors();
         SetupAllItems();
         ApplyItemListToVendor();
@@ -42,9 +42,9 @@ class Shops
             vendor.AddItemToStock(item.Item, item.Stock, item.Stock);
     }
 
-    private static AddRegularItemsToVendor(vendor: unit, List<int> items)
+    private static AddRegularItemsToVendor(vendor: unit, int[] items)
     {
-        let vendorList = new List<VendorItem>();
+        let vendorList : VendorItem[] = []
         for (let item in items)
         {
             vendorList.Add(new VendorItem(vendor, item, 2, 60));
@@ -103,9 +103,11 @@ class Shops
     {
         try
         {
-            let item = @event.SoldItem;
-            let vendor = @event.SellingUnit;
-            let player = @event.BuyingUnit.Owner;
+            let item = GetSoldItem() ;
+            let vendor = GetSellingUnit();
+            const u = GetBuyingUnit()
+            if (!u) return 
+            let player = GetOwningPlayer(u)
             let itemID = item.TypeId;
 
             let vendorItems = VendorsItemList[vendor];
@@ -119,6 +121,7 @@ class Shops
             Logger.Warning("Error in OnVendorSell: {e.Message}");
         }
     }
+    
     private class VendorItem
     {
         public Vendor: unit 

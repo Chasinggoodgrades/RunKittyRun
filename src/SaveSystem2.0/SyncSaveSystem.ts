@@ -19,7 +19,7 @@ class SyncSaveLoad
     public SyncPrefix: string  = "S_TIO";
     public SyncPrefixFinish: string  = "S_TIOF";
     public SyncEvent: trigger  = trigger.Create();
-    private Dictionary<int, FilePromise> allPromises = new Dictionary<int, FilePromise>();
+    private allPromises : {[x: number]: FilePromise} = {}
 
     private SyncSaveLoad()
     {
@@ -130,7 +130,7 @@ class FilePromise
 {
     public SyncOwner: player 
     public HasLoaded: boolean = false;
-    public Dictionary<int, string> Buffer  = new Dictionary<int, string>();
+    public  Buffer  : {[x: number]: string} = {}
     public DecodedString: string 
     private Action<FilePromise> onFinish;
 

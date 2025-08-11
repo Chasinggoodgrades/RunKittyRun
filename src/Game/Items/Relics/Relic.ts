@@ -3,7 +3,7 @@
 abstract class Relic
 {
     private static CanBuyRelicsTrigger: trigger;
-    private static List<player> CanBuyRelics;
+    private static  CanBuyRelics:player[];
 
     public static RequiredLevel: number  = 12;
     public static RelicIncrease: number  = 16;
@@ -16,8 +16,8 @@ abstract class Relic
     public IconPath: string 
     public UpgradeLevel: number = 0;
     public MaxUpgradeLevel: number  { return Upgrades.Count; }
-    public RelicAbilityID: number { get; protected set; }
-    public List<RelicUpgrade> Upgrades  = new List<RelicUpgrade>();
+    public RelicAbilityID: number 
+    public  Upgrades  : RelicUpgrade[] = []
 
     public Relic(name: string, desc: string, relicAbilityID: number, itemID: number, cost: number, iconPath: string)
     {
@@ -84,8 +84,8 @@ abstract class Relic
         // Ability to Purchase Relics
         PlayerUpgrades.Initialize();
         CanBuyRelicsTrigger ??= trigger.Create();
-        CanBuyRelics ??= new List<player>();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel);
+        CanBuyRelics ??: player[] = []
+        TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel);
         CanBuyRelicsTrigger.AddAction(() =>
         {
             try

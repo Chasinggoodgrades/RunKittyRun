@@ -46,7 +46,7 @@ class APMTracker {
             Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL
         } catch (e: Error) {
             Logger.Warning('Error in APMTracker.CheckKittyPositions: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

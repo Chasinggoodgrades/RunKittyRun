@@ -4,7 +4,7 @@ class MemoryHandlerTest
 {
     public static cylceCount: number = 0;
     private static t: timer = timer.Create();
-    private static TestDestroyable[] KibbleTest = new TestDestroyable[2000];
+    private static  KibbleTest:TestDestroyable[] = new TestDestroyable[2000];
 
     private class TestDestroyable extends IDisposable
     {

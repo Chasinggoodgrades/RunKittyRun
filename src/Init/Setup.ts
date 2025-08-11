@@ -12,7 +12,7 @@ class Setup {
     public static Initialize() {
         try {
             SetGameSpeed(gamespeed.Fastest)
-            Blizzard.LockGameSpeedBJ()
+            LockGameSpeedBJ()
             Colors.Initialize()
             GameSeed.Initialize()
             DoodadChanger.ShowSeasonalDoodads(false)
@@ -31,7 +31,7 @@ class Setup {
             Gamemode.SetGameMode(Globals.GAME_MODES[0])
         } catch (e: Error) {
             Logger.Critical('Error in Setup.Initialize: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -91,7 +91,7 @@ class Setup {
             }
         } catch (e: Error) {
             Logger.Critical('Error in Setup.StartGame: {e.Message}')
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 

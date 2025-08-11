@@ -139,7 +139,7 @@ class Challenges {
     private static DoubleBackingTrigger() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         let t = trigger.Create()
-        Blizzard.TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
+        TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
         t.AddAction(
             ErrorHandler.Wrap(() => {
                 let unit = GetTriggerUnit()

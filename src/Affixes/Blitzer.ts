@@ -3,7 +3,11 @@
 class Blitzer extends Affix
 {
     private static readonly GHOST_VISIBLE: number = FourCC("Aeth");
-// TODO; Restore:     private static readonly Predicate<Affix> IsBlitzer = x  { return x is Blitzer; }
+
+    private static readonly IsBlitzer = (r: Affix): r is Blitzer => {
+        return r instanceof Blitzer
+    }
+
     private AFFIX_ABILITY: number = Constants.ABILITY_BLITZER;
     private BLITZER_EFFECT: string = "war3mapImported\\ChargerCasterArt.mdx";
     private BLITZER_SPEED: number = 650.0;
@@ -18,8 +22,9 @@ class Blitzer extends Affix
     private Effect: effect;
     private WanderEffect: effect;
 
-    public Blitzer(unit: Wolf) // TODO; CALL super(unit)
+    public constructor(unit: Wolf)
     {
+        super(unit);
         Name = "{Colors.COLOR_YELLOW}Blitzer|r";
     }
 
@@ -80,7 +85,7 @@ class Blitzer extends Affix
         catch (e: Error)
         {
             Logger.Warning("Error in PreBlitzerMove: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -102,7 +107,7 @@ class Blitzer extends Affix
         catch (e: Error)
         {
             Logger.Warning("Error in BeginBlitz: {e.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw e
         }
     }
 
@@ -156,10 +161,10 @@ class Blitzer extends Affix
         Unit.Unit.AddAbility(GHOST_VISIBLE);
     }
 
-    public static GetBlitzer: Blitzer(unit: unit)
+    public static GetBlitzer(unit: unit):Blitzer
     {
         if (unit == null) return null;
-        let affix = Globals.ALL_WOLVES[unit].Affixes.Find(IsBlitzer);
+        let affix = Globals.ALL_WOLVES[unit].Affixes.Find(Blitzer.IsBlitzer);
         return affix is blitzer: Blitzer ? blitzer : null;
     }
 

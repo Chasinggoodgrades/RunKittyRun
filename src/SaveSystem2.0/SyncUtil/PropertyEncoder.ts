@@ -17,7 +17,7 @@ class PropertyEncoder
         {
             // Handle any exceptions that may occur during encoding
             Logger.Critical("{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 
@@ -51,7 +51,7 @@ class PropertyEncoder
         catch (ex: Error)
         {
             Logger.Critical("{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: {ex.Message}");
-            throw new Error() // TODO; Rethrow actual error
+            throw ex
         }
     }
 

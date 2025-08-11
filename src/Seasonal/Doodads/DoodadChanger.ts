@@ -16,8 +16,8 @@ class DoodadChanger
     private static RedLavaCracks: number = FourCC("B00B");
     private static BlueLavaCracks: number = FourCC("B00C");
     private static SuperChristmasTree: number = FourCC("B00D");
-    private static List<int> ChristmasDecor = InitChristmasDecor();
-    private static List<destructable> AllDestructables = new();
+    private static ChristmasDecor: number[] = InitChristmasDecor();
+    private static AllDestructables: destructable[] = []
 
     public static Initialize()
     {
@@ -26,10 +26,9 @@ class DoodadChanger
         SeasonalDoodads();
     }
 
-    private static List<int> InitChristmasDecor()
+    private static InitChristmasDecor()
     {
-        return new List<int>
-        {
+        return [
             CrystalRed,
             CrystalBlue,
             CrystalGreen,
@@ -42,7 +41,7 @@ class DoodadChanger
             RedLavaCracks,
             BlueLavaCracks,
             SuperChristmasTree,
-        };
+        ]
     }
 
     private static SeasonalDoodads()

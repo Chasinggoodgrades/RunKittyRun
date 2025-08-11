@@ -1,6 +1,6 @@
 import { Rectangle } from 'w3ts'
 
-class Regions {
+export class Regions {
     public static Bronze_medal = Rectangle.create(-224, -800, -192, -736)
     public static Circle_Area = Rectangle.create(-1184, -1504, -992, 0)
     public static Deaths = Rectangle.create(-224, -608, -160, -576)
