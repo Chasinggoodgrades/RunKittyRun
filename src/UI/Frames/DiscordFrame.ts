@@ -21,7 +21,7 @@ class DiscordFrame {
     }
 
     private static CreateFrame() {
-        EditBox = framehandle.Create('EscMenuEditBoxTemplate', originframetype.GameUI.GetOriginFrame(0), 0, 0)
+        EditBox = BlzCreateFrameByType('EscMenuEditBoxTemplate', originframetype.GameUI.GetOriginFrame(0), 0, 0)
         EditBox.SetAbsPoint(framepointtype.Center, 0.4, 0.165)
         EditBox.SetSize(0.2, 0.03)
         EditBox.TextSizeLimit = Link.Length
@@ -30,7 +30,7 @@ class DiscordFrame {
     }
 
     private static SetupBackdrop() {
-        Backdrop = framehandle.Create(
+        Backdrop = BlzCreateFrameByType(
             'BACKDROP',
             'DiscordBackDrop',
             originframetype.GameUI.GetOriginFrame(0),
@@ -42,7 +42,7 @@ class DiscordFrame {
     }
 
     private static SetupDiscordIcon() {
-        DiscordIconFront = framehandle.Create(
+        DiscordIconFront = BlzCreateFrameByType(
             'BACKDROP',
             'FrameDiscordIconFront',
             originframetype.GameUI.GetOriginFrame(0),
@@ -53,7 +53,7 @@ class DiscordFrame {
         DiscordIconFront.SetSize(0.03, 0.03)
         DiscordIconFront.SetTexture('war3mapImported\\DiscordIcon.dds', 0, true)
 
-        DiscordIconBack = framehandle.Create(
+        DiscordIconBack = BlzCreateFrameByType(
             'BACKDROP',
             'FrameDiscordIconBack',
             originframetype.GameUI.GetOriginFrame(0),
@@ -66,7 +66,7 @@ class DiscordFrame {
     }
 
     private static ApplyTextFrame() {
-        DiscordText = framehandle.Create('TEXT', 'DiscordText', originframetype.GameUI.GetOriginFrame(0), '', 0)
+        DiscordText = BlzCreateFrameByType('TEXT', 'DiscordText', originframetype.GameUI.GetOriginFrame(0), '', 0)
         DiscordText.SetAbsPoint(framepointtype.Center, 0.4, 0.21)
         DiscordText.SetSize(0.19, 0.03)
         DiscordText.Text = JoinDiscord
@@ -74,13 +74,13 @@ class DiscordFrame {
     }
 
     private static RegisterTrigger() {
-        Trigger = trigger.Create()
+        Trigger = CreateTrigger()
         Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter)
         Trigger.AddAction(UpdateTextBox)
     }
 
     private static RegisterESCTrigger() {
-        ESCTrigger = trigger.Create()
+        ESCTrigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS) {
             ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic)
         }

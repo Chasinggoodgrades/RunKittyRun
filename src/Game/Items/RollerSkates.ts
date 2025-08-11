@@ -8,7 +8,7 @@ class RollerSkates
     public static Initialize()
     {
         RollerSkaters : player[] = []
-        OnUseTrigger = trigger.Create();
+        let OnUseTrigger = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
         OnUseTrigger.AddCondition(Condition(() => GetManipulatedItem().TypeId == Constants.ITEM_PEGASUS_BOOTS));
         OnUseTrigger.AddAction(ErrorHandler.Wrap(SwitchingBoots));

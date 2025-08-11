@@ -32,7 +32,7 @@ class Disco extends IDisposable
         {
             DiscoTimer.Pause();
             Enabled = false;
-            if (Unit.UnitType == Constants.UNIT_KITTY) return;
+            if (GetUnitTypeId(unit) == Constants.UNIT_KITTY) return;
             Dispose();
         }
     }

@@ -83,7 +83,7 @@ class Wolf {
         if (IsPaused && HasAffix('Bomber')) return
         WolfPoint.DiagonalRegionCreate(
             Unit.X,
-            Unit.Y,
+            GetUnitY(unit),
             GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX),
             GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY)
         )

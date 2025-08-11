@@ -1,5 +1,5 @@
 class UniqueItems {
-    private static Trigger: trigger = trigger.Create()
+    private static Trigger: trigger = CreateTrigger()
     private static UniqueList: Uniques[] = []
 
     public static Initialize() {

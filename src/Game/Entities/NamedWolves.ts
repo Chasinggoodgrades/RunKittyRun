@@ -32,7 +32,7 @@ class NamedWolves
 
     private static UpdateTextTag()
     {
-        ExplodingWolf?.Texttag?.SetPosition(ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 0.015);
+        ExplodingWolf?.Texttag?.SetPosition(ExplodingWolf.Unit.X, ExplodingWolf.GetUnitY(unit), 0.015);
     }
 
     private static CreateStanWolf()
@@ -54,7 +54,7 @@ class NamedWolves
         Utility.SimpleTimer(0.5, () => StanWolf.Unit.IsInvulnerable = false);
         BurntMeat.RegisterDeathTrigger();
 
-        Utility.SimpleTimer(0.5, () => StanWolf.Texttag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015));
+        Utility.SimpleTimer(0.5, () => StanWolf.Texttag.SetPosition(StanWolf.Unit.X, StanWolf.GetUnitY(unit), 0.015));
         DNTNamedWolves.Add(StanWolf);
     }
 
@@ -75,7 +75,7 @@ class NamedWolves
                 ExplodingWolf.IsReviving = false;
                 ExplodingWolf.Unit?.Dispose();
                 Globals.ALL_WOLVES.Remove(ExplodingWolf.Unit);
-                ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.Unit.Y, 360);
+                ExplodingWolf.Unit = unit.Create(ExplodingWolf.Unit.Owner, Wolf.WOLF_MODEL, ExplodingWolf.Unit.X, ExplodingWolf.GetUnitY(unit), 360);
                 Globals.ALL_WOLVES.Add(ExplodingWolf.Unit, ExplodingWolf);
                 ExplodingWolfDesc();
             }));

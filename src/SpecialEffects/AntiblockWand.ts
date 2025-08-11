@@ -14,7 +14,7 @@ class AntiblockWand {
     }
 
     private static RegisterCastEvents(): trigger {
-        let Trigger = trigger.Create()
+        let Trigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS) Trigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast)
         Trigger.AddAction(SpellActions)
         return Trigger

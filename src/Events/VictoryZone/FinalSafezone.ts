@@ -1,5 +1,5 @@
 class FinalSafezone {
-    private static Trigger: trigger = trigger.Create()
+    private static Trigger: trigger = CreateTrigger()
     private static Region: region = RegionList.SafeZones[RegionList.SafeZones.Length - 1].Region
 
     public static Initialize() {

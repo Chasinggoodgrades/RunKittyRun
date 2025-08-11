@@ -15,15 +15,14 @@ class RangeIndicator
     /// <summary>
     /// A list to store the lightning objects that make up the range indicator.
     /// </summary>
-    public LightningObjects: lightning[]
+    public LightningObjects: lightning[] = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RangeIndicator"/> class.
     /// Use with ObjectPool.GetEmptyObject<RangeIndicator>() for efficient object reuse.
     /// </summary>
-    public RangeIndicator()
-    {
-        LightningObjects ??: lightning[] = []
+    constructor() {
+        this.LightningObjects = [];
     }
 
     /// <summary>
@@ -35,8 +34,8 @@ class RangeIndicator
     /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
     public CreateIndicator(unit: unit, range: number, segments: number = 20, lightningType: string = LIGHTNING_TYPE)
     {
-        let x: number = unit.X;
-        let y: number = unit.Y;
+        let x: number = GetUnitX(unit);
+        let y: number = GetUnitY(unit);
 
         let angleStep: number = 360.0 / segments;
 
@@ -52,7 +51,7 @@ class RangeIndicator
             let endY: number = y + (range * Sin(angle2));
 
             let lightning = AddLightning(lightningType, true, startX, startY, endX, endY);
-            LightningObjects.Add(lightning);
+            this.LightningObjects.push(lightning!);
         }
     }
 
@@ -60,12 +59,11 @@ class RangeIndicator
     {
         try
         {
-            for (let i: number = 0; i < LightningObjects.Count; i++)
+            for (let i: number = 0; i < this.LightningObjects.length; i++)
             {
-                LightningObjects[i].Dispose();
-                LightningObjects[i] = null;
+                DestroyLightning(this.LightningObjects[i]);
             }
-            LightningObjects.Clear();
+            this.LightningObjects = [];
         }
         catch (e: Error)
         {
@@ -78,7 +76,7 @@ class RangeIndicator
     /// </summary>
     public Dispose()
     {
-        DestroyIndicator();
+        this.DestroyIndicator();
         ObjectPool<RangeIndicator>.ReturnObject(this);
     }
 }

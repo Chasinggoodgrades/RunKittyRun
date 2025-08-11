@@ -11,7 +11,7 @@ class Shops
     public static Initialize()
     {
         KittyVendors = group.Create();
-        Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         KittyVendorsList = []
         KittyVendorItemList = []
         VendorsItemList = {}

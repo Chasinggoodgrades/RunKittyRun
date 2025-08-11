@@ -1,7 +1,7 @@
 class OldsaveSync {
     private SYNC_PREFIX: string = 'S'
-    private static Trigger: trigger = trigger.Create()
-    private static VariableEvent: trigger = trigger.Create()
+    private static Trigger: trigger = CreateTrigger()
+    private static VariableEvent: trigger = CreateTrigger()
     private static SaveLoadCode: string
     private static SavePlayer: player
     public static LoadEvent: number

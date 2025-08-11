@@ -2,7 +2,7 @@ class VictoryZone {
     private static InVictoryArea: trigger
 
     public static Initialize() {
-        InVictoryArea = trigger.Create()
+        InVictoryArea = CreateTrigger()
         VictoryAreaTrigger()
     }
 

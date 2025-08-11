@@ -582,14 +582,14 @@ class InitCommands {
                 if (args.Length == 1) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
                         Globals.ALL_KITTIES[player].ReviveKitty()
-                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y)
+                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
                         Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing)
                     })
                 } else if (args.Length == 2) {
                     CommandsManager.ResolvePlayerId(args[1], kitty => {
                         CommandsManager.ResolvePlayerId(args[0], kitty2 => {
                             kitty.ReviveKitty()
-                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.Unit.Y)
+                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.GetUnitY(unit))
                             kitty.Unit.SetFacing(kitty2.Unit.Facing)
                         })
                     })
@@ -606,7 +606,10 @@ class InitCommands {
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     kitty.ReviveKitty()
-                    kitty.Unit.SetPosition(Globals.ALL_KITTIES[player].Unit.X, Globals.ALL_KITTIES[player].Unit.Y)
+                    kitty.Unit.SetPosition(
+                        Globals.ALL_KITTIES[player].Unit.X,
+                        Globals.ALL_KITTIES[player].GetUnitY(unit)
+                    )
                     kitty.Unit.SetFacing(Globals.ALL_KITTIES[player].Unit.Facing)
                 })
             },
@@ -917,7 +920,7 @@ class InitCommands {
                 let kitty = Globals.ALL_KITTIES[player]
                 for (let k in Globals.ALL_KITTIES) {
                     if (k.Value.Unit.Owner == player) continue
-                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y)
+                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
                 }
             },
         })

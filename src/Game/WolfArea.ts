@@ -40,7 +40,7 @@ class WolfArea
 
     private RegisterEnterEvents()
     {
-        AreaTrigger = trigger.Create();
+        let AreaTrigger = CreateTrigger();
         AreaTrigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
         AreaTrigger.AddAction(() =>
         {
@@ -66,7 +66,7 @@ class WolfArea
     /// </summary>
     private RegisterLeaveEvents()
     {
-        AreaTrigger = trigger.Create();
+        let AreaTrigger = CreateTrigger();
         AreaTrigger.RegisterLeaveRegion(Region, FilterList.DogFilter);
         AreaTrigger.AddAction(() =>
         {

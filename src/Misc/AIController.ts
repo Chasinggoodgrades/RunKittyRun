@@ -125,7 +125,7 @@ class AIController
     {
         let currentProgressZoneId = kitty.ProgressZone;
 
-        if (IsInSafeZone(kitty.Unit.X, kitty.Unit.Y, currentProgressZoneId + 1))
+        if (IsInSafeZone(kitty.Unit.X, kitty.GetUnitY(unit), currentProgressZoneId + 1))
         {
             currentProgressZoneId++;
         }
@@ -141,7 +141,7 @@ class AIController
         let currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         let nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        int? currentSafeZoneId = IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId) ? currentProgressZoneId : null;
+        int? currentSafeZoneId = IsInSafeZone(this.kitty.Unit.X, this.kitty.GetUnitY(unit), currentProgressZoneId) ? currentProgressZoneId : null;
 
         if (currentSafeZoneId != lastSafeZoneIndexId)
         {
@@ -149,7 +149,7 @@ class AIController
             lastSafeZoneIndexId = currentSafeZoneId;
         }
 
-        let distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.Unit.Y - currentSafezoneCenter.Y, 2));
+        let distanceToCurrentCenter = Math.Sqrt(Math.Pow(kitty.Unit.X - currentSafezoneCenter.X, 2) + Math.Pow(kitty.GetUnitY(unit) - currentSafezoneCenter.Y, 2));
         let SAFEZONE_THRESHOLD: number = 128.0;
 
         if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD)
@@ -194,7 +194,7 @@ class AIController
             {
                 if (!claimedKitties.ContainsKey(deadKitty))
                 {
-                    let thisDistance: number = Math.Sqrt(Math.Pow(this.kitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(this.kitty.Unit.Y - deadKitty.Unit.Y, 2));
+                    let thisDistance: number = Math.Sqrt(Math.Pow(this.kitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(this.kitty.GetUnitY(unit) - deadKitty.GetUnitY(unit), 2));
                     let thisLaneDiff: number = Math.Abs(currentProgressZoneId - deadKittyProgressZoneId);
 
                     let isNearest: boolean = true;
@@ -209,7 +209,7 @@ class AIController
 
                         if (otherKitty != this.kitty && otherKitty.Alive)
                         {
-                            let otherDistance: number = Math.Sqrt(Math.Pow(otherKitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.Unit.Y - deadKitty.Unit.Y, 2));
+                            let otherDistance: number = Math.Sqrt(Math.Pow(otherKitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(otherKitty.GetUnitY(unit) - deadKitty.GetUnitY(unit), 2));
                             let otherLaneDiff: number = Math.Abs(CalcProgressZone(otherKitty) - deadKittyProgressZoneId);
 
                             // Prioritize by lane difference first, then by distance.
@@ -232,7 +232,7 @@ class AIController
                 {
                     if (deadKittyProgressZoneId != currentProgressZoneId)
                     {
-                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.Unit.Y, currentProgressZoneId) && reachedLastProgressZoneCenter)
+                        if (IsInSafeZone(this.kitty.Unit.X, this.kitty.GetUnitY(unit), currentProgressZoneId) && reachedLastProgressZoneCenter)
                         {
                             targetPosition = (currentProgressZoneId - 1 >= 0) ? GetCenterPositionInSafezone(Globals.SAFE_ZONES[currentProgressZoneId - 1]) : currentSafezoneCenter;
                         }
@@ -244,7 +244,7 @@ class AIController
                         break;
                     }
 
-                    targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
+                    targetPosition = (circle.Value.Unit.X, circle.Value.GetUnitY(unit));
                     break;
                 }
             }
@@ -256,13 +256,13 @@ class AIController
         for (let i: number = 0; i < wolvesInLane.Count; i++)
         {
             let wolf = wolvesInLane[i];
-            if (IsWithinRadius(kitty.Unit.X, kitty.Unit.Y, wolf.Unit.X, wolf.Unit.Y, wolf.IsWalking ? DODGE_RADIUS : DODGE_RADIUS_STILL))
+            if (IsWithinRadius(kitty.Unit.X, kitty.GetUnitY(unit), wolf.Unit.X, wolf.GetUnitY(unit), wolf.IsWalking ? DODGE_RADIUS : DODGE_RADIUS_STILL))
             {
                 wolvesInRange.Add(wolf);
             }
         }
 
-        let forwardDirection = (X: targetPosition.X - kitty.Unit.X, Y: targetPosition.Y - kitty.Unit.Y);
+        let forwardDirection = (X: targetPosition.X - kitty.Unit.X, Y: targetPosition.Y - kitty.GetUnitY(unit));
 
         if (wolvesInRange.Count > 0)
         {
@@ -277,13 +277,13 @@ class AIController
         }
 
         let deltaX = targetPosition.X - kitty.Unit.X;
-        let deltaY = targetPosition.Y - kitty.Unit.Y;
+        let deltaY = targetPosition.Y - kitty.GetUnitY(unit);
         let distance = Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
         if (distance > 256)
         {
             let scale = 256 / distance;
             let moveX = kitty.Unit.X + (deltaX * scale);
-            let moveY = kitty.Unit.Y + (deltaY * scale);
+            let moveY = kitty.GetUnitY(unit) + (deltaY * scale);
             IssueOrder("move", moveX, moveY, false);
         }
         else
@@ -329,13 +329,13 @@ class AIController
         {
             if (lastLightning != null)
             {
-                MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                MoveLightning(lastLightning, false, this.kitty.Unit.X, this.kitty.GetUnitY(unit), x, y);
             }
             else
             {
                 if (this.laser)
                 {
-                    lastLightning = AddLightning("DRAM", false, this.kitty.Unit.X, this.kitty.Unit.Y, x, y);
+                    lastLightning = AddLightning("DRAM", false, this.kitty.Unit.X, this.kitty.GetUnitY(unit), x, y);
                 }
             }
         }
@@ -412,26 +412,26 @@ class AIController
             {
                 let a = ObjectPool.GetEmptyObject<Point>();
                 a.X = constant;
-                a.Y = relativeY + this.kitty.Unit.Y;
+                a.Y = relativeY + this.kitty.GetUnitY(unit);
                 wallPoints.Add(a);
 
                 let b = ObjectPool.GetEmptyObject<Point>();
                 b.X = constant;
-                b.Y = -relativeY + this.kitty.Unit.Y;
+                b.Y = -relativeY + this.kitty.GetUnitY(unit);
                 wallPoints.Add(b);
             }
         }
         else
         {
             let constant: number = float.NaN;
-            if (this.kitty.Unit.Y + dodgeRange > laneBounds.Top)
+            if (this.kitty.GetUnitY(unit) + dodgeRange > laneBounds.Top)
                 constant = laneBounds.Top;
-            else if (this.kitty.Unit.Y - dodgeRange < laneBounds.Bottom)
+            else if (this.kitty.GetUnitY(unit) - dodgeRange < laneBounds.Bottom)
                 constant = laneBounds.Bottom;
             else
                 return;
 
-            let relativeX: number = Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.Unit.Y - constant, 2));
+            let relativeX: number = Math.Sqrt((dodgeRange * dodgeRange) - Math.Pow(this.kitty.GetUnitY(unit) - constant, 2));
             if (!float.IsNaN(relativeX) && relativeX != 0)
             {
                 let a = ObjectPool.GetEmptyObject<Point>();
@@ -455,8 +455,8 @@ class AIController
 	*/
     (float, float) AnglesFromCenter((X: number, Y: number) pointA, (X: number, Y: number) pointB)
     {
-        let angleA: number = AngleOf(pointA, (this.kitty.Unit.X, this.kitty.Unit.Y));
-        let angleB: number = AngleOf(pointB, (this.kitty.Unit.X, this.kitty.Unit.Y));
+        let angleA: number = AngleOf(pointA, (this.kitty.Unit.X, this.kitty.GetUnitY(unit)));
+        let angleB: number = AngleOf(pointB, (this.kitty.Unit.X, this.kitty.GetUnitY(unit)));
         return (angleA, angleB);
     }
 
@@ -489,13 +489,13 @@ class AIController
             }
 
             let dx: number = wolf.Unit.X - this.kitty.Unit.X;
-            let dy: number = wolf.Unit.Y - this.kitty.Unit.Y;
+            let dy: number = wolf.GetUnitY(unit) - this.kitty.GetUnitY(unit);
             let distance: number = Math.Sqrt(dx * dx + dy * dy);
 
             if (distance < 1)
                 continue; // Skip if the wolf is at the same position to avoid division by zero
 
-            let centerAngle: number = MathF.Atan2(wolf.Unit.Y - this.kitty.Unit.Y, wolf.Unit.X - this.kitty.Unit.X);
+            let centerAngle: number = MathF.Atan2(wolf.GetUnitY(unit) - this.kitty.GetUnitY(unit), wolf.Unit.X - this.kitty.Unit.X);
             let clampedDistance: number = Math.Clamp(distance, CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS, DODGE_RADIUS);
             let ratio: number = (clampedDistance - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) / (DODGE_RADIUS - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS);
 
@@ -634,7 +634,7 @@ class AIController
         }
 
         let targetX: number = kitty.Unit.X + MathF.Cos(forwardAngle) * DODGE_DISTANCE;
-        let targetY: number = kitty.Unit.Y + MathF.Sin(forwardAngle) * DODGE_DISTANCE;
+        let targetY: number = kitty.GetUnitY(unit) + MathF.Sin(forwardAngle) * DODGE_DISTANCE;
 
         let bestCandidateScore: number = float.MaxValue;
         let bestCandidateAngle: number = -500; // Default to the original forward angle
@@ -652,7 +652,7 @@ class AIController
             }
 
             let candX: number = kitty.Unit.X + MathF.Cos(bestAngle) * DODGE_DISTANCE;
-            let candY: number = kitty.Unit.Y + MathF.Sin(bestAngle) * DODGE_DISTANCE;
+            let candY: number = kitty.GetUnitY(unit) + MathF.Sin(bestAngle) * DODGE_DISTANCE;
 
             let dx: number = Math.Abs(candX - targetX);
             let dy: number = Math.Abs(candY - targetY);
@@ -668,7 +668,7 @@ class AIController
         if (bestCandidateAngle == -500)
         {
             cleanArrays();
-            return (kitty.Unit.X, kitty.Unit.Y);
+            return (kitty.Unit.X, kitty.GetUnitY(unit));
         }
 
         // Update the forward direction to the chosen dodge direction.
@@ -677,7 +677,7 @@ class AIController
         cleanArrays();
 
         // Return the target dodge position (kitty's position plus 128 in the chosen direction).
-        return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.Unit.Y + forwardDirection2.Y * DODGE_DISTANCE);
+        return (kitty.Unit.X + forwardDirection2.X * DODGE_DISTANCE, kitty.GetUnitY(unit) + forwardDirection2.Y * DODGE_DISTANCE);
     }
 
     private calcAngle(forwardAngle: number, requiredClearance: number)
@@ -808,9 +808,9 @@ class AIController
         for (let angle: number = interval.Start; angle < interval.End; angle += step)
         {
             let x1: number = kitty.Unit.X + radius * MathF.Cos(angle);
-            let y1: number = kitty.Unit.Y + radius * MathF.Sin(angle);
+            let y1: number = kitty.GetUnitY(unit) + radius * MathF.Sin(angle);
             let x2: number = kitty.Unit.X + radius * MathF.Cos(angle + step);
-            let y2: number = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+            let y2: number = kitty.GetUnitY(unit) + radius * MathF.Sin(angle + step);
 
             //
             let freeLightning: lightning = null;
@@ -843,9 +843,9 @@ class AIController
         for (let angle: number = interval.Start; angle < interval.End; angle += step)
         {
             let x1: number = kitty.Unit.X + radius * MathF.Cos(angle);
-            let y1: number = kitty.Unit.Y + radius * MathF.Sin(angle);
+            let y1: number = kitty.GetUnitY(unit) + radius * MathF.Sin(angle);
             let x2: number = kitty.Unit.X + radius * MathF.Cos(angle + step);
-            let y2: number = kitty.Unit.Y + radius * MathF.Sin(angle + step);
+            let y2: number = kitty.GetUnitY(unit) + radius * MathF.Sin(angle + step);
 
             //
             let freeLightning: lightning = null;

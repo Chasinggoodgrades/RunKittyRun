@@ -51,7 +51,7 @@ class ShadowKitty {
     /// </summary>
     public TeleportToShadowKitty() {
         let kitty = Globals.ALL_KITTIES[Player].Unit
-        kitty.SetPosition(Unit.X, Unit.Y)
+        kitty.SetPosition(Unit.X, GetUnitY(unit))
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ class ShadowKitty {
     }
 
     private RegisterTriggers() {
-        this.wCollision = trigger.Create()
-        this.cCollision = trigger.Create()
+        this.wCollision = CreateTrigger()
+        this.cCollision = CreateTrigger()
     }
 }

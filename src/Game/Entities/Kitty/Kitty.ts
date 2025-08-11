@@ -36,8 +36,8 @@ class Kitty
     public Finished: boolean = false;
     public TeamID: number = 0;
     public ProgressZone: number = 0;
-    public w_Collision: trigger = trigger.Create();
-    public c_Collision: trigger = trigger.Create();
+    public w_Collision: trigger = CreateTrigger();
+    public c_Collision: trigger = CreateTrigger();
     public Disco: Disco 
     public InvulTimer: timer = timer.Create();
     public IsChained: boolean = false;
@@ -156,7 +156,7 @@ class Kitty
             Alive = true;
 
             // Revive the unit at its respective position
-            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
+            Unit.Revive(circle.Unit.X, circle.GetUnitY(unit), false);
             Unit.Mana = circle.Unit.Mana;
 
             // Adjust player controls and UI

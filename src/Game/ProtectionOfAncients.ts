@@ -45,7 +45,7 @@ class ProtectionOfAncients
     private static RegisterUltimateGain()
     {
         // Ultimate, Protection of the Ancients
-        KittyReachedLevelSix ??= trigger.Create();
+        KittyReachedLevelSix ??= CreateTrigger();
         HitLevel6 ??: player[] = []
         TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
         KittyReachedLevelSix.AddAction(() =>
@@ -67,7 +67,7 @@ class ProtectionOfAncients
         let player = unit.Owner;
         let heroLevel = unit.HeroLevel;
 
-        if (unit.UnitType != Constants.UNIT_KITTY) return 0;
+        if (GetUnitTypeId(unit) != Constants.UNIT_KITTY) return 0;
 
         // Return early if the hero level is below 6
         if (heroLevel < 6) return 0;
@@ -103,7 +103,7 @@ class ProtectionOfAncients
 
     private static RegisterUpgradeLevelEvents()
     {
-        LevelUpTrigger = trigger.Create();
+        let LevelUpTrigger = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => GetTriggerUnit().HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
         LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(GetTriggerUnit()));
@@ -111,7 +111,7 @@ class ProtectionOfAncients
 
     private static RegisterEvents()
     {
-        Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
         Trigger.AddAction(ActivationEvent);
@@ -159,7 +159,7 @@ class ProtectionOfAncients
     {
         let owningPlayer = Unit.Owner;
         let kitty = Globals.ALL_KITTIES[owningPlayer];
-        let actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
+        let actiEffect = effect.Create(APPLY_EFFECT, Unit.X, GetUnitY(unit));
         if (!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
         GC.RemoveEffect( actiEffect); // TODO; Cleanup:         GC.RemoveEffect(ref actiEffect);
         EndEffectActions(owningPlayer);
@@ -170,7 +170,7 @@ class ProtectionOfAncients
         // Append units only if they're dead and a kitty circle.
         let unit = GetFilterUnit();
         let player = unit.Owner;
-        if (unit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
+        if (GetUnitTypeId(unit) != Constants.UNIT_KITTY_CIRCLE) return false;
 
         let kitty = Globals.ALL_KITTIES[player].Unit;
         return !kitty.Alive;
@@ -189,7 +189,7 @@ class ProtectionOfAncients
         let filter = Utility.CreateFilterFunc(AoEEffectFilter);
 
         kitty.ProtectionActive = false;
-        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);
+        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.GetUnitY(unit), effectRadius, filter);
 
         while (true)
         {

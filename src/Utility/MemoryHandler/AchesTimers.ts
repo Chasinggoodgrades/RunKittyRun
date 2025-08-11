@@ -1,6 +1,6 @@
 
 
-class AchesTimers extends IDisposable
+class AchesTimers extends IDisposeable
 {
     public Timer: timer = CreateTimer();
     public AchesTimers()

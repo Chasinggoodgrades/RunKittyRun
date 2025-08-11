@@ -27,8 +27,8 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
     public constructor(unit: Wolf) 
     {
         super(unit);
-        InRangeTrigger ??= trigger.Create();
-        PeriodicSpeed ??= trigger.Create();
+        InRangeTrigger ??= CreateTrigger();
+        PeriodicSpeed ??= CreateTrigger();
         ChaseTimer = ObjectPool.GetEmptyObject<AchesTimers>();
         Name = "{Colors.COLOR_RED}Fixation|r";
     }
@@ -127,7 +127,7 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
     private GetClosestTarget()
     {
         UnitsInRange.Clear();
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, FilterList.KittyFilter);
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.GetUnitY(unit), FIXATION_RADIUS, FilterList.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
         let newTarget = GetClosestUnitInRange();
         if (newTarget != Target)
@@ -141,7 +141,7 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
     private GetClosestUnitInRange(): unit
     {
         let unitX = Unit.Unit.X;
-        let unitY = Unit.Unit.Y;
+        let unitY = Unit.GetUnitY(unit);
 
         // Determine closest unit in list
         let closestUnit = UnitsInRange.First;
@@ -154,7 +154,7 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
                 let unit = UnitsInRange.First;
                 if (unit == null) break;
                 UnitsInRange.Remove(unit);
-                let distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+                let distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, GetUnitX(unit), GetUnitY(unit));
                 if (distance < closestDistance)
                 {
                     closestUnit = unit;

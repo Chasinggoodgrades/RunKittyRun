@@ -9,7 +9,7 @@ class Windwalk {
 
     private static RegisterWWCast() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        Trigger = trigger.Create()
+        Trigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS)
             Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null)
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK))

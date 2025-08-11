@@ -23,7 +23,7 @@ class SoloDeathTimer
     {
         let circle = Globals.ALL_CIRCLES[Player];
         let floatText = texttag.Create();
-        floatText.SetPosition(circle.Unit.X, circle.Unit.Y - Y_OFFSET, 0);
+        floatText.SetPosition(circle.Unit.X, circle.GetUnitY(unit) - Y_OFFSET, 0);
         floatText.SetVisibility(true);
         return floatText;
     }

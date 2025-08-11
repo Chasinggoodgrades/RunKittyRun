@@ -89,7 +89,7 @@ class Bomber extends Affix {
             if (RangeIndicator == null) return
             RangeIndicator.DestroyIndicator()
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, 'origin')
-            ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter)
+            ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.GetUnitY(unit), EXPLOSION_RANGE, FilterList.KittyFilter)
 
             while (true) {
                 let u = ExplodeGroup.First
@@ -118,11 +118,11 @@ class Bomber extends Affix {
     private Revive() {
         Unit.IsReviving = true
         if (Unit.WolfArea.IsEnabled) {
-            TimerIndicator ??= effect.Create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.Unit.Y)
+            TimerIndicator ??= effect.Create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.GetUnitY(unit))
             TimerIndicator.SetTime(0)
             TimerIndicator.PlayAnimation(animtype.Birth)
             TimerIndicator.SetX(Unit.Unit.X)
-            TimerIndicator.SetY(Unit.Unit.Y)
+            TimerIndicator.SetY(Unit.GetUnitY(unit))
         }
         ReviveAlphaTimer?.Timer?.Start(1.0, true, ReviveActions)
     }

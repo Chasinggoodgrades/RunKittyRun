@@ -51,7 +51,7 @@ class APMTracker {
     }
 
     private static IsInSafeZone(kitty: Kitty) {
-        return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.Unit.Y)
+        return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.GetUnitY(unit))
     }
 
     private static CalculateAPM(kitty: Kitty) {

@@ -29,7 +29,7 @@ class RingOfSummoning extends Relic
 
     private RegisterTriggers(Unit: unit)
     {
-        Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         Trigger.AddAction(ErrorHandler.Wrap(SacredRingOfSummoning));

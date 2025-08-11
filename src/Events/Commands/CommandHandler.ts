@@ -2,8 +2,8 @@
 
 class CommandHandler
 {
-    private static DebugCmdTrigger: trigger = trigger.Create();
-    private static NewCmdHandler: trigger = trigger.Create();
+    private static DebugCmdTrigger: trigger = CreateTrigger();
+    private static NewCmdHandler: trigger = CreateTrigger();
     private static readonly EmptyStringArray = new string[] [""]
 
     public static Initialize()

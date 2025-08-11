@@ -117,7 +117,7 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 1) return;
             LocationCaptureTimer ??= timer.Create();
-            CapturedLocation = (Kitty.Unit.X, Kitty.Unit.Y, Kitty.Unit.Facing); // reset to current location on buy
+            CapturedLocation = (Kitty.Unit.X, Kitty.GetUnitY(unit), Kitty.Unit.Facing); // reset to current location on buy
             LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
 
         }
@@ -134,8 +134,8 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
             LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
             if (Kitty.CurrentStats.ChronoSphereCD) return;
             let unit = Kitty.Unit;
-            CapturedLocation = (unit.X, unit.Y, unit.Facing);
-            LocationEffect ??= effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
+            CapturedLocation = (GetUnitX(unit), GetUnitY(unit), unit.Facing);
+            LocationEffect ??= effect.Create(LocationSaveEffectPath, GetUnitX(unit), GetUnitY(unit));
             LocationEffect.Scale = 0.55;
             LocationEffect.Dispose();
             LocationEffect = null;
@@ -165,14 +165,14 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
             if (x == 0 && y == 0)
             {
                 x = Kitty.Unit.X;
-                y = Kitty.Unit.Y;
+                y = Kitty.GetUnitY(unit);
             }
             Kitty.Unit.SetPosition(x, y);
             Kitty.Unit.SetFacing(CapturedLocation.Item3);
             Kitty.Unit.IsPaused = true;
             Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit);
 
-            if (Kitty.Player.IsLocal) PanCameraToTimed(Kitty.Unit.X, Kitty.Unit.Y, 0.0);
+            if (Kitty.Player.IsLocal) PanCameraToTimed(Kitty.Unit.X, Kitty.GetUnitY(unit), 0.0);
             Utility.SimpleTimer(2.0, () =>
             {
                 Kitty.Unit.IsPaused = false;

@@ -45,7 +45,7 @@ class ShardOfTranslocation extends Relic
     private RegisterTrigger(Unit: unit)
     {
         let player = Unit.Owner;
-        CastEventTrigger = trigger.Create();
+        let CastEventTrigger = CreateTrigger();
         CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null);
         CastEventTrigger.AddAction(TeleportActions);
     }
@@ -118,9 +118,9 @@ class ShardOfTranslocation extends Relic
 
         if (distance > MaxBlinkRange)
         {
-            let angle = Atan2(y - unit.Y, x - unit.X);
-            x = unit.X + (MaxBlinkRange * Cos(angle));
-            y = unit.Y + (MaxBlinkRange * Sin(angle));
+            let angle = Atan2(y - GetUnitY(unit), x - GetUnitX(unit));
+            x = GetUnitX(unit) + (MaxBlinkRange * Cos(angle));
+            y = GetUnitY(unit) + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
     }

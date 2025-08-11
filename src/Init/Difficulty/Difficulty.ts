@@ -24,7 +24,7 @@ class Difficulty {
     }
 
     private static RegisterSelectionEvent() {
-        Trigger ??= trigger.Create()
+        Trigger ??= CreateTrigger()
         Trigger.RegisterDialogEvent(DifficultyOption.DifficultyChoosing)
         Trigger.AddAction(() => {
             let player = GetTriggerPlayer()

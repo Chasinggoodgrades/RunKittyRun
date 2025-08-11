@@ -56,8 +56,8 @@ class ItemSpatialGrid {
     }
 
     public static KittyItemPickup(kitty: Kitty) {
-        let kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.Unit.Y)
-        let itemList = GetNearbyItems(kitty.Unit.X, kitty.Unit.Y)
+        let kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.GetUnitY(unit))
+        let itemList = GetNearbyItems(kitty.Unit.X, kitty.GetUnitY(unit))
 
         if (kibbleList != null && kibbleList.Count > 0) {
             for (let i: number = 0; i < kibbleList.Count; i++) {

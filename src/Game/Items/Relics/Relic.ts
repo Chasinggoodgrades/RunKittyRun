@@ -83,7 +83,7 @@ abstract class Relic
     {
         // Ability to Purchase Relics
         PlayerUpgrades.Initialize();
-        CanBuyRelicsTrigger ??= trigger.Create();
+        CanBuyRelicsTrigger ??= CreateTrigger();
         CanBuyRelics ??: player[] = []
         TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel);
         CanBuyRelicsTrigger.AddAction(() =>

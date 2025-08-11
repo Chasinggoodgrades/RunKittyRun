@@ -37,7 +37,7 @@ class FandF
 
     private static RegisterCollection(): trigger
     {
-        let trig = trigger.Create();
+        let trig = CreateTrigger();
         trig.AddAction(ErrorHandler.Wrap(CollectionActions));
         return trig;
     }
@@ -55,7 +55,7 @@ class FandF
 
     private static RegisterTurnIn(): trigger
     {
-        let trig = trigger.Create();
+        let trig = CreateTrigger();
         trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, FilterList.KittyFilter);
         trig.AddAction(ErrorHandler.Wrap(TurnInActions));
         return trig;

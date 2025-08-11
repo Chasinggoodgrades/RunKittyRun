@@ -42,14 +42,15 @@ class Progress {
     private static CalculatePlayerProgress(kitty: Kitty) {
         try {
             let currentSafezone = kitty.ProgressZone
-            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y))
+            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(kitty.Unit.X, kitty.GetUnitY(unit)))
                 return 100.0 // if at end.. 100 progress
-            if (Regions.Victory_Area.Contains(kitty.Unit.X, kitty.Unit.Y)) return 100.0 // if in victory area, 100 progress
-            if (Globals.SAFE_ZONES[0].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y) && !kitty.Finished) return 0.0 // if at start, 0 progress
+            if (Regions.Victory_Area.Contains(kitty.Unit.X, kitty.GetUnitY(unit))) return 100.0 // if in victory area, 100 progress
+            if (Globals.SAFE_ZONES[0].Rectangle.Contains(kitty.Unit.X, kitty.GetUnitY(unit)) && !kitty.Finished)
+                return 0.0 // if at start, 0 progress
             if (kitty.Alive && kitty.Finished) return 100.0
             let currentProgress = DistanceBetweenPoints(
                 kitty.Unit.X,
-                kitty.Unit.Y,
+                kitty.GetUnitY(unit),
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X,
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y
             )

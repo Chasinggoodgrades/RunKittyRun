@@ -1,5 +1,5 @@
 class PlayerLeaves {
-    private static Trigger: trigger = trigger.Create()
+    private static Trigger: trigger = CreateTrigger()
 
     public static Initialize() {
         RegisterTrigger()

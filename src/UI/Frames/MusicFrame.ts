@@ -56,8 +56,8 @@ class MusicFrame {
         for (let player in Globals.ALL_PLAYERS)
             if (!MusicSliderValues.ContainsKey(player)) MusicSliderValues.Add(player, 0)
 
-        let Trigger = trigger.Create()
-        let mousewheel = trigger.Create()
+        let Trigger = CreateTrigger()
+        let mousewheel = CreateTrigger()
         Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged)
         mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel)
         Trigger.AddAction(() => {
@@ -149,7 +149,7 @@ class MusicFrame {
     }
 
     private static SetMusicFrameHotkeyEvent() {
-        let musicHotkeyTrigger = trigger.Create()
+        let musicHotkeyTrigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS) {
             musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true)
         }

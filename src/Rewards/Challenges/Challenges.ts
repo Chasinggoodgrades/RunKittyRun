@@ -138,14 +138,14 @@ class Challenges {
 
     private static DoubleBackingTrigger() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        let t = trigger.Create()
+        let t = CreateTrigger()
         TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
         t.AddAction(
             ErrorHandler.Wrap(() => {
                 let unit = GetTriggerUnit()
                 let player = unit.Owner
                 if (!Globals.GAME_ACTIVE) return
-                if (unit.UnitType != Constants.UNIT_KITTY) return
+                if (GetUnitTypeId(unit) != Constants.UNIT_KITTY) return
                 if (!Globals.ALL_PLAYERS.Contains(player)) return
                 if (!Globals.ALL_KITTIES[player].CurrentStats.RoundFinished) return
                 DivineWindwalk(player)

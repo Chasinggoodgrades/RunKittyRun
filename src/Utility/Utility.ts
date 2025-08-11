@@ -267,7 +267,7 @@ class Utility {
     public static DropAllItems(Unit: unit) {
         for (let i: number = 0; i < 6; i++) {
             let item = UnitItemInSlot(Unit, i)
-            if (item != null) UnitDropItemPoint(Unit, item, Unit.X, Unit.Y)
+            if (item != null) UnitDropItemPoint(Unit, item, Unit.X, GetUnitY(unit))
         }
     }
 

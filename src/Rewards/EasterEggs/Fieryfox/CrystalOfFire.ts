@@ -29,7 +29,7 @@ class CrystalOfFire
 
     private static RegisterTurnInFiery(): trigger
     {
-        let Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         Trigger.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null);
         Trigger.AddAction(ErrorHandler.Wrap(FieryfoxEvent));
         return Trigger;
@@ -37,7 +37,7 @@ class CrystalOfFire
 
     private static RegisterTurnInFandF(): trigger
     {
-        let Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         Trigger.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, null);
         Trigger.AddAction(ErrorHandler.Wrap(FandFEvent));
         return Trigger;
@@ -45,7 +45,7 @@ class CrystalOfFire
 
     private static RegisterChatEvent(): trigger
     {
-        let Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
         for (let player in Globals.ALL_PLAYERS)
         {
             Trigger.RegisterPlayerChatEvent(player, "yes!", false);

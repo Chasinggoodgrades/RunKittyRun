@@ -30,7 +30,7 @@ class ItemStacker
 
     private static RegisterEvents(): trigger
     {
-        PickupTrigger = trigger.Create();
+        let PickupTrigger = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem);
         PickupTrigger.AddAction(StackActions);
         return PickupTrigger;

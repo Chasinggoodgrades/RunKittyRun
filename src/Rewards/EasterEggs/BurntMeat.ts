@@ -1,6 +1,6 @@
 class BurntMeat {
-    private static StanDeath: trigger = trigger.Create()
-    private static StanTurnIn: trigger = trigger.Create()
+    private static StanDeath: trigger = CreateTrigger()
+    private static StanTurnIn: trigger = CreateTrigger()
     private static StanDeathActions: triggeraction
     private static StanTurnInActions: triggeraction
     private ITEM_CLOAK_FLAMES: number = Constants.ITEM_CLOAK_OF_FLAMES

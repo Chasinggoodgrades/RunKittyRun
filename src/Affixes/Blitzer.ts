@@ -115,7 +115,7 @@ class Blitzer extends Affix
     {
         let speed = BLITZER_SPEED; // speed in yards per second
         let currentX: number = Unit.Unit.X;
-        let currentY: number = Unit.Unit.Y;
+        let currentY: number = Unit.GetUnitY(unit);
 
         // Distance between current and target pos
         let distance: number = WCSharp.Shared.FastUtil.DistanceBetweenPoints(currentX, currentY, TargetX, TargetY);

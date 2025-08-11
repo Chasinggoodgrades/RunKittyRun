@@ -14,13 +14,13 @@ class MissingShoe {
     private static RegisterSpawnEvent() {
         // Between 10 mins - 15mins currently.
         let randomTime = GetRandomReal(600.0, 900.0)
-        TimerEvent = trigger.Create()
+        TimerEvent = CreateTrigger()
         TimerEvent.RegisterTimerEvent(randomTime, false)
         TimerEvent.AddAction(ErrorHandler.Wrap(EventStart))
     }
 
     private static RegisterTurnInEvent() {
-        TurnInEvent = trigger.Create()
+        TurnInEvent = CreateTrigger()
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2023, TurnInRange, null)
         TurnInEvent.RegisterUnitInRange(SpawnChampions.Fieryfox2024, TurnInRange, null)
         TurnInEvent.AddAction(ErrorHandler.Wrap(TurnInActions))

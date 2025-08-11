@@ -13,7 +13,7 @@ class Safezone
     {
         ID = id;
         Region = region;
-        Trigger = trigger.Create();
+        let Trigger = CreateTrigger();
     }
 
     public static Initialize()
@@ -43,7 +43,7 @@ class Safezone
         {
             let unit = GetTriggerUnit();
             if (WolfEntersSafezoneActions(unit)) return;
-            if (unit.UnitType == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON)
+            if (GetUnitTypeId(unit) == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON)
             {
                 WolfLaneHider.ShadowKittyLaneAdd(ID);
                 return;
@@ -132,7 +132,7 @@ class Safezone
     /// <returns>bool [true/false] if unit type is infact a wolf</returns>
     public static WolfEntersSafezoneActions(unit: unit)
     {
-        if (unit.UnitType != Wolf.WOLF_MODEL) return false;
+        if (GetUnitTypeId(unit) != Wolf.WOLF_MODEL) return false;
         let wolf = Globals.ALL_WOLVES[unit];
         wolf.WolfMove(true); // forced move
         return true;

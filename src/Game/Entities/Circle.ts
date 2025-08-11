@@ -9,7 +9,7 @@ class Circle {
     public Circle(player: player) {
         Player = player
         ID = player.Id
-        Collision = trigger.Create()
+        Collision = CreateTrigger()
         CreateCircle()
     }
 
@@ -27,7 +27,7 @@ class Circle {
     }
 
     public KittyDied(kitty: Kitty) {
-        Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y)
+        Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
         ShowCircle()
     }
 

@@ -347,7 +347,7 @@ class Chain
         FirstKitty = firstKitty;
         SecondKitty = secondKitty;
         Lightning?.Dispose(); // just incase
-        Lightning = AddLightning("WHCH", true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        Lightning = AddLightning("WHCH", true, FirstKitty.Unit.X, FirstKitty.GetUnitY(unit), SecondKitty.Unit.X, SecondKitty.GetUnitY(unit));
         FirstKitty.IsChained = true;
         SecondKitty.IsChained = true;
     }
@@ -357,10 +357,10 @@ class Chain
         let outOfRange: number = CalculateRangeByDifficulty("breakPoint");
         let isOutOfRange: boolean = false;
         let x1 = FirstKitty.Unit.X;
-        let y1 = FirstKitty.Unit.Y;
+        let y1 = FirstKitty.GetUnitY(unit);
         let x2 = SecondKitty.Unit.X;
-        let y2 = SecondKitty.Unit.Y;
-        MoveLightning(Lightning, true, FirstKitty.Unit.X, FirstKitty.Unit.Y, SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        let y2 = SecondKitty.GetUnitY(unit);
+        MoveLightning(Lightning, true, FirstKitty.Unit.X, FirstKitty.GetUnitY(unit), SecondKitty.Unit.X, SecondKitty.GetUnitY(unit));
         let distance: number = Math.Abs(x2 - x1) + Math.Abs(y2 - y1);
 
         if (distance > outOfRange)

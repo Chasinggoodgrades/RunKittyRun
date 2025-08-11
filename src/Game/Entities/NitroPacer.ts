@@ -75,7 +75,7 @@ class NitroPacer
             let speed: number = remainingTime != 0.0 ? remainingDistance / remainingTime : 350.0;
             SetSpeed(speed);
 
-            if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, Unit.Y))
+            if (pathingPoints[currentCheckpoint + 1].Contains(Unit.X, GetUnitY(unit)))
             {
                 currentCheckpoint++;
                 if (currentCheckpoint >= pathingPoints.Length - 1)

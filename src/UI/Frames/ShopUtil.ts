@@ -3,7 +3,7 @@ class ShopUtil {
         let kitty = Globals.ALL_KITTIES[player]
         let currentZone = kitty.ProgressZone
         let region = RegionList.WolfRegions[currentZone]
-        if (region.Contains(kitty.Unit.X, kitty.Unit.Y) && kitty.Alive) {
+        if (region.Contains(kitty.Unit.X, kitty.GetUnitY(unit)) && kitty.Alive) {
             player.DisplayTimedTextTo(1.0, '{Colors.COLOR_RED}are: inactive: Shops in lanes: wolf.{Colors.COLOR_RESET}')
             return true
         }

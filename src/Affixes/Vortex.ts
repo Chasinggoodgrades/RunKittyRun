@@ -13,8 +13,8 @@ class Vortex extends Affix {
     private VORTEX_PULSE_RATE: number = 0.4 // every second.
     private VORTEX_PERIODIC_PULL: number = 30.0 // every 30 seconds
     private VORTEX_LENGTH: number = 10.0 // lasts 10 seconds.
-    private EntersRange: trigger = trigger.Create()
-    private LeavesRange: trigger = trigger.Create()
+    private EntersRange: trigger = CreateTrigger()
+    private LeavesRange: trigger = CreateTrigger()
     private PullingInTimer: timer = timer.Create()
     private PeriodicPull: timer = timer.Create()
     private PullStart: timer = timer.Create()
@@ -80,9 +80,9 @@ class Vortex extends Affix {
         let distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE
         for (let unit in UnitsInRange) {
             if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue
-            let x = unit.X
-            let y = unit.Y
-            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.Unit.Y, x, y)
+            let x = GetUnitX(unit)
+            let y = GetUnitY(unit)
+            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.GetUnitY(unit), x, y)
             let newX = x + distance * Cos(angle)
             let newY = y + distance * Sin(angle)
             unit.SetPosition(newX, newY)

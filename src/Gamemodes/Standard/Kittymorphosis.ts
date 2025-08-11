@@ -38,7 +38,7 @@ class KittyMorphosis {
     /// </summary>
     private RegisterTriggers() {
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return // Solo Mode
-        Trigger ??= trigger.Create()
+        Trigger ??= CreateTrigger()
         Trigger.RegisterUnitEvent(Kitty.Unit, unitevent.HeroLevel)
         Trigger.AddCondition(Condition(() => GetTriggerUnit().HeroLevel >= REQUIRED_LEVEL))
         Trigger.AddAction(MorphKitty)

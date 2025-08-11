@@ -18,7 +18,7 @@ class SyncSaveLoad
 
     public SyncPrefix: string  = "S_TIO";
     public SyncPrefixFinish: string  = "S_TIOF";
-    public SyncEvent: trigger  = trigger.Create();
+    public SyncEvent: trigger  = CreateTrigger();
     private allPromises : {[x: number]: FilePromise} = {}
 
     private SyncSaveLoad()

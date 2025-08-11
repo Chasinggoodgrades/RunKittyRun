@@ -9,7 +9,7 @@ class MirrorMovementHandler {
     }
 
     private RegisterMovementEvents() {
-        MovementTrigger = trigger.Create()
+        MovementTrigger = CreateTrigger()
         MovementTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder)
         MovementTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder)
         MovementTrigger.AddAction(HandleMovementOrder)

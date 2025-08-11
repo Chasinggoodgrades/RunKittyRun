@@ -48,12 +48,12 @@ class FangOfShadows extends Relic
 
     private RegisterTriggers(Unit: unit)
     {
-        SummonTrigger = trigger.Create();
+        let SummonTrigger = CreateTrigger();
         SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
         SummonTrigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty));
 
-        TeleTrigger = trigger.Create();
+        let TeleTrigger = CreateTrigger();
         KillTimer = timer.Create();
     }
 

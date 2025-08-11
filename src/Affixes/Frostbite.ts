@@ -11,8 +11,8 @@ class Frostbite extends Affix {
     public constructor(unit: Wolf) {
         super(unit)
         Name = '{Colors.COLOR_LIGHTBLUE}Frostbite|r'
-        InRangeTrigger ??= trigger.Create()
-        PeriodicRangeTrigger ??= trigger.Create()
+        InRangeTrigger ??= CreateTrigger()
+        PeriodicRangeTrigger ??= CreateTrigger()
     }
 
     public override Apply() {

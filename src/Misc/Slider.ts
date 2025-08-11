@@ -172,7 +172,7 @@ class Slider {
     }
 
     public IsOnSlideTerrain(): boolean {
-        return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.Unit.Y))
+        return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.GetUnitY(unit)))
     }
 
     private UpdateSlider() {
@@ -185,7 +185,7 @@ class Slider {
         let angle: number = Rad2Deg(kitty.Unit.Facing)
 
         let oldX: number = kitty.Unit.X
-        let oldY: number = kitty.Unit.Y
+        let oldY: number = kitty.GetUnitY(unit)
 
         escaperTurnForOnePeriod()
 
@@ -207,11 +207,11 @@ class Slider {
     }
 
     private RegisterClickEvent() {
-        ClickTrigger = trigger.Create()
+        ClickTrigger = CreateTrigger()
         ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder)
         ClickTrigger.AddAction(() => HandleTurn(true))
 
-        WidgetTrigger = trigger.Create()
+        WidgetTrigger = CreateTrigger()
         WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder)
         WidgetTrigger.AddAction(() => HandleTurn(false))
 

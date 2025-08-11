@@ -6,7 +6,7 @@ class TeamsMultiboard {
     public static Initialize() {
         try {
             if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-            ESCTrigger ??= trigger.Create()
+            ESCTrigger ??= CreateTrigger()
             TeamsMultiboardInit()
             ESCInit()
         } catch (e: Error) {

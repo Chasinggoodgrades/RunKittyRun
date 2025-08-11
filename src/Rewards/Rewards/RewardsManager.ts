@@ -4,7 +4,7 @@
 /// * Any activated reward including the Reset ability so long as it's added within the RewardCreation class.
 /// </summary>
 class RewardsManager {
-    private static Trigger: trigger = trigger.Create()
+    private static Trigger: trigger = CreateTrigger()
     private static RewardAbilities: number[] = []
     public static Rewards: Reward[] = []
     public static GameStatRewards: Reward[] = []

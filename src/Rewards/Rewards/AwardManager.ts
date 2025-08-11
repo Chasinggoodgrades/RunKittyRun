@@ -5,7 +5,7 @@
 /// </summary>
 class AwardManager
 {
-    private static AwardTrigger: trigger = trigger.Create();
+    private static AwardTrigger: trigger = CreateTrigger();
 
     /// <summary>
     /// Gives the player an award and enables the ability for them to use.

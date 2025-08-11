@@ -202,11 +202,11 @@ class TeamDeathless
         CurrentHolder = Globals.ALL_KITTIES[u.Owner];
 
         Utility.TimedTextToAllPlayers(1.5, "{Colors.PlayerNameColored(CurrentHolder.Player)} picked: up: the: orb: has!");
-        RippleEffect ??= effect.Create(RIPPLE_MODEL, CurrentHolder.Unit.X, CurrentHolder.Unit.Y);
+        RippleEffect ??= effect.Create(RIPPLE_MODEL, CurrentHolder.Unit.X, CurrentHolder.GetUnitY(unit));
         RippleEffect.SetTime(0);
         RippleEffect.Scale = 0.25;
         RippleEffect.SetX(CurrentHolder.Unit.X);
-        RippleEffect.SetY(CurrentHolder.Unit.Y);
+        RippleEffect.SetY(CurrentHolder.GetUnitY(unit));
         RippleEffect.PlayAnimation(animtype.Birth);
         RangeTrigger.Disable();
 
@@ -223,7 +223,7 @@ class TeamDeathless
         }
 
         let x: number = CurrentHolder.Unit.X;
-        let y: number = CurrentHolder.Unit.Y;
+        let y: number = CurrentHolder.GetUnitY(unit);
         OrbEffect.SetX(x);
         OrbEffect.SetY(y);
     }

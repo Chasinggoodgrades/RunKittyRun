@@ -84,7 +84,7 @@ class RTR
         }
 
         let currentX: number = kitty.Unit.X;
-        let currentY: number = kitty.Unit.Y;
+        let currentY: number = kitty.GetUnitY(unit);
 
         let distanceToTarget: number = WCSharp.Shared.Util.DistanceBetweenPoints(currentX, currentY, targetX, targetY);
 
@@ -133,11 +133,11 @@ class RTR
 
     private RegisterClickEvent()
     {
-        ClickTrigger = trigger.Create();
+        let ClickTrigger = CreateTrigger();
         ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder);
         ClickTrigger.AddAction(() => HandleClick(true));
 
-        WidgetTrigger = trigger.Create();
+        let WidgetTrigger = CreateTrigger();
         WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder);
         WidgetTrigger.AddAction(() => HandleClick(false));
 

@@ -51,7 +51,7 @@ class Kibble extends IDisposable
 
     private static KibblePickupEvents(): trigger
     {
-        let trig = trigger.Create();
+        let trig = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(trig, playerunitevent.PickupItem);
         trig.AddAction(() =>
         {
@@ -83,7 +83,7 @@ class Kibble extends IDisposable
             else if (randomChance <= 60) KibbleXP(kitty);
             let KibbleNothing: else(kitty);
 
-            if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+            if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.GetUnitY(unit));
             GC.RemoveEffect( effect); // TODO; Cleanup:             GC.RemoveEffect(ref effect);
 
             KibbleEvent.StartKibbleEvent(randomChance);
@@ -133,7 +133,7 @@ class Kibble extends IDisposable
     private static JackpotEffect(kitty: Kitty, kibble: Kibble)
     {
         let unitX = kitty.Unit.X;
-        let unitY = kitty.Unit.Y;
+        let unitY = kitty.GetUnitY(unit);
         let newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0);
         let newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0);
 
