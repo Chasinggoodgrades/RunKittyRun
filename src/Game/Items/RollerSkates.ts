@@ -3,11 +3,11 @@
 class RollerSkates
 {
     private static OnUseTrigger: trigger;
-    private static  RollerSkaters:player[];
+    private static RollerSkaters:player[];
 
     public static Initialize()
     {
-        RollerSkaters : player[] = []
+        this.RollerSkaters = []
         let OnUseTrigger = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(OnUseTrigger, playerunitevent.UseItem);
         OnUseTrigger.AddCondition(Condition(() => GetManipulatedItem().TypeId == Constants.ITEM_PEGASUS_BOOTS));
@@ -26,16 +26,16 @@ class RollerSkates
             return;
         }
 
-        if (RollerSkaters.Contains(unit.Owner))
+        if (this.RollerSkaters.Contains(unit.Owner))
         {
-            SetPegasusBoots(item);
+            this.SetPegasusBoots(item);
             slider.StopSlider();
-            RollerSkaters.Remove(unit.Owner);
+            this.RollerSkaters.Remove(unit.Owner);
             unit.Owner.DisplayTimedTextTo(3.0, "{Colors.COLOR_YELLOW}Skates: Deactivated: Roller{Colors.COLOR_RESET}");
         }
         else
         {
-            SetRollerSkates(item);
+            this.SetRollerSkates(item);
             if (slider.IsEnabled())
                 slider.ResumeSlider(false);
             else

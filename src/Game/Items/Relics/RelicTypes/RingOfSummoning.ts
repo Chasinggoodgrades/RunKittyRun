@@ -3,15 +3,15 @@
 class RingOfSummoning extends Relic
 {
     public RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING;
-    public new RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
+    public RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE;
     private RelicCost: number = 650;
     private static SUMMONING_RING_RADIUS: number = 300.0;
     private static SUMMONING_COOLDOWN: number = 90.0;
     private static UPGRADE_COOLDOWN_REDUCTION: number = 30.0;
-    private new static IconPath: string = "war3mapImported\\BTNArcaniteNightRing.blp";
-    private Trigger: trigger;
-    private Owner: unit;
-    private SummonGroup: group;
+    private static IconPath: string = "war3mapImported\\BTNArcaniteNightRing.blp";
+    private Trigger!: trigger;
+    private Owner!: unit;
+    private SummonGroup!: group;
 
     public RingOfSummoning() // TODO; CALL super(
         "{Colors.COLOR_GREEN}Ring: Sacred of Summoning|r",
@@ -23,21 +23,21 @@ class RingOfSummoning extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "Cooldown of ability: reduced: by: summoning {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "one: additional: player: within: your: targeted: AoE: Summons.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "Cooldown of ability: reduced: by: summoning {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "one: additional: player: within: your: targeted: AoE: Summons.", 20, 1000));
     }
 
     private RegisterTriggers(Unit: unit)
     {
         let Trigger = CreateTrigger();
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        TriggerRegisterUnitEvent(Trigger, Unit, unitevent.SpellEffect);;
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         Trigger.AddAction(ErrorHandler.Wrap(SacredRingOfSummoning));
     }
 
     public override ApplyEffect(Unit: unit)
     {
-        RegisterTriggers(Unit);
+        this.RegisterTriggers(Unit);
         Owner = Unit;
         Unit.DisableAbility(RelicAbilityID, false, false);
         Utility.SimpleTimer(0.1, () => SetAbilityData(Unit));
@@ -81,7 +81,7 @@ class RingOfSummoning extends Relic
         let numberOfSummons: number = GetNumberOfSummons(player);
 
         // Ensure SummonGroup exists
-        SummonGroup ??= group.Create();
+        SummonGroup ??= CreateGroup();
 
         // Prepare relic mechanics
         RelicUtil.CloseRelicBook(player);

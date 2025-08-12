@@ -3,14 +3,14 @@
 class ShardOfTranslocation extends Relic
 {
     public RelicItemID: number = Constants.ITEM_SHARD_OF_TRANSLOCATION;
-    public new RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE;
+    public RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE;
     private static RelicCost: number = 650;
     private static DEFAULT_BLINK_RANGE: number = 450.0;
     private static UPGRADE_BLINK_RANGE: number = 650.0;
     private static DEFAULT_COOLDOWN: number = 90.0;
     private static CooldownReduction: number = 30.0;
     private Owner: unit;
-    private new static IconPath: string = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
+    private static IconPath: string = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private MaxBlinkRange: number = DEFAULT_BLINK_RANGE;
     private CastEventTrigger: trigger;
 
@@ -23,8 +23,8 @@ class ShardOfTranslocation extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "the: teleport: range: to: Extends {UPGRADE_BLINK_RANGE} within: lane: bounds: yrds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "reduced: by: Cooldown {CooldownReduction} seconds.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "the: teleport: range: to: Extends {UPGRADE_BLINK_RANGE} within: lane: bounds: yrds.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "reduced: by: Cooldown {CooldownReduction} seconds.", 20, 1000));
     }
 
     public override ApplyEffect(Unit: unit)

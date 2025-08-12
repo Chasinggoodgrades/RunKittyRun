@@ -39,7 +39,7 @@ class UrnSoul {
 
     private static RegisterPeriodicTrigger(): trigger {
         let trig = CreateTrigger()
-        trig.RegisterTimerEvent(RotationTime, true)
+        TriggerRegisterTimerEvent(trig, RotationTime, true)
         trig.AddAction(RotationActions)
         return trig
     }

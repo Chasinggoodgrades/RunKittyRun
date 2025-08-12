@@ -13,10 +13,10 @@ class Bomber extends Affix {
     private MAX_EXPLODE_INTERVAL: number = 15.0
     private ExplodeTimer: AchesTimers = ObjectPool.GetEmptyObject<AchesTimers>()
     private ReviveAlphaTimer: AchesTimers = ObjectPool.GetEmptyObject<AchesTimers>()
-    private ExplodeGroup: group = group.Create()
+    private ExplodeGroup: group = CreateGroup()
     private ReviveAlpha: number = 1
-    private RangeIndicator: RangeIndicator = null
-    private TimerIndicator: effect
+    private RangeIndicator!: RangeIndicator
+    private TimerIndicator!: effect
 
     public constructor(unit: Wolf) {
         super(unit)
@@ -25,10 +25,10 @@ class Bomber extends Affix {
 
     public override Apply() {
         try {
-            Unit.Unit.AddAbility(AFFIX_ABILITY)
-            Unit.Unit.SetVertexColor(204, 102, 0)
-            RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>()
-            RegisterTimers()
+            this.UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+            this.Unit.Unit.SetVertexColor(204, 102, 0)
+            this.RangeIndicator = ObjectPool.GetEmptyObject<RangeIndicator>()
+            this.RegisterTimers()
             base.Apply()
         } catch (e: Error) {
             Logger.Warning('Error in Bomber.Apply: {e.Message}')
@@ -37,7 +37,7 @@ class Bomber extends Affix {
 
     public override Remove() {
         try {
-            Unit.Unit.RemoveAbility(AFFIX_ABILITY)
+            UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
             Unit.Unit.SetVertexColor(150, 120, 255, 255)
 
             ExplodeTimer?.Dispose()
@@ -118,11 +118,11 @@ class Bomber extends Affix {
     private Revive() {
         Unit.IsReviving = true
         if (Unit.WolfArea.IsEnabled) {
-            TimerIndicator ??= effect.Create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.GetUnitY(unit))
-            TimerIndicator.SetTime(0)
-            TimerIndicator.PlayAnimation(animtype.Birth)
-            TimerIndicator.SetX(Unit.Unit.X)
-            TimerIndicator.SetY(Unit.GetUnitY(unit))
+            this.TimerIndicator ??= effect.Create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.GetUnitY(unit))
+            this.TimerIndicator.SetTime(0)
+            this.TimerIndicator.PlayAnimation(animtype.Birth)
+            this.TimerIndicator.SetX(Unit.Unit.X)
+            this.TimerIndicator.SetY(Unit.GetUnitY(unit))
         }
         ReviveAlphaTimer?.Timer?.Start(1.0, true, ReviveActions)
     }

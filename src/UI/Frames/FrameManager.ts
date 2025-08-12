@@ -179,7 +179,7 @@ class FrameManager {
     private static ESCHideFrames() {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
             let player = Globals.ALL_PLAYERS[i]
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic)
+            TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
         }
         ESCTrigger.AddAction(ESCActions)
     }

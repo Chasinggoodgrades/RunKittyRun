@@ -7,13 +7,14 @@ class Stealth extends Affix {
     }
 
     public override Apply() {
-        Unit.Unit.AddAbility(AFFIX_ABILITY)
-        base.Apply()
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        super.Apply()
     }
 
     public override Remove() {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY)
-        base.Remove()
+        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        super.Remove()
     }
 
     public override Pause(pause: boolean) {

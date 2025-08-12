@@ -6,7 +6,7 @@ class FrostbiteRing extends Relic
     public static SLOW_DURATION: number = 5.0;
     public FROSTBITE_FREEZE_RING_EFFECT: string = "war3mapImported\\FreezingBreathTargetArt.mdl";
     public FROSTBITE_SLOW_TARGET_EFFECT: string = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl";
-    public new static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
+    public static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE;
     public static  FrozenWolves : {[x: unit]: FrozenWolf} = {}
 
     private RelicCost: number = 650;
@@ -14,7 +14,7 @@ class FrostbiteRing extends Relic
     private static DEFAULT_FREEZE_DURATION: number = 5.0;
     private static UPGRADE_COOLDOWN_REDUCTION: number = 15.0;
     private FREEZE_DURATION: number = 5.0;
-    private new static IconPath: string = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
+    private static IconPath: string = "ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp";
     private Owner: player;
     private Trigger: trigger;
     private FreezeGroup: group;
@@ -28,14 +28,14 @@ class FrostbiteRing extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "duration: Freeze is by: 1: second: per: upgrade: level: increased.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "that: Wolves'been: frozen: will: have: 50: ve% movespeed: for: reduced {SLOW_DURATION} after: being: seconds unfrozen.", 20, 1000));
-        Upgrades.Add(new RelicUpgrade(2, "Cooldown is by: reduced {UPGRADE_COOLDOWN_REDUCTION} seconds.", 20, 1200));
+        Upgrades.push(new RelicUpgrade(0, "duration: Freeze is by: 1: second: per: upgrade: level: increased.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "that: Wolves'been: frozen: will: have: 50: ve% movespeed: for: reduced {SLOW_DURATION} after: being: seconds unfrozen.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(2, "Cooldown is by: reduced {UPGRADE_COOLDOWN_REDUCTION} seconds.", 20, 1200));
     }
 
     public override ApplyEffect(Unit: unit)
     {
-        RegisterTriggers(Unit);
+        this.RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
         Owner = Unit.Owner;
         SetAbilityCooldown(Unit);
@@ -51,7 +51,7 @@ class FrostbiteRing extends Relic
     {
         try
         {
-            FreezeGroup ??= group.Create();
+            FreezeGroup ??= CreateGroup();
             FreezeGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, FilterList.DogFilter);
 
             while (true)
@@ -116,7 +116,7 @@ class FrostbiteRing extends Relic
     private RegisterTriggers(Unit: unit)
     {
         let Trigger = CreateTrigger();
-        Trigger.RegisterUnitEvent(Unit, unitevent.SpellEffect);
+        TriggerRegisterUnitEvent(Trigger, Unit, unitevent.SpellEffect);;
         Trigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         Trigger.AddAction(ErrorHandler.Wrap(() => FrostbiteCast(GetSpellTargetLoc())));
     }

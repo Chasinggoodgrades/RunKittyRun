@@ -24,7 +24,7 @@ class PropertyEncoder {
 
     public static EncodeAllDataToJsonBase64(): string {
         try {
-            let jsonString: string = "";
+            let jsonString: string = ''
             jsonString += '{'
             for (let player in Globals.ALL_PLAYERS) {
                 if (!(playerData = SaveManager.SaveData.TryGetValue(player)) /* TODO; Prepend: let */) continue

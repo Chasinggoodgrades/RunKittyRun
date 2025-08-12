@@ -30,7 +30,7 @@ class KittyMorphosis {
     /// <param name="kitty"></param>
     public KittyMorphosis(kitty: Kitty) {
         Kitty = kitty
-        RegisterTriggers()
+        this.RegisterTriggers()
     }
 
     /// <summary>

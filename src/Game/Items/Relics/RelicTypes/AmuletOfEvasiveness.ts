@@ -20,8 +20,8 @@
 //        IconPath
 //        )
 //    {
-//        Upgrades.Add(new RelicUpgrade(0, "Collision reduced by 1% per upgrade level.", 15, 800));
-//        Upgrades.Add(new RelicUpgrade(1, "Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
+//        Upgrades.push(new RelicUpgrade(0, "Collision reduced by 1% per upgrade level.", 15, 800));
+//        Upgrades.push(new RelicUpgrade(1, "Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
 //    }
 
 //    public override ApplyEffect(unit Unit)

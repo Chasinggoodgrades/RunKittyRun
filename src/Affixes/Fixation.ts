@@ -7,12 +7,9 @@ class Fixation extends Affix
     private FIXATION_MAX_MS: number = 410.0;
     private FIXATION_TARGET_EFFECT: string = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
 
-private static readonly IsFixation = (r: Affix): r is Fixation => {
-        return r instanceof Fixation
+    private static readonly IsFixation = (r: Affix): r is Fixation => {
+            return r instanceof Fixation
     }
-
-
-
     
     private AFFIX_ABILITY: number = Constants.ABILITY_FIXATION;
     private InRangeTrigger: trigger;
@@ -35,20 +32,20 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
 
     public override Apply()
     {
-        Type = RandomType();
-        SetUnitMoveSpeed(Unit.Unit, FIXATION_MS);
-        SetUnitVertexColor(Unit.Unit, 255, 0, 0, 255);
-        Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.Unit.TargetedAs = TargetTypes.Ward;
+        this.Type = RandomType();
+        SetUnitMoveSpeed(this.Unit.Unit, FIXATION_MS);
+        SetUnitVertexColor(this.Unit.Unit, 255, 0, 0, 255);
+        this.UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY);
+        this.Unit.Unit.TargetedAs = TargetTypes.Ward;
         RegisterEvents();
-        Unit.WolfArea.FixationCount += 1;
+        this.Unit.WolfArea.FixationCount += 1;
         base.Apply();
     }
 
     public override Remove()
     {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.DefaultMovementSpeed);
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY);
+        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY);
         Unit.Unit.TargetedAs = TargetTypes.Ground;
         SetUnitVertexColor(Unit.Unit, 150, 120, 255, 255);
         IsChasing = false;
@@ -77,9 +74,9 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
 
     private RegisterEvents()
     {
-        if (Type == 1) UnitsInRange ??= group.Create();
+        if (Type == 1) UnitsInRange ??= CreateGroup();
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FIXATION_RADIUS, FilterList.KittyFilter);
-        PeriodicSpeed.RegisterTimerEvent(0.1, true);
+        TriggerRegisterTimerEvent(PeriodicSpeed, 0.1, true);;
         PeriodicSpeed.AddAction(UpdateChaseSpeed);
         InRangeTrigger.AddAction(() =>
         {
@@ -108,7 +105,7 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
         IsChasing = true;
         Unit.WanderTimer?.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        ChaseTimer.Timer.Start(0.1, true, () =>
+        this.ChaseTimer.Start(0.1, true, () =>
         {
             if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
             {
@@ -140,8 +137,8 @@ private static readonly IsFixation = (r: Affix): r is Fixation => {
 
     private GetClosestUnitInRange(): unit
     {
-        let unitX = Unit.Unit.X;
-        let unitY = Unit.GetUnitY(unit);
+        let unitX = GetUnitX(this.Unit.Unit);
+        let unitY = GetUnitY(this.Unit.Unit);
 
         // Determine closest unit in list
         let closestUnit = UnitsInRange.First;

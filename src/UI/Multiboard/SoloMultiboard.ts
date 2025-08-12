@@ -17,7 +17,7 @@ class SoloMultiboard {
             SoloMultiboard.sortedDict = {}
             SoloMultiboard.MBSlot = {}
             SoloMultiboard.MakeMultiboard()
-            SoloMultiboard.RegisterTriggers()
+            SoloMultiboard.this.RegisterTriggers()
         } catch (ex: Error) {
             Logger.Critical('Error in SoloMultiboard: {ex.Message}')
             throw ex
@@ -33,7 +33,7 @@ class SoloMultiboard {
     private static RegisterTriggers() {
         SoloMultiboard.ESCTrigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS)
-            SoloMultiboard.ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic)
+            SoloMultiboard.TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
         SoloMultiboard.ESCTrigger.AddAction(SoloMultiboard.ESCPressed)
     }
 

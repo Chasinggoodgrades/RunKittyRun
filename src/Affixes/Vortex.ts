@@ -27,13 +27,13 @@ class Vortex extends Affix {
     }
 
     public override Apply() {
-        Unit.Unit.AddAbility(AFFIX_ABILITY)
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         RegisterEvents()
         base.Apply()
     }
 
     public override Remove() {
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY)
+        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         Unit.Unit.SetVertexColor(150, 120, 255)
 
         GC.RemoveTimer(PullingInTimer) // TODO; Cleanup:         GC.RemoveTimer(ref PullingInTimer);

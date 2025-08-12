@@ -10,7 +10,7 @@ class Shops
 
     public static Initialize()
     {
-        KittyVendors = group.Create();
+        KittyVendors = CreateGroup();
         let Trigger = CreateTrigger();
         KittyVendorsList = []
         KittyVendorItemList = []
@@ -95,7 +95,7 @@ class Shops
     {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         for (let vendor in KittyVendorsList)
-            Trigger.RegisterUnitEvent(vendor, unitevent.SellItem);
+            TriggerRegisterUnitEvent(Trigger, vendor, unitevent.SellItem);;
         Trigger.AddAction(OnVendorSell);
     }
 

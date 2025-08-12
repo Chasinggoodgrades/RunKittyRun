@@ -22,8 +22,8 @@ class BeaconOfUnitedLifeforce extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "extra: revive: chance: Your is by: increased {Math.Ceiling(EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE * 100.0)}%.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "revive: has: a: VERY: small: chance: to: simply: revive: all: Each dead players.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "extra: revive: chance: Your is by: increased {Math.Ceiling(EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE * 100.0)}%.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "revive: has: a: VERY: small: chance: to: simply: revive: all: Each dead players.", 20, 1000));
     }
 
     public override ApplyEffect(Unit: unit)

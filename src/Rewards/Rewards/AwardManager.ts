@@ -117,7 +117,7 @@ class AwardManager {
                     )
                 }
             }
-            AwardTrigger.RegisterTimerEvent(1.0, true)
+            TriggerRegisterTimerEvent(AwardTrigger, 1.0, true)
         } catch (ex: Error) {
             Logger.Critical('Error in AwardManager.RegisterGamestatEvents: {ex.Message}')
         }

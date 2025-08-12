@@ -7,7 +7,7 @@ class Howler extends Affix {
     private MIN_HOWL_TIME: number = 10.0
     private MAX_HOWL_TIME: number = 20.0
     private HowlTimer: AchesTimers
-    private NearbyWolves: group = group.Create()
+    private NearbyWolves: group = CreateGroup()
 
     public constructor(unit: Wolf) {
         super(unit)

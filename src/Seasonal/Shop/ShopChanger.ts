@@ -34,7 +34,7 @@ class ShopChanger {
     }
 
     private static SetShopsToSkin(skinType: number) {
-        let tempGroup = group.Create()
+        let tempGroup = CreateGroup()
         tempGroup.EnumUnitsInRect(
             Globals.WORLD_BOUNDS,
             Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY_VENDOR)

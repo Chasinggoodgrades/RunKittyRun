@@ -6,7 +6,7 @@ class Safezone
     private Trigger: trigger 
     public ID: number 
     public Rect_: rect 
-    public WCSharp.Shared.Data.Rectangle: Rectangle 
+    public Rectangle: Rectangle 
     public AwardedPlayers: player[] = [];
 
     public Safezone(id: number, region: region)

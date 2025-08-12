@@ -32,7 +32,7 @@ class StandardMultiboard {
             ErrorHandler.Wrap(() => {
                 if (!Difficulty.IsDifficultyChosen) return
                 StandardMultiboard.MakeMultiboard()
-                StandardMultiboard.RegisterTriggers()
+                StandardMultiboard.this.RegisterTriggers()
                 DestroyTimer(t)
             })
         )
@@ -42,10 +42,10 @@ class StandardMultiboard {
         let Updater = CreateTrigger()
         let ESCTrigger = CreateTrigger()
 
-        Updater.RegisterTimerEvent(1.0, true)
+        TriggerRegisterTimerEvent(Updater, 1.0, true)
         Updater.AddAction(CurrentStatsRoundTimes)
 
-        for (let player in Globals.ALL_PLAYERS) ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic)
+        for (let player in Globals.ALL_PLAYERS) TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
         ESCTrigger.AddAction(ESCPressed)
     }
 

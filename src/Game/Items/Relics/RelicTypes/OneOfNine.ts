@@ -3,11 +3,11 @@
 class OneOfNine extends Relic
 {
     public RelicItemID: number = Constants.ITEM_ONE_OF_NINE;
-    public new RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    public RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
     private PreviousAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private RelicCost: number = 650;
-    private new static IconPath: string = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
+    private static IconPath: string = "war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp";
 
     public OneOfNine() // TODO; CALL super(
         "|cffff4500One of Nine|r",
@@ -18,8 +18,8 @@ class OneOfNine extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "Cooldown of ultimate: your is by: an: additional: 3: seconds: per: upgrade: level: reduced.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "ultimate: no: longer: costs: mana: Your.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "Cooldown of ultimate: your is by: an: additional: 3: seconds: per: upgrade: level: reduced.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "ultimate: no: longer: costs: mana: Your.", 20, 1000));
     }
 
     public override ApplyEffect(Unit: unit)

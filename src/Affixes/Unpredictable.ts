@@ -8,15 +8,15 @@ class Unpredictable extends Affix {
     }
 
     public override Apply() {
-        Unit.Unit.AddAbility(WANDER_ABILITY) // Wander
-        Unit.Unit.AddAbility(AFFIX_ABILITY)
+        UnitAddAbility(this.Unit.Unit, this.WANDER_ABILITY) // Wander
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         Unit.OVERHEAD_EFFECT_PATH = ''
         base.Apply()
     }
 
     public override Remove() {
-        Unit.Unit.RemoveAbility(WANDER_ABILITY) // Wander
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY)
+        UnitRemoveAbility(this.Unit.Unit, this.WANDER_ABILITY) // Wander
+        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT
         base.Remove()
     }

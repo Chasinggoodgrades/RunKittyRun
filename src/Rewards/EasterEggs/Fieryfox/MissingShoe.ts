@@ -15,7 +15,7 @@ class MissingShoe {
         // Between 10 mins - 15mins currently.
         let randomTime = GetRandomReal(600.0, 900.0)
         TimerEvent = CreateTrigger()
-        TimerEvent.RegisterTimerEvent(randomTime, false)
+        TriggerRegisterTimerEvent(TimerEvent, randomTime, false)
         TimerEvent.AddAction(ErrorHandler.Wrap(EventStart))
     }
 

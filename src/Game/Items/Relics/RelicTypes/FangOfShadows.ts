@@ -3,9 +3,9 @@
 class FangOfShadows extends Relic
 {
     public RelicItemID: number = Constants.ITEM_FANG_OF_SHADOWS;
-    public new RelicAbilityID: number = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    public RelicAbilityID: number = Constants.ABILITY_SUMMON_SHADOW_KITTY;
     private TeleportAbilityID: number = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
-    private new static IconPath: string = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
+    private static IconPath: string = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private SummonTrigger: trigger;
     private TeleTrigger: trigger;
     private KillTimer: timer;
@@ -28,28 +28,28 @@ class FangOfShadows extends Relic
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "cooldown: Overall is by: reduced {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "cooldown: reduced: at: Remaining new safezones is 50: now% instead of 25%.", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "cooldown: Overall is by: reduced {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "cooldown: reduced: at: Remaining new safezones is 50: now% instead of 25%.", 20, 1000));
     }
 
     public override ApplyEffect(Unit: unit)
     {
         Owner = Unit;
-        RegisterTriggers(Unit);
+        this.RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
         SetAbilityCooldown(Unit);
     }
 
     public override RemoveEffect(Unit: unit)
     {
-        DeregisterTriggers();
+        Dethis.RegisterTriggers();
         Unit.DisableAbility(RelicAbilityID, false, true);
     }
 
     private RegisterTriggers(Unit: unit)
     {
         let SummonTrigger = CreateTrigger();
-        SummonTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
+        TriggerRegisterUnitEvent(SummonTrigger, Unit, unitevent.SpellCast);;
         SummonTrigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID));
         SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty));
 
@@ -115,7 +115,7 @@ class FangOfShadows extends Relic
 
     private RegisterTeleportAbility(Unit: unit)
     {
-        TeleTrigger.RegisterUnitEvent(Unit, unitevent.SpellCast);
+        TriggerRegisterUnitEvent(TeleTrigger, Unit, unitevent.SpellCast);;
         TeleTrigger.AddCondition(Condition(() => GetSpellAbilityId() == TeleportAbilityID));
         TeleTrigger.AddAction(TeleportToShadowKitty);
     }

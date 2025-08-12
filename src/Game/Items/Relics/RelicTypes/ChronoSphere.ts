@@ -36,8 +36,8 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
         IconPath
         )
     {
-        Upgrades.Add(new RelicUpgrade(0, "Every {MAGNITUDE_CHANGE_INTERVAL.ToString("F2")} seconds, magnitude: the of slowing: aura: will: change: between: the {MAGNITUDE_LOWER_BOUND.ToString("F2")}% - {MAGNITUDE_UPPER_BOUND.ToString("F2")}% effectiveness.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, "Every {LOCATION_CAPTURE_INTERVAL.ToString("F2")} seconds, location: your is captured. you: were: to: die: If, you'reverse: time: to: that: location: ll. {Colors.COLOR_LIGHTBLUE}(2min cooldown)|r", 20, 1000));
+        Upgrades.push(new RelicUpgrade(0, "Every {MAGNITUDE_CHANGE_INTERVAL.ToString("F2")} seconds, magnitude: the of slowing: aura: will: change: between: the {MAGNITUDE_LOWER_BOUND.ToString("F2")}% - {MAGNITUDE_UPPER_BOUND.ToString("F2")}% effectiveness.", 15, 800));
+        Upgrades.push(new RelicUpgrade(1, "Every {LOCATION_CAPTURE_INTERVAL.ToString("F2")} seconds, location: your is captured. you: were: to: die: If, you'reverse: time: to: that: location: ll. {Colors.COLOR_LIGHTBLUE}(2min cooldown)|r", 20, 1000));
     }
 
     public override ApplyEffect(Unit: unit)

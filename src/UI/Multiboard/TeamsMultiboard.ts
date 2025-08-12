@@ -125,7 +125,7 @@ class TeamsMultiboard {
 
     private static ESCInit() {
         for (let player in Globals.ALL_PLAYERS) {
-            ESCTrigger.RegisterPlayerEvent(player, playerevent.EndCinematic)
+            TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
         }
         ESCTrigger.AddAction(ErrorHandler.Wrap(ESCPressed))
     }

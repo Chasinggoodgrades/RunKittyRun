@@ -17,7 +17,7 @@ class Frostbite extends Affix {
 
     public override Apply() {
         Unit.Unit.SetVertexColor(80, 140, 250)
-        Unit.Unit.AddAbility(AFFIX_ABILITY)
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         RegisterEvents()
         base.Apply()
     }
@@ -25,7 +25,7 @@ class Frostbite extends Affix {
     public override Remove() {
         try {
             Unit.Unit.SetVertexColor(150, 120, 255)
-            Unit.Unit.RemoveAbility(AFFIX_ABILITY)
+            UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
             GC.RemoveTrigger(InRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref InRangeTrigger);
             GC.RemoveTrigger(PeriodicRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref PeriodicRangeTrigger);
             RemoveAllEffects()
@@ -52,7 +52,7 @@ class Frostbite extends Affix {
     }
 
     private RegisterEvents() {
-        PeriodicRangeTrigger.RegisterTimerEvent(0.3, true)
+        TriggerRegisterTimerEvent(PeriodicRangeTrigger, 0.3, true);
         PeriodicRangeTrigger.AddAction(PeriodicRangeCheck)
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, FilterList.KittyFilter)
         InRangeTrigger.AddAction(() => {

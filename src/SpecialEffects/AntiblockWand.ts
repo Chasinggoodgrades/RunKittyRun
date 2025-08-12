@@ -23,7 +23,7 @@ class AntiblockWand {
     private static SpellActions() {
         if (GetSpellAbilityId() != AbilityID) return
         let location = GetSpellTargetLoc()
-        let wolvesInArea = group.Create()
+        let wolvesInArea = CreateGroup()
         wolvesInArea.EnumUnitsInRange(location.X, location.Y, Radius, null)
         let list = wolvesInArea.ToList()
         for (let wolf in list) {

@@ -12,7 +12,7 @@ class Chaos extends Affix {
     public override Apply() {
         try {
             RegisterTimer()
-            Unit.Unit.AddAbility(AFFIX_ABILITY)
+            UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
             base.Apply()
         } catch (e: Error) {
             Logger.Warning('Chaos.Apply: {e.Message}')
@@ -57,7 +57,6 @@ class Chaos extends Affix {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning('Error in Chaos.RotateAffix: {e.Message}')
             Unit.RemoveAffix(currentAffix)
-            currentAffix = null
         }
     }
 

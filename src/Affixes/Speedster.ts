@@ -8,13 +8,13 @@ class Speedster extends Affix {
 
     public override Apply() {
         SetUnitMoveSpeed(Unit.Unit, 522)
-        Unit.Unit.AddAbility(AFFIX_ABILITY)
+        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         base.Apply()
     }
 
     public override Remove() {
         SetUnitMoveSpeed(Unit.Unit, Unit.Unit.DefaultMovementSpeed)
-        Unit.Unit.RemoveAbility(AFFIX_ABILITY)
+        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         base.Remove()
     }
 
