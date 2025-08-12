@@ -1,4 +1,4 @@
-class BigNum {
+export class BigNum {
     public List: BigNumL
     public Base: number
 
@@ -29,7 +29,7 @@ class BigNum {
     }
 }
 
-class BigNumL {
+export class BigNumL {
     public Leaf: number
     public Next: BigNumL
     private static _nalloc: number = 0

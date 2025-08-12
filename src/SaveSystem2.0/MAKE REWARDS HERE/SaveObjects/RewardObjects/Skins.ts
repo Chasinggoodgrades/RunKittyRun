@@ -1,4 +1,4 @@
-class Skins {
+export class Skins {
     public UndeadKitty: number
     public HighelfKitty: number
     public AstralKitty: number

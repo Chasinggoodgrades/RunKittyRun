@@ -1,4 +1,4 @@
-class Slider {
+export class Slider {
     private SLIDE_INTERVAL: number = 0.0075
     private SLIDE_ANGLE_PER_PERIOD: number = 0.3
     private ITEM_PICKUP_RADIUS: number = 48
@@ -19,7 +19,7 @@ class Slider {
     private ForcedSlideTimer: timer
 
     // percentage of maximum speed
-    private SPEED_AT_LEAST_THAN_50_DEGREES: { [x: number]: number } = {
+    private SPEED_AT_LEAST_THAN_50_DEGREES: Map<number, number> = {
         51: 92.721,
         50: 91.655,
         49: 90.588,
@@ -103,13 +103,13 @@ class Slider {
             this.forcedSlideSpeed = 0
             this.kitty.Invulnerable = true
 
-            this.ForcedSlideTimer.Start(
+            this.ForcedSlideTimer.start(
                 1.4,
                 false,
                 ErrorHandler.Wrap(() => {
                     this.forcedSlideSpeed = null
 
-                    this.ForcedSlideTimer.Start(
+                    this.ForcedSlideTimer.start(
                         0.6,
                         false,
                         ErrorHandler.Wrap(() => {
@@ -120,7 +120,7 @@ class Slider {
             )
         }
 
-        SliderTimer.Start(
+        SliderTimer.start(
             SLIDE_INTERVAL,
             true,
             ErrorHandler.Wrap(() => {
@@ -157,8 +157,8 @@ class Slider {
     public PauseSlider() {
         ClickTrigger.Disable()
         WidgetTrigger.Disable()
-        SliderTimer.Pause()
-        ForcedSlideTimer.Pause()
+        SliderTimer.pause()
+        ForcedSlideTimer.pause()
         this.forcedSlideSpeed = null
         this.kitty.Invulnerable = false
         remainingDegreesToTurn = 0
@@ -172,7 +172,7 @@ class Slider {
     }
 
     public IsOnSlideTerrain(): boolean {
-        return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.GetUnitY(unit)))
+        return !TerrainChanger.SafezoneTerrain.includes(GetTerrainType(kitty.Unit.X, kitty.unit.y))
     }
 
     private UpdateSlider() {
@@ -185,7 +185,7 @@ class Slider {
         let angle: number = Rad2Deg(kitty.Unit.Facing)
 
         let oldX: number = kitty.Unit.X
-        let oldY: number = kitty.GetUnitY(unit)
+        let oldY: number = kitty.unit.y
 
         escaperTurnForOnePeriod()
 
@@ -201,7 +201,7 @@ class Slider {
         }
 
         kitty.Unit.SetPathing(false)
-        kitty.Unit.SetPosition(newX, newY)
+        kitty.Unit.setPos(newX, newY)
         kitty.Unit.SetPathing(true)
         ItemPickup()
     }
@@ -228,12 +228,12 @@ class Slider {
         if (isToLocation) {
             let orderX = GetOrderPointX()
             let orderY = GetOrderPointY()
-            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * bj_RADTODEG
+            angle = Atan2(orderY - unit.y, orderX - unit.x) * bj_RADTODEG
         } else {
             let target = GetOrderTarget()
             let orderX = GetWidgetX(target)
             let orderY = GetWidgetY(target)
-            angle = Atan2(orderY - GetUnitY(unit), orderX - GetUnitX(unit)) * bj_RADTODEG
+            angle = Atan2(orderY - unit.y, orderX - unit.x) * bj_RADTODEG
         }
 
         let currentAngle = GetUnitFacing(unit)

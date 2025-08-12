@@ -1,6 +1,6 @@
-class FinalSafezone {
+export class FinalSafezone {
     private static Trigger: trigger = CreateTrigger()
-    private static Region: region = RegionList.SafeZones[RegionList.SafeZones.Length - 1].Region
+    private static Region: region = RegionList.SafeZones[RegionList.SafeZones.length - 1].Region
 
     public static Initialize() {
         RegisterEvents()
@@ -12,7 +12,7 @@ class FinalSafezone {
             ErrorHandler.Wrap(() => {
                 let unit = GetTriggerUnit()
                 let player = unit.Owner
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards()
                 if (Gamemode.CurrentGameMode != GameMode.Standard) return
 

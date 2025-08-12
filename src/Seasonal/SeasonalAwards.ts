@@ -1,4 +1,4 @@
-class SeasonalAwards {
+export class SeasonalAwards {
     private static Season: HolidaySeasons
 
     public static Initialize() {
@@ -16,8 +16,8 @@ class SeasonalAwards {
             8.0,
             '{Colors.COLOR_YELLOW}thanks: to: every: for: playing: this: holiday: season: Special! players: have: All been awarded the snow trail and snow wings from 2023 :){Colors.COLOR_RESET}'
         )
-        let t = ObjectPool.GetEmptyObject<AchesTimers>()
-        t.Timer.Start(
+        let t = MemoryHandler.getEmptyObject<AchesTimers>()
+        t.Timer.start(
             1.0,
             false,
             ErrorHandler.Wrap(() => {

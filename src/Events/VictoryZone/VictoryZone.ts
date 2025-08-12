@@ -1,4 +1,4 @@
-class VictoryZone {
+export class VictoryZone {
     private static InVictoryArea: trigger
 
     public static Initialize() {
@@ -6,7 +6,7 @@ class VictoryZone {
         VictoryAreaTrigger()
     }
 
-    private static VictoryAreaConditions(u: unit) {
+    private static VictoryAreaConditions(u: Unit) {
         return VictoryAreaConditionsStandard(u) || VictoryAreaConditionsTeam(u) || VictoryAreaConditionsSolo(u)
     }
 
@@ -35,7 +35,7 @@ class VictoryZone {
             RoundManager.RoundEndCheck()
         } else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) {
             // Team
-            let kitty = Globals.ALL_KITTIES[player]
+            let kitty = Globals.ALL_KITTIES.get(player)
             kitty.Finished = true
 
             if (RoundManager.DidTeamEnd(kitty.TeamID)) {
@@ -47,35 +47,35 @@ class VictoryZone {
             BarrierSetup.ActivateBarrier()
 
             // // Move all team members to the start, save their time. Wait for all teams to finish.
-            // for (let teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
+            // for (let teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES.get(player).TeamID].Teammembers)
             // {
             //     MoveAndFinish(teamMember);
             // }
-            // Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
+            // Globals.ALL_TEAMS[Globals.ALL_KITTIES.get(player).TeamID].Finished = true;
             // RoundManager.RoundEndCheck();
         }
         MultiboardUtil.RefreshMultiboards()
     }
 
-    private static VictoryAreaConditionsStandard(u: unit) {
+    private static VictoryAreaConditionsStandard(u: Unit) {
         return Gamemode.CurrentGameMode == GameMode.Standard
     }
 
-    private static VictoryAreaConditionsSolo(u: unit) {
+    private static VictoryAreaConditionsSolo(u: Unit) {
         return Gamemode.CurrentGameMode == GameMode.SoloTournament
     }
 
-    private static VictoryAreaConditionsTeam(u: unit) {
+    private static VictoryAreaConditionsTeam(u: Unit) {
         // If a team enters the area, check if all the members of the team are in the area.
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return false
         let team = Globals.ALL_KITTIES[u.Owner].TeamID
         for (let player in Globals.ALL_TEAMS[team].Teammembers) {
-            if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false
+            if (!VictoryContainerConditions(Globals.ALL_KITTIES.get(player).Unit)) return false
         }
         return true
     }
 
-    private static VictoryContainerConditions(u: unit) {
-        return Regions.Victory_Area.Region.Contains(u) || Regions.safe_Area_14.Region.Contains(u)
+    private static VictoryContainerConditions(u: Unit) {
+        return Regions.Victory_Area.Region.includes(u) || Regions.safe_Area_14.Region.includes(u)
     }
 }

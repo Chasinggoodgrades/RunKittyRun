@@ -1,4 +1,4 @@
-class Frostbite extends Affix {
+export class Frostbite extends Affix {
     private FROSTBITE_RADIUS: number = 500.0
     private FROSTBITE_SPEED_REDUCTION: number = 0.83
     private AFFIX_ABILITY: number = Constants.ABILITY_FROSTBITE
@@ -19,7 +19,7 @@ class Frostbite extends Affix {
         Unit.Unit.SetVertexColor(80, 140, 250)
         UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         RegisterEvents()
-        base.Apply()
+        super.Apply()
     }
 
     public override Remove() {
@@ -30,44 +30,44 @@ class Frostbite extends Affix {
             GC.RemoveTrigger(PeriodicRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref PeriodicRangeTrigger);
             RemoveAllEffects()
             GC.RemoveList(FrostbittenKitties) // TODO; Cleanup:             GC.RemoveList(ref FrostbittenKitties);
-            base.Remove()
-        } catch (e: Error) {
+            super.Remove()
+        } catch (e) {
             Logger.Warning('Error in Frostbite.Remove: {e.Message}')
             throw e
         }
     }
 
     private RemoveAllEffects() {
-        if (FrostbittenKitties == null || FrostbittenKitties.Count == 0) return
+        if (FrostbittenKitties == null || FrostbittenKitties.length == 0) return
         try {
-            for (let i: number = 0; i < FrostbittenKitties.Count; i++) {
+            for (let i: number = 0; i < FrostbittenKitties.length; i++) {
                 let frostbitten = FrostbittenKitties[i]
                 frostbitten.Dispose()
             }
-            FrostbittenKitties.Clear()
-        } catch (e: Error) {
+            FrostbittenKitties.clear()
+        } catch (e) {
             Logger.Warning('Error in Frostbite.RemoveAllEffects: {e.Message}')
             throw e
         }
     }
 
     private RegisterEvents() {
-        TriggerRegisterTimerEvent(PeriodicRangeTrigger, 0.3, true);
+        TriggerRegisterTimerEvent(PeriodicRangeTrigger, 0.3, true)
         PeriodicRangeTrigger.AddAction(PeriodicRangeCheck)
         InRangeTrigger.RegisterUnitInRange(Unit.Unit, FROSTBITE_RADIUS, FilterList.KittyFilter)
         InRangeTrigger.AddAction(() => {
             let target = GetTriggerUnit()
             if (!target.Alive) return // must be alive
-            if (!RegionList.WolfRegions[Unit.RegionIndex].Contains(target.X, target.Y)) return // must be in same lane
+            if (!RegionList.WolfRegions[Unit.RegionIndex].includes(target.X, target.Y)) return // must be in same lane
             SlowEffect(target)
         })
     }
 
     private PeriodicRangeCheck() {
-        if (FrostbittenKitties == null || FrostbittenKitties.Count == 0) return
+        if (FrostbittenKitties == null || FrostbittenKitties.length == 0) return
         try {
             for (
-                let i: number = FrostbittenKitties.Count - 1;
+                let i: number = FrostbittenKitties.length - 1;
                 i >= 0;
                 i-- // if go backwards, can avoid loop index issues
             ) {
@@ -78,22 +78,22 @@ class Frostbite extends Affix {
                 frostbitten.Dispose()
                 FrostbittenKitties.RemoveAt(i)
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in Frostbite.PeriodicRangeCheck: {e.Message}')
         }
     }
 
-    private SlowEffect(target: unit) {
+    private SlowEffect(target: Unit) {
         if (target.GetAbilityLevel(ADRENALINE_POTION_ABILITY) > 0) return // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
         let k: Kitty = Globals.ALL_KITTIES[target.Owner]
         if (k.KittyMiscInfo.FrostBitten != null) return // already bitten.
-        let frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten = ObjectPool.GetEmptyObject<Frostbitten>())
+        let frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyObject<Frostbitten>())
         frostBittenObject.OriginalSpeed = target.DefaultMovementSpeed
-        frostBittenObject.Effect = effect.Create(FROSTBITE_TARGET_EFFECT, target, 'chest')
+        frostBittenObject.Effect = Effect.create(FROSTBITE_TARGET_EFFECT, target, 'chest')!
         frostBittenObject.Kitty = k
         target.MovementSpeed = target.DefaultMovementSpeed * FROSTBITE_SPEED_REDUCTION
-        FrostbittenKitties.Add(frostBittenObject)
+        FrostbittenKitties.push(frostBittenObject)
     }
 
     public override Pause(pause: boolean) {
@@ -101,7 +101,7 @@ class Frostbite extends Affix {
     }
 }
 
-class Frostbitten extends IDisposable {
+export class Frostbitten extends IDisposable {
     public Effect: effect
     public OriginalSpeed: number
     public Kitty: Kitty
@@ -117,6 +117,6 @@ class Frostbitten extends IDisposable {
         Effect = null
         OriginalSpeed = 0.0
         Kitty.KittyMiscInfo.FrostBitten = null
-         ObjectPool<Frostbitten>.ReturnObject(this);
+        MemoryHandler.destroyObject(this)
     }
 }

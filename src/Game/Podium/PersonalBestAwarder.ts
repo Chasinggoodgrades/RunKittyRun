@@ -6,18 +6,18 @@ let KD: highest in game: a
 let all: other: stats: i: and'say: d. streak: so/     saves/deaths in game: 1 / w/other: stats: we: got: e
 */
 
-class PersonalBestAwarder {
-    private static KibbleCollectionBeatenList: player[] = []
-    private static BeatenMostSavesList: player[] = []
-    private static SaveStreakBeatenList: player[] = []
+export class PersonalBestAwarder {
+    private static KibbleCollectionBeatenList: MapPlayer[] = []
+    private static BeatenMostSavesList: MapPlayer[] = []
+    private static SaveStreakBeatenList: MapPlayer[] = []
     private static MessageTime: number = 3.0
 
     /// <summary>
     /// Checks if the current round time is higher than the best time and updates it if so. Also notifies all players :).
     /// </summary>
     /// <param name="player"></param>
-    public static BeatRecordTime(player: player) {
-        let kittyStats = Globals.ALL_KITTIES[player].SaveData
+    public static BeatRecordTime(player: MapPlayer) {
+        let kittyStats = Globals.ALL_KITTIES.get(player).SaveData
         let roundEnum = ''
         if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum()
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum()
@@ -44,12 +44,12 @@ class PersonalBestAwarder {
         if (currentKibble > bestKibble) {
             k.SaveData.PersonalBests.KibbleCollected = currentKibble
 
-            if (KibbleCollectionBeatenList.Contains(k.Player)) return
+            if (KibbleCollectionBeatenList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 MessageTime,
                 '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: collecting: personal {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r'
             )
-            KibbleCollectionBeatenList.Add(k.Player)
+            KibbleCollectionBeatenList.push(k.Player)
         }
     }
 
@@ -65,12 +65,12 @@ class PersonalBestAwarder {
         if (currentSaves > bestSaves) {
             k.SaveData.PersonalBests.Saves = currentSaves
 
-            if (BeatenMostSavesList.Contains(k.Player)) return
+            if (BeatenMostSavesList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 MessageTime,
                 '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: saving: personal {Colors.COLOR_YELLOW}{currentSaves} kitties|r in single: game: a.'
             )
-            BeatenMostSavesList.Add(k.Player)
+            BeatenMostSavesList.push(k.Player)
         }
     }
 
@@ -86,12 +86,12 @@ class PersonalBestAwarder {
         if (currentStreak > bestStreak) {
             k.SaveData.GameStats.HighestSaveStreak = currentStreak
 
-            if (SaveStreakBeatenList.Contains(k.Player)) return
+            if (SaveStreakBeatenList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 MessageTime,
                 '{Colors.PlayerNameColored(k.Player)} set: a: has new best: save: streak: personal of {Colors.COLOR_YELLOW}{currentStreak}!|r'
             )
-            SaveStreakBeatenList.Add(k.Player)
+            SaveStreakBeatenList.push(k.Player)
         }
     }
 }

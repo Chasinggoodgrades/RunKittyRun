@@ -1,4 +1,4 @@
-class DiscordFrame {
+export class DiscordFrame {
     private static EditBox: framehandle
     private static DiscordIconFront: framehandle
     private static DiscordIconBack: framehandle
@@ -24,7 +24,7 @@ class DiscordFrame {
         EditBox = BlzCreateFrameByType('EscMenuEditBoxTemplate', originframetype.GameUI.GetOriginFrame(0), 0, 0)
         EditBox.SetAbsPoint(framepointtype.Center, 0.4, 0.165)
         EditBox.SetSize(0.2, 0.03)
-        EditBox.TextSizeLimit = Link.Length
+        EditBox.TextSizeLimit = Link.length
         EditBox.Text = Link
         EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center)
     }
@@ -82,14 +82,14 @@ class DiscordFrame {
     private static RegisterESCTrigger() {
         ESCTrigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS) {
-            TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
+            TriggerRegisterPlayerEvent(ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
         }
         ESCTrigger.AddAction(ESCPressed)
     }
 
     private static ESCPressed() {
         let player = GetTriggerPlayer()
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         Backdrop.Visible = !Backdrop.Visible
         EditBox.Visible = !EditBox.Visible
         DiscordIconFront.Visible = !DiscordIconFront.Visible
@@ -98,7 +98,7 @@ class DiscordFrame {
     }
 
     private static UpdateTextBox() {
-        if (!GetTriggerPlayer().IsLocal) return
+        if (!GetTriggerPlayer().isLocal()) return
         EditBox.Text = Link
     }
 }

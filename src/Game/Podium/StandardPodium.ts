@@ -1,148 +1,134 @@
-
-
 /// <summary>
 /// Players are going to be rewarded
 /// </summary>
-class StandardPodium
-{
-    private static Queue<(Player: player, position: Point)> PodiumQueue = new Queue<(Player: player, position: Point)>();
-    private static MovedUnits : unit[] = []
-    private static PodiumType: string = "";
-    private static Color: string = Colors.COLOR_YELLOW_ORANGE;
-    private HighestScore: string = "score: highest";
-    private MostSaves: string = "saves: most";
-    private HighestRatio: string = "ratio: highest";
-    private HighestStreak: string = "streak: highest";
+export class StandardPodium {
+    private static PodiumQueue = new Queue<[player, Point]>()
+    private static MovedUnits: Unit[] = []
+    private static PodiumType: string = ''
+    private static Color: string = Colors.COLOR_YELLOW_ORANGE
+    private HighestScore: string = 'score: highest'
+    private MostSaves: string = 'saves: most'
+    private HighestRatio: string = 'ratio: highest'
+    private HighestStreak: string = 'streak: highest'
 
-    public static BeginPodiumActions()
-    {
-        PodiumUtil.SetCameraToPodium();
-        Utility.SimpleTimer(3.0, ProcessPodiumTypeActions);
+    public static BeginPodiumActions() {
+        PodiumUtil.SetCameraToPodium()
+        Utility.SimpleTimer(3.0, ProcessPodiumTypeActions)
     }
 
-    private static EnqueueTopScorePlayers()
-    {
-        let topScores = PodiumUtil.SortPlayersByScore();
-        let podiumPositions = PodiumManager.PodiumSpots;
-        for (let i: number = topScores.Count - 1; i >= 0; i--)
-        {
-            let player = topScores[i];
-            let position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
+    private static EnqueueTopScorePlayers() {
+        let topScores = PodiumUtil.SortPlayersByScore()
+        let podiumPositions = PodiumManager.PodiumSpots
+        for (let i: number = topScores.length - 1; i >= 0; i--) {
+            let player = topScores[i]
+            let position = podiumPositions[i]
+            PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = HighestScore;
+        PodiumType = HighestScore
     }
 
-    private static EnqueueTopSavesPlayers()
-    {
-        let topSaves = PodiumUtil.SortPlayersBySaves();
-        let podiumPositions = PodiumManager.PodiumSpots;
-        for (let i: number = topSaves.Count - 1; i >= 0; i--)
-        {
-            let player = topSaves[i];
-            let position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
+    private static EnqueueTopSavesPlayers() {
+        let topSaves = PodiumUtil.SortPlayersBySaves()
+        let podiumPositions = PodiumManager.PodiumSpots
+        for (let i: number = topSaves.length - 1; i >= 0; i--) {
+            let player = topSaves[i]
+            let position = podiumPositions[i]
+            PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = MostSaves;
+        PodiumType = MostSaves
     }
 
-    private static EnqueueTopRatioPlayers()
-    {
-        let topRatios = PodiumUtil.SortPlayersByHighestRatio();
-        let podiumPositions = PodiumManager.PodiumSpots;
-        for (let i: number = topRatios.Count - 1; i >= 0; i--)
-        {
-            let player = topRatios[i];
-            let position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
+    private static EnqueueTopRatioPlayers() {
+        let topRatios = PodiumUtil.SortPlayersByHighestRatio()
+        let podiumPositions = PodiumManager.PodiumSpots
+        for (let i: number = topRatios.length - 1; i >= 0; i--) {
+            let player = topRatios[i]
+            let position = podiumPositions[i]
+            PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = HighestRatio;
+        PodiumType = HighestRatio
     }
 
-    private static EnqueueTopStreakPlayers()
-    {
-        let topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak();
-        let podiumPositions = PodiumManager.PodiumSpots;
-        for (let i: number = topStreaks.Count - 1; i >= 0; i--)
-        {
-            let player = topStreaks[i];
-            let position = podiumPositions[i];
-            PodiumQueue.Enqueue((player, position));
+    private static EnqueueTopStreakPlayers() {
+        let topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
+        let podiumPositions = PodiumManager.PodiumSpots
+        for (let i: number = topStreaks.length - 1; i >= 0; i--) {
+            let player = topStreaks[i]
+            let position = podiumPositions[i]
+            PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = HighestStreak;
+        PodiumType = HighestStreak
     }
 
-    private static ProcessNextPodiumAction()
-    {
-        if (PodiumQueue.Count == 0)
-        {
-            ProcessPodiumTypeActions();
-            return;
+    private static ProcessNextPodiumAction() {
+        if (PodiumQueue.length == 0) {
+            ProcessPodiumTypeActions()
+            return
         }
-        let (player, position) = PodiumQueue.Dequeue();
-        let kitty = Globals.ALL_KITTIES[player].Unit;
-        kitty.SetPosition(position.X, position.Y);
-        kitty.SetFacing(270);
-        kitty.IsPaused = true;
-        MovedUnits.Add(kitty);
-        Console.WriteLine("{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.Count + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r");
-        Utility.SimpleTimer(5.0, ProcessNextPodiumAction);
+        let(player, position) = PodiumQueue.Dequeue()
+        let kitty = Globals.ALL_KITTIES.get(player).Unit
+        kitty.setPos(position.X, position.Y)
+        kitty.SetFacing(270)
+        kitty.IsPaused = true
+        MovedUnits.push(kitty)
+        print(
+            '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
+        )
+        Utility.SimpleTimer(5.0, ProcessNextPodiumAction)
     }
 
     /// <summary>
     /// Topscore => Saves => Ratio => Streak .. End
     /// </summary>
-    private static ProcessPodiumTypeActions()
-    {
-        PodiumQueue.Clear();
-        PodiumUtil.ClearPodiumUnits(MovedUnits);
-        switch (PodiumType)
-        {
-            case "":
-                EnqueueTopScorePlayers();
-                break;
+    private static ProcessPodiumTypeActions() {
+        PodiumQueue.clear()
+        PodiumUtil.ClearPodiumUnits(MovedUnits)
+        switch (PodiumType) {
+            case '':
+                EnqueueTopScorePlayers()
+                break
 
             case HighestScore:
-                EnqueueTopSavesPlayers();
-                break;
+                EnqueueTopSavesPlayers()
+                break
 
             case MostSaves:
-                EnqueueTopRatioPlayers();
-                break;
+                EnqueueTopRatioPlayers()
+                break
 
             case HighestRatio:
-                EnqueueTopStreakPlayers();
-                break;
+                EnqueueTopStreakPlayers()
+                break
 
             case HighestStreak:
-                PodiumUtil.EndingGameThankyou();
-                return;
+                PodiumUtil.EndingGameThankyou()
+                return
 
             default:
-                break;
+                break
         }
-        ProcessNextPodiumAction();
+        ProcessNextPodiumAction()
     }
 
-    private static GetStatBasedOnType(player: player)
-    {
-        let stats = Globals.ALL_KITTIES[player].CurrentStats;
-        switch (PodiumType)
-        {
+    private static GetStatBasedOnType(player: MapPlayer) {
+        let stats = Globals.ALL_KITTIES.get(player).CurrentStats
+        switch (PodiumType) {
             case HighestScore:
-                return (stats.TotalSaves - stats.TotalDeaths).ToString();
+                return (stats.TotalSaves - stats.TotalDeaths).ToString()
 
             case MostSaves:
-                return stats.TotalSaves.ToString();
+                return stats.TotalSaves.ToString()
 
             case HighestRatio:
-                return stats.TotalDeaths == 0 ? stats.TotalSaves.ToString("F2") : (stats.TotalSaves / stats.TotalDeaths).ToString("F2");
+                return stats.TotalDeaths == 0
+                    ? stats.TotalSaves.ToString('F2')
+                    : (stats.TotalSaves / stats.TotalDeaths).ToString('F2')
 
             case HighestStreak:
-                return stats.MaxSaveStreak.ToString();
+                return stats.MaxSaveStreak.ToString()
 
             default:
-                return "n/a";
+                return 'n/a'
         }
     }
 }

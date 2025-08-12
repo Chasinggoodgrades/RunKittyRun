@@ -1,4 +1,4 @@
-class SoundManager {
+export class SoundManager {
     private static KITTY_DEATH_PATH: string = 'Units\\NightElf\\HeroMoonPriestess\\HeroMoonPriistessDeath1.wav'
     private static ROUND_1_PATH: string = 'war3mapImported\\Round01.mp3'
     private static ROUND_2_PATH: string = 'war3mapImported\\Round02.mp3'
@@ -24,7 +24,7 @@ class SoundManager {
     private static FIRST_BLOOD_SOUND: sound
 
     private static FirstBloodSoundPlayed: boolean = false
-    private static LastManStanding: timer = CreateTimer()
+    private static LastManStanding = Timer.create()
     private static sounds: Record<string, sound> = {}
 
     public static Initialize() {
@@ -98,7 +98,7 @@ class SoundManager {
         this.FirstBloodSoundPlayed = true
     }
 
-    public static PlayKibbleTomeSound(Kitty: unit) {
+    public static PlayKibbleTomeSound(Kitty: Unit) {
         let s = this.KIBBLE_TOME_SOUND
         StopSound(s, false, false)
         AttachSoundToUnit(s, Kitty)
@@ -148,7 +148,7 @@ class SoundManager {
         }
         if (sound) {
             // Assuming Start() is a method to play the sound, otherwise use PlaySoundBJ(sound);
-            // sound.Start();
+            // sound.start();
             PlaySoundBJ(sound)
         }
     }
@@ -162,7 +162,7 @@ class SoundManager {
         let k: Kitty = null
 
         try {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 if (kitty.Alive) {
                     count += 1
@@ -177,11 +177,11 @@ class SoundManager {
             let e = AddSpecialEffectTarget('Abilities\\Spells\\Human\\Feedback\\FeedbackCaster.mdl', k.Unit, 'chest')
             Utility.TimedTextToAllPlayers(1.0, '{Colors.COLOR_RED}man: standing: Last!{Colors.COLOR_RESET}')
             s.Stop(false, false)
-            s.Start()
+            s.start()
             Utility.SimpleTimer(2.0, () => {
                 GC.RemoveEffect(e) // TODO; Cleanup:                 GC.RemoveEffect(ref e);
             })
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in SoundManager.PlayLastManStandingSound: {e.Message}')
         }
     }

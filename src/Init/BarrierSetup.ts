@@ -1,9 +1,9 @@
-class BarrierSetup {
+export class BarrierSetup {
     private static BARRIERID: number = FourCC('YTpb') // changed to call native only once
     private static BarrierActive: boolean
-    private static DummyUnitOne: unit
-    private static DummyUnitTwo: unit
-    private static DummyUnitThree: unit
+    private static DummyUnitOne: Unit
+    private static DummyUnitTwo: Unit
+    private static DummyUnitThree: Unit
     public static destructables: destructable[] = []
 
     public static Initialize() {
@@ -46,7 +46,7 @@ class BarrierSetup {
         for (let i: number = 1; i < 13; i++) {
             let currentY: number = minY + i * intervalY
             let des = destructable.Create(BARRIERID, centerX, currentY)
-            destructables.Add(des)
+            destructables.push(des)
         }
     }
 
@@ -65,7 +65,7 @@ class BarrierSetup {
         for (let des in destructables) {
             des.Dispose()
         }
-        destructables.Clear()
+        destructables.clear()
         BarrierActive = false
     }
 }

@@ -1,4 +1,4 @@
-class GameTimesData {
+export class GameTimesData {
     public NormalGameTime: NormalGameTimeData
     public HardGameTime: HardGameTimeData
     public ImpossibleGameTime: ImpossibleGameTimeData
@@ -12,7 +12,7 @@ class GameTimesData {
     }
 }
 
-class NormalGameTimeData {
+export class NormalGameTimeData {
     public Date: string = ''
     public Time: number
     public TeamMembers: string = ''
@@ -23,7 +23,7 @@ class NormalGameTimeData {
     public RoundFiveTime: number */
 }
 
-class HardGameTimeData {
+export class HardGameTimeData {
     public Date: string = ''
     public Time: number
     public TeamMembers: string = ''
@@ -34,7 +34,7 @@ class HardGameTimeData {
     public RoundFiveTime: number */
 }
 
-class ImpossibleGameTimeData {
+export class ImpossibleGameTimeData {
     public Date: string = ''
     public Time: number
     public TeamMembers: string = ''
@@ -45,7 +45,7 @@ class ImpossibleGameTimeData {
     public RoundFiveTime: number */
 }
 
-class NightmareGameTimeData {
+export class NightmareGameTimeData {
     public Date: string = ''
     public Time: number
     public TeamMembers: string = ''

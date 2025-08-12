@@ -1,4 +1,4 @@
-class ColorData {
+export class ColorData {
     public colorname: string
     public colorID: number
     public colorcode: string
@@ -26,7 +26,7 @@ class ColorData {
     }
 }
 
-class Colors {
+export class Colors {
     public static COLOR_GOLD: string = '|c00FFCC00'
     public static COLOR_YELLOW_ORANGE: string = '|c00FF9900'
     public static COLOR_RED: string = '|c00FF0000'
@@ -95,7 +95,7 @@ class Colors {
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
-    public static PlayerNameColored(p: player) {
+    public static PlayerNameColored(p: MapPlayer) {
         return Colors.GetStringColorOfPlayer(GetPlayerId(p) + 1) + Player.name + Colors.COLOR_RESET
     }
 
@@ -121,23 +121,23 @@ class Colors {
         return '|cffffffff'
     }
 
-    public static SetPlayerColor(p: player, color: string) {
+    public static SetPlayerColor(p: MapPlayer, color: string) {
         let kitty: Kitty = Globals.ALL_KITTIES[p]
         for (let c in ColorManager) {
             if (ColorContainsCommand(c, color)) {
-                kitty.Unit.SetColor(playercolor.Convert(c.colorID - 1))
+                kitty.Unit.setColor(playercolor.Convert(c.colorID - 1))
                 kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.Split(',')[0]
             }
         }
     }
 
-    public static SetColorJoinedAs(p: player) {
+    public static SetColorJoinedAs(p: MapPlayer) {
         let kitty: Kitty = Globals.ALL_KITTIES[p]
         let color = Colors.ColorManager[GetPlayerId(p)]
         kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.Split(',')[0]
     }
 
-    public static SetPlayerVertexColor(p: player, RGB: string[]) {
+    public static SetPlayerVertexColor(p: MapPlayer, RGB: string[]) {
         let kitty: Kitty = Globals.ALL_KITTIES[p]
         let r: number = 0,
             g = 0,
@@ -155,7 +155,7 @@ class Colors {
     /// Sets a player's vertex color to a random RGB value.
     /// </summary>
     /// <param name="p">The player object</param>
-    public static SetPlayerRandomVertexColor(p: player) {
+    public static SetPlayerRandomVertexColor(p: MapPlayer) {
         let kitty: Kitty = Globals.ALL_KITTIES[p]
         let r: number = GetRandomInt(0, 255)
         let g: number = GetRandomInt(0, 255)
@@ -179,7 +179,7 @@ class Colors {
     /// <param name="text"></param>
     /// <returns></returns>
     public static HighlightString(text: string) {
-        return text != null && text.Length > 0 ? COLOR_YELLOW + text + COLOR_RESET : '{COLOR_RED}ERROR{COLOR_RESET}'
+        return text != null && text.length > 0 ? COLOR_YELLOW + text + COLOR_RESET : '{COLOR_RED}ERROR{COLOR_RESET}'
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ class Colors {
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="playerID"></param>
-    public static SetUnitToVertexColor(unit: unit, playerID: number) {
+    public static SetUnitToVertexColor(unit: Unit, playerID: number) {
         let color: ColorData = Colors.ColorManager[playerID]
         SetUnitVertexColor(unit, color.red, color.green, color.blue, 255)
         if (GetUnitTypeId(unit) == Constants.UNIT_CUSTOM_DOG) return
@@ -195,14 +195,14 @@ class Colors {
             `${color.red},${color.green},${color.blue}`
     }
 
-    public static ListColorCommands(player: player) {
+    public static ListColorCommands(player: MapPlayer) {
         Colors.sb = ''
         for (let color of Colors.ColorManager) Colors.sb += `${color.colorcode}${color.colorname}|r, `
 
         player.DisplayTimedTextTo(10.0, Colors.sb)
     }
 
-    public static GetPlayerByColor(colorName: string): player {
+    public static GetPlayerByColor(colorName: string): MapPlayer {
         for (let color of Colors.ColorManager) {
             if (Colors.ColorContainsCommand(color, colorName.toLowerCase())) {
                 return Player(color.colorID - 1)
@@ -228,7 +228,7 @@ class Colors {
             }
 
             kitty.SaveData.PlayerColorData.PlayedColors = Colors.sb
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in PopulateColorsData: {e.Message}')
         }
     }
@@ -268,7 +268,7 @@ class Colors {
             }
 
             kitty.SaveData.PlayerColorData.PlayedColors = Colors.sb
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in UpdateColors: {e.Message}')
         }
     }

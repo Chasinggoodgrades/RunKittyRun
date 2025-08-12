@@ -1,42 +1,31 @@
-
-
-class ExecuteLua
-{
-    public static LuaCode(player: player, args: string)
-    {
-        player.DisplayTextTo("Args: {args}");
+export class ExecuteLua {
+    public static LuaCode(player: MapPlayer, args: string) {
+        player.DisplayTextTo('Args: {args}')
         let func = Lua.Load(
-            @"return function()
-            let self: local = Globals.ALL_KITTIES:get(GetTriggerPlayer())
-            let target: local = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
-            "
-            + args +
-            @"end");
-        if (func != null)
-        {
-            try
-            {
-                let result = Lua.Call(func);
-                let resultFunc = (Func<object>)result;
-                result = resultFunc();
-                if (result != null) player.DisplayTextTo("Result: {result.ToString()}");
+            `return function()
+            local self = Globals.ALL_KITTIES:get(GetTriggerPlayer())
+            local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
+            ${args}
+            end`
+        )
+        if (func != null) {
+            try {
+                let result = Lua.Call(func)
+                let resultFunc = result
+                result = resultFunc()
+                if (result != null) player.DisplayTextTo('Result: {result.ToString()}')
+            } catch (ex) {
+                player.DisplayTextTo('Error: {ex.Message}')
             }
-            catch (ex: Error)
-            {
-                player.DisplayTextTo("Error: {ex.Message}");
-            }
-        }
-        let player: else.DisplayTextTo("Error: Syntax");
+        } else player.DisplayTextTo('Syntax Error')
     }
 }
 
-    class DebugPrinter
-    {
-        public static _G: dynamic;
+export class DebugPrinter {
+    public static _G: dynamic
 
-        // Converts the TypeScript function printDebugNames into C#.
-        public static PrintDebugNames(title: string)
-        {
-            // {{ LUA_REPLACE }}
-        }
+    // Converts the TypeScript function printDebugNames into C#.
+    public static PrintDebugNames(title: string) {
+        // {{ LUA_REPLACE }}
     }
+}

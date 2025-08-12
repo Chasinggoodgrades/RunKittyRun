@@ -1,4 +1,4 @@
-class Windwalks {
+export class Windwalks {
     public WWBlood: number
     public WWBlue: number
     public WWFire: number

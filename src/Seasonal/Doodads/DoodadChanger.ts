@@ -1,4 +1,4 @@
-class DoodadChanger {
+export class DoodadChanger {
     private static SafezoneLanterns: number = FourCC('B005')
     private static ChristmasTree: number = FourCC('B001')
     private static CrystalRed: number = FourCC('B002')
@@ -108,6 +108,6 @@ class DoodadChanger {
 
     private static HideDoodads(show: boolean) {
         let des = GetEnumDestructable()
-        if (ChristmasDecor.Contains(des.Type)) des.SetVisibility(show)
+        if (ChristmasDecor.includes(des.Type)) des.setVisible(show)
     }
 }

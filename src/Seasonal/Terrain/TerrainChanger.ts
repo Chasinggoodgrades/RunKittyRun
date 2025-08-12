@@ -1,4 +1,4 @@
-class TerrainChanger {
+export class TerrainChanger {
     public static Terrains: number[] = []
     public static SafezoneTerrain: number[] = []
     public static NormalCliff: string = 'cXc1'
@@ -12,7 +12,7 @@ class TerrainChanger {
             if (Gamemode.CurrentGameMode != GameMode.Standard) return
             this.ChristmasTerrain()
             this.SetTerrain()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in TerrainChanger.Initialize {e.Message}')
             throw e
         }

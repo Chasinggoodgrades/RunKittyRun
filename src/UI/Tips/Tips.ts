@@ -1,4 +1,4 @@
-class Tips {
+export class Tips {
     private static TipsList: string[] = []
 
     private static RefillTipsList() {

@@ -1,4 +1,4 @@
-class ADMINDISABLE {
+export class ADMINDISABLE {
     public static AdminOnly: boolean = false // enable if restricted to admins/VIPs only.
 
     public static AdminsGame(): boolean {

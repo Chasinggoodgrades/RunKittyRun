@@ -3,7 +3,7 @@
  * technically: works: just: fine: It, not: each: lane: however is equal in terms of difficulty.
  */
 
-class WolfSpawning {
+export class WolfSpawning {
     private static WolvesPerRound = [195, 264, 325, 365, 427]
     private MaxWolvesPerLane: number = 60
 

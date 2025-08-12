@@ -1,4 +1,4 @@
-class ShopChanger {
+export class ShopChanger {
     private static SantaSkin: number = Constants.UNIT_SANTA
     private static HalloweenSkin: number
     private static ValentinesSkin: number
@@ -34,7 +34,7 @@ class ShopChanger {
     }
 
     private static SetShopsToSkin(skinType: number) {
-        let tempGroup = CreateGroup()
+        let tempGroup = CreateGroup()!
         tempGroup.EnumUnitsInRect(
             Globals.WORLD_BOUNDS,
             Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY_VENDOR)

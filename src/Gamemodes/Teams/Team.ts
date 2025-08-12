@@ -1,13 +1,13 @@
 import { Globals } from 'src/Global/Globals'
 
-class Team {
+export class Team {
     private static TeamTimer: timer
     public TeamID: number
     public TeamColor: string
-    public TeamTimes: { [x: number]: number }
-    public Teammembers: player[]
+    public TeamTimes: Map<number, number>
+    public Teammembers: MapPlayer[]
     public TeamMembersString: string = ''
-    public RoundProgress: { [x: number]: string }
+    public RoundProgress: Map<number, string>
     public Finished: boolean
 
     public Team(id: number) {
@@ -17,8 +17,8 @@ class Team {
         this.TeamTimes = {}
         this.TeamColor = Colors.GetStringColorOfPlayer(this.TeamID) + 'Team ' + this.TeamID
         this.InitRoundStats()
-        Globals.ALL_TEAMS.Add(this.TeamID, this)
-        Globals.ALL_TEAMS_LIST.Add(this)
+        Globals.ALL_TEAMS.push(this.TeamID, this)
+        Globals.ALL_TEAMS_LIST.push(this)
     }
 
     public static Initialize() {
@@ -27,22 +27,22 @@ class Team {
             ProtectionOfAncients.Initialize()
             Relic.RegisterRelicEnabler()
 
-            Globals.ALL_TEAMS = {}
+            Globals.ALL_TEAMS = new Map()
             Globals.ALL_TEAMS_LIST = []
-            Globals.PLAYERS_TEAMS = {}
-            this.TeamTimer ??= CreateTimer()
-            this.TeamTimer.Start(0.1, false, ErrorHandler.Wrap(this.TeamSetup))
-        } catch (e: Error) {
+            Globals.PLAYERS_TEAMS = new Map()
+            this.TeamTimer ??= Timer.create()
+            this.TeamTimer.start(0.1, false, ErrorHandler.Wrap(this.TeamSetup))
+        } catch (e) {
             Logger.Critical('Error in Team.Initialize: {e.Message}')
             throw e
         }
     }
 
-    public AddMember(player: player) {
+    public AddMember(player: MapPlayer) {
         this.AssignTeamMember(player, true)
     }
 
-    public RemoveMember(player: player) {
+    public RemoveMember(player: MapPlayer) {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.has(player)) return
         this.AssignTeamMember(player, false)
@@ -76,7 +76,7 @@ class Team {
     }
 
     public static UpdateTeamsMB() {
-        let t = CreateTimer()
+        let t = Timer.create()
         TimerStart(
             t,
             0.1,
@@ -123,22 +123,22 @@ class Team {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="adding"></param>
-    private AssignTeamMember(player: player, adding: boolean) {
+    private AssignTeamMember(player: MapPlayer, adding: boolean) {
         if (adding) {
             this.Teammembers.push(player)
-            Globals.ALL_KITTIES[player].TeamID = this.TeamID
-            Globals.ALL_KITTIES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)))
-            Globals.ALL_CIRCLES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)))
-            Globals.PLAYERS_TEAMS.Add(player, this)
+            Globals.ALL_KITTIES.get(player).TeamID = this.TeamID
+            Globals.ALL_KITTIES.get(player).Unit.setColor(GetPlayerColor(Player(TeamID - 1)))
+            Globals.ALL_CIRCLES[player].Unit.setColor(GetPlayerColor(Player(TeamID - 1)))
+            Globals.PLAYERS_TEAMS.push(player, this)
         } else {
             Teammembers.Remove(player)
-            Globals.ALL_KITTIES[player].TeamID = 0
+            Globals.ALL_KITTIES.get(player).TeamID = 0
             Globals.PLAYERS_TEAMS.Remove(player)
         }
 
         // Sets the team member string whenever someone is added or removed.
         this.TeamMembersString = '' // Reset TeamMembersString
-        for (let i: number = 0; i < this.Teammembers.Count; i++) {
+        for (let i: number = 0; i < this.Teammembers.length; i++) {
             let member = this.Teammembers[i]
             let name: string = member.Name.split('#')[0]
             if (name.length > 7) name = Colors.ColorString(member.Name.Substring(0, 7), member.Id + 1)

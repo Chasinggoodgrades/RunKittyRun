@@ -1,9 +1,9 @@
-class MusicFrame {
+export class MusicFrame {
     public static MusicFramehandle: framehandle
     private static MusicSlider: framehandle
     private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0)
-    private static MusicSliderValues: { [x: player]: number } = {}
-    private static MusicButtons: { [x: number]: framehandle } = {}
+    private static MusicSliderValues: Map<player, number> = new Map()
+    private static MusicButtons: Map<number, framehandle> = new Map()
     private static Headers: string[]
     private static MusicFrameX: number = 0.4
     private static MusicFrameY: number = 0.36
@@ -25,14 +25,14 @@ class MusicFrame {
             MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY)
             CreateMusicFrames()
             SetMusicFrameHotkeyEvent()
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in MusicFrame: {ex.Message}')
             throw ex
         }
     }
 
     private static CreateMusicFrames() {
-        let ySize = MusicManager.MusicList.Count * 0.03
+        let ySize = MusicManager.MusicList.length * 0.03
         MusicFramehandle.SetSize(0.2, ySize)
 
         FrameManager.CreateHeaderFrame(MusicFramehandle)
@@ -46,15 +46,14 @@ class MusicFrame {
 
     private static RegisterMusicSlider() {
         MusicSlider = BlzCreateFrameByType('SLIDER', 'SliderFrame', MusicFramehandle, 'QuestMainListScrollBar', 0)
-        let numberOfSongs = MusicManager.MusicList.Count
+        let numberOfSongs = MusicManager.MusicList.length
         MusicSlider.ClearPoints()
         MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.485, 0.455)
         MusicSlider.SetSize(0.01, 0.125)
         MusicSlider.SetMinMaxValue(0, numberOfSongs)
         MusicSlider.SetStepSize(1)
 
-        for (let player in Globals.ALL_PLAYERS)
-            if (!MusicSliderValues.ContainsKey(player)) MusicSliderValues.Add(player, 0)
+        for (let player in Globals.ALL_PLAYERS) if (!MusicSliderValues.has(player)) MusicSliderValues.push(player, 0)
 
         let Trigger = CreateTrigger()
         let mousewheel = CreateTrigger()
@@ -64,25 +63,25 @@ class MusicFrame {
             let frame = BlzGetTriggerFrame()
             let player = GetTriggerPlayer()
             MusicSliderValues[player] = BlzGetTriggerFrameValue()
-            if (player.IsLocal) PopulateMusicFrame(player)
+            if (player.isLocal()) PopulateMusicFrame(player)
         })
         mousewheel.AddAction(() => {
             let frame = BlzGetTriggerFrame()
             let player = GetTriggerPlayer()
             let frameValue = BlzGetTriggerFrameValue()
-            if (!player.IsLocal) return
+            if (!player.isLocal()) return
             MusicSlider.Value = frameValue > 0 ? frameValue + 1.0 : frameValue - 1.0
             let value = MusicSliderValues[player]
-            if (player.IsLocal) PopulateMusicFrame(player)
+            if (player.isLocal()) PopulateMusicFrame(player)
         })
     }
 
     private static InitializeMusicButtons() {
-        let musicCount: number = MusicManager.MusicList.Count
+        let musicCount: number = MusicManager.MusicList.length
 
         // Create buttons for each music item
         for (let i = 0; i < musicCount; i++) {
-            if (MusicButtons.ContainsKey(i)) continue // Skip if already exists
+            if (MusicButtons.has(i)) continue // Skip if already exists
             let name = MusicManager.MusicList[i].Name
             MusicButtons[i] = BlzCreateFrameByType('GLUETEXTBUTTON', name, MusicFramehandle, 'DebugButton', 0)
             MusicButtons[i].SetSize(ButtonWidth, ButtonHeight)
@@ -97,7 +96,7 @@ class MusicFrame {
                     let frame = BlzGetTriggerFrame()
                     let player = GetTriggerPlayer()
 
-                    if (!player.IsLocal) return
+                    if (!player.isLocal()) return
 
                     //MusicManager.StopAllMusic();
 
@@ -112,13 +111,13 @@ class MusicFrame {
     /// <summary>
     /// Applies columns of data to the music frame, use only once for initialization.
     /// </summary>
-    public static PopulateMusicFrame(player: player) {
+    public static PopulateMusicFrame(player: MapPlayer) {
         // Ensure this code runs only for the local player
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
 
         // Retrieve the scroll value for the player
         let value = MusicSliderValues[player]
-        let maxSongs: number = MusicManager.MusicList.Count
+        let maxSongs: number = MusicManager.MusicList.length
         let visibleButtons: number = 9
 
         // Ensure the value stays within valid bounds
@@ -161,7 +160,7 @@ class MusicFrame {
     /// </summary>
     public static MusicFrameActions() {
         let player = GetTriggerPlayer()
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.MusicButton.Visible = false
         FrameManager.MusicButton.Visible = true

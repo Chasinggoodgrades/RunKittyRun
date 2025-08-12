@@ -1,11 +1,11 @@
-class BurntMeat {
+export class BurntMeat {
     private static StanDeath: trigger = CreateTrigger()
     private static StanTurnIn: trigger = CreateTrigger()
     private static StanDeathActions: triggeraction
     private static StanTurnInActions: triggeraction
     private ITEM_CLOAK_FLAMES: number = Constants.ITEM_CLOAK_OF_FLAMES
     private ITEM_BURNT_MEAT: number = Constants.ITEM_WOLF_MEAT
-    private static Completed: unit[] = []
+    private static Completed: Unit[] = []
 
     public static FlamesDropChance(k: Kitty) {
         let randomRoll = GetRandomInt(1, 100)
@@ -24,7 +24,7 @@ class BurntMeat {
                 NamedWolves.StanWolf.Texttag?.Dispose()
                 Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES)
                 killer.AddItem(ITEM_BURNT_MEAT)
-                Completed.Add(killer)
+                Completed.push(killer)
             })
         )
     }
@@ -36,7 +36,7 @@ class BurntMeat {
             ErrorHandler.Wrap(() => {
                 let unit = GetTriggerUnit()
                 let player = unit.Owner
-                if (!Completed.Contains(unit)) return
+                if (!Completed.includes(unit)) return
                 player.DisplayTimedTextTo(
                     8.0,
                     'vriend: Bedankt, moet: slide: eens: proberen: je! (friend: Thanks, should: try: slide: you!)'

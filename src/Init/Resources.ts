@@ -1,4 +1,4 @@
-class Resources {
+export class Resources {
     private static StartingGold: number = 100
     public static SaveExperience: number = 80
     public static SaveGold: number = 30

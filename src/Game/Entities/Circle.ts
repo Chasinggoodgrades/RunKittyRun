@@ -1,12 +1,12 @@
-class Circle {
+export class Circle {
     private CIRCLE_UNIT_MODEL: number = Constants.UNIT_KITTY_CIRCLE
     private static CIRCLE_SPAWN_REGION: rect = Regions.Circle_Area.Rect
     private ID: number
-    public Player: player
-    public Unit: unit
+    public Player: MapPlayer
+    public Unit: Unit
     public Collision: trigger
 
-    public Circle(player: player) {
+    public Circle(player: MapPlayer) {
         Player = player
         ID = player.Id
         Collision = CreateTrigger()
@@ -16,7 +16,7 @@ class Circle {
     private CreateCircle() {
         Unit = unit.Create(Player, CIRCLE_UNIT_MODEL, CIRCLE_SPAWN_REGION.CenterX, CIRCLE_SPAWN_REGION.CenterY)
         Utility.MakeUnitLocust(Unit)
-        Globals.ALL_CIRCLES.Add(Player, this)
+        Globals.ALL_CIRCLES.push(Player, this)
         Unit.IsVisible = false
     }
 
@@ -27,13 +27,13 @@ class Circle {
     }
 
     public KittyDied(kitty: Kitty) {
-        Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
+        Unit.setPos(kitty.Unit.X, kitty.unit.y)
         ShowCircle()
     }
 
     public SetMana(mana: number, maxMana: number, regenRate: number) {
-        Unit.Mana = mana
-        Unit.MaxMana = maxMana
+        Unit.mana = mana
+        Unit.maxMana = maxMana
         Unit.ManaRegeneration = regenRate
     }
 

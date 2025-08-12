@@ -1,107 +1,97 @@
+abstract class Relic {
+    private static CanBuyRelicsTrigger: trigger
+    private static CanBuyRelics: MapPlayer[]
 
+    public static RequiredLevel: number = 12
+    public static RelicIncrease: number = 16
+    public static RelicSellLevel: number = 15
+    public static MaxRelics: number = 2
+    public Name: string
+    public Description: string
+    public ItemID: number
+    public Cost: number
+    public IconPath: string
+    public UpgradeLevel: number = 0
+    public RelicAbilityID: number
+    public Upgrades: RelicUpgrade[] = []
 
-abstract class Relic
-{
-    private static CanBuyRelicsTrigger: trigger;
-    private static  CanBuyRelics:player[];
-
-    public static RequiredLevel: number  = 12;
-    public static RelicIncrease: number  = 16;
-    public static RelicSellLevel: number  = 15;
-    public static MaxRelics: number  = 2;
-    public Name: string 
-    public Description: string 
-    public ItemID: number 
-    public Cost: number 
-    public IconPath: string 
-    public UpgradeLevel: number = 0;
-    public MaxUpgradeLevel: number  { return Upgrades.Count; }
-    public RelicAbilityID: number 
-    public  Upgrades  : RelicUpgrade[] = []
-
-    public Relic(name: string, desc: string, relicAbilityID: number, itemID: number, cost: number, iconPath: string)
-    {
-        Name = name;
-        Description = desc;
-        RelicAbilityID = relicAbilityID;
-        ItemID = itemID;
-        Cost = cost;
-        IconPath = iconPath;
+    public Relic(name: string, desc: string, relicAbilityID: number, itemID: number, cost: number, iconPath: string) {
+        Name = name
+        Description = desc
+        RelicAbilityID = relicAbilityID
+        ItemID = itemID
+        Cost = cost
+        IconPath = iconPath
     }
 
-    public abstract ApplyEffect(Unit: unit);
+    public abstract ApplyEffect(Unit: Unit)
 
-    public abstract RemoveEffect(Unit: unit);
+    public abstract RemoveEffect(Unit: Unit)
 
-    public GetCurrentUpgrade(): RelicUpgrade
-    {
-        if (Upgrades == null || Upgrades.Count == 0) return null;
-        if (UpgradeLevel >= Upgrades.Count) return Upgrades[Upgrades.Count - 1];
-        return Upgrades[UpgradeLevel];
+    public GetCurrentUpgrade(): RelicUpgrade {
+        if (Upgrades == null || Upgrades.length == 0) return null
+        if (UpgradeLevel >= Upgrades.length) return Upgrades[Upgrades.length - 1]
+        return Upgrades[UpgradeLevel]
     }
 
-    public CanUpgrade(player: player)  { return PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(GetType()) < MaxUpgradeLevel; }
-
-    public Upgrade(Unit: unit)
-    {
-        if (!CanUpgrade(Unit.Owner)) return false;
-        UpgradeLevel++;
-        PlayerUpgrades.IncreaseUpgradeLevel(GetType(), Unit);
-        SetUpgradeLevelDesc(Unit);
-        RemoveEffect(Unit);
-        ApplyEffect(Unit);
-        return true;
+    public CanUpgrade(player: MapPlayer) {
+        return PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(GetType()) < Upgrades.length
     }
 
-    public static GetRelicCountForLevel(currentLevel: number)
-    {
-        let count = currentLevel - RelicIncrease + 1; // account for level 10 relic ..
-        return count < 0 ? 0 : count >= MaxRelics ? MaxRelics : count;
+    public Upgrade(Unit: Unit) {
+        if (!CanUpgrade(Unit.Owner)) return false
+        UpgradeLevel++
+        PlayerUpgrades.IncreaseUpgradeLevel(GetType(), Unit)
+        SetUpgradeLevelDesc(Unit)
+        RemoveEffect(Unit)
+        ApplyEffect(Unit)
+        return true
     }
 
-    public SetUpgradeLevelDesc(Unit: unit)
-    {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
-        if (upgradeLevel == 0) return;
+    public static GetRelicCountForLevel(currentLevel: number) {
+        let count = currentLevel - RelicIncrease + 1 // account for level 10 relic ..
+        return count < 0 ? 0 : count >= MaxRelics ? MaxRelics : count
+    }
 
-        let item = Utility.UnitGetItem(Unit, ItemID);
-        if (item == null) return;
+    public SetUpgradeLevelDesc(Unit: Unit) {
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType())
+        if (upgradeLevel == 0) return
 
-        let tempName = item.Name;
-        let newUpgradeText = "{Colors.COLOR_TURQUOISE}[Upgrade: {upgradeLevel}]{Colors.COLOR_RESET}";
+        let item = Utility.UnitGetItem(Unit, ItemID)
+        if (item == null) return
 
-        if (tempName.StartsWith("{Colors.COLOR_TURQUOISE}[Upgrade:"))
-        {
-            let endIndex = tempName.IndexOf("]|r") + 3;
-            tempName = tempName.Substring(endIndex).Trim();
+        let tempName = item.Name
+        let newUpgradeText = '{Colors.COLOR_TURQUOISE}[Upgrade: {upgradeLevel}]{Colors.COLOR_RESET}'
+
+        if (tempName.StartsWith('{Colors.COLOR_TURQUOISE}[Upgrade:')) {
+            let endIndex = tempName.IndexOf(']|r') + 3
+            tempName = tempName.Substring(endIndex).Trim()
         }
 
-        item.Name = "{newUpgradeText} {tempName}";
+        item.Name = '{newUpgradeText} {tempName}'
     }
 
-    public static RegisterRelicEnabler()
-    {
+    public static RegisterRelicEnabler() {
         // Ability to Purchase Relics
-        PlayerUpgrades.Initialize();
-        CanBuyRelicsTrigger ??= CreateTrigger();
-        CanBuyRelics ??: player[] = []
-        TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel);
-        CanBuyRelicsTrigger.AddAction(() =>
-        {
-            try
-            {
-                if (CanBuyRelics.Contains(GetTriggerUnit().Owner)) return;
-                if (GetTriggerUnit().HeroLevel < RequiredLevel) return;
-                CanBuyRelics.Add(GetTriggerUnit().Owner);
-                RelicUtil.EnableRelicBook(GetTriggerUnit());
-                RelicUtil.DisableRelicAbilities(GetTriggerUnit());
-                ProtectionOfAncients.SetProtectionOfAncientsLevel(GetTriggerUnit());
-                GetTriggerUnit().Owner.DisplayTimedTextTo(4.0, "{Colors.COLOR_TURQUOISE}may: now: buy: relics: from: the: shop: You!{Colors.COLOR_RESET}");
+        PlayerUpgrades.Initialize()
+        CanBuyRelicsTrigger ??= CreateTrigger()
+        CanBuyRelics ??= []
+        TriggerRegisterAnyUnitEventBJ(CanBuyRelicsTrigger, playerunitevent.HeroLevel)
+        CanBuyRelicsTrigger.AddAction(() => {
+            try {
+                if (CanBuyRelics.includes(GetTriggerUnit().Owner)) return
+                if (GetTriggerUnit().HeroLevel < RequiredLevel) return
+                CanBuyRelics.push(GetTriggerUnit().Owner)
+                RelicUtil.EnableRelicBook(GetTriggerUnit())
+                RelicUtil.DisableRelicAbilities(GetTriggerUnit())
+                ProtectionOfAncients.SetProtectionOfAncientsLevel(GetTriggerUnit())
+                GetTriggerUnit().Owner.DisplayTimedTextTo(
+                    4.0,
+                    '{Colors.COLOR_TURQUOISE}may: now: buy: relics: from: the: shop: You!{Colors.COLOR_RESET}'
+                )
+            } catch (e) {
+                Logger.Warning('Error in RegisterLevelTenTrigger {e.Message}')
             }
-            catch (e: Error)
-            {
-                Logger.Warning("Error in RegisterLevelTenTrigger {e.Message}");
-            }
-        });
+        })
     }
 }

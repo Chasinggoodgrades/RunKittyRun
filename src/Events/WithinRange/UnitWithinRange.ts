@@ -1,6 +1,6 @@
-class UnitWithinRange {
+export class UnitWithinRange {
     private static RegisterUnitWithinRangeSuper(
-        u: unit,
+        u: Unit,
         range: number,
         cleanOnKilled: boolean,
         filter: Func<bool>,
@@ -33,7 +33,7 @@ class UnitWithinRange {
         kitty.cCollision = null
     }
 
-    public static RegisterUnitWithinRangeTrigger(u: unit, range: number, filter: Func<bool>, execution: trigger) {
+    public static RegisterUnitWithinRangeTrigger(u: Unit, range: number, filter: Func<bool>, execution: trigger) {
         return RegisterUnitWithinRangeSuper(u, range, false, filter, execution)
     }
 }

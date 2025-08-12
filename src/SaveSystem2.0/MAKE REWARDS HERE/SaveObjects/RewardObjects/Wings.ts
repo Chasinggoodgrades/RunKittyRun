@@ -1,4 +1,4 @@
-class Wings {
+export class Wings {
     public PhoenixWings: number
     public FairyWings: number
     public NightmareWings: number

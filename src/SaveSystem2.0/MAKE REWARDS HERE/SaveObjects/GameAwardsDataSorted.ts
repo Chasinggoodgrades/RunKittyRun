@@ -1,4 +1,4 @@
-class GameAwardsDataSorted {
+export class GameAwardsDataSorted {
     public Auras: Auras
     public Hats: Hats
     public Nitros: Nitros

@@ -1,4 +1,4 @@
-class FrameManager {
+export class FrameManager {
     public static StatsTrigger: trigger = CreateTrigger()
     public static ShopTrigger: trigger = CreateTrigger()
     public static RewardsTrigger: trigger = CreateTrigger()
@@ -28,7 +28,7 @@ class FrameManager {
             CreateShopButton()
             MusicFrame.Initialize()
             Utility.SimpleTimer(1.0, ESCHideFrames)
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in FrameManager.Initialize: {ex.Message}')
             throw ex
         }
@@ -97,9 +97,9 @@ class FrameManager {
     }
 
     private static InitFramesList() {
-        _frames.Add(ShopFrame.shopFrame)
-        _frames.Add(RewardsFrame.RewardFrame)
-        _frames.Add(MusicFrame.MusicFramehandle)
+        _frames.push(ShopFrame.shopFrame)
+        _frames.push(RewardsFrame.RewardFrame)
+        _frames.push(MusicFrame.MusicFramehandle)
     }
 
     private static CreateRewardsButton() {
@@ -158,7 +158,7 @@ class FrameManager {
         let t = timer.Create()
         let nameFrame = BlzGetFrameByName('ConsoleUIBackdrop', 0)
 
-        t.Start(1.0, true, _cachedUIPosition)
+        t.start(1.0, true, _cachedUIPosition)
     }
 
     private static RepositionBackdropAction(): Action {
@@ -170,16 +170,16 @@ class FrameManager {
                 let yOffSet = nameFrame.Height / 8
                 Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top)
                 Backdrop.SetSize(x, h)
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Critical('Error in RepositionBackdropAction: {e.Message}')
             }
         }
     }
 
     private static ESCHideFrames() {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let player = Globals.ALL_PLAYERS[i]
-            TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
+            TriggerRegisterPlayerEvent(ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
         }
         ESCTrigger.AddAction(ESCActions)
     }
@@ -191,14 +191,14 @@ class FrameManager {
 
     private static ESCActions() {
         let player = GetTriggerPlayer()
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         RewardsFrame.RewardFrame.Visible = false
         ShopFrame.shopFrame.Visible = false
         MusicFrame.MusicFramehandle.Visible = false
     }
 
     public static HideOtherFrames(currentFrame: framehandle) {
-        for (let i: number = 0; i < _frames.Count; i++) {
+        for (let i: number = 0; i < _frames.length; i++) {
             if (_frames[i] != currentFrame) _frames[i].Visible = false
         }
     }

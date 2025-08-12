@@ -1,4 +1,4 @@
-class TeamsUtil {
+export class TeamsUtil {
     public static RoundResetAllTeams() {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
         for (let team in Globals.ALL_TEAMS) team.Value.Finished = false
@@ -7,7 +7,7 @@ class TeamsUtil {
     public static CheckTeamDead(k: Kitty) {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
         let team = Globals.ALL_TEAMS[k.TeamID]
-        for (let i: number = 0; i < team.Teammembers.Count; i++) {
+        for (let i: number = 0; i < team.Teammembers.length; i++) {
             if (Globals.ALL_KITTIES[team.Teammembers[i]].Alive) return
         }
         team.TeamIsDeadActions()
@@ -15,7 +15,7 @@ class TeamsUtil {
 
     public static UpdateTeamsMB() {
         let t = timer.Create()
-        t.Start(
+        t.start(
             0.1,
             false,
             ErrorHandler.Wrap(() => {

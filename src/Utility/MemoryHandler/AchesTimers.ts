@@ -1,41 +1,33 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Timer } from 'w3ts'
+import { MemoryHandler } from './MemoryHandler'
 
+export class AchesTimers {
+    public Timer = Timer.create()
+    public AchesTimers() {}
 
-class AchesTimers
-{
-    public Timer: timer = CreateTimer();
-    public AchesTimers()
-    {
+    public Pause(pause: boolean = true) {
+        if (this.Timer == null) Logger.Warning('TIMER IS NULL in {nameof(AchesTimers)}.pause()')
+        if (pause) this.Timer.pause()
+        else this.Timer.resume()
     }
 
-    public Pause(pause: boolean = true)
-    {
-        if (this.Timer == null) Logger.Warning("TIMER IS NULL in {nameof(AchesTimers)}.Pause()");
-        if (pause)
-            PauseTimerBJ(true, this.Timer);
-        else
-            PauseTimerBJ(false, this.Timer);
+    public Start(delay: number, repeat: boolean, callback: () => void) {
+        if (this.Timer == null) Logger.Warning('TIMER IS NULL in {nameof(AchesTimers)}.start()')
+        this.Timer.start(delay, repeat, callback)
     }
 
-    public Start(delay: number, repeat: boolean, callback: () => void)
-    {
-        if (this.Timer == null) Logger.Warning("TIMER IS NULL in {nameof(AchesTimers)}.Start()");
-        TimerStart(this.Timer, delay, repeat, callback);
+    public Resume() {
+        if (this.Timer == null) Logger.Warning('TIMER IS NULL in {nameof(AchesTimers)}.Resume()')
+        this.Timer.resume()
     }
 
-    public Resume()
-    {
-        if (this.Timer == null) Logger.Warning("TIMER IS NULL in {nameof(AchesTimers)}.Resume()");
-        PauseTimerBJ(false, this.Timer);
+    public Remaining() {
+        return this.Timer.remaining
     }
 
-    public Remaining()
-    {
-        return TimerGetRemaining(this.Timer);
-    }
-
-    public Dispose()
-    {
-        this.Pause();
-        ObjectPool<AchesTimers>.ReturnObject(this);
+    public Dispose() {
+        this.Pause()
+        MemoryHandler.destroyObject(this)
     }
 }

@@ -1,4 +1,4 @@
-class FilterList {
+export class FilterList {
     public static KittyFilter: filterfunc = Utility.CreateFilterFunc(() => {
         return GetFilterUnit().UnitType == Constants.UNIT_KITTY
     })

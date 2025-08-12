@@ -1,4 +1,4 @@
-class Trails {
+export class Trails {
     public PurpleFire: number
     public BlueFire: number
     public TurquoiseFire: number

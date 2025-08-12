@@ -1,8 +1,8 @@
-class ShadowKitty {
-    public static ALL_SHADOWKITTIES: { [x: player]: ShadowKitty }
-    public Unit: unit
+export class ShadowKitty {
+    public static ALL_SHADOWKITTIES: Map<player, ShadowKitty>
+    public Unit: Unit
 
-    public Player: player
+    public Player: MapPlayer
 
     public Kitty: Kitty
 
@@ -51,7 +51,7 @@ class ShadowKitty {
     /// </summary>
     public TeleportToShadowKitty() {
         let kitty = Globals.ALL_KITTIES[Player].Unit
-        kitty.SetPosition(Unit.X, GetUnitY(unit))
+        kitty.setPos(Unit.X, unit.y)
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ class ShadowKitty {
             this.Unit = null
             this.Active = false
             PauseKitty(this.Player, false)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('ShadowKitty.KillShadowKitty: {e.Message}')
             throw e
         }
@@ -80,8 +80,8 @@ class ShadowKitty {
         Utility.SelectUnitForPlayer(this.Player, this.Unit)
     }
 
-    private static PauseKitty(player: player, paused: boolean) {
-        let kitty = Globals.ALL_KITTIES[player].Unit
+    private static PauseKitty(player: MapPlayer, paused: boolean) {
+        let kitty = Globals.ALL_KITTIES.get(player).Unit
         kitty.IsPaused = paused
     }
 

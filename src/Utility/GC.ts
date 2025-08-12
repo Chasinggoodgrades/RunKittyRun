@@ -1,4 +1,4 @@
-class GC {
+export class GC {
     public static GCAffixes: Affix[] = []
 
     public static RemoveTrigger(t: trigger) {
@@ -13,7 +13,7 @@ class GC {
     public static RemoveTimer(t: timer) {
         // TODO; Cleanup:     public static RemoveTimer(ref timer t)
         if (t == null) return
-        t.Pause()
+        t.pause()
         t?.Dispose()
         t = null
     }
@@ -28,7 +28,7 @@ class GC {
     public static RemoveGroup(g: group) {
         // TODO; Cleanup:     public static RemoveGroup(ref group g)
         if (g == null) return
-        g.Clear()
+        g.clear()
         g?.Dispose()
         g = null
     }
@@ -43,7 +43,7 @@ class GC {
     public static RemoveList<T>(list: T[]) {
         // TODO; Cleanup:     public static RemoveList<T>(ref list: T[])
         if (list == null) return
-        list.Clear()
+        list.clear()
         list = null
     }
 

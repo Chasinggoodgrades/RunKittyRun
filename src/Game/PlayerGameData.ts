@@ -1,7 +1,7 @@
 /// <summary>
 /// Keeps track of current game stats, saves, deaths, streak, nitros, and other misc data.
 /// </summary>
-class PlayerGameData {
+export class PlayerGameData {
     public TotalSaves: number
     public TotalDeaths: number
     public RoundSaves: number

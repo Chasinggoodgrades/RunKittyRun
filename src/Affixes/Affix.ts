@@ -7,7 +7,7 @@ abstract class Affix {
     }
 
     public Apply() {
-        // GC.GCAffixes.Add(this);
+        // GC.GCAffixes.push(this);
     }
 
     public Remove() {

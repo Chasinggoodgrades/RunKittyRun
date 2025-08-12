@@ -1,4 +1,4 @@
-class DeathlessChallenges {
+export class DeathlessChallenges {
     public static DeathlessCount: number = 0 // Number of deaths allowed for the current round.
 
     public static Initialize() {
@@ -10,7 +10,7 @@ class DeathlessChallenges {
     /// </summary>
     public static ResetDeathless() {
         DeathlessCount = 0
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             ResetPlayerDeathless(kitty)
         }
@@ -50,7 +50,7 @@ class DeathlessChallenges {
         PlayInvulnerableSoundWithText(kitty)
     }
 
-    private static AwardBasedOnDifficulty(player: player) {
+    private static AwardBasedOnDifficulty(player: MapPlayer) {
         let difficulty = Difficulty.DifficultyValue
         NormalDeathlessAward(player)
         /*        switch (difficulty)
@@ -72,7 +72,7 @@ class DeathlessChallenges {
                 }*/
     }
 
-    private static NormalDeathlessAward(player: player) {
+    private static NormalDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
         GiveRoundReward(
             player,
@@ -84,7 +84,7 @@ class DeathlessChallenges {
         )
     }
 
-    private static HardDeathlessAward(player: player) {
+    private static HardDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
         GiveRoundReward(
             player,
@@ -96,7 +96,7 @@ class DeathlessChallenges {
         )
     }
 
-    private static ImpossibleDeathlessAward(player: player) {
+    private static ImpossibleDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
         GiveRoundReward(
             player,
@@ -108,7 +108,7 @@ class DeathlessChallenges {
         )
     }
 
-    private static GiveRoundReward(player: player, ...rewards: string[]) {
+    private static GiveRoundReward(player: MapPlayer, ...rewards: string[]) {
         if (Globals.ROUND >= 1 && Globals.ROUND <= rewards.length) {
             AwardManager.GiveReward(player, rewards[Globals.ROUND - 1])
         }
@@ -116,7 +116,7 @@ class DeathlessChallenges {
 
     private static PlayInvulnerableSoundWithText(k: Kitty) {
         SoundManager.PlayInvulnerableSound()
-        let textTag = texttag.Create()
+        let textTag = TextTag.create()!
         Utility.CreateSimpleTextTag('{Colors.COLOR_RED}Deathless {Globals.ROUND}!', 2.0, k.Unit)
     }
 }

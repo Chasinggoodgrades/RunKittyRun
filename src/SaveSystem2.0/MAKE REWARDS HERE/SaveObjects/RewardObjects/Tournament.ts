@@ -1,4 +1,4 @@
-class Tournament {
+export class Tournament {
     public TurquoiseNitro: number
     public TurquoiseWings: number
     public VioletWings: number

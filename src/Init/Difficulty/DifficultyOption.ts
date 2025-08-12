@@ -1,12 +1,12 @@
-class DifficultyOption {
+export class DifficultyOption {
     public static Options: DifficultyOption[] = []
     public static DifficultyChoosing: dialog = DialogCreate()!
     private static _OptionCount: number = -1
-    public Name!: string
-    public Value!: number
-    public Color!: string
-    public Button!: button
-    public TallyCount!: number
+    public Name: string
+    public Value: number
+    public Color: string
+    public Button: button
+    public TallyCount: number
 
     constructor(name: string, value: number, color: string) {
         this.Name = name

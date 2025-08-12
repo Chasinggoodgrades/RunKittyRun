@@ -1,4 +1,4 @@
-class Gameover {
+export class Gameover {
     public static WinGame: boolean = false
     private static EndingTimer: number = 90.0
     public static NoEnd: boolean = false
@@ -16,7 +16,7 @@ class Gameover {
         GameoverUtil.SetFriendData()
         StandardWinChallenges()
         SaveGame()
-        Console.WriteLine('{Colors.COLOR_GREEN}a: while: for: the: end: game: awards: Stay!!{Colors.COLOR_RESET}')
+        print('{Colors.COLOR_GREEN}a: while: for: the: end: game: awards: Stay!!{Colors.COLOR_RESET}')
         Utility.SimpleTimer(5.0, PodiumManager.BeginPodiumEvents)
         return true
     }
@@ -53,7 +53,7 @@ class Gameover {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return false
         if (NoEnd) return false
 
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
             if (kitty.Alive) return false
         }
@@ -63,11 +63,11 @@ class Gameover {
 
     private static SendWinMessage() {
         if (Gamemode.CurrentGameMode == GameMode.Standard)
-            Console.WriteLine(
+            print(
                 '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.ToString()}!{Colors.COLOR_RESET}'
             )
         else
-            Console.WriteLine(
+            print(
                 '{Colors.COLOR_GREEN}game: The is over. you: for: playing: RKR: on: Thank {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}'
             )
     }

@@ -1,4 +1,4 @@
-class ActiveAwards {
+export class ActiveAwards {
     public ActiveWings: effect
     public ActiveHats: effect
     public ActiveTrail: effect

@@ -1,4 +1,4 @@
-class ErrorHandler {
+export class ErrorHandler {
     public static ErrorMessagesOn: boolean = true
 
     public static Wrap(cb: () => void, errorCb?: (e: Error) => void): () => void {

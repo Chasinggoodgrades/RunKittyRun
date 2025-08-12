@@ -1,4 +1,4 @@
-class Cell {
+export class Cell {
     public readonly X: number
     public readonly Y: number
 
@@ -8,10 +8,10 @@ class Cell {
     }
 }
 
-class ItemSpatialGrid {
+export class ItemSpatialGrid {
     private CELL_SIZE: number = 128
-    private static Dictionary<Cell, Kibble[]> kibbleCells = new();
-    private static Dictionary<Cell, item[]> itemCells = new();
+    private static kibbleCells: Map<Cell, Kibble[]> = new Map()
+    private static itemCells: Map<Cell, item[]> = new Map()
 
     public static GetCell(x: number, y: number): Cell {
         let cellX: number = x / CELL_SIZE
@@ -23,7 +23,7 @@ class ItemSpatialGrid {
         let cell = GetCell(kibble.Item.X, kibble.Item.Y)
         let list: Kibble[]
         if (!(list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) kibbleCells[cell] = list = []
-        list.Add(kibble)
+        list.push(kibble)
     }
 
     public static UnregisterKibble(kibble: Kibble) {
@@ -35,7 +35,7 @@ class ItemSpatialGrid {
         let cell = GetCell(item.X, item.Y)
         let list: Kibble[]
         if (!(list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) itemCells[cell] = list = []
-        list.Add(item)
+        list.push(item)
     }
 
     public static UnregisterItem(item: item) {
@@ -56,19 +56,19 @@ class ItemSpatialGrid {
     }
 
     public static KittyItemPickup(kitty: Kitty) {
-        let kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.GetUnitY(unit))
-        let itemList = GetNearbyItems(kitty.Unit.X, kitty.GetUnitY(unit))
+        let kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.unit.y)
+        let itemList = GetNearbyItems(kitty.Unit.X, kitty.unit.y)
 
-        if (kibbleList != null && kibbleList.Count > 0) {
-            for (let i: number = 0; i < kibbleList.Count; i++) {
+        if (kibbleList != null && kibbleList.length > 0) {
+            for (let i: number = 0; i < kibbleList.length; i++) {
                 let k = kibbleList[i]
                 if (k == null) continue
                 kitty.Unit.AddItem(k.Item)
             }
         }
 
-        if (itemList != null && itemList.Count > 0) {
-            for (let i: number = 0; i < itemList.Count; i++) {
+        if (itemList != null && itemList.length > 0) {
+            for (let i: number = 0; i < itemList.length; i++) {
                 let item = itemList[i]
                 if (item == null) continue
                 if (item.IsOwned) continue

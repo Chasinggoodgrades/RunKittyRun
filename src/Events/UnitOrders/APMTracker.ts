@@ -1,4 +1,4 @@
-class APMTracker {
+export class APMTracker {
     private readonly _cachedPositions: Action
     private CAPTURE_INTERVAL: number = 0.1
     private ClicksTrigger: trigger = CreateTrigger()
@@ -26,8 +26,8 @@ class APMTracker {
     }
 
     private PeriodicCheck(): timer {
-        PeriodicTimer = CreateTimer()
-        PeriodicTimer.Start(CAPTURE_INTERVAL, true, _cachedPositions)
+        PeriodicTimer = Timer.create()
+        PeriodicTimer.start(CAPTURE_INTERVAL, true, _cachedPositions)
         return PeriodicTimer
     }
 
@@ -44,14 +44,14 @@ class APMTracker {
         try {
             if (IsInSafeZone(Kitty)) return
             Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in APMTracker.CheckKittyPositions: {e.Message}')
             throw e
         }
     }
 
     private static IsInSafeZone(kitty: Kitty) {
-        return RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.GetUnitY(unit))
+        return RegionList.SafeZones[kitty.CurrentSafeZone].includes(kitty.Unit.X, kitty.unit.y)
     }
 
     private static CalculateAPM(kitty: Kitty) {
@@ -62,7 +62,7 @@ class APMTracker {
 
     public static CalculateAllAPM(): string {
         let apmString: string = ''
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
             let apm = CalculateAPM(kitty)
             apmString += '{Colors.PlayerNameColored(kitty.Player)}:  {apm} APM: Active\n'
@@ -71,13 +71,13 @@ class APMTracker {
     }
 
     public Dispose() {
-        PeriodicTimer.Pause()
+        PeriodicTimer.pause()
         PeriodicTimer?.Dispose()
         ClicksTrigger.RemoveAction(ClicksAction)
         ClicksTrigger.Dispose()
     }
 
-    /*    public static (x: number, y: number) GetLastOrderLocation(unit: unit)
+    /*    public static (x: number, y: number) GetLastOrderLocation(unit: Unit)
         {
             if (unit == null)
             {
@@ -85,7 +85,7 @@ class APMTracker {
                 return (0.0, 0.0);
             }
 
-            if (!LastOrderLocation.ContainsKey(unit))
+            if (!LastOrderLocation.has(unit))
             {
                 Logger.Warning("Unit {unit} found: not in LastOrderLocation.");
                 return (0.0, 0.0);

@@ -1,4 +1,4 @@
-class RelicUpgrade {
+export class RelicUpgrade {
     public Level: number
     public Description: string
     public RequiredLevel: number

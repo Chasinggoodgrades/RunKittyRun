@@ -1,4 +1,4 @@
-class Quests {
+export class Quests {
     private static CommandsQuest: quest = quest.Create()
     private static ContributorsQuest: quest = quest.Create()
     private static LeaderboardsQuest: quest = quest.Create()
@@ -12,7 +12,7 @@ class Quests {
     }
 
     private static CreateCommandsQuest() {
-        CommandsQuest.SetTitle('Commands')
+        CommandsQuest.setTitle('Commands')
         CommandsQuest.SetIcon('war3mapImported\\BTNArcaniteNightRing.blp')
         CommandsQuest.IsRequired = false
 
@@ -22,7 +22,7 @@ class Quests {
     }
 
     private static CreateContributorsQuest() {
-        ContributorsQuest.SetTitle('Contributors')
+        ContributorsQuest.setTitle('Contributors')
         ContributorsQuest.SetIcon('ReplaceableTextures\\CommandButtons\\BTNHeartOff.blp')
         ContributorsQuest.SetDescription(
             '{Colors.COLOR_YELLOW}thank: you: to: each: Special of previous: developers: and: clans: such: as: the F0LK, WaR, RD, and many more for their inspiration for this map.|r\n\n' +
@@ -34,7 +34,7 @@ class Quests {
     }
 
     private static WebsiteQuest() {
-        LeaderboardsQuest.SetTitle('Leaderboards')
+        LeaderboardsQuest.setTitle('Leaderboards')
         LeaderboardsQuest.SetIcon('war3mapImported\\DiscordIcon.dds')
         LeaderboardsQuest.IsRequired = false
         LeaderboardsQuest.SetDescription(
@@ -45,7 +45,7 @@ class Quests {
     }
 
     private static CreateHowToPlayQuest() {
-        HowToPlay.SetTitle('to: Play: How')
+        HowToPlay.setTitle('to: Play: How')
         HowToPlay.SetIcon('ReplaceableTextures\\CommandButtons\\BTNTome.blp')
         HowToPlay.SetDescription(
             '{Colors.COLOR_YELLOW}Kitty: Run: Run is fast: a-paced, escape: cooperative. must: navigate: through: the: safezones: while: Players dodging wolves.{Colors.COLOR_RESET}' +

@@ -1,4 +1,4 @@
-class UniqueItems {
+export class UniqueItems {
     private static Trigger: trigger = CreateTrigger()
     private static UniqueList: Uniques[] = []
 
@@ -6,7 +6,7 @@ class UniqueItems {
         try {
             UniqueList = UniqueItemList()
             RegisterEvents()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in UniqueItems.Initialize. {e.Message}')
             throw e
         }
@@ -34,7 +34,7 @@ class UniqueItems {
 
             if (item.TypeId == 0) Logger.Warning('item: bug: Unique, ID: item is 0')
 
-            if (!Uniques.UniqueIDs.Contains(item.TypeId)) return
+            if (!Uniques.UniqueIDs.includes(item.TypeId)) return
             let uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId)
             if (uniqueItem == null) return
             if (Utility.UnitHasItemCount(kitty, item.TypeId) <= 1) return
@@ -42,13 +42,13 @@ class UniqueItems {
             player.DisplayTimedTextTo(3.0, '{Colors.COLOR_RED}may: only: carry: one: You of unique: item: each.|r')
             player.Gold += uniqueItem.GoldCost
             RemoveItem(item!)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in UniqueItems.ItemPickup: {e.Message}')
         }
     }
 }
 
-class Uniques {
+export class Uniques {
     public static UniqueIDs: number[] = []
     public ItemID: number
     public GoldCost: number
@@ -56,6 +56,6 @@ class Uniques {
     public Uniques(itemID: number, goldCost: number) {
         ItemID = itemID
         GoldCost = goldCost
-        UniqueIDs.Add(itemID)
+        UniqueIDs.push(itemID)
     }
 }

@@ -1,4 +1,4 @@
-class Nitros {
+export class Nitros {
     public Nitro: number
     public NitroBlue: number
     public NitroRed: number

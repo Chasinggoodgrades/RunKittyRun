@@ -7,7 +7,7 @@
 //    public static number WINDWALK_COLLISION_DURATION = 5.0;
 //    private static number AMULET_UPGRADE_COLLISION_REDUCTION = 0.01; // 1%
 //    private static number AMULET_OF_EVASIVENESS_COLLSION_REDUCTION = 0.10; // 10%
-//    private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
+//    private static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNTalisman.blp";
 //    private number RelicCost = 650;
 //    private static number UnitScale = 0.60 - (0.60 * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0);
 
@@ -27,7 +27,7 @@
 //    public override ApplyEffect(unit Unit)
 //    {
 //        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES[player];
+//        let kitty = Globals.ALL_KITTIES.get(player);
 //        let newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = newCollisionRadius;
@@ -38,7 +38,7 @@
 //    public override RemoveEffect(unit Unit)
 //    {
 //        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES[player];
+//        let kitty = Globals.ALL_KITTIES.get(player);
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
 //        Unit.SetScale(0.60, 0.60, 0.60);
@@ -75,7 +75,7 @@
 //    public static AmuletWindwalkEffect(unit Unit)
 //    {
 //        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES[player];
+//        let kitty = Globals.ALL_KITTIES.get(player);
 //        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
 //        if (upgradeLevel < 2) return;
 //        let newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
@@ -83,8 +83,8 @@
 //        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
 //        CollisionDetection.KittyRegisterCollisions(kitty);
 
-//        let t = ObjectPool.GetEmptyObject<AchesTimers>();
-//        t.Timer.Start(WINDWALK_COLLISION_DURATION, false, () =>
+//        let t = MemoryHandler.getEmptyObject<AchesTimers>()
+//        t.Timer.start(WINDWALK_COLLISION_DURATION, false, () =>
 //        {
 //            kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);
 //            CollisionDetection.KittyRegisterCollisions(kitty);

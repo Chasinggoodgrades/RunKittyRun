@@ -1,4 +1,4 @@
-class GameCurrency {
+export class GameCurrency {
     public Kibble: KibbleCurrency
 
     public GameCurrency() {
@@ -6,7 +6,7 @@ class GameCurrency {
     }
 }
 
-class KibbleCurrency {
+export class KibbleCurrency {
     public Collected: number
     public Jackpots: number
     public SuperJackpots: number

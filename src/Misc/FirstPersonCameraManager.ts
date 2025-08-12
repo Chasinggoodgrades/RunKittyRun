@@ -1,14 +1,14 @@
-class FirstPersonCamera {
+export class FirstPersonCamera {
     private timerPeriod: number = 0.001
     private FIRSTPERSON_ANGLE_PER_PERIOD: number = 0.3
 
-    private forceCamTimer!: timer
-    private hero!: unit
-    private player!: player
-    private keyDownState!: { [key: string]: boolean }
-    private lastUnitAnimation!: string
+    private forceCamTimer: Timer
+    private hero: Unit
+    private player: MapPlayer
+    private keyDownState: Map<string, boolean>
+    private lastUnitAnimation: string
 
-    public FirstPersonCamera(hero: unit, player: player) {
+    public FirstPersonCamera(hero: Unit, player: MapPlayer) {
         this.hero = hero
         this.player = player
         this.keyDownState = {
@@ -26,12 +26,12 @@ class FirstPersonCamera {
     public ToggleFirstPerson(active: boolean) {
         if (active) {
             if (this.forceCamTimer == null) {
-                this.forceCamTimer = CreateTimer()
+                this.forceCamTimer = Timer.create()
                 TimerStart(this.forceCamTimer, this.timerPeriod, true, ErrorHandler.Wrap(UpdateCamera))
             }
         } else {
             if (this.forceCamTimer != null) {
-                this.forceCamTimer.Pause()
+                this.forceCamTimer.pause()
                 DestroyTimer(this.forceCamTimer)
                 this.ResetCamera()
             }
@@ -60,7 +60,7 @@ class FirstPersonCamera {
             let moveSpeed: number = GetUnitMoveSpeed(this.hero)
             let movePerTick: number = moveSpeed * timerPeriod
 
-            let kitty: Kitty = Globals.ALL_KITTIES[player]
+            let kitty: Kitty = Globals.ALL_KITTIES.get(player)
 
             if (kitty.Slider.IsEnabled()) {
                 movePerTick = 0.2
@@ -70,13 +70,13 @@ class FirstPersonCamera {
             if (this.keyDownState['UP']) fwd += movePerTick
             if (this.keyDownState['DOWN']) fwd -= movePerTick
 
-            let oldX: number = GetUnitX(this.hero)
-            let oldY: number = GetUnitY(this.hero)
+            let oldX: number = this.hero.x
+            let oldY: number = this.hero.y
 
             let newX: number = oldX + fwd * Cos(angle)
             let newY: number = oldY + fwd * Sin(angle)
 
-            if (!Globals.GAME_ACTIVE && Regions.BarrierRegion.Contains(newX, newY)) {
+            if (!Globals.GAME_ACTIVE && Regions.BarrierRegion.includes(newX, newY)) {
                 return
             }
 
@@ -115,26 +115,26 @@ class FirstPersonCamera {
     }
 
     public SetKeyDownState(key: string, state: boolean) {
-        if (keyDownState.ContainsKey(key)) {
+        if (keyDownState.has(key)) {
             keyDownState[key] = state
         }
     }
 
     private ResetCamera() {
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         SetCameraTargetControllerNoZForPlayer(player, this.hero, 0, 0, false)
         ResetToGameCamera(0)
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0, 0.0)
     }
 
     private ItemPickup() {
-        let kitty: Kitty = Globals.ALL_KITTIES[player]
+        let kitty: Kitty = Globals.ALL_KITTIES.get(player)
         ItemSpatialGrid.KittyItemPickup(kitty)
     }
 }
 
-class FirstPersonCameraManager {
-    private static cameras: { [x: player]: FirstPersonCamera } = {}
+export class FirstPersonCameraManager {
+    private static cameras: Map<player, FirstPersonCamera> = new Map()
 
     public static Initialize() {
         for (let player in Globals.ALL_PLAYERS) {
@@ -148,12 +148,12 @@ class FirstPersonCameraManager {
     }
 
     private static RegisterKeyEvents() {
-        let keyStates: { [key: string]: number } = {
+        let keyStates: Map<string, number> = {
             true: bj_KEYEVENTTYPE_DEPRESS,
             false: bj_KEYEVENTTYPE_RELEASE,
         }
 
-        let keys: { [key: string]: number } = {
+        let keys: Map<string, number> = {
             UP: bj_KEYEVENTKEY_UP,
             DOWN: bj_KEYEVENTKEY_DOWN,
             LEFT: bj_KEYEVENTKEY_LEFT,
@@ -174,23 +174,23 @@ class FirstPersonCameraManager {
     }
 
     private static OnKeyEvent(key: string, isDown: boolean) {
-        if (cameras.ContainsKey(GetTriggerPlayer())) {
+        if (cameras.has(GetTriggerPlayer())) {
             cameras[GetTriggerPlayer()].SetKeyDownState(key, isDown)
         }
     }
 
-    private static GetHeroForPlayer(player: player): unit {
-        return Globals.ALL_KITTIES.ContainsKey(player) ? Globals.ALL_KITTIES[player].Unit : null
+    private static GetHeroForPlayer(player: MapPlayer): Unit {
+        return Globals.ALL_KITTIES.has(player) ? Globals.ALL_KITTIES.get(player).Unit : null
     }
 
-    public static ToggleFirstPerson(player: player) {
-        if (cameras.ContainsKey(player)) {
+    public static ToggleFirstPerson(player: MapPlayer) {
+        if (cameras.has(player)) {
             cameras[player].ToggleFirstPerson(!cameras[player].IsFirstPerson())
         }
     }
 
-    public static SetFirstPerson(player: player, active: boolean) {
-        if (cameras.ContainsKey(player)) {
+    public static SetFirstPerson(player: MapPlayer, active: boolean) {
+        if (cameras.has(player)) {
             cameras[player].ToggleFirstPerson(active)
         }
     }

@@ -1,7 +1,7 @@
-class TeamHandler {
+export class TeamHandler {
     public static FreepickEnabled: boolean = false
 
-    public static Handler(Player: player, TeamNumber: number, adminForced: boolean = false) {
+    public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
         if (
             Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] &&
             (adminForced || (!RoundManager.GAME_STARTED && FreepickEnabled))
@@ -14,13 +14,13 @@ class TeamHandler {
         }
     }
 
-    private static FreepickHandler(Player: player, TeamNumber: number, adminForced: boolean) {
+    private static FreepickHandler(Player: MapPlayer, TeamNumber: number, adminForced: boolean) {
         if (CanPlayerJoinTeam(Player, TeamNumber)) {
             ApplyPlayerToTeam(Player, TeamNumber)
         }
     }
 
-    private static ApplyPlayerToTeam(Player: player, TeamNumber: number) {
+    private static ApplyPlayerToTeam(Player: MapPlayer, TeamNumber: number) {
         if ((team = Globals.ALL_TEAMS.TryGetValue(TeamNumber)) /* TODO; Prepend: Team */) {
             team.AddMember(Player)
             Player.DisplayTextTo(
@@ -34,14 +34,13 @@ class TeamHandler {
     /// </summary>
     public static RandomHandler() {
         FreepickEnabled = false
-        let random = Globals.RANDOM_GEN
         let shuffled = Globals.ALL_PLAYERS
 
-        shuffled = shuffled.OrderBy(x => random.Next()).ToList() // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
+        shuffled = shuffled.OrderBy(x => Math.random()).ToList() // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
         let teamNumber = 1
 
         try {
-            for (let i: number = 0; i < shuffled.Count; i++) {
+            for (let i: number = 0; i < shuffled.length; i++) {
                 let player = shuffled[i]
 
                 if ((currentTeam = Globals.PLAYERS_TEAMS.TryGetValue(player)) /* TODO; Prepend: Team */) {
@@ -51,9 +50,9 @@ class TeamHandler {
                 let addedToExistingTeam: boolean = false
 
                 // Attempt to add player to an existing team
-                for (let j: number = 0; j < Globals.ALL_TEAMS_LIST.Count; j++) {
+                for (let j: number = 0; j < Globals.ALL_TEAMS_LIST.length; j++) {
                     let team = Globals.ALL_TEAMS_LIST[j]
-                    if (team.Teammembers.Count < Gamemode.PlayersPerTeam) {
+                    if (team.Teammembers.length < Gamemode.PlayersPerTeam) {
                         team.AddMember(player)
                         addedToExistingTeam = true
                         break
@@ -63,8 +62,8 @@ class TeamHandler {
                 if (!addedToExistingTeam) {
                     // Create new teams as needed
                     while (
-                        Globals.ALL_TEAMS.ContainsKey(teamNumber) &&
-                        Globals.ALL_TEAMS[teamNumber].Teammembers.Count >= Gamemode.PlayersPerTeam
+                        Globals.ALL_TEAMS.has(teamNumber) &&
+                        Globals.ALL_TEAMS[teamNumber].Teammembers.length >= Gamemode.PlayersPerTeam
                     ) {
                         teamNumber++
                     }
@@ -78,12 +77,12 @@ class TeamHandler {
                     team.AddMember(player)
                 }
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in TeamHandler.RandomHandler: {e.Message}')
         }
     }
 
-    private static CanPlayerJoinTeam(Player: player, TeamNumber: number) {
+    private static CanPlayerJoinTeam(Player: MapPlayer, TeamNumber: number) {
         if (TeamNumber > 24) {
             Player.DisplayTextTo('{Colors.COLOR_YELLOW_ORANGE}Usage: -1: team-24{Colors.COLOR_RESET}')
             return false
@@ -92,7 +91,7 @@ class TeamHandler {
         // If the team exists, we're going to check if full or if that player is already on the team
         if ((team = Globals.ALL_TEAMS.TryGetValue(TeamNumber)) /* TODO; Prepend: Team */) {
             // If Team is full, return.
-            if (team.Teammembers.Count >= Gamemode.PlayersPerTeam) {
+            if (team.Teammembers.length >= Gamemode.PlayersPerTeam) {
                 Player.DisplayTextTo('{team.TeamColor}{Colors.COLOR_YELLOW_ORANGE} is full.{Colors.COLOR_RESET}')
                 return false
             }
@@ -117,7 +116,7 @@ class TeamHandler {
         return true
     }
 
-    private static RemoveFromCurrentTeam(Player: player) {
+    private static RemoveFromCurrentTeam(Player: MapPlayer) {
         if ((team = Globals.PLAYERS_TEAMS.TryGetValue(Player)) /* TODO; Prepend: Team */) {
             team.RemoveMember(Player)
         }

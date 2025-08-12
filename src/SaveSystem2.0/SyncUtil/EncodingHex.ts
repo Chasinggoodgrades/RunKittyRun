@@ -1,4 +1,4 @@
-class EncodingHex {
+export class EncodingHex {
     // Converts a number to a 32-bit hex string
     public static To32BitHexString(number: number) {
         return Convert.ToString(number, 16).PadLeft(8, '0').ToUpper()

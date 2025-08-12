@@ -1,4 +1,4 @@
-class DateTimeManager {
+export class DateTimeManager {
     public static DateTime: WcDateTime
     public static CurrentMonth: number
     public static CurrentDay: number
@@ -8,7 +8,7 @@ class DateTimeManager {
     }
 
     private static SetDateTime(time: WcDateTime) {
-        Console.WriteLine('{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}{time.ToString()}')
+        print('{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}{time.ToString()}')
         DateTime = time
         CurrentMonth = DateTime.Month
         CurrentDay = DateTime.Day

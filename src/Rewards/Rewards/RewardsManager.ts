@@ -3,7 +3,7 @@
 /// * Activation / Deactivation of Rewards (Based on Spell Cast Event)
 /// * Any activated reward including the Reset ability so long as it's added within the RewardCreation class.
 /// </summary>
-class RewardsManager {
+export class RewardsManager {
     private static Trigger: trigger = CreateTrigger()
     private static RewardAbilities: number[] = []
     public static Rewards: Reward[] = []
@@ -18,7 +18,7 @@ class RewardsManager {
     }
 
     private static RewardAbilitiesList() {
-        for (let reward in Rewards) RewardAbilities.Add(reward.AbilityID)
+        for (let reward in Rewards) RewardAbilities.push(reward.AbilityID)
     }
 
     private static RegisterTrigger() {
@@ -39,16 +39,16 @@ class RewardsManager {
     }
 
     private static IsRewardAbility(spellID: number) {
-        return RewardAbilities.Contains(spellID)
+        return RewardAbilities.includes(spellID)
     }
 
     private static IsResetSpell(spellID: number) {
         return spellID == Constants.ABILITY_RESET
     }
 
-    private static ResetRewardSettings(Unit: unit) {
+    private static ResetRewardSettings(Unit: Unit) {
         let player = Unit.Owner
-        let kitty = Globals.ALL_KITTIES[player]
+        let kitty = Globals.ALL_KITTIES.get(player)
         let activeRewards = kitty.ActiveAwards
 
         let wings = activeRewards.ActiveWings

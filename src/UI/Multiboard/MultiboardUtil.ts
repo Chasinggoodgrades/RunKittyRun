@@ -1,4 +1,4 @@
-class MultiboardUtil {
+export class MultiboardUtil {
     /// <summary>
     /// Simply updates or refreshes the multiboards.
     /// </summary>
@@ -26,8 +26,8 @@ class MultiboardUtil {
     /// </summary>
     /// <param name="player">the player object.</param>
     /// <param name="minMax">true to minimize, false to maximize</param>
-    public static MinMultiboards(player: player, minimize: boolean) {
-        if (!player.IsLocal) return
+    public static MinMultiboards(player: MapPlayer, minimize: boolean) {
+        if (!player.isLocal()) return
         MinStandardMultiboards(minimize)
     }
 
@@ -45,8 +45,8 @@ class MultiboardUtil {
     /// <param name="rowIndex"></param>
     public static FillPlayers(mb: multiboard, rowIndex: number = 2) {
         for (let player in Globals.ALL_PLAYERS) {
-            let name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name
-            mb.GetItem(rowIndex, 0).SetText('{Colors.GetStringColorOfPlayer(player.Id + 1)}{name}|r')
+            let name = player.Name.length > 8 ? player.Name.Substring(0, 8) : MapPlayer.Name
+            mb.GetItem(rowIndex, 0).setText('{Colors.GetStringColorOfPlayer(player.Id + 1)}{name}|r')
             mb.GetItem(rowIndex, 0).SetWidth(0.07)
             rowIndex++
         }

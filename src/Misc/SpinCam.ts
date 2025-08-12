@@ -1,4 +1,4 @@
-class SpinCam {
+export class SpinCam {
     public Kitty: Kitty
     public SpinCamSpeed: number = 0
     public SpinCamRotation: number = 0 // Should just read current value but it doesn't seem to work :/
@@ -16,10 +16,10 @@ class SpinCam {
         if (this.SpinCamSpeed != 0) {
             if (SpinCamTimer == null) {
                 SpinCamTimer = timer.Create()
-                SpinCamTimer.Start(0.0075, true, SpinCamActions)
+                SpinCamTimer.start(0.0075, true, SpinCamActions)
             }
         } else {
-            SpinCamTimer?.Pause()
+            SpinCamTimer?.pause()
             SpinCamTimer = null
             CameraUtil.UnlockCamera(Kitty.Player)
         }

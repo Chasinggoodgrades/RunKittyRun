@@ -1,4 +1,4 @@
-class DecodeOldsave {
+export class DecodeOldsave {
     private static awards: GameAwardsDataSorted = Globals.GAME_AWARDS_SORTED
     private static times: RoundTimesData = Globals.GAME_TIMES
     private static stats: GameStatsData = Globals.GAME_STATS

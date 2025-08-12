@@ -1,10 +1,10 @@
 /// <summary>
 /// Most of the following functions in this class , take the top 3 players and return them in a list
 /// </summary>
-class PodiumUtil {
+export class PodiumUtil {
     public static SortPlayersByScore() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES[player].CurrentStats
+            let stats = Globals.ALL_KITTIES.get(player).CurrentStats
             return stats.TotalSaves - stats.TotalDeaths
         })
             .Take(3)
@@ -13,7 +13,7 @@ class PodiumUtil {
 
     public static SortPlayersBySaves() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES[player].CurrentStats
+            let stats = Globals.ALL_KITTIES.get(player).CurrentStats
             return stats.TotalSaves
         })
             .Take(3)
@@ -22,7 +22,7 @@ class PodiumUtil {
 
     public static SortPlayersByHighestRatio() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES[player].CurrentStats
+            let stats = Globals.ALL_KITTIES.get(player).CurrentStats
             return stats.TotalDeaths == 0 ? stats.TotalSaves : stats.TotalSaves / stats.TotalDeaths
         })
             .Take(3)
@@ -31,7 +31,7 @@ class PodiumUtil {
 
     public static SortPlayersByHighestSaveStreak() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES[player].CurrentStats
+            let stats = Globals.ALL_KITTIES.get(player).CurrentStats
             return stats.MaxSaveStreak
         })
             .Take(3)
@@ -40,7 +40,7 @@ class PodiumUtil {
 
     public static SortPlayersTopProgress() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES[player].TimeProg
+            let stats = Globals.ALL_KITTIES.get(player).TimeProg
             return stats.GetOverallProgress()
         })
             .Take(3)
@@ -49,7 +49,7 @@ class PodiumUtil {
 
     public static SortPlayersFastestTime() {
         return Globals.ALL_PLAYERS.OrderBy(player => {
-            let stats = Globals.ALL_KITTIES[player].TimeProg
+            let stats = Globals.ALL_KITTIES.get(player).TimeProg
             return stats.GetTotalTime()
         })
             .Take(3)
@@ -59,24 +59,24 @@ class PodiumUtil {
     public static SetCameraToPodium() {
         for (let player in Globals.ALL_PLAYERS) {
             let podium = Regions.Podium_cinematic
-            if (player.IsLocal) {
+            if (player.isLocal()) {
                 SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1400.0, 0.0)
                 PanCameraToTimed(podium.Center.X, podium.Center.Y, 2.0)
             }
         }
     }
 
-    public static ClearPodiumUnits(podiumUnits: unit[]) {
-        if (podiumUnits.Count == 0) return
+    public static ClearPodiumUnits(podiumUnits: Unit[]) {
+        if (podiumUnits.length == 0) return
         for (let kitty in podiumUnits) {
-            kitty.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y)
+            kitty.setPos(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y)
             kitty.IsPaused = false
         }
-        podiumUnits.Clear()
+        podiumUnits.clear()
     }
 
     public static EndingGameThankyou() {
-        Console.WriteLine('{Colors.COLOR_YELLOW}to: everyone: for: playing: Thanks, love: much <3|r')
+        print('{Colors.COLOR_YELLOW}to: everyone: for: playing: Thanks, love: much <3|r')
         Gameover.NotifyEndingGame()
     }
 

@@ -1,4 +1,4 @@
-class EasterEggManager {
+export class EasterEggManager {
     public static LoadEasterEggs() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         MissingShoe.Initialize()

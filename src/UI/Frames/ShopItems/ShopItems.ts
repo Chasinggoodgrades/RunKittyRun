@@ -4,7 +4,7 @@ export enum ShopItemType {
     Misc,
 }
 
-class ShopItem {
+export class ShopItem {
     public Name: string
     public Cost: number
     public ItemID: number
@@ -53,23 +53,23 @@ class ShopItem {
 
         try {
             if (Gamemode.CurrentGameMode == GameMode.Standard) {
-                shopItems.Add(new ShopItem(new OneOfNine()))
+                shopItems.push(new ShopItem(new OneOfNine()))
 
-                shopItems.Add(new ShopItem(new RingOfSummoning()))
+                shopItems.push(new ShopItem(new RingOfSummoning()))
 
-                shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()))
+                shopItems.push(new ShopItem(new BeaconOfUnitedLifeforce()))
 
-                shopItems.Add(new ShopItem(new ShardOfTranslocation()))
+                shopItems.push(new ShopItem(new ShardOfTranslocation()))
 
-                // shopItems.Add(new ShopItem(new ChronoSphere()));
+                // shopItems.push(new ShopItem(new ChronoSphere()));
             }
 
-            shopItems.Add(new ShopItem(new FangOfShadows()))
+            shopItems.push(new ShopItem(new FangOfShadows()))
 
-            shopItems.Add(new ShopItem(new FrostbiteRing()))
+            shopItems.push(new ShopItem(new FrostbiteRing()))
 
             return shopItems
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in ShopItemsRelic: {ex}')
             throw ex
         }
@@ -80,7 +80,7 @@ class ShopItem {
         let gameAwards = Globals.GAME_AWARDS_SORTED
 
         let reward = RewardsManager.Rewards.Find(x => x.Name == 'GreenTendrils')
-        shopItems.Add(
+        shopItems.push(
             new ShopItem(
                 'GreenTendrils',
                 8000,

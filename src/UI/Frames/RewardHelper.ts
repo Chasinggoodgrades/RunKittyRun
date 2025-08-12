@@ -1,6 +1,6 @@
 import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
 
-class RewardHelper {
+export class RewardHelper {
     public Hats: Reward[]
     public Wings: Reward[]
     public Trails: Reward[]
@@ -36,10 +36,10 @@ class RewardHelper {
     }
 
     public ClearRewards() {
-        this.Hats.Clear()
-        this.Wings.Clear()
-        this.Trails.Clear()
-        this.Auras.Clear()
+        this.Hats.clear()
+        this.Wings.clear()
+        this.Trails.clear()
+        this.Auras.clear()
     }
 
     public static GetAwardNestedValue(saveData: object, awardName: string) {

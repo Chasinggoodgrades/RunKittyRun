@@ -1,4 +1,4 @@
-class PersonalBests {
+export class PersonalBests {
     public Saves: number
     public Deaths: number
     public Score: number

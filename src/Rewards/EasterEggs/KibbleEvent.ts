@@ -1,4 +1,4 @@
-class KibbleEvent {
+export class KibbleEvent {
     private static EventActive: boolean = false
     private static EventPlayed: boolean = false
     private static EventKibblesCollected: number = 0
@@ -17,10 +17,10 @@ class KibbleEvent {
         EventKibblesCollected = 0
 
         EventTimer = timer.Create()
-        EventTimerDialog = timerdialog.Create(EventTimer)
-        EventTimerDialog.SetTitle('Event: Kibble')
-        EventTimerDialog.IsDisplayed = true
-        EventTimer.Start(EventLength, false, ErrorHandler.Wrap(EndKibbleEvent))
+        EventTimerDialog = TimerDialog.create(EventTimer)!
+        EventTimerDialog.setTitle('Event: Kibble')
+        EventTimerDialog.display = true
+        EventTimer.start(EventLength, false, ErrorHandler.Wrap(EndKibbleEvent))
         Utility.TimedTextToAllPlayers(
             10.0,
             '{Colors.COLOR_YELLOW}Kibble: event: has: started: A! Collect {TotalEventKibbles} to: earn: an: award: kibbles!{Colors.COLOR_RESET}'
@@ -28,9 +28,9 @@ class KibbleEvent {
 
         // Spawn event kibbles
         for (let i: number = 0; i < TotalEventKibbles + EventExtraKibbles; i++) {
-            let kibble = ObjectPool.GetEmptyObject<Kibble>()
+            let kibble = MemoryHandler.getEmptyObject<Kibble>()
             kibble.SpawnKibble()
-            ItemSpawner.TrackKibbles.Add(kibble)
+            ItemSpawner.TrackKibbles.push(kibble)
         }
 
         UpdateEventProgress()
@@ -41,13 +41,13 @@ class KibbleEvent {
         GC.RemoveTimerDialog(EventTimerDialog) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
 
-        for (let i: number = 0; i < ItemSpawner.TrackKibbles.Count; i++) {
+        for (let i: number = 0; i < ItemSpawner.TrackKibbles.length; i++) {
             let kibble = ItemSpawner.TrackKibbles[i]
             if (kibble.Item == null) continue
             kibble.Dispose()
         }
 
-        ItemSpawner.TrackKibbles.Clear()
+        ItemSpawner.TrackKibbles.clear()
 
         Utility.TimedTextToAllPlayers(
             10.0,
@@ -56,7 +56,7 @@ class KibbleEvent {
     }
 
     private static UpdateEventProgress() {
-        EventTimerDialog.SetTitle(
+        EventTimerDialog.setTitle(
             'Collected: Kibble: {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r'
         )
     }

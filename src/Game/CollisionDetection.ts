@@ -1,4 +1,4 @@
-class CollisionDetection {
+export class CollisionDetection {
     public DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
     private CIRCLE_COLLISION_RADIUS: number = 78.0
 
@@ -89,7 +89,7 @@ class CollisionDetection {
                 OneOfNine.OneOfNineEffect(k)
                 k.KillKitty()
                 TeamsUtil.CheckTeamDead(k)
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Warning('Error: WolfCollisionTrigger: {e.Message}')
                 throw e
             }
@@ -104,7 +104,7 @@ class CollisionDetection {
                 circle
                     .ReviveKitty(k)(k.Relics.Find(CollisionDetection.IsBeaconOfUnitedLifeforce))
                     ?.BeaconOfUnitedLifeforceEffect(k.Player)
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Warning('Error: CircleCollisionTrigger: {e.Message}')
                 throw e
             }
@@ -126,7 +126,7 @@ class CollisionDetection {
                 let circle = Globals.ALL_KITTIES[GetOwningPlayer(GetFilterUnit())]
                 let saviorKitty = Globals.ALL_KITTIES[sk.Player]
                 circle.ReviveKitty(saviorKitty)
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Warning('Error: CircleCollisionShadowTrigger: {e.Message}')
                 throw e
             }

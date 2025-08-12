@@ -1,4 +1,4 @@
-class Windwalk {
+export class Windwalk {
     private static Trigger: trigger
     private static HotkeyTrigger: trigger
     private static WindwalkID: number = FourCC('BOwk') // Windwalk buff ID
@@ -25,7 +25,7 @@ class Windwalk {
     }
 
     private static RegisterHotKeyEvents() {
-        let p: player = GetTriggerPlayer()
+        let p: MapPlayer = GetTriggerPlayer()
         let k: Kitty = Globals.ALL_KITTIES[p]
 
         if (!k.Alive) return // cannot cast if dead obviously.
@@ -37,7 +37,7 @@ class Windwalk {
     private static ApplyWindwalkEffect() {
         let caster = GetTriggerUnit()
         let player = caster.Owner
-        let kitty = Globals.ALL_KITTIES[player]
+        let kitty = Globals.ALL_KITTIES.get(player)
         let abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK)
         let duration = 3.0 + 2.0 * abilityLevel
         let wwID = kitty.ActiveAwards.WindwalkID
@@ -53,7 +53,7 @@ class Windwalk {
                     })
                 }
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in Windwalk.ApplyWindwalkEffect: {e.Message}')
         }
     }

@@ -1,17 +1,17 @@
 import { Rectangle } from 'w3ts'
 
-class WolfArea {
+export class WolfArea {
     public static WolfAreas: Map<number, WolfArea> = new Map<number, WolfArea>()
     public static TotalArea: number = 0.0
-    public ID!: number
-    public Rect!: rect
-    public Region!: region
-    public Rectangle!: Rectangle
-    public Area!: number
+    public ID: number
+    public Rect: rect
+    public Region: region
+    public Rectangle: Rectangle
+    public Area: number
     public IsEnabled: boolean = true
-    private AreaTrigger!: trigger
+    private AreaTrigger: trigger
     public Wolves: Wolf[] = []
-    public FixationCount!: number
+    public FixationCount: number
 
     public WolfArea(id: number, region: region) {
         this.ID = id
@@ -28,7 +28,7 @@ class WolfArea {
             wolfArea.CalculateArea()
             wolfArea.RegisterEnterEvents()
             wolfArea.RegisterLeaveEvents()
-            WolfAreas.Add(count, wolfArea)
+            WolfAreas.push(count, wolfArea)
             count++
         }
     }
@@ -41,10 +41,10 @@ class WolfArea {
                 let unit = GetTriggerUnit()
                 let player = unit.Owner
 
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 kitty.ProgressHelper.CurrentPoint = this.ID
                 kitty.ProgressZone = this.ID
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Warning('Error in WolfArea.RegisterEnterEvents: {e.Message}')
                 throw e
             }
@@ -61,7 +61,7 @@ class WolfArea {
             try {
                 let wolf = Globals.ALL_WOLVES[GetTriggerUnit()]
                 wolf.WolfMove()
-            } catch (e: Error) {
+            } catch (e) {
                 Logger.Critical('Error in WolfArea.RegisterLeaveEvents: {e.Message}')
             }
         })

@@ -1,4 +1,4 @@
-class FloatingNameTag {
+export class FloatingNameTag {
     private NAME_TAG_HEIGHT: number = 0.015
     private NAME_TAG_UPDATE_INTERVAL: number = 0.03
     private NamePosUpdater: AchesTimers
@@ -7,45 +7,45 @@ class FloatingNameTag {
 
     public FloatingNameTag(kitty: Kitty) {
         Kitty = kitty
-        NameTag = texttag.Create()
+        NameTag = TextTag.create()!
         Initialize()
     }
 
     public Initialize() {
-        NamePosUpdater = ObjectPool.GetEmptyObject<AchesTimers>()
+        NamePosUpdater = MemoryHandler.getEmptyObject<AchesTimers>()
         SetNameTagAttributes()
         NamePosTimer()
     }
 
     public Dispose() {
-        NameTag?.SetVisibility(false)
+        NameTag?.setVisible(false)
         NameTag?.Dispose()
         NamePosUpdater?.Dispose()
     }
 
     private SetNameTagAttributes() {
-        NameTag.SetText(Kitty.Name, NAME_TAG_HEIGHT)
+        NameTag.setText(Kitty.Name, NAME_TAG_HEIGHT)
         NameTag.SetPermanent(true)
-        NameTag.SetColor(114, 188, 212, 255)
-        NameTag.SetVisibility(true)
+        NameTag.setColor(114, 188, 212, 255)
+        NameTag.setVisible(true)
     }
 
     private NamePosTimer() {
-        NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () => {
+        NamePosUpdater.Timer.start(NAME_TAG_UPDATE_INTERVAL, true, () => {
             UpdateNameTag()
-            SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.GetUnitY(unit))
+            SetCameraQuickPositionForPlayer(Kitty.Player, Kitty.Unit.X, Kitty.unit.y)
         })
     }
 
     private UpdateNameTag() {
-        return NameTag.SetPosition(Kitty.Unit, NAME_TAG_HEIGHT)
+        return NameTag.setPos(Kitty.Unit, NAME_TAG_HEIGHT)
     }
 
-    public static ShowAllNameTags(Player: player, shown: boolean) {
-        if (!Player.IsLocal) return
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+    public static ShowAllNameTags(Player: MapPlayer, shown: boolean) {
+        if (!Player.isLocal()) return
+        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let k = Globals.ALL_KITTIES_LIST[i]
-            k.NameTag.NameTag.SetVisibility(shown)
+            k.NameTag.NameTag.setVisible(shown)
         }
     }
 }

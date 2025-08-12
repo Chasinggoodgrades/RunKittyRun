@@ -1,15 +1,15 @@
-class TimeSetter {
+export class TimeSetter {
     /// <summary>
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
     /// </summary>
     /// <param name="player"></param>
-    public static SetRoundTime(player: player) {
+    public static SetRoundTime(player: MapPlayer) {
         try {
             let standard = Gamemode.CurrentGameMode == GameMode.Standard
             let solo = Gamemode.CurrentGameMode == GameMode.SoloTournament // Solo
             let roundString: string = ''
             let currentTime = GameTimer.RoundTime[Globals.ROUND]
-            if (!Globals.ALL_KITTIES[player].CanEarnAwards) return false
+            if (!Globals.ALL_KITTIES.get(player).CanEarnAwards) return false
 
             if (currentTime <= 90) return false // Below 90 seconds is impossible and not valid.. Don't save
 
@@ -19,8 +19,8 @@ class TimeSetter {
             if (solo) roundString = GetSoloEnum()
             if (currentTime >= 3599.0) return false // 59min 59 second cap
 
-            let property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString)
-            let value = property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes)
+            let property = Globals.ALL_KITTIES.get(player).SaveData.RoundTimes.GetType().GetProperty(roundString)
+            let value = property.GetValue(Globals.ALL_KITTIES.get(player).SaveData.RoundTimes)
 
             if (currentTime >= value && value != 0) return false
 
@@ -28,7 +28,7 @@ class TimeSetter {
             PersonalBestAwarder.BeatRecordTime(player)
 
             return true
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in TimeSetter.SetRoundTime: {e.Message}')
             throw e
         }
@@ -64,8 +64,8 @@ class TimeSetter {
         return roundEnum
     }
 
-    private static SetSavedTime(player: player, roundString: string) {
-        let kittyStats = Globals.ALL_KITTIES[player].SaveData
+    private static SetSavedTime(player: MapPlayer, roundString: string) {
+        let kittyStats = Globals.ALL_KITTIES.get(player).SaveData
         let property = kittyStats.RoundTimes.GetType().GetProperty(roundString)
         property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01), 2))
     }
@@ -190,7 +190,7 @@ class TimeSetter {
                 return 'RoundFiveSolo'
 
             default:
-                Console.WriteLine('round: number: for: GetSoloRoundEnum: Invalid')
+                print('round: number: for: GetSoloRoundEnum: Invalid')
                 return ''
         }
     }

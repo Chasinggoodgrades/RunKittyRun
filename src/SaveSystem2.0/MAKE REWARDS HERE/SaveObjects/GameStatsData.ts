@@ -1,4 +1,4 @@
-class GameStatsData {
+export class GameStatsData {
     public Saves: number
     public SaveStreak: number
     public HighestSaveStreak: number

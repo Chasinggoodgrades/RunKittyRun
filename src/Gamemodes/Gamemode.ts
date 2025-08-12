@@ -1,5 +1,5 @@
-class Gamemode {
-    public static HostPlayer: player
+export class Gamemode {
+    public static HostPlayer: MapPlayer
     public static CurrentGameMode: GameMode
     public static CurrentGameModeType: string = ''
     public static IsGameModeChosen: boolean = false
@@ -73,7 +73,7 @@ class Gamemode {
             ClearTextMessages()
             NotifyGamemodeChosen()
             SetupChosenGamemode()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Gamemode: SetGameMode: {e.Message}')
         }
     }

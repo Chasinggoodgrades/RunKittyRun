@@ -1,6 +1,6 @@
-class UrnSoul {
+export class UrnSoul {
     private static UrnRegions: rect[]
-    private static UrnGhostUnit: unit
+    private static UrnGhostUnit: Unit
     private static UnitType: number = Constants.UNIT_ASTRAL_KITTY
     private static Name: string = '|cff8080f?|r|cff6666f?|r|cff4d4dff?|r|cff3333f?|r|cff1a1aff?|r|cff0000f?|r'
     private static PeriodicTrigger: trigger
@@ -19,12 +19,12 @@ class UrnSoul {
         InRangeTrigger = RegisterInRangeEvent()
     }
 
-    private static UnitCreation(): unit {
+    private static UnitCreation(): Unit {
         let u = unit.Create(player.NeutralAggressive, UnitType, 0, 0, 0)
         u.HeroName = Name
         u.SetPathing(false) // Disable Collision
-        u.AddAbility(FourCC('Agho')) // Ghost
-        u.AddAbility(FourCC('Augh')) // Shade
+        u.addAbility(FourCC('Agho')) // Ghost
+        u.addAbility(FourCC('Augh')) // Shade
         u.IsInvulnerable = true
         return u
     }
@@ -66,14 +66,10 @@ class UrnSoul {
             StartEventRegion = Regions.Urn_Soul_Region.Region
 
             if (item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
-            if (!StartEventRegion.Contains(unit)) return
+            if (!StartEventRegion.includes(unit)) return
 
             // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
-            let e = AddSpecialEffect(
-                'Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl',
-                GetUnitX(unit!),
-                GetUnitY(unit!)
-            )
+            let e = AddSpecialEffect('Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl', unit!.x, unit!.y)
             DestroyEffect(e!)
 
             // Quest text.. 4 sec delay for next part.
@@ -91,7 +87,7 @@ class UrnSoul {
             // Apply next stage to the item.
             item.RemoveAbility(FourCC('AIda')) // removes temp armory bonus
             item.AddAbility(FourCC('AHta')) // adds reveal ability
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in UrnSoul.UrnUsageActions {e.Message}')
             throw e
         }
@@ -124,7 +120,7 @@ class UrnSoul {
             "|r|Soul: cff8080fRestless:|r |it: be: cffc878c8Could... this: the: moment: I: Is'yearned: for: ve? you: Have come to release me from this eternal confinement? I can feel the life force coursing through my veins... AHHH...|r"
         )
 
-        let e = effect.Create('"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl"', unit, 'origin')
+        let e = Effect.create('"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl"', unit, 'origin')!
         AwardManager.GiveReward(unit.Owner, 'WWBlue')
 
         // Remove Items

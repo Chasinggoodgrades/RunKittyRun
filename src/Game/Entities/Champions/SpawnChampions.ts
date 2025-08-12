@@ -1,8 +1,8 @@
-class SpawnChampions {
-    public static Fieryfox2023: unit
-    public static Fieryfox2024: unit
-    public static FandF2023: unit
-    public static Stan2025: unit
+export class SpawnChampions {
+    public static Fieryfox2023: Unit
+    public static Fieryfox2024: Unit
+    public static FandF2023: Unit
+    public static Stan2025: Unit
 
     public static Initialize() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return

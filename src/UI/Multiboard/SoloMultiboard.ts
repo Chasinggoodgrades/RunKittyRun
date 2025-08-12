@@ -1,9 +1,11 @@
-class SoloMultiboard {
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+
+export class SoloMultiboard {
     private static OverallBoard: multiboard
     private static BestTimes: multiboard
     private static ESCTrigger: trigger
-    private static sortedDict: { [x: player]: Kitty }
-    private static MBSlot: { [x: player]: number }
+    private static sortedDict: Map<player, Kitty>
+    private static MBSlot: Map<player, number>
     private static color: string = Colors.COLOR_YELLOW_ORANGE
 
     /// <summary>
@@ -17,8 +19,8 @@ class SoloMultiboard {
             SoloMultiboard.sortedDict = {}
             SoloMultiboard.MBSlot = {}
             SoloMultiboard.MakeMultiboard()
-            SoloMultiboard.this.RegisterTriggers()
-        } catch (ex: Error) {
+            SoloMultiboard.RegisterTriggers()
+        } catch (ex) {
             Logger.Critical('Error in SoloMultiboard: {ex.Message}')
             throw ex
         }
@@ -33,72 +35,72 @@ class SoloMultiboard {
     private static RegisterTriggers() {
         SoloMultiboard.ESCTrigger = CreateTrigger()
         for (let player in Globals.ALL_PLAYERS)
-            SoloMultiboard.TriggerRegisterPlayerEvent(ESCTrigger, player, playerevent.EndCinematic)
+            SoloMultiboard.TriggerRegisterPlayerEvent(ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
         SoloMultiboard.ESCTrigger.AddAction(SoloMultiboard.ESCPressed)
     }
 
     private static OverallMultiboardRacemode() {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[1]) return // Race mode
-        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.Columns = 9
-        SoloMultiboard.OverallBoard.GetItem(0, 0).SetText('{color}Player|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 1).SetText('{color}Deaths|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 2).SetText('{color}1: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 3).SetText('{color}2: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 4).SetText('{color}3: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 5).SetText('{color}4: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 6).SetText('{color}5: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 7).SetText('{color}Total|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 8).SetText('{color}Status|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 1).setText('{color}Deaths|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 2).setText('{color}1: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 3).setText('{color}2: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 4).setText('{color}3: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 5).setText('{color}4: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 6).setText('{color}5: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 7).setText('{color}Total|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 8).setText('{color}Status|r')
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.SetChildWidth(0.05)
         SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07)
-        SoloMultiboard.OverallBoard.IsDisplayed = true
+        SoloMultiboard.OverallBoard.display = true
         SoloMultiboard.UpdateOverallStatsMB()
     }
 
     private static OverallMultiboardProgressmode() {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return // Progression mode
-        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.Columns = 7
-        SoloMultiboard.OverallBoard.GetItem(0, 0).SetText('{color}Player|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 1).SetText('{color}1: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 2).SetText('{color}2: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 3).SetText('{color}3: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 4).SetText('{color}4: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 5).SetText('{color}5: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 6).SetText('{color}Total|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 1).setText('{color}1: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 2).setText('{color}2: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 3).setText('{color}3: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 4).setText('{color}4: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 5).setText('{color}5: Round|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 6).setText('{color}Total|r')
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.SetChildWidth(0.05)
         SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07)
-        SoloMultiboard.OverallBoard.IsDisplayed = true
+        SoloMultiboard.OverallBoard.display = true
         SoloMultiboard.OverallStats()
     }
 
     private static BestTimesMultiboard() {
-        SoloMultiboard.BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1
+        SoloMultiboard.BestTimes.Rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.BestTimes.Columns = 7
-        SoloMultiboard.BestTimes.GetItem(0, 0).SetText('{color}Player|r')
-        SoloMultiboard.BestTimes.GetItem(0, 1).SetText('{color}1: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 2).SetText('{color}2: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 3).SetText('{color}3: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 4).SetText('{color}4: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 5).SetText('{color}5: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 6).SetText('{color}Time: Total|r')
+        SoloMultiboard.BestTimes.GetItem(0, 0).setText('{color}Player|r')
+        SoloMultiboard.BestTimes.GetItem(0, 1).setText('{color}1: Round|r')
+        SoloMultiboard.BestTimes.GetItem(0, 2).setText('{color}2: Round|r')
+        SoloMultiboard.BestTimes.GetItem(0, 3).setText('{color}3: Round|r')
+        SoloMultiboard.BestTimes.GetItem(0, 4).setText('{color}4: Round|r')
+        SoloMultiboard.BestTimes.GetItem(0, 5).setText('{color}5: Round|r')
+        SoloMultiboard.BestTimes.GetItem(0, 6).setText('{color}Time: Total|r')
         SoloMultiboard.BestTimes.SetChildVisibility(true, false)
         SoloMultiboard.BestTimes.SetChildWidth(0.05)
         SoloMultiboard.BestTimes.GetItem(0, 6).SetWidth(0.06)
         SoloMultiboard.BestTimes.GetItem(0, 0).SetWidth(0.07)
-        SoloMultiboard.BestTimes.IsDisplayed = false
+        SoloMultiboard.BestTimes.display = false
         SoloMultiboard.UpdateBestTimesMB()
     }
 
     private static OverallStats() {
         SoloMultiboard.OverallBoard.Title =
             'Game: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
-        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.Count + 1
+        SoloMultiboard.OverallBoard.Rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
@@ -120,8 +122,8 @@ class SoloMultiboard {
             let times = SoloMultiboard.sortedDict[player].TimeProg
             let playerColor = Colors.GetStringColorOfPlayer(player.Id + 1)
             let totalDeaths = SoloMultiboard.sortedDict[player].CurrentStats.TotalDeaths
-            let name = player.Name.Length > 8 ? player.Name.Substring(0, 8) : player.Name
-            let status = Globals.ALL_KITTIES[player].Finished ? 'Finished' : 'Racing'
+            let name = player.Name.length > 8 ? player.Name.Substring(0, 8) : MapPlayer.Name
+            let status = Globals.ALL_KITTIES.get(player).Finished ? 'Finished' : 'Racing'
             SoloMultiboard.MBSlot[player] = rowIndex
             let stats =
                 Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
@@ -146,8 +148,8 @@ class SoloMultiboard {
                           status,
                       ]
 
-            for (let i: number = 0; i < stats.Length; i++) {
-                SoloMultiboard.OverallBoard.GetItem(rowIndex, i).SetText('{playerColor}{stats[i]}{Colors.COLOR_RESET}')
+            for (let i: number = 0; i < stats.length; i++) {
+                SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText('{playerColor}{stats[i]}{Colors.COLOR_RESET}')
                 if (i == 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).SetWidth(0.07)
             }
 
@@ -165,20 +167,20 @@ class SoloMultiboard {
 
         for (let player in Globals.ALL_PLAYERS) {
             // bad
-            let saveData = Globals.ALL_KITTIES[player].SaveData
+            let saveData = Globals.ALL_KITTIES.get(player).SaveData
             let playerColor = Colors.GetStringColorOfPlayer(player.Id + 1)
 
             let roundTimes = GetGameRoundTime(saveData)
 
-            for (let i: number = 0; i < roundTimes.Length; i++) {
+            for (let i: number = 0; i < roundTimes.length; i++) {
                 if (roundTimes[i] != 0)
-                    SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).SetText(
+                    SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(
                         '{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}'
                     )
-                else SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).SetText('{playerColor}---{Colors.COLOR_RESET}')
+                else SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText('{playerColor}---{Colors.COLOR_RESET}')
             }
             let sum = roundTimes.Sum() // IEnumerable
-            SoloMultiboard.BestTimes.GetItem(rowIndex, 6).SetText('{playerColor}{Utility.ConvertFloatToTime(sum)}')
+            SoloMultiboard.BestTimes.GetItem(rowIndex, 6).setText('{playerColor}{Utility.ConvertFloatToTime(sum)}')
             rowIndex++
             roundTimes = null
         }
@@ -195,17 +197,17 @@ class SoloMultiboard {
         SoloMultiboard.BestTimeStats()
     }
 
-    public static UpdateDeathCount(player: player) {
+    public static UpdateDeathCount(player: MapPlayer) {
         try {
             if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
             let rowIndex: number = (value = SoloMultiboard.MBSlot.TryGetValue(player) /* TODO; Prepend: number */
                 ? value
                 : 0)
             if (rowIndex == 0) return
-            SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).SetText(
-                '{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths}'
+            SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
+                '{Colors.GetStringColorOfPlayer(player.Id + 1)}{Globals.ALL_KITTIES.get(player).CurrentStats.TotalDeaths}'
             )
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in SoloMultiboard.UpdateDeathCount: {ex.Message}')
             throw ex
         }
@@ -225,7 +227,7 @@ class SoloMultiboard {
                 break
 
             default:
-                Console.WriteLine('{Colors.COLOR_DARK_RED}multiboard: getting: gamestat: data: Error.')
+                print('{Colors.COLOR_DARK_RED}multiboard: getting: gamestat: data: Error.')
                 return []
         }
         return roundTimes
@@ -236,11 +238,11 @@ class SoloMultiboard {
         const triggerPlayer = GetTriggerPlayer()
         if (!triggerPlayer || GetLocalPlayer() != triggerPlayer) return
         if (SoloMultiboard.OverallBoard.IsDisplayed) {
-            SoloMultiboard.OverallBoard.IsDisplayed = false
-            SoloMultiboard.BestTimes.IsDisplayed = true
+            SoloMultiboard.OverallBoard.display = false
+            SoloMultiboard.BestTimes.display = true
         } else {
-            SoloMultiboard.BestTimes.IsDisplayed = false
-            SoloMultiboard.OverallBoard.IsDisplayed = true
+            SoloMultiboard.BestTimes.display = false
+            SoloMultiboard.OverallBoard.display = true
         }
     }
 }

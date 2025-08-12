@@ -1,4 +1,4 @@
-class Setup {
+export class Setup {
     private static timeToChoose: number = 0.0
     private static gameModeTimer: AchesTimers
     private static wolfPlayers = [
@@ -29,15 +29,15 @@ class Setup {
             if (!Source.Program.Debug) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(Globals.GAME_MODES[0])
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in Setup.Initialize: {e.Message}')
             throw e
         }
     }
 
     private static StartGameModeTimer() {
-        gameModeTimer = ObjectPool.GetEmptyObject<AchesTimers>()
-        gameModeTimer.Timer.Start(1.0, true, ErrorHandler.Wrap(ChoosingGameMode))
+        gameModeTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        gameModeTimer.Timer.start(1.0, true, ErrorHandler.Wrap(ChoosingGameMode))
     }
 
     private static ChoosingGameMode() {
@@ -68,7 +68,7 @@ class Setup {
             ItemStacker.Initialize()
             Kitty.Initialize()
             ItemSpawner.Initialize()
-            Multiboard.Initialize()
+            MultiboardManager.Initialize()
             PlayerLeaves.Initialize()
             VictoryZone.Initialize()
             AffixFactory.Initialize()
@@ -86,10 +86,10 @@ class Setup {
 
             for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
                 if (Player(i).SlotState != playerslotstate.Playing) {
-                    wolfPlayers.Add(Player(i))
+                    wolfPlayers.push(Player(i))
                 }
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in Setup.StartGame: {e.Message}')
             throw e
         }
@@ -97,7 +97,7 @@ class Setup {
 
     public static GetActivePlayers() {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            if (Player(i).SlotState == playerslotstate.Playing) Globals.ALL_PLAYERS.Add(Player(i))
+            if (Player(i).SlotState == playerslotstate.Playing) Globals.ALL_PLAYERS.push(Player(i))
             Player(i).Team = 0
         }
     }
@@ -125,18 +125,18 @@ class Setup {
         }
     }
 
-    public static getNextWolfPlayer(): player {
+    public static getNextWolfPlayer(): MapPlayer {
         let selectedPlayer = wolfPlayers[wolfPlayerIndex]
-        wolfPlayerIndex = (wolfPlayerIndex + 1) % wolfPlayers.Count
+        wolfPlayerIndex = (wolfPlayerIndex + 1) % wolfPlayers.length
         return selectedPlayer
     }
 
     public static SetupVIPList() {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
-            for (let j: number = 0; j < Globals.VIPLIST.Length; j++) {
-                let fromBase64Name = Base64.FromBase64(Globals.VIPLIST[j])
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            for (let j: number = 0; j < Globals.VIPLIST.length; j++) {
+                let fromBase64Name = base64Decode(Globals.VIPLIST[j])
                 if (Globals.ALL_PLAYERS[i].Name == fromBase64Name) {
-                    Globals.VIPLISTUNFILTERED.Add(Globals.ALL_PLAYERS[i])
+                    Globals.VIPLISTUNFILTERED.push(Globals.ALL_PLAYERS[i])
                 }
             }
         }

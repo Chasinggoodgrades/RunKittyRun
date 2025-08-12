@@ -1,4 +1,4 @@
-class Auras {
+export class Auras {
     public SpecialAura: number
     public StarlightAura: number
     public ManaAura: number

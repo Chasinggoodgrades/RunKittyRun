@@ -1,4 +1,4 @@
-class PropertyEncoder {
+export class PropertyEncoder {
     public static EncodeToJsonBase64(obj: object) {
         try {
             let jsonString: StringBuilder = new StringBuilder('{')
@@ -7,7 +7,7 @@ class PropertyEncoder {
 
             let base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString())
             return base64String
-        } catch (ex: Error) {
+        } catch (ex) {
             // Handle any exceptions that may occur during encoding
             Logger.Critical('{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: {ex.Message}')
             throw ex
@@ -35,7 +35,7 @@ class PropertyEncoder {
 
             let base64String = WCSharp.Shared.Base64.ToBase64(jsonString)
             return base64String
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: {ex.Message}')
             throw ex
         }
@@ -70,7 +70,7 @@ class PropertyEncoder {
 
     public static DecodeFromJsonBase64(base64EncodedData: StringBuilder) {
         // Decode the Base64 string to a JSON-like string
-        let jsonString = WCSharp.Shared.Base64.FromBase64(base64EncodedData.ToString())
+        let jsonString = WCSharp.Shared.base64Decode(base64EncodedData.ToString())
         return jsonString
     }
 }

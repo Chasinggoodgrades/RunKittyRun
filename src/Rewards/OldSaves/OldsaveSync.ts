@@ -1,9 +1,9 @@
-class OldsaveSync {
+export class OldsaveSync {
     private SYNC_PREFIX: string = 'S'
     private static Trigger: trigger = CreateTrigger()
     private static VariableEvent: trigger = CreateTrigger()
     private static SaveLoadCode: string
-    private static SavePlayer: player
+    private static SavePlayer: MapPlayer
     public static LoadEvent: number
 
     public static SyncString(s: string) {
@@ -23,7 +23,7 @@ class OldsaveSync {
 
     public static LoadActions() {
         let savecode: Savecode = new Savecode()
-        if (SaveLoadCode.Length < 1) return
+        if (SaveLoadCode.length < 1) return
         if (!savecode.Load(SavePlayer, SaveLoadCode)) {
             SavePlayer.DisplayTimedTextTo(5.0, '{Colors.COLOR_RED}save: code: The is invalid :(')
             return

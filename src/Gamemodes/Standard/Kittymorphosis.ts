@@ -1,4 +1,4 @@
-class KittyMorphosis {
+export class KittyMorphosis {
     /// <summary>
     /// The level required to morph (reduction in size / collision).
     /// </summary>

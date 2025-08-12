@@ -1,12 +1,12 @@
-class ChampionAwards {
+export class ChampionAwards {
     public static AwardAllChampions() {
         for (let player in Globals.ALL_PLAYERS) {
-            if (!Globals.CHAMPIONS.Contains(player.Name)) continue
+            if (!Globals.CHAMPIONS.includes(player.Name)) continue
             GiveAllChampionAwards(player)
         }
     }
 
-    private static GiveAllChampionAwards(player: player) {
+    private static GiveAllChampionAwards(player: MapPlayer) {
         let awards: Tournament
         AwardManager.GiveReward(player, 'TurquoiseNitro', false)
         AwardManager.GiveReward(player, 'TurquoiseWings', false)

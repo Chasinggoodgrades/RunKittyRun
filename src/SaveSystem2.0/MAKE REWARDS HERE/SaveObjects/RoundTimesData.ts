@@ -1,4 +1,4 @@
-class RoundTimesData {
+export class RoundTimesData {
     public RoundOneNormal: number
     public RoundTwoNormal: number
     public RoundThreeNormal: number

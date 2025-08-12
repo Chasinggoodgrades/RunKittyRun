@@ -1,7 +1,7 @@
-class ShopFrame {
+export class ShopFrame {
     public static shopFrame: framehandle
     public static upgradeButton: framehandle
-    public static SelectedItems: { [x: player]: ShopItem } = {}
+    public static SelectedItems: Map<player, ShopItem> = new Map()
     private static relicsPanel: framehandle
     private static rewardsPanel: framehandle
     private static miscPanel: framehandle
@@ -40,7 +40,7 @@ class ShopFrame {
             CreateUpgradeTooltip()
             SetRewardsFrameHotkey()
             shopFrame.Visible = false
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in ShopFrame: {ex.Message}')
             throw ex
         }
@@ -153,7 +153,7 @@ class ShopFrame {
             AddItemsToPanel(relicsPanel, GetRelicItems())
             AddItemsToPanel(rewardsPanel, GetRewardItems())
             AddItemsToPanel(miscPanel, GetMiscItems())
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in LoadItemsIntoPanels: {ex}')
             throw ex
         }
@@ -161,8 +161,8 @@ class ShopFrame {
 
     private static AddItemsToPanel(panel: framehandle, items: ShopItem[]) {
         let columns: number = 6
-        let rows: number = Math.Ceiling(items.Count / columns)
-        for (let i: number = 0; i < items.Count; i++) {
+        let rows: number = Math.Ceiling(items.length / columns)
+        for (let i: number = 0; i < items.length; i++) {
             let row: number = i / columns
             let column: number = i % columns
             let name = items[i].Name
@@ -195,13 +195,13 @@ class ShopFrame {
         }
     }
 
-    private static UpdateButtonStatus(player: player) {
+    private static UpdateButtonStatus(player: MapPlayer) {
         try {
-            if (!player.IsLocal) return
-            if (!SelectedItems.ContainsKey(player)) return
+            if (!player.isLocal()) return
+            if (!SelectedItems.has(player)) return
 
             let item = SelectedItems[player]
-            let kitty = Globals.ALL_KITTIES[player]
+            let kitty = Globals.ALL_KITTIES.get(player)
 
             upgradeButton.Visible = false
             sellButton.Visible = false
@@ -216,15 +216,15 @@ class ShopFrame {
                 RefreshUpgradeTooltip(item.Relic)
                 if (Utility.UnitHasItem(kitty.Unit, item.ItemID)) sellButton.Alpha = ActiveAlpha
             }
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Warning('Error in UpdateButtonStatus: {ex.Message}')
         }
     }
 
-    private static RelicButtons(player: player, item: ShopItem) {
+    private static RelicButtons(player: MapPlayer, item: ShopItem) {
         if (item == null) return
         if (item.Type != ShopItemType.Relic) return
-        let kitty = Globals.ALL_KITTIES[player].Unit
+        let kitty = Globals.ALL_KITTIES.get(player).Unit
         upgradeButton.Visible = true
         sellButton.Visible = true
         buyButton.Visible = true
@@ -250,7 +250,7 @@ class ShopFrame {
             SelectedItems.set(player, shopItem)
         }
 
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         FrameManager.RefreshFrame(frame)
         nameLabel.Text = '{Colors.COLOR_YELLOW_ORANGE}Name:{Colors.COLOR_RESET} {shopItem.Name}'
         costLabel.Text = '{Colors.COLOR_YELLOW}Cost:{Colors.COLOR_RESET} {shopItem.Cost}'
@@ -271,7 +271,7 @@ class ShopFrame {
             upgradeButton.SetTooltip(background)
             upgradeTooltip.SetPoint(framepointtype.Bottom, 0, 0.01, upgradeButton, framepointtype.Top)
             upgradeTooltip.Enabled = false
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Warning('Error in CreateUpgradeTooltip: {ex}')
         }
     }
@@ -290,7 +290,7 @@ class ShopFrame {
             tooltip.Enabled = false
 
             tooltip.Text = item.Name
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Warning('Error in CreateShopitemTooltips: {ex}')
         }
     }
@@ -299,7 +299,7 @@ class ShopFrame {
         let finalString = new StringBuilder()
         let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(GetTriggerPlayer()).GetUpgradeLevel(relic.GetType())
 
-        for (let i: number = 0; i < relic.Upgrades.Count; i++) {
+        for (let i: number = 0; i < relic.Upgrades.length; i++) {
             let upgrade = relic.Upgrades[i]
             let color: string, colorDescription
 
@@ -336,7 +336,7 @@ class ShopFrame {
 
             if (!ShopUtil.PlayerIsDead(player!) && selectedItem != null) {
                 // your logic here
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
 
                 if (!HasEnoughGold(player, selectedItem.Cost)) {
                     NotEnoughGold(player, selectedItem.Cost)
@@ -360,8 +360,8 @@ class ShopFrame {
                 }
             }
             // hide shop after purchase
-            if (player.IsLocal) shopFrame.Visible = !shopFrame.Visible
-        } catch (ex: Error) {
+            if (player.isLocal()) shopFrame.Visible = !shopFrame.Visible
+        } catch (ex) {
             Logger.Warning('Error in BuySelectedItem: {ex.Message}')
         }
     }
@@ -369,13 +369,13 @@ class ShopFrame {
     private static SellSelectedItem() {
         let player = GetTriggerPlayer()
         try {
-            if (player.IsLocal) {
+            if (player.isLocal()) {
                 sellButton.Visible = false
                 sellButton.Visible = true
             }
             if ((selectedItem = SelectedItems.TryGetValue(player) /* TODO; Prepend: let */ && selectedItem != null)) {
                 let itemID = selectedItem.ItemID
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 if (!Utility.UnitHasItem(kitty.Unit, itemID)) return
                 if (selectedItem.Type == ShopItemType.Relic) {
                     if (!kitty.Alive || kitty.ProtectionActive) {
@@ -409,7 +409,7 @@ class ShopFrame {
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID)
                 player.Gold += selectedItem.Cost
             }
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Warning('Error in SellSelectedItem: {ex.Message}')
         }
     }
@@ -426,27 +426,27 @@ class ShopFrame {
         return ShopItem.ShopItemsMisc()
     }
 
-    private static HasEnoughGold(player: player, cost: number) {
+    private static HasEnoughGold(player: MapPlayer, cost: number) {
         return player.Gold >= cost
     }
 
-    private static CanSellRelic(unit: unit) {
+    private static CanSellRelic(unit: Unit) {
         return unit.HeroLevel >= Relic.RelicSellLevel
     }
 
-    private static ReduceGold(player: player, amount: number) {
+    private static ReduceGold(player: MapPlayer, amount: number) {
         return (player.Gold -= amount)
     }
 
-    public static NotEnoughGold(player: player, cost: number) {
+    public static NotEnoughGold(player: MapPlayer, cost: number) {
         return player.DisplayTimedTextTo(
             8.0,
             '{Colors.COLOR_RED}do: not: have: enough: gold: You.|r {Colors.COLOR_YELLOW}({cost} gold)|r'
         )
     }
 
-    private static AddItem(player: player, itemID: number) {
-        return Globals.ALL_KITTIES[player].Unit.AddItem(itemID)
+    private static AddItem(player: MapPlayer, itemID: number) {
+        return Globals.ALL_KITTIES.get(player).Unit.AddItem(itemID)
     }
 
     private static SetRewardsFrameHotkey() {
@@ -456,7 +456,7 @@ class ShopFrame {
                 shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
             }
             shopFrameHotkey.AddAction(ErrorHandler.Wrap(() => ShopFrameActions()))
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Warning('Error in SetRewardsFrameHotkey: {ex}')
         }
     }

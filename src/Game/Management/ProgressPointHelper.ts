@@ -1,4 +1,4 @@
-class ProgressPointHelper {
+export class ProgressPointHelper {
     public static Points: RectPoints[]
     public CurrentPoint: number
 
@@ -8,7 +8,7 @@ class ProgressPointHelper {
     }
 }
 
-class RectPoints {
+export class RectPoints {
     public X: number
     public Y: number
 
@@ -20,7 +20,7 @@ class RectPoints {
     public static InitPoints(): RectPoints[] {
         let points: RectPoints[] = []
         for (let point in RegionList.PathingPoints) {
-            points.Add(new RectPoints(point.Rect.CenterX, point.Rect.CenterY))
+            points.push(new RectPoints(point.Rect.CenterX, point.Rect.CenterY))
         }
         return points
     }

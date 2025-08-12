@@ -1,4 +1,4 @@
-class Standard {
+export class Standard {
     private ROUND_INTERMISSION: number = 10.0
 
     public static Initialize() {

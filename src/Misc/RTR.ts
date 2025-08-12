@@ -1,19 +1,19 @@
-class RTR {
+export class RTR {
     private RTR_INTERVAL: number = 0.001
     private ITEM_PICKUP_RADIUS: number = 48
 
-    private kitty!: Kitty
-    private RTRTimer!: timer
-    private enabled!: boolean
+    private kitty: Kitty
+    private RTRTimer: Timer
+    private enabled: boolean
 
-    private ClickTrigger!: trigger
-    private WidgetTrigger!: trigger
+    private ClickTrigger: trigger
+    private WidgetTrigger: trigger
 
     private targetX: number = 0
     private targetY: number = 0
     private hasTarget: boolean = false
-    private lastUnitAnimation!: string
-    public absoluteMoveSpeed!: number
+    private lastUnitAnimation: string
+    public absoluteMoveSpeed: number
 
     public RTR(kitty: Kitty) {
         this.kitty = kitty
@@ -40,13 +40,13 @@ class RTR {
         ClickTrigger.Enable()
         WidgetTrigger.Enable()
 
-        RTRTimer.Start(RTR_INTERVAL, true, ErrorHandler.Wrap(UpdateRTR))
+        RTRTimer.start(RTR_INTERVAL, true, ErrorHandler.Wrap(UpdateRTR))
     }
 
     public PauseRTR() {
         ClickTrigger.Disable()
         WidgetTrigger.Disable()
-        RTRTimer.Pause()
+        RTRTimer.pause()
         hasTarget = false
         if (this.lastUnitAnimation != 'stand') {
             this.lastUnitAnimation = 'stand'
@@ -70,7 +70,7 @@ class RTR {
         }
 
         let currentX: number = kitty.Unit.X
-        let currentY: number = kitty.GetUnitY(unit)
+        let currentY: number = kitty.unit.y
 
         let distanceToTarget: number = WCSharp.Shared.Util.DistanceBetweenPoints(currentX, currentY, targetX, targetY)
 
@@ -106,7 +106,7 @@ class RTR {
         }
 
         kitty.Unit.SetPathing(false)
-        kitty.Unit.SetPosition(newX, newY)
+        kitty.Unit.setPos(newX, newY)
         kitty.Unit.SetPathing(true)
 
         ItemPickup()

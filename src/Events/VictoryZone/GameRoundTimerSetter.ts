@@ -10,14 +10,14 @@
 //        string difficultyString = GetDifficultyProperty();
 //        string roundString = GetRoundDataProperty(difficultyString);
 
-//        let saveData = Globals.ALL_KITTIES[player].SaveData.BestGameTimes;
+//        let saveData = Globals.ALL_KITTIES.get(player).SaveData.BestGameTimes;
 
 //        let difficultyProperty = saveData.GetType().GetProperty(difficultyString);
 //        let difficultyData = difficultyProperty.GetValue(saveData);
 //        let roundProperty = difficultyData.GetType().GetProperty(roundString.split('.').Last());
 //        let roundTimeValue = roundProperty.GetValue(difficultyData);
 
-//        Console.WriteLine("Round Time for {difficultyString} - {Globals.ROUND}: {roundTimeValue}");
+//        print("Round Time for {difficultyString} - {Globals.ROUND}: {roundTimeValue}");
 //    }
 
 //    private static string GetDifficultyProperty()

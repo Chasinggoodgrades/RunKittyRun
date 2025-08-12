@@ -1,4 +1,4 @@
-class Solo {
+export class Solo {
     public static Initialize() {
         ItemSpawner.NUMBER_OF_ITEMS = 8
     }
@@ -11,7 +11,7 @@ class Solo {
     public static RoundEndCheck() {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return // Progression mode
 
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
             if (kitty.Alive) return
         }

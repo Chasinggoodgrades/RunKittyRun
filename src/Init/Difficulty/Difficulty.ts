@@ -1,4 +1,4 @@
-class Difficulty {
+export class Difficulty {
     public static DifficultyValue: number
     public static DifficultyOption: DifficultyOption
     public static IsDifficultyChosen: boolean = false
@@ -17,7 +17,7 @@ class Difficulty {
             RegisterSelectionEvent()
 
             Utility.SimpleTimer(2.0, ChooseDifficulty)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in Difficulty.Initialize: {e.Message}')
             throw e
         }
@@ -33,7 +33,7 @@ class Difficulty {
             let option = DifficultyOption.Options.Find(o => o.Button == button)
             if (option != null) option.TallyCount++
 
-            DifficultyOption.DifficultyChoosing.SetVisibility(player, false)
+            DifficultyOption.DifficultyChoosing.setVisible(player, false)
             Utility.TimedTextToAllPlayers(
                 3.0,
                 '{Colors.PlayerNameColored(player)}|has: chosen: r {option.ToString()} difficulty.{Colors.COLOR_RESET}'
@@ -42,7 +42,7 @@ class Difficulty {
     }
 
     private static ChooseDifficulty() {
-        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.SetVisibility(player, true)
+        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, true)
         Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, TallyingVotes)
     }
 
@@ -65,13 +65,13 @@ class Difficulty {
         DifficultyOption = difficulty
         DifficultyValue = difficulty.Value
         IsDifficultyChosen = true
-        Console.WriteLine(
+        print(
             '{Colors.COLOR_YELLOW_ORANGE}difficulty: has: been: set: to: The |r{difficulty.ToString()}{Colors.COLOR_RESET}'
         )
     }
 
     private static RemoveDifficultyDialog() {
-        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.SetVisibility(player, false)
+        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, false)
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ class Difficulty {
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
     public static ChangeDifficulty(difficulty: string = 'normal') {
-        for (let i: number = 0; i < DifficultyOption.Options.Count; i++) {
+        for (let i: number = 0; i < DifficultyOption.Options.length; i++) {
             let option = DifficultyOption.Options[i]
             if (option.Name.ToLower() == difficulty.ToLower()) {
                 SetDifficulty(option)

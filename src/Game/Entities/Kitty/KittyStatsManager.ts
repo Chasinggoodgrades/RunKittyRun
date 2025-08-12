@@ -1,4 +1,4 @@
-class KittyStatsManager {
+export class KittyStatsManager {
     private Kitty: Kitty
     public KittyStatsManager(kitty: Kitty) {
         this.Kitty = kitty

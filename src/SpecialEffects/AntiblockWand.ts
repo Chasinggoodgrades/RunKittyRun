@@ -1,4 +1,4 @@
-class AntiblockWand {
+export class AntiblockWand {
     private static CastEvent: trigger
     private static AbilityID: number
     private static Radius: number
@@ -23,12 +23,12 @@ class AntiblockWand {
     private static SpellActions() {
         if (GetSpellAbilityId() != AbilityID) return
         let location = GetSpellTargetLoc()
-        let wolvesInArea = CreateGroup()
+        let wolvesInArea = CreateGroup()!
         wolvesInArea.EnumUnitsInRange(location.X, location.Y, Radius, null)
         let list = wolvesInArea.ToList()
         for (let wolf in list) {
             if (wolf.UnitType != Wolf.WOLF_MODEL) continue
-            if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[wolf])) continue
+            if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES[wolf])) continue
             let wolfUnit = Globals.ALL_WOLVES[wolf]
             wolfUnit.StartWandering(true)
         }

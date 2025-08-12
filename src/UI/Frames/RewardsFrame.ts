@@ -1,11 +1,11 @@
 import { RewardType } from 'C:\Users\chase\Documents\Warcraft III\Maps\WCSharpTemplate\src\Rewards\Rewards\Reward.ts' // Update the path as needed
 
-class RewardsFrame {
+export class RewardsFrame {
     public static RewardFrame: framehandle
     private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0)
     private static TempHandle: framehandle
-    private static FrameByName: { [x: string]: framehandle } = {}
-    private static RewardIcons: { [x: framehandle]: Reward } = {}
+    private static FrameByName: Map<string, framehandle> = new Map()
+    private static RewardIcons: Map<framehandle, Reward> = new Map()
     private static RewardHelp: RewardHelper = new RewardHelper()
     private static RewardsPerRow: number = 6
     private static FrameX: number = 0.4
@@ -25,7 +25,7 @@ class RewardsFrame {
             AppendRewardsToFrames()
             CreateRandomRewardButton()
             FrameManager.CreateHeaderFrame(RewardFrame)
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in RewardsFrame: {ex.Message}')
             throw ex
         }
@@ -61,7 +61,7 @@ class RewardsFrame {
             count += colCount
             FrameCount++
         }
-        //Console.WriteLine("There are {count} types");
+        //print("There are {count} types");
     }
 
     private static CountNumberOfRewards(type: RewardType) {
@@ -111,7 +111,7 @@ class RewardsFrame {
 
         TempHandle = panel
 
-        FrameByName.Add(title, panel)
+        FrameByName.push(title, panel)
 
         return panel
     }
@@ -176,7 +176,7 @@ class RewardsFrame {
             RewardHelp.ClearRewards()
 
             for (let reward in RewardsManager.Rewards) {
-                let stats = Globals.ALL_KITTIES[player].SaveData
+                let stats = Globals.ALL_KITTIES.get(player).SaveData
                 let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name)
                 if (value <= 0) continue
 
@@ -184,29 +184,29 @@ class RewardsFrame {
             }
 
             let selectedHat: Reward =
-                RewardHelp.Hats.Count > 0 ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.Count - 1)] : null
+                RewardHelp.Hats.length > 0 ? RewardHelp.Hats[GetRandomInt(0, RewardHelp.Hats.length - 1)] : null
             let selectedWings: Reward =
-                RewardHelp.Wings.Count > 0 ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.Count - 1)] : null
+                RewardHelp.Wings.length > 0 ? RewardHelp.Wings[GetRandomInt(0, RewardHelp.Wings.length - 1)] : null
             let selectedTrail: Reward =
-                RewardHelp.Trails.Count > 0 ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.Count - 1)] : null
+                RewardHelp.Trails.length > 0 ? RewardHelp.Trails[GetRandomInt(0, RewardHelp.Trails.length - 1)] : null
             let selectedAura: Reward =
-                RewardHelp.Auras.Count > 0 ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.Count - 1)] : null
+                RewardHelp.Auras.length > 0 ? RewardHelp.Auras[GetRandomInt(0, RewardHelp.Auras.length - 1)] : null
 
             selectedHat?.ApplyReward(player)
             selectedWings?.ApplyReward(player)
             selectedTrail?.ApplyReward(player)
             selectedAura?.ApplyReward(player)
 
-            if (!player.IsLocal) return
+            if (!player.isLocal()) return
             FrameManager.RefreshFrame(frame)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in RandomRewardsButtonActions: {e.Message}')
         }
     }
 
     private static AppendRewardsToFrames() {
         const cols = this.RewardsPerRow
-        const count: { [key: number]: number } = {}
+        const count: Map<number, number> = new Map()
 
         // Initialize the count dictionary with zeros for each RewardType
         for (const type of Object.values(RewardType)) {
@@ -275,17 +275,17 @@ class RewardsFrame {
     private static RewardButtonActions(reward: Reward) {
         let player = GetTriggerPlayer()
         let frame = BlzGetTriggerFrame()
-        let stats = Globals.ALL_KITTIES[player].SaveData
+        let stats = Globals.ALL_KITTIES.get(player).SaveData
         let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.Name)
         if (value <= 0) return // Doesnt have the reward , dont apply.
         reward.ApplyReward(player)
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         FrameManager.RefreshFrame(frame)
     }
 
-    private static UnavilableRewardIcons(player: player) {
+    private static UnavilableRewardIcons(player: MapPlayer) {
         try {
-            let stats = Globals.ALL_KITTIES[player].SaveData
+            let stats = Globals.ALL_KITTIES.get(player).SaveData
             let unavailablePath = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn'
             for (let reward in RewardIcons) {
                 let value = RewardHelper.GetAwardNestedValue(
@@ -298,7 +298,7 @@ class RewardsFrame {
                     reward.Key.SetTexture(unavailablePath, 0, false)
                 else reward.Key.SetTexture(BlzGetAbilityIcon(reward.Value.AbilityID), 0, false)
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in UnavilableRewardIcons: {e}')
         }
     }
@@ -317,7 +317,7 @@ class RewardsFrame {
 
     public static RewardsFrameActions() {
         let player = GetTriggerPlayer()
-        if (!player.IsLocal) return
+        if (!player.isLocal()) return
         if (Gamemode.CurrentGameMode != GameMode.Standard) {
             player.DisplayTimedTextTo(
                 3.0,

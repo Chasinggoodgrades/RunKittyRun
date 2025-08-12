@@ -6,7 +6,7 @@
 /// -- Have to figure out a way to simulate the gravity effect smoothly..
 /// </summary>
 
-class Vortex extends Affix {
+export class Vortex extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_UNPREDICTABLE
     private VORTEX_RADIUS: number = 500.0 // triggers witihn 500 yds
     private VORTEX_PULL_SPEED: number = 40.0 // pulls 2 yds per second.
@@ -15,11 +15,11 @@ class Vortex extends Affix {
     private VORTEX_LENGTH: number = 10.0 // lasts 10 seconds.
     private EntersRange: trigger = CreateTrigger()
     private LeavesRange: trigger = CreateTrigger()
-    private PullingInTimer: timer = timer.Create()
-    private PeriodicPull: timer = timer.Create()
-    private PullStart: timer = timer.Create()
+    private PullingInTimer = Timer.create()
+    private PeriodicPull = Timer.create()
+    private PullStart = Timer.create()
     private Counter: number = 0
-    private UnitsInRange: unit[] = []
+    private UnitsInRange: Unit[] = []
 
     public constructor(unit: Wolf) {
         super(unit)
@@ -29,7 +29,7 @@ class Vortex extends Affix {
     public override Apply() {
         UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
         RegisterEvents()
-        base.Apply()
+        super.Apply()
     }
 
     public override Remove() {
@@ -42,7 +42,7 @@ class Vortex extends Affix {
         GC.RemoveTrigger(EntersRange) // TODO; Cleanup:         GC.RemoveTrigger(ref EntersRange);
         GC.RemoveTrigger(LeavesRange) // TODO; Cleanup:         GC.RemoveTrigger(ref LeavesRange);
         GC.RemoveList(UnitsInRange) // TODO; Cleanup:         GC.RemoveList(ref UnitsInRange);
-        base.Remove()
+        super.Remove()
     }
 
     public override Pause(pause: boolean) {}
@@ -52,23 +52,23 @@ class Vortex extends Affix {
         EntersRange.AddAction(EnterRegionActions)
         LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter)
 
-        PeriodicPull.Start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(PullBegin))
+        PeriodicPull.start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(PullBegin))
     }
 
     private EnterRegionActions() {
         let enteringUnit = GetTriggerUnit()
-        if (UnitsInRange.Contains(enteringUnit)) return
-        UnitsInRange.Add(enteringUnit)
+        if (UnitsInRange.includes(enteringUnit)) return
+        UnitsInRange.push(enteringUnit)
     }
 
     private LeavesRegionActions() {
         let leavingUnit = GetTriggerUnit()
-        if (!UnitsInRange.Contains(leavingUnit)) return
+        if (!UnitsInRange.includes(leavingUnit)) return
         UnitsInRange.Remove(leavingUnit)
     }
 
     private PullBegin() {
-        PullStart.Start(VORTEX_PULSE_RATE, true, ErrorHandler.Wrap(PullActions))
+        PullStart.start(VORTEX_PULSE_RATE, true, ErrorHandler.Wrap(PullActions))
         Unit.Unit.SetVertexColor(255, 0, 255)
     }
 
@@ -80,12 +80,12 @@ class Vortex extends Affix {
         let distance = VORTEX_PULL_SPEED * VORTEX_PULSE_RATE
         for (let unit in UnitsInRange) {
             if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue
-            let x = GetUnitX(unit)
-            let y = GetUnitY(unit)
-            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.GetUnitY(unit), x, y)
+            let x = unit.x
+            let y = unit.y
+            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.unit.y, x, y)
             let newX = x + distance * Cos(angle)
             let newY = y + distance * Sin(angle)
-            unit.SetPosition(newX, newY)
+            unit.setPos(newX, newY)
             unit.SetFacing(angle)
             //let lastOrder = UnitOrders.GetLastOrderLocation(unit);
             //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
@@ -96,7 +96,7 @@ class Vortex extends Affix {
     }
 
     private ResetVortex() {
-        PullStart.Pause()
+        PullStart.pause()
         Counter = 0
         Unit.Unit.SetVertexColor(150, 120, 255)
     }

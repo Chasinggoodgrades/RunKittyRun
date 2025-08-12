@@ -3,7 +3,7 @@
 /// This class is used to store and manage data such as player information, game statistics,
 /// selected configurations, round timings, awards, best game times, and personal achievements.
 /// </summary>
-class KittyData {
+export class KittyData {
     public PlayerName: string = ''
     public Date: string = ''
     public GameStats: GameStatsData

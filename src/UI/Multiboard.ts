@@ -1,6 +1,8 @@
-class Multiboard {
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+
+export class MultiboardManager {
     public static Initialize() {
-        SetupMultiboards()
+        MultiboardManager.SetupMultiboards()
     }
 
     private static SetupMultiboards() {

@@ -1,4 +1,4 @@
-class Hats {
+export class Hats {
     public Bandana: number
     public PirateHat: number
     public ChefHat: number

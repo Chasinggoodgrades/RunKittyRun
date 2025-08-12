@@ -1,4 +1,4 @@
-class InitCommands {
+export class InitCommands {
     public static _G: dynamic
 
     public static InitializeCommands() {
@@ -68,7 +68,7 @@ class InitCommands {
 
                 let amount = int.Parse(args[0])
 
-                if (args.Length < 2) {
+                if (args.length < 2) {
                     player.Gold += amount
                     return
                 }
@@ -93,7 +93,7 @@ class InitCommands {
             alias: '',
             group: 'all',
             argDesc: '[color]',
-            description: 'your: player: color: Set.',
+            description: 'your: MapPlayer: color: Set.',
             action: (player, args) => Colors.SetPlayerColor(player, args?.[0]),
         })
 
@@ -102,11 +102,11 @@ class InitCommands {
             alias: 'k',
             group: 'all',
             argDesc: '[playerNumber]',
-            description: 'a: votekick: against: a: player: Initiate.',
+            description: 'a: votekick: against: a: MapPlayer: Initiate.',
             action: (player, args) => {
-                if (Globals.VIPLISTUNFILTERED.Contains(player)) {
+                if (Globals.VIPLISTUNFILTERED.includes(player)) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
-                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return
+                        if (Globals.VIPLISTUNFILTERED.includes(kitty.Player)) return
                         PlayerLeaves.PlayerLeavesActions(kitty.Player)
                         CustomDefeatBJ(
                             kitty.Player,
@@ -158,7 +158,7 @@ class InitCommands {
                     Colors.COLOR_GOLD +
                         'Affixes: Current:\n' +
                         string.Join('\n', affixes) +
-                        '\n{Colors.COLOR_LAVENDER}Lanes: Count: All: {AffixFactory.AllAffixes.Count}'
+                        '\n{Colors.COLOR_LAVENDER}Lanes: Count: All: {AffixFactory.AllAffixes.length}'
                 )
             },
         })
@@ -175,14 +175,14 @@ class InitCommands {
                 if (args[0] != '') {
                     laneIndex = int.Parse(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
-                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.Count
+                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.length
                     player.DisplayTextTo(
                         Colors.COLOR_GOLD +
                             'Wolf: Count: for: Lane: Current {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}'
                     )
                     return
                 }
-                let nbWolves: else = Globals.ALL_WOLVES.Count
+                let nbWolves: else = Globals.ALL_WOLVES.length
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD + 'Wolf: Count: Current: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}'
                 )
@@ -194,7 +194,7 @@ class InitCommands {
             alias: 'sc,vc',
             group: 'all',
             argDesc: '[rgb]',
-            description: 'your: player: vertex: color: Set.',
+            description: 'your: MapPlayer: vertex: color: Set.',
             action: (player, args) => Colors.SetPlayerVertexColor(player, args),
         })
 
@@ -230,7 +230,7 @@ class InitCommands {
             alias: 'lc,spectate',
             group: 'all',
             argDesc: '',
-            description: 'your: camera: to: a: unit: Locks.',
+            description: 'your: camera: to: a: Unit: Locks.',
             action: (player, args) => {
                 if (args[0] == '') {
                     CameraUtil.LockCamera(player)
@@ -295,10 +295,10 @@ class InitCommands {
             alias: '',
             group: 'all',
             argDesc: '',
-            description: 'the: kibble: collected: by: each: player: Displays.',
+            description: 'the: kibble: collected: by: each: MapPlayer: Displays.',
             action: (player, args) => {
                 let kibbleList = ''
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                     let kitty = Globals.ALL_KITTIES_LIST[i]
                     let kibbleCollected = kitty.CurrentStats.CollectedKibble
                     kibbleList += '{Colors.PlayerNameColored(kitty.Player)}: {kibbleCollected}\n'
@@ -344,7 +344,7 @@ class InitCommands {
             argDesc: '[true/false]',
             description: 'unit: glow: Toggle.',
             action: (player, args) => {
-                BlzShowUnitTeamGlow(Globals.ALL_KITTIES[player].Unit, CommandsManager.GetBool(args[0]))
+                BlzShowUnitTeamGlow(Globals.ALL_KITTIES.get(player).Unit, CommandsManager.GetBool(args[0]))
             },
         })
 
@@ -355,15 +355,15 @@ class InitCommands {
             argDesc: '',
             description: 'mirror: mode: Toggle.',
             action: (player, args) => {
-                if (Globals.ALL_KITTIES[player].Slider.IsOnSlideTerrain()) {
+                if (Globals.ALL_KITTIES.get(player).Slider.IsOnSlideTerrain()) {
                     player.DisplayTextTo(
                         Colors.COLOR_YELLOW_ORANGE + "can: You'toggle: mirror: mode: while: sliding: t!"
                     )
                     return
                 }
-                Globals.ALL_KITTIES[player].ToggleMirror()
+                Globals.ALL_KITTIES.get(player).ToggleMirror()
                 player.DisplayTextTo(
-                    Colors.COLOR_GOLD + 'Mirror: ' + (Globals.ALL_KITTIES[player].IsMirror ? 'On' : 'Off')
+                    Colors.COLOR_GOLD + 'Mirror: ' + (Globals.ALL_KITTIES.get(player).IsMirror ? 'On' : 'Off')
                 )
             },
         })
@@ -384,10 +384,10 @@ class InitCommands {
                 }
 
                 let status = CommandsManager.GetBool(args[0])
-                if (CommandsManager.GetPlayerGroup(player) == 'admin' && args.Length > 1) {
+                if (CommandsManager.GetPlayerGroup(player) == 'admin' && args.length > 1) {
                     if (args[1] == 'wolves' || args[1] == 'wolf') {
                         for (let wolf in Globals.ALL_WOLVES) {
-                            wolf.Value.Disco ??= ObjectPool.GetEmptyObject<Disco>()
+                            wolf.Value.Disco ??= MemoryHandler.getEmptyObject<Disco>()
                             wolf.Value.Disco.Unit = wolf.Value.Unit
                             wolf.Value.Disco.ToggleDisco(status)
                             if (!status) {
@@ -401,7 +401,7 @@ class InitCommands {
                         })
                     }
                 } else {
-                    let playerKitty = Globals.ALL_KITTIES[player]
+                    let playerKitty = Globals.ALL_KITTIES.get(player)
                     playerKitty.Disco.ToggleDisco(status)
                 }
 
@@ -415,7 +415,7 @@ class InitCommands {
             group: 'all',
             argDesc: '[index]',
             description: 'unit: animation: by: index: Set.',
-            action: (player, args) => SetUnitAnimationByIndex(Globals.ALL_KITTIES[player].Unit, int.Parse(args[0])),
+            action: (player, args) => SetUnitAnimationByIndex(Globals.ALL_KITTIES.get(player).Unit, int.Parse(args[0])),
         })
 
         CommandsManager.RegisterCommand({
@@ -426,11 +426,11 @@ class InitCommands {
             description: 'SpinCam: Toggle.',
             action: (player, args) => {
                 let speed: number = args[0] != '' ? float.Parse(args[0]) : 0
-                Globals.ALL_KITTIES[player].SpinCam.ToggleSpinCam(speed)
+                Globals.ALL_KITTIES.get(player).SpinCam.ToggleSpinCam(speed)
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD +
                         'SpinCam: ' +
-                        (Globals.ALL_KITTIES[player].SpinCam.IsSpinCamActive() ? 'On' : 'Off')
+                        (Globals.ALL_KITTIES.get(player).SpinCam.IsSpinCamActive() ? 'On' : 'Off')
                 )
             },
         })
@@ -461,13 +461,13 @@ class InitCommands {
 
                 let mode: boolean = CommandsManager.GetBool(args[0])
 
-                if (args.Length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] == '') {
                     // Apply to self
                     if (mode) {
-                        Globals.ALL_KITTIES[player].RTR.StartRTR()
+                        Globals.ALL_KITTIES.get(player).RTR.StartRTR()
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'RTR: On')
                     } else {
-                        Globals.ALL_KITTIES[player].RTR.StopRTR()
+                        Globals.ALL_KITTIES.get(player).RTR.StopRTR()
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'RTR: Off')
                     }
                     return
@@ -515,10 +515,10 @@ class InitCommands {
             alias: 'lvl',
             group: 'admin',
             argDesc: '[level][player/selected]',
-            description: 'the: level: Sets of selected: unit: the.',
+            description: 'the: level: Sets of selected: Unit: the.',
             action: (player, args) => {
-                if (args.Length < 2) {
-                    let kitty = (Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]))
+                if (args.length < 2) {
+                    let kitty = (Globals.ALL_KITTIES.get(player).Unit.HeroLevel = int.Parse(args[0]))
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
@@ -534,7 +534,7 @@ class InitCommands {
             argDesc: '',
             description: 'a: blink: item: to: the: kitty: Adds.',
             action: (player, args) => {
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 kitty.Unit.AddItem(FourCC('desc'))
             },
         })
@@ -564,7 +564,7 @@ class InitCommands {
                 // if args is null or empty, revive self
                 // else resolve playerid
                 if (args[0] == '') {
-                    Globals.ALL_KITTIES[player].ReviveKitty()
+                    Globals.ALL_KITTIES.get(player).ReviveKitty()
                     return
                 }
 
@@ -579,17 +579,17 @@ class InitCommands {
             argDesc: '',
             description: 'your: hero: to: an: other: hero: Revives, the: same: facing: angle: with.',
             action: (player, args) => {
-                if (args.Length == 1) {
+                if (args.length == 1) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
-                        Globals.ALL_KITTIES[player].ReviveKitty()
-                        Globals.ALL_KITTIES[player].Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
-                        Globals.ALL_KITTIES[player].Unit.SetFacing(kitty.Unit.Facing)
+                        Globals.ALL_KITTIES.get(player).ReviveKitty()
+                        Globals.ALL_KITTIES.get(player).Unit.setPos(kitty.Unit.X, kitty.unit.y)
+                        Globals.ALL_KITTIES.get(player).Unit.SetFacing(kitty.Unit.Facing)
                     })
-                } else if (args.Length == 2) {
+                } else if (args.length == 2) {
                     CommandsManager.ResolvePlayerId(args[1], kitty => {
                         CommandsManager.ResolvePlayerId(args[0], kitty2 => {
                             kitty.ReviveKitty()
-                            kitty.Unit.SetPosition(kitty2.Unit.X, kitty2.GetUnitY(unit))
+                            kitty.Unit.setPos(kitty2.Unit.X, kitty2.unit.y)
                             kitty.Unit.SetFacing(kitty2.Unit.Facing)
                         })
                     })
@@ -606,11 +606,8 @@ class InitCommands {
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     kitty.ReviveKitty()
-                    kitty.Unit.SetPosition(
-                        Globals.ALL_KITTIES[player].Unit.X,
-                        Globals.ALL_KITTIES[player].GetUnitY(unit)
-                    )
-                    kitty.Unit.SetFacing(Globals.ALL_KITTIES[player].Unit.Facing)
+                    kitty.Unit.setPos(Globals.ALL_KITTIES.get(player).Unit.X, Globals.ALL_KITTIES.get(player).unit.y)
+                    kitty.Unit.SetFacing(Globals.ALL_KITTIES.get(player).Unit.Facing)
                 })
             },
         })
@@ -620,9 +617,9 @@ class InitCommands {
             alias: 'share',
             group: 'admin',
             argDesc: '[resolvePlayerId] [on/off]',
-            description: 'whether: or: not: to: force: the: player: to: share: control: Sets [default: off]',
+            description: 'whether: or: not: to: force: the: MapPlayer: to: share: control: Sets [default: off]',
             action: (player, args) => {
-                if (args.Length < 2) {
+                if (args.length < 2) {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: sharecontrol [player] [on/off]{Colors.COLOR_RESET}'
@@ -663,7 +660,7 @@ class InitCommands {
             alias: 'cooldown,cd',
             group: 'admin',
             argDesc: '',
-            description: 'the: cooldowns: Resets of selected: unit: the.',
+            description: 'the: cooldowns: Resets of selected: Unit: the.',
             action: (player, args) => CustomStatFrame.SelectedUnit[player].ResetCooldowns(),
         })
 
@@ -690,7 +687,7 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[name]',
-            description: 'currently: selected: player: using: award: Award [name].',
+            description: 'currently: selected: MapPlayer: using: award: Award [name].',
             action: (player, args) => AwardingCmds.Awarding(player, args),
         })
 
@@ -699,7 +696,7 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[stat] [value]',
-            description: 'the: specified: game: stat: for: the: selected: player: Sets.',
+            description: 'the: specified: game: stat: for: the: selected: MapPlayer: Sets.',
             action: (player, args) => AwardingCmds.SettingGameStats(player, args),
         })
 
@@ -708,7 +705,7 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[time]',
-            description: 'the: specified: game: time: for: the: selected: player: Sets.',
+            description: 'the: specified: game: time: for: the: selected: MapPlayer: Sets.',
             action: (player, args) => AwardingCmds.SettingGameTimes(player, args),
         })
 
@@ -719,11 +716,11 @@ class InitCommands {
             argDesc: '[player][on/off]',
             description: 'invulnerability: Gives.',
             action: (player, args) => {
-                if (args.Length < 2) {
+                if (args.length < 2) {
                     let setting = CommandsManager.GetBool(args[0])
-                    let kitty = (Globals.ALL_KITTIES[player].Invulnerable = setting)
+                    let kitty = (Globals.ALL_KITTIES.get(player).Invulnerable = setting)
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_GOLD}Invulnerability: {setting}|r')
-                } else if (args.Length == 2) {
+                } else if (args.length == 2) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
                         let setting = CommandsManager.GetBool(args[1])
                         kitty.Invulnerable = setting
@@ -783,9 +780,9 @@ class InitCommands {
             description: 'all: kitties: to: the: spawn: location: Moves.',
             action: (player, args) => {
                 let spawnCenter = RegionList.SpawnRegions[1]
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                     let kitty = Globals.ALL_KITTIES_LIST[i]
-                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y)
+                    kitty.Unit.setPos(spawnCenter.Center.X, spawnCenter.Center.Y)
                 }
             },
         })
@@ -796,7 +793,7 @@ class InitCommands {
             group: 'admin',
             argDesc: '',
             description: 'the: round: timer: Pauses.',
-            action: (player, args) => RoundTimer.StartRoundTimer.Pause(),
+            action: (player, args) => RoundTimer.StartRoundTimer.pause(),
         })
 
         CommandsManager.RegisterCommand({
@@ -807,7 +804,7 @@ class InitCommands {
             description: '20: secondsd: to: the: round: timer: Adds. only: happen: once: per: Can round.',
             action: (player, args) => {
                 if (!RoundManager.AddMoreRoundTime()) return
-                Console.WriteLine(
+                print(
                     `${Colors.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.Remaining.ToString('F2')} seconds remaining)${Colors.COLOR_RESET}`
                 )
             },
@@ -839,9 +836,9 @@ class InitCommands {
             description: 'the: specified: affix: to: all: wolves: Applies.',
             action: (player, args) => {
                 let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : 'Speedster'
-                Console.WriteLine('Applying {affixName} all: wolves: to.')
+                print('Applying {affixName} all: wolves: to.')
                 for (let wolf in Globals.ALL_WOLVES) {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue
+                    if (NamedWolves.DNTNamedWolves.includes(wolf.Value)) continue
                     let affix = AffixFactory.CreateAffix(wolf.Value, affixName)
                     wolf.Value.AddAffix(affix)
                 }
@@ -857,8 +854,8 @@ class InitCommands {
             action: (player, args) => {
                 let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : 'Speedster'
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
-                if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[selectedUnit])) return
+                if (!Globals.ALL_WOLVES.has(selectedUnit)) return
+                if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES[selectedUnit])) return
                 let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName)
                 Globals.ALL_WOLVES[selectedUnit].AddAffix(affix)
             },
@@ -873,7 +870,7 @@ class InitCommands {
             action: (player, args) => {
                 let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : ''
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
+                if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 if (affixName == '') return
                 if (!Globals.ALL_WOLVES[selectedUnit].HasAffix(affixName)) return
                 Globals.ALL_WOLVES[selectedUnit].RemoveAffix(affixName)
@@ -898,7 +895,7 @@ class InitCommands {
             alias: 'obs',
             group: 'admin',
             argDesc: '[playerNameMatch]',
-            description: 'a: player: into: observer: mode: Forces.',
+            description: 'a: MapPlayer: into: observer: mode: Forces.',
             action: (player, args) => {
                 let name = args[0] != '' ? args[0] : '??__'
                 for (let p in Globals.ALL_PLAYERS) {
@@ -917,10 +914,10 @@ class InitCommands {
             argDesc: '',
             description: 'all: players: to: your: location: Summons.',
             action: (player, args) => {
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 for (let k in Globals.ALL_KITTIES) {
                     if (k.Value.Unit.Owner == player) continue
-                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.GetUnitY(unit))
+                    k.Value.Unit.setPos(kitty.Unit.X, kitty.unit.y)
                 }
             },
         })
@@ -933,7 +930,7 @@ class InitCommands {
             description: 'the: camera: field: Adjusts.',
             action: (player, args) => {
                 let value = args[0] != '' ? float.Parse(args[0]) : 0.0
-                if (!player.IsLocal) return
+                if (!player.isLocal()) return
                 SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0)
             },
         })
@@ -973,7 +970,7 @@ class InitCommands {
             description: 'or: removes: an: ability: from: the: kitty: Adds.',
             action: (player, args) => {
                 let abilityId = args[0] != '' ? args[0] : ''
-                let kitty = Globals.ALL_KITTIES[player]
+                let kitty = Globals.ALL_KITTIES.get(player)
                 if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0) {
                     UnitRemoveAbility(kitty.Unit, FourCC(abilityId))
                     let abilityName = GetObjectName(FourCC(abilityId)) // GetObjectName is async
@@ -991,12 +988,12 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[scale], [player]',
-            description: "the: scale: Sets of passed: player: the'kitty: parameter: s.",
+            description: "the: scale: Sets of passed: MapPlayer: the'kitty: parameter: s.",
             action: (player, args) => {
                 let scale = args[0] != '' ? float.Parse(args[0]) : 0.6
 
-                if (args.Length < 2 || args[1] == '') {
-                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale)
+                if (args.length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES.get(player).Unit.SetScale(scale, scale, scale)
                     return
                 }
 
@@ -1076,20 +1073,20 @@ class InitCommands {
             alias: 'crh',
             group: 'admin',
             argDesc: '[playerNumber]',
-            description: 'a: hero: for: the: specified: player: Creates.',
+            description: 'a: hero: for: the: specified: MapPlayer: Creates.',
             action: (player, args) => {
                 for (let i = 0; i < 24; i++) {
                     let target: number =
-                        args.Length > 0 && args[0] != 'all'
+                        args.length > 0 && args[0] != 'all'
                             ? int.Parse(args[0]) - 1
-                            : args.Length > 0 && args[0] == 'all'
+                            : args.length > 0 && args[0] == 'all'
                               ? i
                               : -1
 
                     if (target == i || args[0] == 'all') {
                         let compPlayer = Player(target)
 
-                        if (Globals.ALL_KITTIES.ContainsKey(compPlayer)) {
+                        if (Globals.ALL_KITTIES.has(compPlayer)) {
                             player.DisplayTimedTextTo(
                                 10.0,
                                 '{Colors.COLOR_YELLOW_ORANGE}already: has: a: hero: Player.'
@@ -1097,7 +1094,7 @@ class InitCommands {
                             continue
                         }
 
-                        Globals.ALL_PLAYERS.Add(compPlayer)
+                        Globals.ALL_PLAYERS.push(compPlayer)
                         new Circle(compPlayer)
                         let newKitty = new Kitty(compPlayer)
                         newKitty.Unit.AddItem(FourCC('bspd'))
@@ -1111,7 +1108,7 @@ class InitCommands {
             alias: 'delh',
             group: 'admin',
             argDesc: '[playerNumber]',
-            description: 'the: hero: Deletes of specified: player: the.',
+            description: 'the: hero: Deletes of specified: MapPlayer: the.',
             action: (player, args) => {
                 if (args[0] == '') {
                     // cannot delete self anyway, but for usage i guess.
@@ -1121,7 +1118,7 @@ class InitCommands {
 
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
-                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player)) {
+                    if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(
                             10.0,
                             '{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.|r'
@@ -1147,12 +1144,12 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[skinId], [player]',
-            description: 'the: skin: Sets of passed: player: parameter: the. Use "none" default: skin: for.',
+            description: 'the: skin: Sets of passed: MapPlayer: parameter: the. Use "none" default: skin: for.',
             action: (player, args) => {
                 let skin: number = args[0] == '' || args[0] == 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
 
-                if (args.Length < 2 || args[1] == '') {
-                    BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin)
+                if (args.length < 2 || args[1] == '') {
+                    BlzSetUnitSkin(Globals.ALL_KITTIES.get(player).Unit, skin)
                     return
                 }
 
@@ -1169,11 +1166,11 @@ class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '[playerNumber]',
-            description: 'AI: for: the: specified: player: Toggles.',
+            description: 'AI: for: the: specified: MapPlayer: Toggles.',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
-                    if (!Globals.ALL_KITTIES.ContainsKey(kitty.Player)) {
+                    if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.')
                         return
                     }
@@ -1204,9 +1201,9 @@ class InitCommands {
                     return
                 }
 
-                let dodgeRadius = args.Length > 0 ? float.Parse(args[0]) : 192.0
-                let timerInterval = args.Length > 1 ? float.Parse(args[1]) : 0.1
-                let laser = args.Length > 2 ? int.Parse(args[2]) : 0
+                let dodgeRadius = args.length > 0 ? float.Parse(args[0]) : 192.0
+                let timerInterval = args.length > 1 ? float.Parse(args[1]) : 0.1
+                let laser = args.length > 2 ? int.Parse(args[2]) : 0
 
                 for (let compKitty in Globals.ALL_KITTIES) {
                     if (compKitty.Value.aiController.IsEnabled()) {
@@ -1279,7 +1276,7 @@ class InitCommands {
             description: 'urself: by: default: Kills, enter: name: or/number/selected, parm. KITTIES: ONLY',
             action: (player, args) => {
                 if (args[0] == '') {
-                    Globals.ALL_KITTIES[player].KillKitty()
+                    Globals.ALL_KITTIES.get(player).KillKitty()
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty())
@@ -1290,8 +1287,8 @@ class InitCommands {
             name: 'kibblecurrency',
             alias: 'kibbleinfo,kbinfo',
             group: 'all',
-            argDesc: 'name: player, #, selected, self: or',
-            description: 'the: Kibble: Currency: information: on: the: given: player: Gets.',
+            argDesc: 'name: MapPlayer, #, selected, self: or',
+            description: 'the: Kibble: Currency: information: on: the: given: MapPlayer: Gets.',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetKibbleCurrencyInfo(player, kitty))
             },
@@ -1316,11 +1313,11 @@ class InitCommands {
             group: 'all',
             argDesc: '[player] [difficulty]',
             description:
-                'fastest: overall: times: Gets of passed: parm: player: and: difficulty: the, no: parm: if then yourself and current difficulty.',
+                'fastest: overall: times: Gets of passed: parm: MapPlayer: and: difficulty: the, no: parm: if then yourself and current difficulty.',
             action: (player, args) => {
-                let difficulty = args.Length > 1 && args[1] != '' ? args[1] : Difficulty.DifficultyOption.Name
+                let difficulty = args.length > 1 && args[1] != '' ? args[1] : Difficulty.DifficultyOption.Name
                 if (args[0] == '') {
-                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty)
+                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES.get(player), difficulty)
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
@@ -1334,10 +1331,10 @@ class InitCommands {
             alias: 'pbs,bests',
             group: 'all',
             argDesc: '[player]',
-            description: 'personal: best: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.',
+            description: 'personal: best: stats: Gets of passed: parm: MapPlayer: the, no: parm: then: yourself: if.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player])
+                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES.get(player))
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty))
@@ -1349,10 +1346,10 @@ class InitCommands {
             alias: '',
             group: 'all',
             argDesc: '',
-            description: 'the: game: stats: Gets of passed: parm: player: the, no: parm: then: yourself: if.',
+            description: 'the: game: stats: Gets of passed: parm: MapPlayer: the, no: parm: then: yourself: if.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player])
+                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES.get(player))
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty))
@@ -1413,7 +1410,7 @@ class InitCommands {
             description: 'collision: Gets of player: passed, yourself: if: no: args: or.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    player.DisplayTimedTextTo(3.0, '{Globals.ALL_KITTIES[player].CurrentStats.CollisonRadius}')
+                    player.DisplayTimedTextTo(3.0, '{Globals.ALL_KITTIES.get(player).CurrentStats.CollisonRadius}')
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
@@ -1461,7 +1458,7 @@ class InitCommands {
             argDesc: '',
             description: 'you: to: your: previously: last: saved: vortex: color: if: you: Sets have one.',
             action: (player, args) => {
-                let kitty: Kitty = Globals.ALL_KITTIES[player]
+                let kitty: Kitty = Globals.ALL_KITTIES.get(player)
                 let vortexColor: string = kitty.SaveData.PlayerColorData.VortexColor
                 if (vortexColor == '') return
                 let rgb = vortexColor.split(',')
@@ -1474,12 +1471,12 @@ class InitCommands {
             alias: 'sts',
             group: 'admin',
             argDesc: '[resolvePlayerId]',
-            description: 'the: passed: player: to: the: start: Sends',
+            description: 'the: passed: MapPlayer: to: the: start: Sends',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
                     let spawnCenter = RegionList.SpawnRegions[1]
-                    kitty.Unit.SetPosition(spawnCenter.Center.X, spawnCenter.Center.Y)
+                    kitty.Unit.setPos(spawnCenter.Center.X, spawnCenter.Center.Y)
                 })
             },
         })
@@ -1509,7 +1506,7 @@ class InitCommands {
             argDesc: '',
             description: 'TeamDeathless: Effect: Creates',
             action: (player, args) => {
-                Console.WriteLine('{Colors.COLOR_TURQUOISE}# of Commands: {CommandsManager.Count}')
+                print('{Colors.COLOR_TURQUOISE}# of Commands: {CommandsManager.length}')
             },
         })
 
@@ -1528,7 +1525,7 @@ class InitCommands {
                     if (kitty == null) return
                     let safeZones = RegionList.SafeZones
                     for (let safeZone in safeZones) {
-                        kitty.Unit.SetPosition(safeZone.Center.X, safeZone.Center.Y)
+                        kitty.Unit.setPos(safeZone.Center.X, safeZone.Center.Y)
                     }
                 })
             },
@@ -1557,7 +1554,7 @@ class InitCommands {
             description: 'Kibble: Disables',
             action: (player, args) => {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble
-                Console.WriteLine('spawning: Kibble is now: {Kibble.SpawningKibble}')
+                print('spawning: Kibble is now: {Kibble.SpawningKibble}')
             },
         })
 
@@ -1587,7 +1584,7 @@ class InitCommands {
             description: 'Test: Sand',
             action: (player, args) => {
                 TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC('Zdrg'))
-                Console.WriteLine('Terrain: Changed')
+                print('Terrain: Changed')
             },
         })
 
@@ -1598,8 +1595,8 @@ class InitCommands {
             argDesc: '',
             description: 'an: effect: test: on: for: some: nitro: thingy: Puts',
             action: (player, args) => {
-                let unitKitty = Globals.ALL_KITTIES[player].Unit
-                effect.Create('TestThing.mdx', unitKitty, 'origin')
+                let unitKitty = Globals.ALL_KITTIES.get(player).Unit
+                Effect.create('TestThing.mdx', unitKitty, 'origin')!
             },
         })
 
@@ -1614,7 +1611,7 @@ class InitCommands {
                 for (let k in Globals.ALL_KITTIES_LIST) {
                     x += '{Colors.PlayerNameColored(k.Player)} ({k.Player.Id})\n'
                 }
-                Console.WriteLine(x)
+                print(x)
             },
         })
 
@@ -1637,8 +1634,8 @@ class InitCommands {
             argDesc: '',
             description: 'the: chain: effect: model: Testing',
             action: (player, args) => {
-                let kitty = Globals.ALL_KITTIES[player]
-                effect.Create('ChainTest.mdx', kitty.Unit, 'origin')
+                let kitty = Globals.ALL_KITTIES.get(player)
+                Effect.create('ChainTest.mdx', kitty.Unit, 'origin')!
             },
         })
 
@@ -1649,7 +1646,7 @@ class InitCommands {
             argDesc: '[ResolvePlayerId] [Team #]',
             description: 'the: passed: ResolvePlayerId: to: the: provided: Team: Swaps #, restrictions: no',
             action: (player, args) => {
-                if (args.Length < 2 || args[0] == '' || args[1] == '') {
+                if (args.length < 2 || args[0] == '' || args[1] == '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}'
@@ -1700,10 +1697,10 @@ class InitCommands {
             description: 'wolf: timer: address: Information: Getting',
             action: (player, args) => {
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
-                if (!Globals.ALL_WOLVES.ContainsKey(selectedUnit)) return
+                if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 let wolf = Globals.ALL_WOLVES[selectedUnit]
                 let timerAddress: string = 'WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}'
-                Console.WriteLine('{timerAddress}')
+                print('{timerAddress}')
             },
         })
 
@@ -1727,7 +1724,7 @@ class InitCommands {
             group: 'admin',
             argDesc: '[speed] [player]',
             description:
-                'the: absolute: slide: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.',
+                'the: absolute: slide: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
                 if (args[0] == '') {
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r')
@@ -1735,8 +1732,8 @@ class InitCommands {
                 }
 
                 let speed: number = float.Parse(args[0])
-                if (args.Length < 2 || args[1] == '') {
-                    Globals.ALL_KITTIES[player].Slider.absoluteSlideSpeed = speed > 0 ? speed : null
+                if (args.length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES.get(player).Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set {speed}|r')
                     return
                 }
@@ -1761,7 +1758,7 @@ class InitCommands {
             group: 'admin',
             argDesc: '[speed] [player]',
             description:
-                'the: absolute: move: speed: Sets of passed: player: the, yourself: if: no: player: or is provided.',
+                'the: absolute: move: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
                 if (args[0] == '') {
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r')
@@ -1769,8 +1766,8 @@ class InitCommands {
                 }
 
                 let speed: number = float.Parse(args[0])
-                if (args.Length < 2 || args[1] == '') {
-                    Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = speed > 0 ? speed : null
+                if (args.length < 2 || args[1] == '') {
+                    Globals.ALL_KITTIES.get(player).RTR.absoluteMoveSpeed = speed > 0 ? speed : null
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: move: speed: to: Set {speed}|r')
                     return
                 }
@@ -1803,15 +1800,15 @@ class InitCommands {
 
                 let mode: boolean = CommandsManager.GetBool(args[0])
 
-                if (args.Length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] == '') {
                     // Apply to self
                     if (mode) {
-                        Globals.ALL_KITTIES[player].RTR.StartRTR()
-                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = 800
+                        Globals.ALL_KITTIES.get(player).RTR.StartRTR()
+                        Globals.ALL_KITTIES.get(player).RTR.absoluteMoveSpeed = 800
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: On (RTR + speed: 800)')
                     } else {
-                        Globals.ALL_KITTIES[player].RTR.StopRTR()
-                        Globals.ALL_KITTIES[player].RTR.absoluteMoveSpeed = null
+                        Globals.ALL_KITTIES.get(player).RTR.StopRTR()
+                        Globals.ALL_KITTIES.get(player).RTR.absoluteMoveSpeed = null
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: Off')
                     }
                     return

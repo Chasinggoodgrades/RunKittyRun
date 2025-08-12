@@ -1,16 +1,16 @@
-class RoundUtilities {
-    public static MovePlayerToStart(Player: player) {
+export class RoundUtilities {
+    public static MovePlayerToStart(Player: MapPlayer) {
         let kitty = Globals.ALL_KITTIES[Player]
         let x = RegionList.SpawnRegions[Player.Id].Center.X
         let y = RegionList.SpawnRegions[Player.Id].Center.Y
-        kitty.Unit.SetPosition(x, y)
+        kitty.Unit.setPos(x, y)
         kitty.Unit.Facing = 360.0
     }
 
     public static MoveTeamToStart(team: Team) {
-        for (let i: number = 0; i < team.Teammembers.Count; i++) {
+        for (let i: number = 0; i < team.Teammembers.length; i++) {
             let player = team.Teammembers[i]
-            let kitty = (Globals.ALL_KITTIES[player].Finished = true)
+            let kitty = (Globals.ALL_KITTIES.get(player).Finished = true)
             MovePlayerToStart(player)
         }
         team.Finished = true
@@ -33,7 +33,7 @@ class RoundUtilities {
             kitty.Value.Alive = true
             kitty.Value.ProgressZone = 0
             kitty.Value.Finished = false
-            kitty.Value.Unit.Mana = kitty.Value.Unit.MaxMana
+            kitty.Value.Unit.mana = kitty.Value.Unit.maxMana
             kitty.Value.CurrentStats.ResetRoundData()
         }
     }
@@ -42,7 +42,7 @@ class RoundUtilities {
         let x = RegionList.SpawnRegions[0].Center.X
         let y = RegionList.SpawnRegions[0].Center.Y
         for (let player in Globals.ALL_PLAYERS) {
-            if (player.IsLocal) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY)
+            if (player.isLocal()) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY)
             CameraUtil.RelockCamera(player)
         }
     }

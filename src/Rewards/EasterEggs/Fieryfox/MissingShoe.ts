@@ -1,4 +1,4 @@
-class MissingShoe {
+export class MissingShoe {
     private static TimerEvent: trigger
     private static TurnInEvent: trigger
     private static ItemID: number
@@ -28,7 +28,7 @@ class MissingShoe {
 
     // Ping Event + Shoe Spawn
     private static EventStart() {
-        let randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.Length - 1)]
+        let randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.length - 1)]
         let randomX = GetRandomReal(randomWolfRegion.Rect.MinX, randomWolfRegion.Rect.MaxX)
         let randomY = GetRandomReal(randomWolfRegion.Rect.MinY, randomWolfRegion.Rect.MaxY)
         Shoe = item.Create(ItemID, randomX, randomY)
@@ -38,7 +38,7 @@ class MissingShoe {
 
     private static TurnInActions() {
         if (!GetTriggerUnit().HasItem(Shoe)) return
-        GetTriggerUnit().RemoveItem(Shoe)
+        GetTriggerUnit().removeItem(Shoe)
         SpawnChampions.Fieryfox2023.AddItem(Shoe)
         AwardManager.GiveRewardAll('RedTendrils')
     }

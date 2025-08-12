@@ -1,4 +1,4 @@
-class MusicManager {
+export class MusicManager {
     public static MusicList: Music[]
 
     public static Initialize() {
@@ -30,7 +30,7 @@ class MusicManager {
     }
 }
 
-class Music {
+export class Music {
     public Name: string
     public Path: string
 

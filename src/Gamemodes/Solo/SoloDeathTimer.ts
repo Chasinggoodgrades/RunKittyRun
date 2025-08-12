@@ -1,16 +1,16 @@
-class SoloDeathTimer {
+export class SoloDeathTimer {
     private TIME_TO_REVIVE: number = 6.0
     private TextTagHeight: number = 0.018
     private Y_OFFSET: number = 5.0
     public ReviveTimer: AchesTimers
     public UpdateTextTimer: AchesTimers
-    public Player: player
+    public Player: MapPlayer
     public FloatingTimer: texttag
 
-    public SoloDeathTimer(player: player) {
+    public SoloDeathTimer(player: MapPlayer) {
         Player = player
-        ReviveTimer = ObjectPool.GetEmptyObject<AchesTimers>()
-        UpdateTextTimer = ObjectPool.GetEmptyObject<AchesTimers>()
+        ReviveTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        UpdateTextTimer = MemoryHandler.getEmptyObject<AchesTimers>()
         FloatingTimer = CreateFloatingTimer()
         StartTimers()
     }
@@ -18,14 +18,14 @@ class SoloDeathTimer {
     private CreateFloatingTimer(): texttag {
         let circle = Globals.ALL_CIRCLES[Player]
         let floatText = CreateTextTag()!
-        floatText.SetPosition(GetUnitX(circle.Unit), GetUnitY(circle.Unit) - this.Y_OFFSET, 0)
-        floatText.SetVisibility(true)
+        floatText.setPos(circle.Unit.x, circle.Unit.y - this.Y_OFFSET, 0)
+        floatText.setVisible(true)
         return floatText
     }
 
     private StartTimers() {
-        this.ReviveTimer.Start(this.TIME_TO_REVIVE, false, this.Revive)
-        this.UpdateTextTimer.Start(0.03, true, this.UpdateFloatingText)
+        this.ReviveTimer.start(this.TIME_TO_REVIVE, false, this.Revive)
+        this.UpdateTextTimer.start(0.03, true, this.UpdateFloatingText)
     }
 
     private UpdateFloatingText() {
@@ -43,11 +43,11 @@ class SoloDeathTimer {
             let x = lastCheckpoint.Rect_.CenterX
             let y = lastCheckpoint.Rect_.CenterY
             kitty.ReviveKitty()
-            kitty.Unit.SetPosition(x, y)
-            if (Player.IsLocal) PanCameraToTimed(x, y, 0.0)
+            kitty.Unit.setPos(x, y)
+            if (Player.isLocal()) PanCameraToTimed(x, y, 0.0)
             CameraUtil.RelockCamera(Player)
             Dispose()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in SoloDeathTimer.Revive: {e.Message}')
             Dispose()
         }

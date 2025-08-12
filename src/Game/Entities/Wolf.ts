@@ -1,4 +1,4 @@
-class Wolf {
+export class Wolf {
     public DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
     public static DisableEffects: boolean = false
@@ -11,14 +11,14 @@ class Wolf {
 
     public RegionIndex: number
     public OVERHEAD_EFFECT_PATH: string
-    public WanderTimer: AchesTimers = ObjectPool.GetEmptyObject<AchesTimers>()
+    public WanderTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
 
     public EffectTimer: AchesTimers
 
     public Texttag: texttag
     public Disco: Disco
     public WolfArea: WolfArea
-    public Unit: unit
+    public Unit: Unit
     public Affixes: Affix[]
     private OverheadEffect: effect
     // private effect RandomEffect // some random cool event - can do later on (roar, stomps, whatever)
@@ -38,10 +38,10 @@ class Wolf {
         _cachedEffect = () => WolfMoveCancelEffect()
 
         InitializeWolf()
-        WanderTimer.Timer.Start(GetRandomReal(2.0, 4.5), false, _cachedWander)
-        Globals.ALL_WOLVES.Add(Unit, this)
+        WanderTimer.Timer.start(GetRandomReal(2.0, 4.5), false, _cachedWander)
+        Globals.ALL_WOLVES.push(Unit, this)
 
-        WolfArea.Wolves.Add(this)
+        WolfArea.Wolves.push(this)
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ class Wolf {
                 FandF.CreateBloodWolf()
                 NamedWolves.CreateNamedWolves()
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in Wolf.SpawnWolves: {e.Message}')
             throw e
         }
@@ -71,7 +71,7 @@ class Wolf {
             ApplyEffect()
             realTime = NEXT_WANDER_DELAY // Gives a brief delay before the wolf has a chance to move again.
         }
-        WanderTimer?.Timer?.Start(realTime, false, _cachedWander)
+        WanderTimer?.Timer?.start(realTime, false, _cachedWander)
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ class Wolf {
         if (IsPaused && HasAffix('Bomber')) return
         WolfPoint.DiagonalRegionCreate(
             Unit.X,
-            GetUnitY(unit),
+            unit.y,
             GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX),
             GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY)
         )
@@ -114,7 +114,7 @@ class Wolf {
         for (let wolfKey in Globals.ALL_WOLVES) {
             Globals.ALL_WOLVES[wolfKey.Key]?.Dispose()
         }
-        Globals.ALL_WOLVES.Clear()
+        Globals.ALL_WOLVES.clear()
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ class Wolf {
         }
     }
 
-    public static PauseSelectedWolf(selectedUnit: unit, pause: boolean) {
+    public static PauseSelectedWolf(selectedUnit: Unit, pause: boolean) {
         if (!(wolf = Globals.ALL_WOLVES.TryGetValue(selectedUnit)) /* TODO; Prepend: let */) return
         wolf.PauseSelf(pause)
     }
@@ -135,9 +135,9 @@ class Wolf {
     public PauseSelf(pause: boolean) {
         try {
             if (pause) {
-                WanderTimer?.Pause()
-                EffectTimer?.Pause()
-                for (let i: number = 0; i < Affixes.Count; i++) {
+                WanderTimer?.pause()
+                EffectTimer?.pause()
+                for (let i: number = 0; i < Affixes.length; i++) {
                     Affixes[i].Pause(true)
                 }
                 Unit?.ClearOrders()
@@ -145,16 +145,16 @@ class Wolf {
                 IsPaused = true
                 Unit.IsPaused = true // Wander Wolf
             } else {
-                for (let i: number = 0; i < Affixes.Count; i++) {
+                for (let i: number = 0; i < Affixes.length; i++) {
                     Affixes[i].Pause(false)
                 }
                 WanderTimer?.Resume()
-                if (EffectTimer != null && EffectTimer.Timer.Remaining > 0) EffectTimer.Resume()
+                if (EffectTimer != null && EffectTimer.Timer.remaining > 0) EffectTimer.Resume()
                 IsWalking = true
                 IsPaused = false
                 Unit.IsPaused = false
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in Wolf.PauseSelf: {e.Message}')
         }
     }
@@ -170,7 +170,7 @@ class Wolf {
         Utility.MakeUnitLocust(Unit)
         Unit.Name = 'Lane: {RegionIndex + 1}'
         Unit.IsInvulnerable = true
-        Unit.SetColor(ConvertPlayerColor(24))
+        Unit.setColor(ConvertPlayerColor(24))
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true)
     }
@@ -201,11 +201,11 @@ class Wolf {
     private ApplyEffect() {
         let effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND)
 
-        OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, 'overhead')
+        OverheadEffect ??= Effect.create(OVERHEAD_EFFECT_PATH, Unit, 'overhead')!
         BlzPlaySpecialEffect(OverheadEffect, animtype.Stand)
 
-        EffectTimer ??= ObjectPool.GetEmptyObject<AchesTimers>()
-        EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect)
+        EffectTimer ??= MemoryHandler.getEmptyObject<AchesTimers>()
+        EffectTimer?.Timer?.start(effectDuration, false, _cachedEffect)
     }
 
     private WolfMoveCancelEffect() {
@@ -220,8 +220,8 @@ class Wolf {
     // #region AFFIXES
 
     public AddAffix(affix: Affix) {
-        Affixes.Add(affix)
-        AffixFactory.AllAffixes.Add(affix)
+        Affixes.push(affix)
+        AffixFactory.AllAffixes.push(affix)
         affix.Apply()
     }
 
@@ -232,7 +232,7 @@ class Wolf {
     }
 
     public RemoveAffix(affixName: string) {
-        for (let i: number = 0; i < Affixes.Count; i++) {
+        for (let i: number = 0; i < Affixes.length; i++) {
             if (Affixes[i].GetType().Name == affixName) {
                 RemoveAffix(Affixes[i])
                 break
@@ -241,8 +241,8 @@ class Wolf {
     }
 
     public HasAffix(affixName: string) {
-        if (Affixes.Count == 0) return false
-        for (let i: number = 0; i < Affixes.Count; i++) if (Affixes[i].GetType().Name == affixName) return true
+        if (Affixes.length == 0) return false
+        for (let i: number = 0; i < Affixes.length; i++) if (Affixes[i].GetType().Name == affixName) return true
 
         return false
     }
@@ -251,23 +251,23 @@ class Wolf {
         if (AffixCount() == 0) return
 
         try {
-            for (let i: number = Affixes.Count - 1; i >= 0; i--) {
+            for (let i: number = Affixes.length - 1; i >= 0; i--) {
                 Affixes[i].Remove()
                 AffixFactory.AllAffixes.Remove(Affixes[i])
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in RemoveAllWolfAffixes: {e.Message}')
         }
 
-        Affixes.Clear()
+        Affixes.clear()
     }
 
     public IsAffixed(): boolean {
-        return Affixes.Count > 0
+        return Affixes.length > 0
     }
 
     public AffixCount(): number {
-        return Affixes.Count
+        return Affixes.length
     }
 
     // #endregion AFFIXES

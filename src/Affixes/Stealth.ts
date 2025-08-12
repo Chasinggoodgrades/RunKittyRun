@@ -1,4 +1,4 @@
-class Stealth extends Affix {
+export class Stealth extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_GHOSTAFFIX
 
     public constructor(unit: Wolf) {

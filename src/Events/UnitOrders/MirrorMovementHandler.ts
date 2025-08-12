@@ -1,4 +1,4 @@
-class MirrorMovementHandler {
+export class MirrorMovementHandler {
     private kitty: Kitty
     private MovementTrigger: trigger
     private isProcessingMirror: boolean = false
@@ -21,8 +21,8 @@ class MirrorMovementHandler {
         if (isProcessingMirror) return // Prevent recursion
 
         let unit = GetTriggerUnit()
-        let unitX = GetUnitX(unit)
-        let unitY = GetUnitY(unit)
+        let unitX = unit.x
+        let unitY = unit.y
 
         let orderX: number, orderY
 

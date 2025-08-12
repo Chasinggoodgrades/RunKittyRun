@@ -1,4 +1,4 @@
-class RoundManager {
+export class RoundManager {
     public static ROUND_INTERMISSION: number = 30.0
     public static END_ROUND_DELAY: number = 3.0
     public static GAME_STARTED: boolean = false
@@ -15,7 +15,7 @@ class RoundManager {
         if (remainingTime <= 0.0) return false
         AddedTimeAlready = true
         let tempTime = remainingTime + 20.0 // 20 seconds
-        RoundTimer.StartRoundTimer.Start(tempTime, false, this.StartRound)
+        RoundTimer.StartRoundTimer.start(tempTime, false, this.StartRound)
         return true
     }
 
@@ -31,14 +31,14 @@ class RoundManager {
             if (Globals.ROUND > 1) TerrainChanger.SetTerrain()
 
             RoundTimer.InitEndRoundTimer()
-            RoundTimer.StartRoundTimer.Start(ROUND_INTERMISSION, false, StartRound)
+            RoundTimer.StartRoundTimer.start(ROUND_INTERMISSION, false, StartRound)
 
             RoundTimer.CountDown()
             TeamDeathless.StartEvent()
             ChainedTogether.StartEvent()
             WolfLaneHider.HideAllLanes()
             WolfLaneHider.LanesHider()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in RoundManager.RoundSetup {e.Message}')
             throw e
         }
@@ -47,7 +47,7 @@ class RoundManager {
     private static StartRound() {
         GAME_STARTED = true
         Globals.GAME_ACTIVE = true
-        RoundTimer.RoundTimerDialog.IsDisplayed = false
+        RoundTimer.RoundTimerDialog.display = false
         RoundTimer.StartEndRoundTimer()
 
         BarrierSetup.DeactivateBarrier()
@@ -58,8 +58,8 @@ class RoundManager {
     }
 
     private static HasDifficultyBeenChosen() {
-        let Timer = ObjectPool.GetEmptyObject<AchesTimers>()
-        Timer.Timer.Start(0.35, true, () => {
+        let Timer = MemoryHandler.getEmptyObject<AchesTimers>()
+        Timer.Timer.start(0.35, true, () => {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0) {
                 RoundSetup()
                 Timer.Dispose()
@@ -71,7 +71,7 @@ class RoundManager {
         try {
             Globals.GAME_ACTIVE = false
             MultiboardUtil.RefreshMultiboards()
-            RoundTimer.EndRoundTimer.Pause()
+            RoundTimer.EndRoundTimer.pause()
             NitroChallenges.StopNitroTimer()
             Wolf.RemoveAllWolves()
             BarrierSetup.ActivateBarrier()
@@ -88,7 +88,7 @@ class RoundManager {
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
             Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in RoundManager.RoundEnd {e.Message}')
             throw e
         }
@@ -96,7 +96,7 @@ class RoundManager {
 
     public static RoundEndCheck(): boolean {
         // Always returns for standard mode, and solo progression mode.
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) return false
         }
@@ -107,7 +107,7 @@ class RoundManager {
     public static DidTeamEnd(teamId: number) {
         let teamMemebers = Globals.ALL_TEAMS[teamId].Teammembers
         // Always returns for standard mode, and solo progression mode.
-        for (let i: number = 0; i < teamMemebers.Count; i++) {
+        for (let i: number = 0; i < teamMemebers.length; i++) {
             let member = teamMemebers[i]
             let kitty = Globals.ALL_KITTIES[member]
             if (!kitty.Finished) return false

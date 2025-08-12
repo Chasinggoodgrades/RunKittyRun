@@ -1,8 +1,8 @@
-class GamemodeCmd {
+export class GamemodeCmd {
     private static CmdInfo: GamemodeInfo
 
-    public static Handle(player: player, command: string) {
-        if (player != Gamemode.HostPlayer && !Globals.VIPLISTUNFILTERED.Contains(player)) {
+    public static Handle(player: MapPlayer, command: string) {
+        if (player != Gamemode.HostPlayer && !Globals.VIPLISTUNFILTERED.includes(player)) {
             player.DisplayTimedTextTo(
                 10.0,
                 Colors.COLOR_YELLOW_ORANGE +
@@ -42,19 +42,19 @@ class GamemodeCmd {
         if (parts[0] == '-s') {
             CmdInfo = GamemodeManager.GetCommandInfo(parts[0])
             return
-        } else if (parts.Length < 2) return
+        } else if (parts.length < 2) return
         else {
             let commandXD = parts[0] + ' ' + parts[1]
             CmdInfo = GamemodeManager.GetCommandInfo(commandXD)
         }
     }
 
-    private static HandleStandardMode(player: player) {
+    private static HandleStandardMode(player: MapPlayer) {
         Gamemode.SetGameMode(GameMode.Standard)
     }
 
-    private static HandleTeamOrSoloMode(player: player, parts: string[]) {
-        if (parts.Length < 2) {
+    private static HandleTeamOrSoloMode(player: MapPlayer, parts: string[]) {
+        if (parts.length < 2) {
             player.DisplayTimedTextTo(
                 10.0,
                 CmdInfo.Error + Colors.COLOR_GOLD + '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
@@ -82,10 +82,10 @@ class GamemodeCmd {
         }
     }
 
-    private static HandleSoloMode(player: player, parts: string[]) {
+    private static HandleSoloMode(player: MapPlayer, parts: string[]) {
         // let = parts [1] and 2
 
-        if (parts.Length != 3) {
+        if (parts.length != 3) {
             player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
             return
         }
@@ -108,8 +108,8 @@ class GamemodeCmd {
         }
     }
 
-    private static HandleTeamMode(player: player, parts: string[]) {
-        if (parts.Length < 3) {
+    private static HandleTeamMode(player: MapPlayer, parts: string[]) {
+        if (parts.length < 3) {
             player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
             return
         }
@@ -118,11 +118,11 @@ class GamemodeCmd {
         let teamSize: number = Globals.DEFAULT_TEAM_SIZE
         let parsedTeamSize: number
 
-        if (parts.Length == 4 && !int.TryParse(parts[3])) {
+        if (parts.length == 4 && !int.TryParse(parts[3])) {
             Globals.MAX_TEAM_SIZE.ToString()
             player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
             return
-        } else if (parts.Length == 4 && (parsedTeamSize = int.TryParse(parts[3]))) {
+        } else if (parts.length == 4 && (parsedTeamSize = int.TryParse(parts[3]))) {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0) {
                 teamSize = parsedTeamSize
             } else {

@@ -1,4 +1,15 @@
-class Utility {
+import { Logger } from 'src/Events/Logger/Logger'
+import { PlayerLeaves } from 'src/Events/PlayerLeavesEvent/PlayerLeaves'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
+import { Globals } from 'src/Global/Globals'
+import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { base64Decode, Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
+import { Colors } from './Colors/Colors'
+import { Action } from './CSUtils'
+import { AchesTimers } from './MemoryHandler/AchesTimers'
+import { MemoryHandler } from './MemoryHandler/MemoryHandler'
+
+export class Utility {
     private static Locust: number = FourCC('Aloc')
     // StringBuilder is not available in TypeScript, so we'll use a string array for efficient concatenation
     private static stringBuilder: string[] = []
@@ -7,11 +18,11 @@ class Utility {
     /// Makes the unit unclickable while remaining selectable.
     /// </summary>
     /// <param name="u"></param>
-    public static MakeUnitLocust(u: unit) {
-        u.AddAbility(Locust)
-        ShowUnit(u, false)
-        u.RemoveAbility(Locust)
-        ShowUnit(u, true)
+    public static MakeUnitLocust(u: Unit) {
+        u.addAbility(Utility.Locust)
+        u.show = false
+        u.removeAbility(Utility.Locust)
+        u.show = true
     }
 
     /// <summary>
@@ -19,10 +30,10 @@ class Utility {
     /// </summary>
     /// <param name="p"></param>
     /// <param name="u"></param>
-    public static SelectUnitForPlayer(p: player, u: unit) {
-        if (GetLocalPlayer() != p) return
+    public static SelectUnitForPlayer(p: MapPlayer, u: Unit) {
+        if (!p.isLocal()) return
         ClearSelection()
-        SelectUnit(u, true)
+        u.select(true)
     }
 
     /// <summary>
@@ -31,7 +42,7 @@ class Utility {
     /// <param name="duration">How long to show the message.</param>
     /// <param name="message">Whats the message?</param>
     public static TimedTextToAllPlayers(duration: number, message: string) {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             Globals.ALL_PLAYERS[i].DisplayTimedTextTo(duration, message)
         }
     }
@@ -44,7 +55,7 @@ class Utility {
     /// Converts a number to time string tenths.
     /// Used for colorizing the time string in Teams mode.
     /// </summary>
-    public static ConvertFloatToTime(time: number, teamID: number) {
+    public static ConvertFloatToTimeTeam(time: number, teamID: number) {
         if (time <= 0.0) return '0:00.0'
 
         let minutes = time / 60
@@ -83,16 +94,21 @@ class Utility {
         return seconds < 10 ? '{minutes}:0{seconds}' : '{minutes}:{seconds}'
     }
 
-    public static IsDeveloper(p: player) {
+    public static IsDeveloper(p: MapPlayer) {
         try {
-            for (let i: number = 0; i < Globals.VIPLIST.Length; i++) {
-                if (GetPlayerName(p) == Base64.FromBase64(Globals.VIPLIST[i])) {
+            for (let i: number = 0; i < Globals.VIPLIST.length; i++) {
+                if (p.name == base64Decode(Globals.VIPLIST[i])) {
                     return true
                 }
             }
             return false
-        } catch (ex: Error) {
-            Logger.Warning(ex.StackTrace)
+        } catch (ex) {
+            if (ex instanceof Error) {
+                Logger.Warning(ex.stack || '')
+            } else {
+                Logger.Warning('' + ex)
+            }
+
             return false
         }
     }
@@ -103,11 +119,10 @@ class Utility {
     /// <param name="duration"></param>
     /// <param name="action"></param>
     public static SimpleTimer(duration: number, action: Action) {
-        let handle = ObjectPool.GetEmptyObject<AchesTimers>()
-        handle.Timer.Start(duration, false, () => {
+        let handle = MemoryHandler.getEmptyObject<AchesTimers>()
+        handle.Timer.start(duration, false, () => {
             action()
             handle?.Dispose()
-            handle = null
         })
     }
 
@@ -117,9 +132,9 @@ class Utility {
     /// <param name="u">The unit to check for the item.</param>
     /// <param name="itemId">The ID of the item to check for.</param>
     /// <returns>True if the unit has the item, otherwise false.</returns>
-    public static UnitHasItem(u: unit, itemId: number) {
+    public static UnitHasItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId) return true
+            if (u.getItemInSlot(i)?.typeId == itemId) return true
         }
         return false
     }
@@ -130,10 +145,10 @@ class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static UnitHasItemCount(u: unit, itemId: number) {
+    public static UnitHasItemCount(u: Unit, itemId: number) {
         let count = 0
         for (let i: number = 0; i < 6; i++) {
-            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId) count++
+            if (u.getItemInSlot(i)?.typeId == itemId) count++
         }
         return count
     }
@@ -144,10 +159,11 @@ class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static UnitGetItem(u: unit, itemId: number) {
+    public static UnitGetItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId) return UnitItemInSlot(u, i)
+            if (u.getItemInSlot(i)?.typeId == itemId) return u.getItemInSlot(i)
         }
+
         return null
     }
 
@@ -157,9 +173,9 @@ class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static GetSlotOfItem(u: unit, itemId: number) {
+    public static GetSlotOfItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId) return i
+            if (u.getItemInSlot(i)?.typeId == itemId) return i
         }
         return -1
     }
@@ -169,10 +185,10 @@ class Utility {
     /// </summary>
     /// <param name="u"></param>
     /// <param name="itemId"></param>
-    public static RemoveItemFromUnit(u: unit, itemId: number) {
+    public static RemoveItemFromUnit(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (GetItemTypeId(UnitItemInSlot(u, i)) == itemId) {
-                UnitItemInSlot(u, i).Dispose()
+            if (u.getItemInSlot(i)?.typeId == itemId) {
+                u.removeItemFromSlot(i)
                 return
             }
         }
@@ -184,10 +200,9 @@ class Utility {
     /// <param name="itemId"></param>
     /// <returns></returns>
     public static GetItemIconPath(itemId: number) {
-        let item = CreateItem(itemId, 0, 0)
-        let iconPath = item.Icon
-        RemoveItem(item!)
-        item = null
+        let item = Item.create(itemId, 0, 0)!
+        let iconPath = item.icon
+        item.destroy()
         return iconPath
     }
 
@@ -204,19 +219,19 @@ class Utility {
     public static CreateSimpleTextTag(
         text: string,
         duration: number,
-        u: unit,
+        u: Unit,
         height: number = 0.015,
         red: number = 255,
         green: number = 255,
         blue: number = 255
     ) {
-        let tt = texttag.Create()
-        tt.SetText(text, height)
-        tt.SetColor(red, green, blue, 255)
-        tt.SetPosition(u.X, u.Y, 0)
-        tt.SetVelocity(0, 0.02)
-        tt.SetVisibility(true)
-        SimpleTimer(duration, () => tt?.Dispose())
+        let tt = TextTag.create()!
+        tt.setText(text, height)
+        tt.setColor(red, green, blue, 255)
+        tt.setPos(u.x, u.y, 0)
+        tt.setVelocity(0, 0.02)
+        tt.setVisible(true)
+        Utility.SimpleTimer(duration, () => tt?.destroy())
     }
 
     /// <summary>
@@ -224,9 +239,9 @@ class Utility {
     /// </summary>
     /// <param name="amount"></param>
     /// <param name="u"></param>
-    public static GiveGoldFloatingText(amount: number, u: unit) {
-        u.Owner.Gold += amount
-        CreateSimpleTextTag('+{amount} Gold', 2.0, u, 0.018, 255, 215, 0)
+    public static GiveGoldFloatingText(amount: number, u: Unit) {
+        u.owner.setState(PLAYER_STATE_RESOURCE_GOLD, u.owner.getState(PLAYER_STATE_RESOURCE_GOLD) + amount)
+        Utility.CreateSimpleTextTag('+{amount} Gold', 2.0, u, 0.018, 255, 215, 0)
     }
 
     /// <summary>
@@ -237,8 +252,8 @@ class Utility {
     /// <param name="x">The x-coordinate at which to create the effect.</param>
     /// <param name="y">The y-coordinate at which to create the effect.</param>
     public static CreateEffectAndDispose(path: string, x: number, y: number) {
-        let e: effect = effect.Create(path, x, y)
-        e.Dispose()
+        let e = Effect.create(path, x, y)!
+        e.destroy()
     }
 
     /// <summary>
@@ -247,17 +262,17 @@ class Utility {
     /// <param name="path"></param>
     /// <param name="u"></param>
     /// <param name="attachPoint"></param>
-    public static CreateEffectAndDispose(path: string, u: unit, attachPoint: string) {
-        let e: effect = effect.Create(path, u, attachPoint)
-        e.Dispose()
+    public static CreateEffectAndDisposeAttach(path: string, u: Unit, attachPoint: string) {
+        let e = Effect.createAttachment(path, u, attachPoint)!
+        e.destroy()
     }
 
     /// <summary>
     /// Clears the screen of all messages for the given player.
     /// </summary>
     /// <param name="player"></param>
-    public static ClearScreen(player: player) {
-        if (!player.IsLocal) return
+    public static ClearScreen(player: MapPlayer) {
+        if (!player.isLocal()) return
         ClearTextMessages()
     }
 
@@ -265,10 +280,10 @@ class Utility {
     /// Drops all items held by the specified unit.
     /// </summary>
     /// <param name="Unit">The unit whose items are to be dropped.</param>
-    public static DropAllItems(Unit: unit) {
+    public static DropAllItems(Unit: Unit) {
         for (let i: number = 0; i < 6; i++) {
-            let item = UnitItemInSlot(Unit, i)
-            if (item != null) UnitDropItemPoint(Unit, item, Unit.X, GetUnitY(unit))
+            let item = Unit.getItemInSlot(i)
+            if (item != null) Unit.dropItem(item, Unit.x, Unit.y)
         }
     }
 
@@ -277,12 +292,12 @@ class Utility {
     /// </summary>
     /// <param name="unit">The unit to which mana is to be added.</param>
     /// <param name="amount">The amount of mana to add.</param>
-    public static UnitAddMana(unit: unit, amount: number) {
-        let maxMana = unit.MaxMana
-        let currentMana = unit.Mana
+    public static UnitAddMana(unit: Unit, amount: number) {
+        let maxMana = unit.maxMana
+        let currentMana = unit.mana
         let newMana = currentMana + amount
 
-        unit.Mana = newMana >= maxMana ? maxMana - 1 : newMana
+        unit.mana = newMana >= maxMana ? maxMana - 1 : newMana
     }
 
     /// <summary>
@@ -307,22 +322,22 @@ class Utility {
     /// disposing of their in-game objects, and refreshing the game state.
     /// </summary>
     /// <param name="player">The player to be made a spectator.</param>
-    public static MakePlayerSpectator(player: player) {
+    public static MakePlayerSpectator(player: MapPlayer) {
         PlayerLeaves.TeamRemovePlayer(player)
-        Globals.ALL_KITTIES[player].Dispose()
-        Globals.ALL_CIRCLES[player].Dispose()
+        Globals.ALL_KITTIES.get(player)?.Dispose()
+        Globals.ALL_CIRCLES.get(player)?.Dispose()
         Globals.ALL_PLAYERS.Remove(player)
-        Globals.ALL_KITTIES[player].NameTag?.Dispose()
+        Globals.ALL_KITTIES.get(player)?.NameTag?.Dispose()
         RoundManager.RoundEndCheck()
         MultiboardUtil.RefreshMultiboards()
     }
 
-    public static GetPlayerByName(playerName: string): player {
+    public static GetPlayerByName(playerName: string): MapPlayer {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let p = Globals.ALL_PLAYERS[i]
-            if (GetPlayerName(p).ToLower().Contains(playerName.ToLower())) {
+            if (GetPlayerName(p).ToLower().includes(playerName.ToLower())) {
                 return p
             }
         }
@@ -331,7 +346,7 @@ class Utility {
 
     public static GetItemSkin(itemId: number) {
         if (itemId == 0) return 0
-        let item = CreateItem(itemId, 0, 0)
+        let item = Item.create(itemId, 0, 0)!
         let skin = BlzGetItemSkin(item!)
         RemoveItem(item!)
         return skin
@@ -343,11 +358,11 @@ class Utility {
         BlzSetSpecialEffectTime(effect, 0)
         BlzSetSpecialEffectTimeScale(effect, 0.0)
         BlzSpecialEffectClearSubAnimations(effect)
-        effect.SetPosition(x, y, z)
+        effect.setPos(x, y, z)
         BlzPlaySpecialEffect(effect, animtype.Birth)
     }
 
-    public static FormattedColorPlayerName(p: player) {
+    public static FormattedColorPlayerName(p: MapPlayer) {
         // removes everything after '#' in the player name
         let name = GetPlayerName(p).split('#')[0]
         return '{Colors.ColorString(name, p.Id + 1)}'

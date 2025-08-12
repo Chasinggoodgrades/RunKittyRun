@@ -3,7 +3,7 @@
 /// * Follow the AddReward functions below to determine what you wish to do.
 
 import { Reward } from 'src/Rewards/Rewards/Reward'
-class RewardManager {
+export class RewardManager {
     public static AddReward(reward: Reward): Reward
     public static AddReward(
         name: string,
@@ -40,7 +40,7 @@ class RewardManager {
             reward = new Reward(...args) // Idk what the fuck to do here but OK good luck.
         }
 
-        RewardsManager.Rewards.Add(reward)
+        RewardsManager.Rewards.push(reward)
         reward.TypeSorted = reward.SetRewardTypeSorted()
         return reward
     }

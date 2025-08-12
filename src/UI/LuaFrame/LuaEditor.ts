@@ -1,4 +1,4 @@
-class LuaEditor {
+export class LuaEditor {
     private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0)
     private frameBackdrop: framehandle
     private editBox: framehandle
@@ -66,12 +66,12 @@ class LuaEditor {
             let p = GetTriggerPlayer()
             let output: string = RunLua(p, luaCode)
             BlzFrameSetText(outputText, output)
-        } catch (ex: Error) {
+        } catch (ex) {
             BlzFrameSetText(outputText, 'Error: {ex.Message}')
         }
     }
 
-    private RunLua(player: player, luaCode: string) {
+    private RunLua(player: MapPlayer, luaCode: string) {
         ExecuteLua.LuaCode(player, luaCode)
         return 'Lua: Executed: ' + luaCode
     }

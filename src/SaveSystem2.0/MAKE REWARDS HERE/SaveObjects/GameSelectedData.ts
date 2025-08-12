@@ -1,4 +1,4 @@
-class GameSelectedData {
+export class GameSelectedData {
     public SelectedSkin: string = ''
     public SelectedWings: string = ''
     public SelectedAura: string = ''

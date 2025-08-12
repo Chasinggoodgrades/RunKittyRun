@@ -6,7 +6,7 @@ export enum HolidaySeasons {
     None,
 }
 
-class SeasonalManager {
+export class SeasonalManager {
     public static Season: HolidaySeasons
     private static CurrentMonth: number
     private static SnowEffect: number = FourCC('SNls') // light snow

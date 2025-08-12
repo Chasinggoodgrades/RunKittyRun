@@ -1,7 +1,7 @@
-class Chaos extends Affix {
+export class Chaos extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_CHAOS
-    private RotationTimer: AchesTimers = ObjectPool.GetEmptyObject<AchesTimers>()
-    private currentAffix!: Affix
+    private RotationTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
+    private currentAffix: Affix
     private rotationTime: number = GetRandomReal(25, 45)
 
     public constructor(unit: Wolf) {
@@ -13,8 +13,8 @@ class Chaos extends Affix {
         try {
             RegisterTimer()
             UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
-            base.Apply()
-        } catch (e: Error) {
+            super.Apply()
+        } catch (e) {
             Logger.Warning('Chaos.Apply: {e.Message}')
             throw e
         }
@@ -26,7 +26,7 @@ class Chaos extends Affix {
             this.RotationTimer?.Dispose()
             this.Unit?.Unit?.RemoveAbility(AFFIX_ABILITY)
             super.Remove()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in Chaos.Remove: {e.Message}')
             super.Remove()
         }
@@ -34,11 +34,11 @@ class Chaos extends Affix {
 
     private RegisterTimer() {
         try {
-            RotationTimer?.Timer.Start(rotationTime, true, RotateAffix)
+            RotationTimer?.Timer.start(rotationTime, true, RotateAffix)
             let randomAffix: string = GenRandomAffixName()
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix)
             Unit.AddAffix(currentAffix)
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Warning('Error in Chaos.RegisterTimer: {e.Message}')
             RotationTimer.Dispose()
             Unit.RemoveAffix(currentAffix)
@@ -53,7 +53,7 @@ class Chaos extends Affix {
             let randomAffix: string = GenRandomAffixName()
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix)
             Unit.AddAffix(currentAffix)
-        } catch (e: Error) {
+        } catch (e) {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning('Error in Chaos.RotateAffix: {e.Message}')
             Unit.RemoveAffix(currentAffix)
@@ -62,8 +62,8 @@ class Chaos extends Affix {
 
     private GenRandomAffixName(): string {
         let randomAffixName: string =
-            AffixFactory.AffixTypes.Count > 0
-                ? AffixFactory.AffixTypes[GetRandomInt(0, AffixFactory.AffixTypes.Count - 1)]
+            AffixFactory.AffixTypes.length > 0
+                ? AffixFactory.AffixTypes[GetRandomInt(0, AffixFactory.AffixTypes.length - 1)]
                 : 'Speedster'
         if (randomAffixName == 'Chaos') randomAffixName = 'Speedster'
         return randomAffixName

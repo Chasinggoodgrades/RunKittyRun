@@ -1,4 +1,4 @@
-class Deathless {
+export class Deathless {
     public NormalDeathless1: number
     public NormalDeathless2: number
     public NormalDeathless3: number

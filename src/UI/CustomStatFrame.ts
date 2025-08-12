@@ -1,19 +1,19 @@
-class CustomStat {
-    public Frame!: framehandle
-    public Icon!: framehandle
-    public Text!: framehandle
-    public Hover!: framehandle
-    public ToolTipBox!: framehandle
-    public ToolTipTitle!: framehandle
-    public ToolTipText!: framehandle
+export class CustomStat {
+    public Frame: framehandle
+    public Icon: framehandle
+    public Text: framehandle
+    public Hover: framehandle
+    public ToolTipBox: framehandle
+    public ToolTipTitle: framehandle
+    public ToolTipText: framehandle
 }
 
-class CustomStatFrame {
+export class CustomStatFrame {
     private static Count: number = 0
     private static CustomStatFrameBoxS: framehandle
     private static CustomStatFrameBoxF: framehandle
 
-    public static SelectedUnit: { [x: player]: unit } = {}
+    public static SelectedUnit: Map<player, unit> = new Map()
     private static Stats: CustomStat[] = []
     private static MoveSpeed: string = '{Colors.COLOR_YELLOW_ORANGE}MS:|r'
     private static Time: string = '{Colors.COLOR_YELLOW_ORANGE}Time:|r'
@@ -85,7 +85,7 @@ class CustomStatFrame {
             HandleFrameText(selectedUnit)
 
             CustomStatFrameBoxF.Visible = CustomStatFrameBoxS.Visible
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in CustomStatFrame.Update: {e.Message}')
             throw e
         }
@@ -140,10 +140,10 @@ class CustomStatFrame {
         Add('ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp', '', 'Speed')
 
         t = timer.Create()
-        t.Start(0.1, true, _cacheUpdate)
+        t.start(0.1, true, _cacheUpdate)
     }
 
-    private static HandleFrameText(selectedUnit: unit) {
+    private static HandleFrameText(selectedUnit: Unit) {
         if (selectedUnit.UnitType == Constants.UNIT_CUSTOM_DOG || selectedUnit.UnitType == Constants.UNIT_NITRO_PACER)
             SetWolfFrameText(selectedUnit)
         else if (selectedUnit.UnitType == Constants.UNIT_KITTY) {
@@ -155,7 +155,7 @@ class CustomStatFrame {
         }
     }
 
-    private static SetChampionFrameText(selectedUnit: unit) {
+    private static SetChampionFrameText(selectedUnit: Unit) {
         // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
         if (selectedUnit == SpawnChampions.Fieryfox2023) {
             Stats[1].Text.Text = '|cffff0000Fieryfox|r'
@@ -189,7 +189,7 @@ class CustomStatFrame {
         return true
     }
 
-    private static SetWolfFrameText(selectedUnit: unit) {
+    private static SetWolfFrameText(selectedUnit: Unit) {
         Stats[0].Text.Text = ''
         Stats[1].Text.Text = ''
         Stats[2].Text.Text = ''
@@ -201,18 +201,18 @@ class CustomStatFrame {
         Stats[5].Text.Text = '{MoveSpeed} {GetUnitMoveSpeed(selectedUnit)}'
     }
 
-    private static SetWolfAffixTexts(selectedUnit: unit) {
+    private static SetWolfAffixTexts(selectedUnit: Unit) {
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return
         if (!(wolf = Globals.ALL_WOLVES.TryGetValue(selectedUnit)) /* TODO; Prepend: let */) return
 
         let affixes = wolf.Affixes
 
-        for (let i = 0; i < affixes.Count; i++) {
+        for (let i = 0; i < affixes.length; i++) {
             Stats[i].Text.Text = affixes[i].Name
         }
     }
 
-    private static SetGamemodeFrameText(selectedUnit: unit) {
+    private static SetGamemodeFrameText(selectedUnit: Unit) {
         if (Gamemode.CurrentGameMode == GameMode.Standard) {
             // Standard
             BlzFrameSetText(Stats[3].Text, '{Streak} {GetPlayerSaveStreak(selectedUnit)}')
@@ -235,55 +235,55 @@ class CustomStatFrame {
         }
     }
 
-    private static SetCommonFrameText(selectedUnit: unit) {
+    private static SetCommonFrameText(selectedUnit: Unit) {
         BlzFrameSetText(Stats[4].Text, '{Gold} {GetPlayerGold(selectedUnit)}')
         BlzFrameSetText(Stats[5].Text, '{MoveSpeed} {GetUnitMoveSpeed(selectedUnit)}')
         BlzFrameSetText(Stats[2].Text, '{Deaths} {Colors.COLOR_RED}{GetPlayerDeaths(selectedUnit)}|r')
     }
 
-    private static GetPlayerTeamName(u: unit) {
+    private static GetPlayerTeamName(u: Unit) {
         return (team = Globals.PLAYERS_TEAMS.TryGetValue(u.Owner) /* TODO; Prepend: Team */
             ? team.TeamColor
             : '{Colors.COLOR_YELLOW_ORANGE}Aches: Team{Colors.COLOR_RESET}')
     }
 
-    private static GetPlayerGold(u: unit) {
+    private static GetPlayerGold(u: Unit) {
         return u.Owner.Gold
     }
 
-    private static GetPlayerProgress(u: unit) {
+    private static GetPlayerProgress(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundProgress(Globals.ROUND).ToString('F2')
     }
 
-    private static GetPlayerSaves(u: unit) {
+    private static GetPlayerSaves(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Saves
     }
 
-    private static GetPlayerDeaths(u: unit) {
+    private static GetPlayerDeaths(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.Deaths
     }
 
-    private static GetPlayerSaveStreak(u: unit) {
+    private static GetPlayerSaveStreak(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.SaveStreak
     }
 
-    private static GetPlayerTime(u: unit) {
+    private static GetPlayerTime(u: Unit) {
         return Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundTime(Globals.ROUND))
     }
 
-    private static GetCurrentRoundSaves(u: unit) {
+    private static GetCurrentRoundSaves(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves
     }
 
-    private static GetCurrentRoundDeaths(u: unit) {
+    private static GetCurrentRoundDeaths(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundDeaths
     }
 
-    private static GetGameTotalSaves(u: unit) {
+    private static GetGameTotalSaves(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalSaves
     }
 
-    private static GetGameTotalDeaths(u: unit) {
+    private static GetGameTotalDeaths(u: Unit) {
         return Globals.ALL_KITTIES[u.Owner].CurrentStats.TotalDeaths
     }
 }

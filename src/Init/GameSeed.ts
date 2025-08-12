@@ -1,12 +1,13 @@
-class GameSeed {
+import { Globals } from 'src/Global/Globals'
+
+export class GameSeed {
     public static Initialize() {
-        if (SpecialSeed()) return
+        if (this.SpecialSeed()) return
         Globals.GAME_SEED = GetRandomInt(1, 900000)
-        Globals.RANDOM_GEN = new Random(Globals.GAME_SEED)
     }
 
     private static SpecialSeed(): boolean {
-        if (TeamTournament2025Seed()) return true
+        if (this.TeamTournament2025Seed()) return true
         return false
     }
 
@@ -20,7 +21,6 @@ class GameSeed {
         }
         let OmnisSeed = 458266 // Omnis' Seed for the Team Tournament 2025
         Globals.GAME_SEED = OmnisSeed
-        Globals.RANDOM_GEN = new Random(OmnisSeed)
 
         return true
     }

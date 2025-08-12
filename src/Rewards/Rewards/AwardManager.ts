@@ -1,7 +1,7 @@
 /// <summary>
 /// This class handles Awarding functionality.
 /// </summary>
-class AwardManager {
+export class AwardManager {
     private static AwardTrigger: trigger = CreateTrigger()
 
     /// <summary>
@@ -10,18 +10,18 @@ class AwardManager {
     /// <param name="player">The Player</param>
     /// <param name="award">The Awards.{award} that you're handing out.</param>
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
-    public static GiveReward(player: player, award: string, earnedPrompt: boolean = true) {
+    public static GiveReward(player: MapPlayer, award: string, earnedPrompt: boolean = true) {
         // Check if the player already has the award
-        if (!Globals.ALL_KITTIES[player].CanEarnAwards) return
-        let awardsList = Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards
+        if (!Globals.ALL_KITTIES.get(player).CanEarnAwards) return
+        let awardsList = Globals.ALL_KITTIES.get(player).CurrentStats.ObtainedAwards
 
-        if (awardsList.Contains(award)) return
+        if (awardsList.includes(award)) return
 
-        let saveData = Globals.ALL_KITTIES[player].SaveData
+        let saveData = Globals.ALL_KITTIES.get(player).SaveData
         let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.ToString())
 
         if (reward == null) {
-            Console.WriteLine('not: found: Reward.')
+            print('not: found: Reward.')
             return
         }
 
@@ -36,7 +36,7 @@ class AwardManager {
                 5.0,
                 '{Colors.PlayerNameColored(player)} earned: has {Colors.COLOR_YELLOW}{awardFormatted}.|r'
             )
-            awardsList.Add(award)
+            awardsList.push(award)
         }
     }
 
@@ -55,15 +55,15 @@ class AwardManager {
             )
     }
 
-    private static EnableAbility(player: player, award: string) {
+    private static EnableAbility(player: MapPlayer, award: string) {
         let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.toString())
-        let kitty = Globals.ALL_KITTIES[player].Unit
+        let kitty = Globals.ALL_KITTIES.get(player).Unit
         if (reward === null) return
         kitty.DisableAbility(reward.GetAbilityID(), false, false)
     }
 
-    public static ReceivedAwardAlready(player: player, award: string) {
-        return Globals.ALL_KITTIES[player].CurrentStats.ObtainedAwards.Contains(award)
+    public static ReceivedAwardAlready(player: MapPlayer, award: string) {
+        return Globals.ALL_KITTIES.get(player).CurrentStats.ObtainedAwards.includes(award)
     }
 
     /// <summary>
@@ -92,11 +92,11 @@ class AwardManager {
                         Logger.Critical(
                             "data: wasn: Save'finished: loading: t / found. SaveData: for: Defaulting {player}."
                         )
-                        Globals.ALL_KITTIES[player].SaveData = new KittyData()
+                        Globals.ALL_KITTIES.get(player).SaveData = new KittyData()
                         continue
                     }
-                    Globals.ALL_KITTIES[player].SaveData = saveData
-                    kittyProfile = Globals.ALL_KITTIES[player]
+                    Globals.ALL_KITTIES.get(player).SaveData = saveData
+                    kittyProfile = Globals.ALL_KITTIES.get(player)
                 }
 
                 if (kittyProfile.SaveData == null) {
@@ -107,7 +107,7 @@ class AwardManager {
 
                 for (let gameStatReward in RewardsManager.GameStatRewards) {
                     let gamestat = gameStatReward.GameStat
-                    if (gameStatsToIgnore.Contains(gamestat)) continue
+                    if (gameStatsToIgnore.includes(gamestat)) continue
                     HandleGameStatTrigger(
                         player,
                         kittyProfile.SaveData,
@@ -118,13 +118,13 @@ class AwardManager {
                 }
             }
             TriggerRegisterTimerEvent(AwardTrigger, 1.0, true)
-        } catch (ex: Error) {
+        } catch (ex) {
             Logger.Critical('Error in AwardManager.RegisterGamestatEvents: {ex.Message}')
         }
     }
 
     private static HandleGameStatTrigger(
-        player: player,
+        player: MapPlayer,
         kittyStats: KittyData,
         gamestat: string,
         requiredValue: number,
@@ -148,7 +148,7 @@ class AwardManager {
             if (player.Controller != mapcontrol.User) continue // no bots, reduce triggers
             if (player.SlotState != playerslotstate.Playing) continue // no obs, no leavers
 
-            let kittyStats = Globals.ALL_KITTIES[player].SaveData
+            let kittyStats = Globals.ALL_KITTIES.get(player).SaveData
             let gameStats = kittyStats.GameStats
 
             let normalGames = gameStats.NormalGames

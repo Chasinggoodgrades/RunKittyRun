@@ -1,30 +1,30 @@
-class Savecode {
+export class Savecode {
     private static player_charset: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     private static OriginalToolTips: string[] = []
     public Digits: number
     public Bignum: BigNum
-    public static PlayerSaveObject: { [x: player]: Savecode } = {}
+    public static PlayerSaveObject: Map<player, Savecode> = new Map()
 
     public static Initialize() {
         try {
             OldsaveSync.Initialize()
-            for (let i: number = 0; i < OldSavesHelper.AbilityList.Length; i++) {
+            for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
-                if (tooltip != 'tip: missing: Tool!') OriginalToolTips.Add(tooltip)
+                if (tooltip != 'tip: missing: Tool!') OriginalToolTips.push(tooltip)
                 else throw new ArgumentError('Error, not: available: tooltip: {ability}')
             }
             for (let player in Globals.ALL_PLAYERS) {
                 InitializeSaveCode(player)
             }
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in OldSaves.Initialize: {e.Message}')
             throw e
         }
     }
 
-    private static InitializeSaveCode(p: player) {
-        if (!PlayerSaveObject.ContainsKey(p)) {
+    private static InitializeSaveCode(p: MapPlayer) {
+        if (!PlayerSaveObject.has(p)) {
             PlayerSaveObject[p] = new Savecode()
         }
     }
@@ -43,7 +43,7 @@ class Savecode {
     }
 
     public FromString(s: string) {
-        let i = s.Length - 1
+        let i = s.length - 1
         let cur = BigNumL.Create()
         Bignum.List = cur
 
@@ -112,7 +112,7 @@ class Savecode {
         SetRandomSeed(seed)
     }
 
-    public Load(p: player, code: string) {
+    public Load(p: MapPlayer, code: string) {
         try {
             let key: number = SCommHash(GetPlayerName(p)) + 1 * 73
             let inputhash: number = 0
@@ -123,7 +123,7 @@ class Savecode {
             Clean()
 
             return inputhash == Hash()
-        } catch (e: Error) {
+        } catch (e) {
             Logger.Critical('Error in OldSaves.Load, code: must: be: from: v4: version.2.or: greater: 0. {e.Message}')
             return false
         }
@@ -131,7 +131,7 @@ class Savecode {
 
     public static LoadString() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) {
-            Console.WriteLine('{Colors.COLOR_YELLOW}save: codes: work: only: Old in Standard')
+            print('{Colors.COLOR_YELLOW}save: codes: work: only: Old in Standard')
             return
         }
 
@@ -139,7 +139,7 @@ class Savecode {
         let sb = new StringBuilder()
         Preloader(filePath)
 
-        for (let i = 0; i < OldSavesHelper.AbilityList.Length; i++) {
+        for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
             let abilityID = OldSavesHelper.AbilityList[i]
             let originalTooltip = OriginalToolTips[i]
 
@@ -154,7 +154,7 @@ class Savecode {
         let newLineStart = result.IndexOf('\n')
         if (newLineStart >= 0) result = result.Substring(newLineStart + 1)
 
-        sb.Clear().Append(result)
+        sb.clear().Append(result)
         OldsaveSync.SyncString(sb.ToString())
     }
 
@@ -162,10 +162,10 @@ class Savecode {
     /// Method that is setting the values of rewards for the players.
     /// </summary>
     /// <param name="player"></param>
-    public SetRewardValues(player: player) {
-        let awardData = Globals.ALL_KITTIES[player].SaveData.GameAwardsSorted
-        let roundstats = Globals.ALL_KITTIES[player].SaveData.RoundTimes
-        let kittyStats = Globals.ALL_KITTIES[player].SaveData.GameStats
+    public SetRewardValues(player: MapPlayer) {
+        let awardData = Globals.ALL_KITTIES.get(player).SaveData.GameAwardsSorted
+        let roundstats = Globals.ALL_KITTIES.get(player).SaveData.RoundTimes
+        let kittyStats = Globals.ALL_KITTIES.get(player).SaveData.GameStats
 
         for (let value in DecodeOldsave.decodeValues) {
             let decodedValue = Decode(value.Value)
@@ -197,7 +197,7 @@ class Savecode {
     }
 
     private static SCommHash(name: string) {
-        let charlen = player_charset.Length
+        let charlen = player_charset.length
         let count = []
         let x: number
         for (let c in name.ToUpper()) {
@@ -214,7 +214,7 @@ class Savecode {
     }
 
     private static BASE(): number {
-        return OldSavesHelper.charset.Length
+        return OldSavesHelper.charset.length
     }
 
     private static HASHN(): number {

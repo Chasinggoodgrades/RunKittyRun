@@ -1,6 +1,6 @@
-type Action = (player: player, args: string[]) => void
+type Action = (player: MapPlayer, args: string[]) => void
 
-class Commands {
+export class Commands {
     public Name: string
     public Alias: string[]
     public Group: string // "all", "vip", "admin", "dev" "some other shit? naw prolly good", "oh yeah, i should put red lmao"
@@ -9,9 +9,9 @@ class Commands {
     public Action: Action
 }
 
-class CommandsManager {
+export class CommandsManager {
     public static Count: number = 0
-    private static AllCommands: { [x: string]: Commands } = {}
+    private static AllCommands: Map<string, Commands> = new Map()
     private static CommandsList: Commands[] = []
     private static KittiesList: Kitty[] = []
 
@@ -44,26 +44,26 @@ class CommandsManager {
     }
 
     private static ResolvePlayerIdArray(arg: string): Kitty[] {
-        KittiesList.Clear()
+        KittiesList.clear()
         let kitties = KittiesList
         let larg = arg.ToLower()
 
         if (arg == '') {
             // no arg for self
-            kitties.Add(Globals.ALL_KITTIES[GetTriggerPlayer()])
+            kitties.push(Globals.ALL_KITTIES[GetTriggerPlayer()])
         } else if (larg == 'a' || larg == 'all') {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
-                kitties.Add(kitty) // add all players
+                kitties.push(kitty) // add all players
             }
         } else if (larg == 'ai' || larg == 'computer' || larg == 'computers') {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
+            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 if (
                     kitty.Player.SlotState == playerslotstate.Playing &&
                     kitty.Player.Controller == mapcontrol.Computer
                 ) {
-                    kitties.Add(kitty) // add all AI players
+                    kitties.push(kitty) // add all AI players
                 }
             }
         } else if (larg == 's' || larg == 'sel' || larg == 'select' || larg == 'selected') {
@@ -73,23 +73,23 @@ class CommandsManager {
                     ? k
                     : null)
                 if (kitty != null) {
-                    kitties.Add(kitty)
+                    kitties.push(kitty)
                 }
             }
         } else if ((playerId = int.TryParse(arg))) {
             if ((kitty = Globals.ALL_KITTIES.TryGetValue(Player(playerId - 1))) /* TODO; Prepend: let */) {
                 // assume player ids 1-24
-                kitties.Add(kitty)
+                kitties.push(kitty)
             }
         } else if (Utility.GetPlayerByName(larg)) {
             const p = Utility.GetPlayerByName(larg)
             if ((kitty = Globals.ALL_KITTIES.TryGetValue(p)) /* TODO; Prepend: let */) {
-                kitties.Add(kitty)
+                kitties.push(kitty)
             }
         } else if (Colors.GetPlayerByColor(larg)) {
             const pl = Colors.GetPlayerByColor(larg)
             if ((kitty = Globals.ALL_KITTIES.TryGetValue(pl)) /* TODO; Prepend: let */) {
-                kitties.Add(kitty)
+                kitties.push(kitty)
             }
         } else {
             GetTriggerPlayer().DisplayTimedTextTo(
@@ -103,7 +103,7 @@ class CommandsManager {
     public static ResolvePlayerId(arg: string, action: Action<Kitty>) {
         let kittyArray = ResolvePlayerIdArray(arg)
 
-        for (let i: number = 0; i < kittyArray.Count; i++) {
+        for (let i: number = 0; i < kittyArray.length; i++) {
             action(kittyArray[i])
         }
     }
@@ -114,30 +114,30 @@ class CommandsManager {
         return lower == 'true' || lower == 'on' || lower == '1'
     }
 
-    public static HelpCommands(player: player, arg: string = '') {
+    public static HelpCommands(player: MapPlayer, arg: string = '') {
         let filter = string.IsNullOrEmpty(arg) ? '' : arg.ToLower()
-        CommandsList.Clear() // instead of creating a new list each time, just use 1 and clear it
+        CommandsList.clear() // instead of creating a new list each time, just use 1 and clear it
         let playerGroup = GetPlayerGroup(player)
 
         for (let command in AllCommands) {
             let cmd = command.Value
-            if (CommandsList.Contains(cmd)) continue // already got cmd / alias
+            if (CommandsList.includes(cmd)) continue // already got cmd / alias
             if (cmd.Group == playerGroup || cmd.Group == 'all' || playerGroup == 'admin') {
                 // admins get ALL DUH
-                if (string.IsNullOrEmpty(arg) || arg.Length == 0) {
-                    CommandsList.Add(cmd)
+                if (string.IsNullOrEmpty(arg) || arg.length == 0) {
+                    CommandsList.push(cmd)
                 } else {
                     if (
-                        cmd.Name.ToLower().Contains(filter) ||
-                        Array.Exists(cmd.Alias, alias => alias.ToLower().Contains(filter)) ||
-                        cmd.Description.ToLower().Contains(filter)
+                        cmd.Name.ToLower().includes(filter) ||
+                        Array.Exists(cmd.Alias, alias => alias.ToLower().includes(filter)) ||
+                        cmd.Description.ToLower().includes(filter)
                     ) {
-                        CommandsList.Add(cmd)
+                        CommandsList.push(cmd)
                     }
                 }
             }
         }
-        if (CommandsList.Count == 0) {
+        if (CommandsList.length == 0) {
             player.DisplayTimedTextTo(
                 5.0,
                 '{Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: {Colors.COLOR_GOLD}{filter}|r'
@@ -154,7 +154,7 @@ class CommandsManager {
         player.DisplayTimedTextTo(15.0, '{Colors.COLOR_TURQUOISE}Commands: Available:|r\n{commandList}', 0, 0)
     }
 
-    public static GetPlayerGroup(player: player) {
-        return Globals.VIPLISTUNFILTERED.Contains(player) ? 'admin' : player.Id == 0 ? 'red' : 'all'
+    public static GetPlayerGroup(player: MapPlayer) {
+        return Globals.VIPLISTUNFILTERED.includes(player) ? 'admin' : MapPlayer.Id == 0 ? 'red' : 'all'
     }
 }

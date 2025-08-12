@@ -1,4 +1,4 @@
-class PlayerColorData {
+export class PlayerColorData {
     public LastPlayedColor: string = ''
     public MostPlayedColor: string = ''
     public VortexColor: string = ''
