@@ -2,15 +2,15 @@
 
 class WolfLaneHider
 {
-    private static readonly HashSet<int> lanesToEnable = new HashSet<int>();
-    private static readonly HashSet<int> currentlyVisibleLanes = new HashSet<int>();
+    private static readonly lanesToEnable: Set<number> = new Set<number>();
+    private static readonly currentlyVisibleLanes: Set<number> = new Set<number>();
 
     public static LanesHider()
     {
         try
         {
-            UpdateLanesToEnable();
-            ApplyLaneVisibility();
+            this.UpdateLanesToEnable();
+            this.ApplyLaneVisibility();
         }
         catch (e: Error)
         {
@@ -22,13 +22,13 @@ class WolfLaneHider
     {
         try
         {
-            lanesToEnable.Clear();
+            this.lanesToEnable.clear();
 
             for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
                 let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]];
                 let currentSafezone: number = kitty.CurrentSafeZone;
-                AddAdjacentLanes(currentSafezone);
+                this.AddAdjacentLanes(currentSafezone);
             }
         }
         catch (e: Error)
@@ -39,21 +39,21 @@ class WolfLaneHider
 
     public static ShadowKittyLaneAdd(safezone: number)
     {
-        AddAdjacentLanes(safezone);
-        ApplyLaneVisibility();
+        this.AddAdjacentLanes(safezone);
+        this.ApplyLaneVisibility();
     }
 
     private static AddAdjacentLanes(currentSafezone: number)
     {
-        AddLane(currentSafezone);
-        AddLane(currentSafezone + 1);
-        AddLane(currentSafezone - 1);
-        AddLane(currentSafezone - 2);
+        this.AddLane(currentSafezone);
+        this.AddLane(currentSafezone + 1);
+        this.AddLane(currentSafezone - 1);
+        this.AddLane(currentSafezone - 2);
 
         if (currentSafezone >= 13)
         {
-            AddLane(currentSafezone + 2);
-            AddLane(currentSafezone + 3);
+            this.AddLane(currentSafezone + 2);
+            this.AddLane(currentSafezone + 3);
         }
     }
 
@@ -61,7 +61,7 @@ class WolfLaneHider
     {
         if (lane >= 0 && lane <= 17)
         {
-            lanesToEnable.Add(lane);
+            this.lanesToEnable.add(lane);
         }
     }
 
@@ -73,9 +73,9 @@ class WolfLaneHider
                 return;
 
             // Show lanes that are now visible but weren't before
-            for (let laneId in lanesToEnable)
+            for (let laneId in this.lanesToEnable)
             {
-                if (!(currentlyVisibleLanes.Contains(laneId) && lane = WolfArea.WolfAreas.TryGetValue(laneId)) /* TODO; Prepend: let */)
+                if (!(this.currentlyVisibleLanes.Contains(laneId) && lane = WolfArea.WolfAreas.TryGetValue(laneId)) /* TODO; Prepend: let */)
                 {
                     lane.IsEnabled = true;
                     SetLaneVisibility(lane, true);
@@ -83,9 +83,9 @@ class WolfLaneHider
             }
 
             // Hide lanes that are no longer visible
-            for (let laneId in currentlyVisibleLanes)
+            for (let laneId in this.currentlyVisibleLanes)
             {
-                if (!(lanesToEnable.Contains(laneId) && lane = WolfArea.WolfAreas.TryGetValue(laneId)) /* TODO; Prepend: let */)
+                if (!(this.lanesToEnable.Contains(laneId) && lane = WolfArea.WolfAreas.TryGetValue(laneId)) /* TODO; Prepend: let */)
                 {
                     lane.IsEnabled = false;
                     SetLaneVisibility(lane, false);
@@ -93,9 +93,9 @@ class WolfLaneHider
             }
 
             // Update the set for next time
-            currentlyVisibleLanes.Clear();
-            for (let laneId in lanesToEnable)
-                currentlyVisibleLanes.Add(laneId);
+            this.currentlyVisibleLanes.clear();
+            for (let laneId in this.lanesToEnable)
+                this.currentlyVisibleLanes.add(laneId);
         }
         catch (e: Error)
         {
@@ -105,7 +105,7 @@ class WolfLaneHider
 
     private static SetLaneVisibility(lane: WolfArea, isVisible: boolean)
     {
-        for (let i: number = 0; i < lane.Wolves.Count; i++)
+        for (let i: number = 0; i < lane.Wolves.length; i++)
         {
             let wolf = lane.Wolves[i];
             wolf.Unit.IsVisible = isVisible;
@@ -137,8 +137,8 @@ class WolfLaneHider
     {
         try
         {
-            lanesToEnable.Clear();
-            currentlyVisibleLanes.Clear();
+            this.lanesToEnable.clear();
+            this.currentlyVisibleLanes.clear();
             if (WolfArea.WolfAreas == null)
                 return;
             for (let lane in WolfArea.WolfAreas)

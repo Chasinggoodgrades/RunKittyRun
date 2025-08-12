@@ -1,7 +1,7 @@
 class Chaos extends Affix {
     private AFFIX_ABILITY: number = Constants.ABILITY_CHAOS
     private RotationTimer: AchesTimers = ObjectPool.GetEmptyObject<AchesTimers>()
-    private currentAffix: Affix
+    private currentAffix!: Affix
     private rotationTime: number = GetRandomReal(25, 45)
 
     public constructor(unit: Wolf) {
@@ -22,14 +22,13 @@ class Chaos extends Affix {
 
     public override Remove() {
         try {
-            Unit.RemoveAffix(currentAffix)
-            currentAffix = null
-            RotationTimer?.Dispose()
-            Unit?.Unit?.RemoveAbility(AFFIX_ABILITY)
-            base.Remove()
+            this.Unit.RemoveAffix(this.currentAffix)
+            this.RotationTimer?.Dispose()
+            this.Unit?.Unit?.RemoveAbility(AFFIX_ABILITY)
+            super.Remove()
         } catch (e: Error) {
             Logger.Warning('Error in Chaos.Remove: {e.Message}')
-            base.Remove()
+            super.Remove()
         }
     }
 

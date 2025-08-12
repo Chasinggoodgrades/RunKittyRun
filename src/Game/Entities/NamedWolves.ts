@@ -6,8 +6,8 @@ class NamedWolves
     public static ExplodingWolf: Wolf;
     public static StanWolf: Wolf;
     public STAN_NAME: string = "{Colors.COLOR_PURPLE}Stan|r";
-    private static ExplodingTexttagTimer: timer = timer.Create();
-    private static ExplodingWolfRevive: timer = timer.Create();
+    private static ExplodingTexttagTimer: timer = CreateTimer();
+    private static ExplodingWolfRevive: timer = CreateTimer();
     private static BLOOD_EFFECT_PATH: string = "war3mapImported\\Bloodstrike.mdx";
 
     /// <summary>

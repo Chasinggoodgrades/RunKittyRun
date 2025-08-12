@@ -46,16 +46,16 @@ export class Globals {
     public static GAME_TIMER: timer = CreateTimer()
     public static GAME_TIMER_DIALOG: timerdialog = CreateTimerDialog(Globals.GAME_TIMER)!
 
-    public static ALL_PLAYERS: MapPlayer[] = []
+    public static ALL_PLAYERS: player[] = []
     public static SAFE_ZONES: Safezone[] = []
-    public static LockedCamera: MapPlayer[] = []
+    public static LockedCamera: player[] = []
     public static ALL_KITTIES_LIST: Kitty[] = []
 
-    public static ALL_KITTIES: Map<MapPlayer, Kitty> = new Map<MapPlayer, Kitty>()
-    public static ALL_CIRCLES: Map<MapPlayer, Circle> = new Map<MapPlayer, Circle>()
-    public static ALL_WOLVES: Map<unit, Wolf> = new Map<unit, Wolf>()
+    public static ALL_KITTIES: { [x: number]: Kitty } = {}
+    public static ALL_CIRCLES: { [x: number]: Circle } = {}
+    public static ALL_WOLVES: { [x: number]: Wolf } = {}
 
-    public static PLAYER_UPGRADES: Map<MapPlayer, PlayerUpgrades> = new Map<MapPlayer, PlayerUpgrades>()
+    public static PLAYER_UPGRADES: Map<player, PlayerUpgrades> = new Map()
 
     public static SaveSystem: SaveManager
     public static GAME_AWARDS_SORTED: GameAwardsDataSorted = new GameAwardsDataSorted()
@@ -64,11 +64,11 @@ export class Globals {
     // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
     // public static RANDOM_GEN: Random = new Random();
-    public static ALL_TEAMS: Map<MapPlayer, Team> = new Map<MapPlayer, Team>()
+    public static ALL_TEAMS: Map<player, Team> = new Map()
 
     public static ALL_TEAMS_LIST: Team[] = []
-    public static PLAYERS_TEAMS: Map<MapPlayer, Team> = new Map<MapPlayer, Team>()
-    public static TEAM_PROGRESS: Map<Team, string> = new Map<Team, string>()
+    public static PLAYERS_TEAMS: Map<player, Team> = new Map()
+    public static TEAM_PROGRESS: Map<Team, string> = new Map()
 
     public static DATE_TIME_LOADED: boolean
     public static GAME_INITIALIZED: boolean

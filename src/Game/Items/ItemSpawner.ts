@@ -7,7 +7,7 @@ class ItemSpawner
     public static  TrackItems:item[];
 
     private static  SpawnableItems:int[];
-    private static SpawnTimer: timer = timer.Create();
+    private static SpawnTimer: timer = CreateTimer();
     private static ITEM_SPAWN_INTERVAL: number = 45.0;
     public static NUMBER_OF_ITEMS: number = 15;
 
@@ -51,7 +51,7 @@ class ItemSpawner
             let item = TrackItems[i];
             ItemSpatialGrid.UnregisterItem(item);
             if (item.IsOwned) continue;
-            item.Dispose();
+            RemoveItem(item!);
         }
 
         TrackItems.Clear();

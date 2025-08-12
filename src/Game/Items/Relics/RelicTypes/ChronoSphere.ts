@@ -22,8 +22,8 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
     private Ability: ability;
     private Kitty: Kitty;
     private Magnitude: number;
-    private MagnitudeTimer: timer = timer.Create();
-    private LocationCaptureTimer: timer = timer.Create();
+    private MagnitudeTimer: timer = CreateTimer();
+    private LocationCaptureTimer: timer = CreateTimer();
     private LocationEffect: effect = null;
     private (float, float, float) CapturedLocation = (100, 100, 100);
 
@@ -98,7 +98,7 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 0) return;
 
-            MagnitudeTimer ??= timer.Create();
+            MagnitudeTimer ??= CreateTimer();
 
             MagnitudeTimer.Start(MAGNITUDE_CHANGE_INTERVAL, true, SetAbilityData);
             SetAbilityData();
@@ -116,7 +116,7 @@ private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
         {
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 1) return;
-            LocationCaptureTimer ??= timer.Create();
+            LocationCaptureTimer ??= CreateTimer();
             CapturedLocation = (Kitty.Unit.X, Kitty.GetUnitY(unit), Kitty.Unit.Facing); // reset to current location on buy
             LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
 

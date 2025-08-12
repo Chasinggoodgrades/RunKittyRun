@@ -16,66 +16,66 @@ class Challenges {
 
     public static WhiteTendrils() {
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.WhiteTendrils))
+        AwardManager.GiveRewardAll('WhiteTendrils')
     }
 
     public static DivinityTendrils(player: player) {
-        return AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Wings.DivinityTendrils))
+        return AwardManager.GiveReward(player, 'DivinityTendrils')
     }
 
     public static NecroWindwalk() {
         if (Globals.GAME_TIMER.Remaining > 1500) return // only awarded if under 25 mins.
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWNecro))
+        AwardManager.GiveRewardAll('WWNecro')
     }
 
     // Violet Windwalk, awarded for killing stan with something, then taking some burnt meat n and turning it in.
     public static VioletWindwalk(player: player) {
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWViolet))
+        AwardManager.GiveReward(player, 'WWViolet')
     }
 
     // finished round, then run all the way back to the start.
     public static DivineWindwalk(player: player) {
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWDivine))
+        AwardManager.GiveReward(player, 'WWDivine')
     }
 
     // Kibble Event, give all
     public static HuntressKitty() {
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Skins.HuntressKitty))
+        AwardManager.GiveRewardAll('HuntressKitty')
     }
 
     public static PatrioticLight(kitty: Kitty) {
         if (Globals.ROUND != 5) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         if (Globals.GAME_TIMER.Remaining > 995) return // Formally 20 mins, now 16:35 and awards to all players.
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Nitros.PatrioticLight))
+        AwardManager.GiveRewardAll('PatrioticLight')
     }
 
     public static ButterflyAura(player: player) {
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         let currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths
         if (currentDeaths > 5) return
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Auras.ButterflyAura))
+        AwardManager.GiveReward(player, 'ButterflyAura')
     }
 
     public static PurpleFire(player: player) {
         let currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths
         if (Globals.ROUND != 2 || currentDeaths > PURPLE_FIRE_DEATH_REQUIREMENT) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.PurpleFire))
+        AwardManager.GiveReward(player, 'PurpleFire')
     }
 
     public static BlueFire() {
         for (let player in Globals.ALL_PLAYERS) {
             let gameDeaths = Globals.ALL_KITTIES[player].CurrentStats.TotalDeaths
             if (gameDeaths >= BLUE_FIRE_DEATH_REQUIREMENT) continue
-            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.BlueFire))
+            AwardManager.GiveReward(player, 'BlueFire')
         }
     }
 
     public static TurquoiseFire(player: player) {
         let currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths
         if (Globals.ROUND != 5 || currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.TurquoiseFire))
+        AwardManager.GiveReward(player, 'TurquoiseFire')
     }
 
     public static PinkFire() {
@@ -91,7 +91,7 @@ class Challenges {
             )
                 continue
 
-            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.PinkFire))
+            AwardManager.GiveReward(player, 'PinkFire')
         }
     }
 
@@ -99,12 +99,12 @@ class Challenges {
         if (NitroChallenges.GetNitroTimeRemaining() <= 0) return
         let currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths
         if (Globals.ROUND != 3 || currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.WhiteFire))
+        AwardManager.GiveReward(player, 'WhiteFire')
     }
 
     public static PurpleLighting(kitty: Kitty) {
         if (kitty.CurrentStats.TotalSaves < PURPLE_LIGHTNING_SAVE_REQUIREMENT) return
-        AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.PurpleLightning))
+        AwardManager.GiveReward(kitty.Player, 'PurpleLightning')
     }
 
     public static GreenLightning(player: player) {
@@ -112,14 +112,14 @@ class Challenges {
         let currentDeaths = kitty.CurrentStats.RoundDeaths
         let saveStreak = kitty.SaveData.GameStats.SaveStreak // current or overall, either is fine tbh.
         if (saveStreak < 10 || currentDeaths > 0) return
-        AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.GreenLightning))
+        AwardManager.GiveReward(player, 'GreenLightning')
     }
 
     public static FreezeAura() {
         if (!Gameover.WinGame) return
         for (let kitty in Globals.ALL_KITTIES) {
             if (kitty.Value.CurrentStats.WolfFreezeCount < FREEZE_AURA_WOLF_REQUIREMENT) continue
-            AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Auras.FreezeAura))
+            AwardManager.GiveReward(kitty.Value.Player, 'FreezeAura')
         }
     }
 
@@ -132,7 +132,7 @@ class Challenges {
         if (!Gameover.WinGame) return
         for (let kitty in Globals.ALL_KITTIES) {
             if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(4)) continue
-            AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty))
+            AwardManager.GiveReward(kitty.Value.Player, 'ZandalariKitty')
         }
     }
 
@@ -173,7 +173,7 @@ class YellowLightning {
 
     private EndTimer() {
         if (SaveCount >= YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == GameMode.Standard) {
-            AwardManager.GiveReward(Kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Trails.YellowLightning))
+            AwardManager.GiveReward(Kitty.Player, 'YellowLightning')
         }
         SaveCount = 0
     }

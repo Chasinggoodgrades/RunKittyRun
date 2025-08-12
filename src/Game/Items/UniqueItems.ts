@@ -41,7 +41,7 @@ class UniqueItems {
 
             player.DisplayTimedTextTo(3.0, '{Colors.COLOR_RED}may: only: carry: one: You of unique: item: each.|r')
             player.Gold += uniqueItem.GoldCost
-            item.Dispose()
+            RemoveItem(item!)
         } catch (e: Error) {
             Logger.Warning('Error in UniqueItems.ItemPickup: {e.Message}')
         }

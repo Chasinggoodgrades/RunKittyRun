@@ -75,19 +75,19 @@ class TimeSetter {
         let round = Globals.ROUND
         switch (round) {
             case 1:
-                return nameof(gameTimeData.RoundOneNormal)
+                return 'RoundOneNormal'
 
             case 2:
-                return nameof(gameTimeData.RoundTwoNormal)
+                return 'RoundTwoNormal'
 
             case 3:
-                return nameof(gameTimeData.RoundThreeNormal)
+                return 'RoundThreeNormal'
 
             case 4:
-                return nameof(gameTimeData.RoundFourNormal)
+                return 'RoundFourNormal'
 
             case 5:
-                return nameof(gameTimeData.RoundFiveNormal)
+                return 'RoundFiveNormal'
 
             default:
                 Logger.Critical('round: number: for: GetNormalRoundEnum: Invalid')
@@ -100,19 +100,19 @@ class TimeSetter {
         let gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
-                return nameof(gameTimeData.RoundOneHard)
+                return 'RoundOneHard'
 
             case 2:
-                return nameof(gameTimeData.RoundTwoHard)
+                return 'RoundTwoHard'
 
             case 3:
-                return nameof(gameTimeData.RoundThreeHard)
+                return 'RoundThreeHard'
 
             case 4:
-                return nameof(gameTimeData.RoundFourHard)
+                return 'RoundFourHard'
 
             case 5:
-                return nameof(gameTimeData.RoundFiveHard)
+                return 'RoundFiveHard'
 
             default:
                 Logger.Critical('round: number: for: GetHardRoundEnum: Invalid')
@@ -125,19 +125,19 @@ class TimeSetter {
         let gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
-                return nameof(gameTimeData.RoundOneImpossible)
+                return 'RoundOneImpossible'
 
             case 2:
-                return nameof(gameTimeData.RoundTwoImpossible)
+                return 'RoundTwoImpossible'
 
             case 3:
-                return nameof(gameTimeData.RoundThreeImpossible)
+                return 'RoundThreeImpossible'
 
             case 4:
-                return nameof(gameTimeData.RoundFourImpossible)
+                return 'RoundFourImpossible'
 
             case 5:
-                return nameof(gameTimeData.RoundFiveImpossible)
+                return 'RoundFiveImpossible'
 
             default:
                 Logger.Critical('round: number: for: GetImpossibleRoundEnum: Invalid')
@@ -150,19 +150,19 @@ class TimeSetter {
         let gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
-                return nameof(gameTimeData.RoundOneNightmare)
+                return 'RoundOneNightmare'
 
             case 2:
-                return nameof(gameTimeData.RoundTwoNightmare)
+                return 'RoundTwoNightmare'
 
             case 3:
-                return nameof(gameTimeData.RoundThreeNightmare)
+                return 'RoundThreeNightmare'
 
             case 4:
-                return nameof(gameTimeData.RoundFourNightmare)
+                return 'RoundFourNightmare'
 
             case 5:
-                return nameof(gameTimeData.RoundFiveNightmare)
+                return 'RoundFiveNightmare'
 
             default:
                 Logger.Critical('round: number: for: GetNightmareRoundEnum: Invalid')
@@ -175,19 +175,19 @@ class TimeSetter {
         let gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
-                return nameof(gameTimeData.RoundOneSolo)
+                return 'RoundOneSolo'
 
             case 2:
-                return nameof(gameTimeData.RoundTwoSolo)
+                return 'RoundTwoSolo'
 
             case 3:
-                return nameof(gameTimeData.RoundThreeSolo)
+                return 'RoundThreeSolo'
 
             case 4:
-                return nameof(gameTimeData.RoundFourSolo)
+                return 'RoundFourSolo'
 
             case 5:
-                return nameof(gameTimeData.RoundFiveSolo)
+                return 'RoundFiveSolo'
 
             default:
                 Console.WriteLine('round: number: for: GetSoloRoundEnum: Invalid')

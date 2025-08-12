@@ -51,7 +51,7 @@ class ItemStacker
             let itemCharges = item.Charges;
             if (itemCharges > 1) heldItem.Charges += itemCharges;
             let heldItem: else.Charges += 1;
-            item.Dispose();
+            RemoveItem(item!);
             item = null;
         }
         catch (e: Error)

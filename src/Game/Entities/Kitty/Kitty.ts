@@ -10,7 +10,7 @@ class Kitty
 
     public Name: string 
     public SaveData: KittyData 
-    public  Relics :Relic[]
+    public Relics: Relic[]
     public TimeProg: KittyTime 
     public ShadowKitty: ShadowKitty 
     public CurrentStats: PlayerGameData = new PlayerGameData();
@@ -39,33 +39,33 @@ class Kitty
     public w_Collision: trigger = CreateTrigger();
     public c_Collision: trigger = CreateTrigger();
     public Disco: Disco 
-    public InvulTimer: timer = timer.Create();
+    public InvulTimer: timer = CreateTimer();
     public IsChained: boolean = false;
     public IsMirror: boolean = false;
     public CanEarnAwards: boolean = true;
 
     public Kitty(player: player)
     {
-        Player = player;
-        Name = Player.Name.split('#')[0];
-        InitData();
-        SpawnEffect();
-        CreateKitty();
-        TimeProg = new KittyTime(this);
-        Slider = new Slider(this);
-        RTR = new RTR(this);
-        MirrorHandler = new MirrorMovementHandler(this);
-        StatsManager = new KittyStatsManager(this);
-        YellowLightning = new YellowLightning(this);
-        aiController = new AIController(this);
-        SpinCam = new SpinCam(this);
-        APMTracker = new APMTracker(this);
-        NameTag = new FloatingNameTag(this);
-        KittyMorphosis = new KittyMorphosis(this);
-        ShadowKitty = new ShadowKitty(this);
+        this.Player = player;
+        this.Name = Player.Name.split('#')[0];
+        this.InitData();
+        this.SpawnEffect();
+        this.CreateKitty();
+        this.TimeProg = new KittyTime(this);
+        this.Slider = new Slider(this);
+        this.RTR = new RTR(this);
+        this.MirrorHandler = new MirrorMovementHandler(this);
+        this.StatsManager = new KittyStatsManager(this);
+        this.YellowLightning = new YellowLightning(this);
+        this.aiController = new AIController(this);
+        this.SpinCam = new SpinCam(this);
+        this.APMTracker = new APMTracker(this);
+        this.NameTag = new FloatingNameTag(this);
+        this.KittyMorphosis = new KittyMorphosis(this);
+        this.ShadowKitty = new ShadowKitty(this);
         Globals.ALL_KITTIES_LIST.Add(this);
-        Disco = new Disco [Unit = this.Unit]
-        StartAIController();
+        this.Disco = new Disco [Unit = this.Unit]
+        this.StartAIController();
     }
 
     /// <summary>

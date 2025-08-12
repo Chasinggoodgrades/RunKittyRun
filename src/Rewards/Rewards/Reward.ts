@@ -16,29 +16,29 @@ export enum RewardType {
 }
 
 export class Reward {
-    public Name: string
-    public AbilityID: number
-    public OriginPoint: string = ''
-    public ModelPath: string = ''
-    public SkinID: number
-    public Type: RewardType
-    public TypeSorted: string
-    public GameStat: string
-    public GameStatValue: number
+    public Name!: string
+    public AbilityID!: number
+    public OriginPoint!: string
+    public ModelPath!: string
+    public SkinID!: number
+    public Type!: RewardType
+    public TypeSorted!: string
+    public GameStat!: string
+    public GameStatValue!: number
 
     public Reward(name: string, abilityID: number, originPoint: string, modelPath: string, type: RewardType) {
-        Name = name
-        AbilityID = abilityID
-        OriginPoint = originPoint
-        ModelPath = modelPath
-        Type = type
+        this.Name = name
+        this.AbilityID = abilityID
+        this.OriginPoint = originPoint
+        this.ModelPath = modelPath
+        this.Type = type
     }
 
     public Reward(name: string, abilityID: number, skinID: number, type: RewardType) {
-        Name = name
-        AbilityID = abilityID
-        SkinID = skinID
-        Type = type
+        this.Name = name
+        this.AbilityID = abilityID
+        this.SkinID = skinID
+        this.Type = type
     }
 
     public Reward(

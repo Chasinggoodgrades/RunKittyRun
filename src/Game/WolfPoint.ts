@@ -9,8 +9,8 @@ class WolfPoint
     public static readonly HoldPositionOrderID: number = OrderId("holdposition");
     public static IsPausedTrigger: trigger;
 
-    private Wolf: Wolf 
-    private  PointInfo :WolfPointInfo[]
+    private Wolf!: Wolf
+    private PointInfo!: WolfPointInfo[]
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -18,8 +18,8 @@ class WolfPoint
     /// <param name="wolf">The wolf instance.</param>
     public WolfPoint(wolf: Wolf)
     {
-        Wolf = wolf;
-        IsPausedTrigger ??= InitTrigger();
+        this.Wolf = wolf;
+        this.IsPausedTrigger ??= this.InitTrigger();
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ class WolfPoint
 
             if (PointInfo != null && PointInfo.Count > 0)
             {
-                StartMovingOrders();
+                this.StartMovingOrders();
             }
         }
         catch (ex: Error)
@@ -91,9 +91,9 @@ class WolfPoint
 
     public Dispose()
     {
-        Cleanup();
-        WolfPointInfo.ClearWolfPointList(PointInfo);
-        Wolf.Unit.ClearOrders();
+        this.Cleanup();
+        WolfPointInfo.ClearWolfPointList(this.PointInfo);
+        BlzUnitClearOrders(this.Wolf.Unit, false);
     }
 
     private StartMovingOrders()
@@ -124,54 +124,54 @@ class WolfPoint
 
     private static InitTrigger(): trigger
     {
-        IsPausedTrigger ??= CreateTrigger();
-        TriggerRegisterAnyUnitEventBJ(IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
+        this.IsPausedTrigger ??= CreateTrigger();
+        TriggerRegisterAnyUnitEventBJ(this.IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
 
-        TriggerAddCondition(IsPausedTrigger, FilterList.IssuedOrderAtkOrder);
-        TriggerAddCondition(IsPausedTrigger, FilterList.UnitTypeWolf);
+        TriggerAddCondition(this.IsPausedTrigger, FilterList.IssuedOrderAtkOrder);
+        TriggerAddCondition(this.IsPausedTrigger, FilterList.UnitTypeWolf);
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(IsPausedTrigger, QueueOrderActions);
-        return IsPausedTrigger;
+        TriggerAddAction(this.IsPausedTrigger, this.QueueOrderActions);
+        return this.IsPausedTrigger;
     }
 
     private static QueueOrderActions()
     {
         Globals.ALL_WOLVES[GetTriggerUnit()].IsWalking = !Globals.ALL_WOLVES[GetTriggerUnit()].IsWalking;
     }
+}
 
-    private class WolfPointInfo
+class WolfPointInfo
+{
+    public X!: number 
+    public Y!: number 
+    public LastPoint!: boolean 
+
+    public WolfPointInfo()
     {
-        public X: number 
-        public Y: number 
-        public LastPoint: boolean 
+        this.X = 0;
+        this.Y = 0;
+    }
 
-        public WolfPointInfo()
+    public static  GetWolfPointList():WolfPointInfo[]
+    {
+        let list = ObjectPool<WolfPointInfo>.GetEmptyList();
+        for (let i: number = 0; i < 48; i++)
         {
-            X = 0;
-            Y = 0;
+            list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
         }
+        return list;
+    }
 
-        public static  GetWolfPointList():WolfPointInfo[]
+    public static ClearWolfPointList( list:WolfPointInfo[])
+    {
+        if (list == null) return;
+        for (let i: number = 0; i < list.Count; i++)
         {
-            let list = ObjectPool<WolfPointInfo>.GetEmptyList();
-            for (let i: number = 0; i < 48; i++)
-            {
-                list.Add(ObjectPool.GetEmptyObject<WolfPointInfo>());
-            }
-            return list;
+            let item = list[i];
+            ObjectPool<WolfPointInfo>.ReturnObject(item);
         }
-
-        public static ClearWolfPointList( list:WolfPointInfo[])
-        {
-            if (list == null) return;
-            for (let i: number = 0; i < list.Count; i++)
-            {
-                let item = list[i];
-                ObjectPool<WolfPointInfo>.ReturnObject(item);
-            }
-            list.Clear();
-            ObjectPool<WolfPointInfo>.ReturnList(list);
-        }
+        list.Clear();
+        ObjectPool<WolfPointInfo>.ReturnList(list);
     }
 }

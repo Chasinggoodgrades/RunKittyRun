@@ -1,3 +1,4 @@
+import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption";
 
 
 class ChainedTogether
@@ -290,24 +291,24 @@ class ChainedTogether
     {
         Utility.CreateSimpleTextTag("{Colors.COLOR_RED}Together: Chained!{Colors.COLOR_RESET}", 2.0, kitty.Unit);
 
-        let level: DifficultyLevel = (DifficultyLevel)Difficulty.DifficultyValue;
+        let level: DifficultyLevel = Difficulty.DifficultyValue;
 
         let awards = Globals.GAME_AWARDS_SORTED.Auras;
         let nameOfAward: string;
 
         switch (level)
         {
-            case >= DifficultyLevel.Nightmare:
-                nameOfAward = nameof(awards.ChainedNightmareAura);
+            case DifficultyLevel.Nightmare:
+                nameOfAward = "ChainedNightmareAura";
                 break;
-            case >= DifficultyLevel.Impossible:
-                nameOfAward = nameof(awards.ChainedImpossibleAura);
+            case DifficultyLevel.Impossible:
+                nameOfAward = "ChainedImpossibleAura";
                 break;
-            case >= DifficultyLevel.Hard:
-                nameOfAward = nameof(awards.ChainedHardAura);
+            case DifficultyLevel.Hard:
+                nameOfAward = "ChainedHardAura";
                 break;
             default:
-                nameOfAward = nameof(awards.ChainedNormalAura);
+                nameOfAward = "ChainedNormalAura";
                 break;
         }
 
@@ -330,12 +331,11 @@ class Chain
     public SecondKitty: Kitty 
     public Lightning: lightning 
 
-    private static readonly Dictionary<DifficultyLevel, (good: number, far: number, breakPoint: number)> ranges = new()
-    {
-        { DifficultyLevel.Normal,     (600, 700, 800) },
-        { DifficultyLevel.Hard,       (650, 750, 850) },
-        { DifficultyLevel.Impossible, (700, 800, 900) },
-        { DifficultyLevel.Nightmare,  (750, 850, 950) }
+    private static readonly ranges: { [key in DifficultyLevel]: { good: number, far: number, breakPoint: number } } = {
+        [DifficultyLevel.Normal]:     { good: 600, far: 700, breakPoint: 800 },
+        [DifficultyLevel.Hard]:       { good: 650, far: 750, breakPoint: 850 },
+        [DifficultyLevel.Impossible]: { good: 700, far: 800, breakPoint: 900 },
+        [DifficultyLevel.Nightmare]:  { good: 750, far: 850, breakPoint: 950 }
     };
 
     public Chain()

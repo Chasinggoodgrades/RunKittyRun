@@ -2,44 +2,49 @@
 
 class AIController
 {
-    private kitty: Kitty;
-    private enabled: boolean;
+    private kitty!: Kitty;
+    private enabled!: boolean;
     public DODGE_RADIUS: number = 192.0;
     public DODGE_RADIUS_STILL: number = 128.0;
     private DODGE_DISTANCE: number = 128; // Amount to walk away
     public static FREE_LASER_COLOR: string = "GRSB";
     public static BLOCKED_LASER_COLOR: string = "RESB";
     private static WindwalkID: number = FourCC("BOwk");
-    private static number[] offsets = [-90, -45, 0.0, 45, 90]
+    private static offsets: number[] = [-90, -45, 0.0, 45, 90];
     public _timerInterval: number = 0.1;
-    public timerInterval: number
-    {
-        get { return _timerInterval; }
-        set
-        {
-            _timerInterval = Math.Max(value, 0.01);
 
-            if (this.IsEnabled())
-            {
-                this.PauseAi();
-                this.ResumeAi();
-            }
+    public get timerInterval(): number {
+        return this._timerInterval;
+    }
+
+    public set timerInterval(value: number) {
+        const clamped = Math.max(value, 0.01);
+        if (clamped === this._timerInterval) {
+            return;
+        }
+
+        this._timerInterval = clamped;
+
+        if (this.IsEnabled()) {
+            this.PauseAi();
+            this.ResumeAi();
         }
     }
-    public laser: boolean = Program.Debug;
+
+public laser: boolean = Program.Debug;
 
     private lastCommand: string = "";
-    private lastX: number;
-    private lastY: number;
+    private lastX!: number;
+    private lastY!: number;
     private hasLastOrder: boolean = false;
     private lastOrderTime: number = 0;
     private elapsedTime: number = 0;
 
-    private moveTimer: timer;
-    private  wolvesInRange : Wolf[] = []
-    private lastLightning: lightning;
+    private moveTimer!: timer;
+    private wolvesInRange : Wolf[] = []
+    private lastLightning!: lightning;
 
-    private int? lastSafeZoneIndexId = null;
+    private lastSafeZoneIndexId!: number;
     private reachedLastProgressZoneCenter: boolean = false;
     private  availableBlockedLightnings : lightning[] = []
     private  availableClearLightnings : lightning[] = []
@@ -59,19 +64,19 @@ class AIController
 
     public StartAi()
     {
-        enabled = true;
-        ResumeAi();
+        this.enabled = true;
+        this.ResumeAi();
     }
 
     public ResumeAi()
     {
-        if (!enabled)
+        if (!this.enabled)
             return;
 
-        if (moveTimer == null)
+        if (this.moveTimer == null)
         {
-            moveTimer = CreateTimer();
-            TimerStart(moveTimer, this.timerInterval, true, ErrorHandler.Wrap(PollMovement));
+            this.moveTimer = CreateTimer();
+            TimerStart(this.moveTimer, this.timerInterval, true, ErrorHandler.Wrap(PollMovement));
         }
 
         // If I revive release me from the claimedKitties
@@ -98,21 +103,19 @@ class AIController
 
         if (moveTimer != null)
         {
-            PauseTimer(moveTimer);
-            DestroyTimer(moveTimer);
-            moveTimer = null;
+            PauseTimer(this.moveTimer);
+            DestroyTimer(this.moveTimer);
         }
 
-        DestroyLightning(lastLightning);
-        lastLightning = null;
+        DestroyLightning(this.lastLightning);
 
-        HideAllLightnings();
-        HideAllFreeLightnings();
+        this.HideAllLightnings();
+        this.HideAllFreeLightnings();
 
         // If I die release my target from the claimedKitties
-        if (claimedKitties.ContainsValue(this.kitty))
+        if (this.claimedKitties.has(this.kitty))
         {
-            claimedKitties.Remove(claimedKitties.FirstOrDefault(x => x.Value == this.kitty).Key);
+            this.claimedKitties.delete(this.kitty);
         }
     }
 
@@ -141,7 +144,7 @@ class AIController
         let currentSafezoneCenter = GetCenterPositionInSafezone(currentSafezone);
         let nextSafezoneCenter = GetCenterPositionInSafezone(nextSafezone);
 
-        int? currentSafeZoneId = IsInSafeZone(this.kitty.Unit.X, this.kitty.GetUnitY(unit), currentProgressZoneId) ? currentProgressZoneId : null;
+        let currentSafeZoneId: number | null = this.IsInSafeZone(GetUnitX(this.kitty.Unit), this.kitty.GetUnitY(unit), currentProgressZoneId) ? currentProgressZoneId : null;
 
         if (currentSafeZoneId != lastSafeZoneIndexId)
         {
@@ -166,7 +169,7 @@ class AIController
                 continue;
             }
 
-            if (CalcProgressZone(k) < currentProgressZoneId)
+            if (this.CalcProgressZone(k) < currentProgressZoneId)
             {
                 allKittiesAtSameOrHigherSafezone = false;
                 break;
@@ -224,11 +227,11 @@ class AIController
 
                     if (isNearest)
                     {
-                        claimedKitties[deadKitty] = this.kitty;
+                        this.claimedKitties[deadKitty] = this.kitty;
                     }
                 }
 
-                if (claimedKitties.ContainsKey(deadKitty) && claimedKitties[deadKitty] == this.kitty)
+                if (this.claimedKitties.ContainsKey(deadKitty) && claimedKitties[deadKitty] == this.kitty)
                 {
                     if (deadKittyProgressZoneId != currentProgressZoneId)
                     {

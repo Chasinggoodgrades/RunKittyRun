@@ -54,7 +54,7 @@ class FangOfShadows extends Relic
         SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty));
 
         let TeleTrigger = CreateTrigger();
-        KillTimer = timer.Create();
+        KillTimer = CreateTimer();
     }
 
     private DeregisterTriggers()

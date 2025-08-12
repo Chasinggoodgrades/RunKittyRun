@@ -82,7 +82,7 @@ class ShopItem {
         let reward = RewardsManager.Rewards.Find(x => x.Name == 'GreenTendrils')
         shopItems.Add(
             new ShopItem(
-                nameof(gameAwards.Wings.GreenTendrils),
+                'GreenTendrils',
                 8000,
                 reward.AbilityID,
                 'designed: for: those: whom: are: economically: stable: Wings.'

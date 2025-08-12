@@ -21,8 +21,8 @@ class SeasonalAwards {
             1.0,
             false,
             ErrorHandler.Wrap(() => {
-                AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Trails.SnowTrail2023), false)
-                AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.SnowWings2023), false)
+                AwardManager.GiveRewardAll('SnowTrail2023', false)
+                AwardManager.GiveRewardAll('SnowWings2023', false)
                 t.Dispose()
             })
         )

@@ -125,7 +125,7 @@ class UrnSoul {
         )
 
         let e = effect.Create('"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl"', unit, 'origin')
-        AwardManager.GiveReward(unit.Owner, nameof(Globals.GAME_AWARDS_SORTED.Windwalks.WWBlue))
+        AwardManager.GiveReward(unit.Owner, 'WWBlue')
 
         // Remove Items
         Utility.RemoveItemFromUnit(unit, urn)

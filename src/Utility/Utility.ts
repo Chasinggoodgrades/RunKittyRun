@@ -1,6 +1,7 @@
 class Utility {
     private static Locust: number = FourCC('Aloc')
-    private static stringBuilder: StringBuilder = new StringBuilder()
+    // StringBuilder is not available in TypeScript, so we'll use a string array for efficient concatenation
+    private static stringBuilder: string[] = []
 
     /// <summary>
     /// Makes the unit unclickable while remaining selectable.
@@ -185,7 +186,7 @@ class Utility {
     public static GetItemIconPath(itemId: number) {
         let item = CreateItem(itemId, 0, 0)
         let iconPath = item.Icon
-        item.Dispose()
+        RemoveItem(item!)
         item = null
         return iconPath
     }
@@ -288,17 +289,16 @@ class Utility {
     /// Formats an award name by inserting spaces before capital letters.
     /// </summary>
     /// <param name="awardName">The award name to be formatted.</param>
-    /// <returns>The formatted award name.</returns>
     public static FormatAwardName(awardName: string) {
-        stringBuilder.Clear()
-        for (let i: number = 0; i < awardName.Length; i++) {
-            if (i > 0 && char.IsUpper(awardName[i])) {
-                stringBuilder.Append(' ')
+        Utility.stringBuilder = []
+        for (let i: number = 0; i < awardName.length; i++) {
+            if (i > 0 && awardName[i] === awardName[i].toUpperCase() && /[A-Z]/.test(awardName[i])) {
+                Utility.stringBuilder.push(' ')
             }
-            stringBuilder.Append(awardName[i])
+            Utility.stringBuilder.push(awardName[i])
         }
 
-        let s = stringBuilder.ToString()
+        let s = Utility.stringBuilder.join('')
         return s
     }
 
@@ -319,7 +319,7 @@ class Utility {
 
     public static GetPlayerByName(playerName: string): player {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
-        if (playerName.Length < 3) return null
+        if (playerName.length < 3) return null
         for (let i: number = 0; i < Globals.ALL_PLAYERS.Count; i++) {
             let p = Globals.ALL_PLAYERS[i]
             if (GetPlayerName(p).ToLower().Contains(playerName.ToLower())) {
@@ -332,9 +332,8 @@ class Utility {
     public static GetItemSkin(itemId: number) {
         if (itemId == 0) return 0
         let item = CreateItem(itemId, 0, 0)
-        let skin = BlzGetItemSkin(item)
-        item.Dispose()
-        item = null
+        let skin = BlzGetItemSkin(item!)
+        RemoveItem(item!)
         return skin
     }
 
@@ -357,4 +356,8 @@ class Utility {
     public static CreateFilterFunc(func: Func<bool>): filterfunc {
         return filterfunc.Create(func)
     }
+}
+// Helper function to mimic C#'s nameof operator in TypeScript
+function nameof<T>(name: keyof T): string {
+    return name as string
 }

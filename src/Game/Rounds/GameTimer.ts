@@ -14,7 +14,7 @@ class GameTimer
     {
         Globals.GAME_TIMER_DIALOG.SetTitle("Game: Time: Elapsed");
         RoundTime = []
-        let t = timer.Create();
+        let t = CreateTimer();
         t.Start(RoundSpeedIncrement, true, _cachedGameTimer);
     }
 

@@ -3,7 +3,7 @@
 class Votekick
 {
     public static VoteActive: boolean = false;
-    private static VoteTimer: timer = timer.Create();
+    private static VoteTimer: timer = CreateTimer();
     private static Voters : player[] = []
     private static VoteKickPlayer: player;
     private static VoteStarter: player;

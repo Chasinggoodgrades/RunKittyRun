@@ -40,6 +40,6 @@ class MissingShoe {
         if (!GetTriggerUnit().HasItem(Shoe)) return
         GetTriggerUnit().RemoveItem(Shoe)
         SpawnChampions.Fieryfox2023.AddItem(Shoe)
-        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.RedTendrils))
+        AwardManager.GiveRewardAll('RedTendrils')
     }
 }

@@ -25,13 +25,13 @@
 //        switch (Difficulty.DifficultyValue)
 //        {
 //            case DifficultyLevel.Normal:
-//                return nameof(Globals.SAVE_GAME_ROUND_DATA.NormalGameTime);
+//                return "NormalGameTime";
 //            case DifficultyLevel.Hard:
-//                return nameof(Globals.SAVE_GAME_ROUND_DATA.HardGameTime);
+//                return "HardGameTime";
 //            case DifficultyLevel.Impossible:
-//                return nameof(Globals.SAVE_GAME_ROUND_DATA.ImpossibleGameTime);
+//                return "ImpossibleGameTime";
 //            default:
-//                throw new ArgumentOutOfRangeError(nameof(Difficulty.DifficultyValue), "Invalid difficulty level");
+//                throw new ArgumentOutOfRangeError("DifficultyValue", "Invalid difficulty level");
 //        }
 //    }
 
@@ -50,7 +50,7 @@
 //            case 5:
 //                return "{propertyName}.RoundFiveTime";
 //            default:
-//                throw new ArgumentOutOfRangeError(nameof(Globals.ROUND), "Invalid round number");
+//                throw new ArgumentOutOfRangeError("ROUND", "Invalid round number");
 //        }
 //    }
 //}
