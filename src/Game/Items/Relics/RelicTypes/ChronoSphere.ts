@@ -97,7 +97,7 @@ export class ChronoSphere extends Relic {
             Magnitude = RandomMagnitude()
             Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude)
             Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS)
-            item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
+            item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.SetAbilityData: {e.Message}')
         }

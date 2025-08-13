@@ -47,7 +47,7 @@ export class MissingShoe {
     private static TurnInActions() {
         if (!getTriggerUnit().hasItem(MissingShoe.Shoe)) return
         getTriggerUnit().removeItem(MissingShoe.Shoe)
-        SpawnChampions.Fieryfox2023.AddItem(MissingShoe.Shoe)
+        SpawnChampions.Fieryfox2023.addItem(MissingShoe.Shoe)
         AwardManager.GiveRewardAll('RedTendrils')
     }
 }

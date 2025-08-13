@@ -59,7 +59,7 @@ export class OneOfNine extends Relic {
 
         cooldown -= reduction
 
-        return Math.Max(0.0, cooldown) // gotta make sure its not negative
+        return Math.max(0.0, cooldown) // gotta make sure its not negative
     }
 
     public static GetOneOfNineReduction(Player: MapPlayer) {
@@ -74,7 +74,7 @@ export class OneOfNine extends Relic {
     private RemoveManaCost(Unit: Unit, abilityLevel: number) {
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
         if (upgradeLevel < 2) return
-        Unit.GetAbility(RelicAbilityID)
+        Unit.getAbility(RelicAbilityID)
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0)
     }
 

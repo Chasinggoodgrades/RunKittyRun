@@ -111,6 +111,6 @@ export class Progress {
     }
 
     private static DistanceBetweenPoints(x1: number, y1: number, x2: number, y2: number) {
-        return Math.Abs(x1 - x2) > Math.Abs(y1 - y2) ? Math.Abs(x1 - x2) : Math.Abs(y1 - y2)
+        return Math.abs(x1 - x2) > Math.abs(y1 - y2) ? Math.abs(x1 - x2) : Math.abs(y1 - y2)
     }
 }

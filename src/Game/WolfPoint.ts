@@ -40,12 +40,12 @@ export class WolfPoint {
 
             // Calculate the distance between points
             let distance = WCSharp.Shared.Util.DistanceBetweenPoints(startX, startY, endX, endY)
-            let numRegions: number = Math.Ceiling(distance / this.MaxDistance)
+            let numRegions: number = Math.ceil(distance / this.MaxDistance)
 
             // Calculate angle and step sizes using trigonometry
-            let angle = Math.Atan2(endY - startY, endX - startX)
-            let stepX = this.MaxDistance * Math.Cos(angle)
-            let stepY = this.MaxDistance * Math.Sin(angle)
+            let angle = Math.atan2(endY - startY, endX - startX)
+            let stepX = this.MaxDistance * Math.cos(angle)
+            let stepY = this.MaxDistance * Math.sin(angle)
 
             for (let i: number = 0; i < numRegions; i++) {
                 let regionX = startX + i * stepX

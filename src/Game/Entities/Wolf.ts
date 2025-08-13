@@ -19,7 +19,7 @@ import { WolfPoint } from '../WolfPoint'
 import { NamedWolves } from './NamedWolves'
 
 export class Wolf {
-    public DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
+    public static DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
     public static DisableEffects: boolean = false
     private WANDER_LOWER_BOUND: number = 0.7 // reaction time lower bound
@@ -214,7 +214,7 @@ export class Wolf {
         let totalProbability = linearProbability + randomAdjustment
 
         // Cap the probability to the maximum limit
-        totalProbability = Math.Min(totalProbability, maxProbability)
+        totalProbability = Math.min(totalProbability, maxProbability)
         return GetRandomReal(0, 100) <= totalProbability
     }
 

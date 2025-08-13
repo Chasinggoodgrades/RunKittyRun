@@ -1,9 +1,13 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
+import { Trigger, Unit } from 'w3ts'
+
 export class UnitWithinRange {
     private static RegisterUnitWithinRangeSuper(
         u: Unit,
         range: number,
         cleanOnKilled: boolean,
-        filter: Func<bool>,
+        filter: () => boolean,
         execution: Trigger
     ) {
         if (range <= 0) {
@@ -24,7 +28,7 @@ export class UnitWithinRange {
         kitty.c_Collision = null
     }
 
-    public static DeRegisterUnitWithinRangeUnit(kitty: ShadowKitty) {
+    public static DeRegisterUnitWithinRangeUnitShadow(kitty: ShadowKitty) {
         kitty.cCollision.ClearActions()
         kitty.wCollision.ClearActions()
         kitty.wCollision.dispose()
@@ -33,7 +37,7 @@ export class UnitWithinRange {
         kitty.cCollision = null
     }
 
-    public static RegisterUnitWithinRangeTrigger(u: Unit, range: number, filter: Func<bool>, execution: Trigger) {
-        return RegisterUnitWithinRangeSuper(u, range, false, filter, execution)
+    public static RegisterUnitWithinRangeTrigger(u: Unit, range: number, filter: () => boolean, execution: Trigger) {
+        return UnitWithinRange.RegisterUnitWithinRangeSuper(u, range, false, filter, execution)
     }
 }

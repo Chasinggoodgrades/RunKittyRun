@@ -43,7 +43,7 @@ export class Fixation extends Affix {
         this.Type = this.RandomType()
         SetUnitMoveSpeed(this.Unit.Unit, this.FIXATION_MS)
         SetUnitVertexColor(this.Unit.Unit, 255, 0, 0, 255)
-        this.this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
+        this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.TargetedAs = TargetTypes.Ward
         this.RegisterEvents()
         this.Unit.WolfArea.FixationCount += 1
@@ -122,7 +122,7 @@ export class Fixation extends Affix {
         this.UnitsInRange.clear()
         this.UnitsInRange.enumUnitsInRange(
             this.Unit.Unit.x,
-            this.Unit.unit.y,
+            this.Unit.Unit.y,
             this.FIXATION_RADIUS,
             FilterList.KittyFilter
         )
@@ -167,12 +167,12 @@ export class Fixation extends Affix {
 
             let newSpeed = currentMS + speedIncrementer
 
-            SetUnitMoveSpeed(this.Unit.Unit, Math.Min(newSpeed, this.FIXATION_MAX_MS))
+            SetUnitMoveSpeed(this.Unit.Unit, Math.min(newSpeed, this.FIXATION_MAX_MS))
         } else {
             if (currentMS <= this.FIXATION_MS) return
 
             let newSpeed = currentMS - speedIncrementer / 2 // Decrease by half the rate
-            SetUnitMoveSpeed(this.Unit.Unit, Math.Max(newSpeed, this.FIXATION_MS))
+            SetUnitMoveSpeed(this.Unit.Unit, Math.max(newSpeed, this.FIXATION_MS))
         }
     }
 

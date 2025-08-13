@@ -18,7 +18,7 @@ export class CrystalOfFire {
     }
 
     public static AwardCrystalOfFire(unit: Unit) {
-        return unit.AddItem(this.ItemID)
+        return unit.addItem(this.ItemID)
     }
 
     public static CrystalOfFireDeath(kitty: Kitty) {

@@ -54,7 +54,7 @@ export class Howler extends Affix {
             Utility.CreateEffectAndDisposeAttach(this.ROAR_EFFECT, this.Unit.Unit, 'origin')
             this.NearbyWolves.enumUnitsInRange(
                 this.Unit.Unit.x,
-                this.Unit.unit.y,
+                this.Unit.Unit.y,
                 this.HOWL_RADIUS,
                 FilterList.DogFilter
             )

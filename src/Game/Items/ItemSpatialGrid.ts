@@ -63,7 +63,7 @@ export class ItemSpatialGrid {
             for (let i: number = 0; i < kibbleList.length; i++) {
                 let k = kibbleList[i]
                 if (k == null) continue
-                kitty.Unit.AddItem(k.Item)
+                kitty.Unit.addItem(k.Item)
             }
         }
 
@@ -72,7 +72,7 @@ export class ItemSpatialGrid {
                 let item = itemList[i]
                 if (item == null) continue
                 if (item.IsOwned) continue
-                kitty.Unit.AddItem(item)
+                kitty.Unit.addItem(item)
                 break
             }
         }

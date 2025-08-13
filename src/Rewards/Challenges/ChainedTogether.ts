@@ -336,7 +336,7 @@ export class Chain {
             this.SecondKitty.Unit.x,
             this.SecondKitty.unit.y
         )
-        let distance: number = Math.Abs(x2 - x1) + Math.Abs(y2 - y1)
+        let distance: number = Math.abs(x2 - x1) + Math.abs(y2 - y1)
 
         if (distance > outOfRange) {
             isOutOfRange = true

@@ -1,6 +1,11 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Unit } from 'w3ts'
+
 /// <summary>
 /// Represents a visual range indicator created using lightning effects around a specified unit.
 /// </summary>
+
 export class RangeIndicator {
     /// <summary>
     /// The type of lightning used to create the range indicator. Default is "BLNL" (Blue Lightning).
@@ -29,7 +34,12 @@ export class RangeIndicator {
     /// <param name="range">The radius of the range indicator in game units.</param>
     /// <param name="segments">The number of segments into which the range indicator is divided. Higher values produce a smoother circle. Default is 20.</param>
     /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
-    public CreateIndicator(unit: Unit, range: number, segments: number = 20, lightningType: string = LIGHTNING_TYPE) {
+    public CreateIndicator(
+        unit: Unit,
+        range: number,
+        segments: number = 20,
+        lightningType: string = this.LIGHTNING_TYPE
+    ) {
         let x: number = unit.x
         let y: number = unit.y
 

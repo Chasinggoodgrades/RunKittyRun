@@ -43,7 +43,7 @@ export class SyncSaveLoad {
         let toCompile: string = rawDataString
         let chunkSize: number = 180
         let assemble: StringBuilder = new StringBuilder()
-        let noOfChunks: number = Math.Ceiling(toCompile.length / chunkSize)
+        let noOfChunks: number = Math.ceil(toCompile.length / chunkSize)
 
         //print("toCompile.length: {toCompile.length}");
 
@@ -53,7 +53,7 @@ export class SyncSaveLoad {
                 if (assemble.length >= chunkSize) {
                     let header: string =
                         EncodingHex.To32BitHexString(noOfChunks) +
-                        EncodingHex.To32BitHexString(Math.Ceiling(i / chunkSize))
+                        EncodingHex.To32BitHexString(Math.ceil(i / chunkSize))
                     Preload('")\BlzSendSyncData: ncall("{SyncPrefix}","{header + assemble}")\S2I: ncall("')
                     assemble.clear()
                 }
@@ -90,7 +90,7 @@ export class SyncSaveLoad {
         let totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
         let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 8)) : 0
         let theRest: string =
-            readData.length > 16 ? readData.substring(16) : readData.substring(Math.Min(readData.length, 8))
+            readData.length > 16 ? readData.substring(16) : readData.substring(Math.min(readData.length, 8))
         let promise = allPromises[getTriggerPlayer().id]
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 

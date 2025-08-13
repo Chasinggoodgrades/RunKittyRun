@@ -278,11 +278,11 @@ export class Slider {
         if (remainingDegrees != 0) {
             let currentAngle: number = GetUnitFacing(this.kitty.Unit)
 
-            let diffToApplyAbs: number = Math.Min(Math.Abs(remainingDegrees), Math.Abs(maxSlideTurnPerPeriod))
+            let diffToApplyAbs: number = Math.min(Math.abs(remainingDegrees), Math.abs(maxSlideTurnPerPeriod))
 
             if (diffToApplyAbs > 0.05) {
                 let sens: number = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1
-                let maxIncreaseRotationSpeedPerPeriod: number = Math.Abs(
+                let maxIncreaseRotationSpeedPerPeriod: number = Math.abs(
                     (maxSlideTurnPerPeriod * this.SLIDE_INTERVAL) / rotationTimeForMaximumSpeed
                 )
 
@@ -291,12 +291,12 @@ export class Slider {
                 let increaseRotationSpeedPerPeriod: number = maxIncreaseRotationSpeedPerPeriod
                 let diffToApply: number
 
-                if (Math.Abs(remainingDegrees) <= MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL) {
-                    let tableInd: number = Math.Round(Math.Abs(remainingDegrees))
+                if (Math.abs(remainingDegrees) <= MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL) {
+                    let tableInd: number = Math.round(Math.abs(remainingDegrees))
                     let aimedSpeedPercentage: number = this.SPEED_AT_LEAST_THAN_50_DEGREES[tableInd]
                     let aimedNewSpeedPerPeriod: number = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100
                     let diffSpeed: number = aimedNewSpeedPerPeriod - curSlideTurn
-                    if (Math.Abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod) {
+                    if (Math.abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod) {
                         diffToApply = aimedNewSpeedPerPeriod
                     } else {
                         let sensDiffToApply: number = diffSpeed > 0 ? 1 : -1
@@ -305,13 +305,13 @@ export class Slider {
                     this.slideCurrentTurnPerPeriod = diffToApply
                 } else {
                     if (sens > 0) {
-                        newSlideTurn = Math.Min(curSlideTurn + increaseRotationSpeedPerPeriod, maxSlideTurnPerPeriod)
-                        diffToApply = Math.Min(newSlideTurn, diffToApplyAbs)
-                        diffToApply = Math.Min(remainingDegrees, diffToApply)
+                        newSlideTurn = Math.min(curSlideTurn + increaseRotationSpeedPerPeriod, maxSlideTurnPerPeriod)
+                        diffToApply = Math.min(newSlideTurn, diffToApplyAbs)
+                        diffToApply = Math.min(remainingDegrees, diffToApply)
                     } else {
-                        newSlideTurn = Math.Max(curSlideTurn - increaseRotationSpeedPerPeriod, -maxSlideTurnPerPeriod)
-                        diffToApply = Math.Max(newSlideTurn, -diffToApplyAbs)
-                        diffToApply = Math.Max(remainingDegrees, diffToApply)
+                        newSlideTurn = Math.max(curSlideTurn - increaseRotationSpeedPerPeriod, -maxSlideTurnPerPeriod)
+                        diffToApply = Math.max(newSlideTurn, -diffToApplyAbs)
+                        diffToApply = Math.max(remainingDegrees, diffToApply)
                     }
                     this.slideCurrentTurnPerPeriod = newSlideTurn
                 }

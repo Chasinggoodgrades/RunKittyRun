@@ -214,7 +214,7 @@ export class AffixFactory {
             for (let i: number = 0; i < AffixFactory.LaneWeights.length; i++) {
                 // Set proportions based on lane weights
                 let ratio: number = AffixFactory.LaneWeights[i] / totalWeight
-                laneDistribution[i] = Math.Floor(AffixFactory.NUMBER_OF_AFFIXED_WOLVES * ratio)
+                laneDistribution[i] = Math.floor(AffixFactory.NUMBER_OF_AFFIXED_WOLVES * ratio)
                 totalAssigned += laneDistribution[i]
             }
 
@@ -229,7 +229,7 @@ export class AffixFactory {
 
             // Go thru and apply affixes to each lane
             for (let i: number = 0; i < laneDistribution.length; i++) {
-                let affixTarget: number = Math.Min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
+                let affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
                 let wolvesInLane = WolfArea.WolfAreas[i].Wolves
 
                 // Add affixes to random wolves until the {affixTarget} is reached

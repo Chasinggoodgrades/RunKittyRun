@@ -586,7 +586,7 @@ export class InitCommands {
             description: 'a: blink: item: to: the: kitty: Adds.',
             action: (player, args) => {
                 let kitty = Globals.ALL_KITTIES.get(player)!
-                kitty.Unit.AddItem(FourCC('desc'))
+                kitty.Unit.addItem(FourCC('desc'))
             },
         })
 
@@ -1153,7 +1153,7 @@ export class InitCommands {
                         Globals.ALL_PLAYERS.push(compPlayer)
                         new Circle(compPlayer)
                         let newKitty = new Kitty(compPlayer)
-                        newKitty.Unit.AddItem(FourCC('bspd'))
+                        newKitty.Unit.addItem(FourCC('bspd'))
                     }
                 }
             },

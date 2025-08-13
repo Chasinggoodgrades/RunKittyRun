@@ -23,7 +23,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
         Upgrades.push(
             new RelicUpgrade(
                 0,
-                'Your extra revive chance is increased by {(int)Math.Ceiling(EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE * 100.0f)}%.',
+                'Your extra revive chance is increased by {(int)Math.ceil(EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE * 100.0f)}%.',
                 15,
                 800
             )

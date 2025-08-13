@@ -22,7 +22,7 @@ export class Resources {
 
     public static StartingItems(kitty: Kitty) {
         let unit = kitty.Unit
-        unit.AddItem(Constants.ITEM_ADRENALINE_POTION)
+        unit.addItem(Constants.ITEM_ADRENALINE_POTION)
     }
 
     public static SaveGoldBonus(streak: number) {

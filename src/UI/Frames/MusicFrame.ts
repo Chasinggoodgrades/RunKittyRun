@@ -127,10 +127,10 @@ export class MusicFrame {
         // Calculates the start and end indexes for the visible buttons
         let start: number = value - visibleButtons / 2
         if (start < 0) start = 0
-        let end: number = Math.Min(start + visibleButtons, maxSongs)
+        let end: number = Math.min(start + visibleButtons, maxSongs)
 
         // Adjust start in case end is too small
-        if (end - start < visibleButtons) start = Math.Max(0, end - visibleButtons)
+        if (end - start < visibleButtons) start = Math.max(0, end - visibleButtons)
 
         // Display the buttons in the visible range and hide others
         for (let i: number = 0; i < maxSongs; i++) {

@@ -202,7 +202,7 @@ export class ShopFrame {
 
     private static AddItemsToPanel(panel: Frame, items: ShopItem[]) {
         let columns: number = 6
-        let rows: number = Math.Ceiling(items.length / columns)
+        let rows: number = Math.ceil(items.length / columns)
         for (let i: number = 0; i < items.length; i++) {
             let row: number = i / columns
             let column: number = i % columns
@@ -399,7 +399,7 @@ export class ShopFrame {
                         break
 
                     case ShopItemType.Misc:
-                        ShopFrame.AddItem(player, selectedItem.ItemID)
+                        ShopFrame.addItem(player, selectedItem.ItemID)
                         ShopFrame.ReduceGold(player, selectedItem.Cost)
                         break
                 }
@@ -494,7 +494,7 @@ export class ShopFrame {
     }
 
     private static AddItem(player: MapPlayer, itemID: number) {
-        return Globals.ALL_KITTIES.get(player)!.Unit.AddItem(itemID)
+        return Globals.ALL_KITTIES.get(player)!.Unit.addItem(itemID)
     }
 
     private static SetRewardsFrameHotkey() {

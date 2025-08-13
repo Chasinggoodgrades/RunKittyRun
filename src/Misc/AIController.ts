@@ -156,9 +156,9 @@ export class AIController {
             this.lastSafeZoneIndexId = currentSafeZoneId
         }
 
-        let distanceToCurrentCenter = Math.Sqrt(
-            Math.Pow(this.kitty.Unit.x - currentSafezoneCenter.x, 2) +
-                Math.Pow(this.kitty.Unit.y - currentSafezoneCenter.y, 2)
+        let distanceToCurrentCenter = Math.sqrt(
+            Math.pow(this.kitty.Unit.x - currentSafezoneCenter.x, 2) +
+                Math.pow(this.kitty.Unit.y - currentSafezoneCenter.y, 2)
         )
         let SAFEZONE_THRESHOLD: number = 128.0
 
@@ -198,11 +198,11 @@ export class AIController {
 
             if (!deadKitty.isAlive()) {
                 if (!AIController.claimedKitties.has(deadKitty)) {
-                    let thisDistance: number = Math.Sqrt(
-                        Math.Pow(this.kitty.Unit.x - deadKitty.Unit.x, 2) +
-                            Math.Pow(this.kitty.Unit.y - deadKitty.unit.y, 2)
+                    let thisDistance: number = Math.sqrt(
+                        Math.pow(this.kitty.Unit.x - deadKitty.Unit.x, 2) +
+                            Math.pow(this.kitty.Unit.y - deadKitty.unit.y, 2)
                     )
-                    let thisLaneDiff: number = Math.Abs(currentProgressZoneId - deadKittyProgressZoneId)
+                    let thisLaneDiff: number = Math.abs(currentProgressZoneId - deadKittyProgressZoneId)
 
                     let isNearest: boolean = true
 
@@ -213,11 +213,11 @@ export class AIController {
                         }
 
                         if (otherKitty != this.kitty && otherKitty.isAlive()) {
-                            let otherDistance: number = Math.Sqrt(
-                                Math.Pow(otherKitty.Unit.x - deadKitty.Unit.x, 2) +
-                                    Math.Pow(otherKitty.unit.y - deadKitty.unit.y, 2)
+                            let otherDistance: number = Math.sqrt(
+                                Math.pow(otherKitty.Unit.x - deadKitty.Unit.x, 2) +
+                                    Math.pow(otherKitty.unit.y - deadKitty.unit.y, 2)
                             )
-                            let otherLaneDiff: number = Math.Abs(
+                            let otherLaneDiff: number = Math.abs(
                                 this.CalcProgressZone(otherKitty) - deadKittyProgressZoneId
                             )
 
@@ -292,7 +292,7 @@ export class AIController {
 
         let deltaX = targetPosition.x - this.kitty.Unit.x
         let deltaY = targetPosition.y - this.kitty.Unit.y
-        let distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY)
+        let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
         if (distance > 256) {
             let scale = 256 / distance
             let moveX = this.kitty.Unit.x + deltaX * scale
@@ -402,7 +402,7 @@ export class AIController {
             else if (this.kitty.Unit.x + dodgeRange > laneBounds.Right) constant = laneBounds.Right
             else return
 
-            let relativeY: number = Math.Sqrt(dodgeRange * dodgeRange - Math.Pow(this.kitty.Unit.x - constant, 2))
+            let relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
             if (!float.IsNaN(relativeY) && relativeY != 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = constant
@@ -420,7 +420,7 @@ export class AIController {
             else if (this.kitty.Unit.y - dodgeRange < laneBounds.Bottom) constant = laneBounds.Bottom
             else return
 
-            let relativeX: number = Math.Sqrt(dodgeRange * dodgeRange - Math.Pow(this.kitty.Unit.y - constant, 2))
+            let relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
             if (!float.IsNaN(relativeX) && relativeX != 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = relativeX + this.kitty.Unit.x
@@ -450,36 +450,36 @@ export class AIController {
     AngleOf(point: [number, number], center: [number, number]) {
         let deltaX: number = point.x - center.x
         let deltaY: number = point.y - center.y
-        let radians: number = Math.Atan2(deltaY, deltaX)
+        let radians: number = Math.atan2(deltaY, deltaX)
         return this.NormalizeAngle(radians)
     }
 
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
     private GetCompositeDodgePosition(wolves: Wolf[], forwardDirection: [number, number]) {
         // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
-        let forwardAngle: number = this.NormalizeAngle(MathF.Atan2(forwardDirection.y, forwardDirection.x))
-        let requiredClearance: number = 22.5 * (MathF.PI / 180)
+        let forwardAngle: number = this.NormalizeAngle(Math.Atan2(forwardDirection.y, forwardDirection.x))
+        let requiredClearance: number = 22.5 * (Math.PI / 180)
 
         // Calculate the angle interval that each wolf “blocks.”
         for (let i: number = 0; i < wolves.length; i++) {
             let wolf: Wolf = wolves[i]
 
-            let MIN_TOTAL_BLOCKED_ANGLE: number = 45.0 * (MathF.PI / 180)
-            let MAX_TOTAL_BLOCKED_ANGLE: number = 270.0 * (MathF.PI / 180)
+            let MIN_TOTAL_BLOCKED_ANGLE: number = 45.0 * (Math.PI / 180)
+            let MAX_TOTAL_BLOCKED_ANGLE: number = 270.0 * (Math.PI / 180)
 
             if (!wolf.IsWalking) {
-                MIN_TOTAL_BLOCKED_ANGLE = 30.0 * (MathF.PI / 180)
-                MAX_TOTAL_BLOCKED_ANGLE = 150.0 * (MathF.PI / 180)
+                MIN_TOTAL_BLOCKED_ANGLE = 30.0 * (Math.PI / 180)
+                MAX_TOTAL_BLOCKED_ANGLE = 150.0 * (Math.PI / 180)
             }
 
             let dx: number = wolf.Unit.x - this.kitty.Unit.x
             let dy: number = wolf.unit.y - this.kitty.Unit.y
-            let distance: number = Math.Sqrt(dx * dx + dy * dy)
+            let distance: number = Math.sqrt(dx * dx + dy * dy)
 
             if (distance < 1) continue // Skip if the wolf is at the same position to avoid division by zero
 
-            let centerAngle: number = MathF.Atan2(wolf.unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
-            let clampedDistance: number = Math.Clamp(
+            let centerAngle: number = Math.Atan2(wolf.unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
+            let clampedDistance: number = Math.clamp(
                 distance,
                 CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS,
                 this.DODGE_RADIUS
@@ -500,7 +500,7 @@ export class AIController {
             if (start > end) {
                 let a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
-                a.End = 2 * MathF.PI
+                a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
                 let b = MemoryHandler.getEmptyObject<AngleInterval>()
@@ -532,7 +532,7 @@ export class AIController {
             let start: number
             let end: number
 
-            if (angleB - angleA > 180.0 * (MathF.PI / 180)) {
+            if (angleB - angleA > 180.0 * (Math.PI / 180)) {
                 start = angleB
                 end = angleA
             } else {
@@ -544,7 +544,7 @@ export class AIController {
             if (start > end) {
                 let a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
-                a.End = 2 * MathF.PI
+                a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
                 let b = MemoryHandler.getEmptyObject<AngleInterval>()
@@ -573,7 +573,7 @@ export class AIController {
             // No wolves blocking any direction; entire circle is free.
             let a = MemoryHandler.getEmptyObject<AngleInterval>()
             a.Start = 0
-            a.End = 2 * MathF.PI
+            a.End = 2 * Math.PI
             this.freeGaps.push(a)
         } else {
             // Ensure the merged intervals are sorted by their start angle.
@@ -582,11 +582,11 @@ export class AIController {
 
             // The gap between the end of the last interval and the start of the first (accounting for wrap-around).
             let wrapGap: number =
-                this.mergedIntervals[0].Start + 2 * MathF.PI - this.mergedIntervals[this.mergedIntervals.length - 1].End
+                this.mergedIntervals[0].Start + 2 * Math.PI - this.mergedIntervals[this.mergedIntervals.length - 1].End
             if (wrapGap > 0) {
                 let a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = this.mergedIntervals[this.mergedIntervals.length - 1].End
-                a.End = this.mergedIntervals[0].Start + 2 * MathF.PI
+                a.End = this.mergedIntervals[0].Start + 2 * Math.PI
                 this.freeGaps.push(a)
             }
             // Gaps between consecutive intervals.
@@ -608,8 +608,8 @@ export class AIController {
             this.VisualizeFreeInterval(interval)
         }
 
-        let targetX: number = this.kitty.Unit.x + MathF.Cos(forwardAngle) * this.DODGE_DISTANCE
-        let targetY: number = this.kitty.Unit.y + MathF.Sin(forwardAngle) * this.DODGE_DISTANCE
+        let targetX: number = this.kitty.Unit.x + Math.Cos(forwardAngle) * this.DODGE_DISTANCE
+        let targetY: number = this.kitty.Unit.y + Math.Sin(forwardAngle) * this.DODGE_DISTANCE
 
         let bestCandidateScore: number = float.MaxValue
         let bestCandidateAngle: number = -500 // Default to the original forward angle
@@ -624,11 +624,11 @@ export class AIController {
                 continue
             }
 
-            let candX: number = this.kitty.Unit.x + MathF.Cos(bestAngle) * this.DODGE_DISTANCE
-            let candY: number = this.kitty.Unit.y + MathF.Sin(bestAngle) * this.DODGE_DISTANCE
+            let candX: number = this.kitty.Unit.x + Math.Cos(bestAngle) * this.DODGE_DISTANCE
+            let candY: number = this.kitty.Unit.y + Math.Sin(bestAngle) * this.DODGE_DISTANCE
 
-            let dx: number = Math.Abs(candX - targetX)
-            let dy: number = Math.Abs(candY - targetY)
+            let dx: number = Math.abs(candX - targetX)
+            let dy: number = Math.abs(candY - targetY)
             let score: number = dx * dx + dy * dy
 
             if (score < bestCandidateScore) {
@@ -643,7 +643,7 @@ export class AIController {
         }
 
         // Update the forward direction to the chosen dodge direction.
-        let forwardDirection2 = (MathF.Cos(bestCandidateAngle), MathF.Sin(bestCandidateAngle))
+        let forwardDirection2 = (Math.Cos(bestCandidateAngle), Math.Sin(bestCandidateAngle))
 
         this.cleanArrays()
 
@@ -763,10 +763,10 @@ export class AIController {
         let radius: number = this.DODGE_RADIUS
         let step: number = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
-            let x1: number = this.kitty.Unit.x + radius * MathF.Cos(angle)
-            let y1: number = this.kitty.Unit.y + radius * MathF.Sin(angle)
-            let x2: number = this.kitty.Unit.x + radius * MathF.Cos(angle + step)
-            let y2: number = this.kitty.Unit.y + radius * MathF.Sin(angle + step)
+            let x1: number = this.kitty.Unit.x + radius * Math.Cos(angle)
+            let y1: number = this.kitty.Unit.y + radius * Math.Sin(angle)
+            let x2: number = this.kitty.Unit.x + radius * Math.Cos(angle + step)
+            let y2: number = this.kitty.Unit.y + radius * Math.Sin(angle + step)
 
             //
             let freeLightning: lightning = null
@@ -793,10 +793,10 @@ export class AIController {
         let radius: number = this.DODGE_RADIUS
         let step: number = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
-            let x1: number = this.kitty.Unit.x + radius * MathF.Cos(angle)
-            let y1: number = this.kitty.Unit.y + radius * MathF.Sin(angle)
-            let x2: number = this.kitty.Unit.x + radius * MathF.Cos(angle + step)
-            let y2: number = this.kitty.Unit.y + radius * MathF.Sin(angle + step)
+            let x1: number = this.kitty.Unit.x + radius * Math.Cos(angle)
+            let y1: number = this.kitty.Unit.y + radius * Math.Sin(angle)
+            let x2: number = this.kitty.Unit.x + radius * Math.Cos(angle + step)
+            let y2: number = this.kitty.Unit.y + radius * Math.Sin(angle + step)
 
             //
             let freeLightning: lightning = null
@@ -839,8 +839,8 @@ export class AIController {
     /// Normalizes an angle (in radians) to the range [0, 2π).
     /// </summary>
     private NormalizeAngle(angle: number) {
-        while (angle < 0) angle += 2 * MathF.PI
-        while (angle >= 2 * MathF.PI) angle -= 2 * MathF.PI
+        while (angle < 0) angle += 2 * Math.PI
+        while (angle >= 2 * Math.PI) angle -= 2 * Math.PI
         return angle
     }
 
@@ -849,7 +849,7 @@ export class AIController {
     /// </summary>
     private AngleDifference(a: number, b: number) {
         let diff: number = ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI
-        return Math.Abs(diff)
+        return Math.abs(diff)
     }
 
     private SortAngleIntervals(intervals: AngleInterval[]) {
@@ -876,7 +876,7 @@ export class AIController {
         for (let i: number = 1; i < intervals.length; i++) {
             if (this.IsAngleInInterval(intervals[i].Start, current)) {
                 // Extend the current interval if needed.
-                current.End = MathF.Max(current.End, intervals[i].End)
+                current.End = Math.max(current.End, intervals[i].End)
             } else {
                 this.mergedIntervals.push(current)
                 current = intervals[i]
@@ -887,7 +887,7 @@ export class AIController {
     }
 
     private IsWithinRadius(x1: number, y1: number, x2: number, y2: number, radius: number) {
-        let distance = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+        let distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
         return distance <= radius
     }
 

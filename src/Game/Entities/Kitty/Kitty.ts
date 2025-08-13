@@ -259,7 +259,7 @@ export class Kitty {
     private StartAIController() {
         if (Player.controller == MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode == GameMode.Standard) {
             this.aiController?.StartAi()
-            Unit.AddItem(FourCC('bspd')) // boots
+            Unit.addItem(FourCC('bspd')) // boots
         }
     }
 

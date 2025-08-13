@@ -51,7 +51,7 @@ export class RoundTimer {
                 false,
                 ErrorHandler.Wrap(() => {
                     let RoundStartingString: string =
-                        '{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} begin: will in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r'
+                        '{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} begin: will in |r{Colors.COLOR_RED}{Math.round(StartRoundTimer.remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r'
                     if (RoundTimer.StartRoundTimer.remaining % 5 <= 0.1 && RoundTimer.StartRoundTimer.remaining > 5)
                         Utility.TimedTextToAllPlayers(5.0, RoundStartingString)
                     if (RoundTimer.StartRoundTimer.remaining <= 5 && RoundTimer.StartRoundTimer.remaining > 0)

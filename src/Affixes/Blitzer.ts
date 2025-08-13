@@ -24,9 +24,9 @@ export class Blitzer extends Affix {
     private BLITZER_HIGHEND: number = 11.0
     private TargetX: number
     private TargetY: number
-    private MoveTimer: AchesTimers
-    private BlitzerTimer: AchesTimers
-    private PreBlitzerTimer: AchesTimers
+    private MoveTimer: AchesTimers | null
+    private BlitzerTimer: AchesTimers | null
+    private PreBlitzerTimer: AchesTimers | null
     private Effect: Effect
     private WanderEffect: Effect
 
@@ -77,10 +77,14 @@ export class Blitzer extends Affix {
                 this.MoveTimer?.Timer.start(GetRandomReal(3.0, 10.0), false, this.PreBlitzerMove)
                 return
             }
-            this.WanderEffect ??= Effect.create(Wolf.DEFAULT_OVERHEAD_EFFECT, this.Unit.Unit, 'overhead')!
+            this.WanderEffect ??= this.Effect.createAttachment(
+                Wolf.DEFAULT_OVERHEAD_EFFECT,
+                this.Unit.Unit,
+                'overhead'
+            )!
             this.WanderEffect.playAnimation(ANIM_TYPE_STAND)
             this.Unit.Unit.setVertexColor(255, 255, 0, 255)
-            this.Unit.Unit.setColor(playercolor.Yellow)
+            this.Unit.Unit.setColor(PLAYER_COLOR_YELLOW)
             this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, this.BeginBlitz)
         } catch (e: any) {
             Logger.Warning('Error in PreBlitzerMove: {e.Message}')
@@ -91,12 +95,12 @@ export class Blitzer extends Affix {
     private BeginBlitz() {
         try {
             let randomTime = GetRandomReal(this.BLITZER_LOWEND, this.BLITZER_HIGHEND) // blitz randomly between this time interval
-            this.TargetX = GetRandomReal(Unit.WolfArea.Rect.minX, Unit.WolfArea.Rect.maxX)
-            this.TargetY = GetRandomReal(Unit.WolfArea.Rect.minY, Unit.WolfArea.Rect.maxY)
+            this.TargetX = GetRandomReal(this.Unit.WolfArea.Rect.minX, this.Unit.WolfArea.Rect.maxX)
+            this.TargetY = GetRandomReal(this.Unit.WolfArea.Rect.minY, this.Unit.WolfArea.Rect.maxY)
             this.WanderEffect?.playAnimation(ANIM_TYPE_DEATH)
             this.BlitzerMove()
-            this.Unit.Unit.removeAbility(this.GHOST_VISIBLE) // ghost visible
-            this.Effect ??= Effect.create(this.BLITZER_EFFECT, this.Unit.Unit, 'origin')!
+            this.Unit.Unit.removeAbility(Blitzer.GHOST_VISIBLE) // ghost visible
+            this.Effect ??= this.Effect.create(this.BLITZER_EFFECT, this.Unit.Unit, 'origin')!
             this.Effect?.playAnimation(ANIM_TYPE_STAND)
             this.Unit.IsWalking = true
             this.MoveTimer?.Timer.start(randomTime, false, this.PreBlitzerMove)
@@ -139,7 +143,7 @@ export class Blitzer extends Affix {
         this.Unit.Unit.setPos(nextX, nextY)
         this.Unit.Unit.setPathing(true)
 
-        this.Unit.Unit.setFacingEx((Math.Atan2(directionY, directionX) * 180.0) / Math.PI)
+        this.Unit.Unit.setFacingEx((Math.atan2(directionY, directionX) * 180.0) / Math.PI)
         this.Unit.Unit.setAnimation(2) // running animation: ;
 
         let stepTime = 1.0 / 50.0

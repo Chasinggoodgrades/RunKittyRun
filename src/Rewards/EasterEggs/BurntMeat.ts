@@ -10,7 +10,7 @@ export class BurntMeat {
     public static FlamesDropChance(k: Kitty) {
         let randomRoll = GetRandomInt(1, 100)
         if (randomRoll > 8) return // 8% chance
-        k.Unit.AddItem(ITEM_CLOAK_FLAMES)
+        k.Unit.addItem(ITEM_CLOAK_FLAMES)
     }
 
     public static RegisterDeathTrigger() {
@@ -23,7 +23,7 @@ export class BurntMeat {
                 if (killer == null) return
                 NamedWolves.StanWolf.Texttag?.dispose()
                 Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES)
-                killer.AddItem(ITEM_BURNT_MEAT)
+                killer.addItem(ITEM_BURNT_MEAT)
                 Completed.push(killer)
             })
         )

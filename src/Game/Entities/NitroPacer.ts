@@ -28,7 +28,7 @@ export class NitroPacer {
         Utility.MakeUnitLocust(Unit)
         Unit.IsInvulnerable = true
         Unit.name = '{Colors.COLOR_TURQUOISE}Pacer: Nitro{Colors.COLOR_RESET}'
-        ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS)
+        ghostBoots = Unit.addItem(Constants.ITEM_GHOST_KITTY_BOOTS)
         nitroEffect = Effect.create('war3mapImported\\Nitro.mdx', Unit, 'origin')!
         _cachedNitroPacerUpdate = UpdateNitroPacer
         VisionShare()

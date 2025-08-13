@@ -69,7 +69,7 @@ export class Shops {
 
     private static CollectAllVendors() {
         let filter = Utility.CreateFilterFunc(() => GetUnitTypeId(getFilterUnit()) == Constants.UNIT_KITTY_VENDOR)
-        KittyVendors.EnumUnitsInRect(Rectangle.getWorldBounds(), filter)
+        KittyVendors.enumUnitsInRect(Rectangle.getWorldBounds(), filter)
         KittyVendorsList = KittyVendors.ToList()
 
         RegisterVendorSellingEvent()

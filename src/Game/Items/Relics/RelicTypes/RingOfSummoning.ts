@@ -73,7 +73,7 @@ export class RingOfSummoning extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
-        let ability = Unit.GetAbility(this.RelicAbilityID)
+        let ability = Unit.getAbility(this.RelicAbilityID)
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
 
         // Summon radius thingy
@@ -91,7 +91,7 @@ export class RingOfSummoning extends Relic {
     private SacredRingOfSummoning() {
         // Retrieve event details
         let player: MapPlayer = getTriggerUnit().owner
-        let targetedPoint: location = GetSpellTargetLoc()
+        let targetedPoint: location = GetSpellTargetLoc()!
         let summoningKitty: Kitty = Globals.ALL_KITTIES.get(player)!
         let summoningKittyUnit: Unit = summoningKitty.Unit
         let numberOfSummons: number = this.GetNumberOfSummons(player)
@@ -100,24 +100,24 @@ export class RingOfSummoning extends Relic {
         this.SummonGroup ??= Group.create()!
 
         // Prepare relic mechanics
-        RelicUtil.CloseRelicBook(player)
+        RelicUtil.CloseRelicBookPlayer(player)
         Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID))
 
         // Filter eligible summon targets
         let filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
         this.SummonGroup.enumUnitsInRange(
-            targetedPoint.x,
-            targetedPoint.y,
+            GetLocationX(targetedPoint),
+            GetLocationY(targetedPoint),
             RingOfSummoning.SUMMONING_RING_RADIUS,
             filter
         )
-        this.SummonGroup.Remove(summoningKittyUnit) // Ensure self is not included
+        this.SummonGroup.removeUnit(summoningKittyUnit) // Ensure self is not included
 
         // Summon loop
         let count: number = 0
-        while (this.SummonGroup.First != null && count < numberOfSummons) {
-            let unit: Unit = this.SummonGroup.First
-            this.SummonGroup.Remove(unit)
+        while (this.SummonGroup.first != null && count < numberOfSummons) {
+            let unit: Unit = this.SummonGroup.first
+            this.SummonGroup.removeUnit(unit)
 
             let kitty: Kitty = Globals.ALL_KITTIES.get(unit.owner)!
             if (
@@ -143,7 +143,7 @@ export class RingOfSummoning extends Relic {
         }
 
         // Cleanup
-        targetedPoint.dispose()
+        RemoveLocation(targetedPoint)
         GC.RemoveFilterFunc(filter) // TODO; Cleanup:         GC.RemoveFilterFunc(ref filter);
     }
 

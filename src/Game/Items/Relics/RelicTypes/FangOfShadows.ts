@@ -120,7 +120,7 @@ export class FangOfShadows extends Relic {
         let currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0)
         let newCooldown = upgradeLevel >= 1 ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
-        //let ability = Unit.GetAbility(RelicAbilityID);
+        //let ability = Unit.getAbility(RelicAbilityID);
         RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, newCooldown)
     }
 
@@ -128,7 +128,7 @@ export class FangOfShadows extends Relic {
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return
         let upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
-        Unit.GetAbility(RelicAbilityID)
+        Unit.getAbility(RelicAbilityID)
         let reduction: number = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION
         let remainingCooldown: number = Unit.GetAbilityCooldownRemaining(RelicAbilityID)
         if (remainingCooldown <= 0) return

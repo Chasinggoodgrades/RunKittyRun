@@ -67,7 +67,7 @@ export class TimeSetter {
     private static SetSavedTime(player: MapPlayer, roundString: string) {
         let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let property = kittyStats.RoundTimes.GetType().GetProperty(roundString)
-        property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01), 2))
+        property.SetValue(kittyStats.RoundTimes, Math.round(Math.max(GameTimer.RoundTime[Globals.ROUND], 0.01), 2))
     }
 
     private static GetNormalRoundEnum(): string {

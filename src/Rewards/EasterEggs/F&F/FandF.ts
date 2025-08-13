@@ -43,7 +43,7 @@ export class FandF {
 
         // Otherwise .. they have item.. Give them blood filled vial.
         Utility.RemoveItemFromUnit(unit, EmptyVial)
-        unit.AddItem(BloodVial)
+        unit.addItem(BloodVial)
     }
 
     private static RegisterTurnIn(): Trigger {

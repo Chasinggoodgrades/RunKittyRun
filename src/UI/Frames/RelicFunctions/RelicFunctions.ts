@@ -40,7 +40,7 @@ export class RelicFunctions {
             if (newRelic != null) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
-                RelicFunctions.AddItem(player, selectedItem.ItemID)
+                RelicFunctions.addItem(player, selectedItem.ItemID)
                 Utility.SimpleTimer(0.21, () => newRelic.SetUpgradeLevelDesc(kitty.Unit))
             }
         } catch (e: any) {
@@ -128,7 +128,7 @@ export class RelicFunctions {
     }
 
     private static AddItem(player: MapPlayer, itemID: number) {
-        Globals.ALL_KITTIES.get(player)!.Unit.AddItem(itemID)
+        Globals.ALL_KITTIES.get(player)!.Unit.addItem(itemID)
     }
 
     private static RelicMaxedOut(player: MapPlayer) {

@@ -81,13 +81,13 @@ export class FrostbiteRing extends Relic {
             while (true) {
                 let unit = this.FreezeGroup.First
                 if (unit == null) break
-                this.FreezeGroup.Remove(unit)
+                this.FreezeGroup.removeUnit(unit)
                 if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES[unit].IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
                 if (Globals.ALL_WOLVES[unit].HasAffix('Frostbite')) continue
                 this.FrostbiteEffect(unit)
             }
 
-            RelicUtil.CloseRelicBook(this.Owner)
+            RelicUtil.CloseRelicBookPlayer(this.Owner)
 
             Utility.SimpleTimer(1.0, () =>
                 this.Owner.DisplayTimedTextTo(

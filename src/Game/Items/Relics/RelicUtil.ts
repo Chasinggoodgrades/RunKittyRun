@@ -36,7 +36,7 @@ export class RelicUtil {
         ForceUICancel()
     }
 
-    public static CloseRelicBook(Player: MapPlayer) {
+    public static CloseRelicBookPlayer(Player: MapPlayer) {
         if (!Player.isLocal()) return
         ForceUICancel()
     }
@@ -61,11 +61,11 @@ export class RelicUtil {
         let unitCooldown: number = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0)
         let itemCooldown: number = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0)
 
-        cooldown = cooldown == 0 ? Math.Min(unitCooldown, itemCooldown) : cooldown
+        cooldown = cooldown == 0 ? Math.min(unitCooldown, itemCooldown) : cooldown
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         unit.SetAbilityCooldownRemaining(abilityID, cooldown)
-        unit.AddItem(item)
-        unit.DropItem(item, itemSlot)
+        unit.addItem(item)
+        unit.dropItemFromSlot(item, itemSlot)
         unit.SetAbilityCooldownRemaining(abilityID, cooldown)
     }
 
@@ -73,11 +73,11 @@ export class RelicUtil {
         let item = Utility.UnitGetItem(unit, itemID)
         if (!item) return
         let itemSlot = Utility.GetSlotOfItem(unit, itemID)
-        let unitAbility = unit.GetAbility(abilityID)
+        let unitAbility = unit.getAbility(abilityID)!
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown)
-        unit.AddItem(item)
-        unit.DropItem(item, itemSlot)
+        unit.addItem(item)
+        unit.dropItemFromSlot(item, itemSlot)
         let itemAbility = item.getAbility(abilityID)
         if (!itemAbility) return
         BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown)

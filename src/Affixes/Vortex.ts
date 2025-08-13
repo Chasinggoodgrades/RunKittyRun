@@ -82,7 +82,7 @@ export class Vortex extends Affix {
             if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue
             let x = unit.x
             let y = unit.y
-            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.x, Unit.unit.y, x, y)
+            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.x, Unit.Unit.y, x, y)
             let newX = x + distance * Cos(angle)
             let newY = y + distance * Sin(angle)
             unit.setPos(newX, newY)
