@@ -1,17 +1,29 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
+import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
+import { ChronoSphere } from 'src/Game/Items/Relics/RelicTypes/ChronoSphere'
+import { Globals } from 'src/Global/Globals'
+import { Utility } from 'src/Utility/Utility'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { MapPlayer, Unit } from 'w3ts'
+import { ShopFrame } from '../ShopFrame'
+import { ShopItem } from '../ShopItems/ShopItems'
+
 export class RelicFunctions {
     public static HandleRelicPurchase(player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) {
         try {
             if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID)) {
-                AlreadyHaveRelic(player)
+                RelicFunctions.AlreadyHaveRelic(player)
                 return
             }
 
-            if (!RelicLevel(kitty.Unit)) {
-                NotHighEnoughLevel(player)
+            if (!RelicFunctions.RelicLevel(kitty.Unit)) {
+                RelicFunctions.NotHighEnoughLevel(player)
                 return
             }
 
-            if (!HasInventorySpace(kitty.Unit)) {
+            if (!RelicFunctions.HasInventorySpace(kitty.Unit)) {
                 player.DisplayTimedTextTo(
                     8.0,
                     '{Colors.COLOR_RED}do: not: have: enough: inventory: space: to: purchase: this: relic: You!{Colors.COLOR_RESET}'
@@ -19,29 +31,29 @@ export class RelicFunctions {
                 return
             }
 
-            if (!CanGetAnotherRelic(kitty.Unit)) return
+            if (!RelicFunctions.CanGetAnotherRelic(kitty.Unit)) return
 
-            if (RelicMaxedOut(player)) return
+            if (RelicFunctions.RelicMaxedOut(player)) return
 
-            ReduceGold(player, selectedItem.Cost)
+            RelicFunctions.ReduceGold(player, selectedItem.Cost)
             let newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic
             if (newRelic != null) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
-                AddItem(player, selectedItem.ItemID)
+                RelicFunctions.AddItem(player, selectedItem.ItemID)
                 Utility.SimpleTimer(0.21, () => newRelic.SetUpgradeLevelDesc(kitty.Unit))
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in HandleRelicPurchase: {e.Message}')
         }
     }
 
     public static UpgradeRelic() {
         try {
-            let player = GetTriggerPlayer()
+            let player = getTriggerPlayer()
             if (player.isLocal()) {
-                ShopFrame.upgradeButton.Visible = false
-                ShopFrame.upgradeButton.Visible = true
+                ShopFrame.upgradeButton.visible = false
+                ShopFrame.upgradeButton.visible = true
             }
 
             if (
@@ -50,19 +62,19 @@ export class RelicFunctions {
             ) {
                 let itemID = selectedItem.ItemID
                 let relicType = selectedItem.Relic.GetType()
-                let playerRelic = Globals.ALL_KITTIES.get(player).Relics.Find(x => x.GetType() == relicType)
+                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.GetType() == relicType)
                 if (playerRelic == null) return
                 let playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
                 let playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
 
                 if (playerUpgradesRelic == null) return
-                if (ActiveShadowKitty(player)) return
+                if (RelicFunctions.ActiveShadowKitty(player)) return
 
                 // Check if they can upgrade..
                 if (!playerRelic.CanUpgrade(player)) {
                     player.DisplayTimedTextTo(
                         5.0,
-                        '{Colors.COLOR_RED}have: reached: the: maximum: upgrade: level: for: You {playerRelic.Name}.{Colors.COLOR_RESET}'
+                        '{Colors.COLOR_RED}have: reached: the: maximum: upgrade: level: for: You {playerRelic.name}.{Colors.COLOR_RESET}'
                     )
                     return
                 }
@@ -75,15 +87,15 @@ export class RelicFunctions {
                 }
 
                 // Ok upgrade em! pog
-                playerRelic.Upgrade(Globals.ALL_KITTIES.get(player).Unit)
+                playerRelic.Upgrade(Globals.ALL_KITTIES.get(player)!.Unit)
                 player.DisplayTimedTextTo(
                     5.0,
-                    "{Colors.COLOR_YELLOW}You'upgraded: ve {playerRelic.Name}.{Colors.COLOR_RESET}"
+                    "{Colors.COLOR_YELLOW}You'upgraded: ve {playerRelic.name}.{Colors.COLOR_RESET}"
                 )
                 player.Gold -= goldCost
                 if (player.isLocal()) ShopFrame.RefreshUpgradeTooltip(playerRelic)
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in UpgradeRelic: {e.Message}')
         }
     }
@@ -116,11 +128,11 @@ export class RelicFunctions {
     }
 
     private static AddItem(player: MapPlayer, itemID: number) {
-        Globals.ALL_KITTIES.get(player).Unit.AddItem(itemID)
+        Globals.ALL_KITTIES.get(player)!.Unit.AddItem(itemID)
     }
 
     private static RelicMaxedOut(player: MapPlayer) {
-        let relics = Globals.ALL_KITTIES.get(player).Relics
+        let relics = Globals.ALL_KITTIES.get(player)!.Relics
         if (relics.length < Relic.MaxRelics) return false
         player.DisplayTimedTextTo(
             8.0,
@@ -130,10 +142,10 @@ export class RelicFunctions {
     }
 
     private static CanGetAnotherRelic(unit: Unit) {
-        let relicCount = Globals.ALL_KITTIES[unit.Owner].Relics.length
+        let relicCount = Globals.ALL_KITTIES.get(unit.owner)!.Relics.length
         if (relicCount < 1) return true // can get a first relic ofc.
-        if (Relic.GetRelicCountForLevel(unit.HeroLevel) < relicCount) {
-            unit.Owner.DisplayTimedTextTo(
+        if (Relic.GetRelicCountForLevel(unit.getHeroLevel()) < relicCount) {
+            unit.owner.DisplayTimedTextTo(
                 6.0,
                 '{Colors.COLOR_RED}must: have: reached: You {Relic.RelicIncrease} obtain: a: second: relic: to. Then +for: each: level: 1 after up to {Relic.MaxRelics} relics.{Colors.COLOR_RESET}'
             )
@@ -159,7 +171,7 @@ export class RelicFunctions {
         if (CD > 0.0 && relic.RelicAbilityID != 0) {
             kitty.Player.DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_RED}cannot: sell: You {relic.Name}{Colors.COLOR_RED} it: while is cooldown: on.{Colors.COLOR_RESET}'
+                '{Colors.COLOR_RED}cannot: sell: You {relic.name}{Colors.COLOR_RED} it: while is cooldown: on.{Colors.COLOR_RESET}'
             )
             return false
         }
@@ -167,7 +179,7 @@ export class RelicFunctions {
             // chrono sphere
             kitty.Player.DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_RED}cannot: sell: You {relic.Name}{Colors.COLOR_RED} it: while is cooldown: on.{Colors.COLOR_RESET}'
+                '{Colors.COLOR_RED}cannot: sell: You {relic.name}{Colors.COLOR_RED} it: while is cooldown: on.{Colors.COLOR_RESET}'
             )
             return false
         }

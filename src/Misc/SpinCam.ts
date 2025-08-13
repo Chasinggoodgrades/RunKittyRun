@@ -1,11 +1,15 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { CameraUtil } from 'src/Utility/CameraUtil'
+import { Timer } from 'w3ts'
+
 export class SpinCam {
     public Kitty: Kitty
     public SpinCamSpeed: number = 0
     public SpinCamRotation: number = 0 // Should just read current value but it doesn't seem to work :/
-    public SpinCamTimer: timer
+    public SpinCamTimer: Timer
     public WasSpinCamReset: boolean = false
 
-    public SpinCam(kitty: Kitty) {
+    public constructor(kitty: Kitty) {
         this.Kitty = kitty
     }
 
@@ -14,33 +18,33 @@ export class SpinCam {
         this.WasSpinCamReset = false
 
         if (this.SpinCamSpeed != 0) {
-            if (SpinCamTimer == null) {
-                SpinCamTimer = timer.Create()
-                SpinCamTimer.start(0.0075, true, SpinCamActions)
+            if (this.SpinCamTimer == null) {
+                this.SpinCamTimer = Timer.create()
+                this.SpinCamTimer.start(0.0075, true, this.SpinCamActions)
             }
         } else {
-            SpinCamTimer?.pause()
-            SpinCamTimer = null
+            this.SpinCamTimer?.pause()
+            this.SpinCamTimer = null
             CameraUtil.UnlockCamera(Kitty.Player)
         }
     }
 
     public IsSpinCamActive(): boolean {
-        return SpinCamTimer != null
+        return this.SpinCamTimer != null
     }
 
     private SpinCamActions() {
-        if (!this.Kitty.Slider.IsOnSlideTerrain() || !Kitty.Alive) {
-            if (!this.Kitty.Alive && !this.WasSpinCamReset) {
+        if (!this.Kitty.Slider.IsOnSlideTerrain() || !this.Kitty.isAlive()) {
+            if (!this.Kitty.isAlive() && !this.WasSpinCamReset) {
                 this.WasSpinCamReset = true
                 this.SpinCamRotation = 0
-                SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, 0, 0)
+                SetCameraFieldForPlayer(this.Kitty.Player, CAMERA_FIELD_ROTATION, 0, 0)
             }
 
             return
         }
 
-        SpinCamRotation = this.Kitty.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed)
-        SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0)
+        this.SpinCamRotation = this.Kitty.Slider.ForceAngleBetween0And360(this.SpinCamRotation + this.SpinCamSpeed)
+        SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, this.SpinCamRotation, 0)
     }
 }

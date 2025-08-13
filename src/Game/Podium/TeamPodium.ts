@@ -39,10 +39,10 @@ export class TeamPodium {
             return
         }
         let(player, position) = PodiumQueue.Dequeue()
-        let kitty = Globals.ALL_KITTIES.get(player).Unit
-        kitty.setPos(position.X, position.Y)
-        kitty.SetFacing(270)
-        kitty.IsPaused = true
+        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        kitty.setPos(position.x, position.y)
+        kitty.setFacingEx(270)
+        kitty.paused = true
         MovedUnits.push(kitty)
         print(
             '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
@@ -76,10 +76,10 @@ export class TeamPodium {
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player).CurrentStats
+        let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (PodiumType) {
             case MostSaves:
-                return stats.TotalSaves.ToString()
+                return stats.TotalSaves.toString()
 
             case MVP:
                 return stats.TotalDeaths == 0

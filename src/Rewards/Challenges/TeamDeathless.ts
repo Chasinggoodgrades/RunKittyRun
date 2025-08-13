@@ -51,22 +51,22 @@ export class TeamDeathless {
     /// <summary>
     /// The primary effect (the orb) that is being moved around constantly with players / safezone location
     /// </summary>
-    private static OrbEffect: effect
+    private static OrbEffect: Effect
 
     /// <summary>
     /// The timer that will be moving the effect on a specific interval of time (0.03 maybe?)
     /// </summary>
-    private static Timer: timer
+    private static Timer: Timer
 
     /// <summary>
     /// The effect object for the ripple whenever orb is picked up.
     /// </summary>
-    private static RippleEffect: effect
+    private static RippleEffect: Effect
 
     /// <summary>
     /// The trigger that will be used to detect when a player is in range of the orb.
     /// </summary>
-    private static RangeTrigger: trigger
+    private static RangeTrigger: Trigger
 
     /// <summary>
     /// The dummy unit that will be used to detect when a player is in range of the orb.
@@ -89,11 +89,17 @@ export class TeamDeathless {
         this.EventTriggered = true
         this.AlreadyCarriedOrb = []
         this.Timer = Timer.create()
-        this.DummyUnit = CreateUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE)!, Constants.UNIT_SPELLDUMMY, 0, 0, 0)!
-        this.RangeTrigger = CreateTrigger()
-        this.RangeTrigger.RegisterUnitInRange(this.DummyUnit, PICKUP_RANGE, FilterList.KittyFilter)
-        this.RangeTrigger.AddAction(InRangeEvent)
-        this.RangeTrigger.Disable()
+        this.DummyUnit = CreateUnit(
+            MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!!,
+            Constants.UNIT_SPELLDUMMY,
+            0,
+            0,
+            0
+        )!
+        this.RangeTrigger = Trigger.create()!
+        this.RangeTrigger.registerUnitInRage(this.DummyUnit, PICKUP_RANGE, FilterList.KittyFilter)
+        this.RangeTrigger.addAction(InRangeEvent)
+        this.RangeTrigger.enabled = false
 
         Utility.TimedTextToAllPlayers(
             4.0,
@@ -111,11 +117,11 @@ export class TeamDeathless {
             EventStarted = true
             CurrentHolder = null
             CurrentSafezone = Globals.SAFE_ZONES[0]
-            RangeTrigger.Enable()
+            RangeTrigger.enabled = true
             AlreadyCarriedOrb.clear()
 
-            let x: number = RegionList.SafeZones[0].Center.X
-            let y: number = RegionList.SafeZones[0].Center.Y
+            let x: number = RegionList.SafeZones[0].Center.x
+            let y: number = RegionList.SafeZones[0].Center.y
             OrbEffect ??= Effect.create(EFFECT_MODEL, x, y)!
             OrbEffect.Scale = 1.0
             OrbEffect.SetX(x)
@@ -126,7 +132,7 @@ export class TeamDeathless {
                 4.0,
                 '{Colors.COLOR_YELLOW}Deathless: Orb: has: been: spawned: The! a: team: As, it: to: the: bring end without dying!{Colors.COLOR_RESET}'
             )
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in TeamDeathless.StartEvent {e.Message}')
             throw e
         }
@@ -147,12 +153,12 @@ export class TeamDeathless {
         CurrentSafezone = safezone
         CurrentHolder = null
 
-        OrbEffect.SetX(safezone.Rect_.CenterX)
-        OrbEffect.SetY(safezone.Rect_.CenterY)
+        OrbEffect.SetX(safezone.Rect_.centerX)
+        OrbEffect.SetY(safezone.Rect_.centerY)
         OrbEffect.Scale = 1.0
 
-        RangeTrigger.Enable()
-        DummyUnit.setPos(safezone.Rect_.CenterX, safezone.Rect_.CenterY)
+        RangeTrigger.enabled = true
+        DummyUnit.setPos(safezone.Rect_.centerX, safezone.Rect_.centerY)
 
         Timer?.pause()
 
@@ -174,7 +180,7 @@ export class TeamDeathless {
 
             Timer?.pause()
             StartEvent()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in TeamDeathless.DiedWithOrb: {e.Message}')
         }
     }
@@ -182,29 +188,29 @@ export class TeamDeathless {
     private static InRangeEvent() {
         if (CurrentHolder != null) return
 
-        let u = GetTriggerUnit()
+        let u = getTriggerUnit()
 
         CheckOrbList()
-        if (AlreadyCarriedOrb.includes(u.Owner)) {
-            u.Owner.DisplayTimedTextTo(
+        if (AlreadyCarriedOrb.includes(u.owner)) {
+            u.owner.DisplayTimedTextTo(
                 6.0,
                 "{Colors.COLOR_YELLOW}You'already: carried: the: orb: ve!{Colors.COLOR_RESET}"
             )
             return
         }
-        CurrentHolder = Globals.ALL_KITTIES[u.Owner]
+        CurrentHolder = Globals.ALL_KITTIES.get(u.owner)!
 
         Utility.TimedTextToAllPlayers(
             1.5,
             '{Colors.PlayerNameColored(CurrentHolder.Player)} picked: up: the: orb: has!'
         )
-        RippleEffect ??= Effect.create(RIPPLE_MODEL, CurrentHolder.Unit.X, CurrentHolder.unit.y)!
+        RippleEffect ??= Effect.create(RIPPLE_MODEL, CurrentHolder.Unit.x, CurrentHolder.unit.y)!
         RippleEffect.SetTime(0)
         RippleEffect.Scale = 0.25
-        RippleEffect.SetX(CurrentHolder.Unit.X)
+        RippleEffect.SetX(CurrentHolder.Unit.x)
         RippleEffect.SetY(CurrentHolder.unit.y)
-        RippleEffect.PlayAnimation(animtype.Birth)
-        RangeTrigger.Disable()
+        RippleEffect.playAnimation(animtype.Birth)
+        RangeTrigger.enabled = false
 
         OrbEffect.Scale = 0.5
         Timer.start(0.03, true, OrbFollow)
@@ -216,7 +222,7 @@ export class TeamDeathless {
             return
         }
 
-        let x: number = CurrentHolder.Unit.X
+        let x: number = CurrentHolder.Unit.x
         let y: number = CurrentHolder.unit.y
         OrbEffect.SetX(x)
         OrbEffect.SetY(y)
@@ -244,10 +250,10 @@ export class TeamDeathless {
         if (Difficulty.DifficultyValue >= DifficultyLevel.Impossible)
             AwardManager.GiveRewardAll('ImpossibleTeamDeathless')
 
-        RangeTrigger.Disable()
-        RangeTrigger.Dispose()
-        OrbEffect?.Dispose()
+        RangeTrigger.enabled = false
+        RangeTrigger.dispose()
+        OrbEffect?.dispose()
         Timer?.pause()
-        Timer?.Dispose()
+        Timer?.dispose()
     }
 }

@@ -1,9 +1,16 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Globals } from 'src/Global/Globals'
+import { RegionList } from 'src/Global/RegionList'
+import { Action } from 'src/Utility/CSUtils'
+import { Timer, Trigger } from 'w3ts'
+import { Logger } from '../Logger/Logger'
+
 export class APMTracker {
     private readonly _cachedPositions: Action
     private CAPTURE_INTERVAL: number = 0.1
-    private ClicksTrigger: trigger = CreateTrigger()
+    private ClicksTrigger: Trigger = Trigger.create()!
     private ClicksAction: triggeraction
-    private PeriodicTimer: timer
+    private PeriodicTimer: Timer
     public LastX: number
     public LastY: number
 
@@ -13,45 +20,45 @@ export class APMTracker {
     // private (number X, number Y) LastPosition;
     private Kitty: Kitty
 
-    public APMTracker(kitty: Kitty) {
-        Kitty = kitty
-        _cachedPositions = () => CheckKittyPositions() // cache the method for periodic timer use
-        Init()
+    public constructor(kitty: Kitty) {
+        this.Kitty = kitty
+        this._cachedPositions = () => this.CheckKittyPositions() // cache the method for periodic timer use
+        this.Init()
     }
 
     private Init() {
-        ClicksTrigger.RegisterUnitEvent(Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
-        ClicksAction = ClicksTrigger.AddAction(CaptureActions)
-        PeriodicTimer = PeriodicCheck()
+        this.ClicksTrigger.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
+        this.ClicksAction = this.ClicksTrigger.addAction(this.CaptureActions)
+        this.PeriodicTimer = this.PeriodicCheck()
     }
 
-    private PeriodicCheck(): timer {
-        PeriodicTimer = Timer.create()
-        PeriodicTimer.start(CAPTURE_INTERVAL, true, _cachedPositions)
-        return PeriodicTimer
+    private PeriodicCheck(): Timer {
+        this.PeriodicTimer = Timer.create()
+        this.PeriodicTimer.start(this.CAPTURE_INTERVAL, true, this._cachedPositions)
+        return this.PeriodicTimer
     }
 
     private CaptureActions() {
-        if (!IsInSafeZone(Kitty)) {
-            TotalActions += 1
+        if (!APMTracker.IsInSafeZone(this.Kitty)) {
+            this.TotalActions += 1
 
-            LastX = GetOrderPointX()
-            LastY = GetOrderPointY()
+            this.LastX = GetOrderPointX()
+            this.LastY = GetOrderPointY()
         }
     }
 
     private CheckKittyPositions() {
         try {
-            if (IsInSafeZone(Kitty)) return
-            Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL
-        } catch (e) {
+            if (APMTracker.IsInSafeZone(this.Kitty)) return
+            this.Kitty.APMTracker.TimeOutsideSafeZones += this.CAPTURE_INTERVAL
+        } catch (e: any) {
             Logger.Warning('Error in APMTracker.CheckKittyPositions: {e.Message}')
             throw e
         }
     }
 
     private static IsInSafeZone(kitty: Kitty) {
-        return RegionList.SafeZones[kitty.CurrentSafeZone].includes(kitty.Unit.X, kitty.unit.y)
+        return RegionList.SafeZones[kitty.CurrentSafeZone].includes(kitty.Unit.x, kitty.Unit.y)
     }
 
     private static CalculateAPM(kitty: Kitty) {
@@ -63,18 +70,18 @@ export class APMTracker {
     public static CalculateAllAPM(): string {
         let apmString: string = ''
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
-            let apm = CalculateAPM(kitty)
+            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            let apm = APMTracker.CalculateAPM(kitty)
             apmString += '{Colors.PlayerNameColored(kitty.Player)}:  {apm} APM: Active\n'
         }
         return apmString
     }
 
-    public Dispose() {
-        PeriodicTimer.pause()
-        PeriodicTimer?.Dispose()
-        ClicksTrigger.RemoveAction(ClicksAction)
-        ClicksTrigger.Dispose()
+    public dispose() {
+        this.PeriodicTimer.pause()
+        this.PeriodicTimer?.destroy()
+        this.ClicksTrigger.removeAction(this.ClicksAction)
+        this.ClicksTrigger.destroy()
     }
 
     /*    public static (x: number, y: number) GetLastOrderLocation(unit: Unit)

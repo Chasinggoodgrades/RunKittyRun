@@ -1,6 +1,6 @@
 export class BurntMeat {
-    private static StanDeath: trigger = CreateTrigger()
-    private static StanTurnIn: trigger = CreateTrigger()
+    private static StanDeath: Trigger = Trigger.create()!
+    private static StanTurnIn: Trigger = Trigger.create()!
     private static StanDeathActions: triggeraction
     private static StanTurnInActions: triggeraction
     private ITEM_CLOAK_FLAMES: number = Constants.ITEM_CLOAK_OF_FLAMES
@@ -14,14 +14,14 @@ export class BurntMeat {
     }
 
     public static RegisterDeathTrigger() {
-        StanDeath.RegisterUnitEvent(NamedWolves.StanWolf.Unit, unitevent.Death)
+        StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, unitevent.Death)
         if (StanDeathActions != null) return
         RegisterTurnInTrigger()
-        StanDeathActions = StanDeath.AddAction(
+        StanDeathActions = StanDeath.addAction(
             ErrorHandler.Wrap(() => {
                 let killer = GetKillingUnit()
                 if (killer == null) return
-                NamedWolves.StanWolf.Texttag?.Dispose()
+                NamedWolves.StanWolf.Texttag?.dispose()
                 Utility.RemoveItemFromUnit(killer, ITEM_CLOAK_FLAMES)
                 killer.AddItem(ITEM_BURNT_MEAT)
                 Completed.push(killer)
@@ -32,10 +32,10 @@ export class BurntMeat {
     private static RegisterTurnInTrigger() {
         TriggerRegisterUnitInRangeSimple(StanTurnIn, 200, SpawnChampions.Stan2025)
         if (StanTurnInActions != null) return
-        StanTurnInActions = StanTurnIn.AddAction(
+        StanTurnInActions = StanTurnIn.addAction(
             ErrorHandler.Wrap(() => {
-                let unit = GetTriggerUnit()
-                let player = unit.Owner
+                let unit = getTriggerUnit()
+                let player = unit.owner
                 if (!Completed.includes(unit)) return
                 player.DisplayTimedTextTo(
                     8.0,

@@ -119,14 +119,14 @@ export class GamemodeCmd {
         let parsedTeamSize: number
 
         if (parts.length == 4 && !int.TryParse(parts[3])) {
-            Globals.MAX_TEAM_SIZE.ToString()
+            Globals.MAX_TEAM_SIZE.toString()
             player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
             return
         } else if (parts.length == 4 && (parsedTeamSize = int.TryParse(parts[3]))) {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0) {
                 teamSize = parsedTeamSize
             } else {
-                Globals.MAX_TEAM_SIZE.ToString()
+                Globals.MAX_TEAM_SIZE.toString()
                 player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
                 return
             }

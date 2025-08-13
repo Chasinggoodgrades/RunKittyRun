@@ -4,6 +4,7 @@ import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { base64Decode, Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
+import { safeArraySplice } from './ArrayUtils'
 import { Colors } from './Colors/Colors'
 import { Action } from './CSUtils'
 import { AchesTimers } from './MemoryHandler/AchesTimers'
@@ -102,7 +103,7 @@ export class Utility {
                 }
             }
             return false
-        } catch (ex) {
+        } catch (ex: any) {
             if (ex instanceof Error) {
                 Logger.Warning(ex.stack || '')
             } else {
@@ -122,7 +123,7 @@ export class Utility {
         let handle = MemoryHandler.getEmptyObject<AchesTimers>()
         handle.Timer.start(duration, false, () => {
             action()
-            handle?.Dispose()
+            handle?.dispose()
         })
     }
 
@@ -240,7 +241,7 @@ export class Utility {
     /// <param name="amount"></param>
     /// <param name="u"></param>
     public static GiveGoldFloatingText(amount: number, u: Unit) {
-        u.owner.setState(PLAYER_STATE_RESOURCE_GOLD, u.owner.getState(PLAYER_STATE_RESOURCE_GOLD) + amount)
+        u.owner.addGold(amount)
         Utility.CreateSimpleTextTag('+{amount} Gold', 2.0, u, 0.018, 255, 215, 0)
     }
 
@@ -324,20 +325,20 @@ export class Utility {
     /// <param name="player">The player to be made a spectator.</param>
     public static MakePlayerSpectator(player: MapPlayer) {
         PlayerLeaves.TeamRemovePlayer(player)
-        Globals.ALL_KITTIES.get(player)?.Dispose()
-        Globals.ALL_CIRCLES.get(player)?.Dispose()
-        Globals.ALL_PLAYERS.Remove(player)
-        Globals.ALL_KITTIES.get(player)?.NameTag?.Dispose()
+        Globals.ALL_KITTIES.get(player)!?.dispose()
+        Globals.ALL_CIRCLES.get(player)?.dispose()
+        safeArraySplice(Globals.ALL_PLAYERS, p => p === player)
+        Globals.ALL_KITTIES.get(player)!?.NameTag?.dispose()
         RoundManager.RoundEndCheck()
         MultiboardUtil.RefreshMultiboards()
     }
 
-    public static GetPlayerByName(playerName: string): MapPlayer {
+    public static GetPlayerByName(playerName: string) {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let p = Globals.ALL_PLAYERS[i]
-            if (GetPlayerName(p).ToLower().includes(playerName.ToLower())) {
+            if (p.name.toLowerCase().includes(playerName.toLowerCase())) {
                 return p
             }
         }
@@ -347,32 +348,49 @@ export class Utility {
     public static GetItemSkin(itemId: number) {
         if (itemId == 0) return 0
         let item = Item.create(itemId, 0, 0)!
-        let skin = BlzGetItemSkin(item!)
-        RemoveItem(item!)
+        let skin = item.skin
+        item.destroy()
         return skin
     }
 
-    public static EffectReplayMagic(effect: effect, x: number, y: number, z: number) {
-        BlzSetSpecialEffectAlpha(effect, 255)
-        BlzSetSpecialEffectColor(effect, 255, 255, 255)
-        BlzSetSpecialEffectTime(effect, 0)
-        BlzSetSpecialEffectTimeScale(effect, 0.0)
-        BlzSpecialEffectClearSubAnimations(effect)
-        effect.setPos(x, y, z)
-        BlzPlaySpecialEffect(effect, animtype.Birth)
+    public static EffectReplayMagic(effect: Effect, x: number, y: number, z: number) {
+        effect.setAlpha(255)
+        effect.setColor(255, 255, 255)
+        effect.setTime(0)
+        effect.setTimeScale(0)
+        effect.clearSubAnimations()
+        effect.setPosition(x, y, z)
+        effect.playAnimation(ANIM_TYPE_BIRTH)
     }
 
     public static FormattedColorPlayerName(p: MapPlayer) {
         // removes everything after '#' in the player name
-        let name = GetPlayerName(p).split('#')[0]
-        return '{Colors.ColorString(name, p.Id + 1)}'
+        let name = p.name.split('#')[0]
+        return '{Colors.ColorString(name, p.id + 1)}'
     }
 
-    public static CreateFilterFunc(func: Func<bool>): filterfunc {
-        return filterfunc.Create(func)
+    public static CreateFilterFunc(func: () => boolean) {
+        return func
     }
 }
-// Helper function to mimic C#'s nameof operator in TypeScript
-function nameof<T>(name: keyof T): string {
-    return name as string
+
+export const sumNumbers = (arr: number[]) => {
+    let i = 0
+
+    for (let num of arr) {
+        i += num
+    }
+
+    return i
+}
+
+export const int = {
+    Parse: (value: string) => {
+        let parsed = parseInt(value)
+        return isNaN(parsed) ? 0 : parsed
+    },
+    TryParse: (value: string) => {
+        let parsed = parseInt(value)
+        return !isNaN(parsed) ? parsed : null
+    },
 }

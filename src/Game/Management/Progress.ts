@@ -21,7 +21,7 @@ export class Progress {
                 team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(team))
             }
             TeamsMultiboard.UpdateTeamStatsMB()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in TeamProgressTracker. {e.Message}')
         }
     }
@@ -33,7 +33,7 @@ export class Progress {
 
         for (let i: number = 0; i < Team.Teammembers.length; i++) {
             let player = Team.Teammembers[i]
-            totalProgress += Globals.ALL_KITTIES.get(player).TimeProg.GetRoundProgress(Globals.ROUND)
+            totalProgress += Globals.ALL_KITTIES.get(player)!.TimeProg.GetRoundProgress(Globals.ROUND)
         }
 
         return (totalProgress / Team.Teammembers.length).ToString('F2')
@@ -42,16 +42,16 @@ export class Progress {
     private static CalculatePlayerProgress(kitty: Kitty) {
         try {
             let currentSafezone = kitty.ProgressZone
-            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(kitty.Unit.X, kitty.unit.y))
+            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(kitty.Unit.x, kitty.Unit.y))
                 return 100.0 // if at end.. 100 progress
-            if (Regions.Victory_Area.includes(kitty.Unit.X, kitty.unit.y)) return 100.0 // if in victory area, 100 progress
-            if (Globals.SAFE_ZONES[0].Rectangle.includes(kitty.Unit.X, kitty.unit.y) && !kitty.Finished) return 0.0 // if at start, 0 progress
-            if (kitty.Alive && kitty.Finished) return 100.0
+            if (Regions.Victory_Area.includes(kitty.Unit.x, kitty.Unit.y)) return 100.0 // if in victory area, 100 progress
+            if (Globals.SAFE_ZONES[0].Rectangle.includes(kitty.Unit.x, kitty.Unit.y) && !kitty.Finished) return 0.0 // if at start, 0 progress
+            if (kitty.isAlive() && kitty.Finished) return 100.0
             let currentProgress = DistanceBetweenPoints(
-                kitty.Unit.X,
-                kitty.unit.y,
-                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X,
-                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y
+                kitty.Unit.x,
+                kitty.Unit.y,
+                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].x,
+                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].y
             )
             let totalProgress = DistancesFromStart[currentSafezone] + currentProgress
 
@@ -59,7 +59,7 @@ export class Progress {
             if (progress > 100) progress = 100.0
 
             return progress
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in CalculatePlayerProgress. {e.Message}')
             return 0.0
         }
@@ -68,14 +68,14 @@ export class Progress {
     public static CalculateNitroPacerProgress(): number {
         let nitroKitty = NitroPacer.Unit
         let currentSafezone = NitroPacer.GetCurrentCheckpoint()
-        if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.X, nitroKitty.Y)) return 0.0 // if at start, 0 progress
-        if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.X, nitroKitty.Y))
+        if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.x, nitroKitty.y)) return 0.0 // if at start, 0 progress
+        if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.x, nitroKitty.y))
             return 100.0 // if at end.. 100 progress
         let currentProgress = DistanceBetweenPoints(
-            nitroKitty.X,
-            nitroKitty.Y,
-            ProgressPointHelper.Points[currentSafezone].X,
-            ProgressPointHelper.Points[currentSafezone].Y
+            nitroKitty.x,
+            nitroKitty.y,
+            ProgressPointHelper.Points[currentSafezone].x,
+            ProgressPointHelper.Points[currentSafezone].y
         )
         let totalProgress = DistancesFromStart[currentSafezone] + currentProgress
 
@@ -96,15 +96,15 @@ export class Progress {
                 if (count >= RegionList.PathingPoints.length - 1) break
                 let nextPathPoint = RegionList.PathingPoints[count + 1]
                 totalDistance += DistanceBetweenPoints(
-                    pathPoint.Rect.CenterX,
-                    pathPoint.Rect.CenterY,
-                    nextPathPoint.Rect.CenterX,
-                    nextPathPoint.Rect.CenterY
+                    pathPoint.Rect.centerX,
+                    pathPoint.Rect.centerY,
+                    nextPathPoint.Rect.centerX,
+                    nextPathPoint.Rect.centerY
                 )
                 if (!DistancesFromStart.has(count + 1)) DistancesFromStart.push(count + 1, totalDistance)
                 count++
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in CalculateTotalDistance. {e.Message}')
             throw e
         }

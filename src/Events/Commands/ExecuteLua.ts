@@ -3,8 +3,8 @@ export class ExecuteLua {
         player.DisplayTextTo('Args: {args}')
         let func = Lua.Load(
             `return function()
-            local self = Globals.ALL_KITTIES:get(GetTriggerPlayer())
-            local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(GetTriggerPlayer())))
+            local self = Globals.ALL_KITTIES:get(getTriggerPlayer())
+            local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(getTriggerPlayer())))
             ${args}
             end`
         )
@@ -13,8 +13,8 @@ export class ExecuteLua {
                 let result = Lua.Call(func)
                 let resultFunc = result
                 result = resultFunc()
-                if (result != null) player.DisplayTextTo('Result: {result.ToString()}')
-            } catch (ex) {
+                if (result != null) player.DisplayTextTo('Result: {result.toString()}')
+            } catch (ex: any) {
                 player.DisplayTextTo('Error: {ex.Message}')
             }
         } else player.DisplayTextTo('Syntax Error')

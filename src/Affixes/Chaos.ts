@@ -6,15 +6,15 @@ export class Chaos extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        Name = '{Colors.COLOR_GREEN}Chaos|r'
+        name = '{Colors.COLOR_GREEN}Chaos|r'
     }
 
     public override Apply() {
         try {
             RegisterTimer()
-            UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+            this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
             super.Apply()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Chaos.Apply: {e.Message}')
             throw e
         }
@@ -23,10 +23,10 @@ export class Chaos extends Affix {
     public override Remove() {
         try {
             this.Unit.RemoveAffix(this.currentAffix)
-            this.RotationTimer?.Dispose()
+            this.RotationTimer?.dispose()
             this.Unit?.Unit?.RemoveAbility(AFFIX_ABILITY)
             super.Remove()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in Chaos.Remove: {e.Message}')
             super.Remove()
         }
@@ -38,9 +38,9 @@ export class Chaos extends Affix {
             let randomAffix: string = GenRandomAffixName()
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix)
             Unit.AddAffix(currentAffix)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in Chaos.RegisterTimer: {e.Message}')
-            RotationTimer.Dispose()
+            RotationTimer.dispose()
             Unit.RemoveAffix(currentAffix)
             currentAffix = null
         }
@@ -53,7 +53,7 @@ export class Chaos extends Affix {
             let randomAffix: string = GenRandomAffixName()
             currentAffix = AffixFactory.CreateAffix(Unit, randomAffix)
             Unit.AddAffix(currentAffix)
-        } catch (e) {
+        } catch (e: any) {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning('Error in Chaos.RotateAffix: {e.Message}')
             Unit.RemoveAffix(currentAffix)
@@ -70,7 +70,7 @@ export class Chaos extends Affix {
     }
 
     public override Pause(pause: boolean) {
-        RotationTimer.Pause(pause)
-        currentAffix.Pause(pause)
+        RotationTimer.pause(pause)
+        currentAffix.pause(pause)
     }
 }

@@ -1,8 +1,8 @@
 export class VictoryZone {
-    private static InVictoryArea: trigger
+    private static InVictoryArea: Trigger
 
     public static Initialize() {
-        InVictoryArea = CreateTrigger()
+        InVictoryArea = Trigger.create()!
         VictoryAreaTrigger()
     }
 
@@ -14,15 +14,15 @@ export class VictoryZone {
         let VictoryArea = Regions.Victory_Area.Region
         InVictoryArea.RegisterEnterRegion(
             VictoryArea,
-            Filter(() => VictoryAreaConditions(GetFilterUnit()))
+            Filter(() => VictoryAreaConditions(getFilterUnit()))
         )
-        InVictoryArea.AddAction(ErrorHandler.Wrap(VictoryAreaActions))
+        InVictoryArea.addAction(ErrorHandler.Wrap(VictoryAreaActions))
     }
 
     private static VictoryAreaActions() {
-        let u = GetTriggerUnit()
-        let player = u.Owner
-        if (u.UnitType != Constants.UNIT_KITTY) return
+        let u = getTriggerUnit()
+        let player = u.owner
+        if (u.typeId != Constants.UNIT_KITTY) return
         if (!Globals.GAME_ACTIVE) return
         if (Gamemode.CurrentGameMode == GameMode.Standard) {
             // Standard
@@ -35,23 +35,23 @@ export class VictoryZone {
             RoundManager.RoundEndCheck()
         } else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) {
             // Team
-            let kitty = Globals.ALL_KITTIES.get(player)
+            let kitty = Globals.ALL_KITTIES.get(player)!
             kitty.Finished = true
 
             if (RoundManager.DidTeamEnd(kitty.TeamID)) {
-                Globals.ALL_TEAMS[kitty.TeamID].Finished = true
+                Globals.ALL_TEAMS.get(kitty.TeamID)!.Finished = true
                 if (RoundManager.RoundEndCheck()) return
             }
-            RoundUtilities.MoveTeamToStart(Globals.ALL_TEAMS[kitty.TeamID])
+            RoundUtilities.MoveTeamToStart(Globals.ALL_TEAMS.get(kitty.TeamID)!)
             if (RoundManager.RoundEndCheck()) return
             BarrierSetup.ActivateBarrier()
 
             // // Move all team members to the start, save their time. Wait for all teams to finish.
-            // for (let teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES.get(player).TeamID].Teammembers)
+            // for (let teamMember in Globals.ALL_TEAMS.get(Globals.ALL_KITTIES.get(player)!.TeamID)!.Teammembers)
             // {
             //     MoveAndFinish(teamMember);
             // }
-            // Globals.ALL_TEAMS[Globals.ALL_KITTIES.get(player).TeamID].Finished = true;
+            // Globals.ALL_TEAMS.get(Globals.ALL_KITTIES.get(player)!.TeamID)!.Finished = true;
             // RoundManager.RoundEndCheck();
         }
         MultiboardUtil.RefreshMultiboards()
@@ -68,9 +68,9 @@ export class VictoryZone {
     private static VictoryAreaConditionsTeam(u: Unit) {
         // If a team enters the area, check if all the members of the team are in the area.
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return false
-        let team = Globals.ALL_KITTIES[u.Owner].TeamID
-        for (let player in Globals.ALL_TEAMS[team].Teammembers) {
-            if (!VictoryContainerConditions(Globals.ALL_KITTIES.get(player).Unit)) return false
+        let team = Globals.ALL_KITTIES.get(u.owner)!.TeamID
+        for (let player in Globals.ALL_TEAMS.get(team)!.Teammembers) {
+            if (!VictoryContainerConditions(Globals.ALL_KITTIES.get(player)!.Unit)) return false
         }
         return true
     }

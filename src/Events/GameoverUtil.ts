@@ -1,27 +1,36 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { int } from 'src/Utility/Utility'
+import { isNullOrEmpty } from '../Utility/StringUtils'
+
 export class GameoverUtil {
     public static SetBestGameStats() {
-        for (let kitty in Globals.ALL_KITTIES) {
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
             switch (Difficulty.DifficultyValue) {
                 case DifficultyLevel.Normal:
-                    SetNormalGameStats(kitty.Value)
+                    GameoverUtil.SetNormalGameStats(kitty)
                     break
 
                 case DifficultyLevel.Hard:
-                    SetHardGameStats(kitty.Value)
+                    GameoverUtil.SetHardGameStats(kitty)
                     break
 
                 case DifficultyLevel.Impossible:
-                    SetImpossibleGameStats(kitty.Value)
+                    GameoverUtil.SetImpossibleGameStats(kitty)
                     break
                 case DifficultyLevel.Nightmare:
-                    SetNightmareGameStats(kitty.Value)
+                    GameoverUtil.SetNightmareGameStats(kitty)
                     break
             }
         }
     }
 
     public static SetColorData() {
-        for (let kitty in Globals.ALL_KITTIES.Values) {
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
             Colors.PopulateColorsData(kitty) // make sure its populated
             Colors.UpdateColors(kitty) //
             Colors.GetMostPlayedColor(kitty)
@@ -31,77 +40,77 @@ export class GameoverUtil {
     public static SetFriendData() {
         let friendDict: Map<string, number> = new Map()
 
-        for (let kitty in Globals.ALL_KITTIES) {
-            let friendsPlayedWith = kitty.Value.SaveData.FriendsData.FriendsPlayedWith
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            let friendsPlayedWith = kitty.SaveData.FriendsData.FriendsPlayedWith
 
             friendDict.clear()
 
             // Splitting / Parsing the data of playerName:count pairs
-            if (!string.IsNullOrWhiteSpace(friendsPlayedWith)) {
+            if (!isNullOrEmpty(friendsPlayedWith)) {
                 for (let entry in friendsPlayedWith.split(',').filter(Boolean)) {
                     let parts = entry.split(':')
-                    if (parts.length == 2 && (count = int.TryParse(parts[1].Trim()))) {
-                        friendDict[parts[0].Trim()] = count
+                    let count
+                    if (parts.length == 2 && (count = int.TryParse(parts[1].trim()))) {
+                        friendDict.set(parts[0].trim(), count)
                     }
                 }
             }
 
             // takes all in-game kitties, increments count if they're present in dictionary else set to 1
-            for (let other in Globals.ALL_KITTIES) {
-                if (other.Value == kitty.Value) continue
-                let friendName: string = other.Value.Player.Name // Get their full battle tag
+            for (let [_, other] of Globals.ALL_KITTIES) {
+                if (other == kitty) continue
+                let friendName: string = other.Player.name // Get their full battle tag
 
                 if (friendDict.has(friendName)) {
-                    friendDict[friendName]++
+                    friendDict.set(friendName, (friendDict.get(friendName) || 0) + 1)
                 } else {
-                    friendDict[friendName] = 1
+                    friendDict.set(friendName, 1)
                 }
             }
 
             // Yoshi said if this wasn't sorted she was gonna hurt me, SO HERE IT IS .. Order By DESC!!
-            kitty.Value.SaveData.FriendsData.FriendsPlayedWith = string.Join(
-                ', ',
-                friendDict.OrderByDescending(kvp => kvp.Value).Select(kvp => '{kvp.Key}:{kvp.Value}')
-            )
+            kitty.SaveData.FriendsData.FriendsPlayedWith = Array.from(friendDict.entries())
+                .sort((a, b) => b[1] - a[1])
+                .map(([key, value]) => `${key}:${value}`)
+                .join(', ')
         }
     }
 
     private static SetNormalGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.NormalGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
-        stats.Time = Globals.GAME_TIMER.Remaining
-        stats.Date = DateTimeManager.DateTime.ToString()
-        stats.TeamMembers = GetTeamMembers()
+        stats.Time = Globals.GAME_TIMER.remaining
+        stats.Date = DateTimeManager.DateTime.toString()
+        stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
     private static SetHardGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.HardGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
-        stats.Time = Globals.GAME_TIMER.Remaining
-        stats.Date = DateTimeManager.DateTime.ToString()
-        stats.TeamMembers = GetTeamMembers()
+        stats.Time = Globals.GAME_TIMER.remaining
+        stats.Date = DateTimeManager.DateTime.toString()
+        stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
     private static SetImpossibleGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
-        stats.Time = Globals.GAME_TIMER.Remaining
-        stats.Date = DateTimeManager.DateTime.ToString()
-        stats.TeamMembers = GetTeamMembers()
+        stats.Time = Globals.GAME_TIMER.remaining
+        stats.Date = DateTimeManager.DateTime.toString()
+        stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
     private static SetNightmareGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.NightmareGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
-        stats.Time = Globals.GAME_TIMER.Remaining
-        stats.Date = DateTimeManager.DateTime.ToString()
-        stats.TeamMembers = GetTeamMembers()
+        stats.Time = Globals.GAME_TIMER.remaining
+        stats.Date = DateTimeManager.DateTime.toString()
+        stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
     private static GetTeamMembers(): string {
-        return string.Join(
-            ', ',
-            Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name)
-        )
+        return Globals.ALL_PLAYERS.filter(player => player.controller != MAP_CONTROL_COMPUTER)
+            .map(player => player.name)
+            .join(', ')
     }
 }

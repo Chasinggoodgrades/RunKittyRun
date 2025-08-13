@@ -1,34 +1,46 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { Action } from 'src/Utility/CSUtils'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { Utility } from 'src/Utility/Utility'
+import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Frame, Timer, Trigger } from 'w3ts'
+import { MusicFrame } from './MusicFrame'
+import { RewardsFrame } from './RewardsFrame'
+import { ShopFrame } from './ShopFrame'
+
 export class FrameManager {
-    public static StatsTrigger: trigger = CreateTrigger()
-    public static ShopTrigger: trigger = CreateTrigger()
-    public static RewardsTrigger: trigger = CreateTrigger()
-    public static MusicButton: framehandle
-    public static ShopButton: framehandle
-    public static RewardsButton: framehandle
-    public static Backdrop: framehandle
+    public static StatsTrigger: Trigger = Trigger.create()!
+    public static ShopTrigger: Trigger = Trigger.create()!
+    public static RewardsTrigger: Trigger = Trigger.create()!
+    public static MusicButton: Frame
+    public static ShopButton: Frame
+    public static RewardsButton: Frame
+    public static Backdrop: Frame
 
     private ButtonWidth: number = 0.053
     private ButtonHeight: number = 0.028
 
-    private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0)
-    private static ESCTrigger: trigger = CreateTrigger()
+    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private static ESCTrigger: Trigger = Trigger.create()!
     private static TEXT_COLOR: string = Colors.COLOR_YELLOW
     private static HOTKEY_COLOR: string = Colors.COLOR_YELLOW_ORANGE
 
-    private static readonly _cachedUIPosition: Action = RepositionBackdropAction()
-    private static _frames: framehandle[] = []
+    private static readonly _cachedUIPosition: Action = FrameManager.RepositionBackdropAction()
+    private static _frames: Frame[] = []
 
     public static Initialize() {
         try {
             BlzLoadTOCFile('war3mapImported\\templates.toc')
-            RemoveUnwantedFrames()
-            ButtonsBackdrop()
-            CreateRewardsButton()
-            CreateMusicButton()
-            CreateShopButton()
+            FrameManager.RemoveUnwantedFrames()
+            FrameManager.ButtonsBackdrop()
+            FrameManager.CreateRewardsButton()
+            FrameManager.CreateMusicButton()
+            FrameManager.CreateShopButton()
             MusicFrame.Initialize()
-            Utility.SimpleTimer(1.0, ESCHideFrames)
-        } catch (ex) {
+            Utility.SimpleTimer(1.0, FrameManager.ESCHideFrames)
+        } catch (ex: any) {
             Logger.Critical('Error in FrameManager.Initialize: {ex.Message}')
             throw ex
         }
@@ -37,140 +49,164 @@ export class FrameManager {
     public static InitAllFrames() {
         ShopFrame.Initialize()
         RewardsFrame.Initialize()
-        InitalizeButtons()
-        InitFramesList()
+        FrameManager.InitalizeButtons()
+        FrameManager.InitFramesList()
     }
 
     public static InitalizeButtons() {
-        Backdrop.Visible = true
-        RewardsButton.Visible = true
-        MusicButton.Visible = true
-        ShopButton.Visible = true
+        FrameManager.Backdrop.visible = true
+        FrameManager.RewardsButton.visible = true
+        FrameManager.MusicButton.visible = true
+        FrameManager.ShopButton.visible = true
     }
 
-    public static CreateHeaderFrame(parent: framehandle): framehandle {
-        let header = BlzCreateFrameByType(
+    public static CreateHeaderFrame(parent: Frame): Frame {
+        let header = blzCreateFrameByType(
             'BACKDROP',
-            '{parent.Name}Header',
+            '{parent.name}Header',
             parent,
             'QuestButtonDisabledBackdropTemplate',
             0
         )
-        let width = parent.Width
+        let width = parent.width
         let height = 0.0225
-        header.SetPoint(framepointtype.TopLeft, 0, 0.0125, parent, framepointtype.TopLeft)
-        header.SetSize(width, height)
+        header.setPoint(FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_TOPLEFT, 0, 0.0125)
+        header.setSize(width, height)
 
-        let title = BlzCreateFrameByType('TEXT', '{parent.Name}Title', header, 'ScriptDialogText', 0)
-        title.SetPoint(framepointtype.Center, 0, 0, header, framepointtype.Center)
-        title.SetSize(width, height)
-        title.Text = '{Colors.COLOR_YELLOW}{parent.Name}{Colors.COLOR_RESET}'
+        let title = blzCreateFrameByType('TEXT', '{parent.name}Title', header, 'ScriptDialogText', 0)
+        title.setPoint(FRAMEPOINT_CENTER, header, FRAMEPOINT_CENTER, 0, 0)
+        title.setSize(width, height)
+        title.text = '{Colors.COLOR_YELLOW}{parent.name}{Colors.COLOR_RESET}'
         title.SetTextAlignment(textaligntype.Center, textaligntype.Center)
 
-        let closeButton = BlzCreateFrameByType(
+        let closeButton = blzCreateFrameByType(
             'GLUETEXTBUTTON',
-            '{parent.Name}CloseButton',
+            '{parent.name}CloseButton',
             header,
             'ScriptDialogButton',
             0
         )
-        closeButton.SetPoint(framepointtype.TopRight, -0.0025, -0.0025, header, framepointtype.TopRight)
-        closeButton.SetSize(height - 0.005, height - 0.005)
-        closeButton.Text = 'X'
+        closeButton.setPoint(FRAMEPOINT_TOPRIGHT, -0.0025, -0.0025, header, FRAMEPOINT_TOPRIGHT)
+        closeButton.setSize(height - 0.005, height - 0.005)
+        closeButton.text = 'X'
 
         // Close Actions
-        let closeTrigger = CreateTrigger()
-        closeTrigger.RegisterFrameEvent(closeButton, frameeventtype.Click)
-        closeTrigger.AddAction(() => {
-            if (GetLocalPlayer() != GetTriggerPlayer()) return
-            parent.Visible = false
+        let closeTrigger = Trigger.create()!
+        closeTrigger.triggerRegisterFrameEvent(closeButton, FRAMEEVENT_CONTROL_CLICK)
+        closeTrigger.addAction(() => {
+            if (!getTriggerPlayer().isLocal()) return
+            parent.visible = false
         })
 
         return header
     }
 
     private static RemoveUnwantedFrames() {
-        let resourceBarText = BlzGetFrameByName('ResourceBarSupplyText', 0)
-        BlzFrameGetChild(BlzFrameGetChild(GameUI, 5), 0)
-        resourceBarText.Text = '0:00'
-        //timeDayDisplay.Visible = false;
+        let resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
+        BlzFrameGetChild(BlzFrameGetChild(FrameManager.GameUI, 5), 0)
+        resourceBarText.text = '0:00'
+        //timeDayDisplay.visible = false;
     }
 
     private static InitFramesList() {
-        _frames.push(ShopFrame.shopFrame)
-        _frames.push(RewardsFrame.RewardFrame)
-        _frames.push(MusicFrame.MusicFramehandle)
+        FrameManager._frames.push(ShopFrame.shopFrame)
+        FrameManager._frames.push(RewardsFrame.RewardFrame)
+        FrameManager._frames.push(MusicFrame.MusicFramehandle)
     }
 
     private static CreateRewardsButton() {
-        RewardsButton = BlzCreateFrameByType('GLUETEXTBUTTON', 'RewardsButton', Backdrop, 'ScriptDialogButton', 0)
-        RewardsButton.SetPoint(framepointtype.Center, 0, 0, Backdrop, framepointtype.Center)
-        RewardsButton.SetSize(ButtonWidth, ButtonHeight)
-        let shopText = BlzCreateFrameByType('TEXT', 'RewardsText', RewardsButton, '', 0)
-        shopText.Text = '{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r'
-        shopText.SetPoint(framepointtype.Center, 0, 0, RewardsButton, framepointtype.Center)
+        FrameManager.RewardsButton = blzCreateFrameByType(
+            'GLUETEXTBUTTON',
+            'RewardsButton',
+            FrameManager.Backdrop,
+            'ScriptDialogButton',
+            0
+        )
+        FrameManager.RewardsButton.setPoint(FRAMEPOINT_CENTER, FrameManager.Backdrop, FRAMEPOINT_CENTER, 0, 0)
+        FrameManager.RewardsButton.setSize(ButtonWidth, ButtonHeight)
+        let shopText = blzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton, '', 0)
+        shopText.text = '{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r'
+        shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.RewardsButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.SetScale(0.9)
         shopText.Enabled = false
-        RewardsTrigger.RegisterFrameEvent(RewardsButton, frameeventtype.Click)
-        RewardsTrigger.AddAction(ErrorHandler.Wrap(RewardsFrame.RewardsFrameActions))
-        RewardsButton.Visible = false
+        FrameManager.RewardsTrigger.triggerRegisterFrameEvent(FrameManager.RewardsButton, FRAMEEVENT_CONTROL_CLICK)
+        FrameManager.RewardsTrigger.addAction(ErrorHandler.Wrap(RewardsFrame.RewardsFrameActions))
+        FrameManager.RewardsButton.visible = false
     }
 
     private static CreateMusicButton() {
-        MusicButton = BlzCreateFrameByType('GLUETEXTBUTTON', 'MusicButton', Backdrop, 'ScriptDialogButton', 0)
-        MusicButton.SetPoint(framepointtype.TopRight, 0, 0, RewardsButton, framepointtype.TopLeft)
-        MusicButton.SetSize(ButtonWidth, ButtonHeight)
-        let shopText = BlzCreateFrameByType('TEXT', 'MusicText', MusicButton, '', 0)
-        shopText.Text = '{TEXT_COLOR}Music{HOTKEY_COLOR}(0)'
-        shopText.SetPoint(framepointtype.Center, 0, 0, MusicButton, framepointtype.Center)
+        FrameManager.MusicButton = blzCreateFrameByType(
+            'GLUETEXTBUTTON',
+            'MusicButton',
+            FrameManager.Backdrop,
+            'ScriptDialogButton',
+            0
+        )
+        FrameManager.MusicButton.setPoint(FRAMEPOINT_TOPRIGHT, FrameManager.RewardsButton, FRAMEPOINT_TOPLEFT, 0, 0)
+        FrameManager.MusicButton.setSize(ButtonWidth, ButtonHeight)
+        let shopText = blzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton, '', 0)
+        shopText.text = '{TEXT_COLOR}Music{HOTKEY_COLOR}(0)'
+        shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.MusicButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.SetScale(0.98)
         shopText.Enabled = false
-        StatsTrigger.RegisterFrameEvent(MusicButton, frameeventtype.Click)
-        StatsTrigger.AddAction(ErrorHandler.Wrap(MusicFrame.MusicFrameActions))
-        MusicButton.Visible = false
+        FrameManager.StatsTrigger.triggerRegisterFrameEvent(FrameManager.MusicButton, FRAMEEVENT_CONTROL_CLICK)
+        FrameManager.StatsTrigger.addAction(ErrorHandler.Wrap(MusicFrame.MusicFrameActions))
+        FrameManager.MusicButton.visible = false
     }
 
     private static CreateShopButton() {
-        ShopButton = BlzCreateFrameByType('GLUETEXTBUTTON', 'ShopButton', Backdrop, 'ScriptDialogButton', 0)
-        ShopButton.SetPoint(framepointtype.TopLeft, 0, 0, RewardsButton, framepointtype.TopRight)
-        ShopButton.SetSize(ButtonWidth, ButtonHeight)
-        let shopText = BlzCreateFrameByType('TEXT', 'ShopText', ShopButton, '', 0)
-        shopText.Text = '{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)'
-        shopText.SetPoint(framepointtype.Center, 0, 0, ShopButton, framepointtype.Center)
+        FrameManager.ShopButton = blzCreateFrameByType(
+            'GLUETEXTBUTTON',
+            'ShopButton',
+            FrameManager.Backdrop,
+            'ScriptDialogButton',
+            0
+        )
+        FrameManager.ShopButton.setPoint(FRAMEPOINT_TOPLEFT, FrameManager.RewardsButton, FRAMEPOINT_TOPRIGHT, 0, 0)
+        FrameManager.ShopButton.setSize(ButtonWidth, ButtonHeight)
+        let shopText = blzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton, '', 0)
+        shopText.text = '{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)'
+        shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.ShopButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.SetScale(1.0)
         shopText.Enabled = false
-        ShopTrigger.RegisterFrameEvent(ShopButton, frameeventtype.Click)
-        ShopTrigger.AddAction(ErrorHandler.Wrap(ShopFrame.ShopFrameActions))
-        ShopButton.Visible = false
+        FrameManager.ShopTrigger.triggerRegisterFrameEvent(FrameManager.ShopButton, FRAMEEVENT_CONTROL_CLICK)
+        FrameManager.ShopTrigger.addAction(ErrorHandler.Wrap(ShopFrame.ShopFrameActions))
+        FrameManager.ShopButton.visible = false
     }
 
     private static ButtonsBackdrop() {
-        Backdrop = BlzCreateFrameByType('BACKDROP', 'ButtonsBackdrop', GameUI, 'QuestButtonDisabledBackdropTemplate', 0)
-        BlzGetFrameByName('ResourceBarGoldText', 0)
-        Backdrop.SetPoint(framepointtype.Top, 0, 0, GameUI, framepointtype.Top)
-        Backdrop.SetSize(0.16, 0.035)
-        Backdrop.SetScale(1.0)
-        Backdrop.Visible = false
-        RepositionBackdrop()
+        FrameManager.Backdrop = blzCreateFrameByType(
+            'BACKDROP',
+            'ButtonsBackdrop',
+            FrameManager.GameUI,
+            'QuestButtonDisabledBackdropTemplate',
+            0
+        )
+        blzGetFrameByName('ResourceBarGoldText', 0)
+        FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, FrameManager.GameUI, FRAMEPOINT_TOP, 0, 0)
+        FrameManager.Backdrop.setSize(0.16, 0.035)
+        FrameManager.Backdrop.SetScale(1.0)
+        FrameManager.Backdrop.visible = false
+        FrameManager.RepositionBackdrop()
     }
 
     private static RepositionBackdrop() {
-        let t = timer.Create()
-        let nameFrame = BlzGetFrameByName('ConsoleUIBackdrop', 0)
+        let t = Timer.create()
+        let nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
 
-        t.start(1.0, true, _cachedUIPosition)
+        t.start(1.0, true, FrameManager._cachedUIPosition)
     }
 
     private static RepositionBackdropAction(): Action {
         return () => {
             try {
-                let nameFrame = BlzGetFrameByName('ConsoleUIBackdrop', 0)
-                let x = nameFrame.Width / 4
+                let nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
+                let x = nameFrame.width / 4
                 let h = nameFrame.Height / 8
                 let yOffSet = nameFrame.Height / 8
-                Backdrop.SetPoint(framepointtype.Top, 0, yOffSet, nameFrame, framepointtype.Top)
-                Backdrop.SetSize(x, h)
-            } catch (e) {
+                FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, 0, yOffSet, nameFrame, FRAMEPOINT_TOP)
+                FrameManager.Backdrop.setSize(x, h)
+            } catch (e: any) {
                 Logger.Critical('Error in RepositionBackdropAction: {e.Message}')
             }
         }
@@ -179,27 +215,27 @@ export class FrameManager {
     private static ESCHideFrames() {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let player = Globals.ALL_PLAYERS[i]
-            TriggerRegisterPlayerEvent(ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
+            FrameManager.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        ESCTrigger.AddAction(ESCActions)
+        FrameManager.ESCTrigger.addAction(FrameManager.ESCActions)
     }
 
-    public static RefreshFrame(frame: framehandle) {
-        frame.Visible = !frame.Visible
-        frame.Visible = !frame.Visible
+    public static RefreshFrame(frame: Frame) {
+        frame.visible = !frame.visible
+        frame.visible = !frame.visible
     }
 
     private static ESCActions() {
-        let player = GetTriggerPlayer()
+        let player = getTriggerPlayer()
         if (!player.isLocal()) return
-        RewardsFrame.RewardFrame.Visible = false
-        ShopFrame.shopFrame.Visible = false
-        MusicFrame.MusicFramehandle.Visible = false
+        RewardsFrame.RewardFrame.visible = false
+        ShopFrame.shopFrame.visible = false
+        MusicFrame.MusicFramehandle.visible = false
     }
 
-    public static HideOtherFrames(currentFrame: framehandle) {
-        for (let i: number = 0; i < _frames.length; i++) {
-            if (_frames[i] != currentFrame) _frames[i].Visible = false
+    public static HideOtherFrames(currentFrame: Frame) {
+        for (let i: number = 0; i < FrameManager._frames.length; i++) {
+            if (FrameManager._frames[i] != currentFrame) FrameManager._frames[i].visible = false
         }
     }
 }

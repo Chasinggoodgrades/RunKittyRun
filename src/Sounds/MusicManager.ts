@@ -31,18 +31,18 @@ export class MusicManager {
 }
 
 export class Music {
-    public Name: string
+    public name: string
     public Path: string
 
     public constructor(name: string, path: string) {
-        this.Name = name
+        this.name = name
         this.Path = path
     }
 
     public Play() {
         StopMusic(false)
         ClearMapMusic()
-        if (this.Name == 'All: Music: Stop') return
+        if (this.name == 'All: Music: Stop') return
         PlayMusic(this.Path)
     }
 }

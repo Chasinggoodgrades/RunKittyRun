@@ -33,7 +33,7 @@ export class ChronoSphere extends Relic {
     private Magnitude: number
     private MagnitudeTimer = Timer.create()
     private LocationCaptureTimer = Timer.create()
-    private LocationEffect: effect = null
+    private LocationEffect: Effect = null
     private CapturedLocation = [100, 100, 100]
 
     public constructor() {
@@ -66,10 +66,10 @@ export class ChronoSphere extends Relic {
 
     public override ApplyEffect(Unit: Unit) {
         try {
-            Kitty = Globals.ALL_KITTIES[Unit.Owner]
+            Kitty = Globals.ALL_KITTIES.get(Unit.owner)!
             Utility.SimpleTimer(0.1, RotatingSlowAura)
             Utility.SimpleTimer(0.1, RotatingLocationCapture)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.ApplyEffect: {e.Message}')
         }
     }
@@ -77,14 +77,14 @@ export class ChronoSphere extends Relic {
     public override RemoveEffect(Unit: Unit) {
         try {
             MagnitudeTimer?.pause()
-            MagnitudeTimer?.Dispose()
+            MagnitudeTimer?.dispose()
             MagnitudeTimer = null
             LocationCaptureTimer?.pause()
-            LocationCaptureTimer?.Dispose()
+            LocationCaptureTimer?.dispose()
             LocationCaptureTimer = null
-            LocationEffect?.Dispose()
+            LocationEffect?.dispose()
             LocationEffect = null
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RemoveEffect: {e.Message}')
         }
     }
@@ -98,7 +98,7 @@ export class ChronoSphere extends Relic {
             Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude)
             Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS)
             item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.Abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.SetAbilityData: {e.Message}')
         }
     }
@@ -113,7 +113,7 @@ export class ChronoSphere extends Relic {
 
             MagnitudeTimer.start(MAGNITUDE_CHANGE_INTERVAL, true, SetAbilityData)
             SetAbilityData()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RotatingSlowAura: {e.Message}')
         }
     }
@@ -124,9 +124,9 @@ export class ChronoSphere extends Relic {
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
             if (upgradeLevel <= 1) return
             LocationCaptureTimer ??= Timer.create()
-            CapturedLocation = (Kitty.Unit.X, Kitty.unit.y, Kitty.Unit.Facing) // reset to current location on buy
+            CapturedLocation = (Kitty.Unit.x, Kitty.Unit.y, Kitty.Unit.facing) // reset to current location on buy
             LocationCaptureTimer.start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RotatingLocationCapture: {e.Message}')
         }
     }
@@ -136,12 +136,12 @@ export class ChronoSphere extends Relic {
             LocationCaptureTimer.start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation)
             if (Kitty.CurrentStats.ChronoSphereCD) return
             let unit = Kitty.Unit
-            CapturedLocation = (unit.x, unit.y, unit.Facing)
+            CapturedLocation = (unit.x, unit.y, unit.facing)
             LocationEffect ??= Effect.create(LocationSaveEffectPath, unit.x, unit.y)!
             LocationEffect.Scale = 0.55
-            LocationEffect.Dispose()
+            LocationEffect.dispose()
             LocationEffect = null
-        } catch (er: Error) {
+        } catch (er: any) {
             Logger.Warning('Error in ChronoSphere.CaptureLocation: {er.Message}')
         }
     }
@@ -160,20 +160,20 @@ export class ChronoSphere extends Relic {
             let x = CapturedLocation.Item1
             let y = CapturedLocation.Item2
             if (x == 0 && y == 0) {
-                x = Kitty.Unit.X
-                y = Kitty.unit.y
+                x = Kitty.Unit.x
+                y = Kitty.Unit.y
             }
             Kitty.Unit.setPos(x, y)
-            Kitty.Unit.SetFacing(CapturedLocation.Item3)
-            Kitty.Unit.IsPaused = true
+            Kitty.Unit.setFacingEx(CapturedLocation.Item3)
+            Kitty.Unit.paused = true
             Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit)
 
-            if (Kitty.Player.isLocal()) PanCameraToTimed(Kitty.Unit.X, Kitty.unit.y, 0.0)
+            if (Kitty.Player.isLocal()) PanCameraToTimed(Kitty.Unit.x, Kitty.Unit.y, 0.0)
             Utility.SimpleTimer(2.0, () => {
-                Kitty.Unit.IsPaused = false
+                Kitty.Unit.paused = false
                 Utility.SimpleTimer(1.0, () => (Kitty.Invulnerable = false))
             })
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RewindTime: {e.Message}')
         }
     }
@@ -183,7 +183,7 @@ export class ChronoSphere extends Relic {
             if (Gamemode.CurrentGameMode != GameMode.Standard) return false // Only for Standard.
             if (kitty.ProtectionActive) return false // Don't rewind if ultimate has been casted.
             if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false
-            let relic = kitty.Relics.Find(IsChronoSphere) as ChronoSphere
+            let relic = kitty.Relics.find(IsChronoSphere) as ChronoSphere
             if (relic == null) return false
             if (kitty.CurrentStats.ChronoSphereCD) return false
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
@@ -199,12 +199,12 @@ export class ChronoSphere extends Relic {
                     kitty.CurrentStats.ChronoSphereCD = false
                     kitty.Player.DisplayTimedTextTo(1.0, '{Colors.COLOR_LAVENDER}Sphere: recharged: Chrono|r')
                     relic?.LocationCaptureTimer?.start(0, false, relic.CaptureLocation)
-                } catch (e) {
+                } catch (e: any) {
                     Logger.Warning('Error in ChronoSphere.RewindDeath: {e.Message}')
                 }
             })
             return true
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RewindDeath: {e.Message}')
             return false
         }

@@ -76,10 +76,10 @@ export class DoodadChanger {
         for (let safeZone in Globals.SAFE_ZONES) {
             let rect = safeZone.Rect_
 
-            let minX = rect.MinX
-            let minY = rect.MinY
-            let maxX = rect.MaxX
-            let maxY = rect.MaxY
+            let minX = rect.minX
+            let minY = rect.minY
+            let maxX = rect.maxX
+            let maxY = rect.maxY
 
             if (counter % 4 != 0) {
                 const des = CreateDeadDestructable(DoodadChanger.SafezoneLanterns, minX, maxY, 0, 1, 0)

@@ -5,9 +5,9 @@ export class PropertyEncoder {
             this.AppendProperties(obj, jsonString)
             jsonString.Append('}')
 
-            let base64String = WCSharp.Shared.Base64.ToBase64(jsonString.ToString())
+            let base64String = WCSharp.Shared.Base64.ToBase64(jsonString.toString())
             return base64String
-        } catch (ex) {
+        } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
             Logger.Critical('{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: {ex.Message}')
             throw ex
@@ -19,23 +19,23 @@ export class PropertyEncoder {
         AppendProperties(obj, jsonString)
         jsonString.Append('}')
 
-        return jsonString.ToString()
+        return jsonString.toString()
     }
 
     public static EncodeAllDataToJsonBase64(): string {
         try {
             let jsonString: string = ''
             jsonString += '{'
-            for (let player in Globals.ALL_PLAYERS) {
+            for (let player of Globals.ALL_PLAYERS) {
                 if (!(playerData = SaveManager.SaveData.TryGetValue(player)) /* TODO; Prepend: let */) continue
-                jsonString += `"{player.Name}":{GetJsonData(playerData)},`
+                jsonString += `"{player.name}":{GetJsonData(playerData)},`
             }
             if (jsonString.length > 0 && jsonString[jsonString.length - 1] == ',') jsonString.length--
             jsonString += '}'
 
             let base64String = WCSharp.Shared.Base64.ToBase64(jsonString)
             return base64String
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical('{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: {ex.Message}')
             throw ex
         }
@@ -70,7 +70,7 @@ export class PropertyEncoder {
 
     public static DecodeFromJsonBase64(base64EncodedData: StringBuilder) {
         // Decode the Base64 string to a JSON-like string
-        let jsonString = WCSharp.Shared.base64Decode(base64EncodedData.ToString())
+        let jsonString = WCSharp.Shared.base64Decode(base64EncodedData.toString())
         return jsonString
     }
 }

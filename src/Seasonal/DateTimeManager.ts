@@ -8,7 +8,7 @@ export class DateTimeManager {
     }
 
     private static SetDateTime(time: WcDateTime) {
-        print('{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}{time.ToString()}')
+        print('{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}{time.toString()}')
         DateTime = time
         CurrentMonth = DateTime.Month
         CurrentDay = DateTime.Day

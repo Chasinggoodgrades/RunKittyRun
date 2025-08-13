@@ -1,3 +1,7 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Globals } from 'src/Global/Globals'
+import { WolfArea } from '../WolfArea'
+
 export class WolfLaneHider {
     private static readonly lanesToEnable: Set<number> = new Set<number>()
     private static readonly currentlyVisibleLanes: Set<number> = new Set<number>()
@@ -6,7 +10,7 @@ export class WolfLaneHider {
         try {
             this.UpdateLanesToEnable()
             this.ApplyLaneVisibility()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in WolfLaneHider: {e.Message}')
         }
     }
@@ -16,11 +20,11 @@ export class WolfLaneHider {
             this.lanesToEnable.clear()
 
             for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-                let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
+                let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
                 let currentSafezone: number = kitty.CurrentSafeZone
                 this.AddAdjacentLanes(currentSafezone)
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in UpdateLanesToEnable: {e.Message}')
         }
     }
@@ -79,7 +83,7 @@ export class WolfLaneHider {
             // Update the set for next time
             this.currentlyVisibleLanes.clear()
             for (let laneId in this.lanesToEnable) this.currentlyVisibleLanes.add(laneId)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ApplyLaneVisibility: {e.Message}')
         }
     }
@@ -87,7 +91,7 @@ export class WolfLaneHider {
     private static SetLaneVisibility(lane: WolfArea, isVisible: boolean) {
         for (let i: number = 0; i < lane.Wolves.length; i++) {
             let wolf = lane.Wolves[i]
-            wolf.Unit.IsVisible = isVisible
+            wolf.Unit.show = isVisible
             wolf.PauseSelf(!isVisible)
             wolf.Texttag?.setVisible(isVisible)
         }
@@ -101,7 +105,7 @@ export class WolfLaneHider {
                 SetLaneVisibility(lane.Value, false)
                 lane.Value.IsEnabled = false
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in HideAllLanes: {e.Message}')
         }
     }
@@ -115,7 +119,7 @@ export class WolfLaneHider {
                 lane.Value.IsEnabled = true
                 SetLaneVisibility(lane.Value, true)
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in ResetLanes: {e.Message}')
         }
     }

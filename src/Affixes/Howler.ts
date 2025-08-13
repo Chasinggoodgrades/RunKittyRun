@@ -16,30 +16,30 @@ export class Howler extends Affix {
     private MIN_HOWL_TIME: number = 10.0
     private MAX_HOWL_TIME: number = 20.0
     private HowlTimer: AchesTimers
-    private NearbyWolves: group = CreateGroup()!
+    private NearbyWolves: Group = Group.create()!
 
     public constructor(unit: Wolf) {
         super(unit)
-        this.Name = '{Colors.COLOR_BLUE}Howler|r'
+        this.name = '{Colors.COLOR_BLUE}Howler|r'
     }
 
     public override Apply() {
         this.RegisterTimerEvents()
         this.Unit.Unit.AddAbility(this.AFFIX_ABILITY)
-        this.Unit.Unit.SetVertexColor(25, 25, 112)
+        this.Unit.Unit.setVertexColor(25, 25, 112, 255)
         super.Apply()
     }
 
     public override Remove() {
         SetUnitVertexColor(this.Unit.Unit, 150, 120, 255, 255)
         this.Unit.Unit.RemoveAbility(this.AFFIX_ABILITY)
-        this.HowlTimer?.Dispose()
+        this.HowlTimer?.dispose()
         GC.RemoveGroup(this.NearbyWolves) // TODO; Cleanup:         GC.RemoveGroup(ref NearbyWolves);
         super.Remove()
     }
 
     public override Pause(pause: boolean) {
-        this.HowlTimer.Pause(pause)
+        this.HowlTimer.pause(pause)
     }
 
     private RegisterTimerEvents() {
@@ -50,10 +50,10 @@ export class Howler extends Affix {
     private Howl() {
         try {
             this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, this.Howl)
-            if (this.Unit.IsPaused) return
+            if (this.Unit.paused) return
             Utility.CreateEffectAndDisposeAttach(this.ROAR_EFFECT, this.Unit.Unit, 'origin')
-            this.NearbyWolves.EnumUnitsInRange(
-                this.Unit.Unit.X,
+            this.NearbyWolves.enumUnitsInRange(
+                this.Unit.Unit.x,
                 this.Unit.unit.y,
                 this.HOWL_RADIUS,
                 FilterList.DogFilter
@@ -63,13 +63,13 @@ export class Howler extends Affix {
                 if (wolf == null) break
                 this.NearbyWolves.Remove(wolf)
                 if (NamedWolves.StanWolf != null && NamedWolves.StanWolf.Unit == wolf) continue
-                if (wolf.IsPaused) continue
+                if (wolf.paused) continue
                 if (!(wolfObject = Globals.ALL_WOLVES.TryGetValue(wolf)) /* TODO; Prepend: let */) continue
                 if (wolfObject.RegionIndex != this.Unit.RegionIndex) continue
                 wolfObject.StartWandering(true) // Start wandering
             }
             this.NearbyWolves.clear()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in Howl: {e.Message}')
             throw e
         }

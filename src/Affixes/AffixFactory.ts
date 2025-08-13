@@ -1,4 +1,26 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { NamedWolves } from 'src/Game/Entities/NamedWolves'
+import { Wolf } from 'src/Game/Entities/Wolf'
+import { WolfArea } from 'src/Game/WolfArea'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { RegionList } from 'src/Global/RegionList'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
+import { sumNumbers } from 'src/Utility/Utility'
+import { Affix } from './Affix'
+import { Blitzer } from './Blitzer'
+import { Bomber } from './Bomber'
+import { Chaos } from './Chaos'
+import { Fixation } from './Fixation'
+import { Frostbite } from './Frostbite'
+import { Howler } from './Howler'
+import { Speedster } from './Speedster'
+import { Stealth } from './Stealth'
+import { Unpredictable } from './Unpredictable'
+import { Vortex } from './Vortex'
 
 export class AffixFactory {
     public static AllAffixes: Affix[] = []
@@ -31,21 +53,21 @@ export class AffixFactory {
     }
 
     public static CalculateAffixes(laneIndex: number = -1) {
-        for (let affix in AffixFactory.AllAffixes) {
-            if (AffixFactory.TempAffixCounts.has(affix.Name)) continue
+        for (let affix of AffixFactory.AllAffixes) {
+            if (AffixFactory.TempAffixCounts.has(affix.name)) continue
             if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue
-            AffixFactory.TempAffixCounts[affix.Name] = 0
+            AffixFactory.TempAffixCounts.set(affix.name, 0)
         }
 
-        for (let affix in AffixFactory.AllAffixes) {
-            if (AffixFactory.TempAffixCounts.has(affix.Name)) {
+        for (let affix of AffixFactory.AllAffixes) {
+            if (AffixFactory.TempAffixCounts.has(affix.name)) {
                 if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue
-                AffixFactory.TempAffixCounts[affix.Name]++
+                AffixFactory.TempAffixCounts.set(affix.name, (AffixFactory.TempAffixCounts.get(affix.name) || 0) + 1)
             }
         }
 
-        for (let affix in AffixFactory.TempAffixCounts) {
-            if (affix.Value > 0) {
+        for (let [_, affix] of AffixFactory.TempAffixCounts) {
+            if (affix > 0) {
                 AffixFactory.TempAffixesList.push('{affix.Key} x{affix.Value}')
             }
         }
@@ -130,7 +152,7 @@ export class AffixFactory {
     }
 
     private static AvailableAffixes(laneNumber: number) {
-        let affixes = string.Join(', ', AffixFactory.AffixTypes) // Start with all affixes in a single string
+        let affixes = AffixFactory.AffixTypes.join(', ') // Start with all affixes in a single string
         let fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount
         if (
             laneNumber > 6 ||
@@ -141,7 +163,7 @@ export class AffixFactory {
         if (Difficulty.DifficultyValue == DifficultyLevel.Hard) {
             affixes = affixes.Replace('Chaos, ', '').Replace(', Chaos', '').Replace('Chaos', '')
         }
-        return affixes.Trim()
+        return affixes.trim()
     }
 
     private static ApplyRandomAffix(unit: Wolf, laneNumber: number): Affix {
@@ -155,7 +177,7 @@ export class AffixFactory {
             let randomIndex = Math.random()
             let randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Warning('{Colors.COLOR_RED}Error in ApplyRandomAffix: {ex.Message}{Colors.COLOR_RESET}')
             return null
         }
@@ -185,7 +207,7 @@ export class AffixFactory {
             }
 
             // # per lane based on the weights
-            let totalWeight: number = AffixFactory.LaneWeights.Sum() // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
+            let totalWeight = sumNumbers(AffixFactory.LaneWeights) // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
             let laneDistribution = []
             let totalAssigned: number = 0
 
@@ -220,7 +242,7 @@ export class AffixFactory {
                     if (affix != null) appliedCount++
                 }
             }
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical('{Colors.COLOR_RED}Error in DistAffixes: {ex.Message}{Colors.COLOR_RESET}')
             AffixFactory.RemoveAllAffixes()
         }

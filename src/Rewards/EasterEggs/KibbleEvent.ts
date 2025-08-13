@@ -4,7 +4,7 @@ export class KibbleEvent {
     private static EventKibblesCollected: number = 0
     private static TotalEventKibbles: number = 200
     private static EventExtraKibbles: number = 5 // a little extra, the previous ones also don't despawn if theres any left.
-    private static EventTimer: timer
+    private static EventTimer: Timer
     private static EventTimerDialog: timerdialog
     private EventLength: number = 300.0 // 5 minutes to collect 200 kibble xd
 
@@ -16,7 +16,7 @@ export class KibbleEvent {
         EventPlayed = true // only once per game.
         EventKibblesCollected = 0
 
-        EventTimer = timer.Create()
+        EventTimer = Timer.create()
         EventTimerDialog = TimerDialog.create(EventTimer)!
         EventTimerDialog.setTitle('Event: Kibble')
         EventTimerDialog.display = true
@@ -44,7 +44,7 @@ export class KibbleEvent {
         for (let i: number = 0; i < ItemSpawner.TrackKibbles.length; i++) {
             let kibble = ItemSpawner.TrackKibbles[i]
             if (kibble.Item == null) continue
-            kibble.Dispose()
+            kibble.dispose()
         }
 
         ItemSpawner.TrackKibbles.clear()

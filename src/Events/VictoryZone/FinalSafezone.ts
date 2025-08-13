@@ -1,5 +1,5 @@
 export class FinalSafezone {
-    private static Trigger: trigger = CreateTrigger()
+    private static Trigger: Trigger = Trigger.create()!
     private static Region: region = RegionList.SafeZones[RegionList.SafeZones.length - 1].Region
 
     public static Initialize() {
@@ -8,11 +8,11 @@ export class FinalSafezone {
 
     private static RegisterEvents() {
         Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter)
-        Trigger.AddAction(
+        Trigger.addAction(
             ErrorHandler.Wrap(() => {
-                let unit = GetTriggerUnit()
-                let player = unit.Owner
-                let kitty = Globals.ALL_KITTIES.get(player)
+                let unit = getTriggerUnit()
+                let player = unit.owner
+                let kitty = Globals.ALL_KITTIES.get(player)!
                 if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards()
                 if (Gamemode.CurrentGameMode != GameMode.Standard) return
 

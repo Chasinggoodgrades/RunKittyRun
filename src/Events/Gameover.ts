@@ -1,21 +1,36 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Wolf } from 'src/Game/Entities/Wolf'
+import { PodiumManager } from 'src/Game/Podium/PodiumManager'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { Challenges } from 'src/Rewards/Challenges/Challenges'
+import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
+import { DiscordFrame } from 'src/UI/Frames/DiscordFrame'
+import { Utility } from 'src/Utility/Utility'
+import { GameoverUtil } from './GameoverUtil'
+
 export class Gameover {
     public static WinGame: boolean = false
     private static EndingTimer: number = 90.0
     public static NoEnd: boolean = false
 
     public static GameOver(): boolean {
-        return WinningGame() || LosingGameCheck()
+        return Gameover.WinningGame() || Gameover.LosingGameCheck()
     }
 
     private static WinningGame(): boolean {
-        if (!WinGame) return false
-        SendWinMessage()
-        GameStats(true)
+        if (!Gameover.WinGame) return false
+        Gameover.SendWinMessage()
+        Gameover.GameStats(true)
         GameoverUtil.SetColorData()
         GameoverUtil.SetBestGameStats()
         GameoverUtil.SetFriendData()
-        StandardWinChallenges()
-        SaveGame()
+        Gameover.StandardWinChallenges()
+        Gameover.SaveGame()
         print('{Colors.COLOR_GREEN}a: while: for: the: end: game: awards: Stay!!{Colors.COLOR_RESET}')
         Utility.SimpleTimer(5.0, PodiumManager.BeginPodiumEvents)
         return true
@@ -35,9 +50,9 @@ export class Gameover {
         Wolf.RemoveAllWolves()
         GameoverUtil.SetColorData()
         GameoverUtil.SetFriendData()
-        GameStats(false)
-        SaveGame()
-        NotifyEndingGame()
+        Gameover.GameStats(false)
+        Gameover.SaveGame()
+        Gameover.NotifyEndingGame()
     }
 
     private static SaveGame() {
@@ -46,25 +61,25 @@ export class Gameover {
     }
 
     private static EndGame() {
-        for (let player in Globals.ALL_PLAYERS) CustomVictoryBJ(player, true, true)
+        for (let player of Globals.ALL_PLAYERS) CustomVictoryBJ(player.handle, true, true)
     }
 
     private static LosingGameCheck(): boolean {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return false
-        if (NoEnd) return false
+        if (Gameover.NoEnd) return false
 
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
-            if (kitty.Alive) return false
+            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            if (kitty.isAlive()) return false
         }
-        LosingGame()
+        Gameover.LosingGame()
         return true
     }
 
     private static SendWinMessage() {
         if (Gamemode.CurrentGameMode == GameMode.Standard)
             print(
-                '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.ToString()}!{Colors.COLOR_RESET}'
+                '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.toString()}!{Colors.COLOR_RESET}'
             )
         else
             print(
@@ -77,10 +92,10 @@ export class Gameover {
     /// </summary>
     /// <param name="win"></param>
     private static GameStats(win: boolean) {
-        for (let kitty in Globals.ALL_KITTIES) {
-            IncrementGameStats(kitty.Value)
-            if (win) IncrementWins(kitty.Value)
-            IncrementWinStreak(kitty.Value, win)
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            Gameover.IncrementGameStats(kitty)
+            if (win) Gameover.IncrementWins(kitty)
+            Gameover.IncrementWinStreak(kitty, win)
         }
         AwardManager.AwardGameStatRewards()
     }
@@ -134,17 +149,16 @@ export class Gameover {
         if (win) {
             stats.WinStreak += 1
             if (stats.WinStreak > stats.HighestWinStreak) stats.HighestWinStreak = stats.WinStreak
-        }
-        let stats: else.WinStreak = 0
+        } else stats.WinStreak = 0
     }
 
     public static NotifyEndingGame() {
         DiscordFrame.Initialize()
         Utility.TimedTextToAllPlayers(
-            EndingTimer,
+            Gameover.EndingTimer,
             '{Colors.COLOR_YELLOW}game: will: end: The in {EndingTimer} seconds.{Colors.COLOR_RESET}'
         )
         Globals.GAME_ACTIVE = false
-        Utility.SimpleTimer(EndingTimer, EndGame)
+        Utility.SimpleTimer(Gameover.EndingTimer, EndGame)
     }
 }

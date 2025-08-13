@@ -1,12 +1,12 @@
 export class UniqueItems {
-    private static Trigger: trigger = CreateTrigger()
+    private static Trigger: Trigger = Trigger.create()!
     private static UniqueList: Uniques[] = []
 
     public static Initialize() {
         try {
             UniqueList = UniqueItemList()
             RegisterEvents()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in UniqueItems.Initialize. {e.Message}')
             throw e
         }
@@ -22,27 +22,27 @@ export class UniqueItems {
     }
 
     private static RegisterEvents() {
-        TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.PickupItem)
-        Trigger.AddAction(ItemPickup)
+        Trigger.registerAnyUnitEvent(playerunitevent.PickupItem)
+        Trigger.addAction(ItemPickup)
     }
 
     private static ItemPickup() {
         try {
             let item = GetManipulatedItem()
-            let player = GetTriggerPlayer()
-            let kitty = GetTriggerUnit()
+            let player = getTriggerPlayer()
+            let kitty = getTriggerUnit()
 
             if (item.TypeId == 0) Logger.Warning('item: bug: Unique, ID: item is 0')
 
             if (!Uniques.UniqueIDs.includes(item.TypeId)) return
-            let uniqueItem = UniqueList.Find(u => u.ItemID == item.TypeId)
+            let uniqueItem = UniqueList.find(u => u.ItemID == item.TypeId)
             if (uniqueItem == null) return
             if (Utility.UnitHasItemCount(kitty, item.TypeId) <= 1) return
 
             player.DisplayTimedTextTo(3.0, '{Colors.COLOR_RED}may: only: carry: one: You of unique: item: each.|r')
             player.Gold += uniqueItem.GoldCost
             RemoveItem(item!)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in UniqueItems.ItemPickup: {e.Message}')
         }
     }

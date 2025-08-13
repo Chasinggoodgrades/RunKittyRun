@@ -29,7 +29,7 @@ export class Setup {
             if (!Source.Program.Debug) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(Globals.GAME_MODES[0])
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in Setup.Initialize: {e.Message}')
             throw e
         }
@@ -45,7 +45,7 @@ export class Setup {
         if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
         if (Gamemode.IsGameModeChosen) {
             StartGame()
-            gameModeTimer.Dispose()
+            gameModeTimer.dispose()
         }
     }
 
@@ -85,11 +85,11 @@ export class Setup {
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
 
             for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-                if (Player(i).SlotState != playerslotstate.Playing) {
-                    wolfPlayers.push(Player(i))
+                if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) {
+                    wolfPlayers.push(MapPlayer.fromIndex(i)!)
                 }
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in Setup.StartGame: {e.Message}')
             throw e
         }
@@ -97,14 +97,15 @@ export class Setup {
 
     public static GetActivePlayers() {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            if (Player(i).SlotState == playerslotstate.Playing) Globals.ALL_PLAYERS.push(Player(i))
-            Player(i).Team = 0
+            if (MapPlayer.fromIndex(i)!.slotState == PLAYER_SLOT_STATE_PLAYING)
+                Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
+            MapPlayer.fromIndex(i)!.Team = 0
         }
     }
 
     private static RemoveDisconnectedPlayers() {
-        for (let player in Globals.ALL_PLAYERS) {
-            if (player.SlotState == playerslotstate.Left) {
+        for (let player of Globals.ALL_PLAYERS) {
+            if (player.slotState == playerslotstate.Left) {
                 Globals.ALL_PLAYERS.Remove(player)
                 break
             }
@@ -112,15 +113,15 @@ export class Setup {
     }
 
     private static SetAlliedPlayers() {
-        for (let player in Globals.ALL_PLAYERS) {
-            for (let playerx in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
+            for (let playerx of Globals.ALL_PLAYERS) {
                 if (player == playerx) continue
-                player.SetAlliance(playerx, ALLIANCE_PASSIVE, true)
-                player.SetAlliance(playerx, ALLIANCE_HELP_REQUEST, true)
-                player.SetAlliance(playerx, ALLIANCE_HELP_RESPONSE, true)
-                player.SetAlliance(playerx, ALLIANCE_SHARED_XP, true)
-                player.SetAlliance(playerx, ALLIANCE_SHARED_VISION, true)
-                player.SetAlliance(playerx, ALLIANCE_SHARED_CONTROL, false)
+                player.setAlliance(playerx, ALLIANCE_PASSIVE, true)
+                player.setAlliance(playerx, ALLIANCE_HELP_REQUEST, true)
+                player.setAlliance(playerx, ALLIANCE_HELP_RESPONSE, true)
+                player.setAlliance(playerx, ALLIANCE_SHARED_XP, true)
+                player.setAlliance(playerx, ALLIANCE_SHARED_VISION, true)
+                player.setAlliance(playerx, ALLIANCE_SHARED_CONTROL, false)
             }
         }
     }
@@ -135,7 +136,7 @@ export class Setup {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             for (let j: number = 0; j < Globals.VIPLIST.length; j++) {
                 let fromBase64Name = base64Decode(Globals.VIPLIST[j])
-                if (Globals.ALL_PLAYERS[i].Name == fromBase64Name) {
+                if (Globals.ALL_PLAYERS[i].name == fromBase64Name) {
                     Globals.VIPLISTUNFILTERED.push(Globals.ALL_PLAYERS[i])
                 }
             }

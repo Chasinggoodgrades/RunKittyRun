@@ -3,25 +3,25 @@ export class BigNum {
     public Base: number
 
     // Constructor
-    public BigNum(baseValue: number) {
-        List = null
-        Base = baseValue
+    public constructor(baseValue: number) {
+        this.List = null as never
+        this.Base = baseValue
     }
 
     // Clean method
     public Clean() {
-        let current: BigNumL = List
-        _ = current?.Clean()
+        let current: BigNumL = this.List
+        current?.Clean()
     }
 
     // DivSmall method
     public DivSmall(denom: number) {
-        return List?.DivSmall(Base, denom) ?? 0
+        return this.List?.DivSmall(this.Base, denom) ?? 0
     }
 
     // LastDigit method
     public LastDigit(): number {
-        let current: BigNumL = List
+        let current: BigNumL = this.List
         while (current?.Next != null) {
             current = current.Next
         }
@@ -35,10 +35,10 @@ export class BigNumL {
     private static _nalloc: number = 0
 
     // Constructor
-    public BigNumL() {
-        Next = null
-        Leaf = 0
-        _nalloc++
+    public constructor() {
+        this.Next = null as never
+        this.Leaf = 0
+        BigNumL._nalloc++
     }
 
     public static Create(): BigNumL {
@@ -46,11 +46,11 @@ export class BigNumL {
     }
 
     public Clean(): boolean {
-        if (Next == null && Leaf == 0) {
+        if (this.Next == null && this.Leaf == 0) {
             return true
-        } else if (Next != null && Next.Clean()) {
-            Next = null
-            return Leaf == 0
+        } else if (this.Next != null && this.Next.Clean()) {
+            this.Next = null as never
+            return this.Leaf == 0
         } else {
             return false
         }
@@ -60,14 +60,14 @@ export class BigNumL {
         let remainder: number = 0
         let num: number
 
-        if (Next != null) {
-            remainder = Next.DivSmall(baseValue, denom)
+        if (this.Next != null) {
+            remainder = this.Next.DivSmall(baseValue, denom)
         }
 
-        num = Leaf + remainder * baseValue
+        num = this.Leaf + remainder * baseValue
         let quotient: number = num / denom
         remainder = num - quotient * denom
-        Leaf = quotient
+        this.Leaf = quotient
         return remainder
     }
 }

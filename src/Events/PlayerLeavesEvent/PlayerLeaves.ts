@@ -1,15 +1,15 @@
 export class PlayerLeaves {
-    private static Trigger: trigger = CreateTrigger()
+    private static Trigger: Trigger = Trigger.create()!
 
     public static Initialize() {
         RegisterTrigger()
     }
 
     private static RegisterTrigger() {
-        for (let player in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
             Trigger.RegisterPlayerEvent(player, EVENT_PLAYER_LEAVE)
         }
-        Trigger.AddAction(ErrorHandler.Wrap(() => PlayerLeavesActions()))
+        Trigger.addAction(ErrorHandler.Wrap(() => PlayerLeavesActions()))
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
@@ -19,22 +19,22 @@ export class PlayerLeaves {
 
     public static PlayerLeavesActions(player: MapPlayer = null) {
         try {
-            let leavingPlayer = GetTriggerPlayer()
+            let leavingPlayer = getTriggerPlayer()
             if (player != null) leavingPlayer = player
             if (!Globals.ALL_PLAYERS.includes(leavingPlayer)) return
-            let kitty = Globals.ALL_KITTIES[leavingPlayer]
+            let kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
             let circle = Globals.ALL_CIRCLES[leavingPlayer]
             let nameTag = kitty.NameTag
             TeamRemovePlayer(leavingPlayer)
-            kitty.Dispose()
-            circle.Dispose()
-            nameTag?.Dispose()
+            kitty.dispose()
+            circle.dispose()
+            nameTag?.dispose()
             if (!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer)
             print(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
             RoundManager.RoundEndCheck()
             if (Gameover.WinGame) return
             MultiboardUtil.RefreshMultiboards()
-        } catch (e) {
+        } catch (e: any) {
             print('Error in PlayerLeavesActions: ' + e.Message)
         }
     }

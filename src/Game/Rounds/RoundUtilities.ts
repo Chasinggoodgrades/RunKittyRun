@@ -1,16 +1,16 @@
 export class RoundUtilities {
     public static MovePlayerToStart(Player: MapPlayer) {
-        let kitty = Globals.ALL_KITTIES[Player]
-        let x = RegionList.SpawnRegions[Player.Id].Center.X
-        let y = RegionList.SpawnRegions[Player.Id].Center.Y
+        let kitty = Globals.ALL_KITTIES.get(Player)!
+        let x = RegionList.SpawnRegions[Player.id].Center.x
+        let y = RegionList.SpawnRegions[Player.id].Center.y
         kitty.Unit.setPos(x, y)
-        kitty.Unit.Facing = 360.0
+        kitty.Unit.facing = 360.0
     }
 
     public static MoveTeamToStart(team: Team) {
         for (let i: number = 0; i < team.Teammembers.length; i++) {
             let player = team.Teammembers[i]
-            let kitty = (Globals.ALL_KITTIES.get(player).Finished = true)
+            let kitty = (Globals.ALL_KITTIES.get(player)!.Finished = true)
             MovePlayerToStart(player)
         }
         team.Finished = true
@@ -25,12 +25,12 @@ export class RoundUtilities {
     public static RoundResetAll() {
         for (let kitty in Globals.ALL_KITTIES) {
             kitty.Value.Unit.Revive(
-                RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X,
-                RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y,
+                RegionList.SpawnRegions[kitty.Value.Player.id].Center.x,
+                RegionList.SpawnRegions[kitty.Value.Player.id].Center.y,
                 false
             )
             Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle()
-            kitty.Value.Alive = true
+            kitty.Value.isAlive() = true
             kitty.Value.ProgressZone = 0
             kitty.Value.Finished = false
             kitty.Value.Unit.mana = kitty.Value.Unit.maxMana
@@ -39,9 +39,9 @@ export class RoundUtilities {
     }
 
     public static MovedTimedCameraToStart() {
-        let x = RegionList.SpawnRegions[0].Center.X
-        let y = RegionList.SpawnRegions[0].Center.Y
-        for (let player in Globals.ALL_PLAYERS) {
+        let x = RegionList.SpawnRegions[0].Center.x
+        let y = RegionList.SpawnRegions[0].Center.y
+        for (let player of Globals.ALL_PLAYERS) {
             if (player.isLocal()) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY)
             CameraUtil.RelockCamera(player)
         }

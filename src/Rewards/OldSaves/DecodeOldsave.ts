@@ -1,3 +1,8 @@
+import { Globals } from 'src/Global/Globals'
+import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
+import { GameStatsData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
+import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
+
 export class DecodeOldsave {
     private static awards: GameAwardsDataSorted = Globals.GAME_AWARDS_SORTED
     private static times: RoundTimesData = Globals.GAME_TIMES

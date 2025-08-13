@@ -26,8 +26,8 @@
 
 //    public override ApplyEffect(unit Unit)
 //    {
-//        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES.get(player);
+//        let player = Unit.owner;
+//        let kitty = Globals.ALL_KITTIES.get(player)!;
 //        let newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = newCollisionRadius;
@@ -37,8 +37,8 @@
 
 //    public override RemoveEffect(unit Unit)
 //    {
-//        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES.get(player);
+//        let player = Unit.owner;
+//        let kitty = Globals.ALL_KITTIES.get(player)!;
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
 //        Unit.SetScale(0.60, 0.60, 0.60);
@@ -47,7 +47,7 @@
 
 //    public static number GetCollisionReduction(unit Unit)
 //    {
-//        let player = Unit.Owner;
+//        let player = Unit.owner;
 //        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
 //        return 1.0 - AMULET_OF_EVASIVENESS_COLLSION_REDUCTION - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
 //    }
@@ -62,7 +62,7 @@
 //        if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
 
 //        // Scale based on upgrade level
-//        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
+//        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
 //        let scale = UnitScale - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
 
 //        Unit.SetScale(scale, scale, scale);
@@ -74,8 +74,8 @@
 //    /// <param name="Unit"></param>
 //    public static AmuletWindwalkEffect(unit Unit)
 //    {
-//        let player = Unit.Owner;
-//        let kitty = Globals.ALL_KITTIES.get(player);
+//        let player = Unit.owner;
+//        let kitty = Globals.ALL_KITTIES.get(player)!;
 //        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
 //        if (upgradeLevel < 2) return;
 //        let newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
@@ -88,7 +88,7 @@
 //        {
 //            kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);
 //            CollisionDetection.KittyRegisterCollisions(kitty);
-//            t.Dispose();
+//            t.dispose();
 //        });
 //    }
 //}

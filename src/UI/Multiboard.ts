@@ -1,4 +1,8 @@
+import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { SoloMultiboard } from './Multiboard/SoloMultiboard'
+import { StandardMultiboard } from './Multiboard/StandardMultiboard'
+import { TeamsMultiboard } from './Multiboard/TeamsMultiboard'
 
 export class MultiboardManager {
     public static Initialize() {

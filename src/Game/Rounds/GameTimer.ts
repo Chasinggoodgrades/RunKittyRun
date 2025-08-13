@@ -10,7 +10,7 @@ export class GameTimer {
     }
     public static RoundTime: number[]
     public static RoundSpeedIncrement: number = 0.12
-    private static GameTimeBar: framehandle = framehandle.Get('ResourceBarSupplyText', 0)
+    private static GameTimeBar: Frame = framehandle.Get('ResourceBarSupplyText', 0)
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
@@ -33,7 +33,7 @@ export class GameTimer {
         Globals.GAME_TIMER.pause()
 
         RoundTime[Globals.ROUND] += RoundSpeedIncrement
-        GameTimeBar.Text = '{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}'
+        GameTimeBar.text = '{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}'
         UpdatingTimes()
     }
 

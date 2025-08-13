@@ -9,7 +9,7 @@ export class ShardOfTranslocation extends Relic {
     private Owner: Unit
     private static IconPath: string = 'ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp'
     private MaxBlinkRange: number = DEFAULT_BLINK_RANGE
-    private CastEventTrigger: trigger
+    private CastEventTrigger: Trigger
 
     public constructor() {
         super(
@@ -31,29 +31,29 @@ export class ShardOfTranslocation extends Relic {
         RegisterTrigger(Unit)
         UpdateBlinkRange(Unit)
         Owner = Unit
-        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false)
+        Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, false)
         Utility.SimpleTimer(0.1, () => SetAbilityData(Unit))
     }
 
     public override RemoveEffect(Unit: Unit) {
         GC.RemoveTrigger(CastEventTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref CastEventTrigger);
-        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
+        Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
     }
 
     private RegisterTrigger(Unit: Unit) {
-        let player = Unit.Owner
-        let CastEventTrigger = CreateTrigger()
-        CastEventTrigger.RegisterPlayerUnitEvent(player, playerunitevent.SpellCast, null)
-        CastEventTrigger.AddAction(TeleportActions)
+        let player = Unit.owner
+        let CastEventTrigger = Trigger.create()!
+        CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null)
+        CastEventTrigger.addAction(TeleportActions)
     }
 
     private TeleportActions() {
         if (!Globals.GAME_ACTIVE) return
         if (GetSpellAbilityId() != RelicAbilityID) return
-        let unit = GetTriggerUnit()
+        let unit = getTriggerUnit()
         let targetLoc = GetSpellTargetLoc()
-        let player = unit.Owner
-        let currentSafezone = Globals.ALL_KITTIES.get(player).CurrentSafeZone
+        let player = unit.owner
+        let currentSafezone = Globals.ALL_KITTIES.get(player)!.CurrentSafeZone
         try {
             if (!EligibleLocation(targetLoc, currentSafezone)) {
                 player.DisplayTimedTextTo(
@@ -68,15 +68,15 @@ export class ShardOfTranslocation extends Relic {
             TeleportUnit(unit, targetLoc)
             RelicUtil.CloseRelicBook(player)
             Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID))
-            targetLoc.Dispose()
-        } catch (e) {
+            targetLoc.dispose()
+        } catch (e: any) {
             Logger.Critical(e.Message)
             throw e
         }
     }
 
     private UpdateBlinkRange(unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.Owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(GetType())
         MaxBlinkRange = upgradeLevel >= 1 ? UPGRADE_BLINK_RANGE : DEFAULT_BLINK_RANGE
         if (upgradeLevel >= 1) Utility.SimpleTimer(0.1, () => SetItemTooltip(unit))
     }
@@ -92,7 +92,7 @@ export class ShardOfTranslocation extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         Unit.GetAbility(RelicAbilityID)
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
 
         let cooldown =
             upgradeLevel >= 2 // lvl 2 upgrade
@@ -104,8 +104,8 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private TeleportUnit(unit: Unit, targetLoc: location) {
-        let x = targetLoc.X
-        let y = targetLoc.Y
+        let x = targetLoc.x
+        let y = targetLoc.y
         let distance = WCSharp.Shared.Util.DistanceBetweenPoints(unit, x, y)
 
         if (distance > MaxBlinkRange) {
@@ -119,10 +119,10 @@ export class ShardOfTranslocation extends Relic {
     private static EligibleLocation(targetLoc: location, currentSafezone: number) {
         let SAFEZONES = Globals.SAFE_ZONES
         return (
-            SAFEZONES[currentSafezone].Region.includes(targetLoc.X, targetLoc.Y) ||
-            (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.includes(targetLoc.X, targetLoc.Y)) ||
+            SAFEZONES[currentSafezone].Region.includes(targetLoc.x, targetLoc.y) ||
+            (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.includes(targetLoc.x, targetLoc.y)) ||
             (currentSafezone < SAFEZONES.length - 1 &&
-                SAFEZONES[currentSafezone + 1].Region.includes(targetLoc.X, targetLoc.Y) &&
+                SAFEZONES[currentSafezone + 1].Region.includes(targetLoc.x, targetLoc.y) &&
                 currentSafezone < 13) ||
             WolfRegionEligible(targetLoc, currentSafezone)
         )
@@ -130,13 +130,13 @@ export class ShardOfTranslocation extends Relic {
 
     private static WolfRegionEligible(targetLoc: location, currentSafezone: number) {
         let WOLF_AREAS = RegionList.WolfRegions
-        if (WOLF_AREAS[currentSafezone].includes(targetLoc.X, targetLoc.Y)) return true
-        if (currentSafezone > 0 && WOLF_AREAS[currentSafezone - 1].includes(targetLoc.X, targetLoc.Y)) return true
-        if (WOLF_AREAS[currentSafezone + 1].includes(targetLoc.X, targetLoc.Y)) return true
+        if (WOLF_AREAS[currentSafezone].includes(targetLoc.x, targetLoc.y)) return true
+        if (currentSafezone > 0 && WOLF_AREAS[currentSafezone - 1].includes(targetLoc.x, targetLoc.y)) return true
+        if (WOLF_AREAS[currentSafezone + 1].includes(targetLoc.x, targetLoc.y)) return true
         if (currentSafezone == 13 || currentSafezone == 14) {
-            if (WOLF_AREAS[14].includes(targetLoc.X, targetLoc.Y)) return true
-            if (WOLF_AREAS[15].includes(targetLoc.X, targetLoc.Y)) return true
-            if (WOLF_AREAS[16].includes(targetLoc.X, targetLoc.Y)) return true
+            if (WOLF_AREAS[14].includes(targetLoc.x, targetLoc.y)) return true
+            if (WOLF_AREAS[15].includes(targetLoc.x, targetLoc.y)) return true
+            if (WOLF_AREAS[16].includes(targetLoc.x, targetLoc.y)) return true
         }
         return false
     }

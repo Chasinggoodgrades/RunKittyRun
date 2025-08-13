@@ -24,46 +24,46 @@ export class Bomber extends Affix {
     private MAX_EXPLODE_INTERVAL: number = 15.0
     private ExplodeTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
     private ReviveAlphaTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
-    private ExplodeGroup: group = CreateGroup()!
+    private ExplodeGroup: Group = Group.create()!
     private ReviveAlpha: number = 1
     private RangeIndicator: RangeIndicator
-    private TimerIndicator: effect
+    private TimerIndicator: Effect
 
     public constructor(unit: Wolf) {
         super(unit)
-        Name = '{Colors.COLOR_ORANGE}Bomber|r'
+        name = '{Colors.COLOR_ORANGE}Bomber|r'
     }
 
     public override Apply() {
         try {
-            this.UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
-            this.Unit.Unit.SetVertexColor(204, 102, 0)
+            this.this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
+            this.Unit.Unit.setVertexColor(204, 102, 0, 255)
             this.RangeIndicator = MemoryHandler.getEmptyObject<RangeIndicator>()
             this.RegisterTimers()
             super.Apply()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in Bomber.Apply: {e.Message}')
         }
     }
 
     public override Remove() {
         try {
-            UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
-            Unit.Unit.SetVertexColor(150, 120, 255, 255)
+            this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
+            Unit.Unit.setVertexColor(150, 120, 255, 255)
 
-            ExplodeTimer?.Dispose()
-            ReviveAlphaTimer?.Dispose()
+            ExplodeTimer?.dispose()
+            ReviveAlphaTimer?.dispose()
             ExplodeTimer = null // These two timers are needed as it prevents the start explosion from continuing
             ReviveAlphaTimer = null
-            RangeIndicator?.Dispose()
+            RangeIndicator?.dispose()
             RangeIndicator = null
-            TimerIndicator?.Dispose()
+            TimerIndicator?.dispose()
             TimerIndicator = null
 
-            if (Unit.IsPaused) Unit?.PauseSelf(false)
+            if (Unit.paused) Unit?.PauseSelf(false)
             Unit.IsReviving = false
-            Unit.IsPaused = false
-        } catch (e) {
+            Unit.paused = false
+        } catch (e: any) {
             super.Remove()
         }
     }
@@ -75,7 +75,7 @@ export class Bomber extends Affix {
     private StartExplosion() {
         // Temporary for testing, will add an actual graphic ticker later
         try {
-            if (Unit.IsPaused) {
+            if (Unit.paused) {
                 ExplodeTimer?.Timer.start(ExplosionInterval(), false, StartExplosion)
                 return
             }
@@ -90,7 +90,7 @@ export class Bomber extends Affix {
             }
 
             Utility.SimpleTimer(4.0, Explode)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in Bomber.StartExplosion: {e.Message}')
         }
     }
@@ -100,21 +100,21 @@ export class Bomber extends Affix {
             if (RangeIndicator == null) return
             RangeIndicator.DestroyIndicator()
             Utility.CreateEffectAndDisposeAttach(BLOOD_EFFECT_PATH, Unit.Unit, 'origin')
-            ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.unit.y, EXPLOSION_RANGE, FilterList.KittyFilter)
+            ExplodeGroup.enumUnitsInRange(Unit.Unit.x, Unit.unit.y, EXPLOSION_RANGE, FilterList.KittyFilter)
 
             while (true) {
                 let u = ExplodeGroup.First
                 if (u == null) break
                 ExplodeGroup.Remove(u)
 
-                if (!Unit.WolfArea.Rectangle.includes(u.X, u.Y)) continue // has to be in wolf lane.
-                if (!Globals.ALL_KITTIES[u.Owner].Alive) continue // ignore if they're dead lol
+                if (!Unit.WolfArea.Rectangle.includes(u.x, u.y)) continue // has to be in wolf lane.
+                if (!Globals.ALL_KITTIES.get(u.owner)!.isAlive()) continue // ignore if they're dead lol
                 Utility.CreateEffectAndDisposeAttach(BLOOD_EFFECT_PATH, u, 'origin')
-                Globals.ALL_KITTIES[u.Owner].KillKitty()
+                Globals.ALL_KITTIES.get(u.owner)!.KillKitty()
             }
             Revive()
-            Unit.Unit.SetVertexColor(204, 102, 0, 25)
-        } catch (e) {
+            Unit.Unit.setVertexColor(204, 102, 0, 25)
+        } catch (e: any) {
             Logger.Warning('Error in Bomber.Explode: {e.Message}')
             ReviveAlphaTimer.pause()
             Unit?.PauseSelf(false)
@@ -129,10 +129,10 @@ export class Bomber extends Affix {
     private Revive() {
         Unit.IsReviving = true
         if (Unit.WolfArea.IsEnabled) {
-            this.TimerIndicator ??= Effect.create(RING_TIMER_INDICATOR, Unit.Unit.X, Unit.unit.y)!
+            this.TimerIndicator ??= Effect.create(RING_TIMER_INDICATOR, Unit.Unit.x, Unit.unit.y)!
             this.TimerIndicator.SetTime(0)
-            this.TimerIndicator.PlayAnimation(animtype.Birth)
-            this.TimerIndicator.SetX(Unit.Unit.X)
+            this.TimerIndicator.playAnimation(animtype.Birth)
+            this.TimerIndicator.SetX(Unit.Unit.x)
             this.TimerIndicator.SetY(Unit.unit.y)
         }
         ReviveAlphaTimer?.Timer?.start(1.0, true, ReviveActions)
@@ -141,14 +141,14 @@ export class Bomber extends Affix {
     private ReviveActions() {
         if (ReviveAlpha < 10) {
             ReviveAlpha++
-            Unit.Unit.SetVertexColor(204, 102, 0, 25)
+            Unit.Unit.setVertexColor(204, 102, 0, 25)
         } else {
             ReviveAlpha = 1
             ReviveAlphaTimer?.pause()
             Unit.PauseSelf(false)
             Unit.IsReviving = false
-            TimerIndicator?.PlayAnimation(animtype.Death)
-            Unit.Unit.SetVertexColor(204, 102, 0)
+            TimerIndicator?.playAnimation(animtype.Death)
+            Unit.Unit.setVertexColor(204, 102, 0, 255)
             ExplodeTimer?.Timer?.start(ExplosionInterval(), false, StartExplosion)
         }
     }

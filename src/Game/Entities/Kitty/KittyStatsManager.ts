@@ -1,6 +1,16 @@
+import { PersonalBestAwarder } from 'src/Game/Podium/PersonalBestAwarder'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Resources } from 'src/Init/Resources'
+import { Challenges } from 'src/Rewards/Challenges/Challenges'
+import { DeathlessChallenges } from 'src/Rewards/Challenges/DeathlessChallenges'
+import { SoloMultiboard } from 'src/UI/Multiboard/SoloMultiboard'
+import { Kitty } from './Kitty'
+
 export class KittyStatsManager {
     private Kitty: Kitty
-    public KittyStatsManager(kitty: Kitty) {
+
+    public constructor(kitty: Kitty) {
         this.Kitty = kitty
     }
 
@@ -9,7 +19,7 @@ export class KittyStatsManager {
     /// </summary>
     /// <param name="savior"></param>
     public UpdateSaviorStats(savior: Kitty) {
-        savior.Player.Gold += Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak)
+        savior.Player.addGold(Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak))
         savior.Unit.Experience += Resources.SaveExperience
         SaveStatUpdate(savior)
     }

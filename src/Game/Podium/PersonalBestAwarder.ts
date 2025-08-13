@@ -17,7 +17,7 @@ export class PersonalBestAwarder {
     /// </summary>
     /// <param name="player"></param>
     public static BeatRecordTime(player: MapPlayer) {
-        let kittyStats = Globals.ALL_KITTIES.get(player).SaveData
+        let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let roundEnum = ''
         if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum()
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum()
@@ -25,7 +25,7 @@ export class PersonalBestAwarder {
         let timeFormatted = Utility.ConvertFloatToTime(time)
         let difficulty =
             Gamemode.CurrentGameMode == GameMode.Standard
-                ? Difficulty.DifficultyOption.ToString()
+                ? Difficulty.DifficultyOption.toString()
                 : '{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}'
         Utility.TimedTextToAllPlayers(
             MessageTime,

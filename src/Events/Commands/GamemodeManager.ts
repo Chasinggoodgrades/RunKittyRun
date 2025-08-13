@@ -12,11 +12,11 @@ export class GamemodeManager {
         desc = Colors.COLOR_YELLOW_ORANGE + desc
         usage = Colors.COLOR_GOLD + usage
         let command: GamemodeInfo = new GamemodeInfo(cmd, desc, usage)
-        commands.push(cmd.ToLower(), command)
+        commands.push(cmd.toLowerCase(), command)
     }
 
     public static GetCommandInfo(cmd: string): GamemodeInfo {
-        return commands.has(cmd.ToLower()) ? commands[cmd.ToLower()] : null
+        return commands.has(cmd.toLowerCase()) ? commands[cmd.toLowerCase()] : null
     }
 }
 

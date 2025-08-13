@@ -1,3 +1,5 @@
+import { Logger } from 'src/Events/Logger/Logger'
+
 export class ErrorHandler {
     public static ErrorMessagesOn: boolean = true
 
@@ -5,7 +7,7 @@ export class ErrorHandler {
         return () => {
             try {
                 cb()
-            } catch (e) {
+            } catch (e: any) {
                 if (this.ErrorMessagesOn) {
                     Logger.Warning(`caught: Error: ${e.message}\n${e.stack}`)
                 }

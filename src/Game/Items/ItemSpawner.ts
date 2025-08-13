@@ -30,7 +30,7 @@ export class ItemSpawner {
                 SpawnRegularItems()
             }
             SpawnKibble(NUMBER_OF_ITEMS)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('ItemSpawner: SpawnItems: {e.Message}')
         }
     }
@@ -51,7 +51,7 @@ export class ItemSpawner {
             let kibble = TrackKibbles[i]
             ItemSpatialGrid.UnregisterKibble(kibble)
             if (kibble.Item == null) continue // Already been __destroyed.
-            kibble.Dispose()
+            kibble.dispose()
         }
 
         TrackKibbles.clear()
@@ -74,8 +74,8 @@ export class ItemSpawner {
         let item = SpawnableItems[random]
         let regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         let region = RegionList.WolfRegions[regionNumber]
-        let x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX)
-        let y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY)
+        let x = GetRandomReal(region.Rect.minX, region.Rect.maxX)
+        let y = GetRandomReal(region.Rect.minY, region.Rect.maxY)
         let i = Item.create(item, x, y)!
         TrackItems.push(i)
         ItemSpatialGrid.RegisterItem(i)

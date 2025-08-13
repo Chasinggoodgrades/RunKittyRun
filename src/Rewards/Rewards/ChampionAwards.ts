@@ -1,7 +1,7 @@
 export class ChampionAwards {
     public static AwardAllChampions() {
-        for (let player in Globals.ALL_PLAYERS) {
-            if (!Globals.CHAMPIONS.includes(player.Name)) continue
+        for (let player of Globals.ALL_PLAYERS) {
+            if (!Globals.CHAMPIONS.includes(player.name)) continue
             GiveAllChampionAwards(player)
         }
     }

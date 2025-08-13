@@ -1,17 +1,26 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { GameTimer } from 'src/Game/Rounds/GameTimer'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { int, Utility } from 'src/Utility/Utility'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Multiboard, Trigger } from 'w3ts'
 
 export class TeamsMultiboard {
-    private static CurrentTeamsMB: multiboard
-    private static TeamsStatsMB: multiboard
-    private static ESCTrigger: trigger
+    private static CurrentTeamsMB: Multiboard
+    private static TeamsStatsMB: Multiboard
+    private static ESCTrigger: Trigger
 
     public static Initialize() {
         try {
             if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-            TeamsMultiboard.ESCTrigger ??= CreateTrigger()
+            TeamsMultiboard.ESCTrigger ??= Trigger.create()!
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in TeamsMultiboard.Initialize: {e.Message}')
             throw e
         }
@@ -25,19 +34,19 @@ export class TeamsMultiboard {
     // #region Teams Multiboards
 
     private static TeamsStatsMultiboard() {
-        TeamsMultiboard.TeamsStatsMB ??= multiboard.Create()
-        TeamsMultiboard.TeamsStatsMB.Title =
+        TeamsMultiboard.TeamsStatsMB ??= Multiboard.create()!
+        TeamsMultiboard.TeamsStatsMB.title =
             'Stats: Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
-        TeamsMultiboard.TeamsStatsMB.display = false
+        TeamsMultiboard.TeamsStatsMB.display(false)
     }
 
     public static CurrentTeamsMultiboard() {
-        TeamsMultiboard.CurrentTeamsMB ??= multiboard.Create()
-        TeamsMultiboard.CurrentTeamsMB.Title =
+        TeamsMultiboard.CurrentTeamsMB ??= Multiboard.create()!
+        TeamsMultiboard.CurrentTeamsMB.title =
             'Teams: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
-        TeamsMultiboard.CurrentTeamsMB.display = true
-        TeamsMultiboard.CurrentTeamsMB.Rows = Globals.ALL_TEAMS.length + 1
-        TeamsMultiboard.CurrentTeamsMB.Columns = Gamemode.PlayersPerTeam
+        TeamsMultiboard.CurrentTeamsMB.display(true)
+        TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.length + 1
+        TeamsMultiboard.CurrentTeamsMB.columns = Gamemode.PlayersPerTeam
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 0).setText('1: Team')
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 0).setVisible(true, false)
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 1).setText('1: Player')
@@ -47,8 +56,8 @@ export class TeamsMultiboard {
     public static UpdateTeamStatsMB() {
         // Top Portion Setup
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-        TeamsMultiboard.TeamsStatsMB.Rows = Globals.ALL_TEAMS_LIST.length + 1
-        TeamsMultiboard.TeamsStatsMB.Columns = 3 + Gamemode.NumberOfRounds
+        TeamsMultiboard.TeamsStatsMB.rows = Globals.ALL_TEAMS_LIST.length + 1
+        TeamsMultiboard.TeamsStatsMB.columns = 3 + Gamemode.NumberOfRounds
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setText('Team')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setVisible(true, false)
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).SetWidth(0.05)
@@ -83,7 +92,7 @@ export class TeamsMultiboard {
             }
             // Overall Progress
             for (let j: number = 1; j <= Gamemode.NumberOfRounds; j++) {
-                overallProgress = overallProgress + float.Parse(team.RoundProgress[j], CultureInfo.InvariantCulture) // possibly bad?
+                overallProgress = overallProgress + int.Parse(team.RoundProgress[j]) // possibly bad?
             }
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setText(
                 (overallProgress / Gamemode.NumberOfRounds).ToString('F2') + '%'
@@ -102,8 +111,8 @@ export class TeamsMultiboard {
     }
 
     public static UpdateCurrentTeamsMB() {
-        TeamsMultiboard.CurrentTeamsMB.Rows = Globals.ALL_TEAMS.length
-        TeamsMultiboard.CurrentTeamsMB.Columns = 2
+        TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size
+        TeamsMultiboard.CurrentTeamsMB.columns = 2
 
         let widthSize = 0.05 * Gamemode.PlayersPerTeam
         let rowIndex: number = 0
@@ -126,23 +135,22 @@ export class TeamsMultiboard {
     // #region ESC Key Event & Actions
 
     private static ESCInit() {
-        for (let player in Globals.ALL_PLAYERS) {
-            TriggerRegisterPlayerEvent(TeamsMultiboard.ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
+        for (let player of Globals.ALL_PLAYERS) {
+            TeamsMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        TeamsMultiboard.ESCTrigger.AddAction(ErrorHandler.Wrap(TeamsMultiboard.ESCPressed))
+        TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(TeamsMultiboard.ESCPressed))
     }
 
     private static ESCPressed() {
-        let player = GetTriggerPlayer()
-        let localPlayer = player.LocalPlayer
-        if (localPlayer != player) return
+        let player = getTriggerPlayer()
+        if (player.isLocal()) return
         // Swap multiboards
-        if (TeamsMultiboard.CurrentTeamsMB.IsDisplayed) {
-            TeamsMultiboard.CurrentTeamsMB.display = false
-            TeamsMultiboard.TeamsStatsMB.display = true
+        if (TeamsMultiboard.CurrentTeamsMB.displayed) {
+            TeamsMultiboard.CurrentTeamsMB.display(false)
+            TeamsMultiboard.TeamsStatsMB.display(true)
         } else {
-            TeamsMultiboard.TeamsStatsMB.display = false
-            TeamsMultiboard.CurrentTeamsMB.display = true
+            TeamsMultiboard.TeamsStatsMB.display(false)
+            TeamsMultiboard.CurrentTeamsMB.display(true)
         }
     }
 

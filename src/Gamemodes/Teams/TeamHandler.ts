@@ -63,7 +63,7 @@ export class TeamHandler {
                     // Create new teams as needed
                     while (
                         Globals.ALL_TEAMS.has(teamNumber) &&
-                        Globals.ALL_TEAMS[teamNumber].Teammembers.length >= Gamemode.PlayersPerTeam
+                        Globals.ALL_TEAMS.get(teamNumber)!.Teammembers.length >= Gamemode.PlayersPerTeam
                     ) {
                         teamNumber++
                     }
@@ -77,7 +77,7 @@ export class TeamHandler {
                     team.AddMember(player)
                 }
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in TeamHandler.RandomHandler: {e.Message}')
         }
     }

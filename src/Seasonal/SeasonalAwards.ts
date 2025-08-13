@@ -23,7 +23,7 @@ export class SeasonalAwards {
             ErrorHandler.Wrap(() => {
                 AwardManager.GiveRewardAll('SnowTrail2023', false)
                 AwardManager.GiveRewardAll('SnowWings2023', false)
-                t.Dispose()
+                t.dispose()
             })
         )
     }

@@ -1,4 +1,10 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Globals } from 'src/Global/Globals'
+import { FilterList } from 'src/Utility/FilterList'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { Trigger } from 'w3ts'
+import { Wolf } from './Entities/Wolf'
 
 export class WolfPoint {
     private MaxDistance: number = 128 // Max distance between points
@@ -6,7 +12,7 @@ export class WolfPoint {
     public static readonly StopOrderID: number = OrderId('stop')
     public static readonly AttackOrderID: number = OrderId('attack')
     public static readonly HoldPositionOrderID: number = OrderId('holdposition')
-    public static IsPausedTrigger: trigger
+    public static IsPausedTrigger: Trigger
 
     private Wolf: Wolf
     private PointInfo: WolfPointInfo[]
@@ -29,54 +35,54 @@ export class WolfPoint {
     /// <param name="endY">The end point Y coordinate.</param>
     public DiagonalRegionCreate(startX: number, startY: number, endX: number, endY: number) {
         try {
-            PointInfo ??= WolfPointInfo.GetWolfPointList()
-            Cleanup()
+            this.PointInfo ??= WolfPointInfo.GetWolfPointList()
+            this.Cleanup()
 
             // Calculate the distance between points
             let distance = WCSharp.Shared.Util.DistanceBetweenPoints(startX, startY, endX, endY)
-            let numRegions: number = Math.Ceiling(distance / MaxDistance)
+            let numRegions: number = Math.Ceiling(distance / this.MaxDistance)
 
             // Calculate angle and step sizes using trigonometry
             let angle = Math.Atan2(endY - startY, endX - startX)
-            let stepX = MaxDistance * Math.Cos(angle)
-            let stepY = MaxDistance * Math.Sin(angle)
+            let stepX = this.MaxDistance * Math.Cos(angle)
+            let stepY = this.MaxDistance * Math.Sin(angle)
 
             for (let i: number = 0; i < numRegions; i++) {
                 let regionX = startX + i * stepX
                 let regionY = startY + i * stepY
-                PointInfo[i].X = regionX
-                PointInfo[i].Y = regionY
-                PointInfo[i].LastPoint = false
+                this.PointInfo[i].x = regionX
+                this.PointInfo[i].y = regionY
+                this.PointInfo[i].LastPoint = false
             }
 
             // Ensure the last point is exactly the end point
-            PointInfo[numRegions].X = endX
-            PointInfo[numRegions].Y = endY
-            PointInfo[numRegions].LastPoint = true
+            this.PointInfo[numRegions].x = endX
+            this.PointInfo[numRegions].y = endY
+            this.PointInfo[numRegions].LastPoint = true
 
-            if (PointInfo != null && PointInfo.length > 0) {
+            if (this.PointInfo != null && this.PointInfo.length > 0) {
                 this.StartMovingOrders()
             }
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Warning('WolfPoint.DiagonalRegionCreate {ex.Message}')
         }
     }
 
     public Cleanup() {
         try {
-            if (PointInfo == null) return
-            Wolf.Unit.ClearOrders()
+            if (this.PointInfo == null) return
+            this.Wolf.Unit.ClearOrders()
 
-            for (let i: number = 0; i < PointInfo.length; i++) {
-                PointInfo[i].X = 0
-                PointInfo[i].Y = 0
+            for (let i: number = 0; i < this.PointInfo.length; i++) {
+                this.PointInfo[i].x = 0
+                this.PointInfo[i].y = 0
             }
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical('up: error: Clean: WolfPoint: {ex.Message}')
         }
     }
 
-    public Dispose() {
+    public dispose() {
         this.Cleanup()
         WolfPointInfo.ClearWolfPointList(this.PointInfo)
         BlzUnitClearOrders(this.Wolf.Unit, false)
@@ -84,27 +90,27 @@ export class WolfPoint {
 
     private StartMovingOrders() {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
-        if (Wolf.IsPaused || Wolf.IsReviving) {
-            Wolf.Unit.ClearOrders()
+        if (this.Wolf.paused || this.Wolf.IsReviving) {
+            this.Wolf.Unit.ClearOrders()
             return
         }
 
         try {
-            for (let i: number = PointInfo.length - 1; i >= 1; i--) {
-                if (PointInfo[i].X == 0 && PointInfo[i].Y == 0) continue
-                let moveID = PointInfo[i].LastPoint ? AttackOrderID : MoveOrderID
+            for (let i: number = this.PointInfo.length - 1; i >= 1; i--) {
+                if (this.PointInfo[i].x == 0 && this.PointInfo[i].y == 0) continue
+                let moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
-                Wolf.Unit.QueueOrder(moveID, PointInfo[i].X, PointInfo[i].Y)
-                if (!Wolf.IsWalking) Wolf.IsWalking = true // ensure its set after queued order.
+                this.Wolf.Unit.QueueOrder(moveID, this.PointInfo[i].x, this.PointInfo[i].y)
+                if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
             }
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical('WolfPoint.StartMovingOrders {ex.Message}')
         }
     }
 
-    private static InitTrigger(): trigger {
-        this.IsPausedTrigger ??= CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(this.IsPausedTrigger, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
+    private static InitTrigger(): Trigger {
+        this.IsPausedTrigger ??= Trigger.create()!
+        this.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 
         TriggerAddCondition(this.IsPausedTrigger, FilterList.IssuedOrderAtkOrder)
         TriggerAddCondition(this.IsPausedTrigger, FilterList.UnitTypeWolf)
@@ -115,18 +121,18 @@ export class WolfPoint {
     }
 
     private static QueueOrderActions() {
-        Globals.ALL_WOLVES[GetTriggerUnit()].IsWalking = !Globals.ALL_WOLVES[GetTriggerUnit()].IsWalking
+        Globals.ALL_WOLVES[getTriggerUnit()].IsWalking = !Globals.ALL_WOLVES[getTriggerUnit()].IsWalking
     }
 }
 
 export class WolfPointInfo {
-    public X: number
-    public Y: number
+    public x: number
+    public y: number
     public LastPoint: boolean
 
     public WolfPointInfo() {
-        this.X = 0
-        this.Y = 0
+        this.x = 0
+        this.y = 0
     }
 
     public static GetWolfPointList(): WolfPointInfo[] {

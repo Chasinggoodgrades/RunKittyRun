@@ -33,7 +33,7 @@ import { FloatingNameTag } from 'src/UI/FloatingNames'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { Utility } from 'src/Utility/Utility'
-import { MapPlayer, Timer, Unit } from 'w3ts'
+import { MapPlayer, Timer, Trigger, Unit } from 'w3ts'
 import { Circle } from '../Circle'
 import { ShadowKitty } from '../ShadowKitty'
 import { KittyMiscInfo } from './KittyMiscInfo'
@@ -46,7 +46,7 @@ export class Kitty {
     private InvulDuration: number = 0.3
     public static InvulTest: boolean = false
 
-    public Name: string
+    public name: string
     public SaveData: KittyData
     public Relics: Relic[]
     public TimeProg: KittyTime
@@ -74,8 +74,8 @@ export class Kitty {
     public Finished: boolean = false
     public TeamID: number = 0
     public ProgressZone: number = 0
-    public w_Collision: trigger = CreateTrigger()
-    public c_Collision: trigger = CreateTrigger()
+    public w_Collision: Trigger = Trigger.create()!
+    public c_Collision: Trigger = Trigger.create()!
     public Disco: Disco
     public InvulTimer = Timer.create()
     public IsChained: boolean = false
@@ -84,7 +84,7 @@ export class Kitty {
 
     public constructor(player: MapPlayer) {
         this.Player = player
-        this.Name = Player.Name.split('#')[0]
+        this.name = player.name.split('#')[0]
         this.InitData()
         this.SpawnEffect()
         this.CreateKitty()
@@ -110,11 +110,11 @@ export class Kitty {
     /// </summary>
     public static Initialize() {
         try {
-            for (let player in Globals.ALL_PLAYERS) {
+            for (let player of Globals.ALL_PLAYERS) {
                 new Circle(player)
                 new Kitty(player)
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in Kitty.Initalize. {e.StackTrace}')
             throw e
         }
@@ -155,12 +155,12 @@ export class Kitty {
             // Handle game mode specific logic
             if (Gamemode.CurrentGameMode == GameMode.Standard) {
                 TeamDeathless.DiedWithOrb(this)
-                ChainedTogether.LoseEvent(this.Name)
+                ChainedTogether.LoseEvent(this.name)
                 SoundManager.PlayLastManStandingSound()
                 Gameover.GameOver()
                 MultiboardUtil.RefreshMultiboards()
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in KillKitty: {e.Message}')
         }
     }
@@ -170,7 +170,7 @@ export class Kitty {
     /// </summary>
     public ReviveKitty(savior: Kitty = null) {
         try {
-            if (Unit.Alive) return
+            if (Unit.isAlive()) return
 
             let circle: Circle = Globals.ALL_CIRCLES[Player]
 
@@ -180,7 +180,7 @@ export class Kitty {
             Alive = true
 
             // Revive the unit at its respective position
-            Unit.Revive(circle.Unit.X, circle.unit.y, false)
+            Unit.Revive(circle.Unit.x, circle.unit.y, false)
             Unit.mana = circle.Unit.mana
 
             // Adjust player controls and UI
@@ -197,7 +197,7 @@ export class Kitty {
                 StatsManager.UpdateSaviorStats(savior)
                 MultiboardUtil.RefreshMultiboards()
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in ReviveKitty: {e.Message}')
             throw e
         }
@@ -219,28 +219,28 @@ export class Kitty {
     private InitData() {
         try {
             // Save Data
-            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing)
+            if (Player.controller == MAP_CONTROL_USER && Player.slotState == PLAYER_SLOT_STATE_PLAYING)
                 SaveData = SaveManager.GetKittyData(Player)
             else SaveData = new KittyData() // dummy data for comps
 
             Relics = []
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in InitData {e.Message}')
             throw e
         }
     }
 
     private SpawnEffect() {
-        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.Id].Center
-        Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y)
+        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.id].Center
+        Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.x, spawnCenter.y)
     }
 
     private CreateKitty() {
         // Spawn Location
-        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.Id].Center
+        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.id].Center
 
         // Creation of Unit
-        Unit = Unit.Create(this.Player, this.KITTY_HERO_TYPE, spawnCenter.X, spawnCenter.Y, 360)
+        Unit = Unit.Create(this.Player, this.KITTY_HERO_TYPE, spawnCenter.x, spawnCenter.y, 360)
         Utility.MakeUnitLocust(Unit)
         Utility.SelectUnitForPlayer(Player, Unit)
 
@@ -248,7 +248,7 @@ export class Kitty {
         Globals.ALL_KITTIES.push(Player, this)
         Resources.StartingItems(this)
         RelicUtil.DisableRelicBook(Unit)
-        Unit.Name = '{Colors.PlayerNameColored(Player)}'
+        Unit.name = '{Colors.PlayerNameColored(Player)}'
         TrueSightGhostWolves()
         CollisionDetection.KittyRegisterCollisions(this)
 
@@ -257,27 +257,27 @@ export class Kitty {
     }
 
     private StartAIController() {
-        if (Player.Controller == mapcontrol.Computer && Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (Player.controller == MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode == GameMode.Standard) {
             this.aiController?.StartAi()
             Unit.AddItem(FourCC('bspd')) // boots
         }
     }
 
-    public Dispose() {
+    public dispose() {
         Alive = false
-        w_Collision.Dispose()
-        c_Collision.Dispose()
-        YellowLightning.Dispose()
-        TimeProg.Dispose()
-        APMTracker.Dispose()
-        MirrorHandler.Dispose()
+        w_Collision.dispose()
+        c_Collision.dispose()
+        YellowLightning.dispose()
+        TimeProg.dispose()
+        APMTracker.dispose()
+        MirrorHandler.dispose()
         InvulTimer.pause()
-        InvulTimer.Dispose()
-        Disco?.Dispose()
+        InvulTimer.dispose()
+        Disco?.dispose()
         aiController.StopAi()
         RTR.StopRTR()
-        Unit.Dispose()
-        ChainedTogether.RegenerateGroup(this.Name)
+        Unit.dispose()
+        ChainedTogether.RegenerateGroup(this.name)
         if (Gameover.WinGame) return
         Globals.ALL_KITTIES_LIST.Remove(this)
         Globals.ALL_KITTIES.Remove(Player)
@@ -288,4 +288,6 @@ export class Kitty {
         Unit.AddAbility(trueSight)
         Unit.HideAbility(trueSight, true)
     }
+
+    public isAlive = () => this.Alive
 }

@@ -66,10 +66,10 @@ export class StandardPodium {
             return
         }
         let(player, position) = PodiumQueue.Dequeue()
-        let kitty = Globals.ALL_KITTIES.get(player).Unit
-        kitty.setPos(position.X, position.Y)
-        kitty.SetFacing(270)
-        kitty.IsPaused = true
+        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        kitty.setPos(position.x, position.y)
+        kitty.setFacingEx(270)
+        kitty.paused = true
         MovedUnits.push(kitty)
         print(
             '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
@@ -111,13 +111,13 @@ export class StandardPodium {
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player).CurrentStats
+        let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (PodiumType) {
             case HighestScore:
-                return (stats.TotalSaves - stats.TotalDeaths).ToString()
+                return (stats.TotalSaves - stats.TotalDeaths).toString()
 
             case MostSaves:
-                return stats.TotalSaves.ToString()
+                return stats.TotalSaves.toString()
 
             case HighestRatio:
                 return stats.TotalDeaths == 0
@@ -125,7 +125,7 @@ export class StandardPodium {
                     : (stats.TotalSaves / stats.TotalDeaths).ToString('F2')
 
             case HighestStreak:
-                return stats.MaxSaveStreak.ToString()
+                return stats.MaxSaveStreak.toString()
 
             default:
                 return 'n/a'

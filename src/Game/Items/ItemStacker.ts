@@ -1,5 +1,5 @@
 export class ItemStacker {
-    private static PickupTrigger: trigger
+    private static PickupTrigger: Trigger
     private static StackableItemIDs: number[]
 
     public static Initialize() {
@@ -22,10 +22,10 @@ export class ItemStacker {
         return StackableItemIDs
     }
 
-    private static RegisterEvents(): trigger {
-        let PickupTrigger = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(PickupTrigger, playerunitevent.PickupItem)
-        PickupTrigger.AddAction(StackActions)
+    private static RegisterEvents(): Trigger {
+        let PickupTrigger = Trigger.create()!
+        PickupTrigger.registerAnyUnitEvent(playerunitevent.PickupItem)
+        PickupTrigger.addAction(StackActions)
         return PickupTrigger
     }
 
@@ -34,9 +34,9 @@ export class ItemStacker {
             let item: item = GetManipulatedItem()
             let itemID = item.TypeId
             if (!StackableItem(itemID)) return
-            let unit = GetTriggerUnit()
+            let unit = getTriggerUnit()
             let heldItem = Utility.UnitGetItem(unit, itemID)
-            item.Owner = unit.Owner
+            item.owner = unit.owner
             if (heldItem == item) return
             if (heldItem == null) return
             let itemCharges = item.Charges
@@ -44,7 +44,7 @@ export class ItemStacker {
             else heldItem.Charges += 1
             item.destroy()
             item = null
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical(e.Message)
             throw e
         }

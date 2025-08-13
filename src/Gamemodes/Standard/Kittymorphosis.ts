@@ -12,7 +12,7 @@ export class KittyMorphosis {
     /// <summary>
     /// Trigger that will detect whenever the Kitty.Player levels up..
     /// </summary>
-    private Trigger: trigger
+    private Trigger: Trigger
 
     /// <summary>
     /// The Kitty instance that this morphosis is applied to.
@@ -38,10 +38,10 @@ export class KittyMorphosis {
     /// </summary>
     private RegisterTriggers() {
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return // Solo Mode
-        Trigger ??= CreateTrigger()
-        Trigger.RegisterUnitEvent(Kitty.Unit, unitevent.HeroLevel)
-        Trigger.AddCondition(Condition(() => GetTriggerUnit().HeroLevel >= REQUIRED_LEVEL))
-        Trigger.AddAction(MorphKitty)
+        Trigger ??= Trigger.create()!
+        Trigger.registerUnitEvent(Kitty.Unit, unitevent.getHeroLevel())
+        Trigger.addCondition(Condition(() => getTriggerUnit().getHeroLevel() >= REQUIRED_LEVEL))
+        Trigger.addAction(MorphKitty)
     }
 
     /// <summary>

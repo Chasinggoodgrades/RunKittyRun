@@ -1,15 +1,15 @@
 export class Safezone {
     public Region: region
-    private Trigger: trigger
+    private Trigger: Trigger
     public ID: number
-    public Rect_: rect
+    public Rect_: Rectangle
     public Rectangle: Rectangle
     public AwardedPlayers: MapPlayer[] = []
 
     public Safezone(id: number, region: region) {
         ID = id
         Region = region
-        let Trigger = CreateTrigger()
+        let Trigger = Trigger.create()!
     }
 
     public static Initialize() {
@@ -27,19 +27,19 @@ export class Safezone {
 
     private EnterSafezoneEvents() {
         Trigger.RegisterEnterRegion(Region, FilterList.KittyFilterOrShadow)
-        Trigger.AddAction(EnterSafezoneActions)
+        Trigger.addAction(EnterSafezoneActions)
     }
 
     private EnterSafezoneActions() {
         try {
-            let unit = GetTriggerUnit()
+            let unit = getTriggerUnit()
             if (WolfEntersSafezoneActions(unit)) return
             if (GetUnitTypeId(unit) == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON) {
                 WolfLaneHider.ShadowKittyLaneAdd(ID)
                 return
             }
-            let player = unit.Owner
-            let kitty = Globals.ALL_KITTIES.get(player)
+            let player = unit.owner
+            let kitty = Globals.ALL_KITTIES.get(player)!
             SafezoneAdditions(kitty)
             kitty.CurrentSafeZone = ID
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider()
@@ -50,7 +50,7 @@ export class Safezone {
             unit.Experience += Resources.SafezoneExperience
             AwardedPlayers.push(player)
             DeathlessChallenges.DeathlessCheck(kitty)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in EnterSafezoneActions: {e.Message}')
         }
     }

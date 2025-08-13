@@ -1,14 +1,20 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
+import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { Timer, Trigger } from 'w3ts'
+
 export class Slider {
     private SLIDE_INTERVAL: number = 0.0075
     private SLIDE_ANGLE_PER_PERIOD: number = 0.3
     private ITEM_PICKUP_RADIUS: number = 48
 
     private kitty: Kitty
-    private SliderTimer: timer
+    private SliderTimer: Timer
     private enabled: boolean
 
-    private ClickTrigger: trigger
-    private WidgetTrigger: trigger
+    private ClickTrigger: Trigger
+    private WidgetTrigger: Trigger
 
     private remainingDegreesToTurn: number = 0
     private slideCurrentTurnPerPeriod: number = 0
@@ -16,10 +22,10 @@ export class Slider {
     private wasSliding: boolean = false
     private forcedSlideSpeed: number | null = null
     public absoluteSlideSpeed: number | null = null
-    private ForcedSlideTimer: timer
+    private ForcedSlideTimer: Timer
 
     // percentage of maximum speed
-    private SPEED_AT_LEAST_THAN_50_DEGREES: Map<number, number> = {
+    private SPEED_AT_LEAST_THAN_50_DEGREES: { [x: number]: number } = {
         51: 92.721,
         50: 91.655,
         49: 90.588,
@@ -74,30 +80,30 @@ export class Slider {
         0: 1.5,
     }
 
-    public Slider(kitty: Kitty) {
+    public constructor(kitty: Kitty) {
         this.kitty = kitty
-        SliderTimer = timer.Create()
-        ForcedSlideTimer = timer.Create()
-        enabled = false
-        RegisterClickEvent()
+        this.SliderTimer = Timer.create()
+        this.ForcedSlideTimer = Timer.create()
+        this.enabled = false
+        this.RegisterClickEvent()
     }
 
     public IsEnabled(): boolean {
-        return enabled
+        return this.enabled
     }
 
     public StartSlider() {
-        enabled = true
-        ResumeSlider(false)
+        this.enabled = true
+        this.ResumeSlider(false)
     }
 
     public ResumeSlider(isRevive: boolean) {
-        if (!enabled) {
+        if (!this.enabled) {
             return
         }
 
-        ClickTrigger.Enable()
-        WidgetTrigger.Enable()
+        this.ClickTrigger.enabled = true
+        this.WidgetTrigger.enabled = true
 
         if (isRevive) {
             this.forcedSlideSpeed = 0
@@ -120,24 +126,24 @@ export class Slider {
             )
         }
 
-        SliderTimer.start(
-            SLIDE_INTERVAL,
+        this.SliderTimer.start(
+            this.SLIDE_INTERVAL,
             true,
             ErrorHandler.Wrap(() => {
-                if (this.kitty.Unit.IsPaused) {
+                if (this.kitty.Unit.paused) {
                     return
                 }
 
-                if (!IsOnSlideTerrain()) {
+                if (!this.IsOnSlideTerrain()) {
                     if (this.wasSliding && this.kitty.IsMirror) {
                         // Reverse hero
-                        BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180)
+                        this.kitty.Unit.setFacingEx(this.kitty.Unit.facing + 180)
                     }
 
                     this.wasSliding = false
 
                     if (this.remainingDegreesToTurn != 0) {
-                        escaperTurnForOnePeriod()
+                        this.escaperTurnForOnePeriod()
                     }
 
                     return
@@ -145,49 +151,49 @@ export class Slider {
 
                 if (!this.wasSliding && this.kitty.IsMirror) {
                     // Reverse hero
-                    BlzSetUnitFacingEx(kitty.Unit, GetUnitFacing(kitty.Unit) + 180)
+                    this.kitty.Unit.setFacingEx(this.kitty.Unit.facing + 180)
                 }
 
                 this.wasSliding = true
-                UpdateSlider()
+                this.UpdateSlider()
             })
         )
     }
 
     public PauseSlider() {
-        ClickTrigger.Disable()
-        WidgetTrigger.Disable()
-        SliderTimer.pause()
-        ForcedSlideTimer.pause()
+        this.ClickTrigger.enabled = false
+        this.WidgetTrigger.enabled = false
+        this.SliderTimer.pause()
+        this.ForcedSlideTimer.pause()
         this.forcedSlideSpeed = null
         this.kitty.Invulnerable = false
-        remainingDegreesToTurn = 0
-        slideCurrentTurnPerPeriod = 0
+        this.remainingDegreesToTurn = 0
+        this.slideCurrentTurnPerPeriod = 0
         this.wasSliding = false
     }
 
     public StopSlider() {
-        enabled = false
+        this.enabled = false
         this.PauseSlider()
     }
 
     public IsOnSlideTerrain(): boolean {
-        return !TerrainChanger.SafezoneTerrain.includes(GetTerrainType(kitty.Unit.X, kitty.unit.y))
+        return !TerrainChanger.SafezoneTerrain.includes(GetTerrainType(this.kitty.Unit.x, this.kitty.Unit.y))
     }
 
     private UpdateSlider() {
         let slideSpeed: number =
             this.forcedSlideSpeed ??
             this.absoluteSlideSpeed ??
-            (this.kitty.IsMirror ? -1 : 1) * GetUnitMoveSpeed(kitty.Unit)
-        let slidePerTick: number = slideSpeed * SLIDE_INTERVAL
+            (this.kitty.IsMirror ? -1 : 1) * this.kitty.Unit.moveSpeed
+        let slidePerTick: number = slideSpeed * this.SLIDE_INTERVAL
 
-        let angle: number = Rad2Deg(kitty.Unit.Facing)
+        let angle: number = Rad2Deg(this.kitty.Unit.facing)
 
-        let oldX: number = kitty.Unit.X
-        let oldY: number = kitty.unit.y
+        let oldX: number = this.kitty.Unit.x
+        let oldY: number = this.kitty.Unit.y
 
-        escaperTurnForOnePeriod()
+        this.escaperTurnForOnePeriod()
 
         let newX: number = oldX + slidePerTick * Cos(angle)
         let newY: number = oldY + slidePerTick * Sin(angle)
@@ -200,30 +206,30 @@ export class Slider {
             newY = oldY
         }
 
-        kitty.Unit.SetPathing(false)
-        kitty.Unit.setPos(newX, newY)
-        kitty.Unit.SetPathing(true)
-        ItemPickup()
+        this.kitty.Unit.setPathing(false)
+        this.kitty.Unit.setPos(newX, newY)
+        this.kitty.Unit.setPathing(true)
+        this.ItemPickup()
     }
 
     private RegisterClickEvent() {
-        ClickTrigger = CreateTrigger()
-        ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder)
-        ClickTrigger.AddAction(() => HandleTurn(true))
+        this.ClickTrigger = Trigger.create()!
+        this.ClickTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
+        this.ClickTrigger.addAction(() => this.HandleTurn(true))
 
-        WidgetTrigger = CreateTrigger()
-        WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder)
-        WidgetTrigger.AddAction(() => HandleTurn(false))
+        this.WidgetTrigger = Trigger.create()!
+        this.WidgetTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        this.WidgetTrigger.addAction(() => this.HandleTurn(false))
 
-        ClickTrigger.Disable()
-        WidgetTrigger.Disable()
+        this.ClickTrigger.enabled = false
+        this.WidgetTrigger.enabled = false
     }
 
     private HandleTurn(isToLocation: boolean) {
-        if (!IsEnabled()) return
-        if (!IsOnSlideTerrain()) return
+        if (!this.IsEnabled()) return
+        if (!this.IsOnSlideTerrain()) return
 
-        let unit = GetTriggerUnit()
+        let unit = getTriggerUnit()
         let angle: number
         if (isToLocation) {
             let orderX = GetOrderPointX()
@@ -237,7 +243,7 @@ export class Slider {
         }
 
         let currentAngle = GetUnitFacing(unit)
-        this.setRemainingDegreesToTurn(AnglesDiff(angle, currentAngle))
+        this.setRemainingDegreesToTurn(this.AnglesDiff(angle, currentAngle))
     }
 
     public ForceAngleBetween0And360(angle: number) {
@@ -247,8 +253,8 @@ export class Slider {
     }
 
     private AnglesDiff(endAngle: number, startAngle: number) {
-        endAngle = ForceAngleBetween0And360(endAngle)
-        startAngle = ForceAngleBetween0And360(startAngle)
+        endAngle = this.ForceAngleBetween0And360(endAngle)
+        startAngle = this.ForceAngleBetween0And360(startAngle)
 
         let anglesDiff = endAngle - startAngle
         if (anglesDiff < -180) anglesDiff += 360
@@ -264,30 +270,30 @@ export class Slider {
 
     private escaperTurnForOnePeriod() {
         let rotationSpeed: number = 1.3
-        let maxSlideTurnPerPeriod: number = rotationSpeed * SLIDE_INTERVAL * 360
+        let maxSlideTurnPerPeriod: number = rotationSpeed * this.SLIDE_INTERVAL * 360
         let rotationTimeForMaximumSpeed: number = 0.11
         let MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL: number = 51
 
         let remainingDegrees: number = this.remainingDegreesToTurn
         if (remainingDegrees != 0) {
-            let currentAngle: number = GetUnitFacing(kitty.Unit)
+            let currentAngle: number = GetUnitFacing(this.kitty.Unit)
 
             let diffToApplyAbs: number = Math.Min(Math.Abs(remainingDegrees), Math.Abs(maxSlideTurnPerPeriod))
 
             if (diffToApplyAbs > 0.05) {
                 let sens: number = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1
                 let maxIncreaseRotationSpeedPerPeriod: number = Math.Abs(
-                    (maxSlideTurnPerPeriod * SLIDE_INTERVAL) / rotationTimeForMaximumSpeed
+                    (maxSlideTurnPerPeriod * this.SLIDE_INTERVAL) / rotationTimeForMaximumSpeed
                 )
 
                 let newSlideTurn: number
-                let curSlideTurn: number = slideCurrentTurnPerPeriod
+                let curSlideTurn: number = this.slideCurrentTurnPerPeriod
                 let increaseRotationSpeedPerPeriod: number = maxIncreaseRotationSpeedPerPeriod
                 let diffToApply: number
 
                 if (Math.Abs(remainingDegrees) <= MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL) {
                     let tableInd: number = Math.Round(Math.Abs(remainingDegrees))
-                    let aimedSpeedPercentage: number = SPEED_AT_LEAST_THAN_50_DEGREES[tableInd]
+                    let aimedSpeedPercentage: number = this.SPEED_AT_LEAST_THAN_50_DEGREES[tableInd]
                     let aimedNewSpeedPerPeriod: number = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100
                     let diffSpeed: number = aimedNewSpeedPerPeriod - curSlideTurn
                     if (Math.Abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod) {
@@ -296,7 +302,7 @@ export class Slider {
                         let sensDiffToApply: number = diffSpeed > 0 ? 1 : -1
                         diffToApply = curSlideTurn + sensDiffToApply * maxIncreaseRotationSpeedPerPeriod
                     }
-                    slideCurrentTurnPerPeriod = diffToApply
+                    this.slideCurrentTurnPerPeriod = diffToApply
                 } else {
                     if (sens > 0) {
                         newSlideTurn = Math.Min(curSlideTurn + increaseRotationSpeedPerPeriod, maxSlideTurnPerPeriod)
@@ -307,19 +313,19 @@ export class Slider {
                         diffToApply = Math.Max(newSlideTurn, -diffToApplyAbs)
                         diffToApply = Math.Max(remainingDegrees, diffToApply)
                     }
-                    slideCurrentTurnPerPeriod = newSlideTurn
+                    this.slideCurrentTurnPerPeriod = newSlideTurn
                 }
 
                 this.setRemainingDegreesToTurn(remainingDegrees - diffToApply)
 
                 let newAngle: number = currentAngle + diffToApply
-                BlzSetUnitFacingEx(kitty.Unit, newAngle)
+                BlzSetUnitFacingEx(this.kitty.Unit, newAngle)
             }
         }
     }
 
     private ItemPickup() {
-        if (!enabled) return
-        ItemSpatialGrid.KittyItemPickup(kitty)
+        if (!this.enabled) return
+        ItemSpatialGrid.KittyItemPickup(this.kitty)
     }
 }

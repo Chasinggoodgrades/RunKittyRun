@@ -39,10 +39,10 @@ export class SoloPodium {
             return
         }
         let(player, position) = PodiumQueue.Dequeue()
-        let kitty = Globals.ALL_KITTIES.get(player).Unit
-        kitty.setPos(position.X, position.Y)
-        kitty.SetFacing(270)
-        kitty.IsPaused = true
+        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        kitty.setPos(position.x, position.y)
+        kitty.setFacingEx(270)
+        kitty.paused = true
         MovedUnits.push(kitty)
         print(
             '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
@@ -66,7 +66,7 @@ export class SoloPodium {
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player).TimeProg
+        let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
         switch (PodiumType) {
             case Time:
                 return stats.GetTotalTimeFormatted()

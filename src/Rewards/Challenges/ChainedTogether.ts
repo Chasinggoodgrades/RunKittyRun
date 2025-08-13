@@ -1,31 +1,42 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { RegionList } from 'src/Global/RegionList'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Utility } from 'src/Utility/Utility'
+import { Timer } from 'w3ts'
+import { AwardManager } from '../Rewards/AwardManager'
 
 export class ChainedTogether {
     private REQUIRED_PLAYERS: number = 2
     private static KittyLightnings: Map<string, Chain> = new Map()
     private static kittyGroups: Kitty[][] = [] // Convert this into a dictionary
     private static timerInterval: number = 0.1
-    private static MoveChainTimer: timer
+    private static MoveChainTimer: Timer
     private static EventTriggered: boolean = false
     private static EventStarted: boolean = false
     private static IsStartingContidionValid: boolean = true
 
     private static TriggerEventOnLastSafeZone() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return // Only occurs in Standard Gamemode.
-        if (EventStarted || EventTriggered) return // Don't trigger multiple times.
-        if (!IsStartingContidionValid) return
+        if (ChainedTogether.EventStarted || ChainedTogether.EventTriggered) return // Don't trigger multiple times.
+        if (!ChainedTogether.IsStartingContidionValid) return
 
         let allKitties = Globals.ALL_KITTIES_LIST
 
         if (allKitties.length < REQUIRED_PLAYERS) return // Need at least 2 players to trigger event.
 
         for (let i: number = 0; i < allKitties.length - 1; i++) {
-            if (!IsInLastSafezone(allKitties[i])) {
+            if (!ChainedTogether.IsInLastSafezone(allKitties[i])) {
                 return
             }
         }
 
-        TriggerEvent()
+        ChainedTogether.TriggerEvent()
     }
 
     public static TriggerEvent() {
@@ -33,7 +44,7 @@ export class ChainedTogether {
             4.0,
             '{Colors.COLOR_TURQUOISE}Togheter: Event: Requirements: Complete: Chained!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}next: round: Activating!{Colors.COLOR_RESET}'
         )
-        EventTriggered = true
+        ChainedTogether.EventTriggered = true
     }
 
     private static UpdateStartingCondition(kitty: Kitty) {
@@ -53,7 +64,7 @@ export class ChainedTogether {
         }
 
         if (skippedSafezone) {
-            IsStartingContidionValid = false
+            ChainedTogether.IsStartingContidionValid = false
         }
     }
 
@@ -61,18 +72,18 @@ export class ChainedTogether {
     /// Starts the event
     /// </summary>
     public static StartEvent() {
-        if (!EventTriggered) {
-            IsStartingContidionValid = true
+        if (!ChainedTogether.EventTriggered) {
+            ChainedTogether.IsStartingContidionValid = true
             return
         }
 
-        EventStarted = true
+        ChainedTogether.EventStarted = true
 
         try {
-            SetGroups()
-            MoveChainTimer ??= Timer.create()
-            TimerStart(MoveChainTimer, timerInterval, true, MoveChain)
-        } catch (e) {
+            ChainedTogether.SetGroups()
+            ChainedTogether.MoveChainTimer ??= Timer.create()
+            ChainedTogether.MoveChainTimer.start(ChainedTogether.timerInterval, true, ChainedTogether.MoveChain)
+        } catch (e: any) {
             Logger.Warning('Error in ChainedTogether.StartEvent {e.Message}')
             throw e
         }
@@ -85,11 +96,11 @@ export class ChainedTogether {
 
         for (let i: number = 0; i < kitties.length - 1; i++) {
             let kitty = kitties[i]
-            let kittyName = kitty.Name
+            let kittyName = kitty.name
 
-            if (!KittyLightnings.has(kittyName)) continue
+            if (!ChainedTogether.KittyLightnings.has(kittyName)) continue
 
-            let chain = KittyLightnings[kittyName]
+            let chain = ChainedTogether.KittyLightnings[kittyName]
             isOutOfRange = chain.Move()
             kittyOutOfRange = kittyName
 
@@ -97,16 +108,16 @@ export class ChainedTogether {
         }
 
         if (isOutOfRange) {
-            LoseEvent(kittyOutOfRange)
+            ChainedTogether.LoseEvent(kittyOutOfRange)
         }
     }
 
     public static LoseEvent(kittyNameOutSideRange: string) {
-        if (!EventStarted) return // Event not started or already ended.
+        if (!ChainedTogether.EventStarted) return // Event not started or already ended.
 
         try {
-            FreeKittiesFromGroup(kittyNameOutSideRange, false)
-        } catch (e) {
+            ChainedTogether.FreeKittiesFromGroup(kittyNameOutSideRange, false)
+        } catch (e: any) {
             Logger.Warning('Error in ChainedTogether.LoseEvent {e.Message}')
             throw e
         }
@@ -117,13 +128,15 @@ export class ChainedTogether {
     /// </summary>
     /// <param name="kittyName"></param>
     public static RegenerateGroup(kittyName: string) {
-        let groupIndex: number = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)) // IEnumerable "Any" leaks
+        let groupIndex: number = ChainedTogether.kittyGroups.FindIndex(group =>
+            group.Any(kitty => kitty.name == kittyName)
+        ) // IEnumerable "Any" leaks
         if (groupIndex < 0) return
 
         try {
-            let currentGroup = kittyGroups[groupIndex].Where(kitty => kitty.Name != kittyName).ToList() // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
+            let currentGroup = ChainedTogether.kittyGroups[groupIndex].filter(kitty => kitty.name != kittyName).ToList() // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
 
-            FreeKittiesFromGroup(kittyName, false)
+            ChainedTogether.FreeKittiesFromGroup(kittyName, false)
 
             for (let j: number = 0; j < currentGroup.length - 1; j++) {
                 let currentKitty = currentGroup[j]
@@ -132,37 +145,39 @@ export class ChainedTogether {
                 currentKitty.IsChained = true
                 let chain: Chain = MemoryHandler.getEmptyObject<Chain>()
                 chain.SetKitties(currentKitty, nextKitty)
-                KittyLightnings[currentKitty.Name] = chain
+                ChainedTogether.KittyLightnings[currentKitty.name] = chain
             }
 
-            kittyGroups.push(currentGroup)
-        } catch (e) {
+            ChainedTogether.kittyGroups.push(currentGroup)
+        } catch (e: any) {
             Logger.Warning('Error in ChainedTogether.LoseEvent {e.Message}')
             throw e
         }
     }
 
     private static FreeKittiesFromGroup(kittyName: string, isVictory: boolean = false) {
-        let groupIndex: number = kittyGroups.FindIndex(group => group.Any(kitty => kitty.Name == kittyName)) //IEnumerable with "Any" leaks
+        let groupIndex: number = ChainedTogether.kittyGroups.FindIndex(group =>
+            group.Any(kitty => kitty.name == kittyName)
+        ) //IEnumerable with "Any" leaks
         if (groupIndex < 0) return
 
-        let currentGroup = kittyGroups[groupIndex]
+        let currentGroup = ChainedTogether.kittyGroups[groupIndex]
 
         for (let i: number = 0; i < currentGroup.length; i++) {
             let kitty = currentGroup[i]
             kitty.IsChained = false
 
             if (isVictory) {
-                AwardChainedTogether(kitty)
+                ChainedTogether.AwardChainedTogether(kitty)
             }
 
-            if (KittyLightnings.has(kitty.Name)) {
-                KittyLightnings[kitty.Name].Dispose()
-                KittyLightnings.Remove(kitty.Name)
+            if (ChainedTogether.KittyLightnings.has(kitty.name)) {
+                ChainedTogether.KittyLightnings[kitty.name].dispose()
+                ChainedTogether.KittyLightnings.Remove(kitty.name)
             }
         }
 
-        kittyGroups.RemoveAt(groupIndex)
+        ChainedTogether.kittyGroups.RemoveAt(groupIndex)
     }
 
     private static SetGroups() {
@@ -178,8 +193,8 @@ export class ChainedTogether {
         }
 
         if (count < 3) {
-            kittyGroups.push(allKitties)
-            ChainGroup(allKitties)
+            ChainedTogether.kittyGroups.push(allKitties)
+            ChainedTogether.ChainGroup(allKitties)
         }
 
         let index: number = 0
@@ -194,8 +209,8 @@ export class ChainedTogether {
 
         for (let i: number = 0; i < groupsOfThree; i++) {
             let group = [allKitties[index], allKitties[index + 1], allKitties[index + 2]]
-            kittyGroups.push(group)
-            ChainGroup(group)
+            ChainedTogether.kittyGroups.push(group)
+            ChainedTogether.ChainGroup(group)
             index += 3
         }
 
@@ -204,8 +219,8 @@ export class ChainedTogether {
             for (let i: number = index; i < allKitties.length; i++) {
                 lastGroup.push(allKitties[i])
             }
-            kittyGroups.push(lastGroup)
-            ChainGroup(lastGroup)
+            ChainedTogether.kittyGroups.push(lastGroup)
+            ChainedTogether.ChainGroup(lastGroup)
         }
     }
 
@@ -217,26 +232,26 @@ export class ChainedTogether {
             currentKitty.IsChained = true
             let chain: Chain = MemoryHandler.getEmptyObject<Chain>()
             chain.SetKitties(currentKitty, nextKitty)
-            KittyLightnings[currentKitty.Name] = chain
+            ChainedTogether.KittyLightnings[currentKitty.name] = chain
         }
     }
 
     public static ReachedSafezone(kitty: Kitty) {
         try {
-            if (!EventStarted) {
-                UpdateStartingCondition(kitty)
+            if (!ChainedTogether.EventStarted) {
+                ChainedTogether.UpdateStartingCondition(kitty)
 
-                if (IsInLastSafezone(kitty)) {
-                    TriggerEventOnLastSafeZone()
+                if (ChainedTogether.IsInLastSafezone(kitty)) {
+                    ChainedTogether.TriggerEventOnLastSafeZone()
                 }
                 return // Event not started or already ended.
             }
 
-            if (!IsInLastSafezone(kitty)) return
+            if (!ChainedTogether.IsInLastSafezone(kitty)) return
 
             //finish event
-            FreeKittiesFromGroup(kitty.Name, true)
-        } catch (e) {
+            ChainedTogether.FreeKittiesFromGroup(kitty.name, true)
+        } catch (e: any) {
             Logger.Warning('Error in ChainedTogether.ReachedSafezone {e.Message}')
             throw e
         }
@@ -291,43 +306,50 @@ export class Chain {
     public Chain() {}
 
     public SetKitties(firstKitty: Kitty, secondKitty: Kitty) {
-        FirstKitty = firstKitty
-        SecondKitty = secondKitty
-        Lightning?.Dispose() // just incase
-        Lightning = AddLightning(
+        this.FirstKitty = firstKitty
+        this.SecondKitty = secondKitty
+        this.Lightning?.dispose() // just incase
+        this.Lightning = AddLightning(
             'WHCH',
             true,
-            FirstKitty.Unit.X,
-            FirstKitty.unit.y,
-            SecondKitty.Unit.X,
-            SecondKitty.unit.y
+            this.FirstKitty.Unit.x,
+            this.FirstKitty.unit.y,
+            this.SecondKitty.Unit.x,
+            this.SecondKitty.unit.y
         )
-        FirstKitty.IsChained = true
-        SecondKitty.IsChained = true
+        this.FirstKitty.IsChained = true
+        this.SecondKitty.IsChained = true
     }
 
     public Move(): boolean {
-        let outOfRange: number = CalculateRangeByDifficulty('breakPoint')
+        let outOfRange: number = Chain.CalculateRangeByDifficulty('breakPoint')
         let isOutOfRange: boolean = false
-        let x1 = FirstKitty.Unit.X
-        let y1 = FirstKitty.unit.y
-        let x2 = SecondKitty.Unit.X
-        let y2 = SecondKitty.unit.y
-        MoveLightning(Lightning, true, FirstKitty.Unit.X, FirstKitty.unit.y, SecondKitty.Unit.X, SecondKitty.unit.y)
+        let x1 = this.FirstKitty.Unit.x
+        let y1 = this.FirstKitty.unit.y
+        let x2 = this.SecondKitty.Unit.x
+        let y2 = this.SecondKitty.unit.y
+        MoveLightning(
+            this.Lightning,
+            true,
+            this.FirstKitty.Unit.x,
+            this.FirstKitty.unit.y,
+            this.SecondKitty.Unit.x,
+            this.SecondKitty.unit.y
+        )
         let distance: number = Math.Abs(x2 - x1) + Math.Abs(y2 - y1)
 
         if (distance > outOfRange) {
             isOutOfRange = true
         }
 
-        ChangeChainColor(distance)
+        this.ChangeChainColor(distance)
         return isOutOfRange
     }
 
-    public Dispose() {
-        Lightning?.Dispose()
-        FirstKitty.IsChained = false
-        SecondKitty.IsChained = false
+    public dispose() {
+        this.Lightning?.dispose()
+        this.FirstKitty.IsChained = false
+        this.SecondKitty.IsChained = false
         MemoryHandler.destroyObject(this)
     }
 
@@ -337,8 +359,8 @@ export class Chain {
             blue = 0.0,
             alpha = 1.0 // Default color is green
 
-        let far: number = CalculateRangeByDifficulty('far')
-        let good: number = CalculateRangeByDifficulty('good')
+        let far: number = Chain.CalculateRangeByDifficulty('far')
+        let good: number = Chain.CalculateRangeByDifficulty('good')
 
         if (distance > far) {
             red = 1.0
@@ -350,7 +372,7 @@ export class Chain {
             blue = 0.0 // Yellow
         }
 
-        SetLightningColor(Lightning, red, green, blue, alpha)
+        SetLightningColor(this.Lightning, red, green, blue, alpha)
     }
 
     public static CalculateRangeByDifficulty(rangeType: string) {
@@ -359,16 +381,16 @@ export class Chain {
 
         switch (level) {
             case level >= DifficultyLevel.Nightmare:
-                selectedRange = ranges[DifficultyLevel.Nightmare]
+                selectedRange = Chain.ranges[DifficultyLevel.Nightmare]
                 break
             case level >= DifficultyLevel.Impossible:
-                selectedRange = ranges[DifficultyLevel.Impossible]
+                selectedRange = Chain.ranges[DifficultyLevel.Impossible]
                 break
             case level >= DifficultyLevel.Hard:
-                selectedRange = ranges[DifficultyLevel.Hard]
+                selectedRange = Chain.ranges[DifficultyLevel.Hard]
                 break
             default:
-                selectedRange = ranges[DifficultyLevel.Normal]
+                selectedRange = Chain.ranges[DifficultyLevel.Normal]
                 break
         }
 

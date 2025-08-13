@@ -17,18 +17,17 @@ export class Program {
     public static Main() {
         // Delay a little since some stuff can break otherwise
         let timer = Timer.create()
-        TimerStart(
-            timer,
+        timer.start(
             0.01,
             false,
             ErrorHandler.Wrap(() => {
-                DestroyTimer(timer)
+                timer.destroy()
                 Program.start()
             })
         )
     }
 
-    private static Start() {
+    private static start() {
         if (!PROD) {
             // This part of the code will only run if the map is compiled in Debug mode
             Program.Debug = true

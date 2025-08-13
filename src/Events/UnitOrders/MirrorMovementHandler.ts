@@ -1,26 +1,29 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Trigger } from 'w3ts'
+
 export class MirrorMovementHandler {
     private kitty: Kitty
-    private MovementTrigger: trigger
+    private MovementTrigger: Trigger
     private isProcessingMirror: boolean = false
 
-    public MirrorMovementHandler(kitty: Kitty) {
+    public constructor(kitty: Kitty) {
         this.kitty = kitty
-        RegisterMovementEvents()
+        this.RegisterMovementEvents()
     }
 
     private RegisterMovementEvents() {
-        MovementTrigger = CreateTrigger()
-        MovementTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder)
-        MovementTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder)
-        MovementTrigger.AddAction(HandleMovementOrder)
+        this.MovementTrigger = Trigger.create()!
+        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
+        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        this.MovementTrigger.addAction(this.HandleMovementOrder)
     }
 
     private HandleMovementOrder() {
-        if (!kitty.IsMirror) return
-        if (kitty.Slider.IsEnabled()) return // Let slider handle its own mirror logic
-        if (isProcessingMirror) return // Prevent recursion
+        if (!this.kitty.IsMirror) return
+        if (this.kitty.Slider.IsEnabled()) return // Let slider handle its own mirror logic
+        if (this.isProcessingMirror) return // Prevent recursion
 
-        let unit = GetTriggerUnit()
+        let unit = getTriggerUnit()
         let unitX = unit.x
         let unitY = unit.y
 
@@ -45,13 +48,13 @@ export class MirrorMovementHandler {
         let mirrorY = unitY - deltaY
 
         // Issue the mirrored move order
-        isProcessingMirror = true
+        this.isProcessingMirror = true
         unit.IssueOrder('move', mirrorX, mirrorY)
-        isProcessingMirror = false
+        this.isProcessingMirror = false
     }
 
-    public Dispose() {
-        MovementTrigger?.Dispose()
-        MovementTrigger = null
+    public dispose() {
+        this.MovementTrigger?.dispose()
+        this.MovementTrigger = null
     }
 }

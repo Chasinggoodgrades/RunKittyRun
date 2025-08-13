@@ -3,7 +3,7 @@ export class Difficulty {
     public static DifficultyOption: DifficultyOption
     public static IsDifficultyChosen: boolean = false
     private static TIME_TO_CHOOSE_DIFFICULTY: number = 10.0
-    private static Trigger: trigger
+    private static Trigger: Trigger
 
     public static Initialize() {
         try {
@@ -17,32 +17,32 @@ export class Difficulty {
             RegisterSelectionEvent()
 
             Utility.SimpleTimer(2.0, ChooseDifficulty)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in Difficulty.Initialize: {e.Message}')
             throw e
         }
     }
 
     private static RegisterSelectionEvent() {
-        Trigger ??= CreateTrigger()
+        Trigger ??= Trigger.create()!
         Trigger.RegisterDialogEvent(DifficultyOption.DifficultyChoosing)
-        Trigger.AddAction(() => {
-            let player = GetTriggerPlayer()
+        Trigger.addAction(() => {
+            let player = getTriggerPlayer()
             let button = GetClickedButton()
 
-            let option = DifficultyOption.Options.Find(o => o.Button == button)
+            let option = DifficultyOption.Options.find(o => o.Button == button)
             if (option != null) option.TallyCount++
 
             DifficultyOption.DifficultyChoosing.setVisible(player, false)
             Utility.TimedTextToAllPlayers(
                 3.0,
-                '{Colors.PlayerNameColored(player)}|has: chosen: r {option.ToString()} difficulty.{Colors.COLOR_RESET}'
+                '{Colors.PlayerNameColored(player)}|has: chosen: r {option.toString()} difficulty.{Colors.COLOR_RESET}'
             )
         })
     }
 
     private static ChooseDifficulty() {
-        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, true)
+        for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, true)
         Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, TallyingVotes)
     }
 
@@ -66,12 +66,12 @@ export class Difficulty {
         DifficultyValue = difficulty.Value
         IsDifficultyChosen = true
         print(
-            '{Colors.COLOR_YELLOW_ORANGE}difficulty: has: been: set: to: The |r{difficulty.ToString()}{Colors.COLOR_RESET}'
+            '{Colors.COLOR_YELLOW_ORANGE}difficulty: has: been: set: to: The |r{difficulty.toString()}{Colors.COLOR_RESET}'
         )
     }
 
     private static RemoveDifficultyDialog() {
-        for (let player in Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, false)
+        for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.setVisible(player, false)
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ export class Difficulty {
     public static ChangeDifficulty(difficulty: string = 'normal') {
         for (let i: number = 0; i < DifficultyOption.Options.length; i++) {
             let option = DifficultyOption.Options[i]
-            if (option.Name.ToLower() == difficulty.ToLower()) {
+            if (option.name.toLowerCase() == difficulty.toLowerCase()) {
                 SetDifficulty(option)
                 return true
             }

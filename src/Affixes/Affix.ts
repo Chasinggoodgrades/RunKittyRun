@@ -1,6 +1,8 @@
-abstract class Affix {
+import { Wolf } from 'src/Game/Entities/Wolf'
+
+export abstract class Affix {
     public Unit: Wolf
-    public Name: string | undefined
+    public name: string = ''
 
     public constructor(unit: Wolf) {
         this.Unit = unit

@@ -34,7 +34,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     }
 
     public override ApplyEffect(Unit: Unit) {
-        Owner = Unit.Owner
+        Owner = Unit.owner
         Utility.SimpleTimer(0.1, UpgradeReviveChance)
     }
 
@@ -45,7 +45,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     public BeaconOfUnitedLifeforceEffect(player: MapPlayer) {
         // Make sure person has the relic
         if (player != Owner) return
-        let kitty = Globals.ALL_KITTIES.get(player)
+        let kitty = Globals.ALL_KITTIES.get(player)!
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return
 
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(
@@ -63,7 +63,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
         let color = Colors.COLOR_YELLOW_ORANGE
         let msgSent = false
         for (let k in Globals.ALL_KITTIES) {
-            if (k.Value.Alive) continue
+            if (k.Value.isAlive()) continue
 
             k.Value.ReviveKitty(kitty)
             Invulnerability(kitty, k.Value)

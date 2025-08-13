@@ -8,7 +8,7 @@ import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveOb
 import { GameStatsData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
-import { Group, MapPlayer, Timer, TimerDialog, Unit } from 'w3ts'
+import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
 export class Globals {
@@ -18,7 +18,7 @@ export class Globals {
     public static ROUND: number = 0
     public static GAME_ACTIVE: boolean = false
     public static GAME_SECONDS: number = 0.0
-    public static WORLD_BOUNDS: rect = GetWorldBounds()!
+    public static WORLD_BOUNDS: Rectangle = Rectangle.getWorldBounds()!
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
     public static readonly GAME_MODES: string[] = [
@@ -73,7 +73,7 @@ export class Globals {
     public static GAME_STATS: GameStatsData = new GameStatsData()
     // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
-    public static ALL_TEAMS: Map<MapPlayer, Team> = new Map()
+    public static ALL_TEAMS: Map<number, Team> = new Map()
 
     public static ALL_TEAMS_LIST: Team[] = []
     public static PLAYERS_TEAMS: Map<MapPlayer, Team> = new Map()

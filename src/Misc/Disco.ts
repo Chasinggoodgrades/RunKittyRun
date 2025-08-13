@@ -14,7 +14,7 @@ export class Disco extends IDisposable {
         this.DiscoTimer = Timer.create()
     }
 
-    public Dispose() {
+    public dispose() {
         this.DiscoTimer.pause()
         this.Enabled = false
         MemoryHandler.destroyObject(this)
@@ -31,7 +31,7 @@ export class Disco extends IDisposable {
             this.DiscoTimer.pause()
             this.Enabled = false
             if (this.Unit.typeId == Constants.UNIT_KITTY) return
-            this.Dispose()
+            this.dispose()
         }
     }
 

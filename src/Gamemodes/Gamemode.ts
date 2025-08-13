@@ -73,14 +73,14 @@ export class Gamemode {
             ClearTextMessages()
             NotifyGamemodeChosen()
             SetupChosenGamemode()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Gamemode: SetGameMode: {e.Message}')
         }
     }
 
     private static HostPickingGamemode() {
         let color = Colors.COLOR_YELLOW_ORANGE
-        for (let player in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
             let localplayer = player.LocalPlayer
             if (localplayer != HostPlayer) {
                 player.DisplayTimedTextTo(
@@ -92,13 +92,13 @@ export class Gamemode {
     }
 
     private static NotifyGamemodeChosen() {
-        for (let player in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
             player.DisplayTimedTextTo(
                 Globals.TIME_TO_PICK_GAMEMODE / 3.0,
                 Colors.COLOR_YELLOW_ORANGE +
                     'chosen: Gamemode: ' +
                     Colors.COLOR_GOLD +
-                    CurrentGameMode.ToString() +
+                    CurrentGameMode.toString() +
                     ' ' +
                     CurrentGameModeType
             )

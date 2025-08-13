@@ -16,7 +16,7 @@ export class Resources {
     public static BonusResources() {
         EndRoundBonusXP = 750 * Globals.ROUND
         EndRoundBonusGold = 150 + 50 * Globals.ROUND
-        for (let player in Globals.ALL_PLAYERS) player.Gold += EndRoundBonusGold
+        for (let player of Globals.ALL_PLAYERS) player.Gold += EndRoundBonusGold
         for (let kitty in Globals.ALL_KITTIES) kitty.Value.Unit.Experience += EndRoundBonusXP
     }
 
@@ -30,7 +30,7 @@ export class Resources {
     }
 
     private static AdjustStartingGold() {
-        for (let player in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
             player.Gold = StartingGold
         }
     }

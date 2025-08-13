@@ -1,73 +1,77 @@
+import { ExecuteLua } from 'src/Events/Commands/ExecuteLua'
+import { blzCreateFrame, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Frame, MapPlayer, Trigger } from 'w3ts'
+
 export class LuaEditor {
-    private static GameUI: framehandle = originframetype.GameUI.GetOriginFrame(0)
-    private frameBackdrop: framehandle
-    private editBox: framehandle
-    private runButton: framehandle
-    private outputText: framehandle
-    private clearButton: framehandle
-    private buttonTrigger: trigger
-    private clearButtonTrigger: trigger
+    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private frameBackdrop: Frame
+    private editBox: Frame
+    private runButton: Frame
+    private outputText: Frame
+    private clearButton: Frame
+    private buttonTrigger: Trigger
+    private clearButtonTrigger: Trigger
 
     public LuaEditor() {
-        CreateLuaEditor()
+        this.CreateLuaEditor()
     }
 
     private CreateLuaEditor() {
         // Background frame
-        frameBackdrop = BlzCreateFrame('EscMenuBackdrop', GameUI, 0, 0)
-        BlzFrameSetSize(frameBackdrop, 0.4, 0.25)
-        BlzFrameSetPoint(frameBackdrop, FRAMEPOINT_CENTER, GameUI, FRAMEPOINT_CENTER, 0, 0)
+        this.frameBackdrop = blzCreateFrame('EscMenuBackdrop', LuaEditor.GameUI, 0, 0)
+        this.frameBackdrop.setSize(0.4, 0.25)
+        this.frameBackdrop.setPoint(FRAMEPOINT_CENTER, LuaEditor.GameUI, FRAMEPOINT_CENTER, 0, 0)
 
         // Text input box
-        editBox = BlzCreateFrame('EscMenuEditBoxTemplate', frameBackdrop, 0, 0)
-        BlzFrameSetSize(editBox, 0.38, 0.18)
-        BlzFrameSetPoint(editBox, FRAMEPOINT_TOPLEFT, frameBackdrop, FRAMEPOINT_TOPLEFT, 0.01, -0.01)
+        this.editBox = blzCreateFrame('EscMenuEditBoxTemplate', this.frameBackdrop, 0, 0)
+        this.editBox.setSize(0.38, 0.18)
+        this.editBox.setPoint(FRAMEPOINT_TOPLEFT, this.frameBackdrop, FRAMEPOINT_TOPLEFT, 0.01, -0.01)
 
         // Run button
-        runButton = BlzCreateFrame('ScriptDialogButton', frameBackdrop, 0, 0)
-        BlzFrameSetSize(runButton, 0.1, 0.04)
-        BlzFrameSetPoint(runButton, FRAMEPOINT_BOTTOMRIGHT, frameBackdrop, FRAMEPOINT_BOTTOMRIGHT, -0.01, 0.01)
-        BlzFrameSetText(runButton, 'Run')
+        this.runButton = blzCreateFrame('ScriptDialogButton', this.frameBackdrop, 0, 0)
+        this.runButton.setSize(0.1, 0.04)
+        this.runButton.setPoint(FRAMEPOINT_BOTTOMRIGHT, this.frameBackdrop, FRAMEPOINT_BOTTOMRIGHT, -0.01, 0.01)
+        this.runButton.setText('Run')
 
         // Output text box
-        outputText = BlzCreateFrame('TextLabel', frameBackdrop, 0, 0)
-        BlzFrameSetSize(outputText, 0.38, 0.05)
-        BlzFrameSetPoint(outputText, FRAMEPOINT_BOTTOMLEFT, frameBackdrop, FRAMEPOINT_BOTTOMLEFT, 0.01, 0.01)
-        BlzFrameSetText(outputText, 'will: appear: here: Output')
+        this.outputText = blzCreateFrame('TextLabel', this.frameBackdrop, 0, 0)
+        this.outputText.setSize(0.38, 0.05)
+        this.outputText.setPoint(FRAMEPOINT_BOTTOMLEFT, this.frameBackdrop, FRAMEPOINT_BOTTOMLEFT, 0.01, 0.01)
+        this.outputText.setText('will: appear: here: Output')
 
         // Clear button
-        clearButton = BlzCreateFrame('ScriptDialogButton', frameBackdrop, 0, 0)
-        BlzFrameSetSize(clearButton, 0.1, 0.04)
-        BlzFrameSetPoint(clearButton, FRAMEPOINT_BOTTOMLEFT, frameBackdrop, FRAMEPOINT_BOTTOMLEFT, 0.01, 0.01)
-        BlzFrameSetText(clearButton, 'Clear')
+        this.clearButton = blzCreateFrame('ScriptDialogButton', this.frameBackdrop, 0, 0)
+        this.clearButton.setSize(0.1, 0.04)
+        this.clearButton.setPoint(FRAMEPOINT_BOTTOMLEFT, this.frameBackdrop, FRAMEPOINT_BOTTOMLEFT, 0.01, 0.01)
+        this.clearButton.setText('Clear')
 
         // Button click event
-        buttonTrigger = CreateTrigger()
-        BlzTriggerRegisterFrameEvent(buttonTrigger, runButton, FRAMEEVENT_CONTROL_CLICK)
-        TriggerAddAction(buttonTrigger, () => {
-            let luaCode: string = BlzFrameGetText(editBox)
-            PassLua(luaCode)
+        this.buttonTrigger = Trigger.create()!
+        BlzTriggerRegisterFrameEvent(this.buttonTrigger, this.runButton, FRAMEEVENT_CONTROL_CLICK)
+        TriggerAddAction(this.buttonTrigger, () => {
+            let luaCode: string = BlzFrameGetText(this.editBox)
+            this.PassLua(luaCode)
         })
 
         // Clear Button event thing
-        clearButtonTrigger = CreateTrigger()
-        BlzTriggerRegisterFrameEvent(clearButtonTrigger, clearButton, FRAMEEVENT_CONTROL_CLICK)
-        TriggerAddAction(clearButtonTrigger, () => {
-            ClearEditBox()
+        this.clearButtonTrigger = Trigger.create()!
+        BlzTriggerRegisterFrameEvent(this.clearButtonTrigger, this.clearButton, FRAMEEVENT_CONTROL_CLICK)
+        TriggerAddAction(this.clearButtonTrigger, () => {
+            this.ClearEditBox()
         })
     }
 
     private ClearEditBox() {
-        BlzFrameSetText(editBox, '')
+        this.editBox.setText('')
     }
 
     private PassLua(luaCode: string) {
         try {
-            let p = GetTriggerPlayer()
-            let output: string = RunLua(p, luaCode)
-            BlzFrameSetText(outputText, output)
-        } catch (ex) {
-            BlzFrameSetText(outputText, 'Error: {ex.Message}')
+            let p = getTriggerPlayer()
+            let output: string = this.RunLua(p, luaCode)
+            this.outputText.setText(output)
+        } catch (ex: any) {
+            this.outputText.setText('Error: {ex.Message}')
         }
     }
 

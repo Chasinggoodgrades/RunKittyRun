@@ -3,9 +3,9 @@ export class FangOfShadows extends Relic {
     public RelicAbilityID: number = Constants.ABILITY_SUMMON_SHADOW_KITTY
     private TeleportAbilityID: number = Constants.ABILITY_APPEAR_AT_SHADOWKITTY
     private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
-    private SummonTrigger: trigger
-    private TeleTrigger: trigger
-    private KillTimer: timer
+    private SummonTrigger: Trigger
+    private TeleTrigger: Trigger
+    private KillTimer: Timer
     private Owner: Unit
     private Active: boolean = false
 
@@ -37,22 +37,22 @@ export class FangOfShadows extends Relic {
     public override ApplyEffect(Unit: Unit) {
         Owner = Unit
         this.RegisterTriggers(Unit)
-        Unit.DisableAbility(RelicAbilityID, false, false)
+        Unit.disableAbility(RelicAbilityID, false, false)
         SetAbilityCooldown(Unit)
     }
 
     public override RemoveEffect(Unit: Unit) {
         Dethis.RegisterTriggers()
-        Unit.DisableAbility(RelicAbilityID, false, true)
+        Unit.disableAbility(RelicAbilityID, false, true)
     }
 
     private RegisterTriggers(Unit: Unit) {
-        let SummonTrigger = CreateTrigger()
+        let SummonTrigger = Trigger.create()!
         TriggerRegisterUnitEvent(SummonTrigger, Unit, unitevent.SpellCast)
-        SummonTrigger.AddCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID))
-        SummonTrigger.AddAction(ErrorHandler.Wrap(SummonShadowKitty))
+        SummonTrigger.addCondition(Condition(() => GetSpellAbilityId() == RelicAbilityID))
+        SummonTrigger.addAction(ErrorHandler.Wrap(SummonShadowKitty))
 
-        let TeleTrigger = CreateTrigger()
+        let TeleTrigger = Trigger.create()!
         KillTimer = Timer.create()
     }
 
@@ -64,7 +64,7 @@ export class FangOfShadows extends Relic {
 
     private SummonShadowKitty() {
         try {
-            let summoner: Kitty = Globals.ALL_KITTIES[GetTriggerUnit().Owner]
+            let summoner: Kitty = Globals.ALL_KITTIES.get(getTriggerUnit()!.owner)
 
             // Prevent summoning if holding the orb
             if (TeamDeathless.CurrentHolder == summoner) {
@@ -75,7 +75,7 @@ export class FangOfShadows extends Relic {
                 return
             }
 
-            let shadowKitty: ShadowKitty = ShadowKitty.ALL_SHADOWKITTIES[GetTriggerUnit().Owner]
+            let shadowKitty: ShadowKitty = ShadowKitty.ALL_SHADOWKITTIES[getTriggerUnit().owner]
 
             // Summon and configure Shadow Kitty
             shadowKitty.SummonShadowKitty()
@@ -87,19 +87,19 @@ export class FangOfShadows extends Relic {
 
             // Apply relic cooldowns with a slight delay
             Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID))
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in SummonShadowKitty: {e}')
         }
     }
 
     private TeleportToShadowKitty() {
         try {
-            let sk = ShadowKitty.ALL_SHADOWKITTIES[GetTriggerUnit().Owner]
+            let sk = ShadowKitty.ALL_SHADOWKITTIES[getTriggerUnit().owner]
             sk.TeleportToShadowKitty()
-            Utility.DropAllItems(GetTriggerUnit())
+            Utility.DropAllItems(getTriggerUnit())
             Utility.SimpleTimer(0.09, sk.KillShadowKitty)
             KillTimer.pause()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in FangOfShadows.TeleportToShadowKitty: {e}')
             return
         }
@@ -107,8 +107,8 @@ export class FangOfShadows extends Relic {
 
     private RegisterTeleportAbility(Unit: Unit) {
         TriggerRegisterUnitEvent(TeleTrigger, Unit, unitevent.SpellCast)
-        TeleTrigger.AddCondition(Condition(() => GetSpellAbilityId() == TeleportAbilityID))
-        TeleTrigger.AddAction(TeleportToShadowKitty)
+        TeleTrigger.addCondition(Condition(() => GetSpellAbilityId() == TeleportAbilityID))
+        TeleTrigger.addAction(TeleportToShadowKitty)
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ export class FangOfShadows extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityCooldown(Unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
         let currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0)
         let newCooldown = upgradeLevel >= 1 ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
@@ -127,7 +127,7 @@ export class FangOfShadows extends Relic {
     public ReduceCooldownAtSafezone(Unit: Unit) {
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return
-        let upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof FangOfShadows)
+        let upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
         Unit.GetAbility(RelicAbilityID)
         let reduction: number = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION
         let remainingCooldown: number = Unit.GetAbilityCooldownRemaining(RelicAbilityID)

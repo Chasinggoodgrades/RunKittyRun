@@ -32,7 +32,7 @@ export enum RewardType {
 }
 
 export class Reward {
-    public Name: string
+    public name: string
     public AbilityID: number
     public OriginPoint: string
     public ModelPath: string
@@ -43,7 +43,7 @@ export class Reward {
     public GameStatValue: number
 
     public Reward(name: string, abilityID: number, originPoint: string, modelPath: string, type: RewardType) {
-        this.Name = name
+        this.name = name
         this.AbilityID = abilityID
         this.OriginPoint = originPoint
         this.ModelPath = modelPath
@@ -51,7 +51,7 @@ export class Reward {
     }
 
     public Reward(name: string, abilityID: number, skinID: number, type: RewardType) {
-        this.Name = name
+        this.name = name
         this.AbilityID = abilityID
         this.SkinID = skinID
         this.Type = type
@@ -65,7 +65,7 @@ export class Reward {
         gameStat: string,
         gameStatValue: number
     ) {
-        this.Name = name
+        this.name = name
         this.AbilityID = abilityID
         this.SkinID = skinID
         this.Type = type
@@ -83,7 +83,7 @@ export class Reward {
         gameStat: string,
         gameStatValue: number
     ) {
-        this.Name = name
+        this.name = name
         this.AbilityID = abilityID
         this.OriginPoint = originPoint
         this.ModelPath = modelPath
@@ -105,7 +105,7 @@ export class Reward {
         if (setData)
             player.DisplayTimedTextTo(
                 3.0,
-                '{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.ToString()}]'
+                '{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.toString()}]'
             )
     }
 
@@ -116,18 +116,18 @@ export class Reward {
             if (this.SetSkin(player)) return
             if (this.SetWindwalk(player)) return
 
-            let kitty = Globals.ALL_KITTIES.get(player).Unit
+            let kitty = Globals.ALL_KITTIES.get(player)!.Unit
             let effectInstance = Effect.create(this.ModelPath, kitty, this.OriginPoint)!
 
             this.DestroyCurrentEffect(player)
             this.ApplyEffect(player, effectInstance)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning(e.Message)
         }
     }
 
-    private ApplyEffect(player: MapPlayer, effectInstance: effect = null) {
-        let activeRewards = Globals.ALL_KITTIES.get(player).ActiveAwards
+    private ApplyEffect(player: MapPlayer, effectInstance: Effect = null) {
+        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings:
                 activeRewards.ActiveWings = effectInstance
@@ -157,7 +157,7 @@ export class Reward {
     }
 
     private DestroyCurrentEffect(player: MapPlayer) {
-        let activeRewards = Globals.ALL_KITTIES.get(player).ActiveAwards
+        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings:
                 let x = activeRewards.ActiveWings
@@ -192,7 +192,7 @@ export class Reward {
 
     private SetWindwalk(player: MapPlayer) {
         if (this.Type != RewardType.Windwalks) return false
-        let kitty = Globals.ALL_KITTIES.get(player)
+        let kitty = Globals.ALL_KITTIES.get(player)!
         kitty.ActiveAwards.WindwalkID = this.AbilityID
         return true
     }
@@ -200,12 +200,12 @@ export class Reward {
     private SetSkin(player: MapPlayer, tournament: boolean = false) {
         if (this.Type != RewardType.Skins && tournament == false) return false
 
-        let kitty = Globals.ALL_KITTIES.get(player)
+        let kitty = Globals.ALL_KITTIES.get(player)!
 
         if (this.SkinID != 0) {
-            kitty.Unit.Skin = this.SkinID
+            kitty.Unit.skin = this.SkinID
             kitty.KittyMorphosis.ScaleUnit()
-            kitty.Unit.Name = '{Colors.PlayerNameColored(player)}'
+            kitty.Unit.name = '{Colors.PlayerNameColored(player)}'
         } else Logger.Critical('ID: invalid: for: Skins {Name}')
 
         return true
@@ -214,33 +214,33 @@ export class Reward {
     private SetSelectedData(player: MapPlayer) {
         if (!Globals.ALL_KITTIES.has(player)) return
 
-        let saveData = Globals.ALL_KITTIES.get(player).SaveData
+        let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
 
         switch (this.Type) {
             case RewardType.Skins:
-                saveData.SelectedData.SelectedSkin = this.Name
+                saveData.SelectedData.SelectedSkin = this.name
                 break
 
             case RewardType.Windwalks:
-                saveData.SelectedData.SelectedWindwalk = this.Name
+                saveData.SelectedData.SelectedWindwalk = this.name
                 break
 
             case RewardType.Auras:
-                saveData.SelectedData.SelectedAura = this.Name
+                saveData.SelectedData.SelectedAura = this.name
                 break
 
             case RewardType.Hats:
-                saveData.SelectedData.SelectedHat = this.Name
+                saveData.SelectedData.SelectedHat = this.name
                 break
 
             case RewardType.Wings:
-                saveData.SelectedData.SelectedWings = this.Name
+                saveData.SelectedData.SelectedWings = this.name
                 break
 
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
-                saveData.SelectedData.SelectedTrail = this.Name
+                saveData.SelectedData.SelectedTrail = this.name
                 break
 
             case RewardType.Tournament:
@@ -252,25 +252,25 @@ export class Reward {
         }
     }
 
-    private SetTournamentReward(player: MapPlayer, e: effect, activate: boolean) {
+    private SetTournamentReward(player: MapPlayer, e: Effect, activate: boolean) {
         if (this.Type != RewardType.Tournament) return false
 
-        let activeRewards = Globals.ALL_KITTIES.get(player).ActiveAwards
+        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         if (activate) {
-            if (this.Name.includes('Nitro')) activeRewards.ActiveTrail = e
-            else if (this.Name.includes('Aura')) activeRewards.ActiveAura = e
-            else if (this.Name.includes('Wings')) activeRewards.ActiveWings = e
-            else if (this.Name.includes('Skin')) {
+            if (this.name.includes('Nitro')) activeRewards.ActiveTrail = e
+            else if (this.name.includes('Aura')) activeRewards.ActiveAura = e
+            else if (this.name.includes('Wings')) activeRewards.ActiveWings = e
+            else if (this.name.includes('Skin')) {
                 this.SetSkin(player, true)
-                Globals.ALL_KITTIES.get(player).SaveData.SelectedData.SelectedSkin = this.Name
+                Globals.ALL_KITTIES.get(player)!.SaveData.SelectedData.SelectedSkin = this.name
             } else {
                 Logger.Warning('Error: reward: Tournament {Name} is a: valid: type: not.')
                 return false
             }
         } else {
-            if (this.Name.includes('Nitro')) activeRewards.ActiveTrail?.Dispose()
-            else if (this.Name.includes('Aura')) activeRewards.ActiveAura?.Dispose()
-            else if (this.Name.includes('Wings')) activeRewards.ActiveWings?.Dispose()
+            if (this.name.includes('Nitro')) activeRewards.ActiveTrail?.dispose()
+            else if (this.name.includes('Aura')) activeRewards.ActiveAura?.dispose()
+            else if (this.name.includes('Wings')) activeRewards.ActiveWings?.dispose()
             else return false
         }
 
@@ -280,36 +280,36 @@ export class Reward {
     public SetRewardTypeSorted(): string {
         switch (this.Type) {
             case RewardType.Auras:
-                return new Auras().GetType().Name
+                return new Auras().GetType().name
 
             case RewardType.Windwalks:
-                return new Windwalks().GetType().Name
+                return new Windwalks().GetType().name
 
             case RewardType.Skins:
-                return new Skins().GetType().Name
+                return new Skins().GetType().name
 
             case RewardType.Trails:
-                return new Trails().GetType().Name
+                return new Trails().GetType().name
 
             case RewardType.Deathless:
-                return new Deathless().GetType().Name
+                return new Deathless().GetType().name
 
             case RewardType.Nitros:
-                return new Nitros().GetType().Name
+                return new Nitros().GetType().name
 
             case RewardType.Hats:
-                return new Hats().GetType().Name
+                return new Hats().GetType().name
 
             case RewardType.Wings:
-                return new Wings().GetType().Name
+                return new Wings().GetType().name
 
             default:
-                return new Tournament().GetType().Name
+                return new Tournament().GetType().name
         }
     }
 
     public SystemRewardName(): string {
-        return this.Name.ToString()
+        return this.name.toString()
     }
 
     public GetRewardName(): string {

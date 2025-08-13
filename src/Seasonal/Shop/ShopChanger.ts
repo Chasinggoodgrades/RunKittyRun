@@ -34,16 +34,16 @@ export class ShopChanger {
     }
 
     private static SetShopsToSkin(skinType: number) {
-        let tempGroup = CreateGroup()!
+        let tempGroup = Group.create()!
         tempGroup.EnumUnitsInRect(
             Globals.WORLD_BOUNDS,
-            Filter(() => GetFilterUnit().UnitType == Constants.UNIT_KITTY_VENDOR)
+            Filter(() => getFilterUnit().typeId == Constants.UNIT_KITTY_VENDOR)
         )
         while (true) {
             let vendor = tempGroup.First
             if (vendor == null) break
             tempGroup.Remove(vendor)
-            vendor.Skin = skinType
+            vendor.skin = skinType
         }
         GC.RemoveGroup(tempGroup) // TODO; Cleanup:         GC.RemoveGroup(ref tempGroup);
     }

@@ -13,8 +13,8 @@ export class Vortex extends Affix {
     private VORTEX_PULSE_RATE: number = 0.4 // every second.
     private VORTEX_PERIODIC_PULL: number = 30.0 // every 30 seconds
     private VORTEX_LENGTH: number = 10.0 // lasts 10 seconds.
-    private EntersRange: trigger = CreateTrigger()
-    private LeavesRange: trigger = CreateTrigger()
+    private EntersRange: Trigger = Trigger.create()!
+    private LeavesRange: Trigger = Trigger.create()!
     private PullingInTimer = Timer.create()
     private PeriodicPull = Timer.create()
     private PullStart = Timer.create()
@@ -23,18 +23,18 @@ export class Vortex extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        Name = '{Colors.COLOR_PURPLE}Vortex|r'
+        name = '{Colors.COLOR_PURPLE}Vortex|r'
     }
 
     public override Apply() {
-        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         RegisterEvents()
         super.Apply()
     }
 
     public override Remove() {
-        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
-        Unit.Unit.SetVertexColor(150, 120, 255)
+        this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
+        Unit.Unit.setVertexColor(150, 120, 255, 255)
 
         GC.RemoveTimer(PullingInTimer) // TODO; Cleanup:         GC.RemoveTimer(ref PullingInTimer);
         GC.RemoveTimer(PeriodicPull) // TODO; Cleanup:         GC.RemoveTimer(ref PeriodicPull);
@@ -48,28 +48,28 @@ export class Vortex extends Affix {
     public override Pause(pause: boolean) {}
 
     private RegisterEvents() {
-        EntersRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter)
-        EntersRange.AddAction(EnterRegionActions)
-        LeavesRange.RegisterUnitInRange(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter)
+        EntersRange.registerUnitInRage(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter)
+        EntersRange.addAction(EnterRegionActions)
+        LeavesRange.registerUnitInRage(Unit.Unit, VORTEX_RADIUS, FilterList.KittyFilter)
 
         PeriodicPull.start(VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(PullBegin))
     }
 
     private EnterRegionActions() {
-        let enteringUnit = GetTriggerUnit()
+        let enteringUnit = getTriggerUnit()
         if (UnitsInRange.includes(enteringUnit)) return
         UnitsInRange.push(enteringUnit)
     }
 
     private LeavesRegionActions() {
-        let leavingUnit = GetTriggerUnit()
+        let leavingUnit = getTriggerUnit()
         if (!UnitsInRange.includes(leavingUnit)) return
         UnitsInRange.Remove(leavingUnit)
     }
 
     private PullBegin() {
         PullStart.start(VORTEX_PULSE_RATE, true, ErrorHandler.Wrap(PullActions))
-        Unit.Unit.SetVertexColor(255, 0, 255)
+        Unit.Unit.setVertexColor(255, 0, 255, 255)
     }
 
     private PullActions() {
@@ -82,11 +82,11 @@ export class Vortex extends Affix {
             if (!unit.IsInRange(Unit.Unit, VORTEX_RADIUS)) continue
             let x = unit.x
             let y = unit.y
-            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.X, Unit.unit.y, x, y)
+            let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.x, Unit.unit.y, x, y)
             let newX = x + distance * Cos(angle)
             let newY = y + distance * Sin(angle)
             unit.setPos(newX, newY)
-            unit.SetFacing(angle)
+            unit.setFacingEx(angle)
             //let lastOrder = UnitOrders.GetLastOrderLocation(unit);
             //unit.IssueOrder("move", lastOrder.x, lastOrder.y);
             // We can set position.. but we need to get the units last move order and issue that move order to that x, y immediately after to stimulate the gravity effect.
@@ -98,6 +98,6 @@ export class Vortex extends Affix {
     private ResetVortex() {
         PullStart.pause()
         Counter = 0
-        Unit.Unit.SetVertexColor(150, 120, 255)
+        Unit.Unit.setVertexColor(150, 120, 255, 255)
     }
 }

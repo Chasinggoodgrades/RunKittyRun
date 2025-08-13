@@ -1,3 +1,9 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { HolidaySeasons, SeasonalManager } from '../SeasonalManager'
+
 export class TerrainChanger {
     public static Terrains: number[] = []
     public static SafezoneTerrain: number[] = []
@@ -12,7 +18,7 @@ export class TerrainChanger {
             if (Gamemode.CurrentGameMode != GameMode.Standard) return
             this.ChristmasTerrain()
             this.SetTerrain()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in TerrainChanger.Initialize {e.Message}')
             throw e
         }
@@ -58,31 +64,31 @@ export class TerrainChanger {
                 SafezoneTerrain[4] = FourCC("Oaby");*/
 
         for (let i: number = 0; i < Gamemode.NumberOfRounds; i++) {
-            SafezoneTerrain[i] = FourCC('Ibsq') // Icecrown Glaicer (Black Squares)
+            TerrainChanger.SafezoneTerrain[i] = FourCC('Ibsq') // Icecrown Glaicer (Black Squares)
         }
         for (let i: number = 0; i < Gamemode.NumberOfRounds; i++) {
-            Terrains[i] = FourCC('Nrck')
+            TerrainChanger.Terrains[i] = FourCC('Nrck')
         }
     }
 
     private static SetWolfRegionTerrain() {
         let round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
-        ChangeMapTerrain(LastWolfTerrain, Terrains[round])
-        LastWolfTerrain = Terrains[round]
+        TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, TerrainChanger.Terrains[round])
+        TerrainChanger.LastWolfTerrain = TerrainChanger.Terrains[round]
     }
 
     private static SetSafezoneTerrain() {
         let round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
-        ChangeMapTerrain(LastSafezoneTerrain, SafezoneTerrain[round])
-        LastSafezoneTerrain = SafezoneTerrain[round]
+        TerrainChanger.ChangeMapTerrain(TerrainChanger.LastSafezoneTerrain, TerrainChanger.SafezoneTerrain[round])
+        TerrainChanger.LastSafezoneTerrain = TerrainChanger.SafezoneTerrain[round]
     }
 
     public static ChangeMapTerrain(tileToChange: number, newTerrain: number) {
         let mapRect = Globals.WORLD_BOUNDS
-        let minX = mapRect.MinX
-        let minY = mapRect.MinY
-        let maxX = mapRect.MaxX
-        let maxY = mapRect.MaxY
+        let minX = mapRect.minX
+        let minY = mapRect.minY
+        let maxX = mapRect.maxX
+        let maxY = mapRect.maxY
 
         for (let x = minX; x <= maxX; x += 128) {
             for (let y = minY; y <= maxY; y += 128) {

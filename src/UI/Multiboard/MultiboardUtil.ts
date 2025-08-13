@@ -1,10 +1,19 @@
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { MapPlayer, Multiboard } from 'w3ts'
+import { SoloMultiboard } from './SoloMultiboard'
+import { StandardMultiboard } from './StandardMultiboard'
+
 export class MultiboardUtil {
     /// <summary>
     /// Simply updates or refreshes the multiboards.
     /// </summary>
     public static RefreshMultiboards() {
-        RefreshStandardMbs()
-        RefreshSoloMbs()
+        MultiboardUtil.RefreshStandardMbs()
+        MultiboardUtil.RefreshSoloMbs()
     }
 
     private static RefreshStandardMbs() {
@@ -28,14 +37,14 @@ export class MultiboardUtil {
     /// <param name="minMax">true to minimize, false to maximize</param>
     public static MinMultiboards(player: MapPlayer, minimize: boolean) {
         if (!player.isLocal()) return
-        MinStandardMultiboards(minimize)
+        MultiboardUtil.MinStandardMultiboards(minimize)
     }
 
     private static MinStandardMultiboards(minimize: boolean) {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        StandardMultiboard.CurrentStats.IsMinimized = minimize // Possible Desync
-        StandardMultiboard.BestTimes.IsMinimized = minimize // Possible Desync
-        StandardMultiboard.OverallStats.IsMinimized = minimize // Possible Desync
+        StandardMultiboard.CurrentStats.minimize(minimize) // Possible Desync
+        StandardMultiboard.BestTimes.minimize(minimize) // Possible Desync
+        StandardMultiboard.OverallStats.minimize(minimize) // Possible Desync
     }
 
     /// <summary>
@@ -43,10 +52,10 @@ export class MultiboardUtil {
     /// </summary>
     /// <param name="mb"></param>
     /// <param name="rowIndex"></param>
-    public static FillPlayers(mb: multiboard, rowIndex: number = 2) {
-        for (let player in Globals.ALL_PLAYERS) {
-            let name = player.Name.length > 8 ? player.Name.Substring(0, 8) : MapPlayer.Name
-            mb.GetItem(rowIndex, 0).setText('{Colors.GetStringColorOfPlayer(player.Id + 1)}{name}|r')
+    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
+        for (let player of Globals.ALL_PLAYERS) {
+            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+            mb.GetItem(rowIndex, 0).setText(`${Colors.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
             mb.GetItem(rowIndex, 0).SetWidth(0.07)
             rowIndex++
         }

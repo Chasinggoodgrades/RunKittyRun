@@ -1,3 +1,6 @@
+import { Colors } from 'src/Utility/Colors/Colors'
+import { Utility } from 'src/Utility/Utility'
+
 export class Tips {
     private static TipsList: string[] = []
 

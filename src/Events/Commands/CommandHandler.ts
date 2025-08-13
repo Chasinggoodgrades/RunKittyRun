@@ -1,14 +1,14 @@
 export class CommandHandler {
-    private static DebugCmdTrigger: trigger = CreateTrigger()
-    private static NewCmdHandler: trigger = CreateTrigger()
+    private static DebugCmdTrigger: Trigger = Trigger.create()!
+    private static NewCmdHandler: Trigger = Trigger.create()!
     private static readonly EmptyStringArray = ['']
 
     public static Initialize() {
         InitCommands.InitializeCommands()
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            if (Player(i).SlotState != playerslotstate.Playing) continue
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, Player(i), '?', false)
-            TriggerRegisterPlayerChatEvent(NewCmdHandler, Player(i), '-', false)
+            if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) continue
+            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, MapPlayer.fromIndex(i)!, '?', false)
+            TriggerRegisterPlayerChatEvent(NewCmdHandler, MapPlayer.fromIndex(i)!, '-', false)
         }
         TriggerAddAction(DebugCmdTrigger, DebugHandle)
         TriggerAddAction(NewCmdHandler, HandleCommands)
@@ -19,8 +19,8 @@ export class CommandHandler {
         let chatString = GetEventPlayerChatString() || ''
         if (chatString.length < 2 || chatString[0] != '-') return
 
-        let cmd = chatString.Substring(1)
-        let spaceIndex = cmd.IndexOf(' ')
+        let cmd = chatString.substring(1)
+        let spaceIndex = cmd.indexOf(' ')
 
         let commandName: string
         let args: string[]
@@ -29,8 +29,8 @@ export class CommandHandler {
             commandName = cmd
             args = EmptyStringArray
         } else {
-            commandName = cmd.Substring(0, spaceIndex)
-            let remainder = cmd.Substring(spaceIndex + 1)
+            commandName = cmd.substring(0, spaceIndex)
+            let remainder = cmd.substring(spaceIndex + 1)
             let split = remainder.split(' ').filter(Boolean)
             args = split.length > 0 ? split : EmptyStringArray
         }
@@ -38,15 +38,15 @@ export class CommandHandler {
         if (GamemodeSetting(GetEventPlayerChatString() || '')) return
 
         try {
-            let command = CommandsManager.GetCommand(commandName.ToLower())
-            let playerGroup = CommandsManager.GetPlayerGroup(GetTriggerPlayer())
+            let command = CommandsManager.GetCommand(commandName.toLowerCase())
+            let playerGroup = CommandsManager.GetPlayerGroup(getTriggerPlayer())
             if (command != null && (command.Group == playerGroup || command.Group == 'all' || playerGroup == 'admin')) {
-                command.Action?.Invoke(GetTriggerPlayer(), args)
+                command.Action?.Invoke(getTriggerPlayer(), args)
             } else {
-                GetTriggerPlayer().DisplayTimedTextTo(4.0, '{Colors.COLOR_YELLOW_ORANGE}not: found: Command.|r')
+                getTriggerPlayer().DisplayTimedTextTo(4.0, '{Colors.COLOR_YELLOW_ORANGE}not: found: Command.|r')
             }
-        } catch (ex) {
-            GetTriggerPlayer().DisplayTimedTextTo(
+        } catch (ex: any) {
+            getTriggerPlayer().DisplayTimedTextTo(
                 4.0,
                 '{Colors.COLOR_YELLOW_ORANGE}executing: command: Error:{Colors.COLOR_RESET} {Colors.COLOR_RED}{ex.Message} {ex.StackTrace}{Colors.COLOR_RESET}'
             )
@@ -55,22 +55,22 @@ export class CommandHandler {
     }
 
     private static GamemodeSetting(chatString: string) {
-        let player = GetTriggerPlayer()
-        let command = chatString.ToLower()
+        let player = getTriggerPlayer()
+        let command = chatString.toLowerCase()
 
-        if (!command.StartsWith('-t ') && command != '-s' && !command.StartsWith('-dev')) return false
+        if (!command.startsWith('-t ') && command != '-s' && !command.startsWith('-dev')) return false
 
         GamemodeCmd.Handle(player, command)
         return true
     }
 
     private static DebugHandle() {
-        let player = GetTriggerPlayer()
+        let player = getTriggerPlayer()
         let chatString = GetEventPlayerChatString() || ''
-        let command = chatString.ToLower()
+        let command = chatString.toLowerCase()
 
-        if (command.StartsWith('?') && Globals.VIPLISTUNFILTERED.includes(player)) {
-            if (command.ToLower().StartsWith('?exec')) ExecuteLua.LuaCode(player, chatString)
+        if (command.startsWith('?') && Globals.VIPLISTUNFILTERED.includes(player)) {
+            if (command.toLowerCase().startsWith('?exec')) ExecuteLua.LuaCode(player, chatString)
         }
     }
 }

@@ -5,25 +5,25 @@ import { MapPlayer, Unit } from 'w3ts'
 
 export class RelicUtil {
     public static DisableRelicBook(Unit: Unit) {
-        return Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true)
+        return Unit.disableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true)
     }
 
     public static EnableRelicBook(Unit: Unit) {
-        return Unit.DisableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false)
+        return Unit.disableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false)
     }
 
     public static DisableRelicAbilities(Unit: Unit) {
-        Unit.DisableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, true)
-        Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, true)
-        Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, true)
-        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
+        Unit.disableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, true)
+        Unit.disableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, true)
+        Unit.disableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, true)
+        Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
     }
 
     public static EnableRelicAbilities(Unit: Unit) {
-        Unit.DisableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, false)
-        Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, false)
-        Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, false)
-        Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false)
+        Unit.disableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, false)
+        Unit.disableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, false)
+        Unit.disableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, false)
+        Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, false)
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ export class RelicUtil {
     /// </summary>
     /// <param name="Unit"></param>
     public static CloseRelicBook(Unit: Unit) {
-        let player = Unit.Owner
+        let player = Unit.owner
         if (!player.isLocal()) return
         ForceUICancel()
     }
@@ -62,7 +62,7 @@ export class RelicUtil {
         let itemCooldown: number = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0)
 
         cooldown = cooldown == 0 ? Math.Min(unitCooldown, itemCooldown) : cooldown
-        if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.removeItem(item)
+        if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         unit.SetAbilityCooldownRemaining(abilityID, cooldown)
         unit.AddItem(item)
         unit.DropItem(item, itemSlot)
@@ -74,7 +74,7 @@ export class RelicUtil {
         if (!item) return
         let itemSlot = Utility.GetSlotOfItem(unit, itemID)
         let unitAbility = unit.GetAbility(abilityID)
-        if (Globals.ALL_KITTIES[unit.Owner].Alive) unit.removeItem(item)
+        if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown)
         unit.AddItem(item)
         unit.DropItem(item, itemSlot)

@@ -1,7 +1,20 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
+import { ProtectionOfAncients } from 'src/Game/ProtectionOfAncients'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
+import { TeamsMultiboard } from 'src/UI/Multiboard/TeamsMultiboard'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer, Timer } from 'w3ts'
+import { Gamemode } from '../Gamemode'
+import { GameMode } from '../GameModeEnum'
+import { TeamHandler } from './TeamHandler'
+import { TeamsUtil } from './TeamsUtil'
 
 export class Team {
-    private static TeamTimer: timer
+    private static TeamTimer: Timer
     public TeamID: number
     public TeamColor: string
     public TeamTimes: Map<number, number>
@@ -32,7 +45,7 @@ export class Team {
             Globals.PLAYERS_TEAMS = new Map()
             this.TeamTimer ??= Timer.create()
             this.TeamTimer.start(0.1, false, ErrorHandler.Wrap(this.TeamSetup))
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in Team.Initialize: {e.Message}')
             throw e
         }
@@ -57,7 +70,7 @@ export class Team {
 
     public TeamIsDeadActions() {
         for (let i: number = 0; i < this.Teammembers.length; i++) {
-            let kitty = Globals.ALL_KITTIES[this.Teammembers[i]]
+            let kitty = Globals.ALL_KITTIES.get(this.Teammembers[i])!
             kitty.Finished = true
         }
         this.Finished = true
@@ -77,8 +90,7 @@ export class Team {
 
     public static UpdateTeamsMB() {
         let t = Timer.create()
-        TimerStart(
-            t,
+        t.start(
             0.1,
             false,
             ErrorHandler.Wrap(() => {
@@ -94,7 +106,7 @@ export class Team {
             // free pick
             RoundManager.ROUND_INTERMISSION += 15.0
             TeamHandler.FreepickEnabled = true
-            for (let player in Globals.ALL_PLAYERS) {
+            for (let player of Globals.ALL_PLAYERS) {
                 player.DisplayTimedTextTo(
                     RoundManager.ROUND_INTERMISSION - 30.0,
                     Colors.COLOR_YELLOW_ORANGE +
@@ -126,13 +138,13 @@ export class Team {
     private AssignTeamMember(player: MapPlayer, adding: boolean) {
         if (adding) {
             this.Teammembers.push(player)
-            Globals.ALL_KITTIES.get(player).TeamID = this.TeamID
-            Globals.ALL_KITTIES.get(player).Unit.setColor(GetPlayerColor(Player(TeamID - 1)))
-            Globals.ALL_CIRCLES[player].Unit.setColor(GetPlayerColor(Player(TeamID - 1)))
+            Globals.ALL_KITTIES.get(player)!.TeamID = this.TeamID
+            Globals.ALL_KITTIES.get(player)!.Unit.setColor(GetPlayerColor(MapPlayer.fromIndex(TeamID - 1)!))
+            Globals.ALL_CIRCLES[player].Unit.setColor(GetPlayerColor(MapPlayer.fromIndex(TeamID - 1)!))
             Globals.PLAYERS_TEAMS.push(player, this)
         } else {
             Teammembers.Remove(player)
-            Globals.ALL_KITTIES.get(player).TeamID = 0
+            Globals.ALL_KITTIES.get(player)!.TeamID = 0
             Globals.PLAYERS_TEAMS.Remove(player)
         }
 
@@ -140,8 +152,8 @@ export class Team {
         this.TeamMembersString = '' // Reset TeamMembersString
         for (let i: number = 0; i < this.Teammembers.length; i++) {
             let member = this.Teammembers[i]
-            let name: string = member.Name.split('#')[0]
-            if (name.length > 7) name = Colors.ColorString(member.Name.Substring(0, 7), member.Id + 1)
+            let name: string = member.name.split('#')[0]
+            if (name.length > 7) name = Colors.ColorString(member.name.substring(0, 7), member.id + 1)
 
             if (this.TeamMembersString.length > 0) this.TeamMembersString += ', '
 

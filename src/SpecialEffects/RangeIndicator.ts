@@ -56,7 +56,7 @@ export class RangeIndicator {
                 DestroyLightning(this.LightningObjects[i])
             }
             this.LightningObjects = []
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in RangeIndicator.DestroyIndicator: {e.Message}')
         }
     }
@@ -64,7 +64,7 @@ export class RangeIndicator {
     /// <summary>
     /// Disposes of the range indicator by destroying all associated lightning effects and releasing the object back to the pool
     /// </summary>
-    public Dispose() {
+    public dispose() {
         this.DestroyIndicator()
         MemoryHandler.destroyObject(this)
     }

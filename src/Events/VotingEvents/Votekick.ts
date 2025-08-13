@@ -10,7 +10,7 @@ export class Votekick {
         if (VotekickAlreadyActive()) return
         VoteStarter = voteStarter
         let playerID = GetPlayerID(player)
-        if (playerID != -1) StartVotekick(Player(playerID))
+        if (playerID != -1) StartVotekick(MapPlayer.fromIndex(playerID)!)
         else
             voteStarter.DisplayTimedTextTo(
                 7.0,
@@ -20,8 +20,8 @@ export class Votekick {
 
     public static IncrementTally() {
         if (!VoteActive) return
-        let player = GetTriggerPlayer()
-        let vote = (GetEventPlayerChatString() || '').ToLower()
+        let player = getTriggerPlayer()
+        let vote = (GetEventPlayerChatString() || '').toLowerCase()
         if (vote != '-yes') return
         if (Voters.includes(player)) {
             player.DisplayTimedTextTo(
@@ -104,11 +104,11 @@ export class Votekick {
     private static GetPlayer(player: string): MapPlayer {
         // doesnt quite work yet.
         let basePlayerName: string = Regex.Match(player, `^[^\W_]+`).Value
-        for (let p in Globals.ALL_PLAYERS) {
-            if (GetPlayerName(p).IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase) >= 0) {
+        for (let p of Globals.ALL_PLAYERS) {
+            if (p.name.indexOf(basePlayerName, StringComparison.OrdinalIgnoreCase) >= 0) {
                 return p
             }
-            print(GetPlayerName(p).IndexOf(basePlayerName, StringComparison.OrdinalIgnoreCase))
+            print(p.name.indexOf(basePlayerName, StringComparison.OrdinalIgnoreCase))
         }
         return null
     }

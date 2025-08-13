@@ -1,7 +1,8 @@
 import { Units } from '@objectdata/units'
-import { Timer, Unit } from 'w3ts'
+import { MapPlayer, Timer, Unit } from 'w3ts'
 import { Players } from 'w3ts/globals'
 import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
+import { Program } from './Program'
 
 const BUILD_DATE = compiletime(() => new Date().toUTCString())
 const TS_VERSION = compiletime(() => require('typescript').version)
@@ -32,7 +33,30 @@ function tsMain() {
         Timer.create().start(1.0, true, () => {
             unit.color = Players[math.random(0, bj_MAX_PLAYERS)].color
         })
-    } catch (e) {
+
+        // Surely this'll work
+        MapPlayer.prototype.DisplayTimedTextTo = function (duration: number, message: string) {
+            DisplayTimedTextToPlayer(this.handle, 0, 0, duration, message)
+        }
+
+        MapPlayer.prototype.DisplayTextTo = function (message: string) {
+            DisplayTextToPlayer(this.handle, 0, 0, message)
+        }
+
+        MapPlayer.prototype.getGold = function (): number {
+            return GetPlayerState(this.handle, PLAYER_STATE_RESOURCE_GOLD)
+        }
+
+        MapPlayer.prototype.setGold = function (amount: number): void {
+            SetPlayerState(this.handle, PLAYER_STATE_RESOURCE_GOLD, amount)
+        }
+
+        MapPlayer.prototype.addGold = function (amount: number): void {
+            this.setGold(this.getGold() + amount)
+        }
+
+        new Program()
+    } catch (e: any) {
         print(e)
     }
 }

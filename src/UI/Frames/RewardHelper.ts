@@ -1,4 +1,6 @@
+import { Logger } from 'src/Events/Logger/Logger'
 import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
+import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
 
 export class RewardHelper {
     public Hats: Reward[]
@@ -36,16 +38,16 @@ export class RewardHelper {
     }
 
     public ClearRewards() {
-        this.Hats.clear()
-        this.Wings.clear()
-        this.Trails.clear()
-        this.Auras.clear()
+        this.Hats.length = 0
+        this.Wings.length = 0
+        this.Trails.length = 0
+        this.Auras.length = 0
     }
 
-    public static GetAwardNestedValue(saveData: object, awardName: string) {
+    public static GetAwardNestedValueTwo(saveData: object, awardName: string) {
         // search rewardsList for this award name, then return getawardNestedvalue
-        let reward = RewardsManager.Rewards.Find(r => r.Name == awardName)
-        return reward != null ? GetAwardNestedValue(saveData, reward.TypeSorted, reward.Name) : -1
+        let reward = RewardsManager.Rewards.find(r => r.name == awardName)
+        return reward != null ? RewardHelper.GetAwardNestedValue(saveData, reward.TypeSorted, reward.name) : -1
     }
 
     /// <summary>
@@ -53,7 +55,7 @@ export class RewardHelper {
     /// </summary>
     /// <param name="obj">Players SaveData Object GameAwardsSorted in this case.</param>
     /// <param name="nestedPropertyName">The Reward.TypeSorted</param>
-    /// <param name="propertyName">Reward.Name</param>
+    /// <param name="propertyName">Reward.name</param>
     /// <returns></returns>
     public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
         let nestedProperty = obj.GetType().GetProperty(nestedPropertyName)
@@ -81,7 +83,7 @@ export class RewardHelper {
         if (nestedProperty != null) {
             let nestedObject = nestedProperty.GetValue(obj)
             if (nestedObject != null) {
-                UpdateProperty(nestedObject, propertyName, value)
+                RewardHelper.UpdateProperty(nestedObject, propertyName, value)
             }
         } else {
             Logger.Warning('property: Nested {nestedPropertyName} found: not.')

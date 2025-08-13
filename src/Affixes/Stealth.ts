@@ -3,17 +3,17 @@ export class Stealth extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        Name = '{Colors.COLOR_GREY}Stealth|r'
+        name = '{Colors.COLOR_GREY}Stealth|r'
     }
 
     public override Apply() {
-        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
-        UnitAddAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
+        this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         super.Apply()
     }
 
     public override Remove() {
-        UnitRemoveAbility(this.Unit.Unit, this.AFFIX_ABILITY)
+        this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         super.Remove()
     }
 

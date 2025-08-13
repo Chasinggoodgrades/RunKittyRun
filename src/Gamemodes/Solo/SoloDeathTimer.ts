@@ -5,7 +5,7 @@ export class SoloDeathTimer {
     public ReviveTimer: AchesTimers
     public UpdateTextTimer: AchesTimers
     public Player: MapPlayer
-    public FloatingTimer: texttag
+    public FloatingTimer: TextTag
 
     public SoloDeathTimer(player: MapPlayer) {
         Player = player
@@ -15,7 +15,7 @@ export class SoloDeathTimer {
         StartTimers()
     }
 
-    private CreateFloatingTimer(): texttag {
+    private CreateFloatingTimer(): TextTag {
         let circle = Globals.ALL_CIRCLES[Player]
         let floatText = CreateTextTag()!
         floatText.setPos(circle.Unit.x, circle.Unit.y - this.Y_OFFSET, 0)
@@ -31,32 +31,32 @@ export class SoloDeathTimer {
     private UpdateFloatingText() {
         SetTextTagText(
             this.FloatingTimer,
-            '{Colors.GetStringColorOfPlayer(Player.Id + 1)}' + this.ReviveTimer.Remaining().toFixed(2) + '|r',
+            '{Colors.GetStringColorOfPlayer(Player.id + 1)}' + this.ReviveTimer.remaining().toFixed(2) + '|r',
             this.TextTagHeight
         )
     }
 
     private Revive() {
         try {
-            let kitty = Globals.ALL_KITTIES[Player]
+            let kitty = Globals.ALL_KITTIES.get(Player)!
             let lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone]
-            let x = lastCheckpoint.Rect_.CenterX
-            let y = lastCheckpoint.Rect_.CenterY
+            let x = lastCheckpoint.Rect_.centerX
+            let y = lastCheckpoint.Rect_.centerY
             kitty.ReviveKitty()
             kitty.Unit.setPos(x, y)
             if (Player.isLocal()) PanCameraToTimed(x, y, 0.0)
             CameraUtil.RelockCamera(Player)
             Dispose()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in SoloDeathTimer.Revive: {e.Message}')
             Dispose()
         }
     }
 
     private Dispose() {
-        ReviveTimer.Dispose()
-        UpdateTextTimer.Dispose()
-        FloatingTimer.Dispose()
+        ReviveTimer.dispose()
+        UpdateTextTimer.dispose()
+        FloatingTimer.dispose()
         FloatingTimer = null
     }
 }

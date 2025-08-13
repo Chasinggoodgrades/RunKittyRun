@@ -6,10 +6,10 @@ export class NitroPacer {
     private static currentDistance: number = 0
     private static currentCheckpoint: number = 0
     private static pacerTimer: AchesTimers
-    private static spawnRect: rect = RegionList.SpawnRegions[5].Rect
+    private static spawnRect: Rectangle = RegionList.SpawnRegions[5].Rect
     private static pathingPoints: Rectangle[] = RegionList.PathingPoints
     private static _cachedNitroPacerUpdate: Action
-    private static nitroEffect: effect
+    private static nitroEffect: Effect
     private static ghostBoots: item
 
     /// <summary>
@@ -18,16 +18,16 @@ export class NitroPacer {
     public static Initialize() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
-        Unit ??= unit.Create(
+        Unit ??= Unit.create(
             player.NeutralPassive,
             Constants.UNIT_NITRO_PACER,
-            spawnRect.CenterX,
-            spawnRect.CenterY,
+            spawnRect.centerX,
+            spawnRect.centerY,
             360
         )
         Utility.MakeUnitLocust(Unit)
         Unit.IsInvulnerable = true
-        Unit.Name = '{Colors.COLOR_TURQUOISE}Pacer: Nitro{Colors.COLOR_RESET}'
+        Unit.name = '{Colors.COLOR_TURQUOISE}Pacer: Nitro{Colors.COLOR_RESET}'
         ghostBoots = Unit.AddItem(Constants.ITEM_GHOST_KITTY_BOOTS)
         nitroEffect = Effect.create('war3mapImported\\Nitro.mdx', Unit, 'origin')!
         _cachedNitroPacerUpdate = UpdateNitroPacer
@@ -63,8 +63,8 @@ export class NitroPacer {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
         pacerTimer?.pause()
-        Unit.IsPaused = false
-        Unit.setPos(spawnRect.CenterX, spawnRect.CenterY)
+        Unit.paused = false
+        Unit.setPos(spawnRect.centerX, spawnRect.centerY)
         currentCheckpoint = 0
         currentDistance = 0
     }
@@ -78,15 +78,15 @@ export class NitroPacer {
             let speed: number = remainingTime != 0.0 ? remainingDistance / remainingTime : 350.0
             SetSpeed(speed)
 
-            if (pathingPoints[currentCheckpoint + 1].includes(Unit.X, unit.y)) {
+            if (pathingPoints[currentCheckpoint + 1].includes(Unit.x, unit.y)) {
                 currentCheckpoint++
                 if (currentCheckpoint >= pathingPoints.length - 1) {
                     pacerTimer?.pause()
-                    Utility.SimpleTimer(2.0, () => (Unit.IsPaused = true)) // this is actually ok since we reset pacer before starting it again
+                    Utility.SimpleTimer(2.0, () => (Unit.paused = true)) // this is actually ok since we reset pacer before starting it again
                     return
                 }
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in UpdateNitroPacer. {e.Message}')
             throw e
         }
@@ -100,13 +100,13 @@ export class NitroPacer {
             i-- // exclude starting point
         ) {
             let point: Rectangle = pathingPoints[i]
-            Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.X, point.Center.Y)
+            Unit.QueueOrder(WolfPoint.MoveOrderID, point.Center.x, point.Center.y)
         }
     }
 
     private static VisionShare() {
-        for (let player in Globals.ALL_PLAYERS) {
-            player.NeutralPassive.SetAlliance(player, alliancetype.SharedVisionForced, true)
+        for (let player of Globals.ALL_PLAYERS) {
+            player.NeutralPassive.setAlliance(player, alliancetype.SharedVisionForced, true)
         }
     }
 

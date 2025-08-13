@@ -1,7 +1,7 @@
 export class OldsaveSync {
     private SYNC_PREFIX: string = 'S'
-    private static Trigger: trigger = CreateTrigger()
-    private static VariableEvent: trigger = CreateTrigger()
+    private static Trigger: Trigger = Trigger.create()!
+    private static VariableEvent: Trigger = Trigger.create()!
     private static SaveLoadCode: string
     private static SavePlayer: MapPlayer
     public static LoadEvent: number
@@ -11,11 +11,11 @@ export class OldsaveSync {
     }
 
     public static Initialize() {
-        for (let player in Globals.ALL_PLAYERS) {
+        for (let player of Globals.ALL_PLAYERS) {
             BlzTriggerRegisterPlayerSyncEvent(Trigger, player, SYNC_PREFIX, false)
         }
-        Trigger.AddAction(() => {
-            SavePlayer = GetTriggerPlayer()
+        Trigger.addAction(() => {
+            SavePlayer = getTriggerPlayer()
             SaveLoadCode = BlzGetTriggerSyncData()
             LoadActions()
         })

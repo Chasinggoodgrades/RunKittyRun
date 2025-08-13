@@ -1,5 +1,5 @@
 export abstract class IDisposable {
-    public abstract Dispose(): void
+    public abstract dispose(): void
 }
 
-export type Action = () => void
+export type Action<T = any> = (...args: T[]) => void

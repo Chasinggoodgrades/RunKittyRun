@@ -1,4 +1,5 @@
 import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { Action } from 'src/Utility/CSUtils'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
@@ -14,64 +15,64 @@ export class KittyTime {
     private TotalTime: number
     private Kitty: Kitty
 
-    public KittyTime(kitty: Kitty) {
+    public constructor(kitty: Kitty) {
         Kitty = kitty
-        _cachedProgress = () => Progress.CalculateProgress(Kitty)
-        Initialize()
+        this._cachedProgress = () => Progress.CalculateProgress(Kitty)
+        this.Initialize()
     }
 
     private Initialize() {
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) RoundTime.push(i, 0.0)
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) RoundProgress.push(i, 0.0)
-        PeriodicProgressTimer()
+        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundTime.push(i, 0.0)
+        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundProgress.push(i, 0.0)
+        this.PeriodicProgressTimer()
     }
 
-    public Dispose() {
-        ProgressTimer.pause()
-        ProgressTimer?.Dispose()
-        RoundTime.clear()
-        RoundProgress.clear()
-        RoundTime = null
-        RoundProgress = null
+    public dispose() {
+        this.ProgressTimer.pause()
+        this.ProgressTimer?.dispose()
+        this.RoundTime.clear()
+        this.RoundProgress.clear()
+        this.RoundTime = null
+        this.RoundProgress = null
     }
 
     private PeriodicProgressTimer() {
-        ProgressTimer.Timer.start(0.2, true, _cachedProgress)
+        this.ProgressTimer.Timer.start(0.2, true, this._cachedProgress)
     }
 
     // #region Time Section
 
     public GetRoundTime(round: number) {
-        return RoundTime.has(round) ? RoundTime[round] : 0.0
+        return this.RoundTime.has(round) ? this.RoundTime[round] : 0.0
     }
 
     public GetRoundTimeFormatted(round: number) {
-        return RoundTime.has(round) ? Utility.ConvertFloatToTime(RoundTime[round]) : '0:00'
+        return this.RoundTime.has(round) ? Utility.ConvertFloatToTime(this.RoundTime[round]) : '0:00'
     }
 
     public GetTotalTime(): number {
-        return TotalTime
+        return this.TotalTime
     }
 
     public GetTotalTimeFormatted(): string {
-        return Utility.ConvertFloatToTime(TotalTime)
+        return Utility.ConvertFloatToTime(this.TotalTime)
     }
 
     public SetRoundTime(round: number, time: number) {
-        if (RoundTime.has(round)) RoundTime[round] = time
-        SetTotalTime()
+        if (this.RoundTime.has(round)) this.RoundTime[round] = time
+        this.SetTotalTime()
     }
 
     public IncrementRoundTime(round: number) {
-        if (RoundTime.has(round)) RoundTime[round] += GameTimer.RoundSpeedIncrement
-        SetTotalTime()
+        if (this.RoundTime.has(round)) this.RoundTime[round] += GameTimer.RoundSpeedIncrement
+        this.SetTotalTime()
     }
 
     private SetTotalTime() {
         // Solo Tournament Issue
-        TotalTime = 0.0
-        for (let time in RoundTime) // IEnumberable
-            TotalTime += time.Value
+        this.TotalTime = 0.0
+        for (let time in this.RoundTime) // IEnumberable
+            this.TotalTime += time.Value
     }
 
     // #endregion Time Section
@@ -79,19 +80,19 @@ export class KittyTime {
     // #region Progress Section
 
     public GetRoundProgress(round: number) {
-        return RoundProgress.has(round) ? RoundProgress[round] : 0.0
+        return this.RoundProgress.has(round) ? this.RoundProgress[round] : 0.0
     }
 
     public SetRoundProgress(round: number, progress: number) {
-        RoundProgress[round] = progress
+        this.RoundProgress[round] = progress
     }
 
     public GetOverallProgress(): number {
         // Solo Tournament Issue
         let overallProgress: number = 0.0
-        for (let progress in RoundProgress) // IEnumberable
+        for (let progress in this.RoundProgress) // IEnumberable
             overallProgress += progress.Value
-        return overallProgress / RoundProgress.length
+        return overallProgress / this.RoundProgress.length
     }
 
     // #endregion Progress Section

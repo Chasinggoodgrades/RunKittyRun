@@ -5,8 +5,8 @@ export class FandF {
     private BloodVial: number = Constants.ITEM_EASTER_EGG_BLOOD_FILLED_VIAL
     private static TurnInRange: number
     private static CollectionRange: number
-    private static InRangeTrigger: trigger
-    private static CollectionTrigger: trigger
+    private static InRangeTrigger: Trigger
+    private static CollectionTrigger: Trigger
     public static BloodWolf: Unit
 
     public static Initialize() {
@@ -21,23 +21,23 @@ export class FandF {
         let region = GetRandomInt(0, WolfArea.WolfAreas.length - 1)
         let wolfObject = new Wolf(region)
         this.BloodWolf = wolfObject.Unit
-        this.BloodWolf.Name = '|cffffffff?|r|cffffcccc?|r|cffff9999?|r|cffff6666?|r|cffff3333?|r|cffff0000?|r'
-        this.BloodWolf.SetVertexColor(100, 50, 50)
+        this.BloodWolf.name = '|cffffffff?|r|cffffcccc?|r|cffff9999?|r|cffff6666?|r|cffff3333?|r|cffff0000?|r'
+        this.BloodWolf.setVertexColor(100, 50, 50, 255)
         this.AppendCollectionsUnit()
     }
 
     private static AppendCollectionsUnit() {
-        this.CollectionTrigger.RegisterUnitInRange(this.BloodWolf, this.CollectionRange, FilterList.KittyFilter)
+        this.CollectionTrigger.registerUnitInRage(this.BloodWolf, this.CollectionRange, FilterList.KittyFilter)
     }
 
-    private static RegisterCollection(): trigger {
-        let trig = CreateTrigger()
-        trig.AddAction(ErrorHandler.Wrap(CollectionActions))
+    private static RegisterCollection(): Trigger {
+        let trig = Trigger.create()!
+        trig.addAction(ErrorHandler.Wrap(CollectionActions))
         return trig
     }
 
     private static CollectionActions() {
-        let unit = GetTriggerUnit()
+        let unit = getTriggerUnit()
 
         if (!Utility.UnitHasItem(unit, EmptyVial)) return
 
@@ -46,21 +46,21 @@ export class FandF {
         unit.AddItem(BloodVial)
     }
 
-    private static RegisterTurnIn(): trigger {
-        let trig = CreateTrigger()
-        trig.RegisterUnitInRange(SpawnChampions.FandF2023, TurnInRange, FilterList.KittyFilter)
-        trig.AddAction(ErrorHandler.Wrap(TurnInActions))
+    private static RegisterTurnIn(): Trigger {
+        let trig = Trigger.create()!
+        trig.registerUnitInRage(SpawnChampions.FandF2023, TurnInRange, FilterList.KittyFilter)
+        trig.addAction(ErrorHandler.Wrap(TurnInActions))
         return trig
     }
 
     private static TurnInActions() {
-        EmptyVialQuest(GetTriggerUnit())
-        BloodVialQuest(GetTriggerUnit())
+        EmptyVialQuest(getTriggerUnit())
+        BloodVialQuest(getTriggerUnit())
     }
 
     private static EmptyVialQuest(u: Unit) {
         if (!Utility.UnitHasItem(u, EmptyVial)) return
-        let player = u.Owner
+        let player = u.owner
         player.DisplayTimedTextTo(
             20.0,
             "|cff00fffFast & Furriest:|r |cffffff00Greetings, feline: fellow! paws: you: hold: there: What? empty: vial: An, eh? predecessor: A'unfinished: tale: s, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r"
@@ -72,7 +72,7 @@ export class FandF {
 
         if (this.BloodVialItems(u)) {
             this.RemoveQuestItems(u)
-            AwardManager.GiveReward(u.Owner, 'WWBlood')
+            AwardManager.GiveReward(u.owner, 'WWBlood')
         }
         DisplayTimedTextToPlayer(
             GetOwningPlayer(u),

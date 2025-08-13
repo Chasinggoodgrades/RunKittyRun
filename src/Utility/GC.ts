@@ -1,63 +1,54 @@
+import { Affix } from 'src/Affixes/Affix'
+import { Effect, Group, Timer, Trigger } from 'w3ts'
+import { safeArraySplice } from './ArrayUtils'
+
 export class GC {
     public static GCAffixes: Affix[] = []
 
-    public static RemoveTrigger(t: trigger) {
+    public static RemoveTrigger(t: Trigger) {
         // TODO; Cleanup:     public static RemoveTrigger(ref trigger t)
         if (t == null) return
-        t.ClearActions()
-        t.ClearConditions()
-        t.Dispose()
-        t = null
+        t.destroy()
     }
 
-    public static RemoveTimer(t: timer) {
+    public static RemoveTimer(t: Timer) {
         // TODO; Cleanup:     public static RemoveTimer(ref timer t)
         if (t == null) return
         t.pause()
-        t?.Dispose()
-        t = null
+        t.destroy()
     }
 
-    public static RemoveEffect(e: effect) {
+    public static RemoveEffect(e: Effect) {
         // TODO; Cleanup:     public static RemoveEffect(ref effect e)
         if (e == null) return
-        e?.Dispose()
-        e = null
+        e.destroy()
     }
 
-    public static RemoveGroup(g: group) {
+    public static RemoveGroup(g: Group) {
         // TODO; Cleanup:     public static RemoveGroup(ref group g)
         if (g == null) return
         g.clear()
-        g?.Dispose()
-        g = null
+        g.destroy()
     }
 
     public static RemoveAffix(affix: Affix) {
         if (affix == null) return
-        let index = GCAffixes.IndexOf(affix)
-        if (index != -1) GCAffixes[index] = null
-        GCAffixes.Remove(affix)
+        let index = GC.GCAffixes.indexOf(affix)
+        if (index != -1) (GC.GCAffixes as any)[index] = null
+        safeArraySplice(GC.GCAffixes, a => a === affix)
     }
 
     public static RemoveList<T>(list: T[]) {
         // TODO; Cleanup:     public static RemoveList<T>(ref list: T[])
         if (list == null) return
-        list.clear()
-        list = null
+        list.length = 0
     }
 
-    public static RemoveFilterFunc(filter: filterfunc) {
-        // TODO; Cleanup:     public static RemoveFilterFunc(ref filterfunc filter)
-        if (filter == null) return
-        filter.Dispose()
-        filter = null
-    }
+    public static RemoveFilterFunc(filter: filterfunc) {}
 
     public static RemoveTimerDialog(td: timerdialog) {
         // TODO; Cleanup:     public static RemoveTimerDialog(ref timerdialog td)
         if (td == null) return
-        td.Dispose()
-        td = null
+        DestroyTimerDialog(td)
     }
 }

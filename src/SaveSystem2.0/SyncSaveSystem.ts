@@ -1,3 +1,10 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Action } from 'src/Utility/CSUtils'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { MapPlayer, Trigger } from 'w3ts'
+import { EncodingHex } from './SyncUtil/EncodingHex'
+import { PropertyEncoder } from './SyncUtil/PropertyEncoder'
+
 export class SyncSaveLoad {
     private static instance: SyncSaveLoad
 
@@ -10,15 +17,15 @@ export class SyncSaveLoad {
 
     public SyncPrefix: string = 'S_TIO'
     public SyncPrefixFinish: string = 'S_TIOF'
-    public SyncEvent: trigger = CreateTrigger()
+    public SyncEvent: Trigger = Trigger.create()!
     private allPromises: Map<number, FilePromise> = new Map()
 
     private constructor() {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false)
-            SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefixFinish, false)
+            SyncEvent.RegisterPlayerSyncEvent(MapPlayer.fromIndex(i)!, SyncPrefix, false)
+            SyncEvent.RegisterPlayerSyncEvent(MapPlayer.fromIndex(i)!, SyncPrefixFinish, false)
         }
-        SyncEvent.AddAction(OnSync)
+        SyncEvent.addAction(OnSync)
     }
 
     /// <summary>
@@ -55,17 +62,17 @@ export class SyncSaveLoad {
                 let header: string = EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
                 Preload('")\BlzSendSyncData: ncall("{SyncPrefix}","{header + assemble}")\S2I: ncall("')
             }
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical('Error in SyncSaveSystem.WriteFileObjects')
         }
         PreloadGenEnd(filename)
     }
 
     public Read(filename: string, reader: MapPlayer, onFinish: Action<FilePromise> = null): FilePromise {
-        let playerId: number = reader.Id
+        let playerId: number = reader.id
         if (!allPromises.has(playerId)) {
             allPromises[playerId] = new FilePromise(reader, onFinish)
-            if (GetLocalPlayer() == reader) {
+            if (reader.isLocal()) {
                 PreloadStart()
                 Preloader(filename)
                 PreloadEnd(1)
@@ -80,11 +87,11 @@ export class SyncSaveLoad {
     private OnSync() {
         let readData: string = BlzGetTriggerSyncData()
         let prefix: string = BlzGetTriggerSyncPrefix()
-        let totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0
-        let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0
+        let totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
+        let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 8)) : 0
         let theRest: string =
-            readData.length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.length, 8))
-        let promise = allPromises[GetTriggerPlayer().Id]
+            readData.length > 16 ? readData.substring(16) : readData.substring(Math.Min(readData.length, 8))
+        let promise = allPromises[getTriggerPlayer().id]
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
         if (promise != null) {
@@ -92,12 +99,12 @@ export class SyncSaveLoad {
                 promise.Buffer[currentChunk - 1] = theRest
             } else if (prefix == SyncPrefixFinish) {
                 promise.Finish()
-                allPromises.Remove(GetPlayerId(promise.SyncOwner))
-                //print("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
+                allPromises.Remove(promise.SyncOwner.id)
+                //print("Promise killed: ", allPromises[promise.SyncOwner.id]);
             }
         } else {
             print(
-                'data: Synchronized in {nameof(SyncSaveLoad)} there: when is promise: present: for: MapPlayer: no: {GetPlayerName(GetTriggerPlayer())}'
+                'data: Synchronized in {nameof(SyncSaveLoad)} there: when is promise: present: for: MapPlayer: no: {GetPlayerName(getTriggerPlayer())}'
             )
         }
     }
@@ -126,7 +133,7 @@ export class FilePromise {
                 }
             }
 
-            //FinalString = WCSharp.Shared.base64Decode(loadString.ToString());
+            //FinalString = WCSharp.Shared.base64Decode(loadString.toString());
             DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString)
 
             /*            Logger.Verbose("loadString.length", loadString.length);
@@ -135,7 +142,7 @@ export class FilePromise {
             //Logger.Verbose("FinalString: ", FinalString);
 
             onFinish?.Invoke(this)
-        } catch (ex) {
+        } catch (ex: any) {
             Logger.Critical(ex)
         }
     }

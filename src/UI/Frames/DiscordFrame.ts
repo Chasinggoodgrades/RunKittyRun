@@ -1,104 +1,119 @@
+import { Globals } from 'src/Global/Globals'
+import { blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Frame, Trigger } from 'w3ts'
+
 export class DiscordFrame {
-    private static EditBox: framehandle
-    private static DiscordIconFront: framehandle
-    private static DiscordIconBack: framehandle
-    private static DiscordText: framehandle
-    private static Backdrop: framehandle
-    private static Trigger: trigger
-    private static ESCTrigger: trigger
+    private static EditBox: Frame
+    private static DiscordIconFront: Frame
+    private static DiscordIconBack: Frame
+    private static DiscordText: Frame
+    private static Backdrop: Frame
+    private static Trigger: Trigger
+    private static ESCTrigger: Trigger
     private static Link: string = 'https://discord.gg/GSu6zkNvx5'
     private static JoinDiscord: string =
         '|our: discord: cffFF2020Join! then: Ctrl: Highlight + to: copy: C, Ctrl + to: paste: V!|r'
 
     public static Initialize() {
         //BlzLoadTOCFile("war3mapImported\\templates.toc");
-        SetupBackdrop()
-        CreateFrame()
-        RegisterTrigger()
-        SetupDiscordIcon()
-        ApplyTextFrame()
-        RegisterESCTrigger()
+        DiscordFrame.SetupBackdrop()
+        DiscordFrame.CreateFrame()
+        DiscordFrame.RegisterTrigger()
+        DiscordFrame.SetupDiscordIcon()
+        DiscordFrame.ApplyTextFrame()
+        DiscordFrame.RegisterESCTrigger()
     }
 
     private static CreateFrame() {
-        EditBox = BlzCreateFrameByType('EscMenuEditBoxTemplate', originframetype.GameUI.GetOriginFrame(0), 0, 0)
-        EditBox.SetAbsPoint(framepointtype.Center, 0.4, 0.165)
-        EditBox.SetSize(0.2, 0.03)
-        EditBox.TextSizeLimit = Link.length
-        EditBox.Text = Link
-        EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center)
+        DiscordFrame.EditBox = blzCreateFrameByType(
+            'EscMenuEditBoxTemplate',
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
+            0,
+            0
+        )
+        DiscordFrame.EditBox.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.165)
+        DiscordFrame.EditBox.setSize(0.2, 0.03)
+        DiscordFrame.EditBox.TextSizeLimit = DiscordFrame.Link.length
+        DiscordFrame.EditBox.text = DiscordFrame.Link
+        DiscordFrame.EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center)
     }
 
     private static SetupBackdrop() {
-        Backdrop = BlzCreateFrameByType(
+        DiscordFrame.Backdrop = blzCreateFrameByType(
             'BACKDROP',
             'DiscordBackDrop',
-            originframetype.GameUI.GetOriginFrame(0),
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
             'QuestButtonDisabledBackdropTemplate',
             0
         )
-        Backdrop.SetAbsPoint(framepointtype.Center, 0.4, 0.21)
-        Backdrop.SetSize(0.195, 0.035)
+        DiscordFrame.Backdrop.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.21)
+        DiscordFrame.Backdrop.setSize(0.195, 0.035)
     }
 
     private static SetupDiscordIcon() {
-        DiscordIconFront = BlzCreateFrameByType(
+        DiscordFrame.DiscordIconFront = blzCreateFrameByType(
             'BACKDROP',
             'FrameDiscordIconFront',
-            originframetype.GameUI.GetOriginFrame(0),
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
             '',
             1
         )
-        DiscordIconFront.SetAbsPoint(framepointtype.Center, 0.29, 0.165)
-        DiscordIconFront.SetSize(0.03, 0.03)
-        DiscordIconFront.SetTexture('war3mapImported\\DiscordIcon.dds', 0, true)
+        DiscordFrame.DiscordIconFront.setAbsPoint(FRAMEPOINT_CENTER, 0.29, 0.165)
+        DiscordFrame.DiscordIconFront.setSize(0.03, 0.03)
+        DiscordFrame.DiscordIconFront.setTexture('war3mapImported\\DiscordIcon.dds', 0, true)
 
-        DiscordIconBack = BlzCreateFrameByType(
+        DiscordFrame.DiscordIconBack = blzCreateFrameByType(
             'BACKDROP',
             'FrameDiscordIconBack',
-            originframetype.GameUI.GetOriginFrame(0),
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
             '',
             1
         )
-        DiscordIconBack.SetAbsPoint(framepointtype.Center, 0.51, 0.165)
-        DiscordIconBack.SetSize(0.03, 0.03)
-        DiscordIconBack.SetTexture('war3mapImported\\DiscordIcon.dds', 0, true)
+        DiscordFrame.DiscordIconBack.setAbsPoint(FRAMEPOINT_CENTER, 0.51, 0.165)
+        DiscordFrame.DiscordIconBack.setSize(0.03, 0.03)
+        DiscordFrame.DiscordIconBack.setTexture('war3mapImported\\DiscordIcon.dds', 0, true)
     }
 
     private static ApplyTextFrame() {
-        DiscordText = BlzCreateFrameByType('TEXT', 'DiscordText', originframetype.GameUI.GetOriginFrame(0), '', 0)
-        DiscordText.SetAbsPoint(framepointtype.Center, 0.4, 0.21)
-        DiscordText.SetSize(0.19, 0.03)
-        DiscordText.Text = JoinDiscord
-        DiscordText.SetTextAlignment(textaligntype.Center, textaligntype.Center)
+        DiscordFrame.DiscordText = blzCreateFrameByType(
+            'TEXT',
+            'DiscordText',
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
+            '',
+            0
+        )
+        DiscordFrame.DiscordText.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.21)
+        DiscordFrame.DiscordText.setSize(0.19, 0.03)
+        DiscordFrame.DiscordText.text = DiscordFrame.JoinDiscord
+        DiscordFrame.DiscordText.SetTextAlignment(textaligntype.Center, textaligntype.Center)
     }
 
     private static RegisterTrigger() {
-        Trigger = CreateTrigger()
-        Trigger.RegisterFrameEvent(EditBox, frameeventtype.EditBoxEnter)
-        Trigger.AddAction(UpdateTextBox)
+        DiscordFrame.Trigger = DiscordFrame.Trigger.create()!
+        DiscordFrame.Trigger.triggerRegisterFrameEvent(DiscordFrame.EditBox, frameeventtype.EditBoxEnter)
+        DiscordFrame.Trigger.addAction(DiscordFrame.UpdateTextBox)
     }
 
     private static RegisterESCTrigger() {
-        ESCTrigger = CreateTrigger()
-        for (let player in Globals.ALL_PLAYERS) {
-            TriggerRegisterPlayerEvent(ESCTrigger, player, EVENT_PLAYER_END_CINEMATIC)
+        DiscordFrame.ESCTrigger = DiscordFrame.Trigger.create()!
+        for (let player of Globals.ALL_PLAYERS) {
+            DiscordFrame.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        ESCTrigger.AddAction(ESCPressed)
+        DiscordFrame.ESCTrigger.addAction(DiscordFrame.ESCPressed)
     }
 
     private static ESCPressed() {
-        let player = GetTriggerPlayer()
+        let player = getTriggerPlayer()
         if (!player.isLocal()) return
-        Backdrop.Visible = !Backdrop.Visible
-        EditBox.Visible = !EditBox.Visible
-        DiscordIconFront.Visible = !DiscordIconFront.Visible
-        DiscordIconBack.Visible = !DiscordIconBack.Visible
-        DiscordText.Visible = !DiscordText.Visible
+        DiscordFrame.Backdrop.visible = !DiscordFrame.Backdrop.visible
+        DiscordFrame.EditBox.visible = !DiscordFrame.EditBox.visible
+        DiscordFrame.DiscordIconFront.visible = !DiscordFrame.DiscordIconFront.visible
+        DiscordFrame.DiscordIconBack.visible = !DiscordFrame.DiscordIconBack.visible
+        DiscordFrame.DiscordText.visible = !DiscordFrame.DiscordText.visible
     }
 
     private static UpdateTextBox() {
-        if (!GetTriggerPlayer().isLocal()) return
-        EditBox.Text = Link
+        if (!getTriggerPlayer().isLocal()) return
+        DiscordFrame.EditBox.text = DiscordFrame.Link
     }
 }

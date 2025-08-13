@@ -12,8 +12,8 @@ export class Solo {
         if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return // Progression mode
 
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES[Globals.ALL_PLAYERS[i]]
-            if (kitty.Alive) return
+            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            if (kitty.isAlive()) return
         }
         RoundManager.RoundEnd()
     }

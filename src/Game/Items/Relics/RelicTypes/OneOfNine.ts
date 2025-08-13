@@ -27,7 +27,7 @@ export class OneOfNine extends Relic {
         Upgrades.push(new RelicUpgrade(1, 'Your ultimate no longer costs mana.', 20, 1000))
     }
     public override ApplyEffect(Unit: Unit) {
-        let player: MapPlayer = Unit.Owner
+        let player: MapPlayer = Unit.owner
         let cooldown: number = GetOneOfNineCooldown(player)
         Unit.RemoveAbility(PreviousAbilityID)
         Unit.AddAbility(RelicAbilityID)
@@ -37,7 +37,7 @@ export class OneOfNine extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        let player: MapPlayer = Unit.Owner
+        let player: MapPlayer = Unit.owner
         let cooldown: number = GetOneOfNineCooldown(player)
         Unit.RemoveAbility(RelicAbilityID)
         Unit.AddAbility(PreviousAbilityID)
@@ -46,7 +46,7 @@ export class OneOfNine extends Relic {
     }
 
     public static GetOneOfNineCooldown(Player: MapPlayer) {
-        let kitty: Unit = Globals.ALL_KITTIES[Player].Unit
+        let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
         let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
         let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
         let reduction = GetOneOfNineReduction(Player)
@@ -72,7 +72,7 @@ export class OneOfNine extends Relic {
     /// <param name="Unit"></param>
     /// <param name="abilityLevel"></param>
     private RemoveManaCost(Unit: Unit, abilityLevel: number) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
         if (upgradeLevel < 2) return
         Unit.GetAbility(RelicAbilityID)
         Unit.SetAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0)

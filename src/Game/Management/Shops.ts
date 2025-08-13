@@ -1,13 +1,13 @@
 export class Shops {
-    private static KittyVendors: group
+    private static KittyVendors: Group
     private static KittyVendorsList: Unit[]
     private static KittyVendorItemList: number[]
     private static VendorsItemList: Map<unit, VendorItem[]>
-    private static Trigger: trigger
+    private static Trigger: Trigger
 
     public static Initialize() {
-        KittyVendors = CreateGroup()!
-        let Trigger = CreateTrigger()
+        KittyVendors = Group.create()!
+        let Trigger = Trigger.create()!
         KittyVendorsList = []
         KittyVendorItemList = []
         VendorsItemList = {}
@@ -68,8 +68,8 @@ export class Shops {
     }
 
     private static CollectAllVendors() {
-        let filter = Utility.CreateFilterFunc(() => GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_VENDOR)
-        KittyVendors.EnumUnitsInRect(GetWorldBounds(), filter)
+        let filter = Utility.CreateFilterFunc(() => GetUnitTypeId(getFilterUnit()) == Constants.UNIT_KITTY_VENDOR)
+        KittyVendors.EnumUnitsInRect(Rectangle.getWorldBounds(), filter)
         KittyVendorsList = KittyVendors.ToList()
 
         RegisterVendorSellingEvent()
@@ -80,7 +80,7 @@ export class Shops {
     private static RegisterVendorSellingEvent() {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         for (let vendor in KittyVendorsList) TriggerRegisterUnitEvent(Trigger, vendor, unitevent.SellItem)
-        Trigger.AddAction(OnVendorSell)
+        Trigger.addAction(OnVendorSell)
     }
 
     private static OnVendorSell() {
@@ -93,11 +93,11 @@ export class Shops {
             let itemID = item.TypeId
 
             let vendorItems = VendorsItemList[vendor]
-            let vendorItem = vendorItems.Find(vi => vi.Item == itemID)
+            let vendorItem = vendorItems.find(vi => vi.Item == itemID)
             if (vendorItem == null) return
 
             RefreshItemsOnVendor(vendor)
-        } catch (e) {
+        } catch (e: any) {
             Logger.Warning('Error in OnVendorSell: {e.Message}')
         }
     }

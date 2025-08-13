@@ -1,3 +1,8 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { Timer, Trigger } from 'w3ts'
+
 export class RTR {
     private RTR_INTERVAL: number = 0.001
     private ITEM_PICKUP_RADIUS: number = 48
@@ -6,8 +11,8 @@ export class RTR {
     private RTRTimer: Timer
     private enabled: boolean
 
-    private ClickTrigger: trigger
-    private WidgetTrigger: trigger
+    private ClickTrigger: Trigger
+    private WidgetTrigger: Trigger
 
     private targetX: number = 0
     private targetY: number = 0
@@ -15,84 +20,89 @@ export class RTR {
     private lastUnitAnimation: string
     public absoluteMoveSpeed: number
 
-    public RTR(kitty: Kitty) {
+    public constructor(kitty: Kitty) {
         this.kitty = kitty
-        RTRTimer = timer.Create()
-        enabled = false
-        RegisterClickEvent()
+        this.RTRTimer = Timer.create()
+        this.enabled = false
+        this.RegisterClickEvent()
     }
 
     public IsEnabled(): boolean {
-        return enabled
+        return this.enabled
     }
 
     public StartRTR() {
-        enabled = true
-        kitty.CanEarnAwards = false
-        ResumeRTR()
+        this.enabled = true
+        this.kitty.CanEarnAwards = false
+        this.ResumeRTR()
     }
 
     public ResumeRTR() {
-        if (!enabled) {
+        if (!this.enabled) {
             return
         }
 
-        ClickTrigger.Enable()
-        WidgetTrigger.Enable()
+        this.ClickTrigger.enabled = true
+        this.WidgetTrigger.enabled = true
 
-        RTRTimer.start(RTR_INTERVAL, true, ErrorHandler.Wrap(UpdateRTR))
+        this.RTRTimer.start(this.RTR_INTERVAL, true, ErrorHandler.Wrap(this.UpdateRTR))
     }
 
     public PauseRTR() {
-        ClickTrigger.Disable()
-        WidgetTrigger.Disable()
-        RTRTimer.pause()
-        hasTarget = false
+        this.ClickTrigger.enabled = false
+        this.WidgetTrigger.enabled = false
+        this.RTRTimer.pause()
+        this.hasTarget = false
         if (this.lastUnitAnimation != 'stand') {
             this.lastUnitAnimation = 'stand'
-            kitty.Unit.SetAnimation(0)
+            this.kitty.Unit.setAnimation(0)
         }
     }
 
     public StopRTR() {
-        enabled = false
+        this.enabled = false
         // kitty.CanEarnAwards = true;
         this.PauseRTR()
     }
 
     private UpdateRTR() {
-        if (!hasTarget) {
+        if (!this.hasTarget) {
             if (this.lastUnitAnimation != 'stand') {
                 this.lastUnitAnimation = 'stand'
-                kitty.Unit.SetAnimation(0)
+                this.kitty.Unit.setAnimation(0)
             }
             return
         }
 
-        let currentX: number = kitty.Unit.X
-        let currentY: number = kitty.unit.y
+        let currentX: number = this.kitty.Unit.x
+        let currentY: number = this.kitty.Unit.y
 
-        let distanceToTarget: number = WCSharp.Shared.Util.DistanceBetweenPoints(currentX, currentY, targetX, targetY)
+        let distanceToTarget: number = WCSharp.Shared.Util.DistanceBetweenPoints(
+            currentX,
+            currentY,
+            this.targetX,
+            this.targetY
+        )
 
         if (distanceToTarget < 10) {
-            hasTarget = false
+            this.hasTarget = false
             if (this.lastUnitAnimation != 'stand') {
                 this.lastUnitAnimation = 'stand'
-                kitty.Unit.SetAnimation(0)
+                this.kitty.Unit.setAnimation(0)
             }
             return
         }
 
         if (this.lastUnitAnimation != 'walk') {
             this.lastUnitAnimation = 'walk'
-            kitty.Unit.SetAnimation(6)
+            this.kitty.Unit.setAnimation(6)
         }
 
-        let moveSpeed: number = this.absoluteMoveSpeed ?? GetUnitMoveSpeed(kitty.Unit)
-        let movePerTick: number = moveSpeed * RTR_INTERVAL
+        let moveSpeed: number = this.absoluteMoveSpeed ?? this.kitty.Unit.moveSpeed
+        let movePerTick: number = moveSpeed * this.RTR_INTERVAL
 
-        let angle: number = Atan2(targetY - currentY, targetX - currentX)
-        SetUnitFacing(kitty.Unit, angle * bj_RADTODEG)
+        let angle: number = Atan2(this.targetY - currentY, this.targetX - currentX)
+        SetUnitFacing(this.kitty.Unit, angle * bj_RADTODEG)
 
         let newX: number = currentX + movePerTick * Cos(angle)
         let newY: number = currentY + movePerTick * Sin(angle)
@@ -105,45 +115,45 @@ export class RTR {
             newY = currentY
         }
 
-        kitty.Unit.SetPathing(false)
-        kitty.Unit.setPos(newX, newY)
-        kitty.Unit.SetPathing(true)
+        this.kitty.Unit.setPathing(false)
+        this.kitty.Unit.setPos(newX, newY)
+        this.kitty.Unit.setPathing(true)
 
-        ItemPickup()
+        this.ItemPickup()
     }
 
     private RegisterClickEvent() {
-        let ClickTrigger = CreateTrigger()
-        ClickTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedPointOrder)
-        ClickTrigger.AddAction(() => HandleClick(true))
+        let ClickTrigger = Trigger.create()!
+        ClickTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
+        ClickTrigger.addAction(() => this.HandleClick(true))
 
-        let WidgetTrigger = CreateTrigger()
-        WidgetTrigger.RegisterUnitEvent(kitty.Unit, unitevent.IssuedTargetOrder)
-        WidgetTrigger.AddAction(() => HandleClick(false))
+        let WidgetTrigger = Trigger.create()!
+        WidgetTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        WidgetTrigger.addAction(() => this.HandleClick(false))
 
-        ClickTrigger.Disable()
-        WidgetTrigger.Disable()
+        ClickTrigger.enabled = false
+        WidgetTrigger.enabled = false
     }
 
     private HandleClick(isToLocation: boolean) {
-        if (!IsEnabled()) return
+        if (!this.IsEnabled()) return
 
-        IssueImmediateOrder(GetTriggerUnit(), 'stop')
+        IssueImmediateOrder(getTriggerUnit(), 'stop')
 
         if (isToLocation) {
-            targetX = GetOrderPointX()
-            targetY = GetOrderPointY()
+            this.targetX = GetOrderPointX()
+            this.targetY = GetOrderPointY()
         } else {
             let target = GetOrderTarget()
-            targetX = GetWidgetX(target)
-            targetY = GetWidgetY(target)
+            this.targetX = GetWidgetX(target)
+            this.targetY = GetWidgetY(target)
         }
 
-        hasTarget = true
+        this.hasTarget = true
     }
 
     private ItemPickup() {
-        if (!enabled) return
-        ItemSpatialGrid.KittyItemPickup(kitty)
+        if (!this.enabled) return
+        ItemSpatialGrid.KittyItemPickup(this.kitty)
     }
 }

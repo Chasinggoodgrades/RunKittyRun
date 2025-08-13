@@ -1,10 +1,10 @@
 export class Cell {
-    public readonly X: number
-    public readonly Y: number
+    public readonly x: number
+    public readonly y: number
 
     public constructor(x: number, y: number) {
-        this.X = x
-        this.Y = y
+        this.x = x
+        this.y = y
     }
 }
 
@@ -20,26 +20,26 @@ export class ItemSpatialGrid {
     }
 
     public static RegisterKibble(kibble: Kibble) {
-        let cell = GetCell(kibble.Item.X, kibble.Item.Y)
+        let cell = GetCell(kibble.Item.x, kibble.Item.y)
         let list: Kibble[]
         if (!(list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) kibbleCells[cell] = list = []
         list.push(kibble)
     }
 
     public static UnregisterKibble(kibble: Kibble) {
-        let cell = GetCell(kibble.Item.X, kibble.Item.Y)
+        let cell = GetCell(kibble.Item.x, kibble.Item.y)
         if ((list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(kibble)
     }
 
     public static RegisterItem(item: item) {
-        let cell = GetCell(item.X, item.Y)
+        let cell = GetCell(item.x, item.y)
         let list: Kibble[]
         if (!(list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) itemCells[cell] = list = []
         list.push(item)
     }
 
     public static UnregisterItem(item: item) {
-        let cell = GetCell(item.X, item.Y)
+        let cell = GetCell(item.x, item.y)
         if ((list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(item)
     }
 
@@ -56,8 +56,8 @@ export class ItemSpatialGrid {
     }
 
     public static KittyItemPickup(kitty: Kitty) {
-        let kibbleList = GetNearbyKibbles(kitty.Unit.X, kitty.unit.y)
-        let itemList = GetNearbyItems(kitty.Unit.X, kitty.unit.y)
+        let kibbleList = GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
+        let itemList = GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
         if (kibbleList != null && kibbleList.length > 0) {
             for (let i: number = 0; i < kibbleList.length; i++) {

@@ -12,34 +12,34 @@ export class BarrierSetup {
 
     private static CreateDummyUnits() {
         let neutralPassive = player.NeutralPassive
-        DummyUnitOne = unit.Create(
+        DummyUnitOne = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_1,
-            Regions.Dummy1Region.Center.X,
-            Regions.Dummy1Region.Center.Y,
+            Regions.Dummy1Region.Center.x,
+            Regions.Dummy1Region.Center.y,
             360
         )
-        DummyUnitTwo = unit.Create(
+        DummyUnitTwo = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_2,
-            Regions.Dummy2Region.Center.X,
-            Regions.Dummy2Region.Center.Y,
+            Regions.Dummy2Region.Center.x,
+            Regions.Dummy2Region.Center.y,
             360
         )
-        DummyUnitThree = unit.Create(
+        DummyUnitThree = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_3,
-            Regions.Dummy3Region.Center.X,
-            Regions.Dummy3Region.Center.Y,
+            Regions.Dummy3Region.Center.x,
+            Regions.Dummy3Region.Center.y,
             360
         )
     }
 
     private static CreateBarrier() {
         let barrierRegion = Regions.BarrierRegion
-        let centerX = barrierRegion.Center.X
-        let minY = barrierRegion.Rect.MinY
-        let maxY = barrierRegion.Rect.MaxY
+        let centerX = barrierRegion.Center.x
+        let minY = barrierRegion.Rect.minY
+        let maxY = barrierRegion.Rect.maxY
 
         let distanceY: number = maxY - minY
         let intervalY: number = distanceY / 13
@@ -59,11 +59,11 @@ export class BarrierSetup {
 
     public static DeactivateBarrier() {
         if (!BarrierActive) return
-        DummyUnitOne.Dispose()
-        DummyUnitTwo.Dispose()
-        DummyUnitThree.Dispose()
+        DummyUnitOne.dispose()
+        DummyUnitTwo.dispose()
+        DummyUnitThree.dispose()
         for (let des in destructables) {
-            des.Dispose()
+            des.dispose()
         }
         destructables.clear()
         BarrierActive = false

@@ -1,3 +1,33 @@
+import { AffixFactory } from 'src/Affixes/AffixFactory'
+import { Gameover } from 'src/Events/Gameover'
+import { Logger } from 'src/Events/Logger/Logger'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { TeamsUtil } from 'src/Gamemodes/Teams/TeamsUtil'
+import { Globals } from 'src/Global/Globals'
+import { BarrierSetup } from 'src/Init/BarrierSetup'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { Resources } from 'src/Init/Resources'
+import { ChainedTogether } from 'src/Rewards/Challenges/ChainedTogether'
+import { DeathlessChallenges } from 'src/Rewards/Challenges/DeathlessChallenges'
+import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
+import { TeamDeathless } from 'src/Rewards/Challenges/TeamDeathless'
+import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
+import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
+import { SoundManager } from 'src/Sounds/SoundManager'
+import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { Tips } from 'src/UI/Tips/Tips'
+import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Utility } from 'src/Utility/Utility'
+import { NitroPacer } from '../Entities/NitroPacer'
+import { Wolf } from '../Entities/Wolf'
+import { Safezone } from '../Management/Safezone'
+import { WolfLaneHider } from '../WolfLaneHider/WolfLaneHider'
+import { GameTimer } from './GameTimer'
+import { RoundTimer } from './RoundTimer'
+import { RoundUtilities } from './RoundUtilities'
+
 export class RoundManager {
     public static ROUND_INTERMISSION: number = 30.0
     public static END_ROUND_DELAY: number = 3.0
@@ -10,10 +40,10 @@ export class RoundManager {
     }
 
     public static AddMoreRoundTime(): boolean {
-        if (AddedTimeAlready) return false
-        let remainingTime = RoundTimer.StartRoundTimer.Remaining
+        if (RoundManager.AddedTimeAlready) return false
+        let remainingTime = RoundTimer.StartRoundTimer.remaining
         if (remainingTime <= 0.0) return false
-        AddedTimeAlready = true
+        RoundManager.AddedTimeAlready = true
         let tempTime = remainingTime + 20.0 // 20 seconds
         RoundTimer.StartRoundTimer.start(tempTime, false, this.StartRound)
         return true
@@ -27,25 +57,25 @@ export class RoundManager {
             Safezone.ResetPlayerSafezones()
             Wolf.SpawnWolves()
             Utility.SimpleTimer(1.0, AffixFactory.DistAffixes)
-            AddedTimeAlready = false
+            RoundManager.AddedTimeAlready = false
             if (Globals.ROUND > 1) TerrainChanger.SetTerrain()
 
             RoundTimer.InitEndRoundTimer()
-            RoundTimer.StartRoundTimer.start(ROUND_INTERMISSION, false, StartRound)
+            RoundTimer.StartRoundTimer.start(RoundManager.ROUND_INTERMISSION, false, RoundManager.StartRound)
 
             RoundTimer.CountDown()
             TeamDeathless.StartEvent()
             ChainedTogether.StartEvent()
             WolfLaneHider.HideAllLanes()
             WolfLaneHider.LanesHider()
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in RoundManager.RoundSetup {e.Message}')
             throw e
         }
     }
 
     private static StartRound() {
-        GAME_STARTED = true
+        RoundManager.GAME_STARTED = true
         Globals.GAME_ACTIVE = true
         RoundTimer.RoundTimerDialog.display = false
         RoundTimer.StartEndRoundTimer()
@@ -61,8 +91,8 @@ export class RoundManager {
         let Timer = MemoryHandler.getEmptyObject<AchesTimers>()
         Timer.Timer.start(0.35, true, () => {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0) {
-                RoundSetup()
-                Timer.Dispose()
+                RoundManager.RoundSetup()
+                Timer.dispose()
             }
         })
     }
@@ -87,8 +117,8 @@ export class RoundManager {
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
-            Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup)
-        } catch (e) {
+            Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)
+        } catch (e: any) {
             Logger.Critical('Error in RoundManager.RoundEnd {e.Message}')
             throw e
         }
@@ -105,11 +135,11 @@ export class RoundManager {
     }
 
     public static DidTeamEnd(teamId: number) {
-        let teamMemebers = Globals.ALL_TEAMS[teamId].Teammembers
+        let teamMemebers = Globals.ALL_TEAMS.get(teamId)!.Teammembers
         // Always returns for standard mode, and solo progression mode.
         for (let i: number = 0; i < teamMemebers.length; i++) {
             let member = teamMemebers[i]
-            let kitty = Globals.ALL_KITTIES[member]
+            let kitty = Globals.ALL_KITTIES.get(member)!
             if (!kitty.Finished) return false
         }
         return true

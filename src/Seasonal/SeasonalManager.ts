@@ -101,9 +101,9 @@ export class SeasonalManager {
             CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect)
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23)
             SuspendTimeOfDay(true)
-            CurrentWeather.Enable()
+            CurrentWeather.enabled = true
         } else if (Season == HolidaySeasons.None) {
-            CurrentWeather?.Dispose()
+            CurrentWeather?.dispose()
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
             SuspendTimeOfDay(true)
             CurrentWeather = null
@@ -112,10 +112,10 @@ export class SeasonalManager {
 
     public static SetWeather(weather: string) {
         if (CurrentWeather != null) {
-            CurrentWeather.Dispose()
+            CurrentWeather.dispose()
             CurrentWeather = null
         }
-        switch (weather.ToLower()) {
+        switch (weather.toLowerCase()) {
             case 'none':
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
                 SuspendTimeOfDay(true)
@@ -147,6 +147,6 @@ export class SeasonalManager {
             default:
                 return
         }
-        CurrentWeather.Enable()
+        CurrentWeather.enabled = true
     }
 }

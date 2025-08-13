@@ -107,7 +107,7 @@ export class NitroChallenges {
         if (
             NitroChallenges.NitroTimer == null ||
             NitroChallenges.NitroTimer.remaining <= 0.0 ||
-            !NitroChallenges.NitroDialog.IsDisplayed
+            !NitroChallenges.NitroDialog.displayed
         )
             return
         let round = Globals.ROUND
@@ -166,8 +166,8 @@ export class NitroChallenges {
     }
 
     private static PlayNitroSound(player: MapPlayer) {
-        if (Globals.ALL_KITTIES.get(player).CurrentStats.NitroObtained) return // first time
-        Globals.ALL_KITTIES.get(player).CurrentStats.NitroObtained = true
+        if (Globals.ALL_KITTIES.get(player)!.CurrentStats.NitroObtained) return // first time
+        Globals.ALL_KITTIES.get(player)!.CurrentStats.NitroObtained = true
         SoundManager.PlaySpeedSound()
     }
 }

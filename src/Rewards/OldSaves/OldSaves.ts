@@ -1,3 +1,16 @@
+import { Logger } from 'src/Events/Logger/Logger'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { RewardHelper } from 'src/UI/Frames/RewardHelper'
+import { int } from 'src/Utility/Utility'
+import { MapPlayer } from 'w3ts'
+import { AwardManager } from '../Rewards/AwardManager'
+import { BigNum, BigNumL } from './BigNum'
+import { DecodeOldsave } from './DecodeOldsave'
+import { OldSavesHelper } from './OldSavesHelper'
+import { OldsaveSync } from './OldsaveSync'
+
 export class Savecode {
     private static player_charset: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     private static OriginalToolTips: string[] = []
@@ -11,41 +24,41 @@ export class Savecode {
             for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
-                if (tooltip != 'tip: missing: Tool!') OriginalToolTips.push(tooltip)
+                if (tooltip != 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
                 else throw new ArgumentError('Error, not: available: tooltip: {ability}')
             }
-            for (let player in Globals.ALL_PLAYERS) {
-                InitializeSaveCode(player)
+            for (let player of Globals.ALL_PLAYERS) {
+                Savecode.InitializeSaveCode(player)
             }
-        } catch (e) {
+        } catch (e: any) {
             Logger.Critical('Error in OldSaves.Initialize: {e.Message}')
             throw e
         }
     }
 
     private static InitializeSaveCode(p: MapPlayer) {
-        if (!PlayerSaveObject.has(p)) {
-            PlayerSaveObject[p] = new Savecode()
+        if (!Savecode.PlayerSaveObject.has(p)) {
+            Savecode.PlayerSaveObject[p] = new Savecode()
         }
     }
 
     public Savecode() {
-        Digits = 0.0
-        Bignum = new BigNum(BASE())
+        this.Digits = 0.0
+        this.Bignum = new BigNum(Savecode.BASE())
     }
 
     public Decode(max: number) {
-        return Bignum.DivSmall(max + 1)
+        return this.Bignum.DivSmall(max + 1)
     }
 
     public Clean() {
-        return Bignum.Clean()
+        return this.Bignum.Clean()
     }
 
     public FromString(s: string) {
         let i = s.length - 1
         let cur = BigNumL.Create()
-        Bignum.List = cur
+        this.Bignum.List = cur
 
         while (true) {
             cur.Leaf = OldSavesHelper.CharToInt(s[i])
@@ -59,13 +72,16 @@ export class Savecode {
     public Hash(): number {
         let hash = 0
         let x: number
-        let current: BigNumL = Bignum.List
+        let current: BigNumL = this.Bignum.List
 
         while (current != null) {
             x = current.Leaf
             hash = OldSavesHelper.ModuloInteger(
-                hash + (79 * hash) / (x + 1) + (293 * x) / (1 + hash - (hash / BASE()) * BASE()) + 479,
-                HASHN()
+                hash +
+                    (79 * hash) / (x + 1) +
+                    (293 * x) / (1 + hash - (hash / Savecode.BASE()) * Savecode.BASE()) +
+                    479,
+                Savecode.HASHN()
             )
             current = current.Next
         }
@@ -77,11 +93,11 @@ export class Savecode {
         let seed: number = GetRandomInt(0, int.MaxValue)
         let advance: number = 0
         let x: number = 0
-        let current: BigNumL = Bignum.List
+        let current: BigNumL = this.Bignum.List
 
         if (sign == -1) {
-            SetRandomSeed(Bignum.LastDigit())
-            current.Leaf = Modb(current.Leaf + sign * GetRandomInt(0, BASE() - 1))
+            SetRandomSeed(this.Bignum.LastDigit())
+            current.Leaf = Savecode.Modb(current.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
             x = current.Leaf
         }
         SetRandomSeed(key)
@@ -91,13 +107,13 @@ export class Savecode {
                 advance = current.Leaf
             }
 
-            current.Leaf = Modb(current.Leaf + sign * GetRandomInt(0, BASE() - 1))
+            current.Leaf = Savecode.Modb(current.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
 
             if (sign == 1) {
                 advance = current.Leaf
             }
 
-            advance += GetRandomInt(0, BASE() - 1)
+            advance += GetRandomInt(0, Savecode.BASE() - 1)
             SetRandomSeed(advance)
 
             x = current.Leaf
@@ -106,7 +122,7 @@ export class Savecode {
 
         if (sign == 1) {
             SetRandomSeed(x)
-            Bignum.List.Leaf = Modb(Bignum.List.Leaf + sign * GetRandomInt(0, BASE() - 1))
+            this.Bignum.List.Leaf = Savecode.Modb(this.Bignum.List.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
         }
 
         SetRandomSeed(seed)
@@ -114,16 +130,16 @@ export class Savecode {
 
     public Load(p: MapPlayer, code: string) {
         try {
-            let key: number = SCommHash(GetPlayerName(p)) + 1 * 73
+            let key: number = Savecode.SCommHash(p.name) + 1 * 73
             let inputhash: number = 0
 
-            FromString(code)
-            Obfuscate(key, -1)
-            inputhash = Decode(HASHN())
-            Clean()
+            this.FromString(code)
+            this.Obfuscate(key, -1)
+            inputhash = this.Decode(Savecode.HASHN())
+            this.Clean()
 
-            return inputhash == Hash()
-        } catch (e) {
+            return inputhash == this.Hash()
+        } catch (e: any) {
             Logger.Critical('Error in OldSaves.Load, code: must: be: from: v4: version.2.or: greater: 0. {e.Message}')
             return false
         }
@@ -141,7 +157,7 @@ export class Savecode {
 
         for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
             let abilityID = OldSavesHelper.AbilityList[i]
-            let originalTooltip = OriginalToolTips[i]
+            let originalTooltip = Savecode.OriginalToolTips[i]
 
             let packet = BlzGetAbilityTooltip(abilityID, 0)
             if (packet == originalTooltip) break
@@ -150,12 +166,12 @@ export class Savecode {
                 sb.Append(packet)
             }
         }
-        let result = sb.ToString()
-        let newLineStart = result.IndexOf('\n')
-        if (newLineStart >= 0) result = result.Substring(newLineStart + 1)
+        let result = sb.toString()
+        let newLineStart = result.indexOf('\n')
+        if (newLineStart >= 0) result = result.substring(newLineStart + 1)
 
         sb.clear().Append(result)
-        OldsaveSync.SyncString(sb.ToString())
+        OldsaveSync.SyncString(sb.toString())
     }
 
     /// <summary>
@@ -163,13 +179,13 @@ export class Savecode {
     /// </summary>
     /// <param name="player"></param>
     public SetRewardValues(player: MapPlayer) {
-        let awardData = Globals.ALL_KITTIES.get(player).SaveData.GameAwardsSorted
-        let roundstats = Globals.ALL_KITTIES.get(player).SaveData.RoundTimes
-        let kittyStats = Globals.ALL_KITTIES.get(player).SaveData.GameStats
+        let awardData = Globals.ALL_KITTIES.get(player)!.SaveData.GameAwardsSorted
+        let roundstats = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes
+        let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats
 
         for (let value in DecodeOldsave.decodeValues) {
-            let decodedValue = Decode(value.Value)
-            let propertyValue = RewardHelper.GetAwardNestedValue(awardData, value.Key)
+            let decodedValue = this.Decode(value.Value)
+            let propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.Key)
             // Award Events
             if (propertyValue != -1 && decodedValue == 1) {
                 if (propertyValue == 0) {
@@ -197,7 +213,7 @@ export class Savecode {
     }
 
     private static SCommHash(name: string) {
-        let charlen = player_charset.length
+        let charlen = Savecode.player_charset.length
         let count = []
         let x: number
         for (let c in name.ToUpper()) {
@@ -222,8 +238,8 @@ export class Savecode {
     }
 
     private static Modb(x: number) {
-        if (x >= BASE()) return x - BASE()
-        else if (x < 0) return x + BASE()
+        if (x >= Savecode.BASE()) return x - Savecode.BASE()
+        else if (x < 0) return x + Savecode.BASE()
         return x
     }
 }
