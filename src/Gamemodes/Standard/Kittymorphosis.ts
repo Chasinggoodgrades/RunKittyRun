@@ -1,11 +1,11 @@
-import { UnitWithinRange } from "src/Events/WithinRange/UnitWithinRange"
-import { CollisionDetection } from "src/Game/CollisionDetection"
-import { Kitty } from "src/Game/Entities/Kitty/Kitty"
-import { Utility } from "src/Utility/Utility"
-import { getTriggerUnit } from "src/Utility/w3tsUtils"
-import { Trigger } from "w3ts"
-import { Gamemode } from "../Gamemode"
-import { GameMode } from "../GameModeEnum"
+import { UnitWithinRange } from 'src/Events/WithinRange/UnitWithinRange'
+import { CollisionDetection } from 'src/Game/CollisionDetection'
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Utility } from 'src/Utility/Utility'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { Trigger } from 'w3ts'
+import { Gamemode } from '../Gamemode'
+import { GameMode } from '../GameModeEnum'
 
 export class KittyMorphosis {
     /// <summary>
@@ -45,7 +45,7 @@ export class KittyMorphosis {
 
     /// <summary>
     /// Registers the triggers so that when someone hits the required level they'll morph.
-    /// </summary>  
+    /// </summary>
     private RegisterTriggers() {
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return // Solo Mode
         this.triggerHandle ??= Trigger.create()!
@@ -60,7 +60,8 @@ export class KittyMorphosis {
     private MorphKitty() {
         if (this.Active) return
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Kitty)
-        this.Kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
+        this.Kitty.CurrentStats.CollisonRadius =
+            CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
         CollisionDetection.KittyRegisterCollisions(this.Kitty)
         Utility.SimpleTimer(0.1, this.ScaleUnit)
         this.Kitty.Player.DisplayTimedTextTo(

@@ -10,9 +10,9 @@ import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Group, MapPlayer, Trigger, Unit } from 'w3ts'
 import { PlayerUpgrades } from '../PlayerUpgrades'
+import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
-import { Relic } from '../Relic'
 
 export class FrostbiteRing extends Relic {
     public RelicItemID: number = Constants.ITEM_FROSTBITE_RING
@@ -33,13 +33,14 @@ export class FrostbiteRing extends Relic {
     private FreezeGroup: Group
 
     public constructor() {
-        super();
-        this.name = '{Colors.COLOR_BLUE}Frostbite Ring';
-        this.Description = 'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r';
-        this.RelicAbilityID = FrostbiteRing.RelicAbilityID;
-        this.RelicItemID = this.RelicItemID;
-        this.RelicCost = this.RelicCost;
-        this.IconPath = FrostbiteRing.IconPath;
+        super()
+        this.name = '{Colors.COLOR_BLUE}Frostbite Ring'
+        this.Description =
+            'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r'
+        this.RelicAbilityID = FrostbiteRing.RelicAbilityID
+        this.RelicItemID = this.RelicItemID
+        this.RelicCost = this.RelicCost
+        this.IconPath = FrostbiteRing.IconPath
 
         this.Upgrades.push(new RelicUpgrade(0, 'Freeze duration is increased by 1 second per upgrade level.', 15, 800))
         this.Upgrades.push(
@@ -78,7 +79,7 @@ export class FrostbiteRing extends Relic {
             )
 
             while (true) {
-                let unit = this.FreezeGroup.First
+                let unit = this.FreezeGroup.first
                 if (unit == null) break
                 this.FreezeGroup.removeUnit(unit)
                 if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit).IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
@@ -222,10 +223,10 @@ export class FrozenWolf {
         try {
             if (Unit == null) return
             if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
-            Unit.MovementSpeed = 365.0 / 2.0
+            Unit.moveSpeed = 365.0 / 2.0
             let effect = AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit, 'origin')
             Utility.SimpleTimer(FrostbiteRing.SLOW_DURATION, () => {
-                Unit.MovementSpeed = Unit.DefaultMovementSpeed
+                Unit.moveSpeed = Unit.defaultMoveSpeed
                 GC.RemoveEffect(effect) // TODO; Cleanup:                 GC.RemoveEffect(ref effect);
             })
         } catch (e: any) {

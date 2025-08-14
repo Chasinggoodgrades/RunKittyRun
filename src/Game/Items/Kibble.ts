@@ -88,7 +88,7 @@ export class Kibble extends IDisposable {
             let randomChance = GetRandomReal(0, 100)
             let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle == item.handle)
 
-            if (kib == null) return;
+            if (kib == null) return
 
             if (randomChance <= 30) Kibble.KibbleGoldReward(kitty, kib)
             else if (randomChance <= 60) Kibble.KibbleXP(kitty)

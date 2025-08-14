@@ -1,45 +1,45 @@
-import { AffixFactory } from "src/Affixes/AffixFactory";
-import { Logger } from "src/Events/Logger/Logger";
-import { PlayerLeaves } from "src/Events/PlayerLeavesEvent/PlayerLeaves";
-import { UnitSharing } from "src/Events/UnitSharing/UnitSharing";
-import { VictoryZone } from "src/Events/VictoryZone/VictoryZone";
-import { Kitty } from "src/Game/Entities/Kitty/Kitty";
-import { NitroPacer } from "src/Game/Entities/NitroPacer";
-import { ItemSpawner } from "src/Game/Items/ItemSpawner";
-import { ItemStacker } from "src/Game/Items/ItemStacker";
-import { UniqueItems } from "src/Game/Items/UniqueItems";
-import { Progress } from "src/Game/Management/Progress";
-import { Safezone } from "src/Game/Management/Safezone";
-import { Shops } from "src/Game/Management/Shops";
-import { PodiumManager } from "src/Game/Podium/PodiumManager";
-import { GameTimer } from "src/Game/Rounds/GameTimer";
-import { RoundManager } from "src/Game/Rounds/RoundManager";
-import { WolfArea } from "src/Game/WolfArea";
-import { Gamemode } from "src/Gamemodes/Gamemode";
-import { GameMode } from "src/Gamemodes/GameModeEnum";
-import { Globals } from "src/Global/Globals";
-import { FirstPersonCameraManager } from "src/Misc/FirstPersonCameraManager";
-import { Challenges } from "src/Rewards/Challenges/Challenges";
-import { Savecode } from "src/Rewards/OldSaves/OldSaves";
-import { RewardsManager } from "src/Rewards/Rewards/RewardsManager";
-import { DoodadChanger } from "src/Seasonal/Doodads/DoodadChanger";
-import { SeasonalManager } from "src/Seasonal/SeasonalManager";
-import { MusicManager } from "src/Sounds/MusicManager";
-import { SoundManager } from "src/Sounds/SoundManager";
-import { CustomStatFrame } from "src/UI/CustomStatFrame";
-import { FrameManager } from "src/UI/Frames/FrameManager";
-import { ShopFrame } from "src/UI/Frames/ShopFrame";
-import { MultiboardManager } from "src/UI/Multiboard";
-import { Colors } from "src/Utility/Colors/Colors";
-import { ErrorHandler } from "src/Utility/ErrorHandler";
-import { AchesTimers } from "src/Utility/MemoryHandler/AchesTimers";
-import { MemoryHandler } from "src/Utility/MemoryHandler/MemoryHandler";
-import { Utility } from "src/Utility/Utility";
-import { MapPlayer, base64Decode } from "w3ts";
-import { Difficulty } from "./Difficulty/Difficulty";
-import { GameSeed } from "./GameSeed";
-import { Resources } from "./Resources";
-import { Program } from "src/Program";
+import { AffixFactory } from 'src/Affixes/AffixFactory'
+import { Logger } from 'src/Events/Logger/Logger'
+import { PlayerLeaves } from 'src/Events/PlayerLeavesEvent/PlayerLeaves'
+import { UnitSharing } from 'src/Events/UnitSharing/UnitSharing'
+import { VictoryZone } from 'src/Events/VictoryZone/VictoryZone'
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { NitroPacer } from 'src/Game/Entities/NitroPacer'
+import { ItemSpawner } from 'src/Game/Items/ItemSpawner'
+import { ItemStacker } from 'src/Game/Items/ItemStacker'
+import { UniqueItems } from 'src/Game/Items/UniqueItems'
+import { Progress } from 'src/Game/Management/Progress'
+import { Safezone } from 'src/Game/Management/Safezone'
+import { Shops } from 'src/Game/Management/Shops'
+import { PodiumManager } from 'src/Game/Podium/PodiumManager'
+import { GameTimer } from 'src/Game/Rounds/GameTimer'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
+import { WolfArea } from 'src/Game/WolfArea'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
+import { Challenges } from 'src/Rewards/Challenges/Challenges'
+import { Savecode } from 'src/Rewards/OldSaves/OldSaves'
+import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
+import { DoodadChanger } from 'src/Seasonal/Doodads/DoodadChanger'
+import { SeasonalManager } from 'src/Seasonal/SeasonalManager'
+import { MusicManager } from 'src/Sounds/MusicManager'
+import { SoundManager } from 'src/Sounds/SoundManager'
+import { CustomStatFrame } from 'src/UI/CustomStatFrame'
+import { FrameManager } from 'src/UI/Frames/FrameManager'
+import { ShopFrame } from 'src/UI/Frames/ShopFrame'
+import { MultiboardManager } from 'src/UI/Multiboard'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer, base64Decode } from 'w3ts'
+import { Difficulty } from './Difficulty/Difficulty'
+import { GameSeed } from './GameSeed'
+import { Resources } from './Resources'
+import { Program } from 'src/Program'
 
 export class Setup {
     private static timeToChoose: number = 0.0
@@ -54,7 +54,7 @@ export class Setup {
 
     public static Initialize() {
         try {
-            SetGameSpeed(MAP_SPEED_FASTEST);
+            SetGameSpeed(MAP_SPEED_FASTEST)
             LockGameSpeedBJ()
             Colors.Initialize()
             GameSeed.Initialize()

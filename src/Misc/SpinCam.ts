@@ -24,8 +24,8 @@ export class SpinCam {
             }
         } else {
             this.SpinCamTimer?.pause()
-            this.SpinCamTimer = null
-            CameraUtil.UnlockCamera(Kitty.Player)
+            this.SpinCamTimer = null as never
+            CameraUtil.UnlockCamera(this.Kitty.Player)
         }
     }
 
@@ -38,13 +38,13 @@ export class SpinCam {
             if (!this.Kitty.isAlive() && !this.WasSpinCamReset) {
                 this.WasSpinCamReset = true
                 this.SpinCamRotation = 0
-                SetCameraFieldForPlayer(this.Kitty.Player, CAMERA_FIELD_ROTATION, 0, 0)
+                SetCameraFieldForPlayer(this.Kitty.Player.handle, CAMERA_FIELD_ROTATION, 0, 0)
             }
 
             return
         }
 
         this.SpinCamRotation = this.Kitty.Slider.ForceAngleBetween0And360(this.SpinCamRotation + this.SpinCamSpeed)
-        SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, this.SpinCamRotation, 0)
+        SetCameraFieldForPlayer(this.Kitty.Player.handle, CAMERA_FIELD_ROTATION, this.SpinCamRotation, 0)
     }
 }

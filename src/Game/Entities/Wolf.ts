@@ -74,8 +74,7 @@ export class Wolf {
             if (wolvesInRound) {
                 for (const [laneStr, numberOfWolves] of Object.entries(wolvesInRound)) {
                     const lane = Number(laneStr)
-                    for (let i: number = 0; i < numberOfWolves; i++)
-                        new Wolf(lane)
+                    for (let i: number = 0; i < numberOfWolves; i++) new Wolf(lane)
                 }
                 FandF.CreateBloodWolf()
                 NamedWolves.CreateNamedWolves()
@@ -127,9 +126,9 @@ export class Wolf {
     /// </summary>
     public static RemoveAllWolves() {
         for (let [_, wolf] of Globals.ALL_WOLVES) {
-            wolf.dispose();
+            wolf.dispose()
         }
-        Globals.ALL_WOLVES.clear();
+        Globals.ALL_WOLVES.clear()
     }
 
     /// <summary>
@@ -143,9 +142,9 @@ export class Wolf {
     }
 
     public static PauseSelectedWolf(selectedUnit: Unit, pause: boolean) {
-        let wolf = Globals.ALL_WOLVES.get(selectedUnit);
-        if (!wolf) return;
-        wolf.PauseSelf(pause);
+        let wolf = Globals.ALL_WOLVES.get(selectedUnit)
+        if (!wolf) return
+        wolf.PauseSelf(pause)
     }
 
     public PauseSelf(pause: boolean) {
@@ -156,7 +155,7 @@ export class Wolf {
                 for (let i: number = 0; i < this.Affixes.length; i++) {
                     this.Affixes[i].Pause(true)
                 }
-                BlzUnitClearOrders(this.Unit.handle, false);
+                BlzUnitClearOrders(this.Unit.handle, false)
                 this.IsWalking = false
                 this.paused = true
                 this.Unit.paused = true // Wander Wolf
@@ -240,22 +239,22 @@ export class Wolf {
         affix.Apply()
     }
 
-public RemoveAffix(affix: Affix): void;
-public RemoveAffix(affixName: string): void;
-public RemoveAffix(arg: Affix | string): void {
-    if (typeof arg === "string") {
-        for (let i = 0; i < this.Affixes.length; i++) {
-            if (this.Affixes[i].constructor.name === arg) {
-                this.RemoveAffix(this.Affixes[i]);
-                break;
+    public RemoveAffix(affix: Affix): void
+    public RemoveAffix(affixName: string): void
+    public RemoveAffix(arg: Affix | string): void {
+        if (typeof arg === 'string') {
+            for (let i = 0; i < this.Affixes.length; i++) {
+                if (this.Affixes[i].constructor.name === arg) {
+                    this.RemoveAffix(this.Affixes[i])
+                    break
+                }
             }
+        } else {
+            this.Affixes.splice(this.Affixes.indexOf(arg), 1)
+            arg.Remove()
+            AffixFactory.AllAffixes.splice(AffixFactory.AllAffixes.indexOf(arg), 1)
         }
-    } else {
-        this.Affixes.splice(this.Affixes.indexOf(arg), 1);
-        arg.Remove();
-        AffixFactory.AllAffixes.splice(AffixFactory.AllAffixes.indexOf(arg), 1);
     }
-}
 
     public HasAffix(affixName: string) {
         if (this.Affixes.length == 0) return false

@@ -47,9 +47,9 @@ export class NoKittyLeftBehind {
     }
 
     private static NoOneLeftBehind(): boolean {
-        let region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
+        let rect = RegionList.SafeZones[RegionList.SafeZones.length - 1]
         for (let [_, kitty] of Globals.ALL_KITTIES) {
-            if (!region.includes(kitty.Unit)) return false
+            if (!rect.includes(kitty.Unit.x, kitty.Unit.y)) return false
         }
         return true
     }

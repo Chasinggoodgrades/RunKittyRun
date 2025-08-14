@@ -10,7 +10,7 @@ export class WolfArea {
     public static WolfAreas: Map<number, WolfArea> = new Map<number, WolfArea>()
     public static TotalArea: number = 0.0
     public ID: number
-    public Rect: Rectangle
+    public Rect: rect
     public Region: region
     public Rectangle: Rectangle
     public Area: number
@@ -19,18 +19,17 @@ export class WolfArea {
     public Wolves: Wolf[] = []
     public FixationCount: number
 
-    public WolfArea(id: number, region: region) {
+    public constructor(id: number, region: region) {
         this.ID = id
         this.Region = region
     }
 
     public static Initialize() {
         let count: number = 0
-        for (let wolfRegion in RegionList.WolfRegions) {
-            let wolfArea = new WolfArea(count, wolfRegion.Region)
-            {
-                ;((Rect = wolfRegion.Rect), (Rectangle = wolfRegion))
-            }
+        for (let wolfRegion of RegionList.WolfRegions) {
+            let wolfArea = new WolfArea(count, wolfRegion.region())
+            wolfArea.Rect = Rect(wolfRegion.minX, wolfRegion.minY, wolfRegion.maxX, wolfRegion.maxY)
+            wolfArea.Rectangle = wolfRegion
             wolfArea.CalculateArea()
             wolfArea.RegisterEnterEvents()
             wolfArea.RegisterLeaveEvents()
@@ -74,7 +73,10 @@ export class WolfArea {
     }
 
     private CalculateArea() {
-        this.Area = this.Rectangle.width * this.Rectangle.Height
+        const width = Math.abs(this.Rectangle.maxX - this.Rectangle.minX)
+        const height = Math.abs(this.Rectangle.maxY - this.Rectangle.minY)
+
+        this.Area = width * height
         WolfArea.TotalArea += this.Area
     }
 }

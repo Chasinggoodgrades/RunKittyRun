@@ -1,12 +1,12 @@
-import { ItemSpawner } from "src/Game/Items/ItemSpawner"
-import { Kibble } from "src/Game/Items/Kibble"
-import { Program } from "src/Program"
-import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { GC } from "src/Utility/GC"
-import { MemoryHandler } from "src/Utility/MemoryHandler/MemoryHandler"
-import { Utility } from "src/Utility/Utility"
-import { Timer, TimerDialog } from "w3ts"
-import { Challenges } from "../Challenges/Challenges"
+import { ItemSpawner } from 'src/Game/Items/ItemSpawner'
+import { Kibble } from 'src/Game/Items/Kibble'
+import { Program } from 'src/Program'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { GC } from 'src/Utility/GC'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Utility } from 'src/Utility/Utility'
+import { Timer, TimerDialog } from 'w3ts'
+import { Challenges } from '../Challenges/Challenges'
 
 export class KibbleEvent {
     private static EventActive: boolean = false

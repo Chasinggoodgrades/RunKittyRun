@@ -28,7 +28,7 @@ export class Team {
         this.TeamID = id
         this.Teammembers = []
         this.RoundProgress = new Map()
-                this.TeamID = id
+        this.TeamID = id
         this.Teammembers = []
         this.RoundProgress = new Map()
         this.TeamTimes = new Map()
@@ -37,7 +37,7 @@ export class Team {
         Globals.ALL_TEAMS.set(this.TeamID, this)
         Globals.ALL_TEAMS_LIST.push(this)
     }
-    
+
     public static Initialize() {
         try {
             ShadowKitty.Initialize()
@@ -87,7 +87,7 @@ export class Team {
 
     private InitRoundStats() {
         for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
-            this.RoundProgress.set(i,'0.0')
+            this.RoundProgress.set(i, '0.0')
             this.TeamTimes.set(i, 0.0)
         }
     }
@@ -143,8 +143,8 @@ export class Team {
         if (adding) {
             this.Teammembers.push(player)
             Globals.ALL_KITTIES.get(player)!.TeamID = this.TeamID
-            Globals.ALL_KITTIES.get(player)!.Unit.color = (GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle))
-            Globals.ALL_CIRCLES.get(player)!.Unit.color = (GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle))
+            Globals.ALL_KITTIES.get(player)!.Unit.color = GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle)
+            Globals.ALL_CIRCLES.get(player)!.Unit.color = GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle)
             Globals.PLAYERS_TEAMS.set(player, this)
         } else {
             this.Teammembers.splice(this.Teammembers.indexOf(player), 1)

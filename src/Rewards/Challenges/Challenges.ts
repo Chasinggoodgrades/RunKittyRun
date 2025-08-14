@@ -10,6 +10,7 @@ import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 import { DeathlessChallenges } from './DeathlessChallenges'
@@ -134,9 +135,9 @@ export class Challenges {
 
     public static FreezeAura() {
         if (!Gameover.WinGame) return
-        for (let kitty in Globals.ALL_KITTIES) {
-            if (kitty.Value.CurrentStats.WolfFreezeCount < Challenges.FREEZE_AURA_WOLF_REQUIREMENT) continue
-            AwardManager.GiveReward(kitty.Value.Player, 'FreezeAura')
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            if (kitty.CurrentStats.WolfFreezeCount < Challenges.FREEZE_AURA_WOLF_REQUIREMENT) continue
+            AwardManager.GiveReward(kitty.Player, 'FreezeAura')
         }
     }
 
@@ -147,22 +148,22 @@ export class Challenges {
     public static ZandalariKitty() {
         if (Difficulty.DifficultyValue < DifficultyLevel.Hard) return
         if (!Gameover.WinGame) return
-        for (let kitty in Globals.ALL_KITTIES) {
-            if (!kitty.Value.CurrentStats.ObtainedNitros.includes(4)) continue
-            AwardManager.GiveReward(kitty.Value.Player, 'ZandalariKitty')
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            if (!kitty.CurrentStats.ObtainedNitros.includes(4)) continue
+            AwardManager.GiveReward(kitty.Player, 'ZandalariKitty')
         }
     }
 
     private static DoubleBackingTrigger() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         let t = Trigger.create()!
-        TriggerregisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
+        t.registerEnterRegion(RegionList.SafeZones[0].region(), () => true)
         t.addAction(
             ErrorHandler.Wrap(() => {
                 let unit = getTriggerUnit()
                 let player = unit.owner
                 if (!Globals.GAME_ACTIVE) return
-                if (GetUnitTypeId(unit) != Constants.UNIT_KITTY) return
+                if (unit.typeId != Constants.UNIT_KITTY) return
                 if (!Globals.ALL_PLAYERS.includes(player)) return
                 if (!Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundFinished) return
                 Challenges.DivineWindwalk(player)

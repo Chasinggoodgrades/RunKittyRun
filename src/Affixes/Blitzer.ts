@@ -6,6 +6,7 @@ import { Globals } from 'src/Global/Globals'
 import { GC } from 'src/Utility/GC'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { distanceBetweenXYPoints } from 'src/Utility/Utility'
 import { Effect, Unit } from 'w3ts'
 import { Affix } from './Affix'
 
@@ -59,7 +60,7 @@ export class Blitzer extends Affix {
         GC.RemoveEffect(this.Effect) // TODO; Cleanup:         GC.RemoveEffect(ref Effect);
         this.EndBlitz()
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
-        this.Unit.Unit.setColor(PLAYER_COLOR_BROWN)
+        this.Unit.Unit.color = PLAYER_COLOR_BROWN
         super.Remove()
     }
 
@@ -77,14 +78,10 @@ export class Blitzer extends Affix {
                 this.MoveTimer?.Timer.start(GetRandomReal(3.0, 10.0), false, this.PreBlitzerMove)
                 return
             }
-            this.WanderEffect ??= this.Effect.createAttachment(
-                Wolf.DEFAULT_OVERHEAD_EFFECT,
-                this.Unit.Unit,
-                'overhead'
-            )!
+            this.WanderEffect ??= Effect.createAttachment(Wolf.DEFAULT_OVERHEAD_EFFECT, this.Unit.Unit, 'overhead')!
             this.WanderEffect.playAnimation(ANIM_TYPE_STAND)
             this.Unit.Unit.setVertexColor(255, 255, 0, 255)
-            this.Unit.Unit.setColor(PLAYER_COLOR_YELLOW)
+            this.Unit.Unit.color = PLAYER_COLOR_YELLOW
             this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, this.BeginBlitz)
         } catch (e: any) {
             Logger.Warning('Error in PreBlitzerMove: {e.Message}')
@@ -95,12 +92,12 @@ export class Blitzer extends Affix {
     private BeginBlitz() {
         try {
             let randomTime = GetRandomReal(this.BLITZER_LOWEND, this.BLITZER_HIGHEND) // blitz randomly between this time interval
-            this.TargetX = GetRandomReal(this.Unit.WolfArea.Rect.minX, this.Unit.WolfArea.Rect.maxX)
-            this.TargetY = GetRandomReal(this.Unit.WolfArea.Rect.minY, this.Unit.WolfArea.Rect.maxY)
+            this.TargetX = GetRandomReal(this.Unit.WolfArea.Rectangle.minX, this.Unit.WolfArea.Rectangle.maxX)
+            this.TargetY = GetRandomReal(this.Unit.WolfArea.Rectangle.minY, this.Unit.WolfArea.Rectangle.maxY)
             this.WanderEffect?.playAnimation(ANIM_TYPE_DEATH)
             this.BlitzerMove()
             this.Unit.Unit.removeAbility(Blitzer.GHOST_VISIBLE) // ghost visible
-            this.Effect ??= this.Effect.create(this.BLITZER_EFFECT, this.Unit.Unit, 'origin')!
+            this.Effect ??= Effect.createAttachment(this.BLITZER_EFFECT, this.Unit.Unit, 'origin')!
             this.Effect?.playAnimation(ANIM_TYPE_STAND)
             this.Unit.IsWalking = true
             this.MoveTimer?.Timer.start(randomTime, false, this.PreBlitzerMove)
@@ -116,12 +113,7 @@ export class Blitzer extends Affix {
         let currentY: number = this.Unit.Unit.y
 
         // Distance between current and target pos
-        let distance: number = WCSharp.Shared.FastUtil.DistanceBetweenPoints(
-            currentX,
-            currentY,
-            this.TargetX,
-            this.TargetY
-        )
+        let distance: number = distanceBetweenXYPoints(currentX, currentY, this.TargetX, this.TargetY)
 
         // stop if its within range of the target / collision thingy
         if (distance <= CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) {
@@ -157,18 +149,18 @@ export class Blitzer extends Affix {
         this.Effect?.playAnimation(ANIM_TYPE_DEATH)
         this.Unit.Unit.setAnimation(0)
         this.Unit.Unit.setVertexColor(224, 224, 120, 255)
-        this.Unit.Unit.setColor(playercolor.Brown)
+        this.Unit.Unit.color = PLAYER_COLOR_BROWN
         this.Unit.IsWalking = false
-        this.Unit.Unit.addAbility(this.GHOST_VISIBLE)
+        this.Unit.Unit.addAbility(Blitzer.GHOST_VISIBLE)
     }
 
     public static GetBlitzer(unit: Unit): Blitzer {
-        if (unit == null) return null
+        if (unit == null) return null as never
         let affix = Globals.ALL_WOLVES.get(unit)!.Affixes.find(Blitzer.IsBlitzer)
-        return affix instanceof Blitzer ? blitzer : null
+        return affix instanceof Blitzer ? affix : (null as never)
     }
 
-    public override Pause(pause: boolean) {
+    public override pause(pause: boolean) {
         if (pause) {
             this.BlitzerTimer?.pause()
             this.PreBlitzerTimer?.pause()

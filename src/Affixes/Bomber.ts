@@ -21,8 +21,8 @@ export class Bomber extends Affix {
     private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
     private static RING_TIMER_INDICATOR: string = 'war3mapImported\\RingProgress.mdx'
 
-    private MIN_EXPLODE_INTERVAL: number = 10.0
-    private MAX_EXPLODE_INTERVAL: number = 15.0
+    private static MIN_EXPLODE_INTERVAL: number = 10.0
+    private static MAX_EXPLODE_INTERVAL: number = 15.0
     private ExplodeTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
     private ReviveAlphaTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
     private ExplodeGroup: Group = Group.create()!
@@ -135,17 +135,17 @@ export class Bomber extends Affix {
     }
 
     private static ExplosionInterval(): number {
-        return GetRandomReal(MIN_EXPLODE_INTERVAL, MAX_EXPLODE_INTERVAL)
+        return GetRandomReal(Bomber.MIN_EXPLODE_INTERVAL, Bomber.MAX_EXPLODE_INTERVAL)
     }
 
     private Revive() {
         this.Unit.IsReviving = true
         if (this.Unit.WolfArea.IsEnabled) {
             this.TimerIndicator ??= Effect.create(Bomber.RING_TIMER_INDICATOR, this.Unit.Unit.x, this.Unit.Unit.y)!
-            this.TimerIndicator.SetTime(0)
-            this.TimerIndicator.playAnimation(animtype.Birth)
-            this.TimerIndicator.SetX(this.Unit.Unit.x)
-            this.TimerIndicator.SetY(this.Unit.Unit.y)
+            this.TimerIndicator.setTime(0)
+            this.TimerIndicator.playAnimation(ANIM_TYPE_BIRTH)
+            this.TimerIndicator.x = this.Unit.Unit.x
+            this.TimerIndicator.y = this.Unit.Unit.y
         }
         this.ReviveAlphaTimer?.Timer?.start(1.0, true, this.ReviveActions)
     }
@@ -165,7 +165,7 @@ export class Bomber extends Affix {
         }
     }
 
-    public override Pause(pause: boolean) {
+    public override pause(pause: boolean) {
         // For now.. Bomber wolves cannot really be frozen once the explosion timer starts..
         // But in the future.. Need to move the explosion timers to be 1 timer instead of 4 Utility.SimpleTimers.
         this.RangeIndicator?.DestroyIndicator()

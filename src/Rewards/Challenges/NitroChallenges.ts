@@ -5,7 +5,7 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { Timer, TimerDialog } from 'w3ts'
+import { MapPlayer, Timer, TimerDialog } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 import { Challenges } from './Challenges'
 
@@ -107,7 +107,7 @@ export class NitroChallenges {
         if (
             NitroChallenges.NitroTimer == null ||
             NitroChallenges.NitroTimer.remaining <= 0.0 ||
-            !NitroChallenges.NitroDialog.displayed
+            !NitroChallenges.NitroDialog.display
         )
             return
         let round = Globals.ROUND

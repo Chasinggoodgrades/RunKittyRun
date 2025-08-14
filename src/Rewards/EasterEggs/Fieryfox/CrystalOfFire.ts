@@ -84,7 +84,8 @@ export class CrystalOfFire {
             this.QuestEligible.push(player)
             // 30 seconds to accept the quest.
             Utility.SimpleTimer(30.0, () => {
-                if (this.QuestEligible.includes(player)) this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
+                if (this.QuestEligible.includes(player))
+                    this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
             })
         } else if (this.GetDeathAttempts(player) == -1) {
             player.DisplayTextTo(this.PartTwoMessage(player))

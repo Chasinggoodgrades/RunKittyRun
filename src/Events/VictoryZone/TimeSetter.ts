@@ -1,12 +1,14 @@
-import { PersonalBestAwarder } from "src/Game/Podium/PersonalBestAwarder"
-import { GameTimer } from "src/Game/Rounds/GameTimer"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { Difficulty } from "src/Init/Difficulty/Difficulty"
-import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption"
-import { MapPlayer } from "w3ts"
-import { Logger } from "../Logger/Logger"
+import { PersonalBestAwarder } from 'src/Game/Podium/PersonalBestAwarder'
+import { GameTimer } from 'src/Game/Rounds/GameTimer'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { MapPlayer } from 'w3ts'
+import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
+import { roundDecimals } from '../../Utility/Utility'
+import { Logger } from '../Logger/Logger'
 
 export class TimeSetter {
     /// <summary>
@@ -29,8 +31,7 @@ export class TimeSetter {
             if (solo) roundString = this.GetSoloEnum()
             if (currentTime >= 3599.0) return false // 59min 59 second cap
 
-            let property = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes.GetType().GetProperty(roundString)
-            let value = property.GetValue(Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes)
+            let value = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes[roundString as keyof RoundTimesData]
 
             if (currentTime >= value && value != 0) return false
 
@@ -76,8 +77,10 @@ export class TimeSetter {
 
     private static SetSavedTime(player: MapPlayer, roundString: string) {
         let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
-        let property = kittyStats.RoundTimes.GetType().GetProperty(roundString)
-        property.SetValue(kittyStats.RoundTimes, Math.round(Math.max(GameTimer.RoundTime[Globals.ROUND], 0.01), 2))
+        kittyStats.RoundTimes[roundString as keyof RoundTimesData] = roundDecimals(
+            Math.max(GameTimer.RoundTime[Globals.ROUND], 0.01),
+            2
+        )
     }
 
     private static GetNormalRoundEnum(): string {

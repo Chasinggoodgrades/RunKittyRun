@@ -12,54 +12,42 @@ export class PodiumUtil {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
             return stats.TotalSaves - stats.TotalDeaths
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SortPlayersBySaves() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
             return stats.TotalSaves
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SortPlayersByHighestRatio() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
             return stats.TotalDeaths == 0 ? stats.TotalSaves : stats.TotalSaves / stats.TotalDeaths
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SortPlayersByHighestSaveStreak() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
             return stats.MaxSaveStreak
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SortPlayersTopProgress() {
         return Globals.ALL_PLAYERS.OrderByDescending(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
             return stats.GetOverallProgress()
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SortPlayersFastestTime() {
         return Globals.ALL_PLAYERS.OrderBy(player => {
             let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
             return stats.GetTotalTime()
-        })
-            .Take(3)
-            .ToList()
+        }).Take(3)
     }
 
     public static SetCameraToPodium() {
@@ -74,11 +62,11 @@ export class PodiumUtil {
 
     public static ClearPodiumUnits(podiumUnits: Unit[]) {
         if (podiumUnits.length == 0) return
-        for (let kitty in podiumUnits) {
+        for (let kitty of podiumUnits) {
             kitty.setPosition(Regions.safe_Area_00.centerX, Regions.safe_Area_00.centerY)
             kitty.paused = false
         }
-        podiumUnits.clear()
+        podiumUnits.length = 0
     }
 
     public static EndingGameThankyou() {

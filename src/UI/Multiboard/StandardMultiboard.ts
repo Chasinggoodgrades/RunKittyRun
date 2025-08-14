@@ -35,15 +35,14 @@ export class StandardMultiboard {
     /// </summary>
     private static Init() {
         let t = Timer.create()
-        TimerStart(
-            t,
+        t.start(
             1.0,
             true,
             ErrorHandler.Wrap(() => {
                 if (!Difficulty.IsDifficultyChosen) return
                 StandardMultiboard.MakeMultiboard()
                 StandardMultiboard.RegisterTriggers()
-                DestroyTimer(t)
+                t.destroy()
             })
         )
     }
@@ -79,8 +78,8 @@ export class StandardMultiboard {
         StandardMultiboard.CurrentStats.GetItem(1, 6).setText('{color}S / D|r')
         StandardMultiboard.CurrentStats.SetChildVisibility(true, false)
         StandardMultiboard.CurrentStats.setItemsWidth(0.055)
-        StandardMultiboard.CurrentStats.GetItem(1, 0).SetWidth(0.07)
-        StandardMultiboard.CurrentStats.display = true
+        StandardMultiboard.CurrentStats.GetItem(1, 0).setWidth(0.07)
+        StandardMultiboard.CurrentStats.display(true)
     }
 
     private static OverallGamesStatsMultiboard() {
@@ -96,8 +95,8 @@ export class StandardMultiboard {
         StandardMultiboard.OverallStats.GetItem(0, 7).setText('{color}Wins|r')
         StandardMultiboard.OverallStats.SetChildVisibility(true, false)
         StandardMultiboard.OverallStats.setItemsWidth(0.052)
-        StandardMultiboard.OverallStats.GetItem(0, 0).SetWidth(0.07)
-        StandardMultiboard.OverallStats.display = false
+        StandardMultiboard.OverallStats.GetItem(0, 0).setWidth(0.07)
+        StandardMultiboard.OverallStats.display(false)
         StandardMultiboard.UpdateOverallStatsMB()
     }
 
@@ -112,8 +111,8 @@ export class StandardMultiboard {
         StandardMultiboard.BestTimes.GetItem(0, 5).setText('{color}5: Round|r')
         StandardMultiboard.BestTimes.SetChildVisibility(true, false)
         StandardMultiboard.BestTimes.setItemsWidth(0.05)
-        StandardMultiboard.BestTimes.GetItem(0, 0).SetWidth(0.07)
-        StandardMultiboard.BestTimes.display = false
+        StandardMultiboard.BestTimes.GetItem(0, 0).setWidth(0.07)
+        StandardMultiboard.BestTimes.display(false)
         StandardMultiboard.UpdateBestTimesMB()
     }
 
@@ -134,7 +133,7 @@ export class StandardMultiboard {
             let rowIndex = 2
 
             // Use a list to hold keys for manual sorting
-            StandardMultiboard.PlayersList.clear()
+            StandardMultiboard.PlayersList.length = 0
 
             for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 StandardMultiboard.PlayersList.push(Globals.ALL_PLAYERS[i])
@@ -188,7 +187,7 @@ export class StandardMultiboard {
                     StandardMultiboard.CurrentStats.GetItem(rowIndex, j).setText(
                         '{playerColor}{PlayerStats[j]}{Colors.COLOR_RESET}'
                     )
-                    if (j == 0) StandardMultiboard.CurrentStats.GetItem(rowIndex, j).SetWidth(0.07)
+                    if (j == 0) StandardMultiboard.CurrentStats.GetItem(rowIndex, j).setWidth(0.07)
                 }
 
                 rowIndex++
@@ -204,7 +203,7 @@ export class StandardMultiboard {
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
-        StandardMultiboard.PlayersList.clear()
+        StandardMultiboard.PlayersList.length = 0
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             StandardMultiboard.PlayersList.push(Globals.ALL_PLAYERS[i])
         }
@@ -254,7 +253,7 @@ export class StandardMultiboard {
                 StandardMultiboard.OverallStats.GetItem(rowIndex, j).setText(
                     '{playerColor}{PlayerStats[j]}{Colors.COLOR_RESET}'
                 )
-                if (j == 0) StandardMultiboard.OverallStats.GetItem(rowIndex, j).SetWidth(0.07)
+                if (j == 0) StandardMultiboard.OverallStats.GetItem(rowIndex, j).setWidth(0.07)
             }
 
             rowIndex++
@@ -383,14 +382,14 @@ export class StandardMultiboard {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         if (!getTriggerPlayer().isLocal()) return
         if (StandardMultiboard.CurrentStats.displayed) {
-            StandardMultiboard.CurrentStats.display = false
-            StandardMultiboard.OverallStats.display = true
+            StandardMultiboard.CurrentStats.display(false)
+            StandardMultiboard.OverallStats.display(true)
         } else if (StandardMultiboard.OverallStats.displayed) {
-            StandardMultiboard.OverallStats.display = false
-            StandardMultiboard.BestTimes.display = true
+            StandardMultiboard.OverallStats.display(false)
+            StandardMultiboard.BestTimes.display(true)
         } else if (StandardMultiboard.BestTimes.displayed) {
-            StandardMultiboard.BestTimes.display = false
-            StandardMultiboard.CurrentStats.display = true
+            StandardMultiboard.BestTimes.display(false)
+            StandardMultiboard.CurrentStats.display(true)
         }
     }
 }

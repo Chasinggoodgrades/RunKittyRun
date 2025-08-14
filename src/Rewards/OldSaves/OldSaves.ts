@@ -16,7 +16,7 @@ export class Savecode {
     private static OriginalToolTips: string[] = []
     public Digits: number
     public Bignum: BigNum
-    public static PlayerSaveObject: Map<player, Savecode> = new Map()
+    public static PlayerSaveObject: Map<MapPlayer, Savecode> = new Map()
 
     public static Initialize() {
         try {
@@ -216,7 +216,7 @@ export class Savecode {
         let charlen = Savecode.player_charset.length
         let count = []
         let x: number
-        for (let c in name.ToUpper()) {
+        for (let c in name.toUpperCase()) {
             x = OldSavesHelper.Player_CharToInt(c)
             if (x >= 0) count[x]++
         }

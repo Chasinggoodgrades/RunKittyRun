@@ -1,11 +1,11 @@
-import { Globals } from "src/Global/Globals"
-import { Colors } from "src/Utility/Colors/Colors"
-import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { int } from "src/Utility/Utility"
-import { getTriggerPlayer } from "src/Utility/w3tsUtils"
-import { Timer, MapPlayer } from "w3ts"
-import { PlayerLeaves } from "../PlayerLeavesEvent/PlayerLeaves"
-import { VoteEndRound } from "./VoteEndRound"
+import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { int } from 'src/Utility/Utility'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Timer, MapPlayer } from 'w3ts'
+import { PlayerLeaves } from '../PlayerLeavesEvent/PlayerLeaves'
+import { VoteEndRound } from './VoteEndRound'
 
 export class Votekick {
     public static VoteActive: boolean = false

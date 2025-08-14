@@ -41,7 +41,7 @@ export class ShopItem {
             relic.IconPath,
             ShopItemType.Relic
         )
-        Relic = relic
+        this.Relic = relic
     }
 
     public ShopItem(award: string, cost: number, abilityID: number, description: string) {

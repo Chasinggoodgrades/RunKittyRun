@@ -1,15 +1,15 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { Utility } from "src/Utility/Utility"
-import { getTriggerPlayer } from "src/Utility/w3tsUtils"
-import { Trigger } from "w3ts"
-import { DifficultyOption } from "./DifficultyOption"
+import { Logger } from 'src/Events/Logger/Logger'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Utility } from 'src/Utility/Utility'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Trigger } from 'w3ts'
+import { DifficultyOption } from './DifficultyOption'
 
 export class Difficulty {
     public static DifficultyValue: number
-    public static DiffOption: DifficultyOption
+    public static DifficultyOption: DifficultyOption
     public static IsDifficultyChosen: boolean = false
     private static TIME_TO_CHOOSE_DIFFICULTY: number = 10.0
     private static triggerHandle: Trigger
@@ -23,7 +23,7 @@ export class Difficulty {
             DifficultyOption.DifficultyChoosing.setMessage(
                 '{Colors.COLOR_GOLD}choose: a: difficulty: Please{Colors.COLOR_RESET}'
             )
-            this.RegisterSelectionEvent()   
+            this.RegisterSelectionEvent()
 
             Utility.SimpleTimer(2.0, this.ChooseDifficulty)
         } catch (e: any) {
@@ -34,7 +34,7 @@ export class Difficulty {
 
     private static RegisterSelectionEvent() {
         this.triggerHandle ??= Trigger.create()!
-        this.triggerHandle.registerDialogEvent(DifficultyOption.DifficultyChoosing);
+        this.triggerHandle.registerDialogEvent(DifficultyOption.DifficultyChoosing)
         this.triggerHandle.addAction(() => {
             let player = getTriggerPlayer()
             let button = GetClickedButton()
@@ -71,7 +71,7 @@ export class Difficulty {
     }
 
     private static SetDifficulty(difficulty: DifficultyOption) {
-        this.DiffOption = difficulty
+        this.DifficultyOption = difficulty
         this.DifficultyValue = difficulty.Value
         this.IsDifficultyChosen = true
         print(
@@ -80,8 +80,7 @@ export class Difficulty {
     }
 
     private static RemoveDifficultyDialog() {
-        for (let player of Globals.ALL_PLAYERS) 
-            DifficultyOption.DifficultyChoosing.display(player, false)
+        for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, false)
     }
 
     /// <summary>

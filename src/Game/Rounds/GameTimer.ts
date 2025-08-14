@@ -55,13 +55,13 @@ export class GameTimer {
 
     private static UpdateTeamTimes() {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-            for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-                let team = Globals.ALL_TEAMS_LIST[i]
-                if (!team.Finished) {
-                    let teamTime = team.TeamTimes.get(Globals.ROUND)
-                    if (teamTime != null) {
-                        team.TeamTimes.set(Globals.ROUND, teamTime + this.RoundSpeedIncrement)
-                    }
+        for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+            let team = Globals.ALL_TEAMS_LIST[i]
+            if (!team.Finished) {
+                let teamTime = team.TeamTimes.get(Globals.ROUND)
+                if (teamTime != null) {
+                    team.TeamTimes.set(Globals.ROUND, teamTime + this.RoundSpeedIncrement)
+                }
             }
         }
     }

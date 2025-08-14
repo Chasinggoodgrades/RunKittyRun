@@ -24,7 +24,14 @@ export abstract class Relic {
     public RelicAbilityID: number
     public Upgrades: RelicUpgrade[] = []
 
-    public Relic(name: string, desc: string, relicAbilityID: number, itemID: number, cost: number, iconPath: string) {
+    public constructor(
+        name: string,
+        desc: string,
+        relicAbilityID: number,
+        itemID: number,
+        cost: number,
+        iconPath: string
+    ) {
         this.name = name
         this.Description = desc
         this.RelicAbilityID = relicAbilityID

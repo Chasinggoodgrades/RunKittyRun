@@ -11,7 +11,7 @@ import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { FilterList } from 'src/Utility/FilterList'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { MapPlayer, Effect, Timer, Trigger, Unit } from 'w3ts'
+import { Effect, MapPlayer, Timer, Trigger, Unit } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 import { DeathlessChallenges } from './DeathlessChallenges'
 
@@ -163,17 +163,18 @@ export class TeamDeathless {
         if (safezone.ID <= this.CurrentSafezone.ID) return
         if (safezone.ID > this.CurrentSafezone.ID + 1) return // no skipping safezones
         if (this.CurrentHolder.Unit != unit) return // The unit that reached the safezone is not the current holder of the orb.
-        if (!this.AlreadyCarriedOrb.includes(this.CurrentHolder.Player)) this.AlreadyCarriedOrb.push(this.CurrentHolder.Player)
+        if (!this.AlreadyCarriedOrb.includes(this.CurrentHolder.Player))
+            this.AlreadyCarriedOrb.push(this.CurrentHolder.Player)
 
         this.CurrentSafezone = safezone
         this.CurrentHolder = null
 
-        this.OrbEffect.x = safezone.rect.centerX
-        this.OrbEffect.y = safezone.rect.centerY
+        this.OrbEffect.x = safezone.Rectangle.centerX
+        this.OrbEffect.y = safezone.Rectangle.centerY
         this.OrbEffect.scale = 1.0
 
         this.RangeTrigger.enabled = true
-        this.DummyUnit.setPosition(safezone.rect.centerX, safezone.rect.centerY) // gotta define rect i guess
+        this.DummyUnit.setPosition(safezone.Rectangle.centerX, safezone.Rectangle.centerY)
 
         this.timerHandle?.pause()
 
@@ -222,8 +223,8 @@ export class TeamDeathless {
         this.RippleEffect ??= Effect.create(this.RIPPLE_MODEL, this.CurrentHolder.Unit.x, this.CurrentHolder.Unit.y)!
         this.RippleEffect.setTime(0)
         this.RippleEffect.scale = 0.25
-        this.RippleEffect.x = (this.CurrentHolder.Unit.x)
-        this.RippleEffect.y = (this.CurrentHolder.Unit.y)
+        this.RippleEffect.x = this.CurrentHolder.Unit.x
+        this.RippleEffect.y = this.CurrentHolder.Unit.y
         this.RippleEffect.playAnimation(ANIM_TYPE_BIRTH)
         this.RangeTrigger.enabled = false
 
@@ -239,8 +240,8 @@ export class TeamDeathless {
 
         let x: number = this.CurrentHolder.Unit.x
         let y: number = this.CurrentHolder.Unit.y
-        this.OrbEffect.x = (x)
-        this.OrbEffect.y = (y)
+        this.OrbEffect.x = x
+        this.OrbEffect.y = y
     }
 
     private static CheckOrbList() {

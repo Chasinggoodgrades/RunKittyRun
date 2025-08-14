@@ -1,7 +1,7 @@
-import { Globals } from "src/Global/Globals"
-import { Tournament } from "src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Tournament"
-import { MapPlayer } from "w3ts"
-import { AwardManager } from "./AwardManager"
+import { Globals } from 'src/Global/Globals'
+import { Tournament } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Tournament'
+import { MapPlayer } from 'w3ts'
+import { AwardManager } from './AwardManager'
 
 export class ChampionAwards {
     public static AwardAllChampions() {

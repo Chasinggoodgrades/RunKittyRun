@@ -7,6 +7,7 @@ import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { distanceBetweenXYPoints, TargetTypes } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Effect, Group, Trigger, Unit } from 'w3ts'
 import { Affix } from './Affix'
@@ -41,26 +42,26 @@ export class Fixation extends Affix {
 
     public override Apply() {
         this.Type = this.RandomType()
-        SetUnitMoveSpeed(this.Unit.Unit, this.FIXATION_MS)
-        SetUnitVertexColor(this.Unit.Unit, 255, 0, 0, 255)
+        this.Unit.Unit.moveSpeed = this.FIXATION_MS
+        this.Unit.Unit.setVertexColor(255, 0, 0, 255)
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
-        this.Unit.Unit.TargetedAs = TargetTypes.Ward
+        this.Unit.Unit.setField(UNIT_IF_TARGETED_AS, TargetTypes.Ward)
         this.RegisterEvents()
         this.Unit.WolfArea.FixationCount += 1
         super.Apply()
     }
 
     public override Remove() {
-        SetUnitMoveSpeed(this.Unit.Unit, this.Unit.Unit.DefaultMovementSpeed)
+        this.Unit.Unit.moveSpeed = this.Unit.Unit.defaultMoveSpeed
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
-        this.Unit.Unit.TargetedAs = TargetTypes.Ground
-        SetUnitVertexColor(this.Unit.Unit, 150, 120, 255, 255)
+        this.Unit.Unit.setField(UNIT_IF_TARGETED_AS, TargetTypes.Ground)
+        this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.IsChasing = false
 
         GC.RemoveTrigger(this.InRangeTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref InRangeTrigger);
         GC.RemoveTrigger(this.PeriodicSpeed) // TODO; Cleanup:         GC.RemoveTrigger(ref PeriodicSpeed);
         this.ChaseTimer?.dispose()
-        this.ChaseTimer = null
+        this.ChaseTimer = null as never
         GC.RemoveGroup(this.UnitsInRange) // TODO; Cleanup:         GC.RemoveGroup(ref UnitsInRange);
         GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:         GC.RemoveEffect(ref TargetEffect);
         if (this.Unit.WolfArea.FixationCount > 0) this.Unit.WolfArea.FixationCount -= 1
@@ -80,7 +81,7 @@ export class Fixation extends Affix {
 
     private RegisterEvents() {
         if (this.Type == 1) this.UnitsInRange ??= Group.create()!
-        this.InRangeTrigger.registerUnitInRage(this.Unit.Unit, this.FIXATION_RADIUS, FilterList.KittyFilter)
+        this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FIXATION_RADIUS, FilterList.KittyFilter)
         this.PeriodicSpeed.registerTimerEvent(0.1, true)
         this.PeriodicSpeed.addAction(this.UpdateChaseSpeed)
         this.InRangeTrigger.addAction(() => {
@@ -103,7 +104,7 @@ export class Fixation extends Affix {
         let Region = RegionList.WolfRegions[this.Unit.RegionIndex]
         this.IsChasing = true
         this.Unit.WanderTimer?.pause()
-        this.TargetEffect = Effect.create(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
+        this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
         this.ChaseTimer.start(0.1, true, () => {
             if (!this.Target.isAlive() || !Region.includes(this.Target.x, this.Target.y)) {
                 this.IsChasing = false
@@ -114,7 +115,7 @@ export class Fixation extends Affix {
                 return
             }
             if (this.Type == 1) this.GetClosestTarget()
-            this.Unit.Unit.IssueOrder('move', this.Target.x, this.Target.y)
+            this.Unit.Unit.issueOrderAt('move', this.Target.x, this.Target.y)
         })
     }
 
@@ -126,12 +127,12 @@ export class Fixation extends Affix {
             this.FIXATION_RADIUS,
             FilterList.KittyFilter
         )
-        if (this.UnitsInRange.length <= 0) return
+        if (this.UnitsInRange.size <= 0) return
         let newTarget = this.GetClosestUnitInRange()
         if (newTarget != this.Target) {
             this.Target = newTarget
             GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:             GC.RemoveEffect(ref TargetEffect);
-            this.TargetEffect = Effect.create(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
+            this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
         }
     }
 
@@ -140,14 +141,14 @@ export class Fixation extends Affix {
         let unitY = this.Unit.Unit.y
 
         // Determine closest unit in list
-        let closestUnit = this.UnitsInRange.First
-        let closestDistance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, closestUnit.x, closestUnit.y)
+        let closestUnit = this.UnitsInRange.first!
+        let closestDistance = distanceBetweenXYPoints(unitX, unitY, closestUnit.x, closestUnit.y)
         if (closestDistance > 0) {
             while (true) {
-                let unit = this.UnitsInRange.First
+                let unit = this.UnitsInRange.first
                 if (unit == null) break
-                this.UnitsInRange.Remove(unit)
-                let distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.x, unit.y)
+                this.UnitsInRange.removeUnit(unit)
+                let distance = distanceBetweenXYPoints(unitX, unitY, unit.x, unit.y)
                 if (distance < closestDistance) {
                     closestUnit = unit
                     closestDistance = distance
@@ -158,33 +159,33 @@ export class Fixation extends Affix {
     }
 
     private UpdateChaseSpeed() {
-        let currentMS = this.Unit.Unit.MovementSpeed
+        let currentMS = this.Unit.Unit.moveSpeed
         let speedIncrementer = 0.4 // 4 movespeed every second
 
         if (this.IsChasing) {
-            if (currentMS <= 300) SetUnitMoveSpeed(this.Unit.Unit, this.FIXATION_MS)
+            if (currentMS <= 300) this.Unit.Unit.moveSpeed = this.FIXATION_MS
             if (currentMS >= this.FIXATION_MAX_MS) return
 
             let newSpeed = currentMS + speedIncrementer
 
-            SetUnitMoveSpeed(this.Unit.Unit, Math.min(newSpeed, this.FIXATION_MAX_MS))
+            this.Unit.Unit.moveSpeed = Math.min(newSpeed, this.FIXATION_MAX_MS)
         } else {
             if (currentMS <= this.FIXATION_MS) return
 
             let newSpeed = currentMS - speedIncrementer / 2 // Decrease by half the rate
-            SetUnitMoveSpeed(this.Unit.Unit, Math.max(newSpeed, this.FIXATION_MS))
+            this.Unit.Unit.moveSpeed = Math.max(newSpeed, this.FIXATION_MS)
         }
     }
 
     public static GetFixation(Unit: Unit): Fixation {
-        if (Unit == null) return null
-        let affix = Globals.ALL_WOLVES.get(unit).Affixes.find(Fixation.IsFixation)
-        return affix instanceof Fixation ? fixation : null
+        if (Unit == null) return null as never
+        let affix = Globals.ALL_WOLVES.get(Unit)!.Affixes.find(Fixation.IsFixation)
+        return affix instanceof Fixation ? affix : (null as never)
     }
 
-    public override Pause(pause: boolean) {
+    public override pause(pause: boolean) {
         if (pause) {
-            this.Unit.Unit.ClearOrders()
+            BlzUnitClearOrders(this.Unit.Unit.handle, false)
             this.ChaseTimer.pause()
             this.InRangeTrigger.enabled = false
             this.IsChasing = false

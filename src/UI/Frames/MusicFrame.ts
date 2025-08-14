@@ -1,11 +1,11 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { Globals } from "src/Global/Globals"
-import { MusicManager } from "src/Sounds/MusicManager"
-import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { blzCreateFrameByType, getTriggerPlayer, blzGetFrameByName } from "src/Utility/w3tsUtils"
-import { Frame, Trigger, MapPlayer } from "w3ts"
-import { MultiboardUtil } from "../Multiboard/MultiboardUtil"
-import { FrameManager } from "./FrameManager"
+import { Logger } from 'src/Events/Logger/Logger'
+import { Globals } from 'src/Global/Globals'
+import { MusicManager } from 'src/Sounds/MusicManager'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { blzCreateFrameByType, getTriggerPlayer, blzGetFrameByName } from 'src/Utility/w3tsUtils'
+import { Frame, Trigger, MapPlayer } from 'w3ts'
+import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
+import { FrameManager } from './FrameManager'
 
 export class MusicFrame {
     public static MusicFramehandle: Frame
@@ -54,7 +54,13 @@ export class MusicFrame {
     }
 
     private static RegisterMusicSlider() {
-        this.MusicSlider = blzCreateFrameByType('SLIDER', 'SliderFrame', this.MusicFramehandle, 'QuestMainListScrollBar', 0)
+        this.MusicSlider = blzCreateFrameByType(
+            'SLIDER',
+            'SliderFrame',
+            this.MusicFramehandle,
+            'QuestMainListScrollBar',
+            0
+        )
         let numberOfSongs = MusicManager.MusicList.length
         this.MusicSlider.clearPoints()
         this.MusicSlider.setAbsPoint(FRAMEPOINT_TOPLEFT, 0.485, 0.455)
@@ -62,7 +68,8 @@ export class MusicFrame {
         this.MusicSlider.setMinMaxValue(0, numberOfSongs)
         this.MusicSlider.setStepSize(1)
 
-        for (let player of Globals.ALL_PLAYERS) if (!this.MusicSliderValues.has(player)) this.MusicSliderValues.set(player, 0)
+        for (let player of Globals.ALL_PLAYERS)
+            if (!this.MusicSliderValues.has(player)) this.MusicSliderValues.set(player, 0)
 
         let triggerHandle = Trigger.create()!
         let mousewheel = Trigger.create()!
@@ -92,14 +99,21 @@ export class MusicFrame {
         for (let i = 0; i < musicCount; i++) {
             if (this.MusicButtons.has(i)) continue // Skip if already exists
             let name = MusicManager.MusicList[i].name
-            this.MusicButtons.set(i, blzCreateFrameByType('GLUETEXTBUTTON', name, this.MusicFramehandle, 'DebugButton', 0))
+            this.MusicButtons.set(
+                i,
+                blzCreateFrameByType('GLUETEXTBUTTON', name, this.MusicFramehandle, 'DebugButton', 0)
+            )
             this.MusicButtons.get(i)?.setSize(this.ButtonWidth, this.ButtonHeight)
             const button = this.MusicButtons.get(i)
             if (button) {
                 button.text = MusicManager.MusicList[i].name
             }
 
-            this.MusicButtons.get(i)?.setAbsPoint(FRAMEPOINT_CENTER, this.ButtonStartX, this.ButtonStartY - i * this.ButtonSpacing)
+            this.MusicButtons.get(i)?.setAbsPoint(
+                FRAMEPOINT_CENTER,
+                this.ButtonStartX,
+                this.ButtonStartY - i * this.ButtonSpacing
+            )
 
             let trigger = Trigger.create()!
             trigger.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
@@ -108,7 +122,7 @@ export class MusicFrame {
                     let frame = BlzGetTriggerFrame()
                     let player = getTriggerPlayer()
 
-                    if (!frame) return;
+                    if (!frame) return
                     if (!player.isLocal()) return
 
                     //MusicManager.StopAllMusic();
@@ -158,8 +172,7 @@ export class MusicFrame {
                 if (!button) continue // Skip if button does not exist
                 button.setAbsPoint(FRAMEPOINT_CENTER, this.ButtonStartX, positionY)
                 button.visible = true
-            } 
-            else {
+            } else {
                 const button = this.MusicButtons.get(i)
                 if (button) button.visible = false
             }

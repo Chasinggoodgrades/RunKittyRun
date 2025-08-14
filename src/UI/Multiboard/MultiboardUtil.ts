@@ -56,7 +56,7 @@ export class MultiboardUtil {
         for (let player of Globals.ALL_PLAYERS) {
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${Colors.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
-            mb.GetItem(rowIndex, 0).SetWidth(0.07)
+            mb.GetItem(rowIndex, 0).setWidth(0.07)
             rowIndex++
         }
     }

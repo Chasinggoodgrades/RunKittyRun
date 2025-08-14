@@ -124,6 +124,6 @@ export class NitroPacer {
     }
 
     private static SetSpeed(speed: number) {
-        return (Unit.MovementSpeed = speed)
+        return (this.Unit.moveSpeed = speed)
     }
 }

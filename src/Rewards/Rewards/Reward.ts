@@ -1,8 +1,3 @@
-/// <summary>
-/// Reward Class and Enums
-/// * Enums are the different types of rewards. They help designate which category the reward should be in.
-/// * The Reward class simply helps define what the Reward is ; ie name, ability, model.. etc.
-
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { Auras } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Auras'
@@ -18,6 +13,10 @@ import { GC } from 'src/Utility/GC'
 import { Effect, MapPlayer } from 'w3ts'
 import { RewardsManager } from './RewardsManager'
 
+/// <summary>
+/// Reward Class and Enums
+/// * Enums are the different types of rewards. They help designate which category the reward should be in.
+/// * The Reward class simply helps define what the Reward is ; ie name, ability, model.. etc.
 /// </summary>
 export enum RewardType {
     Auras,
@@ -117,7 +116,7 @@ export class Reward {
             if (this.SetWindwalk(player)) return
 
             let kitty = Globals.ALL_KITTIES.get(player)!.Unit
-            let effectInstance = Effect.create(this.ModelPath, kitty, this.OriginPoint)!
+            let effectInstance = Effect.createAttachment(this.ModelPath, kitty, this.OriginPoint)!
 
             this.DestroyCurrentEffect(player)
             this.ApplyEffect(player, effectInstance)
@@ -126,7 +125,7 @@ export class Reward {
         }
     }
 
-    private ApplyEffect(player: MapPlayer, effectInstance: Effect = null) {
+    private ApplyEffect(player: MapPlayer, effectInstance: Effect) {
         let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings:
@@ -152,7 +151,7 @@ export class Reward {
                 break
 
             default:
-                throw new ArgumentOutOfRangeError(nameof(this.Type), this.Type, null)
+                throw new Error('' + this.Type)
         }
     }
 
@@ -186,7 +185,7 @@ export class Reward {
                 break
 
             default:
-                throw new ArgumentOutOfRangeError(nameof(this.Type), this.Type, null)
+                throw new Error('' + this.Type)
         }
     }
 
@@ -248,18 +247,18 @@ export class Reward {
 
             default:
                 Logger.Critical('with: selected: data: Error')
-                throw new ArgumentOutOfRangeError(nameof(this.Type), this.Type, null)
+                throw new Error(this.Type)
         }
     }
 
-    private SetTournamentReward(player: MapPlayer, e: Effect, activate: boolean) {
+    private SetTournamentReward(player: MapPlayer, e: Effect | null, activate: boolean) {
         if (this.Type != RewardType.Tournament) return false
 
         let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         if (activate) {
-            if (this.name.includes('Nitro')) activeRewards.ActiveTrail = e
-            else if (this.name.includes('Aura')) activeRewards.ActiveAura = e
-            else if (this.name.includes('Wings')) activeRewards.ActiveWings = e
+            if (this.name.includes('Nitro')) e && (activeRewards.ActiveTrail = e)
+            else if (this.name.includes('Aura')) e && (activeRewards.ActiveAura = e)
+            else if (this.name.includes('Wings')) e && (activeRewards.ActiveWings = e)
             else if (this.name.includes('Skin')) {
                 this.SetSkin(player, true)
                 Globals.ALL_KITTIES.get(player)!.SaveData.SelectedData.SelectedSkin = this.name
@@ -268,9 +267,9 @@ export class Reward {
                 return false
             }
         } else {
-            if (this.name.includes('Nitro')) activeRewards.ActiveTrail?.dispose()
-            else if (this.name.includes('Aura')) activeRewards.ActiveAura?.dispose()
-            else if (this.name.includes('Wings')) activeRewards.ActiveWings?.dispose()
+            if (this.name.includes('Nitro')) activeRewards.ActiveTrail?.destroy()
+            else if (this.name.includes('Aura')) activeRewards.ActiveAura?.destroy()
+            else if (this.name.includes('Wings')) activeRewards.ActiveWings?.destroy()
             else return false
         }
 
@@ -280,31 +279,31 @@ export class Reward {
     public SetRewardTypeSorted(): string {
         switch (this.Type) {
             case RewardType.Auras:
-                return new Auras().GetType().name
+                return Auras.name
 
             case RewardType.Windwalks:
-                return new Windwalks().GetType().name
+                return Windwalks.name
 
             case RewardType.Skins:
-                return new Skins().GetType().name
+                return Skins.name
 
             case RewardType.Trails:
-                return new Trails().GetType().name
+                return Trails.name
 
             case RewardType.Deathless:
-                return new Deathless().GetType().name
+                return Deathless.name
 
             case RewardType.Nitros:
-                return new Nitros().GetType().name
+                return Nitros.name
 
             case RewardType.Hats:
-                return new Hats().GetType().name
+                return Hats.name
 
             case RewardType.Wings:
-                return new Wings().GetType().name
+                return Wings.name
 
             default:
-                return new Tournament().GetType().name
+                return Tournament.name
         }
     }
 
@@ -313,7 +312,7 @@ export class Reward {
     }
 
     public GetRewardName(): string {
-        return BlzGetAbilityTooltip(this.AbilityID, 0)
+        return BlzGetAbilityTooltip(this.AbilityID, 0) || ''
     }
 
     public GetAbilityID(): number {

@@ -5,10 +5,10 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
-import { Unit, Effect, Timer } from 'w3ts'
+import { Effect, Timer, Unit } from 'w3ts'
 import { PlayerUpgrades } from '../PlayerUpgrades'
-import { RelicUpgrade } from '../RelicUpgrade'
 import { Relic } from '../Relic'
+import { RelicUpgrade } from '../RelicUpgrade'
 
 export class ChronoSphere extends Relic {
     public RelicItemID: number = Constants.ITEM_CHRONO_ORB
@@ -37,13 +37,14 @@ export class ChronoSphere extends Relic {
     private CapturedLocation = [100, 100, 100]
 
     public constructor() {
-        super(),
-        this.name = '{Colors.COLOR_YELLOW}Chrono Sphere',
-        this.Description = 'Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r',
-        this.RelicAbilityID = this.RelicAbilityID,
-        this.RelicItemID = this.RelicItemID,
-        this.RelicCost = this.RelicCost,
-        this.IconPath = this.IconPath
+        ;(super(),
+            (this.name = '{Colors.COLOR_YELLOW}Chrono Sphere'),
+            (this.Description =
+                'Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r'),
+            (this.RelicAbilityID = this.RelicAbilityID),
+            (this.RelicItemID = this.RelicItemID),
+            (this.RelicCost = this.RelicCost),
+            (this.IconPath = this.IconPath))
 
         this.Upgrades.push(
             new RelicUpgrade(
@@ -93,7 +94,10 @@ export class ChronoSphere extends Relic {
             this.Magnitude = this.RandomMagnitude()
             this.Ability.SetMovementSpeedIncreasePercent_Oae1(0, this.Magnitude)
             this.Ability.SetAreaOfEffect_aare(0, this.SLOW_AURA_RADIUS)
-            item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(this.Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
+            BlzSetItemExtendedTooltip(
+                item.handle,
+                `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(this.Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
+            )
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.SetAbilityData: {e.Message}')
         }

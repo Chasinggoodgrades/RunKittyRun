@@ -2,10 +2,10 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { FilterList } from 'src/Utility/FilterList'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { distanceBetweenXYPoints } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { Wolf } from './Entities/Wolf'
-import { distanceBetweenXYPoints, Utility } from 'src/Utility/Utility'
 
 export class WolfPoint {
     private MaxDistance: number = 128 // Max distance between points
@@ -92,8 +92,8 @@ export class WolfPoint {
     private StartMovingOrders() {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
         if (this.Wolf.paused || this.Wolf.IsReviving) {
-        BlzUnitClearOrders(this.Wolf.Unit.handle, false)
-        return
+            BlzUnitClearOrders(this.Wolf.Unit.handle, false)
+            return
         }
 
         try {
@@ -117,7 +117,7 @@ export class WolfPoint {
         TriggerAddCondition(WolfPoint.IsPausedTrigger.handle, FilterList.UnitTypeWolf)
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(WolfPoint.IsPausedTrigger.handle, WolfPoint.QueueOrderActions)
+        WolfPoint.IsPausedTrigger.addAction(WolfPoint.QueueOrderActions)
         return WolfPoint.IsPausedTrigger
     }
 

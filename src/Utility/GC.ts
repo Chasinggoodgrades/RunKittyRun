@@ -44,7 +44,7 @@ export class GC {
         list.length = 0
     }
 
-    public static RemoveFilterFunc(filter: filterfunc) {}
+    public static RemoveFilterFunc(filter: filterfunc | (() => boolean)) {}
 
     public static RemoveTimerDialog(td: timerdialog) {
         // TODO; Cleanup:     public static RemoveTimerDialog(ref timerdialog td)

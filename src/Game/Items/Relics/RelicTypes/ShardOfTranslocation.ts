@@ -3,7 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { GC } from 'src/Utility/GC'
-import { Utility } from 'src/Utility/Utility'
+import { distanceBetweenXYPoints, Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger, Unit } from 'w3ts'
 import { Upgrades } from 'war3-objectdata-th'
@@ -13,8 +13,8 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class ShardOfTranslocation extends Relic {
-    public RelicItemID: number = Constants.ITEM_SHARD_OF_TRANSLOCATION
-    public RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE
+    public static RelicItemID: number = Constants.ITEM_SHARD_OF_TRANSLOCATION
+    public static RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE
     private static RelicCost: number = 650
     private static DEFAULT_BLINK_RANGE: number = 450.0
     private static UPGRADE_BLINK_RANGE: number = 650.0
@@ -29,8 +29,8 @@ export class ShardOfTranslocation extends Relic {
         super(
             '|c7eb66ff1Shard of Translocation|r',
             'Teleports the user to a targeted location within {DEFAULT_BLINK_RANGE} range, restricted to lane bounds.{Colors.COLOR_ORANGE}(Active) {Colors.COLOR_LIGHTBLUE}(1min 30 sec cooldown).|r',
-            this.RelicAbilityID,
-            this.RelicItemID,
+            ShardOfTranslocation.RelicAbilityID,
+            ShardOfTranslocation.RelicItemID,
             ShardOfTranslocation.RelicCost,
             ShardOfTranslocation.IconPath
         )
@@ -57,7 +57,7 @@ export class ShardOfTranslocation extends Relic {
     private RegisterTrigger(Unit: Unit) {
         let player = Unit.owner
         let CastEventTrigger = Trigger.create()!
-        CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null)
+        CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
         CastEventTrigger.addAction(this.TeleportActions)
     }
 
@@ -65,7 +65,7 @@ export class ShardOfTranslocation extends Relic {
         if (!Globals.GAME_ACTIVE) return
         if (GetSpellAbilityId() != this.RelicAbilityID) return
         let unit = getTriggerUnit()
-        let targetLoc = GetSpellTargetLoc()
+        let targetLoc = GetSpellTargetLoc()!
         let player = unit.owner
         let currentSafezone = Globals.ALL_KITTIES.get(player)!.CurrentSafeZone
         try {
@@ -75,18 +75,18 @@ export class ShardOfTranslocation extends Relic {
                     '{Colors.COLOR_RED}location: Invalid. be: within: safezone: bounds: Must.{Colors.COLOR_RESET}'
                 )
                 Utility.SimpleTimer(0.1, () =>
-                    RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID, 1)
+                    RelicUtil.SetRelicCooldowns(this.Owner, ShardOfTranslocation.RelicItemID, this.RelicAbilityID, 1)
                 )
                 Utility.SimpleTimer(0.15, () => Utility.UnitAddMana(this.Owner, 200))
                 return
             }
 
             this.TeleportUnit(unit, targetLoc)
-            RelicUtil.CloseRelicBook(player)
+            RelicUtil.CloseRelicBook(unit)
             Utility.SimpleTimer(0.1, () =>
-                RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID)
+                RelicUtil.SetRelicCooldowns(this.Owner, ShardOfTranslocation.RelicItemID, this.RelicAbilityID)
             )
-            targetLoc.dispose()
+            RemoveLocation(targetLoc)
         } catch (e: any) {
             Logger.Critical(e.Message)
             throw e
@@ -101,8 +101,11 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private SetItemTooltip(unit: Unit) {
-        let item = Utility.UnitGetItem(unit, this.RelicItemID)
-        item.ExtendedDescription = `{Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within {Colors.COLOR_LAVENDER}{MaxBlinkRange.ToString("F2")}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r`
+        let item = Utility.UnitGetItem(unit, ShardOfTranslocation.RelicItemID)!
+        BlzSetItemExtendedTooltip(
+            item.handle,
+            `{Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within {Colors.COLOR_LAVENDER}{MaxBlinkRange.ToString("F2")}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r`
+        )
     }
 
     /// <summary>
@@ -119,13 +122,13 @@ export class ShardOfTranslocation extends Relic {
                 : ShardOfTranslocation.DEFAULT_COOLDOWN
 
         // Set cooldown based on the upgrade lvl.
-        RelicUtil.SetAbilityCooldown(Unit, this.RelicItemID, this.RelicAbilityID, cooldown)
+        RelicUtil.SetAbilityCooldown(Unit, ShardOfTranslocation.RelicItemID, this.RelicAbilityID, cooldown)
     }
 
     private TeleportUnit(unit: Unit, targetLoc: location) {
-        let x = targetLoc.x
-        let y = targetLoc.y
-        let distance = WCSharp.Shared.Util.DistanceBetweenPoints(unit, x, y)
+        let x = GetLocationX(targetLoc)
+        let y = GetLocationY(targetLoc)
+        let distance = distanceBetweenXYPoints(unit.x, unit.y, x, y)
 
         if (distance > this.MaxBlinkRange) {
             let angle = Atan2(y - unit.y, x - unit.x)
@@ -138,10 +141,11 @@ export class ShardOfTranslocation extends Relic {
     private static EligibleLocation(targetLoc: location, currentSafezone: number) {
         let SAFEZONES = Globals.SAFE_ZONES
         return (
-            SAFEZONES[currentSafezone].Region.includes(targetLoc.x, targetLoc.y) ||
-            (currentSafezone > 0 && SAFEZONES[currentSafezone - 1].Region.includes(targetLoc.x, targetLoc.y)) ||
+            SAFEZONES[currentSafezone].Rectangle.includes(GetLocationX(targetLoc), GetLocationY(targetLoc)) ||
+            (currentSafezone > 0 &&
+                SAFEZONES[currentSafezone - 1].Rectangle.includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) ||
             (currentSafezone < SAFEZONES.length - 1 &&
-                SAFEZONES[currentSafezone + 1].Region.includes(targetLoc.x, targetLoc.y) &&
+                SAFEZONES[currentSafezone + 1].Rectangle.includes(GetLocationX(targetLoc), GetLocationY(targetLoc)) &&
                 currentSafezone < 13) ||
             ShardOfTranslocation.WolfRegionEligible(targetLoc, currentSafezone)
         )
@@ -149,13 +153,17 @@ export class ShardOfTranslocation extends Relic {
 
     private static WolfRegionEligible(targetLoc: location, currentSafezone: number) {
         let WOLF_AREAS = RegionList.WolfRegions
-        if (WOLF_AREAS[currentSafezone].includes(targetLoc.x, targetLoc.y)) return true
-        if (currentSafezone > 0 && WOLF_AREAS[currentSafezone - 1].includes(targetLoc.x, targetLoc.y)) return true
-        if (WOLF_AREAS[currentSafezone + 1].includes(targetLoc.x, targetLoc.y)) return true
+        if (WOLF_AREAS[currentSafezone].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
+        if (
+            currentSafezone > 0 &&
+            WOLF_AREAS[currentSafezone - 1].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))
+        )
+            return true
+        if (WOLF_AREAS[currentSafezone + 1].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
         if (currentSafezone == 13 || currentSafezone == 14) {
-            if (WOLF_AREAS[14].includes(targetLoc.x, targetLoc.y)) return true
-            if (WOLF_AREAS[15].includes(targetLoc.x, targetLoc.y)) return true
-            if (WOLF_AREAS[16].includes(targetLoc.x, targetLoc.y)) return true
+            if (WOLF_AREAS[14].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
+            if (WOLF_AREAS[15].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
+            if (WOLF_AREAS[16].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
         }
         return false
     }

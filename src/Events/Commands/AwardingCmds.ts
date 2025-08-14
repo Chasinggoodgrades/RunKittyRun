@@ -1,3 +1,16 @@
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Globals } from 'src/Global/Globals'
+import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { CustomStatFrame } from 'src/UI/CustomStatFrame'
+import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { isNullOrEmpty } from 'src/Utility/StringUtils'
+import { int } from 'src/Utility/Utility'
+import { MapPlayer } from 'w3ts'
+import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
+import { PersonalBests } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/PersonalBests'
+import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
+
 export class AwardingCmds {
     /// <summary>
     /// Awards the owning player of the selected <param name="player"/> unit with the given reward input. Use ?award help to see all valid awards. // TODO; Cleanup:     /// Awards the owning player of the selected <paramref name="player"/> unit with the given reward input. Use ?award help to see all valid awards.
@@ -6,24 +19,24 @@ export class AwardingCmds {
     /// <param name="command"></param>
     public static Awarding(player: MapPlayer, args: string[]) {
         let award = args[0].toLowerCase()
-        let selectedUnit = CustomStatFrame.SelectedUnit[player]
-        let selectedPlayer = GetOwningPlayer(selectedUnit)
+        let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
+        let selectedPlayer = selectedUnit.owner
 
         if (args[0] == '') return
 
         if (award.toLowerCase() == 'help') {
-            AwardingHelp(player)
+            AwardingCmds.AwardingHelp(player)
             return
         }
 
         if (award.toLowerCase() == 'all') {
-            AwardAll(player)
+            AwardingCmds.AwardAll(player)
             return
         }
 
-        for (let category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties()) {
+        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
             let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let awd in subCategory.GetType().GetProperties()) {
+            for (let awd of Object.keys(subCategory)) {
                 let awardString = awd.name.toLowerCase()
                 let inputAward = award.toLowerCase()
 
@@ -44,9 +57,9 @@ export class AwardingCmds {
     private static AwardingHelp(player: MapPlayer) {
         let combined = ''
 
-        for (let category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties()) {
+        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
             let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let awd in subCategory.GetType().GetProperties()) {
+            for (let awd of Object.keys(subCategory)) {
                 combined += awd.name + ', '
             }
         }
@@ -54,9 +67,9 @@ export class AwardingCmds {
     }
 
     private static AwardAll(player: MapPlayer) {
-        for (let category in Globals.GAME_AWARDS_SORTED.GetType().GetProperties()) {
+        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
             let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let property in subCategory.GetType().GetProperties()) {
+            for (let property of Object.keys(subCategory)) {
                 AwardManager.GiveReward(player, property.name)
             }
         }
@@ -69,13 +82,13 @@ export class AwardingCmds {
     /// <param name="command"></param>
     public static SettingGameStats(player: MapPlayer, args: string[]) {
         let stats = args[0].toLowerCase()
-        let selectedUnit = CustomStatFrame.SelectedUnit[player]
+        let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         let selectedPlayer = selectedUnit.owner
 
         if (args[0] == '') return
 
         if (stats.toLowerCase() == 'help') {
-            GameStatsHelp(player)
+            AwardingCmds.GameStatsHelp(player)
             return
         }
 
@@ -85,10 +98,10 @@ export class AwardingCmds {
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         // Then check if the value is actually a proper value.
-        for (let prop in Globals.GAME_STATS.GetType().GetProperties()) {
-            if (prop.name.toLowerCase() == stats.toLowerCase()) {
+        for (let prop of Object.keys(Globals.GAME_STATS)) {
+            if (prop.toLowerCase() == stats.toLowerCase()) {
                 let val: number
-                if (!(val = int.TryParse(value))) {
+                if (!(val = int.TryParse(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
                         '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.toString())}'
@@ -96,10 +109,8 @@ export class AwardingCmds {
                     return
                 }
 
-                let changeProp = Globals.ALL_KITTIES.get(selectedPlayer)!
-                    .SaveData.GameStats.GetType()
-                    .GetProperty(prop.name)
-                changeProp.SetValue(Globals.ALL_KITTIES.get(selectedPlayer)!.SaveData.GameStats, val)
+                Globals.ALL_KITTIES.get(selectedPlayer)!.SaveData.GameStats[prop as keyof GameStatsData] = val
+
                 player.DisplayTimedTextTo(
                     3.0,
                     '{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}'
@@ -112,8 +123,8 @@ export class AwardingCmds {
 
     private static GameStatsHelp(player: MapPlayer) {
         let combined = ''
-        for (let property in Globals.GAME_STATS.GetType().GetProperties()) {
-            combined += property.name + ', '
+        for (let property of Object.keys(Globals.GAME_STATS)) {
+            combined += property + ', '
         }
         player.DisplayTimedTextTo(
             15.0,
@@ -123,13 +134,13 @@ export class AwardingCmds {
 
     public static SettingGameTimes(player: MapPlayer, args: string[]) {
         let roundTime = args[0].toLowerCase()
-        let selectedUnit = CustomStatFrame.SelectedUnit[player]
+        let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         let selectedPlayer = selectedUnit.owner
 
         if (args[0] == '') return
 
         if (roundTime.toLowerCase() == 'help') {
-            GameTimesHelp(player)
+            AwardingCmds.GameTimesHelp(player)
             return
         }
 
@@ -138,10 +149,10 @@ export class AwardingCmds {
         let value = args[1]
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
-        for (let prop in Globals.GAME_TIMES.GetType().GetProperties()) {
-            if (prop.name.toLowerCase() == roundTime.toLowerCase()) {
+        for (let prop of Object.keys(Globals.GAME_TIMES)) {
+            if (prop.toLowerCase() == roundTime.toLowerCase()) {
                 let val: number
-                if (!(val = float.TryParse(value))) {
+                if (!(val = int.TryParse(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
                         '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.toString())}'
@@ -149,10 +160,8 @@ export class AwardingCmds {
                     return
                 }
 
-                let changeProp = Globals.ALL_KITTIES.get(selectedPlayer)!
-                    .SaveData.RoundTimes.GetType()
-                    .GetProperty(prop.name)
-                changeProp.SetValue(Globals.ALL_KITTIES.get(selectedPlayer)!.SaveData.RoundTimes, val)
+                Globals.ALL_KITTIES.get(selectedPlayer)!.SaveData.RoundTimes[prop as keyof RoundTimesData] = val
+
                 player.DisplayTimedTextTo(
                     3.0,
                     '{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}{Colors.COLOR_RESET}'
@@ -165,8 +174,8 @@ export class AwardingCmds {
 
     private static GameTimesHelp(player: MapPlayer) {
         let combined = ''
-        for (let property in Globals.GAME_TIMES.GetType().GetProperties()) {
-            combined += property.name + ', '
+        for (let property of Object.keys(Globals.GAME_TIMES)) {
+            combined += property + ', '
         }
         player.DisplayTimedTextTo(
             15.0,
@@ -182,8 +191,8 @@ export class AwardingCmds {
     public static GetAllGameStats(player: MapPlayer, kitty: Kitty) {
         if (!Globals.ALL_PLAYERS.includes(player)) return
         let combined = ''
-        for (let property in Globals.GAME_STATS.GetType().GetProperties()) {
-            let value = property.GetValue(Globals.ALL_KITTIES.get(player)!.SaveData.GameStats)
+        for (let property of Object.keys(Globals.GAME_STATS)) {
+            let value = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats[property as keyof GameStatsData]
             combined +=
                 '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'
         }
@@ -202,8 +211,8 @@ export class AwardingCmds {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined = ''
         let personalBests = kitty.SaveData.PersonalBests
-        for (let property in personalBests.GetType().GetProperties()) {
-            let value = property.GetValue(personalBests)
+        for (let property of Object.keys(personalBests)) {
+            let value = personalBests[property as keyof PersonalBests]
             combined +=
                 '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'
         }
@@ -223,10 +232,9 @@ export class AwardingCmds {
         let combined: string = ''
 
         // Previously this wasn't sorted by round number, so i had to hard code the order with one two three etc.. but ye its sorted now
-        let properties = Globals.GAME_TIMES.GetType()
-            .GetProperties()
+        let properties = Object.keys(Globals.GAME_TIMES)
             .filter(p => isNullOrEmpty(difficultyArg) || p.name.toLowerCase().includes(difficultyArg.toLowerCase()))
-            .OrderBy(p => GetRoundNumber(p.name))
+            .OrderBy(p => AwardingCmds.GetRoundNumber(p.name))
 
         for (let property in properties) {
             let value = property.GetValue(kitty.SaveData.RoundTimes)
@@ -270,7 +278,7 @@ export class AwardingCmds {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined = ''
         let kibbleCurrency = kitty.SaveData.KibbleCurrency
-        for (let property in kibbleCurrency.GetType().GetProperties()) {
+        for (let property of Object.keys(kibbleCurrency)) {
             let value = property.GetValue(kibbleCurrency)
             combined +=
                 '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'

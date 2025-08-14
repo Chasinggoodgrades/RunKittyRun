@@ -31,14 +31,14 @@ export class CollisionDetection {
 
     private static ShadowRelicWolvesFilter(sk: ShadowKitty): () => boolean {
         return () => {
-            return GetUnitTypeId(getFilterUnit()) == Constants.UNIT_CUSTOM_DOG && sk.Unit.isAlive()
+            return getFilterUnit().typeId == Constants.UNIT_CUSTOM_DOG && sk.Unit.isAlive()
         }
     }
 
     private static ShadowRelicCircleFilter(sk: ShadowKitty): () => boolean {
         return () => {
             return (
-                GetUnitTypeId(getFilterUnit()) == Constants.UNIT_KITTY_CIRCLE &&
+                getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE &&
                 getFilterUnit().owner != sk.Player && // Not Same Player
                 sk.Unit.isAlive() && // Has to Be Alive
                 Globals.ALL_KITTIES.get(getFilterUnit()!.owner).TeamID == Globals.ALL_KITTIES.get(sk.Player)!.TeamID
@@ -96,11 +96,11 @@ export class CollisionDetection {
     }
 
     private static WolfCollisionTrigger(k: Kitty): Trigger {
-        TriggerAddAction(k.w_Collision, () => {
+        k.w_Collision.addAction(() => {
             try {
                 if (!k.Unit.isAlive()) return
                 if (NamedWolves.ExplodingWolfCollision(getFilterUnit(), k)) return
-                if (Globals.ALL_WOLVES[getFilterUnit()].IsReviving) return // bomber wolf
+                if (Globals.ALL_WOLVES.get(getFilterUnit())!.IsReviving) return // bomber wolf
                 if (ChronoSphere.RewindDeath(k)) return
                 if (k.Invulnerable) return
                 OneOfNine.OneOfNineEffect(k)
@@ -115,12 +115,11 @@ export class CollisionDetection {
     }
 
     private static CircleCollisionTrigger(k: Kitty): Trigger {
-        TriggerAddAction(k.c_Collision, () => {
+        k.c_Collision.addAction(() => {
             try {
-                let circle = Globals.ALL_KITTIES.get(getFilterUnit()!.owner)
-                circle
-                    .ReviveKitty(k)(k.Relics.find(CollisionDetection.IsBeaconOfUnitedLifeforce))
-                    ?.BeaconOfUnitedLifeforceEffect(k.Player)
+                let circle = Globals.ALL_KITTIES.get(getFilterUnit()!.owner)!
+                circle.ReviveKitty(k)
+                k.Relics.find(CollisionDetection.IsBeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player)
             } catch (e: any) {
                 Logger.Warning('Error: CircleCollisionTrigger: {e.Message}')
                 throw e
@@ -130,7 +129,7 @@ export class CollisionDetection {
     }
 
     private static WolfCollisionShadowTrigger(sk: ShadowKitty): Trigger {
-        TriggerAddAction(sk.wCollision, () => {
+        sk.wCollision.addAction(() => {
             if (NamedWolves.ExplodingWolfCollision(getFilterUnit(), sk.Kitty, true)) return // Floating text will appear on kitty instead of SK tho.
             sk.KillShadowKitty()
         })
@@ -138,9 +137,9 @@ export class CollisionDetection {
     }
 
     private static CircleCollisionShadowTrigger(sk: ShadowKitty): Trigger {
-        TriggerAddAction(sk.cCollision, () => {
+        sk.cCollision.addAction(() => {
             try {
-                let circle = Globals.ALL_KITTIES.get(GetOwningPlayer(getFilterUnit()!))
+                let circle = Globals.ALL_KITTIES.get(getFilterUnit().owner)!
                 let saviorKitty = Globals.ALL_KITTIES.get(sk.Player)!
                 circle.ReviveKitty(saviorKitty)
             } catch (e: any) {

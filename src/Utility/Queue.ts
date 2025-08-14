@@ -17,6 +17,10 @@ export class Queue<T> {
         return this.items.length
     }
 
+    set length(value: number) {
+        this.items.length = value
+    }
+
     isEmpty(): boolean {
         return this.items.length === 0
     }

@@ -26,7 +26,7 @@ export class CustomStatFrame {
     private static CustomStatFrameBoxS: Frame
     private static CustomStatFrameBoxF: Frame
 
-    public static SelectedUnit: Map<MapPlayer, unit> = new Map()
+    public static SelectedUnit: Map<MapPlayer, Unit> = new Map()
     private static Stats: CustomStat[] = []
     private static MoveSpeed: string = '{Colors.COLOR_YELLOW_ORANGE}MS:|r'
     private static Time: string = '{Colors.COLOR_YELLOW_ORANGE}Time:|r'
@@ -104,7 +104,8 @@ export class CustomStatFrame {
 
     public static Update() {
         try {
-            if (!(selectedUnit = CustomStatFrame.SelectedUnit.TryGetValue(player.LocalPlayer)) /* TODO; Prepend: let */)
+            let selectedUnit: Unit
+            if (!(selectedUnit = CustomStatFrame.SelectedUnit.get(MapPlayer.fromLocal())!) /* TODO; Prepend: let */)
                 return
 
             CustomStatFrame.HandleFrameText(selectedUnit)
@@ -135,12 +136,12 @@ export class CustomStatFrame {
         trig.addAction(() => {
             let player = getTriggerPlayer()
             let unit = getTriggerUnit()
-            CustomStatFrame.SelectedUnit[player] = unit
+            CustomStatFrame.SelectedUnit.set(player, unit)
         })
 
         for (let player of Globals.ALL_PLAYERS)
             if (player.slotState == PLAYER_SLOT_STATE_PLAYING)
-                trig.registerPlayerUnitEvent(player, playerunitevent.Selected, null)
+                trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SELECTED, () => true)
 
         CustomStatFrame.CustomStatFrameBoxS = blzCreateFrameByType(
             'SIMPLEFRAME',
@@ -152,7 +153,7 @@ export class CustomStatFrame {
         CustomStatFrame.CustomStatFrameBoxF = blzCreateFrameByType(
             'FRAME',
             'CustomStatFrameBoxFBoss',
-            BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
+            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
             '',
             0
         )
@@ -222,14 +223,14 @@ export class CustomStatFrame {
         //Stats[4].Text.text = "";
         if (selectedUnit.typeId == Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
         if (Program.Debug && selectedUnit.typeId == Constants.UNIT_CUSTOM_DOG)
-            CustomStatFrame.Stats[4].Text.text = 'Walk: {Globals.ALL_WOLVES[selectedUnit].IsWalking}'
+            CustomStatFrame.Stats[4].Text.text = 'Walk: {Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}'
         CustomStatFrame.Stats[5].Text.text = `{MoveSpeed} ${selectedUnit.moveSpeed}`
     }
 
     private static SetWolfAffixTexts(selectedUnit: Unit) {
         if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return
         let wolf
-        if (!(wolf = Globals.ALL_WOLVES.TryGetValue(selectedUnit)) /* TODO; Prepend: let */) return
+        if (!(wolf = Globals.ALL_WOLVES.get(selectedUnit)) /* TODO; Prepend: let */) return
 
         let affixes = wolf.Affixes
 
@@ -267,14 +268,14 @@ export class CustomStatFrame {
     }
 
     private static GetPlayerTeamName(u: Unit) {
-        let team
-        return (team = Globals.PLAYERS_TEAMS.TryGetValue(u.owner) /* TODO; Prepend: Team */
+        let team: any
+        return (team = Globals.PLAYERS_TEAMS.get(u.owner) /* TODO; Prepend: Team */
             ? team.TeamColor
             : '{Colors.COLOR_YELLOW_ORANGE}Aches: Team{Colors.COLOR_RESET}')
     }
 
     private static GetPlayerGold(u: Unit) {
-        return u.owner.Gold
+        return u.owner.getGold()
     }
 
     private static GetPlayerProgress(u: Unit) {

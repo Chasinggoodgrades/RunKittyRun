@@ -12,7 +12,7 @@ import { Timer } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 
 export class ChainedTogether {
-    private REQUIRED_PLAYERS: number = 2
+    private static REQUIRED_PLAYERS: number = 2
     private static KittyLightnings: Map<string, Chain> = new Map()
     private static kittyGroups: Kitty[][] = [] // Convert this into a dictionary
     private static timerInterval: number = 0.1
@@ -28,7 +28,7 @@ export class ChainedTogether {
 
         let allKitties = Globals.ALL_KITTIES_LIST
 
-        if (allKitties.length < REQUIRED_PLAYERS) return // Need at least 2 players to trigger event.
+        if (allKitties.length < ChainedTogether.REQUIRED_PLAYERS) return // Need at least 2 players to trigger event.
 
         for (let i: number = 0; i < allKitties.length - 1; i++) {
             if (!ChainedTogether.IsInLastSafezone(allKitties[i])) {
@@ -100,7 +100,7 @@ export class ChainedTogether {
 
             if (!ChainedTogether.KittyLightnings.has(kittyName)) continue
 
-            let chain = ChainedTogether.KittyLightnings[kittyName]
+            let chain = ChainedTogether.KittyLightnings.get(kittyName)!
             isOutOfRange = chain.Move()
             kittyOutOfRange = kittyName
 
@@ -128,13 +128,13 @@ export class ChainedTogether {
     /// </summary>
     /// <param name="kittyName"></param>
     public static RegenerateGroup(kittyName: string) {
-        let groupIndex: number = ChainedTogether.kittyGroups.FindIndex(group =>
-            group.Any(kitty => kitty.name == kittyName)
+        let groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
+            group.some(kitty => kitty.name == kittyName)
         ) // IEnumerable "Any" leaks
         if (groupIndex < 0) return
 
         try {
-            let currentGroup = ChainedTogether.kittyGroups[groupIndex].filter(kitty => kitty.name != kittyName).ToList() // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
+            let currentGroup = ChainedTogether.kittyGroups[groupIndex].filter(kitty => kitty.name != kittyName) // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
 
             ChainedTogether.FreeKittiesFromGroup(kittyName, false)
 
@@ -145,7 +145,7 @@ export class ChainedTogether {
                 currentKitty.IsChained = true
                 let chain: Chain = MemoryHandler.getEmptyObject<Chain>()
                 chain.SetKitties(currentKitty, nextKitty)
-                ChainedTogether.KittyLightnings[currentKitty.name] = chain
+                ChainedTogether.KittyLightnings.set(currentKitty.name, chain)
             }
 
             ChainedTogether.kittyGroups.push(currentGroup)
@@ -156,8 +156,8 @@ export class ChainedTogether {
     }
 
     private static FreeKittiesFromGroup(kittyName: string, isVictory: boolean = false) {
-        let groupIndex: number = ChainedTogether.kittyGroups.FindIndex(group =>
-            group.Any(kitty => kitty.name == kittyName)
+        let groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
+            group.some(kitty => kitty.name == kittyName)
         ) //IEnumerable with "Any" leaks
         if (groupIndex < 0) return
 
@@ -172,12 +172,12 @@ export class ChainedTogether {
             }
 
             if (ChainedTogether.KittyLightnings.has(kitty.name)) {
-                ChainedTogether.KittyLightnings[kitty.name].dispose()
-                ChainedTogether.KittyLightnings.Remove(kitty.name)
+                ChainedTogether.KittyLightnings.get(kitty.name)!.dispose()
+                ChainedTogether.KittyLightnings.delete(kitty.name)
             }
         }
 
-        ChainedTogether.kittyGroups.RemoveAt(groupIndex)
+        ChainedTogether.kittyGroups.splice(groupIndex, 1)
     }
 
     private static SetGroups() {
@@ -232,7 +232,7 @@ export class ChainedTogether {
             currentKitty.IsChained = true
             let chain: Chain = MemoryHandler.getEmptyObject<Chain>()
             chain.SetKitties(currentKitty, nextKitty)
-            ChainedTogether.KittyLightnings[currentKitty.name] = chain
+            ChainedTogether.KittyLightnings.set(currentKitty.name, chain)
         }
     }
 
@@ -308,15 +308,15 @@ export class Chain {
     public SetKitties(firstKitty: Kitty, secondKitty: Kitty) {
         this.FirstKitty = firstKitty
         this.SecondKitty = secondKitty
-        this.Lightning?.dispose() // just incase
+        DestroyLightning(this.Lightning)
         this.Lightning = AddLightning(
             'WHCH',
             true,
             this.FirstKitty.Unit.x,
-            this.FirstKitty.unit.y,
+            this.FirstKitty.Unit.y,
             this.SecondKitty.Unit.x,
-            this.SecondKitty.unit.y
-        )
+            this.SecondKitty.Unit.y
+        )!
         this.FirstKitty.IsChained = true
         this.SecondKitty.IsChained = true
     }
@@ -325,16 +325,16 @@ export class Chain {
         let outOfRange: number = Chain.CalculateRangeByDifficulty('breakPoint')
         let isOutOfRange: boolean = false
         let x1 = this.FirstKitty.Unit.x
-        let y1 = this.FirstKitty.unit.y
+        let y1 = this.FirstKitty.Unit.y
         let x2 = this.SecondKitty.Unit.x
-        let y2 = this.SecondKitty.unit.y
+        let y2 = this.SecondKitty.Unit.y
         MoveLightning(
             this.Lightning,
             true,
             this.FirstKitty.Unit.x,
-            this.FirstKitty.unit.y,
+            this.FirstKitty.Unit.y,
             this.SecondKitty.Unit.x,
-            this.SecondKitty.unit.y
+            this.SecondKitty.Unit.y
         )
         let distance: number = Math.abs(x2 - x1) + Math.abs(y2 - y1)
 
@@ -347,7 +347,7 @@ export class Chain {
     }
 
     public dispose() {
-        this.Lightning?.dispose()
+        DestroyLightning(this.Lightning)
         this.FirstKitty.IsChained = false
         this.SecondKitty.IsChained = false
         MemoryHandler.destroyObject(this)
@@ -376,10 +376,10 @@ export class Chain {
     }
 
     public static CalculateRangeByDifficulty(rangeType: string) {
-        let level: DifficultyLevel = Difficulty.DifficultyValue
+        let level = Difficulty.DifficultyValue
         let selectedRange: { good: number; far: number; breakPoint: number }
 
-        switch (level) {
+        switch (true) {
             case level >= DifficultyLevel.Nightmare:
                 selectedRange = Chain.ranges[DifficultyLevel.Nightmare]
                 break
@@ -402,7 +402,7 @@ export class Chain {
             case 'breakPoint':
                 return selectedRange.breakPoint
             default:
-                throw new ArgumentError("rangeType: Invalid '{rangeType}'")
+                throw new Error(`Invalid rangeType '${rangeType}'`)
         }
     }
 }

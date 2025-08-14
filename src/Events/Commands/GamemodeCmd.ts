@@ -1,10 +1,10 @@
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { Colors } from "src/Utility/Colors/Colors"
-import { int } from "src/Utility/Utility"
-import { MapPlayer } from "w3ts"
-import { GamemodeInfo, GamemodeManager } from "./GamemodeManager"
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { int } from 'src/Utility/Utility'
+import { MapPlayer } from 'w3ts'
+import { GamemodeInfo, GamemodeManager } from './GamemodeManager'
 
 export class GamemodeCmd {
     private static CmdInfo: GamemodeInfo

@@ -45,7 +45,7 @@ export class TeamsMultiboard {
         TeamsMultiboard.CurrentTeamsMB.title =
             'Teams: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         TeamsMultiboard.CurrentTeamsMB.display(true)
-        TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.length + 1
+        TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size + 1
         TeamsMultiboard.CurrentTeamsMB.columns = Gamemode.PlayersPerTeam
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 0).setText('1: Team')
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 0).setVisible(true, false)
@@ -60,19 +60,19 @@ export class TeamsMultiboard {
         TeamsMultiboard.TeamsStatsMB.columns = 3 + Gamemode.NumberOfRounds
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setText('Team')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setVisible(true, false)
-        TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).SetWidth(0.05)
+        TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setWidth(0.05)
         for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
             if (Globals.ROUND == i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('|c0000FF00Round {i}|r')
             else TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('Round {i}')
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setVisible(true, false)
-            TeamsMultiboard.TeamsStatsMB.GetItem(0, i).SetWidth(0.05)
+            TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setWidth(0.05)
         }
         TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).setText(Colors.COLOR_GOLD + 'Overall')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).setVisible(true, false)
-        TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetWidth(0.05)
+        TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).setWidth(0.05)
         TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).setText(Colors.COLOR_GOLD + 'Time')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).setVisible(true, false)
-        TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetWidth(0.05)
+        TeamsMultiboard.TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).setWidth(0.05)
 
         // Actual Stats
         let rowIndex: number = 1
@@ -82,30 +82,30 @@ export class TeamsMultiboard {
             overallProgress = 0.0
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setText(team.TeamColor)
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setVisible(true, false)
-            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).SetWidth(0.05)
+            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setWidth(0.05)
             // Each Round Progress
             for (let j: number = 1; j <= Gamemode.NumberOfRounds; j++) {
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setText('_')
-                TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setText('{team.RoundProgress[j]}%')
+                TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setText(`${team.RoundProgress.get(j)}%`)
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setVisible(true, false)
-                TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).SetWidth(0.05)
+                TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setWidth(0.05)
             }
             // Overall Progress
             for (let j: number = 1; j <= Gamemode.NumberOfRounds; j++) {
-                overallProgress = overallProgress + int.Parse(team.RoundProgress[j]) // possibly bad?
+                overallProgress = overallProgress + int.Parse(team.RoundProgress.get(j)!) // possibly bad?
             }
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setText(
                 (overallProgress / Gamemode.NumberOfRounds).toFixed(2) + '%'
             )
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setVisible(true, false)
-            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetWidth(0.05)
+            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setWidth(0.05)
 
             // Overall Time
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).setText(
                 Utility.ConvertFloatToTimeTeam(GameTimer.TeamTotalTime(team), team.TeamID)
             )
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).setVisible(true, false)
-            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).SetWidth(0.05)
+            TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).setWidth(0.05)
             rowIndex++
         }
     }
@@ -119,10 +119,10 @@ export class TeamsMultiboard {
         for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             let team = Globals.ALL_TEAMS_LIST[i]
             let teamMembers: string = team.TeamMembersString
-            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).SetWidth(0.05)
+            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setWidth(0.05)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setText('{team.TeamColor}:')
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setVisible(true, false)
-            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).SetWidth(widthSize)
+            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setWidth(widthSize)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setText('{teamMembers}')
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setVisible(true, false)
 

@@ -86,7 +86,6 @@ export class DiscordFrame {
         DiscordFrame.DiscordText.setSize(0.19, 0.03)
         DiscordFrame.DiscordText.text = DiscordFrame.JoinDiscord
         BlzFrameSetTextAlignment(DiscordFrame.DiscordText.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
-
     }
 
     private static RegisterTrigger() {

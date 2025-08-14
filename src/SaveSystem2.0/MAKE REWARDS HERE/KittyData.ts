@@ -1,18 +1,17 @@
+import { GameAwardsDataSorted } from './SaveObjects/GameAwardsDataSorted'
+import { KibbleCurrency } from './SaveObjects/GameCurrency'
+import { GameFriendsData } from './SaveObjects/GameFriendsData'
+import { GameSelectedData } from './SaveObjects/GameSelectedData'
+import { GameStatsData } from './SaveObjects/GameStatsData'
+import { GameTimesData } from './SaveObjects/GameTimesData'
+import { PersonalBests } from './SaveObjects/PersonalBests'
+import { PlayerColorData } from './SaveObjects/PlayerColorData'
+import { RoundTimesData } from './SaveObjects/RoundTimesData'
+
 /// <summary>
 /// Represents data related to a player's game progress, achievements, and personal bests.
 /// This class is used to store and manage data such as player information, game statistics,
 /// selected configurations, round timings, awards, best game times, and personal achievements.
-
-import { GameAwardsDataSorted } from "./SaveObjects/GameAwardsDataSorted"
-import { KibbleCurrency } from "./SaveObjects/GameCurrency"
-import { GameFriendsData } from "./SaveObjects/GameFriendsData"
-import { GameSelectedData } from "./SaveObjects/GameSelectedData"
-import { GameStatsData } from "./SaveObjects/GameStatsData"
-import { GameTimesData } from "./SaveObjects/GameTimesData"
-import { PersonalBests } from "./SaveObjects/PersonalBests"
-import { PlayerColorData } from "./SaveObjects/PlayerColorData"
-import { RoundTimesData } from "./SaveObjects/RoundTimesData"
-
 /// </summary>
 export class KittyData {
     public PlayerName: string = ''

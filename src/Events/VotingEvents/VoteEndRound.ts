@@ -1,11 +1,11 @@
-import { RoundManager } from "src/Game/Rounds/RoundManager"
-import { RoundTimer } from "src/Game/Rounds/RoundTimer"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { Utility } from "src/Utility/Utility"
-import { MapPlayer } from "w3ts"
-import { Votekick } from "./Votekick"
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
+import { RoundTimer } from 'src/Game/Rounds/RoundTimer'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer } from 'w3ts'
+import { Votekick } from './Votekick'
 
 export class VoteEndRound {
     public static VoteActive: boolean

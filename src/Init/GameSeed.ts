@@ -30,18 +30,18 @@ export class GameSeed {
 
     public static SeededRandom(seed: number): () => number {
         return () => {
-            seed = (seed * 9301 + 49297) % 233280;
-            return seed / 233280;
-        };
+            seed = (seed * 9301 + 49297) % 233280
+            return seed / 233280
+        }
     }
 
     public static Shuffle<T>(array: T[], seed: number): T[] {
-        const rng = this.SeededRandom(seed);
-        const result = [...array];
+        const rng = this.SeededRandom(seed)
+        const result = [...array]
         for (let i = result.length - 1; i > 0; i--) {
-            const j = Math.floor(rng() * (i + 1));
-            [result[i], result[j]] = [result[j], result[i]];
+            const j = Math.floor(rng() * (i + 1))
+            ;[result[i], result[j]] = [result[j], result[i]]
         }
-        return result;
+        return result
     }
 }

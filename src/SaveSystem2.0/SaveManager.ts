@@ -1,11 +1,11 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { Globals } from "src/Global/Globals"
-import { DateTimeManager } from "src/Seasonal/DateTimeManager"
-import { Action } from "src/Utility/CSUtils"
-import { MapPlayer } from "w3ts"
-import { KittyData } from "./MAKE REWARDS HERE/KittyData"
-import { SyncSaveLoad, FilePromise } from "./SyncSaveSystem"
+import { Logger } from 'src/Events/Logger/Logger'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { Globals } from 'src/Global/Globals'
+import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
+import { Action } from 'src/Utility/CSUtils'
+import { MapPlayer } from 'w3ts'
+import { KittyData } from './MAKE REWARDS HERE/KittyData'
+import { SyncSaveLoad, FilePromise } from './SyncSaveSystem'
 
 export class SaveManager {
     private syncSaveLoad: SyncSaveLoad
@@ -64,7 +64,8 @@ export class SaveManager {
         for (let player of Globals.ALL_PLAYERS) {
             if (player.controller == MAP_CONTROL_COMPUTER) continue
             if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue
-            if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) == null) Globals.SaveSystem.NewSave(player) // Ensure save data exists for this player before saving.
+            if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) == null)
+                Globals.SaveSystem.NewSave(player) // Ensure save data exists for this player before saving.
             let data = SaveManager.SaveData.get(player)
             if (!data) continue
             data.Date = date
@@ -139,12 +140,10 @@ export class SaveManager {
         let kittyData = SaveManager.SaveData.get(player)
         if (kittyData) {
             return kittyData
-        } 
-        else {
+        } else {
             if (!SaveManager.PlayersLoaded.includes(player)) {
                 Globals.SaveSystem.Load(player)
-            } 
-            else {
+            } else {
                 Globals.SaveSystem.NewSave(player)
             }
         }

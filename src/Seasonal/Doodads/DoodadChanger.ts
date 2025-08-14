@@ -1,8 +1,8 @@
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { GC } from "src/Utility/GC"
-import { SeasonalManager, HolidaySeasons } from "../SeasonalManager"
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { GC } from 'src/Utility/GC'
+import { SeasonalManager, HolidaySeasons } from '../SeasonalManager'
 
 export class DoodadChanger {
     private static SafezoneLanterns: number = FourCC('B005')

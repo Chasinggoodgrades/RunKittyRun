@@ -1,13 +1,13 @@
-import { RoundManager } from "src/Game/Rounds/RoundManager"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { MultiboardUtil } from "src/UI/Multiboard/MultiboardUtil"
-import { Colors } from "src/Utility/Colors/Colors"
-import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { getTriggerPlayer } from "src/Utility/w3tsUtils"
-import { Trigger, MapPlayer } from "w3ts"
-import { Gameover } from "../Gameover"
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Trigger, MapPlayer } from 'w3ts'
+import { Gameover } from '../Gameover'
 
 export class PlayerLeaves {
     private static triggerHandle: Trigger = Trigger.create()!

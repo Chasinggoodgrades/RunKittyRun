@@ -1,3 +1,9 @@
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { MapPlayer, Trigger } from 'w3ts'
+
 export class UnitSharing {
     private static Trigger: Trigger
     private static Action: triggeraction
@@ -6,7 +12,7 @@ export class UnitSharing {
     /// Initializes the trigger that manages unit sharing.
     /// </summary>
     public static Initialize() {
-        Trigger ??= RegisterTrigger()
+        UnitSharing.Trigger ??= UnitSharing.RegisterTrigger()
     }
 
     /// <summary>
@@ -14,14 +20,14 @@ export class UnitSharing {
     /// </summary>
     /// <returns></returns>
     private static RegisterTrigger(): Trigger {
-        Trigger = Trigger.create()!
+        UnitSharing.Trigger = Trigger.create()!
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            if (Action != null) break
+            if (UnitSharing.Action != null) break
             let player = Globals.ALL_PLAYERS[i]
-            Trigger.RegisterPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
+            UnitSharing.Trigger.registerPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
         }
-        Action = TriggerActions()
-        return Trigger
+        UnitSharing.Action = UnitSharing.TriggerActions()
+        return UnitSharing.Trigger
     }
 
     /// <summary>
@@ -29,9 +35,9 @@ export class UnitSharing {
     /// </summary>
     /// <returns></returns>
     private static TriggerActions(): triggeraction {
-        Action = Trigger.addAction(() => {
+        UnitSharing.Action = UnitSharing.Trigger.addAction(() => {
             let player = getTriggerPlayer() // Triggering Player
-            if (AllowSharing(player)) return
+            if (UnitSharing.AllowSharing(player)) return
 
             for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 let otherPlayer = Globals.ALL_PLAYERS[i]
@@ -40,7 +46,7 @@ export class UnitSharing {
                 otherPlayer.setAlliance(player, ALLIANCE_SHARED_CONTROL, false)
             }
         })
-        return Action
+        return UnitSharing.Action
     }
 
     /// <summary>

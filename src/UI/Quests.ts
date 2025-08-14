@@ -1,4 +1,4 @@
-import { Quest } from "w3ts"
+import { Quest } from 'w3ts'
 
 export class Quests {
     private static CommandsQuest: Quest = Quest.create()!

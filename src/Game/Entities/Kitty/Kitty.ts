@@ -142,7 +142,11 @@ export class Kitty {
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this)
-            circle.SetMana(this.Unit.mana - this.MANA_DEATH_PENALTY, this.Unit.maxMana, this.Unit.intelligence * 0.08 + 0.01)
+            circle.SetMana(
+                this.Unit.mana - this.MANA_DEATH_PENALTY,
+                this.Unit.maxMana,
+                this.Unit.intelligence * 0.08 + 0.01
+            )
             circle.KittyDied(this)
             Solo.ReviveKittySoloTournament(this)
             Solo.RoundEndCheck()
@@ -172,7 +176,7 @@ export class Kitty {
     /// </summary>
     public ReviveKitty(savior?: Kitty) {
         try {
-            if (UnitAlive(this.Unit.handle)) return;
+            if (UnitAlive(this.Unit.handle)) return
 
             let circle = Globals.ALL_CIRCLES.get(this.Player)
 
@@ -201,8 +205,7 @@ export class Kitty {
                 this.StatsManager.UpdateSaviorStats(savior)
                 MultiboardUtil.RefreshMultiboards()
             }
-        } 
-        catch (e: any) {
+        } catch (e: any) {
             Logger.Critical('Error in ReviveKitty: {e.Message}')
             throw e
         }
@@ -236,13 +239,19 @@ export class Kitty {
     }
 
     private SpawnEffect() {
-        const spawncenter = Point.create(RegionList.SpawnRegions[this.Player.id].centerX, RegionList.SpawnRegions[this.Player.id].centerY)
+        const spawncenter = Point.create(
+            RegionList.SpawnRegions[this.Player.id].centerX,
+            RegionList.SpawnRegions[this.Player.id].centerY
+        )
         Utility.CreateEffectAndDispose(this.SPAWN_IN_EFFECT, spawncenter.x, spawncenter.y)
     }
 
     private CreateKitty() {
         // Spawn Location
-        const spawncenter = Point.create(RegionList.SpawnRegions[this.Player.id].centerX, RegionList.SpawnRegions[this.Player.id].centerY)
+        const spawncenter = Point.create(
+            RegionList.SpawnRegions[this.Player.id].centerX,
+            RegionList.SpawnRegions[this.Player.id].centerY
+        )
 
         // Creation of Unit
         this.Unit = Unit.create(this.Player, this.KITTY_HERO_TYPE, spawncenter.x, spawncenter.y, 360)!

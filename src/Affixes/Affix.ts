@@ -16,5 +16,5 @@ export abstract class Affix {
         // GC.RemoveAffix(this);
     }
 
-    public abstract Pause(pause: boolean): void
+    public abstract pause(pause: boolean): void
 }

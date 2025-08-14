@@ -1,9 +1,9 @@
-import { AwardManager } from "src/Rewards/Rewards/AwardManager"
-import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { AchesTimers } from "src/Utility/MemoryHandler/AchesTimers"
-import { MemoryHandler } from "src/Utility/MemoryHandler/MemoryHandler"
-import { Utility } from "src/Utility/Utility"
-import { HolidaySeasons, SeasonalManager } from "./SeasonalManager"
+import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { Utility } from 'src/Utility/Utility'
+import { HolidaySeasons, SeasonalManager } from './SeasonalManager'
 
 export class SeasonalAwards {
     private static Season: HolidaySeasons

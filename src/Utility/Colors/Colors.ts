@@ -168,7 +168,7 @@ export class Colors {
         let r: number = GetRandomInt(0, 255)
         let g: number = GetRandomInt(0, 255)
         let b: number = GetRandomInt(0, 255)
-        SetUnitVertexColor(kitty.Unit.handle, r, g, b, 255)
+        kitty.Unit.setVertexColor(r, g, b, 255)
         p.DisplayTimedTextTo(
             5.0,
             '{COLOR_RED}Red: {COLOR_RESET}{r}, {COLOR_GREEN}Green: {COLOR_RESET}{g}, {COLOR_BLUE}Blue: {COLOR_RESET}{b}'
@@ -199,8 +199,8 @@ export class Colors {
     /// <param name="playerID"></param>
     public static SetUnitToVertexColor(unit: Unit, playerID: number) {
         let color: ColorData = Colors.ColorManager[playerID]
-        SetUnitVertexColor(unit.handle, color.red, color.green, color.blue, 255)
-        if (GetUnitTypeId(unit.handle) == Constants.UNIT_CUSTOM_DOG) return
+        unit.setVertexColor(color.red, color.green, color.blue, 255)
+        if (unit.typeId == Constants.UNIT_CUSTOM_DOG) return
         Globals.ALL_KITTIES.get(unit.owner)!.SaveData.PlayerColorData.VortexColor =
             `${color.red},${color.green},${color.blue}`
     }
@@ -313,7 +313,7 @@ export class Colors {
         }
 
         // Set the save data to the most played color
-        kitty.SaveData.PlayerColorData.MostPlayedColor = mostPlayedColor
+        kitty.SaveData.PlayerColorData.MostPlayedColor = mostPlayedColor || ''
 
         return mostPlayedColor
     }

@@ -1,3 +1,13 @@
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { WeatherEffect } from 'w3ts'
+import { DateTimeManager } from './DateTimeManager'
+import { DoodadChanger } from './Doodads/DoodadChanger'
+import { SeasonalAwards } from './SeasonalAwards'
+import { ShopChanger } from './Shop/ShopChanger'
+import { TerrainChanger } from './Terrain/TerrainChanger'
+
 export enum HolidaySeasons {
     Christmas,
     Halloween,
@@ -17,16 +27,16 @@ export class SeasonalManager {
     private static RaysOfLight: number = FourCC('LRaa') // rays of light
     private static RaysOfMoonlight: number = FourCC('LRma') // rays of moonlight
     private static DalaranShield: number = FourCC('MEds') // Dalaran shield
-    private static CurrentWeather: weathereffect
+    private static CurrentWeather: WeatherEffect
 
     /// <summary>
     /// Must be standard mode for seasonal changes to occur.
     /// </summary>
     public static Initialize() {
-        CurrentMonth = DateTimeManager.DateTime.Month
-        DetermineSeason()
-        SetMinimap()
-        SetWeather()
+        SeasonalManager.CurrentMonth = DateTimeManager.DateTime.Month
+        SeasonalManager.DetermineSeason()
+        SeasonalManager.SetMinimap()
+        SeasonalManager.SetWeather()
         DoodadChanger.Initialize()
         TerrainChanger.Initialize()
         SeasonalAwards.Initialize()
@@ -35,12 +45,12 @@ export class SeasonalManager {
 
     public static DetermineSeason() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) {
-            Season = HolidaySeasons.None
+            SeasonalManager.Season = HolidaySeasons.None
             return
         }
-        switch (CurrentMonth) {
+        switch (SeasonalManager.CurrentMonth) {
             case 12:
-                Season = HolidaySeasons.Christmas
+                SeasonalManager.Season = HolidaySeasons.Christmas
                 break
             /*            case 10:
                             Season = HolidaySeasons.Halloween;
@@ -54,7 +64,7 @@ export class SeasonalManager {
                             Season = HolidaySeasons.Valentines;
                             break;*/
             default:
-                Season = HolidaySeasons.None
+                SeasonalManager.Season = HolidaySeasons.None
                 break
         }
     }
@@ -64,28 +74,28 @@ export class SeasonalManager {
     /// </summary>
     public static ActivateChristmas() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        Season = HolidaySeasons.Christmas
+        SeasonalManager.Season = HolidaySeasons.Christmas
         TerrainChanger.ActivateChristmasTerrain()
         DoodadChanger.ChristmasDoodads()
         ShopChanger.SetSeasonalShop()
-        SetWeather()
-        SetMinimap()
+        SeasonalManager.SetWeather()
+        SeasonalManager.SetMinimap()
     }
 
     /// <summary>
     /// Admin Command for no seasons. Works regardless of mode.
     /// </summary>
     public static NoSeason() {
-        Season = HolidaySeasons.None
+        SeasonalManager.Season = HolidaySeasons.None
         TerrainChanger.NoSeason()
         DoodadChanger.NoSeasonDoodads()
         ShopChanger.SetSeasonalShop()
-        SetMinimap()
-        SetWeather()
+        SeasonalManager.SetMinimap()
+        SeasonalManager.SetWeather()
     }
 
     private static SetMinimap() {
-        switch (Season) {
+        switch (SeasonalManager.Season) {
             case HolidaySeasons.Christmas:
                 BlzChangeMinimapTerrainTex('snowMap.blp')
                 break
@@ -97,56 +107,73 @@ export class SeasonalManager {
     }
 
     private static SetWeather() {
-        if (Season == HolidaySeasons.Christmas) {
-            CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect)
+        if (SeasonalManager.Season == HolidaySeasons.Christmas) {
+            SeasonalManager.CurrentWeather ??= WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.SnowEffect)!
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23)
             SuspendTimeOfDay(true)
-            CurrentWeather.enabled = true
-        } else if (Season == HolidaySeasons.None) {
-            CurrentWeather?.dispose()
+            SeasonalManager.CurrentWeather.enable(true)
+        } else if (SeasonalManager.Season == HolidaySeasons.None) {
+            SeasonalManager.CurrentWeather?.destroy()
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
             SuspendTimeOfDay(true)
-            CurrentWeather = null
+            SeasonalManager.CurrentWeather = null as never
         }
     }
 
-    public static SetWeather(weather: string) {
-        if (CurrentWeather != null) {
-            CurrentWeather.dispose()
-            CurrentWeather = null
+    public static SetWeatherArg(weather: string) {
+        if (SeasonalManager.CurrentWeather != null) {
+            SeasonalManager.CurrentWeather.destroy()
+            SeasonalManager.CurrentWeather = null as never
         }
+
         switch (weather.toLowerCase()) {
             case 'none':
                 SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
                 SuspendTimeOfDay(true)
                 break
             case 'snow':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.SnowEffect)!
                 break
             case 'hrain':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, HeavyRain)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.HeavyRain)!
                 break
             case 'rain':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, LightRain)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.LightRain)!
                 break
             case 'blizzard':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, BlizzardEffect)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(
+                    Globals.WORLD_BOUNDS,
+                    SeasonalManager.BlizzardEffect
+                )!
                 break
             case 'hsnow':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, HeavySnowEffect)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(
+                    Globals.WORLD_BOUNDS,
+                    SeasonalManager.HeavySnowEffect
+                )!
                 break
             case 'rays':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, RaysOfLight)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(
+                    Globals.WORLD_BOUNDS,
+                    SeasonalManager.RaysOfLight
+                )!
                 break
             case 'moonlight':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, RaysOfMoonlight)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(
+                    Globals.WORLD_BOUNDS,
+                    SeasonalManager.RaysOfMoonlight
+                )!
                 break
             case 'dalaran':
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, DalaranShield)
+                SeasonalManager.CurrentWeather = WeatherEffect.create(
+                    Globals.WORLD_BOUNDS,
+                    SeasonalManager.DalaranShield
+                )!
                 break
             default:
                 return
         }
-        CurrentWeather.enabled = true
+
+        SeasonalManager.CurrentWeather.enable(true)
     }
 }

@@ -1,12 +1,12 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { Globals } from "src/Global/Globals"
-import { ADMINDISABLE } from "src/Init/ADMINDISABLE"
-import { Colors } from "src/Utility/Colors/Colors"
-import { MapPlayer } from "w3ts"
-import { GameMode } from "./GameModeEnum"
-import { Solo } from "./Solo/Solo"
-import { Standard } from "./Standard/Standard"
-import { Team } from "./Teams/Team"
+import { Logger } from 'src/Events/Logger/Logger'
+import { Globals } from 'src/Global/Globals'
+import { ADMINDISABLE } from 'src/Init/ADMINDISABLE'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { MapPlayer } from 'w3ts'
+import { GameMode } from './GameModeEnum'
+import { Solo } from './Solo/Solo'
+import { Standard } from './Standard/Standard'
+import { Team } from './Teams/Team'
 
 export class Gamemode {
     public static HostPlayer: MapPlayer

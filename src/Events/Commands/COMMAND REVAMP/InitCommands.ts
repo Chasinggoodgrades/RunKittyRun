@@ -49,7 +49,7 @@ import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
 
 export class InitCommands {
-    public static _G: dynamic
+    public static _G: any
 
     public static InitializeCommands() {
         CommandsManager.RegisterCommand({
@@ -69,9 +69,7 @@ export class InitCommands {
             group: 'admin',
             argDesc: '[on][off]',
             description: 'Handler: Periodic: Message: Memory',
-            action: (player, args) => {
-                
-            },
+            action: (player, args) => {},
         })
 
         CommandsManager.RegisterCommand({
@@ -225,14 +223,13 @@ export class InitCommands {
                 if (args[0] != '') {
                     laneIndex = int.Parse(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
-                    nbWolves = WolfArea.WolfAreas[laneIndex - 1].Wolves.length
+                    nbWolves = WolfArea.WolfAreas.get(laneIndex - 1)!.Wolves.length
                     player.DisplayTextTo(
                         Colors.COLOR_GOLD +
                             'Wolf: Count: for: Lane: Current {Colors.COLOR_YELLOW}{laneIndex}: {nbWolves}{Colors.COLOR_RESET}'
                     )
                     return
-                }
-                let nbWolves: else = Globals.ALL_WOLVES.length
+                } else nbWolves = Globals.ALL_WOLVES.size
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD + 'Wolf: Count: Current: {Colors.COLOR_YELLOW}{nbWolves}{Colors.COLOR_RESET}'
                 )
@@ -394,7 +391,7 @@ export class InitCommands {
             argDesc: '[true/false]',
             description: 'unit: glow: Toggle.',
             action: (player, args) => {
-                BlzShowUnitTeamGlow(Globals.ALL_KITTIES.get(player)!.Unit, CommandsManager.GetBool(args[0]))
+                Globals.ALL_KITTIES.get(player)!.Unit.showTeamGlow(CommandsManager.GetBool(args[0]))
             },
         })
 
@@ -436,13 +433,13 @@ export class InitCommands {
                 let status = CommandsManager.GetBool(args[0])
                 if (CommandsManager.GetPlayerGroup(player) == 'admin' && args.length > 1) {
                     if (args[1] == 'wolves' || args[1] == 'wolf') {
-                        for (let wolf in Globals.ALL_WOLVES) {
-                            wolf.Value.Disco ??= MemoryHandler.getEmptyObject<Disco>()
-                            wolf.Value.Disco.Unit = wolf.Value.Unit
-                            wolf.Value.Disco.ToggleDisco(status)
+                        for (let [_, wolf] of Globals.ALL_WOLVES) {
+                            wolf.Disco ??= MemoryHandler.getEmptyObject<Disco>()
+                            wolf.Disco.Unit = wolf.Unit
+                            wolf.Disco.ToggleDisco(status)
                             if (!status) {
-                                wolf.Value.Disco = null
-                                wolf.Value.Unit.setVertexColor(150, 120, 255, 255)
+                                wolf.Disco = null as never
+                                wolf.Unit.setVertexColor(150, 120, 255, 255)
                             }
                         }
                     } else {
@@ -911,9 +908,9 @@ export class InitCommands {
                     args[0] != '' ? char.ToUpper(args[0][0]) + args[0].substring(1).toLowerCase() : 'Speedster'
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
-                if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES[selectedUnit])) return
-                let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES[selectedUnit], affixName)
-                Globals.ALL_WOLVES[selectedUnit].AddAffix(affix)
+                if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(selectedUnit)!)) return
+                let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES.get(selectedUnit)!, affixName)
+                Globals.ALL_WOLVES.get(selectedUnit)!.AddAffix(affix)
             },
         })
 
@@ -928,8 +925,8 @@ export class InitCommands {
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 if (affixName == '') return
-                if (!Globals.ALL_WOLVES[selectedUnit].HasAffix(affixName)) return
-                Globals.ALL_WOLVES[selectedUnit].RemoveAffix(affixName)
+                if (!Globals.ALL_WOLVES.get(selectedUnit)!.HasAffix(affixName)) return
+                Globals.ALL_WOLVES.get(selectedUnit)!.RemoveAffix(affixName)
             },
         })
 
@@ -1296,12 +1293,12 @@ export class InitCommands {
                     return
                 }
 
-                if (laserType == 'free') AIController.FREE_LASER_COLOR = args[1].ToUpper()
-                else if (laserType == 'blocked') AIController.BLOCKED_LASER_COLOR = args[1].ToUpper()
+                if (laserType == 'free') AIController.FREE_LASER_COLOR = args[1].toUpperCase()
+                else if (laserType == 'blocked') AIController.BLOCKED_LASER_COLOR = args[1].toUpperCase()
 
                 player.DisplayTimedTextTo(
                     10.0,
-                    '{Colors.COLOR_YELLOW}color: changed: Laser: {laserType} color: laser is now {args[1].ToUpper()}'
+                    '{Colors.COLOR_YELLOW}color: changed: Laser: {laserType} color: laser is now {args[1].toUpperCase()}'
                 )
             },
         })
@@ -1628,7 +1625,7 @@ export class InitCommands {
                     )
                     return
                 }
-                SeasonalManager.SetWeather(args[0])
+                SeasonalManager.SetWeatherArg(args[0])
             },
         })
 
@@ -1754,7 +1751,7 @@ export class InitCommands {
             action: (player, args) => {
                 let selectedUnit = CustomStatFrame.SelectedUnit[player]
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
-                let wolf = Globals.ALL_WOLVES[selectedUnit]
+                let wolf = Globals.ALL_WOLVES.get(selectedUnit)!
                 let timerAddress: string = 'WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}'
                 print('{timerAddress}')
             },

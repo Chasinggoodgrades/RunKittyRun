@@ -68,7 +68,7 @@ export class SyncSaveLoad {
         PreloadGenEnd(filename)
     }
 
-    public Read(filename: string, reader: MapPlayer, onFinish: Action<FilePromise> = null): FilePromise {
+    public Read(filename: string, reader: MapPlayer, onFinish: Action<FilePromise>): FilePromise {
         let playerId: number = reader.id
         if (!this.allPromises.has(playerId)) {
             this.allPromises.set(playerId, new FilePromise(reader, onFinish))
@@ -81,7 +81,7 @@ export class SyncSaveLoad {
         } else {
             Logger.Warning('to: read: file: when: file: read: Trying is busy: already.')
         }
-        return this.allPromises.get(playerId)
+        return this.allPromises.get(playerId)!
     }
 
     private OnSync() {
@@ -97,8 +97,7 @@ export class SyncSaveLoad {
         if (promise != null) {
             if (prefix == this.SyncPrefix) {
                 promise.Buffer.set(currentChunk - 1, theRest)
-            } 
-            else if (prefix == this.SyncPrefixFinish) {
+            } else if (prefix == this.SyncPrefixFinish) {
                 promise.Finish()
                 this.allPromises.delete(promise.SyncOwner.id)
                 //print("Promise killed: ", allPromises[promise.SyncOwner.id]);
@@ -118,7 +117,7 @@ export class FilePromise {
     public DecodedString: string
     private onFinish: Action<FilePromise>
 
-    public constructor(syncOwner: MapPlayer, onFinish: Action<FilePromise> = undefined) {
+    public constructor(syncOwner: MapPlayer, onFinish: Action<FilePromise>) {
         this.SyncOwner = syncOwner
         this.onFinish = onFinish
     }
@@ -143,8 +142,7 @@ export class FilePromise {
             //Logger.Verbose("FinalString: ", FinalString);
 
             this.onFinish?.call(this, this)
-        } 
-        catch (ex: any) {
+        } catch (ex: any) {
             Logger.Critical(ex)
         }
     }

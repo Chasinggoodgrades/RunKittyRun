@@ -32,6 +32,6 @@ export class PlayerUpgrades {
     }
 
     public GetUpgradeLevel(relicType: string) {
-        return (level = this.UpgradeLevels.TryGetValue(relicType) /* TODO; Prepend: let */ ? level : 0)
+        return this.UpgradeLevels.get(relicType) || 0
     }
 }

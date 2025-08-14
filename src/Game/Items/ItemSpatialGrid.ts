@@ -1,6 +1,6 @@
-import { Item } from "w3ts"
-import { Kitty } from "../Entities/Kitty/Kitty"
-import { Kibble } from "./Kibble"
+import { Item } from 'w3ts'
+import { Kitty } from '../Entities/Kitty/Kitty'
+import { Kibble } from './Kibble'
 
 export class Cell {
     public readonly x: number

@@ -29,8 +29,16 @@ export class MissingShoe {
 
     private static RegisterTurnInEvent() {
         MissingShoe.TurnInEvent = Trigger.create()!
-        MissingShoe.TurnInEvent.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, MissingShoe.TurnInRange, undefined)
-        MissingShoe.TurnInEvent.registerUnitInRage(SpawnChampions.Fieryfox2024.handle, MissingShoe.TurnInRange, undefined)
+        MissingShoe.TurnInEvent.registerUnitInRage(
+            SpawnChampions.Fieryfox2023.handle,
+            MissingShoe.TurnInRange,
+            undefined
+        )
+        MissingShoe.TurnInEvent.registerUnitInRage(
+            SpawnChampions.Fieryfox2024.handle,
+            MissingShoe.TurnInRange,
+            undefined
+        )
         MissingShoe.TurnInEvent.addAction(ErrorHandler.Wrap(MissingShoe.TurnInActions))
     }
 

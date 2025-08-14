@@ -1,10 +1,10 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { RoundManager } from "src/Game/Rounds/RoundManager"
-import { Globals } from "src/Global/Globals"
-import { MapPlayer } from "w3ts"
-import { Gamemode } from "../Gamemode"
-import { Team } from "./Team"
-import { GameSeed } from "src/Init/GameSeed"
+import { Logger } from 'src/Events/Logger/Logger'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
+import { Globals } from 'src/Global/Globals'
+import { MapPlayer } from 'w3ts'
+import { Gamemode } from '../Gamemode'
+import { Team } from './Team'
+import { GameSeed } from 'src/Init/GameSeed'
 
 export class TeamHandler {
     public static FreepickEnabled: boolean = false

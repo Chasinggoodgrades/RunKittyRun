@@ -12,7 +12,7 @@ export class LuaEditor {
     private buttonTrigger: Trigger
     private clearButtonTrigger: Trigger
 
-    public LuaEditor() {
+    public constructor() {
         this.CreateLuaEditor()
     }
 
@@ -37,7 +37,7 @@ export class LuaEditor {
         this.outputText = blzCreateFrame('TextLabel', this.frameBackdrop, 0, 0)
         this.outputText.setSize(0.38, 0.05)
         this.outputText.setPoint(FRAMEPOINT_BOTTOMLEFT, this.frameBackdrop, FRAMEPOINT_BOTTOMLEFT, 0.01, 0.01)
-        this.outputText.setText('will: appear: here: Output')
+        this.outputText.setText('Output will appear here')
 
         // Clear button
         this.clearButton = blzCreateFrame('ScriptDialogButton', this.frameBackdrop, 0, 0)
@@ -47,16 +47,16 @@ export class LuaEditor {
 
         // Button click event
         this.buttonTrigger = Trigger.create()!
-        BlzTriggerRegisterFrameEvent(this.buttonTrigger, this.runButton, FRAMEEVENT_CONTROL_CLICK)
-        TriggerAddAction(this.buttonTrigger, () => {
-            let luaCode: string = BlzFrameGetText(this.editBox)
+        this.buttonTrigger.triggerRegisterFrameEvent(this.runButton, FRAMEEVENT_CONTROL_CLICK)
+        this.buttonTrigger.addAction(() => {
+            let luaCode: string = this.editBox.text
             this.PassLua(luaCode)
         })
 
         // Clear Button event thing
         this.clearButtonTrigger = Trigger.create()!
-        BlzTriggerRegisterFrameEvent(this.clearButtonTrigger, this.clearButton, FRAMEEVENT_CONTROL_CLICK)
-        TriggerAddAction(this.clearButtonTrigger, () => {
+        this.clearButtonTrigger.triggerRegisterFrameEvent(this.clearButton, FRAMEEVENT_CONTROL_CLICK)
+        this.clearButtonTrigger.addAction(() => {
             this.ClearEditBox()
         })
     }
@@ -71,12 +71,12 @@ export class LuaEditor {
             let output: string = this.RunLua(p, luaCode)
             this.outputText.setText(output)
         } catch (ex: any) {
-            this.outputText.setText('Error: {ex.Message}')
+            this.outputText.setText(`Error: ${ex.Message}`)
         }
     }
 
     private RunLua(player: MapPlayer, luaCode: string) {
         ExecuteLua.LuaCode(player, luaCode)
-        return 'Lua: Executed: ' + luaCode
+        return 'Executed Lua: ' + luaCode
     }
 }

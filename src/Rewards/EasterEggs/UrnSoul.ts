@@ -4,8 +4,8 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { FilterList } from 'src/Utility/FilterList'
 import { Utility } from 'src/Utility/Utility'
-import { getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { Effect, Trigger, Unit } from 'w3ts'
+import { getManipulatedItem, getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { Effect, MapPlayer, Rectangle, Trigger, Unit } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 
 export class UrnSoul {
@@ -30,7 +30,7 @@ export class UrnSoul {
     }
 
     private static UnitCreation(): Unit {
-        let u = Unit.create(player.NeutralAggressive, UrnSoul.UnitType, 0, 0, 0)
+        let u = Unit.create(MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!, UrnSoul.UnitType, 0, 0, 0)
         u.HeroName = UrnSoul.Name
         u.setPathing(false) // Disable Collision
         u.addAbility(FourCC('Agho')) // Ghost
@@ -58,7 +58,7 @@ export class UrnSoul {
         UrnSoul.RotationIndex = (UrnSoul.RotationIndex + 1) % 4
         let x = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerX
         let y = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerY
-        UrnSoul.UrnGhostUnit.IssueOrder('move', x, y)
+        UrnSoul.UrnGhostUnit.issueOrderAt('move', x, y)
     }
 
     private static RegisterUrnUsage(): Trigger {
@@ -75,7 +75,7 @@ export class UrnSoul {
             let unit = getTriggerUnit()
             UrnSoul.StartEventRegion = Regions.Urn_Soul_Region.Region
 
-            if (item.TypeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
+            if (item.typeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
             if (!UrnSoul.StartEventRegion.includes(unit)) return
 
             // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao

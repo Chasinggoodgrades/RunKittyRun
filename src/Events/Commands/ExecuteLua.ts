@@ -1,3 +1,5 @@
+import { MapPlayer } from 'w3ts'
+
 export class ExecuteLua {
     public static LuaCode(player: MapPlayer, args: string) {
         player.DisplayTextTo('Args: {args}')
@@ -22,7 +24,7 @@ export class ExecuteLua {
 }
 
 export class DebugPrinter {
-    public static _G: dynamic
+    public static _G: any
 
     // Converts the TypeScript function printDebugNames into C#.
     public static PrintDebugNames(title: string) {

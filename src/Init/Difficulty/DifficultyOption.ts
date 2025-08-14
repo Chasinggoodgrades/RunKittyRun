@@ -1,5 +1,5 @@
-import { Colors } from "src/Utility/Colors/Colors"
-import { Dialog, DialogButton } from "w3ts"
+import { Colors } from 'src/Utility/Colors/Colors'
+import { Dialog, DialogButton } from 'w3ts'
 
 export class DifficultyOption {
     public static Options: DifficultyOption[] = []

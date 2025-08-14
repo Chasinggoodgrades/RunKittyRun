@@ -19,12 +19,12 @@ export class FirstPersonCamera {
     public constructor(hero: Unit, player: MapPlayer) {
         this.hero = hero
         this.player = player
-        this.keyDownState = {
-            UP: false,
-            DOWN: false,
-            LEFT: false,
-            RIGHT: false,
-        }
+        this.keyDownState = new Map<string, boolean>([
+            ['UP', false],
+            ['DOWN', false],
+            ['LEFT', false],
+            ['RIGHT', false],
+        ])
     }
 
     public IsFirstPerson(): boolean {
@@ -52,18 +52,18 @@ export class FirstPersonCamera {
         let fwd: number = 0
 
         if (
-            !(this.keyDownState['LEFT'] && this.keyDownState['RIGHT']) &&
-            (this.keyDownState['LEFT'] || this.keyDownState['RIGHT'])
+            !(this.keyDownState.get('LEFT') && this.keyDownState.get('RIGHT')) &&
+            (this.keyDownState.get('LEFT') || this.keyDownState.get('RIGHT'))
         ) {
-            let angle: number = GetUnitFacing(this.hero)
-            if (this.keyDownState['LEFT']) angle += this.FIRSTPERSON_ANGLE_PER_PERIOD
-            if (this.keyDownState['RIGHT']) angle -= this.FIRSTPERSON_ANGLE_PER_PERIOD
+            let angle: number = this.hero.facing
+            if (this.keyDownState.get('LEFT')) angle += this.FIRSTPERSON_ANGLE_PER_PERIOD
+            if (this.keyDownState.get('RIGHT')) angle -= this.FIRSTPERSON_ANGLE_PER_PERIOD
             this.hero.setFacingEx(angle)
         }
 
         if (
-            !(this.keyDownState['UP'] && this.keyDownState['DOWN']) &&
-            (this.keyDownState['UP'] || this.keyDownState['DOWN'])
+            !(this.keyDownState.get('UP') && this.keyDownState.get('DOWN')) &&
+            (this.keyDownState.get('UP') || this.keyDownState.get('DOWN'))
         ) {
             let moveSpeed: number = this.hero.moveSpeed
             let movePerTick: number = moveSpeed * this.timerPeriod
@@ -74,9 +74,9 @@ export class FirstPersonCamera {
                 movePerTick = 0.2
             }
 
-            let angle: number = Rad2Deg(GetUnitFacing(this.hero))
-            if (this.keyDownState['UP']) fwd += movePerTick
-            if (this.keyDownState['DOWN']) fwd -= movePerTick
+            let angle: number = Rad2Deg(this.hero.facing)
+            if (this.keyDownState.get('UP')) fwd += movePerTick
+            if (this.keyDownState.get('DOWN')) fwd -= movePerTick
 
             let oldX: number = this.hero.x
             let oldY: number = this.hero.y
@@ -97,7 +97,7 @@ export class FirstPersonCamera {
             }
 
             this.hero.setPathing(false)
-            SetUnitPosition(this.hero, newX, newY)
+            this.hero.setPosition(newX, newY)
             this.hero.setPathing(true)
         }
 
@@ -113,18 +113,18 @@ export class FirstPersonCamera {
             }
         }
 
-        SetCameraTargetControllerNoZForPlayer(this.player, this.hero, 0, 0, true)
-        SetCameraFieldForPlayer(this.player, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0)
-        SetCameraFieldForPlayer(this.player, CAMERA_FIELD_FIELD_OF_VIEW, 1500, 0)
-        SetCameraFieldForPlayer(this.player, CAMERA_FIELD_ROTATION, GetUnitFacing(this.hero), 0)
-        SetCameraFieldForPlayer(this.player, CAMERA_FIELD_ZOFFSET, 100, 0)
+        SetCameraTargetControllerNoZForPlayer(this.player.handle, this.hero.handle, 0, 0, true)
+        SetCameraFieldForPlayer(this.player.handle, CAMERA_FIELD_ANGLE_OF_ATTACK, 310, 0)
+        SetCameraFieldForPlayer(this.player.handle, CAMERA_FIELD_FIELD_OF_VIEW, 1500, 0)
+        SetCameraFieldForPlayer(this.player.handle, CAMERA_FIELD_ROTATION, this.hero.facing, 0)
+        SetCameraFieldForPlayer(this.player.handle, CAMERA_FIELD_ZOFFSET, 100, 0)
 
         this.ItemPickup()
     }
 
     public SetKeyDownState(key: string, state: boolean) {
         if (this.keyDownState.has(key)) {
-            this.keyDownState[key] = state
+            this.keyDownState.set(key, state)
         }
     }
 
@@ -142,13 +142,13 @@ export class FirstPersonCamera {
 }
 
 export class FirstPersonCameraManager {
-    private static cameras: Map<player, FirstPersonCamera> = new Map()
+    private static cameras: Map<MapPlayer, FirstPersonCamera> = new Map()
 
     public static Initialize() {
         for (let player of Globals.ALL_PLAYERS) {
             let hero = FirstPersonCameraManager.GetHeroForPlayer(player)
             if (hero != null) {
-                FirstPersonCameraManager.cameras[player] = new FirstPersonCamera(hero, player)
+                FirstPersonCameraManager.cameras.set(player, new FirstPersonCamera(hero, player))
             }
         }
 
@@ -156,26 +156,26 @@ export class FirstPersonCameraManager {
     }
 
     private static RegisterKeyEvents() {
-        let keyStates: Map<string, number> = {
-            true: bj_KEYEVENTTYPE_DEPRESS,
-            false: bj_KEYEVENTTYPE_RELEASE,
-        }
+        let keyStates: Map<boolean, number> = new Map([
+            [true, bj_KEYEVENTTYPE_DEPRESS],
+            [false, bj_KEYEVENTTYPE_RELEASE],
+        ])
 
-        let keys: Map<string, number> = {
-            UP: bj_KEYEVENTKEY_UP,
-            DOWN: bj_KEYEVENTKEY_DOWN,
-            LEFT: bj_KEYEVENTKEY_LEFT,
-            RIGHT: bj_KEYEVENTKEY_RIGHT,
-        }
+        let keys: Map<string, number> = new Map([
+            ['UP', bj_KEYEVENTKEY_UP],
+            ['DOWN', bj_KEYEVENTKEY_DOWN],
+            ['LEFT', bj_KEYEVENTKEY_LEFT],
+            ['RIGHT', bj_KEYEVENTKEY_RIGHT],
+        ])
 
-        for (let keyState in keyStates) {
-            for (let key in keys) {
+        for (let [k, v] of keyStates) {
+            for (let [k2, v2] of keys) {
                 for (let p of Globals.ALL_PLAYERS) {
                     let keyTrigger = Trigger.create()!
-                    let localKey = key.Key // Create a local copy of the key
-                    let localValue = keyState.Key // Create a local copy of the value
-                    TriggerregisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value)
-                    TriggerAddAction(keyTrigger, () => FirstPersonCameraManager.OnKeyEvent(localKey, localValue))
+                    let localKey = k2 // Create a local copy of the key
+                    let localValue = k // Create a local copy of the value
+                    TriggerRegisterPlayerKeyEventBJ(keyTrigger.handle, p.handle, v, v2)
+                    keyTrigger.addAction(() => FirstPersonCameraManager.OnKeyEvent(localKey, localValue))
                 }
             }
         }
@@ -183,25 +183,25 @@ export class FirstPersonCameraManager {
 
     private static OnKeyEvent(key: string, isDown: boolean) {
         if (FirstPersonCameraManager.cameras.has(getTriggerPlayer())) {
-            FirstPersonCameraManager.cameras[getTriggerPlayer()].SetKeyDownState(key, isDown)
+            FirstPersonCameraManager.cameras.get(getTriggerPlayer())!.SetKeyDownState(key, isDown)
         }
     }
 
     private static GetHeroForPlayer(player: MapPlayer): Unit {
-        return Globals.ALL_KITTIES.has(player) ? Globals.ALL_KITTIES.get(player)!.Unit : null
+        return Globals.ALL_KITTIES.has(player) ? Globals.ALL_KITTIES.get(player)!.Unit : (null as never)
     }
 
     public static ToggleFirstPerson(player: MapPlayer) {
         if (FirstPersonCameraManager.cameras.has(player)) {
-            FirstPersonCameraManager.cameras[player].ToggleFirstPerson(
-                !FirstPersonCameraManager.cameras[player].IsFirstPerson()
-            )
+            FirstPersonCameraManager.cameras
+                .get(player)!
+                .ToggleFirstPerson(!FirstPersonCameraManager.cameras.get(player)!.IsFirstPerson())
         }
     }
 
     public static SetFirstPerson(player: MapPlayer, active: boolean) {
         if (FirstPersonCameraManager.cameras.has(player)) {
-            FirstPersonCameraManager.cameras[player].ToggleFirstPerson(active)
+            FirstPersonCameraManager.cameras.get(player)!.ToggleFirstPerson(active)
         }
     }
 }

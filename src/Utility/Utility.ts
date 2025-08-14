@@ -400,3 +400,64 @@ export const distanceBetweenXYPoints = (x1: number, y1: number, x2: number, y2: 
     let dy = y2 - y1
     return Math.sqrt(dx * dx + dy * dy)
 }
+
+export const angleBetweenPoints = (x1: number, y1: number, x2: number, y2: number) => {
+    let dx = x2 - x1
+    let dy = y2 - y1
+    return Math.atan2(dy, dx)
+}
+
+export enum MetaKey {
+    None = 0,
+    Shift = 1,
+    Control = 2,
+    Alt = 4,
+    //
+    // Summary:
+    //     Windows/Super key.
+    META = 8,
+}
+
+export const roundDecimals = (value: number, decimals: number = 0) => {
+    const factor = Math.pow(10, decimals)
+    return Math.round(value * factor) / factor
+}
+
+export enum TargetTypes {
+    None = 1,
+    Ground = 2,
+    Air = 4,
+    Structure = 8,
+    Ward = 0x10,
+    Item = 0x20,
+    Tree = 0x40,
+    Wall = 0x80,
+    Debris = 0x100,
+    Decoration = 0x200,
+    Bridge = 0x400,
+    Self = 0x1000,
+    PlayerUnits = 0x2000,
+    Allied = 0x4000,
+    Neutral = 0x8000,
+    Enemy = 0x10000,
+    Vulnerable = 0x100000,
+    Invulnerable = 0x200000,
+    Hero = 0x400000,
+    NonHero = 0x800000,
+    Alive = 0x1000000,
+    Dead = 0x2000000,
+    Organic = 0x4000000,
+    Mechanical = 0x8000000,
+    //
+    // Summary:
+    //     Also known as "Non-Sapper".
+    NonSuicidal = 0x10000000,
+    //
+    // Summary:
+    //     Also known as "Sapper".
+    Suicidal = 0x20000000,
+    NonAncient = 0x40000000,
+    Ancient = 0,
+    NotSelf = 0x1e000,
+    Friend = 0x6000,
+}

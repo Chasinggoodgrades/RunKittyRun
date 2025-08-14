@@ -1,15 +1,14 @@
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { Globals } from "src/Global/Globals"
-import { Colors } from "src/Utility/Colors/Colors"
-import { Queue } from "src/Utility/Queue"
-import { Utility } from "src/Utility/Utility"
-import { Point, Unit, MapPlayer } from "w3ts"
-import { Progress } from "../Management/Progress"
-import { PodiumManager } from "./PodiumManager"
-import { PodiumUtil } from "./PodiumUtil"
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { Queue } from 'src/Utility/Queue'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer, Point, Unit } from 'w3ts'
+import { PodiumManager } from './PodiumManager'
+import { PodiumUtil } from './PodiumUtil'
 
 export class SoloPodium {
-    private static PodiumQueue = new Queue<[player, Point]>()
+    private static PodiumQueue = new Queue<[MapPlayer, Point]>()
     private static MovedUnits: Unit[] = []
     private static PodiumType: string = ''
     private static Color: string = Colors.COLOR_YELLOW_ORANGE
@@ -27,7 +26,7 @@ export class SoloPodium {
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
             let player = topTimes[i]
             let position = podiumPositions[i]
-            this.PodiumQueue.Enqueue((player, position))
+            this.PodiumQueue.enqueue((player, position))
         }
         this.PodiumType = this.Time
     }
@@ -38,7 +37,7 @@ export class SoloPodium {
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
             let player = topProgress[i]
             let position = podiumPositions[i]
-            this.PodiumQueue.Enqueue((player, position))
+            this.PodiumQueue.enqueue((player, position))
         }
         this.PodiumType = this.Progress
     }
@@ -48,7 +47,7 @@ export class SoloPodium {
             PodiumUtil.EndingGameThankyou()
             return
         }
-        let(player, position) = this.PodiumQueue.Dequeue()
+        let(player, position) = this.PodiumQueue.dequeue()
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)

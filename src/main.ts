@@ -1,5 +1,5 @@
 import { Units } from '@objectdata/units'
-import { MapPlayer, Timer, Unit } from 'w3ts'
+import { MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Unit } from 'w3ts'
 import { Players } from 'w3ts/globals'
 import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
 import { Program } from './Program'
@@ -53,6 +53,36 @@ function tsMain() {
 
         MapPlayer.prototype.addGold = function (amount: number): void {
             this.setGold(this.getGold() + amount)
+        }
+
+        Rectangle.prototype.includes = function (x: number, y: number): boolean {
+            return this.minX <= x && x <= this.maxX && this.minY <= y && y <= this.maxY
+        }
+
+        Rectangle.prototype.region = function (): region {
+            const region = CreateRegion()
+            RegionAddRect(region, this.handle)
+            return region
+        }
+
+        Multiboard.prototype.GetItem = function (row: number, column: number): MultiboardItem {
+            return MultiboardItem.fromHandle(MultiboardGetItem(this.handle, row, column)!)
+        }
+
+        Multiboard.prototype.SetChildVisibility = function (visible: boolean, fade: boolean): void {
+            MultiboardSetItemsStyle(this.handle, visible, fade)
+        }
+
+        MultiboardItem.prototype.setText = function (text: string): void {
+            MultiboardSetItemValue(this.handle, text)
+        }
+
+        MultiboardItem.prototype.setVisible = function (visible: boolean, fade: boolean): void {
+            MultiboardSetItemStyle(this.handle, visible, fade)
+        }
+
+        Unit.prototype.issueImmediateOrderById = function (orderId: number): void {
+            IssueImmediateOrderById(this.handle, orderId)
         }
 
         new Program()

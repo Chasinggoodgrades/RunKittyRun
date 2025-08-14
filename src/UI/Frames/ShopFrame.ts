@@ -1,5 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -18,7 +19,7 @@ import { ShopUtil } from './ShopUtil'
 export class ShopFrame {
     public static shopFrame: Frame
     public static upgradeButton: Frame
-    public static SelectedItems: Map<player, ShopItem> = new Map()
+    public static SelectedItems: Map<MapPlayer, ShopItem> = new Map()
     private static relicsPanel: Frame
     private static rewardsPanel: Frame
     private static miscPanel: Frame
@@ -341,7 +342,7 @@ export class ShopFrame {
     }
 
     public static RefreshUpgradeTooltip(relic: Relic) {
-        let finalString = new StringBuilder()
+        let finalString: string[] = []
         let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.GetType())
 
         for (let i: number = 0; i < relic.Upgrades.length; i++) {
@@ -362,12 +363,12 @@ export class ShopFrame {
                 colorDescription = Colors.COLOR_GREY
             }
 
-            finalString.AppendLine('{color}[Upgrade {i + 1}] {upgrade.Cost}g{Colors.COLOR_RESET}')
-            finalString.AppendLine('{colorDescription}{upgrade.Description}{Colors.COLOR_RESET}')
-            finalString.AppendLine('----------------------------')
+            finalString.push('{color}[Upgrade {i + 1}] {upgrade.Cost}g{Colors.COLOR_RESET}')
+            finalString.push('{colorDescription}{upgrade.Description}{Colors.COLOR_RESET}')
+            finalString.push('----------------------------')
         }
 
-        ShopFrame.upgradeTooltip.text = finalString.toString()
+        ShopFrame.upgradeTooltip.text = finalString.join('\n')
     }
 
     private static BuySelectedItem() {
@@ -377,7 +378,7 @@ export class ShopFrame {
                 ShopFrame.buyButton.visible = false
                 ShopFrame.buyButton.visible = true
             }
-            const selectedItem = ShopFrame.SelectedItems.TryGetValue(player)
+            const selectedItem = ShopFrame.SelectedItems.get(player)
 
             if (!ShopUtil.PlayerIsDead(player!) && selectedItem != null) {
                 // your logic here

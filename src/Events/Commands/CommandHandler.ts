@@ -1,10 +1,10 @@
-import { Globals } from "src/Global/Globals"
-import { getTriggerPlayer } from "src/Utility/w3tsUtils"
-import { Trigger, MapPlayer } from "w3ts"
-import { CommandsManager } from "./COMMAND REVAMP/CommandsManager"
-import { InitCommands } from "./COMMAND REVAMP/InitCommands"
-import { ExecuteLua } from "./ExecuteLua"
-import { GamemodeCmd } from "./GamemodeCmd"
+import { Globals } from 'src/Global/Globals'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { MapPlayer, Trigger } from 'w3ts'
+import { CommandsManager } from './COMMAND REVAMP/CommandsManager'
+import { InitCommands } from './COMMAND REVAMP/InitCommands'
+import { ExecuteLua } from './ExecuteLua'
+import { GamemodeCmd } from './GamemodeCmd'
 
 export class CommandHandler {
     private static DebugCmdTrigger: Trigger = Trigger.create()!
@@ -18,8 +18,8 @@ export class CommandHandler {
             TriggerRegisterPlayerChatEvent(DebugCmdTrigger, MapPlayer.fromIndex(i)!, '?', false)
             TriggerRegisterPlayerChatEvent(NewCmdHandler, MapPlayer.fromIndex(i)!, '-', false)
         }
-        TriggerAddAction(this.DebugCmdTrigger.handle, this.DebugHandle)
-        TriggerAddAction(this.NewCmdHandler.handle, this.HandleCommands)
+        this.DebugCmdTrigger.addAction(this.DebugHandle)
+        this.NewCmdHandler.addAction(this.HandleCommands)
     }
 
     private static HandleCommands() {

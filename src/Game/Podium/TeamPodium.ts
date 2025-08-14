@@ -1,14 +1,22 @@
+import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { Queue } from 'src/Utility/Queue'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer, Point, Unit } from 'w3ts'
+import { PodiumManager } from './PodiumManager'
+import { PodiumUtil } from './PodiumUtil'
+
 export class TeamPodium {
-    private static PodiumQueue = new Queue<[player, Point]>()
+    private static PodiumQueue = new Queue<[MapPlayer, Point]>()
     private static MovedUnits: Unit[] = []
     private static PodiumType: string = ''
     private static Color: string = Colors.COLOR_YELLOW_ORANGE
-    private MVP: string = 'MVP'
-    private MostSaves: string = 'saves: most'
+    private static MVP: string = 'MVP'
+    private static MostSaves: string = 'saves: most'
 
     public static BeginPodiumActions() {
         PodiumUtil.SetCameraToPodium()
-        Utility.SimpleTimer(3.0, ProcessPodiumTypeActions)
+        Utility.SimpleTimer(3.0, TeamPodium.ProcessPodiumTypeActions)
     }
 
     private static EnqueueMVPPlayer() {
@@ -17,9 +25,9 @@ export class TeamPodium {
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
             let player = topRatios[i]
             let position = podiumPositions[i]
-            PodiumQueue.Enqueue((player, position))
+            TeamPodium.PodiumQueue.enqueue([player, position])
         }
-        PodiumType = MVP
+        TeamPodium.PodiumType = TeamPodium.MVP
     }
 
     private static EnqueueTopSavesPlayer() {
@@ -28,60 +36,60 @@ export class TeamPodium {
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
             let player = topSaves[i]
             let position = podiumPositions[i]
-            PodiumQueue.Enqueue((player, position))
+            TeamPodium.PodiumQueue.enqueue([player, position])
         }
-        PodiumType = MostSaves
+        TeamPodium.PodiumType = TeamPodium.MostSaves
     }
 
     private static ProcessNextPodiumAction() {
-        if (PodiumQueue.length == 0) {
-            ProcessPodiumTypeActions()
+        if (TeamPodium.PodiumQueue.length == 0) {
+            TeamPodium.ProcessPodiumTypeActions()
             return
         }
-        let(player, position) = PodiumQueue.Dequeue()
+        let [player, position] = TeamPodium.PodiumQueue.dequeue()!
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
-        MovedUnits.push(kitty)
+        TeamPodium.MovedUnits.push(kitty)
         print(
             '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
         )
-        Utility.SimpleTimer(5.0, ProcessNextPodiumAction)
+        Utility.SimpleTimer(5.0, TeamPodium.ProcessNextPodiumAction)
     }
 
     /// <summary>
     /// Topscore => Saves => Ratio => Streak .. End
     /// </summary>
     private static ProcessPodiumTypeActions() {
-        PodiumQueue.clear()
-        PodiumUtil.ClearPodiumUnits(MovedUnits)
-        switch (PodiumType) {
+        TeamPodium.PodiumQueue.length = 0
+        PodiumUtil.ClearPodiumUnits(TeamPodium.MovedUnits)
+        switch (TeamPodium.PodiumType) {
             case '':
-                EnqueueMVPPlayer()
+                TeamPodium.EnqueueMVPPlayer()
                 break
 
-            case MVP:
-                EnqueueTopSavesPlayer()
+            case TeamPodium.MVP:
+                TeamPodium.EnqueueTopSavesPlayer()
                 break
 
-            case MostSaves:
+            case TeamPodium.MostSaves:
                 PodiumUtil.EndingGameThankyou()
                 return
 
             default:
                 break
         }
-        ProcessNextPodiumAction()
+        TeamPodium.ProcessNextPodiumAction()
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
         let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-        switch (PodiumType) {
-            case MostSaves:
+        switch (TeamPodium.PodiumType) {
+            case TeamPodium.MostSaves:
                 return stats.TotalSaves.toString()
 
-            case MVP:
+            case TeamPodium.MVP:
                 return stats.TotalDeaths == 0
                     ? stats.TotalSaves.toFixed(2) + ' ratio.'
                     : (stats.TotalSaves / stats.TotalDeaths).toFixed(2) + ' ratio'

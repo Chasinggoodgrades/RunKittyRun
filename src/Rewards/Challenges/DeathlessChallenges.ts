@@ -1,15 +1,15 @@
-import { Kitty } from "src/Game/Entities/Kitty/Kitty"
-import { Gamemode } from "src/Gamemodes/Gamemode"
-import { GameMode } from "src/Gamemodes/GameModeEnum"
-import { Globals } from "src/Global/Globals"
-import { Difficulty } from "src/Init/Difficulty/Difficulty"
-import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption"
-import { GameAwardsDataSorted } from "src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted"
-import { SoundManager } from "src/Sounds/SoundManager"
-import { Utility } from "src/Utility/Utility"
-import { MapPlayer, TextTag } from "w3ts"
-import { CrystalOfFire } from "../EasterEggs/Fieryfox/CrystalOfFire"
-import { AwardManager } from "../Rewards/AwardManager"
+import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { GameMode } from 'src/Gamemodes/GameModeEnum'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
+import { SoundManager } from 'src/Sounds/SoundManager'
+import { Utility } from 'src/Utility/Utility'
+import { MapPlayer, TextTag } from 'w3ts'
+import { CrystalOfFire } from '../EasterEggs/Fieryfox/CrystalOfFire'
+import { AwardManager } from '../Rewards/AwardManager'
 
 export class DeathlessChallenges {
     public static DeathlessCount: number = 0 // Number of deaths allowed for the current round.

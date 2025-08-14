@@ -1,8 +1,7 @@
+import { CollisionDetection } from './CollisionDetection'
+
 /// <summary>
 /// Keeps track of current game stats, saves, deaths, streak, nitros, and other misc data.
-
-import { CollisionDetection } from "./CollisionDetection"
-
 /// </summary>
 export class PlayerGameData {
     public TotalSaves: number

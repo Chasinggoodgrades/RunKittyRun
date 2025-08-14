@@ -1,6 +1,8 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { distanceBetweenXYPoints } from 'src/Utility/Utility'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
 
 export class RTR {
@@ -77,12 +79,7 @@ export class RTR {
         let currentX: number = this.kitty.Unit.x
         let currentY: number = this.kitty.Unit.y
 
-        let distanceToTarget: number = WCSharp.Shared.Util.DistanceBetweenPoints(
-            currentX,
-            currentY,
-            this.targetX,
-            this.targetY
-        )
+        let distanceToTarget: number = distanceBetweenXYPoints(currentX, currentY, this.targetX, this.targetY)
 
         if (distanceToTarget < 10) {
             this.hasTarget = false
@@ -102,7 +99,7 @@ export class RTR {
         let movePerTick: number = moveSpeed * this.RTR_INTERVAL
 
         let angle: number = Atan2(this.targetY - currentY, this.targetX - currentX)
-        SetUnitFacing(this.kitty.Unit, angle * bj_RADTODEG)
+        this.kitty.Unit.facing = angle * bj_RADTODEG
 
         let newX: number = currentX + movePerTick * Cos(angle)
         let newY: number = currentY + movePerTick * Sin(angle)
@@ -138,13 +135,13 @@ export class RTR {
     private HandleClick(isToLocation: boolean) {
         if (!this.IsEnabled()) return
 
-        IssueImmediateOrder(getTriggerUnit(), 'stop')
+        getTriggerUnit().issueImmediateOrder('stop')
 
         if (isToLocation) {
             this.targetX = GetOrderPointX()
             this.targetY = GetOrderPointY()
         } else {
-            let target = GetOrderTarget()
+            let target = GetOrderTarget()!
             this.targetX = GetWidgetX(target)
             this.targetY = GetWidgetY(target)
         }

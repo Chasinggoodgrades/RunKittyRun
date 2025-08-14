@@ -71,7 +71,7 @@ export class ShadowKitty {
         try {
             UnitWithinRange.DeRegisterUnitWithinRangeUnitShadow(this)
             KillUnit(this.Unit.handle)
-            this.Unit.destroy();
+            this.Unit.destroy()
             this.Active = false
             ShadowKitty.PauseKitty(this.Player, false)
         } catch (e: any) {

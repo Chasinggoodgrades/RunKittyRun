@@ -104,8 +104,8 @@ export class AIController {
         this.elapsedTime = 0
 
         if (this.moveTimer != null) {
-            PauseTimer(this.moveTimer)
-            DestroyTimer(this.moveTimer)
+            this.moveTimer.pause()
+            this.moveTimer.destroy()
         }
 
         DestroyLightning(this.lastLightning)

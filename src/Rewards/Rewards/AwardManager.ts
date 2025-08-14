@@ -9,6 +9,7 @@ import { RewardHelper } from 'src/UI/Frames/RewardHelper'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Trigger } from 'w3ts'
+import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { RewardsManager } from './RewardsManager'
 
 /// <summary>
@@ -144,14 +145,12 @@ export class AwardManager {
         requiredValue: number,
         award: string
     ) {
-        let property = kittyStats.GameStats.GetType().GetProperty(gamestat)
-        let value = property.GetValue(kittyStats.GameStats)
+        let value = kittyStats.GameStats[gamestat as keyof GameStatsData]
         if (value < requiredValue) {
-            let abc: triggeraction = null
-            abc = TriggerAddAction(AwardManager.AwardTrigger, () => {
-                if (property.GetValue(kittyStats.GameStats) < requiredValue) return
+            const abc = AwardManager.AwardTrigger.addAction(() => {
+                if (kittyStats.GameStats[gamestat as keyof GameStatsData] < requiredValue) return
                 AwardManager.GiveReward(player, award)
-                AwardManager.AwardTrigger.RemoveAction(abc)
+                AwardManager.AwardTrigger.removeAction(abc)
             })
         }
     }

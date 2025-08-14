@@ -8,13 +8,15 @@ import { GC } from 'src/Utility/GC'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
+import { Group } from 'w3ts'
+import { Affix } from './Affix'
 
 export class Howler extends Affix {
     private HOWL_RADIUS: number = 900.0
     private AFFIX_ABILITY: number = Constants.ABILITY_HOWLER
     private ROAR_EFFECT: string = 'Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl'
-    private MIN_HOWL_TIME: number = 10.0
-    private MAX_HOWL_TIME: number = 20.0
+    private static MIN_HOWL_TIME: number = 10.0
+    private static MAX_HOWL_TIME: number = 20.0
     private HowlTimer: AchesTimers
     private NearbyWolves: Group = Group.create()!
 
@@ -31,14 +33,14 @@ export class Howler extends Affix {
     }
 
     public override Remove() {
-        SetUnitVertexColor(this.Unit.Unit, 150, 120, 255, 255)
+        this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.HowlTimer?.dispose()
         GC.RemoveGroup(this.NearbyWolves) // TODO; Cleanup:         GC.RemoveGroup(ref NearbyWolves);
         super.Remove()
     }
 
-    public override Pause(pause: boolean) {
+    public override pause(pause: boolean) {
         this.HowlTimer.pause(pause)
     }
 
@@ -59,12 +61,13 @@ export class Howler extends Affix {
                 FilterList.DogFilter
             )
             while (true) {
-                let wolf = this.NearbyWolves.First
+                let wolf = this.NearbyWolves.first
                 if (wolf == null) break
-                this.NearbyWolves.Remove(wolf)
+                this.NearbyWolves.removeUnit(wolf)
                 if (NamedWolves.StanWolf != null && NamedWolves.StanWolf.Unit == wolf) continue
                 if (wolf.paused) continue
-                if (!(wolfObject = Globals.ALL_WOLVES.TryGetValue(wolf)) /* TODO; Prepend: let */) continue
+                let wolfObject
+                if (!(wolfObject = Globals.ALL_WOLVES.get(wolf)) /* TODO; Prepend: let */) continue
                 if (wolfObject.RegionIndex != this.Unit.RegionIndex) continue
                 wolfObject.StartWandering(true) // Start wandering
             }
@@ -76,6 +79,6 @@ export class Howler extends Affix {
     }
 
     private static GetRandomHowlTime(): number {
-        return GetRandomReal(MIN_HOWL_TIME, MAX_HOWL_TIME)
+        return GetRandomReal(Howler.MIN_HOWL_TIME, Howler.MAX_HOWL_TIME)
     }
 }

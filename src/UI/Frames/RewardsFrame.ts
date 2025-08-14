@@ -63,7 +63,7 @@ export class RewardsFrame {
         let rewardTypes = Enum.GetValues(typeof RewardType)
             .Cast<RewardType>()
             .OrderBy(rt => rt)
-            .ToList() // sorts by enum, no desync possibilies here.
+        // sorts by enum, no desync possibilies here.
 
         for (let type in rewardTypes) {
             let numberOfRewards = RewardsFrame.CountNumberOfRewards(type)

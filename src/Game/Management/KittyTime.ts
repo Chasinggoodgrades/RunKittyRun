@@ -62,7 +62,8 @@ export class KittyTime {
     }
 
     public IncrementRoundTime(round: number) {
-        if (this.RoundTime.has(round)) this.RoundTime.set(round, this.RoundTime.get(round)! + GameTimer.RoundSpeedIncrement)
+        if (this.RoundTime.has(round))
+            this.RoundTime.set(round, this.RoundTime.get(round)! + GameTimer.RoundSpeedIncrement)
         this.SetTotalTime()
     }
 

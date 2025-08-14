@@ -14,8 +14,8 @@ export class SoloMultiboard {
     private static OverallBoard: Multiboard
     private static BestTimes: Multiboard
     private static ESCTrigger: Trigger
-    private static sortedDict: Map<player, Kitty>
-    private static MBSlot: Map<player, number>
+    private static sortedDict: Map<MapPlayer, Kitty>
+    private static MBSlot: Map<MapPlayer, number>
     private static color: string = Colors.COLOR_YELLOW_ORANGE
 
     /// <summary>
@@ -65,7 +65,7 @@ export class SoloMultiboard {
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.setItemsWidth(0.05)
-        SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07)
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setWidth(0.07)
         SoloMultiboard.OverallBoard.display(true)
         SoloMultiboard.UpdateOverallStatsMB()
     }
@@ -84,7 +84,7 @@ export class SoloMultiboard {
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.setItemsWidth(0.05)
-        SoloMultiboard.OverallBoard.GetItem(0, 0).SetWidth(0.07)
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setWidth(0.07)
         SoloMultiboard.OverallBoard.display(true)
         SoloMultiboard.OverallStats()
     }
@@ -101,8 +101,8 @@ export class SoloMultiboard {
         SoloMultiboard.BestTimes.GetItem(0, 6).setText('{color}Time: Total|r')
         SoloMultiboard.BestTimes.SetChildVisibility(true, false)
         SoloMultiboard.BestTimes.setItemsWidth(0.05)
-        SoloMultiboard.BestTimes.GetItem(0, 6).SetWidth(0.06)
-        SoloMultiboard.BestTimes.GetItem(0, 0).SetWidth(0.07)
+        SoloMultiboard.BestTimes.GetItem(0, 6).setWidth(0.06)
+        SoloMultiboard.BestTimes.GetItem(0, 0).setWidth(0.07)
         SoloMultiboard.BestTimes.display(false)
         SoloMultiboard.UpdateBestTimesMB()
     }
@@ -160,7 +160,7 @@ export class SoloMultiboard {
 
             for (let i: number = 0; i < stats.length; i++) {
                 SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText('{playerColor}{stats[i]}{Colors.COLOR_RESET}')
-                if (i == 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).SetWidth(0.07)
+                if (i == 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setWidth(0.07)
             }
 
             rowIndex++
@@ -192,7 +192,7 @@ export class SoloMultiboard {
             let sum = sumNumbers(roundTimes)
             SoloMultiboard.BestTimes.GetItem(rowIndex, 6).setText('{playerColor}{Utility.ConvertFloatToTime(sum)}')
             rowIndex++
-            roundTimes = null
+            roundTimes.length = 0
         }
     }
 

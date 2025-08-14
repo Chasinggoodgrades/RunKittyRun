@@ -111,7 +111,7 @@ export class AffixFactory {
 
             default:
                 Logger.Warning('{Colors.COLOR_YELLOW_ORANGE}affix: Invalid|r')
-                return null
+                return null as never
         }
     }
 
@@ -123,9 +123,9 @@ export class AffixFactory {
         let totalArea = 0.0
         AffixFactory.LaneWeights = []
 
-        for (let lane in WolfArea.WolfAreas) {
-            totalArea += lane.Value.Area
-            AffixFactory.LaneWeights[lane.Value.ID] = lane.Value.Area
+        for (let [_, lane] of WolfArea.WolfAreas) {
+            totalArea += lane.Area
+            AffixFactory.LaneWeights[lane.ID] = lane.Area
         }
 
         // Normalizing Weights
@@ -145,7 +145,7 @@ export class AffixFactory {
     }
 
     public static ApplyAffix(unit: Wolf, affixName: string): Affix {
-        if (!AffixFactory.CanApplyAffix(unit, affixName)) return null
+        if (!AffixFactory.CanApplyAffix(unit, affixName)) return null as never
         let affix = AffixFactory.CreateAffix(unit, affixName)
         unit.AddAffix(affix)
         return affix
@@ -153,15 +153,15 @@ export class AffixFactory {
 
     private static AvailableAffixes(laneNumber: number) {
         let affixes = AffixFactory.AffixTypes.join(', ') // Start with all affixes in a single string
-        let fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount
+        let fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
         if (
             laneNumber > 6 ||
             Difficulty.DifficultyValue == DifficultyLevel.Hard ||
             fixationCount >= AffixFactory.MAX_FIXIATION_PER_LANE
         )
-            affixes = affixes.Replace('Fixation, ', '').Replace(', Fixation', '').Replace('Fixation', '')
+            affixes = affixes.replace('Fixation, ', '').replace(', Fixation', '').replace('Fixation', '')
         if (Difficulty.DifficultyValue == DifficultyLevel.Hard) {
-            affixes = affixes.Replace('Chaos, ', '').Replace(', Chaos', '').Replace('Chaos', '')
+            affixes = affixes.replace('Chaos, ', '').replace(', Chaos', '').replace('Chaos', '')
         }
         return affixes.trim()
     }
@@ -172,14 +172,14 @@ export class AffixFactory {
 
             let affixArray = affixes.split(', ').filter(Boolean)
 
-            if (affixArray.length == 0) return null
+            if (affixArray.length == 0) return null as never
 
             let randomIndex = Math.random()
             let randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
         } catch (ex: any) {
             Logger.Warning('{Colors.COLOR_RED}Error in ApplyRandomAffix: {ex.Message}{Colors.COLOR_RESET}')
-            return null
+            return null as never
         }
     }
 
@@ -199,7 +199,7 @@ export class AffixFactory {
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == DifficultyLevel.Nightmare) {
-                for (let wolf in Globals.ALL_WOLVES.Values) {
+                for (let [_, wolf] of Globals.ALL_WOLVES) {
                     if (!AffixFactory.ShouldAffixWolves(wolf, wolf.RegionIndex)) continue
                     AffixFactory.ApplyRandomAffix(wolf, wolf.RegionIndex)
                 }
@@ -230,7 +230,7 @@ export class AffixFactory {
             // Go thru and apply affixes to each lane
             for (let i: number = 0; i < laneDistribution.length; i++) {
                 let affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
-                let wolvesInLane = WolfArea.WolfAreas[i].Wolves
+                let wolvesInLane = WolfArea.WolfAreas.get(i)!.Wolves
 
                 // Add affixes to random wolves until the {affixTarget} is reached
                 let appliedCount: number = 0
@@ -266,9 +266,9 @@ export class AffixFactory {
     }
 
     public static RemoveAllAffixes() {
-        for (let wolf in Globals.ALL_WOLVES) {
-            wolf.Value.RemoveAllWolfAffixes()
+        for (let [_, wolf] of Globals.ALL_WOLVES) {
+            wolf.RemoveAllWolfAffixes()
         }
-        AffixFactory.AllAffixes.clear()
+        AffixFactory.AllAffixes.length = 0
     }
 }

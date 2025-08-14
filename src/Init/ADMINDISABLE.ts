@@ -1,5 +1,5 @@
-import { Globals } from "src/Global/Globals"
-import { Utility } from "src/Utility/Utility"
+import { Globals } from 'src/Global/Globals'
+import { Utility } from 'src/Utility/Utility'
 
 export class ADMINDISABLE {
     public static AdminOnly: boolean = false // enable if restricted to admins/VIPs only.
@@ -14,7 +14,7 @@ export class ADMINDISABLE {
                 60.0,
                 '{Colors.COLOR_RED}map: This is in testing: phase: the. only: Admins... out: soon: Coming.'
             )
-            CustomDefeatBJ(player.handle, "Admin only game!");
+            CustomDefeatBJ(player.handle, 'Admin only game!')
         }
         return false
     }
