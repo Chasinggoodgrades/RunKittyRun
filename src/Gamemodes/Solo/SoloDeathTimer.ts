@@ -52,8 +52,8 @@ export class SoloDeathTimer {
         try {
             let kitty = Globals.ALL_KITTIES.get(this.Player)!
             let lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone]
-            let x = lastCheckpoint.Rect_.centerX
-            let y = lastCheckpoint.Rect_.centerY
+            let x = lastCheckpoint.rect.centerX
+            let y = lastCheckpoint.rect.centerY
             kitty.ReviveKitty()
             kitty.Unit.setPosition(x, y)
             if (this.Player.isLocal()) PanCameraToTimed(x, y, 0.0)

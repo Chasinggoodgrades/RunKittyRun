@@ -1,5 +1,8 @@
 /// <summary>
 /// Keeps track of current game stats, saves, deaths, streak, nitros, and other misc data.
+
+import { CollisionDetection } from "./CollisionDetection"
+
 /// </summary>
 export class PlayerGameData {
     public TotalSaves: number
@@ -22,19 +25,19 @@ export class PlayerGameData {
     public CollectedJackpots: number = 0
     public CollectedSuperJackpots: number = 0
 
-    public PlayerGameData() {
-        TotalSaves = 0
-        TotalDeaths = 0
-        RoundSaves = 0
-        RoundDeaths = 0
+    public constructor() {
+        this.TotalSaves = 0
+        this.TotalDeaths = 0
+        this.RoundSaves = 0
+        this.RoundDeaths = 0
     }
 
     public ResetRoundData() {
-        RoundSaves = 0
-        RoundDeaths = 0
-        DeathlessProgress = 0
-        SaveStreak = 0
-        RoundFinished = false
-        NitroObtained = false
+        this.RoundSaves = 0
+        this.RoundDeaths = 0
+        this.DeathlessProgress = 0
+        this.SaveStreak = 0
+        this.RoundFinished = false
+        this.NitroObtained = false
     }
 }

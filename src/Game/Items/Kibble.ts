@@ -10,8 +10,8 @@ import { IDisposable } from 'src/Utility/CSUtils'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
-import { getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { Effect, Trigger } from 'w3ts'
+import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { Effect, Item, Item, Trigger } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { PersonalBestAwarder } from '../Podium/PersonalBestAwarder'
 import { ItemSpatialGrid } from './ItemSpatialGrid'
@@ -28,10 +28,10 @@ export class Kibble extends IDisposable {
     private static JackpotMin: number = 600
     private static JackpotMax: number = 1500
 
-    public Item: item
+    public Item: Item
     private Type: number
     private JackPotIndex: number
-    private StarFallEffect: Effect
+    private StarFallEffect: Effect | null
 
     public Kibble() {
         Kibble.PickupTrigger ??= Kibble.KibblePickupEvents()
@@ -39,8 +39,7 @@ export class Kibble extends IDisposable {
     }
 
     public dispose() {
-        this.Item?.dispose()
-        this.Item = null
+        this.Item?.destroy()
         MemoryHandler.destroyObject(this)
     }
 
@@ -50,7 +49,7 @@ export class Kibble extends IDisposable {
         let x = GetRandomReal(region.Rect.minX, region.Rect.maxX)
         let y = GetRandomReal(region.Rect.minY, region.Rect.maxY)
         this.StarFallEffect ??= AddSpecialEffect(Kibble.StarfallEffect, x, y)
-        this.StarFallEffect.setPos(x, y, 0)
+        this.StarFallEffect.setPosition(x, y, 0)
         this.StarFallEffect.playAnimation(ANIM_TYPE_BIRTH)
         this.JackPotIndex = 1
         this.Item = this.Item.create(this.Type, x, y)!
@@ -68,7 +67,7 @@ export class Kibble extends IDisposable {
         trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addAction(() => {
             let item = getManipulatedItem()
-            if (!Kibble.KibblesColors.includes(item.TypeId)) return
+            if (!Kibble.KibblesColors.includes(item.typeId)) return
             Kibble.KibblePickup(item)
         })
         return trig
@@ -78,16 +77,18 @@ export class Kibble extends IDisposable {
 
     // #region Kibble Pickup Logic
 
-    private static KibblePickup(item: item) {
+    private static KibblePickup(item: Item) {
         try {
             if (item == null) return
 
             let unit = getTriggerUnit()
             let player = unit.owner
             let kitty = Globals.ALL_KITTIES.get(player)!
-            let effect: Effect = null
+            let effect: Effect | null = null
             let randomChance = GetRandomReal(0, 100)
-            let kib = ItemSpawner.TrackKibbles.find(k => k.Item == item)
+            let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle == item.handle)
+
+            if (kib == null) return;
 
             if (randomChance <= 30) Kibble.KibbleGoldReward(kitty, kib)
             else if (randomChance <= 60) Kibble.KibbleXP(kitty)

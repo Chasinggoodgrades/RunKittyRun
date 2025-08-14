@@ -116,7 +116,7 @@ export class RTR {
         }
 
         this.kitty.Unit.setPathing(false)
-        this.kitty.Unit.setPos(newX, newY)
+        this.kitty.Unit.setPosition(newX, newY)
         this.kitty.Unit.setPathing(true)
 
         this.ItemPickup()

@@ -10,6 +10,8 @@ export const getTriggerPlayer = () => MapPlayer.fromHandle(GetTriggerPlayer())!
 
 export const getManipulatedItem = () => Item.fromHandle(GetManipulatedItem())!
 
+export const getKillingUnit = () => Unit.fromHandle(GetKillingUnit())!
+
 export const blzCreateFrameByType = (type: string, name: string, parent: Frame, template: string, id: number) => {
     return Frame.createType(name, parent, id, template, type)!
 }

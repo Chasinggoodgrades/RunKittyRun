@@ -130,7 +130,7 @@ export class FirstPersonCamera {
 
     private ResetCamera() {
         if (!this.player.isLocal()) return
-        SetCameraTargetControllerNoZForPlayer(this.player, this.hero, 0, 0, false)
+        SetCameraTargetControllerNoZForPlayer(this.player.handle, this.hero.handle, 0, 0, false)
         ResetToGameCamera(0)
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0, 0.0)
     }

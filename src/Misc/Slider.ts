@@ -2,6 +2,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
 import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
 
 export class Slider {
@@ -207,7 +208,7 @@ export class Slider {
         }
 
         this.kitty.Unit.setPathing(false)
-        this.kitty.Unit.setPos(newX, newY)
+        this.kitty.Unit.setPosition(newX, newY)
         this.kitty.Unit.setPathing(true)
         this.ItemPickup()
     }
@@ -236,13 +237,13 @@ export class Slider {
             let orderY = GetOrderPointY()
             angle = Atan2(orderY - unit.y, orderX - unit.x) * bj_RADTODEG
         } else {
-            let target = GetOrderTarget()
+            let target = GetOrderTarget()!
             let orderX = GetWidgetX(target)
             let orderY = GetWidgetY(target)
             angle = Atan2(orderY - unit.y, orderX - unit.x) * bj_RADTODEG
         }
 
-        let currentAngle = GetUnitFacing(unit)
+        let currentAngle = GetUnitFacing(unit.handle)
         this.setRemainingDegreesToTurn(this.AnglesDiff(angle, currentAngle))
     }
 
@@ -276,7 +277,7 @@ export class Slider {
 
         let remainingDegrees: number = this.remainingDegreesToTurn
         if (remainingDegrees != 0) {
-            let currentAngle: number = GetUnitFacing(this.kitty.Unit)
+            let currentAngle: number = GetUnitFacing(this.kitty.Unit.handle)
 
             let diffToApplyAbs: number = Math.min(Math.abs(remainingDegrees), Math.abs(maxSlideTurnPerPeriod))
 
@@ -319,7 +320,7 @@ export class Slider {
                 this.setRemainingDegreesToTurn(remainingDegrees - diffToApply)
 
                 let newAngle: number = currentAngle + diffToApply
-                BlzSetUnitFacingEx(this.kitty.Unit, newAngle)
+                BlzSetUnitFacingEx(this.kitty.Unit.handle, newAngle)
             }
         }
     }

@@ -1,3 +1,4 @@
+import { Item } from "w3ts"
 import { Kitty } from "../Entities/Kitty/Kitty"
 import { Kibble } from "./Kibble"
 
@@ -34,14 +35,14 @@ export class ItemSpatialGrid {
         if ((list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(kibble)
     }
 
-    public static RegisterItem(item: item) {
+    public static RegisterItem(item: Item) {
         let cell = GetCell(item.x, item.y)
-        let list: Kibble[]
+        let list: Item[]
         if (!(list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) itemCells[cell] = list = []
         list.push(item)
     }
 
-    public static UnregisterItem(item: item) {
+    public static UnregisterItem(item: Item) {
         let cell = GetCell(item.x, item.y)
         if ((list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(item)
     }

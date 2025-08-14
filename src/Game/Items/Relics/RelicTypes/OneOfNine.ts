@@ -25,7 +25,7 @@ export class OneOfNine extends Relic {
         this.RelicItemID = Constants.ITEM_ONE_OF_NINE
         this.RelicCost = 650
 
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(
                 0,
                 'Cooldown of your ultimate is reduced by an additional 3 seconds per upgrade level.',
@@ -33,7 +33,7 @@ export class OneOfNine extends Relic {
                 800
             )
         )
-        Upgrades.push(new RelicUpgrade(1, 'Your ultimate no longer costs mana.', 20, 1000))
+        this.Upgrades.push(new RelicUpgrade(1, 'Your ultimate no longer costs mana.', 20, 1000))
     }
     public override ApplyEffect(Unit: Unit) {
         let player: MapPlayer = Unit.owner

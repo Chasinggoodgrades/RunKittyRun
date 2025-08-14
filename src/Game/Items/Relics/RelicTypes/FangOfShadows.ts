@@ -9,7 +9,6 @@ import { GC } from "src/Utility/GC"
 import { Utility } from "src/Utility/Utility"
 import { getTriggerUnit } from "src/Utility/w3tsUtils"
 import { Trigger, Timer, Unit } from "w3ts"
-import { Upgrades } from "war3-objectdata-th"
 import { PlayerUpgrades } from "../PlayerUpgrades"
 import { Relic } from "../Relic"
 import { RelicUpgrade } from "../RelicUpgrade"
@@ -42,10 +41,10 @@ export class FangOfShadows extends Relic {
         this.RelicCost = 650
         ;(this.constructor as typeof FangOfShadows).IconPath = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
 
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(0, 'Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.', 15, 800)
         )
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(1, 'Remaining cooldown reduced at new safezones is now 50% instead of 25%.', 20, 1000)
         )
     }
@@ -64,7 +63,7 @@ export class FangOfShadows extends Relic {
 
     private RegisterTriggers(Unit: Unit) {
         this.SummonTrigger = Trigger.create()!
-        TriggerRegisterUnitEvent(this.SummonTrigger, Unit, EVENT_UNIT_SPELL_CAST)
+        TriggerRegisterUnitEvent(this.SummonTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.SummonTrigger.addCondition(Condition(() => GetSpellAbilityId() == this.RelicAbilityID))
         this.SummonTrigger.addAction(ErrorHandler.Wrap(this.SummonShadowKitty))
 
@@ -124,7 +123,7 @@ export class FangOfShadows extends Relic {
     }
 
     private RegisterTeleportAbility(Unit: Unit) {
-        TriggerRegisterUnitEvent(this.TeleTrigger, Unit, EVENT_UNIT_SPELL_CAST)
+        TriggerRegisterUnitEvent(this.TeleTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.TeleTrigger.addCondition(Condition(() => GetSpellAbilityId() == this.TeleportAbilityID))
         this.TeleTrigger.addAction(this.TeleportToShadowKitty)
     }

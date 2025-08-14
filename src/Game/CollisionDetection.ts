@@ -66,14 +66,14 @@ export class CollisionDetection {
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
             WOLF_COLL_RADIUS,
-            WolfCollisionFilter(k),
-            WolfCollisionTrigger(k)
+            this.WolfCollisionFilter(k),
+            this.WolfCollisionTrigger(k)
         )
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
             CIRCLE_COLLISION_RADIUS,
-            CircleCollisionFilter(k),
-            CircleCollisionTrigger(k)
+            this.CircleCollisionFilter(k),
+            this.CircleCollisionTrigger(k)
         )
     }
 
@@ -84,14 +84,14 @@ export class CollisionDetection {
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
             DEFAULT_WOLF_COLLISION_RADIUS,
-            ShadowRelicWolvesFilter(sk),
-            WolfCollisionShadowTrigger(sk)
+            this.ShadowRelicWolvesFilter(sk),
+            this.WolfCollisionShadowTrigger(sk)
         )
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
             CIRCLE_COLLISION_RADIUS,
-            ShadowRelicCircleFilter(sk),
-            CircleCollisionShadowTrigger(sk)
+            this.ShadowRelicCircleFilter(sk),
+            this.CircleCollisionShadowTrigger(sk)
         )
     }
 

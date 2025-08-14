@@ -5,10 +5,10 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
-import { Timer } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
+import { Unit, Effect, Timer } from 'w3ts'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { RelicUpgrade } from '../RelicUpgrade'
+import { Relic } from '../Relic'
 
 export class ChronoSphere extends Relic {
     public RelicItemID: number = Constants.ITEM_CHRONO_ORB
@@ -33,20 +33,19 @@ export class ChronoSphere extends Relic {
     private Magnitude: number
     private MagnitudeTimer = Timer.create()
     private LocationCaptureTimer = Timer.create()
-    private LocationEffect: Effect = null
+    private LocationEffect: Effect | null = null
     private CapturedLocation = [100, 100, 100]
 
     public constructor() {
-        super(
-            '{Colors.COLOR_YELLOW}Chrono Sphere',
-            'Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r',
-            RelicAbilityID,
-            RelicItemID,
-            RelicCost,
-            IconPath
-        )
+        super(),
+        this.name = '{Colors.COLOR_YELLOW}Chrono Sphere',
+        this.Description = 'Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r',
+        this.RelicAbilityID = this.RelicAbilityID,
+        this.RelicItemID = this.RelicItemID,
+        this.RelicCost = this.RelicCost,
+        this.IconPath = this.IconPath
 
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(
                 0,
                 `Every {MAGNITUDE_CHANGE_INTERVAL.ToString("F2")} seconds, the magnitude of the slowing aura will change between {MAGNITUDE_LOWER_BOUND.ToString("F2")}% - {MAGNITUDE_UPPER_BOUND.ToString("F2")}% effectiveness.`,
@@ -54,7 +53,7 @@ export class ChronoSphere extends Relic {
                 800
             )
         )
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(
                 1,
                 `Every {LOCATION_CAPTURE_INTERVAL.ToString("F2")} seconds, your location is captured. If you were to die, you'll reverse time to that location. {Colors.COLOR_LIGHTBLUE}(2min cooldown)|r`,
@@ -66,9 +65,9 @@ export class ChronoSphere extends Relic {
 
     public override ApplyEffect(Unit: Unit) {
         try {
-            Kitty = Globals.ALL_KITTIES.get(Unit.owner)!
-            Utility.SimpleTimer(0.1, RotatingSlowAura)
-            Utility.SimpleTimer(0.1, RotatingLocationCapture)
+            this.Kitty = Globals.ALL_KITTIES.get(Unit.owner)!
+            Utility.SimpleTimer(0.1, this.RotatingSlowAura)
+            Utility.SimpleTimer(0.1, this.RotatingLocationCapture)
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.ApplyEffect: {e.Message}')
         }
@@ -76,14 +75,11 @@ export class ChronoSphere extends Relic {
 
     public override RemoveEffect(Unit: Unit) {
         try {
-            MagnitudeTimer?.pause()
-            MagnitudeTimer?.dispose()
-            MagnitudeTimer = null
-            LocationCaptureTimer?.pause()
-            LocationCaptureTimer?.dispose()
-            LocationCaptureTimer = null
-            LocationEffect?.dispose()
-            LocationEffect = null
+            this.MagnitudeTimer?.pause()
+            this.MagnitudeTimer?.destroy()
+            this.LocationCaptureTimer?.pause()
+            this.LocationCaptureTimer?.destroy()
+            this.LocationEffect?.destroy()
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RemoveEffect: {e.Message}')
         }
@@ -93,11 +89,11 @@ export class ChronoSphere extends Relic {
         try {
             let item = Utility.UnitGetItem(Kitty.Unit, RelicItemID)
             if (!item) return
-            Ability = item.getAbility(RelicAbilityID)
-            Magnitude = RandomMagnitude()
-            Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude)
-            Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS)
-            item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
+            this.Ability = item.getAbility(RelicAbilityID)
+            this.Magnitude = this.RandomMagnitude()
+            this.Ability.SetMovementSpeedIncreasePercent_Oae1(0, this.Magnitude)
+            this.Ability.SetAreaOfEffect_aare(0, this.SLOW_AURA_RADIUS)
+            item.ExtendedDescription = `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(this.Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.SetAbilityData: {e.Message}')
         }
@@ -123,9 +119,9 @@ export class ChronoSphere extends Relic {
         try {
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
             if (upgradeLevel <= 1) return
-            LocationCaptureTimer ??= Timer.create()
-            CapturedLocation = (Kitty.Unit.x, Kitty.Unit.y, Kitty.Unit.facing) // reset to current location on buy
-            LocationCaptureTimer.start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation)
+            this.LocationCaptureTimer ??= Timer.create()
+            this.CapturedLocation = (Kitty.Unit.x, Kitty.Unit.y, Kitty.Unit.facing) // reset to current location on buy
+            this.LocationCaptureTimer.start(this.LOCATION_CAPTURE_INTERVAL, false, this.CaptureLocation)
         } catch (e: any) {
             Logger.Warning('Error in ChronoSphere.RotatingLocationCapture: {e.Message}')
         }
@@ -163,7 +159,7 @@ export class ChronoSphere extends Relic {
                 x = Kitty.Unit.x
                 y = Kitty.Unit.y
             }
-            Kitty.Unit.setPos(x, y)
+            Kitty.Unit.setPosition(x, y)
             Kitty.Unit.setFacingEx(CapturedLocation.Item3)
             Kitty.Unit.paused = true
             Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit)

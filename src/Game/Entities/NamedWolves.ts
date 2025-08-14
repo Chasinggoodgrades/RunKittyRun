@@ -39,7 +39,7 @@ export class NamedWolves {
     }
 
     private static UpdateTextTag() {
-        NamedWolves.ExplodingWolf?.Texttag?.setPos(
+        NamedWolves.ExplodingWolf?.Texttag?.setPosition(
             NamedWolves.ExplodingWolf.Unit.x,
             NamedWolves.ExplodingWolf.unit.y,
             0.015
@@ -65,7 +65,7 @@ export class NamedWolves {
         BurntMeat.RegisterDeathTrigger()
 
         Utility.SimpleTimer(0.5, () =>
-            NamedWolves.StanWolf.Texttag.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.unit.y, 0.015)
+            NamedWolves.StanWolf.Texttag.setPosition(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.unit.y, 0.015)
         )
         NamedWolves.DNTNamedWolves.push(NamedWolves.StanWolf)
     }

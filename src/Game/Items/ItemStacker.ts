@@ -42,14 +42,13 @@ export class ItemStacker {
             if (!this.StackableItem(itemID)) return
             let unit = getTriggerUnit()
             let heldItem = Utility.UnitGetItem(unit, itemID)
-            item.owner = unit.owner
+            item.setOwner(unit.owner, false)
             if (heldItem == item) return
             if (heldItem == null) return
             let itemCharges = item.charges
             if (itemCharges > 1) heldItem.charges += itemCharges
             else heldItem.charges += 1
             item.destroy()
-            item = null
         } catch (e: any) {
             Logger.Critical(e.Message)
             throw e

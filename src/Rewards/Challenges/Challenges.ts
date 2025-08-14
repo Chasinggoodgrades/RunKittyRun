@@ -190,7 +190,7 @@ export class YellowLightning {
 
     private EndTimer() {
         if (this.SaveCount >= this.YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == GameMode.Standard) {
-            AwardManager.GiveReward(Kitty.Player, 'YellowLightning')
+            AwardManager.GiveReward(this.Kitty.Player, 'YellowLightning')
         }
         this.SaveCount = 0
     }

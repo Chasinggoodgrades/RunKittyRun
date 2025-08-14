@@ -8,10 +8,11 @@ import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
 import { getFilterUnit, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Group, MapPlayer, Trigger, Unit } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
+import { Program } from 'src/Program'
+import { Relic } from '../Relic'
 
 export class RingOfSummoning extends Relic {
     public RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING
@@ -21,22 +22,21 @@ export class RingOfSummoning extends Relic {
     private static SUMMONING_COOLDOWN: number = 90.0
     private static UPGRADE_COOLDOWN_REDUCTION: number = 30.0
     private static IconPath: string = 'war3mapImported\\BTNArcaniteNightRing.blp'
-    private Trigger: Trigger
-    private Owner: Unit
+    private triggerHandle: Trigger
+    private Owner: Unit | null
     private SummonGroup: Group
 
     public constructor() {
-        super(
-            '{Colors.COLOR_GREEN}Sacred Ring of Summoning|r',
-            'On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.' +
-                ' {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r',
-            this.RelicAbilityID,
-            this.RelicItemID,
-            this.RelicCost,
-            RingOfSummoning.IconPath
-        )
-
-        Upgrades.push(
+        super(),
+        this.name = '{Colors.COLOR_GREEN}Sacred Ring of Summoning|r',
+        this.Description = 'On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.' +
+            ' {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r',
+        this.RelicAbilityID = this.RelicAbilityID,
+        this.RelicItemID = this.RelicItemID,
+        this.RelicCost = this.RelicCost,
+        this.IconPath = RingOfSummoning.IconPath
+        
+        this.Upgrades.push(
             new RelicUpgrade(
                 0,
                 'Cooldown of summoning ability reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.',
@@ -44,14 +44,14 @@ export class RingOfSummoning extends Relic {
                 800
             )
         )
-        Upgrades.push(new RelicUpgrade(1, 'Summons one additional player within your targeted AoE.', 20, 1000))
+        this.Upgrades.push(new RelicUpgrade(1, 'Summons one additional player within your targeted AoE.', 20, 1000))
     }
 
     private RegisterTriggers(Unit: Unit) {
-        let Trigger = Trigger.create()!
-        TriggerRegisterUnitEvent(Trigger, Unit, EVENT_UNIT_SPELL_EFFECT)
-        Trigger.addCondition(Condition(() => GetSpellAbilityId() == this.RelicAbilityID))
-        Trigger.addAction(ErrorHandler.Wrap(this.SacredRingOfSummoning))
+        this.triggerHandle = Trigger.create()!
+        TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
+        this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() == this.RelicAbilityID))
+        this.triggerHandle.addAction(ErrorHandler.Wrap(this.SacredRingOfSummoning))
     }
 
     public override ApplyEffect(Unit: Unit) {
@@ -62,7 +62,7 @@ export class RingOfSummoning extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        GC.RemoveTrigger(Trigger) // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
+        GC.RemoveTrigger(this.triggerHandle) // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
         GC.RemoveGroup(this.SummonGroup) // TODO; Cleanup:         GC.RemoveGroup(ref SummonGroup);
         this.Owner = null
         Unit.disableAbility(this.RelicAbilityID, false, true)
@@ -73,7 +73,7 @@ export class RingOfSummoning extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
-        let ability = Unit.getAbility(this.RelicAbilityID)
+        let ability = Unit.getAbility(this.RelicAbilityID)!
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
 
         // Summon radius thingy
@@ -101,7 +101,8 @@ export class RingOfSummoning extends Relic {
 
         // Prepare relic mechanics
         RelicUtil.CloseRelicBookPlayer(player)
-        Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID))
+        if (this.Owner === null) return;
+        Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(this.Owner!, this.RelicItemID, this.RelicAbilityID))
 
         // Filter eligible summon targets
         let filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
@@ -130,7 +131,7 @@ export class RingOfSummoning extends Relic {
             // Position adjustments and revival
             kitty.Unit.setPosition(summoningKittyUnit.x, summoningKittyUnit.y)
             kitty.ProgressZone = summoningKitty.ProgressZone
-            Globals.ALL_CIRCLES[unit.owner].Unit.setPos(summoningKittyUnit.x, summoningKittyUnit.y)
+            Globals.ALL_CIRCLES[unit.owner].Unit.setPosition(summoningKittyUnit.x, summoningKittyUnit.y)
             kitty.ReviveKitty(summoningKitty)
 
             // Notify players

@@ -3,8 +3,8 @@ import { Gamemode } from "src/Gamemodes/Gamemode"
 import { GameMode } from "src/Gamemodes/GameModeEnum"
 import { Globals } from "src/Global/Globals"
 import { ErrorHandler } from "src/Utility/ErrorHandler"
-import { getTriggerUnit } from "src/Utility/w3tsUtils"
-import { Trigger, MapPlayer } from "w3ts"
+import { getManipulatedItem, getTriggerUnit } from "src/Utility/w3tsUtils"
+import { Trigger, MapPlayer, Item } from "w3ts"
 
 export class RollerSkates {
     private static OnUseTrigger: Trigger
@@ -14,7 +14,7 @@ export class RollerSkates {
         this.RollerSkaters = []
         this.OnUseTrigger = Trigger.create()!
         this.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
-        this.OnUseTrigger.addCondition(Condition(() => getManipulatedItem().TypeId == Constants.ITEM_PEGASUS_BOOTS))
+        this.OnUseTrigger.addCondition(Condition(() => getManipulatedItem().typeId == Constants.ITEM_PEGASUS_BOOTS))
         this.OnUseTrigger.addAction(ErrorHandler.Wrap(this.SwitchingBoots))
     }
 
@@ -34,22 +34,22 @@ export class RollerSkates {
         if (this.RollerSkaters.includes(unit.owner)) {
             this.SetPegasusBoots(item)
             slider.StopSlider()
-            this.RollerSkaters.Remove(unit.owner)
+            this.RollerSkaters.splice(this.RollerSkaters.indexOf(unit.owner), 1)
             unit.owner.DisplayTimedTextTo(3.0, '{Colors.COLOR_YELLOW}Skates: Deactivated: Roller{Colors.COLOR_RESET}')
         } else {
             this.SetRollerSkates(item)
             if (slider.IsEnabled()) slider.ResumeSlider(false)
             else slider.StartSlider()
-            RollerSkaters.push(unit.owner)
+            this.RollerSkaters.push(unit.owner)
             unit.owner.DisplayTimedTextTo(3.0, '{Colors.COLOR_YELLOW}Skates: Activated: Roller{Colors.COLOR_RESET}')
         }
     }
 
-    private static SetPegasusBoots(item: item) {
+    private static SetPegasusBoots(item: Item) {
         item.name = 'Boots: Pegasus'
     }
 
-    private static SetRollerSkates(item: item) {
+    private static SetRollerSkates(item: Item) {
         item.name = '{Colors.COLOR_ORANGE}[Skates: Roller]{Colors.COLOR_RESET} Boots: Pegasus'
     }
 }

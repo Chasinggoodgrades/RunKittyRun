@@ -9,10 +9,10 @@ import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Group, MapPlayer, Trigger, Unit } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
+import { Relic } from '../Relic'
 
 export class FrostbiteRing extends Relic {
     public RelicItemID: number = Constants.ITEM_FROSTBITE_RING
@@ -33,17 +33,16 @@ export class FrostbiteRing extends Relic {
     private FreezeGroup: Group
 
     public constructor() {
-        super(
-            '{Colors.COLOR_BLUE}Frostbite Ring',
-            'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r',
-            FrostbiteRing.RelicAbilityID,
-            this.RelicItemID,
-            this.RelicCost,
-            FrostbiteRing.IconPath
-        )
+        super();
+        this.name = '{Colors.COLOR_BLUE}Frostbite Ring';
+        this.Description = 'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r';
+        this.RelicAbilityID = FrostbiteRing.RelicAbilityID;
+        this.RelicItemID = this.RelicItemID;
+        this.RelicCost = this.RelicCost;
+        this.IconPath = FrostbiteRing.IconPath;
 
-        Upgrades.push(new RelicUpgrade(0, 'Freeze duration is increased by 1 second per upgrade level.', 15, 800))
-        Upgrades.push(
+        this.Upgrades.push(new RelicUpgrade(0, 'Freeze duration is increased by 1 second per upgrade level.', 15, 800))
+        this.Upgrades.push(
             new RelicUpgrade(
                 1,
                 "Wolves that've been frozen will have 50% reduced movespeed for {SLOW_DURATION} seconds after being unfrozen.",
@@ -51,7 +50,7 @@ export class FrostbiteRing extends Relic {
                 1000
             )
         )
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(2, 'Cooldown is reduced by {(int)UPGRADE_COOLDOWN_REDUCTION} seconds.', 20, 1200)
         )
     }

@@ -77,7 +77,7 @@ export class NitroPacer {
 
         pacerTimer?.pause()
         Unit.paused = false
-        Unit.setPos(spawnRect.centerX, spawnRect.centerY)
+        Unit.setPosition(spawnRect.centerX, spawnRect.centerY)
         currentCheckpoint = 0
         currentDistance = 0
     }

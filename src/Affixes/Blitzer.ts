@@ -140,7 +140,7 @@ export class Blitzer extends Affix {
 
         // Move the unit one step
         this.Unit.Unit.setPathing(false)
-        this.Unit.Unit.setPos(nextX, nextY)
+        this.Unit.Unit.setPosition(nextX, nextY)
         this.Unit.Unit.setPathing(true)
 
         this.Unit.Unit.setFacingEx((Math.atan2(directionY, directionX) * 180.0) / Math.PI)

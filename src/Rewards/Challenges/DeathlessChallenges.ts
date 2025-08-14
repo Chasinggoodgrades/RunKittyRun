@@ -65,7 +65,7 @@ export class DeathlessChallenges {
 
     private static AwardBasedOnDifficulty(player: MapPlayer) {
         let difficulty = Difficulty.DifficultyValue
-        NormalDeathlessAward(player)
+        this.NormalDeathlessAward(player)
         /*        switch (difficulty)
                 {
                     case DifficultyLevel.Normal:
@@ -87,7 +87,7 @@ export class DeathlessChallenges {
 
     private static NormalDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        GiveRoundReward(
+        this.GiveRoundReward(
             player,
             'NormalDeathless1',
             'NormalDeathless2',
@@ -99,7 +99,7 @@ export class DeathlessChallenges {
 
     private static HardDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        GiveRoundReward(
+        this.GiveRoundReward(
             player,
             'HardDeathless1',
             'HardDeathless2',
@@ -111,7 +111,7 @@ export class DeathlessChallenges {
 
     private static ImpossibleDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        GiveRoundReward(
+        this.GiveRoundReward(
             player,
             'ImpossibleDeathless1',
             'ImpossibleDeathless2',

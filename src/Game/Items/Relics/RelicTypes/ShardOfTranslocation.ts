@@ -132,7 +132,7 @@ export class ShardOfTranslocation extends Relic {
             x = unit.x + this.MaxBlinkRange * Cos(angle)
             y = unit.y + this.MaxBlinkRange * Sin(angle)
         }
-        unit.setPos(x, y)
+        unit.setPosition(x, y)
     }
 
     private static EligibleLocation(targetLoc: location, currentSafezone: number) {

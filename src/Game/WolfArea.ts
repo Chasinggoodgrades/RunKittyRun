@@ -34,7 +34,7 @@ export class WolfArea {
             wolfArea.CalculateArea()
             wolfArea.RegisterEnterEvents()
             wolfArea.RegisterLeaveEvents()
-            WolfArea.WolfAreas.push(count, wolfArea)
+            WolfArea.WolfAreas.set(count, wolfArea)
             count++
         }
     }

@@ -3,7 +3,7 @@ export class RoundUtilities {
         let kitty = Globals.ALL_KITTIES.get(Player)!
         let x = RegionList.SpawnRegions[Player.id].centerX
         let y = RegionList.SpawnRegions[Player.id].centerY
-        kitty.Unit.setPos(x, y)
+        kitty.Unit.setPosition(x, y)
         kitty.Unit.facing = 360.0
     }
 

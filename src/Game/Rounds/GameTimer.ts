@@ -2,24 +2,25 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Team } from 'src/Gamemodes/Teams/Team'
 import { Globals } from 'src/Global/Globals'
-import { Timer } from 'w3ts'
+import { Frame, Timer } from 'w3ts'
 
 export class GameTimer {
-    private static readonly _cachedGameTimer: Action = () => {
-        return StartGameTimer()
+    private static readonly _cachedGameTimer: () => void = () => {
+        return this.StartGameTimer()
     }
+
     public static RoundTime: number[]
     public static RoundSpeedIncrement: number = 0.12
-    private static GameTimeBar: Frame = framehandle.Get('ResourceBarSupplyText', 0)
+    private static GameTimeBar: Frame = Frame.fromName('ResourceBarSupplyText', 0)!
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>
     public static Initialize() {
         Globals.GAME_TIMER_DIALOG.setTitle('Game: Time: Elapsed')
-        RoundTime = []
+        this.RoundTime = []
         let t = Timer.create()
-        t.start(RoundSpeedIncrement, true, _cachedGameTimer)
+        t.start(this.RoundSpeedIncrement, true, this._cachedGameTimer)
     }
 
     /// <summary>
@@ -28,19 +29,19 @@ export class GameTimer {
     private static StartGameTimer() {
         if (!Globals.GAME_ACTIVE) return
 
-        Globals.GAME_SECONDS += RoundSpeedIncrement
-        Globals.GAME_TIMER.start(Globals.GAME_SECONDS, false, null)
+        Globals.GAME_SECONDS += this.RoundSpeedIncrement
+        Globals.GAME_TIMER.start(Globals.GAME_SECONDS, false, () => {})
         Globals.GAME_TIMER.pause()
 
-        RoundTime[Globals.ROUND] += RoundSpeedIncrement
-        GameTimeBar.text = '{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}'
-        UpdatingTimes()
+        this.RoundTime[Globals.ROUND] += this.RoundSpeedIncrement
+        this.GameTimeBar.text = '{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}'
+        this.UpdatingTimes()
     }
 
     private static UpdatingTimes() {
         if (Globals.ROUND > Gamemode.NumberOfRounds) return
-        UpdateIndividualTimes()
-        UpdateTeamTimes()
+        this.UpdateIndividualTimes()
+        this.UpdateTeamTimes()
     }
 
     private static UpdateIndividualTimes() {
@@ -54,9 +55,14 @@ export class GameTimer {
 
     private static UpdateTeamTimes() {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-        for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-            let team = Globals.ALL_TEAMS_LIST[i]
-            if (!team.Finished) team.TeamTimes[Globals.ROUND] += RoundSpeedIncrement
+            for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+                let team = Globals.ALL_TEAMS_LIST[i]
+                if (!team.Finished) {
+                    let teamTime = team.TeamTimes.get(Globals.ROUND)
+                    if (teamTime != null) {
+                        team.TeamTimes.set(Globals.ROUND, teamTime + this.RoundSpeedIncrement)
+                    }
+            }
         }
     }
 
@@ -67,8 +73,8 @@ export class GameTimer {
     /// <returns></returns>
     public static TeamTotalTime(team: Team) {
         let totalTime = 0.0
-        for (let time in team.TeamTimes) {
-            totalTime += time.Value
+        for (let [round, time] of team.TeamTimes) {
+            totalTime += time
         }
         return totalTime
     }

@@ -85,7 +85,7 @@ export class Vortex extends Affix {
             let angle = WCSharp.Shared.Util.AngleBetweenPoints(Unit.Unit.x, Unit.Unit.y, x, y)
             let newX = x + distance * Cos(angle)
             let newY = y + distance * Sin(angle)
-            unit.setPos(newX, newY)
+            unit.setPosition(newX, newY)
             unit.setFacingEx(angle)
             //let lastOrder = UnitOrders.GetLastOrderLocation(unit);
             //unit.IssueOrder("move", lastOrder.x, lastOrder.y);

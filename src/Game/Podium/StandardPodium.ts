@@ -67,7 +67,7 @@ export class StandardPodium {
         }
         let(player, position) = PodiumQueue.Dequeue()
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
-        kitty.setPos(position.x, position.y)
+        kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
         MovedUnits.push(kitty)

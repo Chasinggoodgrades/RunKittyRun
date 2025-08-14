@@ -973,7 +973,7 @@ export class InitCommands {
                 let kitty = Globals.ALL_KITTIES.get(player)!
                 for (let k in Globals.ALL_KITTIES) {
                     if (k.Value.Unit.owner == player) continue
-                    k.Value.Unit.setPos(kitty.Unit.x, kitty.Unit.y)
+                    k.Value.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
                 }
             },
         })
@@ -1532,7 +1532,7 @@ export class InitCommands {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
                     let spawnCenter = RegionList.SpawnRegions[1]
-                    kitty.Unit.setPos(spawnCenter.centerX, spawnCenter.centerY)
+                    kitty.Unit.setPosition(spawnCenter.centerX, spawnCenter.centerY)
                 })
             },
         })
@@ -1581,7 +1581,7 @@ export class InitCommands {
                     if (kitty == null) return
                     let safeZones = RegionList.SafeZones
                     for (let safeZone in safeZones) {
-                        kitty.Unit.setPos(safeZone.centerX, safeZone.centerY)
+                        kitty.Unit.setPosition(safeZone.centerX, safeZone.centerY)
                     }
                 })
             },

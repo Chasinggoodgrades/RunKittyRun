@@ -1,3 +1,13 @@
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { Globals } from "src/Global/Globals"
+import { Colors } from "src/Utility/Colors/Colors"
+import { Queue } from "src/Utility/Queue"
+import { Utility } from "src/Utility/Utility"
+import { Point, Unit, MapPlayer } from "w3ts"
+import { Progress } from "../Management/Progress"
+import { PodiumManager } from "./PodiumManager"
+import { PodiumUtil } from "./PodiumUtil"
+
 export class SoloPodium {
     private static PodiumQueue = new Queue<[player, Point]>()
     private static MovedUnits: Unit[] = []
@@ -8,7 +18,7 @@ export class SoloPodium {
 
     public static BeginPodiumActions() {
         PodiumUtil.SetCameraToPodium()
-        Utility.SimpleTimer(3.0, ProcessPodiumTypeActions)
+        Utility.SimpleTimer(3.0, this.ProcessPodiumTypeActions)
     }
 
     private static EnqueueTopPlayerTimes() {
@@ -17,9 +27,9 @@ export class SoloPodium {
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
             let player = topTimes[i]
             let position = podiumPositions[i]
-            PodiumQueue.Enqueue((player, position))
+            this.PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = Time
+        this.PodiumType = this.Time
     }
 
     private static EnqueueTopPlayerProgress() {
@@ -28,50 +38,50 @@ export class SoloPodium {
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
             let player = topProgress[i]
             let position = podiumPositions[i]
-            PodiumQueue.Enqueue((player, position))
+            this.PodiumQueue.Enqueue((player, position))
         }
-        PodiumType = Progress
+        this.PodiumType = this.Progress
     }
 
     private static ProcessNextPodiumAction() {
-        if (PodiumQueue.length == 0) {
+        if (this.PodiumQueue.length == 0) {
             PodiumUtil.EndingGameThankyou()
             return
         }
-        let(player, position) = PodiumQueue.Dequeue()
+        let(player, position) = this.PodiumQueue.Dequeue()
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
-        kitty.setPos(position.x, position.y)
+        kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
-        MovedUnits.push(kitty)
+        this.MovedUnits.push(kitty)
         print(
             '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
         )
-        Utility.SimpleTimer(5.0, ProcessNextPodiumAction)
+        Utility.SimpleTimer(5.0, this.ProcessNextPodiumAction)
     }
 
     private static ProcessPodiumTypeActions() {
-        PodiumQueue.clear()
-        PodiumUtil.ClearPodiumUnits(MovedUnits)
+        this.PodiumQueue.clear()
+        PodiumUtil.ClearPodiumUnits(this.MovedUnits)
         switch (Gamemode.CurrentGameModeType) {
             case 'Race':
-                EnqueueTopPlayerTimes()
+                this.EnqueueTopPlayerTimes()
                 break
 
             case 'Progression':
-                EnqueueTopPlayerProgress()
+                this.EnqueueTopPlayerProgress()
                 break
         }
-        ProcessNextPodiumAction()
+        this.ProcessNextPodiumAction()
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
         let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
-        switch (PodiumType) {
-            case Time:
+        switch (this.PodiumType) {
+            case 'Time':
                 return stats.GetTotalTimeFormatted()
 
-            case Progress:
+            case 'Progress':
                 return stats.GetOverallProgress().toFixed(2) + '%'
 
             default:
