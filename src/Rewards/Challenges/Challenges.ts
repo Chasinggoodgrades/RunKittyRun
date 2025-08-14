@@ -156,7 +156,7 @@ export class Challenges {
     private static DoubleBackingTrigger() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         let t = Trigger.create()!
-        TriggerRegisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
+        TriggerregisterEnterRegionSimple(t, RegionList.SafeZones[0].Region)
         t.addAction(
             ErrorHandler.Wrap(() => {
                 let unit = getTriggerUnit()

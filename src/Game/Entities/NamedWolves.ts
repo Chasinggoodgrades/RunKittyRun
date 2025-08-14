@@ -59,9 +59,9 @@ export class NamedWolves {
         NamedWolves.StanWolf.Texttag.setText(NamedWolves.StanWolf.Unit.name, 0.015)
         NamedWolves.StanWolf.Texttag.setPermanent(true)
         NamedWolves.StanWolf.paused = true
-        NamedWolves.StanWolf.Unit.IsInvulnerable = false
+        NamedWolves.StanWolf.Unit.invulnerable = false
 
-        Utility.SimpleTimer(0.5, () => (NamedWolves.StanWolf.Unit.IsInvulnerable = false))
+        Utility.SimpleTimer(0.5, () => (NamedWolves.StanWolf.Unit.invulnerable = false))
         BurntMeat.RegisterDeathTrigger()
 
         Utility.SimpleTimer(0.5, () =>

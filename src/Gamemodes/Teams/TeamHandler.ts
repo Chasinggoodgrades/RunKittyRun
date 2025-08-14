@@ -1,12 +1,20 @@
+import { Logger } from "src/Events/Logger/Logger"
+import { RoundManager } from "src/Game/Rounds/RoundManager"
+import { Globals } from "src/Global/Globals"
+import { MapPlayer } from "w3ts"
+import { Gamemode } from "../Gamemode"
+import { Team } from "./Team"
+import { GameSeed } from "src/Init/GameSeed"
+
 export class TeamHandler {
     public static FreepickEnabled: boolean = false
 
     public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
         if (
             Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] &&
-            (adminForced || (!RoundManager.GAME_STARTED && FreepickEnabled))
+            (adminForced || (!RoundManager.GAME_STARTED && this.FreepickEnabled))
         ) {
-            FreepickHandler(Player, TeamNumber, adminForced)
+            this.FreepickHandler(Player, TeamNumber, adminForced)
         } else {
             Player.DisplayTextTo(
                 '{Colors.COLOR_YELLOW_ORANGE}The -command: team is available: for: this: gamemode: or: the: time: to: pick: not has expired.{Colors.COLOR_RESET}'
@@ -15,13 +23,14 @@ export class TeamHandler {
     }
 
     private static FreepickHandler(Player: MapPlayer, TeamNumber: number, adminForced: boolean) {
-        if (CanPlayerJoinTeam(Player, TeamNumber)) {
-            ApplyPlayerToTeam(Player, TeamNumber)
+        if (this.CanPlayerJoinTeam(Player, TeamNumber)) {
+            this.ApplyPlayerToTeam(Player, TeamNumber)
         }
     }
 
     private static ApplyPlayerToTeam(Player: MapPlayer, TeamNumber: number) {
-        if ((team = Globals.ALL_TEAMS.TryGetValue(TeamNumber)) /* TODO; Prepend: Team */) {
+        const team = Globals.ALL_TEAMS.get(TeamNumber)
+        if (team) {
             team.AddMember(Player)
             Player.DisplayTextTo(
                 '{Colors.COLOR_YELLOW_ORANGE}have: joined: team: You {team.TeamColor}{Colors.COLOR_RESET}'
@@ -33,20 +42,17 @@ export class TeamHandler {
     /// Throws all players who are currently not on a team into a random team. Prioritizing already made teams before creating new ones.
     /// </summary>
     public static RandomHandler() {
-        FreepickEnabled = false
-        let shuffled = Globals.ALL_PLAYERS
-
-        shuffled = shuffled.OrderBy(x => Math.random()).ToList() // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
+        this.FreepickEnabled = false
+        let shuffled = GameSeed.Shuffle(Globals.ALL_PLAYERS, Globals.GAME_SEED)
         let teamNumber = 1
-
         try {
             for (let i: number = 0; i < shuffled.length; i++) {
                 let player = shuffled[i]
 
-                if ((currentTeam = Globals.PLAYERS_TEAMS.TryGetValue(player)) /* TODO; Prepend: Team */) {
+                let currentTeam = Globals.PLAYERS_TEAMS.get(player)
+                if (currentTeam) {
                     continue
                 }
-
                 let addedToExistingTeam: boolean = false
 
                 // Attempt to add player to an existing team
@@ -69,7 +75,8 @@ export class TeamHandler {
                     }
 
                     // Check if the team exists, if not create it
-                    if (!(team = Globals.ALL_TEAMS.TryGetValue(teamNumber)) /* TODO; Prepend: Team */) {
+                    let team = Globals.ALL_TEAMS.get(teamNumber)
+                    if (!team) {
                         team = new Team(teamNumber)
                     }
 
@@ -89,14 +96,16 @@ export class TeamHandler {
         }
 
         // If the team exists, we're going to check if full or if that player is already on the team
-        if ((team = Globals.ALL_TEAMS.TryGetValue(TeamNumber)) /* TODO; Prepend: Team */) {
+        let team = Globals.ALL_TEAMS.get(TeamNumber)
+        if (team) {
             // If Team is full, return.
             if (team.Teammembers.length >= Gamemode.PlayersPerTeam) {
                 Player.DisplayTextTo('{team.TeamColor}{Colors.COLOR_YELLOW_ORANGE} is full.{Colors.COLOR_RESET}')
                 return false
             }
             // If player is on the team they're trying to join.. Return.
-            if ((currentTeam = Globals.PLAYERS_TEAMS.TryGetValue(Player)) /* TODO; Prepend: Team */) {
+            let currentTeam = Globals.PLAYERS_TEAMS.get(Player)
+            if (currentTeam) {
                 if (currentTeam.TeamID == TeamNumber) {
                     Player.DisplayTextTo(
                         '{Colors.COLOR_YELLOW_ORANGE}are: already: on: You {team.TeamColor}{Colors.COLOR_RESET}'
@@ -105,19 +114,20 @@ export class TeamHandler {
                 }
 
                 // If not the same team.. Remove them so they're ready to join another.
-                RemoveFromCurrentTeam(Player)
+                this.RemoveFromCurrentTeam(Player)
             }
         }
         // If team doesnt exist, we're going to remove the player from current team and create that new team.
         else {
-            RemoveFromCurrentTeam(Player)
+            this.RemoveFromCurrentTeam(Player)
             new Team(TeamNumber)
         }
         return true
     }
 
     private static RemoveFromCurrentTeam(Player: MapPlayer) {
-        if ((team = Globals.PLAYERS_TEAMS.TryGetValue(Player)) /* TODO; Prepend: Team */) {
+        let team = Globals.PLAYERS_TEAMS.get(Player)
+        if (team) {
             team.RemoveMember(Player)
         }
     }

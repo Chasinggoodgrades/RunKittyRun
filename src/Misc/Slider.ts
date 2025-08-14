@@ -214,11 +214,11 @@ export class Slider {
 
     private RegisterClickEvent() {
         this.ClickTrigger = Trigger.create()!
-        this.ClickTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
+        this.ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         this.ClickTrigger.addAction(() => this.HandleTurn(true))
 
         this.WidgetTrigger = Trigger.create()!
-        this.WidgetTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        this.WidgetTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
         this.WidgetTrigger.addAction(() => this.HandleTurn(false))
 
         this.ClickTrigger.enabled = false

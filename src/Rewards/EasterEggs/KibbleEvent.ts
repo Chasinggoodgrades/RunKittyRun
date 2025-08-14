@@ -9,7 +9,7 @@ export class KibbleEvent {
     private EventLength: number = 300.0 // 5 minutes to collect 200 kibble xd
 
     public static StartKibbleEvent(chance: number) {
-        let adjustedChance = Source.Program.Debug ? 5 : 1
+        let adjustedChance = Program.Debug ? 5 : 1
         if (chance > adjustedChance || EventPlayed) return
 
         EventActive = true

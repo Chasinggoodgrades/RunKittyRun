@@ -33,11 +33,12 @@ import { FloatingNameTag } from 'src/UI/FloatingNames'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { Utility } from 'src/Utility/Utility'
-import { MapPlayer, Timer, Trigger, Unit } from 'w3ts'
+import { MapPlayer, Point, Timer, Trigger, Unit } from 'w3ts'
 import { Circle } from '../Circle'
 import { ShadowKitty } from '../ShadowKitty'
 import { KittyMiscInfo } from './KittyMiscInfo'
 import { KittyStatsManager } from './KittyStatsManager'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class Kitty {
     private KITTY_HERO_TYPE: number = Constants.UNIT_KITTY
@@ -125,22 +126,23 @@ export class Kitty {
     /// </summary>
     public KillKitty() {
         try {
-            if (Invulnerable || !Alive) return
+            if (this.Invulnerable || !this.Alive) return
 
-            let circle: Circle = Globals.ALL_CIRCLES[Player]
+            let circle = Globals.ALL_CIRCLES.get(this.Player)
+            if (!circle) return
 
             // Pause processes before unit death
-            Slider.PauseSlider()
-            RTR.PauseRTR()
-            aiController.PauseAi()
-            Unit.Kill()
+            this.Slider.PauseSlider()
+            this.RTR.PauseRTR()
+            this.aiController.PauseAi()
+            KillUnit(this.Unit.handle)
 
             // Update status flags
-            if (!ProtectionActive) Alive = false
+            if (!this.ProtectionActive) this.Alive = false
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this)
-            circle.SetMana(Unit.mana - MANA_DEATH_PENALTY, Unit.maxMana, Unit.Intelligence * 0.08 + 0.01)
+            circle.SetMana(this.Unit.mana - this.MANA_DEATH_PENALTY, this.Unit.maxMana, this.Unit.intelligence * 0.08 + 0.01)
             circle.KittyDied(this)
             Solo.ReviveKittySoloTournament(this)
             Solo.RoundEndCheck()
@@ -150,7 +152,7 @@ export class Kitty {
             SoundManager.PlayFirstBloodSound()
 
             // Update stats
-            StatsManager.DeathStatUpdate()
+            this.StatsManager.DeathStatUpdate()
 
             // Handle game mode specific logic
             if (Gamemode.CurrentGameMode == GameMode.Standard) {
@@ -168,62 +170,65 @@ export class Kitty {
     /// <summary>
     /// Revives this object and increments savior's stats if provided.
     /// </summary>
-    public ReviveKitty(savior: Kitty = null) {
+    public ReviveKitty(savior?: Kitty) {
         try {
-            if (Unit.isAlive()) return
+            if (UnitAlive(this.Unit.handle)) return;
 
-            let circle: Circle = Globals.ALL_CIRCLES[Player]
+            let circle = Globals.ALL_CIRCLES.get(this.Player)
+
+            if (!circle) return
 
             // Hide visual indicators before revival
             circle.HideCircle()
-            InvulnerableKitty()
-            Alive = true
+            this.InvulnerableKitty()
+            this.Alive = true
 
             // Revive the unit at its respective position
-            Unit.Revive(circle.Unit.x, circle.unit.y, false)
-            Unit.mana = circle.Unit.mana
+            this.Unit.revive(circle.Unit.x, circle.Unit.y, false)
+            this.Unit.mana = circle.Unit.mana
 
             // Adjust player controls and UI
-            Utility.SelectUnitForPlayer(Player, Unit)
-            CameraUtil.RelockCamera(Player)
+            Utility.SelectUnitForPlayer(this.Player, this.Unit)
+            CameraUtil.RelockCamera(this.Player)
 
             // Resume processes
-            Slider.ResumeSlider(true)
-            RTR.ResumeRTR()
-            aiController.ResumeAi()
+            this.Slider.ResumeSlider(true)
+            this.RTR.ResumeRTR()
+            this.aiController.ResumeAi()
 
             // Update savior stats if applicable
             if (savior != null) {
-                StatsManager.UpdateSaviorStats(savior)
+                this.StatsManager.UpdateSaviorStats(savior)
                 MultiboardUtil.RefreshMultiboards()
             }
-        } catch (e: any) {
+        } 
+        catch (e: any) {
             Logger.Critical('Error in ReviveKitty: {e.Message}')
             throw e
         }
     }
 
     private InvulnerableKitty() {
-        if (!InvulTest) return
-        Invulnerable = true
-        InvulTimer.start(InvulDuration, false, () => {
-            Invulnerable = false
-            InvulTimer.pause()
+        if (!Kitty.InvulTest) return
+        this.Invulnerable = true
+        this.InvulTimer.start(this.InvulDuration, false, () => {
+            this.Invulnerable = false
+            this.InvulTimer.pause()
         })
     }
 
     public ToggleMirror() {
-        IsMirror = !IsMirror
+        this.IsMirror = !this.IsMirror
     }
 
     private InitData() {
         try {
             // Save Data
-            if (Player.controller == MAP_CONTROL_USER && Player.slotState == PLAYER_SLOT_STATE_PLAYING)
-                SaveData = SaveManager.GetKittyData(Player)
-            else SaveData = new KittyData() // dummy data for comps
+            if (this.Player.controller == MAP_CONTROL_USER && this.Player.slotState == PLAYER_SLOT_STATE_PLAYING)
+                this.SaveData = SaveManager.GetKittyData(this.Player)
+            else this.SaveData = new KittyData() // dummy data for comps
 
-            Relics = []
+            this.Relics = []
         } catch (e: any) {
             Logger.Critical('Error in InitData {e.Message}')
             throw e
@@ -231,25 +236,25 @@ export class Kitty {
     }
 
     private SpawnEffect() {
-        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.id].Center
-        Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.x, spawnCenter.y)
+        const spawncenter = Point.create(RegionList.SpawnRegions[this.Player.id].centerX, RegionList.SpawnRegions[this.Player.id].centerY)
+        Utility.CreateEffectAndDispose(this.SPAWN_IN_EFFECT, spawncenter.x, spawncenter.y)
     }
 
     private CreateKitty() {
         // Spawn Location
-        WCSharp.Shared.Data.spawnCenter = RegionList.SpawnRegions[Player.id].Center
+        const spawncenter = Point.create(RegionList.SpawnRegions[this.Player.id].centerX, RegionList.SpawnRegions[this.Player.id].centerY)
 
         // Creation of Unit
-        Unit = Unit.Create(this.Player, this.KITTY_HERO_TYPE, spawnCenter.x, spawnCenter.y, 360)
-        Utility.MakeUnitLocust(Unit)
-        Utility.SelectUnitForPlayer(Player, Unit)
+        this.Unit = Unit.create(this.Player, this.KITTY_HERO_TYPE, spawncenter.x, spawncenter.y, 360)!
+        Utility.MakeUnitLocust(this.Unit)
+        Utility.SelectUnitForPlayer(this.Player, this.Unit)
 
         // Initialize Kitty
-        Globals.ALL_KITTIES.push(Player, this)
+        Globals.ALL_KITTIES.set(this.Player, this)
         Resources.StartingItems(this)
-        RelicUtil.DisableRelicBook(Unit)
-        Unit.name = '{Colors.PlayerNameColored(Player)}'
-        TrueSightGhostWolves()
+        RelicUtil.DisableRelicBook(this.Unit)
+        this.Unit.name = '{Colors.PlayerNameColored(this.Player)}'
+        this.TrueSightGhostWolves()
         CollisionDetection.KittyRegisterCollisions(this)
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
@@ -257,36 +262,36 @@ export class Kitty {
     }
 
     private StartAIController() {
-        if (Player.controller == MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (this.Player.controller == MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode == GameMode.Standard) {
             this.aiController?.StartAi()
-            Unit.addItem(FourCC('bspd')) // boots
+            this.Unit.addItemById(FourCC('bspd')) // boots
         }
     }
 
     public dispose() {
-        Alive = false
-        w_Collision.dispose()
-        c_Collision.dispose()
-        YellowLightning.dispose()
-        TimeProg.dispose()
-        APMTracker.dispose()
-        MirrorHandler.dispose()
-        InvulTimer.pause()
-        InvulTimer.dispose()
-        Disco?.dispose()
-        aiController.StopAi()
-        RTR.StopRTR()
-        Unit.dispose()
+        this.Alive = false
+        this.w_Collision.destroy()
+        this.c_Collision.destroy()
+        this.YellowLightning.dispose()
+        this.TimeProg.dispose()
+        this.APMTracker.dispose()
+        this.MirrorHandler.dispose()
+        this.InvulTimer.pause()
+        this.InvulTimer.destroy()
+        this.Disco?.dispose()
+        this.aiController.StopAi()
+        this.RTR.StopRTR()
+        this.Unit.destroy()
         ChainedTogether.RegenerateGroup(this.name)
         if (Gameover.WinGame) return
-        Globals.ALL_KITTIES_LIST.Remove(this)
-        Globals.ALL_KITTIES.Remove(Player)
+        Globals.ALL_KITTIES_LIST.splice(Globals.ALL_KITTIES_LIST.indexOf(this), 1)
+        Globals.ALL_KITTIES.delete(this.Player)
     }
 
     private TrueSightGhostWolves() {
         let trueSight: number = FourCC('Atru')
-        Unit.AddAbility(trueSight)
-        Unit.HideAbility(trueSight, true)
+        this.Unit.addAbility(trueSight)
+        this.Unit.hideAbility(trueSight, true)
     }
 
     public isAlive = () => this.Alive

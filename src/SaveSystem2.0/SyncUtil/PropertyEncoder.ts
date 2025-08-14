@@ -16,7 +16,7 @@ export class PropertyEncoder {
 
     private static GetJsonData(obj: object) {
         let jsonString: StringBuilder = new StringBuilder('{')
-        AppendProperties(obj, jsonString)
+        this.AppendProperties(obj, jsonString)
         jsonString.Append('}')
 
         return jsonString.toString()

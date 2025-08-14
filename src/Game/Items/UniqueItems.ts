@@ -22,13 +22,13 @@ export class UniqueItems {
     }
 
     private static RegisterEvents() {
-        Trigger.registerAnyUnitEvent(playerunitevent.PickupItem)
+        Trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         Trigger.addAction(ItemPickup)
     }
 
     private static ItemPickup() {
         try {
-            let item = GetManipulatedItem()
+            let item = getManipulatedItem()
             let player = getTriggerPlayer()
             let kitty = getTriggerUnit()
 

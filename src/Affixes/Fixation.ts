@@ -178,7 +178,7 @@ export class Fixation extends Affix {
 
     public static GetFixation(Unit: Unit): Fixation {
         if (Unit == null) return null
-        let affix = Globals.ALL_WOLVES[Unit].Affixes.find(Fixation.IsFixation)
+        let affix = Globals.ALL_WOLVES.get(unit).Affixes.find(Fixation.IsFixation)
         return affix instanceof Fixation ? fixation : null
     }
 

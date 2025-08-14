@@ -72,7 +72,7 @@ export class SoloPodium {
                 return stats.GetTotalTimeFormatted()
 
             case Progress:
-                return stats.GetOverallProgress().ToString('F2') + '%'
+                return stats.GetOverallProgress().toFixed(2) + '%'
 
             default:
                 return 'n/a'

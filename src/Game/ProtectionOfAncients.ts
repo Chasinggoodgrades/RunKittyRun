@@ -43,7 +43,7 @@ export class ProtectionOfAncients {
     /// <param name="unit"></param>
     private static AddProtectionOfAncients(unit: Unit) {
         let player = unit.owner
-        unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS)
+        unit.addAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS)
         player.DisplayTimedTextTo(
             7.0,
             "{Colors.COLOR_YELLOW_ORANGE}on: level: 6: Congratulations! You'gained: a: ve new ability!{Colors.COLOR_RESET}"
@@ -156,7 +156,7 @@ export class ProtectionOfAncients {
         Globals.ALL_KITTIES.get(player)!.ProtectionActive = true
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
-        Utility.SimpleTimer(0.03, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)))
+        Utility.SimpleTimer(0.03, () => BlzStartUnitAbilityCooldown(Unit.handle, relic, OneOfNine.GetOneOfNineCooldown(player)))
 
         let actiEffect = Effect.create(ACTIVATION_EFFECT, Unit, 'chest')!
 

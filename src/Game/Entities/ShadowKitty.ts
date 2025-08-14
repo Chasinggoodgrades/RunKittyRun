@@ -9,7 +9,7 @@ import { RelicUtil } from '../Items/Relics/RelicUtil'
 import { Kitty } from './Kitty/Kitty'
 
 export class ShadowKitty {
-    public static ALL_SHADOWKITTIES: Map<player, ShadowKitty>
+    public static ALL_SHADOWKITTIES: Map<MapPlayer, ShadowKitty>
     public Unit: Unit
 
     public Player: MapPlayer
@@ -24,34 +24,34 @@ export class ShadowKitty {
 
     public ID: number
 
-    public ShadowKitty(kitty: Kitty) {
+    constructor(kitty: Kitty) {
         this.Kitty = kitty
         this.Player = kitty.Player
-        ID = kitty.Player.id
-        ALL_SHADOWKITTIES[Player] = this
+        this.ID = kitty.Player.id
+        ShadowKitty.ALL_SHADOWKITTIES.set(this.Player, this)
         this.RegisterTriggers()
     }
 
     public static Initialize() {
-        ALL_SHADOWKITTIES = {}
+        ShadowKitty.ALL_SHADOWKITTIES = new Map()
     }
 
     /// <summary>
     /// Summons shadow kitty to the position of this player's kitty object.
     /// </summary>
     public SummonShadowKitty() {
-        let kitty = Globals.ALL_KITTIES.get(Player)!.Unit
-        this.Unit = Unit.create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.x, kitty.y)
+        let kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
+        this.Unit = Unit.create(this.Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.x, kitty.y)!
         this.Unit.setVertexColor(0, 0, 0, 255)
 
-        // Unit.AddAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
-        Unit.AddAbility(Constants.ABILITY_WIND_WALK)
-        Unit.SetAbilityLevel(Constants.ABILITY_WIND_WALK, 3)
+        // Unit.addAbility(Constants.ABILITY_APPEAR_AT_SHADOWKITTY);
+        this.Unit.addAbility(Constants.ABILITY_WIND_WALK)
+        this.Unit.setAbilityLevel(Constants.ABILITY_WIND_WALK, 3)
         Utility.MakeUnitLocust(this.Unit)
         CollisionDetection.ShadowKittyRegisterCollision(this)
-        this.Unit.MovementSpeed = 522
+        this.Unit.moveSpeed = 522
         RelicUtil.CloseRelicBook(kitty)
-        PauseKitty(this.Player, true)
+        ShadowKitty.PauseKitty(this.Player, true)
         Utility.SelectUnitForPlayer(this.Player, this.Unit)
         this.Active = true
     }
@@ -60,8 +60,8 @@ export class ShadowKitty {
     /// Teleports the player's kitty to the shadow kitty's position.
     /// </summary>
     public TeleportToShadowKitty() {
-        let kitty = Globals.ALL_KITTIES.get(Player)!.Unit
-        kitty.setPos(Unit.x, unit.y)
+        let kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
+        kitty.setPosition(this.Unit.x, this.Unit.y)
     }
 
     /// <summary>
@@ -70,11 +70,10 @@ export class ShadowKitty {
     public KillShadowKitty() {
         try {
             UnitWithinRange.DeRegisterUnitWithinRangeUnitShadow(this)
-            this.Unit.Kill()
-            this.Unit.dispose()
-            this.Unit = null
+            KillUnit(this.Unit.handle)
+            this.Unit.destroy();
             this.Active = false
-            PauseKitty(this.Player, false)
+            ShadowKitty.PauseKitty(this.Player, false)
         } catch (e: any) {
             Logger.Warning('ShadowKitty.KillShadowKitty: {e.Message}')
             throw e

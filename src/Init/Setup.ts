@@ -1,32 +1,75 @@
+import { AffixFactory } from "src/Affixes/AffixFactory";
+import { Logger } from "src/Events/Logger/Logger";
+import { PlayerLeaves } from "src/Events/PlayerLeavesEvent/PlayerLeaves";
+import { UnitSharing } from "src/Events/UnitSharing/UnitSharing";
+import { VictoryZone } from "src/Events/VictoryZone/VictoryZone";
+import { Kitty } from "src/Game/Entities/Kitty/Kitty";
+import { NitroPacer } from "src/Game/Entities/NitroPacer";
+import { ItemSpawner } from "src/Game/Items/ItemSpawner";
+import { ItemStacker } from "src/Game/Items/ItemStacker";
+import { UniqueItems } from "src/Game/Items/UniqueItems";
+import { Progress } from "src/Game/Management/Progress";
+import { Safezone } from "src/Game/Management/Safezone";
+import { Shops } from "src/Game/Management/Shops";
+import { PodiumManager } from "src/Game/Podium/PodiumManager";
+import { GameTimer } from "src/Game/Rounds/GameTimer";
+import { RoundManager } from "src/Game/Rounds/RoundManager";
+import { WolfArea } from "src/Game/WolfArea";
+import { Gamemode } from "src/Gamemodes/Gamemode";
+import { GameMode } from "src/Gamemodes/GameModeEnum";
+import { Globals } from "src/Global/Globals";
+import { FirstPersonCameraManager } from "src/Misc/FirstPersonCameraManager";
+import { Challenges } from "src/Rewards/Challenges/Challenges";
+import { Savecode } from "src/Rewards/OldSaves/OldSaves";
+import { RewardsManager } from "src/Rewards/Rewards/RewardsManager";
+import { DoodadChanger } from "src/Seasonal/Doodads/DoodadChanger";
+import { SeasonalManager } from "src/Seasonal/SeasonalManager";
+import { MusicManager } from "src/Sounds/MusicManager";
+import { SoundManager } from "src/Sounds/SoundManager";
+import { CustomStatFrame } from "src/UI/CustomStatFrame";
+import { FrameManager } from "src/UI/Frames/FrameManager";
+import { ShopFrame } from "src/UI/Frames/ShopFrame";
+import { MultiboardManager } from "src/UI/Multiboard";
+import { Colors } from "src/Utility/Colors/Colors";
+import { ErrorHandler } from "src/Utility/ErrorHandler";
+import { AchesTimers } from "src/Utility/MemoryHandler/AchesTimers";
+import { MemoryHandler } from "src/Utility/MemoryHandler/MemoryHandler";
+import { Utility } from "src/Utility/Utility";
+import { MapPlayer, base64Decode } from "w3ts";
+import { Difficulty } from "./Difficulty/Difficulty";
+import { GameSeed } from "./GameSeed";
+import { Resources } from "./Resources";
+import { Program } from "src/Program";
+
 export class Setup {
     private static timeToChoose: number = 0.0
     private static gameModeTimer: AchesTimers
     private static wolfPlayers = [
-        player.NeutralExtra,
-        player.NeutralVictim,
-        player.NeutralAggressive,
-        player.NeutralPassive,
+        MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_EXTRA)!,
+        MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_VICTIM)!,
+        MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!,
+        MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!,
     ]
     private static wolfPlayerIndex: number = 0
 
     public static Initialize() {
         try {
-            SetGameSpeed(gamespeed.Fastest)
+            SetGameSpeed(MAP_SPEED_FASTEST);
             LockGameSpeedBJ()
             Colors.Initialize()
             GameSeed.Initialize()
             DoodadChanger.ShowSeasonalDoodads(false)
             Gamemode.Initialize()
-            SetupVIPList()
-            SetAlliedPlayers()
+            this.SetupVIPList()
+            this.SetAlliedPlayers()
             //if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize()
             Savecode.Initialize()
-            Utility.SimpleTimer(2.0, () => StartGameModeTimer()) // Gives some delay time for the save system to sync
+            Utility.SimpleTimer(2.0, () => this.StartGameModeTimer()) // Gives some delay time for the save system to sync
             StopMusic(false)
             ClearMapMusic()
             Globals.GAME_INITIALIZED = true
-            if (!Source.Program.Debug) return
+            if (!Program.Debug) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(Globals.GAME_MODES[0])
         } catch (e: any) {
@@ -36,22 +79,22 @@ export class Setup {
     }
 
     private static StartGameModeTimer() {
-        gameModeTimer = MemoryHandler.getEmptyObject<AchesTimers>()
-        gameModeTimer.Timer.start(1.0, true, ErrorHandler.Wrap(ChoosingGameMode))
+        this.gameModeTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.gameModeTimer.Timer.start(1.0, true, ErrorHandler.Wrap(this.ChoosingGameMode))
     }
 
     private static ChoosingGameMode() {
-        timeToChoose += 1.0
-        if (timeToChoose == Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
+        this.timeToChoose += 1.0
+        if (this.timeToChoose == Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
         if (Gamemode.IsGameModeChosen) {
-            StartGame()
-            gameModeTimer.dispose()
+            this.StartGame()
+            this.gameModeTimer.dispose()
         }
     }
 
     private static StartGame() {
         try {
-            RemoveDisconnectedPlayers()
+            this.RemoveDisconnectedPlayers()
             FogEnable(false)
             FogMaskEnable(false)
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
@@ -86,7 +129,7 @@ export class Setup {
 
             for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
                 if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) {
-                    wolfPlayers.push(MapPlayer.fromIndex(i)!)
+                    this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
                 }
             }
         } catch (e: any) {
@@ -99,15 +142,16 @@ export class Setup {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState == PLAYER_SLOT_STATE_PLAYING)
                 Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
-            MapPlayer.fromIndex(i)!.Team = 0
+            MapPlayer.fromIndex(i)!.Team = 0 // Need to check C# implementation
         }
     }
 
     private static RemoveDisconnectedPlayers() {
-        for (let player of Globals.ALL_PLAYERS) {
-            if (player.slotState == playerslotstate.Left) {
-                Globals.ALL_PLAYERS.Remove(player)
-                break
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            const player = Globals.ALL_PLAYERS[i]
+            if (player.slotState == PLAYER_SLOT_STATE_LEFT) {
+                Globals.ALL_PLAYERS.splice(i, 1)
+                i--
             }
         }
     }
@@ -127,8 +171,8 @@ export class Setup {
     }
 
     public static getNextWolfPlayer(): MapPlayer {
-        let selectedPlayer = wolfPlayers[wolfPlayerIndex]
-        wolfPlayerIndex = (wolfPlayerIndex + 1) % wolfPlayers.length
+        let selectedPlayer = this.wolfPlayers[this.wolfPlayerIndex]
+        this.wolfPlayerIndex = (this.wolfPlayerIndex + 1) % this.wolfPlayers.length
         return selectedPlayer
     }
 

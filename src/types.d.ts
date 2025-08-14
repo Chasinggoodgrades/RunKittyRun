@@ -8,4 +8,12 @@ declare module 'w3ts' {
     }
 }
 
+declare module 'w3ts' {
+    interface Rectangle {
+        includes(x: number, y: number): boolean
+        rect(): rect
+        region(): region
+    }
+}
+
 export {}

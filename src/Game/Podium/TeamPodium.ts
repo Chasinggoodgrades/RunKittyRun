@@ -83,8 +83,8 @@ export class TeamPodium {
 
             case MVP:
                 return stats.TotalDeaths == 0
-                    ? stats.TotalSaves.ToString('F2') + ' ratio.'
-                    : (stats.TotalSaves / stats.TotalDeaths).ToString('F2') + ' ratio'
+                    ? stats.TotalSaves.toFixed(2) + ' ratio.'
+                    : (stats.TotalSaves / stats.TotalDeaths).toFixed(2) + ' ratio'
 
             default:
                 return 'n/a'

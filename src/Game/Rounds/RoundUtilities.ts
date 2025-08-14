@@ -1,8 +1,8 @@
 export class RoundUtilities {
     public static MovePlayerToStart(Player: MapPlayer) {
         let kitty = Globals.ALL_KITTIES.get(Player)!
-        let x = RegionList.SpawnRegions[Player.id].Center.x
-        let y = RegionList.SpawnRegions[Player.id].Center.y
+        let x = RegionList.SpawnRegions[Player.id].centerX
+        let y = RegionList.SpawnRegions[Player.id].centerY
         kitty.Unit.setPos(x, y)
         kitty.Unit.facing = 360.0
     }
@@ -25,8 +25,8 @@ export class RoundUtilities {
     public static RoundResetAll() {
         for (let kitty in Globals.ALL_KITTIES) {
             kitty.Value.Unit.Revive(
-                RegionList.SpawnRegions[kitty.Value.Player.id].Center.x,
-                RegionList.SpawnRegions[kitty.Value.Player.id].Center.y,
+                RegionList.SpawnRegions[kitty.Value.Player.id].centerX,
+                RegionList.SpawnRegions[kitty.Value.Player.id].centerY,
                 false
             )
             Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle()
@@ -39,8 +39,8 @@ export class RoundUtilities {
     }
 
     public static MovedTimedCameraToStart() {
-        let x = RegionList.SpawnRegions[0].Center.x
-        let y = RegionList.SpawnRegions[0].Center.y
+        let x = RegionList.SpawnRegions[0].centerX
+        let y = RegionList.SpawnRegions[0].centerY
         for (let player of Globals.ALL_PLAYERS) {
             if (player.isLocal()) PanCameraToTimed(x, y, RoundManager.END_ROUND_DELAY)
             CameraUtil.RelockCamera(player)

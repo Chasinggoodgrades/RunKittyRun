@@ -67,7 +67,7 @@ export class PodiumUtil {
             let podium = Regions.Podium_cinematic
             if (player.isLocal()) {
                 SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1400.0, 0.0)
-                PanCameraToTimed(podium.Center.x, podium.Center.y, 2.0)
+                PanCameraToTimed(podium.centerX, podium.centerY, 2.0)
             }
         }
     }
@@ -75,7 +75,7 @@ export class PodiumUtil {
     public static ClearPodiumUnits(podiumUnits: Unit[]) {
         if (podiumUnits.length == 0) return
         for (let kitty in podiumUnits) {
-            kitty.setPos(Regions.safe_Area_00.Center.x, Regions.safe_Area_00.Center.y)
+            kitty.setPos(Regions.safe_Area_00.centerX, Regions.safe_Area_00.centerY)
             kitty.paused = false
         }
         podiumUnits.clear()

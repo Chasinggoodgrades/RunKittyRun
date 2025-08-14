@@ -169,8 +169,8 @@ export class StandardMultiboard {
                 let score = currentStats.TotalSaves - currentStats.TotalDeaths
                 let kda =
                     currentStats.TotalDeaths == 0
-                        ? currentStats.TotalSaves.ToString('F2')
-                        : (currentStats.TotalSaves / currentStats.TotalDeaths).ToString('F2')
+                        ? currentStats.TotalSaves.toFixed(2)
+                        : (currentStats.TotalSaves / currentStats.TotalDeaths).toFixed(2)
 
                 StandardMultiboard.PlayerStats[0] = name
                 StandardMultiboard.PlayerStats[1] = score.toString()
@@ -237,7 +237,7 @@ export class StandardMultiboard {
             let allSaves = saveData.GameStats.Saves
             let allDeaths = saveData.GameStats.Deaths
             let score = allSaves - allDeaths
-            let kda = allDeaths == 0 ? allSaves.ToString('F2') : (allSaves / allDeaths).ToString('F2')
+            let kda = allDeaths == 0 ? allSaves.toFixed(2) : (allSaves / allDeaths).toFixed(2)
             let gameCount = StandardMultiboard.GetGameCount(saveData)
             let winCount = StandardMultiboard.GetWinCount(saveData)
 

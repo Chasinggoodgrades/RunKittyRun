@@ -16,14 +16,14 @@ export class KittyTime {
     private Kitty: Kitty
 
     public constructor(kitty: Kitty) {
-        Kitty = kitty
-        this._cachedProgress = () => Progress.CalculateProgress(Kitty)
+        this.Kitty = kitty
+        this._cachedProgress = () => Progress.CalculateProgress(this.Kitty)
         this.Initialize()
     }
 
     private Initialize() {
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundTime.push(i, 0.0)
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundProgress.push(i, 0.0)
+        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
+        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
         this.PeriodicProgressTimer()
     }
 
@@ -32,8 +32,6 @@ export class KittyTime {
         this.ProgressTimer?.dispose()
         this.RoundTime.clear()
         this.RoundProgress.clear()
-        this.RoundTime = null
-        this.RoundProgress = null
     }
 
     private PeriodicProgressTimer() {
@@ -43,11 +41,11 @@ export class KittyTime {
     // #region Time Section
 
     public GetRoundTime(round: number) {
-        return this.RoundTime.has(round) ? this.RoundTime[round] : 0.0
+        return this.RoundTime.has(round) ? this.RoundTime.get(round)! : 0.0
     }
 
     public GetRoundTimeFormatted(round: number) {
-        return this.RoundTime.has(round) ? Utility.ConvertFloatToTime(this.RoundTime[round]) : '0:00'
+        return this.RoundTime.has(round) ? Utility.ConvertFloatToTime(this.RoundTime.get(round)!) : '0:00'
     }
 
     public GetTotalTime(): number {
@@ -59,20 +57,20 @@ export class KittyTime {
     }
 
     public SetRoundTime(round: number, time: number) {
-        if (this.RoundTime.has(round)) this.RoundTime[round] = time
+        if (this.RoundTime.has(round)) this.RoundTime.set(round, time)
         this.SetTotalTime()
     }
 
     public IncrementRoundTime(round: number) {
-        if (this.RoundTime.has(round)) this.RoundTime[round] += GameTimer.RoundSpeedIncrement
+        if (this.RoundTime.has(round)) this.RoundTime.set(round, this.RoundTime.get(round)! + GameTimer.RoundSpeedIncrement)
         this.SetTotalTime()
     }
 
     private SetTotalTime() {
         // Solo Tournament Issue
         this.TotalTime = 0.0
-        for (let time in this.RoundTime) // IEnumberable
-            this.TotalTime += time.Value
+        for (let [_, time] of this.RoundTime) // IEnumberable
+            this.TotalTime += time
     }
 
     // #endregion Time Section
@@ -80,19 +78,19 @@ export class KittyTime {
     // #region Progress Section
 
     public GetRoundProgress(round: number) {
-        return this.RoundProgress.has(round) ? this.RoundProgress[round] : 0.0
+        return this.RoundProgress.has(round) ? this.RoundProgress.get(round)! : 0.0
     }
 
     public SetRoundProgress(round: number, progress: number) {
-        this.RoundProgress[round] = progress
+        this.RoundProgress.set(round, progress)
     }
 
     public GetOverallProgress(): number {
         // Solo Tournament Issue
         let overallProgress: number = 0.0
-        for (let progress in this.RoundProgress) // IEnumberable
-            overallProgress += progress.Value
-        return overallProgress / this.RoundProgress.length
+        for (let [_, progress] of this.RoundProgress) // IEnumberable
+            overallProgress += progress
+        return overallProgress / this.RoundProgress.size
     }
 
     // #endregion Progress Section

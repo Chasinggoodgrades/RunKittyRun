@@ -25,14 +25,14 @@ export class Howler extends Affix {
 
     public override Apply() {
         this.RegisterTimerEvents()
-        this.Unit.Unit.AddAbility(this.AFFIX_ABILITY)
+        this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.setVertexColor(25, 25, 112, 255)
         super.Apply()
     }
 
     public override Remove() {
         SetUnitVertexColor(this.Unit.Unit, 150, 120, 255, 255)
-        this.Unit.Unit.RemoveAbility(this.AFFIX_ABILITY)
+        this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.HowlTimer?.dispose()
         GC.RemoveGroup(this.NearbyWolves) // TODO; Cleanup:         GC.RemoveGroup(ref NearbyWolves);
         super.Remove()

@@ -95,7 +95,7 @@ export class TeamsMultiboard {
                 overallProgress = overallProgress + int.Parse(team.RoundProgress[j]) // possibly bad?
             }
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setText(
-                (overallProgress / Gamemode.NumberOfRounds).ToString('F2') + '%'
+                (overallProgress / Gamemode.NumberOfRounds).toFixed(2) + '%'
             )
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setVisible(true, false)
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetWidth(0.05)

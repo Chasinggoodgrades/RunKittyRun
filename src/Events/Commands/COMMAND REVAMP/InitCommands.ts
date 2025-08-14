@@ -70,7 +70,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'Handler: Periodic: Message: Memory',
             action: (player, args) => {
-                MemoryHandlerTest.PeriodicTest(CommandsManager.GetBool(args[0]))
+                
             },
         })
 
@@ -159,7 +159,7 @@ export class InitCommands {
                         if (Globals.VIPLISTUNFILTERED.includes(kitty.Player)) return
                         PlayerLeaves.PlayerLeavesActions(kitty.Player)
                         CustomDefeatBJ(
-                            kitty.Player,
+                            kitty.Player.handle,
                             '{Colors.COLOR_RED}have: been: kicked: from: the: game: You!{Colors.COLOR_RESET}'
                         )
                     })
@@ -836,7 +836,7 @@ export class InitCommands {
                 let spawnCenter = RegionList.SpawnRegions[1]
                 for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                     let kitty = Globals.ALL_KITTIES_LIST[i]
-                    kitty.Unit.setPosition(spawnCenter.Center.x, spawnCenter.Center.y)
+                    kitty.Unit.setPosition(spawnCenter.centerX, spawnCenter.centerY)
                 }
             },
         })
@@ -859,7 +859,7 @@ export class InitCommands {
             action: (player, args) => {
                 if (!RoundManager.AddMoreRoundTime()) return
                 print(
-                    `${Colors.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.remaining.ToString('F2')} seconds remaining)${Colors.COLOR_RESET}`
+                    `${Colors.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.remaining.toFixed(2)} seconds remaining)${Colors.COLOR_RESET}`
                 )
             },
         })
@@ -1532,7 +1532,7 @@ export class InitCommands {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
                     let spawnCenter = RegionList.SpawnRegions[1]
-                    kitty.Unit.setPos(spawnCenter.Center.x, spawnCenter.Center.y)
+                    kitty.Unit.setPos(spawnCenter.centerX, spawnCenter.centerY)
                 })
             },
         })
@@ -1581,7 +1581,7 @@ export class InitCommands {
                     if (kitty == null) return
                     let safeZones = RegionList.SafeZones
                     for (let safeZone in safeZones) {
-                        kitty.Unit.setPos(safeZone.Center.x, safeZone.Center.y)
+                        kitty.Unit.setPos(safeZone.centerX, safeZone.centerY)
                     }
                 })
             },

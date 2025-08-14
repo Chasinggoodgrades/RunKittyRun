@@ -18,7 +18,7 @@ export class UnitSharing {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             if (Action != null) break
             let player = Globals.ALL_PLAYERS[i]
-            Trigger.RegisterPlayerAllianceChange(player, alliancetype.SharedControl)
+            Trigger.RegisterPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
         }
         Action = TriggerActions()
         return Trigger
@@ -36,8 +36,8 @@ export class UnitSharing {
             for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 let otherPlayer = Globals.ALL_PLAYERS[i]
                 if (otherPlayer == player) continue
-                player.setAlliance(otherPlayer, alliancetype.SharedControl, false)
-                otherPlayer.setAlliance(player, alliancetype.SharedControl, false)
+                player.setAlliance(otherPlayer, ALLIANCE_SHARED_CONTROL, false)
+                otherPlayer.setAlliance(player, ALLIANCE_SHARED_CONTROL, false)
             }
         })
         return Action

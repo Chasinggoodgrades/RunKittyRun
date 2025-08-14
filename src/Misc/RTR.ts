@@ -124,11 +124,11 @@ export class RTR {
 
     private RegisterClickEvent() {
         let ClickTrigger = Trigger.create()!
-        ClickTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
+        ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         ClickTrigger.addAction(() => this.HandleClick(true))
 
         let WidgetTrigger = Trigger.create()!
-        WidgetTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        WidgetTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
         WidgetTrigger.addAction(() => this.HandleClick(false))
 
         ClickTrigger.enabled = false

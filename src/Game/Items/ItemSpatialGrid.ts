@@ -1,3 +1,6 @@
+import { Kitty } from "../Entities/Kitty/Kitty"
+import { Kibble } from "./Kibble"
+
 export class Cell {
     public readonly x: number
     public readonly y: number

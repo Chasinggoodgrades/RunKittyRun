@@ -1,30 +1,39 @@
+import { Logger } from "src/Events/Logger/Logger"
+import { Globals } from "src/Global/Globals"
+import { MusicManager } from "src/Sounds/MusicManager"
+import { ErrorHandler } from "src/Utility/ErrorHandler"
+import { blzCreateFrameByType, getTriggerPlayer, blzGetFrameByName } from "src/Utility/w3tsUtils"
+import { Frame, Trigger, MapPlayer } from "w3ts"
+import { MultiboardUtil } from "../Multiboard/MultiboardUtil"
+import { FrameManager } from "./FrameManager"
+
 export class MusicFrame {
     public static MusicFramehandle: Frame
     private static MusicSlider: Frame
     private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
-    private static MusicSliderValues: Map<player, number> = new Map()
-    private static MusicButtons: Map<number, framehandle> = new Map()
+    private static MusicSliderValues: Map<MapPlayer, number> = new Map()
+    private static MusicButtons: Map<number, Frame> = new Map()
     private static Headers: string[]
     private static MusicFrameX: number = 0.4
     private static MusicFrameY: number = 0.36
-    private ButtonWidth: number = 0.17
-    private ButtonHeight: number = 0.023
-    private ButtonSpacing: number = 0.025 // Space between buttons
-    private ButtonStartX: number = 0.4 // X coordinate for button positions
-    private ButtonStartY: number = 0.465 // Starting Y coordinate for the first button
+    private static ButtonWidth: number = 0.17
+    private static ButtonHeight: number = 0.023
+    private static ButtonSpacing: number = 0.025 // Space between buttons
+    private static ButtonStartX: number = 0.4 // X coordinate for button positions
+    private static ButtonStartY: number = 0.465 // Starting Y coordinate for the first button
 
     public static Initialize() {
         try {
-            MusicFramehandle = blzCreateFrameByType(
+            this.MusicFramehandle = blzCreateFrameByType(
                 'BACKDROP',
                 'Frame: Music',
-                GameUI,
+                this.GameUI,
                 'QuestButtonPushedBackdropTemplate',
                 0
             )
-            MusicFramehandle.setAbsPoint(FRAMEPOINT_CENTER, MusicFrameX, MusicFrameY)
-            CreateMusicFrames()
-            SetMusicFrameHotkeyEvent()
+            this.MusicFramehandle.setAbsPoint(FRAMEPOINT_CENTER, this.MusicFrameX, this.MusicFrameY)
+            this.CreateMusicFrames()
+            this.SetMusicFrameHotkeyEvent()
         } catch (ex: any) {
             Logger.Critical('Error in MusicFrame: {ex.Message}')
             throw ex
@@ -33,46 +42,46 @@ export class MusicFrame {
 
     private static CreateMusicFrames() {
         let ySize = MusicManager.MusicList.length * 0.03
-        MusicFramehandle.setSize(0.2, ySize)
+        this.MusicFramehandle.setSize(0.2, ySize)
 
-        FrameManager.CreateHeaderFrame(MusicFramehandle)
+        FrameManager.CreateHeaderFrame(this.MusicFramehandle)
 
         // Slider
-        RegisterMusicSlider()
+        this.RegisterMusicSlider()
 
-        InitializeMusicButtons()
-        MusicFramehandle.visible = false
+        this.InitializeMusicButtons()
+        this.MusicFramehandle.visible = false
     }
 
     private static RegisterMusicSlider() {
-        MusicSlider = blzCreateFrameByType('SLIDER', 'SliderFrame', MusicFramehandle, 'QuestMainListScrollBar', 0)
+        this.MusicSlider = blzCreateFrameByType('SLIDER', 'SliderFrame', this.MusicFramehandle, 'QuestMainListScrollBar', 0)
         let numberOfSongs = MusicManager.MusicList.length
-        MusicSlider.ClearPoints()
-        MusicSlider.setAbsPoint(FRAMEPOINT_TOPLEFT, 0.485, 0.455)
-        MusicSlider.setSize(0.01, 0.125)
-        MusicSlider.SetMinMaxValue(0, numberOfSongs)
-        MusicSlider.SetStepSize(1)
+        this.MusicSlider.clearPoints()
+        this.MusicSlider.setAbsPoint(FRAMEPOINT_TOPLEFT, 0.485, 0.455)
+        this.MusicSlider.setSize(0.01, 0.125)
+        this.MusicSlider.setMinMaxValue(0, numberOfSongs)
+        this.MusicSlider.setStepSize(1)
 
-        for (let player of Globals.ALL_PLAYERS) if (!MusicSliderValues.has(player)) MusicSliderValues.push(player, 0)
+        for (let player of Globals.ALL_PLAYERS) if (!this.MusicSliderValues.has(player)) this.MusicSliderValues.set(player, 0)
 
-        let Trigger = Trigger.create()!
+        let triggerHandle = Trigger.create()!
         let mousewheel = Trigger.create()!
-        Trigger.triggerRegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged)
-        mousewheel.triggerRegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel)
-        Trigger.addAction(() => {
+        triggerHandle.triggerRegisterFrameEvent(this.MusicSlider, FRAMEEVENT_SLIDER_VALUE_CHANGED)
+        mousewheel.triggerRegisterFrameEvent(this.MusicSlider, FRAMEEVENT_MOUSE_WHEEL)
+        triggerHandle.addAction(() => {
             let frame = BlzGetTriggerFrame()
             let player = getTriggerPlayer()
-            MusicSliderValues[player] = BlzGetTriggerFrameValue()
-            if (player.isLocal()) PopulateMusicFrame(player)
+            this.MusicSliderValues.set(player, BlzGetTriggerFrameValue())
+            if (player.isLocal()) this.PopulateMusicFrame(player)
         })
         mousewheel.addAction(() => {
             let frame = BlzGetTriggerFrame()
             let player = getTriggerPlayer()
             let frameValue = BlzGetTriggerFrameValue()
             if (!player.isLocal()) return
-            MusicSlider.Value = frameValue > 0 ? frameValue + 1.0 : frameValue - 1.0
-            let value = MusicSliderValues[player]
-            if (player.isLocal()) PopulateMusicFrame(player)
+            this.MusicSlider.value = frameValue > 0 ? frameValue + 1.0 : frameValue - 1.0
+            let value = this.MusicSliderValues.get(player)
+            if (player.isLocal()) this.PopulateMusicFrame(player)
         })
     }
 
@@ -81,13 +90,16 @@ export class MusicFrame {
 
         // Create buttons for each music item
         for (let i = 0; i < musicCount; i++) {
-            if (MusicButtons.has(i)) continue // Skip if already exists
+            if (this.MusicButtons.has(i)) continue // Skip if already exists
             let name = MusicManager.MusicList[i].name
-            MusicButtons[i] = blzCreateFrameByType('GLUETEXTBUTTON', name, MusicFramehandle, 'DebugButton', 0)
-            MusicButtons[i].setSize(ButtonWidth, ButtonHeight)
-            MusicButtons[i].text = MusicManager.MusicList[i].name
+            this.MusicButtons.set(i, blzCreateFrameByType('GLUETEXTBUTTON', name, this.MusicFramehandle, 'DebugButton', 0))
+            this.MusicButtons.get(i)?.setSize(this.ButtonWidth, this.ButtonHeight)
+            const button = this.MusicButtons.get(i)
+            if (button) {
+                button.text = MusicManager.MusicList[i].name
+            }
 
-            MusicButtons[i].setAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, ButtonStartY - i * ButtonSpacing)
+            this.MusicButtons.get(i)?.setAbsPoint(FRAMEPOINT_CENTER, this.ButtonStartX, this.ButtonStartY - i * this.ButtonSpacing)
 
             let trigger = Trigger.create()!
             trigger.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
@@ -96,13 +108,14 @@ export class MusicFrame {
                     let frame = BlzGetTriggerFrame()
                     let player = getTriggerPlayer()
 
+                    if (!frame) return;
                     if (!player.isLocal()) return
 
                     //MusicManager.StopAllMusic();
 
-                    let music = MusicManager.MusicList.find(m => m.name == frame.Text)
+                    let music = MusicManager.MusicList.find(m => m.name == BlzGetTriggerFrameText())
                     music?.Play()
-                    MusicFramehandle.visible = !MusicFramehandle.visible
+                    this.MusicFramehandle.visible = !this.MusicFramehandle.visible
                 })
             )
         }
@@ -116,7 +129,9 @@ export class MusicFrame {
         if (!player.isLocal()) return
 
         // Retrieve the scroll value for the player
-        let value = MusicSliderValues[player]
+        let value = this.MusicSliderValues.get(player)
+        if (value === undefined) return
+
         let maxSongs: number = MusicManager.MusicList.length
         let visibleButtons: number = 9
 
@@ -137,12 +152,16 @@ export class MusicFrame {
             if (i >= start && i < end) {
                 let positionY: number =
                     i == end - 1
-                        ? ButtonStartY - (visibleButtons - 1) * ButtonSpacing
-                        : ButtonStartY - (i - start) * ButtonSpacing
-                MusicButtons[i].setAbsPoint(FRAMEPOINT_CENTER, ButtonStartX, positionY)
-                MusicButtons[i].visible = true
-            } else {
-                MusicButtons[i].visible = false
+                        ? this.ButtonStartY - (visibleButtons - 1) * this.ButtonSpacing
+                        : this.ButtonStartY - (i - start) * this.ButtonSpacing
+                let button = this.MusicButtons.get(i)
+                if (!button) continue // Skip if button does not exist
+                button.setAbsPoint(FRAMEPOINT_CENTER, this.ButtonStartX, positionY)
+                button.visible = true
+            } 
+            else {
+                const button = this.MusicButtons.get(i)
+                if (button) button.visible = false
             }
         }
     }
@@ -150,9 +169,9 @@ export class MusicFrame {
     private static SetMusicFrameHotkeyEvent() {
         let musicHotkeyTrigger = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS) {
-            musicHotkeyTrigger.RegisterPlayerKeyEvent(player, OSKEY_0, 0, true)
+            musicHotkeyTrigger.registerPlayerKeyEvent(player, OSKEY_0, 0, true)
         }
-        musicHotkeyTrigger.addAction(ErrorHandler.Wrap(MusicFrameActions))
+        musicHotkeyTrigger.addAction(ErrorHandler.Wrap(this.MusicFrameActions))
     }
 
     /// <summary>
@@ -164,9 +183,9 @@ export class MusicFrame {
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.MusicButton.visible = false
         FrameManager.MusicButton.visible = true
-        FrameManager.HideOtherFrames(MusicFramehandle)
-        MusicFramehandle.visible = !MusicFramehandle.visible
-        if (MusicFramehandle.visible) MultiboardUtil.MinMultiboards(player, true)
-        PopulateMusicFrame(player)
+        FrameManager.HideOtherFrames(this.MusicFramehandle)
+        this.MusicFramehandle.visible = !this.MusicFramehandle.visible
+        if (this.MusicFramehandle.visible) MultiboardUtil.MinMultiboards(player, true)
+        this.PopulateMusicFrame(player)
     }
 }

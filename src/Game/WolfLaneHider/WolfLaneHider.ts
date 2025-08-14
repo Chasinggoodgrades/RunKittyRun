@@ -64,7 +64,7 @@ export class WolfLaneHider {
                     ) /* TODO; Prepend: let */
                 ) {
                     lane.IsEnabled = true
-                    SetLaneVisibility(lane, true)
+                    this.SetLaneVisibility(lane, true)
                 }
             }
 
@@ -76,7 +76,7 @@ export class WolfLaneHider {
                     ) /* TODO; Prepend: let */
                 ) {
                     lane.IsEnabled = false
-                    SetLaneVisibility(lane, false)
+                    this.SetLaneVisibility(lane, false)
                 }
             }
 

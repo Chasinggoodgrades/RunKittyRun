@@ -121,8 +121,8 @@ export class StandardPodium {
 
             case HighestRatio:
                 return stats.TotalDeaths == 0
-                    ? stats.TotalSaves.ToString('F2')
-                    : (stats.TotalSaves / stats.TotalDeaths).ToString('F2')
+                    ? stats.TotalSaves.toFixed(2)
+                    : (stats.TotalSaves / stats.TotalDeaths).toFixed(2)
 
             case HighestStreak:
                 return stats.MaxSaveStreak.toString()

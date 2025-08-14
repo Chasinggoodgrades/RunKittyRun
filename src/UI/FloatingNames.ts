@@ -11,7 +11,7 @@ export class FloatingNameTag {
     public Kitty: Kitty
     public NameTag: TextTag
 
-    public FloatingNameTag(kitty: Kitty) {
+    constructor(kitty: Kitty) {
         this.Kitty = kitty
         this.NameTag = TextTag.create()!
         this.Initialize()
@@ -39,7 +39,7 @@ export class FloatingNameTag {
     private NamePosTimer() {
         this.NamePosUpdater.Timer.start(this.NAME_TAG_UPDATE_INTERVAL, true, () => {
             this.UpdateNameTag()
-            SetCameraQuickPositionForPlayer(this.Kitty.Player, this.Kitty.Unit.x, this.Kitty.Unit.y)
+            SetCameraQuickPositionForPlayer(this.Kitty.Player.handle, this.Kitty.Unit.x, this.Kitty.Unit.y)
         })
     }
 

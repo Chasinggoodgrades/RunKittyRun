@@ -278,7 +278,7 @@ export class CustomStatFrame {
     }
 
     private static GetPlayerProgress(u: Unit) {
-        return Globals.ALL_KITTIES.get(u.owner)!.TimeProg.GetRoundProgress(Globals.ROUND).ToString('F2')
+        return Globals.ALL_KITTIES.get(u.owner)!.TimeProg.GetRoundProgress(Globals.ROUND).toFixed(2)
     }
 
     private static GetPlayerSaves(u: Unit) {

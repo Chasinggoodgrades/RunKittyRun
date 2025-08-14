@@ -159,7 +159,7 @@ export class Bomber extends Affix {
             this.ReviveAlphaTimer?.pause()
             this.Unit.PauseSelf(false)
             this.Unit.IsReviving = false
-            this.TimerIndicator?.playAnimation(animtype.Death)
+            this.TimerIndicator?.playAnimation(ANIM_TYPE_DEATH)
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
             this.ExplodeTimer?.Timer?.start(Bomber.ExplosionInterval(), false, this.StartExplosion)
         }

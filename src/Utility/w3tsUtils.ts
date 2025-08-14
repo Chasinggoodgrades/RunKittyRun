@@ -1,4 +1,4 @@
-import { Frame, MapPlayer, Unit } from 'w3ts'
+import { Frame, Item, MapPlayer, Unit } from 'w3ts'
 
 // Not sure if these mappings are correct so I didn't replace them everywhere yet.
 // They should also be optional but fuck it for now
@@ -7,6 +7,8 @@ export const getFilterUnit = () => Unit.fromFilter()!
 export const getTriggerUnit = () => Unit.fromHandle(GetTriggerUnit())!
 
 export const getTriggerPlayer = () => MapPlayer.fromHandle(GetTriggerPlayer())!
+
+export const getManipulatedItem = () => Item.fromHandle(getManipulatedItem())!
 
 export const blzCreateFrameByType = (type: string, name: string, parent: Frame, template: string, id: number) => {
     return Frame.createType(name, parent, id, template, type)!

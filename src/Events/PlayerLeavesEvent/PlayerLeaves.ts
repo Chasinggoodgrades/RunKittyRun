@@ -1,15 +1,26 @@
+import { RoundManager } from "src/Game/Rounds/RoundManager"
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { MultiboardUtil } from "src/UI/Multiboard/MultiboardUtil"
+import { Colors } from "src/Utility/Colors/Colors"
+import { ErrorHandler } from "src/Utility/ErrorHandler"
+import { getTriggerPlayer } from "src/Utility/w3tsUtils"
+import { Trigger, MapPlayer } from "w3ts"
+import { Gameover } from "../Gameover"
+
 export class PlayerLeaves {
-    private static Trigger: Trigger = Trigger.create()!
+    private static triggerHandle: Trigger = Trigger.create()!
 
     public static Initialize() {
-        RegisterTrigger()
+        this.RegisterTrigger()
     }
 
     private static RegisterTrigger() {
         for (let player of Globals.ALL_PLAYERS) {
-            Trigger.RegisterPlayerEvent(player, EVENT_PLAYER_LEAVE)
+            this.triggerHandle.registerPlayerEvent(player, EVENT_PLAYER_LEAVE)
         }
-        Trigger.addAction(ErrorHandler.Wrap(() => PlayerLeavesActions()))
+        this.triggerHandle.addAction(ErrorHandler.Wrap(() => this.PlayerLeavesActions()))
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
@@ -17,7 +28,7 @@ export class PlayerLeaves {
         Globals.PLAYERS_TEAMS[player].RemoveMember(player)
     }
 
-    public static PlayerLeavesActions(player: MapPlayer = null) {
+    public static PlayerLeavesActions(player: MapPlayer | null = null) {
         try {
             let leavingPlayer = getTriggerPlayer()
             if (player != null) leavingPlayer = player
@@ -25,7 +36,7 @@ export class PlayerLeaves {
             let kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
             let circle = Globals.ALL_CIRCLES[leavingPlayer]
             let nameTag = kitty.NameTag
-            TeamRemovePlayer(leavingPlayer)
+            this.TeamRemovePlayer(leavingPlayer)
             kitty.dispose()
             circle.dispose()
             nameTag?.dispose()

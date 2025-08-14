@@ -63,10 +63,10 @@ export class RelicUtil {
 
         cooldown = cooldown == 0 ? Math.min(unitCooldown, itemCooldown) : cooldown
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
-        unit.SetAbilityCooldownRemaining(abilityID, cooldown)
+        BlzStartUnitAbilityCooldown(unit.handle,abilityID, cooldown)
         unit.addItem(item)
         unit.dropItemFromSlot(item, itemSlot)
-        unit.SetAbilityCooldownRemaining(abilityID, cooldown)
+        BlzStartUnitAbilityCooldown(unit.handle,abilityID, cooldown)
     }
 
     public static SetAbilityCooldown(unit: Unit, itemID: number, abilityID: number, cooldown: number) {

@@ -394,3 +394,9 @@ export const int = {
         return !isNaN(parsed) ? parsed : null
     },
 }
+
+export const distanceBetweenXYPoints = (x1: number, y1: number, x2: number, y2: number) => {
+    let dx = x2 - x1
+    let dy = y2 - y1
+    return Math.sqrt(dx * dx + dy * dy)
+}

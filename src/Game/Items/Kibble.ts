@@ -65,9 +65,9 @@ export class Kibble extends IDisposable {
 
     private static KibblePickupEvents(): Trigger {
         let trig = Trigger.create()!
-        trig.registerAnyUnitEvent(playerunitevent.PickupItem)
+        trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addAction(() => {
-            let item = GetManipulatedItem()
+            let item = getManipulatedItem()
             if (!Kibble.KibblesColors.includes(item.TypeId)) return
             Kibble.KibblePickup(item)
         })
@@ -129,7 +129,7 @@ export class Kibble extends IDisposable {
 
     private static KibbleXP(kitty: Kitty) {
         let xpAmount = GetRandomInt(50, Kibble.XPMax)
-        kitty.Unit.Experience += xpAmount
+        kitty.Unit.experience += xpAmount
         SoundManager.PlayKibbleTomeSound(kitty.Unit)
     }
 

@@ -1,3 +1,11 @@
+import { Kitty } from "src/Game/Entities/Kitty/Kitty"
+import { ItemSpawner } from "src/Game/Items/ItemSpawner"
+import { RoundManager } from "src/Game/Rounds/RoundManager"
+import { Globals } from "src/Global/Globals"
+import { Gamemode } from "../Gamemode"
+import { GameMode } from "../GameModeEnum"
+import { SoloDeathTimer } from "./SoloDeathTimer"
+
 export class Solo {
     public static Initialize() {
         ItemSpawner.NUMBER_OF_ITEMS = 8

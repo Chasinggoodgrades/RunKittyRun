@@ -12,9 +12,9 @@ import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
 export class Globals {
-    public MAX_TEAM_SIZE: number = 24
-    public TIME_TO_PICK_GAMEMODE: number = 20.0
-    public DEFAULT_TEAM_SIZE: number = 3
+    public static MAX_TEAM_SIZE: number = 24
+    public static DEFAULT_TEAM_SIZE: number = 3
+    public static TIME_TO_PICK_GAMEMODE: number = 20.0
     public static ROUND: number = 0
     public static GAME_ACTIVE: boolean = false
     public static GAME_SECONDS: number = 0.0

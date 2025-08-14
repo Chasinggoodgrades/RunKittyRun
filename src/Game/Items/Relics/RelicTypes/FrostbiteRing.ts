@@ -82,8 +82,8 @@ export class FrostbiteRing extends Relic {
                 let unit = this.FreezeGroup.First
                 if (unit == null) break
                 this.FreezeGroup.removeUnit(unit)
-                if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES[unit].IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
-                if (Globals.ALL_WOLVES[unit].HasAffix('Frostbite')) continue
+                if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit).IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
+                if (Globals.ALL_WOLVES.get(unit).HasAffix('Frostbite')) continue
                 this.FrostbiteEffect(unit)
             }
 
@@ -209,7 +209,7 @@ export class FrozenWolf {
         try {
             if (unit == null) return
             if (NamedWolves.StanWolf != null && unit == NamedWolves.StanWolf.Unit) return
-            if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES[unit].PauseSelf(pause)
+            if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit).PauseSelf(pause)
         } catch (e: any) {
             Logger.Warning('Error in FrozenWolf.PausingWolf: {e.Message}')
         }

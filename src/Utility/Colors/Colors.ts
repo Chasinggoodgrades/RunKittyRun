@@ -131,10 +131,10 @@ export class Colors {
 
     public static SetPlayerColor(p: MapPlayer, color: string) {
         let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        for (let c in Colors.ColorManager) {
+        for (let c of Colors.ColorManager) {
             if (Colors.ColorContainsCommand(c, color)) {
-                kitty.Unit.setColor(playercolor.Convert(c.colorID - 1))
-                kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.Split(',')[0]
+                kitty.Unit.color = ConvertPlayerColor(c.colorID - 1)!
+                kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.split(',')[0]
             }
         }
     }
@@ -142,7 +142,7 @@ export class Colors {
     public static SetColorJoinedAs(p: MapPlayer) {
         let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         let color = Colors.ColorManager[p.id]
-        kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.Split(',')[0]
+        kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.split(',')[0]
     }
 
     public static SetPlayerVertexColor(p: MapPlayer, RGB: string[]) {
@@ -168,7 +168,7 @@ export class Colors {
         let r: number = GetRandomInt(0, 255)
         let g: number = GetRandomInt(0, 255)
         let b: number = GetRandomInt(0, 255)
-        SetUnitVertexColor(kitty.Unit, r, g, b, 255)
+        SetUnitVertexColor(kitty.Unit.handle, r, g, b, 255)
         p.DisplayTimedTextTo(
             5.0,
             '{COLOR_RED}Red: {COLOR_RESET}{r}, {COLOR_GREEN}Green: {COLOR_RESET}{g}, {COLOR_BLUE}Blue: {COLOR_RESET}{b}'
@@ -199,8 +199,8 @@ export class Colors {
     /// <param name="playerID"></param>
     public static SetUnitToVertexColor(unit: Unit, playerID: number) {
         let color: ColorData = Colors.ColorManager[playerID]
-        SetUnitVertexColor(unit, color.red, color.green, color.blue, 255)
-        if (GetUnitTypeId(unit) == Constants.UNIT_CUSTOM_DOG) return
+        SetUnitVertexColor(unit.handle, color.red, color.green, color.blue, 255)
+        if (GetUnitTypeId(unit.handle) == Constants.UNIT_CUSTOM_DOG) return
         Globals.ALL_KITTIES.get(unit.owner)!.SaveData.PlayerColorData.VortexColor =
             `${color.red},${color.green},${color.blue}`
     }
@@ -212,13 +212,13 @@ export class Colors {
         player.DisplayTimedTextTo(10.0, Colors.sb)
     }
 
-    public static GetPlayerByColor(colorName: string): MapPlayer {
+    public static GetPlayerByColor(colorName: string): MapPlayer | undefined {
         for (let color of Colors.ColorManager) {
             if (Colors.ColorContainsCommand(color, colorName.toLowerCase())) {
                 return MapPlayer.fromIndex(color.colorID - 1)!
             }
         }
-        return null
+        return undefined
     }
 
     public static PopulateColorsData(kitty: Kitty) {

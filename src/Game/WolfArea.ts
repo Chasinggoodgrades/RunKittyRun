@@ -41,7 +41,7 @@ export class WolfArea {
 
     private RegisterEnterEvents() {
         let AreaTrigger = Trigger.create()!
-        AreaTrigger.RegisterEnterRegion(this.Region, FilterList.KittyFilter)
+        AreaTrigger.registerEnterRegion(this.Region, FilterList.KittyFilter)
         AreaTrigger.addAction(() => {
             try {
                 let unit = getTriggerUnit()

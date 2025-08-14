@@ -12,6 +12,7 @@ import { Gamemode } from '../Gamemode'
 import { GameMode } from '../GameModeEnum'
 import { TeamHandler } from './TeamHandler'
 import { TeamsUtil } from './TeamsUtil'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class Team {
     private static TeamTimer: Timer
@@ -23,17 +24,20 @@ export class Team {
     public RoundProgress: Map<number, string>
     public Finished: boolean
 
-    public Team(id: number) {
+    constructor(id: number) {
         this.TeamID = id
         this.Teammembers = []
-        this.RoundProgress = {}
-        this.TeamTimes = {}
+        this.RoundProgress = new Map()
+                this.TeamID = id
+        this.Teammembers = []
+        this.RoundProgress = new Map()
+        this.TeamTimes = new Map()
         this.TeamColor = Colors.GetStringColorOfPlayer(this.TeamID) + 'Team ' + this.TeamID
         this.InitRoundStats()
-        Globals.ALL_TEAMS.push(this.TeamID, this)
+        Globals.ALL_TEAMS.set(this.TeamID, this)
         Globals.ALL_TEAMS_LIST.push(this)
     }
-
+    
     public static Initialize() {
         try {
             ShadowKitty.Initialize()
@@ -78,13 +82,13 @@ export class Team {
     }
 
     public UpdateRoundProgress(round: number, progress: string) {
-        this.RoundProgress[round] = progress
+        this.RoundProgress.set(round, progress)
     }
 
     private InitRoundStats() {
         for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
-            this.RoundProgress[i] = '0.0'
-            this.TeamTimes[i] = 0.0
+            this.RoundProgress.set(i,'0.0')
+            this.TeamTimes.set(i, 0.0)
         }
     }
 
@@ -96,7 +100,7 @@ export class Team {
             ErrorHandler.Wrap(() => {
                 TeamsMultiboard.UpdateCurrentTeamsMB()
                 TeamsMultiboard.UpdateTeamStatsMB()
-                DestroyTimer(t)
+                t.destroy()
             })
         )
     }
@@ -139,13 +143,13 @@ export class Team {
         if (adding) {
             this.Teammembers.push(player)
             Globals.ALL_KITTIES.get(player)!.TeamID = this.TeamID
-            Globals.ALL_KITTIES.get(player)!.Unit.setColor(GetPlayerColor(MapPlayer.fromIndex(TeamID - 1)!))
-            Globals.ALL_CIRCLES[player].Unit.setColor(GetPlayerColor(MapPlayer.fromIndex(TeamID - 1)!))
-            Globals.PLAYERS_TEAMS.push(player, this)
+            Globals.ALL_KITTIES.get(player)!.Unit.color = (GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle))
+            Globals.ALL_CIRCLES.get(player)!.Unit.color = (GetPlayerColor(MapPlayer.fromIndex(this.TeamID - 1)!.handle))
+            Globals.PLAYERS_TEAMS.set(player, this)
         } else {
-            Teammembers.Remove(player)
+            this.Teammembers.splice(this.Teammembers.indexOf(player), 1)
             Globals.ALL_KITTIES.get(player)!.TeamID = 0
-            Globals.PLAYERS_TEAMS.Remove(player)
+            Globals.PLAYERS_TEAMS.delete(player)
         }
 
         // Sets the team member string whenever someone is added or removed.

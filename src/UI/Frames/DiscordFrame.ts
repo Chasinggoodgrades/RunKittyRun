@@ -1,5 +1,5 @@
 import { Globals } from 'src/Global/Globals'
-import { blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, Trigger } from 'w3ts'
 
 export class DiscordFrame {
@@ -8,7 +8,7 @@ export class DiscordFrame {
     private static DiscordIconBack: Frame
     private static DiscordText: Frame
     private static Backdrop: Frame
-    private static Trigger: Trigger
+    private static triggerHandle: Trigger
     private static ESCTrigger: Trigger
     private static Link: string = 'https://discord.gg/GSu6zkNvx5'
     private static JoinDiscord: string =
@@ -25,7 +25,7 @@ export class DiscordFrame {
     }
 
     private static CreateFrame() {
-        DiscordFrame.EditBox = blzCreateFrameByType(
+        DiscordFrame.EditBox = blzCreateFrame(
             'EscMenuEditBoxTemplate',
             Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
             0,
@@ -33,9 +33,9 @@ export class DiscordFrame {
         )
         DiscordFrame.EditBox.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.165)
         DiscordFrame.EditBox.setSize(0.2, 0.03)
-        DiscordFrame.EditBox.TextSizeLimit = DiscordFrame.Link.length
+        DiscordFrame.EditBox.textSizeLimit = DiscordFrame.Link.length
         DiscordFrame.EditBox.text = DiscordFrame.Link
-        DiscordFrame.EditBox.SetTextAlignment(textaligntype.Center, textaligntype.Center)
+        BlzFrameSetTextAlignment(DiscordFrame.EditBox.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
     }
 
     private static SetupBackdrop() {
@@ -85,17 +85,18 @@ export class DiscordFrame {
         DiscordFrame.DiscordText.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.21)
         DiscordFrame.DiscordText.setSize(0.19, 0.03)
         DiscordFrame.DiscordText.text = DiscordFrame.JoinDiscord
-        DiscordFrame.DiscordText.SetTextAlignment(textaligntype.Center, textaligntype.Center)
+        BlzFrameSetTextAlignment(DiscordFrame.DiscordText.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
+
     }
 
     private static RegisterTrigger() {
-        DiscordFrame.Trigger = DiscordFrame.Trigger.create()!
-        DiscordFrame.Trigger.triggerRegisterFrameEvent(DiscordFrame.EditBox, frameeventtype.EditBoxEnter)
-        DiscordFrame.Trigger.addAction(DiscordFrame.UpdateTextBox)
+        DiscordFrame.triggerHandle = Trigger.create()!
+        DiscordFrame.triggerHandle.triggerRegisterFrameEvent(DiscordFrame.EditBox, FRAMEEVENT_EDITBOX_ENTER)
+        DiscordFrame.triggerHandle.addAction(DiscordFrame.UpdateTextBox)
     }
 
     private static RegisterESCTrigger() {
-        DiscordFrame.ESCTrigger = DiscordFrame.Trigger.create()!
+        DiscordFrame.ESCTrigger = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS) {
             DiscordFrame.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }

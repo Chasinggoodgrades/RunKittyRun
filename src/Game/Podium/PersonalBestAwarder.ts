@@ -6,6 +6,15 @@ let KD: highest in game: a
 let all: other: stats: i: and'say: d. streak: so/     saves/deaths in game: 1 / w/other: stats: we: got: e
 */
 
+import { TimeSetter } from "src/Events/VictoryZone/TimeSetter"
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { Difficulty } from "src/Init/Difficulty/Difficulty"
+import { Utility } from "src/Utility/Utility"
+import { MapPlayer } from "w3ts"
+import { Kitty } from "../Entities/Kitty/Kitty"
+
 export class PersonalBestAwarder {
     private static KibbleCollectionBeatenList: MapPlayer[] = []
     private static BeatenMostSavesList: MapPlayer[] = []

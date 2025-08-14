@@ -1,14 +1,29 @@
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { RegionList } from "src/Global/RegionList"
+import { Challenges } from "src/Rewards/Challenges/Challenges"
+import { NitroChallenges } from "src/Rewards/Challenges/NitroChallenges"
+import { TeamDeathless } from "src/Rewards/Challenges/TeamDeathless"
+import { NoKittyLeftBehind } from "src/Rewards/EasterEggs/NoKittyLeftBehind"
+import { MultiboardUtil } from "src/UI/Multiboard/MultiboardUtil"
+import { ErrorHandler } from "src/Utility/ErrorHandler"
+import { FilterList } from "src/Utility/FilterList"
+import { getTriggerUnit } from "src/Utility/w3tsUtils"
+import { Trigger, Region } from "w3ts"
+import { TimeSetter } from "./TimeSetter"
+
 export class FinalSafezone {
-    private static Trigger: Trigger = Trigger.create()!
-    private static Region: region = RegionList.SafeZones[RegionList.SafeZones.length - 1].Region
+    private static triggerHandle: Trigger = Trigger.create()!
+    private static Region: region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
 
     public static Initialize() {
-        RegisterEvents()
+        this.RegisterEvents()
     }
 
     private static RegisterEvents() {
-        Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter)
-        Trigger.addAction(
+        this.triggerHandle.registerEnterRegion(this.Region, FilterList.KittyFilter)
+        this.triggerHandle.addAction(
             ErrorHandler.Wrap(() => {
                 let unit = getTriggerUnit()
                 let player = unit.owner

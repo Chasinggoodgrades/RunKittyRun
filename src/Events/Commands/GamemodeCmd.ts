@@ -1,3 +1,11 @@
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { Colors } from "src/Utility/Colors/Colors"
+import { int } from "src/Utility/Utility"
+import { MapPlayer } from "w3ts"
+import { GamemodeInfo, GamemodeManager } from "./GamemodeManager"
+
 export class GamemodeCmd {
     private static CmdInfo: GamemodeInfo
 
@@ -21,15 +29,15 @@ export class GamemodeCmd {
             return
         }
         let parts = command.split(' ')
-        CommandInfoCheck(parts)
+        this.CommandInfoCheck(parts)
 
         switch (parts[0]) {
             case '-s':
-                HandleStandardMode(player)
+                this.HandleStandardMode(player)
                 break
 
             case '-t':
-                HandleTeamOrSoloMode(player, parts)
+                this.HandleTeamOrSoloMode(player, parts)
                 break
 
             default:
@@ -64,11 +72,11 @@ export class GamemodeCmd {
 
         switch (parts[1]) {
             case 'solo':
-                HandleSoloMode(player, parts)
+                this.HandleSoloMode(player, parts)
                 break
 
             case 'team':
-                HandleTeamMode(player, parts)
+                this.HandleTeamMode(player, parts)
                 break
 
             default:

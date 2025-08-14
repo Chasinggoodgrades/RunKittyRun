@@ -1,11 +1,14 @@
+import { Colors } from "src/Utility/Colors/Colors"
+import { Dialog, DialogButton } from "w3ts"
+
 export class DifficultyOption {
     public static Options: DifficultyOption[] = []
-    public static DifficultyChoosing: dialog = DialogCreate()!
+    public static DifficultyChoosing: Dialog = Dialog.create()!
     private static _OptionCount: number = -1
     public name: string
     public Value: number
     public Color: string
-    public Button: button
+    public Button: DialogButton
     public TallyCount: number
 
     constructor(name: string, value: number, color: string) {
@@ -16,8 +19,8 @@ export class DifficultyOption {
         DifficultyOption.Options.push(this)
     }
 
-    public AddButton(): button {
-        return DialogAddButton(DifficultyOption.DifficultyChoosing, this.toString(), ++DifficultyOption._OptionCount)!
+    public AddButton(): DialogButton {
+        return DifficultyOption.DifficultyChoosing.addButton(this.toString(), ++DifficultyOption._OptionCount)!
     }
 
     public ToString(): string {

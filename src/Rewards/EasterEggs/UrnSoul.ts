@@ -35,7 +35,7 @@ export class UrnSoul {
         u.setPathing(false) // Disable Collision
         u.addAbility(FourCC('Agho')) // Ghost
         u.addAbility(FourCC('Augh')) // Shade
-        u.IsInvulnerable = true
+        u.invulnerable = true
         return u
     }
 
@@ -63,14 +63,14 @@ export class UrnSoul {
 
     private static RegisterUrnUsage(): Trigger {
         let trig = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS) trig.registerPlayerUnitEvent(player, playerunitevent.UseItem, null)
+        for (let player of Globals.ALL_PLAYERS) trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_USE_ITEM, null)
         trig.addAction(UrnSoul.UrnUsageActions)
         return trig
     }
 
     private static UrnUsageActions() {
         try {
-            let item = GetManipulatedItem()
+            let item = getManipulatedItem()
             let player = getTriggerPlayer()
             let unit = getTriggerUnit()
             UrnSoul.StartEventRegion = Regions.Urn_Soul_Region.Region

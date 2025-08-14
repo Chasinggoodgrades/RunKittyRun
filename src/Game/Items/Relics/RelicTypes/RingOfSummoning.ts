@@ -158,7 +158,7 @@ export class RingOfSummoning extends Relic {
         let summoersProgress = summoner.TimeProg.GetRoundProgress(round)
         let deadProg = summoned.TimeProg.GetRoundProgress(round)
 
-        if (Source.Program.Debug)
+        if (Program.Debug)
             Logger.Verbose(
                 'Summoner: {summoner.Player.name} | Progress: Summoner: {summoersProgress} | Summoned: {summoned.Player.name} | Progress: Summoned: {deadProg}'
             )

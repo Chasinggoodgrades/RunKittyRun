@@ -22,8 +22,8 @@ export class UnitWithinRange {
     public static DeRegisterUnitWithinRangeUnit(kitty: Kitty) {
         kitty.w_Collision.ClearActions()
         kitty.c_Collision.ClearActions()
-        kitty.w_Collision.dispose()
-        kitty.c_Collision.dispose()
+        kitty.w_Collision.destroy()
+        kitty.c_Collision.destroy()
         kitty.w_Collision = null
         kitty.c_Collision = null
     }
@@ -31,8 +31,8 @@ export class UnitWithinRange {
     public static DeRegisterUnitWithinRangeUnitShadow(kitty: ShadowKitty) {
         kitty.cCollision.ClearActions()
         kitty.wCollision.ClearActions()
-        kitty.wCollision.dispose()
-        kitty.cCollision.dispose()
+        kitty.wCollision.destroy()
+        kitty.cCollision.destroy()
         kitty.wCollision = null
         kitty.cCollision = null
     }

@@ -17,6 +17,7 @@ import { Effect, MapPlayer, TextTag, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
 import { WolfPoint } from '../WolfPoint'
 import { NamedWolves } from './NamedWolves'
+import { Program } from 'src/Program'
 
 export class Wolf {
     public static DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
@@ -49,17 +50,17 @@ export class Wolf {
 
     public constructor(regionIndex: number) {
         this.RegionIndex = regionIndex
-        this.WolfArea = this.WolfArea.WolfAreas[regionIndex]
+        this.WolfArea = WolfArea.WolfAreas.get(regionIndex)!
         let Affixes: Affix[] = [] // Consider creating a new object that contains Affix[] so we're not making a new one each wolf.
-        this.OVERHEAD_EFFECT_PATH = this.DEFAULT_OVERHEAD_EFFECT
-        this.WolfPoint = new this.WolfPoint(this) // Consider changing this to be a part of the memory handler. Remove the parameter
+        this.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT
+        this.WolfPoint = new WolfPoint(this) // Consider changing this to be a part of the memory handler. Remove the parameter
 
         this._cachedWander = () => this.StartWandering()
         this._cachedEffect = () => this.WolfMoveCancelEffect()
 
         this.InitializeWolf()
         this.WanderTimer.Timer.start(GetRandomReal(2.0, 4.5), false, this._cachedWander)
-        Globals.ALL_WOLVES.push(this.Unit, this)
+        Globals.ALL_WOLVES.set(this.Unit, this)
 
         this.WolfArea.Wolves.push(this)
     }
@@ -69,12 +70,12 @@ export class Wolf {
     /// </summary>
     public static SpawnWolves() {
         try {
-            if ((wolvesInRound = Globals.WolvesPerRound.TryGetValue(Globals.ROUND)) /* TODO; Prepend: let */) {
-                for (let laneEntry in wolvesInRound) {
-                    let lane: number = laneEntry.Key
-                    let numberOfWolves: number = laneEntry.Value
-
-                    for (let i: number = 0; i < numberOfWolves; i++) new Wolf(lane)
+            let wolvesInRound = Globals.WolvesPerRound.get(Globals.ROUND)
+            if (wolvesInRound) {
+                for (const [laneStr, numberOfWolves] of Object.entries(wolvesInRound)) {
+                    const lane = Number(laneStr)
+                    for (let i: number = 0; i < numberOfWolves; i++)
+                        new Wolf(lane)
                 }
                 FandF.CreateBloodWolf()
                 NamedWolves.CreateNamedWolves()
@@ -103,7 +104,7 @@ export class Wolf {
         if (this.paused && this.HasAffix('Bomber')) return
         this.WolfPoint.DiagonalRegionCreate(
             this.Unit.x,
-            unit.y,
+            this.Unit.y,
             GetRandomReal(this.WolfArea.Rect.minX, this.WolfArea.Rect.maxX),
             GetRandomReal(this.WolfArea.Rect.minY, this.WolfArea.Rect.maxY)
         )
@@ -112,29 +113,23 @@ export class Wolf {
     public dispose() {
         this.RemoveAllWolfAffixes()
         this.EffectTimer?.dispose()
-        this.EffectTimer = null
-        this.OverheadEffect?.dispose()
-        this.OverheadEffect = null
+        this.OverheadEffect?.destroy()
         this.WanderTimer?.dispose()
-        this.WanderTimer = null
-        this.Texttag?.dispose()
-        this.Texttag = null
-        this.WolfArea.Wolves.Remove(this)
+        this.Texttag?.destroy()
+        this.WolfArea.Wolves.splice(this.WolfArea.Wolves.indexOf(this), 1)
         this.Disco?.dispose()
         this.WolfPoint?.dispose()
-        this.WolfPoint = null
-        this.Unit?.dispose()
-        this.Unit = null
+        this.Unit?.destroy()
     }
 
     /// <summary>
     /// Removes all wolves from the game and clears wolf list.
     /// </summary>
     public static RemoveAllWolves() {
-        for (let wolfKey in Globals.ALL_WOLVES) {
-            Globals.ALL_WOLVES[wolfKey.Key]?.dispose()
+        for (let [_, wolf] of Globals.ALL_WOLVES) {
+            wolf.dispose();
         }
-        Globals.ALL_WOLVES.clear()
+        Globals.ALL_WOLVES.clear();
     }
 
     /// <summary>
@@ -142,14 +137,15 @@ export class Wolf {
     /// </summary>
     /// <param name="pause"></param>
     public static PauseAllWolves(pause: boolean) {
-        for (let wolf in Globals.ALL_WOLVES) {
-            wolf.Value.PauseSelf(pause)
+        for (let [_, wolf] of Globals.ALL_WOLVES) {
+            wolf.PauseSelf(pause)
         }
     }
 
     public static PauseSelectedWolf(selectedUnit: Unit, pause: boolean) {
-        if (!(wolf = Globals.ALL_WOLVES.TryGetValue(selectedUnit)) /* TODO; Prepend: let */) return
-        wolf.PauseSelf(pause)
+        let wolf = Globals.ALL_WOLVES.get(selectedUnit);
+        if (!wolf) return;
+        wolf.PauseSelf(pause);
     }
 
     public PauseSelf(pause: boolean) {
@@ -158,15 +154,15 @@ export class Wolf {
                 this.WanderTimer?.pause()
                 this.EffectTimer?.pause()
                 for (let i: number = 0; i < this.Affixes.length; i++) {
-                    this.Affixes[i].pause(true)
+                    this.Affixes[i].Pause(true)
                 }
-                this.Unit?.ClearOrders()
+                BlzUnitClearOrders(this.Unit.handle, false);
                 this.IsWalking = false
                 this.paused = true
                 this.Unit.paused = true // Wander Wolf
             } else {
                 for (let i: number = 0; i < this.Affixes.length; i++) {
-                    this.Affixes[i].pause(false)
+                    this.Affixes[i].Pause(false)
                 }
                 this.WanderTimer?.resume()
                 if (this.EffectTimer != null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
@@ -186,13 +182,13 @@ export class Wolf {
         let randomY = GetRandomReal(this.WolfArea.Rect.minY, this.WolfArea.Rect.maxY)
         let facing = GetRandomReal(0, 360)
 
-        this.Unit ??= this.Unit.create(selectedPlayer, Wolf.WOLF_MODEL, randomX, randomY, facing)
+        this.Unit ??= Unit.create(selectedPlayer, Wolf.WOLF_MODEL, randomX, randomY, facing)!
         Utility.MakeUnitLocust(this.Unit)
         this.Unit.name = 'Lane: {RegionIndex + 1}'
-        this.Unit.IsInvulnerable = true
-        this.Unit.setColor(ConvertPlayerColor(24))
+        this.Unit.invulnerable = true
+        this.Unit.color = ConvertPlayerColor(24)!
 
-        if (Source.Program.Debug) selectedPlayer.setAlliance(MapPlayer.fromIndex(0)!, alliancetype.SharedControl, true)
+        if (Program.Debug) selectedPlayer.setAlliance(MapPlayer.fromIndex(0)!, ALLIANCE_SHARED_CONTROL, true)
     }
 
     private ShouldStartEffect(): boolean {
@@ -221,8 +217,8 @@ export class Wolf {
     private ApplyEffect() {
         let effectDuration = GetRandomReal(this.WANDER_LOWER_BOUND, this.WANDER_UPPER_BOUND)
 
-        this.OverheadEffect ??= Effect.create(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
-        BlzPlaySpecialEffect(this.OverheadEffect, animtype.Stand)
+        this.OverheadEffect ??= Effect.createAttachment(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
+        BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
 
         this.EffectTimer ??= MemoryHandler.getEmptyObject<AchesTimers>()
         this.EffectTimer?.Timer?.start(effectDuration, false, this._cachedEffect)
@@ -230,10 +226,9 @@ export class Wolf {
 
     private WolfMoveCancelEffect() {
         this.WolfMove()
-        BlzPlaySpecialEffect(this.OverheadEffect, animtype.Death)
+        BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_DEATH)
         if (this.IsAffixed()) {
-            this.OverheadEffect.dispose()
-            this.OverheadEffect = null
+            this.OverheadEffect.destroy()
         }
     }
 
@@ -245,25 +240,27 @@ export class Wolf {
         affix.Apply()
     }
 
-    public RemoveAffix(affix: Affix) {
-        this.Affixes.Remove(affix)
-        affix.Remove()
-        AffixFactory.AllAffixes.Remove(affix)
-    }
-
-    public RemoveAffix(affixName: string) {
-        for (let i: number = 0; i < this.Affixes.length; i++) {
-            if (this.Affixes[i].GetType().name == affixName) {
-                this.RemoveAffix(this.Affixes[i])
-                break
+public RemoveAffix(affix: Affix): void;
+public RemoveAffix(affixName: string): void;
+public RemoveAffix(arg: Affix | string): void {
+    if (typeof arg === "string") {
+        for (let i = 0; i < this.Affixes.length; i++) {
+            if (this.Affixes[i].constructor.name === arg) {
+                this.RemoveAffix(this.Affixes[i]);
+                break;
             }
         }
+    } else {
+        this.Affixes.splice(this.Affixes.indexOf(arg), 1);
+        arg.Remove();
+        AffixFactory.AllAffixes.splice(AffixFactory.AllAffixes.indexOf(arg), 1);
     }
+}
 
     public HasAffix(affixName: string) {
         if (this.Affixes.length == 0) return false
         for (let i: number = 0; i < this.Affixes.length; i++)
-            if (this.Affixes[i].GetType().name == affixName) return true
+            if (this.Affixes[i].constructor.name == affixName) return true
 
         return false
     }
@@ -274,13 +271,13 @@ export class Wolf {
         try {
             for (let i: number = this.Affixes.length - 1; i >= 0; i--) {
                 this.Affixes[i].Remove()
-                AffixFactory.AllAffixes.Remove(this.Affixes[i])
+                AffixFactory.AllAffixes.splice(AffixFactory.AllAffixes.indexOf(this.Affixes[i]), 1)
             }
         } catch (e: any) {
             Logger.Warning('Error in RemoveAllWolfAffixes: {e.Message}')
         }
 
-        this.Affixes.clear()
+        this.Affixes = []
     }
 
     public IsAffixed(): boolean {

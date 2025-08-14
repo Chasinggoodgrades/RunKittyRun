@@ -1,16 +1,25 @@
+import { Globals } from "src/Global/Globals"
+import { Colors } from "src/Utility/Colors/Colors"
+import { ErrorHandler } from "src/Utility/ErrorHandler"
+import { int } from "src/Utility/Utility"
+import { getTriggerPlayer } from "src/Utility/w3tsUtils"
+import { Timer, MapPlayer } from "w3ts"
+import { PlayerLeaves } from "../PlayerLeavesEvent/PlayerLeaves"
+import { VoteEndRound } from "./VoteEndRound"
+
 export class Votekick {
     public static VoteActive: boolean = false
     private static VoteTimer = Timer.create()
     private static Voters: MapPlayer[] = []
-    private static VoteKickPlayer: MapPlayer
-    private static VoteStarter: MapPlayer
-    private VOTE_DURATION: number = 30.0
+    private static VoteKickPlayer: MapPlayer | undefined
+    private static VoteStarter: MapPlayer | undefined
+    private static VOTE_DURATION: number = 30.0
 
     public static InitiateVotekick(voteStarter: MapPlayer, player: string) {
-        if (VotekickAlreadyActive()) return
-        VoteStarter = voteStarter
-        let playerID = GetPlayerID(player)
-        if (playerID != -1) StartVotekick(MapPlayer.fromIndex(playerID)!)
+        if (this.VotekickAlreadyActive()) return
+        this.VoteStarter = voteStarter
+        let playerID = this.GetPlayerID(player)
+        if (playerID != -1) this.StartVotekick(MapPlayer.fromIndex(playerID)!)
         else
             voteStarter.DisplayTimedTextTo(
                 7.0,
@@ -19,18 +28,18 @@ export class Votekick {
     }
 
     public static IncrementTally() {
-        if (!VoteActive) return
+        if (!this.VoteActive) return
         let player = getTriggerPlayer()
         let vote = (GetEventPlayerChatString() || '').toLowerCase()
         if (vote != '-yes') return
-        if (Voters.includes(player)) {
+        if (this.Voters.includes(player)) {
             player.DisplayTimedTextTo(
                 7.0,
                 '{Colors.COLOR_YELLOW}have: already: voted: to: kick: You {Colors.PlayerNameColored(VoteKickPlayer)}{Colors.COLOR_RESET}'
             )
             return
         }
-        Voters.push(player)
+        this.Voters.push(player)
         print(
             '{Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW} voted: yes: to: kick: has {Colors.PlayerNameColored(VoteKickPlayer)}{Colors.COLOR_RESET}'
         )
@@ -43,16 +52,16 @@ export class Votekick {
             )
             return
         }
-        VoteActive = true
+        this.VoteActive = true
         print(
             '{Colors.COLOR_YELLOW}votekick: has: been: initiated: against: A {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. you: agree: If, type "-yes" {Colors.COLOR_RED}({VOTE_DURATION} remain: seconds){Colors.COLOR_RESET}'
         )
-        VoteKickPlayer = target
-        Voters.push(VoteStarter)
-        VoteTimer.start(
-            VOTE_DURATION,
+        this.VoteKickPlayer = target
+        this.Voters.push(this.VoteStarter)
+        this.VoteTimer.start(
+            this.VOTE_DURATION,
             false,
-            ErrorHandler.Wrap(() => ExecuteVotekick(target))
+            ErrorHandler.Wrap(() => this.ExecuteVotekick(target))
         )
     }
 
@@ -60,7 +69,7 @@ export class Votekick {
         let totalPlayers: number = Globals.ALL_PLAYERS.length
         let requiredVotes: number = totalPlayers / 2
 
-        if (Voters.length >= requiredVotes) {
+        if (this.Voters.length >= requiredVotes) {
             print(
                 '{Colors.COLOR_YELLOW}succeeded: Votekick. {Voters.length}/{totalPlayers} voted: yes: players. {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW} been: removed: from: the: game: has.{Colors.COLOR_RESET}'
             )
@@ -71,18 +80,18 @@ export class Votekick {
                 '{Colors.COLOR_YELLOW}failed: Votekick. Only {Voters.length}/{totalPlayers} voted: yes: players. enough: votes: to: remove: Not {Colors.PlayerNameColored(target)}.{Colors.COLOR_RESET}'
             )
         }
-        EndVotekick()
+        this.EndVotekick()
     }
 
     private static EndVotekick() {
-        VoteActive = false
-        VoteStarter = null
-        VoteKickPlayer = null
-        Voters.clear()
+        this.VoteActive = false
+        this.VoteStarter = undefined
+        this.VoteKickPlayer = undefined
+        this.Voters = []
     }
 
     private static VotekickAlreadyActive(): boolean {
-        if (VoteActive || VoteEndRound.VoteActive) {
+        if (this.VoteActive || VoteEndRound.VoteActive) {
             print(
                 '{Colors.COLOR_YELLOW}vote: A is active: already. wait: for: the: current: vote: to: finish: Please.{Colors.COLOR_RESET}'
             )

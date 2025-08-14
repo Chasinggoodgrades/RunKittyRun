@@ -139,12 +139,12 @@ export class SoloMultiboard {
                 Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
                     ? [
                           name,
-                          times.GetRoundProgress(1).ToString('F2') + '%',
-                          times.GetRoundProgress(2).ToString('F2') + '%',
-                          times.GetRoundProgress(3).ToString('F2') + '%',
-                          times.GetRoundProgress(4).ToString('F2') + '%',
-                          times.GetRoundProgress(5).ToString('F2') + '%',
-                          times.GetOverallProgress().ToString('F2') + '%',
+                          times.GetRoundProgress(1).toFixed(2) + '%',
+                          times.GetRoundProgress(2).toFixed(2) + '%',
+                          times.GetRoundProgress(3).toFixed(2) + '%',
+                          times.GetRoundProgress(4).toFixed(2) + '%',
+                          times.GetRoundProgress(5).toFixed(2) + '%',
+                          times.GetOverallProgress().toFixed(2) + '%',
                       ]
                     : [
                           name,

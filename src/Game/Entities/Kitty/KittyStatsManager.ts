@@ -20,7 +20,7 @@ export class KittyStatsManager {
     /// <param name="savior"></param>
     public UpdateSaviorStats(savior: Kitty) {
         savior.Player.addGold(Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak))
-        savior.Unit.Experience += Resources.SaveExperience
+        savior.Unit.experience += Resources.SaveExperience
         SaveStatUpdate(savior)
     }
 

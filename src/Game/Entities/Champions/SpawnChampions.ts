@@ -26,14 +26,14 @@ export class SpawnChampions {
             x,
             y,
             135.0
-        )
-        SpawnChampions.Fieryfox2023.IsInvulnerable = true
+        )!
+        SpawnChampions.Fieryfox2023.invulnerable = true
 
         rect = Regions.Team2023.Rect
         x = rect.centerX
         y = rect.centerY
-        SpawnChampions.FandF2023 = Unit.create(player.NeutralPassive, Constants.UNIT_TEAM_TOURNAMENT_2023, x, y, 45.0)
-        SpawnChampions.FandF2023.IsInvulnerable = true
+        SpawnChampions.FandF2023 = Unit.create(player.NeutralPassive, Constants.UNIT_TEAM_TOURNAMENT_2023, x, y, 45.0)!
+        SpawnChampions.FandF2023.invulnerable = true
 
         rect = Regions.Solo2024.Rect
         x = rect.centerX
@@ -44,14 +44,14 @@ export class SpawnChampions {
             x,
             y,
             315.0
-        )
-        SpawnChampions.Fieryfox2024.IsInvulnerable = true
+        )!
+        SpawnChampions.Fieryfox2024.invulnerable = true
 
         rect = Regions.UrnSoulRegion1.Rect
         x = rect.centerX
         y = rect.centerY
-        SpawnChampions.Stan2025 = Unit.create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2025, x, y, 230.0)
-        SpawnChampions.Stan2025.IsInvulnerable = true
+        SpawnChampions.Stan2025 = Unit.create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2025, x, y, 230.0)!
+        SpawnChampions.Stan2025.invulnerable = true
     }
 
     private static ApplyCosmetics() {

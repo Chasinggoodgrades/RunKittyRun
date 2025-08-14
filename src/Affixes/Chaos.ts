@@ -24,7 +24,7 @@ export class Chaos extends Affix {
         try {
             this.Unit.RemoveAffix(this.currentAffix)
             this.RotationTimer?.dispose()
-            this.Unit?.Unit?.RemoveAbility(AFFIX_ABILITY)
+            this.Unit?.Unit?.removeAbility(AFFIX_ABILITY)
             super.Remove()
         } catch (e: any) {
             Logger.Warning('Error in Chaos.Remove: {e.Message}')

@@ -1,3 +1,13 @@
+import { PersonalBestAwarder } from "src/Game/Podium/PersonalBestAwarder"
+import { GameTimer } from "src/Game/Rounds/GameTimer"
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { Difficulty } from "src/Init/Difficulty/Difficulty"
+import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption"
+import { MapPlayer } from "w3ts"
+import { Logger } from "../Logger/Logger"
+
 export class TimeSetter {
     /// <summary>
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
@@ -15,8 +25,8 @@ export class TimeSetter {
 
             if (!standard && !solo) return false
 
-            if (standard) roundString = GetRoundEnum()
-            if (solo) roundString = GetSoloEnum()
+            if (standard) roundString = this.GetRoundEnum()
+            if (solo) roundString = this.GetSoloEnum()
             if (currentTime >= 3599.0) return false // 59min 59 second cap
 
             let property = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes.GetType().GetProperty(roundString)
@@ -24,7 +34,7 @@ export class TimeSetter {
 
             if (currentTime >= value && value != 0) return false
 
-            SetSavedTime(player, roundString)
+            this.SetSavedTime(player, roundString)
             PersonalBestAwarder.BeatRecordTime(player)
 
             return true
@@ -39,18 +49,18 @@ export class TimeSetter {
         let roundEnum: string
         switch (currentDiff) {
             case DifficultyLevel.Normal:
-                roundEnum = GetNormalRoundEnum()
+                roundEnum = this.GetNormalRoundEnum()
                 break
 
             case DifficultyLevel.Hard:
-                roundEnum = GetHardRoundEnum()
+                roundEnum = this.GetHardRoundEnum()
                 break
 
             case DifficultyLevel.Impossible:
-                roundEnum = GetImpossibleRoundEnum()
+                roundEnum = this.GetImpossibleRoundEnum()
                 break
             case DifficultyLevel.Nightmare:
-                roundEnum = GetNightmareRoundEnum()
+                roundEnum = this.GetNightmareRoundEnum()
                 break
             default:
                 Logger.Critical('difficulty: level: for: GetRoundEnum: Invalid')
@@ -60,7 +70,7 @@ export class TimeSetter {
     }
 
     public static GetSoloEnum(): string {
-        let roundEnum = GetSoloRoundEnum()
+        let roundEnum = this.GetSoloRoundEnum()
         return roundEnum
     }
 

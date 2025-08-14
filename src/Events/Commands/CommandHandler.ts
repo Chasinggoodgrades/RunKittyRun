@@ -1,3 +1,11 @@
+import { Globals } from "src/Global/Globals"
+import { getTriggerPlayer } from "src/Utility/w3tsUtils"
+import { Trigger, MapPlayer } from "w3ts"
+import { CommandsManager } from "./COMMAND REVAMP/CommandsManager"
+import { InitCommands } from "./COMMAND REVAMP/InitCommands"
+import { ExecuteLua } from "./ExecuteLua"
+import { GamemodeCmd } from "./GamemodeCmd"
+
 export class CommandHandler {
     private static DebugCmdTrigger: Trigger = Trigger.create()!
     private static NewCmdHandler: Trigger = Trigger.create()!
@@ -10,8 +18,8 @@ export class CommandHandler {
             TriggerRegisterPlayerChatEvent(DebugCmdTrigger, MapPlayer.fromIndex(i)!, '?', false)
             TriggerRegisterPlayerChatEvent(NewCmdHandler, MapPlayer.fromIndex(i)!, '-', false)
         }
-        TriggerAddAction(DebugCmdTrigger, DebugHandle)
-        TriggerAddAction(NewCmdHandler, HandleCommands)
+        TriggerAddAction(this.DebugCmdTrigger.handle, this.DebugHandle)
+        TriggerAddAction(this.NewCmdHandler.handle, this.HandleCommands)
     }
 
     private static HandleCommands() {
@@ -27,15 +35,15 @@ export class CommandHandler {
 
         if (spaceIndex < 0) {
             commandName = cmd
-            args = EmptyStringArray
+            args = this.EmptyStringArray
         } else {
             commandName = cmd.substring(0, spaceIndex)
             let remainder = cmd.substring(spaceIndex + 1)
             let split = remainder.split(' ').filter(Boolean)
-            args = split.length > 0 ? split : EmptyStringArray
+            args = split.length > 0 ? split : this.EmptyStringArray
         }
 
-        if (GamemodeSetting(GetEventPlayerChatString() || '')) return
+        if (this.GamemodeSetting(GetEventPlayerChatString() || '')) return
 
         try {
             let command = CommandsManager.GetCommand(commandName.toLowerCase())

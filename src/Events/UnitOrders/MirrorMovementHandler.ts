@@ -1,4 +1,5 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 
 export class MirrorMovementHandler {
@@ -13,8 +14,8 @@ export class MirrorMovementHandler {
 
     private RegisterMovementEvents() {
         this.MovementTrigger = Trigger.create()!
-        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedPointOrder)
-        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, unitevent.IssuedTargetOrder)
+        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
+        this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
         this.MovementTrigger.addAction(this.HandleMovementOrder)
     }
 
@@ -49,12 +50,11 @@ export class MirrorMovementHandler {
 
         // Issue the mirrored move order
         this.isProcessingMirror = true
-        unit.IssueOrder('move', mirrorX, mirrorY)
+        unit.issueOrderAt('move', mirrorX, mirrorY)
         this.isProcessingMirror = false
     }
 
     public dispose() {
-        this.MovementTrigger?.dispose()
-        this.MovementTrigger = null
+        this.MovementTrigger?.destroy()
     }
 }

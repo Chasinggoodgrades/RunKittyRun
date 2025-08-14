@@ -5,6 +5,7 @@ import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { Wolf } from './Entities/Wolf'
+import { distanceBetweenXYPoints, Utility } from 'src/Utility/Utility'
 
 export class WolfPoint {
     private MaxDistance: number = 128 // Max distance between points
@@ -21,9 +22,9 @@ export class WolfPoint {
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
     /// </summary>
     /// <param name="wolf">The wolf instance.</param>
-    public WolfPoint(wolf: Wolf) {
+    public constructor(wolf: Wolf) {
         this.Wolf = wolf
-        this.IsPausedTrigger ??= this.InitTrigger()
+        WolfPoint.IsPausedTrigger ??= WolfPoint.InitTrigger()
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ export class WolfPoint {
             this.Cleanup()
 
             // Calculate the distance between points
-            let distance = WCSharp.Shared.Util.DistanceBetweenPoints(startX, startY, endX, endY)
+            let distance = distanceBetweenXYPoints(startX, startY, endX, endY)
             let numRegions: number = Math.ceil(distance / this.MaxDistance)
 
             // Calculate angle and step sizes using trigonometry
@@ -71,7 +72,7 @@ export class WolfPoint {
     public Cleanup() {
         try {
             if (this.PointInfo == null) return
-            this.Wolf.Unit.ClearOrders()
+            BlzUnitClearOrders(this.Wolf.Unit.handle, false)
 
             for (let i: number = 0; i < this.PointInfo.length; i++) {
                 this.PointInfo[i].x = 0
@@ -85,14 +86,14 @@ export class WolfPoint {
     public dispose() {
         this.Cleanup()
         WolfPointInfo.ClearWolfPointList(this.PointInfo)
-        BlzUnitClearOrders(this.Wolf.Unit, false)
+        BlzUnitClearOrders(this.Wolf.Unit.handle, false)
     }
 
     private StartMovingOrders() {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
         if (this.Wolf.paused || this.Wolf.IsReviving) {
-            this.Wolf.Unit.ClearOrders()
-            return
+        BlzUnitClearOrders(this.Wolf.Unit.handle, false)
+        return
         }
 
         try {
@@ -100,7 +101,7 @@ export class WolfPoint {
                 if (this.PointInfo[i].x == 0 && this.PointInfo[i].y == 0) continue
                 let moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
-                this.Wolf.Unit.QueueOrder(moveID, this.PointInfo[i].x, this.PointInfo[i].y)
+                BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
                 if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
             }
         } catch (ex: any) {
@@ -110,18 +111,18 @@ export class WolfPoint {
 
     private static InitTrigger(): Trigger {
         this.IsPausedTrigger ??= Trigger.create()!
-        this.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
+        WolfPoint.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 
-        TriggerAddCondition(this.IsPausedTrigger, FilterList.IssuedOrderAtkOrder)
-        TriggerAddCondition(this.IsPausedTrigger, FilterList.UnitTypeWolf)
+        TriggerAddCondition(WolfPoint.IsPausedTrigger.handle, FilterList.IssuedOrderAtkOrder)
+        TriggerAddCondition(WolfPoint.IsPausedTrigger.handle, FilterList.UnitTypeWolf)
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        TriggerAddAction(this.IsPausedTrigger, this.QueueOrderActions)
-        return this.IsPausedTrigger
+        TriggerAddAction(WolfPoint.IsPausedTrigger.handle, WolfPoint.QueueOrderActions)
+        return WolfPoint.IsPausedTrigger
     }
 
     private static QueueOrderActions() {
-        Globals.ALL_WOLVES[getTriggerUnit()].IsWalking = !Globals.ALL_WOLVES[getTriggerUnit()].IsWalking
+        Globals.ALL_WOLVES.get(getTriggerUnit())!.IsWalking = !Globals.ALL_WOLVES.get(getTriggerUnit())!.IsWalking
     }
 }
 
@@ -149,7 +150,7 @@ export class WolfPointInfo {
             let item = list[i]
             MemoryHandler.destroyObject(item)
         }
-        list.clear()
+        list = []
         MemoryHandler.destroyArray(list)
     }
 }

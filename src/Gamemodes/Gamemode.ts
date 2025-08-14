@@ -1,3 +1,13 @@
+import { Logger } from "src/Events/Logger/Logger"
+import { Globals } from "src/Global/Globals"
+import { ADMINDISABLE } from "src/Init/ADMINDISABLE"
+import { Colors } from "src/Utility/Colors/Colors"
+import { MapPlayer } from "w3ts"
+import { GameMode } from "./GameModeEnum"
+import { Solo } from "./Solo/Solo"
+import { Standard } from "./Standard/Standard"
+import { Team } from "./Teams/Team"
+
 export class Gamemode {
     public static HostPlayer: MapPlayer
     public static CurrentGameMode: GameMode
@@ -7,28 +17,28 @@ export class Gamemode {
     public static NumberOfRounds: number = 5
 
     public static Initialize() {
-        ChoosingGameMode()
+        this.ChoosingGameMode()
     }
 
     private static ChoosingGameMode() {
-        HostPlayer = Globals.ALL_PLAYERS[0]
-        HostOptions()
-        HostPickingGamemode()
+        this.HostPlayer = Globals.ALL_PLAYERS[0]
+        this.HostOptions()
+        this.HostPickingGamemode()
     }
 
     private static HostOptions() {
         if (!ADMINDISABLE.AdminsGame()) return
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_GOLD + '=====================================' + Colors.COLOR_RESET
         )
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_GOLD + 'choose: a: gamemode: Please.' + Colors.COLOR_RESET
         )
 
         // Standard Mode
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
                 GameMode.Standard + // Standard
@@ -38,7 +48,7 @@ export class Gamemode {
         )
 
         // Solo Modes
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
                 GameMode.SoloTournament + // Solo
@@ -48,7 +58,7 @@ export class Gamemode {
         )
 
         // Team Modes
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
                 GameMode.TeamTournament + // Team
@@ -57,7 +67,7 @@ export class Gamemode {
                 Colors.COLOR_RESET
         )
 
-        HostPlayer.DisplayTimedTextTo(
+        this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_GOLD + '=====================================' + Colors.COLOR_RESET
         )
@@ -65,14 +75,14 @@ export class Gamemode {
 
     public static SetGameMode(mode: GameMode, modeType: string = '', teamSize: number = Globals.DEFAULT_TEAM_SIZE) {
         try {
-            CurrentGameMode = mode
-            CurrentGameModeType = modeType
-            IsGameModeChosen = true
-            PlayersPerTeam = teamSize
+            this.CurrentGameMode = mode
+            this.CurrentGameModeType = modeType
+            this.IsGameModeChosen = true
+            this.PlayersPerTeam = teamSize
 
             ClearTextMessages()
-            NotifyGamemodeChosen()
-            SetupChosenGamemode()
+            this.NotifyGamemodeChosen()
+            this.SetupChosenGamemode()
         } catch (e: any) {
             Logger.Critical('Gamemode: SetGameMode: {e.Message}')
         }
@@ -81,8 +91,8 @@ export class Gamemode {
     private static HostPickingGamemode() {
         let color = Colors.COLOR_YELLOW_ORANGE
         for (let player of Globals.ALL_PLAYERS) {
-            let localplayer = player.LocalPlayer
-            if (localplayer != HostPlayer) {
+            let localplayer = GetLocalPlayer()
+            if (localplayer != this.HostPlayer.handle) {
                 player.DisplayTimedTextTo(
                     Globals.TIME_TO_PICK_GAMEMODE,
                     '{color}wait: for: Please {Colors.PlayerNameColored(HostPlayer)}{color} pick: the: gamemode: to. {Colors.COLOR_RED}(to: Standard: Defaults in {Globals.TIME_TO_PICK_GAMEMODE} seconds).|r'
@@ -98,15 +108,15 @@ export class Gamemode {
                 Colors.COLOR_YELLOW_ORANGE +
                     'chosen: Gamemode: ' +
                     Colors.COLOR_GOLD +
-                    CurrentGameMode.toString() +
+                    this.CurrentGameMode.toString() +
                     ' ' +
-                    CurrentGameModeType
+                    this.CurrentGameModeType
             )
         }
     }
 
     private static SetupChosenGamemode() {
-        switch (CurrentGameMode) {
+        switch (this.CurrentGameMode) {
             case GameMode.Standard:
                 Standard.Initialize()
                 break
@@ -118,7 +128,7 @@ export class Gamemode {
                 break
             default:
                 Logger.Warning('gamemode: selected: Unknown, to: Standard: defaulting.')
-                CurrentGameMode = GameMode.Standard
+                this.CurrentGameMode = GameMode.Standard
                 Standard.Initialize()
                 break
         }
