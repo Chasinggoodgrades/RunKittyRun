@@ -501,7 +501,7 @@ export class ShopFrame {
         try {
             let shopFrameHotkey: Trigger = Trigger.create()!
             for (let player of Globals.ALL_PLAYERS) {
-                shopFrameHotkey.RegisterPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
+                shopFrameHotkey.registerPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
             }
             shopFrameHotkey.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
         } catch (ex: any) {

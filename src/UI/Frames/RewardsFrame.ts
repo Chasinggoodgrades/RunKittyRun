@@ -331,7 +331,7 @@ export class RewardsFrame {
     private static SetRewardsFrameHotkey() {
         let rewardsHotKey = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS) {
-            rewardsHotKey.RegisterPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true)
+            rewardsHotKey.registerPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true)
         }
         rewardsHotKey.addAction(
             ErrorHandler.Wrap(() => {

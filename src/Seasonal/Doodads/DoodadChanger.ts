@@ -1,3 +1,9 @@
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { GC } from "src/Utility/GC"
+import { SeasonalManager, HolidaySeasons } from "../SeasonalManager"
+
 export class DoodadChanger {
     private static SafezoneLanterns: number = FourCC('B005')
     private static ChristmasTree: number = FourCC('B001')
@@ -17,41 +23,41 @@ export class DoodadChanger {
     private static AllDestructables: destructable[] = []
 
     public static Initialize() {
-        CreateInitDestructiables()
+        this.CreateInitDestructiables()
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        SeasonalDoodads()
+        this.SeasonalDoodads()
     }
 
     private static InitChristmasDecor() {
         return [
-            CrystalRed,
-            CrystalBlue,
-            CrystalGreen,
-            Snowglobe,
-            Lantern,
-            Fireplace,
-            Snowman,
-            Firepit,
-            Igloo,
-            RedLavaCracks,
-            BlueLavaCracks,
-            SuperChristmasTree,
+            this.CrystalRed,
+            this.CrystalBlue,
+            this.CrystalGreen,
+            this.Snowglobe,
+            this.Lantern,
+            this.Fireplace,
+            this.Snowman,
+            this.Firepit,
+            this.Igloo,
+            this.RedLavaCracks,
+            this.BlueLavaCracks,
+            this.SuperChristmasTree,
         ]
     }
 
     private static SeasonalDoodads() {
-        ChristmasDoodads()
+        this.ChristmasDoodads()
     }
 
     public static NoSeasonDoodads() {
-        ReplaceDoodad(SafezoneLanterns, 1.0)
-        ShowSeasonalDoodads(false)
+        this.ReplaceDoodad(this.SafezoneLanterns, 1.0)
+        this.ShowSeasonalDoodads(false)
     }
 
     public static ChristmasDoodads() {
         if (SeasonalManager.Season != HolidaySeasons.Christmas) return
-        ReplaceDoodad(ChristmasTree, 2.5)
-        ShowSeasonalDoodads(true)
+        this.ReplaceDoodad(this.ChristmasTree, 2.5)
+        this.ShowSeasonalDoodads(true)
     }
 
     private static ReplaceDoodad(newType: number, scale: number) {
@@ -64,7 +70,7 @@ export class DoodadChanger {
 
         this.AllDestructables = []
         for (let pos of positions) {
-            let newDestructible = CreateDeadDestructable(newType, pos.x, pos.y, 0, scale, 0)
+            let newDestructible = CreateDeadDestructable(newType, pos.x, pos.y, 0, scale, 0)!
             this.AllDestructables.push(newDestructible)
         }
         GC.RemoveList(positions) // TODO; Cleanup:         GC.RemoveList(ref positions);
@@ -103,11 +109,11 @@ export class DoodadChanger {
     }
 
     public static ShowSeasonalDoodads(show: boolean = false) {
-        return EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => HideDoodads(show))
+        return EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => this.HideDoodads(show))
     }
 
     private static HideDoodads(show: boolean) {
         let des = GetEnumDestructable()
-        if (ChristmasDecor.includes(des.Type)) des.setVisible(show)
+        if (this.ChristmasDecor.includes(des.Type)) des.setVisible(show)
     }
 }

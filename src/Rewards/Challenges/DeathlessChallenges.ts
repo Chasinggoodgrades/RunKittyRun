@@ -1,18 +1,31 @@
+import { Kitty } from "src/Game/Entities/Kitty/Kitty"
+import { Gamemode } from "src/Gamemodes/Gamemode"
+import { GameMode } from "src/Gamemodes/GameModeEnum"
+import { Globals } from "src/Global/Globals"
+import { Difficulty } from "src/Init/Difficulty/Difficulty"
+import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption"
+import { GameAwardsDataSorted } from "src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted"
+import { SoundManager } from "src/Sounds/SoundManager"
+import { Utility } from "src/Utility/Utility"
+import { MapPlayer, TextTag } from "w3ts"
+import { CrystalOfFire } from "../EasterEggs/Fieryfox/CrystalOfFire"
+import { AwardManager } from "../Rewards/AwardManager"
+
 export class DeathlessChallenges {
     public static DeathlessCount: number = 0 // Number of deaths allowed for the current round.
 
     public static Initialize() {
-        ResetDeathless()
+        this.ResetDeathless()
     }
 
     /// <summary>
     /// Resetes deathless progress for all players. Should be used at the beginning of new rounds.
     /// </summary>
     public static ResetDeathless() {
-        DeathlessCount = 0
+        this.DeathlessCount = 0
         for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
-            ResetPlayerDeathless(kitty)
+            this.ResetPlayerDeathless(kitty)
         }
     }
 
@@ -33,9 +46,9 @@ export class DeathlessChallenges {
     public static DeathlessCheck(kitty: Kitty) {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
         kitty.CurrentStats.DeathlessProgress++
-        if (kitty.CurrentStats.DeathlessProgress == DeathlessPerRound()) {
-            AwardDeathless(kitty)
-            ResetPlayerDeathless(kitty)
+        if (kitty.CurrentStats.DeathlessProgress == this.DeathlessPerRound()) {
+            this.AwardDeathless(kitty)
+            this.ResetPlayerDeathless(kitty)
         }
     }
 
@@ -44,10 +57,10 @@ export class DeathlessChallenges {
     }
 
     private static AwardDeathless(kitty: Kitty) {
-        DeathlessCount += 1
+        this.DeathlessCount += 1
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit)
-        AwardBasedOnDifficulty(kitty.Player)
-        PlayInvulnerableSoundWithText(kitty)
+        this.AwardBasedOnDifficulty(kitty.Player)
+        this.PlayInvulnerableSoundWithText(kitty)
     }
 
     private static AwardBasedOnDifficulty(player: MapPlayer) {

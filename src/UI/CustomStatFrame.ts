@@ -122,16 +122,16 @@ export class CustomStatFrame {
 
         let hideParent = blzCreateFrameByType('SIMPLEFRAME', 'HideParent', blzGetFrameByName('ConsoleUI', 0), '', 0)
         hideParent.visible = false
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 0), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 1), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconArmor', 2), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconRank', 3), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconFood', 4), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconGold', 5), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconHero', 6), hideParent)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconAlly', 7), hideParent)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 0).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 1).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconArmor', 2).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconRank', 3).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconFood', 4).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconGold', 5).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconHero', 6).handle, hideParent.handle)
+        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconAlly', 7).handle, hideParent.handle)
 
-        let trig: Trigger = trigger.Create()
+        let trig = Trigger.create()
         trig.addAction(() => {
             let player = getTriggerPlayer()
             let unit = getTriggerUnit()

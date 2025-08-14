@@ -174,7 +174,7 @@ export class FirstPersonCameraManager {
                     let keyTrigger = Trigger.create()!
                     let localKey = key.Key // Create a local copy of the key
                     let localValue = keyState.Key // Create a local copy of the value
-                    TriggerRegisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value)
+                    TriggerregisterPlayerKeyEventBJ(keyTrigger, p, keyState.Value, key.Value)
                     TriggerAddAction(keyTrigger, () => FirstPersonCameraManager.OnKeyEvent(localKey, localValue))
                 }
             }

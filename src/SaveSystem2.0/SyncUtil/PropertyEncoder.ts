@@ -1,3 +1,7 @@
+import { Logger } from "src/Events/Logger/Logger"
+import { Globals } from "src/Global/Globals"
+import { SaveManager } from "../SaveManager"
+
 export class PropertyEncoder {
     public static EncodeToJsonBase64(obj: object) {
         try {

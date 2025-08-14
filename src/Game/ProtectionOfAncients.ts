@@ -133,7 +133,7 @@ export class ProtectionOfAncients {
 
         ProtectionOfAncients.HotkeyTrigger = Trigger.create()!
         for (let p of Globals.ALL_PLAYERS) {
-            ProtectionOfAncients.HotkeyTrigger.RegisterPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true)
+            ProtectionOfAncients.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true)
         }
         ProtectionOfAncients.HotkeyTrigger.addAction(ProtectionOfAncients.RegisterHotKeyEvents)
     }
