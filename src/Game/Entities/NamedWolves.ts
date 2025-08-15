@@ -15,7 +15,7 @@ export class NamedWolves {
     public static DNTNamedWolves: Wolf[] = []
     public static ExplodingWolf: Wolf
     public static StanWolf: Wolf
-    public STAN_NAME: string = '{Colors.COLOR_PURPLE}Stan|r'
+    public static STAN_NAME: string = '{Colors.COLOR_PURPLE}Stan|r'
     private static ExplodingTexttagTimer = Timer.create()
     private static ExplodingWolfRevive = Timer.create()
     private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
@@ -25,7 +25,7 @@ export class NamedWolves {
     /// </summary>
     public static CreateNamedWolves() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
-        NamedWolves.DNTNamedWolves.clear()
+        NamedWolves.DNTNamedWolves = []
         NamedWolves.CreateStanWolf()
         NamedWolves.CreateExplodingWolf()
     }
@@ -39,9 +39,9 @@ export class NamedWolves {
     }
 
     private static UpdateTextTag() {
-        NamedWolves.ExplodingWolf?.Texttag?.setPosition(
+        NamedWolves.ExplodingWolf?.Texttag?.setPos(
             NamedWolves.ExplodingWolf.Unit.x,
-            NamedWolves.ExplodingWolf.unit.y,
+            NamedWolves.ExplodingWolf.Unit.y,
             0.015
         )
     }
@@ -52,7 +52,7 @@ export class NamedWolves {
 
         NamedWolves.StanWolf.PauseSelf(true)
         NamedWolves.StanWolf.Unit.setVertexColor(235, 115, 255, 255)
-        NamedWolves.StanWolf.Unit.name = STAN_NAME
+        NamedWolves.StanWolf.Unit.name = this.STAN_NAME
         NamedWolves.StanWolf.OVERHEAD_EFFECT_PATH = ''
 
         NamedWolves.StanWolf.Texttag ??= TextTag.create()!
@@ -65,7 +65,7 @@ export class NamedWolves {
         BurntMeat.RegisterDeathTrigger()
 
         Utility.SimpleTimer(0.5, () =>
-            NamedWolves.StanWolf.Texttag.setPosition(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.unit.y, 0.015)
+            NamedWolves.StanWolf.Texttag.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.Unit.y, 0.015)
         )
         NamedWolves.DNTNamedWolves.push(NamedWolves.StanWolf)
     }
@@ -73,7 +73,7 @@ export class NamedWolves {
     public static KillExplodingWolf() {
         try {
             if (NamedWolves.ExplodingWolf.IsReviving) return
-            NamedWolves.ExplodingWolf.Unit.Kill()
+            NamedWolves.ExplodingWolf.Unit.kill()
             NamedWolves.ExplodingWolf.IsReviving = true
             NamedWolves.ExplodingWolf.OVERHEAD_EFFECT_PATH = ''
             NamedWolves.ExplodingWolf.Texttag.setText('', 0.015)
@@ -87,18 +87,18 @@ export class NamedWolves {
                 false,
                 ErrorHandler.Wrap(() => {
                     if (NamedWolves.ExplodingWolf.Unit == null) return
-                    NamedWolves.DNTNamedWolves.Remove(NamedWolves.ExplodingWolf)
+                    NamedWolves.DNTNamedWolves.splice(NamedWolves.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
                     NamedWolves.ExplodingWolf.IsReviving = false
-                    NamedWolves.ExplodingWolf.Unit?.dispose()
-                    Globals.ALL_WOLVES.Remove(NamedWolves.ExplodingWolf.Unit)
+                    NamedWolves.ExplodingWolf.Unit?.destroy()
+                    Globals.ALL_WOLVES.delete(NamedWolves.ExplodingWolf.Unit)
                     NamedWolves.ExplodingWolf.Unit = Unit.create(
                         NamedWolves.ExplodingWolf.Unit.owner,
                         Wolf.WOLF_MODEL,
                         NamedWolves.ExplodingWolf.Unit.x,
-                        NamedWolves.ExplodingWolf.unit.y,
+                        NamedWolves.ExplodingWolf.Unit.y,
                         360
-                    )
-                    Globals.ALL_WOLVES.push(NamedWolves.ExplodingWolf.Unit, NamedWolves.ExplodingWolf)
+                    )!
+                    Globals.ALL_WOLVES.set(NamedWolves.ExplodingWolf.Unit, NamedWolves.ExplodingWolf)
                     NamedWolves.ExplodingWolfDesc()
                 })
             )

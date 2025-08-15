@@ -9,6 +9,7 @@ import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Unit } from 'w3ts'
 import { ShopFrame } from '../ShopFrame'
 import { ShopItem } from '../ShopItems/ShopItems'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class RelicFunctions {
     public static HandleRelicPurchase(player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) {
@@ -36,11 +37,12 @@ export class RelicFunctions {
             if (RelicFunctions.RelicMaxedOut(player)) return
 
             RelicFunctions.ReduceGold(player, selectedItem.Cost)
-            let newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic
+            const relicCtor = selectedItem.Relic.constructor as new () => Relic;
+            const newRelic = new relicCtor();
             if (newRelic != null) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
-                RelicFunctions.addItem(player, selectedItem.ItemID)
+                RelicFunctions.AddItem(player, selectedItem.ItemID)
                 Utility.SimpleTimer(0.21, () => newRelic.SetUpgradeLevelDesc(kitty.Unit))
             }
         } catch (e: any) {
@@ -56,13 +58,11 @@ export class RelicFunctions {
                 ShopFrame.upgradeButton.visible = true
             }
 
-            if (
-                (selectedItem =
-                    ShopFrame.SelectedItems.TryGetValue(player) /* TODO; Prepend: let */ && selectedItem != null)
-            ) {
+            let selectedItem = ShopFrame.SelectedItems.get(player)
+            if (selectedItem != null) {
                 let itemID = selectedItem.ItemID
-                let relicType = selectedItem.Relic.GetType()
-                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.GetType() == relicType)
+                let relicType = selectedItem.Relic.constructor
+                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor == relicType)
                 if (playerRelic == null) return
                 let playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
                 let playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
@@ -81,7 +81,7 @@ export class RelicFunctions {
 
                 // Check if enough goldies
                 let goldCost = playerUpgradesRelic.Cost
-                if (player.Gold < goldCost) {
+                if (player.getGold() < goldCost) {
                     ShopFrame.NotEnoughGold(player, goldCost)
                     return
                 }
@@ -92,7 +92,7 @@ export class RelicFunctions {
                     5.0,
                     "{Colors.COLOR_YELLOW}You'upgraded: ve {playerRelic.name}.{Colors.COLOR_RESET}"
                 )
-                player.Gold -= goldCost
+                player.addGold(-goldCost)
                 if (player.isLocal()) ShopFrame.RefreshUpgradeTooltip(playerRelic)
             }
         } catch (e: any) {
@@ -101,16 +101,17 @@ export class RelicFunctions {
     }
 
     private static HasInventorySpace(unit: Unit) {
-        for (let i: number = 0; i < 6; i++) if (unit.ItemAtOrDefault(i) == null) return true
+        for (let i: number = 0; i < 6; i++) 
+            if (unit.getItemInSlot(i) == null) return true
         return false
     }
 
     private static ReduceGold(player: MapPlayer, amount: number) {
-        return (player.Gold -= amount)
+        return (player.addGold(-amount))
     }
 
     private static RelicLevel(unit: Unit) {
-        return unit.Level >= Relic.RequiredLevel
+        return unit.level >= Relic.RequiredLevel
     }
 
     private static NotHighEnoughLevel(player: MapPlayer) {
@@ -128,7 +129,7 @@ export class RelicFunctions {
     }
 
     private static AddItem(player: MapPlayer, itemID: number) {
-        Globals.ALL_KITTIES.get(player)!.Unit.addItem(itemID)
+        Globals.ALL_KITTIES.get(player)!.Unit.addItemById(itemID)
     }
 
     private static RelicMaxedOut(player: MapPlayer) {
@@ -155,7 +156,8 @@ export class RelicFunctions {
     }
 
     private static ActiveShadowKitty(player: MapPlayer) {
-        let shadowkitty = ShadowKitty.ALL_SHADOWKITTIES[player]
+        let shadowkitty = ShadowKitty.ALL_SHADOWKITTIES.get(player)
+        if (!shadowkitty) return false
         if (shadowkitty.Active) {
             player.DisplayTimedTextTo(
                 8.0,
@@ -167,7 +169,7 @@ export class RelicFunctions {
     }
 
     public static CannotSellOnCD(kitty: Kitty, relic: Relic) {
-        let CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit, relic.RelicAbilityID)
+        let CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit.handle, relic.RelicAbilityID)
         if (CD > 0.0 && relic.RelicAbilityID != 0) {
             kitty.Player.DisplayTimedTextTo(
                 5.0,
@@ -175,7 +177,7 @@ export class RelicFunctions {
             )
             return false
         }
-        if (relic.GetType() == typeof ChronoSphere && kitty.CurrentStats.ChronoSphereCD) {
+        if (relic.constructor == ChronoSphere && kitty.CurrentStats.ChronoSphereCD) {
             // chrono sphere
             kitty.Player.DisplayTimedTextTo(
                 5.0,

@@ -227,9 +227,12 @@ export class Kitty {
     private InitData() {
         try {
             // Save Data
-            if (this.Player.controller == MAP_CONTROL_USER && this.Player.slotState == PLAYER_SLOT_STATE_PLAYING)
-                this.SaveData = SaveManager.GetKittyData(this.Player)
-            else this.SaveData = new KittyData() // dummy data for comps
+            if (this.Player.controller == MAP_CONTROL_USER && this.Player.slotState == PLAYER_SLOT_STATE_PLAYING) {
+                const data = SaveManager.GetKittyData(this.Player)
+                this.SaveData = data ? data : new KittyData()
+            } else {
+                this.SaveData = new KittyData() // dummy data for comps
+            }
 
             this.Relics = []
         } catch (e: any) {

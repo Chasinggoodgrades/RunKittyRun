@@ -41,7 +41,7 @@
 //        let kitty = Globals.ALL_KITTIES.get(player)!;
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
-//        Unit.SetScale(0.60, 0.60, 0.60);
+//        Unit.setScale(0.60, 0.60, 0.60);
 //        CollisionDetection.KittyRegisterCollisions(kitty);
 //    }
 
@@ -65,7 +65,7 @@
 //        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof(AmuletOfEvasiveness));
 //        let scale = UnitScale - (AMULET_UPGRADE_COLLISION_REDUCTION * upgradeLevel);
 
-//        Unit.SetScale(scale, scale, scale);
+//        Unit.setScale(scale, scale, scale);
 //    }
 
 //    /// <summary>

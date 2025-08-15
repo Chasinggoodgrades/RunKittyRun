@@ -1,3 +1,10 @@
+import { Team } from "src/Gamemodes/Teams/Team"
+import { Globals } from "src/Global/Globals"
+import { RegionList } from "src/Global/RegionList"
+import { CameraUtil } from "src/Utility/CameraUtil"
+import { MapPlayer } from "w3ts"
+import { RoundManager } from "./RoundManager"
+
 export class RoundUtilities {
     public static MovePlayerToStart(Player: MapPlayer) {
         let kitty = Globals.ALL_KITTIES.get(Player)!
@@ -11,30 +18,30 @@ export class RoundUtilities {
         for (let i: number = 0; i < team.Teammembers.length; i++) {
             let player = team.Teammembers[i]
             let kitty = (Globals.ALL_KITTIES.get(player)!.Finished = true)
-            MovePlayerToStart(player)
+            this.MovePlayerToStart(player)
         }
         team.Finished = true
     }
 
     public static MoveAllPlayersToStart() {
-        for (let kitty in Globals.ALL_KITTIES) {
-            MovePlayerToStart(kitty.Value.Player)
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            this.MovePlayerToStart(kitty.Player)
         }
     }
 
     public static RoundResetAll() {
-        for (let kitty in Globals.ALL_KITTIES) {
-            kitty.Value.Unit.Revive(
-                RegionList.SpawnRegions[kitty.Value.Player.id].centerX,
-                RegionList.SpawnRegions[kitty.Value.Player.id].centerY,
+        for (let [_, kitty] of Globals.ALL_KITTIES) {
+            kitty.Unit.revive(
+                RegionList.SpawnRegions[kitty.Player.id].centerX,
+                RegionList.SpawnRegions[kitty.Player.id].centerY,
                 false
             )
-            Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle()
-            kitty.Value.isAlive() = true
-            kitty.Value.ProgressZone = 0
-            kitty.Value.Finished = false
-            kitty.Value.Unit.mana = kitty.Value.Unit.maxMana
-            kitty.Value.CurrentStats.ResetRoundData()
+            Globals.ALL_CIRCLES.get(kitty.Player)?.HideCircle()
+            kitty.Alive = true
+            kitty.ProgressZone = 0
+            kitty.Finished = false
+            kitty.Unit.mana = kitty.Unit.maxMana
+            kitty.CurrentStats.ResetRoundData()
         }
     }
 

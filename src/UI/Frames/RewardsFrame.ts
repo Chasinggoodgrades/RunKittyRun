@@ -299,12 +299,13 @@ export class RewardsFrame {
 
     private static RewardButtonActions(reward: Reward) {
         let player = getTriggerPlayer()
-        let frame = BlzGetTriggerFrame()
+        let frame = Frame.fromEvent()
         let stats = Globals.ALL_KITTIES.get(player)!.SaveData
         let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
         if (value <= 0) return // Doesnt have the reward , dont apply.
         reward.ApplyReward(player)
         if (!player.isLocal()) return
+        if (!frame) return
         FrameManager.RefreshFrame(frame)
     }
 

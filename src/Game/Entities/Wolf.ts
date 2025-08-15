@@ -104,8 +104,8 @@ export class Wolf {
         this.WolfPoint.DiagonalRegionCreate(
             this.Unit.x,
             this.Unit.y,
-            GetRandomReal(this.WolfArea.Rect.minX, this.WolfArea.Rect.maxX),
-            GetRandomReal(this.WolfArea.Rect.minY, this.WolfArea.Rect.maxY)
+            GetRandomReal(this.WolfArea.Rectangle.minX, this.WolfArea.Rectangle.maxX),
+            GetRandomReal(this.WolfArea.Rectangle.minY, this.WolfArea.Rectangle.maxY)
         )
     }
 
@@ -153,7 +153,7 @@ export class Wolf {
                 this.WanderTimer?.pause()
                 this.EffectTimer?.pause()
                 for (let i: number = 0; i < this.Affixes.length; i++) {
-                    this.Affixes[i].Pause(true)
+                    this.Affixes[i].pause(true)
                 }
                 BlzUnitClearOrders(this.Unit.handle, false)
                 this.IsWalking = false
@@ -161,7 +161,7 @@ export class Wolf {
                 this.Unit.paused = true // Wander Wolf
             } else {
                 for (let i: number = 0; i < this.Affixes.length; i++) {
-                    this.Affixes[i].Pause(false)
+                    this.Affixes[i].pause(false)
                 }
                 this.WanderTimer?.resume()
                 if (this.EffectTimer != null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
@@ -177,8 +177,8 @@ export class Wolf {
     private InitializeWolf() {
         let selectedPlayer = Setup.getNextWolfPlayer()
 
-        let randomX = GetRandomReal(this.WolfArea.Rect.minX, this.WolfArea.Rect.maxX)
-        let randomY = GetRandomReal(this.WolfArea.Rect.minY, this.WolfArea.Rect.maxY)
+        let randomX = GetRandomReal(this.WolfArea.Rectangle.minX, this.WolfArea.Rectangle.maxX)
+        let randomY = GetRandomReal(this.WolfArea.Rectangle.minY, this.WolfArea.Rectangle.maxY)
         let facing = GetRandomReal(0, 360)
 
         this.Unit ??= Unit.create(selectedPlayer, Wolf.WOLF_MODEL, randomX, randomY, facing)!

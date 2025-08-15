@@ -1,7 +1,10 @@
+import { Globals } from "src/Global/Globals"
+
 export class DateTimeManager {
     public static DateTime: WcDateTime
     public static CurrentMonth: number
     public static CurrentDay: number
+    public static Test: Date
 
     public static Initialize() {
         WcDateTime.GetCurrentTime(SetDateTime)

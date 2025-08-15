@@ -55,15 +55,20 @@ export class AwardingCmds {
     }
 
     private static AwardingHelp(player: MapPlayer) {
-        let combined = ''
+        let combined = '';
 
-        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
-            let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let awd of Object.keys(subCategory)) {
-                combined += awd.name + ', '
+        for (const category of Object.keys(Globals.GAME_AWARDS_SORTED) as Array<keyof typeof Globals.GAME_AWARDS_SORTED>) { // YUCK
+            const subCategory = Globals.GAME_AWARDS_SORTED[category];
+            for (const awdKey of Object.keys(subCategory)) {
+                const awd = subCategory[awdKey]; // This... is just a shit show. I think we need to make an interface .. implement it for the awards types and do it from there.. but i have no idea how thats going change the save system if it'll even work.
+                combined += awd.name + ', ';
             }
         }
-        player.DisplayTimedTextTo(15.0, '{Colors.COLOR_YELLOW_ORANGE}awards: Valid: {Colors.HighlightString(combined)}')
+
+        player.DisplayTimedTextTo(
+            15.0,
+            `${Colors.COLOR_YELLOW_ORANGE}awards: Valid: ${Colors.HighlightString(combined)}`
+        );
     }
 
     private static AwardAll(player: MapPlayer) {

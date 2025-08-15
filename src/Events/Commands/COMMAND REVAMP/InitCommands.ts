@@ -47,6 +47,7 @@ import { Effect, MapPlayer } from 'w3ts'
 import { AwardingCmds } from '../AwardingCmds'
 import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
+import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 
 export class InitCommands {
     public static _G: any
@@ -463,7 +464,7 @@ export class InitCommands {
             argDesc: '[index]',
             description: 'unit: animation: by: index: Set.',
             action: (player, args) =>
-                SetUnitAnimationByIndex(Globals.ALL_KITTIES.get(player)!.Unit, int.Parse(args[0])),
+                SetUnitAnimationByIndex(Globals.ALL_KITTIES.get(player)!.Unit.handle, int.Parse(args[0])),
         })
 
         CommandsManager.RegisterCommand({
@@ -566,11 +567,12 @@ export class InitCommands {
             description: 'the: level: Sets of selected: Unit: the.',
             action: (player, args) => {
                 if (args.length < 2) {
-                    let kitty = (Globals.ALL_KITTIES.get(player)!.Unit.getHeroLevel() = int.Parse(args[0]))
+                    let kitty = Globals.ALL_KITTIES.get(player)!
+                    kitty.Unit.setHeroLevel(int.Parse(args[0]), true)
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    kitty.Unit.getHeroLevel() = int.Parse(args[0])
+                    kitty.Unit.setHeroLevel(int.Parse(args[0]), true)
                 })
             },
         })
@@ -583,7 +585,7 @@ export class InitCommands {
             description: 'a: blink: item: to: the: kitty: Adds.',
             action: (player, args) => {
                 let kitty = Globals.ALL_KITTIES.get(player)!
-                kitty.Unit.addItem(FourCC('desc'))
+                kitty.Unit.addItemById(FourCC('desc'))
             },
         })
 
@@ -712,7 +714,7 @@ export class InitCommands {
             group: 'admin',
             argDesc: '',
             description: 'the: cooldowns: Resets of selected: Unit: the.',
-            action: (player, args) => CustomStatFrame.SelectedUnit.get(player)!.ResetCooldowns(),
+            action: (player, args) => CustomStatFrame.SelectedUnit.get(player)!.resetCooldown(), // Assuming this resets all cooldowns?
         })
 
         CommandsManager.RegisterCommand({
@@ -804,7 +806,10 @@ export class InitCommands {
             description: 'selected: wolf: Pauses. to: Defaults [on]',
             action: (player, args) => {
                 let status = args[0] == '' || CommandsManager.GetBool(args[0])
-                Wolf.PauseSelectedWolf(CustomStatFrame.SelectedUnit[player], status)
+                let selected = CustomStatFrame.SelectedUnit.get(player)
+                if (selected) {
+                    Wolf.PauseSelectedWolf(selected, status)
+                }
             },
         })
 
@@ -816,9 +821,12 @@ export class InitCommands {
             description: 'the: selected: wolf: to: walking: or: not: Sets. to: Defaults [on]',
             action: (player, args) => {
                 let status = args[0] == '' || CommandsManager.GetBool(args[0])
-                let selected = CustomStatFrame.SelectedUnit[player]
-                if ((wolf = Globals.ALL_WOLVES.TryGetValue(selected)) /* TODO; Prepend: let */) {
-                    wolf.IsWalking = status
+                let selected = CustomStatFrame.SelectedUnit.get(player)
+                if (selected) {
+                    let wolf = Globals.ALL_WOLVES.get(selected)
+                    if (wolf) {
+                        wolf.IsWalking = status
+                    }
                 }
             },
         })
@@ -887,12 +895,12 @@ export class InitCommands {
             description: 'the: specified: affix: to: all: wolves: Applies.',
             action: (player, args) => {
                 let affixName =
-                    args[0] != '' ? char.ToUpper(args[0][0]) + args[0].substring(1).toLowerCase() : 'Speedster'
+                    args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
                 print('Applying {affixName} all: wolves: to.')
-                for (let wolf in Globals.ALL_WOLVES) {
-                    if (NamedWolves.DNTNamedWolves.includes(wolf.Value)) continue
-                    let affix = AffixFactory.CreateAffix(wolf.Value, affixName)
-                    wolf.Value.AddAffix(affix)
+                for (let [_, wolf] of Globals.ALL_WOLVES) {
+                    if (NamedWolves.DNTNamedWolves.includes(wolf)) continue
+                    let affix = AffixFactory.CreateAffix(wolf, affixName)
+                    wolf.AddAffix(affix)
                 }
             },
         })
@@ -905,8 +913,9 @@ export class InitCommands {
             description: 'the: specified: affix: to: the: currently: selected: wolf: Applies.',
             action: (player, args) => {
                 let affixName =
-                    args[0] != '' ? char.ToUpper(args[0][0]) + args[0].substring(1).toLowerCase() : 'Speedster'
-                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                    args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
+                let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
+                if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(selectedUnit)!)) return
                 let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES.get(selectedUnit)!, affixName)
@@ -921,8 +930,9 @@ export class InitCommands {
             argDesc: '[affix]',
             description: 'the: specified: affix: from: the: currently: selected: wolf: Removes.',
             action: (player, args) => {
-                let affixName = args[0] != '' ? char.ToUpper(args[0][0]) + args[0].substring(1).toLowerCase() : ''
-                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                let affixName = args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : ''
+                let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
+                if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 if (affixName == '') return
                 if (!Globals.ALL_WOLVES.get(selectedUnit)!.HasAffix(affixName)) return
@@ -937,8 +947,8 @@ export class InitCommands {
             argDesc: '',
             description: 'all: affixes: from: all: wolves: Clears.',
             action: (player, args) => {
-                for (let wolf in Globals.ALL_WOLVES) {
-                    wolf.Value.RemoveAllWolfAffixes()
+                for (let [_, wolf] of Globals.ALL_WOLVES) {
+                    wolf.RemoveAllWolfAffixes()
                 }
             },
         })
@@ -968,9 +978,9 @@ export class InitCommands {
             description: 'all: players: to: your: location: Summons.',
             action: (player, args) => {
                 let kitty = Globals.ALL_KITTIES.get(player)!
-                for (let k in Globals.ALL_KITTIES) {
-                    if (k.Value.Unit.owner == player) continue
-                    k.Value.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
+                for (let [_, k] of Globals.ALL_KITTIES) {
+                    if (k.Unit.owner == player) continue
+                    k.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
                 }
             },
         })
@@ -1023,13 +1033,16 @@ export class InitCommands {
             description: 'or: removes: an: ability: from: the: kitty: Adds.',
             action: (player, args) => {
                 let abilityId = args[0] != '' ? args[0] : ''
-                let kitty = Globals.ALL_KITTIES.get(player)!
-                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0) {
-                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId))
+                let kitty = Globals.ALL_KITTIES.get(player)
+
+                if (!kitty) return
+
+                if (kitty.Unit.getAbilityLevel(FourCC(abilityId)) > 0) {
+                    kitty.Unit.removeAbility(FourCC(abilityId))
                     let abilityName = GetObjectName(FourCC(abilityId)) // GetObjectName is async
                     player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.')
                 } else {
-                    UnitAddAbility(kitty.Unit, FourCC(abilityId))
+                    kitty.Unit.addAbility(FourCC(abilityId))
                     let abilityName = GetObjectName(FourCC(abilityId)) // GetObjectName is async
                     player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.')
                 }
@@ -1046,13 +1059,13 @@ export class InitCommands {
                 let scale = args[0] != '' ? int.Parse(args[0]) : 0.6
 
                 if (args.length < 2 || args[1] == '') {
-                    Globals.ALL_KITTIES.get(player)!.Unit.SetScale(scale, scale, scale)
+                    Globals.ALL_KITTIES.get(player)!.Unit.setScale(scale, scale, scale)
                     return
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (kitty == null) return
-                    kitty.Unit.SetScale(scale, scale, scale)
+                    kitty.Unit.setScale(scale, scale, scale)
                 })
             },
         })
@@ -1088,8 +1101,8 @@ export class InitCommands {
             argDesc: '',
             description: 'debug: names: Prints.',
             action: (player, args) => {
-                _G['trackPrintMap'] = true
-                DebugUtilities.DebugPrinter.PrintDebugNames('globals')
+                this._G['trackPrintMap'] = true
+                // this.DebugUtilities.DebugPrinter.PrintDebugNames('globals') 
             },
         })
 
@@ -1150,7 +1163,7 @@ export class InitCommands {
                         Globals.ALL_PLAYERS.push(compPlayer)
                         new Circle(compPlayer)
                         let newKitty = new Kitty(compPlayer)
-                        newKitty.Unit.addItem(FourCC('bspd'))
+                        newKitty.Unit.addItemById(FourCC('bspd'))
                     }
                 }
             },
@@ -1202,13 +1215,15 @@ export class InitCommands {
                 let skin: number = args[0] == '' || args[0] == 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
 
                 if (args.length < 2 || args[1] == '') {
-                    BlzSetUnitSkin(Globals.ALL_KITTIES.get(player)!.Unit, skin)
+                    let kitty = Globals.ALL_KITTIES.get(player)
+                    if (kitty == null) return
+                    kitty.Unit.skin = skin
                     return
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (kitty == null) return
-                    BlzSetUnitSkin(kitty.Unit, skin)
+                    kitty.Unit.skin = skin
                 })
                 return
             },
@@ -1258,11 +1273,11 @@ export class InitCommands {
                 let timerInterval = args.length > 1 ? int.Parse(args[1]) : 0.1
                 let laser = args.length > 2 ? int.Parse(args[2]) : 0
 
-                for (let compKitty in Globals.ALL_KITTIES) {
-                    if (compKitty.Value.aiController.IsEnabled()) {
-                        compKitty.Value.aiController.DODGE_RADIUS = dodgeRadius
-                        compKitty.Value.aiController.timerInterval = timerInterval
-                        compKitty.Value.aiController.laser = laser == 1
+                for (let [_, compKitty] of Globals.ALL_KITTIES) {
+                    if (compKitty.aiController.IsEnabled()) {
+                        compKitty.aiController.DODGE_RADIUS = dodgeRadius
+                        compKitty.aiController.timerInterval = timerInterval
+                        compKitty.aiController.laser = laser == 1
                     }
                 }
 
@@ -1310,11 +1325,11 @@ export class InitCommands {
             argDesc: '',
             description: 'the: color: Changes of laser: on: all: the: AI: the, or: free: blocked',
             action: (player, args) => {
-                for (let compKitty in Globals.ALL_KITTIES) {
-                    if (compKitty.Value.aiController.IsEnabled()) {
-                        compKitty.Value.aiController.DODGE_RADIUS = 160.0
-                        compKitty.Value.aiController.timerInterval = 0.1
-                        compKitty.Value.aiController.laser = true
+                for (let [_, compKitty] of Globals.ALL_KITTIES) {
+                    if (compKitty.aiController.IsEnabled()) {
+                        compKitty.aiController.DODGE_RADIUS = 160.0
+                        compKitty.aiController.timerInterval = 0.1
+                        compKitty.aiController.laser = true
                     }
                 }
                 player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW}started: Test')
@@ -1484,8 +1499,8 @@ export class InitCommands {
             action: (player, args) => {
                 // Roughly 3MB of memory per 20k iterations.
                 for (let i: number = 0; i < 20000; i++) {
-                    for (let k in Globals.ALL_KITTIES) {
-                        k.Value.TeamID = k.Value.TeamID
+                    for (let [_, k] of Globals.ALL_KITTIES) {
+                        k.TeamID = k.TeamID
                     }
                 }
                 player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + 'Done')
@@ -1577,7 +1592,7 @@ export class InitCommands {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
                     if (kitty == null) return
                     let safeZones = RegionList.SafeZones
-                    for (let safeZone in safeZones) {
+                    for (let safeZone of safeZones) {
                         kitty.Unit.setPosition(safeZone.centerX, safeZone.centerY)
                     }
                 })
@@ -1649,7 +1664,7 @@ export class InitCommands {
             description: 'an: Effect: test: on: for: some: nitro: thingy: Puts',
             action: (player, args) => {
                 let unitKitty = Globals.ALL_KITTIES.get(player)!.Unit
-                Effect.create('TestThing.mdx', unitKitty, 'origin')!
+                Effect.createAttachment('TestThing.mdx', unitKitty, 'origin')!
             },
         })
 
@@ -1688,7 +1703,7 @@ export class InitCommands {
             description: 'the: chain: Effect: model: Testing',
             action: (player, args) => {
                 let kitty = Globals.ALL_KITTIES.get(player)!
-                Effect.create('ChainTest.mdx', kitty.Unit, 'origin')!
+                Effect.createAttachment('ChainTest.mdx', kitty.Unit, 'origin')!
             },
         })
 
@@ -1722,22 +1737,22 @@ export class InitCommands {
                 if (args[0] == '') {
                     player.DisplayTimedTextTo(
                         5.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Per: Team: Allowed]{Colors.COLOR_RESET}'
+                        `${Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Per: Team: Allowed]${Colors.COLOR_RESET}`
                     )
                     return
                 }
-                let maxPlayersPerTeam: number
-                if (!(maxPlayersPerTeam = int.TryParse(args[0])) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24) {
+                const maxPlayersPerTeam = parseInt(args[0], 10)
+                if (isNaN(maxPlayersPerTeam) || maxPlayersPerTeam < 1 || maxPlayersPerTeam > 24) {
                     player.DisplayTimedTextTo(
                         5.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}number: Invalid of per: team: players. (1-24)|r'
+                        `${Colors.COLOR_YELLOW_ORANGE}Invalid number of team players. (1-24)|r`
                     )
                     return
                 }
                 Gamemode.PlayersPerTeam = maxPlayersPerTeam
                 player.DisplayTimedTextTo(
                     5.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Players: Per: Team: set: to: Max {maxPlayersPerTeam}|r'
+                    `${Colors.COLOR_YELLOW_ORANGE}Players Per Team set to Max ${maxPlayersPerTeam}|r`
                 )
             },
         })
@@ -1749,11 +1764,12 @@ export class InitCommands {
             argDesc: '',
             description: 'wolf: Timer: address: Information: Getting',
             action: (player, args) => {
-                let selectedUnit = CustomStatFrame.SelectedUnit[player]
+                let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
+                if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 let wolf = Globals.ALL_WOLVES.get(selectedUnit)!
-                let timerAddress: string = 'WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}'
-                print('{timerAddress}')
+                let timerAddress: string = `WCTimerAddresses:${wolf.WanderTimer.Timer} : ${wolf.EffectTimer.Timer}`
+                print(`${timerAddress}`)
             },
         })
 
@@ -1766,7 +1782,7 @@ export class InitCommands {
             action: (player, args) => {
                 player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Date: {DateTimeManager.DateTime.toString()}'
+                    `${Colors.COLOR_YELLOW_ORANGE}Date: ${DateTimeManager.DateTime.toString()}`
                 )
             },
         })
@@ -1780,14 +1796,14 @@ export class InitCommands {
                 'the: absolute: slide: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r`)
                     return
                 }
 
                 let speed: number = int.Parse(args[0])
                 if (args.length < 2 || args[1] == '') {
                     Globals.ALL_KITTIES.get(player)!.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set {speed}|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set ${speed}|r`)
                     return
                 }
 
@@ -1800,7 +1816,7 @@ export class InitCommands {
                 })
 
                 if (isMatch) {
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set {speed}|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set ${speed}|r`)
                 }
             },
         })
@@ -1814,14 +1830,16 @@ export class InitCommands {
                 'the: absolute: move: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r`)
                     return
                 }
 
                 let speed: number = int.Parse(args[0])
                 if (args.length < 2 || args[1] == '') {
-                    Globals.ALL_KITTIES.get(player)!.RTR.absoluteMoveSpeed = speed > 0 ? speed : null
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}your: move: speed: to: Set {speed}|r')
+                    let kitty = Globals.ALL_KITTIES.get(player)
+                    if (!kitty) return
+                    kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : 0
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}your: move: speed: to: Set ${speed}|r`)
                     return
                 }
 
@@ -1830,11 +1848,11 @@ export class InitCommands {
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (kitty == null) return
                     isMatch = true
-                    kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : null
+                    kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : 0
                 })
 
                 if (isMatch) {
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set {speed}|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set ${speed}|r`)
                 }
             },
         })
@@ -1847,7 +1865,7 @@ export class InitCommands {
             description: 'on: RTR: and: sets: move: speed: to: 800: for: the: Turns specified player.',
             action: (player, args) => {
                 if (args[0] == '') {
-                    player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r')
+                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r`)
                     return
                 }
 
@@ -1861,7 +1879,7 @@ export class InitCommands {
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: On (RTR + speed: 800)')
                     } else {
                         Globals.ALL_KITTIES.get(player)!.RTR.StopRTR()
-                        Globals.ALL_KITTIES.get(player)!.RTR.absoluteMoveSpeed = null
+                        Globals.ALL_KITTIES.get(player)!.RTR.absoluteMoveSpeed = 0
                         player.DisplayTextTo(Colors.COLOR_GOLD + 'Edit: Speed: Off')
                     }
                     return
@@ -1877,7 +1895,7 @@ export class InitCommands {
                         kitty.RTR.absoluteMoveSpeed = 800
                     } else {
                         kitty.RTR.StopRTR()
-                        kitty.RTR.absoluteMoveSpeed = null
+                        kitty.RTR.absoluteMoveSpeed = 0
                     }
                 })
 

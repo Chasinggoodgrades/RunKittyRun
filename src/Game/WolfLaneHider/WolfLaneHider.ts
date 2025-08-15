@@ -57,24 +57,20 @@ export class WolfLaneHider {
             if (WolfArea.WolfAreas == null) return
 
             // Show lanes that are now visible but weren't before
-            for (let laneId in this.lanesToEnable) {
-                if (
-                    !(
-                        this.currentlyVisibleLanes.includes(laneId) && (lane = WolfArea.WolfAreas.TryGetValue(laneId))
-                    ) /* TODO; Prepend: let */
-                ) {
+            for (let laneId of this.lanesToEnable) {
+                let lane = WolfArea.WolfAreas.get(laneId)
+                if (!lane) continue
+                if (!(this.currentlyVisibleLanes.has(laneId) && lane)) {
                     lane.IsEnabled = true
                     this.SetLaneVisibility(lane, true)
                 }
             }
 
             // Hide lanes that are no longer visible
-            for (let laneId in this.currentlyVisibleLanes) {
-                if (
-                    !(
-                        this.lanesToEnable.includes(laneId) && (lane = WolfArea.WolfAreas.TryGetValue(laneId))
-                    ) /* TODO; Prepend: let */
-                ) {
+            for (let laneId of this.currentlyVisibleLanes) {
+                let lane = WolfArea.WolfAreas.get(laneId)
+                if (!lane) continue
+                if (!(this.lanesToEnable.has(laneId) && lane)) {
                     lane.IsEnabled = false
                     this.SetLaneVisibility(lane, false)
                 }
@@ -82,7 +78,8 @@ export class WolfLaneHider {
 
             // Update the set for next time
             this.currentlyVisibleLanes.clear()
-            for (let laneId in this.lanesToEnable) this.currentlyVisibleLanes.add(laneId)
+            for (let laneId of this.lanesToEnable) 
+                this.currentlyVisibleLanes.add(laneId)
         } catch (e: any) {
             Logger.Warning('Error in ApplyLaneVisibility: {e.Message}')
         }
@@ -101,9 +98,9 @@ export class WolfLaneHider {
         try {
             if (WolfArea.WolfAreas == null) return
 
-            for (let lane in WolfArea.WolfAreas) {
-                SetLaneVisibility(lane.Value, false)
-                lane.Value.IsEnabled = false
+            for (let [_, lane] of WolfArea.WolfAreas) {
+                this.SetLaneVisibility(lane, false)
+                lane.IsEnabled = false
             }
         } catch (e: any) {
             Logger.Warning('Error in HideAllLanes: {e.Message}')
@@ -115,9 +112,9 @@ export class WolfLaneHider {
             this.lanesToEnable.clear()
             this.currentlyVisibleLanes.clear()
             if (WolfArea.WolfAreas == null) return
-            for (let lane in WolfArea.WolfAreas) {
-                lane.Value.IsEnabled = true
-                SetLaneVisibility(lane.Value, true)
+            for (let [_, lane] of WolfArea.WolfAreas) {
+                lane.IsEnabled = true
+                this.SetLaneVisibility(lane, true)
             }
         } catch (e: any) {
             Logger.Warning('Error in ResetLanes: {e.Message}')

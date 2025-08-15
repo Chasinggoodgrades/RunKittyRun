@@ -32,33 +32,33 @@ export class CommandsManager {
         action: Action
     }) {
         let command = new Commands()
-        {
-            ;((name = name),
-                (Alias = alias.split(',')),
-                (Group = group),
-                (ArgDesc = argDesc),
-                (Description = description),
-                (Action = action))
-        }
-        Count = Count + 1
-        AllCommands[name] = command
-        for (let al in command.Alias) {
-            AllCommands[al] = command
+        command.name = props.name
+        command.Alias = props.alias.split(',')
+        command.Group = props.group
+        command.ArgDesc = props.argDesc
+        command.Description = props.description
+        command.Action = props.action
+        CommandsManager.Count = CommandsManager.Count + 1
+        CommandsManager.AllCommands.set(props.name, command)
+        for (const al of command.Alias) {
+            CommandsManager.AllCommands.set(al, command)
         }
     }
 
-    public static GetCommand(name: string): Commands {
-        return (command = AllCommands.TryGetValue(name) /* TODO; Prepend: let */ ? command : null)
+    public static GetCommand(name: string): Commands | null {
+        const command = CommandsManager.AllCommands.get(name)
+        return command ? command : null
     }
 
     private static ResolvePlayerIdArray(arg: string): Kitty[] {
-        KittiesList.clear()
-        let kitties = KittiesList
+        CommandsManager.KittiesList = []
+        let kitties = CommandsManager.KittiesList
         let larg = arg.toLowerCase()
 
         if (arg == '') {
             // no arg for self
-            kitties.push(Globals.ALL_KITTIES.get(getTriggerPlayer()!))
+            let kitty = Globals.ALL_KITTIES.get(getTriggerPlayer()!)
+            if (kitty) kitties.push(kitty)
         } else if (larg == 'a' || larg == 'all') {
             for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
@@ -75,30 +75,31 @@ export class CommandsManager {
                 }
             }
         } else if (larg == 's' || larg == 'sel' || larg == 'select' || larg == 'selected') {
-            let selectedUnit = CustomStatFrame.SelectedUnit[getTriggerPlayer()]
+            let selectedUnit = CustomStatFrame.SelectedUnit.get(getTriggerPlayer())
             if (selectedUnit != null) {
-                let kitty = (k = Globals.ALL_KITTIES.TryGetValue(selectedUnit.owner) /* TODO; Prepend: let */
-                    ? k
-                    : null)
+                let kitty = Globals.ALL_KITTIES.get(selectedUnit.owner) ?? null
                 if (kitty != null) {
                     kitties.push(kitty)
                 }
             }
-        } else if ((playerId = int.TryParse(arg))) {
-            if (
-                (kitty = Globals.ALL_KITTIES.TryGetValue(MapPlayer.fromIndex(playerId - 1)!)) /* TODO; Prepend: let */
-            ) {
-                // assume player ids 1-24
+        } else if ((!isNaN(parseInt(arg, 10)))) {
+            let playerId = parseInt(arg, 10)
+            let kitty = Globals.ALL_KITTIES.get(MapPlayer.fromIndex(playerId - 1)!)
+            if (kitty) {
                 kitties.push(kitty)
             }
         } else if (Utility.GetPlayerByName(larg)) {
             const p = Utility.GetPlayerByName(larg)
-            if ((kitty = Globals.ALL_KITTIES.TryGetValue(p)) /* TODO; Prepend: let */) {
+            if (!p) return []
+            const kitty = Globals.ALL_KITTIES.get(p)
+            if (kitty) {
                 kitties.push(kitty)
             }
         } else if (Colors.GetPlayerByColor(larg)) {
             const pl = Colors.GetPlayerByColor(larg)
-            if ((kitty = Globals.ALL_KITTIES.TryGetValue(pl)) /* TODO; Prepend: let */) {
+            if (!pl) return []
+            const kitty = Globals.ALL_KITTIES.get(pl)
+            if (kitty) {
                 kitties.push(kitty)
             }
         } else {
@@ -111,7 +112,7 @@ export class CommandsManager {
     }
 
     public static ResolvePlayerId(arg: string, action: Action<Kitty>) {
-        let kittyArray = ResolvePlayerIdArray(arg)
+        let kittyArray = this.ResolvePlayerIdArray(arg)
 
         for (let i: number = 0; i < kittyArray.length; i++) {
             action(kittyArray[i])
@@ -126,42 +127,41 @@ export class CommandsManager {
 
     public static HelpCommands(player: MapPlayer, arg: string = '') {
         let filter = isNullOrEmpty(arg) ? '' : arg.toLowerCase()
-        CommandsList.clear() // instead of creating a new list each time, just use 1 and clear it
-        let playerGroup = GetPlayerGroup(player)
+        this.CommandsList = [] // instead of creating a new list each time, just use 1 and clear it
+        let playerGroup = this.GetPlayerGroup(player)
 
-        for (let command in AllCommands) {
-            let cmd = command.Value
-            if (CommandsList.includes(cmd)) continue // already got cmd / alias
+        for (let [_, command] of this.AllCommands) {
+            let cmd = command
+            if (this.CommandsList.includes(cmd)) continue // already got cmd / alias
             if (cmd.Group == playerGroup || cmd.Group == 'all' || playerGroup == 'admin') {
                 // admins get ALL DUH
                 if (isNullOrEmpty(arg) || arg.length == 0) {
-                    CommandsList.push(cmd)
+                    this.CommandsList.push(cmd)
                 } else {
                     if (
                         cmd.name.toLowerCase().includes(filter) ||
-                        Array.Exists(cmd.Alias, alias => alias.toLowerCase().includes(filter)) ||
+                        cmd.Alias.some(alias => alias.toLowerCase().includes(filter)) ||
                         cmd.Description.toLowerCase().includes(filter)
                     ) {
-                        CommandsList.push(cmd)
+                        this.CommandsList.push(cmd)
                     }
                 }
             }
         }
-        if (CommandsList.length == 0) {
+        if (this.CommandsList.length == 0) {
             player.DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: {Colors.COLOR_GOLD}{filter}|r'
+                `${Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: ${Colors.COLOR_GOLD}${filter}|r`
             )
             return
         }
 
         let commandList = ''
-        for (let cmd in CommandsList) {
-            ;((commandList += '{Colors.COLOR_YELLOW}( {cmd.name} | {string.Join('),
-                ', cmd.Alias)} )|r{Colors.COLOR_RED}[{cmd.ArgDesc}]{Colors.COLOR_RESET} - {Colors.COLOR_GOLD}{cmd.Description}|r\n')
+        for (let cmd of this.CommandsList) {
+            commandList += `${Colors.COLOR_YELLOW}( ${cmd.name} | ${cmd.Alias.join(', ')} )|r${Colors.COLOR_RED}[${cmd.ArgDesc}]{Colors.COLOR_RESET} - ${Colors.COLOR_GOLD}${cmd.Description}|r\n`
         }
 
-        player.DisplayTimedTextTo(15.0, '{Colors.COLOR_TURQUOISE}Commands: Available:|r\n{commandList}', 0, 0)
+        player.DisplayTimedTextTo(15.0, `${Colors.COLOR_TURQUOISE}Commands: Available:|r\n${commandList}`)
     }
 
     public static GetPlayerGroup(player: MapPlayer) {

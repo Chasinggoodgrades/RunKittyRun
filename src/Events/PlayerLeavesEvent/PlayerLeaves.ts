@@ -25,7 +25,7 @@ export class PlayerLeaves {
 
     public static TeamRemovePlayer(player: MapPlayer) {
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
-        Globals.PLAYERS_TEAMS[player].RemoveMember(player)
+        Globals.PLAYERS_TEAMS.get(player)?.RemoveMember(player)
     }
 
     public static PlayerLeavesActions(player: MapPlayer | null = null) {
@@ -34,13 +34,14 @@ export class PlayerLeaves {
             if (player != null) leavingPlayer = player
             if (!Globals.ALL_PLAYERS.includes(leavingPlayer)) return
             let kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
-            let circle = Globals.ALL_CIRCLES[leavingPlayer]
+            let circle = Globals.ALL_CIRCLES.get(leavingPlayer)
+            if (!circle) return;
             let nameTag = kitty.NameTag
             this.TeamRemovePlayer(leavingPlayer)
             kitty.dispose()
             circle.dispose()
             nameTag?.dispose()
-            if (!Gameover.WinGame) Globals.ALL_PLAYERS.Remove(leavingPlayer)
+            if (!Gameover.WinGame) Globals.ALL_PLAYERS.splice(Globals.ALL_PLAYERS.indexOf(leavingPlayer), 1)
             print(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
             RoundManager.RoundEndCheck()
             if (Gameover.WinGame) return

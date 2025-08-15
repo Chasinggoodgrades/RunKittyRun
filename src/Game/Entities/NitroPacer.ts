@@ -9,7 +9,7 @@ import { Action } from 'src/Utility/CSUtils'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
-import { Effect, Rectangle, Unit } from 'w3ts'
+import { Effect, Item, MapPlayer, Rectangle, Unit } from 'w3ts'
 import { Progress } from '../Management/Progress'
 import { WolfPoint } from '../WolfPoint'
 
@@ -19,11 +19,10 @@ export class NitroPacer {
     private static currentDistance: number = 0
     private static currentCheckpoint: number = 0
     private static pacerTimer: AchesTimers
-    private static spawnRect: Rectangle = RegionList.SpawnRegions[5].Rect
+    private static spawnRect: Rectangle = RegionList.SpawnRegions[5]
     private static pathingPoints: Rectangle[] = RegionList.PathingPoints
-    private static _cachedNitroPacerUpdate: Action
     private static nitroEffect: Effect
-    private static ghostBoots: item
+    private static ghostBoots: Item
 
     /// <summary>
     /// Initializes the Nitros Pacer unit and effect, only applies to the standard gamemode.
@@ -31,22 +30,21 @@ export class NitroPacer {
     public static Initialize() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
-        Unit ??= Unit.create(
-            player.NeutralPassive,
+        this.Unit ??= Unit.create(
+            MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!,
             Constants.UNIT_NITRO_PACER,
-            spawnRect.centerX,
-            spawnRect.centerY,
+            this.spawnRect.centerX,
+            this.spawnRect.centerY,
             360
-        )
-        Utility.MakeUnitLocust(Unit)
-        Unit.invulnerable = true
-        Unit.name = '{Colors.COLOR_TURQUOISE}Pacer: Nitro{Colors.COLOR_RESET}'
-        ghostBoots = Unit.addItem(Constants.ITEM_GHOST_KITTY_BOOTS)
-        nitroEffect = Effect.create('war3mapImported\\Nitro.mdx', Unit, 'origin')!
-        _cachedNitroPacerUpdate = UpdateNitroPacer
-        VisionShare()
+        )!
+        Utility.MakeUnitLocust(this.Unit)
+        this.Unit.invulnerable = true
+        this.Unit.name = '{Colors.COLOR_TURQUOISE}Pacer: Nitro{Colors.COLOR_RESET}'
+        this.ghostBoots = this.Unit.addItemById(Constants.ITEM_GHOST_KITTY_BOOTS)!
+        this.nitroEffect = Effect.createAttachment('war3mapImported\\Nitro.mdx', this.Unit, 'origin')!
+        this.VisionShare()
 
-        pacerTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.pacerTimer = MemoryHandler.getEmptyObject<AchesTimers>()
     }
 
     /// <summary>
@@ -63,10 +61,10 @@ export class NitroPacer {
     public static StartNitroPacer() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
-        ResetNitroPacer()
-        Unit.UseItem(ghostBoots)
-        NitroPacerQueueOrders()
-        pacerTimer.Timer.start(0.15, true, _cachedNitroPacerUpdate)
+        this.ResetNitroPacer()
+        this.Unit.useItem(this.ghostBoots)
+        this.NitroPacerQueueOrders()
+        this.pacerTimer.Timer.start(0.15, true, this.UpdateNitroPacer)
     }
 
     /// <summary>
@@ -75,27 +73,31 @@ export class NitroPacer {
     public static ResetNitroPacer() {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
-        pacerTimer?.pause()
-        Unit.paused = false
-        Unit.setPosition(spawnRect.centerX, spawnRect.centerY)
-        currentCheckpoint = 0
-        currentDistance = 0
+        this.pacerTimer?.pause()
+        this.Unit.paused = false
+        this.Unit.setPosition(this.spawnRect.centerX, this.spawnRect.centerY)
+        this.currentCheckpoint = 0
+        this.currentDistance = 0
     }
 
     private static UpdateNitroPacer() {
         try {
-            currentDistance = Progress.CalculateNitroPacerProgress()
-            let remainingDistance: number =
-                Progress.DistancesFromStart[RegionList.PathingPoints.length - 1] - currentDistance
+            this.currentDistance = Progress.CalculateNitroPacerProgress()
+            let remainingDistance = Progress.DistancesFromStart.get(RegionList.PathingPoints.length - 1)
+            if (remainingDistance == null) {
+                Logger.Warning('remainingDistance is undefined in UpdateNitroPacer.')
+                return
+            }
+            remainingDistance -= this.currentDistance
             let remainingTime: number = NitroChallenges.GetNitroTimeRemaining()
             let speed: number = remainingTime != 0.0 ? remainingDistance / remainingTime : 350.0
-            SetSpeed(speed)
+            this.SetSpeed(speed)
 
-            if (pathingPoints[currentCheckpoint + 1].includes(Unit.x, unit.y)) {
-                currentCheckpoint++
-                if (currentCheckpoint >= pathingPoints.length - 1) {
-                    pacerTimer?.pause()
-                    Utility.SimpleTimer(2.0, () => (Unit.paused = true)) // this is actually ok since we reset pacer before starting it again
+            if (this.pathingPoints[this.currentCheckpoint + 1].includes(this.Unit.x, this.Unit.y)) {
+                this.currentCheckpoint++
+                if (this.currentCheckpoint >= this.pathingPoints.length - 1) {
+                    this.pacerTimer?.pause()
+                    Utility.SimpleTimer(2.0, () => (this.Unit.paused = true)) // this is actually ok since we reset pacer before starting it again
                     return
                 }
             }
@@ -108,18 +110,19 @@ export class NitroPacer {
     private static NitroPacerQueueOrders() {
         // backwards for pathingpoints, for stack queue order
         for (
-            let i: number = pathingPoints.length - 1;
+            let i: number = this.pathingPoints.length - 1;
             i >= 1;
             i-- // exclude starting point
         ) {
-            let point: Rectangle = pathingPoints[i]
-            Unit.QueueOrder(WolfPoint.MoveOrderID, point.centerX, point.centerY)
+            let point: Rectangle = this.pathingPoints[i]
+            this.Unit.issueOrderAt(WolfPoint.MoveOrderID, point.centerX, point.centerY)
         }
     }
 
     private static VisionShare() {
         for (let player of Globals.ALL_PLAYERS) {
-            player.NeutralPassive.setAlliance(player, alliancetype.SharedVisionForced, true)
+            let neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!
+            neutralPassive.setAlliance(player, ALLIANCE_SHARED_VISION_FORCED, true)
         }
     }
 

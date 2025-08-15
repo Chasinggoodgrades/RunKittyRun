@@ -32,16 +32,15 @@ export class FangOfShadows extends Relic {
     private SHADOW_KITTY_SUMMON_DURATION: number = 75.0
 
     public constructor() {
-        super()
-        this.name = '{Colors.COLOR_PURPLE}Fang of Shadows'
-        this.Description =
+        super(
+            '{Colors.COLOR_PURPLE}Fang of Shadows',
             'Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r ' +
-            '{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r'
-        this.RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY
-        this.RelicItemID = Constants.ITEM_FANG_OF_SHADOWS
-        this.RelicCost = 650
-        ;(this.constructor as typeof FangOfShadows).IconPath =
+            '{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r',
+            Constants.ITEM_FANG_OF_SHADOWS,
+            Constants.ABILITY_SUMMON_SHADOW_KITTY,
+            650,
             'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
+        )
 
         this.Upgrades.push(
             new RelicUpgrade(0, 'Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.', 15, 800)
@@ -94,12 +93,14 @@ export class FangOfShadows extends Relic {
                 return
             }
 
-            let shadowKitty: ShadowKitty = ShadowKitty.ALL_SHADOWKITTIES[getTriggerUnit().owner]
+            let shadowKitty = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
+
+            if (!shadowKitty) return
 
             // Summon and configure Shadow Kitty
             shadowKitty.SummonShadowKitty()
             this.RegisterTeleportAbility(shadowKitty.Unit)
-            shadowKitty.Unit.ApplyTimedLife(FourCC('BTLF'), this.SHADOW_KITTY_SUMMON_DURATION)
+            shadowKitty.Unit.applyTimedLife(FourCC('BTLF'), this.SHADOW_KITTY_SUMMON_DURATION)
 
             // Set kill timer
             this.KillTimer.start(
@@ -119,11 +120,12 @@ export class FangOfShadows extends Relic {
 
     private TeleportToShadowKitty() {
         try {
-            let sk = ShadowKitty.ALL_SHADOWKITTIES[getTriggerUnit().owner]
+            let sk = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
+            if (!sk) return
             sk.TeleportToShadowKitty()
             Utility.DropAllItems(getTriggerUnit())
             Utility.SimpleTimer(0.09, sk.KillShadowKitty)
-            KillTimer.pause()
+            this.KillTimer.pause()
         } catch (e: any) {
             Logger.Warning('Error in FangOfShadows.TeleportToShadowKitty: {e}')
             return
