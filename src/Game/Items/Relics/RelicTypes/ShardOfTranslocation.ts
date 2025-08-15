@@ -62,7 +62,7 @@ export class ShardOfTranslocation extends Relic {
 
     private TeleportActions() {
         if (!Globals.GAME_ACTIVE) return
-        if (GetSpellAbilityId() != this.RelicAbilityID) return
+        if (GetSpellAbilityId() !== this.RelicAbilityID) return
         let unit = getTriggerUnit()
         let targetLoc = GetSpellTargetLoc()!
         let player = unit.owner
@@ -159,7 +159,7 @@ export class ShardOfTranslocation extends Relic {
         )
             return true
         if (WOLF_AREAS[currentSafezone + 1].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
-        if (currentSafezone == 13 || currentSafezone == 14) {
+        if (currentSafezone === 13 || currentSafezone === 14) {
             if (WOLF_AREAS[14].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
             if (WOLF_AREAS[15].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
             if (WOLF_AREAS[16].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true

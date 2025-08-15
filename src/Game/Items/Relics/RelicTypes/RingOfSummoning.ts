@@ -51,7 +51,7 @@ export class RingOfSummoning extends Relic {
     private RegisterTriggers(Unit: Unit) {
         this.triggerHandle = Trigger.create()!
         TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
-        this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() == this.RelicAbilityID))
+        this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
         this.triggerHandle.addAction(ErrorHandler.Wrap(this.SacredRingOfSummoning))
     }
 
@@ -119,7 +119,7 @@ export class RingOfSummoning extends Relic {
 
         // Summon loop
         let count: number = 0
-        while (this.SummonGroup.first != null && count < numberOfSummons) {
+        while (this.SummonGroup.first && count < numberOfSummons) {
             let unit: Unit = this.SummonGroup.first
             this.SummonGroup.removeUnit(unit)
 
@@ -178,7 +178,7 @@ export class RingOfSummoning extends Relic {
     }
 
     private DeathlessKitty(summonerKitty: Kitty, summonedKittyUnit: Kitty) {
-        if (TeamDeathless.CurrentHolder != summonedKittyUnit) return true
+        if (TeamDeathless.CurrentHolder !== summonedKittyUnit) return true
 
         summonerKitty.Player.DisplayTimedTextTo(
             5.0,
@@ -207,10 +207,10 @@ export class RingOfSummoning extends Relic {
     }
 
     private static KittyFilter(): boolean {
-        return getFilterUnit().typeId == Constants.UNIT_KITTY
+        return getFilterUnit().typeId === Constants.UNIT_KITTY
     }
 
     private static CircleFilter(): boolean {
-        return getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE
+        return getFilterUnit().typeId === Constants.UNIT_KITTY_CIRCLE
     }
 }

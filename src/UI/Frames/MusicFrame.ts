@@ -2,8 +2,8 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { MusicManager } from 'src/Sounds/MusicManager'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { blzCreateFrameByType, getTriggerPlayer, blzGetFrameByName } from 'src/Utility/w3tsUtils'
-import { Frame, Trigger, MapPlayer } from 'w3ts'
+import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
 import { FrameManager } from './FrameManager'
 
@@ -127,7 +127,7 @@ export class MusicFrame {
 
                     //MusicManager.StopAllMusic();
 
-                    let music = MusicManager.MusicList.find(m => m.name == BlzGetTriggerFrameText())
+                    let music = MusicManager.MusicList.find(m => m.name === BlzGetTriggerFrameText())
                     music?.Play()
                     this.MusicFramehandle.visible = !this.MusicFramehandle.visible
                 })
@@ -165,7 +165,7 @@ export class MusicFrame {
         for (let i: number = 0; i < maxSongs; i++) {
             if (i >= start && i < end) {
                 let positionY: number =
-                    i == end - 1
+                    i === end - 1
                         ? this.ButtonStartY - (visibleButtons - 1) * this.ButtonSpacing
                         : this.ButtonStartY - (i - start) * this.ButtonSpacing
                 let button = this.MusicButtons.get(i)

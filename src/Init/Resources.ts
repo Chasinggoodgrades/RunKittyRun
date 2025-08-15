@@ -42,9 +42,9 @@ export class Resources {
     }
 
     private static SetResourcesForGamemode() {
-        if (Gamemode.CurrentGameMode == GameMode.Standard) this.StandardResources()
-        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) this.SoloResources()
-        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) this.TeamResources()
+        if (Gamemode.CurrentGameMode === GameMode.Standard) this.StandardResources()
+        else if (Gamemode.CurrentGameMode === GameMode.SoloTournament) this.SoloResources()
+        else if (Gamemode.CurrentGameMode === GameMode.TeamTournament) this.TeamResources()
     }
 
     private static StandardResources() {

@@ -62,7 +62,7 @@ export class Challenges {
     }
 
     public static PatrioticLight(kitty: Kitty) {
-        if (Globals.ROUND != 5) return
+        if (Globals.ROUND !== 5) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         if (Globals.GAME_TIMER.remaining > 995) return // Formally 20 mins, now 16:35 and awards to all players.
         AwardManager.GiveRewardAll('PatrioticLight')
@@ -77,7 +77,7 @@ export class Challenges {
 
     public static PurpleFire(player: MapPlayer) {
         let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
-        if (Globals.ROUND != 2 || currentDeaths > Challenges.PURPLE_FIRE_DEATH_REQUIREMENT) return
+        if (Globals.ROUND !== 2 || currentDeaths > Challenges.PURPLE_FIRE_DEATH_REQUIREMENT) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         AwardManager.GiveReward(player, 'PurpleFire')
     }
@@ -92,7 +92,7 @@ export class Challenges {
 
     public static TurquoiseFire(player: MapPlayer) {
         let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
-        if (Globals.ROUND != 5 || currentDeaths > Challenges.TURQUOISE_FIRE_DEATH_REQUIREMENT) return
+        if (Globals.ROUND !== 5 || currentDeaths > Challenges.TURQUOISE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'TurquoiseFire')
     }
 
@@ -103,7 +103,7 @@ export class Challenges {
             let currentDeaths = stats.TotalDeaths
 
             if (
-                currentDeaths == 0
+                currentDeaths === 0
                     ? currentSaves < Challenges.PINK_FIRE_SD_REQUIREMENT
                     : currentSaves / currentDeaths < Challenges.PINK_FIRE_SD_REQUIREMENT
             )
@@ -116,7 +116,7 @@ export class Challenges {
     public static WhiteFire(player: MapPlayer) {
         if (NitroChallenges.GetNitroTimeRemaining() <= 0) return
         let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
-        if (Globals.ROUND != 3 || currentDeaths > Challenges.WHITE_FIRE_DEATH_REQUIREMENT) return
+        if (Globals.ROUND !== 3 || currentDeaths > Challenges.WHITE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'WhiteFire')
     }
 
@@ -155,7 +155,7 @@ export class Challenges {
     }
 
     private static DoubleBackingTrigger() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         let t = Trigger.create()!
         t.registerEnterRegion(RegionList.SafeZones[0].region(), () => true)
         t.addAction(
@@ -163,7 +163,7 @@ export class Challenges {
                 let unit = getTriggerUnit()
                 let player = unit.owner
                 if (!Globals.GAME_ACTIVE) return
-                if (unit.typeId != Constants.UNIT_KITTY) return
+                if (unit.typeId !== Constants.UNIT_KITTY) return
                 if (!Globals.ALL_PLAYERS.includes(player)) return
                 if (!Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundFinished) return
                 Challenges.DivineWindwalk(player)
@@ -190,7 +190,10 @@ export class YellowLightning {
     }
 
     private EndTimer() {
-        if (this.SaveCount >= this.YELLOW_LIGHTNING_SAVE_REQUIREMENT && Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (
+            this.SaveCount >= this.YELLOW_LIGHTNING_SAVE_REQUIREMENT &&
+            Gamemode.CurrentGameMode === GameMode.Standard
+        ) {
             AwardManager.GiveReward(this.Kitty.Player, 'YellowLightning')
         }
         this.SaveCount = 0

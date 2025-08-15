@@ -38,7 +38,7 @@ export class KittyStatsManager {
 
         SoloMultiboard.UpdateDeathCount(this.Kitty.Player)
 
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
 
         this.Kitty.SaveData.GameStats.Deaths += 1
     }
@@ -57,7 +57,7 @@ export class KittyStatsManager {
         if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak
 
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
 
         savior.SaveData.GameStats.Saves += 1
         savior.SaveData.GameStats.SaveStreak += 1

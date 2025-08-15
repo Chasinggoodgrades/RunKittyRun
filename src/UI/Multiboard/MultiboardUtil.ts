@@ -2,7 +2,7 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
-import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { MapPlayer, Multiboard } from 'w3ts'
 import { SoloMultiboard } from './SoloMultiboard'
 import { StandardMultiboard } from './StandardMultiboard'
@@ -17,7 +17,7 @@ export class MultiboardUtil {
     }
 
     private static RefreshStandardMbs() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         if (!Difficulty.IsDifficultyChosen) return // Init first.
         StandardMultiboard.UpdateStandardCurrentStatsMB()
         StandardMultiboard.UpdateOverallStatsMB()
@@ -25,7 +25,7 @@ export class MultiboardUtil {
     }
 
     private static RefreshSoloMbs() {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return // Solo Tournament
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return // Solo Tournament
         SoloMultiboard.UpdateOverallStatsMB()
         SoloMultiboard.UpdateBestTimesMB()
     }
@@ -41,7 +41,7 @@ export class MultiboardUtil {
     }
 
     private static MinStandardMultiboards(minimize: boolean) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         StandardMultiboard.CurrentStats.minimize(minimize) // Possible Desync
         StandardMultiboard.BestTimes.minimize(minimize) // Possible Desync
         StandardMultiboard.OverallStats.minimize(minimize) // Possible Desync
@@ -55,7 +55,7 @@ export class MultiboardUtil {
     public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
         for (let player of Globals.ALL_PLAYERS) {
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
-            mb.GetItem(rowIndex, 0).setText(`${Colors.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
+            mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
             mb.GetItem(rowIndex, 0).setWidth(0.07)
             rowIndex++
         }

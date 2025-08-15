@@ -36,7 +36,7 @@ export class ShopItem {
     constructor(...args: any[]) {
         if (args.length === 1 && args[0] instanceof Relic) {
             const relic = args[0] as Relic
-            if (relic == null) throw new Error('Invalid relic')
+            if (relic === null) throw new Error('Invalid relic')
 
             this.InitializeShopItem(
                 relic.name,
@@ -78,7 +78,7 @@ export class ShopItem {
         let shopItems: ShopItem[] = []
 
         try {
-            if (Gamemode.CurrentGameMode == GameMode.Standard) {
+            if (Gamemode.CurrentGameMode === GameMode.Standard) {
                 shopItems.push(new ShopItem(new OneOfNine()))
 
                 shopItems.push(new ShopItem(new RingOfSummoning()))
@@ -105,7 +105,7 @@ export class ShopItem {
         let shopItems: ShopItem[] = []
         let gameAwards = Globals.GAME_AWARDS_SORTED
 
-        let reward = RewardsManager.Rewards.find(x => x.name == 'GreenTendrils')!
+        let reward = RewardsManager.Rewards.find(x => x.name === 'GreenTendrils')!
 
         shopItems.push(
             new ShopItem(

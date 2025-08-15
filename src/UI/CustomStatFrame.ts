@@ -76,9 +76,9 @@ export class CustomStatFrame {
         blzGetFrameByName('BoxedTextValue', CustomStatFrame.Count).setText(text)
         blzGetFrameByName('CustomStatIcon', CustomStatFrame.Count).setTexture(icon, 0, true)
 
-        if (CustomStatFrame.Count == 1)
+        if (CustomStatFrame.Count === 1)
             fh.setPoint(FRAMEPOINT_TOPLEFT, CustomStatFrame.CustomStatFrameBoxS, FRAMEPOINT_TOPLEFT, 0.015, -0.035)
-        else if (CustomStatFrame.Count == 4)
+        else if (CustomStatFrame.Count === 4)
             fh.setPoint(FRAMEPOINT_TOPRIGHT, CustomStatFrame.CustomStatFrameBoxS, FRAMEPOINT_TOPRIGHT, -0.06, -0.035)
         else
             fh.setPoint(
@@ -140,7 +140,7 @@ export class CustomStatFrame {
         })
 
         for (let player of Globals.ALL_PLAYERS)
-            if (player.slotState == PLAYER_SLOT_STATE_PLAYING)
+            if (player.slotState === PLAYER_SLOT_STATE_PLAYING)
                 trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SELECTED, () => true)
 
         CustomStatFrame.CustomStatFrameBoxS = blzCreateFrameByType(
@@ -170,9 +170,9 @@ export class CustomStatFrame {
     }
 
     private static HandleFrameText(selectedUnit: Unit) {
-        if (selectedUnit.typeId == Constants.UNIT_CUSTOM_DOG || selectedUnit.typeId == Constants.UNIT_NITRO_PACER)
+        if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG || selectedUnit.typeId === Constants.UNIT_NITRO_PACER)
             CustomStatFrame.SetWolfFrameText(selectedUnit)
-        else if (selectedUnit.typeId == Constants.UNIT_KITTY) {
+        else if (selectedUnit.typeId === Constants.UNIT_KITTY) {
             CustomStatFrame.SetCommonFrameText(selectedUnit)
             CustomStatFrame.SetGamemodeFrameText(selectedUnit)
         } else if (CustomStatFrame.SetChampionFrameText(selectedUnit)) {
@@ -183,28 +183,28 @@ export class CustomStatFrame {
 
     private static SetChampionFrameText(selectedUnit: Unit) {
         // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
-        if (selectedUnit == SpawnChampions.Fieryfox2023) {
+        if (selectedUnit === SpawnChampions.Fieryfox2023) {
             CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
             CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
             CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|13: r:25'
             CustomStatFrame.Stats[4].Text.text = '|cffffff00Qoz|r'
             CustomStatFrame.Stats[5].Text.text = '|cffffff00Region:|US: r'
             CustomStatFrame.Stats[3].Text.text = '|cffffff00Time:|15: r:36'
-        } else if (selectedUnit == SpawnChampions.FandF2023) {
+        } else if (selectedUnit === SpawnChampions.FandF2023) {
             CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|US: r'
             CustomStatFrame.Stats[1].Text.text = '|cff00fffAches|r'
             CustomStatFrame.Stats[3].Text.text = '|cff00fffBranFlake|r'
             CustomStatFrame.Stats[5].Text.text = '|cffffff00Time:|23: r:12'
             CustomStatFrame.Stats[4].Text.text = '|cff00fffBalmydrop|r'
             CustomStatFrame.Stats[0].Text.text = '|cff00fffUdo|r'
-        } else if (selectedUnit == SpawnChampions.Fieryfox2024) {
+        } else if (selectedUnit === SpawnChampions.Fieryfox2024) {
             CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
             CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
             CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|13: r:23'
             CustomStatFrame.Stats[4].Text.text = '|cff964bc8MrGheed|r'
             CustomStatFrame.Stats[5].Text.text = '|cffffff00Region:|US: r'
             CustomStatFrame.Stats[3].Text.text = '|cffffff00Time:|16: r:31'
-        } else if (selectedUnit == SpawnChampions.Stan2025) {
+        } else if (selectedUnit === SpawnChampions.Stan2025) {
             CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|14: r:25'
             CustomStatFrame.Stats[1].Text.text = '|cffa471e3Stan|r'
             CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
@@ -221,14 +221,14 @@ export class CustomStatFrame {
         CustomStatFrame.Stats[2].Text.text = ''
         CustomStatFrame.Stats[3].Text.text = ''
         //Stats[4].Text.text = "";
-        if (selectedUnit.typeId == Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
-        if (Program.Debug && selectedUnit.typeId == Constants.UNIT_CUSTOM_DOG)
+        if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
+        if (Program.Debug && selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG)
             CustomStatFrame.Stats[4].Text.text = 'Walk: {Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}'
         CustomStatFrame.Stats[5].Text.text = `{MoveSpeed} ${selectedUnit.moveSpeed}`
     }
 
     private static SetWolfAffixTexts(selectedUnit: Unit) {
-        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return
+        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) return
         let wolf
         if (!(wolf = Globals.ALL_WOLVES.get(selectedUnit)) /* TODO; Prepend: let */) return
 
@@ -240,19 +240,19 @@ export class CustomStatFrame {
     }
 
     private static SetGamemodeFrameText(selectedUnit: Unit) {
-        if (Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (Gamemode.CurrentGameMode === GameMode.Standard) {
             // Standard
             CustomStatFrame.Stats[3].Text.setText('{Streak} {GetPlayerSaveStreak(selectedUnit)}')
             CustomStatFrame.Stats[0].Text.setText(
                 '{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r'
             )
             CustomStatFrame.Stats[1].Text.setText('{Saves} {Colors.COLOR_GREEN}{GetPlayerSaves(selectedUnit)}|r')
-        } else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) {
+        } else if (Gamemode.CurrentGameMode === GameMode.SoloTournament) {
             // Solo
             CustomStatFrame.Stats[0].Text.setText('{Time} {GetPlayerTime(selectedUnit)}')
             CustomStatFrame.Stats[1].Text.setText('{Progress} {GetPlayerProgress(selectedUnit)}%')
             CustomStatFrame.Stats[2].Text.setText('{Deaths} {GetGameTotalDeaths(selectedUnit)}')
-        } else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) {
+        } else if (Gamemode.CurrentGameMode === GameMode.TeamTournament) {
             // Team
             CustomStatFrame.Stats[0].Text.setText('{GetPlayerTeamName(selectedUnit)}')
             CustomStatFrame.Stats[4].Text.setText('{GetPlayerProgress(selectedUnit)}%')

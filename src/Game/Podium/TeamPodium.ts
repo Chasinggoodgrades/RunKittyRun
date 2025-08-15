@@ -42,7 +42,7 @@ export class TeamPodium {
     }
 
     private static ProcessNextPodiumAction() {
-        if (TeamPodium.PodiumQueue.length == 0) {
+        if (TeamPodium.PodiumQueue.length === 0) {
             TeamPodium.ProcessPodiumTypeActions()
             return
         }
@@ -90,7 +90,7 @@ export class TeamPodium {
                 return stats.TotalSaves.toString()
 
             case TeamPodium.MVP:
-                return stats.TotalDeaths == 0
+                return stats.TotalDeaths === 0
                     ? stats.TotalSaves.toFixed(2) + ' ratio.'
                     : (stats.TotalSaves / stats.TotalDeaths).toFixed(2) + ' ratio'
 

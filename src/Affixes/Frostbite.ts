@@ -53,7 +53,7 @@ export class Frostbite extends Affix {
     }
 
     private RemoveAllEffects() {
-        if (this.FrostbittenKitties == null || this.FrostbittenKitties.length == 0) return
+        if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
             for (let i: number = 0; i < this.FrostbittenKitties.length; i++) {
                 let frostbitten = this.FrostbittenKitties[i]
@@ -79,7 +79,7 @@ export class Frostbite extends Affix {
     }
 
     private PeriodicRangeCheck() {
-        if (this.FrostbittenKitties == null || this.FrostbittenKitties.length == 0) return
+        if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
             for (
                 let i: number = this.FrostbittenKitties.length - 1;
@@ -102,7 +102,7 @@ export class Frostbite extends Affix {
         if (target.getAbilityLevel(Frostbite.ADRENALINE_POTION_ABILITY) > 0) return // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
         let k: Kitty = Globals.ALL_KITTIES.get(target.owner)!
-        if (k.KittyMiscInfo.FrostBitten != null) return // already bitten.
+        if (k.KittyMiscInfo.FrostBitten !== null) return // already bitten.
         let frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyObject<Frostbitten>())
         frostBittenObject.OriginalSpeed = target.defaultMoveSpeed
         frostBittenObject.Effect = Effect.createAttachment(this.FROSTBITE_TARGET_EFFECT, target, 'chest')!
@@ -128,7 +128,7 @@ export class Frostbitten extends IDisposable {
     }
 
     public dispose() {
-        this.Kitty.Unit.moveSpeed = this.OriginalSpeed != 0 ? this.OriginalSpeed : this.Kitty.Unit.defaultMoveSpeed
+        this.Kitty.Unit.moveSpeed = this.OriginalSpeed !== 0 ? this.OriginalSpeed : this.Kitty.Unit.defaultMoveSpeed
         this.Effect?.destroy()
         this.Effect = null as never
         this.OriginalSpeed = 0.0

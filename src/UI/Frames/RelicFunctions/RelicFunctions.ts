@@ -39,7 +39,7 @@ export class RelicFunctions {
             RelicFunctions.ReduceGold(player, selectedItem.Cost)
             const relicCtor = selectedItem.Relic.constructor as new () => Relic
             const newRelic = new relicCtor()
-            if (newRelic != null) {
+            if (newRelic !== null) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
                 RelicFunctions.AddItem(player, selectedItem.ItemID)
@@ -59,15 +59,15 @@ export class RelicFunctions {
             }
 
             let selectedItem = ShopFrame.SelectedItems.get(player)
-            if (selectedItem != null) {
+            if (selectedItem) {
                 let itemID = selectedItem.ItemID
                 let relicType = selectedItem.Relic.constructor
-                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor == relicType)
-                if (playerRelic == null) return
+                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor === relicType)
+                if (!playerRelic) return
                 let playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
                 let playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
 
-                if (playerUpgradesRelic == null) return
+                if (playerUpgradesRelic === null) return
                 if (RelicFunctions.ActiveShadowKitty(player)) return
 
                 // Check if they can upgrade..
@@ -101,7 +101,7 @@ export class RelicFunctions {
     }
 
     private static HasInventorySpace(unit: Unit) {
-        for (let i: number = 0; i < 6; i++) if (unit.getItemInSlot(i) == null) return true
+        for (let i: number = 0; i < 6; i++) if (unit.getItemInSlot(i) === null) return true
         return false
     }
 
@@ -169,14 +169,14 @@ export class RelicFunctions {
 
     public static CannotSellOnCD(kitty: Kitty, relic: Relic) {
         let CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit.handle, relic.RelicAbilityID)
-        if (CD > 0.0 && relic.RelicAbilityID != 0) {
+        if (CD > 0.0 && relic.RelicAbilityID !== 0) {
             kitty.Player.DisplayTimedTextTo(
                 5.0,
                 '{Colors.COLOR_RED}cannot: sell: You {relic.name}{Colors.COLOR_RED} it: while is cooldown: on.{Colors.COLOR_RESET}'
             )
             return false
         }
-        if (relic.constructor == ChronoSphere && kitty.CurrentStats.ChronoSphereCD) {
+        if (relic.constructor === ChronoSphere && kitty.CurrentStats.ChronoSphereCD) {
             // chrono sphere
             kitty.Player.DisplayTimedTextTo(
                 5.0,

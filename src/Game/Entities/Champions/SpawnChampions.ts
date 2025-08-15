@@ -11,7 +11,7 @@ export class SpawnChampions {
     public static Stan2025: Unit
 
     public static Initialize() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         SpawnChampions.SpawnUnits()
         SpawnChampions.ApplyCosmetics()
     }

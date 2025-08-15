@@ -33,7 +33,7 @@ export class CrystalOfFire {
     }
 
     public static CrystalOfFireDeath(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         kitty.CurrentStats.CrystalOfFireAttempts++
     }
 
@@ -87,7 +87,7 @@ export class CrystalOfFire {
                 if (this.QuestEligible.includes(player))
                     this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
             })
-        } else if (this.GetDeathAttempts(player) == -1) {
+        } else if (this.GetDeathAttempts(player) === -1) {
             player.DisplayTextTo(this.PartTwoMessage(player))
         }
     }
@@ -110,7 +110,7 @@ export class CrystalOfFire {
         let unit = getTriggerUnit()
         if (!Utility.UnitHasItem(unit, this.ItemID)) return
         let player = unit.owner
-        if (this.GetDeathAttempts(player) != -1) return
+        if (this.GetDeathAttempts(player) !== -1) return
 
         let lightningShot = Constants.ITEM_ADRENALINE_POTION
         let orb = Constants.ITEM_ORB_OF_MYSTERIES

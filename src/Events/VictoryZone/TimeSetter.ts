@@ -17,8 +17,8 @@ export class TimeSetter {
     /// <param name="player"></param>
     public static SetRoundTime(player: MapPlayer) {
         try {
-            let standard = Gamemode.CurrentGameMode == GameMode.Standard
-            let solo = Gamemode.CurrentGameMode == GameMode.SoloTournament // Solo
+            let standard = Gamemode.CurrentGameMode === GameMode.Standard
+            let solo = Gamemode.CurrentGameMode === GameMode.SoloTournament // Solo
             let roundString: string = ''
             let currentTime = GameTimer.RoundTime[Globals.ROUND]
             if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return false
@@ -33,7 +33,7 @@ export class TimeSetter {
 
             let value = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes[roundString as keyof RoundTimesData]
 
-            if (currentTime >= value && value != 0) return false
+            if (currentTime >= value && value !== 0) return false
 
             this.SetSavedTime(player, roundString)
             PersonalBestAwarder.BeatRecordTime(player)

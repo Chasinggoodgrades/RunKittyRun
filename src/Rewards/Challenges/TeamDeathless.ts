@@ -98,7 +98,7 @@ export class TeamDeathless {
     /// Then the next round will begin the StartEvent method.
     /// </summary>
     public static PrestartingEvent() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return // Only occurs in Standard Gamemode.
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return // Only occurs in Standard Gamemode.
         if (this.EventStarted || this.EventTriggered) return // Don't trigger multiple times.
         if (DeathlessChallenges.DeathlessCount < this.DeathlessToActivate) return // Not enough players have achieved deathless.
         this.EventTriggered = true
@@ -159,10 +159,10 @@ export class TeamDeathless {
     /// <param name="safezone"></param>
     public static ReachedSafezone(unit: Unit, safezone: Safezone) {
         if (!this.EventStarted) return
-        if (this.CurrentHolder == null) return // No one holding orb.
+        if (this.CurrentHolder === null) return // No one holding orb.
         if (safezone.ID <= this.CurrentSafezone.ID) return
         if (safezone.ID > this.CurrentSafezone.ID + 1) return // no skipping safezones
-        if (this.CurrentHolder.Unit != unit) return // The unit that reached the safezone is not the current holder of the orb.
+        if (this.CurrentHolder.Unit !== unit) return // The unit that reached the safezone is not the current holder of the orb.
         if (!this.AlreadyCarriedOrb.includes(this.CurrentHolder.Player))
             this.AlreadyCarriedOrb.push(this.CurrentHolder.Player)
 
@@ -178,7 +178,7 @@ export class TeamDeathless {
 
         this.timerHandle?.pause()
 
-        if (this.CurrentSafezone.ID == RegionList.SafeZones.length - 1) this.AwardTeamDeathless()
+        if (this.CurrentSafezone.ID === RegionList.SafeZones.length - 1) this.AwardTeamDeathless()
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ export class TeamDeathless {
         try {
             if (!this.EventStarted) return // event hasn't started yet.
             if (k.ProtectionActive) return // Player protected.
-            if (this.CurrentHolder != k) return
+            if (this.CurrentHolder !== k) return
 
             let RandomChance: number = GetRandomReal(0, 100) // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
             if (RandomChance > this.ORB_DROP_CHANCE) return
@@ -202,7 +202,7 @@ export class TeamDeathless {
     }
 
     private static InRangeEvent() {
-        if (this.CurrentHolder != null) return
+        if (this.CurrentHolder !== null) return
 
         let u = getTriggerUnit()
 
@@ -233,7 +233,7 @@ export class TeamDeathless {
     }
 
     private static OrbFollow() {
-        if (this.CurrentHolder == null) {
+        if (this.CurrentHolder === null) {
             this.timerHandle?.pause()
             return
         }

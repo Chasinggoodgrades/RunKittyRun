@@ -1,10 +1,12 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 import { ProtectionOfAncients } from 'src/Game/ProtectionOfAncients'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
 import { TeamsMultiboard } from 'src/UI/Multiboard/TeamsMultiboard'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
@@ -12,7 +14,6 @@ import { Gamemode } from '../Gamemode'
 import { GameMode } from '../GameModeEnum'
 import { TeamHandler } from './TeamHandler'
 import { TeamsUtil } from './TeamsUtil'
-import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class Team {
     private static TeamTimer: Timer
@@ -32,7 +33,7 @@ export class Team {
         this.Teammembers = []
         this.RoundProgress = new Map()
         this.TeamTimes = new Map()
-        this.TeamColor = Colors.GetStringColorOfPlayer(this.TeamID) + 'Team ' + this.TeamID
+        this.TeamColor = ColorUtils.GetStringColorOfPlayer(this.TeamID) + 'Team ' + this.TeamID
         this.InitRoundStats()
         Globals.ALL_TEAMS.set(this.TeamID, this)
         Globals.ALL_TEAMS_LIST.push(this)
@@ -60,10 +61,10 @@ export class Team {
     }
 
     public RemoveMember(player: MapPlayer) {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return // Must be Team Tournament Mode
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.has(player)) return
         this.AssignTeamMember(player, false)
-        if (this.Teammembers.length == 0) {
+        if (this.Teammembers.length === 0) {
             Globals.ALL_TEAMS.delete(this.TeamID)
             const index = Globals.ALL_TEAMS_LIST.indexOf(this)
             if (index > -1) {
@@ -106,7 +107,7 @@ export class Team {
     }
 
     private static TeamSetup() {
-        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0]) {
+        if (Gamemode.CurrentGameModeType === Globals.TEAM_MODES[0]) {
             // free pick
             RoundManager.ROUND_INTERMISSION += 15.0
             TeamHandler.FreepickEnabled = true
@@ -129,7 +130,7 @@ export class Team {
                 )
                 TeamHandler.RandomHandler()
             })
-        } else if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[1])
+        } else if (Gamemode.CurrentGameModeType === Globals.TEAM_MODES[1])
             // random
             Utility.SimpleTimer(2.5, TeamHandler.RandomHandler)
     }
@@ -157,7 +158,7 @@ export class Team {
         for (let i: number = 0; i < this.Teammembers.length; i++) {
             let member = this.Teammembers[i]
             let name: string = member.name.split('#')[0]
-            if (name.length > 7) name = Colors.ColorString(member.name.substring(0, 7), member.id + 1)
+            if (name.length > 7) name = ColorUtils.ColorString(member.name.substring(0, 7), member.id + 1)
 
             if (this.TeamMembersString.length > 0) this.TeamMembersString += ', '
 

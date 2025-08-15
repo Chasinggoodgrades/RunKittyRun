@@ -3,7 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
-import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { int } from 'src/Utility/Utility'
 import { isNullOrEmpty } from '../Utility/StringUtils'
 
@@ -31,9 +31,9 @@ export class GameoverUtil {
 
     public static SetColorData() {
         for (let [_, kitty] of Globals.ALL_KITTIES) {
-            Colors.PopulateColorsData(kitty) // make sure its populated
-            Colors.UpdateColors(kitty) //
-            Colors.GetMostPlayedColor(kitty)
+            ColorUtils.PopulateColorsData(kitty) // make sure its populated
+            ColorUtils.UpdateColors(kitty) //
+            ColorUtils.GetMostPlayedColor(kitty)
         }
     }
 
@@ -47,10 +47,10 @@ export class GameoverUtil {
 
             // Splitting / Parsing the data of playerName:count pairs
             if (!isNullOrEmpty(friendsPlayedWith)) {
-                for (let entry in friendsPlayedWith.split(',').filter(Boolean)) {
+                for (let entry of friendsPlayedWith.split(',').filter(Boolean)) {
                     let parts = entry.split(':')
                     let count
-                    if (parts.length == 2 && (count = int.TryParse(parts[1].trim()))) {
+                    if (parts.length === 2 && (count = int.TryParse(parts[1].trim()))) {
                         friendDict.set(parts[0].trim(), count)
                     }
                 }
@@ -58,7 +58,7 @@ export class GameoverUtil {
 
             // takes all in-game kitties, increments count if they're present in dictionary else set to 1
             for (let [_, other] of Globals.ALL_KITTIES) {
-                if (other == kitty) continue
+                if (other === kitty) continue
                 let friendName: string = other.Player.name // Get their full battle tag
 
                 if (friendDict.has(friendName)) {
@@ -78,7 +78,7 @@ export class GameoverUtil {
 
     private static SetNormalGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.NormalGameTime
-        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
+        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
@@ -86,7 +86,7 @@ export class GameoverUtil {
 
     private static SetHardGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.HardGameTime
-        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
+        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
@@ -94,7 +94,7 @@ export class GameoverUtil {
 
     private static SetImpossibleGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime
-        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
+        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
@@ -102,14 +102,14 @@ export class GameoverUtil {
 
     private static SetNightmareGameStats(kitty: Kitty) {
         let stats = kitty.SaveData.BestGameTimes.NightmareGameTime
-        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time != 0) return
+        if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
     private static GetTeamMembers(): string {
-        return Globals.ALL_PLAYERS.filter(player => player.controller != MAP_CONTROL_COMPUTER)
+        return Globals.ALL_PLAYERS.filter(player => player.controller !== MAP_CONTROL_COMPUTER)
             .map(player => player.name)
             .join(', ')
     }

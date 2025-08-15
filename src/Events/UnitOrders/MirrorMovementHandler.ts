@@ -32,7 +32,7 @@ export class MirrorMovementHandler {
 
         // Check if it's a point order or target order
         let target = GetOrderTarget()
-        if (target != null) {
+        if (target) {
             // Target order - get target position
             orderX = GetWidgetX(target)
             orderY = GetWidgetY(target)

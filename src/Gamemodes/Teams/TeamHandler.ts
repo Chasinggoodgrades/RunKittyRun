@@ -1,17 +1,17 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
+import { GameSeed } from 'src/Init/GameSeed'
 import { MapPlayer } from 'w3ts'
 import { Gamemode } from '../Gamemode'
 import { Team } from './Team'
-import { GameSeed } from 'src/Init/GameSeed'
 
 export class TeamHandler {
     public static FreepickEnabled: boolean = false
 
     public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
         if (
-            Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] &&
+            Gamemode.CurrentGameModeType === Globals.TEAM_MODES[0] &&
             (adminForced || (!RoundManager.GAME_STARTED && this.FreepickEnabled))
         ) {
             this.FreepickHandler(Player, TeamNumber, adminForced)
@@ -106,7 +106,7 @@ export class TeamHandler {
             // If player is on the team they're trying to join.. Return.
             let currentTeam = Globals.PLAYERS_TEAMS.get(Player)
             if (currentTeam) {
-                if (currentTeam.TeamID == TeamNumber) {
+                if (currentTeam.TeamID === TeamNumber) {
                     Player.DisplayTextTo(
                         '{Colors.COLOR_YELLOW_ORANGE}are: already: on: You {team.TeamColor}{Colors.COLOR_RESET}'
                     )

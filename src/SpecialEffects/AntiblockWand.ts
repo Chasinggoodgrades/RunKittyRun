@@ -16,7 +16,7 @@ export class AntiblockWand {
     /// Register's antiblock wand cast's. Only works in standard mode.
     /// </summary>
     public static Initialize() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         this.AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM
         this.Radius = 250.0
         this.CastEvent = this.RegisterCastEvents()
@@ -31,12 +31,12 @@ export class AntiblockWand {
     }
 
     private static SpellActions() {
-        if (GetSpellAbilityId() != this.AbilityID) return
+        if (GetSpellAbilityId() !== this.AbilityID) return
         let wolvesInArea = Group.create()!
         wolvesInArea.enumUnitsInRange(GetSpellTargetX(), GetSpellTargetY(), this.Radius, () => true)
         let list = wolvesInArea.getUnits()
         for (let wolf of list) {
-            if (wolf.typeId != Wolf.WOLF_MODEL) continue
+            if (wolf.typeId !== Wolf.WOLF_MODEL) continue
             if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(wolf)!)) continue
             let wolfUnit = Globals.ALL_WOLVES.get(wolf)!
             wolfUnit.StartWandering(true)

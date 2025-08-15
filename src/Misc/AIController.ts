@@ -80,7 +80,7 @@ export class AIController {
     public ResumeAi() {
         if (!this.enabled) return
 
-        if (this.moveTimer == null) {
+        if (this.moveTimer === null) {
             this.moveTimer = Timer.create()
             this.moveTimer.start(this.timerInterval, true, ErrorHandler.Wrap(this.PollMovement))
         }
@@ -104,7 +104,7 @@ export class AIController {
         this.lastOrderTime = 0
         this.elapsedTime = 0
 
-        if (this.moveTimer != null) {
+        if (this.moveTimer !== null) {
             this.moveTimer.pause()
             this.moveTimer.destroy()
         }
@@ -152,8 +152,8 @@ export class AIController {
             ? currentProgressZoneId
             : null
 
-        if (currentSafeZoneId != this.lastSafeZoneIndexId) {
-            this.reachedLastProgressZoneCenter = currentSafeZoneId == null
+        if (currentSafeZoneId !== this.lastSafeZoneIndexId) {
+            this.reachedLastProgressZoneCenter = currentSafeZoneId === null
             this.lastSafeZoneIndexId = currentSafeZoneId
         }
 
@@ -170,7 +170,7 @@ export class AIController {
         let allKittiesAtSameOrHigherSafezone: boolean = true // IEnumberable is dog shit for C# -> Lua conversion, this should -help-
         for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let k = Globals.ALL_KITTIES_LIST[i]
-            if (Program.Debug && k.Player == MapPlayer.fromIndex(0)!) {
+            if (Program.Debug && k.Player === MapPlayer.fromIndex(0)!) {
                 continue
             }
 
@@ -193,7 +193,7 @@ export class AIController {
                 continue
             }
 
-            if (deadKitty == this.kitty) {
+            if (deadKitty === this.kitty) {
                 continue
             }
 
@@ -209,11 +209,11 @@ export class AIController {
 
                     for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                         let otherKitty = Globals.ALL_KITTIES_LIST[i]
-                        if (Program.Debug && otherKitty.Player == MapPlayer.fromIndex(0)!) {
+                        if (Program.Debug && otherKitty.Player === MapPlayer.fromIndex(0)!) {
                             continue
                         }
 
-                        if (otherKitty != this.kitty && otherKitty.isAlive()) {
+                        if (otherKitty !== this.kitty && otherKitty.isAlive()) {
                             let otherDistance: number = Math.sqrt(
                                 Math.pow(otherKitty.Unit.x - deadKitty.Unit.x, 2) +
                                     Math.pow(otherKitty.Unit.y - deadKitty.Unit.y, 2)
@@ -226,7 +226,7 @@ export class AIController {
                             // Don't think this works for some reason..
                             if (
                                 otherLaneDiff < thisLaneDiff ||
-                                (otherLaneDiff == thisLaneDiff && otherDistance < thisDistance)
+                                (otherLaneDiff === thisLaneDiff && otherDistance < thisDistance)
                             ) {
                                 isNearest = false
                                 break
@@ -239,8 +239,8 @@ export class AIController {
                     }
                 }
 
-                if (this.claimedKitties.has(deadKitty) && this.claimedKitties.get(deadKitty) == this.kitty) {
-                    if (deadKittyProgressZoneId != currentProgressZoneId) {
+                if (this.claimedKitties.has(deadKitty) && this.claimedKitties.get(deadKitty) === this.kitty) {
+                    if (deadKittyProgressZoneId !== currentProgressZoneId) {
                         if (
                             this.IsInSafeZone(this.kitty.Unit.x, this.kitty.Unit.y, currentProgressZoneId) &&
                             this.reachedLastProgressZoneCenter
@@ -341,8 +341,8 @@ export class AIController {
     private IssueOrder(command: string, x: number, y: number, isDodge: boolean) {
         let MIN_MOVE_DISTANCE: number = isDodge ? 16.0 : 64.0
 
-        if (command == 'move') {
-            if (this.lastLightning != null) {
+        if (command === 'move') {
+            if (this.lastLightning !== null) {
                 MoveLightning(this.lastLightning, false, this.kitty.Unit.x, this.kitty.Unit.y, x, y)
             } else {
                 if (this.laser) {
@@ -357,7 +357,7 @@ export class AIController {
 
         if (
             this.hasLastOrder &&
-            this.lastCommand == command &&
+            this.lastCommand === command &&
             distanceSquared < MIN_MOVE_DISTANCE * MIN_MOVE_DISTANCE
         ) {
             if (this.elapsedTime - this.lastOrderTime < 4) {
@@ -417,7 +417,7 @@ export class AIController {
             else return
 
             let relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
-            if (!Number.isNaN(relativeY) && relativeY != 0) {
+            if (!Number.isNaN(relativeY) && relativeY !== 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = constant
                 a.y = relativeY + this.kitty.Unit.y
@@ -435,7 +435,7 @@ export class AIController {
             else return
 
             let relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
-            if (!Number.isNaN(relativeX) && relativeX != 0) {
+            if (!Number.isNaN(relativeX) && relativeX !== 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = relativeX + this.kitty.Unit.x
                 a.y = constant
@@ -531,7 +531,7 @@ export class AIController {
 
         this.CalcCrossingPoints()
 
-        if (this.wallPoints.length == 2) {
+        if (this.wallPoints.length === 2) {
             let [angleA, angleB] = this.AnglesFromCenter(
                 [this.wallPoints[0].x, this.wallPoints[0].y],
                 [this.wallPoints[1].x, this.wallPoints[1].y]
@@ -583,7 +583,7 @@ export class AIController {
         }
 
         // Determine free angular gaps on the circle.
-        if (this.mergedIntervals.length == 0) {
+        if (this.mergedIntervals.length === 0) {
             // No wolves blocking any direction; entire circle is free.
             let a = MemoryHandler.getEmptyObject<AngleInterval>()
             a.Start = 0
@@ -634,7 +634,7 @@ export class AIController {
 
             let bestAngle: number = this.calcAngle(candidateAngle, requiredClearance)
 
-            if (bestAngle == -500) {
+            if (bestAngle === -500) {
                 continue
             }
 
@@ -651,7 +651,7 @@ export class AIController {
             }
         }
 
-        if (bestCandidateAngle == -500) {
+        if (bestCandidateAngle === -500) {
             this.cleanArrays()
             return [this.kitty.Unit.x, this.kitty.Unit.y]
         }
@@ -790,7 +790,7 @@ export class AIController {
                 this.availableBlockedLightnings.splice(this.availableBlockedLightnings.length - 1, 1)
             }
 
-            if (freeLightning == null) {
+            if (freeLightning === null) {
                 freeLightning = AddLightning(AIController.BLOCKED_LASER_COLOR, false, x1, y1, x2, y2)! // "AFOD" is finger of death code
             }
 
@@ -820,7 +820,7 @@ export class AIController {
                 this.availableClearLightnings.splice(this.availableClearLightnings.length - 1, 1)
             }
 
-            if (freeLightning == null) {
+            if (freeLightning === null) {
                 freeLightning = AddLightning(AIController.FREE_LASER_COLOR, false, x1, y1, x2, y2)!
             }
 
@@ -925,10 +925,10 @@ export class AIController {
         let wwLvl = GetUnitAbilityLevel(this.kitty.Unit.handle, Constants.ABILITY_WIND_WALK)
 
         if (
-            wwLvl == 0 ||
-            (wwLvl == 1 && this.kitty.Unit.mana < 75) ||
-            (wwLvl == 2 && this.kitty.Unit.mana < 60) ||
-            (wwLvl == 3 && this.kitty.Unit.mana < 45)
+            wwLvl === 0 ||
+            (wwLvl === 1 && this.kitty.Unit.mana < 75) ||
+            (wwLvl === 2 && this.kitty.Unit.mana < 60) ||
+            (wwLvl === 3 && this.kitty.Unit.mana < 45)
         ) {
             return
         }

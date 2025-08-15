@@ -29,7 +29,7 @@ export class FinalSafezone {
                 let player = unit.owner
                 let kitty = Globals.ALL_KITTIES.get(player)!
                 if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards()
-                if (Gamemode.CurrentGameMode != GameMode.Standard) return
+                if (Gamemode.CurrentGameMode !== GameMode.Standard) return
 
                 kitty.CurrentStats.RoundFinished = true
                 NitroChallenges.CompletedNitro(kitty)

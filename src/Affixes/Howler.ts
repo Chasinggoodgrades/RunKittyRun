@@ -62,13 +62,13 @@ export class Howler extends Affix {
             )
             while (true) {
                 let wolf = this.NearbyWolves.first
-                if (wolf == null) break
+                if (!wolf) break
                 this.NearbyWolves.removeUnit(wolf)
-                if (NamedWolves.StanWolf != null && NamedWolves.StanWolf.Unit == wolf) continue
+                if (NamedWolves.StanWolf !== null && NamedWolves.StanWolf.Unit === wolf) continue
                 if (wolf.paused) continue
                 let wolfObject
                 if (!(wolfObject = Globals.ALL_WOLVES.get(wolf)) /* TODO; Prepend: let */) continue
-                if (wolfObject.RegionIndex != this.Unit.RegionIndex) continue
+                if (wolfObject.RegionIndex !== this.Unit.RegionIndex) continue
                 wolfObject.StartWandering(true) // Start wandering
             }
             this.NearbyWolves.clear()

@@ -16,7 +16,7 @@ export class Difficulty {
 
     public static Initialize() {
         try {
-            if (Gamemode.CurrentGameMode != GameMode.Standard) return
+            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
             if (this.IsDifficultyChosen) return
 
             DifficultyOption.Initialize()
@@ -39,8 +39,8 @@ export class Difficulty {
             let player = getTriggerPlayer()
             let button = GetClickedButton()
 
-            let option = DifficultyOption.Options.find(o => o.Button.handle == button)
-            if (option != null) option.TallyCount++
+            let option = DifficultyOption.Options.find(o => o.Button.handle === button)
+            if (option) option.TallyCount++
 
             DifficultyOption.DifficultyChoosing.display(player, false)
             Utility.TimedTextToAllPlayers(
@@ -90,7 +90,7 @@ export class Difficulty {
     public static ChangeDifficulty(difficulty: string = 'normal') {
         for (let i: number = 0; i < DifficultyOption.Options.length; i++) {
             let option = DifficultyOption.Options[i]
-            if (option.name.toLowerCase() == difficulty.toLowerCase()) {
+            if (option.name.toLowerCase() === difficulty.toLowerCase()) {
                 this.SetDifficulty(option)
                 return true
             }

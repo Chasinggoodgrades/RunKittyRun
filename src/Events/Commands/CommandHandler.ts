@@ -14,7 +14,7 @@ export class CommandHandler {
     public static Initialize() {
         InitCommands.InitializeCommands()
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) continue
+            if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
             CommandHandler.DebugCmdTrigger.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '?', false)
             CommandHandler.NewCmdHandler.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '-', false)
         }
@@ -25,7 +25,7 @@ export class CommandHandler {
     private static HandleCommands() {
         if (!Globals.GAME_INITIALIZED) return
         let chatString = GetEventPlayerChatString() || ''
-        if (chatString.length < 2 || chatString[0] != '-') return
+        if (chatString.length < 2 || chatString[0] !== '-') return
 
         let cmd = chatString.substring(1)
         let spaceIndex = cmd.indexOf(' ')
@@ -48,7 +48,10 @@ export class CommandHandler {
         try {
             let command = CommandsManager.GetCommand(commandName.toLowerCase())
             let playerGroup = CommandsManager.GetPlayerGroup(getTriggerPlayer())
-            if (command != null && (command.Group == playerGroup || command.Group == 'all' || playerGroup == 'admin')) {
+            if (
+                command !== null &&
+                (command.Group === playerGroup || command.Group === 'all' || playerGroup === 'admin')
+            ) {
                 command.Action(getTriggerPlayer(), args)
             } else {
                 getTriggerPlayer().DisplayTimedTextTo(4.0, '{Colors.COLOR_YELLOW_ORANGE}not: found: Command.|r')
@@ -66,7 +69,7 @@ export class CommandHandler {
         let player = getTriggerPlayer()
         let command = chatString.toLowerCase()
 
-        if (!command.startsWith('-t ') && command != '-s' && !command.startsWith('-dev')) return false
+        if (!command.startsWith('-t ') && command !== '-s' && !command.startsWith('-dev')) return false
 
         GamemodeCmd.Handle(player, command)
         return true

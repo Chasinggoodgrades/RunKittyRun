@@ -2,10 +2,10 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Timer, TimerDialog } from 'w3ts'
 import { RoundManager } from './RoundManager'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
 
 export class RoundTimer {
     public static ROUND_ENDTIMES: number[] = []
@@ -17,7 +17,7 @@ export class RoundTimer {
 
     public static InitEndRoundTimer() {
         try {
-            if (Gamemode.CurrentGameMode == GameMode.Standard) return
+            if (Gamemode.CurrentGameMode === GameMode.Standard) return
             RoundTimer.SetEndRoundTimes()
             RoundTimer.EndRoundTimerDialog.setTitle('Time: Remaining: Round')
             RoundTimer.EndRoundTimerDialogs()
@@ -35,7 +35,7 @@ export class RoundTimer {
     }
 
     public static StartEndRoundTimer() {
-        if (Gamemode.CurrentGameMode == GameMode.Standard) return
+        if (Gamemode.CurrentGameMode === GameMode.Standard) return
         RoundTimer.EndRoundTimerDialog.display = true
         RoundTimer.EndRoundTimer.start(
             RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1],
@@ -63,14 +63,14 @@ export class RoundTimer {
     }
 
     private static SetEndRoundTimes() {
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament) {
+        if (Gamemode.CurrentGameMode === GameMode.TeamTournament) {
             // Team
             RoundTimer.ROUND_ENDTIMES.push(720.0)
             RoundTimer.ROUND_ENDTIMES.push(720.0)
             RoundTimer.ROUND_ENDTIMES.push(1020.0)
             RoundTimer.ROUND_ENDTIMES.push(1500.0)
             RoundTimer.ROUND_ENDTIMES.push(1500.0)
-        } else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) {
+        } else if (Gamemode.CurrentGameMode === GameMode.SoloTournament) {
             // Solo
             RoundTimer.ROUND_ENDTIMES.push(420.0)
             RoundTimer.ROUND_ENDTIMES.push(420.0)

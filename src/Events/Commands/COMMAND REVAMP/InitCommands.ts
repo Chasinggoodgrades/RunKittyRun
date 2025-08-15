@@ -40,11 +40,12 @@ import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
 import { int, Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer } from 'w3ts'
+import { ErrorMessagesOn } from '../../../Utility/ErrorMessagesOn'
 import { AwardingCmds } from '../AwardingCmds'
 import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
@@ -107,7 +108,7 @@ export class InitCommands {
             argDesc: 'amount',
             description: 'the: resolvePlayerID: gold: Gives',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: gold [amount] [resolvePlayerId]|r'
@@ -134,7 +135,7 @@ export class InitCommands {
             group: 'all',
             argDesc: '',
             description: 'all: available: colors: Display.',
-            action: (player, args) => Colors.ListColorCommands(player),
+            action: (player, args) => ColorUtils.ListColorCommands(player),
         })
 
         CommandsManager.RegisterCommand({
@@ -143,7 +144,7 @@ export class InitCommands {
             group: 'all',
             argDesc: '[color]',
             description: 'your: MapPlayer: color: Set.',
-            action: (player, args) => Colors.SetPlayerColor(player, args?.[0]),
+            action: (player, args) => ColorUtils.SetPlayerColor(player, args?.[0]),
         })
 
         CommandsManager.RegisterCommand({
@@ -196,7 +197,7 @@ export class InitCommands {
             action: (player, args) => {
                 let affixes: string[]
                 let laneIndex: number
-                if (args[0] != '') {
+                if (args[0] !== '') {
                     laneIndex = int.Parse(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
                     affixes = AffixFactory.CalculateAffixes(laneIndex - 1)
@@ -221,7 +222,7 @@ export class InitCommands {
             action: (player, args) => {
                 let laneIndex: number
                 let nbWolves: number
-                if (args[0] != '') {
+                if (args[0] !== '') {
                     laneIndex = int.Parse(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
                     nbWolves = WolfArea.WolfAreas.get(laneIndex - 1)!.Wolves.length
@@ -243,7 +244,7 @@ export class InitCommands {
             group: 'all',
             argDesc: '[rgb]',
             description: 'your: MapPlayer: vertex: color: Set.',
-            action: (player, args) => Colors.SetPlayerVertexColor(player, args),
+            action: (player, args) => ColorUtils.SetPlayerVertexColor(player, args),
         })
 
         CommandsManager.RegisterCommand({
@@ -252,7 +253,7 @@ export class InitCommands {
             group: 'all',
             argDesc: '',
             description: 'a: random: vertex: color: Set.',
-            action: (player, args) => Colors.SetPlayerRandomVertexColor(player),
+            action: (player, args) => ColorUtils.SetPlayerRandomVertexColor(player),
         })
 
         CommandsManager.RegisterCommand({
@@ -280,7 +281,7 @@ export class InitCommands {
             argDesc: '',
             description: 'your: camera: to: a: Unit: Locks.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     CameraUtil.LockCamera(player)
                     return
                 }
@@ -423,7 +424,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'disco: mode: Toggle.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: disco [on/off]|r'
@@ -432,8 +433,8 @@ export class InitCommands {
                 }
 
                 let status = CommandsManager.GetBool(args[0])
-                if (CommandsManager.GetPlayerGroup(player) == 'admin' && args.length > 1) {
-                    if (args[1] == 'wolves' || args[1] == 'wolf') {
+                if (CommandsManager.GetPlayerGroup(player) === 'admin' && args.length > 1) {
+                    if (args[1] === 'wolves' || args[1] === 'wolf') {
                         for (let [_, wolf] of Globals.ALL_WOLVES) {
                             wolf.Disco ??= MemoryHandler.getEmptyObject<Disco>()
                             wolf.Disco.Unit = wolf.Unit
@@ -474,7 +475,7 @@ export class InitCommands {
             argDesc: '[speed]',
             description: 'SpinCam: Toggle.',
             action: (player, args) => {
-                let speed: number = args[0] != '' ? int.Parse(args[0]) : 0
+                let speed: number = args[0] !== '' ? int.Parse(args[0]) : 0
                 Globals.ALL_KITTIES.get(player)!.SpinCam.ToggleSpinCam(speed)
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD +
@@ -500,7 +501,7 @@ export class InitCommands {
             argDesc: '[on/off] [player]',
             description: 'RTR: mode: on: Set/off.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}arguments: Invalid. Usage: rtr [on/off] [player]|r'
@@ -510,7 +511,7 @@ export class InitCommands {
 
                 let mode: boolean = CommandsManager.GetBool(args[0])
 
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     // Apply to self
                     if (mode) {
                         Globals.ALL_KITTIES.get(player)!.RTR.StartRTR()
@@ -525,7 +526,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     isMatch = true
 
                     if (mode) {
@@ -596,7 +597,7 @@ export class InitCommands {
             argDesc: '[difficulty]',
             description: 'the: game: difficulty: Changes.',
             action: (player, args) => {
-                let difficulty = args[0] != '' ? args[0] : 'normal'
+                let difficulty = args[0] !== '' ? args[0] : 'normal'
                 Difficulty.ChangeDifficulty(difficulty)
                 AffixFactory.DistAffixes()
                 MultiboardUtil.RefreshMultiboards()
@@ -613,7 +614,7 @@ export class InitCommands {
             action: (player, args) => {
                 // if args is null or empty, revive self
                 // else resolve playerid
-                if (args[0] == '') {
+                if (args[0] === '') {
                     Globals.ALL_KITTIES.get(player)!.ReviveKitty()
                     return
                 }
@@ -629,13 +630,13 @@ export class InitCommands {
             argDesc: '',
             description: 'your: hero: to: an: other: hero: Revives, the: same: facing: angle: with.',
             action: (player, args) => {
-                if (args.length == 1) {
+                if (args.length === 1) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
                         Globals.ALL_KITTIES.get(player)!.ReviveKitty()
                         Globals.ALL_KITTIES.get(player)!.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
                         Globals.ALL_KITTIES.get(player)!.Unit.setFacingEx(kitty.Unit.facing)
                     })
-                } else if (args.length == 2) {
+                } else if (args.length === 2) {
                     CommandsManager.ResolvePlayerId(args[1], kitty => {
                         CommandsManager.ResolvePlayerId(args[0], kitty2 => {
                             kitty.ReviveKitty()
@@ -701,7 +702,7 @@ export class InitCommands {
 
                 for (let i = 0; i < 24; i++) {
                     let p = MapPlayer.fromIndex(i)!
-                    if (p.slotState != PLAYER_SLOT_STATE_PLAYING) {
+                    if (p.slotState !== PLAYER_SLOT_STATE_PLAYING) {
                         p.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
                     }
                 }
@@ -773,7 +774,7 @@ export class InitCommands {
                     let setting = CommandsManager.GetBool(args[0])
                     let kitty = (Globals.ALL_KITTIES.get(player)!.Invulnerable = setting)
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_GOLD}Invulnerability: {setting}|r')
-                } else if (args.length == 2) {
+                } else if (args.length === 2) {
                     CommandsManager.ResolvePlayerId(args[0], kitty => {
                         let setting = CommandsManager.GetBool(args[1])
                         kitty.Invulnerable = setting
@@ -793,7 +794,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'all: wolves: Pauses. to: Defaults [on]',
             action: (player, args) => {
-                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                let status = args[0] === '' || CommandsManager.GetBool(args[0])
                 Wolf.PauseAllWolves(status)
             },
         })
@@ -805,7 +806,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'selected: wolf: Pauses. to: Defaults [on]',
             action: (player, args) => {
-                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                let status = args[0] === '' || CommandsManager.GetBool(args[0])
                 let selected = CustomStatFrame.SelectedUnit.get(player)
                 if (selected) {
                     Wolf.PauseSelectedWolf(selected, status)
@@ -820,7 +821,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'the: selected: wolf: to: walking: or: not: Sets. to: Defaults [on]',
             action: (player, args) => {
-                let status = args[0] == '' || CommandsManager.GetBool(args[0])
+                let status = args[0] === '' || CommandsManager.GetBool(args[0])
                 let selected = CustomStatFrame.SelectedUnit.get(player)
                 if (selected) {
                     let wolf = Globals.ALL_WOLVES.get(selected)
@@ -864,7 +865,7 @@ export class InitCommands {
             action: (player, args) => {
                 if (!RoundManager.AddMoreRoundTime()) return
                 print(
-                    `${Colors.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.remaining.toFixed(2)} seconds remaining)${Colors.COLOR_RESET}`
+                    `${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_TURQUOISE} has added more time to start the round.${Colors.COLOR_RESET}${Colors.COLOR_RED}(${RoundTimer.StartRoundTimer.remaining.toFixed(2)} seconds remaining)${Colors.COLOR_RESET}`
                 )
             },
         })
@@ -895,7 +896,7 @@ export class InitCommands {
             description: 'the: specified: affix: to: all: wolves: Applies.',
             action: (player, args) => {
                 let affixName =
-                    args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
+                    args[0] !== '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
                 print('Applying {affixName} all: wolves: to.')
                 for (let [_, wolf] of Globals.ALL_WOLVES) {
                     if (NamedWolves.DNTNamedWolves.includes(wolf)) continue
@@ -913,7 +914,7 @@ export class InitCommands {
             description: 'the: specified: affix: to: the: currently: selected: wolf: Applies.',
             action: (player, args) => {
                 let affixName =
-                    args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
+                    args[0] !== '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
                 let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
                 if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
@@ -930,11 +931,11 @@ export class InitCommands {
             argDesc: '[affix]',
             description: 'the: specified: affix: from: the: currently: selected: wolf: Removes.',
             action: (player, args) => {
-                let affixName = args[0] != '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : ''
+                let affixName = args[0] !== '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : ''
                 let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
                 if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
-                if (affixName == '') return
+                if (affixName === '') return
                 if (!Globals.ALL_WOLVES.get(selectedUnit)!.HasAffix(affixName)) return
                 Globals.ALL_WOLVES.get(selectedUnit)!.RemoveAffix(affixName)
             },
@@ -960,7 +961,7 @@ export class InitCommands {
             argDesc: '[playerNameMatch]',
             description: 'a: MapPlayer: into: observer: mode: Forces.',
             action: (player, args) => {
-                let name = args[0] != '' ? args[0] : '??__'
+                let name = args[0] !== '' ? args[0] : '??__'
                 for (let p of Globals.ALL_PLAYERS) {
                     if (p.name.toLowerCase().startsWith(name)) {
                         Utility.MakePlayerSpectator(p)
@@ -979,7 +980,7 @@ export class InitCommands {
             action: (player, args) => {
                 let kitty = Globals.ALL_KITTIES.get(player)!
                 for (let [_, k] of Globals.ALL_KITTIES) {
-                    if (k.Unit.owner == player) continue
+                    if (k.Unit.owner === player) continue
                     k.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
                 }
             },
@@ -992,7 +993,7 @@ export class InitCommands {
             argDesc: '[value]',
             description: 'the: camera: field: Adjusts.',
             action: (player, args) => {
-                let value = args[0] != '' ? int.Parse(args[0]) : 0.0
+                let value = args[0] !== '' ? int.Parse(args[0]) : 0.0
                 if (!player.isLocal()) return
                 SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0)
             },
@@ -1005,7 +1006,7 @@ export class InitCommands {
             argDesc: '[round]',
             description: 'the: current: round: Sets.',
             action: (player, args) => {
-                let round = args[0] != '' ? int.Parse(args[0]) : 1
+                let round = args[0] !== '' ? int.Parse(args[0]) : 1
                 if (round < 1 || round > 5) return
                 Globals.ROUND = round - 1
                 RoundManager.RoundEnd()
@@ -1032,7 +1033,7 @@ export class InitCommands {
             argDesc: '[abilityId]',
             description: 'or: removes: an: ability: from: the: kitty: Adds.',
             action: (player, args) => {
-                let abilityId = args[0] != '' ? args[0] : ''
+                let abilityId = args[0] !== '' ? args[0] : ''
                 let kitty = Globals.ALL_KITTIES.get(player)
 
                 if (!kitty) return
@@ -1056,15 +1057,15 @@ export class InitCommands {
             argDesc: '[scale], [player]',
             description: "the: scale: Sets of passed: MapPlayer: the'kitty: parameter: s.",
             action: (player, args) => {
-                let scale = args[0] != '' ? int.Parse(args[0]) : 0.6
+                let scale = args[0] !== '' ? int.Parse(args[0]) : 0.6
 
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     Globals.ALL_KITTIES.get(player)!.Unit.setScale(scale, scale, scale)
                     return
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     kitty.Unit.setScale(scale, scale, scale)
                 })
             },
@@ -1114,7 +1115,7 @@ export class InitCommands {
             description: 'control: with: all: AI: players: Shares.',
             action: (player, args) => {
                 for (let p of Globals.ALL_PLAYERS) {
-                    if (p.slotState != PLAYER_SLOT_STATE_PLAYING) {
+                    if (p.slotState !== PLAYER_SLOT_STATE_PLAYING) {
                         p.setAlliance(player, ALLIANCE_SHARED_CONTROL, true)
                     }
                 }
@@ -1128,7 +1129,7 @@ export class InitCommands {
             argDesc: '',
             description: 'lua: script: Executes',
             action: (player, args) => {
-                let script = args[0] != '' ? args.join(' ') : ''
+                let script = args[0] !== '' ? args.join(' ') : ''
                 if (isNullOrEmpty(script)) return
                 ExecuteLua.LuaCode(player, script)
             },
@@ -1143,13 +1144,13 @@ export class InitCommands {
             action: (player, args) => {
                 for (let i = 0; i < 24; i++) {
                     let target: number =
-                        args.length > 0 && args[0] != 'all'
+                        args.length > 0 && args[0] !== 'all'
                             ? int.Parse(args[0]) - 1
-                            : args.length > 0 && args[0] == 'all'
+                            : args.length > 0 && args[0] === 'all'
                               ? i
                               : -1
 
-                    if (target == i || args[0] == 'all') {
+                    if (target === i || args[0] === 'all') {
                         let compPlayer = MapPlayer.fromIndex(target)!
 
                         if (Globals.ALL_KITTIES.has(compPlayer)) {
@@ -1176,14 +1177,14 @@ export class InitCommands {
             argDesc: '[playerNumber]',
             description: 'the: hero: Deletes of specified: MapPlayer: the.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     // cannot delete self anyway, but for usage i guess.
                     player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: deletehero [player] or [all]|r')
                     return
                 }
 
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(
                             10.0,
@@ -1192,8 +1193,8 @@ export class InitCommands {
                         return
                     }
                     if (
-                        kitty.Player.slotState == PLAYER_SLOT_STATE_PLAYING &&
-                        kitty.Player.controller != MAP_CONTROL_COMPUTER
+                        kitty.Player.slotState === PLAYER_SLOT_STATE_PLAYING &&
+                        kitty.Player.controller !== MAP_CONTROL_COMPUTER
                     ) {
                         // if slotted, it becomes computer.. this allows for deletion of even slotted comps
                         player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}Player is a: computer: not.|r')
@@ -1212,17 +1213,17 @@ export class InitCommands {
             argDesc: '[skinId], [player]',
             description: 'the: skin: Sets of passed: MapPlayer: parameter: the. Use "none" default: skin: for.',
             action: (player, args) => {
-                let skin: number = args[0] == '' || args[0] == 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
+                let skin: number = args[0] === '' || args[0] === 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
 
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     let kitty = Globals.ALL_KITTIES.get(player)
-                    if (kitty == null) return
+                    if (!kitty) return
                     kitty.Unit.skin = skin
                     return
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (!kitty) return
                     kitty.Unit.skin = skin
                 })
                 return
@@ -1237,7 +1238,7 @@ export class InitCommands {
             description: 'AI: for: the: specified: MapPlayer: Toggles.',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(10.0, '{Colors.COLOR_YELLOW_ORANGE}does: not: have: a: hero: Player.')
                         return
@@ -1261,7 +1262,7 @@ export class InitCommands {
             argDesc: '[dodgeRadius] [timerInterval] [laser]',
             description: 'up: AI: parameters: Sets.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         10.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: aisetup [dodgeRadius=192] [timerInterval=0.1] [laser=0]'
@@ -1277,7 +1278,7 @@ export class InitCommands {
                     if (compKitty.aiController.IsEnabled()) {
                         compKitty.aiController.DODGE_RADIUS = dodgeRadius
                         compKitty.aiController.timerInterval = timerInterval
-                        compKitty.aiController.laser = laser == 1
+                        compKitty.aiController.laser = laser === 1
                     }
                 }
 
@@ -1295,12 +1296,12 @@ export class InitCommands {
             argDesc: '[free/blocked] [ID: string]',
             description: 'the: color: Changes of laser: on: all: the: AI: the, or: free: blocked',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     return
                 }
 
                 let laserType = args[0].toLowerCase()
-                if (laserType != 'free' && laserType != 'blocked') {
+                if (laserType !== 'free' && laserType !== 'blocked') {
                     player.DisplayTimedTextTo(
                         10.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: ailaser [free/blocked] [ID: string]'
@@ -1308,8 +1309,8 @@ export class InitCommands {
                     return
                 }
 
-                if (laserType == 'free') AIController.FREE_LASER_COLOR = args[1].toUpperCase()
-                else if (laserType == 'blocked') AIController.BLOCKED_LASER_COLOR = args[1].toUpperCase()
+                if (laserType === 'free') AIController.FREE_LASER_COLOR = args[1].toUpperCase()
+                else if (laserType === 'blocked') AIController.BLOCKED_LASER_COLOR = args[1].toUpperCase()
 
                 player.DisplayTimedTextTo(
                     10.0,
@@ -1343,7 +1344,7 @@ export class InitCommands {
             argDesc: 'playerID: resolve',
             description: 'urself: by: default: Kills, enter: name: or/number/selected, parm. KITTIES: ONLY',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     Globals.ALL_KITTIES.get(player)!.KillKitty()
                     return
                 }
@@ -1369,8 +1370,8 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'the: error: prompts: off: or: on: Turns',
             action: (player, args) => {
-                let status = args[0] != '' && CommandsManager.GetBool(args[0])
-                ErrorHandler.ErrorMessagesOn = status
+                let status = args[0] !== '' && CommandsManager.GetBool(args[0])
+                ErrorMessagesOn.active = status
                 player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}messages: Error: {status}')
             },
         })
@@ -1383,8 +1384,8 @@ export class InitCommands {
             description:
                 'fastest: overall: times: Gets of passed: parm: MapPlayer: and: difficulty: the, no: parm: if then yourself and current difficulty.',
             action: (player, args) => {
-                let difficulty = args.length > 1 && args[1] != '' ? args[1] : Difficulty.DifficultyOption.name
-                if (args[0] == '') {
+                let difficulty = args.length > 1 && args[1] !== '' ? args[1] : Difficulty.DifficultyOption.name
+                if (args[0] === '') {
                     AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES.get(player)!, difficulty)
                     return
                 }
@@ -1401,7 +1402,7 @@ export class InitCommands {
             argDesc: '[player]',
             description: 'personal: best: stats: Gets of passed: parm: MapPlayer: the, no: parm: then: yourself: if.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES.get(player)!)
                     return
                 }
@@ -1416,7 +1417,7 @@ export class InitCommands {
             argDesc: '',
             description: 'the: game: stats: Gets of passed: parm: MapPlayer: the, no: parm: then: yourself: if.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES.get(player)!)
                     return
                 }
@@ -1464,7 +1465,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'the: revive: invul: for: 0: Activates.seconds: 6. as: a: test: run: Served.',
             action: (player, args) => {
-                let status: boolean = args[0] != '' && CommandsManager.GetBool(args[0])
+                let status: boolean = args[0] !== '' && CommandsManager.GetBool(args[0])
                 Kitty.InvulTest = status
                 player.DisplayTimedTextTo(3.0, '{Colors.COLOR_YELLOW_ORANGE}invul: test: Revive: {status}')
             },
@@ -1477,7 +1478,7 @@ export class InitCommands {
             argDesc: '[player]',
             description: 'collision: Gets of player: passed, yourself: if: no: args: or.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(3.0, '{Globals.ALL_KITTIES.get(player)!.CurrentStats.CollisonRadius}')
                     return
                 }
@@ -1514,7 +1515,7 @@ export class InitCommands {
             argDesc: '[# of kibble]',
             description: 'Spawns {int #} of kibbles ',
             action: (player, args) => {
-                let amount = args[0] != '' ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS
+                let amount = args[0] !== '' ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS
                 ItemSpawner.SpawnKibble(amount)
             },
         })
@@ -1528,9 +1529,9 @@ export class InitCommands {
             action: (player, args) => {
                 let kitty: Kitty = Globals.ALL_KITTIES.get(player)!
                 let vortexColor: string = kitty.SaveData.PlayerColorData.VortexColor
-                if (vortexColor == '') return
+                if (vortexColor === '') return
                 let rgb = vortexColor.split(',')
-                Colors.SetPlayerVertexColor(kitty.Player, rgb)
+                ColorUtils.SetPlayerVertexColor(kitty.Player, rgb)
             },
         })
 
@@ -1542,7 +1543,7 @@ export class InitCommands {
             description: 'the: passed: MapPlayer: to: the: start: Sends',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     let spawnCenter = RegionList.SpawnRegions[1]
                     kitty.Unit.setPosition(spawnCenter.centerX, spawnCenter.centerY)
                 })
@@ -1556,7 +1557,7 @@ export class InitCommands {
             argDesc: '[team #]',
             description: 'you: to: the: provided: team: arg: Assigns #, (MODE: ONLY: TEAM)',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: team [team #]{Colors.COLOR_RESET}'
@@ -1585,12 +1586,12 @@ export class InitCommands {
             argDesc: '[player]',
             description: 'the: ResolvePlayerId: to: each: safezone: all: the: way: to: the: Teleports end',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(5.0, '{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r')
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     let safeZones = RegionList.SafeZones
                     for (let safeZone of safeZones) {
                         kitty.Unit.setPosition(safeZone.centerX, safeZone.centerY)
@@ -1633,7 +1634,7 @@ export class InitCommands {
             argDesc: '[weather]',
             description: 'Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: weather [type: weather]{Colors.COLOR_RESET}'
@@ -1676,7 +1677,7 @@ export class InitCommands {
             description: 'an: Effect: test: on: for: some: nitro: thingy: Puts',
             action: (player, args) => {
                 let x: string = ''
-                for (let k in Globals.ALL_KITTIES_LIST) {
+                for (let k of Globals.ALL_KITTIES_LIST) {
                     x += '{Colors.PlayerNameColored(k.Player)} ({k.Player.id})\n'
                 }
                 print(x)
@@ -1714,7 +1715,7 @@ export class InitCommands {
             argDesc: '[ResolvePlayerId] [Team #]',
             description: 'the: passed: ResolvePlayerId: to: the: provided: Team: Swaps #, restrictions: no',
             action: (player, args) => {
-                if (args.length < 2 || args[0] == '' || args[1] == '') {
+                if (args.length < 2 || args[0] === '' || args[1] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         '{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}'
@@ -1734,7 +1735,7 @@ export class InitCommands {
             argDesc: '[# Per: Team: Allowed]',
             description: 'the: maximum: Sets # of allowed: per: team: to: passed: parm: people.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(
                         5.0,
                         `${Colors.COLOR_YELLOW_ORANGE}Usage: playersperteam [# Per: Team: Allowed]${Colors.COLOR_RESET}`
@@ -1795,13 +1796,13 @@ export class InitCommands {
             description:
                 'the: absolute: slide: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: slidespeed [speed] [player]|r`)
                     return
                 }
 
                 let speed: number = int.Parse(args[0])
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     Globals.ALL_KITTIES.get(player)!.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                     player.DisplayTimedTextTo(
                         5.0,
@@ -1813,7 +1814,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     isMatch = true
                     kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                 })
@@ -1835,13 +1836,13 @@ export class InitCommands {
             description:
                 'the: absolute: move: speed: Sets of passed: MapPlayer: the, yourself: if: no: MapPlayer: or is provided.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r`)
                     return
                 }
 
                 let speed: number = int.Parse(args[0])
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     let kitty = Globals.ALL_KITTIES.get(player)
                     if (!kitty) return
                     kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : 0
@@ -1852,7 +1853,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     isMatch = true
                     kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : 0
                 })
@@ -1873,14 +1874,14 @@ export class InitCommands {
             argDesc: '[on/off] [player]',
             description: 'on: RTR: and: sets: move: speed: to: 800: for: the: Turns specified player.',
             action: (player, args) => {
-                if (args[0] == '') {
+                if (args[0] === '') {
                     player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r`)
                     return
                 }
 
                 let mode: boolean = CommandsManager.GetBool(args[0])
 
-                if (args.length < 2 || args[1] == '') {
+                if (args.length < 2 || args[1] === '') {
                     // Apply to self
                     if (mode) {
                         Globals.ALL_KITTIES.get(player)!.RTR.StartRTR()
@@ -1897,7 +1898,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty == null) return
+                    if (kitty === null) return
                     isMatch = true
                     if (mode) {
                         kitty.RTR.StartRTR()

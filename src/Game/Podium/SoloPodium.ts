@@ -43,7 +43,7 @@ export class SoloPodium {
     }
 
     private static ProcessNextPodiumAction() {
-        if (this.PodiumQueue.length == 0) {
+        if (this.PodiumQueue.length === 0) {
             PodiumUtil.EndingGameThankyou()
             return
         }

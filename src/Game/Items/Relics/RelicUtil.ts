@@ -61,7 +61,7 @@ export class RelicUtil {
         let unitCooldown: number = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0)
         let itemCooldown: number = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0)
 
-        cooldown = cooldown == 0 ? Math.min(unitCooldown, itemCooldown) : cooldown
+        cooldown = cooldown === 0 ? Math.min(unitCooldown, itemCooldown) : cooldown
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         BlzStartUnitAbilityCooldown(unit.handle, abilityID, cooldown)
         unit.addItem(item)

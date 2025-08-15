@@ -56,7 +56,7 @@ export class Chaos extends Affix {
 
     private RotateAffix() {
         try {
-            if (this.currentAffix != null) this.Unit.RemoveAffix(this.currentAffix) // look at later..
+            if (this.currentAffix !== null) this.Unit.RemoveAffix(this.currentAffix) // look at later..
             this.currentAffix = null as never
             let randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = AffixFactory.CreateAffix(this.Unit, randomAffix)
@@ -73,7 +73,7 @@ export class Chaos extends Affix {
             AffixFactory.AffixTypes.length > 0
                 ? AffixFactory.AffixTypes[GetRandomInt(0, AffixFactory.AffixTypes.length - 1)]
                 : 'Speedster'
-        if (randomAffixName == 'Chaos') randomAffixName = 'Speedster'
+        if (randomAffixName === 'Chaos') randomAffixName = 'Speedster'
         return randomAffixName
     }
 

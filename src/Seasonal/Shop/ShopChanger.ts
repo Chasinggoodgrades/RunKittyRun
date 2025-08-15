@@ -13,7 +13,7 @@ export class ShopChanger {
     private static NormalSkin: number = Constants.UNIT_KITTY_VENDOR
 
     public static Initialize() {
-        if (SeasonalManager.Season == HolidaySeasons.None) return
+        if (SeasonalManager.Season === HolidaySeasons.None) return
         ShopChanger.SetSeasonalShop()
     }
 
@@ -44,11 +44,11 @@ export class ShopChanger {
         let tempGroup = Group.create()!
         tempGroup.enumUnitsInRect(
             Globals.WORLD_BOUNDS,
-            Filter(() => getFilterUnit().typeId == Constants.UNIT_KITTY_VENDOR)
+            Filter(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
         )
         while (true) {
             let vendor = tempGroup.first
-            if (vendor == null) break
+            if (!vendor) break
             tempGroup.removeUnit(vendor)
             vendor.skin = skinType
         }

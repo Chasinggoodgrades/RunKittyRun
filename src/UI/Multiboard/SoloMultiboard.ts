@@ -5,6 +5,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { KittyData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/KittyData'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Multiboard, Trigger } from 'w3ts'
 import { sumNumbers } from '../../Utility/Utility'
@@ -23,7 +24,7 @@ export class SoloMultiboard {
     /// </summary>
     public static Initialize() {
         try {
-            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+            if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
             SoloMultiboard.OverallBoard = Multiboard.create()!
             SoloMultiboard.BestTimes = Multiboard.create()!
             SoloMultiboard.sortedDict = new Map()
@@ -50,7 +51,7 @@ export class SoloMultiboard {
     }
 
     private static OverallMultiboardRacemode() {
-        if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[1]) return // Race mode
+        if (Gamemode.CurrentGameModeType !== Globals.SOLO_MODES[1]) return // Race mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 9
         SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
@@ -71,7 +72,7 @@ export class SoloMultiboard {
     }
 
     private static OverallMultiboardProgressmode() {
-        if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return // Progression mode
+        if (Gamemode.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 7
         SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
@@ -115,7 +116,7 @@ export class SoloMultiboard {
 
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         let sortedPlayers =
-            Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
+            Gamemode.CurrentGameModeType === Globals.SOLO_MODES[0]
                 ? Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
                       let progDiff = b[1].TimeProg.GetOverallProgress() - a[1].TimeProg.GetOverallProgress()
                       if (progDiff !== 0) return progDiff
@@ -133,13 +134,13 @@ export class SoloMultiboard {
 
         for (let [player, _] of SoloMultiboard.sortedDict) {
             let times = SoloMultiboard.sortedDict.get(player)!.TimeProg
-            let playerColor = Colors.GetStringColorOfPlayer(player.id + 1)
+            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
             let totalDeaths = SoloMultiboard.sortedDict.get(player)!.CurrentStats.TotalDeaths
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             let status = Globals.ALL_KITTIES.get(player)!.Finished ? 'Finished' : 'Racing'
             SoloMultiboard.MBSlot.set(player, rowIndex)
             let stats =
-                Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
+                Gamemode.CurrentGameModeType === Globals.SOLO_MODES[0]
                     ? [
                           name,
                           times.GetRoundProgress(1).toFixed(2) + '%',
@@ -163,7 +164,7 @@ export class SoloMultiboard {
 
             for (let i: number = 0; i < stats.length; i++) {
                 SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText('{playerColor}{stats[i]}{Colors.COLOR_RESET}')
-                if (i == 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setWidth(0.07)
+                if (i === 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setWidth(0.07)
             }
 
             rowIndex++
@@ -181,12 +182,12 @@ export class SoloMultiboard {
         for (let player of Globals.ALL_PLAYERS) {
             // bad
             let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-            let playerColor = Colors.GetStringColorOfPlayer(player.id + 1)
+            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
             let roundTimes = SoloMultiboard.GetGameRoundTime(saveData)
 
             for (let i: number = 0; i < roundTimes.length; i++) {
-                if (roundTimes[i] != 0)
+                if (roundTimes[i] !== 0)
                     SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(
                         '{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}'
                     )
@@ -200,24 +201,24 @@ export class SoloMultiboard {
     }
 
     public static UpdateOverallStatsMB() {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
         SoloMultiboard.OverallStats()
     }
 
     public static UpdateBestTimesMB() {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
         MultiboardUtil.FillPlayers(SoloMultiboard.BestTimes, 1)
         SoloMultiboard.BestTimeStats()
     }
 
     public static UpdateDeathCount(player: MapPlayer) {
         try {
-            if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+            if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
             let value
             let rowIndex = (value = SoloMultiboard.MBSlot.get(player) ? value : 0)
-            if (!rowIndex || rowIndex == 0) return
+            if (!rowIndex || rowIndex === 0) return
             SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
-                '{Colors.GetStringColorOfPlayer(player.id + 1)}{Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}'
+                '{ColorUtils.GetStringColorOfPlayer(player.id + 1)}{Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}'
             )
         } catch (ex: any) {
             Logger.Critical('Error in SoloMultiboard.UpdateDeathCount: {ex.Message}')
@@ -246,7 +247,7 @@ export class SoloMultiboard {
     }
 
     private static ESCPressed() {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return // Solo mode
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return // Solo mode
         const triggerPlayer = getTriggerPlayer()
         if (!triggerPlayer || !triggerPlayer.isLocal()) return
         if (SoloMultiboard.OverallBoard.displayed) {

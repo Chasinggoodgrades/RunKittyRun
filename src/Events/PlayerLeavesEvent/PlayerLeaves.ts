@@ -4,9 +4,10 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { Trigger, MapPlayer } from 'w3ts'
+import { MapPlayer, Trigger } from 'w3ts'
 import { Gameover } from '../Gameover'
 
 export class PlayerLeaves {
@@ -24,25 +25,25 @@ export class PlayerLeaves {
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         Globals.PLAYERS_TEAMS.get(player)?.RemoveMember(player)
     }
 
     public static PlayerLeavesActions(player: MapPlayer | null = null) {
         try {
             let leavingPlayer = getTriggerPlayer()
-            if (player != null) leavingPlayer = player
+            if (player !== null) leavingPlayer = player
             if (!Globals.ALL_PLAYERS.includes(leavingPlayer)) return
             let kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
             let circle = Globals.ALL_CIRCLES.get(leavingPlayer)
-            if (!circle) return;
+            if (!circle) return
             let nameTag = kitty.NameTag
             this.TeamRemovePlayer(leavingPlayer)
             kitty.dispose()
             circle.dispose()
             nameTag?.dispose()
             if (!Gameover.WinGame) Globals.ALL_PLAYERS.splice(Globals.ALL_PLAYERS.indexOf(leavingPlayer), 1)
-            print(Colors.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
+            print(ColorUtils.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
             RoundManager.RoundEndCheck()
             if (Gameover.WinGame) return
             MultiboardUtil.RefreshMultiboards()

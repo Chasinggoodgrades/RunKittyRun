@@ -68,11 +68,11 @@ export class RewardsFrame {
 
         for (let type of rewardTypes) {
             let numberOfRewards = RewardsFrame.CountNumberOfRewards(type)
-            if (numberOfRewards == 0) continue
+            if (numberOfRewards === 0) continue
 
             colCount = numberOfRewards / RewardsFrame.RewardsPerRow
-            if (numberOfRewards % RewardsFrame.RewardsPerRow != 0) colCount++
-            if (colCount == 0) colCount = 1
+            if (numberOfRewards % RewardsFrame.RewardsPerRow !== 0) colCount++
+            if (colCount === 0) colCount = 1
 
             // Create panel based on number of columns
             RewardsFrame.InitializePanels(RewardType[type], colCount)
@@ -85,7 +85,7 @@ export class RewardsFrame {
     private static CountNumberOfRewards(type: RewardType) {
         let count = 0
         for (let reward of RewardsManager.Rewards) {
-            if (reward.Type == type) count++
+            if (reward.Type === type) count++
         }
         return count
     }
@@ -93,7 +93,7 @@ export class RewardsFrame {
     private static InitializePanels(name: string, colCount: number) {
         let y = -RewardsFrame.Padding
         let width = (RewardsFrame.FrameWidth - RewardsFrame.Padding * 2) / 2
-        let height = colCount == 1 ? 0.03 : 0.03 + (colCount - 1) * 0.02
+        let height = colCount === 1 ? 0.03 : 0.03 + (colCount - 1) * 0.02
         RewardsFrame.CreatePanel(RewardsFrame.TempHandle, 0, y, width, height, name)
     }
 
@@ -107,10 +107,10 @@ export class RewardsFrame {
     ): Frame {
         let framePoint1 = FRAMEPOINT_TOPLEFT
         let framePoint2 = FRAMEPOINT_BOTTOMLEFT
-        if (parent == RewardsFrame.RewardFrame) framePoint2 = FRAMEPOINT_TOPLEFT
-        if (parent == RewardsFrame.RewardFrame) x = RewardsFrame.Padding
-        if (parent == RewardsFrame.RewardFrame) y = -RewardsFrame.Padding * 2
-        if (RewardsFrame.FrameCount == 5) {
+        if (parent === RewardsFrame.RewardFrame) framePoint2 = FRAMEPOINT_TOPLEFT
+        if (parent === RewardsFrame.RewardFrame) x = RewardsFrame.Padding
+        if (parent === RewardsFrame.RewardFrame) y = -RewardsFrame.Padding * 2
+        if (RewardsFrame.FrameCount === 5) {
             parent = RewardsFrame.RewardFrame
             framePoint1 = FRAMEPOINT_TOPRIGHT
             framePoint2 = FRAMEPOINT_TOPRIGHT
@@ -341,7 +341,7 @@ export class RewardsFrame {
     public static RewardsFrameActions() {
         let player = getTriggerPlayer()
         if (!player.isLocal()) return
-        if (Gamemode.CurrentGameMode != GameMode.Standard) {
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
             player.DisplayTimedTextTo(
                 3.0,
                 '{Colors.COLOR_RED}are: only: available: Rewards in Mode: Standard{Colors.COLOR_RESET}'

@@ -103,9 +103,9 @@ export class NitroChallenges {
     private static AwardingNitroEvents(kitty: Kitty) {
         let nitroCount = kitty.CurrentStats.NitroCount
         let player = kitty.Player
-        if (nitroCount == Globals.ROUND) return // already awarded
+        if (nitroCount === Globals.ROUND) return // already awarded
         if (
-            NitroChallenges.NitroTimer == null ||
+            NitroChallenges.NitroTimer === null ||
             NitroChallenges.NitroTimer.remaining <= 0.0 ||
             !NitroChallenges.NitroDialog.display
         )
@@ -160,9 +160,9 @@ export class NitroChallenges {
     private static AwardingDivineLight(kitty: Kitty) {
         if (Difficulty.DifficultyValue >= DifficultyLevel.Impossible) return
         let requiredCount = 5
-        if (Difficulty.DifficultyValue == DifficultyLevel.Hard) requiredCount = 4
+        if (Difficulty.DifficultyValue === DifficultyLevel.Hard) requiredCount = 4
 
-        if (kitty.CurrentStats.NitroCount == requiredCount) AwardManager.GiveReward(kitty.Player, 'DivineLight')
+        if (kitty.CurrentStats.NitroCount === requiredCount) AwardManager.GiveReward(kitty.Player, 'DivineLight')
     }
 
     private static PlayNitroSound(player: MapPlayer) {

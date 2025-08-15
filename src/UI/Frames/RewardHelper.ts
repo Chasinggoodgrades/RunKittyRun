@@ -46,8 +46,8 @@ export class RewardHelper {
 
     public static GetAwardNestedValueTwo(saveData: object, awardName: string) {
         // search rewardsList for this award name, then return getawardNestedvalue
-        let reward = RewardsManager.Rewards.find(r => r.name == awardName)
-        return reward != null ? RewardHelper.GetAwardNestedValue(saveData, reward.TypeSorted, reward.name) : -1
+        let reward = RewardsManager.Rewards.find(r => r.name === awardName)
+        return reward ? RewardHelper.GetAwardNestedValue(saveData, reward.TypeSorted, reward.name) : -1
     }
 
     /// <summary>
@@ -59,11 +59,11 @@ export class RewardHelper {
     /// <returns></returns>
     public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
         let nestedProperty = (obj as any)[nestedPropertyName]
-        if (nestedProperty != null) {
+        if (nestedProperty !== null) {
             let nestedObject = nestedProperty
-            if (nestedObject != null) {
+            if (nestedObject !== null) {
                 let property = (nestedObject as any)[propertyName]
-                if (property != null) {
+                if (property !== null) {
                     return property
                 }
             }
@@ -80,9 +80,9 @@ export class RewardHelper {
     /// <param name="value">value to set it to</param>
     public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: any) {
         let nestedProperty = (obj as any)[nestedPropertyName]
-        if (nestedProperty != null) {
+        if (nestedProperty !== null) {
             let nestedObject = nestedProperty
-            if (nestedObject != null) {
+            if (nestedObject !== null) {
                 RewardHelper.UpdateProperty(nestedObject, propertyName, value)
             }
         } else {

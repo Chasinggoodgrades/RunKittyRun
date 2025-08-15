@@ -39,7 +39,7 @@ export class SyncSaveLoad {
         PreloadGenStart()
 
         let rawDataString: string =
-            data != null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64()
+            data !== null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64()
         let toCompile: string = rawDataString
         let chunkSize: number = 180
         let assemble: string = ''
@@ -94,10 +94,10 @@ export class SyncSaveLoad {
         let promise = this.allPromises.get(getTriggerPlayer().id)
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
-        if (promise != null) {
-            if (prefix == this.SyncPrefix) {
+        if (promise) {
+            if (prefix === this.SyncPrefix) {
                 promise.Buffer.set(currentChunk - 1, theRest)
-            } else if (prefix == this.SyncPrefixFinish) {
+            } else if (prefix === this.SyncPrefixFinish) {
                 promise.Finish()
                 this.allPromises.delete(promise.SyncOwner.id)
                 //print("Promise killed: ", allPromises[promise.SyncOwner.id]);
@@ -142,7 +142,7 @@ export class FilePromise {
                         Logger.Verbose("DecodedString.length: ", DecodedString.length);*/
             //Logger.Verbose("FinalString: ", FinalString);
 
-            this.onFinish?.call(this, this)
+            this.onFinish?.(this)
         } catch (ex: any) {
             Logger.Critical(ex)
         }

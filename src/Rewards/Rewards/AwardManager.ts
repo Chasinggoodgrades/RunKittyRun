@@ -7,6 +7,7 @@ import { KittyData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/KittyData'
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
 import { RewardHelper } from 'src/UI/Frames/RewardHelper'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Trigger } from 'w3ts'
 import { GameAwardsDataSorted } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
@@ -34,9 +35,9 @@ export class AwardManager {
         if (awardsList.includes(award)) return
 
         let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.toString())
+        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())
 
-        if (reward == null) {
+        if (!reward) {
             print('not: found: Reward.')
             return
         }
@@ -72,7 +73,7 @@ export class AwardManager {
     }
 
     private static EnableAbility(player: MapPlayer, award: string) {
-        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.toString())!
+        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())!
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         if (!reward) return
         kitty.disableAbility(reward.GetAbilityID(), false, false)
@@ -98,10 +99,10 @@ export class AwardManager {
                 'NitrosObtained',
             ]
 
-            if (Gamemode.CurrentGameMode != GameMode.Standard) return
+            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
             for (let player of Globals.ALL_PLAYERS) {
-                if (player.controller != MAP_CONTROL_USER) continue // no bots, reduce triggers;
-                if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
+                if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers;
+                if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
 
                 let kittyProfile
                 if (!(kittyProfile = Globals.ALL_KITTIES.get(player)) /* TODO; Prepend: let */) {
@@ -117,7 +118,7 @@ export class AwardManager {
                     kittyProfile = Globals.ALL_KITTIES.get(player)!
                 }
 
-                if (kittyProfile.SaveData == null) {
+                if (kittyProfile.SaveData === null) {
                     kittyProfile.SaveData = new KittyData()
                 }
 
@@ -159,10 +160,10 @@ export class AwardManager {
     }
 
     public static AwardGameStatRewards() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         for (let player of Globals.ALL_PLAYERS) {
-            if (player.controller != MAP_CONTROL_USER) continue // no bots, reduce triggers
-            if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers
+            if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers
+            if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers
 
             let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
             let gameStats = kittyStats.GameStats
@@ -186,12 +187,12 @@ export class AwardManager {
 
             for (let gameStatReward of RewardsManager.GameStatRewards) {
                 if (
-                    gameStatReward.GameStat != 'NormalGames' &&
-                    gameStatReward.GameStat != 'HardGames' &&
-                    gameStatReward.GameStat != 'ImpossibleGames' &&
-                    gameStatReward.GameStat != 'NormalWins' &&
-                    gameStatReward.GameStat != 'HardWins' &&
-                    gameStatReward.GameStat != 'ImpossibleWins'
+                    gameStatReward.GameStat !== 'NormalGames' &&
+                    gameStatReward.GameStat !== 'HardGames' &&
+                    gameStatReward.GameStat !== 'ImpossibleGames' &&
+                    gameStatReward.GameStat !== 'NormalWins' &&
+                    gameStatReward.GameStat !== 'HardWins' &&
+                    gameStatReward.GameStat !== 'ImpossibleWins'
                 )
                     continue
 
@@ -203,19 +204,19 @@ export class AwardManager {
                 const nestedProperty = (typeProperty as any)[gameStatReward.name]
                 const value = nestedProperty
 
-                if (value == 1) continue
+                if (value === 1) continue
 
-                if (gameStat == 'NormalGames' && normalPlusGames >= requiredValue)
+                if (gameStat === 'NormalGames' && normalPlusGames >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
-                else if (gameStat == 'HardGames' && hardPlusGames >= requiredValue)
+                else if (gameStat === 'HardGames' && hardPlusGames >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
-                else if (gameStat == 'ImpossibleGames' && impossiblePlusGames >= requiredValue)
+                else if (gameStat === 'ImpossibleGames' && impossiblePlusGames >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
-                else if (gameStat == 'NormalWins' && normalPlusWins >= requiredValue)
+                else if (gameStat === 'NormalWins' && normalPlusWins >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
-                else if (gameStat == 'HardWins' && hardPlusWins >= requiredValue)
+                else if (gameStat === 'HardWins' && hardPlusWins >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
-                else if (gameStat == 'ImpossibleWins' && impossiblePlusWins >= requiredValue)
+                else if (gameStat === 'ImpossibleWins' && impossiblePlusWins >= requiredValue)
                     AwardManager.GiveReward(player, gameStatReward.name)
             }
         }
@@ -226,11 +227,11 @@ export class AwardManager {
     /// </summary>
     /// <param name="kitty"></param>
     public static SetPlayerSelectedData(kitty: Kitty) {
-        if (kitty.Player.controller != MAP_CONTROL_USER) return // just reduce load, dont include bots.
-        if (kitty.Player.slotState != PLAYER_SLOT_STATE_PLAYING) return
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
+        if (kitty.Player.controller !== MAP_CONTROL_USER) return // just reduce load, dont include bots.
+        if (kitty.Player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
         let selectedData = kitty.SaveData.SelectedData // GameSelectData class object
-        Colors.SetColorJoinedAs(kitty.Player)
+        ColorUtils.SetColorJoinedAs(kitty.Player)
 
         const skinValue = (selectedData as any)['SelectedSkin'] as string
         AwardManager.ProcessAward(kitty, skinValue)
@@ -244,7 +245,7 @@ export class AwardManager {
     }
 
     private static ProcessAward(kitty: Kitty, selectedAwardName: string) {
-        let reward = RewardsManager.Rewards.find(x => x.name == selectedAwardName)
+        let reward = RewardsManager.Rewards.find(x => x.name === selectedAwardName)
         if (!reward) return
         reward.ApplyReward(kitty.Player, false)
     }

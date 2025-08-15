@@ -28,17 +28,17 @@ export class FirstPersonCamera {
     }
 
     public IsFirstPerson(): boolean {
-        return this.forceCamTimer != null
+        return this.forceCamTimer !== null
     }
 
     public ToggleFirstPerson(active: boolean) {
         if (active) {
-            if (this.forceCamTimer == null) {
+            if (this.forceCamTimer === null) {
                 this.forceCamTimer = Timer.create()
                 this.forceCamTimer.start(this.timerPeriod, true, ErrorHandler.Wrap(this.UpdateCamera))
             }
         } else {
-            if (this.forceCamTimer != null) {
+            if (this.forceCamTimer !== null) {
                 this.forceCamTimer.pause()
                 this.forceCamTimer.destroy()
                 this.ResetCamera()
@@ -47,7 +47,7 @@ export class FirstPersonCamera {
     }
 
     private UpdateCamera() {
-        if (this.hero == null || !this.hero.isAlive()) return
+        if (this.hero === null || !this.hero.isAlive()) return
 
         let fwd: number = 0
 
@@ -101,13 +101,13 @@ export class FirstPersonCamera {
             this.hero.setPathing(true)
         }
 
-        if (fwd == 0) {
-            if (this.lastUnitAnimation != 'stand') {
+        if (fwd === 0) {
+            if (this.lastUnitAnimation !== 'stand') {
                 this.lastUnitAnimation = 'stand'
                 this.hero.setAnimation(0) // 0 is stand for most units
             }
         } else {
-            if (this.lastUnitAnimation != 'walk') {
+            if (this.lastUnitAnimation !== 'walk') {
                 this.lastUnitAnimation = 'walk'
                 this.hero.setAnimation(6) // POTM is 6 for walk
             }
@@ -147,7 +147,7 @@ export class FirstPersonCameraManager {
     public static Initialize() {
         for (let player of Globals.ALL_PLAYERS) {
             let hero = FirstPersonCameraManager.GetHeroForPlayer(player)
-            if (hero != null) {
+            if (hero !== null) {
                 FirstPersonCameraManager.cameras.set(player, new FirstPersonCamera(hero, player))
             }
         }

@@ -54,7 +54,7 @@ export class RewardsManager {
     }
 
     private static IsResetSpell(spellID: number) {
-        return spellID == Constants.ABILITY_RESET
+        return spellID === Constants.ABILITY_RESET
     }
 
     private static ResetRewardSettings(Unit: Unit) {
@@ -81,6 +81,6 @@ export class RewardsManager {
             kitty.SaveData.SelectedData[property as keyof GameSelectedData] = ''
         }
 
-        if (kitty.SaveData.SelectedData.SelectedWindwalk == '') kitty.ActiveAwards.WindwalkID = 0
+        if (kitty.SaveData.SelectedData.SelectedWindwalk === '') kitty.ActiveAwards.WindwalkID = 0
     }
 }

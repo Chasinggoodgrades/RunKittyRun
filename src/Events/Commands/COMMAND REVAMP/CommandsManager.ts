@@ -2,6 +2,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { CustomStatFrame } from 'src/UI/CustomStatFrame'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Action } from 'src/Utility/CSUtils'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
 import { Utility } from 'src/Utility/Utility'
@@ -57,30 +58,30 @@ export class CommandsManager {
         let kitties = CommandsManager.KittiesList
         let larg = arg.toLowerCase()
 
-        if (arg == '') {
+        if (arg === '') {
             // no arg for self
             let kitty = Globals.ALL_KITTIES.get(getTriggerPlayer()!)
             if (kitty) kitties.push(kitty)
-        } else if (larg == 'a' || larg == 'all') {
+        } else if (larg === 'a' || larg === 'all') {
             for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 kitties.push(kitty) // add all players
             }
-        } else if (larg == 'ai' || larg == 'computer' || larg == 'computers') {
+        } else if (larg === 'ai' || larg === 'computer' || larg === 'computers') {
             for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 if (
-                    kitty.Player.slotState == PLAYER_SLOT_STATE_PLAYING &&
-                    kitty.Player.controller == MAP_CONTROL_COMPUTER
+                    kitty.Player.slotState === PLAYER_SLOT_STATE_PLAYING &&
+                    kitty.Player.controller === MAP_CONTROL_COMPUTER
                 ) {
                     kitties.push(kitty) // add all AI players
                 }
             }
-        } else if (larg == 's' || larg == 'sel' || larg == 'select' || larg == 'selected') {
+        } else if (larg === 's' || larg === 'sel' || larg === 'select' || larg === 'selected') {
             let selectedUnit = CustomStatFrame.SelectedUnit.get(getTriggerPlayer())
-            if (selectedUnit != null) {
+            if (selectedUnit) {
                 let kitty = Globals.ALL_KITTIES.get(selectedUnit.owner) ?? null
-                if (kitty != null) {
+                if (kitty) {
                     kitties.push(kitty)
                 }
             }
@@ -97,8 +98,8 @@ export class CommandsManager {
             if (kitty) {
                 kitties.push(kitty)
             }
-        } else if (Colors.GetPlayerByColor(larg)) {
-            const pl = Colors.GetPlayerByColor(larg)
+        } else if (ColorUtils.GetPlayerByColor(larg)) {
+            const pl = ColorUtils.GetPlayerByColor(larg)
             if (!pl) return []
             const kitty = Globals.ALL_KITTIES.get(pl)
             if (kitty) {
@@ -124,7 +125,7 @@ export class CommandsManager {
     public static GetBool(arg: string) {
         if (isNullOrEmpty(arg)) return false
         let lower = arg.toLowerCase()
-        return lower == 'true' || lower == 'on' || lower == '1'
+        return lower === 'true' || lower === 'on' || lower === '1'
     }
 
     public static HelpCommands(player: MapPlayer, arg: string = '') {
@@ -135,9 +136,9 @@ export class CommandsManager {
         for (let [_, command] of this.AllCommands) {
             let cmd = command
             if (this.CommandsList.includes(cmd)) continue // already got cmd / alias
-            if (cmd.Group == playerGroup || cmd.Group == 'all' || playerGroup == 'admin') {
+            if (cmd.Group === playerGroup || cmd.Group === 'all' || playerGroup === 'admin') {
                 // admins get ALL DUH
-                if (isNullOrEmpty(arg) || arg.length == 0) {
+                if (isNullOrEmpty(arg) || arg.length === 0) {
                     this.CommandsList.push(cmd)
                 } else {
                     if (
@@ -150,7 +151,7 @@ export class CommandsManager {
                 }
             }
         }
-        if (this.CommandsList.length == 0) {
+        if (this.CommandsList.length === 0) {
             player.DisplayTimedTextTo(
                 5.0,
                 `${Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: ${Colors.COLOR_GOLD}${filter}|r`
@@ -167,6 +168,6 @@ export class CommandsManager {
     }
 
     public static GetPlayerGroup(player: MapPlayer) {
-        return Globals.VIPLISTUNFILTERED.includes(player) ? 'admin' : player.id == 0 ? 'red' : 'all'
+        return Globals.VIPLISTUNFILTERED.includes(player) ? 'admin' : player.id === 0 ? 'red' : 'all'
     }
 }

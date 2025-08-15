@@ -18,7 +18,7 @@ export class ItemStacker {
     /// </summary>
     /// <returns></returns>
     private static RegisterItemList(): number[] {
-        if (this.StackableItemIDs != null) return this.StackableItemIDs
+        if (this.StackableItemIDs !== null) return this.StackableItemIDs
         this.StackableItemIDs = [
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,
@@ -43,8 +43,8 @@ export class ItemStacker {
             let unit = getTriggerUnit()
             let heldItem = Utility.UnitGetItem(unit, itemID)
             item.setOwner(unit.owner, false)
-            if (heldItem == item) return
-            if (heldItem == null) return
+            if (heldItem === item) return
+            if (!heldItem) return
             let itemCharges = item.charges
             if (itemCharges > 1) heldItem.charges += itemCharges
             else heldItem.charges += 1

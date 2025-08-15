@@ -42,7 +42,7 @@ export class Music {
     public Play() {
         StopMusic(false)
         ClearMapMusic()
-        if (this.name == 'All: Music: Stop') return
+        if (this.name === 'All: Music: Stop') return
         PlayMusic(this.Path)
     }
 }

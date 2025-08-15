@@ -31,7 +31,7 @@ import { CustomStatFrame } from 'src/UI/CustomStatFrame'
 import { FrameManager } from 'src/UI/Frames/FrameManager'
 import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardManager } from 'src/UI/Multiboard'
-import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -56,7 +56,7 @@ export class Setup {
         try {
             SetGameSpeed(MAP_SPEED_FASTEST)
             LockGameSpeedBJ()
-            Colors.Initialize()
+            ColorUtils.Initialize()
             GameSeed.Initialize()
             DoodadChanger.ShowSeasonalDoodads(false)
             Gamemode.Initialize()
@@ -85,7 +85,7 @@ export class Setup {
 
     private static ChoosingGameMode() {
         this.timeToChoose += 1.0
-        if (this.timeToChoose == Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
+        if (this.timeToChoose === Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
         if (Gamemode.IsGameModeChosen) {
             this.StartGame()
             this.gameModeTimer.dispose()
@@ -128,7 +128,7 @@ export class Setup {
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
 
             for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-                if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) {
+                if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) {
                     this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
                 }
             }
@@ -140,7 +140,7 @@ export class Setup {
 
     public static GetActivePlayers() {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-            if (MapPlayer.fromIndex(i)!.slotState == PLAYER_SLOT_STATE_PLAYING)
+            if (MapPlayer.fromIndex(i)!.slotState === PLAYER_SLOT_STATE_PLAYING)
                 Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
             SetPlayerTeam(MapPlayer.fromIndex(i)!.handle, 0) // Need to check C# implementation
         }
@@ -149,7 +149,7 @@ export class Setup {
     private static RemoveDisconnectedPlayers() {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             const player = Globals.ALL_PLAYERS[i]
-            if (player.slotState == PLAYER_SLOT_STATE_LEFT) {
+            if (player.slotState === PLAYER_SLOT_STATE_LEFT) {
                 Globals.ALL_PLAYERS.splice(i, 1)
                 i--
             }
@@ -159,7 +159,7 @@ export class Setup {
     private static SetAlliedPlayers() {
         for (let player of Globals.ALL_PLAYERS) {
             for (let playerx of Globals.ALL_PLAYERS) {
-                if (player == playerx) continue
+                if (player === playerx) continue
                 player.setAlliance(playerx, ALLIANCE_PASSIVE, true)
                 player.setAlliance(playerx, ALLIANCE_HELP_REQUEST, true)
                 player.setAlliance(playerx, ALLIANCE_HELP_RESPONSE, true)
@@ -180,7 +180,7 @@ export class Setup {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             for (let j: number = 0; j < Globals.VIPLIST.length; j++) {
                 let fromBase64Name = base64Decode(Globals.VIPLIST[j])
-                if (Globals.ALL_PLAYERS[i].name == fromBase64Name) {
+                if (Globals.ALL_PLAYERS[i].name === fromBase64Name) {
                     Globals.VIPLISTUNFILTERED.push(Globals.ALL_PLAYERS[i])
                 }
             }

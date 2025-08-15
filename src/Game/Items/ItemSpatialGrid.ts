@@ -59,15 +59,15 @@ export class ItemSpatialGrid {
 
     public static GetNearbyKibbles(x: number, y: number) {
         let cell = ItemSpatialGrid.GetCell(x, y)
-        let list: Kibble[]
-        if ((list = ItemSpatialGrid.kibbleCells.get(cell)!)) return list
+        let list = ItemSpatialGrid.kibbleCells.get(cell)
+        if (list) return list
         return null
     }
 
     public static GetNearbyItems(x: number, y: number) {
         let cell = ItemSpatialGrid.GetCell(x, y)
-        let list: Item[]
-        if ((list = ItemSpatialGrid.itemCells.get(cell)!)) return list
+        let list = ItemSpatialGrid.itemCells.get(cell)
+        if (list) return list
         return null
     }
 
@@ -75,18 +75,18 @@ export class ItemSpatialGrid {
         let kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
         let itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
-        if (kibbleList != null && kibbleList.length > 0) {
+        if (kibbleList !== null && kibbleList.length > 0) {
             for (let i: number = 0; i < kibbleList.length; i++) {
                 let k = kibbleList[i]
-                if (k == null) continue
+                if (k === null) continue
                 kitty.Unit.addItem(k.Item)
             }
         }
 
-        if (itemList != null && itemList.length > 0) {
+        if (itemList !== null && itemList.length > 0) {
             for (let i: number = 0; i < itemList.length; i++) {
                 let item = itemList[i]
-                if (item == null) continue
+                if (item === null) continue
                 if (item.isOwned()) continue
                 kitty.Unit.addItem(item)
                 break

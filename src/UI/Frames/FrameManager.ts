@@ -235,7 +235,7 @@ export class FrameManager {
 
     public static HideOtherFrames(currentFrame: Frame) {
         for (let i: number = 0; i < FrameManager._frames.length; i++) {
-            if (FrameManager._frames[i] != currentFrame) FrameManager._frames[i].visible = false
+            if (FrameManager._frames[i] !== currentFrame) FrameManager._frames[i].visible = false
         }
     }
 }

@@ -12,12 +12,12 @@ export class Solo {
     }
 
     public static ReviveKittySoloTournament(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament || Gamemode.CurrentGameModeType != 'Race') return // Solo Gamemode & Race GamemodeType.
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament || Gamemode.CurrentGameModeType !== 'Race') return // Solo Gamemode & Race GamemodeType.
         new SoloDeathTimer(kitty.Player)
     }
 
     public static RoundEndCheck() {
-        if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return // Progression mode
+        if (Gamemode.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
 
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!

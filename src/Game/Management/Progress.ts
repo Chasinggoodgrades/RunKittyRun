@@ -17,7 +17,7 @@ export class Progress {
 
     public static Initialize() {
         this.CalculateTotalDistance()
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         this.TeamProgTimer.start(0.2, true, this.TeamProgressTracker)
     }
 
@@ -42,7 +42,7 @@ export class Progress {
     private static CalculateTeamProgress(Team: Team) {
         let totalProgress: number = 0.0
 
-        if (Team.Teammembers.length == 0) return '0.00'
+        if (Team.Teammembers.length === 0) return '0.00'
 
         for (let i: number = 0; i < Team.Teammembers.length; i++) {
             let player = Team.Teammembers[i]
@@ -98,7 +98,7 @@ export class Progress {
 
     private static CalculateTotalDistance() {
         try {
-            if (RegionList.PathingPoints == null || RegionList.PathingPoints.length == 0) {
+            if (RegionList.PathingPoints === null || RegionList.PathingPoints.length === 0) {
                 Logger.Warning('list: PathingPoints is or: empty: null.')
                 return
             }

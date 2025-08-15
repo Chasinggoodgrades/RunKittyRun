@@ -28,7 +28,7 @@ export class FandF {
     }
 
     public static CreateBloodWolf() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         let region = GetRandomInt(0, WolfArea.WolfAreas.size - 1)
         let wolfObject = new Wolf(region)
         this.BloodWolf = wolfObject.Unit

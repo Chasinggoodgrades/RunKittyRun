@@ -22,7 +22,7 @@ export class UnitSharing {
     private static RegisterTrigger(): Trigger {
         UnitSharing.Trigger = Trigger.create()!
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            if (UnitSharing.Action != null) break
+            if (UnitSharing.Action !== null) break
             let player = Globals.ALL_PLAYERS[i]
             UnitSharing.Trigger.registerPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
         }
@@ -41,7 +41,7 @@ export class UnitSharing {
 
             for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 let otherPlayer = Globals.ALL_PLAYERS[i]
-                if (otherPlayer == player) continue
+                if (otherPlayer === player) continue
                 player.setAlliance(otherPlayer, ALLIANCE_SHARED_CONTROL, false)
                 otherPlayer.setAlliance(player, ALLIANCE_SHARED_CONTROL, false)
             }
@@ -55,7 +55,7 @@ export class UnitSharing {
     /// <param name="player"></param>
     /// <returns></returns>
     private static AllowSharing(player: MapPlayer) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return false // Tournament Modes Disable Sharing
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return false // Tournament Modes Disable Sharing
 
         if (Globals.ALL_KITTIES.get(player)!.IsChained) return false // Chained Kitties Disable Sharing
 

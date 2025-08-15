@@ -86,7 +86,7 @@ export class APMTracker {
 
     /*    public static (x: number, y: number) GetLastOrderLocation(unit: Unit)
         {
-            if (unit == null)
+            if (unit === null)
             {
                 Logger.Warning("Unit is null in GetLastOrderLocation.");
                 return (0.0, 0.0);

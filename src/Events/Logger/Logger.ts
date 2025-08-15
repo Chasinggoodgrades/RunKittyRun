@@ -1,5 +1,5 @@
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { ErrorMessagesOn } from '../../Utility/ErrorMessagesOn'
 
 export class Logger {
     public static Verbose(...messages: string[]) {
@@ -15,7 +15,7 @@ export class Logger {
     }
 
     private static Log(level: string, color: string, ...messages: string[]) {
-        if (!ErrorHandler.ErrorMessagesOn) return
+        if (!ErrorMessagesOn.active) return
         let formattedMessage = messages.join(' ')
         print(
             `${Colors.COLOR_TURQUOISE}(Use '-error off' to disable these messages')${Colors.COLOR_RESET}${color}[${level}] ${formattedMessage}|r`

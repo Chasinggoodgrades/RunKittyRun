@@ -80,7 +80,7 @@ export class FrostbiteRing extends Relic {
 
             while (true) {
                 let unit = this.FreezeGroup.first
-                if (unit == null) break
+                if (!unit) break
                 this.FreezeGroup.removeUnit(unit)
                 if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit)!.IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
                 if (Globals.ALL_WOLVES.get(unit)!.HasAffix('Frostbite')) continue
@@ -141,7 +141,7 @@ export class FrostbiteRing extends Relic {
     private RegisterTriggers(Unit: Unit) {
         let trg = Trigger.create()!
         trg.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
-        trg.addCondition(Condition(() => GetSpellAbilityId() == FrostbiteRing.RelicAbilityID))
+        trg.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
         trg.addAction(ErrorHandler.Wrap(() => this.FrostbiteCast(GetSpellTargetLoc()!)))
     }
 }
@@ -190,7 +190,7 @@ export class FrozenWolf {
     public dispose() {
         try {
             let frozenWolf: FrozenWolf | undefined
-            if (this.Unit != null && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {
+            if (this.Unit !== null && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {
                 FrostbiteRing.FrozenWolves.delete(this.Unit)
             }
             this.Timer.dispose()
@@ -203,8 +203,8 @@ export class FrozenWolf {
 
     private PausingWolf(unit: Unit, pause: boolean = true) {
         try {
-            if (unit == null) return
-            if (NamedWolves.StanWolf != null && unit == NamedWolves.StanWolf.Unit) return
+            if (unit === null) return
+            if (NamedWolves.StanWolf !== null && unit === NamedWolves.StanWolf.Unit) return
             if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit)!.PauseSelf(pause)
         } catch (e: any) {
             Logger.Warning('Error in FrozenWolf.PausingWolf: {e.Message}')
@@ -217,7 +217,7 @@ export class FrozenWolf {
     /// <param name="Unit"></param>
     private SlowWolves(Unit: Unit) {
         try {
-            if (Unit == null) return
+            if (Unit === null) return
             if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
             Unit.moveSpeed = 365.0 / 2.0
             let effect = Effect.fromHandle(

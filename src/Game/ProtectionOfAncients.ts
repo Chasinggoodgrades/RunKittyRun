@@ -74,7 +74,7 @@ export class ProtectionOfAncients {
         let player = unit.owner
         let heroLevel = unit.getHeroLevel()
 
-        if (unit.typeId != Constants.UNIT_KITTY) return 0
+        if (unit.typeId !== Constants.UNIT_KITTY) return 0
 
         // Return early if the hero level is below 6
         if (heroLevel < 6) return 0
@@ -93,8 +93,8 @@ export class ProtectionOfAncients {
 
             // Display the message only if the player is achieving this level for the first time
             if (
-                (abilityLevel == 2 && !ProtectionOfAncients.UpgradeLevel2.includes(player)) ||
-                (abilityLevel == 3 && !ProtectionOfAncients.UpgradeLevel3.includes(player))
+                (abilityLevel === 2 && !ProtectionOfAncients.UpgradeLevel2.includes(player)) ||
+                (abilityLevel === 3 && !ProtectionOfAncients.UpgradeLevel3.includes(player))
             ) {
                 player.DisplayTimedTextTo(
                     7.0,
@@ -102,9 +102,9 @@ export class ProtectionOfAncients {
                 )
             }
 
-            if (abilityLevel == 2) {
+            if (abilityLevel === 2) {
                 ProtectionOfAncients.UpgradeLevel2.push(player)
-            } else if (abilityLevel == 3) {
+            } else if (abilityLevel === 3) {
                 ProtectionOfAncients.UpgradeLevel3.push(player)
                 safeArraySplice(ProtectionOfAncients.UpgradeLevel2, p => p === player) // Ensure the player is only in one list
             }
@@ -127,8 +127,8 @@ export class ProtectionOfAncients {
         trg.addCondition(
             Condition(
                 () =>
-                    GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS ||
-                    GetSpellAbilityId() == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+                    GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS ||
+                    GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
             )
         )
         trg.addAction(ProtectionOfAncients.ActivationEvent)
@@ -183,7 +183,7 @@ export class ProtectionOfAncients {
         // Append units only if they're dead and a kitty circle.
         let unit = getFilterUnit()
         let player = unit.owner
-        if (unit.typeId != Constants.UNIT_KITTY_CIRCLE) return false
+        if (unit.typeId !== Constants.UNIT_KITTY_CIRCLE) return false
 
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         return !kitty.isAlive()
@@ -206,12 +206,12 @@ export class ProtectionOfAncients {
 
         while (true) {
             let unit = tempGroup.first
-            if (unit == null) break
+            if (!unit) break
             tempGroup.removeUnit(unit)
 
             let playerToRevive = Globals.ALL_KITTIES.get(unit.owner)!
             // SELF.. Shouldn't get save points for reviving yourself.
-            if (kitty.Unit == playerToRevive.Unit) {
+            if (kitty.Unit === playerToRevive.Unit) {
                 kitty.ReviveKitty()
             } // Other players get revived and then kitty (person casting ult, gets the save points)
             else {

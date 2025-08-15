@@ -21,7 +21,7 @@ export class Disco extends IDisposable {
     }
 
     public ToggleDisco(enable: boolean) {
-        if (this.Unit == null) return
+        if (this.Unit === null) return
 
         if (enable) {
             if (this.Enabled) return
@@ -30,7 +30,7 @@ export class Disco extends IDisposable {
         } else {
             this.DiscoTimer.pause()
             this.Enabled = false
-            if (this.Unit.typeId == Constants.UNIT_KITTY) return
+            if (this.Unit.typeId === Constants.UNIT_KITTY) return
             this.dispose()
         }
     }

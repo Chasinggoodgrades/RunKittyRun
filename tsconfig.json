@@ -6,10 +6,14 @@
         "baseUrl": "./",
         "forceConsistentCasingInFileNames": true,
         "target": "ESNext",
-        "lib": ["ESNext"],
+        "lib": [
+            "ESNext"
+        ],
         "moduleResolution": "node",
         "paths": {
-            "@objectdata/*": ["./node_modules/war3-objectdata-th/dist/cjs/generated/constants/*"]
+            "@objectdata/*": [
+                "./node_modules/war3-objectdata-th/dist/cjs/generated/constants/*"
+            ]
         },
         "plugins": [
             {
@@ -34,9 +38,11 @@
             "war3-transformer/types",
             "war3-objectdata-th/dist/cjs/objectdata"
         ],
-        "strictPropertyInitialization": false // BAD
+        "strictPropertyInitialization": false
     },
-    "include": ["src"],
+    "include": [
+        "src"
+    ],
     "exclude": [],
     "tstl": {
         "luaTarget": "5.3",
@@ -46,6 +52,9 @@
         "luaBundle": "dist/tstl_output.lua",
         "luaBundleEntry": "./src/main.ts",
         "sourceMapTraceback": false,
-        "noResolvePaths": ["typescript", "typescript-to-lua"]
+        "noResolvePaths": [
+            "typescript",
+            "typescript-to-lua"
+        ]
     }
 }

@@ -25,23 +25,23 @@ export class CollisionDetection {
 
     private static WolfCollisionFilter(k: Kitty): () => boolean {
         return () => {
-            return getFilterUnit().typeId == Constants.UNIT_CUSTOM_DOG && k.isAlive() && getFilterUnit().isAlive() // wolf should be alive too (exploding / stan wolf)
+            return getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG && k.isAlive() && getFilterUnit().isAlive() // wolf should be alive too (exploding / stan wolf)
         }
     }
 
     private static ShadowRelicWolvesFilter(sk: ShadowKitty): () => boolean {
         return () => {
-            return getFilterUnit().typeId == Constants.UNIT_CUSTOM_DOG && sk.Unit.isAlive()
+            return getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG && sk.Unit.isAlive()
         }
     }
 
     private static ShadowRelicCircleFilter(sk: ShadowKitty): () => boolean {
         return () => {
             return (
-                getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE &&
-                getFilterUnit().owner != sk.Player && // Not Same Player
+                getFilterUnit().typeId === Constants.UNIT_KITTY_CIRCLE &&
+                getFilterUnit().owner !== sk.Player && // Not Same Player
                 sk.Unit.isAlive() && // Has to Be Alive
-                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID == Globals.ALL_KITTIES.get(sk.Player)!.TeamID
+                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID === Globals.ALL_KITTIES.get(sk.Player)!.TeamID
             ) // Must be same team
         }
     }
@@ -49,11 +49,11 @@ export class CollisionDetection {
     private static CircleCollisionFilter(k: Kitty): () => boolean {
         return () => {
             return (
-                getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE &&
-                getFilterUnit().owner != k.Player && // Not Same Player
+                getFilterUnit().typeId === Constants.UNIT_KITTY_CIRCLE &&
+                getFilterUnit().owner !== k.Player && // Not Same Player
                 k.isAlive() && // Has to Be Alive
-                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID == Globals.ALL_KITTIES.get(k.Player)!.TeamID && // Must be same team
-                Gamemode.CurrentGameMode != GameMode.SoloTournament
+                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID === Globals.ALL_KITTIES.get(k.Player)!.TeamID && // Must be same team
+                Gamemode.CurrentGameMode !== GameMode.SoloTournament
             ) // Not Solo Mode
         }
     }

@@ -25,7 +25,7 @@ export class DoodadChanger {
 
     public static Initialize() {
         this.CreateInitDestructiables()
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         this.SeasonalDoodads()
     }
 
@@ -56,7 +56,7 @@ export class DoodadChanger {
     }
 
     public static ChristmasDoodads() {
-        if (SeasonalManager.Season != HolidaySeasons.Christmas) return
+        if (SeasonalManager.Season !== HolidaySeasons.Christmas) return
         this.ReplaceDoodad(this.ChristmasTree, 2.5)
         this.ShowSeasonalDoodads(true)
     }
@@ -88,19 +88,19 @@ export class DoodadChanger {
             let maxX = rect.maxX
             let maxY = rect.maxY
 
-            if (counter % 4 != 0) {
+            if (counter % 4 !== 0) {
                 const des = CreateDeadDestructable(DoodadChanger.SafezoneLanterns, minX, maxY, 0, 1, 0)
                 if (des) this.AllDestructables.push(des) // Top left corner
             }
-            if (counter % 4 != 1 && counter != 14) {
+            if (counter % 4 !== 1 && counter !== 14) {
                 const des = CreateDeadDestructable(DoodadChanger.SafezoneLanterns, maxX, maxY, 0, 1, 0)
                 if (des) this.AllDestructables.push(des) // Top right corner
             }
-            if (counter % 4 != 2) {
+            if (counter % 4 !== 2) {
                 const des = CreateDeadDestructable(DoodadChanger.SafezoneLanterns, maxX, minY, 0, 1, 0)
                 if (des) this.AllDestructables.push(des) // Bottom right corner
             }
-            if (counter % 4 != 3 && counter != 0) {
+            if (counter % 4 !== 3 && counter !== 0) {
                 const des = CreateDeadDestructable(DoodadChanger.SafezoneLanterns, minX, minY, 0, 1, 0)
                 if (des) this.AllDestructables.push(des) // Bottom left corner
             }

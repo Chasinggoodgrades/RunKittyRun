@@ -16,7 +16,7 @@ export class TeamsMultiboard {
 
     public static Initialize() {
         try {
-            if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+            if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
             TeamsMultiboard.ESCTrigger ??= Trigger.create()!
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
@@ -55,14 +55,14 @@ export class TeamsMultiboard {
 
     public static UpdateTeamStatsMB() {
         // Top Portion Setup
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         TeamsMultiboard.TeamsStatsMB.rows = Globals.ALL_TEAMS_LIST.length + 1
         TeamsMultiboard.TeamsStatsMB.columns = 3 + Gamemode.NumberOfRounds
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setText('Team')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setVisible(true, false)
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setWidth(0.05)
         for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
-            if (Globals.ROUND == i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('|c0000FF00Round {i}|r')
+            if (Globals.ROUND === i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('|c0000FF00Round {i}|r')
             else TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('Round {i}')
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setVisible(true, false)
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setWidth(0.05)

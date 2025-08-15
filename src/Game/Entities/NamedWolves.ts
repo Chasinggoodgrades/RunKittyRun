@@ -4,7 +4,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { BurntMeat } from 'src/Rewards/EasterEggs/BurntMeat'
-import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, TextTag, Timer, Unit } from 'w3ts'
@@ -24,7 +24,7 @@ export class NamedWolves {
     /// Creates the named Wolves Marco and Stan. Only works in Standard mode.
     /// </summary>
     public static CreateNamedWolves() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         NamedWolves.DNTNamedWolves = []
         NamedWolves.CreateStanWolf()
         NamedWolves.CreateExplodingWolf()
@@ -86,7 +86,7 @@ export class NamedWolves {
                 25.0,
                 false,
                 ErrorHandler.Wrap(() => {
-                    if (NamedWolves.ExplodingWolf.Unit == null) return
+                    if (NamedWolves.ExplodingWolf.Unit === null) return
                     NamedWolves.DNTNamedWolves.splice(NamedWolves.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
                     NamedWolves.ExplodingWolf.IsReviving = false
                     NamedWolves.ExplodingWolf.Unit?.destroy()
@@ -127,8 +127,8 @@ export class NamedWolves {
     }
 
     public static ExplodingWolfCollision(unit: Unit, k: Kitty, shadowKitty: boolean = false) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return false
-        if (unit != NamedWolves.ExplodingWolf.Unit) return false
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return false
+        if (unit !== NamedWolves.ExplodingWolf.Unit) return false
         if (!shadowKitty) Utility.GiveGoldFloatingText(25, k.Unit)
         else Utility.GiveGoldFloatingText(25, k.ShadowKitty.Unit)
         BurntMeat.FlamesDropChance(k)
@@ -141,6 +141,6 @@ export class NamedWolves {
     }
 
     private static SetRandomVertexColor(u: Unit, playerID: number) {
-        Colors.SetUnitToVertexColor(u, playerID)
+        ColorUtils.SetUnitToVertexColor(u, playerID)
     }
 }

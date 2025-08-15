@@ -69,7 +69,7 @@ export class StandardPodium {
     }
 
     private static ProcessNextPodiumAction() {
-        if (StandardPodium.PodiumQueue.length == 0) {
+        if (StandardPodium.PodiumQueue.length === 0) {
             StandardPodium.ProcessPodiumTypeActions()
             return
         }
@@ -128,7 +128,7 @@ export class StandardPodium {
                 return stats.TotalSaves.toString()
 
             case StandardPodium.HighestRatio:
-                return stats.TotalDeaths == 0
+                return stats.TotalDeaths === 0
                     ? stats.TotalSaves.toFixed(2)
                     : (stats.TotalSaves / stats.TotalDeaths).toFixed(2)
 

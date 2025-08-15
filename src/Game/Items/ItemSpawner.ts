@@ -19,7 +19,7 @@ export class ItemSpawner {
     public static NUMBER_OF_ITEMS: number = 15
 
     public static Initialize() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         this.SpawnableItems = this.StandardItems()
         this.TrackItems = []
         this.TrackKibbles = []
@@ -58,7 +58,7 @@ export class ItemSpawner {
         for (let i: number = 0; i < this.TrackKibbles.length; i++) {
             let kibble = this.TrackKibbles[i]
             ItemSpatialGrid.UnregisterKibble(kibble)
-            if (kibble.Item == null) continue // Already been __destroyed.
+            if (kibble.Item === null) continue // Already been __destroyed.
             kibble.dispose()
         }
 
@@ -66,7 +66,7 @@ export class ItemSpawner {
     }
 
     public static SpawnKibble(numberOfItems: number) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         if (!Kibble.SpawningKibble) return
         if (KibbleEvent.IsEventActive()) return
 

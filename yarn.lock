@@ -83,12 +83,7 @@
   resolved "https://registry.npmjs.org/@types/pako/-/pako-1.0.1.tgz"
   integrity sha512-GdZbRSJ3Cv5fiwT6I0SQ3ckeN2PWNqxd26W9Z2fCK1tGrrasGy4puvNFtnddqH9UJFMQYXxEuuB7B8UK+LLwSg==
 
-"@typescript-to-lua/language-extensions@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@typescript-to-lua/language-extensions/-/language-extensions-1.0.0.tgz"
-  integrity sha512-GtmhFqyg+txpGgGLM3mlS3R6AEG9MQhKALxxcbr6SBzg9u7YAXcPKqUBaBYd6nH+Pi/eQLcWz4BNOLhz8v4TjQ==
-
-"@typescript-to-lua/language-extensions@^1.0.0":
+"@typescript-to-lua/language-extensions@1.19.0", "@typescript-to-lua/language-extensions@^1.0.0":
   version "1.19.0"
   resolved "https://registry.npmjs.org/@typescript-to-lua/language-extensions/-/language-extensions-1.19.0.tgz"
   integrity sha512-Os5wOKwviTD4LeqI29N0btYOjokSJ97iCf45EOjIABlb5IwNQy7AE/AqZJobRw3ywHH8+KzJUMkEirWPzh2tUA==
@@ -492,10 +487,10 @@ enabled@2.0.x:
   resolved "https://registry.npmjs.org/enabled/-/enabled-2.0.0.tgz"
   integrity sha512-AKrN98kuwOzMIdAizXGI86UFBoo26CL21UM763y1h/GMSJ4/OHU9k2YlsmBpyScFo/wbLzWQJBMCW4+IO3/+OQ==
 
-enhanced-resolve@^5.8.2:
-  version "5.10.0"
-  resolved "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.10.0.tgz"
-  integrity sha512-T0yTFjdpldGY8PmuXXR0PyQ1ufZpEGiHVrp7zHKB7jdR4qlmZHhONVM5AQOAWXuF/w3dnHbEQVrNptJgt7F+cQ==
+enhanced-resolve@5.8.2:
+  version "5.8.2"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.8.2.tgz#15ddc779345cbb73e97c611cd00c01c1e7bf4d8b"
+  integrity sha512-F27oB3WuHDzvR2DOGNTaYy0D5o0cnrv8TeI482VM4kYgQd/FT9lUQwuNsJ0oOHtBUq7eiW5ytqzp7nBFknL+GA==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -1270,6 +1265,11 @@ path-parse@^1.0.7:
   resolved "https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz"
   integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
+picomatch@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
+  integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+
 pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/pify/-/pify-3.0.0.tgz"
@@ -1728,13 +1728,14 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-typescript-to-lua@1.15.1:
-  version "1.15.1"
-  resolved "https://registry.npmjs.org/typescript-to-lua/-/typescript-to-lua-1.15.1.tgz"
-  integrity sha512-LBsGtRStTYQKTp521w4vIFPBLu59p+DtfxKHp+cMXuQdjMxY55dQb5FN6mrDEx6gPT+FhbRSJMe8Fu6G4wJwqw==
+typescript-to-lua@1.31.4:
+  version "1.31.4"
+  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-1.31.4.tgz#3885228c37198cec34cd085f9f87a9c6408d726e"
+  integrity sha512-fIFYwyPRGXXSuBJBl7hnHKk261vLANWywNFdU12bwdbizReP6IRRPfhpvrA7SeOSDvQwnCzzS+FtSihreQXz1Q==
   dependencies:
-    "@typescript-to-lua/language-extensions" "1.0.0"
-    enhanced-resolve "^5.8.2"
+    "@typescript-to-lua/language-extensions" "1.19.0"
+    enhanced-resolve "5.8.2"
+    picomatch "^2.3.1"
     resolve "^1.15.1"
     source-map "^0.7.3"
 
@@ -1745,7 +1746,7 @@ typescript@5.0.4:
 
 typescript@^4.3.5:
   version "4.9.5"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 undefsafe@^2.0.2:

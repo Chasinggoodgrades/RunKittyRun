@@ -55,7 +55,7 @@ export class RTR {
         this.WidgetTrigger.enabled = false
         this.RTRTimer.pause()
         this.hasTarget = false
-        if (this.lastUnitAnimation != 'stand') {
+        if (this.lastUnitAnimation !== 'stand') {
             this.lastUnitAnimation = 'stand'
             this.kitty.Unit.setAnimation(0)
         }
@@ -69,7 +69,7 @@ export class RTR {
 
     private UpdateRTR() {
         if (!this.hasTarget) {
-            if (this.lastUnitAnimation != 'stand') {
+            if (this.lastUnitAnimation !== 'stand') {
                 this.lastUnitAnimation = 'stand'
                 this.kitty.Unit.setAnimation(0)
             }
@@ -83,14 +83,14 @@ export class RTR {
 
         if (distanceToTarget < 10) {
             this.hasTarget = false
-            if (this.lastUnitAnimation != 'stand') {
+            if (this.lastUnitAnimation !== 'stand') {
                 this.lastUnitAnimation = 'stand'
                 this.kitty.Unit.setAnimation(0)
             }
             return
         }
 
-        if (this.lastUnitAnimation != 'walk') {
+        if (this.lastUnitAnimation !== 'walk') {
             this.lastUnitAnimation = 'walk'
             this.kitty.Unit.setAnimation(6)
         }

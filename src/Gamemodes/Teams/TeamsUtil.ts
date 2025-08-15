@@ -8,12 +8,12 @@ import { GameMode } from '../GameModeEnum'
 
 export class TeamsUtil {
     public static RoundResetAllTeams() {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         for (let [_, team] of Globals.ALL_TEAMS) team.Finished = false
     }
 
     public static CheckTeamDead(k: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         let team = Globals.ALL_TEAMS.get(k.TeamID)!
         for (let i: number = 0; i < team.Teammembers.length; i++) {
             if (Globals.ALL_KITTIES.get(team.Teammembers[i])!.isAlive()) return

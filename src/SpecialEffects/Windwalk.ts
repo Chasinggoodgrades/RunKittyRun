@@ -20,11 +20,11 @@ export class Windwalk {
     }
 
     private static RegisterWWCast() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         this.Trigger = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS)
             this.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
-        this.Trigger.addCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK))
+        this.Trigger.addCondition(Condition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK))
         this.Trigger.addAction(this.ApplyWindwalkEffect)
     }
 
@@ -55,13 +55,13 @@ export class Windwalk {
         let wwID = kitty.ActiveAwards.WindwalkID
         try {
             // AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
-            if (wwID != 0) {
-                let reward = RewardsManager.Rewards.find(r => r.GetAbilityID() == wwID)!
+            if (wwID !== 0) {
+                let reward = RewardsManager.Rewards.find(r => r.GetAbilityID() === wwID)!
                 let visual = reward.ModelPath
                 let e = caster.addSpecialEffectTarget(visual, 'origin')
-                if (e != null) {
+                if (e !== null) {
                     Utility.SimpleTimer(duration, () => {
-                        if (e != null) e.destroy()
+                        if (e !== null) e.destroy()
                     })
                 }
             }

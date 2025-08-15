@@ -45,7 +45,7 @@ export class GameTimer {
     }
 
     private static UpdateIndividualTimes() {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
         for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND)
@@ -54,12 +54,12 @@ export class GameTimer {
     }
 
     private static UpdateTeamTimes() {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
         for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             let team = Globals.ALL_TEAMS_LIST[i]
             if (!team.Finished) {
                 let teamTime = team.TeamTimes.get(Globals.ROUND)
-                if (teamTime != null) {
+                if (teamTime) {
                     team.TeamTimes.set(Globals.ROUND, teamTime + this.RoundSpeedIncrement)
                 }
             }

@@ -55,13 +55,13 @@ export class AffixFactory {
     public static CalculateAffixes(laneIndex: number = -1) {
         for (let affix of AffixFactory.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) continue
-            if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue
+            if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
             AffixFactory.TempAffixCounts.set(affix.name, 0)
         }
 
         for (let affix of AffixFactory.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) {
-                if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue
+                if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
                 AffixFactory.TempAffixCounts.set(affix.name, (AffixFactory.TempAffixCounts.get(affix.name) || 0) + 1)
             }
         }
@@ -156,11 +156,11 @@ export class AffixFactory {
         let fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
         if (
             laneNumber > 6 ||
-            Difficulty.DifficultyValue == DifficultyLevel.Hard ||
+            Difficulty.DifficultyValue === DifficultyLevel.Hard ||
             fixationCount >= AffixFactory.MAX_FIXIATION_PER_LANE
         )
             affixes = affixes.replace('Fixation, ', '').replace(', Fixation', '').replace('Fixation', '')
-        if (Difficulty.DifficultyValue == DifficultyLevel.Hard) {
+        if (Difficulty.DifficultyValue === DifficultyLevel.Hard) {
             affixes = affixes.replace('Chaos, ', '').replace(', Chaos', '').replace('Chaos', '')
         }
         return affixes.trim()
@@ -172,7 +172,7 @@ export class AffixFactory {
 
             let affixArray = affixes.split(', ').filter(Boolean)
 
-            if (affixArray.length == 0) return null as never
+            if (affixArray.length === 0) return null as never
 
             let randomIndex = Math.random()
             let randomAffix = affixArray[randomIndex]
@@ -189,16 +189,16 @@ export class AffixFactory {
     public static DistAffixes() {
         try {
             AffixFactory.RemoveAllAffixes()
-            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return // Solo Return.. Team tournament should work.
+            if (Gamemode.CurrentGameMode === GameMode.SoloTournament) return // Solo Return.. Team tournament should work.
             if (!AffixFactory.CanDistributeAffixes()) return
 
             AffixFactory.NUMBER_OF_AFFIXED_WOLVES =
-                Gamemode.CurrentGameMode == GameMode.Standard
+                Gamemode.CurrentGameMode === GameMode.Standard
                     ? Difficulty.DifficultyValue * 3 + Globals.ROUND * 8
                     : 26 + Globals.ROUND * 8
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
-            if (Difficulty.DifficultyValue == DifficultyLevel.Nightmare) {
+            if (Difficulty.DifficultyValue === DifficultyLevel.Nightmare) {
                 for (let [_, wolf] of Globals.ALL_WOLVES) {
                     if (!AffixFactory.ShouldAffixWolves(wolf, wolf.RegionIndex)) continue
                     AffixFactory.ApplyRandomAffix(wolf, wolf.RegionIndex)
@@ -239,7 +239,7 @@ export class AffixFactory {
                     if (!AffixFactory.ShouldAffixWolves(wolf, i)) continue
 
                     let affix = AffixFactory.ApplyRandomAffix(wolf, i)
-                    if (affix != null) appliedCount++
+                    if (affix !== null) appliedCount++
                 }
             }
         } catch (ex: any) {
@@ -254,15 +254,15 @@ export class AffixFactory {
     // 3. Must not be a blood wolf, or named wolves
     private static ShouldAffixWolves(wolf: Wolf, laneIndex: number) {
         return (
-            wolf.RegionIndex == laneIndex &&
+            wolf.RegionIndex === laneIndex &&
             wolf.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES &&
-            wolf.Unit != FandF.BloodWolf &&
+            wolf.Unit !== FandF.BloodWolf &&
             !NamedWolves.DNTNamedWolves.includes(wolf)
         )
     }
 
     private static CanDistributeAffixes(): boolean {
-        return Difficulty.DifficultyValue != DifficultyLevel.Normal
+        return Difficulty.DifficultyValue !== DifficultyLevel.Normal
     }
 
     public static RemoveAllAffixes() {

@@ -37,7 +37,7 @@ export class Gameover {
     }
 
     private static StandardWinChallenges() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         Challenges.NecroWindwalk()
         Challenges.BlueFire()
         Challenges.PinkFire()
@@ -65,7 +65,7 @@ export class Gameover {
     }
 
     private static LosingGameCheck(): boolean {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return false
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return false
         if (Gameover.NoEnd) return false
 
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
@@ -77,7 +77,7 @@ export class Gameover {
     }
 
     private static SendWinMessage() {
-        if (Gamemode.CurrentGameMode == GameMode.Standard)
+        if (Gamemode.CurrentGameMode === GameMode.Standard)
             print(
                 '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.toString()}!{Colors.COLOR_RESET}'
             )
@@ -101,7 +101,7 @@ export class Gameover {
     }
 
     private static IncrementGameStats(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -122,7 +122,7 @@ export class Gameover {
     }
 
     private static IncrementWins(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -143,7 +143,7 @@ export class Gameover {
     }
 
     private static IncrementWinStreak(kitty: Kitty, win: boolean) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
 
         if (win) {

@@ -4,7 +4,7 @@ export class OldSavesHelper {
 
     public static Player_CharToInt(c: string) {
         for (let i: number = 0; i < OldSavesHelper.PlayerCharSet.length; i++) {
-            if (c == OldSavesHelper.PlayerCharSet[i]) {
+            if (c === OldSavesHelper.PlayerCharSet[i]) {
                 return i
             }
         }
@@ -17,7 +17,7 @@ export class OldSavesHelper {
 
     public static CharToInt(c: string) {
         let i: number = 0
-        while (i < OldSavesHelper.charset.length && c != OldSavesHelper.charset[i]) {
+        while (i < OldSavesHelper.charset.length && c !== OldSavesHelper.charset[i]) {
             i++
         }
         return i

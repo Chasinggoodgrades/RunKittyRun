@@ -18,7 +18,7 @@ export class NoKittyLeftBehind {
     }
 
     public static CheckChallenge() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         if (!this.NoOneLeftBehind()) return
         this.IncrementCompletedCount()
         this.SendMessage()

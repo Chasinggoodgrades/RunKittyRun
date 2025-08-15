@@ -15,7 +15,7 @@ export class TerrainChanger {
     public static Initialize() {
         try {
             this.NoSeason()
-            if (Gamemode.CurrentGameMode != GameMode.Standard) return
+            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
             this.ChristmasTerrain()
             this.SetTerrain()
         } catch (e: any) {
@@ -56,7 +56,7 @@ export class TerrainChanger {
     }
 
     private static ChristmasTerrain() {
-        if (SeasonalManager.Season != HolidaySeasons.Christmas) return
+        if (SeasonalManager.Season !== HolidaySeasons.Christmas) return
         /*        SafezoneTerrain[0] = FourCC("Xblm");
                 SafezoneTerrain[1] = FourCC("Ksmb");
                 SafezoneTerrain[2] = FourCC("Drds");
@@ -94,7 +94,7 @@ export class TerrainChanger {
             for (let y = minY; y <= maxY; y += 128) {
                 let type = GetTerrainType(x, y)
 
-                if (type == tileToChange) SetTerrainType(x, y, newTerrain, -1, 1, 1)
+                if (type === tileToChange) SetTerrainType(x, y, newTerrain, -1, 1, 1)
             }
         }
     }

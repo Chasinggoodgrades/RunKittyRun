@@ -4,6 +4,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { APMTracker } from 'src/Events/UnitOrders/APMTracker'
 import { MirrorMovementHandler } from 'src/Events/UnitOrders/MirrorMovementHandler'
 import { CollisionDetection } from 'src/Game/CollisionDetection'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 import { RelicUtil } from 'src/Game/Items/Relics/RelicUtil'
 import { KittyTime } from 'src/Game/Management/KittyTime'
 import { ProgressPointHelper } from 'src/Game/Management/ProgressPointHelper'
@@ -38,7 +39,6 @@ import { Circle } from '../Circle'
 import { ShadowKitty } from '../ShadowKitty'
 import { KittyMiscInfo } from './KittyMiscInfo'
 import { KittyStatsManager } from './KittyStatsManager'
-import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class Kitty {
     private KITTY_HERO_TYPE: number = Constants.UNIT_KITTY
@@ -159,7 +159,7 @@ export class Kitty {
             this.StatsManager.DeathStatUpdate()
 
             // Handle game mode specific logic
-            if (Gamemode.CurrentGameMode == GameMode.Standard) {
+            if (Gamemode.CurrentGameMode === GameMode.Standard) {
                 TeamDeathless.DiedWithOrb(this)
                 ChainedTogether.LoseEvent(this.name)
                 SoundManager.PlayLastManStandingSound()
@@ -201,7 +201,7 @@ export class Kitty {
             this.aiController.ResumeAi()
 
             // Update savior stats if applicable
-            if (savior != null) {
+            if (savior) {
                 this.StatsManager.UpdateSaviorStats(savior)
                 MultiboardUtil.RefreshMultiboards()
             }
@@ -227,7 +227,7 @@ export class Kitty {
     private InitData() {
         try {
             // Save Data
-            if (this.Player.controller == MAP_CONTROL_USER && this.Player.slotState == PLAYER_SLOT_STATE_PLAYING) {
+            if (this.Player.controller === MAP_CONTROL_USER && this.Player.slotState === PLAYER_SLOT_STATE_PLAYING) {
                 const data = SaveManager.GetKittyData(this.Player)
                 this.SaveData = data ? data : new KittyData()
             } else {
@@ -274,7 +274,7 @@ export class Kitty {
     }
 
     private StartAIController() {
-        if (this.Player.controller == MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (this.Player.controller === MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode === GameMode.Standard) {
             this.aiController?.StartAi()
             this.Unit.addItemById(FourCC('bspd')) // boots
         }

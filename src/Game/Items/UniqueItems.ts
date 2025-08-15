@@ -38,11 +38,11 @@ export class UniqueItems {
             let player = getTriggerPlayer()
             let kitty = getTriggerUnit()
 
-            if (item.typeId == 0) Logger.Warning('item: bug: Unique, ID: item is 0')
+            if (item.typeId === 0) Logger.Warning('item: bug: Unique, ID: item is 0')
 
             if (!Uniques.UniqueIDs.includes(item.typeId)) return
-            let uniqueItem = this.UniqueList.find(u => u.ItemID == item.typeId)
-            if (uniqueItem == null) return
+            let uniqueItem = this.UniqueList.find(u => u.ItemID === item.typeId)
+            if (!uniqueItem) return
             if (Utility.UnitHasItemCount(kitty, item.typeId) <= 1) return
 
             player.DisplayTimedTextTo(3.0, '{Colors.COLOR_RED}may: only: carry: one: You of unique: item: each.|r')

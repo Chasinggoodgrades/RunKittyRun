@@ -8,7 +8,7 @@ import { UrnSoul } from './UrnSoul'
 
 export class EasterEggManager {
     public static LoadEasterEggs() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         MissingShoe.Initialize()
         NoKittyLeftBehind.Initialize()
         FandF.Initialize()

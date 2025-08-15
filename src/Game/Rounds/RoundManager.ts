@@ -35,7 +35,7 @@ export class RoundManager {
     private static AddedTimeAlready: boolean = false
 
     public static Initialize() {
-        if (Gamemode.CurrentGameMode == GameMode.Standard) this.HasDifficultyBeenChosen()
+        if (Gamemode.CurrentGameMode === GameMode.Standard) this.HasDifficultyBeenChosen()
         else this.RoundSetup()
     }
 
@@ -90,7 +90,7 @@ export class RoundManager {
     private static HasDifficultyBeenChosen() {
         let Timer = MemoryHandler.getEmptyObject<AchesTimers>()
         Timer.Timer.start(0.35, true, () => {
-            if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0) {
+            if (Difficulty.IsDifficultyChosen && Globals.ROUND === 0) {
                 RoundManager.RoundSetup()
                 Timer.dispose()
             }
@@ -114,7 +114,7 @@ export class RoundManager {
             DeathlessChallenges.ResetDeathless()
             WolfLaneHider.ResetLanes()
             SaveManager.SaveAll()
-            if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true
+            if (Globals.ROUND === Gamemode.NumberOfRounds) Gameover.WinGame = true
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
             Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)

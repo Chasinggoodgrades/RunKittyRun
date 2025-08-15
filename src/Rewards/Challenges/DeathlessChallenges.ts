@@ -35,7 +35,7 @@ export class DeathlessChallenges {
     /// <returns></returns>
     public static DeathlessPerRound(): number {
         let requiredValue = 14 - (Globals.ROUND - 3) * 4
-        if (requiredValue > 14 || Difficulty.DifficultyValue == DifficultyLevel.Normal) requiredValue = 14
+        if (requiredValue > 14 || Difficulty.DifficultyValue === DifficultyLevel.Normal) requiredValue = 14
         return requiredValue
     }
 
@@ -44,9 +44,9 @@ export class DeathlessChallenges {
     /// </summary>
     /// <param name="player"></param>
     public static DeathlessCheck(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         kitty.CurrentStats.DeathlessProgress++
-        if (kitty.CurrentStats.DeathlessProgress == this.DeathlessPerRound()) {
+        if (kitty.CurrentStats.DeathlessProgress === this.DeathlessPerRound()) {
             this.AwardDeathless(kitty)
             this.ResetPlayerDeathless(kitty)
         }

@@ -44,7 +44,7 @@ export class SeasonalManager {
     }
 
     public static DetermineSeason() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) {
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
             SeasonalManager.Season = HolidaySeasons.None
             return
         }
@@ -73,7 +73,7 @@ export class SeasonalManager {
     /// Admin command to activate Christmas season. Only works in standard mode.
     /// </summary>
     public static ActivateChristmas() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
         SeasonalManager.Season = HolidaySeasons.Christmas
         TerrainChanger.ActivateChristmasTerrain()
         DoodadChanger.ChristmasDoodads()
@@ -107,12 +107,12 @@ export class SeasonalManager {
     }
 
     private static SetWeather() {
-        if (SeasonalManager.Season == HolidaySeasons.Christmas) {
+        if (SeasonalManager.Season === HolidaySeasons.Christmas) {
             SeasonalManager.CurrentWeather ??= WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.SnowEffect)!
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23)
             SuspendTimeOfDay(true)
             SeasonalManager.CurrentWeather.enable(true)
-        } else if (SeasonalManager.Season == HolidaySeasons.None) {
+        } else if (SeasonalManager.Season === HolidaySeasons.None) {
             SeasonalManager.CurrentWeather?.destroy()
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
             SuspendTimeOfDay(true)
@@ -121,7 +121,7 @@ export class SeasonalManager {
     }
 
     public static SetWeatherArg(weather: string) {
-        if (SeasonalManager.CurrentWeather != null) {
+        if (SeasonalManager.CurrentWeather !== null) {
             SeasonalManager.CurrentWeather.destroy()
             SeasonalManager.CurrentWeather = null as never
         }

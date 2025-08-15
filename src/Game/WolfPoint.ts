@@ -61,7 +61,7 @@ export class WolfPoint {
             this.PointInfo[numRegions].y = endY
             this.PointInfo[numRegions].LastPoint = true
 
-            if (this.PointInfo != null && this.PointInfo.length > 0) {
+            if (this.PointInfo !== null && this.PointInfo.length > 0) {
                 this.StartMovingOrders()
             }
         } catch (ex: any) {
@@ -71,7 +71,7 @@ export class WolfPoint {
 
     public Cleanup() {
         try {
-            if (this.PointInfo == null) return
+            if (this.PointInfo === null) return
             BlzUnitClearOrders(this.Wolf.Unit.handle, false)
 
             for (let i: number = 0; i < this.PointInfo.length; i++) {
@@ -98,7 +98,7 @@ export class WolfPoint {
 
         try {
             for (let i: number = this.PointInfo.length - 1; i >= 1; i--) {
-                if (this.PointInfo[i].x == 0 && this.PointInfo[i].y == 0) continue
+                if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
                 let moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
                 BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
@@ -145,7 +145,7 @@ export class WolfPointInfo {
     }
 
     public static ClearWolfPointList(list: WolfPointInfo[]) {
-        if (list == null) return
+        if (list === null) return
         for (let i: number = 0; i < list.length; i++) {
             let item = list[i]
             MemoryHandler.destroyObject(item)

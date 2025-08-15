@@ -8,6 +8,7 @@ import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { Setup } from 'src/Init/Setup'
 import { Disco } from 'src/Misc/Disco'
+import { Program } from 'src/Program'
 import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
 import { Action } from 'src/Utility/CSUtils'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
@@ -17,7 +18,6 @@ import { Effect, MapPlayer, TextTag, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
 import { WolfPoint } from '../WolfPoint'
 import { NamedWolves } from './NamedWolves'
-import { Program } from 'src/Program'
 
 export class Wolf {
     public static DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
@@ -87,7 +87,7 @@ export class Wolf {
 
     public StartWandering(forced: boolean = false) {
         let realTime = GetRandomReal(1.0, 1.12)
-        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving && this != NamedWolves.StanWolf) {
+        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving && this !== NamedWolves.StanWolf) {
             this.ApplyEffect()
             realTime = this.NEXT_WANDER_DELAY // Gives a brief delay before the wolf has a chance to move again.
         }
@@ -164,7 +164,7 @@ export class Wolf {
                     this.Affixes[i].pause(false)
                 }
                 this.WanderTimer?.resume()
-                if (this.EffectTimer != null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
+                if (this.EffectTimer !== null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
                 this.IsWalking = true
                 this.paused = false
                 this.Unit.paused = false
@@ -191,9 +191,9 @@ export class Wolf {
     }
 
     private ShouldStartEffect(): boolean {
-        return Gamemode.CurrentGameMode != GameMode.Standard
+        return Gamemode.CurrentGameMode !== GameMode.Standard
             ? this.TournamentChance()
-            : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1
+            : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) === 1
     }
 
     private TournamentChance(): boolean {
@@ -257,15 +257,15 @@ export class Wolf {
     }
 
     public HasAffix(affixName: string) {
-        if (this.Affixes.length == 0) return false
+        if (this.Affixes.length === 0) return false
         for (let i: number = 0; i < this.Affixes.length; i++)
-            if (this.Affixes[i].constructor.name == affixName) return true
+            if (this.Affixes[i].constructor.name === affixName) return true
 
         return false
     }
 
     public RemoveAllWolfAffixes() {
-        if (this.AffixCount() == 0) return
+        if (this.AffixCount() === 0) return
 
         try {
             for (let i: number = this.Affixes.length - 1; i >= 0; i--) {

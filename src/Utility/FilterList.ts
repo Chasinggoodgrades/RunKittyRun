@@ -6,37 +6,37 @@ import { getFilterUnit, getTriggerUnit } from './w3tsUtils'
 
 export class FilterList {
     public static KittyFilter = Utility.CreateFilterFunc(() => {
-        return getFilterUnit().typeId == Constants.UNIT_KITTY
+        return getFilterUnit().typeId === Constants.UNIT_KITTY
     })
 
     public static KittyFilterOrShadow = Utility.CreateFilterFunc(() => {
         return (
-            getFilterUnit().typeId == Constants.UNIT_KITTY ||
-            getFilterUnit().typeId == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON
+            getFilterUnit().typeId === Constants.UNIT_KITTY ||
+            getFilterUnit().typeId === Constants.UNIT_SHADOWKITTY_RELIC_SUMMON
         )
     })
 
     public static DogFilter = Utility.CreateFilterFunc(() => {
-        return getFilterUnit().typeId == Constants.UNIT_CUSTOM_DOG
+        return getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG
     })
 
     public static IssuedOrderAtkOrder: boolexpr = Condition(() => {
-        return GetIssuedOrderId() == WolfPoint.AttackOrderID
+        return GetIssuedOrderId() === WolfPoint.AttackOrderID
     })
 
     public static IssuedOrderStopOrder: boolexpr = Condition(() => {
-        return GetIssuedOrderId() == WolfPoint.StopOrderID
+        return GetIssuedOrderId() === WolfPoint.StopOrderID
     })
 
     public static IssuedOrderMoveOrder: boolexpr = Condition(() => {
-        return GetIssuedOrderId() == WolfPoint.MoveOrderID
+        return GetIssuedOrderId() === WolfPoint.MoveOrderID
     })
 
     public static IssuedOrderHoldPosiiton: boolexpr = Condition(() => {
-        return GetIssuedOrderId() == WolfPoint.HoldPositionOrderID
+        return GetIssuedOrderId() === WolfPoint.HoldPositionOrderID
     })
 
     public static UnitTypeWolf: boolexpr = Condition(() => {
-        return getTriggerUnit().typeId == Wolf.WOLF_MODEL
+        return getTriggerUnit().typeId === Wolf.WOLF_MODEL
     })
 }

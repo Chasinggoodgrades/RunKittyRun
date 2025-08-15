@@ -56,7 +56,7 @@ export class Safezone {
             let unit = getTriggerUnit()
             if (!unit) return
             if (Safezone.WolfEntersSafezoneActions(unit)) return
-            if (unit.typeId == Constants.UNIT_SHADOWKITTY_RELIC_SUMMON) {
+            if (unit.typeId === Constants.UNIT_SHADOWKITTY_RELIC_SUMMON) {
                 WolfLaneHider.ShadowKittyLaneAdd(this.ID)
                 return
             }
@@ -66,7 +66,7 @@ export class Safezone {
             kitty.CurrentSafeZone = this.ID
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider()
             TeamDeathless.ReachedSafezone(unit, this)
-            if (this.AwardedPlayers.includes(player) || this.ID == 0) return
+            if (this.AwardedPlayers.includes(player) || this.ID === 0) return
             ChainedTogether.ReachedSafezone(kitty)
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit)
             unit.experience += Resources.SafezoneExperience
@@ -83,11 +83,11 @@ export class Safezone {
     private SafezoneAdditions(kitty: Kitty) {
         let player = kitty.Player
 
-        if (kitty.CurrentSafeZone == this.ID) return
+        if (kitty.CurrentSafeZone === this.ID) return
 
         CameraUtil.UpdateKomotoCam(player, this.ID)
 
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
 
         for (let i: number = 0; i < kitty.Relics.length; i++) {
             let relic = kitty.Relics[i]
@@ -132,7 +132,7 @@ export class Safezone {
     /// <param name="unit"></param>
     /// <returns>bool [true/false] if unit type is infact a wolf</returns>
     public static WolfEntersSafezoneActions(unit: Unit) {
-        if (unit.typeId != Wolf.WOLF_MODEL) return false
+        if (unit.typeId !== Wolf.WOLF_MODEL) return false
         let wolf = Globals.ALL_WOLVES.get(unit)
         if (!wolf) return false
         wolf.WolfMove(true) // forced move

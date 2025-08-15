@@ -80,7 +80,7 @@ export class Fixation extends Affix {
     }
 
     private RegisterEvents() {
-        if (this.Type == 1) this.UnitsInRange ??= Group.create()!
+        if (this.Type === 1) this.UnitsInRange ??= Group.create()!
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FIXATION_RADIUS, FilterList.KittyFilter)
         this.PeriodicSpeed.registerTimerEvent(0.1, true)
         this.PeriodicSpeed.addAction(this.UpdateChaseSpeed)
@@ -90,7 +90,7 @@ export class Fixation extends Affix {
                 let Region = RegionList.WolfRegions[this.Unit.RegionIndex]
                 if (!Region.includes(target.x, target.y)) return
                 if (this.Unit.paused) return
-                if (target != this.Unit.Unit && !this.IsChasing) {
+                if (target !== this.Unit.Unit && !this.IsChasing) {
                     this.Target = target
                     this.ChasingEvent()
                 }
@@ -114,7 +114,7 @@ export class Fixation extends Affix {
                 this.ChaseTimer.pause()
                 return
             }
-            if (this.Type == 1) this.GetClosestTarget()
+            if (this.Type === 1) this.GetClosestTarget()
             this.Unit.Unit.issueOrderAt('move', this.Target.x, this.Target.y)
         })
     }
@@ -129,7 +129,7 @@ export class Fixation extends Affix {
         )
         if (this.UnitsInRange.size <= 0) return
         let newTarget = this.GetClosestUnitInRange()
-        if (newTarget != this.Target) {
+        if (newTarget !== this.Target) {
             this.Target = newTarget
             GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:             GC.RemoveEffect(ref TargetEffect);
             this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
@@ -146,7 +146,7 @@ export class Fixation extends Affix {
         if (closestDistance > 0) {
             while (true) {
                 let unit = this.UnitsInRange.first
-                if (unit == null) break
+                if (!unit) break
                 this.UnitsInRange.removeUnit(unit)
                 let distance = distanceBetweenXYPoints(unitX, unitY, unit.x, unit.y)
                 if (distance < closestDistance) {
@@ -178,7 +178,7 @@ export class Fixation extends Affix {
     }
 
     public static GetFixation(Unit: Unit): Fixation {
-        if (Unit == null) return null as never
+        if (Unit === null) return null as never
         let affix = Globals.ALL_WOLVES.get(Unit)!.Affixes.find(Fixation.IsFixation)
         return affix instanceof Fixation ? affix : (null as never)
     }

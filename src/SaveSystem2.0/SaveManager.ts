@@ -25,8 +25,8 @@ export class SaveManager {
     public static SaveAll() {
         let date = DateTimeManager.DateTime.toString()
         for (let player of Globals.ALL_PLAYERS) {
-            if (player.controller == MAP_CONTROL_COMPUTER) continue
-            if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue
+            if (player.controller === MAP_CONTROL_COMPUTER) continue
+            if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
             let saveData = SaveManager.SaveData.get(player)
             if (!saveData) continue
             saveData.Date = date
@@ -62,9 +62,9 @@ export class SaveManager {
     public static SaveAllDataToFile() {
         let date = DateTimeManager.DateTime.toString()
         for (let player of Globals.ALL_PLAYERS) {
-            if (player.controller == MAP_CONTROL_COMPUTER) continue
-            if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue
-            if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) == null)
+            if (player.controller === MAP_CONTROL_COMPUTER) continue
+            if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
+            if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) === null)
                 Globals.SaveSystem.NewSave(player) // Ensure save data exists for this player before saving.
             let data = SaveManager.SaveData.get(player)
             if (!data) continue
@@ -80,8 +80,8 @@ export class SaveManager {
     public LoadAll() {
         try {
             for (let player of Globals.ALL_PLAYERS) {
-                if (player.controller == MAP_CONTROL_COMPUTER) continue
-                if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue
+                if (player.controller === MAP_CONTROL_COMPUTER) continue
+                if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
                 this.Load(player)
             }
         } catch (ex: any) {
@@ -92,7 +92,7 @@ export class SaveManager {
 
     private NewSave(player: MapPlayer) {
         try {
-            if (player.slotState != PLAYER_SLOT_STATE_PLAYING) return
+            if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
             SaveManager.SaveData.set(player, new KittyData())
             let saveData = SaveManager.SaveData.get(player)
             if (!saveData) return

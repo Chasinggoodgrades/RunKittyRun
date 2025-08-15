@@ -5,6 +5,7 @@ import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveOb
 import { CustomStatFrame } from 'src/UI/CustomStatFrame'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
 import { int, Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
@@ -51,7 +52,7 @@ export class AwardingCmds {
 
         player.DisplayTimedTextTo(
             3.0,
-            `${Colors.COLOR_YELLOW_ORANGE}No valid award found for input: |r${Colors.HighlightString(award)} ${Colors.COLOR_YELLOW_ORANGE}try using ?award help|r`
+            `${Colors.COLOR_YELLOW_ORANGE}No valid award found for input: |r${ColorUtils.HighlightString(award)} ${Colors.COLOR_YELLOW_ORANGE}try using ?award help|r`
         )
     }
 
@@ -67,7 +68,7 @@ export class AwardingCmds {
 
         player.DisplayTimedTextTo(
             15.0,
-            `${Colors.COLOR_YELLOW_ORANGE}Valid awards: ${Colors.HighlightString(combined)}`
+            `${Colors.COLOR_YELLOW_ORANGE}Valid awards: ${ColorUtils.HighlightString(combined)}`
         )
     }
 
@@ -90,9 +91,9 @@ export class AwardingCmds {
         let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         let selectedPlayer = selectedUnit.owner
 
-        if (args[0] == '') return
+        if (args[0] === '') return
 
-        if (stats.toLowerCase() == 'help') {
+        if (stats.toLowerCase() === 'help') {
             AwardingCmds.GameStatsHelp(player)
             return
         }
@@ -104,12 +105,12 @@ export class AwardingCmds {
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         // Then check if the value is actually a proper value.
         for (let prop of Object.keys(Globals.GAME_STATS)) {
-            if (prop.toLowerCase() == stats.toLowerCase()) {
+            if (prop.toLowerCase() === stats.toLowerCase()) {
                 let val: number
                 if (!(val = int.TryParse(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.toString())}'
+                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'
                     )
                     return
                 }
@@ -118,7 +119,7 @@ export class AwardingCmds {
 
                 player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}'
+                    '{Colors.COLOR_YELLOW_ORANGE}Set {ColorUtils.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {ColorUtils.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}'
                 )
                 MultiboardUtil.RefreshMultiboards()
                 return
@@ -133,7 +134,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW_ORANGE}game: stats: Valid: {Colors.HighlightString(combined)}'
+            '{Colors.COLOR_YELLOW_ORANGE}game: stats: Valid: {ColorUtils.HighlightString(combined)}'
         )
     }
 
@@ -142,9 +143,9 @@ export class AwardingCmds {
         let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         let selectedPlayer = selectedUnit.owner
 
-        if (args[0] == '') return
+        if (args[0] === '') return
 
-        if (roundTime.toLowerCase() == 'help') {
+        if (roundTime.toLowerCase() === 'help') {
             AwardingCmds.GameTimesHelp(player)
             return
         }
@@ -155,12 +156,12 @@ export class AwardingCmds {
 
         // Search properties for the name.. If it doesnt exist, say invalid game stat.
         for (let prop of Object.keys(Globals.GAME_TIMES)) {
-            if (prop.toLowerCase() == roundTime.toLowerCase()) {
+            if (prop.toLowerCase() === roundTime.toLowerCase()) {
                 let val: number
                 if (!(val = int.TryParse(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {Colors.HighlightString(value.toString())}'
+                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'
                     )
                     return
                 }
@@ -169,7 +170,7 @@ export class AwardingCmds {
 
                 player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Set {Colors.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {Colors.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}{Colors.COLOR_RESET}'
+                    '{Colors.COLOR_YELLOW_ORANGE}Set {ColorUtils.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {ColorUtils.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}{Colors.COLOR_RESET}'
                 )
                 MultiboardUtil.RefreshMultiboards()
                 return
@@ -184,7 +185,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW_ORANGE}game: times: Valid: {Colors.HighlightString(combined)}'
+            '{Colors.COLOR_YELLOW_ORANGE}game: times: Valid: {ColorUtils.HighlightString(combined)}'
         )
     }
 
@@ -203,7 +204,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}stats: for: Game {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}'
+            '{Colors.COLOR_YELLOW}stats: for: Game {Colors.PlayerNameColored(player)}:\n{ColorUtils.HighlightString(combined)}{Colors.COLOR_RESET}'
         )
     }
 
@@ -223,7 +224,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}bests: for: Personal {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}'
+            '{Colors.COLOR_YELLOW}bests: for: Personal {Colors.PlayerNameColored(kitty.Player)}:\n{ColorUtils.HighlightString(combined)}{Colors.COLOR_RESET}'
         )
     }
 
@@ -257,7 +258,7 @@ export class AwardingCmds {
 
         player.DisplayTimedTextTo(
             15.0,
-            `${Colors.COLOR_YELLOW}times: for: Game ${Colors.PlayerNameColored(kitty.Player)}:\n${Colors.HighlightString(combined)}${Colors.COLOR_RESET}`
+            `${Colors.COLOR_YELLOW}times: for: Game ${ColorUtils.PlayerNameColored(kitty.Player)}:\n${ColorUtils.HighlightString(combined)}${Colors.COLOR_RESET}`
         )
     }
 
@@ -284,10 +285,10 @@ export class AwardingCmds {
             const value = (property as any).GetValue(kibbleCurrency)
             combined += `${Colors.COLOR_YELLOW_ORANGE}${Utility.FormatAwardName((property as any).name)}${Colors.COLOR_RESET}: ${value}\n`
         }
-        const nameColored = Colors.PlayerNameColored(kitty.Player)
+        const nameColored = ColorUtils.PlayerNameColored(kitty.Player)
         player.DisplayTimedTextTo(
             15.0,
-            `${Colors.COLOR_YELLOW}Kibble: Info: Overall|r (${nameColored})\n${Colors.HighlightString(combined)}\n${Colors.COLOR_YELLOW}Game: Info: Current:|r (${nameColored})\n${AwardingCmds.CurrentKibbleInfo(kitty)}${Colors.COLOR_RESET}`
+            `${Colors.COLOR_YELLOW}Kibble: Info: Overall|r (${nameColored})\n${ColorUtils.HighlightString(combined)}\n${Colors.COLOR_YELLOW}Game: Info: Current:|r (${nameColored})\n${AwardingCmds.CurrentKibbleInfo(kitty)}${Colors.COLOR_RESET}`
         )
     }
 

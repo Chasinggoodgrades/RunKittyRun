@@ -17,7 +17,7 @@ export class Tips {
     }
 
     private static GetTip(): string {
-        if (Tips.TipsList.length == 0) Tips.RefillTipsList()
+        if (Tips.TipsList.length === 0) Tips.RefillTipsList()
         let tip = Colors.COLOR_GREEN + Tips.TipsList[0] + Colors.COLOR_RESET
         Tips.TipsList.shift()
         return tip

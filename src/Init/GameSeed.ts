@@ -17,7 +17,7 @@ export class GameSeed {
         let expectedMonth = 8 // August
         let expectedDay = 9 // 9th Day
 
-        if (DateTimeManager.CurrentDay != expectedDay || DateTimeManager.CurrentMonth != expectedMonth) {
+        if (DateTimeManager.CurrentDay !== expectedDay || DateTimeManager.CurrentMonth !== expectedMonth) {
             return false
         }
         let OmnisSeed = 458266 // Omnis' Seed for the Team Tournament 2025

@@ -71,7 +71,7 @@ export class PodiumUtil {
     }
 
     public static ClearPodiumUnits(podiumUnits: Unit[]) {
-        if (podiumUnits.length == 0) return
+        if (podiumUnits.length === 0) return
         for (let kitty of podiumUnits) {
             kitty.setPosition(Regions.safe_Area_00.centerX, Regions.safe_Area_00.centerY)
             kitty.paused = false

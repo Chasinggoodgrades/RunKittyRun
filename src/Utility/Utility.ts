@@ -3,9 +3,9 @@ import { PlayerLeaves } from 'src/Events/PlayerLeavesEvent/PlayerLeaves'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { base64Decode, Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
 import { safeArraySplice } from './ArrayUtils'
-import { Colors } from './Colors/Colors'
 import { Action } from './CSUtils'
 import { AchesTimers } from './MemoryHandler/AchesTimers'
 import { MemoryHandler } from './MemoryHandler/MemoryHandler'
@@ -64,7 +64,7 @@ export class Utility {
         let tenths = (time * 10) % 10
 
         let timeString: string = seconds < 10 ? '{minutes}:0{seconds}.{tenths}' : '{minutes}:{seconds}.{tenths}'
-        return Colors.ColorString(timeString, teamID)
+        return ColorUtils.ColorString(timeString, teamID)
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ export class Utility {
     public static IsDeveloper(p: MapPlayer) {
         try {
             for (let i: number = 0; i < Globals.VIPLIST.length; i++) {
-                if (p.name == base64Decode(Globals.VIPLIST[i])) {
+                if (p.name === base64Decode(Globals.VIPLIST[i])) {
                     return true
                 }
             }
@@ -135,7 +135,7 @@ export class Utility {
     /// <returns>True if the unit has the item, otherwise false.</returns>
     public static UnitHasItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId == itemId) return true
+            if (u.getItemInSlot(i)?.typeId === itemId) return true
         }
         return false
     }
@@ -149,7 +149,7 @@ export class Utility {
     public static UnitHasItemCount(u: Unit, itemId: number) {
         let count = 0
         for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId == itemId) count++
+            if (u.getItemInSlot(i)?.typeId === itemId) count++
         }
         return count
     }
@@ -162,7 +162,7 @@ export class Utility {
     /// <returns></returns>
     public static UnitGetItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId == itemId) return u.getItemInSlot(i)
+            if (u.getItemInSlot(i)?.typeId === itemId) return u.getItemInSlot(i)
         }
 
         return null
@@ -176,7 +176,7 @@ export class Utility {
     /// <returns></returns>
     public static GetSlotOfItem(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId == itemId) return i
+            if (u.getItemInSlot(i)?.typeId === itemId) return i
         }
         return -1
     }
@@ -188,7 +188,7 @@ export class Utility {
     /// <param name="itemId"></param>
     public static RemoveItemFromUnit(u: Unit, itemId: number) {
         for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId == itemId) {
+            if (u.getItemInSlot(i)?.typeId === itemId) {
                 u.removeItemFromSlot(i)
                 return
             }
@@ -284,7 +284,7 @@ export class Utility {
     public static DropAllItems(Unit: Unit) {
         for (let i: number = 0; i < 6; i++) {
             let item = Unit.getItemInSlot(i)
-            if (item != null) Unit.dropItem(item, Unit.x, Unit.y)
+            if (item) Unit.dropItem(item, Unit.x, Unit.y)
         }
     }
 
@@ -308,10 +308,11 @@ export class Utility {
     public static FormatAwardName(awardName: string) {
         Utility.stringBuilder = []
         for (let i: number = 0; i < awardName.length; i++) {
-            if (i > 0 && awardName[i] === awardName[i].toUpperCase() && /[A-Z]/.test(awardName[i])) {
+            const char = awardName[i]
+            if (i > 0 && char >= 'A' && char <= 'Z') {
                 Utility.stringBuilder.push(' ')
             }
-            Utility.stringBuilder.push(awardName[i])
+            Utility.stringBuilder.push(char)
         }
 
         let s = Utility.stringBuilder.join('')
@@ -346,7 +347,7 @@ export class Utility {
     }
 
     public static GetItemSkin(itemId: number) {
-        if (itemId == 0) return 0
+        if (itemId === 0) return 0
         let item = Item.create(itemId, 0, 0)!
         let skin = item.skin
         item.destroy()

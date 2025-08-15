@@ -6,6 +6,7 @@ import { KibbleEvent } from 'src/Rewards/EasterEggs/KibbleEvent'
 import { HolidaySeasons, SeasonalManager } from 'src/Seasonal/SeasonalManager'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -79,16 +80,16 @@ export class Kibble extends IDisposable {
 
     private static KibblePickup(item: Item) {
         try {
-            if (item == null) return
+            if (item === null) return
 
             let unit = getTriggerUnit()
             let player = unit.owner
             let kitty = Globals.ALL_KITTIES.get(player)!
             let effect: Effect | undefined = undefined
             let randomChance = GetRandomReal(0, 100)
-            let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle == item.handle)
+            let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle === item.handle)
 
-            if (kib == null) return
+            if (!kib) return
 
             if (randomChance <= 30) Kibble.KibbleGoldReward(kitty, kib)
             else if (randomChance <= 60) Kibble.KibbleXP(kitty)
@@ -106,7 +107,7 @@ export class Kibble extends IDisposable {
             Kibble.IncrementKibble(kitty)
             PersonalBestAwarder.BeatKibbleCollection(kitty)
 
-            if (kib != null && kib.Item != null) {
+            if (kib !== null && kib.Item !== null) {
                 kib.dispose()
             }
         } catch (e: any) {
@@ -150,13 +151,13 @@ export class Kibble extends IDisposable {
 
         if (kibble.JackPotIndex >= 20) {
             let goldAmount = GetRandomInt(Kibble.JackpotMin, Kibble.JackpotMax)
-            let isSuperJackpot = GetRandomInt(1, 10) == 1
+            let isSuperJackpot = GetRandomInt(1, 10) === 1
             if (isSuperJackpot) goldAmount *= 10
 
             kitty.Player.addGold(goldAmount)
 
             let jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
-            let msg = `${Colors.PlayerNameColored(kitty.Player)}${Colors.HighlightString(` has won the ${jackpotString}`)} ${Colors.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r`
+            let msg = `${ColorUtils.PlayerNameColored(kitty.Player)}${ColorUtils.HighlightString(` has won the ${jackpotString}`)} ${ColorUtils.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r`
 
             Utility.TimedTextToAllPlayers(3.0, msg) // was too long previously.
             Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)

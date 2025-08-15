@@ -162,7 +162,7 @@ const initMemoryHandler = () => {
         getEmptyObject: <T>(debugName?: string) => {
             let obj: T & IDestroyable = cachedObjects.shift()
 
-            if (obj) {
+            if (!!obj) {
                 // Causes bugs if debugName changes where getEmptyObject gets called
                 if (debugName) {
                     ;(getmetatable(obj) as any).__debugName = debugName
@@ -187,7 +187,7 @@ const initMemoryHandler = () => {
         getEmptyArray: <T>(debugName?: string) => {
             let arr: T[] & IDestroyable = cachedArrays.shift()
 
-            if (arr) {
+            if (!!arr) {
                 // Causes bugs if debugName changes where getEmptyArray gets called
                 if (debugName) {
                     ;(getmetatable(arr) as any).__debugName = debugName

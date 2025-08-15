@@ -22,7 +22,7 @@ export class ChainedTogether {
     private static IsStartingContidionValid: boolean = true
 
     private static TriggerEventOnLastSafeZone() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return // Only occurs in Standard Gamemode.
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return // Only occurs in Standard Gamemode.
         if (ChainedTogether.EventStarted || ChainedTogether.EventTriggered) return // Don't trigger multiple times.
         if (!ChainedTogether.IsStartingContidionValid) return
 
@@ -55,8 +55,8 @@ export class ChainedTogether {
         for (let i: number = 0; i < kitties.length; i++) {
             let currentKitty: Kitty = kitties[i]
             if (
-                currentKitty.CurrentSafeZone != currentSafezone - 1 &&
-                currentKitty.CurrentSafeZone != currentSafezone
+                currentKitty.CurrentSafeZone !== currentSafezone - 1 &&
+                currentKitty.CurrentSafeZone !== currentSafezone
             ) {
                 skippedSafezone = true
                 break
@@ -129,12 +129,12 @@ export class ChainedTogether {
     /// <param name="kittyName"></param>
     public static RegenerateGroup(kittyName: string) {
         let groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
-            group.some(kitty => kitty.name == kittyName)
+            group.some(kitty => kitty.name === kittyName)
         ) // IEnumerable "Any" leaks
         if (groupIndex < 0) return
 
         try {
-            let currentGroup = ChainedTogether.kittyGroups[groupIndex].filter(kitty => kitty.name != kittyName) // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
+            let currentGroup = ChainedTogether.kittyGroups[groupIndex].filter(kitty => kitty.name !== kittyName) // Where and ToList are IEnumerable or Creating a new Object  .. LEAKS
 
             ChainedTogether.FreeKittiesFromGroup(kittyName, false)
 
@@ -157,7 +157,7 @@ export class ChainedTogether {
 
     private static FreeKittiesFromGroup(kittyName: string, isVictory: boolean = false) {
         let groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
-            group.some(kitty => kitty.name == kittyName)
+            group.some(kitty => kitty.name === kittyName)
         ) //IEnumerable with "Any" leaks
         if (groupIndex < 0) return
 
@@ -201,7 +201,7 @@ export class ChainedTogether {
         let groupsOfThree: number = count / 3
         let remainder: number = count % 3
 
-        if (remainder == 1) {
+        if (remainder === 1) {
             // convert two groups of 3 into two groups of 4 to avoid a group of 1
             groupsOfThree -= 1
             remainder += 3
@@ -287,7 +287,7 @@ export class ChainedTogether {
         // Check if the checks made with this function can be removed by calling the
         // functions TriggerEventOnLastSafeZone and ReachedSafezone on Source\Events\VictoryZone\FinalSafezone.cs
         // I'm afraid there could be a race condition by doing so
-        return kitty.CurrentSafeZone == RegionList.SafeZones.length - 1
+        return kitty.CurrentSafeZone === RegionList.SafeZones.length - 1
     }
 }
 

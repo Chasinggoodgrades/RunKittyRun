@@ -44,7 +44,7 @@ export class ChronoSphere extends Relic {
             Constants.ITEM_CHRONO_ORB,
             650,
             ChronoSphere.IconPath
-        );
+        )
 
         this.Upgrades.push(
             new RelicUpgrade(
@@ -93,7 +93,12 @@ export class ChronoSphere extends Relic {
             this.Ability = item.getAbility(this.RelicAbilityID)!
             if (!this.Ability) return
             this.Magnitude = this.RandomMagnitude()
-            BlzSetAbilityRealLevelField(this.Ability, ABILITY_RLF_MOVEMENT_SPEED_INCREASE_PERCENT_OAE1, 0, this.Magnitude)
+            BlzSetAbilityRealLevelField(
+                this.Ability,
+                ABILITY_RLF_MOVEMENT_SPEED_INCREASE_PERCENT_OAE1,
+                0,
+                this.Magnitude
+            )
             BlzSetAbilityRealLevelField(this.Ability, ABILITY_RLF_AREA_OF_EFFECT, 0, this.SLOW_AURA_RADIUS)
             BlzSetItemExtendedTooltip(
                 item.handle,
@@ -151,7 +156,7 @@ export class ChronoSphere extends Relic {
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
         let lowerBound = (this.MAGNITUDE_LOWER_BOUND / 100.0) * -1.0
         let upperBound = (this.MAGNITUDE_UPPER_BOUND / 100.0) * -1.0
-        if (upgradeLevel == 0) return lowerBound
+        if (upgradeLevel === 0) return lowerBound
         return GetRandomReal(upperBound, lowerBound) // as weird as this is.. yes.
     }
 
@@ -160,7 +165,7 @@ export class ChronoSphere extends Relic {
             this.Kitty.Invulnerable = true
             let x = this.CapturedLocation[0]
             let y = this.CapturedLocation[1]
-            if (x == 0 && y == 0) {
+            if (x === 0 && y === 0) {
                 x = this.Kitty.Unit.x
                 y = this.Kitty.Unit.y
             }
@@ -181,11 +186,11 @@ export class ChronoSphere extends Relic {
 
     public static RewindDeath(kitty: Kitty) {
         try {
-            if (Gamemode.CurrentGameMode != GameMode.Standard) return false // Only for Standard.
+            if (Gamemode.CurrentGameMode !== GameMode.Standard) return false // Only for Standard.
             if (kitty.ProtectionActive) return false // Don't rewind if ultimate has been casted.
             if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false
             let relic = kitty.Relics.find(this.IsChronoSphere) as ChronoSphere
-            if (relic == null) return false
+            if (relic === null) return false
             if (kitty.CurrentStats.ChronoSphereCD) return false
             let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
             if (upgradeLevel < 2) return false

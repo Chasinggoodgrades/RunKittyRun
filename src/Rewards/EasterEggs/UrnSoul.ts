@@ -76,7 +76,7 @@ export class UrnSoul {
             let unit = getTriggerUnit()
             UrnSoul.StartEventRegion = Regions.Urn_Soul_Region
 
-            if (item.typeId != Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
+            if (item.typeId !== Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
             if (!UrnSoul.StartEventRegion.includes(unit.x, unit.y)) return
 
             // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao

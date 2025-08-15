@@ -12,7 +12,7 @@ export class VoteEndRound {
     private static Votes: MapPlayer[] = []
 
     public static InitiateVote(voteStarter: MapPlayer) {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
+        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
         if (this.VoteAlreadyActive()) return
         if (!this.GameActive()) return
         this.VoteActive = true

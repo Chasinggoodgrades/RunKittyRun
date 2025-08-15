@@ -254,10 +254,10 @@ export class ShopFrame {
             ShopFrame.sellButton.visible = false
             ShopFrame.buyButton.visible = true
 
-            // basically if type == shopItem, it'll do the buttons.
+            // basically if type === shopItem, it'll do the buttons.
             ShopFrame.RelicButtons(player, item)
 
-            if (item.Type == ShopItemType.Relic) {
+            if (item.Type === ShopItemType.Relic) {
                 ShopFrame.sellButton.visible = true
                 ShopFrame.sellButton.alpha = ShopFrame.DisabledAlpha
                 ShopFrame.RefreshUpgradeTooltip(item.Relic)
@@ -269,8 +269,8 @@ export class ShopFrame {
     }
 
     private static RelicButtons(player: MapPlayer, item: ShopItem) {
-        if (item == null) return
-        if (item.Type != ShopItemType.Relic) return
+        if (item === null) return
+        if (item.Type !== ShopItemType.Relic) return
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         ShopFrame.upgradeButton.visible = true
         ShopFrame.sellButton.visible = true
@@ -304,7 +304,7 @@ export class ShopFrame {
         ShopFrame.descriptionLabel.text =
             '{Colors.COLOR_YELLOW_ORANGE}Description:{Colors.COLOR_RESET} {shopItem.Description}'
         ShopFrame.UpdateButtonStatus(player)
-        if (shopItem.Type == ShopItemType.Relic) ShopFrame.RefreshUpgradeTooltip(shopItem.Relic)
+        if (shopItem.Type === ShopItemType.Relic) ShopFrame.RefreshUpgradeTooltip(shopItem.Relic)
     }
 
     private static CreateUpgradeTooltip() {
@@ -354,10 +354,10 @@ export class ShopFrame {
             if (i < playersUpgradeLevel - 1) {
                 color = Colors.COLOR_GREY // Grey out past upgrades
                 colorDescription = Colors.COLOR_GREY
-            } else if (i == playersUpgradeLevel - 1) {
+            } else if (i === playersUpgradeLevel - 1) {
                 color = Colors.COLOR_GREY // INCASE WE WANT TO CHANGE THE COLOR OF THE CURRENT UPGRADE OR ADD DETAILS
                 colorDescription = Colors.COLOR_GREY
-            } else if (i == playersUpgradeLevel) {
+            } else if (i === playersUpgradeLevel) {
                 color = Colors.COLOR_YELLOW // Yellow for the next available upgrade
                 colorDescription = Colors.COLOR_YELLOW_ORANGE
             } else {
@@ -382,7 +382,7 @@ export class ShopFrame {
             }
             const selectedItem = ShopFrame.SelectedItems.get(player)
 
-            if (!ShopUtil.PlayerIsDead(player!) && selectedItem != null) {
+            if (!ShopUtil.PlayerIsDead(player!) && selectedItem) {
                 // your logic here
                 let kitty = Globals.ALL_KITTIES.get(player)!
 
@@ -424,12 +424,12 @@ export class ShopFrame {
             let selectedItem: ShopItem
             if (
                 (selectedItem = ShopFrame.SelectedItems.get(player)!) /* TODO; Prepend: let */ &&
-                selectedItem != null
+                selectedItem !== null
             ) {
                 let itemID = selectedItem.ItemID
                 let kitty = Globals.ALL_KITTIES.get(player)!
                 if (!Utility.UnitHasItem(kitty.Unit, itemID)) return
-                if (selectedItem.Type == ShopItemType.Relic) {
+                if (selectedItem.Type === ShopItemType.Relic) {
                     if (!kitty.isAlive() || kitty.ProtectionActive) {
                         player.DisplayTimedTextTo(
                             5.0,
@@ -447,7 +447,7 @@ export class ShopFrame {
                     }
 
                     // Find the shopItem type associated with the selected item that the player owns.
-                    let relic = kitty.Relics.find(x => x.name == selectedItem.Relic.name)
+                    let relic = kitty.Relics.find(x => x.name === selectedItem.Relic.name)
 
                     if (!RelicFunctions.CannotSellOnCD(kitty, relic!)) return
 
@@ -519,7 +519,7 @@ export class ShopFrame {
         FrameManager.ShopButton.visible = false
         FrameManager.ShopButton.visible = true
         FrameManager.HideOtherFrames(ShopFrame.shopFrame)
-        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) {
+        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) {
             // solo mode.
             player.DisplayTimedTextTo(
                 6.0,

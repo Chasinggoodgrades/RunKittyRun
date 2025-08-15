@@ -39,7 +39,7 @@ export class CameraUtil {
     }
 
     public static HandleZoomCommand(p: MapPlayer, args: string[]) {
-        if (args[0] == '') return
+        if (args[0] === '') return
         let zoom: number = int.Parse(args[0])
         if (!p.isLocal()) return
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0)

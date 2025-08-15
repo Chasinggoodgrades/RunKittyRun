@@ -1,5 +1,5 @@
 {
-    "name": "RunKittyRun",
+    "name": "runkittyrun",
     "version": "1.1.0",
     "description": "",
     "license": "MIT",
@@ -35,7 +35,7 @@
         "tsconfig-paths": "3.9.0",
         "tsutils": "3.17.1",
         "typescript": "5.0.4",
-        "typescript-to-lua": "1.15.1",
+        "typescript-to-lua": "1.31.4",
         "w3ts": "^3.0.2",
         "war3-objectdata-th": "^0.2.8",
         "war3-transformer": "^3.0.9",

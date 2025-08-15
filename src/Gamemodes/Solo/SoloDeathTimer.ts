@@ -43,7 +43,7 @@ export class SoloDeathTimer {
     private UpdateFloatingText() {
         SetTextTagText(
             this.FloatingTimer.handle,
-            '{Colors.GetStringColorOfPlayer(Player.id + 1)}' + this.ReviveTimer.remaining().toFixed(2) + '|r',
+            '{ColorUtils.GetStringColorOfPlayer(Player.id + 1)}' + this.ReviveTimer.remaining().toFixed(2) + '|r',
             this.TextTagHeight
         )
     }

@@ -92,7 +92,7 @@ export class Gamemode {
         let color = Colors.COLOR_YELLOW_ORANGE
         for (let player of Globals.ALL_PLAYERS) {
             let localplayer = GetLocalPlayer()
-            if (localplayer != this.HostPlayer.handle) {
+            if (localplayer !== this.HostPlayer.handle) {
                 player.DisplayTimedTextTo(
                     Globals.TIME_TO_PICK_GAMEMODE,
                     '{color}wait: for: Please {Colors.PlayerNameColored(HostPlayer)}{color} pick: the: gamemode: to. {Colors.COLOR_RED}(to: Standard: Defaults in {Globals.TIME_TO_PICK_GAMEMODE} seconds).|r'

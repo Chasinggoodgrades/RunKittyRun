@@ -19,7 +19,7 @@ export class Votekick {
         if (this.VotekickAlreadyActive()) return
         this.VoteStarter = voteStarter
         let playerID = this.GetPlayerID(player)
-        if (playerID != -1) this.StartVotekick(MapPlayer.fromIndex(playerID)!)
+        if (playerID !== -1) this.StartVotekick(MapPlayer.fromIndex(playerID)!)
         else
             voteStarter.DisplayTimedTextTo(
                 7.0,
@@ -31,7 +31,7 @@ export class Votekick {
         if (!this.VoteActive) return
         let player = getTriggerPlayer()
         let vote = (GetEventPlayerChatString() || '').toLowerCase()
-        if (vote != '-yes') return
+        if (vote !== '-yes') return
         if (this.Voters.includes(player)) {
             player.DisplayTimedTextTo(
                 7.0,
@@ -106,21 +106,19 @@ export class Votekick {
     /// <param name="player"></param>
     /// <returns></returns>
     private static GetPlayerID(player: string) {
-        let playerID: number
-        return (playerID = int.TryParse(player)!) ? playerID - 1 : -1
+        let playerID = int.TryParse(player)
+        return playerID && playerID > 0 ? playerID - 1 : -1
     }
 
-    private static GetPlayer(player: string): MapPlayer {
+    private static GetPlayer(player: string) {
         // doesnt quite work yet.
-        let basePlayerName: string = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
-
-        for (let p of Globals.ALL_PLAYERS) {
-            if (p.name.toLowerCase().indexOf(basePlayerName) >= 0) {
-                return p
-            }
-            print(p.name.toLowerCase().indexOf(basePlayerName))
-        }
-
-        return null as never
+        // let basePlayerName: string = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
+        // for (let p of Globals.ALL_PLAYERS) {
+        //     if (p.name.toLowerCase().indexOf(basePlayerName) >= 0) {
+        //         return p
+        //     }
+        //     print(p.name.toLowerCase().indexOf(basePlayerName))
+        // }
+        // return null as never
     }
 }

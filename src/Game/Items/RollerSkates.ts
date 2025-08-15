@@ -4,7 +4,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { Trigger, MapPlayer, Item } from 'w3ts'
+import { Item, MapPlayer, Trigger } from 'w3ts'
 
 export class RollerSkates {
     private static OnUseTrigger: Trigger
@@ -14,7 +14,7 @@ export class RollerSkates {
         this.RollerSkaters = []
         this.OnUseTrigger = Trigger.create()!
         this.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
-        this.OnUseTrigger.addCondition(Condition(() => getManipulatedItem().typeId == Constants.ITEM_PEGASUS_BOOTS))
+        this.OnUseTrigger.addCondition(Condition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS))
         this.OnUseTrigger.addAction(ErrorHandler.Wrap(this.SwitchingBoots))
     }
 
@@ -23,7 +23,7 @@ export class RollerSkates {
         let item = getManipulatedItem()
         let slider = Globals.ALL_KITTIES.get(unit.owner)!.Slider
 
-        if (Gamemode.CurrentGameMode != GameMode.Standard) {
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
             unit.owner.DisplayTimedTextTo(
                 3.0,
                 '{Colors.COLOR_RED}Skates: are: only: available: Roller in Mode: Standard{Colors.COLOR_RESET}'

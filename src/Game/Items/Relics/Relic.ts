@@ -45,7 +45,7 @@ export abstract class Relic {
     public abstract RemoveEffect(Unit: Unit): void
 
     public GetCurrentUpgrade(): RelicUpgrade {
-        if (this.Upgrades == null || this.Upgrades.length == 0) return null as never
+        if (this.Upgrades === null || this.Upgrades.length === 0) return null as never
         if (this.UpgradeLevel >= this.Upgrades.length) return this.Upgrades[this.Upgrades.length - 1]
         return this.Upgrades[this.UpgradeLevel]
     }
@@ -71,10 +71,10 @@ export abstract class Relic {
 
     public SetUpgradeLevelDesc(Unit: Unit) {
         let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
-        if (upgradeLevel == 0) return
+        if (upgradeLevel === 0) return
 
         let item = Utility.UnitGetItem(Unit, this.ItemID)
-        if (item == null) return
+        if (!item) return
 
         let tempName = item.name
         let newUpgradeText = '{Colors.COLOR_TURQUOISE}[Upgrade: {upgradeLevel}]{Colors.COLOR_RESET}'

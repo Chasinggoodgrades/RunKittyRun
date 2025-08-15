@@ -28,7 +28,7 @@ export class Shops {
     private static SetupAllItems() {
         this.ConstantItems()
 
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
 
         this.StandardModeItems()
     }
@@ -77,7 +77,7 @@ export class Shops {
     }
 
     private static CollectAllVendors() {
-        let filter = Utility.CreateFilterFunc(() => getFilterUnit().typeId == Constants.UNIT_KITTY_VENDOR)
+        let filter = Utility.CreateFilterFunc(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
         this.KittyVendors.enumUnitsInRect(Rectangle.getWorldBounds()!, filter)
         this.KittyVendorsList = this.KittyVendors.getUnits()
 
@@ -102,8 +102,8 @@ export class Shops {
             let itemID = item.typeId
 
             let vendorItems = Shops.VendorsItemList.get(vendor)!
-            let vendorItem = vendorItems.find(vi => vi.Item == itemID)
-            if (vendorItem == null) return
+            let vendorItem = vendorItems.find(vi => vi.Item === itemID)
+            if (vendorItem === null) return
 
             this.RefreshItemsOnVendor(vendor)
         } catch (e: any) {

@@ -91,7 +91,7 @@ export class SoundManager {
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
     public static PlayKittyDeathSound(k: Kitty) {
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament) this.TeamKittyDeathSound(k)
+        if (Gamemode.CurrentGameMode === GameMode.TeamTournament) this.TeamKittyDeathSound(k)
         else {
             let s = this.KITTY_DEATH_SOUND
             StopSound(s.handle, false, false)
@@ -181,7 +181,7 @@ export class SoundManager {
                 if (count > 1) return
             }
 
-            if (count == 0) return
+            if (count === 0) return
             if (!k) return
             if (k.ProtectionActive) return // no reason to play if pota is active.
 

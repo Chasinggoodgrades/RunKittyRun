@@ -204,18 +204,18 @@ export class Reward {
     }
 
     private SetWindwalk(player: MapPlayer) {
-        if (this.Type != RewardType.Windwalks) return false
+        if (this.Type !== RewardType.Windwalks) return false
         let kitty = Globals.ALL_KITTIES.get(player)!
         kitty.ActiveAwards.WindwalkID = this.AbilityID
         return true
     }
 
     private SetSkin(player: MapPlayer, tournament: boolean = false) {
-        if (this.Type != RewardType.Skins && tournament == false) return false
+        if (this.Type !== RewardType.Skins && tournament === false) return false
 
         let kitty = Globals.ALL_KITTIES.get(player)!
 
-        if (this.SkinID != 0) {
+        if (this.SkinID !== 0) {
             kitty.Unit.skin = this.SkinID
             kitty.KittyMorphosis.ScaleUnit()
             kitty.Unit.name = '{Colors.PlayerNameColored(player)}'
@@ -266,7 +266,7 @@ export class Reward {
     }
 
     private SetTournamentReward(player: MapPlayer, e: Effect | null, activate: boolean) {
-        if (this.Type != RewardType.Tournament) return false
+        if (this.Type !== RewardType.Tournament) return false
 
         let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         if (activate) {

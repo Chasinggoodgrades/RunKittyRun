@@ -1,12 +1,12 @@
-import { Auras } from "./RewardObjects/Auras"
-import { Deathless } from "./RewardObjects/Deathless"
-import { Hats } from "./RewardObjects/Hats"
-import { Nitros } from "./RewardObjects/Nitros"
-import { Skins } from "./RewardObjects/Skins"
-import { Tournament } from "./RewardObjects/Tournament"
-import { Trails } from "./RewardObjects/Trails"
-import { Windwalks } from "./RewardObjects/Windwalks"
-import { Wings } from "./RewardObjects/Wings"
+import { Auras } from './RewardObjects/Auras'
+import { Deathless } from './RewardObjects/Deathless'
+import { Hats } from './RewardObjects/Hats'
+import { Nitros } from './RewardObjects/Nitros'
+import { Skins } from './RewardObjects/Skins'
+import { Tournament } from './RewardObjects/Tournament'
+import { Trails } from './RewardObjects/Trails'
+import { Windwalks } from './RewardObjects/Windwalks'
+import { Wings } from './RewardObjects/Wings'
 
 export class GameAwardsDataSorted {
     public Auras: Auras

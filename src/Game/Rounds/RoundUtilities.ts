@@ -1,9 +1,9 @@
-import { Team } from "src/Gamemodes/Teams/Team"
-import { Globals } from "src/Global/Globals"
-import { RegionList } from "src/Global/RegionList"
-import { CameraUtil } from "src/Utility/CameraUtil"
-import { MapPlayer } from "w3ts"
-import { RoundManager } from "./RoundManager"
+import { Team } from 'src/Gamemodes/Teams/Team'
+import { Globals } from 'src/Global/Globals'
+import { RegionList } from 'src/Global/RegionList'
+import { CameraUtil } from 'src/Utility/CameraUtil'
+import { MapPlayer } from 'w3ts'
+import { RoundManager } from './RoundManager'
 
 export class RoundUtilities {
     public static MovePlayerToStart(Player: MapPlayer) {

@@ -26,7 +26,7 @@ export class Savecode {
             for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
-                if (tooltip && tooltip != 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
+                if (tooltip && tooltip !== 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
                 else throw new Error('Error, not: available: tooltip: {ability}')
             }
             for (let player of Globals.ALL_PLAYERS) {
@@ -76,7 +76,7 @@ export class Savecode {
         let x: number
         let current: BigNumL = this.Bignum.List
 
-        while (current != null) {
+        while (current !== null) {
             x = current.Leaf
             hash = OldSavesHelper.ModuloInteger(
                 hash +
@@ -97,21 +97,21 @@ export class Savecode {
         let x: number = 0
         let current: BigNumL = this.Bignum.List
 
-        if (sign == -1) {
+        if (sign === -1) {
             SetRandomSeed(this.Bignum.LastDigit())
             current.Leaf = Savecode.Modb(current.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
             x = current.Leaf
         }
         SetRandomSeed(key)
 
-        while (current != null) {
-            if (sign == -1) {
+        while (current !== null) {
+            if (sign === -1) {
                 advance = current.Leaf
             }
 
             current.Leaf = Savecode.Modb(current.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
 
-            if (sign == 1) {
+            if (sign === 1) {
                 advance = current.Leaf
             }
 
@@ -122,7 +122,7 @@ export class Savecode {
             current = current.Next
         }
 
-        if (sign == 1) {
+        if (sign === 1) {
             SetRandomSeed(x)
             this.Bignum.List.Leaf = Savecode.Modb(this.Bignum.List.Leaf + sign * GetRandomInt(0, Savecode.BASE() - 1))
         }
@@ -140,7 +140,7 @@ export class Savecode {
             inputhash = this.Decode(Savecode.HASHN())
             this.Clean()
 
-            return inputhash == this.Hash()
+            return inputhash === this.Hash()
         } catch (e: any) {
             Logger.Critical('Error in OldSaves.Load, code: must: be: from: v4: version.2.or: greater: 0. {e.Message}')
             return false
@@ -148,7 +148,7 @@ export class Savecode {
     }
 
     public static LoadString() {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) {
+        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
             print('{Colors.COLOR_YELLOW}save: codes: work: only: Old in Standard')
             return
         }
@@ -162,7 +162,7 @@ export class Savecode {
             let originalTooltip = Savecode.OriginalToolTips[i]
 
             let packet = BlzGetAbilityTooltip(abilityID, 0)
-            if (packet == originalTooltip) break
+            if (packet === originalTooltip) break
             else {
                 BlzSetAbilityTooltip(abilityID, originalTooltip, 0)
                 sb.push(packet)
@@ -190,8 +190,8 @@ export class Savecode {
             let propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.key)
 
             // Award Events
-            if (propertyValue != -1 && decodedValue == 1) {
-                if (propertyValue == 0) {
+            if (propertyValue !== -1 && decodedValue === 1) {
+                if (propertyValue === 0) {
                     AwardManager.GiveReward(player, value.key)
                     continue
                 }
@@ -200,7 +200,7 @@ export class Savecode {
             if (value.key in roundstats) {
                 if (
                     decodedValue < roundstats[value.key as keyof RoundTimesData] ||
-                    roundstats[value.key as keyof RoundTimesData] == 0
+                    roundstats[value.key as keyof RoundTimesData] === 0
                 ) {
                     roundstats[value.key as keyof RoundTimesData] = decodedValue
                     continue

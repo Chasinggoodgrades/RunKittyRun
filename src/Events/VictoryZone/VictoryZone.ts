@@ -40,18 +40,18 @@ export class VictoryZone {
     private static VictoryAreaActions() {
         let u = getTriggerUnit()
         let player = u.owner
-        if (u.typeId != Constants.UNIT_KITTY) return
+        if (u.typeId !== Constants.UNIT_KITTY) return
         if (!Globals.GAME_ACTIVE) return
-        if (Gamemode.CurrentGameMode == GameMode.Standard) {
+        if (Gamemode.CurrentGameMode === GameMode.Standard) {
             // Standard
-            if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true
+            if (Globals.ROUND === Gamemode.NumberOfRounds) Gameover.WinGame = true
             RoundManager.RoundEnd()
-        } else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) {
+        } else if (Gamemode.CurrentGameMode === GameMode.SoloTournament) {
             // Solo
             // Move player to start, save their time. Wait for everyone to finish.
             //MoveAndFinish(player);
             RoundManager.RoundEndCheck()
-        } else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) {
+        } else if (Gamemode.CurrentGameMode === GameMode.TeamTournament) {
             // Team
             let kitty = Globals.ALL_KITTIES.get(player)!
             kitty.Finished = true
@@ -76,16 +76,16 @@ export class VictoryZone {
     }
 
     private static VictoryAreaConditionsStandard(u: Unit) {
-        return Gamemode.CurrentGameMode == GameMode.Standard
+        return Gamemode.CurrentGameMode === GameMode.Standard
     }
 
     private static VictoryAreaConditionsSolo(u: Unit) {
-        return Gamemode.CurrentGameMode == GameMode.SoloTournament
+        return Gamemode.CurrentGameMode === GameMode.SoloTournament
     }
 
     private static VictoryAreaConditionsTeam(u: Unit) {
         // If a team enters the area, check if all the members of the team are in the area.
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return false
+        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return false
         let team = Globals.ALL_KITTIES.get(u.owner)!.TeamID
         for (let player of Globals.ALL_TEAMS.get(team)!.Teammembers) {
             if (!this.VictoryContainerConditions(Globals.ALL_KITTIES.get(player)!.Unit)) return false

@@ -25,12 +25,12 @@ export class BurntMeat {
 
     public static RegisterDeathTrigger() {
         this.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
-        if (this.StanDeathActions != null) return
+        if (this.StanDeathActions !== null) return
         this.RegisterTurnInTrigger()
         this.StanDeathActions = this.StanDeath.addAction(
             ErrorHandler.Wrap(() => {
                 let killer = getKillingUnit()
-                if (killer == null) return
+                if (killer === null) return
                 NamedWolves.StanWolf.Texttag?.destroy()
                 Utility.RemoveItemFromUnit(killer, this.ITEM_CLOAK_FLAMES)
                 killer.addItemById(this.ITEM_BURNT_MEAT)
@@ -41,7 +41,7 @@ export class BurntMeat {
 
     private static RegisterTurnInTrigger() {
         TriggerRegisterUnitInRangeSimple(this.StanTurnIn.handle, 200, SpawnChampions.Stan2025.handle)
-        if (this.StanTurnInActions != null) return
+        if (this.StanTurnInActions !== null) return
         this.StanTurnInActions = this.StanTurnIn.addAction(
             ErrorHandler.Wrap(() => {
                 let unit = getTriggerUnit()

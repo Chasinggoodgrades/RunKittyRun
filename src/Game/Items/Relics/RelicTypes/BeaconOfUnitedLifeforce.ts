@@ -54,7 +54,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
 
     public BeaconOfUnitedLifeforceEffect(player: MapPlayer) {
         // Make sure person has the relic
-        if (player != this.Owner) return
+        if (player !== this.Owner) return
         let kitty = Globals.ALL_KITTIES.get(player)!
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return
 

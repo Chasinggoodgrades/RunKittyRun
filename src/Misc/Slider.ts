@@ -143,7 +143,7 @@ export class Slider {
 
                     this.wasSliding = false
 
-                    if (this.remainingDegreesToTurn != 0) {
+                    if (this.remainingDegreesToTurn !== 0) {
                         this.escaperTurnForOnePeriod()
                     }
 
@@ -276,7 +276,7 @@ export class Slider {
         let MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL: number = 51
 
         let remainingDegrees: number = this.remainingDegreesToTurn
-        if (remainingDegrees != 0) {
+        if (remainingDegrees !== 0) {
             let currentAngle: number = GetUnitFacing(this.kitty.Unit.handle)
 
             let diffToApplyAbs: number = Math.min(Math.abs(remainingDegrees), Math.abs(maxSlideTurnPerPeriod))

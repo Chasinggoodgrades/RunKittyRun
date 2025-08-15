@@ -50,7 +50,7 @@ export class PropertyEncoder {
     }
 
     private static AppendProperties(obj: object, jsonString: string[]) {
-        if (obj == null) return
+        if (obj === null) return
 
         let properties = Object.keys(obj)
         let firstProperty: boolean = true

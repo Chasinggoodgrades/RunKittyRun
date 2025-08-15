@@ -47,7 +47,7 @@ export class KittyMorphosis {
     /// Registers the triggers so that when someone hits the required level they'll morph.
     /// </summary>
     private RegisterTriggers() {
-        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return // Solo Mode
+        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) return // Solo Mode
         this.triggerHandle ??= Trigger.create()!
         this.triggerHandle.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_HERO_LEVEL)
         this.triggerHandle.addCondition(Condition(() => getTriggerUnit().getHeroLevel() >= this.REQUIRED_LEVEL))
