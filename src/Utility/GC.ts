@@ -18,7 +18,7 @@ export class GC {
         t.destroy()
     }
 
-    public static RemoveEffect(e: Effect) {
+    public static RemoveEffect(e: Effect | undefined) {
         // TODO; Cleanup:     public static RemoveEffect(ref effect e)
         if (e == null) return
         e.destroy()

@@ -9,13 +9,13 @@ export class SeasonalAwards {
     private static Season: HolidaySeasons
 
     public static Initialize() {
-        Season = SeasonalManager.Season
-        if (Season == HolidaySeasons.None) return
-        Utility.SimpleTimer(180.0, FreebeSeasonalAwards)
+        SeasonalAwards.Season = SeasonalManager.Season
+        if (SeasonalAwards.Season == HolidaySeasons.None) return
+        Utility.SimpleTimer(180.0, SeasonalAwards.FreebeSeasonalAwards)
     }
 
     public static FreebeSeasonalAwards() {
-        if (Season == HolidaySeasons.Christmas) ChristmasFreebies()
+        if (SeasonalAwards.Season == HolidaySeasons.Christmas) SeasonalAwards.ChristmasFreebies()
     }
 
     private static ChristmasFreebies() {

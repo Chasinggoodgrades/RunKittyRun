@@ -8,8 +8,8 @@ import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
-import { getTriggerUnit, getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { Trigger, MapPlayer, Unit } from 'w3ts'
+import { getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { MapPlayer, Trigger, Unit } from 'w3ts'
 
 export class CrystalOfFire {
     private static ItemID: number
@@ -96,8 +96,7 @@ export class CrystalOfFire {
         let player = getTriggerPlayer()
         if (!this.QuestEligible.includes(player)) return
         let kitty = Globals.ALL_KITTIES.get(player)!
-        let region = Regions.Spawn_Area_05.Center
-        kitty.Unit.setPosition(region.x, region.y)
+        kitty.Unit.setPosition(Regions.Spawn_Area_05.centerX, Regions.Spawn_Area_05.centerY)
         kitty.CurrentStats.CrystalOfFireAttempts = -1
         Utility.ClearScreen(player)
         player.DisplayTimedTextTo(

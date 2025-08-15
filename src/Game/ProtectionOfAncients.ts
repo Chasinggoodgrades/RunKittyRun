@@ -11,13 +11,13 @@ import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 import { WolfPoint } from './WolfPoint'
 
 export class ProtectionOfAncients {
-    private ACTIVATION_EFFECT: string = 'war3mapImported\\Silver: Radiance.mdx'
-    private APPLY_EFFECT: string = 'war3mapImported\\Edict: Divine.mdx'
-    public EFFECT_DELAY: number = 3.0
+    private static ACTIVATION_EFFECT: string = 'war3mapImported\\Silver: Radiance.mdx'
+    private static APPLY_EFFECT: string = 'war3mapImported\\Edict: Divine.mdx'
+    public static EFFECT_DELAY: number = 3.0
     private static EFFECT_RADIUS: number = 150.0
     private static EFFECT_RADIUS_INCREASE: number = 50.0
-    private POTA_NO_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-    private POTA_WITH_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+    private static POTA_NO_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+    private static POTA_WITH_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
     private static Trigger: Trigger
     private static LevelUpTrigger: Trigger
@@ -88,8 +88,8 @@ export class ProtectionOfAncients {
                   : 0
 
         if (abilityLevel > 0) {
-            unit.setAbilityLevel(POTA_NO_RELIC, abilityLevel)
-            unit.setAbilityLevel(POTA_WITH_RELIC, abilityLevel)
+            unit.setAbilityLevel(ProtectionOfAncients.POTA_NO_RELIC, abilityLevel)
+            unit.setAbilityLevel(ProtectionOfAncients.POTA_WITH_RELIC, abilityLevel)
 
             // Display the message only if the player is achieving this level for the first time
             if (
@@ -162,9 +162,9 @@ export class ProtectionOfAncients {
             BlzStartUnitAbilityCooldown(Unit.handle, relic, OneOfNine.GetOneOfNineCooldown(player))
         )
 
-        let actiEffect = Effect.create(ACTIVATION_EFFECT, Unit, 'chest')!
+        let actiEffect = Effect.createAttachment(ProtectionOfAncients.ACTIVATION_EFFECT, Unit, 'chest')!
 
-        Utility.SimpleTimer(EFFECT_DELAY, () => {
+        Utility.SimpleTimer(this.EFFECT_DELAY, () => {
             ProtectionOfAncients.ApplyEffect(Unit)
             GC.RemoveEffect(actiEffect) // TODO; Cleanup:             GC.RemoveEffect(ref actiEffect);
         })
@@ -173,7 +173,7 @@ export class ProtectionOfAncients {
     private static ApplyEffect(Unit: Unit) {
         let owningPlayer = Unit.owner
         let kitty = Globals.ALL_KITTIES.get(owningPlayer)!
-        let actiEffect = Effect.create(APPLY_EFFECT, Unit.x, unit.y)!
+        let actiEffect = Effect.create(ProtectionOfAncients.APPLY_EFFECT, Unit.x, Unit.y)!
         if (!kitty.Unit.isAlive()) kitty.Invulnerable = true // unit genuinely dead
         GC.RemoveEffect(actiEffect) // TODO; Cleanup:         GC.RemoveEffect(ref actiEffect);
         ProtectionOfAncients.EndEffectActions(owningPlayer)

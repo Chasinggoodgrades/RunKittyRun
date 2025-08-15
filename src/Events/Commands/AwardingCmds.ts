@@ -1,11 +1,12 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
 import { CustomStatFrame } from 'src/UI/CustomStatFrame'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
-import { int } from 'src/Utility/Utility'
+import { int, Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { PersonalBests } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/PersonalBests'
@@ -17,32 +18,32 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static Awarding(player: MapPlayer, args: string[]) {
-        let award = args[0].toLowerCase()
-        let selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
-        let selectedPlayer = selectedUnit.owner
+    public static Awarding(player: MapPlayer, args: string[]): void {
+        const award = args[0].toLowerCase()
+        const selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
+        const selectedPlayer = selectedUnit.owner
 
-        if (args[0] == '') return
+        if (args[0] === '') return
 
-        if (award.toLowerCase() == 'help') {
+        if (award.toLowerCase() === 'help') {
             AwardingCmds.AwardingHelp(player)
             return
         }
 
-        if (award.toLowerCase() == 'all') {
+        if (award.toLowerCase() === 'all') {
             AwardingCmds.AwardAll(player)
             return
         }
 
-        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
-            let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let awd of Object.keys(subCategory)) {
-                let awardString = awd.name.toLowerCase()
-                let inputAward = award.toLowerCase()
+        for (const category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
+            const subCategory = Globals.GAME_AWARDS_SORTED[category as keyof GameAwardsDataSorted]
+            for (const awd of Object.keys(subCategory)) {
+                const awardString = awd.toLowerCase()
+                const inputAward = award.toLowerCase()
 
                 // Exact match
-                if (awardString == inputAward) {
-                    AwardManager.GiveReward(selectedPlayer, awd.name)
+                if (awardString === inputAward) {
+                    AwardManager.GiveReward(selectedPlayer, awd)
                     return
                 }
             }
@@ -50,32 +51,31 @@ export class AwardingCmds {
 
         player.DisplayTimedTextTo(
             3.0,
-            `{Colors.COLOR_YELLOW_ORANGE}No valid award found for input: |r{Colors.HighlightString(award)} {Colors.COLOR_YELLOW_ORANGE}try using ?award help|r`
+            `${Colors.COLOR_YELLOW_ORANGE}No valid award found for input: |r${Colors.HighlightString(award)} ${Colors.COLOR_YELLOW_ORANGE}try using ?award help|r`
         )
     }
 
     private static AwardingHelp(player: MapPlayer) {
-        let combined = '';
+        let combined = ''
 
-        for (const category of Object.keys(Globals.GAME_AWARDS_SORTED) as Array<keyof typeof Globals.GAME_AWARDS_SORTED>) { // YUCK
-            const subCategory = Globals.GAME_AWARDS_SORTED[category];
-            for (const awdKey of Object.keys(subCategory)) {
-                const awd = subCategory[awdKey]; // This... is just a shit show. I think we need to make an interface .. implement it for the awards types and do it from there.. but i have no idea how thats going change the save system if it'll even work.
-                combined += awd.name + ', ';
+        for (const category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
+            const subCategory = Globals.GAME_AWARDS_SORTED[category as keyof GameAwardsDataSorted]
+            for (const awd of Object.keys(subCategory)) {
+                combined += awd + ', '
             }
         }
 
         player.DisplayTimedTextTo(
             15.0,
-            `${Colors.COLOR_YELLOW_ORANGE}awards: Valid: ${Colors.HighlightString(combined)}`
-        );
+            `${Colors.COLOR_YELLOW_ORANGE}Valid awards: ${Colors.HighlightString(combined)}`
+        )
     }
 
     private static AwardAll(player: MapPlayer) {
-        for (let category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
-            let subCategory = category.GetValue(Globals.GAME_AWARDS_SORTED)
-            for (let property of Object.keys(subCategory)) {
-                AwardManager.GiveReward(player, property.name)
+        for (const category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
+            const subCategory = Globals.GAME_AWARDS_SORTED[category as keyof GameAwardsDataSorted]
+            for (const property of Object.keys(subCategory)) {
+                AwardManager.GiveReward(player, property)
             }
         }
     }
@@ -238,29 +238,26 @@ export class AwardingCmds {
 
         // Previously this wasn't sorted by round number, so i had to hard code the order with one two three etc.. but ye its sorted now
         let properties = Object.keys(Globals.GAME_TIMES)
-            .filter(p => isNullOrEmpty(difficultyArg) || p.name.toLowerCase().includes(difficultyArg.toLowerCase()))
-            .OrderBy(p => AwardingCmds.GetRoundNumber(p.name))
+            .filter(p => isNullOrEmpty(difficultyArg) || p.toLowerCase().includes(difficultyArg.toLowerCase()))
+            .sort((a, b) => AwardingCmds.GetRoundNumber(a) - AwardingCmds.GetRoundNumber(b))
 
-        for (let property in properties) {
-            let value = property.GetValue(kitty.SaveData.RoundTimes)
+        for (const property of properties) {
+            let value = kitty.SaveData.RoundTimes[property as keyof RoundTimesData]
 
-            let color: string = property.name.includes('Normal')
+            let color: string = property.includes('Normal')
                 ? Colors.COLOR_YELLOW
-                : property.name.includes('Hard')
+                : property.includes('Hard')
                   ? Colors.COLOR_RED
-                  : property.name.includes('Impossible')
+                  : property.includes('Impossible')
                     ? Colors.COLOR_DARK_RED
                     : Colors.COLOR_YELLOW_ORANGE // Default fallback
 
-            combined +=
-                '{color}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {Utility.ConvertFloatToTimeInt(value)}\n'
+            combined += `${color}${Utility.FormatAwardName(property)}${Colors.COLOR_RESET}: ${Utility.ConvertFloatToTimeInt(value)}\n`
         }
 
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}times: for: Game {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}',
-            0,
-            0
+            `${Colors.COLOR_YELLOW}times: for: Game ${Colors.PlayerNameColored(kitty.Player)}:\n${Colors.HighlightString(combined)}${Colors.COLOR_RESET}`
         )
     }
 
@@ -282,16 +279,15 @@ export class AwardingCmds {
     public static GetKibbleCurrencyInfo(player: MapPlayer, kitty: Kitty) {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined = ''
-        let kibbleCurrency = kitty.SaveData.KibbleCurrency
-        for (let property of Object.keys(kibbleCurrency)) {
-            let value = property.GetValue(kibbleCurrency)
-            combined +=
-                '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'
+        const kibbleCurrency = kitty.SaveData.KibbleCurrency
+        for (const property of Object.keys(kibbleCurrency)) {
+            const value = (property as any).GetValue(kibbleCurrency)
+            combined += `${Colors.COLOR_YELLOW_ORANGE}${Utility.FormatAwardName((property as any).name)}${Colors.COLOR_RESET}: ${value}\n`
         }
-        let nameColored = Colors.PlayerNameColored(kitty.Player)
+        const nameColored = Colors.PlayerNameColored(kitty.Player)
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}Kibble: Info: Overall|r ({nameColored})\n{Colors.HighlightString(combined)}\n{Colors.COLOR_YELLOW}Game: Info: Current:|r ({nameColored})\n{CurrentKibbleInfo(kitty)}{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}Kibble: Info: Overall|r (${nameColored})\n${Colors.HighlightString(combined)}\n${Colors.COLOR_YELLOW}Game: Info: Current:|r (${nameColored})\n${AwardingCmds.CurrentKibbleInfo(kitty)}${Colors.COLOR_RESET}`
         )
     }
 

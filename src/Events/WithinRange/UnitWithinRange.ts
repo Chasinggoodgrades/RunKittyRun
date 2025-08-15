@@ -14,27 +14,27 @@ export class UnitWithinRange {
             return false
         }
 
-        TriggerRegisterUnitInRange(execution, u, range, Condition(filter))
+        execution.registerUnitInRage(u.handle, range, Condition(filter))
 
         return true
     }
 
     public static DeRegisterUnitWithinRangeUnit(kitty: Kitty) {
-        kitty.w_Collision.ClearActions()
-        kitty.c_Collision.ClearActions()
+        kitty.w_Collision.removeActions()
+        kitty.c_Collision.removeActions()
         kitty.w_Collision.destroy()
         kitty.c_Collision.destroy()
-        kitty.w_Collision = null
-        kitty.c_Collision = null
+        kitty.w_Collision = null as never
+        kitty.c_Collision = null as never
     }
 
     public static DeRegisterUnitWithinRangeUnitShadow(kitty: ShadowKitty) {
-        kitty.cCollision.ClearActions()
-        kitty.wCollision.ClearActions()
+        kitty.cCollision.removeActions()
+        kitty.wCollision.removeActions()
         kitty.wCollision.destroy()
         kitty.cCollision.destroy()
-        kitty.wCollision = null
-        kitty.cCollision = null
+        kitty.wCollision = null as never
+        kitty.cCollision = null as never
     }
 
     public static RegisterUnitWithinRangeTrigger(u: Unit, range: number, filter: () => boolean, execution: Trigger) {

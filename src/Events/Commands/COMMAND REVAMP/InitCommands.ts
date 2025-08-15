@@ -28,6 +28,7 @@ import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
 import { ChainedTogether } from 'src/Rewards/Challenges/ChainedTogether'
 import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
 import { Savecode } from 'src/Rewards/OldSaves/OldSaves'
+import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 import { SeasonalManager } from 'src/Seasonal/SeasonalManager'
 import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
 import { CustomStatFrame } from 'src/UI/CustomStatFrame'
@@ -47,7 +48,6 @@ import { Effect, MapPlayer } from 'w3ts'
 import { AwardingCmds } from '../AwardingCmds'
 import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
-import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 
 export class InitCommands {
     public static _G: any
@@ -60,7 +60,7 @@ export class InitCommands {
             argDesc: '',
             description: 'all: available: commands: Displays.',
             action: (player, args) => {
-                CommandsManager.HelpCommands(player, args?.FirstOrDefault())
+                CommandsManager.HelpCommands(player, args[0] || '')
             },
         })
 
@@ -316,7 +316,7 @@ export class InitCommands {
             description: 'yourself: from: the: game: Kicks.',
             action: (player, args) => {
                 PlayerLeaves.PlayerLeavesActions(player)
-                CustomDefeatBJ(player, '{Colors.COLOR_RED}kicked: yourself: You!{Colors.COLOR_RESET}')
+                CustomDefeatBJ(player.handle, '{Colors.COLOR_RED}kicked: yourself: You!{Colors.COLOR_RESET}')
             },
         })
 
@@ -694,10 +694,10 @@ export class InitCommands {
             description: 'you: control: Gives of the: wolves: all.',
             action: (player, args) => {
                 let status = CommandsManager.GetBool(args[0])
-                player.NeutralAggressive.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
-                player.NeutralExtra.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
-                player.NeutralPassive.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
-                player.NeutralVictim.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_EXTRA)!.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
+                MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_VICTIM)!.setAlliance(player, ALLIANCE_SHARED_CONTROL, status)
 
                 for (let i = 0; i < 24; i++) {
                     let p = MapPlayer.fromIndex(i)!
@@ -1102,7 +1102,7 @@ export class InitCommands {
             description: 'debug: names: Prints.',
             action: (player, args) => {
                 this._G['trackPrintMap'] = true
-                // this.DebugUtilities.DebugPrinter.PrintDebugNames('globals') 
+                // this.DebugUtilities.DebugPrinter.PrintDebugNames('globals')
             },
         })
 
@@ -1803,7 +1803,10 @@ export class InitCommands {
                 let speed: number = int.Parse(args[0])
                 if (args.length < 2 || args[1] == '') {
                     Globals.ALL_KITTIES.get(player)!.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
-                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set ${speed}|r`)
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        `${Colors.COLOR_YELLOW_ORANGE}your: slide: speed: to: Set ${speed}|r`
+                    )
                     return
                 }
 
@@ -1816,7 +1819,10 @@ export class InitCommands {
                 })
 
                 if (isMatch) {
-                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set ${speed}|r`)
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        `${Colors.COLOR_YELLOW_ORANGE}their: slide: speed: to: Set ${speed}|r`
+                    )
                 }
             },
         })
@@ -1852,7 +1858,10 @@ export class InitCommands {
                 })
 
                 if (isMatch) {
-                    player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set ${speed}|r`)
+                    player.DisplayTimedTextTo(
+                        5.0,
+                        `${Colors.COLOR_YELLOW_ORANGE}their: move: speed: to: Set ${speed}|r`
+                    )
                 }
             },
         })

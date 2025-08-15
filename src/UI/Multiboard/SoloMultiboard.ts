@@ -116,25 +116,28 @@ export class SoloMultiboard {
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         let sortedPlayers =
             Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
-                ? Globals.ALL_KITTIES.OrderByDescending(kvp => kvp.Value.TimeProg.GetOverallProgress()).ThenBy(
-                      kvp => kvp.Key.id
-                  ) // Progression mode
-                : Globals.ALL_KITTIES.OrderBy(kvp => kvp.Value.TimeProg.GetTotalTime())
-                      .ThenBy(kvp => kvp.Key.id)
-                      .ThenBy(kvp => kvp.Value.Finished) // Race Mode       -- Holy BAD LEAKS
+                ? Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
+                      let progDiff = b[1].TimeProg.GetOverallProgress() - a[1].TimeProg.GetOverallProgress()
+                      if (progDiff !== 0) return progDiff
+                      return a[0].id - b[0].id
+                  }) // Progression mode
+                : Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
+                      let timeDiff = a[1].TimeProg.GetTotalTime() - b[1].TimeProg.GetTotalTime()
+                      if (timeDiff !== 0) return timeDiff
+                      let idDiff = a[0].id - b[0].id
+                      if (idDiff !== 0) return idDiff
+                      return a[1].Finished === b[1].Finished ? 0 : a[1].Finished ? 1 : -1
+                  }) // Race Mode       -- Holy BAD LEAKS
 
-        SoloMultiboard.sortedDict = sortedPlayers.ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value
-        ) // Avoid pass by reference
+        SoloMultiboard.sortedDict = new Map(sortedPlayers) // Avoid pass by reference
 
-        for (let player in SoloMultiboard.sortedDict.Keys) {
-            let times = SoloMultiboard.sortedDict[player].TimeProg
+        for (let [player, _] of SoloMultiboard.sortedDict) {
+            let times = SoloMultiboard.sortedDict.get(player)!.TimeProg
             let playerColor = Colors.GetStringColorOfPlayer(player.id + 1)
-            let totalDeaths = SoloMultiboard.sortedDict[player].CurrentStats.TotalDeaths
+            let totalDeaths = SoloMultiboard.sortedDict.get(player)!.CurrentStats.TotalDeaths
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             let status = Globals.ALL_KITTIES.get(player)!.Finished ? 'Finished' : 'Racing'
-            SoloMultiboard.MBSlot[player] = rowIndex
+            SoloMultiboard.MBSlot.set(player, rowIndex)
             let stats =
                 Gamemode.CurrentGameModeType == Globals.SOLO_MODES[0]
                     ? [
@@ -210,10 +213,9 @@ export class SoloMultiboard {
     public static UpdateDeathCount(player: MapPlayer) {
         try {
             if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return
-            let rowIndex: number = (value = SoloMultiboard.MBSlot.TryGetValue(player) /* TODO; Prepend: number */
-                ? value
-                : 0)
-            if (rowIndex == 0) return
+            let value
+            let rowIndex = (value = SoloMultiboard.MBSlot.get(player) ? value : 0)
+            if (!rowIndex || rowIndex == 0) return
             SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
                 '{Colors.GetStringColorOfPlayer(player.id + 1)}{Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}'
             )

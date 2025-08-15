@@ -21,26 +21,26 @@ export class KittyStatsManager {
     public UpdateSaviorStats(savior: Kitty) {
         savior.Player.addGold(Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak))
         savior.Unit.experience += Resources.SaveExperience
-        SaveStatUpdate(savior)
+        this.SaveStatUpdate(savior)
     }
 
     /// <summary>
     /// This is called whenever the kitty dies, updating their death stats, resetting save streak, and deathless progress.
     /// </summary>
     public DeathStatUpdate() {
-        DeathlessChallenges.ResetPlayerDeathless(Kitty)
-        Kitty.CurrentStats.TotalDeaths += 1
-        Kitty.CurrentStats.RoundDeaths += 1
-        Kitty.CurrentStats.SaveStreak = 0
-        Kitty.SaveData.GameStats.SaveStreak = 0
+        DeathlessChallenges.ResetPlayerDeathless(this.Kitty)
+        this.Kitty.CurrentStats.TotalDeaths += 1
+        this.Kitty.CurrentStats.RoundDeaths += 1
+        this.Kitty.CurrentStats.SaveStreak = 0
+        this.Kitty.SaveData.GameStats.SaveStreak = 0
 
-        if (Kitty.aiController.IsEnabled()) return
+        if (this.Kitty.aiController.IsEnabled()) return
 
-        SoloMultiboard.UpdateDeathCount(Kitty.Player)
+        SoloMultiboard.UpdateDeathCount(this.Kitty.Player)
 
         if (Gamemode.CurrentGameMode != GameMode.Standard) return
 
-        Kitty.SaveData.GameStats.Deaths += 1
+        this.Kitty.SaveData.GameStats.Deaths += 1
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ export class KittyStatsManager {
     /// </summary>
     /// <param name="savior"></param>
     public SaveStatUpdate(savior: Kitty) {
-        if (Kitty.aiController.IsEnabled()) return
+        if (this.Kitty.aiController.IsEnabled()) return
 
         savior.CurrentStats.TotalSaves += 1
         savior.CurrentStats.RoundSaves += 1

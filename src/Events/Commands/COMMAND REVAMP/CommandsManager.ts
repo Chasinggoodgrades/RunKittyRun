@@ -6,7 +6,9 @@ import { Action } from 'src/Utility/CSUtils'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { Group, MapPlayer } from 'w3ts'
+import { MapPlayer } from 'w3ts'
+
+type CmdAction = (player: MapPlayer, args: string[]) => void
 
 export class Commands {
     public name: string
@@ -14,7 +16,7 @@ export class Commands {
     public Group: string // "all", "vip", "admin", "dev" "some other shit? naw prolly good", "oh yeah, i should put red lmao"
     public ArgDesc: string
     public Description: string
-    public Action: Action
+    public Action: CmdAction
 }
 
 export class CommandsManager {
@@ -29,7 +31,7 @@ export class CommandsManager {
         group: string
         argDesc: string
         description: string
-        action: Action
+        action: CmdAction
     }) {
         let command = new Commands()
         command.name = props.name
@@ -82,7 +84,7 @@ export class CommandsManager {
                     kitties.push(kitty)
                 }
             }
-        } else if ((!isNaN(parseInt(arg, 10)))) {
+        } else if (!isNaN(parseInt(arg, 10))) {
             let playerId = parseInt(arg, 10)
             let kitty = Globals.ALL_KITTIES.get(MapPlayer.fromIndex(playerId - 1)!)
             if (kitty) {

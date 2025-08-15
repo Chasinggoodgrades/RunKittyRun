@@ -15,9 +15,9 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class RingOfSummoning extends Relic {
-    public RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING
-    public RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE
-    private RelicCost: number = 650
+    public static RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING
+    public static RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE
+    private static RelicCost: number = 650
     private static SUMMONING_RING_RADIUS: number = 300.0
     private static SUMMONING_COOLDOWN: number = 90.0
     private static UPGRADE_COOLDOWN_REDUCTION: number = 30.0
@@ -27,15 +27,15 @@ export class RingOfSummoning extends Relic {
     private SummonGroup: Group
 
     public constructor() {
-        ;(super(),
-            (this.name = '{Colors.COLOR_GREEN}Sacred Ring of Summoning|r'),
-            (this.Description =
-                'On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.' +
-                ' {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r'),
-            (this.RelicAbilityID = this.RelicAbilityID),
-            (this.RelicItemID = this.RelicItemID),
-            (this.RelicCost = this.RelicCost),
-            (this.IconPath = RingOfSummoning.IconPath))
+        super(
+            '{Colors.COLOR_GREEN}Sacred Ring of Summoning|r',
+            'On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.' +
+                ' {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r',
+            RingOfSummoning.RelicAbilityID,
+            RingOfSummoning.RelicItemID,
+            RingOfSummoning.RelicCost,
+            RingOfSummoning.IconPath
+        )
 
         this.Upgrades.push(
             new RelicUpgrade(
@@ -75,7 +75,7 @@ export class RingOfSummoning extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         let ability = Unit.getAbility(this.RelicAbilityID)!
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
 
         // Summon radius thingy
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, RingOfSummoning.SUMMONING_RING_RADIUS)
@@ -86,7 +86,7 @@ export class RingOfSummoning extends Relic {
                 : RingOfSummoning.SUMMONING_COOLDOWN
 
         // Set cooldown based on the upgrade lvl.
-        RelicUtil.SetAbilityCooldown(Unit, this.RelicItemID, this.RelicAbilityID, cooldown)
+        RelicUtil.SetAbilityCooldown(Unit, RingOfSummoning.RelicItemID, this.RelicAbilityID, cooldown)
     }
 
     private SacredRingOfSummoning() {
@@ -102,8 +102,10 @@ export class RingOfSummoning extends Relic {
 
         // Prepare relic mechanics
         RelicUtil.CloseRelicBookPlayer(player)
-        if (this.Owner === null) return
-        Utility.SimpleTimer(0.1, () => RelicUtil.SetRelicCooldowns(this.Owner!, this.RelicItemID, this.RelicAbilityID))
+        if (!this.Owner) return
+        Utility.SimpleTimer(0.1, () =>
+            RelicUtil.SetRelicCooldowns(this.Owner!, RingOfSummoning.RelicItemID, this.RelicAbilityID)
+        )
 
         // Filter eligible summon targets
         let filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
@@ -132,7 +134,7 @@ export class RingOfSummoning extends Relic {
             // Position adjustments and revival
             kitty.Unit.setPosition(summoningKittyUnit.x, summoningKittyUnit.y)
             kitty.ProgressZone = summoningKitty.ProgressZone
-            Globals.ALL_CIRCLES[unit.owner].Unit.setPosition(summoningKittyUnit.x, summoningKittyUnit.y)
+            Globals.ALL_CIRCLES.get(unit.owner)!.Unit.setPosition(summoningKittyUnit.x, summoningKittyUnit.y)
             kitty.ReviveKitty(summoningKitty)
 
             // Notify players

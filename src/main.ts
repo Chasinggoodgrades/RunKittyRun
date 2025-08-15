@@ -1,5 +1,5 @@
 import { Units } from '@objectdata/units'
-import { MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Unit } from 'w3ts'
+import { Effect, MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Unit } from 'w3ts'
 import { Players } from 'w3ts/globals'
 import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
 import { Program } from './Program'
@@ -55,6 +55,18 @@ function tsMain() {
             this.setGold(this.getGold() + amount)
         }
 
+        MapPlayer.prototype.getLumber = function (): number {
+            return GetPlayerState(this.handle, PLAYER_STATE_RESOURCE_LUMBER)
+        }
+
+        MapPlayer.prototype.setLumber = function (amount: number): void {
+            SetPlayerState(this.handle, PLAYER_STATE_RESOURCE_LUMBER, amount)
+        }
+
+        MapPlayer.prototype.addLumber = function (amount: number): void {
+            this.setLumber(this.getLumber() + amount)
+        }
+
         Rectangle.prototype.includes = function (x: number, y: number): boolean {
             return this.minX <= x && x <= this.maxX && this.minY <= y && y <= this.maxY
         }
@@ -83,6 +95,10 @@ function tsMain() {
 
         Unit.prototype.issueImmediateOrderById = function (orderId: number): void {
             IssueImmediateOrderById(this.handle, orderId)
+        }
+
+        Unit.prototype.addSpecialEffectTarget = function (model: string, attachmentPoint: string): Effect {
+            return Effect.fromHandle(AddSpecialEffectTarget(model, this.handle, attachmentPoint))!
         }
 
         new Program()

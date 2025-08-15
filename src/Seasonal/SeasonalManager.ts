@@ -33,7 +33,7 @@ export class SeasonalManager {
     /// Must be standard mode for seasonal changes to occur.
     /// </summary>
     public static Initialize() {
-        SeasonalManager.CurrentMonth = DateTimeManager.DateTime.Month
+        SeasonalManager.CurrentMonth = DateTimeManager.DateTime.month
         SeasonalManager.DetermineSeason()
         SeasonalManager.SetMinimap()
         SeasonalManager.SetWeather()

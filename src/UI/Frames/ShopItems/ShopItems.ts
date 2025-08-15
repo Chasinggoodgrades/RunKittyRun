@@ -25,33 +25,37 @@ export class ShopItem {
     public ItemID: number
     public AbilityID: number
     public Description: string
-    public IconPath: string
+    public IconPath: string | undefined
     public Relic: Relic
     public Award: string
     public Type: ShopItemType
 
-    public ShopItemFromRelic(relic: Relic) {
-        if (relic == null) throw new Error('Invalid relic')
+    constructor(relic: Relic)
+    constructor(award: string, cost: number, abilityID: number, description: string)
+    constructor(name: string, cost: number, itemID: number, iconPath: string | undefined, description: string)
+    constructor(...args: any[]) {
+        if (args.length === 1 && args[0] instanceof Relic) {
+            const relic = args[0] as Relic
+            if (relic == null) throw new Error('Invalid relic')
 
-        this.InitializeShopItem(
-            relic.name,
-            relic.Cost,
-            relic.ItemID,
-            relic.Description,
-            relic.IconPath,
-            ShopItemType.Relic
-        )
-        this.Relic = relic
-    }
-
-    public ShopItem(award: string, cost: number, abilityID: number, description: string) {
-        this.InitializeShopItem(award, cost, abilityID, description, null, ShopItemType.Reward)
-        this.Award = award
-        this.IconPath = BlzGetAbilityIcon(abilityID)
-    }
-
-    public ShopItem(name: string, cost: number, itemID: number, iconPath: string, description: string) {
-        this.InitializeShopItem(name, cost, itemID, description, iconPath, ShopItemType.Misc)
+            this.InitializeShopItem(
+                relic.name,
+                relic.Cost,
+                relic.ItemID,
+                relic.Description,
+                relic.IconPath,
+                ShopItemType.Relic
+            )
+            this.Relic = relic
+        } else if (args.length === 4 && typeof args[0] === 'string' && typeof args[2] === 'number') {
+            const [award, cost, abilityID, description] = args as [string, number, number, string]
+            this.InitializeShopItem(award, cost, abilityID, description, undefined, ShopItemType.Reward)
+            this.Award = award
+            this.IconPath = BlzGetAbilityIcon(abilityID)
+        } else if (args.length === 5 && typeof args[2] === 'number') {
+            const [name, cost, itemID, iconPath, description] = args as [string, number, number, string, string]
+            this.InitializeShopItem(name, cost, itemID, description, iconPath, ShopItemType.Misc)
+        }
     }
 
     private InitializeShopItem(
@@ -59,7 +63,7 @@ export class ShopItem {
         cost: number,
         itemID: number,
         description: string,
-        iconPath: string,
+        iconPath: string | undefined,
         type: ShopItemType
     ) {
         this.name = name
@@ -101,7 +105,8 @@ export class ShopItem {
         let shopItems: ShopItem[] = []
         let gameAwards = Globals.GAME_AWARDS_SORTED
 
-        let reward = RewardsManager.Rewards.find(x => x.name == 'GreenTendrils')
+        let reward = RewardsManager.Rewards.find(x => x.name == 'GreenTendrils')!
+
         shopItems.push(
             new ShopItem(
                 'GreenTendrils',

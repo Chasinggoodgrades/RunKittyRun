@@ -19,6 +19,7 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
+import { Program } from 'src/Program'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
 import { Savecode } from 'src/Rewards/OldSaves/OldSaves'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
@@ -39,7 +40,6 @@ import { MapPlayer, base64Decode } from 'w3ts'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
-import { Program } from 'src/Program'
 
 export class Setup {
     private static timeToChoose: number = 0.0
@@ -71,7 +71,7 @@ export class Setup {
             Globals.GAME_INITIALIZED = true
             if (!Program.Debug) return
             Difficulty.ChangeDifficulty('normal')
-            Gamemode.SetGameMode(Globals.GAME_MODES[0])
+            Gamemode.SetGameMode(GameMode.Standard)
         } catch (e: any) {
             Logger.Critical('Error in Setup.Initialize: {e.Message}')
             throw e
@@ -142,7 +142,7 @@ export class Setup {
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState == PLAYER_SLOT_STATE_PLAYING)
                 Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
-            MapPlayer.fromIndex(i)!.Team = 0 // Need to check C# implementation
+            SetPlayerTeam(MapPlayer.fromIndex(i)!.handle, 0) // Need to check C# implementation
         }
     }
 

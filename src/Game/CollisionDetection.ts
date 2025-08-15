@@ -17,7 +17,7 @@ import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 
 export class CollisionDetection {
     public static DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
-    private CIRCLE_COLLISION_RADIUS: number = 78.0
+    private static CIRCLE_COLLISION_RADIUS: number = 78.0
 
     private static IsBeaconOfUnitedLifeforce = (r: Relic): r is BeaconOfUnitedLifeforce => {
         return r instanceof BeaconOfUnitedLifeforce
@@ -41,7 +41,7 @@ export class CollisionDetection {
                 getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE &&
                 getFilterUnit().owner != sk.Player && // Not Same Player
                 sk.Unit.isAlive() && // Has to Be Alive
-                Globals.ALL_KITTIES.get(getFilterUnit()!.owner).TeamID == Globals.ALL_KITTIES.get(sk.Player)!.TeamID
+                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID == Globals.ALL_KITTIES.get(sk.Player)!.TeamID
             ) // Must be same team
         }
     }
@@ -52,7 +52,7 @@ export class CollisionDetection {
                 getFilterUnit().typeId == Constants.UNIT_KITTY_CIRCLE &&
                 getFilterUnit().owner != k.Player && // Not Same Player
                 k.isAlive() && // Has to Be Alive
-                Globals.ALL_KITTIES.get(getFilterUnit()!.owner).TeamID == Globals.ALL_KITTIES.get(k.Player)!.TeamID && // Must be same team
+                Globals.ALL_KITTIES.get(getFilterUnit()!.owner)?.TeamID == Globals.ALL_KITTIES.get(k.Player)!.TeamID && // Must be same team
                 Gamemode.CurrentGameMode != GameMode.SoloTournament
             ) // Not Solo Mode
         }
@@ -71,7 +71,7 @@ export class CollisionDetection {
         )
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
-            CIRCLE_COLLISION_RADIUS,
+            CollisionDetection.CIRCLE_COLLISION_RADIUS,
             this.CircleCollisionFilter(k),
             this.CircleCollisionTrigger(k)
         )
@@ -83,13 +83,13 @@ export class CollisionDetection {
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
-            DEFAULT_WOLF_COLLISION_RADIUS,
+            CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS,
             this.ShadowRelicWolvesFilter(sk),
             this.WolfCollisionShadowTrigger(sk)
         )
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
-            CIRCLE_COLLISION_RADIUS,
+            CollisionDetection.CIRCLE_COLLISION_RADIUS,
             this.ShadowRelicCircleFilter(sk),
             this.CircleCollisionShadowTrigger(sk)
         )

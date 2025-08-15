@@ -43,7 +43,7 @@ export class Windwalk {
         if (!k.isAlive()) return // cannot cast if dead obviously.
         if (UnitHasBuffBJ(k.Unit.handle, Windwalk.WindwalkID)) return
         k.Unit.issueImmediateOrder('windwalk')
-        k.Unit.issueImmediateOrderById(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY)
+        k.Unit.issueOrderAt(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY)
     }
 
     private static ApplyWindwalkEffect() {
@@ -58,10 +58,10 @@ export class Windwalk {
             if (wwID != 0) {
                 let reward = RewardsManager.Rewards.find(r => r.GetAbilityID() == wwID)!
                 let visual = reward.ModelPath
-                let e = caster.AddSpecialEffect(visual, 'origin')
+                let e = caster.addSpecialEffectTarget(visual, 'origin')
                 if (e != null) {
                     Utility.SimpleTimer(duration, () => {
-                        if (e != null) DestroyEffect(e)
+                        if (e != null) e.destroy()
                     })
                 }
             }

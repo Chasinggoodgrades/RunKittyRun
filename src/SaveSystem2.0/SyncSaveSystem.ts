@@ -125,10 +125,11 @@ export class FilePromise {
     public Finish() {
         try {
             this.HasLoaded = true
-            let loadString: string = ''
+            let loadString: string[] = []
             for (let i: number = 0; i < this.Buffer.size; i++) {
                 if (this.Buffer.has(i)) {
-                    loadString += this.Buffer.get(i)
+                    const d = this.Buffer.get(i)
+                    d && loadString.push(d)
                     //if(Program.Debug) print("{Buffer[i]}");
                 }
             }

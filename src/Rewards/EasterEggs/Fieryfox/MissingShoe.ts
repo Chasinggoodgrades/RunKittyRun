@@ -45,8 +45,8 @@ export class MissingShoe {
     // Ping Event + Shoe Spawn
     private static EventStart() {
         let randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.length - 1)]
-        let randomX = GetRandomReal(randomWolfRegion.Rect.minX, randomWolfRegion.Rect.maxX)
-        let randomY = GetRandomReal(randomWolfRegion.Rect.minY, randomWolfRegion.Rect.maxY)
+        let randomX = GetRandomReal(randomWolfRegion.minX, randomWolfRegion.maxX)
+        let randomY = GetRandomReal(randomWolfRegion.minY, randomWolfRegion.maxY)
         MissingShoe.Shoe = Item.create(MissingShoe.ItemID, randomX, randomY)!
         PingMinimapEx(randomX, randomY, 10.0, 255, 0, 0, true)
         MissingShoe.RegisterTurnInEvent()

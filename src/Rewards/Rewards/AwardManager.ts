@@ -9,6 +9,7 @@ import { RewardHelper } from 'src/UI/Frames/RewardHelper'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Trigger } from 'w3ts'
+import { GameAwardsDataSorted } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { RewardsManager } from './RewardsManager'
 
@@ -71,9 +72,9 @@ export class AwardManager {
     }
 
     private static EnableAbility(player: MapPlayer, award: string) {
-        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.toString())
+        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() == award.toString())!
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
-        if (reward === null) return
+        if (!reward) return
         kitty.disableAbility(reward.GetAbilityID(), false, false)
     }
 
@@ -102,8 +103,10 @@ export class AwardManager {
                 if (player.controller != MAP_CONTROL_USER) continue // no bots, reduce triggers;
                 if (player.slotState != PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
 
-                if (!(kittyProfile = Globals.ALL_KITTIES.TryGetValue(player)) /* TODO; Prepend: let */) {
-                    if (!(saveData = SaveManager.SaveData.TryGetValue(player)) /* TODO; Prepend: let */) {
+                let kittyProfile
+                if (!(kittyProfile = Globals.ALL_KITTIES.get(player)) /* TODO; Prepend: let */) {
+                    let saveData
+                    if (!(saveData = SaveManager.SaveData.get(player)) /* TODO; Prepend: let */) {
                         Logger.Critical(
                             "data: wasn: Save'finished: loading: t / found. SaveData: for: Defaulting {player}."
                         )
@@ -120,7 +123,7 @@ export class AwardManager {
 
                 let gameStats = kittyProfile.SaveData.GameStats
 
-                for (let gameStatReward in RewardsManager.GameStatRewards) {
+                for (let gameStatReward of RewardsManager.GameStatRewards) {
                     let gamestat = gameStatReward.GameStat
                     if (gameStatsToIgnore.includes(gamestat)) continue
                     AwardManager.HandleGameStatTrigger(
@@ -132,7 +135,7 @@ export class AwardManager {
                     )
                 }
             }
-            TriggerRegisterTimerEvent(AwardManager.AwardTrigger, 1.0, true)
+            AwardManager.AwardTrigger.registerTimerEvent(1.0, true)
         } catch (ex: any) {
             Logger.Critical('Error in AwardManager.RegisterGamestatEvents: {ex.Message}')
         }
@@ -195,9 +198,10 @@ export class AwardManager {
                 let gameStat = gameStatReward.GameStat
                 let requiredValue = gameStatReward.GameStatValue
 
-                let typeProperty = kittyStats.GameAwardsSorted.GetType().GetProperty(gameStatReward.TypeSorted)
-                let nestedProperty = typeProperty.PropertyType.GetProperty(gameStatReward.name)
-                let value = nestedProperty.GetValue(typeProperty.GetValue(kittyStats.GameAwardsSorted))
+                const typeProperty =
+                    kittyStats.GameAwardsSorted[gameStatReward.TypeSorted as keyof GameAwardsDataSorted]
+                const nestedProperty = (typeProperty as any)[gameStatReward.name]
+                const value = nestedProperty
 
                 if (value == 1) continue
 
@@ -241,7 +245,7 @@ export class AwardManager {
 
     private static ProcessAward(kitty: Kitty, selectedAwardName: string) {
         let reward = RewardsManager.Rewards.find(x => x.name == selectedAwardName)
-        if (reward === null) return
+        if (!reward) return
         reward.ApplyReward(kitty.Player, false)
     }
 }

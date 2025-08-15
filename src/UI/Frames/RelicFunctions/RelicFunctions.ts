@@ -2,6 +2,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
 import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
+import { Relic } from 'src/Game/Items/Relics/Relic'
 import { ChronoSphere } from 'src/Game/Items/Relics/RelicTypes/ChronoSphere'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
@@ -9,7 +10,6 @@ import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Unit } from 'w3ts'
 import { ShopFrame } from '../ShopFrame'
 import { ShopItem } from '../ShopItems/ShopItems'
-import { Relic } from 'src/Game/Items/Relics/Relic'
 
 export class RelicFunctions {
     public static HandleRelicPurchase(player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) {
@@ -37,8 +37,8 @@ export class RelicFunctions {
             if (RelicFunctions.RelicMaxedOut(player)) return
 
             RelicFunctions.ReduceGold(player, selectedItem.Cost)
-            const relicCtor = selectedItem.Relic.constructor as new () => Relic;
-            const newRelic = new relicCtor();
+            const relicCtor = selectedItem.Relic.constructor as new () => Relic
+            const newRelic = new relicCtor()
             if (newRelic != null) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
@@ -101,13 +101,12 @@ export class RelicFunctions {
     }
 
     private static HasInventorySpace(unit: Unit) {
-        for (let i: number = 0; i < 6; i++) 
-            if (unit.getItemInSlot(i) == null) return true
+        for (let i: number = 0; i < 6; i++) if (unit.getItemInSlot(i) == null) return true
         return false
     }
 
     private static ReduceGold(player: MapPlayer, amount: number) {
-        return (player.addGold(-amount))
+        return player.addGold(-amount)
     }
 
     private static RelicLevel(unit: Unit) {

@@ -2,7 +2,8 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { GC } from 'src/Utility/GC'
-import { SeasonalManager, HolidaySeasons } from '../SeasonalManager'
+import { Destructable } from 'w3ts'
+import { HolidaySeasons, SeasonalManager } from '../SeasonalManager'
 
 export class DoodadChanger {
     private static SafezoneLanterns: number = FourCC('B005')
@@ -79,8 +80,8 @@ export class DoodadChanger {
     private static CreateInitDestructiables() {
         let counter: number = 0
 
-        for (let safeZone in Globals.SAFE_ZONES) {
-            let rect = safeZone.Rect_
+        for (let safeZone of Globals.SAFE_ZONES) {
+            let rect = safeZone.Rectangle
 
             let minX = rect.minX
             let minY = rect.minY
@@ -109,11 +110,11 @@ export class DoodadChanger {
     }
 
     public static ShowSeasonalDoodads(show: boolean = false) {
-        return EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => this.HideDoodads(show))
+        return EnumDestructablesInRect(Globals.WORLD_BOUNDS.handle, null as never, () => this.HideDoodads(show))
     }
 
     private static HideDoodads(show: boolean) {
-        let des = GetEnumDestructable()
-        if (this.ChristmasDecor.includes(des.Type)) des.setVisible(show)
+        let des = Destructable.fromHandle(GetEnumDestructable())!
+        if (this.ChristmasDecor.includes(des.typeId)) des.show(show)
     }
 }

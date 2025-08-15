@@ -9,9 +9,9 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
-import { Utility } from 'src/Utility/Utility'
+import { PositionWithPolarOffsetRadX, PositionWithPolarOffsetRadY, Utility } from 'src/Utility/Utility'
 import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { Effect, Item, Item, Trigger } from 'w3ts'
+import { Effect, Item, Trigger } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { PersonalBestAwarder } from '../Podium/PersonalBestAwarder'
 import { ItemSpatialGrid } from './ItemSpatialGrid'
@@ -31,7 +31,7 @@ export class Kibble extends IDisposable {
     public Item: Item
     private Type: number
     private JackPotIndex: number
-    private StarFallEffect: Effect | null
+    private StarFallEffect: Effect
 
     public Kibble() {
         Kibble.PickupTrigger ??= Kibble.KibblePickupEvents()
@@ -46,13 +46,13 @@ export class Kibble extends IDisposable {
     public SpawnKibble() {
         let regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         let region = RegionList.WolfRegions[regionNumber]
-        let x = GetRandomReal(region.Rect.minX, region.Rect.maxX)
-        let y = GetRandomReal(region.Rect.minY, region.Rect.maxY)
-        this.StarFallEffect ??= AddSpecialEffect(Kibble.StarfallEffect, x, y)
+        let x = GetRandomReal(region.minX, region.maxX)
+        let y = GetRandomReal(region.minY, region.maxY)
+        this.StarFallEffect ??= Effect.fromHandle(AddSpecialEffect(Kibble.StarfallEffect, x, y))!
         this.StarFallEffect.setPosition(x, y, 0)
         this.StarFallEffect.playAnimation(ANIM_TYPE_BIRTH)
         this.JackPotIndex = 1
-        this.Item = this.Item.create(this.Type, x, y)!
+        this.Item = Item.create(this.Type, x, y)!
         ItemSpatialGrid.RegisterKibble(this)
     }
 
@@ -84,7 +84,7 @@ export class Kibble extends IDisposable {
             let unit = getTriggerUnit()
             let player = unit.owner
             let kitty = Globals.ALL_KITTIES.get(player)!
-            let effect: Effect | null = null
+            let effect: Effect | undefined = undefined
             let randomChance = GetRandomReal(0, 100)
             let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle == item.handle)
 
@@ -95,10 +95,8 @@ export class Kibble extends IDisposable {
             else Kibble.KibbleNothing(kitty)
 
             if (randomChance <= 30)
-                effect = AddSpecialEffect(
-                    'Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl',
-                    kitty.Unit.x,
-                    kitty.Unit.y
+                effect = Effect.fromHandle(
+                    AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', kitty.Unit.x, kitty.Unit.y)
                 )
             GC.RemoveEffect(effect) // TODO; Cleanup:             GC.RemoveEffect(ref effect);
 
@@ -141,10 +139,12 @@ export class Kibble extends IDisposable {
     private static JackpotEffect(kitty: Kitty, kibble: Kibble) {
         let unitX = kitty.Unit.x
         let unitY = kitty.Unit.y
-        let newX = WCSharp.Shared.Util.PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
-        let newY = WCSharp.Shared.Util.PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0)
+        let newX = PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
+        let newY = PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0)
 
-        let effect = AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', newX, newY)
+        let effect = Effect.fromHandle(
+            AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', newX, newY)
+        )!
         GC.RemoveEffect(effect) // TODO; Cleanup:         GC.RemoveEffect(ref effect);
         kibble.JackPotIndex += 1
 
@@ -153,10 +153,10 @@ export class Kibble extends IDisposable {
             let isSuperJackpot = GetRandomInt(1, 10) == 1
             if (isSuperJackpot) goldAmount *= 10
 
-            kitty.Player.Gold += goldAmount
+            kitty.Player.addGold(goldAmount)
 
-            jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
-            msg = `${Colors.PlayerNameColored(kitty.Player)}${Colors.HighlightString(` has won the ${jackpotString}`)} ${Colors.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r`
+            let jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
+            let msg = `${Colors.PlayerNameColored(kitty.Player)}${Colors.HighlightString(` has won the ${jackpotString}`)} ${Colors.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r`
 
             Utility.TimedTextToAllPlayers(3.0, msg) // was too long previously.
             Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)
@@ -177,7 +177,7 @@ export class Kibble extends IDisposable {
     private static IncrementKibble(kibblePicker: Kitty) {
         kibblePicker.CurrentStats.CollectedKibble += 1
 
-        for (let player of Globals.ALL_PLAYERS) player.Lumber += 1
+        for (let player of Globals.ALL_PLAYERS) player.addLumber(1)
 
         kibblePicker.SaveData.KibbleCurrency.Collected += 1
     }

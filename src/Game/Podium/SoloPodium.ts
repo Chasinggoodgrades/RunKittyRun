@@ -12,8 +12,8 @@ export class SoloPodium {
     private static MovedUnits: Unit[] = []
     private static PodiumType: string = ''
     private static Color: string = Colors.COLOR_YELLOW_ORANGE
-    private Time: string = 'time'
-    private Progress: string = 'progress'
+    private static Time: string = 'time'
+    private static Progress: string = 'progress'
 
     public static BeginPodiumActions() {
         PodiumUtil.SetCameraToPodium()
@@ -26,7 +26,7 @@ export class SoloPodium {
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
             let player = topTimes[i]
             let position = podiumPositions[i]
-            this.PodiumQueue.enqueue((player, position))
+            this.PodiumQueue.enqueue([player, position])
         }
         this.PodiumType = this.Time
     }
@@ -37,7 +37,7 @@ export class SoloPodium {
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
             let player = topProgress[i]
             let position = podiumPositions[i]
-            this.PodiumQueue.enqueue((player, position))
+            this.PodiumQueue.enqueue([player, position])
         }
         this.PodiumType = this.Progress
     }
@@ -47,7 +47,7 @@ export class SoloPodium {
             PodiumUtil.EndingGameThankyou()
             return
         }
-        let(player, position) = this.PodiumQueue.dequeue()
+        let [player, position] = this.PodiumQueue.dequeue()!
         let kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
@@ -60,7 +60,7 @@ export class SoloPodium {
     }
 
     private static ProcessPodiumTypeActions() {
-        this.PodiumQueue.clear()
+        this.PodiumQueue.length = 0
         PodiumUtil.ClearPodiumUnits(this.MovedUnits)
         switch (Gamemode.CurrentGameModeType) {
             case 'Race':

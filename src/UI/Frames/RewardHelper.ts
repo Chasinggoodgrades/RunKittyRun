@@ -58,13 +58,13 @@ export class RewardHelper {
     /// <param name="propertyName">Reward.name</param>
     /// <returns></returns>
     public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
-        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName)
+        let nestedProperty = (obj as any)[nestedPropertyName]
         if (nestedProperty != null) {
-            let nestedObject = nestedProperty.GetValue(obj)
+            let nestedObject = nestedProperty
             if (nestedObject != null) {
-                let property = nestedObject.GetType().GetProperty(propertyName)
+                let property = (nestedObject as any)[propertyName]
                 if (property != null) {
-                    return property.GetValue(nestedObject)
+                    return property
                 }
             }
         }
@@ -78,24 +78,24 @@ export class RewardHelper {
     /// <param name="nestedPropertyName">reward.TypeSorted</param>
     /// <param name="propertyName">the name of reward.</param>
     /// <param name="value">value to set it to</param>
-    public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: object) {
-        let nestedProperty = obj.GetType().GetProperty(nestedPropertyName)
+    public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: any) {
+        let nestedProperty = (obj as any)[nestedPropertyName]
         if (nestedProperty != null) {
-            let nestedObject = nestedProperty.GetValue(obj)
+            let nestedObject = nestedProperty
             if (nestedObject != null) {
                 RewardHelper.UpdateProperty(nestedObject, propertyName, value)
             }
         } else {
-            Logger.Warning('property: Nested {nestedPropertyName} found: not.')
+            Logger.Warning(`property: Nested ${nestedPropertyName} found: not.`)
         }
     }
 
     private static UpdateProperty(obj: object, propertyName: string, value: object) {
-        let property = obj.GetType().GetProperty(propertyName)
-        if (property != null) {
-            property.SetValue(obj, value)
+        let property = (obj as any)[propertyName]
+        if (property !== undefined) {
+            ;(obj as any)[propertyName] = value
         } else {
-            Logger.Warning('Property {propertyName} found: not.')
+            Logger.Warning(`Property not found: ${propertyName}.`)
         }
     }
 }

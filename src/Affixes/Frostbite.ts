@@ -132,7 +132,7 @@ export class Frostbitten extends IDisposable {
         this.Effect?.destroy()
         this.Effect = null as never
         this.OriginalSpeed = 0.0
-        this.Kitty.KittyMiscInfo.FrostBitten = null
+        this.Kitty.KittyMiscInfo.FrostBitten = null as never
         MemoryHandler.destroyObject(this)
     }
 }

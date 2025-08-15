@@ -13,55 +13,67 @@ export class Cell {
 }
 
 export class ItemSpatialGrid {
-    private CELL_SIZE: number = 128
+    private static CELL_SIZE: number = 128
     private static kibbleCells: Map<Cell, Kibble[]> = new Map()
-    private static itemCells: Map<Cell, item[]> = new Map()
+    private static itemCells: Map<Cell, Item[]> = new Map()
 
     public static GetCell(x: number, y: number): Cell {
-        let cellX: number = x / CELL_SIZE
-        let cellY: number = y / CELL_SIZE
+        let cellX: number = x / ItemSpatialGrid.CELL_SIZE
+        let cellY: number = y / ItemSpatialGrid.CELL_SIZE
         return new Cell(cellX, cellY)
     }
 
     public static RegisterKibble(kibble: Kibble) {
-        let cell = GetCell(kibble.Item.x, kibble.Item.y)
+        let cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
         let list: Kibble[]
-        if (!(list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) kibbleCells[cell] = list = []
+        if (!(list = ItemSpatialGrid.kibbleCells.get(cell)!)) ItemSpatialGrid.kibbleCells.set(cell, (list = []))
         list.push(kibble)
     }
 
     public static UnregisterKibble(kibble: Kibble) {
-        let cell = GetCell(kibble.Item.x, kibble.Item.y)
-        if ((list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(kibble)
+        let cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
+        let list = ItemSpatialGrid.kibbleCells.get(cell) || []
+
+        ItemSpatialGrid.kibbleCells.set(
+            cell,
+            list.filter(i => i !== kibble)
+        )
     }
 
     public static RegisterItem(item: Item) {
-        let cell = GetCell(item.x, item.y)
+        let cell = ItemSpatialGrid.GetCell(item.x, item.y)
         let list: Item[]
-        if (!(list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) itemCells[cell] = list = []
+        if (!(list = ItemSpatialGrid.itemCells.get(cell)!)) ItemSpatialGrid.itemCells.set(cell, (list = []))
         list.push(item)
     }
 
     public static UnregisterItem(item: Item) {
-        let cell = GetCell(item.x, item.y)
-        if ((list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) list.Remove(item)
+        let cell = ItemSpatialGrid.GetCell(item.x, item.y)
+        let list = ItemSpatialGrid.itemCells.get(cell) || []
+
+        ItemSpatialGrid.itemCells.set(
+            cell,
+            list.filter(i => i !== item)
+        )
     }
 
-    public static GetNearbyKibbles(x: number, y: number): Kibble[] {
-        let cell = GetCell(x, y)
-        if ((list = kibbleCells.TryGetValue(cell)) /* TODO; Prepend: let */) return list
+    public static GetNearbyKibbles(x: number, y: number) {
+        let cell = ItemSpatialGrid.GetCell(x, y)
+        let list: Kibble[]
+        if ((list = ItemSpatialGrid.kibbleCells.get(cell)!)) return list
         return null
     }
 
-    public static GetNearbyItems(x: number, y: number): item[] {
-        let cell = GetCell(x, y)
-        if ((list = itemCells.TryGetValue(cell)) /* TODO; Prepend: let */) return list
+    public static GetNearbyItems(x: number, y: number) {
+        let cell = ItemSpatialGrid.GetCell(x, y)
+        let list: Item[]
+        if ((list = ItemSpatialGrid.itemCells.get(cell)!)) return list
         return null
     }
 
     public static KittyItemPickup(kitty: Kitty) {
-        let kibbleList = GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
-        let itemList = GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
+        let kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
+        let itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
         if (kibbleList != null && kibbleList.length > 0) {
             for (let i: number = 0; i < kibbleList.length; i++) {
@@ -75,7 +87,7 @@ export class ItemSpatialGrid {
             for (let i: number = 0; i < itemList.length; i++) {
                 let item = itemList[i]
                 if (item == null) continue
-                if (item.IsOwned) continue
+                if (item.isOwned()) continue
                 kitty.Unit.addItem(item)
                 break
             }

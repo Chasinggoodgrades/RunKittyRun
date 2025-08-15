@@ -2,24 +2,40 @@ import { MapPlayer } from 'w3ts'
 
 export class ExecuteLua {
     public static LuaCode(player: MapPlayer, args: string) {
-        player.DisplayTextTo('Args: {args}')
-        let func = Lua.Load(
-            `return function()
+        player.DisplayTextTo(`Args: '${args}'`)
+
+        const luaChunk = `return function()
             local self = Globals.ALL_KITTIES:get(getTriggerPlayer())
             local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(getTriggerPlayer())))
-            ${args}
-            end`
-        )
-        if (func != null) {
-            try {
-                let result = Lua.Call(func)
-                let resultFunc = result
-                result = resultFunc()
-                if (result != null) player.DisplayTextTo('Result: {result.toString()}')
-            } catch (ex: any) {
-                player.DisplayTextTo('Error: {ex.Message}')
+            return ${args}
+        end`
+
+        try {
+            const [func, err] = load(luaChunk)
+
+            if (func) {
+                const [ok, f] = pcall(func)
+
+                if (ok) {
+                    player.DisplayTextTo(`Ran: '${args}'`)
+                    const out = f()
+
+                    if (out) {
+                        player.DisplayTextTo(`Result: '${out}'`)
+                    }
+                } else {
+                    player.DisplayTextTo(`Error: ${f}`)
+                }
+            } else {
+                if (typeof err === 'string') {
+                    player.DisplayTextTo(err)
+                } else {
+                    player.DisplayTextTo('Syntax Error')
+                }
             }
-        } else player.DisplayTextTo('Syntax Error')
+        } catch (ex: any) {
+            player.DisplayTextTo(`Error: ${ex?.message ?? ex}`)
+        }
     }
 }
 

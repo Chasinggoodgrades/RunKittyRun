@@ -5,10 +5,10 @@ export class GameTimesData {
     public NightmareGameTime: NightmareGameTimeData
 
     public GameTimesData() {
-        NormalGameTime = new NormalGameTimeData()
-        HardGameTime = new HardGameTimeData()
-        ImpossibleGameTime = new ImpossibleGameTimeData()
-        NightmareGameTime = new NightmareGameTimeData()
+        this.NormalGameTime = new NormalGameTimeData()
+        this.HardGameTime = new HardGameTimeData()
+        this.ImpossibleGameTime = new ImpossibleGameTimeData()
+        this.NightmareGameTime = new NightmareGameTimeData()
     }
 }
 

@@ -82,8 +82,8 @@ export class ItemSpawner {
         let item = this.SpawnableItems[random]
         let regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         let region = RegionList.WolfRegions[regionNumber]
-        let x = GetRandomReal(region.Rect.minX, region.Rect.maxX)
-        let y = GetRandomReal(region.Rect.minY, region.Rect.maxY)
+        let x = GetRandomReal(region.minX, region.maxX)
+        let y = GetRandomReal(region.minY, region.maxY)
         let i = Item.create(item, x, y)!
         this.TrackItems.push(i)
         ItemSpatialGrid.RegisterItem(i)

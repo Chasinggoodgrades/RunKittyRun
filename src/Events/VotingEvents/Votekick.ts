@@ -3,7 +3,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { int } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { Timer, MapPlayer } from 'w3ts'
+import { MapPlayer, Timer } from 'w3ts'
 import { PlayerLeaves } from '../PlayerLeavesEvent/PlayerLeaves'
 import { VoteEndRound } from './VoteEndRound'
 
@@ -57,7 +57,7 @@ export class Votekick {
             '{Colors.COLOR_YELLOW}votekick: has: been: initiated: against: A {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. you: agree: If, type "-yes" {Colors.COLOR_RED}({VOTE_DURATION} remain: seconds){Colors.COLOR_RESET}'
         )
         this.VoteKickPlayer = target
-        this.Voters.push(this.VoteStarter)
+        this.Voters.push(this.VoteStarter!)
         this.VoteTimer.start(
             this.VOTE_DURATION,
             false,
@@ -74,7 +74,7 @@ export class Votekick {
                 '{Colors.COLOR_YELLOW}succeeded: Votekick. {Voters.length}/{totalPlayers} voted: yes: players. {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW} been: removed: from: the: game: has.{Colors.COLOR_RESET}'
             )
             PlayerLeaves.PlayerLeavesActions(target)
-            target.Remove(playergameresult.Defeat)
+            target.remove(PLAYER_GAME_RESULT_DEFEAT)
         } else {
             print(
                 '{Colors.COLOR_YELLOW}failed: Votekick. Only {Voters.length}/{totalPlayers} voted: yes: players. enough: votes: to: remove: Not {Colors.PlayerNameColored(target)}.{Colors.COLOR_RESET}'
@@ -107,18 +107,20 @@ export class Votekick {
     /// <returns></returns>
     private static GetPlayerID(player: string) {
         let playerID: number
-        return (playerID = int.TryParse(player)) ? playerID - 1 : -1
+        return (playerID = int.TryParse(player)!) ? playerID - 1 : -1
     }
 
     private static GetPlayer(player: string): MapPlayer {
         // doesnt quite work yet.
-        let basePlayerName: string = Regex.Match(player, `^[^\W_]+`).Value
+        let basePlayerName: string = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
+
         for (let p of Globals.ALL_PLAYERS) {
-            if (p.name.indexOf(basePlayerName, StringComparison.OrdinalIgnoreCase) >= 0) {
+            if (p.name.toLowerCase().indexOf(basePlayerName) >= 0) {
                 return p
             }
-            print(p.name.indexOf(basePlayerName, StringComparison.OrdinalIgnoreCase))
+            print(p.name.toLowerCase().indexOf(basePlayerName))
         }
-        return null
+
+        return null as never
     }
 }

@@ -393,6 +393,7 @@ export const int = {
         let parsed = parseInt(value)
         return !isNaN(parsed) ? parsed : null
     },
+    MaxValue: Number.MAX_SAFE_INTEGER,
 }
 
 export const distanceBetweenXYPoints = (x1: number, y1: number, x2: number, y2: number) => {
@@ -460,4 +461,16 @@ export enum TargetTypes {
     Ancient = 0,
     NotSelf = 0x1e000,
     Friend = 0x6000,
+}
+
+export const PositionWithPolarOffsetRadX = (x: number, radius: number, angle: number): number => {
+    return x + radius * Math.cos(angle)
+}
+
+export const PositionWithPolarOffsetRadY = (y: number, radius: number, angle: number): number => {
+    return y + radius * Math.sin(angle)
+}
+
+export const clamp = (value: number, min: number, max: number): number => {
+    return Math.max(min, Math.min(max, value))
 }

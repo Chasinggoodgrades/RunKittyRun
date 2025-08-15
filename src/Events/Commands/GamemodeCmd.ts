@@ -41,19 +41,22 @@ export class GamemodeCmd {
                 break
 
             default:
-                player.DisplayTimedTextTo(10.0, CmdInfo.Error + Colors.COLOR_GOLD + 'Use: -s, -solo: t, -team: t')
+                player.DisplayTimedTextTo(
+                    10.0,
+                    GamemodeCmd.CmdInfo.Error + Colors.COLOR_GOLD + 'Use: -s, -solo: t, -team: t'
+                )
                 break
         }
     }
 
     private static CommandInfoCheck(parts: string[]) {
         if (parts[0] == '-s') {
-            CmdInfo = GamemodeManager.GetCommandInfo(parts[0])
+            GamemodeCmd.CmdInfo = GamemodeManager.GetCommandInfo(parts[0])
             return
         } else if (parts.length < 2) return
         else {
             let commandXD = parts[0] + ' ' + parts[1]
-            CmdInfo = GamemodeManager.GetCommandInfo(commandXD)
+            GamemodeCmd.CmdInfo = GamemodeManager.GetCommandInfo(commandXD)
         }
     }
 
@@ -65,7 +68,9 @@ export class GamemodeCmd {
         if (parts.length < 2) {
             player.DisplayTimedTextTo(
                 10.0,
-                CmdInfo.Error + Colors.COLOR_GOLD + '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
+                GamemodeCmd.CmdInfo.Error +
+                    Colors.COLOR_GOLD +
+                    '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
             )
             return
         }
@@ -82,7 +87,7 @@ export class GamemodeCmd {
             default:
                 player.DisplayTimedTextTo(
                     10.0,
-                    CmdInfo.Error +
+                    GamemodeCmd.CmdInfo.Error +
                         Colors.COLOR_GOLD +
                         '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
                 )
@@ -94,7 +99,7 @@ export class GamemodeCmd {
         // let = parts [1] and 2
 
         if (parts.length != 3) {
-            player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+            player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
             return
         }
 
@@ -111,14 +116,14 @@ export class GamemodeCmd {
                 break
 
             default:
-                player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+                player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
                 break
         }
     }
 
     private static HandleTeamMode(player: MapPlayer, parts: string[]) {
         if (parts.length < 3) {
-            player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+            player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
             return
         }
 
@@ -128,14 +133,14 @@ export class GamemodeCmd {
 
         if (parts.length == 4 && !int.TryParse(parts[3])) {
             Globals.MAX_TEAM_SIZE.toString()
-            player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+            player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
             return
-        } else if (parts.length == 4 && (parsedTeamSize = int.TryParse(parts[3]))) {
+        } else if (parts.length == 4 && (parsedTeamSize = int.TryParse(parts[3])!)) {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize != 0) {
                 teamSize = parsedTeamSize
             } else {
                 Globals.MAX_TEAM_SIZE.toString()
-                player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+                player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
                 return
             }
         }
@@ -152,7 +157,7 @@ export class GamemodeCmd {
                 break
 
             default:
-                player.DisplayTimedTextTo(10.0, CmdInfo.Error + CmdInfo.Usage)
+                player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
                 break
         }
     }

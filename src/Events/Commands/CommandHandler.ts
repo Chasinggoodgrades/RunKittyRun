@@ -15,8 +15,8 @@ export class CommandHandler {
         InitCommands.InitializeCommands()
         for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState != PLAYER_SLOT_STATE_PLAYING) continue
-            TriggerRegisterPlayerChatEvent(DebugCmdTrigger, MapPlayer.fromIndex(i)!, '?', false)
-            TriggerRegisterPlayerChatEvent(NewCmdHandler, MapPlayer.fromIndex(i)!, '-', false)
+            CommandHandler.DebugCmdTrigger.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '?', false)
+            CommandHandler.NewCmdHandler.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '-', false)
         }
         this.DebugCmdTrigger.addAction(this.DebugHandle)
         this.NewCmdHandler.addAction(this.HandleCommands)
@@ -49,7 +49,7 @@ export class CommandHandler {
             let command = CommandsManager.GetCommand(commandName.toLowerCase())
             let playerGroup = CommandsManager.GetPlayerGroup(getTriggerPlayer())
             if (command != null && (command.Group == playerGroup || command.Group == 'all' || playerGroup == 'admin')) {
-                command.Action?.Invoke(getTriggerPlayer(), args)
+                command.Action(getTriggerPlayer(), args)
             } else {
                 getTriggerPlayer().DisplayTimedTextTo(4.0, '{Colors.COLOR_YELLOW_ORANGE}not: found: Command.|r')
             }

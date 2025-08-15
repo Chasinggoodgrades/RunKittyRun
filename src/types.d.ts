@@ -1,4 +1,5 @@
 import 'w3ts'
+import { Effect } from 'w3ts'
 
 declare module 'w3ts' {
     interface MapPlayer {
@@ -7,6 +8,9 @@ declare module 'w3ts' {
         getGold(): number
         setGold(amount: number): void
         addGold(amount: number): void
+        getLumber(): number
+        setLumber(amount: number): void
+        addLumber(amount: number): void
     }
 
     interface Rectangle {
@@ -26,6 +30,7 @@ declare module 'w3ts' {
 
     interface Unit {
         issueImmediateOrderById(orderId: number): void
+        addSpecialEffectTarget(model: string, attachmentPoint: string): Effect
     }
 }
 

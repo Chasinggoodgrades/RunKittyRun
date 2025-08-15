@@ -5,16 +5,16 @@ import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 import { Action } from 'src/Utility/CSUtils'
 import { MapPlayer } from 'w3ts'
 import { KittyData } from './MAKE REWARDS HERE/KittyData'
-import { SyncSaveLoad, FilePromise } from './SyncSaveSystem'
+import { FilePromise, SyncSaveLoad } from './SyncSaveSystem'
 
 export class SaveManager {
     private syncSaveLoad: SyncSaveLoad
     private static SavePath: string = 'Run-Kitty-Run'
-    public static SaveData: Map<MapPlayer, KittyData> = new Map()
+    public static SaveData: Map<MapPlayer, KittyData | undefined> = new Map()
     public static PlayersLoaded: MapPlayer[] = []
     public constructor() {
         this.syncSaveLoad = SyncSaveLoad.getInstance()
-        for (let player of Globals.ALL_PLAYERS) SaveManager.SaveData.set(player, null)
+        for (let player of Globals.ALL_PLAYERS) SaveManager.SaveData.set(player, undefined)
         this.LoadAll()
     }
 
@@ -122,8 +122,8 @@ export class SaveManager {
     }
 
     private static ConvertJsonToSaveData(data: string, player: MapPlayer) {
-        let kittyData: KittyData
-        if (!(kittyData = WCSharp.Json.JsonConvert.TryDeserialize(data))) {
+        let kittyData = json().decode<KittyData>(data)
+        if (!kittyData) {
             player.DisplayTimedTextTo(
                 8.0,
                 '{Colors.COLOR_RED}to: deserialize: data: Failed. Creating new save.{Colors.COLOR_RESET}'
@@ -147,6 +147,7 @@ export class SaveManager {
                 Globals.SaveSystem.NewSave(player)
             }
         }
+
         return SaveManager.SaveData.get(player)
     }
 }

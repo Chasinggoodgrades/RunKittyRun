@@ -9,45 +9,55 @@ import { Unit } from 'w3ts'
 
 export class PodiumUtil {
     public static SortPlayersByScore() {
-        return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-            return stats.TotalSaves - stats.TotalDeaths
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            return statsB.TotalSaves - statsB.TotalDeaths - (statsA.TotalSaves - statsA.TotalDeaths)
+        }).slice(0, 3)
     }
 
     public static SortPlayersBySaves() {
-        return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-            return stats.TotalSaves
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            return statsB.TotalSaves - statsA.TotalSaves
+        }).slice(0, 3)
     }
 
     public static SortPlayersByHighestRatio() {
-        return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-            return stats.TotalDeaths == 0 ? stats.TotalSaves : stats.TotalSaves / stats.TotalDeaths
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+
+            let ratioA = statsA.TotalDeaths === 0 ? statsA.TotalSaves : statsA.TotalSaves / statsA.TotalDeaths
+            let ratioB = statsB.TotalDeaths === 0 ? statsB.TotalSaves : statsB.TotalSaves / statsB.TotalDeaths
+
+            return ratioB - ratioA
+        }).slice(0, 3)
     }
 
     public static SortPlayersByHighestSaveStreak() {
-        return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-            return stats.MaxSaveStreak
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            return statsB.MaxSaveStreak - statsA.MaxSaveStreak
+        }).slice(0, 3)
     }
 
     public static SortPlayersTopProgress() {
-        return Globals.ALL_PLAYERS.OrderByDescending(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
-            return stats.GetOverallProgress()
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            let statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
+            let statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
+            return statsB.GetOverallProgress() - statsA.GetOverallProgress()
+        }).slice(0, 3)
     }
 
     public static SortPlayersFastestTime() {
-        return Globals.ALL_PLAYERS.OrderBy(player => {
-            let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
-            return stats.GetTotalTime()
-        }).Take(3)
+        return Globals.ALL_PLAYERS.sort((a, b) => {
+            let statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
+            let statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
+            return statsA.GetTotalTime() - statsB.GetTotalTime()
+        }).slice(0, 3)
     }
 
     public static SetCameraToPodium() {

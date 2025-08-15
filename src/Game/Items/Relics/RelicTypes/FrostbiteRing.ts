@@ -15,14 +15,14 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class FrostbiteRing extends Relic {
-    public RelicItemID: number = Constants.ITEM_FROSTBITE_RING
+    public static RelicItemID: number = Constants.ITEM_FROSTBITE_RING
     public static SLOW_DURATION: number = 5.0
-    public FROSTBITE_FREEZE_RING_EFFECT: string = 'war3mapImported\\FreezingBreathTargetArt.mdl'
-    public FROSTBITE_SLOW_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
+    public static FROSTBITE_FREEZE_RING_EFFECT: string = 'war3mapImported\\FreezingBreathTargetArt.mdl'
+    public static FROSTBITE_SLOW_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
     public static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE
-    public static FrozenWolves: Map<unit, FrozenWolf> = new Map()
+    public static FrozenWolves: Map<Unit, FrozenWolf> = new Map()
 
-    private RelicCost: number = 650
+    private static RelicCost: number = 650
     private static FROSTBITE_RING_RADIUS: number = 450.0
     private static DEFAULT_FREEZE_DURATION: number = 5.0
     private static UPGRADE_COOLDOWN_REDUCTION: number = 15.0
@@ -33,14 +33,14 @@ export class FrostbiteRing extends Relic {
     private FreezeGroup: Group
 
     public constructor() {
-        super()
-        this.name = '{Colors.COLOR_BLUE}Frostbite Ring'
-        this.Description =
-            'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r'
-        this.RelicAbilityID = FrostbiteRing.RelicAbilityID
-        this.RelicItemID = this.RelicItemID
-        this.RelicCost = this.RelicCost
-        this.IconPath = FrostbiteRing.IconPath
+        super(
+            '{Colors.COLOR_BLUE}Frostbite Ring',
+            'Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r',
+            FrostbiteRing.RelicAbilityID,
+            FrostbiteRing.RelicItemID,
+            FrostbiteRing.RelicCost,
+            FrostbiteRing.IconPath
+        )
 
         this.Upgrades.push(new RelicUpgrade(0, 'Freeze duration is increased by 1 second per upgrade level.', 15, 800))
         this.Upgrades.push(
@@ -82,8 +82,8 @@ export class FrostbiteRing extends Relic {
                 let unit = this.FreezeGroup.first
                 if (unit == null) break
                 this.FreezeGroup.removeUnit(unit)
-                if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit).IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
-                if (Globals.ALL_WOLVES.get(unit).HasAffix('Frostbite')) continue
+                if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit)!.IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
+                if (Globals.ALL_WOLVES.get(unit)!.HasAffix('Frostbite')) continue
                 this.FrostbiteEffect(unit)
             }
 
@@ -98,12 +98,12 @@ export class FrostbiteRing extends Relic {
             Utility.SimpleTimer(0.1, () =>
                 RelicUtil.SetRelicCooldowns(
                     Globals.ALL_KITTIES.get(this.Owner)!.Unit,
-                    this.RelicItemID,
+                    FrostbiteRing.RelicItemID,
                     FrostbiteRing.RelicAbilityID
                 )
             )
 
-            freezeLocation.dispose()
+            RemoveLocation(freezeLocation)
             this.FreezeGroup.clear()
         } catch (e: any) {
             Logger.Warning('Error in FrostbiteRing.FrostbiteCast: {e.Message}')
@@ -115,26 +115,26 @@ export class FrostbiteRing extends Relic {
         Globals.ALL_KITTIES.get(this.Owner)!.CurrentStats.WolfFreezeCount += 1 // increment freeze count for freeze_aura reward
 
         if (FrostbiteRing.FrozenWolves.has(Unit)) {
-            FrostbiteRing.FrozenWolves[Unit].BeginFreezeActions(this.Owner, Unit, duration)
+            FrostbiteRing.FrozenWolves.get(Unit)!.BeginFreezeActions(this.Owner, Unit, duration)
             return
         } else {
             let frozenWolf = MemoryHandler.getEmptyObject<FrozenWolf>()
             frozenWolf.BeginFreezeActions(this.Owner, Unit, duration)
-            FrostbiteRing.FrozenWolves[Unit] = frozenWolf
+            FrostbiteRing.FrozenWolves.set(Unit, frozenWolf)
         }
     }
 
     private SetAbilityCooldown(Unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
         let currentCooldown = BlzGetAbilityCooldown(FrostbiteRing.RelicAbilityID, 0)
         let newCooldown =
             upgradeLevel >= 3 ? currentCooldown - FrostbiteRing.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
-        RelicUtil.SetAbilityCooldown(Unit, this.RelicItemID, FrostbiteRing.RelicAbilityID, newCooldown)
+        RelicUtil.SetAbilityCooldown(Unit, FrostbiteRing.RelicItemID, FrostbiteRing.RelicAbilityID, newCooldown)
     }
 
     private GetFreezeDuration(): number {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(this.name)
         return FrostbiteRing.DEFAULT_FREEZE_DURATION + upgradeLevel
     }
 
@@ -159,11 +159,9 @@ export class FrozenWolf {
         try {
             if (!this.Active) this.Timer = MemoryHandler.getEmptyObject<AchesTimers>()
             this.Unit = wolfToFreeze
-            this.FreezeEffect ??= AddSpecialEffectTarget(
-                FrostbiteRing.FROSTBITE_FREEZE_RING_EFFECT,
-                this.Unit,
-                'origin'
-            )
+            this.FreezeEffect ??= Effect.fromHandle(
+                AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_FREEZE_RING_EFFECT, this.Unit.handle, 'origin')
+            )!
             this.Caster = castingPlayer
 
             this.PausingWolf(this.Unit)
@@ -172,30 +170,28 @@ export class FrozenWolf {
             this.Active = true
         } catch (e: any) {
             Logger.Warning('Error in FrozenWolf.BeginFreezeActions: {e.Message}')
-            Dispose()
+            this.dispose()
         }
     }
 
     private EndingFreezeActions() {
         try {
-            this.FreezeEffect?.dispose()
-            this.FreezeEffect = null
+            this.FreezeEffect.destroy()
+            this.FreezeEffect = null as never
             this.PausingWolf(this.Unit, false)
             this.SlowWolves(this.Unit)
-            Dispose()
+            this.dispose()
         } catch (e: any) {
             Logger.Warning('Error in FrozenWolf.EndingFreezeActions: {e.Message}')
-            Dispose()
+            this.dispose()
         }
     }
 
     public dispose() {
         try {
-            if (
-                this.Unit != null &&
-                (frozenWolf = FrostbiteRing.FrozenWolves.TryGetValue(this.Unit)) /* TODO; Prepend: let */
-            ) {
-                FrostbiteRing.FrozenWolves.Remove(this.Unit)
+            let frozenWolf: FrozenWolf | undefined
+            if (this.Unit != null && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {
+                FrostbiteRing.FrozenWolves.delete(this.Unit)
             }
             this.Timer.dispose()
             this.Active = false
@@ -209,7 +205,7 @@ export class FrozenWolf {
         try {
             if (unit == null) return
             if (NamedWolves.StanWolf != null && unit == NamedWolves.StanWolf.Unit) return
-            if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit).PauseSelf(pause)
+            if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit)!.PauseSelf(pause)
         } catch (e: any) {
             Logger.Warning('Error in FrozenWolf.PausingWolf: {e.Message}')
         }
@@ -224,7 +220,9 @@ export class FrozenWolf {
             if (Unit == null) return
             if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
             Unit.moveSpeed = 365.0 / 2.0
-            let effect = AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit, 'origin')
+            let effect = Effect.fromHandle(
+                AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit.handle, 'origin')
+            )!
             Utility.SimpleTimer(FrostbiteRing.SLOW_DURATION, () => {
                 Unit.moveSpeed = Unit.defaultMoveSpeed
                 GC.RemoveEffect(effect) // TODO; Cleanup:                 GC.RemoveEffect(ref effect);

@@ -5,6 +5,7 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { safeArraySplice } from 'src/Utility/ArrayUtils'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
@@ -205,9 +206,11 @@ export class ShopFrame {
         let columns: number = 6
         let rows: number = Math.ceil(items.length / columns)
         for (let i: number = 0; i < items.length; i++) {
+            let relic = items[i]
+
             let row: number = i / columns
             let column: number = i % columns
-            let name = items[i].name
+            let name = relic.name
             let button = blzCreateFrameByType('BUTTON', name, panel, 'ScoreScreenTabButtonTemplate', 0)
             let icon = blzCreateFrameByType('BACKDROP', name + 'icon', button, '', 0)
 
@@ -218,12 +221,11 @@ export class ShopFrame {
             y -= ShopFrame.panelPadding / 2
 
             button.setSize(ShopFrame.buttonWidth, ShopFrame.buttonHeight)
-            button.setPoint(FRAMEPOINT_TOPLEFT, x, y, panel, FRAMEPOINT_TOPLEFT)
-            icon.setTexture(items[i].IconPath, 0, false)
+            button.setPoint(FRAMEPOINT_TOPLEFT, panel, FRAMEPOINT_TOPLEFT, x, y)
+            relic.IconPath && icon.setTexture(relic.IconPath, 0, false)
             icon.setAllPoints(button)
 
             let itemDetails = Trigger.create()!
-            let relic = items[i]
             ShopFrame.CreateShopitemTooltips(button, relic)
             itemDetails.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
             itemDetails.addAction(() => ShopFrame.ShowItemDetails(relic))
@@ -245,7 +247,7 @@ export class ShopFrame {
             if (!player.isLocal()) return
             if (!ShopFrame.SelectedItems.has(player)) return
 
-            let item = ShopFrame.SelectedItems[player]
+            let item = ShopFrame.SelectedItems.get(player)!
             let kitty = Globals.ALL_KITTIES.get(player)!
 
             ShopFrame.upgradeButton.visible = false
@@ -287,7 +289,7 @@ export class ShopFrame {
 
     private static ShowItemDetails(shopItem: ShopItem) {
         let player = getTriggerPlayer()
-        let frame = BlzGetTriggerFrame()
+        let frame = Frame.fromHandle(BlzGetTriggerFrame())!
 
         if (ShopFrame.SelectedItems.has(player)) {
             ShopFrame.SelectedItems.set(player, shopItem)
@@ -307,16 +309,16 @@ export class ShopFrame {
 
     private static CreateUpgradeTooltip() {
         try {
-            let background = blzCreateFrameByType('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
+            let background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
             ShopFrame.upgradeTooltip = blzCreateFrameByType('TEXT', 'UpgradeTooltip', background, '', 0)
 
             ShopFrame.upgradeTooltip.setSize(0.25, 0)
-            background.setPoint(FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01, ShopFrame.upgradeTooltip, FRAMEPOINT_BOTTOMLEFT)
+            background.setPoint(FRAMEPOINT_BOTTOMLEFT, ShopFrame.upgradeTooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
             background.setPoint(FRAMEPOINT_TOPRIGHT, ShopFrame.upgradeTooltip, FRAMEPOINT_TOPRIGHT, 0.01, 0.01)
 
             ShopFrame.upgradeButton.setTooltip(background)
             ShopFrame.upgradeTooltip.setPoint(FRAMEPOINT_BOTTOM, ShopFrame.upgradeButton, FRAMEPOINT_TOP, 0, 0.01)
-            ShopFrame.upgradeTooltip.Enabled = false
+            ShopFrame.upgradeTooltip.enabled = false
         } catch (ex: any) {
             Logger.Warning('Error in CreateUpgradeTooltip: {ex}')
         }
@@ -324,16 +326,16 @@ export class ShopFrame {
 
     private static CreateShopitemTooltips(parent: Frame, item: ShopItem) {
         try {
-            let background = blzCreateFrameByType('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
+            let background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
             let tooltip = blzCreateFrameByType('TEXT', '{parent.name}Tooltip', background, '', 0)
 
             tooltip.setSize(0.1, 0)
-            background.setPoint(FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01, tooltip, FRAMEPOINT_BOTTOMLEFT)
+            background.setPoint(FRAMEPOINT_BOTTOMLEFT, tooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
             background.setPoint(FRAMEPOINT_TOPRIGHT, tooltip, FRAMEPOINT_TOPRIGHT, 0.01, 0.01)
 
             parent.setTooltip(background)
             tooltip.setPoint(FRAMEPOINT_BOTTOM, parent, FRAMEPOINT_TOP, 0, 0.01)
-            tooltip.Enabled = false
+            tooltip.enabled = false
 
             tooltip.text = item.name
         } catch (ex: any) {
@@ -343,7 +345,7 @@ export class ShopFrame {
 
     public static RefreshUpgradeTooltip(relic: Relic) {
         let finalString: string[] = []
-        let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.GetType())
+        let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.name)
 
         for (let i: number = 0; i < relic.Upgrades.length; i++) {
             let upgrade = relic.Upgrades[i]
@@ -400,7 +402,7 @@ export class ShopFrame {
                         break
 
                     case ShopItemType.Misc:
-                        ShopFrame.addItem(player, selectedItem.ItemID)
+                        ShopFrame.AddItem(player, selectedItem.ItemID)
                         ShopFrame.ReduceGold(player, selectedItem.Cost)
                         break
                 }
@@ -419,9 +421,10 @@ export class ShopFrame {
                 ShopFrame.sellButton.visible = false
                 ShopFrame.sellButton.visible = true
             }
+            let selectedItem: ShopItem
             if (
-                (selectedItem =
-                    ShopFrame.SelectedItems.TryGetValue(player) /* TODO; Prepend: let */ && selectedItem != null)
+                (selectedItem = ShopFrame.SelectedItems.get(player)!) /* TODO; Prepend: let */ &&
+                selectedItem != null
             ) {
                 let itemID = selectedItem.ItemID
                 let kitty = Globals.ALL_KITTIES.get(player)!
@@ -444,19 +447,19 @@ export class ShopFrame {
                     }
 
                     // Find the shopItem type associated with the selected item that the player owns.
-                    let relic = kitty.Relics.find(x => x.GetType() == selectedItem.Relic.GetType())
+                    let relic = kitty.Relics.find(x => x.name == selectedItem.Relic.name)
 
-                    if (!RelicFunctions.CannotSellOnCD(kitty, relic)) return
+                    if (!RelicFunctions.CannotSellOnCD(kitty, relic!)) return
 
                     Utility.RemoveItemFromUnit(kitty.Unit, itemID)
-                    player.Gold += selectedItem.Cost
+                    player.addGold(selectedItem.Cost)
                     relic?.RemoveEffect(kitty.Unit)
-                    kitty.Relics.Remove(relic)
+                    safeArraySplice(kitty.Relics, p => p === relic)
                     return
                 }
 
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID)
-                player.Gold += selectedItem.Cost
+                player.addGold(selectedItem.Cost)
             }
         } catch (ex: any) {
             Logger.Warning('Error in SellSelectedItem: {ex.Message}')
@@ -476,7 +479,7 @@ export class ShopFrame {
     }
 
     private static HasEnoughGold(player: MapPlayer, cost: number) {
-        return player.Gold >= cost
+        return player.getGold() >= cost
     }
 
     private static CanSellRelic(unit: Unit) {
@@ -484,7 +487,7 @@ export class ShopFrame {
     }
 
     private static ReduceGold(player: MapPlayer, amount: number) {
-        return (player.Gold -= amount)
+        return player.addGold(-amount)
     }
 
     public static NotEnoughGold(player: MapPlayer, cost: number) {
@@ -495,7 +498,7 @@ export class ShopFrame {
     }
 
     private static AddItem(player: MapPlayer, itemID: number) {
-        return Globals.ALL_KITTIES.get(player)!.Unit.addItem(itemID)
+        return Globals.ALL_KITTIES.get(player)!.Unit.addItemById(itemID)
     }
 
     private static SetRewardsFrameHotkey() {

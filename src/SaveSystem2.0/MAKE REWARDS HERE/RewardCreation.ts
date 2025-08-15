@@ -35,13 +35,29 @@ export class RewardManager {
         gameStatValue: number
     ): Reward
 
-    public static AddReward(...args: any): Reward {
+    public static AddReward(
+        rewardOrName: Reward | string,
+        abilityID?: number,
+        originPointOrSkinID?: string | number,
+        modelPathOrRewardType?: string | RewardType,
+        rewardTypeOrGameStat?: RewardType | string,
+        gameStatOrValue?: string | number,
+        gameStatValue?: number
+    ): Reward {
         let reward: Reward
 
-        if (args.length === 1 && typeof args[0] === 'object' && args[0] !== null && args[0] instanceof Reward) {
-            reward = args[0]
+        if (rewardOrName instanceof Reward) {
+            reward = rewardOrName
         } else {
-            reward = new Reward(...args) // Idk what the fuck to do here but OK good luck.
+            reward = new Reward(
+                rewardOrName,
+                abilityID as any,
+                originPointOrSkinID as any,
+                modelPathOrRewardType as any,
+                rewardTypeOrGameStat as any,
+                gameStatOrValue as any,
+                gameStatValue as any
+            )
         }
 
         RewardsManager.Rewards.push(reward)

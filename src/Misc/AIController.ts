@@ -9,6 +9,7 @@ import { Program } from 'src/Program'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { clamp, int } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
 
 export class AIController {
@@ -54,7 +55,7 @@ export class AIController {
     private wolvesInRange: Wolf[] = []
     private lastLightning: lightning
 
-    private lastSafeZoneIndexId: number
+    private lastSafeZoneIndexId: number | null
     private reachedLastProgressZoneCenter: boolean = false
     private availableBlockedLightnings: lightning[] = []
     private availableClearLightnings: lightning[] = []
@@ -63,7 +64,7 @@ export class AIController {
     private blockedIntervals: AngleInterval[] = []
     private freeGaps: AngleInterval[] = []
     private mergedIntervals: AngleInterval[] = []
-    private static claimedKitties: Map<Kitty, Kitty> = new Map()
+    private claimedKitties: Map<Kitty, Kitty> = new Map()
     private wallPoints: Point[] = []
 
     public constructor(kitty: Kitty) {
@@ -85,8 +86,8 @@ export class AIController {
         }
 
         // If I revive release me from the claimedKitties
-        if (AIController.claimedKitties.has(this.kitty)) {
-            AIController.claimedKitties.Remove(AIController.claimedKitties.FirstOrDefault(x => x.Key == this.kitty).Key)
+        if (this.claimedKitties.has(this.kitty)) {
+            this.claimedKitties.delete(this.kitty)
         }
     }
 
@@ -157,8 +158,8 @@ export class AIController {
         }
 
         let distanceToCurrentCenter = Math.sqrt(
-            Math.pow(this.kitty.Unit.x - currentSafezonecenterX, 2) +
-                Math.pow(this.kitty.Unit.y - currentSafezonecenterY, 2)
+            Math.pow(this.kitty.Unit.x - currentSafezoneCenter[0], 2) +
+                Math.pow(this.kitty.Unit.y - currentSafezoneCenter[1], 2)
         )
         let SAFEZONE_THRESHOLD: number = 128.0
 
@@ -184,8 +185,8 @@ export class AIController {
                 ? nextSafezoneCenter
                 : currentSafezoneCenter
 
-        for (let circle in Globals.ALL_CIRCLES) {
-            let deadKitty = Globals.ALL_KITTIES.get(circle.Value.Player)!
+        for (let [_, circle] of Globals.ALL_CIRCLES) {
+            let deadKitty = Globals.ALL_KITTIES.get(circle.Player)!
             let deadKittyProgressZoneId = this.CalcProgressZone(deadKitty)
 
             if (deadKittyProgressZoneId > currentProgressZoneId) {
@@ -197,10 +198,10 @@ export class AIController {
             }
 
             if (!deadKitty.isAlive()) {
-                if (!AIController.claimedKitties.has(deadKitty)) {
+                if (!this.claimedKitties.has(deadKitty)) {
                     let thisDistance: number = Math.sqrt(
                         Math.pow(this.kitty.Unit.x - deadKitty.Unit.x, 2) +
-                            Math.pow(this.kitty.Unit.y - deadKitty.unit.y, 2)
+                            Math.pow(this.kitty.Unit.y - deadKitty.Unit.y, 2)
                     )
                     let thisLaneDiff: number = Math.abs(currentProgressZoneId - deadKittyProgressZoneId)
 
@@ -215,7 +216,7 @@ export class AIController {
                         if (otherKitty != this.kitty && otherKitty.isAlive()) {
                             let otherDistance: number = Math.sqrt(
                                 Math.pow(otherKitty.Unit.x - deadKitty.Unit.x, 2) +
-                                    Math.pow(otherKitty.unit.y - deadKitty.unit.y, 2)
+                                    Math.pow(otherKitty.Unit.y - deadKitty.Unit.y, 2)
                             )
                             let otherLaneDiff: number = Math.abs(
                                 this.CalcProgressZone(otherKitty) - deadKittyProgressZoneId
@@ -234,11 +235,11 @@ export class AIController {
                     }
 
                     if (isNearest) {
-                        this.claimedKitties[deadKitty] = this.kitty
+                        this.claimedKitties.set(deadKitty, this.kitty)
                     }
                 }
 
-                if (this.claimedKitties.has(deadKitty) && AIController.claimedKitties[deadKitty] == this.kitty) {
+                if (this.claimedKitties.has(deadKitty) && this.claimedKitties.get(deadKitty) == this.kitty) {
                     if (deadKittyProgressZoneId != currentProgressZoneId) {
                         if (
                             this.IsInSafeZone(this.kitty.Unit.x, this.kitty.Unit.y, currentProgressZoneId) &&
@@ -255,13 +256,13 @@ export class AIController {
                         break
                     }
 
-                    targetPosition = (circle.Value.Unit.x, circle.Value.unit.y)
+                    targetPosition = [circle.Unit.x, circle.Unit.y]
                     break
                 }
             }
         }
 
-        let wolvesInLane = WolfArea.WolfAreas[currentProgressZoneId].Wolves
+        let wolvesInLane = WolfArea.WolfAreas.get(currentProgressZoneId)!.Wolves
 
         this.wolvesInRange = []
         for (let i: number = 0; i < wolvesInLane.length; i++) {
@@ -271,7 +272,7 @@ export class AIController {
                     this.kitty.Unit.x,
                     this.kitty.Unit.y,
                     wolf.Unit.x,
-                    wolf.unit.y,
+                    wolf.Unit.y,
                     wolf.IsWalking ? this.DODGE_RADIUS : this.DODGE_RADIUS_STILL
                 )
             ) {
@@ -279,19 +280,22 @@ export class AIController {
             }
         }
 
-        let forwardDirection = { x: targetPosition.x - this.kitty.Unit.x, y: targetPosition.y - this.kitty.Unit.y }
+        let forwardDirection: [number, number] = [
+            targetPosition[0] - this.kitty.Unit.x,
+            targetPosition[1] - this.kitty.Unit.y,
+        ]
 
         if (this.wolvesInRange.length > 0) {
             let dodgePosition = this.GetCompositeDodgePosition(this.wolvesInRange, forwardDirection) // TODO; Cleanup:             let dodgePosition = GetCompositeDodgePosition(wolvesInRange, ref forwardDirection);
-            this.IssueOrder('move', dodgePosition.x, dodgePosition.y, true)
+            this.IssueOrder('move', dodgePosition[0], dodgePosition[1], true)
             return
         } else {
             this.HideAllLightnings()
             this.HideAllFreeLightnings()
         }
 
-        let deltaX = targetPosition.x - this.kitty.Unit.x
-        let deltaY = targetPosition.y - this.kitty.Unit.y
+        let deltaX = targetPosition[0] - this.kitty.Unit.x
+        let deltaY = targetPosition[1] - this.kitty.Unit.y
         let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
         if (distance > 256) {
             let scale = 256 / distance
@@ -299,21 +303,24 @@ export class AIController {
             let moveY = this.kitty.Unit.y + deltaY * scale
             this.IssueOrder('move', moveX, moveY, false)
         } else {
-            this.IssueOrder('move', targetPosition.x, targetPosition.y, false)
+            this.IssueOrder('move', targetPosition[0], targetPosition[1], false)
         }
     }
 
     private IsWithinLaneBounds(x: number, y: number) {
         let currentProgressZoneId = this.kitty.ProgressZone
-        let laneBounds = WolfArea.WolfAreas[currentProgressZoneId].Rectangle
+        let laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
+
+        const width = laneBounds.maxX - laneBounds.minX
+        const height = laneBounds.maxY - laneBounds.minY
 
         // Assume a vertical lane if its width is less than its height.
-        if (laneBounds.width < laneBounds.Height) {
+        if (width < height) {
             // Vertical lane: check only the y coordinate.
-            return x >= laneBounds.Left && x <= laneBounds.Right
+            return x >= laneBounds.minX && x <= laneBounds.maxX
         } else {
             // Horizontal lane: check only the x coordinate.
-            return y >= laneBounds.Bottom && y <= laneBounds.Top
+            return y >= laneBounds.minY && y <= laneBounds.maxY
         }
     }
 
@@ -324,7 +331,10 @@ export class AIController {
         let safezone = Globals.SAFE_ZONES[safeZoneId]
 
         return (
-            x >= safezone.Rect_.minX && x <= safezone.Rect_.maxX && y >= safezone.Rect_.minY && y <= safezone.Rect_.maxY
+            x >= safezone.Rectangle.minX &&
+            x <= safezone.Rectangle.maxX &&
+            y >= safezone.Rectangle.minY &&
+            y <= safezone.Rectangle.maxY
         )
     }
 
@@ -336,7 +346,7 @@ export class AIController {
                 MoveLightning(this.lastLightning, false, this.kitty.Unit.x, this.kitty.Unit.y, x, y)
             } else {
                 if (this.laser) {
-                    this.lastLightning = AddLightning('DRAM', false, this.kitty.Unit.x, this.kitty.Unit.y, x, y)
+                    this.lastLightning = AddLightning('DRAM', false, this.kitty.Unit.x, this.kitty.Unit.y, x, y)!
                 }
             }
         }
@@ -360,7 +370,7 @@ export class AIController {
         this.lastY = y
         this.lastOrderTime = this.elapsedTime
         this.hasLastOrder = true
-        this.kitty.Unit.IssueOrder(command, x, y)
+        this.kitty.Unit.issueOrderAt(command, x, y)
     }
 
     private IssueOrderBasic(command: string) {
@@ -369,12 +379,12 @@ export class AIController {
         this.lastY = -1
         this.lastOrderTime = this.elapsedTime
         this.hasLastOrder = true
-        this.kitty.Unit.IssueOrder(command)
+        this.kitty.Unit.issueImmediateOrder(command)
     }
 
     private GetCenterPositionInSafezone(safezone: Safezone) {
-        let centerX = (safezone.Rect_.minX + safezone.Rect_.maxX) / 2
-        let centerY = (safezone.Rect_.minY + safezone.Rect_.maxY) / 2
+        let centerX = (safezone.Rectangle.minX + safezone.Rectangle.maxX) / 2
+        let centerY = (safezone.Rectangle.minY + safezone.Rectangle.maxY) / 2
         return [centerX, centerY]
     }
 
@@ -392,18 +402,22 @@ export class AIController {
 
         let dodgeRange = this.DODGE_DISTANCE * (this.timerInterval + 0.2)
         let currentProgressZoneId = this.kitty.ProgressZone
-        let laneBounds = WolfArea.WolfAreas[currentProgressZoneId].Rectangle
-        let isVertical: boolean = laneBounds.width < laneBounds.Height
+        let laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
+
+        const width = laneBounds.maxX - laneBounds.minX
+        const height = laneBounds.maxY - laneBounds.minY
+
+        let isVertical: boolean = width < height
 
         if (isVertical) {
             // Handle vertical walls (left/right) as before.
-            let constant: number = float.NaN
-            if (this.kitty.Unit.x - dodgeRange < laneBounds.Left) constant = laneBounds.Left
-            else if (this.kitty.Unit.x + dodgeRange > laneBounds.Right) constant = laneBounds.Right
+            let constant: number = Number.NaN
+            if (this.kitty.Unit.x - dodgeRange < laneBounds.minX) constant = laneBounds.minX
+            else if (this.kitty.Unit.x + dodgeRange > laneBounds.maxX) constant = laneBounds.maxX
             else return
 
             let relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
-            if (!float.IsNaN(relativeY) && relativeY != 0) {
+            if (!Number.isNaN(relativeY) && relativeY != 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = constant
                 a.y = relativeY + this.kitty.Unit.y
@@ -415,13 +429,13 @@ export class AIController {
                 this.wallPoints.push(b)
             }
         } else {
-            let constant: number = float.NaN
-            if (this.kitty.Unit.y + dodgeRange > laneBounds.Top) constant = laneBounds.Top
-            else if (this.kitty.Unit.y - dodgeRange < laneBounds.Bottom) constant = laneBounds.Bottom
+            let constant: number = Number.NaN
+            if (this.kitty.Unit.y + dodgeRange > laneBounds.maxY) constant = laneBounds.maxY
+            else if (this.kitty.Unit.y - dodgeRange < laneBounds.minY) constant = laneBounds.minY
             else return
 
             let relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
-            if (!float.IsNaN(relativeX) && relativeX != 0) {
+            if (!Number.isNaN(relativeX) && relativeX != 0) {
                 let a = MemoryHandler.getEmptyObject<Point>()
                 a.x = relativeX + this.kitty.Unit.x
                 a.y = constant
@@ -442,14 +456,14 @@ export class AIController {
      * the: center: on: the: X: axis: and
      */
     AnglesFromCenter(pointA: [number, number], pointB: [number, number]) {
-        let angleA: number = this.AngleOf(pointA, (this.kitty.Unit.x, this.kitty.Unit.y))
-        let angleB: number = this.AngleOf(pointB, (this.kitty.Unit.x, this.kitty.Unit.y))
-        return (angleA, angleB)
+        let angleA: number = this.AngleOf(pointA, [this.kitty.Unit.x, this.kitty.Unit.y])
+        let angleB: number = this.AngleOf(pointB, [this.kitty.Unit.x, this.kitty.Unit.y])
+        return [angleA, angleB]
     }
 
     AngleOf(point: [number, number], center: [number, number]) {
-        let deltaX: number = point.x - centerX
-        let deltaY: number = point.y - centerY
+        let deltaX: number = point[0] - center[0]
+        let deltaY: number = point[1] - center[1]
         let radians: number = Math.atan2(deltaY, deltaX)
         return this.NormalizeAngle(radians)
     }
@@ -457,7 +471,7 @@ export class AIController {
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
     private GetCompositeDodgePosition(wolves: Wolf[], forwardDirection: [number, number]) {
         // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
-        let forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection.y, forwardDirection.x))
+        let forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
         let requiredClearance: number = 22.5 * (Math.PI / 180)
 
         // Calculate the angle interval that each wolf “blocks.”
@@ -473,13 +487,13 @@ export class AIController {
             }
 
             let dx: number = wolf.Unit.x - this.kitty.Unit.x
-            let dy: number = wolf.unit.y - this.kitty.Unit.y
+            let dy: number = wolf.Unit.y - this.kitty.Unit.y
             let distance: number = Math.sqrt(dx * dx + dy * dy)
 
             if (distance < 1) continue // Skip if the wolf is at the same position to avoid division by zero
 
-            let centerAngle: number = Math.atan2(wolf.unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
-            let clampedDistance: number = Math.clamp(
+            let centerAngle: number = Math.atan2(wolf.Unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
+            let clampedDistance: number = clamp(
                 distance,
                 CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS,
                 this.DODGE_RADIUS
@@ -518,9 +532,9 @@ export class AIController {
         this.CalcCrossingPoints()
 
         if (this.wallPoints.length == 2) {
-            let(angleA, angleB) = this.AnglesFromCenter(
-                (this.wallPoints[0].x, this.wallPoints[0].y),
-                (this.wallPoints[1].x, this.wallPoints[1].y)
+            let [angleA, angleB] = this.AnglesFromCenter(
+                [this.wallPoints[0].x, this.wallPoints[0].y],
+                [this.wallPoints[1].x, this.wallPoints[1].y]
             )
 
             if (angleA > angleB) {
@@ -611,7 +625,7 @@ export class AIController {
         let targetX: number = this.kitty.Unit.x + Math.cos(forwardAngle) * this.DODGE_DISTANCE
         let targetY: number = this.kitty.Unit.y + Math.sin(forwardAngle) * this.DODGE_DISTANCE
 
-        let bestCandidateScore: number = float.MaxValue
+        let bestCandidateScore: number = int.MaxValue
         let bestCandidateAngle: number = -500 // Default to the original forward angle
 
         for (let i: number = 0; i < AIController.offsets.length; i++) {
@@ -639,19 +653,19 @@ export class AIController {
 
         if (bestCandidateAngle == -500) {
             this.cleanArrays()
-            return (this.kitty.Unit.x, this.kitty.Unit.y)
+            return [this.kitty.Unit.x, this.kitty.Unit.y]
         }
 
         // Update the forward direction to the chosen dodge direction.
-        let forwardDirection2 = (Math.cos(bestCandidateAngle), Math.sin(bestCandidateAngle))
+        let forwardDirection2 = [Math.cos(bestCandidateAngle), Math.sin(bestCandidateAngle)]
 
         this.cleanArrays()
 
         // Return the target dodge position (kitty's position plus 128 in the chosen direction).
-        return (
-            this.kitty.Unit.x + forwardDirection2.x * this.DODGE_DISTANCE,
-            this.kitty.Unit.y + forwardDirection2.y * this.DODGE_DISTANCE
-        )
+        return [
+            this.kitty.Unit.x + forwardDirection2[0] * this.DODGE_DISTANCE,
+            this.kitty.Unit.y + forwardDirection2[1] * this.DODGE_DISTANCE,
+        ]
     }
 
     private calcAngle(forwardAngle: number, requiredClearance: number) {
@@ -691,7 +705,7 @@ export class AIController {
 
         // If forwardAngle isn't within any free gap, find the candidate edge closest to forwardAngle.
         if (!foundGapContainingForward) {
-            let bestScore: number = float.MaxValue
+            let bestScore: number = int.MaxValue
             for (
                 let i: number = 0;
                 i < this.freeGaps.length;
@@ -773,7 +787,7 @@ export class AIController {
 
             if (this.availableBlockedLightnings.length > 0) {
                 freeLightning = this.availableBlockedLightnings[this.availableBlockedLightnings.length - 1]
-                this.availableBlockedLightnings.RemoveAt(this.availableBlockedLightnings.length - 1)
+                this.availableBlockedLightnings.splice(this.availableBlockedLightnings.length - 1, 1)
             }
 
             if (freeLightning == null) {
@@ -803,7 +817,7 @@ export class AIController {
 
             if (this.availableClearLightnings.length > 0) {
                 freeLightning = this.availableClearLightnings[this.availableClearLightnings.length - 1]
-                this.availableClearLightnings.RemoveAt(this.availableClearLightnings.length - 1)
+                this.availableClearLightnings.splice(this.availableClearLightnings.length - 1, 1)
             }
 
             if (freeLightning == null) {
@@ -900,10 +914,10 @@ export class AIController {
     }
 
     private LearnSkills() {
-        if (this.kitty.Unit.SkillPoints > 0) {
-            this.kitty.Unit.SelectHeroSkill(Constants.ABILITY_WIND_WALK)
-            this.kitty.Unit.SelectHeroSkill(Constants.ABILITY_AGILITY_AURA)
-            this.kitty.Unit.SelectHeroSkill(Constants.ABILITY_ENERGY_AURA)
+        if (this.kitty.Unit.skillPoints > 0) {
+            this.kitty.Unit.selectSkill(Constants.ABILITY_WIND_WALK)
+            this.kitty.Unit.selectSkill(Constants.ABILITY_AGILITY_AURA)
+            this.kitty.Unit.selectSkill(Constants.ABILITY_ENERGY_AURA)
         }
     }
 

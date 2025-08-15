@@ -1,20 +1,24 @@
-import { Globals } from "src/Global/Globals"
+import { Globals } from 'src/Global/Globals'
 
 export class DateTimeManager {
-    public static DateTime: WcDateTime
+    public static DateTime: LuaDateInfoResult
     public static CurrentMonth: number
     public static CurrentDay: number
     public static Test: Date
 
     public static Initialize() {
-        WcDateTime.GetCurrentTime(SetDateTime)
+        // Get the current date/time table directly from Lua
+        const now = os.date('*t') as LuaDateInfoResult
+        DateTimeManager.SetDateTime(now)
     }
 
-    private static SetDateTime(time: WcDateTime) {
-        print('{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}{time.toString()}')
-        DateTime = time
-        CurrentMonth = DateTime.Month
-        CurrentDay = DateTime.Day
+    private static SetDateTime(time: LuaDateInfoResult) {
+        print(
+            `{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}${time.hour}:${time.min}:${time.sec} ${time.day}/${time.month}/${time.year}`
+        )
+        DateTimeManager.DateTime = time
+        DateTimeManager.CurrentMonth = time.month
+        DateTimeManager.CurrentDay = time.day
         Globals.DATE_TIME_LOADED = true
     }
 }

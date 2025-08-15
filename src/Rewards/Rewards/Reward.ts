@@ -41,39 +41,17 @@ export class Reward {
     public GameStat: string
     public GameStatValue: number
 
-    public Reward(name: string, abilityID: number, originPoint: string, modelPath: string, type: RewardType) {
-        this.name = name
-        this.AbilityID = abilityID
-        this.OriginPoint = originPoint
-        this.ModelPath = modelPath
-        this.Type = type
-    }
-
-    public Reward(name: string, abilityID: number, skinID: number, type: RewardType) {
-        this.name = name
-        this.AbilityID = abilityID
-        this.SkinID = skinID
-        this.Type = type
-    }
-
-    public Reward(
+    constructor(name: string, abilityID: number, originPoint: string, modelPath: string, type: RewardType)
+    constructor(name: string, abilityID: number, skinID: number, type: RewardType)
+    constructor(
         name: string,
         abilityID: number,
         skinID: number,
         type: RewardType,
         gameStat: string,
         gameStatValue: number
-    ) {
-        this.name = name
-        this.AbilityID = abilityID
-        this.SkinID = skinID
-        this.Type = type
-        this.GameStat = gameStat
-        this.GameStatValue = gameStatValue
-        RewardsManager.GameStatRewards.push(this)
-    }
-
-    public Reward(
+    )
+    constructor(
         name: string,
         abilityID: number,
         originPoint: string,
@@ -81,15 +59,51 @@ export class Reward {
         type: RewardType,
         gameStat: string,
         gameStatValue: number
+    )
+    constructor(
+        name: string,
+        abilityID: number,
+        arg3: string | number,
+        arg4: string | RewardType,
+        arg5?: RewardType | string,
+        arg6?: string | number,
+        arg7?: number
     ) {
         this.name = name
         this.AbilityID = abilityID
-        this.OriginPoint = originPoint
-        this.ModelPath = modelPath
-        this.Type = type
-        this.GameStat = gameStat
-        this.GameStatValue = gameStatValue
-        RewardsManager.GameStatRewards.push(this)
+
+        if (typeof arg3 === 'string' && typeof arg4 === 'string' && typeof arg5 === 'object') {
+            this.OriginPoint = arg3
+            this.ModelPath = arg4
+            this.Type = arg5 as RewardType
+        } else if (typeof arg3 === 'number' && typeof arg4 === 'object' && arg5 === undefined) {
+            this.SkinID = arg3
+            this.Type = arg4 as RewardType
+        } else if (
+            typeof arg3 === 'number' &&
+            typeof arg4 === 'object' &&
+            typeof arg5 === 'string' &&
+            typeof arg6 === 'number'
+        ) {
+            this.SkinID = arg3
+            this.Type = arg4 as RewardType
+            this.GameStat = arg5
+            this.GameStatValue = arg6
+            RewardsManager.GameStatRewards.push(this)
+        } else if (
+            typeof arg3 === 'string' &&
+            typeof arg4 === 'string' &&
+            typeof arg5 === 'object' &&
+            typeof arg6 === 'string' &&
+            typeof arg7 === 'number'
+        ) {
+            this.OriginPoint = arg3
+            this.ModelPath = arg4
+            this.Type = arg5 as RewardType
+            this.GameStat = arg6
+            this.GameStatValue = arg7
+            RewardsManager.GameStatRewards.push(this)
+        }
     }
 
     /// <summary>

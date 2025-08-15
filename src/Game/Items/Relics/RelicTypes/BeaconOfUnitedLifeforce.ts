@@ -3,35 +3,34 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
-import { MapPlayer } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
+import { MapPlayer, Unit } from 'w3ts'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
 
 export class BeaconOfUnitedLifeforce extends Relic {
-    public RelicItemID: number = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE
+    public static RelicItemID: number = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE
     private static INVULNERABILITY_DURATION: number = 1.0
     private static EXTRA_REVIVE_CHANCE_SINGLE: number = 0.125 // 12.5%
     private static EXTRA_REVIVE_CHANCE_ALL: number = 0.0175 // 1.75%
     private static EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE: number = 0.01 // 1%
     private static IconPath: string = 'war3mapImported\\BTNTicTac.blp'
-    private RelicCost: number = 650
-    private ReviveChance: number = BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE
+    private static RelicCost: number = 650
+    private static ReviveChance: number = BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE
 
-    private Owner: MapPlayer
+    private Owner: MapPlayer | null
 
     public constructor() {
         super(
             '|cff1e90ffBeacon of United Lifeforce|r',
             'Gives the owner a chance to revive an extra Kitty whenever they revive someone. {Colors.COLOR_LIGHTBLUE}(Passive)|r',
             0,
-            this.RelicItemID,
-            this.RelicCost,
+            BeaconOfUnitedLifeforce.RelicItemID,
+            BeaconOfUnitedLifeforce.RelicCost,
             BeaconOfUnitedLifeforce.IconPath
         )
 
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(
                 0,
                 'Your extra revive chance is increased by {(int)Math.ceil(EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE * 100.0f)}%.',
@@ -39,7 +38,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
                 800
             )
         )
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(1, 'Each revive has a VERY small chance to simply revive all dead players.', 20, 1000)
         )
     }
@@ -65,7 +64,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
 
         let chance = GetRandomReal(0.0, 1.0)
 
-        if (chance > this.ReviveChance) return
+        if (chance > BeaconOfUnitedLifeforce.ReviveChance) return
 
         // Revive all kitties if chance <= EXTRA_REVIVE_CHANCE_ALL, otherwise revive one kitty
         let reviveAll: boolean = chance <= BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_ALL
@@ -111,9 +110,9 @@ export class BeaconOfUnitedLifeforce extends Relic {
     /// Upgrade Level 1: Increases the revive chance of the relic.
     /// </summary>
     private UpgradeReviveChance() {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(typeof BeaconOfUnitedLifeforce)
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner!).GetUpgradeLevel(typeof BeaconOfUnitedLifeforce)
         if (upgradeLevel >= 1)
-            this.ReviveChance =
+            BeaconOfUnitedLifeforce.ReviveChance =
                 BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE +
                 BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE
     }

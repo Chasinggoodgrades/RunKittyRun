@@ -6,7 +6,6 @@ import { GC } from 'src/Utility/GC'
 import { distanceBetweenXYPoints, Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger, Unit } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
@@ -35,10 +34,10 @@ export class ShardOfTranslocation extends Relic {
             ShardOfTranslocation.IconPath
         )
 
-        Upgrades.push(
+        this.Upgrades.push(
             new RelicUpgrade(0, 'Extends the teleport range to {UPGRADE_BLINK_RANGE} yrds within lane bounds.', 15, 800)
         )
-        Upgrades.push(new RelicUpgrade(1, 'Cooldown reduced by {(int)CooldownReduction} seconds.', 20, 1000))
+        this.Upgrades.push(new RelicUpgrade(1, 'Cooldown reduced by {(int)CooldownReduction} seconds.', 20, 1000))
     }
 
     public override ApplyEffect(Unit: Unit) {
@@ -94,7 +93,7 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private UpdateBlinkRange(unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(this.name)
         this.MaxBlinkRange =
             upgradeLevel >= 1 ? ShardOfTranslocation.UPGRADE_BLINK_RANGE : ShardOfTranslocation.DEFAULT_BLINK_RANGE
         if (upgradeLevel >= 1) Utility.SimpleTimer(0.1, () => this.SetItemTooltip(unit))
@@ -114,7 +113,7 @@ export class ShardOfTranslocation extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         Unit.getAbility(this.RelicAbilityID)
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
 
         let cooldown =
             upgradeLevel >= 2 // lvl 2 upgrade

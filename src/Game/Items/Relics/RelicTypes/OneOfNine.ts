@@ -4,27 +4,27 @@ import { ProtectionOfAncients } from 'src/Game/ProtectionOfAncients'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Unit } from 'w3ts'
-import { Upgrades } from 'war3-objectdata-th'
 import { PlayerUpgrades } from '../PlayerUpgrades'
 import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
 
 export class OneOfNine extends Relic {
-    public RelicItemID: number = Constants.ITEM_ONE_OF_NINE
-    public RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+    public static RelicItemID: number = Constants.ITEM_ONE_OF_NINE
+    public static RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
     private PreviousAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-    private RelicCost: number = 650
+    private static RelicCost: number = 650
     private static IconPath: string = 'war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp'
 
     public constructor() {
-        super()
-        this.name = '|cffff4500One of Nine|r'
-        this.Description =
-            'Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r'
-        this.RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
-        this.RelicItemID = Constants.ITEM_ONE_OF_NINE
-        this.RelicCost = 650
+        super(
+            '{Colors.COLOR_RED}One of Nine',
+            'Autocasts Protection of the Ancients if it is available. {Colors.COLOR_LIGHTBLUE}(Passive)|r',
+            OneOfNine.RelicAbilityID,
+            OneOfNine.RelicItemID,
+            OneOfNine.RelicCost,
+            OneOfNine.IconPath
+        )
 
         this.Upgrades.push(
             new RelicUpgrade(
@@ -34,23 +34,24 @@ export class OneOfNine extends Relic {
                 800
             )
         )
+
         this.Upgrades.push(new RelicUpgrade(1, 'Your ultimate no longer costs mana.', 20, 1000))
     }
     public override ApplyEffect(Unit: Unit) {
         let player: MapPlayer = Unit.owner
-        let cooldown: number = GetOneOfNineCooldown(player)
-        Unit.removeAbility(PreviousAbilityID)
-        Unit.addAbility(RelicAbilityID)
+        let cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        Unit.removeAbility(this.PreviousAbilityID)
+        Unit.addAbility(OneOfNine.RelicAbilityID)
         let abilityLevel: number = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
-        Unit(RelicAbilityID, cooldown)
+        BlzStartUnitAbilityCooldown(Unit.handle, OneOfNine.RelicAbilityID, cooldown)
         this.RemoveManaCost(Unit, abilityLevel)
     }
 
     public override RemoveEffect(Unit: Unit) {
         let player: MapPlayer = Unit.owner
-        let cooldown: number = GetOneOfNineCooldown(player)
-        Unit.removeAbility(RelicAbilityID)
-        Unit.addAbility(PreviousAbilityID)
+        let cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        Unit.removeAbility(OneOfNine.RelicAbilityID)
+        Unit.addAbility(this.PreviousAbilityID)
         ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
         BlzStartUnitAbilityCooldown(Unit.handle, this.PreviousAbilityID, cooldown)
     }
@@ -59,7 +60,7 @@ export class OneOfNine extends Relic {
         let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
         let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
         let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
-        let reduction = GetOneOfNineReduction(Player)
+        let reduction = OneOfNine.GetOneOfNineReduction(Player)
 
         // remaining cooldown depending on relic or no relic
         let cooldown: number =
@@ -82,16 +83,16 @@ export class OneOfNine extends Relic {
     /// <param name="Unit"></param>
     /// <param name="abilityLevel"></param>
     private RemoveManaCost(Unit: Unit, abilityLevel: number) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(GetType())
+        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
         if (upgradeLevel < 2) return
-        Unit.getAbility(RelicAbilityID)
-        Unit.setAbilityManaCost(RelicAbilityID, abilityLevel - 1, 0)
+        Unit.getAbility(OneOfNine.RelicAbilityID)
+        Unit.setAbilityManaCost(OneOfNine.RelicAbilityID, abilityLevel - 1, 0)
     }
 
     public static OneOfNineEffect(kitty: Kitty) {
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false
         if (kitty.Unit.getAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0) {
-            IssueImmediateOrder(kitty.Unit, 'divineshield')
+            kitty.Unit.issueImmediateOrder('divineshield')
             return true
         }
         return false

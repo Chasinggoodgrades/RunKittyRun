@@ -1,8 +1,8 @@
 export class GameCurrency {
     public Kibble: KibbleCurrency
 
-    public GameCurrency() {
-        Kibble = new KibbleCurrency()
+    public constructor() {
+        this.Kibble = new KibbleCurrency()
     }
 }
 

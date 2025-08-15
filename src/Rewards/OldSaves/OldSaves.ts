@@ -2,9 +2,11 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { RewardHelper } from 'src/UI/Frames/RewardHelper'
 import { int } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
+import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { AwardManager } from '../Rewards/AwardManager'
 import { BigNum, BigNumL } from './BigNum'
 import { DecodeOldsave } from './DecodeOldsave'
@@ -24,8 +26,8 @@ export class Savecode {
             for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
-                if (tooltip != 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
-                else throw new ArgumentError('Error, not: available: tooltip: {ability}')
+                if (tooltip && tooltip != 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
+                else throw new Error('Error, not: available: tooltip: {ability}')
             }
             for (let player of Globals.ALL_PLAYERS) {
                 Savecode.InitializeSaveCode(player)
@@ -38,7 +40,7 @@ export class Savecode {
 
     private static InitializeSaveCode(p: MapPlayer) {
         if (!Savecode.PlayerSaveObject.has(p)) {
-            Savecode.PlayerSaveObject[p] = new Savecode()
+            Savecode.PlayerSaveObject.set(p, new Savecode())
         }
     }
 
@@ -152,7 +154,7 @@ export class Savecode {
         }
 
         let filePath = 'RunKittyRun\\SaveSlot_RKR.pld'
-        let sb = new StringBuilder()
+        let sb = []
         Preloader(filePath)
 
         for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
@@ -163,15 +165,15 @@ export class Savecode {
             if (packet == originalTooltip) break
             else {
                 BlzSetAbilityTooltip(abilityID, originalTooltip, 0)
-                sb.Append(packet)
+                sb.push(packet)
             }
         }
-        let result = sb.toString()
+        let result = sb.join('')
         let newLineStart = result.indexOf('\n')
         if (newLineStart >= 0) result = result.substring(newLineStart + 1)
 
-        sb.clear().Append(result)
-        OldsaveSync.SyncString(sb.toString())
+        sb = [result]
+        OldsaveSync.SyncString(sb.join(''))
     }
 
     /// <summary>
@@ -183,29 +185,31 @@ export class Savecode {
         let roundstats = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes
         let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats
 
-        for (let value in DecodeOldsave.decodeValues) {
-            let decodedValue = this.Decode(value.Value)
-            let propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.Key)
+        for (let value of DecodeOldsave.decodeValues) {
+            let decodedValue = this.Decode(value.value)
+            let propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.key)
+
             // Award Events
             if (propertyValue != -1 && decodedValue == 1) {
                 if (propertyValue == 0) {
-                    AwardManager.GiveReward(player, value.Key)
+                    AwardManager.GiveReward(player, value.key)
                     continue
                 }
             }
-            let property = roundstats.GetType().GetProperty(value.Key)
             // Round Times
-            if (property != null) {
-                if (decodedValue < property.GetValue(roundstats) || property.GetValue(roundstats) == 0) {
-                    property.SetValue(roundstats, decodedValue)
+            if (value.key in roundstats) {
+                if (
+                    decodedValue < roundstats[value.key as keyof RoundTimesData] ||
+                    roundstats[value.key as keyof RoundTimesData] == 0
+                ) {
+                    roundstats[value.key as keyof RoundTimesData] = decodedValue
                     continue
                 }
             }
-            property = kittyStats.GetType().GetProperty(value.Key)
             // Game Stats
-            if (property != null) {
-                if (decodedValue > property.GetValue(kittyStats)) {
-                    property.SetValue(kittyStats, decodedValue)
+            if (value.key in kittyStats) {
+                if (decodedValue > kittyStats[value.key as keyof GameStatsData]) {
+                    kittyStats[value.key as keyof GameStatsData] = decodedValue
                     continue
                 }
             }
@@ -214,9 +218,9 @@ export class Savecode {
 
     private static SCommHash(name: string) {
         let charlen = Savecode.player_charset.length
-        let count = []
+        let count: { [x: string]: number } = {}
         let x: number
-        for (let c in name.toUpperCase()) {
+        for (let c of name.toUpperCase()) {
             x = OldSavesHelper.Player_CharToInt(c)
             if (x >= 0) count[x]++
         }

@@ -1,15 +1,16 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
+import { base64Decode, base64Encode } from 'w3ts'
 import { SaveManager } from '../SaveManager'
 
 export class PropertyEncoder {
     public static EncodeToJsonBase64(obj: object) {
         try {
-            let jsonString: StringBuilder = new StringBuilder('{')
+            let jsonString = ['{']
             this.AppendProperties(obj, jsonString)
-            jsonString.Append('}')
+            jsonString.push('}')
 
-            let base64String = WCSharp.Shared.Base64.ToBase64(jsonString.toString())
+            let base64String = base64Encode(jsonString.join(''))
             return base64String
         } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
@@ -19,11 +20,11 @@ export class PropertyEncoder {
     }
 
     private static GetJsonData(obj: object) {
-        let jsonString: StringBuilder = new StringBuilder('{')
+        let jsonString = ['{']
         this.AppendProperties(obj, jsonString)
-        jsonString.Append('}')
+        jsonString.push('}')
 
-        return jsonString.toString()
+        return jsonString.join('')
     }
 
     public static EncodeAllDataToJsonBase64(): string {
@@ -31,13 +32,16 @@ export class PropertyEncoder {
             let jsonString: string = ''
             jsonString += '{'
             for (let player of Globals.ALL_PLAYERS) {
-                if (!(playerData = SaveManager.SaveData.TryGetValue(player)) /* TODO; Prepend: let */) continue
+                let playerData = SaveManager.SaveData.get(player)
+                if (!playerData) continue
                 jsonString += `"{player.name}":{GetJsonData(playerData)},`
             }
-            if (jsonString.length > 0 && jsonString[jsonString.length - 1] == ',') jsonString.length--
+            if (jsonString.length > 0 && jsonString[jsonString.length - 1] === ',') {
+                jsonString = jsonString.slice(0, -1)
+            }
             jsonString += '}'
 
-            let base64String = WCSharp.Shared.Base64.ToBase64(jsonString)
+            let base64String = base64Encode(jsonString)
             return base64String
         } catch (ex: any) {
             Logger.Critical('{Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: {ex.Message}')
@@ -45,7 +49,7 @@ export class PropertyEncoder {
         }
     }
 
-    private static AppendProperties(obj: object, jsonString: StringBuilder) {
+    private static AppendProperties(obj: object, jsonString: string[]) {
         if (obj == null) return
 
         let properties = Object.keys(obj)
@@ -56,25 +60,25 @@ export class PropertyEncoder {
             let value = (obj as any)[name]
 
             if (!firstProperty) {
-                jsonString.Append(',')
+                jsonString.push(',')
             }
             firstProperty = false
 
-            jsonString.Append(`"${name}":`)
+            jsonString.push(`"${name}":`)
 
             if (value !== null && typeof value === 'object' && !Array.isArray(value) && typeof value !== 'string') {
-                jsonString.Append('{')
+                jsonString.push('{')
                 this.AppendProperties(value, jsonString)
-                jsonString.Append('}')
+                jsonString.push('}')
             } else {
-                typeof value === 'string' ? jsonString.Append(`"${value}"`) : jsonString.Append(`${value}`)
+                typeof value === 'string' ? jsonString.push(`"${value}"`) : jsonString.push(`${value}`)
             }
         }
     }
 
-    public static DecodeFromJsonBase64(base64EncodedData: StringBuilder) {
+    public static DecodeFromJsonBase64(base64EncodedData: string[]) {
         // Decode the Base64 string to a JSON-like string
-        let jsonString = WCSharp.Shared.base64Decode(base64EncodedData.toString())
+        let jsonString = base64Decode(base64EncodedData.join(''))
         return jsonString
     }
 }
