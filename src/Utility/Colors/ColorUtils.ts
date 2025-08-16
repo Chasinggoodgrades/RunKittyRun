@@ -4,7 +4,6 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { MapPlayer, Unit } from 'w3ts'
 import { isNullOrEmpty } from '../StringUtils'
-import { int } from '../Utility'
 import { Colors } from './Colors'
 
 export class ColorData {
@@ -131,9 +130,9 @@ export class ColorUtils {
             g = 0,
             b = 0
 
-        if (RGB.length > 0) r = int.Parse(RGB[0])
-        if (RGB.length > 1) g = int.Parse(RGB[1])
-        if (RGB.length > 2) b = int.Parse(RGB[2])
+        if (RGB.length > 0) r = S2I(RGB[0])
+        if (RGB.length > 1) g = S2I(RGB[1])
+        if (RGB.length > 2) b = S2I(RGB[2])
 
         kitty.Unit.setVertexColor(r, g, b, 255)
         Globals.ALL_KITTIES.get(p)!.SaveData.PlayerColorData.VortexColor = '{r},{g},{b}'

@@ -1,4 +1,4 @@
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { SoloMultiboard } from './Multiboard/SoloMultiboard'
 import { StandardMultiboard } from './Multiboard/StandardMultiboard'
@@ -10,7 +10,7 @@ export class MultiboardManager {
     }
 
     private static SetupMultiboards() {
-        switch (Gamemode.CurrentGameMode) {
+        switch (CurrentGameMode.active) {
             case GameMode.Standard:
                 StandardMultiboard.Initialize()
                 break

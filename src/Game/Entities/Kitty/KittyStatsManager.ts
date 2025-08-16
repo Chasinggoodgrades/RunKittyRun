@@ -1,5 +1,5 @@
 import { PersonalBestAwarder } from 'src/Game/Podium/PersonalBestAwarder'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Resources } from 'src/Init/Resources'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
@@ -38,7 +38,7 @@ export class KittyStatsManager {
 
         SoloMultiboard.UpdateDeathCount(this.Kitty.Player)
 
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
 
         this.Kitty.SaveData.GameStats.Deaths += 1
     }
@@ -57,7 +57,7 @@ export class KittyStatsManager {
         if (savior.CurrentStats.SaveStreak > savior.CurrentStats.MaxSaveStreak)
             savior.CurrentStats.MaxSaveStreak = savior.CurrentStats.SaveStreak
 
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
 
         savior.SaveData.GameStats.Saves += 1
         savior.SaveData.GameStats.SaveStreak += 1

@@ -1,6 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Team } from 'src/Gamemodes/Teams/Team'
 import { Globals } from 'src/Global/Globals'
@@ -91,7 +91,7 @@ export class SoundManager {
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
     public static PlayKittyDeathSound(k: Kitty) {
-        if (Gamemode.CurrentGameMode === GameMode.TeamTournament) this.TeamKittyDeathSound(k)
+        if (CurrentGameMode.active === GameMode.TeamTournament) this.TeamKittyDeathSound(k)
         else {
             let s = this.KITTY_DEATH_SOUND
             StopSound(s.handle, false, false)

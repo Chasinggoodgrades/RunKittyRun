@@ -1,5 +1,5 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
@@ -148,7 +148,7 @@ export class Savecode {
     }
 
     public static LoadString() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
+        if (CurrentGameMode.active !== GameMode.Standard) {
             print('{Colors.COLOR_YELLOW}save: codes: work: only: Old in Standard')
             return
         }

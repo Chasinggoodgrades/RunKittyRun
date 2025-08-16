@@ -107,7 +107,7 @@ export class AwardingCmds {
         for (let prop of Object.keys(Globals.GAME_STATS)) {
             if (prop.toLowerCase() === stats.toLowerCase()) {
                 let val: number
-                if (!(val = int.TryParse(value)!)) {
+                if (!(val = S2I(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
                         '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'
@@ -158,7 +158,7 @@ export class AwardingCmds {
         for (let prop of Object.keys(Globals.GAME_TIMES)) {
             if (prop.toLowerCase() === roundTime.toLowerCase()) {
                 let val: number
-                if (!(val = int.TryParse(value)!)) {
+                if (!(val = S2I(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
                         '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'

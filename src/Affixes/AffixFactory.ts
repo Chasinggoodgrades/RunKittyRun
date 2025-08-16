@@ -2,7 +2,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { NamedWolves } from 'src/Game/Entities/NamedWolves'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { WolfArea } from 'src/Game/WolfArea'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
@@ -131,7 +131,7 @@ export class AffixFactory {
         // Normalizing Weights
         for (let i: number = 0; i < regionCount; i++) {
             AffixFactory.LaneWeights[i] = (AffixFactory.LaneWeights[i] / totalArea) * 100
-            //if(Program.Debug) print("Lane {i + 1} weight: {LaneWeights[i]}");
+            //if(!PROD) print("Lane {i + 1} weight: {LaneWeights[i]}");
         }
     }
 
@@ -189,11 +189,11 @@ export class AffixFactory {
     public static DistAffixes() {
         try {
             AffixFactory.RemoveAllAffixes()
-            if (Gamemode.CurrentGameMode === GameMode.SoloTournament) return // Solo Return.. Team tournament should work.
+            if (CurrentGameMode.active === GameMode.SoloTournament) return // Solo Return.. Team tournament should work.
             if (!AffixFactory.CanDistributeAffixes()) return
 
             AffixFactory.NUMBER_OF_AFFIXED_WOLVES =
-                Gamemode.CurrentGameMode === GameMode.Standard
+                CurrentGameMode.active === GameMode.Standard
                     ? Difficulty.DifficultyValue * 3 + Globals.ROUND * 8
                     : 26 + Globals.ROUND * 8
 

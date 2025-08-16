@@ -1,7 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { int } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Timer } from 'w3ts'
 import { PlayerLeaves } from '../PlayerLeavesEvent/PlayerLeaves'
@@ -106,7 +105,7 @@ export class Votekick {
     /// <param name="player"></param>
     /// <returns></returns>
     private static GetPlayerID(player: string) {
-        let playerID = int.TryParse(player)
+        let playerID = S2I(player)
         return playerID && playerID > 0 ? playerID - 1 : -1
     }
 

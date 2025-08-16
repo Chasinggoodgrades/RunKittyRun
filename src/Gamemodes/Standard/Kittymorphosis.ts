@@ -4,7 +4,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
-import { Gamemode } from '../Gamemode'
+import { CurrentGameMode } from '../CurrentGameMode'
 import { GameMode } from '../GameModeEnum'
 
 export class KittyMorphosis {
@@ -47,7 +47,7 @@ export class KittyMorphosis {
     /// Registers the triggers so that when someone hits the required level they'll morph.
     /// </summary>
     private RegisterTriggers() {
-        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) return // Solo Mode
+        if (CurrentGameMode.active === GameMode.SoloTournament) return // Solo Mode
         this.triggerHandle ??= Trigger.create()!
         this.triggerHandle.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_HERO_LEVEL)
         this.triggerHandle.addCondition(Condition(() => getTriggerUnit().getHeroLevel() >= this.REQUIRED_LEVEL))

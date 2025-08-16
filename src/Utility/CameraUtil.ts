@@ -3,7 +3,6 @@ import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
 import { MapPlayer } from 'w3ts'
 import { safeArraySplice } from './ArrayUtils'
 import { Colors } from './Colors/Colors'
-import { int } from './Utility'
 
 export class CameraUtil {
     private static LockedCameras: MapPlayer[] = []
@@ -40,7 +39,7 @@ export class CameraUtil {
 
     public static HandleZoomCommand(p: MapPlayer, args: string[]) {
         if (args[0] === '') return
-        let zoom: number = int.Parse(args[0])
+        let zoom: number = S2I(args[0])
         if (!p.isLocal()) return
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0)
     }

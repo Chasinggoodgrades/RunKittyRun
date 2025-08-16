@@ -1,6 +1,6 @@
 import { PersonalBestAwarder } from 'src/Game/Podium/PersonalBestAwarder'
 import { GameTimer } from 'src/Game/Rounds/GameTimer'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
@@ -17,8 +17,8 @@ export class TimeSetter {
     /// <param name="player"></param>
     public static SetRoundTime(player: MapPlayer) {
         try {
-            let standard = Gamemode.CurrentGameMode === GameMode.Standard
-            let solo = Gamemode.CurrentGameMode === GameMode.SoloTournament // Solo
+            let standard = CurrentGameMode.active === GameMode.Standard
+            let solo = CurrentGameMode.active === GameMode.SoloTournament // Solo
             let roundString: string = ''
             let currentTime = GameTimer.RoundTime[Globals.ROUND]
             if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return false

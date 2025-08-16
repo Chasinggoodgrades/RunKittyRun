@@ -38,12 +38,13 @@ import { MusicFrame } from 'src/UI/Frames/MusicFrame'
 import { RewardsFrame } from 'src/UI/Frames/RewardsFrame'
 import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { safeArraySplice } from 'src/Utility/ArrayUtils'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
-import { int, Utility } from 'src/Utility/Utility'
+import { Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer } from 'w3ts'
 import { ErrorMessagesOn } from '../../../Utility/ErrorMessagesOn'
 import { AwardingCmds } from '../AwardingCmds'
@@ -116,7 +117,7 @@ export class InitCommands {
                     return
                 }
 
-                let amount = int.Parse(args[0])
+                let amount = S2I(args[0])
 
                 if (args.length < 2) {
                     player.addGold(amount)
@@ -198,7 +199,7 @@ export class InitCommands {
                 let affixes: string[]
                 let laneIndex: number
                 if (args[0] !== '') {
-                    laneIndex = int.Parse(args[0])
+                    laneIndex = S2I(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
                     affixes = AffixFactory.CalculateAffixes(laneIndex - 1)
                 } else {
@@ -223,7 +224,7 @@ export class InitCommands {
                 let laneIndex: number
                 let nbWolves: number
                 if (args[0] !== '') {
-                    laneIndex = int.Parse(args[0])
+                    laneIndex = S2I(args[0])
                     if (laneIndex <= 0 || laneIndex > 17) return
                     nbWolves = WolfArea.WolfAreas.get(laneIndex - 1)!.Wolves.length
                     player.DisplayTextTo(
@@ -365,7 +366,7 @@ export class InitCommands {
             group: 'all',
             argDesc: '',
             description: 'all: units: from: game: and: you: become: an: observer: Removes/spectator.',
-            action: (player, args) => Utility.MakePlayerSpectator(player),
+            action: (player, args) => this.MakePlayerSpectator(player),
         })
 
         CommandsManager.RegisterCommand({
@@ -465,7 +466,7 @@ export class InitCommands {
             argDesc: '[index]',
             description: 'unit: animation: by: index: Set.',
             action: (player, args) =>
-                SetUnitAnimationByIndex(Globals.ALL_KITTIES.get(player)!.Unit.handle, int.Parse(args[0])),
+                SetUnitAnimationByIndex(Globals.ALL_KITTIES.get(player)!.Unit.handle, S2I(args[0])),
         })
 
         CommandsManager.RegisterCommand({
@@ -475,7 +476,7 @@ export class InitCommands {
             argDesc: '[speed]',
             description: 'SpinCam: Toggle.',
             action: (player, args) => {
-                let speed: number = args[0] !== '' ? int.Parse(args[0]) : 0
+                let speed: number = args[0] !== '' ? S2I(args[0]) : 0
                 Globals.ALL_KITTIES.get(player)!.SpinCam.ToggleSpinCam(speed)
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD +
@@ -569,11 +570,11 @@ export class InitCommands {
             action: (player, args) => {
                 if (args.length < 2) {
                     let kitty = Globals.ALL_KITTIES.get(player)!
-                    kitty.Unit.setHeroLevel(int.Parse(args[0]), true)
+                    kitty.Unit.setHeroLevel(S2I(args[0]), true)
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    kitty.Unit.setHeroLevel(int.Parse(args[0]), true)
+                    kitty.Unit.setHeroLevel(S2I(args[0]), true)
                 })
             },
         })
@@ -964,7 +965,7 @@ export class InitCommands {
                 let name = args[0] !== '' ? args[0] : '??__'
                 for (let p of Globals.ALL_PLAYERS) {
                     if (p.name.toLowerCase().startsWith(name)) {
-                        Utility.MakePlayerSpectator(p)
+                        this.MakePlayerSpectator(p)
                         break
                     }
                 }
@@ -993,7 +994,7 @@ export class InitCommands {
             argDesc: '[value]',
             description: 'the: camera: field: Adjusts.',
             action: (player, args) => {
-                let value = args[0] !== '' ? int.Parse(args[0]) : 0.0
+                let value = args[0] !== '' ? S2I(args[0]) : 0.0
                 if (!player.isLocal()) return
                 SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0)
             },
@@ -1006,7 +1007,7 @@ export class InitCommands {
             argDesc: '[round]',
             description: 'the: current: round: Sets.',
             action: (player, args) => {
-                let round = args[0] !== '' ? int.Parse(args[0]) : 1
+                let round = args[0] !== '' ? S2I(args[0]) : 1
                 if (round < 1 || round > 5) return
                 Globals.ROUND = round - 1
                 RoundManager.RoundEnd()
@@ -1057,7 +1058,7 @@ export class InitCommands {
             argDesc: '[scale], [player]',
             description: "the: scale: Sets of passed: MapPlayer: the'kitty: parameter: s.",
             action: (player, args) => {
-                let scale = args[0] !== '' ? int.Parse(args[0]) : 0.6
+                let scale = args[0] !== '' ? S2I(args[0]) : 0.6
 
                 if (args.length < 2 || args[1] === '') {
                     Globals.ALL_KITTIES.get(player)!.Unit.setScale(scale, scale, scale)
@@ -1145,7 +1146,7 @@ export class InitCommands {
                 for (let i = 0; i < 24; i++) {
                     let target: number =
                         args.length > 0 && args[0] !== 'all'
-                            ? int.Parse(args[0]) - 1
+                            ? S2I(args[0]) - 1
                             : args.length > 0 && args[0] === 'all'
                               ? i
                               : -1
@@ -1270,9 +1271,9 @@ export class InitCommands {
                     return
                 }
 
-                let dodgeRadius = args.length > 0 ? int.Parse(args[0]) : 192.0
-                let timerInterval = args.length > 1 ? int.Parse(args[1]) : 0.1
-                let laser = args.length > 2 ? int.Parse(args[2]) : 0
+                let dodgeRadius = args.length > 0 ? S2I(args[0]) : 192.0
+                let timerInterval = args.length > 1 ? S2I(args[1]) : 0.1
+                let laser = args.length > 2 ? S2I(args[2]) : 0
 
                 for (let [_, compKitty] of Globals.ALL_KITTIES) {
                     if (compKitty.aiController.IsEnabled()) {
@@ -1515,7 +1516,7 @@ export class InitCommands {
             argDesc: '[# of kibble]',
             description: 'Spawns {int #} of kibbles ',
             action: (player, args) => {
-                let amount = args[0] !== '' ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS
+                let amount = args[0] !== '' ? S2I(args[0]) : ItemSpawner.NUMBER_OF_ITEMS
                 ItemSpawner.SpawnKibble(amount)
             },
         })
@@ -1564,7 +1565,7 @@ export class InitCommands {
                     )
                     return
                 }
-                TeamHandler.Handler(player, int.Parse(args[0]))
+                TeamHandler.Handler(player, S2I(args[0]))
             },
         })
 
@@ -1723,7 +1724,7 @@ export class InitCommands {
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    TeamHandler.Handler(kitty.Player, int.Parse(args[1]), true)
+                    TeamHandler.Handler(kitty.Player, S2I(args[1]), true)
                 })
             },
         })
@@ -1801,7 +1802,7 @@ export class InitCommands {
                     return
                 }
 
-                let speed: number = int.Parse(args[0])
+                let speed: number = S2I(args[0])
                 if (args.length < 2 || args[1] === '') {
                     Globals.ALL_KITTIES.get(player)!.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                     player.DisplayTimedTextTo(
@@ -1841,7 +1842,7 @@ export class InitCommands {
                     return
                 }
 
-                let speed: number = int.Parse(args[0])
+                let speed: number = S2I(args[0])
                 if (args.length < 2 || args[1] === '') {
                     let kitty = Globals.ALL_KITTIES.get(player)
                     if (!kitty) return
@@ -1917,5 +1918,20 @@ export class InitCommands {
                 }
             },
         })
+    }
+
+    /// <summary>
+    /// Makes a player a spectator by removing them from their team,
+    /// disposing of their in-game objects, and refreshing the game state.
+    /// </summary>
+    /// <param name="player">The player to be made a spectator.</param>
+    public static MakePlayerSpectator(player: MapPlayer) {
+        PlayerLeaves.TeamRemovePlayer(player)
+        Globals.ALL_KITTIES.get(player)!?.dispose()
+        Globals.ALL_CIRCLES.get(player)?.dispose()
+        safeArraySplice(Globals.ALL_PLAYERS, p => p === player)
+        Globals.ALL_KITTIES.get(player)!?.NameTag?.dispose()
+        RoundManager.RoundEndCheck()
+        MultiboardUtil.RefreshMultiboards()
     }
 }

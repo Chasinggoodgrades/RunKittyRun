@@ -1,11 +1,11 @@
-import { ItemSpawner } from 'src/Game/Items/ItemSpawner'
+import { PROD } from 'src/env'
 import { Kibble } from 'src/Game/Items/Kibble'
-import { Program } from 'src/Program'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Timer, TimerDialog } from 'w3ts'
+import { ItemSpawnerTrackKibbles } from '../../Game/Items/ItemSpawnerTrackKibbles'
 import { Challenges } from '../Challenges/Challenges'
 
 export class KibbleEvent {
@@ -19,7 +19,7 @@ export class KibbleEvent {
     private static EventLength: number = 300.0 // 5 minutes to collect 200 kibble xd
 
     public static StartKibbleEvent(chance: number) {
-        let adjustedChance = Program.Debug ? 5 : 1
+        let adjustedChance = !PROD ? 5 : 1
         if (chance > adjustedChance || this.EventPlayed) return
 
         this.EventActive = true
@@ -40,7 +40,7 @@ export class KibbleEvent {
         for (let i: number = 0; i < this.TotalEventKibbles + this.EventExtraKibbles; i++) {
             let kibble = MemoryHandler.getEmptyObject<Kibble>()
             kibble.SpawnKibble()
-            ItemSpawner.TrackKibbles.push(kibble)
+            ItemSpawnerTrackKibbles.active.push(kibble)
         }
 
         this.UpdateEventProgress()
@@ -51,13 +51,13 @@ export class KibbleEvent {
         GC.RemoveTimerDialog(this.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(this.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
 
-        for (let i: number = 0; i < ItemSpawner.TrackKibbles.length; i++) {
-            let kibble = ItemSpawner.TrackKibbles[i]
+        for (let i: number = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
+            let kibble = ItemSpawnerTrackKibbles.active[i]
             if (kibble.Item === null) continue
             kibble.dispose()
         }
 
-        ItemSpawner.TrackKibbles = []
+        ItemSpawnerTrackKibbles.active = []
 
         Utility.TimedTextToAllPlayers(
             10.0,

@@ -16,7 +16,7 @@ import { Effect, Item, Trigger } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { PersonalBestAwarder } from '../Podium/PersonalBestAwarder'
 import { ItemSpatialGrid } from './ItemSpatialGrid'
-import { ItemSpawner } from './ItemSpawner'
+import { ItemSpawnerTrackKibbles } from './ItemSpawnerTrackKibbles'
 
 export class Kibble extends IDisposable {
     public static PickupTrigger: Trigger
@@ -87,7 +87,7 @@ export class Kibble extends IDisposable {
             let kitty = Globals.ALL_KITTIES.get(player)!
             let effect: Effect | undefined = undefined
             let randomChance = GetRandomReal(0, 100)
-            let kib = ItemSpawner.TrackKibbles.find(k => k.Item.handle === item.handle)
+            let kib = ItemSpawnerTrackKibbles.active.find(k => k.Item.handle === item.handle)
 
             if (!kib) return
 

@@ -1,5 +1,5 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
@@ -44,7 +44,7 @@ export class DeathlessChallenges {
     /// </summary>
     /// <param name="player"></param>
     public static DeathlessCheck(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         kitty.CurrentStats.DeathlessProgress++
         if (kitty.CurrentStats.DeathlessProgress === this.DeathlessPerRound()) {
             this.AwardDeathless(kitty)

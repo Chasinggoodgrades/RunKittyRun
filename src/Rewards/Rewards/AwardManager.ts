@@ -1,6 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { KittyData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/KittyData'
@@ -12,6 +12,7 @@ import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Trigger } from 'w3ts'
 import { GameAwardsDataSorted } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
+import { GameStatRewards } from './GameStatRewards'
 import { RewardsManager } from './RewardsManager'
 
 /// <summary>
@@ -99,7 +100,7 @@ export class AwardManager {
                 'NitrosObtained',
             ]
 
-            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+            if (CurrentGameMode.active !== GameMode.Standard) return
             for (let player of Globals.ALL_PLAYERS) {
                 if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers;
                 if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
@@ -124,7 +125,7 @@ export class AwardManager {
 
                 let gameStats = kittyProfile.SaveData.GameStats
 
-                for (let gameStatReward of RewardsManager.GameStatRewards) {
+                for (let gameStatReward of GameStatRewards) {
                     let gamestat = gameStatReward.GameStat
                     if (gameStatsToIgnore.includes(gamestat)) continue
                     AwardManager.HandleGameStatTrigger(
@@ -160,7 +161,7 @@ export class AwardManager {
     }
 
     public static AwardGameStatRewards() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         for (let player of Globals.ALL_PLAYERS) {
             if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers
@@ -185,7 +186,7 @@ export class AwardManager {
             let impossiblePlusGames = impossibleGames
             let impossiblePlusWins = impossibleWins
 
-            for (let gameStatReward of RewardsManager.GameStatRewards) {
+            for (let gameStatReward of GameStatRewards) {
                 if (
                     gameStatReward.GameStat !== 'NormalGames' &&
                     gameStatReward.GameStat !== 'HardGames' &&
@@ -229,7 +230,7 @@ export class AwardManager {
     public static SetPlayerSelectedData(kitty: Kitty) {
         if (kitty.Player.controller !== MAP_CONTROL_USER) return // just reduce load, dont include bots.
         if (kitty.Player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
+        if (CurrentGameMode.active !== GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
         let selectedData = kitty.SaveData.SelectedData // GameSelectData class object
         ColorUtils.SetColorJoinedAs(kitty.Player)
 

@@ -7,7 +7,7 @@ import { FrostbiteRing } from 'src/Game/Items/Relics/RelicTypes/FrostbiteRing'
 import { OneOfNine } from 'src/Game/Items/Relics/RelicTypes/OneOfNine'
 import { RingOfSummoning } from 'src/Game/Items/Relics/RelicTypes/RingOfSummoning'
 import { ShardOfTranslocation } from 'src/Game/Items/Relics/RelicTypes/ShardOfTranslocation'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
@@ -78,7 +78,7 @@ export class ShopItem {
         let shopItems: ShopItem[] = []
 
         try {
-            if (Gamemode.CurrentGameMode === GameMode.Standard) {
+            if (CurrentGameMode.active === GameMode.Standard) {
                 shopItems.push(new ShopItem(new OneOfNine()))
 
                 shopItems.push(new ShopItem(new RingOfSummoning()))

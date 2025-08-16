@@ -1,13 +1,14 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
 import { Relic } from 'src/Game/Items/Relics/Relic'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { safeArraySplice } from 'src/Utility/ArrayUtils'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrame, blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger, Unit } from 'w3ts'
@@ -451,14 +452,14 @@ export class ShopFrame {
 
                     if (!RelicFunctions.CannotSellOnCD(kitty, relic!)) return
 
-                    Utility.RemoveItemFromUnit(kitty.Unit, itemID)
+                    RemoveItemFromUnit(kitty.Unit, itemID)
                     player.addGold(selectedItem.Cost)
                     relic?.RemoveEffect(kitty.Unit)
                     safeArraySplice(kitty.Relics, p => p === relic)
                     return
                 }
 
-                Utility.RemoveItemFromUnit(kitty.Unit, itemID)
+                RemoveItemFromUnit(kitty.Unit, itemID)
                 player.addGold(selectedItem.Cost)
             }
         } catch (ex: any) {
@@ -519,7 +520,7 @@ export class ShopFrame {
         FrameManager.ShopButton.visible = false
         FrameManager.ShopButton.visible = true
         FrameManager.HideOtherFrames(ShopFrame.shopFrame)
-        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) {
+        if (CurrentGameMode.active === GameMode.SoloTournament) {
             // solo mode.
             player.DisplayTimedTextTo(
                 6.0,

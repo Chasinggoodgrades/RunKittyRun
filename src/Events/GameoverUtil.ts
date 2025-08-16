@@ -4,7 +4,6 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { int } from 'src/Utility/Utility'
 import { isNullOrEmpty } from '../Utility/StringUtils'
 
 export class GameoverUtil {
@@ -50,7 +49,7 @@ export class GameoverUtil {
                 for (let entry of friendsPlayedWith.split(',').filter(Boolean)) {
                     let parts = entry.split(':')
                     let count
-                    if (parts.length === 2 && (count = int.TryParse(parts[1].trim()))) {
+                    if (parts.length === 2 && (count = S2I(parts[1].trim()))) {
                         friendDict.set(parts[0].trim(), count)
                     }
                 }

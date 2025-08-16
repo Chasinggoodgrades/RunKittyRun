@@ -1,4 +1,4 @@
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
@@ -17,7 +17,7 @@ export class MultiboardUtil {
     }
 
     private static RefreshStandardMbs() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         if (!Difficulty.IsDifficultyChosen) return // Init first.
         StandardMultiboard.UpdateStandardCurrentStatsMB()
         StandardMultiboard.UpdateOverallStatsMB()
@@ -25,7 +25,7 @@ export class MultiboardUtil {
     }
 
     private static RefreshSoloMbs() {
-        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return // Solo Tournament
+        if (CurrentGameMode.active !== GameMode.SoloTournament) return // Solo Tournament
         SoloMultiboard.UpdateOverallStatsMB()
         SoloMultiboard.UpdateBestTimesMB()
     }
@@ -41,7 +41,7 @@ export class MultiboardUtil {
     }
 
     private static MinStandardMultiboards(minimize: boolean) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.CurrentStats.minimize(minimize) // Possible Desync
         StandardMultiboard.BestTimes.minimize(minimize) // Possible Desync
         StandardMultiboard.OverallStats.minimize(minimize) // Possible Desync

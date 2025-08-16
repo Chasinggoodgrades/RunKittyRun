@@ -1,5 +1,5 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
@@ -341,7 +341,7 @@ export class RewardsFrame {
     public static RewardsFrameActions() {
         let player = getTriggerPlayer()
         if (!player.isLocal()) return
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
+        if (CurrentGameMode.active !== GameMode.Standard) {
             player.DisplayTimedTextTo(
                 3.0,
                 '{Colors.COLOR_RED}are: only: available: Rewards in Mode: Standard{Colors.COLOR_RESET}'

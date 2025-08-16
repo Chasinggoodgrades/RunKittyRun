@@ -1,11 +1,12 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { GameTimer } from 'src/Game/Rounds/GameTimer'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { int, Utility } from 'src/Utility/Utility'
+import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Multiboard, Trigger } from 'w3ts'
 
@@ -16,7 +17,7 @@ export class TeamsMultiboard {
 
     public static Initialize() {
         try {
-            if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
+            if (CurrentGameMode.active !== GameMode.TeamTournament) return
             TeamsMultiboard.ESCTrigger ??= Trigger.create()!
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
@@ -55,7 +56,7 @@ export class TeamsMultiboard {
 
     public static UpdateTeamStatsMB() {
         // Top Portion Setup
-        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
+        if (CurrentGameMode.active !== GameMode.TeamTournament) return
         TeamsMultiboard.TeamsStatsMB.rows = Globals.ALL_TEAMS_LIST.length + 1
         TeamsMultiboard.TeamsStatsMB.columns = 3 + Gamemode.NumberOfRounds
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setText('Team')
@@ -92,7 +93,7 @@ export class TeamsMultiboard {
             }
             // Overall Progress
             for (let j: number = 1; j <= Gamemode.NumberOfRounds; j++) {
-                overallProgress = overallProgress + int.Parse(team.RoundProgress.get(j)!) // possibly bad?
+                overallProgress = overallProgress + S2I(team.RoundProgress.get(j)!) // possibly bad?
             }
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).setText(
                 (overallProgress / Gamemode.NumberOfRounds).toFixed(2) + '%'

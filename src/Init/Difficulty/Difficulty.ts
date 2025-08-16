@@ -1,5 +1,5 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
@@ -16,7 +16,7 @@ export class Difficulty {
 
     public static Initialize() {
         try {
-            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+            if (CurrentGameMode.active !== GameMode.Standard) return
             if (this.IsDifficultyChosen) return
 
             DifficultyOption.Initialize()

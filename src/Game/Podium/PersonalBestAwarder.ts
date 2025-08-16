@@ -1,5 +1,5 @@
 import { TimeSetter } from 'src/Events/VictoryZone/TimeSetter'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
@@ -28,12 +28,12 @@ export class PersonalBestAwarder {
     public static BeatRecordTime(player: MapPlayer) {
         let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let roundEnum = ''
-        if (Gamemode.CurrentGameMode === GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum()
-        if (Gamemode.CurrentGameMode === GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum()
+        if (CurrentGameMode.active === GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum()
+        if (CurrentGameMode.active === GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum()
         let time = kittyStats.RoundTimes[roundEnum as keyof RoundTimesData]
         let timeFormatted = Utility.ConvertFloatToTime(time)
         let difficulty =
-            Gamemode.CurrentGameMode === GameMode.Standard
+            CurrentGameMode.active === GameMode.Standard
                 ? Difficulty.DifficultyOption.toString()
                 : '{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}'
         Utility.TimedTextToAllPlayers(

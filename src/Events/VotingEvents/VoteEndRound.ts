@@ -1,6 +1,6 @@
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { RoundTimer } from 'src/Game/Rounds/RoundTimer'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Utility } from 'src/Utility/Utility'
@@ -12,7 +12,7 @@ export class VoteEndRound {
     private static Votes: MapPlayer[] = []
 
     public static InitiateVote(voteStarter: MapPlayer) {
-        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament) return
+        if (CurrentGameMode.active !== GameMode.SoloTournament) return
         if (this.VoteAlreadyActive()) return
         if (!this.GameActive()) return
         this.VoteActive = true

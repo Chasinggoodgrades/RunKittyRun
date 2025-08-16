@@ -1,3 +1,4 @@
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -24,7 +25,7 @@ export class StandardMultiboard {
     private static PlayersList: MapPlayer[] = []
 
     public static Initialize() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         let BestTimes = Multiboard.create()!
         let OverallStats = Multiboard.create()!
         let CurrentStats = Multiboard.create()!
@@ -129,7 +130,7 @@ export class StandardMultiboard {
     private static CurrentGameStats() {
         try {
             StandardMultiboard.CurrentStats.title =
-                'Stats: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+                'Stats: Current {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
             StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
             let rowIndex = 2
 
@@ -200,7 +201,7 @@ export class StandardMultiboard {
 
     private static OverallGameStats() {
         StandardMultiboard.OverallStats.title =
-            'Stats: Overall {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Stats: Overall {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
@@ -263,7 +264,7 @@ export class StandardMultiboard {
 
     private static BestTimesStats() {
         StandardMultiboard.BestTimes.title =
-            'Times: Best {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Times: Best {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Difficulty.DifficultyOption.toString()}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
@@ -289,17 +290,17 @@ export class StandardMultiboard {
     }
 
     public static UpdateOverallStatsMB() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.OverallGameStats()
     }
 
     public static UpdateStandardCurrentStatsMB() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.CurrentGameStats()
     }
 
     public static UpdateBestTimesMB() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         MultiboardUtil.FillPlayers(StandardMultiboard.BestTimes, 1)
         StandardMultiboard.BestTimesStats()
     }
@@ -380,7 +381,7 @@ export class StandardMultiboard {
     }
 
     private static ESCPressed() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         if (!getTriggerPlayer().isLocal()) return
         if (StandardMultiboard.CurrentStats.displayed) {
             StandardMultiboard.CurrentStats.display(false)

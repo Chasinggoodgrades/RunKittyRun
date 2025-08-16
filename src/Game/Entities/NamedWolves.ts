@@ -1,12 +1,14 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { BurntMeat } from 'src/Rewards/EasterEggs/BurntMeat'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
+import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
+import { getKillingUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { Kitty } from './Kitty/Kitty'
 import { Wolf } from './Wolf'
@@ -24,7 +26,7 @@ export class NamedWolves {
     /// Creates the named Wolves Marco and Stan. Only works in Standard mode.
     /// </summary>
     public static CreateNamedWolves() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         NamedWolves.DNTNamedWolves = []
         NamedWolves.CreateStanWolf()
         NamedWolves.CreateExplodingWolf()
@@ -62,12 +64,28 @@ export class NamedWolves {
         NamedWolves.StanWolf.Unit.invulnerable = false
 
         Utility.SimpleTimer(0.5, () => (NamedWolves.StanWolf.Unit.invulnerable = false))
-        BurntMeat.RegisterDeathTrigger()
+        this.RegisterDeathTrigger()
 
         Utility.SimpleTimer(0.5, () =>
             NamedWolves.StanWolf.Texttag.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.Unit.y, 0.015)
         )
         NamedWolves.DNTNamedWolves.push(NamedWolves.StanWolf)
+    }
+
+    public static RegisterDeathTrigger() {
+        BurntMeat.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
+        if (BurntMeat.StanDeathActions !== null) return
+        BurntMeat.RegisterTurnInTrigger()
+        BurntMeat.StanDeathActions = BurntMeat.StanDeath.addAction(
+            ErrorHandler.Wrap(() => {
+                let killer = getKillingUnit()
+                if (killer === null) return
+                NamedWolves.StanWolf.Texttag?.destroy()
+                RemoveItemFromUnit(killer, BurntMeat.ITEM_CLOAK_FLAMES)
+                killer.addItemById(BurntMeat.ITEM_BURNT_MEAT)
+                BurntMeat.Completed.push(killer)
+            })
+        )
     }
 
     public static KillExplodingWolf() {
@@ -127,7 +145,7 @@ export class NamedWolves {
     }
 
     public static ExplodingWolfCollision(unit: Unit, k: Kitty, shadowKitty: boolean = false) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return false
+        if (CurrentGameMode.active !== GameMode.Standard) return false
         if (unit !== NamedWolves.ExplodingWolf.Unit) return false
         if (!shadowKitty) Utility.GiveGoldFloatingText(25, k.Unit)
         else Utility.GiveGoldFloatingText(25, k.ShadowKitty.Unit)

@@ -1,11 +1,6 @@
-import { Logger } from 'src/Events/Logger/Logger'
-import { PlayerLeaves } from 'src/Events/PlayerLeavesEvent/PlayerLeaves'
-import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
-import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { base64Decode, Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
-import { safeArraySplice } from './ArrayUtils'
+import { Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
 import { Action } from './CSUtils'
 import { AchesTimers } from './MemoryHandler/AchesTimers'
 import { MemoryHandler } from './MemoryHandler/MemoryHandler'
@@ -95,25 +90,6 @@ export class Utility {
         return seconds < 10 ? '{minutes}:0{seconds}' : '{minutes}:{seconds}'
     }
 
-    public static IsDeveloper(p: MapPlayer) {
-        try {
-            for (let i: number = 0; i < Globals.VIPLIST.length; i++) {
-                if (p.name === base64Decode(Globals.VIPLIST[i])) {
-                    return true
-                }
-            }
-            return false
-        } catch (ex: any) {
-            if (ex instanceof Error) {
-                Logger.Warning(ex.stack || '')
-            } else {
-                Logger.Warning('' + ex)
-            }
-
-            return false
-        }
-    }
-
     /// <summary>
     /// Creates a disposable timer for a specific duration to do a simple action.
     /// </summary>
@@ -179,20 +155,6 @@ export class Utility {
             if (u.getItemInSlot(i)?.typeId === itemId) return i
         }
         return -1
-    }
-
-    /// <summary>
-    /// If the unit has the item, it'll be deleted.
-    /// </summary>
-    /// <param name="u"></param>
-    /// <param name="itemId"></param>
-    public static RemoveItemFromUnit(u: Unit, itemId: number) {
-        for (let i: number = 0; i < 6; i++) {
-            if (u.getItemInSlot(i)?.typeId === itemId) {
-                u.removeItemFromSlot(i)
-                return
-            }
-        }
     }
 
     /// <summary>
@@ -319,21 +281,6 @@ export class Utility {
         return s
     }
 
-    /// <summary>
-    /// Makes a player a spectator by removing them from their team,
-    /// disposing of their in-game objects, and refreshing the game state.
-    /// </summary>
-    /// <param name="player">The player to be made a spectator.</param>
-    public static MakePlayerSpectator(player: MapPlayer) {
-        PlayerLeaves.TeamRemovePlayer(player)
-        Globals.ALL_KITTIES.get(player)!?.dispose()
-        Globals.ALL_CIRCLES.get(player)?.dispose()
-        safeArraySplice(Globals.ALL_PLAYERS, p => p === player)
-        Globals.ALL_KITTIES.get(player)!?.NameTag?.dispose()
-        RoundManager.RoundEndCheck()
-        MultiboardUtil.RefreshMultiboards()
-    }
-
     public static GetPlayerByName(playerName: string) {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
@@ -386,14 +333,6 @@ export const sumNumbers = (arr: number[]) => {
 }
 
 export const int = {
-    Parse: (value: string) => {
-        let parsed = parseInt(value)
-        return isNaN(parsed) ? 0 : parsed
-    },
-    TryParse: (value: string) => {
-        let parsed = parseInt(value)
-        return !isNaN(parsed) ? parsed : null
-    },
     MaxValue: Number.MAX_SAFE_INTEGER,
 }
 

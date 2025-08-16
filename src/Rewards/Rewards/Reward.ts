@@ -11,7 +11,7 @@ import { Windwalks } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/Rewar
 import { Wings } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Wings'
 import { GC } from 'src/Utility/GC'
 import { Effect, MapPlayer } from 'w3ts'
-import { RewardsManager } from './RewardsManager'
+import { GameStatRewards } from './GameStatRewards'
 
 /// <summary>
 /// Reward Class and Enums
@@ -89,7 +89,7 @@ export class Reward {
             this.Type = arg4 as RewardType
             this.GameStat = arg5
             this.GameStatValue = arg6
-            RewardsManager.GameStatRewards.push(this)
+            GameStatRewards.push(this)
         } else if (
             typeof arg3 === 'string' &&
             typeof arg4 === 'string' &&
@@ -102,7 +102,7 @@ export class Reward {
             this.Type = arg5 as RewardType
             this.GameStat = arg6
             this.GameStatValue = arg7
-            RewardsManager.GameStatRewards.push(this)
+            GameStatRewards.push(this)
         }
     }
 

@@ -1,5 +1,5 @@
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
@@ -25,7 +25,7 @@ export class PlayerLeaves {
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
-        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return
+        if (CurrentGameMode.active !== GameMode.TeamTournament) return
         Globals.PLAYERS_TEAMS.get(player)?.RemoveMember(player)
     }
 

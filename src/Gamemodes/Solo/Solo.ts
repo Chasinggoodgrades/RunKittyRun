@@ -2,6 +2,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ItemSpawner } from 'src/Game/Items/ItemSpawner'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
+import { CurrentGameMode } from '../CurrentGameMode'
 import { Gamemode } from '../Gamemode'
 import { GameMode } from '../GameModeEnum'
 import { SoloDeathTimer } from './SoloDeathTimer'
@@ -12,7 +13,7 @@ export class Solo {
     }
 
     public static ReviveKittySoloTournament(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode !== GameMode.SoloTournament || Gamemode.CurrentGameModeType !== 'Race') return // Solo Gamemode & Race GamemodeType.
+        if (CurrentGameMode.active !== GameMode.SoloTournament || Gamemode.CurrentGameModeType !== 'Race') return // Solo Gamemode & Race GamemodeType.
         new SoloDeathTimer(kitty.Player)
     }
 

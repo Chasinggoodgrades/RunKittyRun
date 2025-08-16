@@ -1,6 +1,7 @@
 import { AffixFactory } from 'src/Affixes/AffixFactory'
 import { Gameover } from 'src/Events/Gameover'
 import { Logger } from 'src/Events/Logger/Logger'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { TeamsUtil } from 'src/Gamemodes/Teams/TeamsUtil'
@@ -35,7 +36,7 @@ export class RoundManager {
     private static AddedTimeAlready: boolean = false
 
     public static Initialize() {
-        if (Gamemode.CurrentGameMode === GameMode.Standard) this.HasDifficultyBeenChosen()
+        if (CurrentGameMode.active === GameMode.Standard) this.HasDifficultyBeenChosen()
         else this.RoundSetup()
     }
 

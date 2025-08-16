@@ -10,6 +10,7 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
+import { CurrentGameMode } from '../CurrentGameMode'
 import { Gamemode } from '../Gamemode'
 import { GameMode } from '../GameModeEnum'
 import { TeamHandler } from './TeamHandler'
@@ -61,7 +62,7 @@ export class Team {
     }
 
     public RemoveMember(player: MapPlayer) {
-        if (Gamemode.CurrentGameMode !== GameMode.TeamTournament) return // Must be Team Tournament Mode
+        if (CurrentGameMode.active !== GameMode.TeamTournament) return // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.has(player)) return
         this.AssignTeamMember(player, false)
         if (this.Teammembers.length === 0) {

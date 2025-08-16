@@ -1,4 +1,5 @@
 import { Logger } from 'src/Events/Logger/Logger'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -15,7 +16,7 @@ export class TerrainChanger {
     public static Initialize() {
         try {
             this.NoSeason()
-            if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+            if (CurrentGameMode.active !== GameMode.Standard) return
             this.ChristmasTerrain()
             this.SetTerrain()
         } catch (e: any) {

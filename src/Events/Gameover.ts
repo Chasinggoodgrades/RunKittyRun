@@ -1,7 +1,7 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { PodiumManager } from 'src/Game/Podium/PodiumManager'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
@@ -37,7 +37,7 @@ export class Gameover {
     }
 
     private static StandardWinChallenges() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         Challenges.NecroWindwalk()
         Challenges.BlueFire()
         Challenges.PinkFire()
@@ -65,7 +65,7 @@ export class Gameover {
     }
 
     private static LosingGameCheck(): boolean {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return false
+        if (CurrentGameMode.active !== GameMode.Standard) return false
         if (Gameover.NoEnd) return false
 
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
@@ -77,13 +77,13 @@ export class Gameover {
     }
 
     private static SendWinMessage() {
-        if (Gamemode.CurrentGameMode === GameMode.Standard)
+        if (CurrentGameMode.active === GameMode.Standard)
             print(
                 '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.toString()}!{Colors.COLOR_RESET}'
             )
         else
             print(
-                '{Colors.COLOR_GREEN}game: The is over. you: for: playing: RKR: on: Thank {Gamemode.CurrentGameMode}!{Colors.COLOR_RESET}'
+                '{Colors.COLOR_GREEN}game: The is over. you: for: playing: RKR: on: Thank {CurrentGameMode.active}!{Colors.COLOR_RESET}'
             )
     }
 
@@ -101,7 +101,7 @@ export class Gameover {
     }
 
     private static IncrementGameStats(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -122,7 +122,7 @@ export class Gameover {
     }
 
     private static IncrementWins(kitty: Kitty) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -143,7 +143,7 @@ export class Gameover {
     }
 
     private static IncrementWinStreak(kitty: Kitty, win: boolean) {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         let stats = kitty.SaveData.GameStats
 
         if (win) {

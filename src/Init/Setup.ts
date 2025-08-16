@@ -1,4 +1,5 @@
 import { AffixFactory } from 'src/Affixes/AffixFactory'
+import { PROD } from 'src/env'
 import { Logger } from 'src/Events/Logger/Logger'
 import { PlayerLeaves } from 'src/Events/PlayerLeavesEvent/PlayerLeaves'
 import { UnitSharing } from 'src/Events/UnitSharing/UnitSharing'
@@ -19,9 +20,9 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
-import { Program } from 'src/Program'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
 import { Savecode } from 'src/Rewards/OldSaves/OldSaves'
+import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
 import { DoodadChanger } from 'src/Seasonal/Doodads/DoodadChanger'
 import { SeasonalManager } from 'src/Seasonal/SeasonalManager'
@@ -37,6 +38,7 @@ import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, base64Decode } from 'w3ts'
+import { ChampionAwards } from '../Rewards/Rewards/ChampionAwards'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
@@ -69,7 +71,7 @@ export class Setup {
             StopMusic(false)
             ClearMapMusic()
             Globals.GAME_INITIALIZED = true
-            if (!Program.Debug) return
+            if (PROD) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(GameMode.Standard)
         } catch (e: any) {
@@ -115,7 +117,10 @@ export class Setup {
             PlayerLeaves.Initialize()
             VictoryZone.Initialize()
             AffixFactory.Initialize()
-            RewardsManager.Initialize()
+            RewardsManager.RegisterTrigger()
+            RewardsManager.RewardAbilitiesList()
+            AwardManager.RegisterGamestatEvents()
+            ChampionAwards.AwardAllChampions()
             PodiumManager.Initialize()
             FrameManager.InitAllFrames()
             Challenges.Initialize()

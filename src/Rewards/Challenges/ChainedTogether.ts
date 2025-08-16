@@ -1,6 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
@@ -22,7 +22,7 @@ export class ChainedTogether {
     private static IsStartingContidionValid: boolean = true
 
     private static TriggerEventOnLastSafeZone() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return // Only occurs in Standard Gamemode.
+        if (CurrentGameMode.active !== GameMode.Standard) return // Only occurs in Standard Gamemode.
         if (ChainedTogether.EventStarted || ChainedTogether.EventTriggered) return // Don't trigger multiple times.
         if (!ChainedTogether.IsStartingContidionValid) return
 

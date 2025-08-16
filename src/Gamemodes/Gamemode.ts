@@ -3,6 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { ADMINDISABLE } from 'src/Init/ADMINDISABLE'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { MapPlayer } from 'w3ts'
+import { CurrentGameMode } from './CurrentGameMode'
 import { GameMode } from './GameModeEnum'
 import { Solo } from './Solo/Solo'
 import { Standard } from './Standard/Standard'
@@ -10,7 +11,6 @@ import { Team } from './Teams/Team'
 
 export class Gamemode {
     public static HostPlayer: MapPlayer
-    public static CurrentGameMode: GameMode
     public static CurrentGameModeType: string = ''
     public static IsGameModeChosen: boolean = false
     public static PlayersPerTeam: number = 0
@@ -75,7 +75,7 @@ export class Gamemode {
 
     public static SetGameMode(mode: GameMode, modeType: string = '', teamSize: number = Globals.DEFAULT_TEAM_SIZE) {
         try {
-            this.CurrentGameMode = mode
+            CurrentGameMode.active = mode
             this.CurrentGameModeType = modeType
             this.IsGameModeChosen = true
             this.PlayersPerTeam = teamSize
@@ -108,7 +108,7 @@ export class Gamemode {
                 Colors.COLOR_YELLOW_ORANGE +
                     'chosen: Gamemode: ' +
                     Colors.COLOR_GOLD +
-                    this.CurrentGameMode.toString() +
+                    CurrentGameMode.active.toString() +
                     ' ' +
                     this.CurrentGameModeType
             )
@@ -116,7 +116,7 @@ export class Gamemode {
     }
 
     private static SetupChosenGamemode() {
-        switch (this.CurrentGameMode) {
+        switch (CurrentGameMode.active) {
             case GameMode.Standard:
                 Standard.Initialize()
                 break
@@ -128,7 +128,7 @@ export class Gamemode {
                 break
             default:
                 Logger.Warning('gamemode: selected: Unknown, to: Standard: defaulting.')
-                this.CurrentGameMode = GameMode.Standard
+                CurrentGameMode.active = GameMode.Standard
                 Standard.Initialize()
                 break
         }

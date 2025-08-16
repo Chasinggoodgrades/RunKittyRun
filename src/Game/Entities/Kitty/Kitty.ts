@@ -9,7 +9,7 @@ import { RelicUtil } from 'src/Game/Items/Relics/RelicUtil'
 import { KittyTime } from 'src/Game/Management/KittyTime'
 import { ProgressPointHelper } from 'src/Game/Management/ProgressPointHelper'
 import { PlayerGameData } from 'src/Game/PlayerGameData'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Solo } from 'src/Gamemodes/Solo/Solo'
 import { KittyMorphosis } from 'src/Gamemodes/Standard/Kittymorphosis'
@@ -159,7 +159,7 @@ export class Kitty {
             this.StatsManager.DeathStatUpdate()
 
             // Handle game mode specific logic
-            if (Gamemode.CurrentGameMode === GameMode.Standard) {
+            if (CurrentGameMode.active === GameMode.Standard) {
                 TeamDeathless.DiedWithOrb(this)
                 ChainedTogether.LoseEvent(this.name)
                 SoundManager.PlayLastManStandingSound()
@@ -274,7 +274,7 @@ export class Kitty {
     }
 
     private StartAIController() {
-        if (this.Player.controller === MAP_CONTROL_COMPUTER && Gamemode.CurrentGameMode === GameMode.Standard) {
+        if (this.Player.controller === MAP_CONTROL_COMPUTER && CurrentGameMode.active === GameMode.Standard) {
             this.aiController?.StartAi()
             this.Unit.addItemById(FourCC('bspd')) // boots
         }

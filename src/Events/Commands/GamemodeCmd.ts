@@ -3,7 +3,6 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { int } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { GamemodeInfo, GamemodeManager } from './GamemodeManager'
 
@@ -132,11 +131,11 @@ export class GamemodeCmd {
         let teamSize: number = Globals.DEFAULT_TEAM_SIZE
         let parsedTeamSize: number
 
-        if (parts.length === 4 && !int.TryParse(parts[3])) {
+        if (parts.length === 4 && !S2I(parts[3])) {
             Globals.MAX_TEAM_SIZE.toString()
             player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
             return
-        } else if (parts.length === 4 && (parsedTeamSize = int.TryParse(parts[3])!)) {
+        } else if (parts.length === 4 && (parsedTeamSize = S2I(parts[3])!)) {
             if (parsedTeamSize <= Globals.MAX_TEAM_SIZE && parsedTeamSize !== 0) {
                 teamSize = parsedTeamSize
             } else {

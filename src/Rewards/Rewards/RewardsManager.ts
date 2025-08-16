@@ -3,11 +3,8 @@ import { Globals } from 'src/Global/Globals'
 import { GC } from 'src/Utility/GC'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger, Unit } from 'w3ts'
-import { RewardManager } from '../../SaveSystem2.0/MAKE REWARDS HERE/RewardCreation'
 import { GameSelectedData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameSelectedData'
-import { AwardManager } from './AwardManager'
-import { ChampionAwards } from './ChampionAwards'
-import { Reward } from './Reward'
+import { Reward, RewardType } from './Reward'
 
 /// <summary>
 /// This class handles:
@@ -18,21 +15,12 @@ export class RewardsManager {
     private static Trigger: Trigger = Trigger.create()!
     private static RewardAbilities: number[] = []
     public static Rewards: Reward[] = []
-    public static GameStatRewards: Reward[] = []
 
-    public static Initialize() {
-        RewardsManager.RegisterTrigger()
-        RewardManager.SetupRewards()
-        RewardsManager.RewardAbilitiesList()
-        AwardManager.RegisterGamestatEvents()
-        ChampionAwards.AwardAllChampions()
-    }
-
-    private static RewardAbilitiesList() {
+    public static RewardAbilitiesList() {
         for (let reward of RewardsManager.Rewards) RewardsManager.RewardAbilities.push(reward.AbilityID)
     }
 
-    private static RegisterTrigger() {
+    public static RegisterTrigger() {
         for (let player of Globals.ALL_PLAYERS) {
             RewardsManager.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
         }
@@ -82,5 +70,700 @@ export class RewardsManager {
         }
 
         if (kitty.SaveData.SelectedData.SelectedWindwalk === '') kitty.ActiveAwards.WindwalkID = 0
+    }
+
+    public static AddReward(reward: Reward): Reward
+    public static AddReward(
+        name: string,
+        abilityID: number,
+        originPoint: string,
+        modelPath: string,
+        rewardType: RewardType
+    ): Reward
+    public static AddReward(name: string, abilityID: number, skinID: number, rewardType: RewardType): Reward
+    public static AddReward(
+        name: string,
+        abilityID: number,
+        skinID: number,
+        rewardType: RewardType,
+        gameStat: string,
+        gameStatValue: number
+    ): Reward
+    public static AddReward(
+        name: string,
+        abilityID: number,
+        originPoint: string,
+        modelPath: string,
+        rewardType: RewardType,
+        gameStat: string,
+        gameStatValue: number
+    ): Reward
+
+    public static AddReward(
+        rewardOrName: Reward | string,
+        abilityID?: number,
+        originPointOrSkinID?: string | number,
+        modelPathOrRewardType?: string | RewardType,
+        rewardTypeOrGameStat?: RewardType | string,
+        gameStatOrValue?: string | number,
+        gameStatValue?: number
+    ): Reward {
+        let reward: Reward
+
+        if (rewardOrName instanceof Reward) {
+            reward = rewardOrName
+        } else {
+            reward = new Reward(
+                rewardOrName,
+                abilityID as any,
+                originPointOrSkinID as any,
+                modelPathOrRewardType as any,
+                rewardTypeOrGameStat as any,
+                gameStatOrValue as any,
+                gameStatValue as any
+            )
+        }
+
+        RewardsManager.Rewards.push(reward)
+        reward.TypeSorted = reward.SetRewardTypeSorted()
+        return reward
+    }
+
+    public static SetupRewards() {
+        let awardsSorted = Globals.GAME_AWARDS_SORTED
+        let stats = Globals.GAME_STATS
+
+        // Hats
+        RewardsManager.AddReward(
+            'Bandana',
+            Constants.ABILITY_HAT_BANDANA,
+            'head',
+            'war3mapImported\\Bandana2.MDX',
+            RewardType.Hats,
+            'Saves',
+            200
+        )
+        RewardsManager.AddReward(
+            'PirateHat',
+            Constants.ABILITY_HAT_PIRATE,
+            'head',
+            'war3mapImported\\PirateHat.MDX',
+            RewardType.Hats,
+            'Saves',
+            250
+        )
+        RewardsManager.AddReward(
+            'ChefHat',
+            Constants.ABILITY_HAT_CHEF,
+            'head',
+            'war3mapImported\\ChefsHat.mdx',
+            RewardType.Hats,
+            'Saves',
+            300
+        )
+        RewardsManager.AddReward(
+            'TikiMask',
+            Constants.ABILITY_HAT_TIKI,
+            'head',
+            'war3mapImported\\TikiMask.mdx',
+            RewardType.Hats,
+            'Saves',
+            350
+        )
+        RewardsManager.AddReward(
+            'SamuraiHelm',
+            Constants.ABILITY_HAT_SAMURAI,
+            'head',
+            'war3mapImported\\SamuraiHelmet2.mdx',
+            RewardType.Hats,
+            'Saves',
+            400
+        )
+        RewardsManager.AddReward(
+            'SantaHat',
+            Constants.ABILITY_HAT_SANTA,
+            'head',
+            'war3mapImported\\SantaHat.mdx',
+            RewardType.Hats,
+            'Saves',
+            800
+        )
+
+        // Auras
+        RewardsManager.AddReward(
+            'SpecialAura',
+            Constants.ABILITY_AURA_SPECIAL,
+            'origin',
+            'war3mapImported\\SoulArmor.mdx',
+            RewardType.Auras,
+            'HardWins',
+            5
+        )
+        RewardsManager.AddReward(
+            'StarlightAura',
+            Constants.ABILITY_AURA_STARLIGHT,
+            'origin',
+            'war3mapImported\\StarlightAura.mdx',
+            RewardType.Auras,
+            'NormalGames',
+            65
+        )
+        RewardsManager.AddReward(
+            'SpectacularAura',
+            Constants.ABILITY_AURA_SPECTACULAR,
+            'origin',
+            'war3mapImported\\ChillingAura.mdx',
+            RewardType.Auras,
+            'NormalWins',
+            30
+        )
+        RewardsManager.AddReward(
+            'ManaAura',
+            Constants.ABILITY_AURA_MANATAP,
+            'origin',
+            'war3mapImported\\ManaTapAura.MDX',
+            RewardType.Auras,
+            'NormalWins',
+            20
+        )
+        RewardsManager.AddReward(
+            'ButterflyAura',
+            Constants.ABILITY_AURA_BUTTERFLY,
+            'origin',
+            'war3mapImported\\ButterflyAura.mdx',
+            RewardType.Auras
+        )
+        RewardsManager.AddReward(
+            'FreezeAura',
+            Constants.ABILITY_AURA_FREEZE,
+            'origin',
+            'war3mapImported\\HolyFreezeAuraD2.mdx',
+            RewardType.Auras
+        )
+        RewardsManager.AddReward(
+            'VioletAura',
+            Constants.ABILITY_CHAMPION_AURAPURPLERUNIC,
+            'origin',
+            'war3mapImported\\GlaciarAuraPurple.mdx',
+            RewardType.Tournament
+        )
+        // Chained Together Awards
+        RewardsManager.AddReward(
+            'ChainedNormalAura',
+            Constants.ABILITY_AURA_CHAINEDNORMAL,
+            'origin',
+            'war3mapImported\\ChainedNormalAura.mdx',
+            RewardType.Auras
+        )
+        RewardsManager.AddReward(
+            'ChainedHardAura',
+            Constants.ABILITY_AURA_CHAINEDHARD,
+            'origin',
+            'war3mapImported\\ChainedHardAura.mdx',
+            RewardType.Auras
+        )
+        RewardsManager.AddReward(
+            'ChainedImpossibleAura',
+            Constants.ABILITY_AURA_CHAINEDIMPOSSIBLE,
+            'origin',
+            'war3mapImported\\ChainedImpossibleAura.mdx',
+            RewardType.Auras
+        )
+        RewardsManager.AddReward(
+            'ChainedNightmareAura',
+            Constants.ABILITY_AURA_CHAINEDNIGHTMARE,
+            'origin',
+            'war3mapImported\\ChainedNightmareAura.mdx',
+            RewardType.Auras
+        )
+
+        // Wings
+        RewardsManager.AddReward(
+            'PhoenixWings',
+            Constants.ABILITY_WINGS_PHOENIX,
+            'chest',
+            'war3mapImported\\PhoenixWing2.mdx',
+            RewardType.Wings,
+            'Saves',
+            375
+        )
+        RewardsManager.AddReward(
+            'FairyWings',
+            Constants.ABILITY_WINGS_FAIRY,
+            'chest',
+            'war3mapImported\\fairywing.mdx',
+            RewardType.Wings,
+            'Saves',
+            275
+        )
+        RewardsManager.AddReward(
+            'NightmareWings',
+            Constants.ABILITY_WINGS_NIGHTMARE,
+            'chest',
+            'war3mapImported\\WingsoftheNightmare2.mdx',
+            RewardType.Wings,
+            'Saves',
+            325
+        )
+        RewardsManager.AddReward(
+            'ArchangelWings',
+            Constants.ABILITY_WINGS_ARCHANGEL,
+            'chest',
+            'war3mapImported\\ArchangelWings2.mdx',
+            RewardType.Wings,
+            'Saves',
+            425
+        )
+        RewardsManager.AddReward(
+            'CosmicWings',
+            Constants.ABILITY_WINGS_COSMIC,
+            'chest',
+            'war3mapImported\\Wings: Void.mdx',
+            RewardType.Wings,
+            'Saves',
+            550
+        )
+        RewardsManager.AddReward(
+            'VoidWings',
+            Constants.ABILITY_WINGS_VOID,
+            'chest',
+            'war3mapImported\\Wings: Cosmic.mdx',
+            RewardType.Wings,
+            'Saves',
+            500
+        )
+        RewardsManager.AddReward(
+            'ChaosWings',
+            Constants.ABILITY_WINGS_CHAOS,
+            'chest',
+            'war3mapImported\\ChaosWingsResized2.mdx',
+            RewardType.Wings,
+            'Saves',
+            450
+        )
+        RewardsManager.AddReward(
+            'PinkWings',
+            Constants.ABILITY_WINGS_PINK,
+            'chest',
+            'war3mapImported\\PinkyWings2.mdx',
+            RewardType.Wings,
+            'Saves',
+            600
+        )
+        RewardsManager.AddReward(
+            'NatureWings',
+            Constants.ABILITY_WINGS_NATURE,
+            'chest',
+            'war3mapImported\\Wings2: Nature.mdx',
+            RewardType.Wings,
+            'Saves',
+            750
+        )
+
+        // Tendrils
+        RewardsManager.AddReward(
+            'RedTendrils',
+            Constants.ABILITY_WINGS_TRED,
+            'chest',
+            'war3mapImported\\RedTendrils.mdx',
+            RewardType.Wings
+        )
+        RewardsManager.AddReward(
+            'WhiteTendrils',
+            Constants.ABILITY_WINGS_TWHITE,
+            'chest',
+            'war3mapImported\\WhiteTendrils.mdx',
+            RewardType.Wings
+        )
+        RewardsManager.AddReward(
+            'DivinityTendrils',
+            Constants.ABILITY_WINGS_TYELLOW,
+            'chest',
+            'war3mapImported\\YellowTendrils.mdx',
+            RewardType.Wings
+        )
+        RewardsManager.AddReward(
+            'GreenTendrils',
+            Constants.ABILITY_WINGS_TGREEN,
+            'chest',
+            'war3mapImported\\GreenTendrils.mdx',
+            RewardType.Wings
+        )
+        RewardsManager.AddReward(
+            'PatrioticTendrils',
+            Constants.ABILITY_WINGS_PATRIOTIC,
+            'chest',
+            'RedWhiteBlueTendrilsTest.mdx',
+            RewardType.Wings,
+            'SaveStreak',
+            50
+        )
+        RewardsManager.AddReward(
+            'VioletWings',
+            Constants.ABILITY_CHAMPION_WINGSTVIOLET,
+            'chest',
+            'war3mapImported\\VoidTendrilsWings.mdx',
+            RewardType.Tournament
+        )
+        RewardsManager.AddReward(
+            'TurquoiseWings',
+            Constants.ABILITY_CHAMPION_WINGSTURQUOISE,
+            'chest',
+            'war3mapImported\\TurquoiseWings.mdx',
+            RewardType.Tournament
+        )
+
+        // Fires
+        RewardsManager.AddReward(
+            'PurpleFire',
+            Constants.ABILITY_TRAIL_FIREPURPLE,
+            'origin',
+            'war3mapImported\\PurpleFire.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'BlueFire',
+            Constants.ABILITY_TRAIL_FIREBLUE,
+            'origin',
+            'war3mapImported\\BlueFire.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'TurquoiseFire',
+            Constants.ABILITY_TRAIL_FIRETURQUOISE,
+            'origin',
+            'war3mapImported\\TurquoiseFire.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'PinkFire',
+            Constants.ABILITY_TRAIL_FIREPINK,
+            'origin',
+            'war3mapImported\\PinkFire.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'WhiteFire',
+            Constants.ABILITY_TRAIL_FIREWHITE,
+            'origin',
+            'war3mapImported\\WhiteFire.mdx',
+            RewardType.Trails
+        )
+
+        // Nitros
+        RewardsManager.AddReward(
+            'Nitro',
+            Constants.ABILITY_NITRO,
+            'origin',
+            'war3mapImported\\Nitro.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'NitroBlue',
+            Constants.ABILITY_NITROBLUE,
+            'origin',
+            'war3mapImported\\NitroBlue.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'NitroRed',
+            Constants.ABILITY_NITRORED,
+            'origin',
+            'war3mapImported\\NitroRed.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'NitroGreen',
+            Constants.ABILITY_NITROGREEN,
+            'origin',
+            'war3mapImported\\NitroGreen.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'NitroPurple',
+            Constants.ABILITY_NITROPURPLE,
+            'origin',
+            'war3mapImported\\NitroPurple.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'TurquoiseNitro',
+            Constants.ABILITY_CHAMION_NITROTURQUOISE,
+            'origin',
+            'war3mapImported\\NitroTurquoise.mdx',
+            RewardType.Tournament
+        )
+
+        // Divine Lights
+        RewardsManager.AddReward(
+            'DivineLight',
+            Constants.ABILITY_TRAIL_DIVINELIGHT,
+            'origin',
+            'DivineLight.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'AzureLight',
+            Constants.ABILITY_TRAIL_AZURELIGHT,
+            'origin',
+            'AzureLight.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'CrimsonLight',
+            Constants.ABILITY_TRAIL_CRIMSONLIGHT,
+            'origin',
+            'CrimsonLight.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'EmeraldLight',
+            Constants.ABILITY_TRAIL_EMERALDLIGHT,
+            'origin',
+            'EmeraldLight.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'VioletLight',
+            Constants.ABILITY_TRAIL_VIOLETLIGHT,
+            'origin',
+            'VioletLight.mdx',
+            RewardType.Nitros
+        )
+        RewardsManager.AddReward(
+            'PatrioticLight',
+            Constants.ABILITY_TRAIL_PATRIOTICLIGHT,
+            'origin',
+            'PatrioticLight.mdx',
+            RewardType.Nitros
+        )
+
+        // Lightning
+        RewardsManager.AddReward(
+            'BlueLightning',
+            Constants.ABILITY_TRAIL_LIGHTNINGBLUE,
+            'origin',
+            'war3mapImported\\GreatElderHydraLightningOrbV3.mdx',
+            RewardType.Trails,
+            'Saves',
+            2000
+        )
+        RewardsManager.AddReward(
+            'RedLightning',
+            Constants.ABILITY_TRAIL_LIGHTNINGRED,
+            'origin',
+            'war3mapImported\\RedLightning.mdx',
+            RewardType.Trails,
+            'SaveStreak',
+            15
+        )
+        RewardsManager.AddReward(
+            'PurpleLightning',
+            Constants.ABILITY_TRAIL_LIGHTNINGPURPLE,
+            'origin',
+            'war3mapImported\\PurpleLightning.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'YellowLightning',
+            Constants.ABILITY_TRAIL_LIGHTNINGYELLOW,
+            'origin',
+            'war3mapImported\\YellowLightning.mdx',
+            RewardType.Trails
+        )
+        RewardsManager.AddReward(
+            'GreenLightning',
+            Constants.ABILITY_TRAIL_LIGHTNINGGREEN,
+            'origin',
+            'war3mapImported\\GreenLightning.mdx',
+            RewardType.Trails
+        )
+        // AddReward("LightningSpeed", Constants.ABILITY_AURA_BUTTERFLY, "origin", "lightning_shield.mdx", RewardType.Tournament);
+
+        // WindWalks
+        RewardsManager.AddReward(
+            'WWBlood',
+            Constants.ABILITY_WW_BLOOD,
+            'chest',
+            'war3mapImported\\Blood: Windwalk.mdx',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWBlue',
+            Constants.ABILITY_WW_BLUE,
+            'chest',
+            'war3mapImported\\Blue: Soul: Windwalk',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWFire',
+            Constants.ABILITY_WW_FIRE,
+            'chest',
+            'war3mapImported\\Fire: Windwalk.mdx',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWNecro',
+            Constants.ABILITY_WW_NECRO,
+            'chest',
+            'war3mapImported\\Necro: Soul: Windwalk.mdx',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWSwift',
+            Constants.ABILITY_WW_SWIFT,
+            'chest',
+            'war3mapImported\\Windwalk.mdx',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWDivine',
+            Constants.ABILITY_WW_DIVINE,
+            'chest',
+            'war3mapImported\\WindwalkDivine.mdx',
+            RewardType.Windwalks
+        )
+        RewardsManager.AddReward(
+            'WWViolet',
+            Constants.ABILITY_WW_VIOLET,
+            'chest',
+            'war3mapImported\\Violet: Windwalk.mdx',
+            RewardType.Windwalks
+        )
+        // Deathless
+        RewardsManager.AddReward(
+            'NormalDeathless1',
+            Constants.ABILITY_DEATHLESS_FIRE_1_01,
+            'origin',
+            'Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'NormalDeathless2',
+            Constants.ABILITY_DEATHLESS_FIRE_1_02,
+            'origin',
+            'war3mapImported\\Deathless2.mdx',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'NormalDeathless3',
+            Constants.ABILITY_DEATHLESS_FIRE_1_03,
+            'origin',
+            'war3mapImported\\Deathless3.mdx',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'NormalDeathless4',
+            Constants.ABILITY_DEATHLESS_FIRE_1_04,
+            'origin',
+            'war3mapImported\\Deathless4.mdx',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'NormalDeathless5',
+            Constants.ABILITY_DEATHLESS_FIRE_1_05,
+            'origin',
+            'war3mapImported\\Deathless5.mdx',
+            RewardType.Deathless
+        )
+
+        // Team Deathless
+        RewardsManager.AddReward(
+            'NormalTeamDeathless',
+            Constants.ABILITY_NORMAL_TEAM_DEATHLESS,
+            'origin',
+            'war3mapImported\\NormalTeamDeathless.mdx',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'HardTeamDeathless',
+            Constants.ABILITY_HARD_TEAM_DEATHLESS,
+            'origin',
+            'war3mapImported\\HardTeamDeathless.mdx',
+            RewardType.Deathless
+        )
+        RewardsManager.AddReward(
+            'ImpossibleTeamDeathless',
+            Constants.ABILITY_IMPOSSIBLE_TEAM_DEATHLESS,
+            'origin',
+            'war3mapImported\\ImpossibleTeamDeathless.mdx',
+            RewardType.Deathless
+        )
+
+        // Skins
+        RewardsManager.AddReward(
+            'UndeadKitty',
+            Constants.ABILITY_SKIN_KITTYUNDEAD,
+            Constants.UNIT_UNDEAD_KITTY,
+            RewardType.Skins,
+            'NormalWins',
+            30
+        )
+        RewardsManager.AddReward(
+            'HighelfKitty',
+            Constants.ABILITY_SKIN_KITTYHIGHELF,
+            Constants.UNIT_HIGHELF_KITTY,
+            RewardType.Skins,
+            'NormalGames',
+            40
+        )
+        RewardsManager.AddReward(
+            'AncientKitty',
+            Constants.ABILITY_SKIN_KITTYANCIENT,
+            Constants.UNIT_ANCIENT_KITTY,
+            RewardType.Skins,
+            'NormalWins',
+            40
+        )
+        RewardsManager.AddReward(
+            'SatyrKitty',
+            Constants.ABILITY_SKIN_KITTYSATYR,
+            Constants.UNIT_SATYR_KITTY,
+            RewardType.Skins,
+            'NormalWins',
+            25
+        )
+        RewardsManager.AddReward(
+            'AstralKitty',
+            Constants.ABILITY_SKIN_KITTYASTRAL,
+            Constants.UNIT_ASTRAL_KITTY,
+            RewardType.Skins,
+            'NormalGames',
+            55
+        )
+        RewardsManager.AddReward(
+            'ZandalariKitty',
+            Constants.ABILITY_SKIN_KITTYZANDALARI,
+            Constants.UNIT_ZANDALARI_KITTY,
+            RewardType.Skins
+        )
+        RewardsManager.AddReward(
+            'HuntressKitty',
+            Constants.ABILITY_SKIN_KITTYHUNTRESS,
+            Constants.UNIT_HUNTRESS_KITTY,
+            RewardType.Skins
+        )
+        RewardsManager.AddReward(
+            'PenguinSkin',
+            Constants.ABILITY_CHAMPION_SKINPENGUIN,
+            Constants.UNIT_PENGUIN,
+            RewardType.Tournament
+        )
+
+        // Holiday
+        RewardsManager.AddReward(
+            'SnowWings2023',
+            Constants.ABILITY_HOLIDAY_WINGS_C2023,
+            'chest',
+            'war3mapImported\\SnowflakeWings.mdx',
+            RewardType.Wings
+        )
+        RewardsManager.AddReward(
+            'SnowTrail2023',
+            Constants.ABILITY_HOLIDAY_TRAIL_C2023,
+            'origin',
+            'war3mapImported\\snowtrail.mdx',
+            RewardType.Trails
+        )
     }
 }

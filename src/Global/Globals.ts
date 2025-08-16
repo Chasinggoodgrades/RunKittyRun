@@ -18,7 +18,7 @@ export class Globals {
     public static ROUND: number = 0
     public static GAME_ACTIVE: boolean = false
     public static GAME_SECONDS: number = 0.0
-    public static WORLD_BOUNDS: Rectangle = Rectangle.getWorldBounds()!
+    public static WORLD_BOUNDS: Rectangle
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
     public static readonly GAME_MODES: string[] = [
@@ -81,6 +81,10 @@ export class Globals {
 
     public static DATE_TIME_LOADED: boolean
     public static GAME_INITIALIZED: boolean
+
+    constructor() {
+        Globals.WORLD_BOUNDS = Rectangle.getWorldBounds()!
+    }
 
     // Round                         // Lane ,  // Updated # Wolves (+5% for all lanes, first 6 + 5%)
     public static WolvesPerRound: Map<number, { [lane: number]: number }> = new Map([

@@ -1,4 +1,4 @@
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
@@ -29,7 +29,7 @@ export class FinalSafezone {
                 let player = unit.owner
                 let kitty = Globals.ALL_KITTIES.get(player)!
                 if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards()
-                if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+                if (CurrentGameMode.active !== GameMode.Standard) return
 
                 kitty.CurrentStats.RoundFinished = true
                 NitroChallenges.CompletedNitro(kitty)

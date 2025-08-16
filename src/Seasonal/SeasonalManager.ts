@@ -1,4 +1,4 @@
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { WeatherEffect } from 'w3ts'
@@ -44,7 +44,7 @@ export class SeasonalManager {
     }
 
     public static DetermineSeason() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) {
+        if (CurrentGameMode.active !== GameMode.Standard) {
             SeasonalManager.Season = HolidaySeasons.None
             return
         }
@@ -73,7 +73,7 @@ export class SeasonalManager {
     /// Admin command to activate Christmas season. Only works in standard mode.
     /// </summary>
     public static ActivateChristmas() {
-        if (Gamemode.CurrentGameMode !== GameMode.Standard) return
+        if (CurrentGameMode.active !== GameMode.Standard) return
         SeasonalManager.Season = HolidaySeasons.Christmas
         TerrainChanger.ActivateChristmasTerrain()
         DoodadChanger.ChristmasDoodads()
