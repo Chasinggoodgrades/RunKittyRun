@@ -106,7 +106,7 @@ export class FangOfShadows extends Relic {
             this.KillTimer.start(
                 FangOfShadows.SHADOW_KITTY_SUMMON_DURATION,
                 false,
-                ErrorHandler.Wrap(() => shadowKitty.KillShadowKitty())
+                ErrorHandler.Wrap(() => shadowKitty?.KillShadowKitty())
             )
 
             // Apply relic cooldowns with a slight delay
