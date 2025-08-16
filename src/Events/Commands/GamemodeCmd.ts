@@ -17,14 +17,14 @@ export class GamemodeCmd {
                     'Only ' +
                     ColorUtils.PlayerNameColored(Gamemode.HostPlayer) +
                     Colors.COLOR_YELLOW_ORANGE +
-                    ' choose: the: gamemode: can.'
+                    ' can choose the gamemode.'
             )
             return
         }
         if (Gamemode.IsGameModeChosen) {
             player.DisplayTimedTextTo(
                 10.0,
-                Colors.COLOR_YELLOW_ORANGE + 'has: already: been: chosen: Gamemode. change: gamemode: Cannot.'
+                Colors.COLOR_YELLOW_ORANGE + 'Gamemode has already been chosen. Cannot change gamemode.'
             )
             return
         }
@@ -43,7 +43,7 @@ export class GamemodeCmd {
             default:
                 player.DisplayTimedTextTo(
                     10.0,
-                    GamemodeCmd.CmdInfo.Error + Colors.COLOR_GOLD + 'Use: -s, -solo: t, -team: t'
+                    GamemodeCmd.CmdInfo.Error + Colors.COLOR_GOLD + 'Use -s, -solo t, -team t'
                 )
                 break
         }
@@ -70,7 +70,7 @@ export class GamemodeCmd {
                 10.0,
                 GamemodeCmd.CmdInfo.Error +
                     Colors.COLOR_GOLD +
-                    '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
+                    '-solo t <prog | race> or -team t <fp | freepick | r | random>'
             )
             return
         }
@@ -89,7 +89,7 @@ export class GamemodeCmd {
                     10.0,
                     GamemodeCmd.CmdInfo.Error +
                         Colors.COLOR_GOLD +
-                        '-solo: t <prog | race> or -team: t <fp | freepick | r | random>'
+                        '-solo t <prog | race> or -team t <fp | freepick | r | random>'
                 )
                 break
         }

@@ -9,6 +9,7 @@ import { RelicUtil } from 'src/Game/Items/Relics/RelicUtil'
 import { KittyTime } from 'src/Game/Management/KittyTime'
 import { ProgressPointHelper } from 'src/Game/Management/ProgressPointHelper'
 import { PlayerGameData } from 'src/Game/PlayerGameData'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Solo } from 'src/Gamemodes/Solo/Solo'
@@ -33,13 +34,13 @@ import { SoundManager } from 'src/Sounds/SoundManager'
 import { FloatingNameTag } from 'src/UI/FloatingNames'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { CameraUtil } from 'src/Utility/CameraUtil'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Timer, Trigger, Unit } from 'w3ts'
 import { Circle } from '../Circle'
 import { ShadowKitty } from '../ShadowKitty'
 import { KittyMiscInfo } from './KittyMiscInfo'
 import { KittyStatsManager } from './KittyStatsManager'
-import { RoundManager } from 'src/Game/Rounds/RoundManager'
 
 export class Kitty {
     private KITTY_HERO_TYPE: number = Constants.UNIT_KITTY
@@ -117,7 +118,7 @@ export class Kitty {
                 new Kitty(player)
             }
         } catch (e: any) {
-            Logger.Critical('Error in Kitty.Initalize. {e.StackTrace}')
+            Logger.Critical(`Error in Kitty.Initalize. ${e.StackTrace}`)
             throw e
         }
     }
@@ -168,7 +169,7 @@ export class Kitty {
                 MultiboardUtil.RefreshMultiboards()
             }
         } catch (e: any) {
-            Logger.Critical('Error in KillKitty: {e.Message}')
+            Logger.Critical(`Error in KillKitty: ${e.Message}`)
         }
     }
 
@@ -207,7 +208,7 @@ export class Kitty {
                 MultiboardUtil.RefreshMultiboards()
             }
         } catch (e: any) {
-            Logger.Critical('Error in ReviveKitty: {e.Message}')
+            Logger.Critical(`Error in ReviveKitty: ${e.Message}`)
             throw e
         }
     }
@@ -237,7 +238,7 @@ export class Kitty {
 
             this.Relics = []
         } catch (e: any) {
-            Logger.Critical('Error in InitData {e.Message}')
+            Logger.Critical(`Error in InitData: ${e.Message}`)
             throw e
         }
     }
@@ -266,7 +267,7 @@ export class Kitty {
         Globals.ALL_KITTIES.set(this.Player, this)
         Resources.StartingItems(this)
         RelicUtil.DisableRelicBook(this.Unit)
-        this.Unit.name = '{Colors.PlayerNameColored(this.Player)}'
+        this.Unit.name = `${ColorUtils.PlayerNameColored(this.Player)}`
         this.TrueSightGhostWolves()
         CollisionDetection.KittyRegisterCollisions(this)
 

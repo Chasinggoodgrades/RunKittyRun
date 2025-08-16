@@ -4,6 +4,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Timer, Unit } from 'w3ts'
 import { PlayerUpgrades } from '../PlayerUpgrades'
@@ -15,14 +16,14 @@ export class ChronoSphere extends Relic {
     public RelicAbilityID: number = Constants.ABILITY_THE_AURA_OF_THE_RING
     private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\Orb: BTNChrono.dds'
 
-    private static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
+    public static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
         return r instanceof ChronoSphere
     }
 
     private static REWIND_COOLDOWN: number = 120.0
     private LocationSaveEffectPath: string = 'war3mapImported\\ChronoLocationSave.mdx'
     private RelicCost: number = 650
-    private SLOW_AURA_RADIUS: number = 400.0
+    private static SLOW_AURA_RADIUS: number = 400.0
     private MAGNITUDE_CHANGE_INTERVAL: number = 15.0
     private MAGNITUDE_LOWER_BOUND: number = 10.0
     private MAGNITUDE_UPPER_BOUND: number = 17.0
@@ -38,8 +39,8 @@ export class ChronoSphere extends Relic {
 
     public constructor() {
         super(
-            '{Colors.COLOR_YELLOW}Chrono Sphere',
-            'Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r',
+            `${Colors.COLOR_YELLOW}Chrono Sphere`,
+            `Slows time around you, slowing wolves by 10% within ${ChronoSphere.SLOW_AURA_RADIUS} range.${Colors.COLOR_LIGHTBLUE}(Passive)|r`,
             Constants.ABILITY_THE_AURA_OF_THE_RING,
             Constants.ITEM_CHRONO_ORB,
             650,
@@ -49,7 +50,7 @@ export class ChronoSphere extends Relic {
         this.Upgrades.push(
             new RelicUpgrade(
                 0,
-                `Every {MAGNITUDE_CHANGE_INTERVAL.ToString("F2")} seconds, the magnitude of the slowing aura will change between {MAGNITUDE_LOWER_BOUND.ToString("F2")}% - {MAGNITUDE_UPPER_BOUND.ToString("F2")}% effectiveness.`,
+                `Every ${this.MAGNITUDE_CHANGE_INTERVAL.toFixed(2)} seconds, the magnitude of the slowing aura will change between ${this.MAGNITUDE_LOWER_BOUND.toFixed(2)}% - ${this.MAGNITUDE_UPPER_BOUND.toFixed(2)}% effectiveness.`,
                 15,
                 800
             )
@@ -70,7 +71,7 @@ export class ChronoSphere extends Relic {
             Utility.SimpleTimer(0.1, this.RotatingSlowAura)
             Utility.SimpleTimer(0.1, this.RotatingLocationCapture)
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.ApplyEffect: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.ApplyEffect: ${e.Message}`)
         }
     }
 
@@ -82,7 +83,7 @@ export class ChronoSphere extends Relic {
             this.LocationCaptureTimer?.destroy()
             this.LocationEffect?.destroy()
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.RemoveEffect: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.RemoveEffect: ${e.Message}`)
         }
     }
 
@@ -99,13 +100,13 @@ export class ChronoSphere extends Relic {
                 0,
                 this.Magnitude
             )
-            BlzSetAbilityRealLevelField(this.Ability, ABILITY_RLF_AREA_OF_EFFECT, 0, this.SLOW_AURA_RADIUS)
+            BlzSetAbilityRealLevelField(this.Ability, ABILITY_RLF_AREA_OF_EFFECT, 0, ChronoSphere.SLOW_AURA_RADIUS)
             BlzSetItemExtendedTooltip(
                 item.handle,
                 `{Colors.COLOR_YELLOW}possessor: The of mystical: orb: emits: a: temporal: distortion: field: this, the: movement: slowing of all enemies within a 400 range by {Colors.COLOR_LAVENDER}{Math.abs(this.Magnitude * 100).ToString("F0")}%.|r |cffadd8e6(Passive)|r\r\n`
             )
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.SetAbilityData: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.SetAbilityData: ${e.Message}`)
         }
     }
 
@@ -120,7 +121,7 @@ export class ChronoSphere extends Relic {
             this.MagnitudeTimer.start(this.MAGNITUDE_CHANGE_INTERVAL, true, this.SetAbilityData)
             this.SetAbilityData()
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.RotatingSlowAura: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.RotatingSlowAura: ${e.Message}`)
         }
     }
 
@@ -133,7 +134,7 @@ export class ChronoSphere extends Relic {
             this.CapturedLocation = [this.Kitty.Unit.x, this.Kitty.Unit.y, this.Kitty.Unit.facing] // reset to current location on buy
             this.LocationCaptureTimer.start(this.LOCATION_CAPTURE_INTERVAL, false, this.CaptureLocation)
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.RotatingLocationCapture: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.RotatingLocationCapture: ${e.Message}`)
         }
     }
 
@@ -148,7 +149,7 @@ export class ChronoSphere extends Relic {
             this.LocationEffect.destroy()
             this.LocationEffect = null
         } catch (er: any) {
-            Logger.Warning('Error in ChronoSphere.CaptureLocation: {er.Message}')
+            Logger.Warning(`Error in ChronoSphere.CaptureLocation: ${er.Message}`)
         }
     }
 
@@ -180,7 +181,7 @@ export class ChronoSphere extends Relic {
                 Utility.SimpleTimer(1.0, () => (this.Kitty.Invulnerable = false))
             })
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.RewindTime: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.RewindTime: ${e.Message}`)
         }
     }
 
@@ -203,15 +204,15 @@ export class ChronoSphere extends Relic {
             Utility.SimpleTimer(this.REWIND_COOLDOWN, () => {
                 try {
                     kitty.CurrentStats.ChronoSphereCD = false
-                    kitty.Player.DisplayTimedTextTo(1.0, '{Colors.COLOR_LAVENDER}Sphere: recharged: Chrono|r')
+                    kitty.Player.DisplayTimedTextTo(1.0, `${Colors.COLOR_LAVENDER}Chrono Sphere recharged|r`)
                     relic?.LocationCaptureTimer?.start(0, false, relic.CaptureLocation)
                 } catch (e: any) {
-                    Logger.Warning('Error in ChronoSphere.RewindDeath: {e.Message}')
+                    Logger.Warning(`Error in ChronoSphere.RewindDeath: ${e.Message}`)
                 }
             })
             return true
         } catch (e: any) {
-            Logger.Warning('Error in ChronoSphere.RewindDeath: {e.Message}')
+            Logger.Warning(`Error in ChronoSphere.RewindDeath: ${e.Message}`)
             return false
         }
     }

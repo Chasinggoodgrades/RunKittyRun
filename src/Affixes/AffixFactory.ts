@@ -7,10 +7,11 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { sumNumbers } from 'src/Utility/Utility'
 import { Affix } from './Affix'
+import { AffixTypes, CreateAffix } from './AffixCreate'
 import { AddAffix, RemoveAllWolfAffixes } from './AffixUtil'
-import { CreateAffix, AffixTypes } from './AffixCreate'
 
 export class AffixFactory {
     private static LaneWeights: number[]
@@ -44,9 +45,9 @@ export class AffixFactory {
             }
         }
 
-        for (let [_, affix] of AffixFactory.TempAffixCounts) {
+        for (let [key, affix] of AffixFactory.TempAffixCounts) {
             if (affix > 0) {
-                AffixFactory.TempAffixesList.push('{affix.Key} x{affix.Value}')
+                AffixFactory.TempAffixesList.push(`${key} x${affix}`)
             }
         }
         let arr = AffixFactory.TempAffixesList
@@ -71,7 +72,7 @@ export class AffixFactory {
         // Normalizing Weights
         for (let i: number = 0; i < regionCount; i++) {
             AffixFactory.LaneWeights[i] = (AffixFactory.LaneWeights[i] / totalArea) * 100
-            //if(!PROD) print("Lane {i + 1} weight: {LaneWeights[i]}");
+            //if(!PROD) print(`Lane ${i + 1} weight: ${AffixFactory.LaneWeights[i]}`);
         }
     }
 
@@ -118,7 +119,7 @@ export class AffixFactory {
             let randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
         } catch (ex: any) {
-            Logger.Warning('{Colors.COLOR_RED}Error in ApplyRandomAffix: {ex.Message}{Colors.COLOR_RESET}')
+            Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${ex.Message}${Colors.COLOR_RESET}`)
             return null as never
         }
     }
@@ -183,7 +184,7 @@ export class AffixFactory {
                 }
             }
         } catch (ex: any) {
-            Logger.Critical('{Colors.COLOR_RED}Error in DistAffixes: {ex.Message}{Colors.COLOR_RESET}')
+            Logger.Critical(`${Colors.COLOR_RED}Error in DistAffixes: ${ex.Message}${Colors.COLOR_RESET}`)
             AffixFactory.RemoveAllAffixes()
         }
     }

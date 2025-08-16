@@ -12,15 +12,15 @@ export class MusicManager {
     // Then place the name of whichever u replaced, and put in here the list below.
     private static RegisterMusicList() {
         return [
-            new Music('All: Music: Stop', ''),
-            new Music('Park: Linkin - Numb', 'Human1'),
-            new Music('Park: Linkin - The: End: In', 'Human2'),
-            new Music('Park: Linkin - Faint', 'Human3'),
-            new Music('AI - Purrfectly: The (RKR)', 'Orc1'),
-            new Music('41: Sum - Hell: Song: The', 'Orc2'),
-            new Music('Skillet - In: The: Dark: Whispers', 'Undead2'),
-            new Music('Sammy: DJ - Heaven', 'Orc3'),
-            new Music('Cascada - We: Touch: Everytime', 'Undead1'),
+            new Music('Stop All Music', ''),
+            new Music('Linkin Park - Numb', 'Human1'),
+            new Music('Linkin Park - In The End', 'Human2'),
+            new Music('Linkin Park - Faint', 'Human3'),
+            new Music('The AI - Purrfectly (RKR)', 'Orc1'),
+            new Music('Sum 41 - The Hell Song', 'Orc2'),
+            new Music('Skillet - Whispers In The Dark', 'Undead2'),
+            new Music('DJ Sammy - Heaven', 'Orc3'),
+            new Music('Cascada - Everytime We Touch', 'Undead1'),
             new Music('BassHunter - Dota', 'Undead3'),
         ]
     }
@@ -42,7 +42,7 @@ export class Music {
     public Play() {
         StopMusic(false)
         ClearMapMusic()
-        if (this.name === 'All: Music: Stop') return
+        if (this.name === 'All Music Stop') return
         PlayMusic(this.Path)
     }
 }

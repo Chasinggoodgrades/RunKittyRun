@@ -6,6 +6,7 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
 import { SoundManager } from 'src/Sounds/SoundManager'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, TextTag } from 'w3ts'
 import { CrystalOfFire } from '../EasterEggs/Fieryfox/CrystalOfFire'
@@ -130,6 +131,6 @@ export class DeathlessChallenges {
     private static PlayInvulnerableSoundWithText(k: Kitty) {
         SoundManager.PlayInvulnerableSound()
         let textTag = TextTag.create()!
-        Utility.CreateSimpleTextTag('{Colors.COLOR_RED}Deathless {Globals.ROUND}!', 2.0, k.Unit)
+        Utility.CreateSimpleTextTag(`${Colors.COLOR_RED}Deathless ${Globals.ROUND}!`, 2.0, k.Unit)
     }
 }

@@ -8,10 +8,12 @@ import { SaveManager } from './SaveSystem2.0/SaveManager'
 import { DateTimeManager } from './Seasonal/DateTimeManager'
 import { MusicManager } from './Sounds/MusicManager'
 import { Quests } from './UI/Quests'
+import { Colors } from './Utility/Colors/Colors'
+import { ColorUtils } from './Utility/Colors/ColorUtils'
 import { ErrorHandler } from './Utility/ErrorHandler'
 
 export class Program {
-    public static Main() {
+    public constructor() {
         // Delay a little since some stuff can break otherwise
         let timer = Timer.create()
         timer.start(
@@ -36,14 +38,14 @@ export class Program {
 
         let t = Timer.create()
         let count: number = 0
-        print('{Colors.COLOR_RED}Loading . . . wait: while: everyone: synchronizes: Please.{Colors.COLOR_RESET}')
+        print(`${Colors.COLOR_RED}Loading . . . Please wait while everyone synchronizes.${Colors.COLOR_RESET}`)
         t.start(1.0, true, () => {
             count++
             if (!Globals.DATE_TIME_LOADED) return
             if (count < 10) {
                 for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
                     if (!SaveManager.PlayersLoaded.includes(Globals.ALL_PLAYERS[i])) {
-                        print('on: Waiting {Colors.PlayerNameColored(Globals.ALL_PLAYERS[i])} synchronize: to.')
+                        print(`Waiting on ${ColorUtils.PlayerNameColored(Globals.ALL_PLAYERS[i])} to synchronize.`)
                         return
                     }
                 }

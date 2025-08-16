@@ -170,51 +170,50 @@ local function require(file, ...)
 end`,
                 to: `local ____modules = {}
 local ____moduleCache = {}
-
-local ____moduleCache2 = {}
-local ____moduleCircular = false
-local ____moduleCircularArray = {}
-
 local ____originalRequire = require
+
 local function require(file, ...)
-    if ____moduleCache[file] then
+    -- Return cached value if present
+    local cached = ____moduleCache[file]
+    if cached then
+        return cached.value
+    end
+
+    -- Our module table?
+    local moduleFactory = ____modules[file]
+    if moduleFactory then
+        -- Pre-populate cache with a placeholder to allow circular deps
+        local placeholder = {}
+        ____moduleCache[file] = { value = placeholder, initializing = true }
+
+        -- Run the module factory
+        local value
+        if select("#", ...) > 0 then
+            value = moduleFactory(...)
+        else
+            value = moduleFactory(file)
+        end
+
+        -- If the module returned a table, copy fields into the placeholder
+        if type(value) == "table" then
+            for k, v in pairs(value) do
+                placeholder[k] = v
+            end
+            ____moduleCache[file].value = placeholder
+        else
+            -- For non-tables (numbers/strings/functions), just overwrite
+            ____moduleCache[file].value = value
+        end
+
+        ____moduleCache[file].initializing = false
         return ____moduleCache[file].value
     end
-    if ____modules[file] then
-        local module = ____modules[file]
 
-        if ____moduleCache2[file] == 2 then
-            error("Circular require detected: " .. table.concat(____moduleCircularArray, " -> ") .. " -> " .. file)
-        end
-
-        if ____moduleCache2[file] == 1 then
-            ____moduleCircular = true
-            ____moduleCache2[file] = 2
-        end
-
-        if ____moduleCircular then
-            ____moduleCircularArray[#____moduleCircularArray + 1] = file
-        end
-
-        if ____moduleCache2[file] == nil then
-            ____moduleCache2[file] = 1
-        end
-
-        local value = nil
-        if (select("#", ...) > 0) then
-            value = module(...)
-        else
-            value = module(file)
-        end
-
-        ____moduleCache[file] = { value = value }
-        return value
+    -- Fall back to the host's require
+    if ____originalRequire then
+        return ____originalRequire(file)
     else
-        if ____originalRequire then
-            return ____originalRequire(file)
-        else
-            error("module '" .. file .. "' not found")
-        end
+        error("module '" .. file .. "' not found")
     end
 end`,
             },

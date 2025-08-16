@@ -1,5 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { Savecode } from './OldSaves'
@@ -31,7 +32,7 @@ export class OldsaveSync {
         let savecode: Savecode = new Savecode()
         if (OldsaveSync.SaveLoadCode.length < 1) return
         if (!savecode.Load(OldsaveSync.SavePlayer, OldsaveSync.SaveLoadCode)) {
-            OldsaveSync.SavePlayer.DisplayTimedTextTo(5.0, '{Colors.COLOR_RED}save: code: The is invalid :(')
+            OldsaveSync.SavePlayer.DisplayTimedTextTo(5.0, `${Colors.COLOR_RED}The save code is invalid :(`)
             return
         }
         savecode.SetRewardValues(OldsaveSync.SavePlayer)

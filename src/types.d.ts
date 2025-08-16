@@ -32,6 +32,10 @@ declare module 'w3ts' {
         issueImmediateOrderById(orderId: number): void
         addSpecialEffectTarget(model: string, attachmentPoint: string): Effect
     }
+
+    interface Frame {
+        getName(): string
+    }
 }
 
 export {}

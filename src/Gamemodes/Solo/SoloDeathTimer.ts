@@ -1,6 +1,7 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { CameraUtil } from 'src/Utility/CameraUtil'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { MapPlayer, TextTag } from 'w3ts'
@@ -43,7 +44,7 @@ export class SoloDeathTimer {
     private UpdateFloatingText() {
         SetTextTagText(
             this.FloatingTimer.handle,
-            '{ColorUtils.GetStringColorOfPlayer(Player.id + 1)}' + this.ReviveTimer.remaining().toFixed(2) + '|r',
+            `${ColorUtils.GetStringColorOfPlayer(this.Player.id + 1)}${this.ReviveTimer.remaining().toFixed(2)}|r`,
             this.TextTagHeight
         )
     }
@@ -60,7 +61,7 @@ export class SoloDeathTimer {
             CameraUtil.RelockCamera(this.Player)
             this.Dispose()
         } catch (e: any) {
-            Logger.Warning('Error in SoloDeathTimer.Revive: {e.Message}')
+            Logger.Warning(`Error in SoloDeathTimer.Revive: ${e.Message}`)
             this.Dispose()
         }
     }

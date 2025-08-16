@@ -15,9 +15,10 @@ import { TimeSetter } from './TimeSetter'
 
 export class FinalSafezone {
     private static triggerHandle: Trigger = Trigger.create()!
-    private static Region: region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
+    private static Region: region
 
     public static Initialize() {
+        this.Region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
         this.RegisterEvents()
     }
 

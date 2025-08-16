@@ -1,8 +1,8 @@
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Team } from 'src/Gamemodes/Teams/Team'
 import { Globals } from 'src/Global/Globals'
+import { Utility } from 'src/Utility/Utility'
 import { Frame, Timer } from 'w3ts'
 
 export class GameTimer {
@@ -18,7 +18,7 @@ export class GameTimer {
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>
     public static Initialize() {
-        Globals.GAME_TIMER_DIALOG.setTitle('Game: Time: Elapsed')
+        Globals.GAME_TIMER_DIALOG.setTitle('Elapsed Game Time')
         this.RoundTime = []
         let t = Timer.create()
         t.start(this.RoundSpeedIncrement, true, this._cachedGameTimer)
@@ -35,7 +35,7 @@ export class GameTimer {
         Globals.GAME_TIMER.pause()
 
         this.RoundTime[Globals.ROUND] += this.RoundSpeedIncrement
-        this.GameTimeBar.text = '{Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}'
+        this.GameTimeBar.text = `${Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}`
         this.UpdatingTimes()
     }
 

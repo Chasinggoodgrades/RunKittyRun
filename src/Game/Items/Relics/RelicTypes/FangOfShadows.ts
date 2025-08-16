@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
 import { Globals } from 'src/Global/Globals'
 import { TeamDeathless } from 'src/Rewards/Challenges/TeamDeathless'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
@@ -28,13 +29,13 @@ export class FangOfShadows extends Relic {
     private SAFEZONE_REDUCTION: number = 0.25 // 25%
     private UPGRADE_SAFEZONE_REDUCTION: number = 0.5 // 50%
     private UPGRADE_COOLDOWN_REDUCTION: number = 30.0
-    private SHADOW_KITTY_SUMMON_DURATION: number = 75.0
+    private static SHADOW_KITTY_SUMMON_DURATION: number = 75.0
 
     public constructor() {
         super(
-            '{Colors.COLOR_PURPLE}Fang of Shadows',
-            'Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r ' +
-                '{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r',
+            `${Colors.COLOR_PURPLE}Fang of Shadows`,
+            `Ability to summon a shadowy image for ${Colors.COLOR_CYAN}${FangOfShadows.SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r ` +
+                `${Colors.COLOR_ORANGE}(Active)|r ${Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r`,
             Constants.ITEM_FANG_OF_SHADOWS,
             Constants.ABILITY_SUMMON_SHADOW_KITTY,
             650,
@@ -42,7 +43,7 @@ export class FangOfShadows extends Relic {
         )
 
         this.Upgrades.push(
-            new RelicUpgrade(0, 'Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.', 15, 800)
+            new RelicUpgrade(0, `Overall cooldown is reduced by ${this.UPGRADE_COOLDOWN_REDUCTION} seconds.`, 15, 800)
         )
         this.Upgrades.push(
             new RelicUpgrade(1, 'Remaining cooldown reduced at new safezones is now 50% instead of 25%.', 20, 1000)
@@ -87,7 +88,7 @@ export class FangOfShadows extends Relic {
             if (TeamDeathless.CurrentHolder === summoner) {
                 summoner.Player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_RED}summon: shadow: kitty: while: holding: the: orb: Cannot!{Colors.COLOR_RESET}'
+                    `${Colors.COLOR_RED}Cannot summon shadow kitty while holding the orb!${Colors.COLOR_RESET}`
                 )
                 return
             }
@@ -99,11 +100,11 @@ export class FangOfShadows extends Relic {
             // Summon and configure Shadow Kitty
             shadowKitty.SummonShadowKitty()
             this.RegisterTeleportAbility(shadowKitty.Unit)
-            shadowKitty.Unit.applyTimedLife(FourCC('BTLF'), this.SHADOW_KITTY_SUMMON_DURATION)
+            shadowKitty.Unit.applyTimedLife(FourCC('BTLF'), FangOfShadows.SHADOW_KITTY_SUMMON_DURATION)
 
             // Set kill timer
             this.KillTimer.start(
-                this.SHADOW_KITTY_SUMMON_DURATION,
+                FangOfShadows.SHADOW_KITTY_SUMMON_DURATION,
                 false,
                 ErrorHandler.Wrap(shadowKitty.KillShadowKitty)
             )
@@ -113,7 +114,7 @@ export class FangOfShadows extends Relic {
                 RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID)
             )
         } catch (e: any) {
-            Logger.Warning('Error in SummonShadowKitty: {e}')
+            Logger.Warning(`Error in SummonShadowKitty: ${e}`)
         }
     }
 
@@ -126,7 +127,7 @@ export class FangOfShadows extends Relic {
             Utility.SimpleTimer(0.09, sk.KillShadowKitty)
             this.KillTimer.pause()
         } catch (e: any) {
-            Logger.Warning('Error in FangOfShadows.TeleportToShadowKitty: {e}')
+            Logger.Warning(`Error in FangOfShadows.TeleportToShadowKitty: ${e}`)
             return
         }
     }

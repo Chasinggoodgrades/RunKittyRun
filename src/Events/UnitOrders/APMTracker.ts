@@ -1,6 +1,7 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Action } from 'src/Utility/CSUtils'
 import { Timer, Trigger } from 'w3ts'
 import { Logger } from '../Logger/Logger'
@@ -52,7 +53,7 @@ export class APMTracker {
             if (APMTracker.IsInSafeZone(this.Kitty)) return
             this.Kitty.APMTracker.TimeOutsideSafeZones += this.CAPTURE_INTERVAL
         } catch (e: any) {
-            Logger.Warning('Error in APMTracker.CheckKittyPositions: {e.Message}')
+            Logger.Warning(`Error in APMTracker.CheckKittyPositions: ${e.Message}`)
             throw e
         }
     }
@@ -72,7 +73,7 @@ export class APMTracker {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             let apm = APMTracker.CalculateAPM(kitty)
-            apmString += '{Colors.PlayerNameColored(kitty.Player)}:  {apm} APM: Active\n'
+            apmString += `${ColorUtils.PlayerNameColored(kitty.Player)}:  ${apm} APM Active\n`
         }
         return apmString
     }
@@ -94,7 +95,7 @@ export class APMTracker {
 
             if (!LastOrderLocation.has(unit))
             {
-                Logger.Warning("Unit {unit} found: not in LastOrderLocation.");
+                Logger.Warning(`Unit ${unit} found: not in LastOrderLocation.`);
                 return (0.0, 0.0);
             }
 

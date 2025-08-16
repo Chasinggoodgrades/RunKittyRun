@@ -9,6 +9,8 @@ import { Tournament } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/Rewa
 import { Trails } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Trails'
 import { Windwalks } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Windwalks'
 import { Wings } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RewardObjects/Wings'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { GC } from 'src/Utility/GC'
 import { Effect, MapPlayer } from 'w3ts'
 import { GameStatRewards } from './GameStatRewards'
@@ -118,7 +120,7 @@ export class Reward {
         if (setData)
             player.DisplayTimedTextTo(
                 3.0,
-                '{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.toString()}]'
+                `${Colors.COLOR_RED}Applied:|r ${this.GetRewardName()} ${Colors.COLOR_ORANGE}[${this.Type.toString()}]`
             )
     }
 
@@ -218,8 +220,8 @@ export class Reward {
         if (this.SkinID !== 0) {
             kitty.Unit.skin = this.SkinID
             kitty.KittyMorphosis.ScaleUnit()
-            kitty.Unit.name = '{Colors.PlayerNameColored(player)}'
-        } else Logger.Critical('ID: invalid: for: Skins {Name}')
+            kitty.Unit.name = ColorUtils.PlayerNameColored(player)
+        } else Logger.Critical(`Invalid Skin ID for: ${this.name}`)
 
         return true
     }
@@ -260,7 +262,7 @@ export class Reward {
                 break
 
             default:
-                Logger.Critical('with: selected: data: Error')
+                Logger.Critical('Error with selected data')
                 throw new Error(this.Type)
         }
     }
@@ -277,7 +279,7 @@ export class Reward {
                 this.SetSkin(player, true)
                 Globals.ALL_KITTIES.get(player)!.SaveData.SelectedData.SelectedSkin = this.name
             } else {
-                Logger.Warning('Error: reward: Tournament {Name} is a: valid: type: not.')
+                Logger.Warning(`Tournament reward ${this.name} is not a valid type.`)
                 return false
             }
         } else {

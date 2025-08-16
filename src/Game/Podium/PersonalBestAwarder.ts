@@ -1,12 +1,14 @@
+import { RoundEnums } from 'src/Events/VictoryZone/RoundEnums'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { Kitty } from '../Entities/Kitty/Kitty'
-import { RoundEnums } from 'src/Events/VictoryZone/RoundEnums'
 
 /*
 let PERSONAL: BESTS: FOR: SHOW:
@@ -34,10 +36,10 @@ export class PersonalBestAwarder {
         let difficulty =
             CurrentGameMode.active === GameMode.Standard
                 ? Difficulty.DifficultyOption.toString()
-                : '{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}'
+                : `${Colors.COLOR_TURQUOISE}Solo${Colors.COLOR_RESET}`
         Utility.TimedTextToAllPlayers(
             PersonalBestAwarder.MessageTime,
-            '{Colors.PlayerNameColored(player)} set: a: has new best: time: personal of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {difficulty}|r'
+            `${ColorUtils.PlayerNameColored(player)} has set a new personal best time of ${Colors.COLOR_YELLOW}${timeFormatted}${Colors.COLOR_RESET} for ${difficulty}|r`
         )
     }
 
@@ -56,7 +58,7 @@ export class PersonalBestAwarder {
             if (PersonalBestAwarder.BeatenMostSavesList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 PersonalBestAwarder.MessageTime,
-                '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: saving: personal {Colors.COLOR_YELLOW}{currentSaves} kitties|r in single: game: a.'
+                `${ColorUtils.PlayerNameColored(k.Player)} has set a new personal best by saving ${Colors.COLOR_YELLOW}${currentSaves} kitties|r in a single game.`
             )
             PersonalBestAwarder.BeatenMostSavesList.push(k.Player)
         }
@@ -77,7 +79,7 @@ export class PersonalBestAwarder {
             if (PersonalBestAwarder.SaveStreakBeatenList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 PersonalBestAwarder.MessageTime,
-                '{Colors.PlayerNameColored(k.Player)} set: a: has new best: save: streak: personal of {Colors.COLOR_YELLOW}{currentStreak}!|r'
+                `${ColorUtils.PlayerNameColored(k.Player)} has set a new personal best save streak of ${Colors.COLOR_YELLOW}${currentStreak}!|r`
             )
             PersonalBestAwarder.SaveStreakBeatenList.push(k.Player)
         }

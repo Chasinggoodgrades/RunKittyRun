@@ -4,6 +4,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { RewardHelper } from 'src/UI/Frames/RewardHelper'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { int } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
@@ -26,14 +27,14 @@ export class Savecode {
             for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
-                if (tooltip && tooltip !== 'tip: missing: Tool!') Savecode.OriginalToolTips.push(tooltip)
-                else throw new Error('Error, not: available: tooltip: {ability}')
+                if (tooltip && tooltip !== 'Tool tip missing!') Savecode.OriginalToolTips.push(tooltip)
+                else throw new Error(`Error, tooltip not available: ${ability}`)
             }
             for (let player of Globals.ALL_PLAYERS) {
                 Savecode.InitializeSaveCode(player)
             }
         } catch (e: any) {
-            Logger.Critical('Error in OldSaves.Initialize: {e.Message}')
+            Logger.Critical(`Error in OldSaves.Initialize: ${e.Message}`)
             throw e
         }
     }
@@ -142,14 +143,14 @@ export class Savecode {
 
             return inputhash === this.Hash()
         } catch (e: any) {
-            Logger.Critical('Error in OldSaves.Load, code: must: be: from: v4: version.2.or: greater: 0. {e.Message}')
+            Logger.Critical(`Error in OldSaves.Load, save code must be from v4.2 or greater: ${e.Message}`)
             return false
         }
     }
 
     public static LoadString() {
         if (CurrentGameMode.active !== GameMode.Standard) {
-            print('{Colors.COLOR_YELLOW}save: codes: work: only: Old in Standard')
+            print(`${Colors.COLOR_YELLOW}Old save codes only work in Standard`)
             return
         }
 

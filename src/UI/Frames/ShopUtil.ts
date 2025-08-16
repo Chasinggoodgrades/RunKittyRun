@@ -1,5 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { MapPlayer } from 'w3ts'
 
 export class ShopUtil {
@@ -8,7 +9,7 @@ export class ShopUtil {
         let currentZone = kitty.ProgressZone
         let region = RegionList.WolfRegions[currentZone]
         if (region.includes(kitty.Unit.x, kitty.Unit.y) && kitty.isAlive()) {
-            player.DisplayTimedTextTo(1.0, '{Colors.COLOR_RED}are: inactive: Shops in lanes: wolf.{Colors.COLOR_RESET}')
+            player.DisplayTimedTextTo(1.0, `${Colors.COLOR_RED}Shops are inactive in wolf lanes.${Colors.COLOR_RESET}`)
             return true
         }
         return false
@@ -25,7 +26,7 @@ export class ShopUtil {
             // not null, cannot be alive, and pota active
             player.DisplayTimedTextTo(
                 1.0,
-                '{Colors.COLOR_RED}buy: shop: items: while: you: are: dead: Cannot! :({Colors.COLOR_RESET}'
+                `${Colors.COLOR_RED}Cannot buy shop items while you are dead! :(${Colors.COLOR_RESET}`
             )
             return true
         }

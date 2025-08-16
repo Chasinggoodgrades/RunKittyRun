@@ -12,8 +12,8 @@
 //    private static number UnitScale = 0.60 - (0.60 * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0);
 
 //    public AmuletOfEvasiveness() // TODO; CALL super(
-//        "{Colors.COLOR_LAVENDER}Amulet of Evasiveness|r",
-//        "Makes you smaller and reduces collision range by {Colors.COLOR_ORANGE}{(AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 100)}%|r{Colors.COLOR_LIGHTBLUE} (Passive)|r",
+//        `${Colors.COLOR_LAVENDER}Amulet of Evasiveness|r`,
+//        `Makes you smaller and reduces collision range by ${Colors.COLOR_ORANGE}${(AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 100)}%|r${Colors.COLOR_LIGHTBLUE} (Passive)|r`,
 //        0,
 //        RelicItemID,
 //        RelicCost,
@@ -21,7 +21,7 @@
 //        )
 //    {
 //        Upgrades.push(new RelicUpgrade(0, "Collision reduced by 1% per upgrade level.", 15, 800));
-//        Upgrades.push(new RelicUpgrade(1, "Windwalk reduces your collision range by an additional 2% for {WINDWALK_COLLISION_DURATION} seconds.", 20, 1000));
+//        Upgrades.push(new RelicUpgrade(1, `Windwalk reduces your collision range by an additional 2% for ${WINDWALK_COLLISION_DURATION} seconds.`, 20, 1000));
 //    }
 
 //    public override ApplyEffect(unit Unit)

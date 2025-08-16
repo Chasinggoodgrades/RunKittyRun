@@ -135,7 +135,7 @@ export class ColorUtils {
         if (RGB.length > 2) b = S2I(RGB[2])
 
         kitty.Unit.setVertexColor(r, g, b, 255)
-        Globals.ALL_KITTIES.get(p)!.SaveData.PlayerColorData.VortexColor = '{r},{g},{b}'
+        Globals.ALL_KITTIES.get(p)!.SaveData.PlayerColorData.VortexColor = `${r},${g},${b}`
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ export class ColorUtils {
         kitty.Unit.setVertexColor(r, g, b, 255)
         p.DisplayTimedTextTo(
             5.0,
-            '{COLOR_RED}Red: {COLOR_RESET}{r}, {COLOR_GREEN}Green: {COLOR_RESET}{g}, {COLOR_BLUE}Blue: {COLOR_RESET}{b}'
+            `${Colors.COLOR_RED}Red: ${Colors.COLOR_RESET}${r}, ${Colors.COLOR_GREEN}Green: ${Colors.COLOR_RESET}${g}, ${Colors.COLOR_BLUE}Blue: ${Colors.COLOR_RESET}${b}`
         )
     }
 
@@ -168,7 +168,7 @@ export class ColorUtils {
     public static HighlightString(text: string) {
         return text !== null && text.length > 0
             ? Colors.COLOR_YELLOW + text + Colors.COLOR_RESET
-            : '{COLOR_RED}ERROR{COLOR_RESET}'
+            : `${Colors.COLOR_RED}ERROR${Colors.COLOR_RESET}`
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ export class ColorUtils {
 
             kitty.SaveData.PlayerColorData.PlayedColors = ColorUtils.sb
         } catch (e: any) {
-            Logger.Warning('Error in PopulateColorsData: {e.Message}')
+            Logger.Warning(`Error in PopulateColorsData: ${e.message}`)
         }
     }
 
@@ -258,7 +258,7 @@ export class ColorUtils {
 
             kitty.SaveData.PlayerColorData.PlayedColors = ColorUtils.sb
         } catch (e: any) {
-            Logger.Warning('Error in UpdateColors: {e.Message}')
+            Logger.Warning(`Error in UpdateColors: ${e.message}`)
         }
     }
 

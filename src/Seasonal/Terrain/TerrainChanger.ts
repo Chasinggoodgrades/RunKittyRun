@@ -1,9 +1,8 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
-import { Seasons, HolidaySeasons } from '../Seasons'
+import { HolidaySeasons, Seasons } from '../Seasons'
 
 export class TerrainChanger {
     public static Terrains: number[] = []
@@ -20,7 +19,7 @@ export class TerrainChanger {
             this.ChristmasTerrain()
             this.SetTerrain()
         } catch (e: any) {
-            Logger.Critical('Error in TerrainChanger.Initialize {e.Message}')
+            Logger.Critical(`Error in TerrainChanger.Initialize: ${e.Message}`)
             throw e
         }
     }

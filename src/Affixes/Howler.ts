@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { NamedWolves } from 'src/Game/Entities/NamedWolves'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
@@ -22,7 +23,7 @@ export class Howler extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        this.name = '{Colors.COLOR_BLUE}Howler|r'
+        this.name = `${Colors.COLOR_BLUE}Howler|r`
     }
 
     public override Apply() {
@@ -73,7 +74,7 @@ export class Howler extends Affix {
             }
             this.NearbyWolves.clear()
         } catch (e: any) {
-            Logger.Warning('Error in Howl: {e.Message}')
+            Logger.Warning(`Error in Howl: ${e.Message}`)
             throw e
         }
     }

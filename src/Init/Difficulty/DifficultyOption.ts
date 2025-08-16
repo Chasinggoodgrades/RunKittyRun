@@ -24,7 +24,7 @@ export class DifficultyOption {
     }
 
     public ToString(): string {
-        return '{Color}{Name}|r'
+        return `${this.Color}${this.name}|r`
     }
 
     public static Initialize() {

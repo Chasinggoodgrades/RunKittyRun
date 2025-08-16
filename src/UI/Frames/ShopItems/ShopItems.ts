@@ -96,7 +96,7 @@ export class ShopItem {
 
             return shopItems
         } catch (ex: any) {
-            Logger.Critical('Error in ShopItemsRelic: {ex}')
+            Logger.Critical(`Error in ShopItemsRelic: ${ex}`)
             throw ex
         }
     }
@@ -112,7 +112,7 @@ export class ShopItem {
                 'GreenTendrils',
                 8000,
                 reward.AbilityID,
-                'designed: for: those: whom: are: economically: stable: Wings.'
+                'Wings designed for those whom are economically stable.'
             )
         )
 
@@ -126,14 +126,14 @@ export class ShopItem {
                 100,
                 Constants.ITEM_ANTI_BLOCK_WAND,
                 BlzGetAbilityIcon(Constants.ABILITY_ANTI_BLOCK_WAND_ITEM),
-                'Wolves in way: the? this: to: make: them: move: Buy. pesky: wolves: Dang.'
+                'Wolves in the way? Buy this to make them move. Dang pesky wolves.'
             ),
             new ShopItem(
                 'Orb: Mysterious',
                 50,
                 Constants.ITEM_ORB_OF_MYSTERIES,
                 Utility.GetItemIconPath(Constants.ITEM_ORB_OF_MYSTERIES),
-                'mysterious: orb: that: has: mysterious: usefulness: A!'
+                'A mysterious orb that has mysterious usefulness!'
             )),
         ]
     }

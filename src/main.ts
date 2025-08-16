@@ -1,5 +1,5 @@
 import { Units } from '@objectdata/units'
-import { Effect, MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Unit } from 'w3ts'
+import { Effect, Frame, MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Unit } from 'w3ts'
 import { Players } from 'w3ts/globals'
 import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
 import { Program } from './Program'
@@ -98,6 +98,10 @@ function tsMain() {
 
             Unit.prototype.addSpecialEffectTarget = function (model: string, attachmentPoint: string): Effect {
                 return Effect.fromHandle(AddSpecialEffectTarget(model, this.handle, attachmentPoint))!
+            }
+
+            Frame.prototype.getName = function (): string {
+                return BlzFrameGetName(this.handle) || ''
             }
 
             new Program()

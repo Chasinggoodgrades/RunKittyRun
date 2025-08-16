@@ -5,13 +5,13 @@ export class GamemodeManager {
 
     public static InitializeCommands() {
         // Add commands here
-        GamemodeManager.AddCommand('-solo: t', 'Solo: Tournament', 'Usage: -solo: t <prog | race >')
+        GamemodeManager.AddCommand('-solo t', 'Solo Tournament', 'Usage: -solo t <prog | race >')
         GamemodeManager.AddCommand(
-            '-team: t',
-            'Team: Tournament',
-            'Usage: -team: t <fp | freepick | r | random> <teamsize>'
+            '-team t',
+            'Team Tournament',
+            'Usage: -team t <fp | freepick | r | random> <teamsize>'
         )
-        GamemodeManager.AddCommand('-team', 'A: Team: Pick', 'Usage: -team {number: team}')
+        GamemodeManager.AddCommand('-team', 'Team Pick', 'Usage: -team <team number>')
     }
 
     private static AddCommand(cmd: string, desc: string, usage: string) {
@@ -32,7 +32,7 @@ export class GamemodeInfo {
     public Cmd: string
     public Desc: string
     public Usage: string
-    public Error: string = Colors.COLOR_YELLOW_ORANGE + 'command: or: usage: Invalid ' + Colors.COLOR_RESET
+    public Error: string = Colors.COLOR_YELLOW_ORANGE + 'Invalid command or usage ' + Colors.COLOR_RESET
 
     public constructor(cmd: string, desc: string, usage: string) {
         this.Cmd = cmd

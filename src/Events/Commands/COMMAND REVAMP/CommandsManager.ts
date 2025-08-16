@@ -108,7 +108,7 @@ export class CommandsManager {
         } else {
             getTriggerPlayer().DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_YELLOW}player: ID: Invalid:|r {arg}.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}Invalid player ID:|r ${arg}.${Colors.COLOR_RESET}`
             )
         }
         return kitties

@@ -10,35 +10,35 @@ import { Kitty } from '../Entities/Kitty/Kitty'
 import { NitroPacer } from '../Entities/NitroPacer'
 import { ProgressPointHelper } from './ProgressPointHelper'
 
-export class Progress {
-    public static DistancesFromStart: Map<number, number> = new Map()
-    private static TeamProgTimer = Timer.create()
+export const Progress = {
+    DistancesFromStart: new Map<number, number>(),
+    TeamProgTimer: Timer.create(),
 
-    public static Initialize() {
+    Initialize() {
         this.CalculateTotalDistance()
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         this.TeamProgTimer.start(0.2, true, this.TeamProgressTracker)
-    }
+    },
 
-    public static CalculateProgress(kitty: Kitty) {
+    CalculateProgress(kitty: Kitty) {
         let round = Globals.ROUND
         kitty.TimeProg.SetRoundProgress(round, this.CalculatePlayerProgress(kitty))
-    }
+    },
 
-    private static TeamProgressTracker() {
+    TeamProgressTracker() {
         if (!Globals.GAME_ACTIVE) return
         try {
             for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
                 let team = Globals.ALL_TEAMS_LIST[i]
-                team.UpdateRoundProgress(Globals.ROUND, this.CalculateTeamProgress(team))
+                team.UpdateRoundProgress(Globals.ROUND, Progress.CalculateTeamProgress(team))
             }
             // TeamsMultiboard.UpdateTeamStatsMB()
         } catch (e: any) {
-            Logger.Warning('Error in TeamProgressTracker. {e.Message}')
+            Logger.Warning(`Error in TeamProgressTracker. ${e.Message}`)
         }
-    }
+    },
 
-    private static CalculateTeamProgress(Team: Team) {
+    CalculateTeamProgress(Team: Team) {
         let totalProgress: number = 0.0
 
         if (Team.Teammembers.length === 0) return '0.00'
@@ -49,9 +49,9 @@ export class Progress {
         }
 
         return (totalProgress / Team.Teammembers.length).toFixed(2)
-    }
+    },
 
-    private static CalculatePlayerProgress(kitty: Kitty) {
+    CalculatePlayerProgress(kitty: Kitty) {
         try {
             let currentSafezone = kitty.ProgressZone
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(kitty.Unit.x, kitty.Unit.y))
@@ -73,12 +73,12 @@ export class Progress {
 
             return progress
         } catch (e: any) {
-            Logger.Warning('Error in CalculatePlayerProgress. {e.Message}')
+            Logger.Warning(`Error in CalculatePlayerProgress. ${e.Message}`)
             return 0.0
         }
-    }
+    },
 
-    public static CalculateNitroPacerProgress(): number {
+    CalculateNitroPacerProgress(): number {
         let nitroKitty = NitroPacer.Unit
         let currentSafezone = NitroPacer.GetCurrentCheckpoint()
         if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.x, nitroKitty.y)) return 0.0 // if at start, 0 progress
@@ -93,12 +93,12 @@ export class Progress {
         let totalProgress = Progress.DistancesFromStart.get(currentSafezone)! + currentProgress
 
         return totalProgress
-    }
+    },
 
-    private static CalculateTotalDistance() {
+    CalculateTotalDistance() {
         try {
             if (RegionList.PathingPoints === null || RegionList.PathingPoints.length === 0) {
-                Logger.Warning('list: PathingPoints is or: empty: null.')
+                Logger.Warning('PathingPoints list is null or empty.')
                 return
             }
 
@@ -119,12 +119,12 @@ export class Progress {
                 count++
             }
         } catch (e: any) {
-            Logger.Warning('Error in CalculateTotalDistance. {e.Message}')
+            Logger.Warning(`Error in CalculateTotalDistance. ${e.Message}`)
             throw e
         }
-    }
+    },
 
-    private static DistanceBetweenPoints(x1: number, y1: number, x2: number, y2: number) {
+    DistanceBetweenPoints(x1: number, y1: number, x2: number, y2: number) {
         return Math.abs(x1 - x2) > Math.abs(y1 - y2) ? Math.abs(x1 - x2) : Math.abs(y1 - y2)
-    }
+    },
 }

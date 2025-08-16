@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { KibbleEvent } from 'src/Rewards/EasterEggs/KibbleEvent'
+import { HolidaySeasons, Seasons } from 'src/Seasonal/Seasons'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
@@ -13,10 +14,8 @@ import { PositionWithPolarOffsetRadX, PositionWithPolarOffsetRadY, Utility } fro
 import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Effect, Item, MapPlayer, Trigger } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
-import { PersonalBestAwarder } from '../Podium/PersonalBestAwarder'
 import { ItemSpatialGrid } from './ItemSpatialGrid'
 import { ItemSpawnerTrackKibbles } from './ItemSpawnerTrackKibbles'
-import { HolidaySeasons, Seasons } from 'src/Seasonal/Seasons'
 
 export class Kibble extends IDisposable {
     public static PickupTrigger: Trigger
@@ -113,7 +112,7 @@ export class Kibble extends IDisposable {
                 kib.dispose()
             }
         } catch (e: any) {
-            Logger.Warning('Kibble.Error: KibblePickup: {e.Message}')
+            Logger.Warning(`Kibble.Error KibblePickup: ${e.Message}`)
             throw e
         }
     }
@@ -126,7 +125,7 @@ export class Kibble extends IDisposable {
             return
         } else goldAmount = GetRandomInt(1, Kibble.GoldMax)
         kitty.Player.addGold(goldAmount)
-        Utility.CreateSimpleTextTag('+{goldAmount} Gold', 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)
+        Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)
     }
 
     private static KibbleXP(kitty: Kitty) {
@@ -199,7 +198,7 @@ export class Kibble extends IDisposable {
             if (this.KibbleCollectionBeatenList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 3.0,
-                '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: collecting: personal {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r'
+                `${ColorUtils.PlayerNameColored(k.Player)} has set a new personal best by collecting ${Colors.COLOR_YELLOW}${currentKibble} kibbles!|r`
             )
             this.KibbleCollectionBeatenList.push(k.Player)
         }

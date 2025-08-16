@@ -1,6 +1,7 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { PodiumManager } from 'src/Game/Podium/PodiumManager'
+import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -9,10 +10,9 @@ import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
-import { DiscordFrame } from 'src/UI/Frames/DiscordFrame'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { GameoverUtil } from './GameoverUtil'
-import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 
 export class Gameover {
     public static NoEnd: boolean = false
@@ -30,7 +30,7 @@ export class Gameover {
         GameoverUtil.SetFriendData()
         Gameover.StandardWinChallenges()
         Gameover.SaveGame()
-        print('{Colors.COLOR_GREEN}a: while: for: the: end: game: awards: Stay!!{Colors.COLOR_RESET}')
+        print(`${Colors.COLOR_GREEN}Stay a while for the end game awards!!${Colors.COLOR_RESET}`)
         Utility.SimpleTimer(5.0, PodiumManager.BeginPodiumEvents)
         return true
     }
@@ -78,11 +78,11 @@ export class Gameover {
     private static SendWinMessage() {
         if (CurrentGameMode.active === GameMode.Standard)
             print(
-                '{Colors.COLOR_GREEN}on: winning: the: game: on: Congratulations {Difficulty.DifficultyOption.toString()}!{Colors.COLOR_RESET}'
+                `${Colors.COLOR_GREEN}Congratulations on winning the game on ${Difficulty.DifficultyOption.ToString()}!${Colors.COLOR_RESET}`
             )
         else
             print(
-                '{Colors.COLOR_GREEN}game: The is over. you: for: playing: RKR: on: Thank {CurrentGameMode.active}!{Colors.COLOR_RESET}'
+                `${Colors.COLOR_GREEN}The game is over. Thank you for playing RKR on ${CurrentGameMode.active}!${Colors.COLOR_RESET}`
             )
     }
 

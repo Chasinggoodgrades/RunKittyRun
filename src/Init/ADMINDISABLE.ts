@@ -1,5 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { base64Decode, MapPlayer } from 'w3ts'
 
 export class ADMINDISABLE {
@@ -13,7 +14,7 @@ export class ADMINDISABLE {
         for (let player of Globals.ALL_PLAYERS) {
             player.DisplayTimedTextTo(
                 60.0,
-                '{Colors.COLOR_RED}map: This is in testing: phase: the. only: Admins... out: soon: Coming.'
+                `${Colors.COLOR_RED}This map is in the testing phase. Only Admins... Coming out soon.${Colors.COLOR_RESET}`
             )
             CustomDefeatBJ(player.handle, 'Admin only game!')
         }

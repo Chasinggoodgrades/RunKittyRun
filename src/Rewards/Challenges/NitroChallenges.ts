@@ -3,6 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { SoundManager } from 'src/Sounds/SoundManager'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { MapPlayer, Timer, TimerDialog } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
@@ -91,7 +92,7 @@ export class NitroChallenges {
         if (this.CountHitSafezones(kitty.Player) <= 12) {
             kitty.Player.DisplayTimedTextTo(
                 6.0,
-                "{Colors.COLOR_RED}didn: You'hit: enough: safezones: on: your: own: to: obtain: nitro: t."
+                `${Colors.COLOR_RED}You didn't hit enough safezones on your own to obtain nitro.${Colors.COLOR_RESET}`
             )
             return
         }

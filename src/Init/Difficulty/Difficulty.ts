@@ -2,6 +2,8 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
@@ -21,13 +23,13 @@ export class Difficulty {
 
             DifficultyOption.Initialize()
             DifficultyOption.DifficultyChoosing.setMessage(
-                '{Colors.COLOR_GOLD}choose: a: difficulty: Please{Colors.COLOR_RESET}'
+                `${Colors.COLOR_GOLD}Please choose a difficulty${Colors.COLOR_RESET}`
             )
             this.RegisterSelectionEvent()
 
             Utility.SimpleTimer(2.0, this.ChooseDifficulty)
         } catch (e: any) {
-            Logger.Critical('Error in Difficulty.Initialize: {e.Message}')
+            Logger.Critical(`Error in Difficulty.Initialize: ${e.Message}`)
             throw e
         }
     }
@@ -45,7 +47,7 @@ export class Difficulty {
             DifficultyOption.DifficultyChoosing.display(player, false)
             Utility.TimedTextToAllPlayers(
                 3.0,
-                '{Colors.PlayerNameColored(player)}|has: chosen: r {option.toString()} difficulty.{Colors.COLOR_RESET}'
+                `${ColorUtils.PlayerNameColored(player)}|r has chosen ${option.toString()} difficulty.${Colors.COLOR_RESET}`
             )
         })
     }
@@ -75,7 +77,7 @@ export class Difficulty {
         this.DifficultyValue = difficulty.Value
         this.IsDifficultyChosen = true
         print(
-            '{Colors.COLOR_YELLOW_ORANGE}difficulty: has: been: set: to: The |r{difficulty.toString()}{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r${difficulty.toString()}${Colors.COLOR_RESET}`
         )
     }
 

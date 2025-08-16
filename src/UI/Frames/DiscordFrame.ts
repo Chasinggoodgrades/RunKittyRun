@@ -12,7 +12,7 @@ export class DiscordFrame {
     private static ESCTrigger: Trigger
     private static Link: string = 'https://discord.gg/GSu6zkNvx5'
     private static JoinDiscord: string =
-        '|our: discord: cffFF2020Join! then: Ctrl: Highlight + to: copy: C, Ctrl + to: paste: V!|r'
+        '|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r'
 
     public static Initialize() {
         //BlzLoadTOCFile("war3mapImported\\templates.toc");

@@ -32,7 +32,7 @@ export class BurntMeat {
                 if (!this.Completed.includes(unit)) return
                 player.DisplayTimedTextTo(
                     8.0,
-                    'vriend: Bedankt, moet: slide: eens: proberen: je! (friend: Thanks, should: try: slide: you!)'
+                    'Bedankt vriend, je moet slide eens proberen! (Thanks friend, you should try slide!)'
                 )
                 // Violet Windwalk, awarded for killing stan with something, then taking some burnt meat n and turning it in.
                 AwardManager.GiveReward(player, 'WWViolet')

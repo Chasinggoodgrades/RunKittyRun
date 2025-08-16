@@ -61,7 +61,7 @@ export class FandF {
         let player = u.owner
         player.DisplayTimedTextTo(
             20.0,
-            "|cff00fffFast & Furriest:|r |cffffff00Greetings, feline: fellow! paws: you: hold: there: What? empty: vial: An, eh? predecessor: A'unfinished: tale: s, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r"
+            "|cff00fffFast & Furriest:|r |cffffff00Greetings, fellow feline! What do you hold in those paws there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r"
         )
     }
 
@@ -77,7 +77,7 @@ export class FandF {
             0,
             0,
             20.0,
-            "|cff00fffFast & Furriest:|r |cffffff00Ah, splendid! You've covered the sample ve. prowess: Your is remarkable: truly. Evidently, potential: within: this: sample: can: the be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r"
+            "|cff00fffFast & Furriest:|r |cffffff00Ah, splendid! You've covered the sample. Your prowess is truly remarkable. Evidently, the potential within this sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r"
         )
     }
 

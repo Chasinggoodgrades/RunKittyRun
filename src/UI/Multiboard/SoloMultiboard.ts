@@ -8,7 +8,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Multiboard, Trigger } from 'w3ts'
-import { sumNumbers } from '../../Utility/Utility'
+import { sumNumbers, Utility } from '../../Utility/Utility'
 
 export class SoloMultiboard {
     private static OverallBoard: Multiboard
@@ -31,7 +31,7 @@ export class SoloMultiboard {
             SoloMultiboard.MakeMultiboard()
             SoloMultiboard.RegisterTriggers()
         } catch (ex: any) {
-            Logger.Critical('Error in SoloMultiboard: {ex.Message}')
+            Logger.Critical(`Error in SoloMultiboard: ${ex.Message}`)
             throw ex
         }
     }
@@ -53,15 +53,15 @@ export class SoloMultiboard {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[1]) return // Race mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 9
-        SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 1).setText('{color}Deaths|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 2).setText('{color}1: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 3).setText('{color}2: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 4).setText('{color}3: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 5).setText('{color}4: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 6).setText('{color}5: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 7).setText('{color}Total|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 8).setText('{color}Status|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setText(`${Colors.COLOR_YELLOW}Player|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 1).setText(`${Colors.COLOR_YELLOW}Deaths|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 2).setText(`${Colors.COLOR_YELLOW}1: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 3).setText(`${Colors.COLOR_YELLOW}2: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 4).setText(`${Colors.COLOR_YELLOW}3: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 5).setText(`${Colors.COLOR_YELLOW}4: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 6).setText(`${Colors.COLOR_YELLOW}5: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 7).setText(`${Colors.COLOR_YELLOW}Total|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 8).setText(`${Colors.COLOR_YELLOW}Status|r`)
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.setItemsWidth(0.05)
@@ -74,13 +74,13 @@ export class SoloMultiboard {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 7
-        SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 1).setText('{color}1: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 2).setText('{color}2: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 3).setText('{color}3: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 4).setText('{color}4: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 5).setText('{color}5: Round|r')
-        SoloMultiboard.OverallBoard.GetItem(0, 6).setText('{color}Total|r')
+        SoloMultiboard.OverallBoard.GetItem(0, 0).setText(`${Colors.COLOR_YELLOW}Player|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 1).setText(`${Colors.COLOR_YELLOW}1: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 2).setText(`${Colors.COLOR_YELLOW}2: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 3).setText(`${Colors.COLOR_YELLOW}3: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 4).setText(`${Colors.COLOR_YELLOW}4: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 5).setText(`${Colors.COLOR_YELLOW}5: Round|r`)
+        SoloMultiboard.OverallBoard.GetItem(0, 6).setText(`${Colors.COLOR_YELLOW}Total|r`)
 
         SoloMultiboard.OverallBoard.SetChildVisibility(true, false)
         SoloMultiboard.OverallBoard.setItemsWidth(0.05)
@@ -92,13 +92,13 @@ export class SoloMultiboard {
     private static BestTimesMultiboard() {
         SoloMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.BestTimes.columns = 7
-        SoloMultiboard.BestTimes.GetItem(0, 0).setText('{color}Player|r')
-        SoloMultiboard.BestTimes.GetItem(0, 1).setText('{color}1: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 2).setText('{color}2: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 3).setText('{color}3: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 4).setText('{color}4: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 5).setText('{color}5: Round|r')
-        SoloMultiboard.BestTimes.GetItem(0, 6).setText('{color}Time: Total|r')
+        SoloMultiboard.BestTimes.GetItem(0, 0).setText(`${Colors.COLOR_YELLOW}Player|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 1).setText(`${Colors.COLOR_YELLOW}1: Round|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 2).setText(`${Colors.COLOR_YELLOW}2: Round|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 3).setText(`${Colors.COLOR_YELLOW}3: Round|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 4).setText(`${Colors.COLOR_YELLOW}4: Round|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 5).setText(`${Colors.COLOR_YELLOW}5: Round|r`)
+        SoloMultiboard.BestTimes.GetItem(0, 6).setText(`${Colors.COLOR_YELLOW}Time: Total|r`)
         SoloMultiboard.BestTimes.SetChildVisibility(true, false)
         SoloMultiboard.BestTimes.setItemsWidth(0.05)
         SoloMultiboard.BestTimes.GetItem(0, 6).setWidth(0.06)
@@ -108,8 +108,7 @@ export class SoloMultiboard {
     }
 
     private static OverallStats() {
-        SoloMultiboard.OverallBoard.title =
-            'Game: Current {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+        SoloMultiboard.OverallBoard.title = `Current Game ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
@@ -162,7 +161,9 @@ export class SoloMultiboard {
                       ]
 
             for (let i: number = 0; i < stats.length; i++) {
-                SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText('{playerColor}{stats[i]}{Colors.COLOR_RESET}')
+                SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText(
+                    `${playerColor}${stats[i]}${Colors.COLOR_RESET}`
+                )
                 if (i === 0) SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setWidth(0.07)
             }
 
@@ -174,8 +175,7 @@ export class SoloMultiboard {
     }
 
     private static BestTimeStats() {
-        SoloMultiboard.BestTimes.title =
-            'Times: Best {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+        SoloMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         let rowIndex = 1
 
         for (let player of Globals.ALL_PLAYERS) {
@@ -188,12 +188,14 @@ export class SoloMultiboard {
             for (let i: number = 0; i < roundTimes.length; i++) {
                 if (roundTimes[i] !== 0)
                     SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(
-                        '{playerColor}{Utility.ConvertFloatToTime(roundTimes[i])}{Colors.COLOR_RESET}'
+                        `${playerColor}${Utility.ConvertFloatToTime(roundTimes[i])}${Colors.COLOR_RESET}`
                     )
-                else SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText('{playerColor}---{Colors.COLOR_RESET}')
+                else SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(`${playerColor}---${Colors.COLOR_RESET}`)
             }
             let sum = sumNumbers(roundTimes)
-            SoloMultiboard.BestTimes.GetItem(rowIndex, 6).setText('{playerColor}{Utility.ConvertFloatToTime(sum)}')
+            SoloMultiboard.BestTimes.GetItem(rowIndex, 6).setText(
+                `${playerColor}${Utility.ConvertFloatToTime(sum)}${Colors.COLOR_RESET}`
+            )
             rowIndex++
             roundTimes.length = 0
         }
@@ -226,10 +228,10 @@ export class SoloMultiboard {
             let rowIndex = (value = SoloMultiboard.MBSlot.get(player) ? value : 0)
             if (!rowIndex || rowIndex === 0) return
             SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
-                '{ColorUtils.GetStringColorOfPlayer(player.id + 1)}{Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}'
+                `${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}`
             )
         } catch (ex: any) {
-            Logger.Critical('Error in SoloMultiboard.UpdateDeathCount: {ex.Message}')
+            Logger.Critical(`Error in SoloMultiboard.UpdateDeathCount: ${ex.Message}`)
             throw ex
         }
     }
@@ -248,7 +250,7 @@ export class SoloMultiboard {
                 break
 
             default:
-                print('{Colors.COLOR_DARK_RED}multiboard: getting: gamestat: data: Error.')
+                print(`${Colors.COLOR_DARK_RED}Error getting gamestat data for multiboard.`)
                 return []
         }
         return roundTimes

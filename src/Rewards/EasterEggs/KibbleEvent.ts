@@ -1,5 +1,6 @@
 import { PROD } from 'src/env'
 import { Kibble } from 'src/Game/Items/Kibble'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -33,7 +34,7 @@ export class KibbleEvent {
         this.EventTimer.start(this.EventLength, false, ErrorHandler.Wrap(this.EndKibbleEvent))
         Utility.TimedTextToAllPlayers(
             10.0,
-            '{Colors.COLOR_YELLOW}Kibble: event: has: started: A! Collect {TotalEventKibbles} to: earn: an: award: kibbles!{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}A Kibble event has started! Collect ${this.TotalEventKibbles} kibbles to earn an award!${Colors.COLOR_RESET}`
         )
 
         // Spawn event kibbles
@@ -61,13 +62,13 @@ export class KibbleEvent {
 
         Utility.TimedTextToAllPlayers(
             10.0,
-            '{Colors.COLOR_YELLOW}kibble: collecting: event: has: ended: The! {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|were: collected: r.{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}The kibble collecting event has ended! ${Colors.COLOR_TURQUOISE}${KibbleEvent.EventKibblesCollected}|r/${Colors.COLOR_LAVENDER}${KibbleEvent.TotalEventKibbles}|r were collected.${Colors.COLOR_RESET}`
         )
     }
 
     private static UpdateEventProgress() {
         this.EventTimerDialog.setTitle(
-            'Collected: Kibble: {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r'
+            `Kibble Collected: ${Colors.COLOR_TURQUOISE}${KibbleEvent.EventKibblesCollected}|r/${Colors.COLOR_LAVENDER}${KibbleEvent.TotalEventKibbles}|r`
         )
     }
 

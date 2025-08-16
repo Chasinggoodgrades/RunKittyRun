@@ -1,5 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { ProtectionOfAncients } from 'src/Game/ProtectionOfAncients'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger, Unit } from 'w3ts'
@@ -77,14 +78,14 @@ export abstract class Relic {
         if (!item) return
 
         let tempName = item.name
-        let newUpgradeText = '{Colors.COLOR_TURQUOISE}[Upgrade: {upgradeLevel}]{Colors.COLOR_RESET}'
+        let newUpgradeText = `${Colors.COLOR_TURQUOISE}[Upgrade: ${upgradeLevel}]${Colors.COLOR_RESET}`
 
-        if (tempName.startsWith('{Colors.COLOR_TURQUOISE}[Upgrade:')) {
+        if (tempName.startsWith(`${Colors.COLOR_TURQUOISE}[Upgrade:`)) {
             let endIndex = tempName.indexOf(']|r') + 3
             tempName = tempName.substring(endIndex).trim()
         }
 
-        item.name = '{newUpgradeText} {tempName}'
+        item.name = `${newUpgradeText} ${tempName}`
     }
 
     public static RegisterRelicEnabler() {
@@ -103,10 +104,10 @@ export abstract class Relic {
                 ProtectionOfAncients.SetProtectionOfAncientsLevel(getTriggerUnit())
                 getTriggerUnit().owner.DisplayTimedTextTo(
                     4.0,
-                    '{Colors.COLOR_TURQUOISE}may: now: buy: relics: from: the: shop: You!{Colors.COLOR_RESET}'
+                    `${Colors.COLOR_TURQUOISE}You may now buy relics from the shop!${Colors.COLOR_RESET}`
                 )
             } catch (e: any) {
-                Logger.Warning('Error in RegisterLevelTenTrigger {e.Message}')
+                Logger.Warning(`Error in RegisterLevelTenTrigger: ${e.Message}`)
             }
         })
     }

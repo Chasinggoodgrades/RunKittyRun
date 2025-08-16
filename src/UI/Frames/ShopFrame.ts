@@ -32,21 +32,27 @@ export class ShopFrame {
     private static buyButton: Frame
     private static sellButton: Frame
     private static upgradeTooltip: Frame
-    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private static GameUI: Frame
     private static buttonWidth: number = 0.025
     private static buttonHeight: number = 0.025
     private static panelPadding: number = 0.015
     private static frameX: number = 0.4
     private static frameY: number = 0.25
-    private static panelX: number = ShopFrame.frameX / 2 - this.panelPadding
-    private static panelY: number = ShopFrame.frameY / 3 - this.panelPadding * 2
-    private static detailsPanelX: number = ShopFrame.frameX - (this.panelX + this.panelPadding * 2)
-    private static detailsPanelY: number = ShopFrame.frameY - this.panelPadding * 2
+    private static panelX: number
+    private static panelY: number
+    private static detailsPanelX: number
+    private static detailsPanelY: number
     private static ActiveAlpha: number = 255
     private static DisabledAlpha: number = 150
     private static DisabledPath: string = 'UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp'
 
     public static Initialize() {
+        this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+        this.panelX = this.frameX / 2 - this.panelPadding
+        this.panelY = this.frameY / 3 - this.panelPadding * 2
+        this.detailsPanelX = this.frameX - (this.panelX + this.panelPadding * 2)
+        this.detailsPanelY = this.frameY - this.panelPadding * 2
+
         ShopFrame.InitializeShopFrame()
         ShopFrame.shopFrame.visible = false
     }
@@ -61,7 +67,7 @@ export class ShopFrame {
             ShopFrame.SetRewardsFrameHotkey()
             ShopFrame.shopFrame.visible = false
         } catch (ex: any) {
-            Logger.Critical('Error in ShopFrame: {ex.Message}')
+            Logger.Critical(`Error in ShopFrame: ${ex.Message}`)
             throw ex
         }
     }
@@ -94,7 +100,7 @@ export class ShopFrame {
     }
 
     private static InitializePanelTitles() {
-        ShopFrame.CreatePanelTitle(ShopFrame.relicsPanel, 'Relics (Lvl:{Relic.RequiredLevel})')
+        ShopFrame.CreatePanelTitle(ShopFrame.relicsPanel, `Relics (Lvl:${Relic.RequiredLevel})`)
         ShopFrame.CreatePanelTitle(ShopFrame.rewardsPanel, 'Rewards')
         ShopFrame.CreatePanelTitle(ShopFrame.miscPanel, 'Miscellaneous')
     }
@@ -198,7 +204,7 @@ export class ShopFrame {
             ShopFrame.AddItemsToPanel(ShopFrame.rewardsPanel, ShopFrame.GetRewardItems())
             ShopFrame.AddItemsToPanel(ShopFrame.miscPanel, ShopFrame.GetMiscItems())
         } catch (ex: any) {
-            Logger.Critical('Error in LoadItemsIntoPanels: {ex}')
+            Logger.Critical(`Error in LoadItemsIntoPanels: ${ex}`)
             throw ex
         }
     }
@@ -265,7 +271,7 @@ export class ShopFrame {
                 if (Utility.UnitHasItem(kitty.Unit, item.ItemID)) ShopFrame.sellButton.alpha = ShopFrame.ActiveAlpha
             }
         } catch (ex: any) {
-            Logger.Warning('Error in UpdateButtonStatus: {ex.Message}')
+            Logger.Warning(`Error in UpdateButtonStatus: ${ex.Message}`)
         }
     }
 
@@ -300,10 +306,9 @@ export class ShopFrame {
 
         if (!player.isLocal()) return
         FrameManager.RefreshFrame(frame)
-        ShopFrame.nameLabel.text = '{Colors.COLOR_YELLOW_ORANGE}Name:{Colors.COLOR_RESET} {shopItem.name}'
-        ShopFrame.costLabel.text = '{Colors.COLOR_YELLOW}Cost:{Colors.COLOR_RESET} {shopItem.Cost}'
-        ShopFrame.descriptionLabel.text =
-            '{Colors.COLOR_YELLOW_ORANGE}Description:{Colors.COLOR_RESET} {shopItem.Description}'
+        ShopFrame.nameLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Name:${Colors.COLOR_RESET} ${shopItem.name}`
+        ShopFrame.costLabel.text = `${Colors.COLOR_YELLOW}Cost:${Colors.COLOR_RESET} ${shopItem.Cost}`
+        ShopFrame.descriptionLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Description:${Colors.COLOR_RESET} ${shopItem.Description}`
         ShopFrame.UpdateButtonStatus(player)
         if (shopItem.Type === ShopItemType.Relic) ShopFrame.RefreshUpgradeTooltip(shopItem.Relic)
     }
@@ -321,14 +326,14 @@ export class ShopFrame {
             ShopFrame.upgradeTooltip.setPoint(FRAMEPOINT_BOTTOM, ShopFrame.upgradeButton, FRAMEPOINT_TOP, 0, 0.01)
             ShopFrame.upgradeTooltip.enabled = false
         } catch (ex: any) {
-            Logger.Warning('Error in CreateUpgradeTooltip: {ex}')
+            Logger.Warning(`Error in CreateUpgradeTooltip: ${ex}`)
         }
     }
 
     private static CreateShopitemTooltips(parent: Frame, item: ShopItem) {
         try {
             let background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
-            let tooltip = blzCreateFrameByType('TEXT', '{parent.name}Tooltip', background, '', 0)
+            let tooltip = blzCreateFrameByType('TEXT', `${parent.getName()}Tooltip`, background, '', 0)
 
             tooltip.setSize(0.1, 0)
             background.setPoint(FRAMEPOINT_BOTTOMLEFT, tooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
@@ -340,7 +345,7 @@ export class ShopFrame {
 
             tooltip.text = item.name
         } catch (ex: any) {
-            Logger.Warning('Error in CreateShopitemTooltips: {ex}')
+            Logger.Warning(`Error in CreateShopitemTooltips: ${ex}`)
         }
     }
 
@@ -366,8 +371,8 @@ export class ShopFrame {
                 colorDescription = Colors.COLOR_GREY
             }
 
-            finalString.push('{color}[Upgrade {i + 1}] {upgrade.Cost}g{Colors.COLOR_RESET}')
-            finalString.push('{colorDescription}{upgrade.Description}{Colors.COLOR_RESET}')
+            finalString.push(`${color}[Upgrade ${i + 1}] ${upgrade.Cost}g${Colors.COLOR_RESET}`)
+            finalString.push(`${colorDescription}${upgrade.Description}${Colors.COLOR_RESET}`)
             finalString.push('----------------------------')
         }
 
@@ -411,7 +416,7 @@ export class ShopFrame {
             // hide shop after purchase
             if (player.isLocal()) ShopFrame.shopFrame.visible = !ShopFrame.shopFrame.visible
         } catch (ex: any) {
-            Logger.Warning('Error in BuySelectedItem: {ex.Message}')
+            Logger.Warning(`Error in BuySelectedItem: ${ex.Message}`)
         }
     }
 
@@ -434,7 +439,7 @@ export class ShopFrame {
                     if (!kitty.isAlive() || kitty.ProtectionActive) {
                         player.DisplayTimedTextTo(
                             5.0,
-                            '{Colors.COLOR_RED}cannot: sell: a: relic: while: your: kitty: You is dead!{Colors.COLOR_RESET}'
+                            `${Colors.COLOR_RED}You cannot sell a relic while your kitty is dead!${Colors.COLOR_RESET}`
                         )
                         return
                     }
@@ -442,7 +447,7 @@ export class ShopFrame {
                     if (!ShopFrame.CanSellRelic(kitty.Unit)) {
                         player.DisplayTimedTextTo(
                             5.0,
-                            '{Colors.COLOR_RED}cannot: sell: relics: until: level: You {Relic.RelicSellLevel}.{Colors.COLOR_RESET}'
+                            `${Colors.COLOR_RED}You cannot sell relics until level ${Relic.RelicSellLevel}.${Colors.COLOR_RESET}`
                         )
                         return
                     }
@@ -463,7 +468,7 @@ export class ShopFrame {
                 player.addGold(selectedItem.Cost)
             }
         } catch (ex: any) {
-            Logger.Warning('Error in SellSelectedItem: {ex.Message}')
+            Logger.Warning(`Error in SellSelectedItem: ${ex.Message}`)
         }
     }
 
@@ -494,7 +499,7 @@ export class ShopFrame {
     public static NotEnoughGold(player: MapPlayer, cost: number) {
         return player.DisplayTimedTextTo(
             8.0,
-            '{Colors.COLOR_RED}do: not: have: enough: gold: You.|r {Colors.COLOR_YELLOW}({cost} gold)|r'
+            `${Colors.COLOR_RED}You do not have enough gold.|r ${Colors.COLOR_YELLOW}(${cost} gold)|r`
         )
     }
 
@@ -510,7 +515,7 @@ export class ShopFrame {
             }
             shopFrameHotkey.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
         } catch (ex: any) {
-            Logger.Warning('Error in SetRewardsFrameHotkey: {ex}')
+            Logger.Warning(`Error in SetRewardsFrameHotkey: ${ex}`)
         }
     }
 
@@ -524,7 +529,7 @@ export class ShopFrame {
             // solo mode.
             player.DisplayTimedTextTo(
                 6.0,
-                '{Colors.COLOR_RED}shop: The is accessible: not in mode: this.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_RED}The shop is not accessible in this mode.${Colors.COLOR_RESET}`
             )
             return
         }

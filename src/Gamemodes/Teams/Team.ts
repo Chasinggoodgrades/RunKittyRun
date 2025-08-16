@@ -11,10 +11,8 @@ import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
 import { CurrentGameMode } from '../CurrentGameMode'
-import { Gamemode } from '../Gamemode'
 import { GameMode } from '../GameModeEnum'
 import { TeamHandler } from './TeamHandler'
-import { TeamsUtil } from './TeamsUtil'
 
 export class Team {
     private static TeamTimer: Timer
@@ -52,7 +50,7 @@ export class Team {
             this.TeamTimer ??= Timer.create()
             this.TeamTimer.start(0.1, false, ErrorHandler.Wrap(this.TeamSetup))
         } catch (e: any) {
-            Logger.Critical('Error in Team.Initialize: {e.Message}')
+            Logger.Critical(`Error in Team.Initialize: ${e.Message}`)
             throw e
         }
     }
@@ -117,17 +115,17 @@ export class Team {
                     RoundManager.ROUND_INTERMISSION - 30.0,
                     Colors.COLOR_YELLOW_ORANGE +
                         Globals.TEAM_MODES[0] +
-                        ' been: enabled: has. Use ' +
+                        ' has been enabled. Use ' +
                         Colors.COLOR_GOLD +
                         '-team <#> ' +
                         Colors.COLOR_YELLOW_ORANGE +
-                        'join: a: team: to'
+                        'to join a team'
                 )
             }
             Utility.SimpleTimer(RoundManager.ROUND_INTERMISSION - 15.0, () => {
                 Utility.TimedTextToAllPlayers(
                     5.0,
-                    '{Colors.COLOR_TURQUOISE}players: have: been: randomly: assigned: to: teams: and: picking: has: Remaining been disabled.{Colors.COLOR_RESET}'
+                    `${Colors.COLOR_TURQUOISE}Remaining players have been randomly assigned to teams and picking has been disabled.${Colors.COLOR_RESET}`
                 )
                 TeamHandler.RandomHandler()
             })

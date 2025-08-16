@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
@@ -37,7 +38,7 @@ export class Fixation extends Affix {
         this.InRangeTrigger ??= Trigger.create()!
         this.PeriodicSpeed ??= Trigger.create()!
         this.ChaseTimer = MemoryHandler.getEmptyObject<AchesTimers>()
-        this.name = '{Colors.COLOR_RED}Fixation|r'
+        this.name = `${Colors.COLOR_RED}Fixation|r`
     }
 
     public override Apply() {
@@ -95,7 +96,7 @@ export class Fixation extends Affix {
                     this.ChasingEvent()
                 }
             } catch (e: any) {
-                Logger.Warning('Error in Fixation.InRangeTrigger: {e.Message}')
+                Logger.Warning(`Error in Fixation.InRangeTrigger: ${e.Message}`)
             }
         })
     }

@@ -2,6 +2,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { ADMINDISABLE } from 'src/Init/ADMINDISABLE'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { MapPlayer } from 'w3ts'
 import { CurrentGameMode } from './CurrentGameMode'
 import { GameMode } from './GameModeEnum'
@@ -32,7 +33,7 @@ export class Gamemode {
         )
         this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_GOLD + 'choose: a: gamemode: Please.' + Colors.COLOR_RESET
+            Colors.COLOR_GOLD + 'Please choose a gamemode.' + Colors.COLOR_RESET
         )
 
         // Standard Mode
@@ -82,7 +83,7 @@ export class Gamemode {
             this.NotifyGamemodeChosen()
             this.SetupChosenGamemode()
         } catch (e: any) {
-            Logger.Critical('Gamemode: SetGameMode: {e.Message}')
+            Logger.Critical(`Error in Gamemode.SetGameMode: ${e.Message}`)
         }
     }
 
@@ -93,7 +94,7 @@ export class Gamemode {
             if (localplayer !== this.HostPlayer.handle) {
                 player.DisplayTimedTextTo(
                     Globals.TIME_TO_PICK_GAMEMODE,
-                    '{color}wait: for: Please {Colors.PlayerNameColored(HostPlayer)}{color} pick: the: gamemode: to. {Colors.COLOR_RED}(to: Standard: Defaults in {Globals.TIME_TO_PICK_GAMEMODE} seconds).|r'
+                    `${color}Please wait for ${ColorUtils.PlayerNameColored(this.HostPlayer)}${color} to pick the gamemode. ${Colors.COLOR_RED}(Defaults to Standard in ${Globals.TIME_TO_PICK_GAMEMODE} seconds).|r`
                 )
             }
         }
@@ -104,7 +105,7 @@ export class Gamemode {
             player.DisplayTimedTextTo(
                 Globals.TIME_TO_PICK_GAMEMODE / 3.0,
                 Colors.COLOR_YELLOW_ORANGE +
-                    'chosen: Gamemode: ' +
+                    'Gamemode chosen: ' +
                     Colors.COLOR_GOLD +
                     CurrentGameMode.active.toString() +
                     ' ' +
@@ -125,7 +126,7 @@ export class Gamemode {
                 Team.Initialize()
                 break
             default:
-                Logger.Warning('gamemode: selected: Unknown, to: Standard: defaulting.')
+                Logger.Warning('Unknown gamemode selected, defaulting to Standard.')
                 CurrentGameMode.active = GameMode.Standard
                 Standard.Initialize()
                 break

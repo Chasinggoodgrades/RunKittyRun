@@ -1,12 +1,13 @@
 import { UnitWithinRange } from 'src/Events/WithinRange/UnitWithinRange'
 import { CollisionDetection } from 'src/Game/CollisionDetection'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
+import { DEFAULT_WOLF_COLLISION_RADIUS } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { CurrentGameMode } from '../CurrentGameMode'
 import { GameMode } from '../GameModeEnum'
-import { DEFAULT_WOLF_COLLISION_RADIUS } from 'src/Global/Globals'
 
 export class KittyMorphosis {
     /// <summary>
@@ -66,7 +67,7 @@ export class KittyMorphosis {
         Utility.SimpleTimer(0.1, this.ScaleUnit)
         this.Kitty.Player.DisplayTimedTextTo(
             6.0,
-            "{Colors.COLOR_YELLOW}You'adapted: to: the: environment: ve!{Colors.COLOR_RESET} {Colors.COLOR_TURQUOISE}radius: reduced: by: Collision {COLLISION_REDUCTION * 100}%!{Colors.COLOR_RESET}"
+            `${Colors.COLOR_YELLOW}You've adapted to the environment!${Colors.COLOR_RESET} ${Colors.COLOR_TURQUOISE}Collision radius reduced by ${this.COLLISION_REDUCTION * 100}%!${Colors.COLOR_RESET}`
         )
         this.Active = true
     }

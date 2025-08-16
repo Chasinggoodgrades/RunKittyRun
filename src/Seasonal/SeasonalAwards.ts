@@ -1,4 +1,5 @@
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -21,7 +22,7 @@ export class SeasonalAwards {
     private static ChristmasFreebies() {
         Utility.TimedTextToAllPlayers(
             8.0,
-            '{Colors.COLOR_YELLOW}thanks: to: every: for: playing: this: holiday: season: Special! players: have: All been awarded the snow trail and snow wings from 2023 :){Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}Special thanks to everyone for playing this holiday season! All players have been awarded the snow trail and snow wings from 2023 :)${Colors.COLOR_RESET}`
         )
         let t = MemoryHandler.getEmptyObject<AchesTimers>()
         t.Timer.start(

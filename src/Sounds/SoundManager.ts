@@ -4,6 +4,7 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Team } from 'src/Gamemodes/Teams/Team'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Sound, Timer, Unit } from 'w3ts'
@@ -191,14 +192,14 @@ export class SoundManager {
                 k.Unit.handle,
                 'chest'
             )
-            Utility.TimedTextToAllPlayers(1.0, '{Colors.COLOR_RED}man: standing: Last!{Colors.COLOR_RESET}')
+            Utility.TimedTextToAllPlayers(1.0, `${Colors.COLOR_RED}Last man standing!${Colors.COLOR_RESET}`)
             s.stop(false, false)
             s.start()
             Utility.SimpleTimer(2.0, () => {
                 GC.RemoveEffect(Effect.fromHandle(e)!) // TODO; Cleanup:                 GC.RemoveEffect(ref e);
             })
         } catch (e: any) {
-            Logger.Warning('Error in SoundManager.PlayLastManStandingSound: {e.Message}')
+            Logger.Warning(`Error in SoundManager.PlayLastManStandingSound: ${e.Message}`)
         }
     }
 }

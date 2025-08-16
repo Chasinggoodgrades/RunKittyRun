@@ -3,6 +3,7 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { AwardManager } from '../Rewards/AwardManager'
 
@@ -38,7 +39,7 @@ export class NoKittyLeftBehind {
             if (AwardManager.ReceivedAwardAlready(kitty.Player, 'WWSwift')) continue
             kitty.Player.DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_LAVENDER}Kitty: Left: Behind: No|r {Colors.COLOR_YELLOW_ORANGE}({CompletedCount}/{RequiredCount})|r'
+                `${Colors.COLOR_LAVENDER}No Kitty Left Behind|r ${Colors.COLOR_YELLOW_ORANGE}(${NoKittyLeftBehind.CompletedCount}/${NoKittyLeftBehind.RequiredCount})|r`
             )
             if (this.CompletedCount >= this.RequiredCount) {
                 AwardManager.GiveReward(kitty.Player, 'WWSwift')

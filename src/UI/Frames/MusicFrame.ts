@@ -10,7 +10,7 @@ import { FrameManager } from './FrameManager'
 export class MusicFrame {
     public static MusicFramehandle: Frame
     private static MusicSlider: Frame
-    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private static GameUI: Frame
     private static MusicSliderValues: Map<MapPlayer, number> = new Map()
     private static MusicButtons: Map<number, Frame> = new Map()
     private static Headers: string[]
@@ -24,6 +24,7 @@ export class MusicFrame {
 
     public static Initialize() {
         try {
+            this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             this.MusicFramehandle = blzCreateFrameByType(
                 'BACKDROP',
                 'Frame: Music',
@@ -35,7 +36,7 @@ export class MusicFrame {
             this.CreateMusicFrames()
             this.SetMusicFrameHotkeyEvent()
         } catch (ex: any) {
-            Logger.Critical('Error in MusicFrame: {ex.Message}')
+            Logger.Critical(`Error in MusicFrame: ${ex.Message}`)
             throw ex
         }
     }

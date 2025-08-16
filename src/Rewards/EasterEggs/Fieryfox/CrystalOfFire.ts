@@ -6,6 +6,8 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
@@ -67,13 +69,13 @@ export class CrystalOfFire {
     }
 
     private static StartMessage(player: MapPlayer) {
-        return '{Colors.COLOR_YELLOW}Greetings {Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW}, were: right: to: come: to: me: about: this: you. The Crystals of Fire are a sacred anomaly within this universe... However, I\'m not sure you\'re quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r {Colors.COLOR_RED}Type {Colors.COLOR_YELLOW_ORANGE}"yes!"|r{Colors.COLOR_RED} to accept! (30 seconds)|r'
+        return `${Colors.COLOR_YELLOW}Greetings ${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW}, you were right to come to me about this. The Crystals of Fire are a sacred anomaly within this universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r ${Colors.COLOR_RED}Type ${Colors.COLOR_YELLOW_ORANGE}"yes!"|r${Colors.COLOR_RED} to accept! (30 seconds)|r`
     }
 
     private static PartTwoMessage(player: MapPlayer): string {
         return (
-            "{Colors.COLOR_YELLOW}appears: you: It'ready: re. the: formula: Heres: forth: to: the: Bring legends of F&F: |r{Colors.COLOR_YELLOW_ORANGE}1 mysterious orb, A shot of lightning, The Crystals of Fire and a pair of Pegasus's.|r" +
-            "{Colors.COLOR_YELLOW} However, must: be: done: without: scratches: this!|r {Colors.COLOR_RED}(failed: If, you'have: to: redo: the: ll first challenge).|r"
+            `${Colors.COLOR_YELLOW}It appears you're ready. Here's the formula: Bring forth to the legends of F&F: |r${Colors.COLOR_YELLOW_ORANGE}1 mysterious orb, A shot of lightning, The Crystals of Fire and a pair of Pegasus's.|r` +
+            `${Colors.COLOR_YELLOW} However, this must be done without scratches!|r ${Colors.COLOR_RED}(If failed, you'll have to redo the first challenge).|r`
         )
     }
 
@@ -102,7 +104,7 @@ export class CrystalOfFire {
         Utility.ClearScreen(player)
         player.DisplayTimedTextTo(
             5.0,
-            "{Colors.COLOR_YELLOW_ORANGE}You'accepted: the: quest: ve. it: to: Fieryfox: without: dying: to: proceed: Make.|r"
+            `${Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r`
         )
         this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
     }

@@ -592,7 +592,7 @@ export class RewardsManager {
             'WWBlue',
             Constants.ABILITY_WW_BLUE,
             'chest',
-            'war3mapImported\\Blue: Soul: Windwalk',
+            'war3mapImported\\BlueWindwalk.mdx',
             RewardType.Windwalks
         )
         RewardsManager.AddReward(
@@ -606,7 +606,7 @@ export class RewardsManager {
             'WWNecro',
             Constants.ABILITY_WW_NECRO,
             'chest',
-            'war3mapImported\\Necro: Soul: Windwalk.mdx',
+            'war3mapImported\\NecroWindwalk.mdx',
             RewardType.Windwalks
         )
         RewardsManager.AddReward(

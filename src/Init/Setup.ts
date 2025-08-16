@@ -12,7 +12,7 @@ import { UniqueItems } from 'src/Game/Items/UniqueItems'
 import { Progress } from 'src/Game/Management/Progress'
 import { Safezone } from 'src/Game/Management/Safezone'
 import { Shops } from 'src/Game/Management/Shops'
-import { PodiumManager } from 'src/Game/Podium/PodiumManager'
+import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 import { GameTimer } from 'src/Game/Rounds/GameTimer'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { WolfArea } from 'src/Game/WolfArea'
@@ -21,8 +21,10 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { FirstPersonCameraManager } from 'src/Misc/FirstPersonCameraManager'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
+import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
 import { Savecode } from 'src/Rewards/OldSaves/OldSaves'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
+import { ChampionAwards } from 'src/Rewards/Rewards/ChampionAwards'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
 import { DoodadChanger } from 'src/Seasonal/Doodads/DoodadChanger'
 import { SeasonalManager } from 'src/Seasonal/SeasonalManager'
@@ -38,12 +40,9 @@ import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, base64Decode } from 'w3ts'
-import { ChampionAwards } from '../Rewards/Rewards/ChampionAwards'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
-import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
-import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 
 export class Setup {
     private static timeToChoose: number = 0.0
@@ -70,7 +69,7 @@ export class Setup {
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(GameMode.Standard)
         } catch (e: any) {
-            Logger.Critical('Error in Setup.Initialize: {e.Message}')
+            Logger.Critical(`Error in Setup.Initialize: ${e.Message}`)
             throw e
         }
     }
@@ -128,7 +127,7 @@ export class Setup {
             FirstPersonCameraManager.Initialize()
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
         } catch (e: any) {
-            Logger.Critical('Error in Setup.StartGame: {e.Message}')
+            Logger.Critical(`Error in Setup.StartGame: ${e.Message}`)
             throw e
         }
     }

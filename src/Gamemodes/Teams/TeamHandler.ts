@@ -2,6 +2,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { Globals } from 'src/Global/Globals'
 import { GameSeed } from 'src/Init/GameSeed'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { MapPlayer } from 'w3ts'
 import { Gamemode } from '../Gamemode'
 import { Team } from './Team'
@@ -17,7 +18,7 @@ export class TeamHandler {
             this.FreepickHandler(Player, TeamNumber, adminForced)
         } else {
             Player.DisplayTextTo(
-                '{Colors.COLOR_YELLOW_ORANGE}The -command: team is available: for: this: gamemode: or: the: time: to: pick: not has expired.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.${Colors.COLOR_RESET}`
             )
         }
     }
@@ -33,7 +34,7 @@ export class TeamHandler {
         if (team) {
             team.AddMember(Player)
             Player.DisplayTextTo(
-                '{Colors.COLOR_YELLOW_ORANGE}have: joined: team: You {team.TeamColor}{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW_ORANGE}You have joined team ${team.TeamColor}${Colors.COLOR_RESET}`
             )
         }
     }
@@ -85,13 +86,13 @@ export class TeamHandler {
                 }
             }
         } catch (e: any) {
-            Logger.Critical('Error in TeamHandler.RandomHandler: {e.Message}')
+            Logger.Critical(`Error in TeamHandler.RandomHandler: ${e.Message}`)
         }
     }
 
     private static CanPlayerJoinTeam(Player: MapPlayer, TeamNumber: number) {
         if (TeamNumber > 24) {
-            Player.DisplayTextTo('{Colors.COLOR_YELLOW_ORANGE}Usage: -1: team-24{Colors.COLOR_RESET}')
+            Player.DisplayTextTo(`${Colors.COLOR_YELLOW_ORANGE}Usage: -team 1-24${Colors.COLOR_RESET}`)
             return false
         }
 
@@ -100,7 +101,7 @@ export class TeamHandler {
         if (team) {
             // If Team is full, return.
             if (team.Teammembers.length >= Gamemode.PlayersPerTeam) {
-                Player.DisplayTextTo('{team.TeamColor}{Colors.COLOR_YELLOW_ORANGE} is full.{Colors.COLOR_RESET}')
+                Player.DisplayTextTo(`${team.TeamColor}${Colors.COLOR_YELLOW_ORANGE} is full.${Colors.COLOR_RESET}`)
                 return false
             }
             // If player is on the team they're trying to join.. Return.
@@ -108,7 +109,7 @@ export class TeamHandler {
             if (currentTeam) {
                 if (currentTeam.TeamID === TeamNumber) {
                     Player.DisplayTextTo(
-                        '{Colors.COLOR_YELLOW_ORANGE}are: already: on: You {team.TeamColor}{Colors.COLOR_RESET}'
+                        `${Colors.COLOR_YELLOW_ORANGE}You are already on ${team.TeamColor}${Colors.COLOR_RESET}`
                     )
                     return false
                 }

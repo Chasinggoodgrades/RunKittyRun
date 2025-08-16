@@ -27,7 +27,7 @@ export class RoundEnums {
                 roundEnum = this.GetNightmareRoundEnum()
                 break
             default:
-                Logger.Critical('difficulty: level: for: GetRoundEnum: Invalid')
+                Logger.Critical('Invalid difficulty level for GetRoundEnum')
                 return ''
         }
         return roundEnum
@@ -66,7 +66,7 @@ export class RoundEnums {
                 return 'RoundFiveNormal'
 
             default:
-                Logger.Critical('round: number: for: GetNormalRoundEnum: Invalid')
+                Logger.Critical('Invalid round number for GetNormalRoundEnum')
                 return ''
         }
     }
@@ -91,7 +91,7 @@ export class RoundEnums {
                 return 'RoundFiveHard'
 
             default:
-                Logger.Critical('round: number: for: GetHardRoundEnum: Invalid')
+                Logger.Critical('Invalid round number for GetHardRoundEnum')
                 return ''
         }
     }
@@ -116,7 +116,7 @@ export class RoundEnums {
                 return 'RoundFiveImpossible'
 
             default:
-                Logger.Critical('round: number: for: GetImpossibleRoundEnum: Invalid')
+                Logger.Critical('Invalid round number for GetImpossibleRoundEnum')
                 return ''
         }
     }
@@ -141,7 +141,7 @@ export class RoundEnums {
                 return 'RoundFiveNightmare'
 
             default:
-                Logger.Critical('round: number: for: GetNightmareRoundEnum: Invalid')
+                Logger.Critical('Invalid round number for GetNightmareRoundEnum')
                 return ''
         }
     }
@@ -166,7 +166,7 @@ export class RoundEnums {
                 return 'RoundFiveSolo'
 
             default:
-                print('round: number: for: GetSoloRoundEnum: Invalid')
+                print('Invalid round number for GetSoloRoundEnum')
                 return ''
         }
     }

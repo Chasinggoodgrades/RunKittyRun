@@ -11,7 +11,7 @@ export class WolfLaneHider {
             this.UpdateLanesToEnable()
             this.ApplyLaneVisibility()
         } catch (e: any) {
-            Logger.Warning('Error in WolfLaneHider: {e.Message}')
+            Logger.Warning(`Error in WolfLaneHider: ${e.Message}`)
         }
     }
 
@@ -25,7 +25,7 @@ export class WolfLaneHider {
                 this.AddAdjacentLanes(currentSafezone)
             }
         } catch (e: any) {
-            Logger.Warning('Error in UpdateLanesToEnable: {e.Message}')
+            Logger.Warning(`Error in UpdateLanesToEnable: ${e.Message}`)
         }
     }
 
@@ -80,7 +80,7 @@ export class WolfLaneHider {
             this.currentlyVisibleLanes.clear()
             for (let laneId of this.lanesToEnable) this.currentlyVisibleLanes.add(laneId)
         } catch (e: any) {
-            Logger.Warning('Error in ApplyLaneVisibility: {e.Message}')
+            Logger.Warning(`Error in ApplyLaneVisibility: ${e.Message}`)
         }
     }
 
@@ -102,7 +102,7 @@ export class WolfLaneHider {
                 lane.IsEnabled = false
             }
         } catch (e: any) {
-            Logger.Warning('Error in HideAllLanes: {e.Message}')
+            Logger.Warning(`Error in HideAllLanes: ${e.Message}`)
         }
     }
 
@@ -116,7 +116,7 @@ export class WolfLaneHider {
                 this.SetLaneVisibility(lane, true)
             }
         } catch (e: any) {
-            Logger.Warning('Error in ResetLanes: {e.Message}')
+            Logger.Warning(`Error in ResetLanes: ${e.Message}`)
         }
     }
 }

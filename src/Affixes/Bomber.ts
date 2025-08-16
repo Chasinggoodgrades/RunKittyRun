@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { Globals } from 'src/Global/Globals'
 import { RangeIndicator } from 'src/SpecialEffects/RangeIndicator'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -32,7 +33,7 @@ export class Bomber extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        this.name = '{Colors.COLOR_ORANGE}Bomber|r'
+        this.name = `${Colors.COLOR_ORANGE}Bomber|r`
     }
 
     public override Apply() {
@@ -43,7 +44,7 @@ export class Bomber extends Affix {
             this.RegisterTimers()
             super.Apply()
         } catch (e: any) {
-            Logger.Warning('Error in Bomber.Apply: {e.Message}')
+            Logger.Warning(`Error in Bomber.Apply: ${e.Message}`)
         }
     }
 
@@ -98,7 +99,7 @@ export class Bomber extends Affix {
 
             Utility.SimpleTimer(4.0, this.Explode)
         } catch (e: any) {
-            Logger.Warning('Error in Bomber.StartExplosion: {e.Message}')
+            Logger.Warning(`Error in Bomber.StartExplosion: ${e.Message}`)
         }
     }
 
@@ -127,7 +128,7 @@ export class Bomber extends Affix {
             this.Revive()
             this.Unit.Unit.setVertexColor(204, 102, 0, 25)
         } catch (e: any) {
-            Logger.Warning('Error in Bomber.Explode: {e.Message}')
+            Logger.Warning(`Error in Bomber.Explode: ${e.Message}`)
             this.ReviveAlphaTimer.pause()
             this.Unit?.PauseSelf(false)
             this.Unit.IsReviving = false

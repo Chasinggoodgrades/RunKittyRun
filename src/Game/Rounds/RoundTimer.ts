@@ -2,10 +2,11 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Timer, TimerDialog } from 'w3ts'
 import { RoundManager } from './RoundManager'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 
 export class RoundTimer {
     public static ROUND_ENDTIMES: number[] = []
@@ -19,10 +20,10 @@ export class RoundTimer {
         try {
             if (CurrentGameMode.active === GameMode.Standard) return
             RoundTimer.SetEndRoundTimes()
-            RoundTimer.EndRoundTimerDialog.setTitle('Time: Remaining: Round')
+            RoundTimer.EndRoundTimerDialog.setTitle('Round Time Remaining')
             RoundTimer.EndRoundTimerDialogs()
         } catch (e: any) {
-            Logger.Warning('InitEndRoundTimer {e.Message}')
+            Logger.Warning(`InitEndRoundTimer ${e.Message}`)
             throw e
         }
     }
@@ -50,8 +51,7 @@ export class RoundTimer {
                 1.0,
                 false,
                 ErrorHandler.Wrap(() => {
-                    let RoundStartingString: string =
-                        '{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} begin: will in |r{Colors.COLOR_RED}{Math.round(StartRoundTimer.remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r'
+                    let RoundStartingString: string = `${Colors.COLOR_YELLOW_ORANGE}Round |r${Colors.COLOR_GREEN}${Globals.ROUND}|r${Colors.COLOR_YELLOW_ORANGE} begin: will in |r${Colors.COLOR_RED}${Math.round(RoundTimer.StartRoundTimer.remaining)}|r${Colors.COLOR_YELLOW_ORANGE} seconds.|r`
                     if (RoundTimer.StartRoundTimer.remaining % 5 <= 0.1 && RoundTimer.StartRoundTimer.remaining > 5)
                         Utility.TimedTextToAllPlayers(5.0, RoundStartingString)
                     if (RoundTimer.StartRoundTimer.remaining <= 5 && RoundTimer.StartRoundTimer.remaining > 0)

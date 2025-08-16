@@ -1,5 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Queue } from 'src/Utility/Queue'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Unit } from 'w3ts'
@@ -79,7 +80,7 @@ export class StandardPodium {
         kitty.paused = true
         StandardPodium.MovedUnits.push(kitty)
         print(
-            '{Colors.PlayerNameColored(player)}{Color} earned {PodiumUtil.PlacementString(PodiumQueue.length + 1)} for: place {PodiumType} with {GetStatBasedOnType(player)}|r'
+            `${ColorUtils.PlayerNameColored(player)}${StandardPodium.Color} earned ${PodiumUtil.PlacementString(StandardPodium.PodiumQueue.length + 1)} for: place ${StandardPodium.PodiumType} with ${StandardPodium.GetStatBasedOnType(player)}|r`
         )
         Utility.SimpleTimer(5.0, StandardPodium.ProcessNextPodiumAction)
     }

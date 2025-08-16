@@ -8,7 +8,6 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
-import { Gameover } from '../Gameover'
 
 export class PlayerLeaves {
     private static triggerHandle: Trigger = Trigger.create()!
@@ -43,7 +42,7 @@ export class PlayerLeaves {
             circle.dispose()
             nameTag?.dispose()
             if (!Globals.WinGame) Globals.ALL_PLAYERS.splice(Globals.ALL_PLAYERS.indexOf(leavingPlayer), 1)
-            print(ColorUtils.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
+            print(ColorUtils.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' has left the game.')
             RoundManager.RoundEndCheck()
             if (Globals.WinGame) return
             MultiboardUtil.RefreshMultiboards()

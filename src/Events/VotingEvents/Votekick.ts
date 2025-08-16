@@ -1,5 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Timer } from 'w3ts'
@@ -34,26 +35,26 @@ export class Votekick {
         if (this.Voters.includes(player)) {
             player.DisplayTimedTextTo(
                 7.0,
-                '{Colors.COLOR_YELLOW}have: already: voted: to: kick: You {Colors.PlayerNameColored(VoteKickPlayer)}{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}You have already voted to kick ${ColorUtils.PlayerNameColored(this.VoteKickPlayer!)}${Colors.COLOR_RESET}`
             )
             return
         }
         this.Voters.push(player)
         print(
-            '{Colors.PlayerNameColored(player)}{Colors.COLOR_YELLOW} voted: yes: to: kick: has {Colors.PlayerNameColored(VoteKickPlayer)}{Colors.COLOR_RESET}'
+            `${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW} has voted yes to kick ${ColorUtils.PlayerNameColored(this.VoteKickPlayer!)}${Colors.COLOR_RESET}`
         )
     }
 
     private static StartVotekick(target: MapPlayer) {
         if (Globals.VIPLISTUNFILTERED.includes(target)) {
             print(
-                '{Colors.COLOR_YELLOW}cannot: votekick: You {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. are: a: VIP: They.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}You cannot votekick ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW}. They are a VIP.${Colors.COLOR_RESET}`
             )
             return
         }
         this.VoteActive = true
         print(
-            '{Colors.COLOR_YELLOW}votekick: has: been: initiated: against: A {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. you: agree: If, type "-yes" {Colors.COLOR_RED}({VOTE_DURATION} remain: seconds){Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}A votekick has been initiated against ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW}. If you agree, type "-yes" ${Colors.COLOR_RED}(${this.VOTE_DURATION} seconds remain)${Colors.COLOR_RESET}`
         )
         this.VoteKickPlayer = target
         this.Voters.push(this.VoteStarter!)
@@ -70,13 +71,13 @@ export class Votekick {
 
         if (this.Voters.length >= requiredVotes) {
             print(
-                '{Colors.COLOR_YELLOW}succeeded: Votekick. {Voters.length}/{totalPlayers} voted: yes: players. {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW} been: removed: from: the: game: has.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}Votekick succeeded. ${this.Voters.length}/${totalPlayers} players voted yes. ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW} has been removed from the game.${Colors.COLOR_RESET}`
             )
             PlayerLeaves.PlayerLeavesActions(target)
             target.remove(PLAYER_GAME_RESULT_DEFEAT)
         } else {
             print(
-                '{Colors.COLOR_YELLOW}failed: Votekick. Only {Voters.length}/{totalPlayers} voted: yes: players. enough: votes: to: remove: Not {Colors.PlayerNameColored(target)}.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}Votekick failed. Only ${this.Voters.length}/${totalPlayers} players voted yes. Not enough votes to remove ${ColorUtils.PlayerNameColored(target)}.${Colors.COLOR_RESET}`
             )
         }
         this.EndVotekick()
@@ -92,7 +93,7 @@ export class Votekick {
     private static VotekickAlreadyActive(): boolean {
         if (this.VoteActive || VoteEndRound.VoteActive) {
             print(
-                '{Colors.COLOR_YELLOW}vote: A is active: already. wait: for: the: current: vote: to: finish: Please.{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}A vote is already active. Please wait for the current vote to finish.${Colors.COLOR_RESET}`
             )
             return true
         }

@@ -4,6 +4,8 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
 import { TeamDeathless } from 'src/Rewards/Challenges/TeamDeathless'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
@@ -28,9 +30,9 @@ export class RingOfSummoning extends Relic {
 
     public constructor() {
         super(
-            '{Colors.COLOR_GREEN}Sacred Ring of Summoning|r',
-            'On use, summons a fellow kitty within a {Colors.COLOR_ORANGE}{SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.' +
-                ' {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r',
+            `${Colors.COLOR_GREEN}Sacred Ring of Summoning|r`,
+            `On use, summons a fellow kitty within a ${Colors.COLOR_ORANGE}${RingOfSummoning.SUMMONING_RING_RADIUS} targeted AoE. |r Reviving a dead kitty requires them to be ahead of you.` +
+                ` ${Colors.COLOR_ORANGE}(Active)|r ${Colors.COLOR_LIGHTBLUE}(1min 30sec Cooldown)|r`,
             RingOfSummoning.RelicAbilityID,
             RingOfSummoning.RelicItemID,
             RingOfSummoning.RelicCost,
@@ -40,7 +42,7 @@ export class RingOfSummoning extends Relic {
         this.Upgrades.push(
             new RelicUpgrade(
                 0,
-                'Cooldown of summoning ability reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.',
+                `Cooldown of summoning ability reduced by ${RingOfSummoning.UPGRADE_COOLDOWN_REDUCTION} seconds.`,
                 15,
                 800
             )
@@ -140,7 +142,7 @@ export class RingOfSummoning extends Relic {
             // Notify players
             Utility.TimedTextToAllPlayers(
                 3.0,
-                "{Colors.PlayerNameColored(player)} summoned: has {Colors.PlayerNameColored(kitty.Player)}'kitty: s!"
+                `${ColorUtils.PlayerNameColored(player)} has summoned ${ColorUtils.PlayerNameColored(kitty.Player)}'s kitty!`
             )
 
             count++
@@ -164,13 +166,13 @@ export class RingOfSummoning extends Relic {
 
         if (!PROD)
             Logger.Verbose(
-                'Summoner: {summoner.Player.name} | Progress: Summoner: {summoersProgress} | Summoned: {summoned.Player.name} | Progress: Summoned: {deadProg}'
+                `Summoner: ${summoner.Player.name} | Summoner Progress: ${summoersProgress} | Summoned: ${summoned.Player.name} | Summoned Progress: ${deadProg}`
             )
 
         if (summoersProgress > deadProg && !summoned.isAlive()) {
             summoner.Player.DisplayTimedTextTo(
                 5.0,
-                '{Colors.COLOR_RED}can: only: summon: dead: kitties: that: are: ahead: You of you!{Colors.COLOR_RESET}'
+                `${Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!${Colors.COLOR_RESET}`
             )
             return false
         }
@@ -182,7 +184,7 @@ export class RingOfSummoning extends Relic {
 
         summonerKitty.Player.DisplayTimedTextTo(
             5.0,
-            '{Colors.COLOR_RED}cannot: summon: kitties: holding: the: deathless: orb: You!{Colors.COLOR_RESET}'
+            `${Colors.COLOR_RED}You cannot summon kitties holding the deathless orb!${Colors.COLOR_RESET}`
         )
         return false
     }
@@ -191,7 +193,7 @@ export class RingOfSummoning extends Relic {
         if (!summonedKittyUnit.IsChained) return true
         summonerKitty.Player.DisplayTimedTextTo(
             5.0,
-            '{Colors.COLOR_RED}cannot: summon: kitties: that: are: chained: You!{Colors.COLOR_RESET}'
+            `${Colors.COLOR_RED}You cannot summon kitties that are chained!${Colors.COLOR_RESET}`
         )
         return false
     }

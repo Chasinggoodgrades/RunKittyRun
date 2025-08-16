@@ -8,7 +8,7 @@ export class Tips {
         Tips.TipsList.push("Don't forget, you can buy boots from the kitty shops around the map!")
         Tips.TipsList.push("Use Protection of the Ancients if you think you'll die.")
         Tips.TipsList.push(
-            'Upon reaching level 10, you can purchase relics from the shop button! Hotkey: {Colors.COLOR_RED}"="{Colors.COLOR_RESET}'
+            `Upon reaching level 10, you can purchase relics from the shop button! Hotkey: ${Colors.COLOR_RED}"="${Colors.COLOR_RESET}`
         )
         Tips.TipsList.push('This version of RKR has a save system! Complete the challenges to unlock the rewards :)')
         Tips.TipsList.push(

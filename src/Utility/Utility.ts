@@ -58,7 +58,7 @@ export class Utility {
         let seconds = time % 60
         let tenths = (time * 10) % 10
 
-        let timeString: string = seconds < 10 ? '{minutes}:0{seconds}.{tenths}' : '{minutes}:{seconds}.{tenths}'
+        let timeString: string = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
         return ColorUtils.ColorString(timeString, teamID)
     }
 
@@ -73,7 +73,7 @@ export class Utility {
         let seconds = time % 60
         let tenths = (time * 10) % 10
 
-        return seconds < 10 ? '{minutes}:0{seconds}.{tenths}' : '{minutes}:{seconds}.{tenths}'
+        return seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ export class Utility {
         let minutes = time / 60
         let seconds = time % 60
 
-        return seconds < 10 ? '{minutes}:0{seconds}' : '{minutes}:{seconds}'
+        return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ export class Utility {
     /// <param name="u"></param>
     public static GiveGoldFloatingText(amount: number, u: Unit) {
         u.owner.addGold(amount)
-        Utility.CreateSimpleTextTag('+{amount} Gold', 2.0, u, 0.018, 255, 215, 0)
+        Utility.CreateSimpleTextTag(`+${amount} Gold`, 2.0, u, 0.018, 255, 215, 0)
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ export class Utility {
     public static FormattedColorPlayerName(p: MapPlayer) {
         // removes everything after '#' in the player name
         let name = p.name.split('#')[0]
-        return '{Colors.ColorString(name, p.id + 1)}'
+        return `${ColorUtils.ColorString(name, p.id + 1)}`
     }
 
     public static CreateFilterFunc(func: () => boolean) {

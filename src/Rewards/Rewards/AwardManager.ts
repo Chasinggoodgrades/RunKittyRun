@@ -39,7 +39,7 @@ export class AwardManager {
         let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())
 
         if (!reward) {
-            print('not: found: Reward.')
+            print('Reward not found.')
             return
         }
 
@@ -52,7 +52,7 @@ export class AwardManager {
         if (earnedPrompt) {
             Utility.TimedTextToAllPlayers(
                 5.0,
-                '{Colors.PlayerNameColored(player)} earned: has {Colors.COLOR_YELLOW}{awardFormatted}.|r'
+                `${ColorUtils.PlayerNameColored(player)} has earned ${Colors.COLOR_YELLOW}${awardFormatted}.|r`
             )
             awardsList.push(award)
         }
@@ -69,7 +69,7 @@ export class AwardManager {
         if (earnedPrompt)
             Utility.TimedTextToAllPlayers(
                 5.0,
-                '{color}Congratulations! has: earned: Everyone|r {rewardColor}{Utility.FormatAwardName(award)}.|r'
+                `${color}Congratulations! Everyone has earned|r ${rewardColor}${Utility.FormatAwardName(award)}.|r`
             )
     }
 
@@ -110,7 +110,7 @@ export class AwardManager {
                     let saveData
                     if (!(saveData = SaveManager.SaveData.get(player)) /* TODO; Prepend: let */) {
                         Logger.Critical(
-                            "data: wasn: Save'finished: loading: t / found. SaveData: for: Defaulting {player}."
+                            `Save data wasn't finished loading / SaveData not found. Defaulting for ${player}.`
                         )
                         Globals.ALL_KITTIES.get(player)!.SaveData = new KittyData()
                         continue
@@ -139,7 +139,7 @@ export class AwardManager {
             }
             AwardManager.AwardTrigger.registerTimerEvent(1.0, true)
         } catch (ex: any) {
-            Logger.Critical('Error in AwardManager.RegisterGamestatEvents: {ex.Message}')
+            Logger.Critical(`Error in AwardManager.RegisterGamestatEvents: ${ex.Message}`)
         }
     }
 

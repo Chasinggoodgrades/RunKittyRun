@@ -50,7 +50,7 @@ export class WolfArea {
                 kitty.ProgressHelper.CurrentPoint = this.ID
                 kitty.ProgressZone = this.ID
             } catch (e: any) {
-                Logger.Warning('Error in WolfArea.RegisterEnterEvents: {e.Message}')
+                Logger.Warning(`Error in WolfArea.RegisterEnterEvents: ${e.Message}`)
                 throw e
             }
         })
@@ -67,7 +67,7 @@ export class WolfArea {
                 let wolf = Globals.ALL_WOLVES.get(getTriggerUnit())!
                 wolf.WolfMove()
             } catch (e: any) {
-                Logger.Critical('Error in WolfArea.RegisterLeaveEvents: {e.Message}')
+                Logger.Critical(`Error in WolfArea.RegisterLeaveEvents: ${e.Message}`)
             }
         })
     }

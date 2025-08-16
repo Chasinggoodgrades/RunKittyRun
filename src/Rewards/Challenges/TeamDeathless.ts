@@ -8,6 +8,8 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { Colors } from 'src/Utility/Colors/Colors'
+import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { FilterList } from 'src/Utility/FilterList'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
@@ -118,7 +120,7 @@ export class TeamDeathless {
 
         Utility.TimedTextToAllPlayers(
             4.0,
-            '{Colors.COLOR_YELLOW}Deathless: Event: Requirements: Complete: Team! next: round: Activating!{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}Team Deathless Event Requirements Complete! Activating next round!${Colors.COLOR_RESET}`
         )
     }
 
@@ -145,10 +147,10 @@ export class TeamDeathless {
 
             Utility.TimedTextToAllPlayers(
                 4.0,
-                '{Colors.COLOR_YELLOW}Deathless: Orb: has: been: spawned: The! a: team: As, it: to: the: bring end without dying!{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW}The Deathless Orb has been spawned! As a team, bring it to the end without dying!${Colors.COLOR_RESET}`
             )
         } catch (e: any) {
-            Logger.Warning('Error in TeamDeathless.StartEvent {e.Message}')
+            Logger.Warning(`Error in TeamDeathless.StartEvent: ${e.Message}`)
             throw e
         }
     }
@@ -197,7 +199,7 @@ export class TeamDeathless {
             this.timerHandle?.pause()
             this.StartEvent()
         } catch (e: any) {
-            Logger.Warning('Error in TeamDeathless.DiedWithOrb: {e.Message}')
+            Logger.Warning(`Error in TeamDeathless.DiedWithOrb: ${e.Message}`)
         }
     }
 
@@ -210,7 +212,7 @@ export class TeamDeathless {
         if (this.AlreadyCarriedOrb.includes(u.owner)) {
             u.owner.DisplayTimedTextTo(
                 6.0,
-                "{Colors.COLOR_YELLOW}You'already: carried: the: orb: ve!{Colors.COLOR_RESET}"
+                `${Colors.COLOR_YELLOW}You've already carried the orb!${Colors.COLOR_RESET}`
             )
             return
         }
@@ -218,7 +220,7 @@ export class TeamDeathless {
 
         Utility.TimedTextToAllPlayers(
             1.5,
-            '{Colors.PlayerNameColored(this.CurrentHolder.Player)} picked: up: the: orb: has!'
+            `${ColorUtils.PlayerNameColored(this.CurrentHolder.Player)} has picked up the orb!`
         )
         this.RippleEffect ??= Effect.create(this.RIPPLE_MODEL, this.CurrentHolder.Unit.x, this.CurrentHolder.Unit.y)!
         this.RippleEffect.setTime(0)
@@ -249,7 +251,7 @@ export class TeamDeathless {
             let player = Globals.ALL_PLAYERS[i]
             if (!this.AlreadyCarriedOrb.includes(player)) return
         }
-        print('{Colors.COLOR_TURQUOISE}List: has: been: reset: Orb!{Colors.COLOR_RESET}')
+        print(`${Colors.COLOR_TURQUOISE}Orb List has been reset!${Colors.COLOR_RESET}`)
         this.AlreadyCarriedOrb = []
     }
 

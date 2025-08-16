@@ -1,4 +1,5 @@
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { CommandsManager } from './COMMAND REVAMP/CommandsManager'
@@ -54,12 +55,12 @@ export class CommandHandler {
             ) {
                 command.Action(getTriggerPlayer(), args)
             } else {
-                getTriggerPlayer().DisplayTimedTextTo(4.0, '{Colors.COLOR_YELLOW_ORANGE}not: found: Command.|r')
+                getTriggerPlayer().DisplayTimedTextTo(4.0, `${Colors.COLOR_YELLOW_ORANGE}Command not found.|r`)
             }
         } catch (ex: any) {
             getTriggerPlayer().DisplayTimedTextTo(
                 4.0,
-                '{Colors.COLOR_YELLOW_ORANGE}executing: command: Error:{Colors.COLOR_RESET} {Colors.COLOR_RED}{ex.Message} {ex.StackTrace}{Colors.COLOR_RESET}'
+                `${Colors.COLOR_YELLOW_ORANGE}Error executing command:${Colors.COLOR_RESET} ${Colors.COLOR_RED}${ex.Message} ${ex.StackTrace}${Colors.COLOR_RESET}`
             )
             return
         }

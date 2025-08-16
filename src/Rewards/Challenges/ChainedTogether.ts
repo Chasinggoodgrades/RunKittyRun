@@ -6,6 +6,7 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Timer } from 'w3ts'
@@ -42,7 +43,7 @@ export class ChainedTogether {
     public static TriggerEvent() {
         Utility.TimedTextToAllPlayers(
             4.0,
-            '{Colors.COLOR_TURQUOISE}Togheter: Event: Requirements: Complete: Chained!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}next: round: Activating!{Colors.COLOR_RESET}'
+            `${Colors.COLOR_TURQUOISE}Chained Together Event Requirements Complete!${Colors.COLOR_RESET} ${Colors.COLOR_YELLOW}Activating next round!${Colors.COLOR_RESET}`
         )
         ChainedTogether.EventTriggered = true
     }
@@ -84,7 +85,7 @@ export class ChainedTogether {
             ChainedTogether.MoveChainTimer ??= Timer.create()
             ChainedTogether.MoveChainTimer.start(ChainedTogether.timerInterval, true, ChainedTogether.MoveChain)
         } catch (e: any) {
-            Logger.Warning('Error in ChainedTogether.StartEvent {e.Message}')
+            Logger.Warning(`Error in ChainedTogether.StartEvent: ${e.Message}`)
             throw e
         }
     }
@@ -118,7 +119,7 @@ export class ChainedTogether {
         try {
             ChainedTogether.FreeKittiesFromGroup(kittyNameOutSideRange, false)
         } catch (e: any) {
-            Logger.Warning('Error in ChainedTogether.LoseEvent {e.Message}')
+            Logger.Warning(`Error in ChainedTogether.LoseEvent ${e.Message}`)
             throw e
         }
     }
@@ -150,7 +151,7 @@ export class ChainedTogether {
 
             ChainedTogether.kittyGroups.push(currentGroup)
         } catch (e: any) {
-            Logger.Warning('Error in ChainedTogether.LoseEvent {e.Message}')
+            Logger.Warning(`Error in ChainedTogether.LoseEvent: ${e.Message}`)
             throw e
         }
     }
@@ -252,13 +253,13 @@ export class ChainedTogether {
             //finish event
             ChainedTogether.FreeKittiesFromGroup(kitty.name, true)
         } catch (e: any) {
-            Logger.Warning('Error in ChainedTogether.ReachedSafezone {e.Message}')
+            Logger.Warning(`Error in ChainedTogether.ReachedSafezone ${e.Message}`)
             throw e
         }
     }
 
     private static AwardChainedTogether(kitty: Kitty) {
-        Utility.CreateSimpleTextTag('{Colors.COLOR_RED}Together: Chained!{Colors.COLOR_RESET}', 2.0, kitty.Unit)
+        Utility.CreateSimpleTextTag(`${Colors.COLOR_RED}Chained Together!${Colors.COLOR_RESET}`, 2.0, kitty.Unit)
 
         let level: DifficultyLevel = Difficulty.DifficultyValue
 

@@ -110,7 +110,7 @@ export class AwardingCmds {
                 if (!(val = S2I(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'
+                        `${Colors.COLOR_YELLOW_ORANGE}Invalid value:|r ${ColorUtils.HighlightString(value.toString())}`
                     )
                     return
                 }
@@ -119,7 +119,7 @@ export class AwardingCmds {
 
                 player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Set {ColorUtils.HighlightString(stats)} {Colors.COLOR_YELLOW_ORANGE}to|r {ColorUtils.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}'
+                    `${Colors.COLOR_YELLOW_ORANGE}Set ${ColorUtils.HighlightString(stats)} ${Colors.COLOR_YELLOW_ORANGE}to|r ${ColorUtils.HighlightString(val.toString())} ${Colors.COLOR_YELLOW_ORANGE}for|r ${ColorUtils.PlayerNameColored(selectedPlayer)}`
                 )
                 MultiboardUtil.RefreshMultiboards()
                 return
@@ -134,7 +134,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW_ORANGE}game: stats: Valid: {ColorUtils.HighlightString(combined)}'
+            `${Colors.COLOR_YELLOW_ORANGE}Valid game stats: ${ColorUtils.HighlightString(combined)}`
         )
     }
 
@@ -161,7 +161,7 @@ export class AwardingCmds {
                 if (!(val = S2I(value)!)) {
                     player.DisplayTimedTextTo(
                         3.0,
-                        '{Colors.COLOR_YELLOW_ORANGE}value: Invalid:|r {ColorUtils.HighlightString(value.toString())}'
+                        `${Colors.COLOR_YELLOW_ORANGE}Invalid value:|r ${ColorUtils.HighlightString(value.toString())}`
                     )
                     return
                 }
@@ -170,7 +170,7 @@ export class AwardingCmds {
 
                 player.DisplayTimedTextTo(
                     3.0,
-                    '{Colors.COLOR_YELLOW_ORANGE}Set {ColorUtils.HighlightString(roundTime)} {Colors.COLOR_YELLOW_ORANGE}to|r {ColorUtils.HighlightString(val.toString())} {Colors.COLOR_YELLOW_ORANGE}for|r {Colors.PlayerNameColored(selectedPlayer)}{Colors.COLOR_RESET}'
+                    `${Colors.COLOR_YELLOW_ORANGE}Set ${ColorUtils.HighlightString(roundTime)} ${Colors.COLOR_YELLOW_ORANGE}to|r ${ColorUtils.HighlightString(val.toString())} ${Colors.COLOR_YELLOW_ORANGE}for|r ${ColorUtils.PlayerNameColored(selectedPlayer)}${Colors.COLOR_RESET}`
                 )
                 MultiboardUtil.RefreshMultiboards()
                 return
@@ -185,7 +185,7 @@ export class AwardingCmds {
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW_ORANGE}game: times: Valid: {ColorUtils.HighlightString(combined)}'
+            `${Colors.COLOR_YELLOW_ORANGE}Valid game times: ${ColorUtils.HighlightString(combined)}`
         )
     }
 
@@ -199,12 +199,11 @@ export class AwardingCmds {
         let combined = ''
         for (let property of Object.keys(Globals.GAME_STATS)) {
             let value = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats[property as keyof GameStatsData]
-            combined +=
-                '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'
+            combined += `${Colors.COLOR_YELLOW_ORANGE}${Utility.FormatAwardName(property)}${Colors.COLOR_RESET}: ${value}\n`
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}stats: for: Game {Colors.PlayerNameColored(player)}:\n{ColorUtils.HighlightString(combined)}{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}Game stats for ${ColorUtils.PlayerNameColored(player)}:\n${ColorUtils.HighlightString(combined)}${Colors.COLOR_RESET}`
         )
     }
 
@@ -219,12 +218,11 @@ export class AwardingCmds {
         let personalBests = kitty.SaveData.PersonalBests
         for (let property of Object.keys(personalBests)) {
             let value = personalBests[property as keyof PersonalBests]
-            combined +=
-                '{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.name)}{Colors.COLOR_RESET}: {value}\n'
+            combined += `${Colors.COLOR_YELLOW_ORANGE}${Utility.FormatAwardName(property)}${Colors.COLOR_RESET}: ${value}\n`
         }
         player.DisplayTimedTextTo(
             15.0,
-            '{Colors.COLOR_YELLOW}bests: for: Personal {Colors.PlayerNameColored(kitty.Player)}:\n{ColorUtils.HighlightString(combined)}{Colors.COLOR_RESET}'
+            `${Colors.COLOR_YELLOW}Personal bests for ${ColorUtils.PlayerNameColored(kitty.Player)}:\n${ColorUtils.HighlightString(combined)}${Colors.COLOR_RESET}`
         )
     }
 
@@ -294,9 +292,9 @@ export class AwardingCmds {
 
     private static CurrentKibbleInfo(kitty: Kitty) {
         let combined: string = ''
-        combined += '{Colors.COLOR_YELLOW_ORANGE}Collected:|r {kitty.CurrentStats.CollectedKibble}\n'
-        combined += '{Colors.COLOR_YELLOW_ORANGE}Jackpots:|r {kitty.CurrentStats.CollectedJackpots}\n'
-        combined += '{Colors.COLOR_YELLOW_ORANGE}Jackpots: Super:|r {kitty.CurrentStats.CollectedSuperJackpots}\n'
+        combined += `${Colors.COLOR_YELLOW_ORANGE}Collected:|r ${kitty.CurrentStats.CollectedKibble}\n`
+        combined += `${Colors.COLOR_YELLOW_ORANGE}Jackpots:|r ${kitty.CurrentStats.CollectedJackpots}\n`
+        combined += `${Colors.COLOR_YELLOW_ORANGE}Super Jackpots:|r ${kitty.CurrentStats.CollectedSuperJackpots}\n`
         return combined
     }
 }

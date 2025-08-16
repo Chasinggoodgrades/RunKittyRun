@@ -17,6 +17,7 @@ import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Tips } from 'src/UI/Tips/Tips'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
@@ -69,7 +70,7 @@ export class RoundManager {
             WolfLaneHider.HideAllLanes()
             WolfLaneHider.LanesHider()
         } catch (e: any) {
-            Logger.Critical('Error in RoundManager.RoundSetup {e.Message}')
+            Logger.Critical(`Error in RoundManager.RoundSetup ${e.Message}`)
             throw e
         }
     }
@@ -84,7 +85,7 @@ export class RoundManager {
         NitroChallenges.StartNitroTimer()
         NitroPacer.StartNitroPacer()
         SoundManager.PlayRoundSound()
-        Utility.TimedTextToAllPlayers(2.0, '{Colors.COLOR_CYAN}Kitty: Run: Run!!|r')
+        Utility.TimedTextToAllPlayers(2.0, `${Colors.COLOR_CYAN}Run Kitty Run!!|r`)
     }
 
     private static HasDifficultyBeenChosen() {
@@ -119,7 +120,7 @@ export class RoundManager {
             Tips.DisplayTip()
             Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)
         } catch (e: any) {
-            Logger.Critical('Error in RoundManager.RoundEnd {e.Message}')
+            Logger.Critical(`Error in RoundManager.RoundEnd ${e.Message}`)
             throw e
         }
     }

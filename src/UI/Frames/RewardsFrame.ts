@@ -4,6 +4,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
@@ -13,7 +14,7 @@ import { RewardHelper } from './RewardHelper'
 
 export class RewardsFrame {
     public static RewardFrame: Frame
-    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private static GameUI: Frame
     private static TempHandle: Frame
     private static FrameByName: Map<string, Frame> = new Map()
     private static RewardIcons: Map<Frame, Reward> = new Map()
@@ -29,6 +30,7 @@ export class RewardsFrame {
 
     public static Initialize() {
         try {
+            this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             RewardsFrame.RewardFrame = RewardsFrame.CreateRewardFrame()
             RewardsFrame.TempHandle = RewardsFrame.RewardFrame
             RewardsFrame.SetRewardsFrameHotkey()
@@ -37,7 +39,7 @@ export class RewardsFrame {
             RewardsFrame.CreateRandomRewardButton()
             FrameManager.CreateHeaderFrame(RewardsFrame.RewardFrame)
         } catch (ex: any) {
-            Logger.Critical('Error in RewardsFrame: {ex.Message}')
+            Logger.Critical(`Error in RewardsFrame: ${ex.Message}`)
             throw ex
         }
     }
@@ -79,7 +81,7 @@ export class RewardsFrame {
             count += colCount
             RewardsFrame.FrameCount++
         }
-        //print("There are {count} types");
+        //print(`There are ${count} types`);
     }
 
     private static CountNumberOfRewards(type: RewardType) {
@@ -118,7 +120,7 @@ export class RewardsFrame {
             y = -RewardsFrame.Padding * 2
         }
 
-        let panel = blzCreateFrameByType('BACKDROP', '{title}', parent, 'QuestButtonDisabledBackdropTemplate', 0)
+        let panel = blzCreateFrameByType('BACKDROP', `${title}`, parent, 'QuestButtonDisabledBackdropTemplate', 0)
         panel.setPoint(framePoint1, parent, framePoint2, x, y)
         panel.setSize(width, height)
 
@@ -179,8 +181,7 @@ export class RewardsFrame {
 
         icon.setTexture(dice, 0, false)
 
-        tooltipText.text =
-            '{Colors.COLOR_YELLOW}Rewards: Randomize{Colors.COLOR_RESET}\n{Colors.COLOR_ORANGE}from: your: rewards: list: Picks, random: cosmetics: applying.{Colors.COLOR_RESET}'
+        tooltipText.text = `${Colors.COLOR_YELLOW}Randomize Rewards${Colors.COLOR_RESET}\n${Colors.COLOR_ORANGE}Picks random cosmetics from your rewards list, applying them.${Colors.COLOR_RESET}`
 
         let t = Trigger.create()!
         t.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK)
@@ -226,7 +227,7 @@ export class RewardsFrame {
             if (!player.isLocal()) return
             FrameManager.RefreshFrame(frame)
         } catch (e: any) {
-            Logger.Warning('Error in RandomRewardsButtonActions: {e.Message}')
+            Logger.Warning(`Error in RandomRewardsButtonActions: ${e.Message}`)
         }
     }
 
@@ -282,7 +283,7 @@ export class RewardsFrame {
 
     private static RewardTooltip(parent: Frame, reward: Reward) {
         let background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
-        let tooltipText = blzCreateFrameByType('TEXT', '{reward.name}Tooltip', background, '', 0)
+        let tooltipText = blzCreateFrameByType('TEXT', `${reward.name}Tooltip`, background, '', 0)
 
         tooltipText.setSize(0.25, 0)
         background.setPoint(FRAMEPOINT_BOTTOMLEFT, tooltipText, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
@@ -295,7 +296,7 @@ export class RewardsFrame {
         let name = BlzGetAbilityTooltip(reward.AbilityID, 0)
         let desc = BlzGetAbilityExtendedTooltip(reward.AbilityID, 0)
 
-        tooltipText.text = '{name}\n{desc}'
+        tooltipText.text = `${name}\n${desc}`
     }
 
     private static RewardButtonActions(reward: Reward) {
@@ -322,7 +323,7 @@ export class RewardsFrame {
                 else frame.setTexture(BlzGetAbilityIcon(reward.AbilityID)!, 0, false)
             }
         } catch (e: any) {
-            Logger.Warning('Error in UnavilableRewardIcons: {e}')
+            Logger.Warning(`Error in UnavilableRewardIcons: ${e}`)
         }
     }
 
@@ -344,7 +345,7 @@ export class RewardsFrame {
         if (CurrentGameMode.active !== GameMode.Standard) {
             player.DisplayTimedTextTo(
                 3.0,
-                '{Colors.COLOR_RED}are: only: available: Rewards in Mode: Standard{Colors.COLOR_RESET}'
+                `${Colors.COLOR_RED}Rewards are only available in Standard Mode${Colors.COLOR_RESET}`
             )
             return // Let's not activate rewards in tournament.
         }

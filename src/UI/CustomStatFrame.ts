@@ -5,6 +5,7 @@ import { SpawnChampions } from 'src/Game/Entities/Champions/SpawnChampions'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
 import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
@@ -28,14 +29,14 @@ export class CustomStatFrame {
 
     public static SelectedUnit: Map<MapPlayer, Unit> = new Map()
     private static Stats: CustomStat[] = []
-    private static MoveSpeed: string = '{Colors.COLOR_YELLOW_ORANGE}MS:|r'
-    private static Time: string = '{Colors.COLOR_YELLOW_ORANGE}Time:|r'
-    private static Saves: string = '{Colors.COLOR_YELLOW_ORANGE}Saves:|r'
-    private static Deaths: string = '{Colors.COLOR_YELLOW_ORANGE}Deaths:|r'
-    private static Streak: string = '{Colors.COLOR_YELLOW_ORANGE}Streak:|r'
-    private static Gold: string = '{Colors.COLOR_YELLOW_ORANGE}Gold:|r'
-    private static Ratio: string = '{Colors.COLOR_YELLOW_ORANGE}S/D:|r'
-    private static Progress: string = '{Colors.COLOR_YELLOW_ORANGE}Prog.:|r'
+    private static MoveSpeed: string = `${Colors.COLOR_YELLOW_ORANGE}MS:|r`
+    private static Time: string = `${Colors.COLOR_YELLOW_ORANGE}Time:|r`
+    private static Saves: string = `${Colors.COLOR_YELLOW_ORANGE}Saves:|r`
+    private static Deaths: string = `${Colors.COLOR_YELLOW_ORANGE}Deaths:|r`
+    private static Streak: string = `${Colors.COLOR_YELLOW_ORANGE}Streak:|r`
+    private static Gold: string = `${Colors.COLOR_YELLOW_ORANGE}Gold:|r`
+    private static Ratio: string = `${Colors.COLOR_YELLOW_ORANGE}S/D:|r`
+    private static Progress: string = `${Colors.COLOR_YELLOW_ORANGE}Prog.:|r`
 
     private static readonly _cacheUpdate: Action = CustomStatFrame.Update
 
@@ -112,7 +113,7 @@ export class CustomStatFrame {
 
             CustomStatFrame.CustomStatFrameBoxF.visible = CustomStatFrame.CustomStatFrameBoxS.visible
         } catch (e: any) {
-            Logger.Critical('Error in CustomStatFrame.Update: {e.Message}')
+            Logger.Critical(`Error in CustomStatFrame.Update: ${e.Message}`)
             throw e
         }
     }
@@ -185,32 +186,32 @@ export class CustomStatFrame {
         // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
         if (selectedUnit === SpawnChampions.Fieryfox2023) {
             CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|13: r:25'
+            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 13:25|r'
             CustomStatFrame.Stats[4].Text.text = '|cffffff00Qoz|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region:|US: r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time:|15: r:36'
+            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
+            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 15:36|r'
         } else if (selectedUnit === SpawnChampions.FandF2023) {
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|US: r'
+            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: US|r'
             CustomStatFrame.Stats[1].Text.text = '|cff00fffAches|r'
             CustomStatFrame.Stats[3].Text.text = '|cff00fffBranFlake|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Time:|23: r:12'
+            CustomStatFrame.Stats[5].Text.text = '|cffffff00Time: 23:12|r'
             CustomStatFrame.Stats[4].Text.text = '|cff00fffBalmydrop|r'
             CustomStatFrame.Stats[0].Text.text = '|cff00fffUdo|r'
         } else if (selectedUnit === SpawnChampions.Fieryfox2024) {
             CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|13: r:23'
+            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 13:23|r'
             CustomStatFrame.Stats[4].Text.text = '|cff964bc8MrGheed|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region:|US: r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time:|16: r:31'
+            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
+            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 16:31|r'
         } else if (selectedUnit === SpawnChampions.Stan2025) {
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time:|14: r:25'
+            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 14:25|r'
             CustomStatFrame.Stats[1].Text.text = '|cffa471e3Stan|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region:|EU: r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time:|14: r:56'
+            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 14:56|r'
             CustomStatFrame.Stats[4].Text.text = '|cff964bc8Balmydrop|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region:|US: r'
+            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
         } else return false
         return true
     }
@@ -223,8 +224,8 @@ export class CustomStatFrame {
         //Stats[4].Text.text = "";
         if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
         if (!PROD && selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG)
-            CustomStatFrame.Stats[4].Text.text = 'Walk: {Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}'
-        CustomStatFrame.Stats[5].Text.text = `{MoveSpeed} ${selectedUnit.moveSpeed}`
+            CustomStatFrame.Stats[4].Text.text = `Walk: ${Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}`
+        CustomStatFrame.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`
     }
 
     private static SetWolfAffixTexts(selectedUnit: Unit) {
@@ -242,36 +243,52 @@ export class CustomStatFrame {
     private static SetGamemodeFrameText(selectedUnit: Unit) {
         if (CurrentGameMode.active === GameMode.Standard) {
             // Standard
-            CustomStatFrame.Stats[3].Text.setText('{Streak} {GetPlayerSaveStreak(selectedUnit)}')
-            CustomStatFrame.Stats[0].Text.setText(
-                '{Ratio} {Colors.COLOR_GREEN}{GetCurrentRoundSaves(selectedUnit)}|r/{Colors.COLOR_RED}{GetCurrentRoundDeaths(selectedUnit)}|r'
+            CustomStatFrame.Stats[3].Text.setText(
+                `${CustomStatFrame.Streak} ${CustomStatFrame.GetPlayerSaveStreak(selectedUnit)}`
             )
-            CustomStatFrame.Stats[1].Text.setText('{Saves} {Colors.COLOR_GREEN}{GetPlayerSaves(selectedUnit)}|r')
+            CustomStatFrame.Stats[0].Text.setText(
+                `${CustomStatFrame.Ratio} ${Colors.COLOR_GREEN}${CustomStatFrame.GetCurrentRoundSaves(selectedUnit)}|r/${Colors.COLOR_RED}${CustomStatFrame.GetCurrentRoundDeaths(selectedUnit)}|r`
+            )
+            CustomStatFrame.Stats[1].Text.setText(
+                `${CustomStatFrame.Saves} ${Colors.COLOR_GREEN}${CustomStatFrame.GetPlayerSaves(selectedUnit)}|r`
+            )
         } else if (CurrentGameMode.active === GameMode.SoloTournament) {
             // Solo
-            CustomStatFrame.Stats[0].Text.setText('{Time} {GetPlayerTime(selectedUnit)}')
-            CustomStatFrame.Stats[1].Text.setText('{Progress} {GetPlayerProgress(selectedUnit)}%')
-            CustomStatFrame.Stats[2].Text.setText('{Deaths} {GetGameTotalDeaths(selectedUnit)}')
+            CustomStatFrame.Stats[0].Text.setText(
+                `${CustomStatFrame.Time} ${CustomStatFrame.GetPlayerTime(selectedUnit)}`
+            )
+            CustomStatFrame.Stats[1].Text.setText(
+                `${CustomStatFrame.Progress} ${CustomStatFrame.GetPlayerProgress(selectedUnit)}%`
+            )
+            CustomStatFrame.Stats[2].Text.setText(
+                `${CustomStatFrame.Deaths} ${CustomStatFrame.GetGameTotalDeaths(selectedUnit)}`
+            )
         } else if (CurrentGameMode.active === GameMode.TeamTournament) {
             // Team
-            CustomStatFrame.Stats[0].Text.setText('{GetPlayerTeamName(selectedUnit)}')
-            CustomStatFrame.Stats[4].Text.setText('{GetPlayerProgress(selectedUnit)}%')
-            CustomStatFrame.Stats[1].Text.setText('{Saves} {GetGameTotalSaves(selectedUnit)}')
-            CustomStatFrame.Stats[2].Text.setText('{Deaths} {GetGameTotalDeaths(selectedUnit)}')
+            CustomStatFrame.Stats[0].Text.setText(`${CustomStatFrame.GetPlayerTeamName(selectedUnit)}`)
+            CustomStatFrame.Stats[4].Text.setText(`${CustomStatFrame.GetPlayerProgress(selectedUnit)}%`)
+            CustomStatFrame.Stats[1].Text.setText(
+                `${CustomStatFrame.Saves} ${CustomStatFrame.GetGameTotalSaves(selectedUnit)}`
+            )
+            CustomStatFrame.Stats[2].Text.setText(
+                `${CustomStatFrame.Deaths} ${CustomStatFrame.GetGameTotalDeaths(selectedUnit)}`
+            )
         }
     }
 
     private static SetCommonFrameText(selectedUnit: Unit) {
-        CustomStatFrame.Stats[4].Text.setText('{Gold} {GetPlayerGold(selectedUnit)}')
+        CustomStatFrame.Stats[4].Text.setText(`${CustomStatFrame.Gold} ${CustomStatFrame.GetPlayerGold(selectedUnit)}`)
         CustomStatFrame.Stats[5].Text.setText(`${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`)
-        CustomStatFrame.Stats[2].Text.setText('{Deaths} {Colors.COLOR_RED}{GetPlayerDeaths(selectedUnit)}|r')
+        CustomStatFrame.Stats[2].Text.setText(
+            `${CustomStatFrame.Deaths} ${Colors.COLOR_RED}${CustomStatFrame.GetPlayerDeaths(selectedUnit)}|r`
+        )
     }
 
     private static GetPlayerTeamName(u: Unit) {
         let team: any
         return (team = Globals.PLAYERS_TEAMS.get(u.owner) /* TODO; Prepend: Team */
             ? team.TeamColor
-            : '{Colors.COLOR_YELLOW_ORANGE}Aches: Team{Colors.COLOR_RESET}')
+            : `${Colors.COLOR_YELLOW_ORANGE}Team: Aches${Colors.COLOR_RESET}`)
     }
 
     private static GetPlayerGold(u: Unit) {

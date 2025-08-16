@@ -22,16 +22,18 @@ export class FrameManager {
     private static ButtonWidth: number = 0.053
     private static ButtonHeight: number = 0.028
 
-    private static GameUI: Frame = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+    private static GameUI: Frame
     private static ESCTrigger: Trigger = Trigger.create()!
     private static TEXT_COLOR: string = Colors.COLOR_YELLOW
     private static HOTKEY_COLOR: string = Colors.COLOR_YELLOW_ORANGE
 
-    private static readonly _cachedUIPosition: Action = FrameManager.RepositionBackdropAction()
+    private static _cachedUIPosition: Action
     private static _frames: Frame[] = []
 
     public static Initialize() {
         try {
+            this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+            this._cachedUIPosition = FrameManager.RepositionBackdropAction()
             BlzLoadTOCFile('war3mapImported\\templates.toc')
             FrameManager.RemoveUnwantedFrames()
             FrameManager.ButtonsBackdrop()
@@ -41,7 +43,7 @@ export class FrameManager {
             MusicFrame.Initialize()
             Utility.SimpleTimer(1.0, FrameManager.ESCHideFrames)
         } catch (ex: any) {
-            Logger.Critical('Error in FrameManager.Initialize: {ex.Message}')
+            Logger.Critical(`Error in FrameManager.Initialize: ${ex.Message}`)
             throw ex
         }
     }
@@ -63,7 +65,7 @@ export class FrameManager {
     public static CreateHeaderFrame(parent: Frame): Frame {
         let header = blzCreateFrameByType(
             'BACKDROP',
-            '{parent.name}Header',
+            `${parent.getName()}Header`,
             parent,
             'QuestButtonDisabledBackdropTemplate',
             0
@@ -73,15 +75,15 @@ export class FrameManager {
         header.setPoint(FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_TOPLEFT, 0, 0.0125)
         header.setSize(width, height)
 
-        let title = blzCreateFrameByType('TEXT', '{parent.name}Title', header, 'ScriptDialogText', 0)
+        let title = blzCreateFrameByType('TEXT', `${parent.getName()}Title`, header, 'ScriptDialogText', 0)
         title.setPoint(FRAMEPOINT_CENTER, header, FRAMEPOINT_CENTER, 0, 0)
         title.setSize(width, height)
-        title.text = '{Colors.COLOR_YELLOW}{parent.name}{Colors.COLOR_RESET}'
+        title.text = `${Colors.COLOR_YELLOW}${parent.getName()}${Colors.COLOR_RESET}`
         BlzFrameSetTextAlignment(title.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
 
         let closeButton = blzCreateFrameByType(
             'GLUETEXTBUTTON',
-            '{parent.name}CloseButton',
+            `${parent.getName()}CloseButton`,
             header,
             'ScriptDialogButton',
             0
@@ -125,7 +127,7 @@ export class FrameManager {
         FrameManager.RewardsButton.setPoint(FRAMEPOINT_CENTER, FrameManager.Backdrop, FRAMEPOINT_CENTER, 0, 0)
         FrameManager.RewardsButton.setSize(this.ButtonWidth, this.ButtonHeight)
         let shopText = blzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton, '', 0)
-        shopText.text = '{TEXT_COLOR}Rewards{HOTKEY_COLOR}(-)|r'
+        shopText.text = `${Colors.COLOR_YELLOW}Rewards${Colors.COLOR_LAVENDER}(-)|r`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.RewardsButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.9)
         shopText.enabled = false
@@ -145,7 +147,7 @@ export class FrameManager {
         FrameManager.MusicButton.setPoint(FRAMEPOINT_TOPRIGHT, FrameManager.RewardsButton, FRAMEPOINT_TOPLEFT, 0, 0)
         FrameManager.MusicButton.setSize(this.ButtonWidth, this.ButtonHeight)
         let shopText = blzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton, '', 0)
-        shopText.text = '{TEXT_COLOR}Music{HOTKEY_COLOR}(0)'
+        shopText.text = `${Colors.COLOR_YELLOW}Music${Colors.COLOR_LAVENDER}(0)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.MusicButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.98)
         shopText.enabled = false
@@ -165,7 +167,7 @@ export class FrameManager {
         FrameManager.ShopButton.setPoint(FRAMEPOINT_TOPLEFT, FrameManager.RewardsButton, FRAMEPOINT_TOPRIGHT, 0, 0)
         FrameManager.ShopButton.setSize(this.ButtonWidth, this.ButtonHeight)
         let shopText = blzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton, '', 0)
-        shopText.text = '{TEXT_COLOR}Shop{HOTKEY_COLOR}(=)'
+        shopText.text = `${Colors.COLOR_YELLOW}Shop${Colors.COLOR_LAVENDER}(=)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.ShopButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(1.0)
         shopText.enabled = false
@@ -207,7 +209,7 @@ export class FrameManager {
                 FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, nameFrame, FRAMEPOINT_TOP, 0, yOffSet)
                 FrameManager.Backdrop.setSize(x, h)
             } catch (e: any) {
-                Logger.Critical('Error in RepositionBackdropAction: {e.Message}')
+                Logger.Critical(`Error in RepositionBackdropAction: ${e.Message}`)
             }
         }
     }

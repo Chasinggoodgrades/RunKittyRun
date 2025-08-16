@@ -5,11 +5,10 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { MapPlayer, Multiboard, Timer, Trigger } from 'w3ts'
+import { Multiboard, Trigger } from 'w3ts'
 
 export class TeamsMultiboard {
     private static CurrentTeamsMB: Multiboard
@@ -23,7 +22,7 @@ export class TeamsMultiboard {
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
         } catch (e: any) {
-            Logger.Critical('Error in TeamsMultiboard.Initialize: {e.Message}')
+            Logger.Critical(`Error in TeamsMultiboard.Initialize: ${e.Message}`)
             throw e
         }
     }
@@ -37,15 +36,13 @@ export class TeamsMultiboard {
 
     private static TeamsStatsMultiboard() {
         TeamsMultiboard.TeamsStatsMB ??= Multiboard.create()!
-        TeamsMultiboard.TeamsStatsMB.title =
-            'Stats: Teams {Colors.COLOR_YELLOW_ORANGE}[{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+        TeamsMultiboard.TeamsStatsMB.title = `Teams Stats ${Colors.COLOR_YELLOW_ORANGE}[${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         TeamsMultiboard.TeamsStatsMB.display(false)
     }
 
     public static CurrentTeamsMultiboard() {
         TeamsMultiboard.CurrentTeamsMB ??= Multiboard.create()!
-        TeamsMultiboard.CurrentTeamsMB.title =
-            'Teams: Current {Colors.COLOR_YELLOW_ORANGE}[{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+        TeamsMultiboard.CurrentTeamsMB.title = `Current Teams ${Colors.COLOR_YELLOW_ORANGE}[${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         TeamsMultiboard.CurrentTeamsMB.display(true)
         TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size + 1
         TeamsMultiboard.CurrentTeamsMB.columns = Gamemode.PlayersPerTeam
@@ -64,8 +61,8 @@ export class TeamsMultiboard {
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setVisible(true, false)
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setWidth(0.05)
         for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
-            if (Globals.ROUND === i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('|c0000FF00Round {i}|r')
-            else TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText('Round {i}')
+            if (Globals.ROUND === i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText(`|c0000FF00Round ${i}|r`)
+            else TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText(`Round ${i}`)
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setVisible(true, false)
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setWidth(0.05)
         }
@@ -122,10 +119,10 @@ export class TeamsMultiboard {
             let team = Globals.ALL_TEAMS_LIST[i]
             let teamMembers: string = team.TeamMembersString
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setWidth(0.05)
-            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setText('{team.TeamColor}:')
+            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setText(`${team.TeamColor}:`)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setVisible(true, false)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setWidth(widthSize)
-            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setText('{teamMembers}')
+            TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setText(`${teamMembers}`)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 1).setVisible(true, false)
 
             rowIndex++

@@ -4,6 +4,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
+import { Colors } from 'src/Utility/Colors/Colors'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
@@ -25,7 +26,7 @@ export class Frostbite extends Affix {
 
     public constructor(unit: Wolf) {
         super(unit)
-        this.name = '{Colors.COLOR_LIGHTBLUE}Frostbite|r'
+        this.name = `${Colors.COLOR_LIGHTBLUE}Frostbite|r`
         this.InRangeTrigger ??= Trigger.create()!
         this.PeriodicRangeTrigger ??= Trigger.create()!
     }
@@ -47,7 +48,7 @@ export class Frostbite extends Affix {
             GC.RemoveList(this.FrostbittenKitties) // TODO; Cleanup:             GC.RemoveList(ref FrostbittenKitties);
             super.Remove()
         } catch (e: any) {
-            Logger.Warning('Error in Frostbite.Remove: {e.Message}')
+            Logger.Warning(`Error in Frostbite.Remove: ${e.Message}`)
             throw e
         }
     }
@@ -61,7 +62,7 @@ export class Frostbite extends Affix {
             }
             this.FrostbittenKitties.length = 0
         } catch (e: any) {
-            Logger.Warning('Error in Frostbite.RemoveAllEffects: {e.Message}')
+            Logger.Warning(`Error in Frostbite.RemoveAllEffects: ${e.Message}`)
             throw e
         }
     }
@@ -94,7 +95,7 @@ export class Frostbite extends Affix {
                 this.FrostbittenKitties.splice(i, 1)
             }
         } catch (e: any) {
-            Logger.Warning('Error in Frostbite.PeriodicRangeCheck: {e.Message}')
+            Logger.Warning(`Error in Frostbite.PeriodicRangeCheck: ${e.Message}`)
         }
     }
 

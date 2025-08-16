@@ -17,7 +17,7 @@
 //        let roundProperty = difficultyData.GetType().GetProperty(roundString.split('.').Last());
 //        let roundTimeValue = roundProperty.GetValue(difficultyData);
 
-//        print("Round Time for {difficultyString} - {Globals.ROUND}: {roundTimeValue}");
+//        print(`Round Time for ${difficultyString} - ${Globals.ROUND}: ${roundTimeValue}`);
 //    }
 
 //    private static string GetDifficultyProperty()
@@ -40,15 +40,15 @@
 //        switch (Globals.ROUND)
 //        {
 //            case 1:
-//                return "{propertyName}.RoundOneTime";
+//                return `${propertyName}.RoundOneTime`;
 //            case 2:
-//                return "{propertyName}.RoundTwoTime";
+//                return `${propertyName}.RoundTwoTime`;
 //            case 3:
-//                return "{propertyName}.RoundThreeTime";
+//                return `${propertyName}.RoundThreeTime`;
 //            case 4:
-//                return "{propertyName}.RoundFourTime";
+//                return `${propertyName}.RoundFourTime`;
 //            case 5:
-//                return "{propertyName}.RoundFiveTime";
+//                return `${propertyName}.RoundFiveTime`;
 //            default:
 //                throw new ArgumentOutOfRangeError("ROUND", "Invalid round number");
 //        }

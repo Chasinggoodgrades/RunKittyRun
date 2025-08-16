@@ -1,7 +1,7 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Wolf } from 'src/Game/Entities/Wolf'
-import { Affix } from './Affix'
 import { Globals } from 'src/Global/Globals'
+import { Affix } from './Affix'
 
 export class AffixUtil {
     public static RemoveAffix(affix: Affix, wolf: Wolf): void
@@ -31,7 +31,7 @@ export const RemoveAllWolfAffixes = (wolf: Wolf) => {
             Globals.AllAffixes.splice(Globals.AllAffixes.indexOf(wolf.Affixes[i]), 1)
         }
     } catch (e: any) {
-        Logger.Warning('Error in RemoveAllWolfAffixes: {e.Message}')
+        Logger.Warning(`Error in RemoveAllWolfAffixes: ${e.Message}`)
     }
 
     wolf.Affixes = []
