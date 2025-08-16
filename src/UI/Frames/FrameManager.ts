@@ -40,7 +40,6 @@ export class FrameManager {
             FrameManager.CreateRewardsButton()
             FrameManager.CreateMusicButton()
             FrameManager.CreateShopButton()
-            MusicFrame.Initialize()
             Utility.SimpleTimer(1.0, FrameManager.ESCHideFrames)
         } catch (ex: any) {
             Logger.Critical(`Error in FrameManager.Initialize: ${ex}`)

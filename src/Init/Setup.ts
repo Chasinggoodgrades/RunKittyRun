@@ -32,6 +32,7 @@ import { MusicManager } from 'src/Sounds/MusicManager'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { CustomStatFrame } from 'src/UI/CustomStatFrame'
 import { FrameManager } from 'src/UI/Frames/FrameManager'
+import { MusicFrame } from 'src/UI/Frames/MusicFrame'
 import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardManager } from 'src/UI/Multiboard'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
@@ -100,6 +101,7 @@ export class Setup {
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
             SuspendTimeOfDay(true)
             FrameManager.Initialize()
+            MusicFrame.Initialize()
             CustomStatFrame.Init()
             SeasonalManager.Initialize()
             GameTimer.Initialize()
