@@ -1,5 +1,4 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { NamedWolves } from 'src/Game/Entities/NamedWolves'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { WolfArea } from 'src/Game/WolfArea'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
@@ -8,33 +7,12 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
-import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
 import { sumNumbers } from 'src/Utility/Utility'
 import { Affix } from './Affix'
-import { Blitzer } from './Blitzer'
-import { Bomber } from './Bomber'
-import { Chaos } from './Chaos'
-import { Fixation } from './Fixation'
-import { Frostbite } from './Frostbite'
-import { Howler } from './Howler'
-import { Speedster } from './Speedster'
-import { Stealth } from './Stealth'
-import { Unpredictable } from './Unpredictable'
-import { Vortex } from './Vortex'
+import { AddAffix, AffixUtil, RemoveAllWolfAffixes } from './AffixUtil'
+import { CreateAffix, AffixTypes } from './AffixCreate'
 
 export class AffixFactory {
-    public static AllAffixes: Affix[] = []
-    public static readonly AffixTypes: string[] = [
-        'Speedster',
-        'Unpredictable',
-        'Fixation',
-        'Frostbite',
-        'Chaos',
-        'Howler',
-        'Blitzer',
-        'Stealth',
-        'Bomber',
-    ]
     private static LaneWeights: number[]
 
     private static NUMBER_OF_AFFIXED_WOLVES: number // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
@@ -48,18 +26,18 @@ export class AffixFactory {
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
     /// </summary>
     public static Initialize() {
-        AffixFactory.AllAffixes = []
+        Globals.AllAffixes = []
         AffixFactory.InitLaneWeights()
     }
 
     public static CalculateAffixes(laneIndex: number = -1) {
-        for (let affix of AffixFactory.AllAffixes) {
+        for (let affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) continue
             if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
             AffixFactory.TempAffixCounts.set(affix.name, 0)
         }
 
-        for (let affix of AffixFactory.AllAffixes) {
+        for (let affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) {
                 if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
                 AffixFactory.TempAffixCounts.set(affix.name, (AffixFactory.TempAffixCounts.get(affix.name) || 0) + 1)
@@ -75,44 +53,6 @@ export class AffixFactory {
         AffixFactory.TempAffixCounts.clear()
         AffixFactory.TempAffixesList.length = 0
         return arr
-    }
-
-    public static CreateAffix(unit: Wolf, affixName: string): Affix {
-        switch (affixName) {
-            case 'Speedster':
-                return new Speedster(unit)
-
-            case 'Unpredictable':
-                return new Unpredictable(unit)
-
-            case 'Fixation':
-                return new Fixation(unit)
-
-            case 'Frostbite':
-                return new Frostbite(unit)
-
-            case 'Chaos':
-                return new Chaos(unit)
-
-            case 'Howler':
-                return new Howler(unit)
-
-            case 'Blitzer':
-                return new Blitzer(unit)
-
-            case 'Stealth':
-                return new Stealth(unit)
-
-            case 'Bomber':
-                return new Bomber(unit)
-
-            case 'Vortex':
-                return new Vortex(unit)
-
-            default:
-                Logger.Warning('{Colors.COLOR_YELLOW_ORANGE}affix: Invalid|r')
-                return null as never
-        }
     }
 
     /// <summary>
@@ -146,13 +86,13 @@ export class AffixFactory {
 
     public static ApplyAffix(unit: Wolf, affixName: string): Affix {
         if (!AffixFactory.CanApplyAffix(unit, affixName)) return null as never
-        let affix = AffixFactory.CreateAffix(unit, affixName)
-        unit.AddAffix(affix)
+        let affix = CreateAffix(unit, affixName)
+        AddAffix(affix, unit)
         return affix
     }
 
     private static AvailableAffixes(laneNumber: number) {
-        let affixes = AffixFactory.AffixTypes.join(', ') // Start with all affixes in a single string
+        let affixes = AffixTypes.join(', ') // Start with all affixes in a single string
         let fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
         if (
             laneNumber > 6 ||
@@ -256,8 +196,8 @@ export class AffixFactory {
         return (
             wolf.RegionIndex === laneIndex &&
             wolf.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES &&
-            wolf.Unit !== FandF.BloodWolf &&
-            !NamedWolves.DNTNamedWolves.includes(wolf)
+            // wolf.Unit !== FandF.BloodWolf && // fuck it, lets let this stupid thing rage hell. Sounds fun to me.
+            !Globals.DNTNamedWolves.includes(wolf)
         )
     }
 
@@ -267,8 +207,8 @@ export class AffixFactory {
 
     public static RemoveAllAffixes() {
         for (let [_, wolf] of Globals.ALL_WOLVES) {
-            wolf.RemoveAllWolfAffixes()
+            RemoveAllWolfAffixes(wolf)
         }
-        AffixFactory.AllAffixes.length = 0
+        Globals.AllAffixes.length = 0
     }
 }

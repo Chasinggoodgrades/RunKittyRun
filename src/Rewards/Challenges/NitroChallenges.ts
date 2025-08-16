@@ -13,6 +13,7 @@ export class NitroChallenges {
     private static NitroRoundTimes: Map<number, number>
     private static NitroTimer = Timer.create()
     private static NitroDialog = TimerDialog.create(NitroChallenges.NitroTimer)!
+    private static WHITE_FIRE_DEATH_REQUIREMENT: number = 3
 
     public static Initialize() {
         NitroChallenges.NitroRoundTimes.clear()
@@ -88,7 +89,7 @@ export class NitroChallenges {
 
     public static CompletedNitro(kitty: Kitty) {
         if (NitroChallenges.NitroTimer.remaining <= 0.0) return
-        if (Safezone.CountHitSafezones(kitty.Player) <= 12) {
+        if (this.CountHitSafezones(kitty.Player) <= 12) {
             kitty.Player.DisplayTimedTextTo(
                 6.0,
                 "{Colors.COLOR_RED}didn: You'hit: enough: safezones: on: your: own: to: obtain: nitro: t."
@@ -98,6 +99,26 @@ export class NitroChallenges {
 
         NitroChallenges.AwardingNitroEvents(kitty)
         NitroChallenges.AwardingDivineLight(kitty)
+    }
+
+        /// <summary>
+    /// Counts the number of safezones a player has touched.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns>int count of the # of safezones reached.</returns>
+    public static CountHitSafezones(player: MapPlayer) {
+        let count: number = 0
+        for (let safezone of Globals.SAFE_ZONES) {
+            if (safezone.AwardedPlayers.includes(player)) count++
+        }
+        return count
+    }
+
+    public static WhiteFire(player: MapPlayer) {
+        if (NitroChallenges.GetNitroTimeRemaining() <= 0) return
+        let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
+        if (Globals.ROUND !== 3 || currentDeaths > this.WHITE_FIRE_DEATH_REQUIREMENT) return
+        AwardManager.GiveReward(player, 'WhiteFire')
     }
 
     private static AwardingNitroEvents(kitty: Kitty) {

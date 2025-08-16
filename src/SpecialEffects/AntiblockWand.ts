@@ -37,7 +37,7 @@ export class AntiblockWand {
         let list = wolvesInArea.getUnits()
         for (let wolf of list) {
             if (wolf.typeId !== Wolf.WOLF_MODEL) continue
-            if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(wolf)!)) continue
+            if (Globals.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(wolf)!)) continue
             let wolfUnit = Globals.ALL_WOLVES.get(wolf)!
             wolfUnit.StartWandering(true)
         }

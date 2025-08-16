@@ -10,6 +10,11 @@ import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
 import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
+import { Affix } from 'src/Affixes/Affix'
+
+
+export const DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
+export const DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
 
 export class Globals {
     public static MAX_TEAM_SIZE: number = 24
@@ -21,6 +26,10 @@ export class Globals {
     public static WORLD_BOUNDS: Rectangle
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
+    public static WinGame: boolean = false
+
+    public static AllAffixes: Affix[] = []
+
     public static readonly GAME_MODES: string[] = [
         GameMode[GameMode.Standard],
         GameMode[GameMode.SoloTournament],
@@ -64,6 +73,7 @@ export class Globals {
     public static ALL_KITTIES: Map<MapPlayer, Kitty> = new Map()
     public static ALL_CIRCLES: Map<MapPlayer, Circle> = new Map()
     public static ALL_WOLVES: Map<Unit, Wolf> = new Map()
+    public static DNTNamedWolves: Wolf[] = []
 
     public static PLAYER_UPGRADES: Map<MapPlayer, PlayerUpgrades> = new Map()
 
@@ -81,6 +91,8 @@ export class Globals {
 
     public static DATE_TIME_LOADED: boolean
     public static GAME_INITIALIZED: boolean
+
+    public static CurrentGameModeType: string = ''
 
     constructor() {
         Globals.WORLD_BOUNDS = Rectangle.getWorldBounds()!

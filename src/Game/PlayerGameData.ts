@@ -1,4 +1,4 @@
-import { CollisionDetection } from './CollisionDetection'
+import { DEFAULT_WOLF_COLLISION_RADIUS } from 'src/Global/Globals'
 
 /// <summary>
 /// Keeps track of current game stats, saves, deaths, streak, nitros, and other misc data.
@@ -20,7 +20,7 @@ export class PlayerGameData {
     public CollectedKibble: number
     public CrystalOfFireAttempts: number = 0
     public ChronoSphereCD: boolean = false
-    public CollisonRadius: number = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS
+    public CollisonRadius: number = DEFAULT_WOLF_COLLISION_RADIUS
     public CollectedJackpots: number = 0
     public CollectedSuperJackpots: number = 0
 

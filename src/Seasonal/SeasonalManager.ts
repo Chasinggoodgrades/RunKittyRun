@@ -7,17 +7,11 @@ import { DoodadChanger } from './Doodads/DoodadChanger'
 import { SeasonalAwards } from './SeasonalAwards'
 import { ShopChanger } from './Shop/ShopChanger'
 import { TerrainChanger } from './Terrain/TerrainChanger'
+import { HolidaySeasons, Seasons } from './Seasons'
 
-export enum HolidaySeasons {
-    Christmas,
-    Halloween,
-    Easter,
-    Valentines,
-    None,
-}
+
 
 export class SeasonalManager {
-    public static Season: HolidaySeasons
     private static CurrentMonth: number
     private static SnowEffect: number = FourCC('SNls') // light snow
     private static BlizzardEffect: number = FourCC('SNbs') // blizzard
@@ -45,12 +39,12 @@ export class SeasonalManager {
 
     public static DetermineSeason() {
         if (CurrentGameMode.active !== GameMode.Standard) {
-            SeasonalManager.Season = HolidaySeasons.None
+            Seasons.setCurrentSeason(HolidaySeasons.None)
             return
         }
         switch (SeasonalManager.CurrentMonth) {
             case 12:
-                SeasonalManager.Season = HolidaySeasons.Christmas
+                Seasons.setCurrentSeason(HolidaySeasons.Christmas)
                 break
             /*            case 10:
                             Season = HolidaySeasons.Halloween;
@@ -64,7 +58,7 @@ export class SeasonalManager {
                             Season = HolidaySeasons.Valentines;
                             break;*/
             default:
-                SeasonalManager.Season = HolidaySeasons.None
+                Seasons.setCurrentSeason(HolidaySeasons.None)
                 break
         }
     }
@@ -74,7 +68,7 @@ export class SeasonalManager {
     /// </summary>
     public static ActivateChristmas() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        SeasonalManager.Season = HolidaySeasons.Christmas
+        Seasons.setCurrentSeason(HolidaySeasons.Christmas)
         TerrainChanger.ActivateChristmasTerrain()
         DoodadChanger.ChristmasDoodads()
         ShopChanger.SetSeasonalShop()
@@ -86,7 +80,7 @@ export class SeasonalManager {
     /// Admin Command for no seasons. Works regardless of mode.
     /// </summary>
     public static NoSeason() {
-        SeasonalManager.Season = HolidaySeasons.None
+        Seasons.setCurrentSeason(HolidaySeasons.None)
         TerrainChanger.NoSeason()
         DoodadChanger.NoSeasonDoodads()
         ShopChanger.SetSeasonalShop()
@@ -95,7 +89,7 @@ export class SeasonalManager {
     }
 
     private static SetMinimap() {
-        switch (SeasonalManager.Season) {
+        switch (Seasons.getCurrentSeason()) {
             case HolidaySeasons.Christmas:
                 BlzChangeMinimapTerrainTex('snowMap.blp')
                 break
@@ -107,12 +101,12 @@ export class SeasonalManager {
     }
 
     private static SetWeather() {
-        if (SeasonalManager.Season === HolidaySeasons.Christmas) {
+        if (Seasons.getCurrentSeason() === HolidaySeasons.Christmas) {
             SeasonalManager.CurrentWeather ??= WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.SnowEffect)!
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23)
             SuspendTimeOfDay(true)
             SeasonalManager.CurrentWeather.enable(true)
-        } else if (SeasonalManager.Season === HolidaySeasons.None) {
+        } else if (Seasons.getCurrentSeason() === HolidaySeasons.None) {
             SeasonalManager.CurrentWeather?.destroy()
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
             SuspendTimeOfDay(true)

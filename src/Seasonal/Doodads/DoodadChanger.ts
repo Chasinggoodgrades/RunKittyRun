@@ -3,7 +3,7 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { GC } from 'src/Utility/GC'
 import { Destructable } from 'w3ts'
-import { HolidaySeasons, SeasonalManager } from '../SeasonalManager'
+import { HolidaySeasons, Seasons } from '../Seasons'
 
 export class DoodadChanger {
     private static SafezoneLanterns: number = FourCC('B005')
@@ -56,7 +56,7 @@ export class DoodadChanger {
     }
 
     public static ChristmasDoodads() {
-        if (SeasonalManager.Season !== HolidaySeasons.Christmas) return
+        if (Seasons.getCurrentSeason() !== HolidaySeasons.Christmas) return
         this.ReplaceDoodad(this.ChristmasTree, 2.5)
         this.ShowSeasonalDoodads(true)
     }

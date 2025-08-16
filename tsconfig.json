@@ -18,9 +18,9 @@
         "plugins": [
             {
                 "transform": "war3-transformer",
-                "mapDir": "C:/Users/Stan/Node/RKRAches-TS/maps/map.w3x",
-                "entryFile": "C:/Users/Stan/Node/RKRAches-TS/src/main.ts",
-                "outputDir": "C:/Users/Stan/Node/RKRAches-TS/dist/map.w3x"
+                "mapDir": "C:/Users/chase/Documents/Warcraft III/Maps/RKRTS/RunKittyRun/maps/map.w3x",
+                "entryFile": "C:/Users/chase/Documents/Warcraft III/Maps/RKRTS/RunKittyRun/src/main.ts",
+                "outputDir": "C:/Users/chase/Documents/Warcraft III/Maps/RKRTS/RunKittyRun/dist/map.w3x"
             }
         ],
         "types": [

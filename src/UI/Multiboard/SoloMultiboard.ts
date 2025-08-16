@@ -52,7 +52,7 @@ export class SoloMultiboard {
     }
 
     private static OverallMultiboardRacemode() {
-        if (Gamemode.CurrentGameModeType !== Globals.SOLO_MODES[1]) return // Race mode
+        if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[1]) return // Race mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 9
         SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
@@ -73,7 +73,7 @@ export class SoloMultiboard {
     }
 
     private static OverallMultiboardProgressmode() {
-        if (Gamemode.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
+        if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 7
         SoloMultiboard.OverallBoard.GetItem(0, 0).setText('{color}Player|r')
@@ -111,13 +111,13 @@ export class SoloMultiboard {
 
     private static OverallStats() {
         SoloMultiboard.OverallBoard.title =
-            'Game: Current {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Game: Current {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
         let sortedPlayers =
-            Gamemode.CurrentGameModeType === Globals.SOLO_MODES[0]
+            Globals.CurrentGameModeType === Globals.SOLO_MODES[0]
                 ? Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
                       let progDiff = b[1].TimeProg.GetOverallProgress() - a[1].TimeProg.GetOverallProgress()
                       if (progDiff !== 0) return progDiff
@@ -141,7 +141,7 @@ export class SoloMultiboard {
             let status = Globals.ALL_KITTIES.get(player)!.Finished ? 'Finished' : 'Racing'
             SoloMultiboard.MBSlot.set(player, rowIndex)
             let stats =
-                Gamemode.CurrentGameModeType === Globals.SOLO_MODES[0]
+                Globals.CurrentGameModeType === Globals.SOLO_MODES[0]
                     ? [
                           name,
                           times.GetRoundProgress(1).toFixed(2) + '%',
@@ -177,7 +177,7 @@ export class SoloMultiboard {
 
     private static BestTimeStats() {
         SoloMultiboard.BestTimes.title =
-            'Times: Best {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Times: Best {Colors.COLOR_YELLOW_ORANGE}[{CurrentGameMode.active}-{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         let rowIndex = 1
 
         for (let player of Globals.ALL_PLAYERS) {

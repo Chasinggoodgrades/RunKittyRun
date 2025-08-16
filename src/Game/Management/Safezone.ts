@@ -113,19 +113,6 @@ export class Safezone {
     }
 
     /// <summary>
-    /// Counts the number of safezones a player has touched.
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns>int count of the # of safezones reached.</returns>
-    public static CountHitSafezones(player: MapPlayer) {
-        let count: number = 0
-        for (let safezone of Globals.SAFE_ZONES) {
-            if (safezone.AwardedPlayers.includes(player)) count++
-        }
-        return count
-    }
-
-    /// <summary>
     /// If the unit type is a wolf, it'll tell the wolf to MOVE back to its wolf area.
     /// Primary purpose is to make it so "wander" wolves dont get into the safezones.
     /// </summary>

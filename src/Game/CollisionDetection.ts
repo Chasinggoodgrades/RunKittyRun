@@ -3,8 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { UnitWithinRange } from 'src/Events/WithinRange/UnitWithinRange'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
-import { TeamsUtil } from 'src/Gamemodes/Teams/TeamsUtil'
-import { Globals } from 'src/Global/Globals'
+import { DEFAULT_WOLF_COLLISION_RADIUS, Globals } from 'src/Global/Globals'
 import { getFilterUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { Kitty } from './Entities/Kitty/Kitty'
@@ -15,13 +14,14 @@ import { BeaconOfUnitedLifeforce } from './Items/Relics/RelicTypes/BeaconOfUnite
 import { ChronoSphere } from './Items/Relics/RelicTypes/ChronoSphere'
 import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 
+
+
 export class CollisionDetection {
-    public static DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
     private static CIRCLE_COLLISION_RADIUS: number = 78.0
 
     private static IsBeaconOfUnitedLifeforce = (r: Relic): r is BeaconOfUnitedLifeforce => {
         return r instanceof BeaconOfUnitedLifeforce
-    }
+}
 
     private static WolfCollisionFilter(k: Kitty): () => boolean {
         return () => {
@@ -83,7 +83,7 @@ export class CollisionDetection {
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
-            CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS,
+            DEFAULT_WOLF_COLLISION_RADIUS,
             this.ShadowRelicWolvesFilter(sk),
             this.WolfCollisionShadowTrigger(sk)
         )
@@ -105,7 +105,7 @@ export class CollisionDetection {
                 if (k.Invulnerable) return
                 OneOfNine.OneOfNineEffect(k)
                 k.KillKitty()
-                TeamsUtil.CheckTeamDead(k)
+                this.CheckTeamDead(k)
             } catch (e: any) {
                 Logger.Warning('Error: WolfCollisionTrigger: {e.Message}')
                 throw e
@@ -148,5 +148,14 @@ export class CollisionDetection {
             }
         })
         return sk.cCollision
+    }
+
+    public static CheckTeamDead(k: Kitty) {
+        if (CurrentGameMode.active !== GameMode.TeamTournament) return
+        let team = Globals.ALL_TEAMS.get(k.TeamID)!
+        for (let i: number = 0; i < team.Teammembers.length; i++) {
+            if (Globals.ALL_KITTIES.get(team.Teammembers[i])!.isAlive()) return
+        }
+        team.TeamIsDeadActions()
     }
 }

@@ -3,7 +3,6 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { KibbleEvent } from 'src/Rewards/EasterEggs/KibbleEvent'
-import { HolidaySeasons, SeasonalManager } from 'src/Seasonal/SeasonalManager'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
@@ -12,15 +11,18 @@ import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { PositionWithPolarOffsetRadX, PositionWithPolarOffsetRadY, Utility } from 'src/Utility/Utility'
 import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
-import { Effect, Item, Trigger } from 'w3ts'
+import { Effect, Item, MapPlayer, Trigger } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { PersonalBestAwarder } from '../Podium/PersonalBestAwarder'
 import { ItemSpatialGrid } from './ItemSpatialGrid'
 import { ItemSpawnerTrackKibbles } from './ItemSpawnerTrackKibbles'
+import { HolidaySeasons, Seasons } from 'src/Seasonal/Seasons'
 
 export class Kibble extends IDisposable {
     public static PickupTrigger: Trigger
     public static SpawningKibble: boolean = true
+    public static KibbleCollectionBeatenList: MapPlayer[] = []
+
     private static KibblesColors: number[] = Kibble.KibbleList()
     private static StarfallEffect: string = 'Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl'
     private static TextTagHeight: number = 0.018
@@ -105,7 +107,7 @@ export class Kibble extends IDisposable {
             KibbleEvent.CollectEventKibble()
 
             Kibble.IncrementKibble(kitty)
-            PersonalBestAwarder.BeatKibbleCollection(kitty)
+            this.BeatKibbleCollection(kitty)
 
             if (kib !== null && kib.Item !== null) {
                 kib.dispose()
@@ -183,8 +185,28 @@ export class Kibble extends IDisposable {
         kibblePicker.SaveData.KibbleCurrency.Collected += 1
     }
 
+        /// <summary>
+    /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
+    /// </summary>
+    /// <param name="k"></param>
+    public static BeatKibbleCollection(k: Kitty) {
+        let currentKibble = k.CurrentStats.CollectedKibble
+        let bestKibble = k.SaveData.PersonalBests.KibbleCollected
+        if (currentKibble < 10) return // avoid the spam for 1st timers.
+        if (currentKibble > bestKibble) {
+            k.SaveData.PersonalBests.KibbleCollected = currentKibble
+
+            if (this.KibbleCollectionBeatenList.includes(k.Player)) return
+            Utility.TimedTextToAllPlayers(
+                3.0,
+                '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: collecting: personal {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r'
+            )
+            this.KibbleCollectionBeatenList.push(k.Player)
+        }
+    }
+
     private static KibbleList(): number[] {
-        switch (SeasonalManager.Season) {
+        switch (Seasons.getCurrentSeason()) {
             case HolidaySeasons.Christmas: {
                 return [Constants.ITEM_PRESENT]
             }

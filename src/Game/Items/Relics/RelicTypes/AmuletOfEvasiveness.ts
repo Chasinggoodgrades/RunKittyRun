@@ -28,7 +28,7 @@
 //    {
 //        let player = Unit.owner;
 //        let kitty = Globals.ALL_KITTIES.get(player)!;
-//        let newCollisionRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
+//        let newCollisionRadius = DEFAULT_WOLF_COLLISION_RADIUS * GetCollisionReduction(Unit);
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
 //        kitty.CurrentStats.CollisonRadius = newCollisionRadius;
 //        CollisionDetection.KittyRegisterCollisions(kitty);
@@ -40,7 +40,7 @@
 //        let player = Unit.owner;
 //        let kitty = Globals.ALL_KITTIES.get(player)!;
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
-//        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
+//        kitty.CurrentStats.CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS;
 //        Unit.setScale(0.60, 0.60, 0.60);
 //        CollisionDetection.KittyRegisterCollisions(kitty);
 //    }
@@ -80,7 +80,7 @@
 //        if (upgradeLevel < 2) return;
 //        let newCollisionRadius = GetCollisionReduction(Unit) - AMULET_UPGRADE_WW_COLLISION_REDUCTION;
 //        UnitWithinRange.DeRegisterUnitWithinRangeUnit(kitty);
-//        kitty.CurrentStats.CollisonRadius = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
+//        kitty.CurrentStats.CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
 //        CollisionDetection.KittyRegisterCollisions(kitty);
 
 //        let t = MemoryHandler.getEmptyObject<AchesTimers>()

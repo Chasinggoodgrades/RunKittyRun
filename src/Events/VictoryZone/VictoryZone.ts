@@ -45,7 +45,7 @@ export class VictoryZone {
         if (!Globals.GAME_ACTIVE) return
         if (CurrentGameMode.active === GameMode.Standard) {
             // Standard
-            if (Globals.ROUND === Gamemode.NumberOfRounds) Gameover.WinGame = true
+            if (Globals.ROUND === Gamemode.NumberOfRounds) Globals.WinGame = true
             RoundManager.RoundEnd()
         } else if (CurrentGameMode.active === GameMode.SoloTournament) {
             // Solo

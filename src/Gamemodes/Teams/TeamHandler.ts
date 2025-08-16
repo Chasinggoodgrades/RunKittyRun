@@ -11,7 +11,7 @@ export class TeamHandler {
 
     public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
         if (
-            Gamemode.CurrentGameModeType === Globals.TEAM_MODES[0] &&
+            Globals.CurrentGameModeType === Globals.TEAM_MODES[0] &&
             (adminForced || (!RoundManager.GAME_STARTED && this.FreepickEnabled))
         ) {
             this.FreepickHandler(Player, TeamNumber, adminForced)

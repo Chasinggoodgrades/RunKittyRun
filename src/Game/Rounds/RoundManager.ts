@@ -115,7 +115,7 @@ export class RoundManager {
             DeathlessChallenges.ResetDeathless()
             WolfLaneHider.ResetLanes()
             SaveManager.SaveAll()
-            if (Globals.ROUND === Gamemode.NumberOfRounds) Gameover.WinGame = true
+            if (Globals.ROUND === Gamemode.NumberOfRounds) Globals.WinGame = true
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
             Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)

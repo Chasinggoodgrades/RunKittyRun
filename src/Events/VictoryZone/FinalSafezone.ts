@@ -35,7 +35,7 @@ export class FinalSafezone {
                 NitroChallenges.CompletedNitro(kitty)
                 Challenges.PurpleFire(player)
                 Challenges.TurquoiseFire(player)
-                Challenges.WhiteFire(player)
+                NitroChallenges.WhiteFire(player)
                 Challenges.GreenLightning(player)
                 Challenges.PatrioticLight(kitty) // transition to using kitty object later.
                 TeamDeathless.PrestartingEvent()

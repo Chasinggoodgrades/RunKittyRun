@@ -3,13 +3,13 @@ import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
-import { HolidaySeasons, SeasonalManager } from './SeasonalManager'
+import { HolidaySeasons, Seasons } from './Seasons'
 
 export class SeasonalAwards {
     private static Season: HolidaySeasons
 
     public static Initialize() {
-        SeasonalAwards.Season = SeasonalManager.Season
+        SeasonalAwards.Season = Seasons.getCurrentSeason()
         if (SeasonalAwards.Season === HolidaySeasons.None) return
         Utility.SimpleTimer(180.0, SeasonalAwards.FreebeSeasonalAwards)
     }

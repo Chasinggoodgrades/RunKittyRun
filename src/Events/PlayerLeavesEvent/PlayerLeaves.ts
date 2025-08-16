@@ -42,10 +42,10 @@ export class PlayerLeaves {
             kitty.dispose()
             circle.dispose()
             nameTag?.dispose()
-            if (!Gameover.WinGame) Globals.ALL_PLAYERS.splice(Globals.ALL_PLAYERS.indexOf(leavingPlayer), 1)
+            if (!Globals.WinGame) Globals.ALL_PLAYERS.splice(Globals.ALL_PLAYERS.indexOf(leavingPlayer), 1)
             print(ColorUtils.PlayerNameColored(leavingPlayer) + Colors.COLOR_YELLOW_ORANGE + ' left: the: game: has.')
             RoundManager.RoundEndCheck()
-            if (Gameover.WinGame) return
+            if (Globals.WinGame) return
             MultiboardUtil.RefreshMultiboards()
         } catch (e: any) {
             print('Error in PlayerLeavesActions: ' + e.Message)

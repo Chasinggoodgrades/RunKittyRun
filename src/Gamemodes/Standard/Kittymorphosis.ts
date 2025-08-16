@@ -6,6 +6,7 @@ import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { CurrentGameMode } from '../CurrentGameMode'
 import { GameMode } from '../GameModeEnum'
+import { DEFAULT_WOLF_COLLISION_RADIUS } from 'src/Global/Globals'
 
 export class KittyMorphosis {
     /// <summary>
@@ -61,7 +62,7 @@ export class KittyMorphosis {
         if (this.Active) return
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Kitty)
         this.Kitty.CurrentStats.CollisonRadius =
-            CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
+            DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
         CollisionDetection.KittyRegisterCollisions(this.Kitty)
         Utility.SimpleTimer(0.1, this.ScaleUnit)
         this.Kitty.Player.DisplayTimedTextTo(

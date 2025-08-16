@@ -3,7 +3,7 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
-import { HolidaySeasons, SeasonalManager } from '../SeasonalManager'
+import { Seasons, HolidaySeasons } from '../Seasons'
 
 export class TerrainChanger {
     public static Terrains: number[] = []
@@ -57,7 +57,7 @@ export class TerrainChanger {
     }
 
     private static ChristmasTerrain() {
-        if (SeasonalManager.Season !== HolidaySeasons.Christmas) return
+        if (Seasons.getCurrentSeason() !== HolidaySeasons.Christmas) return
         /*        SafezoneTerrain[0] = FourCC("Xblm");
                 SafezoneTerrain[1] = FourCC("Ksmb");
                 SafezoneTerrain[2] = FourCC("Drds");

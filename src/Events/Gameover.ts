@@ -14,7 +14,6 @@ import { Utility } from 'src/Utility/Utility'
 import { GameoverUtil } from './GameoverUtil'
 
 export class Gameover {
-    public static WinGame: boolean = false
     private static EndingTimer: number = 90.0
     public static NoEnd: boolean = false
 
@@ -23,7 +22,7 @@ export class Gameover {
     }
 
     private static WinningGame(): boolean {
-        if (!Gameover.WinGame) return false
+        if (!Globals.WinGame) return false
         Gameover.SendWinMessage()
         Gameover.GameStats(true)
         GameoverUtil.SetColorData()

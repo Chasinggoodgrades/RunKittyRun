@@ -42,17 +42,13 @@ import { ChampionAwards } from '../Rewards/Rewards/ChampionAwards'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
+import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
+import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 
 export class Setup {
     private static timeToChoose: number = 0.0
     private static gameModeTimer: AchesTimers
-    private static wolfPlayers = [
-        MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_EXTRA)!,
-        MapPlayer.fromIndex(bj_PLAYER_NEUTRAL_VICTIM)!,
-        MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!,
-        MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!,
-    ]
-    private static wolfPlayerIndex: number = 0
+
 
     public static Initialize() {
         try {
@@ -121,9 +117,10 @@ export class Setup {
             RewardsManager.RewardAbilitiesList()
             AwardManager.RegisterGamestatEvents()
             ChampionAwards.AwardAllChampions()
-            PodiumManager.Initialize()
+            PodiumUtil.Initialize()
             FrameManager.InitAllFrames()
             Challenges.Initialize()
+            NitroChallenges.Initialize()
             SoundManager.Initialize()
             ShopFrame.FinishInitialization()
             UnitSharing.Initialize()
@@ -131,13 +128,9 @@ export class Setup {
             RoundManager.Initialize()
             FirstPersonCameraManager.Initialize()
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
-
-            for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
-                if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) {
-                    this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
-                }
-            }
-        } catch (e: any) {
+            
+        } 
+        catch (e: any) {
             Logger.Critical('Error in Setup.StartGame: {e.Message}')
             throw e
         }
@@ -175,11 +168,7 @@ export class Setup {
         }
     }
 
-    public static getNextWolfPlayer(): MapPlayer {
-        let selectedPlayer = this.wolfPlayers[this.wolfPlayerIndex]
-        this.wolfPlayerIndex = (this.wolfPlayerIndex + 1) % this.wolfPlayers.length
-        return selectedPlayer
-    }
+
 
     public static SetupVIPList() {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {

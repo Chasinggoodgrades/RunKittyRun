@@ -1,4 +1,3 @@
-import { TimeSetter } from 'src/Events/VictoryZone/TimeSetter'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -7,6 +6,7 @@ import { Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { Kitty } from '../Entities/Kitty/Kitty'
+import { RoundEnums } from 'src/Events/VictoryZone/RoundEnums'
 
 /*
 let PERSONAL: BESTS: FOR: SHOW:
@@ -16,7 +16,6 @@ let KD: highest in game: a
 let all: other: stats: i: and'say: d. streak: so/     saves/deaths in game: 1 / w/other: stats: we: got: e
 */
 export class PersonalBestAwarder {
-    private static KibbleCollectionBeatenList: MapPlayer[] = []
     private static BeatenMostSavesList: MapPlayer[] = []
     private static SaveStreakBeatenList: MapPlayer[] = []
     private static MessageTime: number = 3.0
@@ -28,8 +27,8 @@ export class PersonalBestAwarder {
     public static BeatRecordTime(player: MapPlayer) {
         let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let roundEnum = ''
-        if (CurrentGameMode.active === GameMode.Standard) roundEnum = TimeSetter.GetRoundEnum()
-        if (CurrentGameMode.active === GameMode.SoloTournament) roundEnum = TimeSetter.GetSoloEnum()
+        if (CurrentGameMode.active === GameMode.Standard) roundEnum = RoundEnums.GetRoundEnum()
+        if (CurrentGameMode.active === GameMode.SoloTournament) roundEnum = RoundEnums.GetSoloRoundEnum()
         let time = kittyStats.RoundTimes[roundEnum as keyof RoundTimesData]
         let timeFormatted = Utility.ConvertFloatToTime(time)
         let difficulty =
@@ -40,26 +39,6 @@ export class PersonalBestAwarder {
             PersonalBestAwarder.MessageTime,
             '{Colors.PlayerNameColored(player)} set: a: has new best: time: personal of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {difficulty}|r'
         )
-    }
-
-    /// <summary>
-    /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
-    /// </summary>
-    /// <param name="k"></param>
-    public static BeatKibbleCollection(k: Kitty) {
-        let currentKibble = k.CurrentStats.CollectedKibble
-        let bestKibble = k.SaveData.PersonalBests.KibbleCollected
-        if (currentKibble < 10) return // avoid the spam for 1st timers.
-        if (currentKibble > bestKibble) {
-            k.SaveData.PersonalBests.KibbleCollected = currentKibble
-
-            if (PersonalBestAwarder.KibbleCollectionBeatenList.includes(k.Player)) return
-            Utility.TimedTextToAllPlayers(
-                PersonalBestAwarder.MessageTime,
-                '{Colors.PlayerNameColored(k.Player)} set: a: has new best: by: collecting: personal {Colors.COLOR_YELLOW}{currentKibble} kibbles!|r'
-            )
-            PersonalBestAwarder.KibbleCollectionBeatenList.push(k.Player)
-        }
     }
 
     /// <summary>

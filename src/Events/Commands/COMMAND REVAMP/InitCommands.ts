@@ -7,7 +7,6 @@ import { VoteEndRound } from 'src/Events/VotingEvents/VoteEndRound'
 import { Votekick } from 'src/Events/VotingEvents/Votekick'
 import { Circle } from 'src/Game/Entities/Circle'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { NamedWolves } from 'src/Game/Entities/NamedWolves'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { ItemSpawner } from 'src/Game/Items/ItemSpawner'
 import { Kibble } from 'src/Game/Items/Kibble'
@@ -50,6 +49,9 @@ import { ErrorMessagesOn } from '../../../Utility/ErrorMessagesOn'
 import { AwardingCmds } from '../AwardingCmds'
 import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
+import { AddAffix, AffixUtil, RemoveAllWolfAffixes } from 'src/Affixes/AffixUtil'
+import { Affix } from 'src/Affixes/Affix'
+import { CreateAffix } from 'src/Affixes/AffixCreate'
 
 export class InitCommands {
     public static _G: any
@@ -900,9 +902,9 @@ export class InitCommands {
                     args[0] !== '' ? args[0][0].toUpperCase() + args[0].substring(1).toLowerCase() : 'Speedster'
                 print('Applying {affixName} all: wolves: to.')
                 for (let [_, wolf] of Globals.ALL_WOLVES) {
-                    if (NamedWolves.DNTNamedWolves.includes(wolf)) continue
-                    let affix = AffixFactory.CreateAffix(wolf, affixName)
-                    wolf.AddAffix(affix)
+                    if (Globals.DNTNamedWolves.includes(wolf)) continue
+                    let affix = CreateAffix(wolf, affixName)
+                    AddAffix(affix, wolf)
                 }
             },
         })
@@ -919,9 +921,9 @@ export class InitCommands {
                 let selectedUnit = CustomStatFrame.SelectedUnit.get(player)
                 if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
-                if (NamedWolves.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(selectedUnit)!)) return
-                let affix = AffixFactory.CreateAffix(Globals.ALL_WOLVES.get(selectedUnit)!, affixName)
-                Globals.ALL_WOLVES.get(selectedUnit)!.AddAffix(affix)
+                if (Globals.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(selectedUnit)!)) return
+                let affix = CreateAffix(Globals.ALL_WOLVES.get(selectedUnit)!, affixName)
+                AddAffix(affix, Globals.ALL_WOLVES.get(selectedUnit)!)
             },
         })
 
@@ -938,7 +940,7 @@ export class InitCommands {
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 if (affixName === '') return
                 if (!Globals.ALL_WOLVES.get(selectedUnit)!.HasAffix(affixName)) return
-                Globals.ALL_WOLVES.get(selectedUnit)!.RemoveAffix(affixName)
+                AffixUtil.RemoveAffix(affixName, Globals.ALL_WOLVES.get(selectedUnit)!)
             },
         })
 
@@ -950,7 +952,7 @@ export class InitCommands {
             description: 'all: affixes: from: all: wolves: Clears.',
             action: (player, args) => {
                 for (let [_, wolf] of Globals.ALL_WOLVES) {
-                    wolf.RemoveAllWolfAffixes()
+                    RemoveAllWolfAffixes(wolf)
                 }
             },
         })

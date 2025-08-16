@@ -5,7 +5,7 @@ import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Wolf } from 'src/Game/Entities/Wolf'
 import { Safezone } from 'src/Game/Management/Safezone'
 import { WolfArea } from 'src/Game/WolfArea'
-import { Globals } from 'src/Global/Globals'
+import { DEFAULT_WOLF_COLLISION_RADIUS, Globals } from 'src/Global/Globals'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
@@ -495,12 +495,12 @@ export class AIController {
             let centerAngle: number = Math.atan2(wolf.Unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
             let clampedDistance: number = clamp(
                 distance,
-                CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS,
+                DEFAULT_WOLF_COLLISION_RADIUS,
                 this.DODGE_RADIUS
             )
             let ratio: number =
-                (clampedDistance - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) /
-                (this.DODGE_RADIUS - CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS)
+                (clampedDistance - DEFAULT_WOLF_COLLISION_RADIUS) /
+                (this.DODGE_RADIUS - DEFAULT_WOLF_COLLISION_RADIUS)
 
             let totalBlockedAngle: number =
                 MIN_TOTAL_BLOCKED_ANGLE + (MAX_TOTAL_BLOCKED_ANGLE - MIN_TOTAL_BLOCKED_ANGLE) * (1 - ratio)

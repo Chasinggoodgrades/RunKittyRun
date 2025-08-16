@@ -108,7 +108,7 @@ export class Team {
     }
 
     private static TeamSetup() {
-        if (Gamemode.CurrentGameModeType === Globals.TEAM_MODES[0]) {
+        if (Globals.CurrentGameModeType === Globals.TEAM_MODES[0]) {
             // free pick
             RoundManager.ROUND_INTERMISSION += 15.0
             TeamHandler.FreepickEnabled = true
@@ -131,7 +131,7 @@ export class Team {
                 )
                 TeamHandler.RandomHandler()
             })
-        } else if (Gamemode.CurrentGameModeType === Globals.TEAM_MODES[1])
+        } else if (Globals.CurrentGameModeType === Globals.TEAM_MODES[1])
             // random
             Utility.SimpleTimer(2.5, TeamHandler.RandomHandler)
     }

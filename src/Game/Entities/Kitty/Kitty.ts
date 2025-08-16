@@ -295,7 +295,7 @@ export class Kitty {
         this.RTR.StopRTR()
         this.Unit.destroy()
         ChainedTogether.RegenerateGroup(this.name)
-        if (Gameover.WinGame) return
+        if (Globals.WinGame) return
         Globals.ALL_KITTIES_LIST.splice(Globals.ALL_KITTIES_LIST.indexOf(this), 1)
         Globals.ALL_KITTIES.delete(this.Player)
     }

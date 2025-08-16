@@ -4,7 +4,6 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Queue } from 'src/Utility/Queue'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Unit } from 'w3ts'
-import { PodiumManager } from './PodiumManager'
 import { PodiumUtil } from './PodiumUtil'
 
 export class SoloPodium {
@@ -22,7 +21,7 @@ export class SoloPodium {
 
     private static EnqueueTopPlayerTimes() {
         let topTimes = PodiumUtil.SortPlayersFastestTime()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
             let player = topTimes[i]
             let position = podiumPositions[i]
@@ -33,7 +32,7 @@ export class SoloPodium {
 
     private static EnqueueTopPlayerProgress() {
         let topProgress = PodiumUtil.SortPlayersTopProgress()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
             let player = topProgress[i]
             let position = podiumPositions[i]
@@ -62,7 +61,7 @@ export class SoloPodium {
     private static ProcessPodiumTypeActions() {
         this.PodiumQueue.length = 0
         PodiumUtil.ClearPodiumUnits(this.MovedUnits)
-        switch (Gamemode.CurrentGameModeType) {
+        switch (Globals.CurrentGameModeType) {
             case 'Race':
                 this.EnqueueTopPlayerTimes()
                 break

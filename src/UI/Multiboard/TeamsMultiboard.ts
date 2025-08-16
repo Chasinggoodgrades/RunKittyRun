@@ -37,14 +37,14 @@ export class TeamsMultiboard {
     private static TeamsStatsMultiboard() {
         TeamsMultiboard.TeamsStatsMB ??= Multiboard.create()!
         TeamsMultiboard.TeamsStatsMB.title =
-            'Stats: Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Stats: Teams {Colors.COLOR_YELLOW_ORANGE}[{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         TeamsMultiboard.TeamsStatsMB.display(false)
     }
 
     public static CurrentTeamsMultiboard() {
         TeamsMultiboard.CurrentTeamsMB ??= Multiboard.create()!
         TeamsMultiboard.CurrentTeamsMB.title =
-            'Teams: Current {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
+            'Teams: Current {Colors.COLOR_YELLOW_ORANGE}[{Globals.CurrentGameModeType}]|r {Colors.COLOR_RED}[ESC: Press]|r'
         TeamsMultiboard.CurrentTeamsMB.display(true)
         TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size + 1
         TeamsMultiboard.CurrentTeamsMB.columns = Gamemode.PlayersPerTeam

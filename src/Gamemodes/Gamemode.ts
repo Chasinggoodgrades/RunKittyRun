@@ -11,7 +11,6 @@ import { Team } from './Teams/Team'
 
 export class Gamemode {
     public static HostPlayer: MapPlayer
-    public static CurrentGameModeType: string = ''
     public static IsGameModeChosen: boolean = false
     public static PlayersPerTeam: number = 0
     public static NumberOfRounds: number = 5
@@ -76,7 +75,7 @@ export class Gamemode {
     public static SetGameMode(mode: GameMode, modeType: string = '', teamSize: number = Globals.DEFAULT_TEAM_SIZE) {
         try {
             CurrentGameMode.active = mode
-            this.CurrentGameModeType = modeType
+            Globals.CurrentGameModeType = modeType
             this.IsGameModeChosen = true
             this.PlayersPerTeam = teamSize
 
@@ -110,7 +109,7 @@ export class Gamemode {
                     Colors.COLOR_GOLD +
                     CurrentGameMode.active.toString() +
                     ' ' +
-                    this.CurrentGameModeType
+                    Globals.CurrentGameModeType
             )
         }
     }

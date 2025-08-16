@@ -3,7 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { GC } from 'src/Utility/GC'
 import { getFilterUnit } from 'src/Utility/w3tsUtils'
 import { Group } from 'w3ts'
-import { HolidaySeasons, SeasonalManager } from '../SeasonalManager'
+import { Seasons, HolidaySeasons } from '../Seasons'
 
 export class ShopChanger {
     private static SantaSkin: number = Constants.UNIT_SANTA
@@ -13,12 +13,12 @@ export class ShopChanger {
     private static NormalSkin: number = Constants.UNIT_KITTY_VENDOR
 
     public static Initialize() {
-        if (SeasonalManager.Season === HolidaySeasons.None) return
+        if (Seasons.getCurrentSeason() === HolidaySeasons.None) return
         ShopChanger.SetSeasonalShop()
     }
 
     public static SetSeasonalShop() {
-        switch (SeasonalManager.Season) {
+        switch (Seasons.getCurrentSeason()) {
             case HolidaySeasons.None:
                 ShopChanger.SetShopsToSkin(ShopChanger.NormalSkin)
                 break
