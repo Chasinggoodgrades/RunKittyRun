@@ -48,9 +48,13 @@ export class Team {
             Globals.ALL_TEAMS_LIST = []
             Globals.PLAYERS_TEAMS = new Map()
             this.TeamTimer ??= Timer.create()
-            this.TeamTimer.start(0.1, false, ErrorHandler.Wrap(this.TeamSetup))
+            this.TeamTimer.start(
+                0.1,
+                false,
+                ErrorHandler.Wrap(() => this.TeamSetup())
+            )
         } catch (e: any) {
-            Logger.Critical(`Error in Team.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in Team.Initialize: ${e}`)
             throw e
         }
     }

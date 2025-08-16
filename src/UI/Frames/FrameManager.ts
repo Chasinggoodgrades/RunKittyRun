@@ -43,7 +43,7 @@ export class FrameManager {
             MusicFrame.Initialize()
             Utility.SimpleTimer(1.0, FrameManager.ESCHideFrames)
         } catch (ex: any) {
-            Logger.Critical(`Error in FrameManager.Initialize: ${ex.Message}`)
+            Logger.Critical(`Error in FrameManager.Initialize: ${ex}`)
             throw ex
         }
     }
@@ -132,7 +132,7 @@ export class FrameManager {
         shopText.setScale(0.9)
         shopText.enabled = false
         FrameManager.RewardsTrigger.triggerRegisterFrameEvent(FrameManager.RewardsButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.RewardsTrigger.addAction(ErrorHandler.Wrap(RewardsFrame.RewardsFrameActions))
+        FrameManager.RewardsTrigger.addAction(ErrorHandler.Wrap(() => RewardsFrame.RewardsFrameActions()))
         FrameManager.RewardsButton.visible = false
     }
 
@@ -152,7 +152,7 @@ export class FrameManager {
         shopText.setScale(0.98)
         shopText.enabled = false
         FrameManager.StatsTrigger.triggerRegisterFrameEvent(FrameManager.MusicButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.StatsTrigger.addAction(ErrorHandler.Wrap(MusicFrame.MusicFrameActions))
+        FrameManager.StatsTrigger.addAction(ErrorHandler.Wrap(() => MusicFrame.MusicFrameActions()))
         FrameManager.MusicButton.visible = false
     }
 
@@ -172,7 +172,7 @@ export class FrameManager {
         shopText.setScale(1.0)
         shopText.enabled = false
         FrameManager.ShopTrigger.triggerRegisterFrameEvent(FrameManager.ShopButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.ShopTrigger.addAction(ErrorHandler.Wrap(ShopFrame.ShopFrameActions))
+        FrameManager.ShopTrigger.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
         FrameManager.ShopButton.visible = false
     }
 
@@ -209,7 +209,7 @@ export class FrameManager {
                 FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, nameFrame, FRAMEPOINT_TOP, 0, yOffSet)
                 FrameManager.Backdrop.setSize(x, h)
             } catch (e: any) {
-                Logger.Critical(`Error in RepositionBackdropAction: ${e.Message}`)
+                Logger.Critical(`Error in RepositionBackdropAction: ${e}`)
             }
         }
     }

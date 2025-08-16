@@ -105,7 +105,7 @@ export class CollisionDetection {
                 k.KillKitty()
                 this.CheckTeamDead(k)
             } catch (e: any) {
-                Logger.Warning(`Error WolfCollisionTrigger: ${e.Message}`)
+                Logger.Warning(`Error WolfCollisionTrigger: ${e}`)
                 throw e
             }
         })
@@ -119,7 +119,7 @@ export class CollisionDetection {
                 circle.ReviveKitty(k)
                 k.Relics.find(CollisionDetection.IsBeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player)
             } catch (e: any) {
-                Logger.Warning(`Error CircleCollisionTrigger: ${e.Message}`)
+                Logger.Warning(`Error CircleCollisionTrigger: ${e}`)
                 throw e
             }
         })
@@ -141,7 +141,7 @@ export class CollisionDetection {
                 let saviorKitty = Globals.ALL_KITTIES.get(sk.Player)!
                 circle.ReviveKitty(saviorKitty)
             } catch (e: any) {
-                Logger.Warning(`Error CircleCollisionShadowTrigger: ${e.Message}`)
+                Logger.Warning(`Error CircleCollisionShadowTrigger: ${e}`)
                 throw e
             }
         })

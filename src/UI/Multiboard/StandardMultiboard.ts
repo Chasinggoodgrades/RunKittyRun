@@ -194,7 +194,7 @@ export class StandardMultiboard {
                 rowIndex++
             }
         } catch (ex: any) {
-            print(`${Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: ${ex.Message}`)
+            print(`${Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: ${ex}`)
         }
     }
 

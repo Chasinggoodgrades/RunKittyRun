@@ -54,7 +54,7 @@ export class RingOfSummoning extends Relic {
         this.triggerHandle = Trigger.create()!
         TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
         this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
-        this.triggerHandle.addAction(ErrorHandler.Wrap(this.SacredRingOfSummoning))
+        this.triggerHandle.addAction(ErrorHandler.Wrap(() => this.SacredRingOfSummoning()))
     }
 
     public override ApplyEffect(Unit: Unit) {

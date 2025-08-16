@@ -39,7 +39,7 @@ export class RewardsFrame {
             RewardsFrame.CreateRandomRewardButton()
             FrameManager.CreateHeaderFrame(RewardsFrame.RewardFrame)
         } catch (ex: any) {
-            Logger.Critical(`Error in RewardsFrame: ${ex.Message}`)
+            Logger.Critical(`Error in RewardsFrame: ${ex}`)
             throw ex
         }
     }
@@ -227,7 +227,7 @@ export class RewardsFrame {
             if (!player.isLocal()) return
             FrameManager.RefreshFrame(frame)
         } catch (e: any) {
-            Logger.Warning(`Error in RandomRewardsButtonActions: ${e.Message}`)
+            Logger.Warning(`Error in RandomRewardsButtonActions: ${e}`)
         }
     }
 

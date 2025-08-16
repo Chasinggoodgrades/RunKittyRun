@@ -3,6 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
+import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger, base64Decode, base64Encode } from 'w3ts'
 import { KittyData } from './MAKE REWARDS HERE/KittyData'
@@ -46,7 +47,7 @@ export class SaveManager {
             this.syncSaveLoad.WriteFileObjects(`${this.SavePath}/${player.name}.txt`, playerData)
             player.DisplayTimedTextTo(4.0, `${Colors.COLOR_GOLD}Stats have been saved.${Colors.COLOR_RESET}`)
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.Save: ${ex.Message}${Colors.COLOR_RESET}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.Save: ${ex}${Colors.COLOR_RESET}`)
             throw ex
         }
     }
@@ -56,7 +57,7 @@ export class SaveManager {
             if (!player.isLocal()) return
             this.syncSaveLoad.WriteFileObjects(`${this.SavePath}/AllSaveData.txt`)
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: ${ex.Message}${Colors.COLOR_RESET}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: ${ex}${Colors.COLOR_RESET}`)
             throw ex
         }
     }
@@ -87,7 +88,7 @@ export class SaveManager {
                 this.Load(player)
             }
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: ${ex.Message}${Colors.COLOR_RESET}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: ${ex}${Colors.COLOR_RESET}`)
             throw ex
         }
     }
@@ -102,7 +103,7 @@ export class SaveManager {
             if (!SaveManager.PlayersLoaded.includes(player)) SaveManager.PlayersLoaded.push(player)
             // if (!Gamemode.IsGameModeChosen) return
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: ${ex.Message} ${Colors.COLOR_RESET}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: ${ex} ${Colors.COLOR_RESET}`)
             throw ex
         }
     }
@@ -124,6 +125,7 @@ export class SaveManager {
     }
 
     private static ConvertJsonToSaveData(data: string, player: MapPlayer) {
+        print(data.length)
         let kittyData = json().decode<KittyData>(data)
         if (!kittyData) {
             player.DisplayTimedTextTo(
@@ -174,7 +176,7 @@ export class SyncSaveLoad {
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefix, false)
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefixFinish, false)
         }
-        this.SyncEvent.addAction(this.OnSync)
+        this.SyncEvent.addAction(ErrorHandler.Wrap(() => this.OnSync()))
     }
 
     /// <summary>
@@ -237,7 +239,7 @@ export class SyncSaveLoad {
         let readData: string = BlzGetTriggerSyncData()!
         let prefix: string = BlzGetTriggerSyncPrefix()!
         let totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
-        let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 8)) : 0
+        let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 16)) : 0
         let theRest: string =
             readData.length > 16 ? readData.substring(16) : readData.substring(Math.min(readData.length, 8))
         let promise = this.allPromises.get(getTriggerPlayer().id)
@@ -309,7 +311,7 @@ export class PropertyEncoder {
             return base64String
         } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: ${ex.Message}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: ${ex}`)
             throw ex
         }
     }
@@ -339,7 +341,7 @@ export class PropertyEncoder {
             let base64String = base64Encode(jsonString)
             return base64String
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${ex.Message}`)
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${ex}`)
             throw ex
         }
     }

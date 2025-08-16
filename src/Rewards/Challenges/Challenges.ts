@@ -7,8 +7,7 @@ import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
@@ -165,7 +164,7 @@ export class YellowLightning {
 
     public constructor(kitty: Kitty) {
         this.Kitty = kitty
-        this.Timer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.Timer = createAchesTimer()
     }
 
     public SaveIncrement() {

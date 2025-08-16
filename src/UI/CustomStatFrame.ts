@@ -113,7 +113,7 @@ export class CustomStatFrame {
 
             CustomStatFrame.CustomStatFrameBoxF.visible = CustomStatFrame.CustomStatFrameBoxS.visible
         } catch (e: any) {
-            Logger.Critical(`Error in CustomStatFrame.Update: ${e.Message}`)
+            Logger.Critical(`Error in CustomStatFrame.Update: ${e}`)
             throw e
         }
     }

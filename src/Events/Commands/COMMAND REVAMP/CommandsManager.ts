@@ -161,7 +161,7 @@ export class CommandsManager {
 
         let commandList = ''
         for (let cmd of this.CommandsList) {
-            commandList += `${Colors.COLOR_YELLOW}( ${cmd.name} | ${cmd.Alias.join(', ')} )|r${Colors.COLOR_RED}[${cmd.ArgDesc}]{Colors.COLOR_RESET} - ${Colors.COLOR_GOLD}${cmd.Description}|r\n`
+            commandList += `${Colors.COLOR_YELLOW}( ${cmd.name} | ${cmd.Alias.join(', ')} )|r${Colors.COLOR_RED}[${cmd.ArgDesc}]${Colors.COLOR_RESET} - ${Colors.COLOR_GOLD}${cmd.Description}|r\n`
         }
 
         player.DisplayTimedTextTo(15.0, `${Colors.COLOR_TURQUOISE}Commands: Available:|r\n${commandList}`)

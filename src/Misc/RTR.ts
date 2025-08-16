@@ -47,7 +47,11 @@ export class RTR {
         this.ClickTrigger.enabled = true
         this.WidgetTrigger.enabled = true
 
-        this.RTRTimer.start(this.RTR_INTERVAL, true, ErrorHandler.Wrap(this.UpdateRTR))
+        this.RTRTimer.start(
+            this.RTR_INTERVAL,
+            true,
+            ErrorHandler.Wrap(() => this.UpdateRTR())
+        )
     }
 
     public PauseRTR() {

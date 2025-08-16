@@ -73,7 +73,7 @@ export class Safezone {
             this.AwardedPlayers.push(player)
             DeathlessChallenges.DeathlessCheck(kitty)
         } catch (e: any) {
-            Logger.Warning(`Error in EnterSafezoneActions: ${e.Message}`)
+            Logger.Warning(`Error in EnterSafezoneActions: ${e}`)
         }
     }
 

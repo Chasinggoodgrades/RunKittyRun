@@ -1,18 +1,16 @@
-import { Gamemode } from 'src/Gamemodes/Gamemode'
+import { Globals } from 'src/Global/Globals'
 import { Action } from 'src/Utility/CSUtils'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { GameTimer } from '../Rounds/GameTimer'
 import { Progress } from './Progress'
-import { Globals } from 'src/Global/Globals'
 
 export class KittyTime {
     private readonly _cachedProgress: Action
     private RoundTime: Map<number, number> = new Map()
     private RoundProgress: Map<number, number> = new Map()
-    private ProgressTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
+    private ProgressTimer: AchesTimers = createAchesTimer()
     private TotalTime: number
     private Kitty: Kitty
 

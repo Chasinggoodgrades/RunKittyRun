@@ -60,7 +60,7 @@ export class CommandHandler {
         } catch (ex: any) {
             getTriggerPlayer().DisplayTimedTextTo(
                 4.0,
-                `${Colors.COLOR_YELLOW_ORANGE}Error executing command:${Colors.COLOR_RESET} ${Colors.COLOR_RED}${ex.Message} ${ex.StackTrace}${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW_ORANGE}Error executing command:${Colors.COLOR_RESET} ${Colors.COLOR_RED}${ex} ${ex.StackTrace}${Colors.COLOR_RESET}`
             )
             return
         }

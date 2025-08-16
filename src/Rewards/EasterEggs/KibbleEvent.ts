@@ -31,7 +31,11 @@ export class KibbleEvent {
         this.EventTimerDialog = TimerDialog.create(this.EventTimer)!
         this.EventTimerDialog.setTitle('Event: Kibble')
         this.EventTimerDialog.display = true
-        this.EventTimer.start(this.EventLength, false, ErrorHandler.Wrap(this.EndKibbleEvent))
+        this.EventTimer.start(
+            this.EventLength,
+            false,
+            ErrorHandler.Wrap(() => this.EndKibbleEvent())
+        )
         Utility.TimedTextToAllPlayers(
             10.0,
             `${Colors.COLOR_YELLOW}A Kibble event has started! Collect ${this.TotalEventKibbles} kibbles to earn an award!${Colors.COLOR_RESET}`

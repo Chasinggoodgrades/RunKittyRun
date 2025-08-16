@@ -6,8 +6,7 @@ import { RegionList } from 'src/Global/RegionList'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { distanceBetweenXYPoints, TargetTypes } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Effect, Group, Trigger, Unit } from 'w3ts'
@@ -37,7 +36,7 @@ export class Fixation extends Affix {
         super(unit)
         this.InRangeTrigger ??= Trigger.create()!
         this.PeriodicSpeed ??= Trigger.create()!
-        this.ChaseTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.ChaseTimer = createAchesTimer()
         this.name = `${Colors.COLOR_RED}Fixation|r`
     }
 
@@ -96,7 +95,7 @@ export class Fixation extends Affix {
                     this.ChasingEvent()
                 }
             } catch (e: any) {
-                Logger.Warning(`Error in Fixation.InRangeTrigger: ${e.Message}`)
+                Logger.Warning(`Error in Fixation.InRangeTrigger: ${e}`)
             }
         })
     }

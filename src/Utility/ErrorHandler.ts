@@ -8,7 +8,7 @@ export class ErrorHandler {
                 cb()
             } catch (e: any) {
                 if (ErrorMessagesOn.active) {
-                    Logger.Warning(`Error caught: ${e.message}\n${e.stack}`)
+                    Logger.Warning(`Error caught: ${e}\n${e.stack}`)
                 }
                 errorCb?.(e)
             }

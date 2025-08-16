@@ -34,7 +34,7 @@ export const Progress = {
             }
             // TeamsMultiboard.UpdateTeamStatsMB()
         } catch (e: any) {
-            Logger.Warning(`Error in TeamProgressTracker. ${e.Message}`)
+            Logger.Warning(`Error in TeamProgressTracker. ${e}`)
         }
     },
 
@@ -73,7 +73,7 @@ export const Progress = {
 
             return progress
         } catch (e: any) {
-            Logger.Warning(`Error in CalculatePlayerProgress. ${e.Message}`)
+            Logger.Warning(`Error in CalculatePlayerProgress. ${e}`)
             return 0.0
         }
     },
@@ -119,7 +119,7 @@ export const Progress = {
                 count++
             }
         } catch (e: any) {
-            Logger.Warning(`Error in CalculateTotalDistance. ${e.Message}`)
+            Logger.Warning(`Error in CalculateTotalDistance. ${e}`)
             throw e
         }
     },

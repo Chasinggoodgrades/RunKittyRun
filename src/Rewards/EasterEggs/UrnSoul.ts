@@ -101,7 +101,7 @@ export class UrnSoul {
             item.removeAbility(FourCC('AIda')) // removes temp armory bonus
             item.addAbility(FourCC('AHta')) // adds reveal ability
         } catch (e: any) {
-            Logger.Critical(`Error in UrnSoul.UrnUsageActions: ${e.Message}`)
+            Logger.Critical(`Error in UrnSoul.UrnUsageActions: ${e}`)
             throw e
         }
     }

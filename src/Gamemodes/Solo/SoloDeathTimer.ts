@@ -2,8 +2,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MapPlayer, TextTag } from 'w3ts'
 
 export class SoloDeathTimer {
@@ -21,8 +20,8 @@ export class SoloDeathTimer {
 
     public SoloDeathTimer(player: MapPlayer) {
         this.Player = player
-        this.ReviveTimer = MemoryHandler.getEmptyObject<AchesTimers>()
-        this.UpdateTextTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.ReviveTimer = createAchesTimer()
+        this.UpdateTextTimer = createAchesTimer()
         this.FloatingTimer = this.CreateFloatingTimer()
         this.StartTimers()
     }
@@ -61,7 +60,7 @@ export class SoloDeathTimer {
             CameraUtil.RelockCamera(this.Player)
             this.Dispose()
         } catch (e: any) {
-            Logger.Warning(`Error in SoloDeathTimer.Revive: ${e.Message}`)
+            Logger.Warning(`Error in SoloDeathTimer.Revive: ${e}`)
             this.Dispose()
         }
     }

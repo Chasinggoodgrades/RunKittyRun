@@ -29,7 +29,7 @@ export class Difficulty {
 
             Utility.SimpleTimer(2.0, this.ChooseDifficulty)
         } catch (e: any) {
-            Logger.Critical(`Error in Difficulty.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in Difficulty.Initialize: ${e}`)
             throw e
         }
     }

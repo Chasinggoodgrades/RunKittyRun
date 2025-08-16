@@ -67,7 +67,7 @@ export class ShopFrame {
             ShopFrame.SetRewardsFrameHotkey()
             ShopFrame.shopFrame.visible = false
         } catch (ex: any) {
-            Logger.Critical(`Error in ShopFrame: ${ex.Message}`)
+            Logger.Critical(`Error in ShopFrame: ${ex}`)
             throw ex
         }
     }
@@ -271,7 +271,7 @@ export class ShopFrame {
                 if (Utility.UnitHasItem(kitty.Unit, item.ItemID)) ShopFrame.sellButton.alpha = ShopFrame.ActiveAlpha
             }
         } catch (ex: any) {
-            Logger.Warning(`Error in UpdateButtonStatus: ${ex.Message}`)
+            Logger.Warning(`Error in UpdateButtonStatus: ${ex}`)
         }
     }
 
@@ -416,7 +416,7 @@ export class ShopFrame {
             // hide shop after purchase
             if (player.isLocal()) ShopFrame.shopFrame.visible = !ShopFrame.shopFrame.visible
         } catch (ex: any) {
-            Logger.Warning(`Error in BuySelectedItem: ${ex.Message}`)
+            Logger.Warning(`Error in BuySelectedItem: ${ex}`)
         }
     }
 
@@ -468,7 +468,7 @@ export class ShopFrame {
                 player.addGold(selectedItem.Cost)
             }
         } catch (ex: any) {
-            Logger.Warning(`Error in SellSelectedItem: ${ex.Message}`)
+            Logger.Warning(`Error in SellSelectedItem: ${ex}`)
         }
     }
 

@@ -22,7 +22,7 @@ export class TeamsMultiboard {
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
         } catch (e: any) {
-            Logger.Critical(`Error in TeamsMultiboard.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in TeamsMultiboard.Initialize: ${e}`)
             throw e
         }
     }
@@ -137,7 +137,7 @@ export class TeamsMultiboard {
         for (let player of Globals.ALL_PLAYERS) {
             TeamsMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(TeamsMultiboard.ESCPressed))
+        TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(() => TeamsMultiboard.ESCPressed()))
     }
 
     private static ESCPressed() {

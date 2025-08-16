@@ -66,7 +66,7 @@ export class FangOfShadows extends Relic {
         this.SummonTrigger = Trigger.create()!
         TriggerRegisterUnitEvent(this.SummonTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.SummonTrigger.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
-        this.SummonTrigger.addAction(ErrorHandler.Wrap(this.SummonShadowKitty))
+        this.SummonTrigger.addAction(ErrorHandler.Wrap(() => this.SummonShadowKitty()))
 
         this.TeleTrigger = Trigger.create()!
         this.KillTimer = Timer.create()
@@ -106,7 +106,7 @@ export class FangOfShadows extends Relic {
             this.KillTimer.start(
                 FangOfShadows.SHADOW_KITTY_SUMMON_DURATION,
                 false,
-                ErrorHandler.Wrap(shadowKitty.KillShadowKitty)
+                ErrorHandler.Wrap(() => shadowKitty.KillShadowKitty())
             )
 
             // Apply relic cooldowns with a slight delay

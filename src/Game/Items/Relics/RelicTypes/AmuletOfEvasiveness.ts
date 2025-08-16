@@ -83,7 +83,7 @@
 //        kitty.CurrentStats.CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS * newCollisionRadius;
 //        CollisionDetection.KittyRegisterCollisions(kitty);
 
-//        let t = MemoryHandler.getEmptyObject<AchesTimers>()
+//        let t = createAchesTimer()
 //        t.Timer.start(WINDWALK_COLLISION_DURATION, false, () =>
 //        {
 //            kitty.CurrentStats.CollisonRadius = GetCollisionReduction(Unit);

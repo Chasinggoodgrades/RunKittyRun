@@ -18,8 +18,7 @@ import { SoundManager } from 'src/Sounds/SoundManager'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Tips } from 'src/UI/Tips/Tips'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { NitroPacer } from '../Entities/NitroPacer'
 import { Wolf } from '../Entities/Wolf'
@@ -70,7 +69,7 @@ export class RoundManager {
             WolfLaneHider.HideAllLanes()
             WolfLaneHider.LanesHider()
         } catch (e: any) {
-            Logger.Critical(`Error in RoundManager.RoundSetup ${e.Message}`)
+            Logger.Critical(`Error in RoundManager.RoundSetup ${e}`)
             throw e
         }
     }
@@ -89,7 +88,7 @@ export class RoundManager {
     }
 
     private static HasDifficultyBeenChosen() {
-        let Timer = MemoryHandler.getEmptyObject<AchesTimers>()
+        let Timer = createAchesTimer()
         Timer.Timer.start(0.35, true, () => {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND === 0) {
                 RoundManager.RoundSetup()
@@ -120,7 +119,7 @@ export class RoundManager {
             Tips.DisplayTip()
             Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)
         } catch (e: any) {
-            Logger.Critical(`Error in RoundManager.RoundEnd ${e.Message}`)
+            Logger.Critical(`Error in RoundManager.RoundEnd ${e}`)
             throw e
         }
     }

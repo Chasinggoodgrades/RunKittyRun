@@ -150,7 +150,7 @@ export class TeamDeathless {
                 `${Colors.COLOR_YELLOW}The Deathless Orb has been spawned! As a team, bring it to the end without dying!${Colors.COLOR_RESET}`
             )
         } catch (e: any) {
-            Logger.Warning(`Error in TeamDeathless.StartEvent: ${e.Message}`)
+            Logger.Warning(`Error in TeamDeathless.StartEvent: ${e}`)
             throw e
         }
     }
@@ -199,7 +199,7 @@ export class TeamDeathless {
             this.timerHandle?.pause()
             this.StartEvent()
         } catch (e: any) {
-            Logger.Warning(`Error in TeamDeathless.DiedWithOrb: ${e.Message}`)
+            Logger.Warning(`Error in TeamDeathless.DiedWithOrb: ${e}`)
         }
     }
 

@@ -199,7 +199,7 @@ export class SoundManager {
                 GC.RemoveEffect(Effect.fromHandle(e)!) // TODO; Cleanup:                 GC.RemoveEffect(ref e);
             })
         } catch (e: any) {
-            Logger.Warning(`Error in SoundManager.PlayLastManStandingSound: ${e.Message}`)
+            Logger.Warning(`Error in SoundManager.PlayLastManStandingSound: ${e}`)
         }
     }
 }

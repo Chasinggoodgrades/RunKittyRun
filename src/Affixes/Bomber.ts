@@ -5,7 +5,7 @@ import { Globals } from 'src/Global/Globals'
 import { RangeIndicator } from 'src/SpecialEffects/RangeIndicator'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Group } from 'w3ts'
@@ -24,8 +24,8 @@ export class Bomber extends Affix {
 
     private static MIN_EXPLODE_INTERVAL: number = 10.0
     private static MAX_EXPLODE_INTERVAL: number = 15.0
-    private ExplodeTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
-    private ReviveAlphaTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
+    private ExplodeTimer: AchesTimers = createAchesTimer()
+    private ReviveAlphaTimer: AchesTimers = createAchesTimer()
     private ExplodeGroup: Group = Group.create()!
     private ReviveAlpha: number = 1
     private RangeIndicator: RangeIndicator
@@ -44,7 +44,7 @@ export class Bomber extends Affix {
             this.RegisterTimers()
             super.Apply()
         } catch (e: any) {
-            Logger.Warning(`Error in Bomber.Apply: ${e.Message}`)
+            Logger.Warning(`Error in Bomber.Apply: ${e}`)
         }
     }
 
@@ -99,7 +99,7 @@ export class Bomber extends Affix {
 
             Utility.SimpleTimer(4.0, this.Explode)
         } catch (e: any) {
-            Logger.Warning(`Error in Bomber.StartExplosion: ${e.Message}`)
+            Logger.Warning(`Error in Bomber.StartExplosion: ${e}`)
         }
     }
 
@@ -128,7 +128,7 @@ export class Bomber extends Affix {
             this.Revive()
             this.Unit.Unit.setVertexColor(204, 102, 0, 25)
         } catch (e: any) {
-            Logger.Warning(`Error in Bomber.Explode: ${e.Message}`)
+            Logger.Warning(`Error in Bomber.Explode: ${e}`)
             this.ReviveAlphaTimer.pause()
             this.Unit?.PauseSelf(false)
             this.Unit.IsReviving = false

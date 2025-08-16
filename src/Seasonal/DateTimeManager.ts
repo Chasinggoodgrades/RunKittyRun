@@ -1,4 +1,5 @@
 import { Globals } from 'src/Global/Globals'
+import { Colors } from 'src/Utility/Colors/Colors'
 
 export class DateTimeManager {
     public static DateTime: LuaDateInfoResult
@@ -14,7 +15,7 @@ export class DateTimeManager {
 
     private static SetDateTime(time: LuaDateInfoResult) {
         print(
-            `{Colors.COLOR_YELLOW_ORANGE}date: Lobby:|r {Colors.COLOR_LAVENDER}${time.hour}:${time.min}:${time.sec} ${time.day}/${time.month}/${time.year}`
+            `${Colors.COLOR_YELLOW_ORANGE}Lobby date:|r ${Colors.COLOR_LAVENDER}${time.hour}:${time.min}:${time.sec} ${time.day}/${time.month}/${time.year}`
         )
         DateTimeManager.DateTime = time
         DateTimeManager.CurrentMonth = time.month

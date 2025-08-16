@@ -107,7 +107,7 @@ export class Shops {
 
             this.RefreshItemsOnVendor(vendor)
         } catch (e: any) {
-            Logger.Warning(`Error in OnVendorSell: ${e.Message}`)
+            Logger.Warning(`Error in OnVendorSell: ${e}`)
         }
     }
 }

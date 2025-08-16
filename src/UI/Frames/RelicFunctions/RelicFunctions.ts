@@ -47,7 +47,7 @@ export class RelicFunctions {
                 Utility.SimpleTimer(0.21, () => newRelic.SetUpgradeLevelDesc(kitty.Unit))
             }
         } catch (e: any) {
-            Logger.Warning(`Error in HandleRelicPurchase: ${e.Message}`)
+            Logger.Warning(`Error in HandleRelicPurchase: ${e}`)
         }
     }
 
@@ -97,7 +97,7 @@ export class RelicFunctions {
                 if (player.isLocal()) ShopFrame.RefreshUpgradeTooltip(playerRelic)
             }
         } catch (e: any) {
-            Logger.Warning(`Error in UpgradeRelic: ${e.Message}`)
+            Logger.Warning(`Error in UpgradeRelic: ${e}`)
         }
     }
 

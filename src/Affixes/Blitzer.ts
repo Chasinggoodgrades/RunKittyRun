@@ -4,8 +4,7 @@ import { Wolf } from 'src/Game/Entities/Wolf'
 import { DEFAULT_OVERHEAD_EFFECT, DEFAULT_WOLF_COLLISION_RADIUS, Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { GC } from 'src/Utility/GC'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { distanceBetweenXYPoints } from 'src/Utility/Utility'
 import { Effect, Unit } from 'w3ts'
 import { Affix } from './Affix'
@@ -65,11 +64,11 @@ export class Blitzer extends Affix {
     }
 
     private RegisterMoveTimer() {
-        this.MoveTimer = MemoryHandler.getEmptyObject<AchesTimers>()
-        this.PreBlitzerTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.MoveTimer = createAchesTimer()
+        this.PreBlitzerTimer = createAchesTimer()
         let randomFlyTime = GetRandomReal(4.0, 10.0) // random time to move before blitzing
         this.MoveTimer?.Timer.start(randomFlyTime, false, this.PreBlitzerMove) // initial move
-        this.BlitzerTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.BlitzerTimer = createAchesTimer()
     }
 
     private PreBlitzerMove() {
@@ -84,7 +83,7 @@ export class Blitzer extends Affix {
             this.Unit.Unit.color = PLAYER_COLOR_YELLOW
             this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, this.BeginBlitz)
         } catch (e: any) {
-            Logger.Warning(`Error in PreBlitzerMove: ${e.Message}`)
+            Logger.Warning(`Error in PreBlitzerMove: ${e}`)
             throw e
         }
     }
@@ -102,7 +101,7 @@ export class Blitzer extends Affix {
             this.Unit.IsWalking = true
             this.MoveTimer?.Timer.start(randomTime, false, this.PreBlitzerMove)
         } catch (e: any) {
-            Logger.Warning(`Error in BeginBlitz: ${e.Message}`)
+            Logger.Warning(`Error in BeginBlitz: ${e}`)
             throw e
         }
     }

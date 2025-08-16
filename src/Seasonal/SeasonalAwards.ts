@@ -1,8 +1,7 @@
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { HolidaySeasons, Seasons } from './Seasons'
 
@@ -24,7 +23,7 @@ export class SeasonalAwards {
             8.0,
             `${Colors.COLOR_YELLOW}Special thanks to everyone for playing this holiday season! All players have been awarded the snow trail and snow wings from 2023 :)${Colors.COLOR_RESET}`
         )
-        let t = MemoryHandler.getEmptyObject<AchesTimers>()
+        let t = createAchesTimer()
         t.Timer.start(
             1.0,
             false,

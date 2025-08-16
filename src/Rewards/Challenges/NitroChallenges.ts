@@ -78,7 +78,7 @@ export class NitroChallenges {
         NitroChallenges.NitroTimer.start(
             NitroChallenges.NitroRoundTimes.get(Globals.ROUND)!,
             false,
-            ErrorHandler.Wrap(NitroChallenges.StopNitroTimer)
+            ErrorHandler.Wrap(() => NitroChallenges.StopNitroTimer())
         )
     }
 

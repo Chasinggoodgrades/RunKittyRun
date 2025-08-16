@@ -6,8 +6,7 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { NitroChallenges } from 'src/Rewards/Challenges/NitroChallenges'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Item, MapPlayer, Rectangle, Unit } from 'w3ts'
 import { Progress } from '../Management/Progress'
@@ -44,7 +43,7 @@ export const NitroPacer = {
         this.nitroEffect = Effect.createAttachment('war3mapImported\\Nitro.mdx', this.Unit, 'origin')!
         this.VisionShare()
 
-        this.pacerTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.pacerTimer = createAchesTimer()
     },
 
     /// <summary>
@@ -102,7 +101,7 @@ export const NitroPacer = {
                 }
             }
         } catch (e: any) {
-            Logger.Warning(`Error in UpdateNitroPacer ${e.Message}`)
+            Logger.Warning(`Error in UpdateNitroPacer ${e}`)
             throw e
         }
     },

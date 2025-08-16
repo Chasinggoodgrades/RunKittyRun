@@ -72,7 +72,7 @@ export class LuaEditor {
             let output: string = this.RunLua(p, luaCode)
             this.outputText.setText(output)
         } catch (ex: any) {
-            this.outputText.setText(`Error: ${ex.Message}`)
+            this.outputText.setText(`Error: ${ex}`)
         }
     }
 

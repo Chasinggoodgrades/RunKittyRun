@@ -34,7 +34,7 @@ export class Savecode {
                 Savecode.InitializeSaveCode(player)
             }
         } catch (e: any) {
-            Logger.Critical(`Error in OldSaves.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in OldSaves.Initialize: ${e}`)
             throw e
         }
     }
@@ -143,7 +143,7 @@ export class Savecode {
 
             return inputhash === this.Hash()
         } catch (e: any) {
-            Logger.Critical(`Error in OldSaves.Load, save code must be from v4.2 or greater: ${e.Message}`)
+            Logger.Critical(`Error in OldSaves.Load, save code must be from v4.2 or greater: ${e}`)
             return false
         }
     }

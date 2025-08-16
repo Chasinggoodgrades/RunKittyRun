@@ -36,8 +36,7 @@ import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardManager } from 'src/UI/Multiboard'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, base64Decode } from 'w3ts'
 import { Difficulty } from './Difficulty/Difficulty'
@@ -52,6 +51,7 @@ export class Setup {
         try {
             SetGameSpeed(MAP_SPEED_FASTEST)
             LockGameSpeedBJ()
+            Globals.Initialize()
             ColorUtils.Initialize()
             GameSeed.Initialize()
             DoodadChanger.ShowSeasonalDoodads(false)
@@ -69,14 +69,18 @@ export class Setup {
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(GameMode.Standard)
         } catch (e: any) {
-            Logger.Critical(`Error in Setup.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in Setup.Initialize: ${e}`)
             throw e
         }
     }
 
     private static StartGameModeTimer() {
-        this.gameModeTimer = MemoryHandler.getEmptyObject<AchesTimers>()
-        this.gameModeTimer.Timer.start(1.0, true, ErrorHandler.Wrap(this.ChoosingGameMode))
+        this.gameModeTimer = createAchesTimer()
+        this.gameModeTimer.Timer.start(
+            1.0,
+            true,
+            ErrorHandler.Wrap(() => this.ChoosingGameMode())
+        )
     }
 
     private static ChoosingGameMode() {
@@ -127,7 +131,7 @@ export class Setup {
             FirstPersonCameraManager.Initialize()
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
         } catch (e: any) {
-            Logger.Critical(`Error in Setup.StartGame: ${e.Message}`)
+            Logger.Critical(`Error in Setup.StartGame: ${e}`)
             throw e
         }
     }

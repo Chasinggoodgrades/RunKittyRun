@@ -67,7 +67,7 @@ export class RangeIndicator {
             }
             this.LightningObjects = []
         } catch (e: any) {
-            Logger.Warning(`Error in RangeIndicator.DestroyIndicator: ${e.Message}`)
+            Logger.Warning(`Error in RangeIndicator.DestroyIndicator: ${e}`)
         }
     }
 

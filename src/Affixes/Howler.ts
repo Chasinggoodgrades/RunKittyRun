@@ -6,8 +6,7 @@ import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Group } from 'w3ts'
 import { Affix } from './Affix'
@@ -46,7 +45,7 @@ export class Howler extends Affix {
     }
 
     private RegisterTimerEvents() {
-        this.HowlTimer = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.HowlTimer = createAchesTimer()
         this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, this.Howl)
     }
 
@@ -74,7 +73,7 @@ export class Howler extends Affix {
             }
             this.NearbyWolves.clear()
         } catch (e: any) {
-            Logger.Warning(`Error in Howl: ${e.Message}`)
+            Logger.Warning(`Error in Howl: ${e}`)
             throw e
         }
     }

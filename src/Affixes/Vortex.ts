@@ -64,7 +64,11 @@ export class Vortex extends Affix {
         this.EntersRange.addAction(this.EnterRegionActions)
         this.LeavesRange.registerUnitInRage(this.Unit.Unit.handle, this.VORTEX_RADIUS, FilterList.KittyFilter)
 
-        this.PeriodicPull.start(this.VORTEX_PERIODIC_PULL, true, ErrorHandler.Wrap(this.PullBegin))
+        this.PeriodicPull.start(
+            this.VORTEX_PERIODIC_PULL,
+            true,
+            ErrorHandler.Wrap(() => this.PullBegin())
+        )
     }
 
     private EnterRegionActions() {
@@ -80,7 +84,11 @@ export class Vortex extends Affix {
     }
 
     private PullBegin() {
-        this.PullStart.start(this.VORTEX_PULSE_RATE, true, ErrorHandler.Wrap(this.PullActions))
+        this.PullStart.start(
+            this.VORTEX_PULSE_RATE,
+            true,
+            ErrorHandler.Wrap(() => this.PullActions())
+        )
         this.Unit.Unit.setVertexColor(255, 0, 255, 255)
     }
 

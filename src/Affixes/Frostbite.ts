@@ -48,7 +48,7 @@ export class Frostbite extends Affix {
             GC.RemoveList(this.FrostbittenKitties) // TODO; Cleanup:             GC.RemoveList(ref FrostbittenKitties);
             super.Remove()
         } catch (e: any) {
-            Logger.Warning(`Error in Frostbite.Remove: ${e.Message}`)
+            Logger.Warning(`Error in Frostbite.Remove: ${e}`)
             throw e
         }
     }
@@ -62,7 +62,7 @@ export class Frostbite extends Affix {
             }
             this.FrostbittenKitties.length = 0
         } catch (e: any) {
-            Logger.Warning(`Error in Frostbite.RemoveAllEffects: ${e.Message}`)
+            Logger.Warning(`Error in Frostbite.RemoveAllEffects: ${e}`)
             throw e
         }
     }
@@ -95,7 +95,7 @@ export class Frostbite extends Affix {
                 this.FrostbittenKitties.splice(i, 1)
             }
         } catch (e: any) {
-            Logger.Warning(`Error in Frostbite.PeriodicRangeCheck: ${e.Message}`)
+            Logger.Warning(`Error in Frostbite.PeriodicRangeCheck: ${e}`)
         }
     }
 

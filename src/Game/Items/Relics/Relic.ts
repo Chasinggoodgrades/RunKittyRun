@@ -107,7 +107,7 @@ export abstract class Relic {
                     `${Colors.COLOR_TURQUOISE}You may now buy relics from the shop!${Colors.COLOR_RESET}`
                 )
             } catch (e: any) {
-                Logger.Warning(`Error in RegisterLevelTenTrigger: ${e.Message}`)
+                Logger.Warning(`Error in RegisterLevelTenTrigger: ${e}`)
             }
         })
     }

@@ -1,3 +1,4 @@
+import { Affix } from 'src/Affixes/Affix'
 import { Circle } from 'src/Game/Entities/Circle'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Wolf } from 'src/Game/Entities/Wolf'
@@ -10,7 +11,6 @@ import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
 import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
-import { Affix } from 'src/Affixes/Affix'
 
 export const DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
 export const DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
@@ -94,7 +94,7 @@ export class Globals {
 
     public static CurrentGameModeType: string = ''
 
-    constructor() {
+    public static Initialize() {
         Globals.WORLD_BOUNDS = Rectangle.getWorldBounds()!
     }
 

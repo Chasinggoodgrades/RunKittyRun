@@ -35,7 +35,11 @@ export class FirstPersonCamera {
         if (active) {
             if (this.forceCamTimer === null) {
                 this.forceCamTimer = Timer.create()
-                this.forceCamTimer.start(this.timerPeriod, true, ErrorHandler.Wrap(this.UpdateCamera))
+                this.forceCamTimer.start(
+                    this.timerPeriod,
+                    true,
+                    ErrorHandler.Wrap(() => this.UpdateCamera())
+                )
             }
         } else {
             if (this.forceCamTimer !== null) {

@@ -11,8 +11,7 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { Disco } from 'src/Misc/Disco'
 import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
 import { Action } from 'src/Utility/CSUtils'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer, TextTag, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
@@ -31,7 +30,7 @@ export class Wolf {
 
     public RegionIndex: number
     public OVERHEAD_EFFECT_PATH: string
-    public WanderTimer: AchesTimers = MemoryHandler.getEmptyObject<AchesTimers>()
+    public WanderTimer: AchesTimers = createAchesTimer()
 
     public EffectTimer: AchesTimers
 
@@ -82,7 +81,7 @@ export class Wolf {
                 NamedWolves.CreateNamedWolves()
             }
         } catch (e: any) {
-            Logger.Critical(`Error in Wolf.SpawnWolves: ${e.Message}`)
+            Logger.Critical(`Error in Wolf.SpawnWolves: ${e}`)
             throw e
         }
     }
@@ -172,7 +171,7 @@ export class Wolf {
                 this.Unit.paused = false
             }
         } catch (e: any) {
-            Logger.Warning(`Error in Wolf.PauseSelf: ${e.Message}`)
+            Logger.Warning(`Error in Wolf.PauseSelf: ${e}`)
         }
     }
 
@@ -221,7 +220,7 @@ export class Wolf {
         this.OverheadEffect ??= Effect.createAttachment(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
 
-        this.EffectTimer ??= MemoryHandler.getEmptyObject<AchesTimers>()
+        this.EffectTimer ??= createAchesTimer()
         this.EffectTimer?.Timer?.start(effectDuration, false, this._cachedEffect)
     }
 

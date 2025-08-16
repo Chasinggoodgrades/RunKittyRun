@@ -7,7 +7,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Group, MapPlayer, Trigger, Unit } from 'w3ts'
@@ -108,7 +108,7 @@ export class FrostbiteRing extends Relic {
             RemoveLocation(freezeLocation)
             this.FreezeGroup.clear()
         } catch (e: any) {
-            Logger.Warning(`Error in FrostbiteRing.FrostbiteCast: ${e.Message}`)
+            Logger.Warning(`Error in FrostbiteRing.FrostbiteCast: ${e}`)
         }
     }
 
@@ -159,7 +159,7 @@ export class FrozenWolf {
 
     public BeginFreezeActions(castingPlayer: MapPlayer, wolfToFreeze: Unit, duration: number) {
         try {
-            if (!this.Active) this.Timer = MemoryHandler.getEmptyObject<AchesTimers>()
+            if (!this.Active) this.Timer = createAchesTimer()
             this.Unit = wolfToFreeze
             this.FreezeEffect ??= Effect.fromHandle(
                 AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_FREEZE_RING_EFFECT, this.Unit.handle, 'origin')
@@ -171,7 +171,7 @@ export class FrozenWolf {
             this.Timer.Timer.start(duration, false, this.EndingFreezeActions)
             this.Active = true
         } catch (e: any) {
-            Logger.Warning(`Error in FrozenWolf.BeginFreezeActions: ${e.Message}`)
+            Logger.Warning(`Error in FrozenWolf.BeginFreezeActions: ${e}`)
             this.dispose()
         }
     }
@@ -184,7 +184,7 @@ export class FrozenWolf {
             this.SlowWolves(this.Unit)
             this.dispose()
         } catch (e: any) {
-            Logger.Warning(`Error in FrozenWolf.EndingFreezeActions: ${e.Message}`)
+            Logger.Warning(`Error in FrozenWolf.EndingFreezeActions: ${e}`)
             this.dispose()
         }
     }
@@ -199,7 +199,7 @@ export class FrozenWolf {
             this.Active = false
             MemoryHandler.destroyObject(this)
         } catch (e: any) {
-            Logger.Warning(`Error in FrozenWolf.Dispose: ${e.Message}`)
+            Logger.Warning(`Error in FrozenWolf.Dispose: ${e}`)
         }
     }
 
@@ -209,7 +209,7 @@ export class FrozenWolf {
             if (NamedWolves.StanWolf !== null && unit === NamedWolves.StanWolf.Unit) return
             if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit)!.PauseSelf(pause)
         } catch (e: any) {
-            Logger.Warning(`Error in FrozenWolf.PausingWolf: ${e.Message}`)
+            Logger.Warning(`Error in FrozenWolf.PausingWolf: ${e}`)
         }
     }
 
@@ -230,7 +230,7 @@ export class FrozenWolf {
                 GC.RemoveEffect(effect) // TODO; Cleanup:                 GC.RemoveEffect(ref effect);
             })
         } catch (e: any) {
-            Logger.Warning(`Error in FrozenWolf.SlowWolves: ${e.Message}`)
+            Logger.Warning(`Error in FrozenWolf.SlowWolves: ${e}`)
         }
     }
 }

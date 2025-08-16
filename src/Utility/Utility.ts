@@ -2,8 +2,7 @@ import { Globals } from 'src/Global/Globals'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Effect, Item, MapPlayer, TextTag, Unit } from 'w3ts'
 import { Action } from './CSUtils'
-import { AchesTimers } from './MemoryHandler/AchesTimers'
-import { MemoryHandler } from './MemoryHandler/MemoryHandler'
+import { createAchesTimer } from './MemoryHandler/AchesTimers'
 
 export class Utility {
     private static Locust: number = FourCC('Aloc')
@@ -96,7 +95,7 @@ export class Utility {
     /// <param name="duration"></param>
     /// <param name="action"></param>
     public static SimpleTimer(duration: number, action: Action) {
-        let handle = MemoryHandler.getEmptyObject<AchesTimers>()
+        let handle = createAchesTimer()
         handle.Timer.start(duration, false, () => {
             action()
             handle?.dispose()

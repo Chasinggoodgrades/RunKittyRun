@@ -115,7 +115,7 @@ export class NamedWolves {
                 })
             )
         } catch (e: any) {
-            Logger.Warning(`Error in KillExplodingWolf ${e.Message}`)
+            Logger.Warning(`Error in KillExplodingWolf ${e}`)
         }
     }
 
@@ -134,7 +134,7 @@ export class NamedWolves {
             NamedWolves.ExplodingWolf.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
             Globals.DNTNamedWolves.push(NamedWolves.ExplodingWolf)
         } catch (e: any) {
-            Logger.Warning(`Error in ExplodingWolfDesc ${e.Message} ${e.StackTrace}`)
+            Logger.Warning(`Error in ExplodingWolfDesc ${e} ${e.StackTrace}`)
         }
     }
 

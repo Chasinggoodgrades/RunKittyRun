@@ -14,7 +14,7 @@ export class UniqueItems {
             this.UniqueList = this.UniqueItemList()
             this.RegisterEvents()
         } catch (e: any) {
-            Logger.Critical(`Error in UniqueItems.Initialize. ${e.Message}`)
+            Logger.Critical(`Error in UniqueItems.Initialize. ${e}`)
             throw e
         }
     }
@@ -50,7 +50,7 @@ export class UniqueItems {
             player.addGold(uniqueItem.GoldCost)
             RemoveItem(item.handle)
         } catch (e: any) {
-            Logger.Warning(`Error in UniqueItems.ItemPickup: ${e.Message}`)
+            Logger.Warning(`Error in UniqueItems.ItemPickup: ${e}`)
         }
     }
 }

@@ -119,7 +119,7 @@ export class AffixFactory {
             let randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
         } catch (ex: any) {
-            Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${ex.Message}${Colors.COLOR_RESET}`)
+            Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${ex}${Colors.COLOR_RESET}`)
             return null as never
         }
     }
@@ -184,7 +184,7 @@ export class AffixFactory {
                 }
             }
         } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_RED}Error in DistAffixes: ${ex.Message}${Colors.COLOR_RESET}`)
+            Logger.Critical(`${Colors.COLOR_RED}Error in DistAffixes: ${ex}${Colors.COLOR_RESET}`)
             AffixFactory.RemoveAllAffixes()
         }
     }

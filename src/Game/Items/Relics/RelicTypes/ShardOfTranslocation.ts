@@ -111,7 +111,7 @@ export class ShardOfTranslocation extends Relic {
         let item = Utility.UnitGetItem(unit, ShardOfTranslocation.RelicItemID)!
         BlzSetItemExtendedTooltip(
             item.handle,
-            `{Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within {Colors.COLOR_LAVENDER}{MaxBlinkRange.ToString("F2")}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r`
+            `${Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within ${Colors.COLOR_LAVENDER}${this.MaxBlinkRange.toFixed(2)}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r`
         )
     }
 

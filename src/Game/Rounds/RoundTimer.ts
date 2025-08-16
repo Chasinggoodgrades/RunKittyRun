@@ -23,7 +23,7 @@ export class RoundTimer {
             RoundTimer.EndRoundTimerDialog.setTitle('Round Time Remaining')
             RoundTimer.EndRoundTimerDialogs()
         } catch (e: any) {
-            Logger.Warning(`InitEndRoundTimer ${e.Message}`)
+            Logger.Warning(`InitEndRoundTimer ${e}`)
             throw e
         }
     }
@@ -41,7 +41,7 @@ export class RoundTimer {
         RoundTimer.EndRoundTimer.start(
             RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1],
             false,
-            ErrorHandler.Wrap(RoundManager.RoundEnd)
+            ErrorHandler.Wrap(() => RoundManager.RoundEnd())
         )
     }
 

@@ -19,7 +19,7 @@ export class TerrainChanger {
             this.ChristmasTerrain()
             this.SetTerrain()
         } catch (e: any) {
-            Logger.Critical(`Error in TerrainChanger.Initialize: ${e.Message}`)
+            Logger.Critical(`Error in TerrainChanger.Initialize: ${e}`)
             throw e
         }
     }

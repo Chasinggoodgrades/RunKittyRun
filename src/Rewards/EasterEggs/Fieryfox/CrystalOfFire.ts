@@ -43,14 +43,14 @@ export class CrystalOfFire {
     private static RegisterTurnInFiery(): Trigger {
         let triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, this.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(this.FieryfoxEvent))
+        triggerHandle.addAction(ErrorHandler.Wrap(() => this.FieryfoxEvent()))
         return triggerHandle
     }
 
     private static RegisterTurnInFandF(): Trigger {
         let triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, this.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(this.FandFEvent))
+        triggerHandle.addAction(ErrorHandler.Wrap(() => this.FandFEvent()))
         return triggerHandle
     }
 
@@ -59,7 +59,7 @@ export class CrystalOfFire {
         for (let player of Globals.ALL_PLAYERS) {
             triggerHandle.registerPlayerChatEvent(player, 'yes!', false)
         }
-        triggerHandle.addAction(ErrorHandler.Wrap(this.AcceptedQuest))
+        triggerHandle.addAction(ErrorHandler.Wrap(() => this.AcceptedQuest()))
         return triggerHandle
     }
 

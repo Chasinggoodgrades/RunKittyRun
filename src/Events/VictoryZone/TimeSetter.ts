@@ -38,7 +38,7 @@ export class TimeSetter {
 
             return true
         } catch (e: any) {
-            Logger.Critical(`Error in TimeSetter.SetRoundTime: ${e.Message}`)
+            Logger.Critical(`Error in TimeSetter.SetRoundTime: ${e}`)
             throw e
         }
     }

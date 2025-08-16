@@ -24,7 +24,7 @@ export class MissingShoe {
         let randomTime = GetRandomReal(600.0, 900.0)
         MissingShoe.TimerEvent = Trigger.create()!
         MissingShoe.TimerEvent.registerTimerEvent(randomTime, false)
-        MissingShoe.TimerEvent.addAction(ErrorHandler.Wrap(MissingShoe.EventStart))
+        MissingShoe.TimerEvent.addAction(ErrorHandler.Wrap(() => MissingShoe.EventStart()))
     }
 
     private static RegisterTurnInEvent() {
@@ -39,7 +39,7 @@ export class MissingShoe {
             MissingShoe.TurnInRange,
             undefined
         )
-        MissingShoe.TurnInEvent.addAction(ErrorHandler.Wrap(MissingShoe.TurnInActions))
+        MissingShoe.TurnInEvent.addAction(ErrorHandler.Wrap(() => MissingShoe.TurnInActions()))
     }
 
     // Ping Event + Shoe Spawn

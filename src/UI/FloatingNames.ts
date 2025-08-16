@@ -1,7 +1,6 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { Globals } from 'src/Global/Globals'
-import { AchesTimers } from 'src/Utility/MemoryHandler/AchesTimers'
-import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
+import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { MapPlayer, TextTag } from 'w3ts'
 
 export class FloatingNameTag {
@@ -18,7 +17,7 @@ export class FloatingNameTag {
     }
 
     public Initialize() {
-        this.NamePosUpdater = MemoryHandler.getEmptyObject<AchesTimers>()
+        this.NamePosUpdater = createAchesTimer()
         this.SetNameTagAttributes()
         this.NamePosTimer()
     }

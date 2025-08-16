@@ -30,7 +30,7 @@ export class FandF {
 
     private static RegisterCollection(): Trigger {
         let trig = Trigger.create()!
-        trig.addAction(ErrorHandler.Wrap(this.CollectionActions))
+        trig.addAction(ErrorHandler.Wrap(() => this.CollectionActions()))
         return trig
     }
 
@@ -47,7 +47,7 @@ export class FandF {
     private static RegisterTurnIn(): Trigger {
         let trig = Trigger.create()!
         trig.registerUnitInRage(SpawnChampions.FandF2023.handle, this.TurnInRange, FilterList.KittyFilter)
-        trig.addAction(ErrorHandler.Wrap(this.TurnInActions))
+        trig.addAction(ErrorHandler.Wrap(() => this.TurnInActions()))
         return trig
     }
 

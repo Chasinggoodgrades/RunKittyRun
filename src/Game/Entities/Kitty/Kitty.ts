@@ -169,7 +169,7 @@ export class Kitty {
                 MultiboardUtil.RefreshMultiboards()
             }
         } catch (e: any) {
-            Logger.Critical(`Error in KillKitty: ${e.Message}`)
+            Logger.Critical(`Error in KillKitty: ${e}`)
         }
     }
 
@@ -208,7 +208,7 @@ export class Kitty {
                 MultiboardUtil.RefreshMultiboards()
             }
         } catch (e: any) {
-            Logger.Critical(`Error in ReviveKitty: ${e.Message}`)
+            Logger.Critical(`Error in ReviveKitty: ${e}`)
             throw e
         }
     }
@@ -238,7 +238,7 @@ export class Kitty {
 
             this.Relics = []
         } catch (e: any) {
-            Logger.Critical(`Error in InitData: ${e.Message}`)
+            Logger.Critical(`Error in InitData: ${e}`)
             throw e
         }
     }

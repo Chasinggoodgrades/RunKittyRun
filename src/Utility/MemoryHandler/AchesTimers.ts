@@ -32,3 +32,5 @@ export class AchesTimers {
         MemoryHandler.destroyObject(this)
     }
 }
+
+export const createAchesTimer = () => new AchesTimers()

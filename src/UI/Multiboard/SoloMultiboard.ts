@@ -31,7 +31,7 @@ export class SoloMultiboard {
             SoloMultiboard.MakeMultiboard()
             SoloMultiboard.RegisterTriggers()
         } catch (ex: any) {
-            Logger.Critical(`Error in SoloMultiboard: ${ex.Message}`)
+            Logger.Critical(`Error in SoloMultiboard: ${ex}`)
             throw ex
         }
     }
@@ -231,7 +231,7 @@ export class SoloMultiboard {
                 `${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}`
             )
         } catch (ex: any) {
-            Logger.Critical(`Error in SoloMultiboard.UpdateDeathCount: ${ex.Message}`)
+            Logger.Critical(`Error in SoloMultiboard.UpdateDeathCount: ${ex}`)
             throw ex
         }
     }

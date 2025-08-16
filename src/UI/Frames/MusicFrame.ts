@@ -27,7 +27,7 @@ export class MusicFrame {
             this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             this.MusicFramehandle = blzCreateFrameByType(
                 'BACKDROP',
-                'Frame: Music',
+                'Music Frame:',
                 this.GameUI,
                 'QuestButtonPushedBackdropTemplate',
                 0
@@ -36,7 +36,7 @@ export class MusicFrame {
             this.CreateMusicFrames()
             this.SetMusicFrameHotkeyEvent()
         } catch (ex: any) {
-            Logger.Critical(`Error in MusicFrame: ${ex.Message}`)
+            Logger.Critical(`Error in MusicFrame: ${ex}`)
             throw ex
         }
     }
@@ -185,7 +185,7 @@ export class MusicFrame {
         for (let player of Globals.ALL_PLAYERS) {
             musicHotkeyTrigger.registerPlayerKeyEvent(player, OSKEY_0, 0, true)
         }
-        musicHotkeyTrigger.addAction(ErrorHandler.Wrap(this.MusicFrameActions))
+        musicHotkeyTrigger.addAction(ErrorHandler.Wrap(() => this.MusicFrameActions()))
     }
 
     /// <summary>

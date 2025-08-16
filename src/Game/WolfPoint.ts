@@ -65,7 +65,7 @@ export class WolfPoint {
                 this.StartMovingOrders()
             }
         } catch (ex: any) {
-            Logger.Warning(`WolfPoint.DiagonalRegionCreate ${ex.Message}`)
+            Logger.Warning(`WolfPoint.DiagonalRegionCreate ${ex}`)
         }
     }
 
@@ -79,7 +79,7 @@ export class WolfPoint {
                 this.PointInfo[i].y = 0
             }
         } catch (ex: any) {
-            Logger.Critical(`WolfPoint cleanup error: ${ex.Message}`)
+            Logger.Critical(`WolfPoint cleanup error: ${ex}`)
         }
     }
 
@@ -105,7 +105,7 @@ export class WolfPoint {
                 if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
             }
         } catch (ex: any) {
-            Logger.Critical(`WolfPoint.StartMovingOrders ${ex.Message}`)
+            Logger.Critical(`WolfPoint.StartMovingOrders ${ex}`)
         }
     }
 

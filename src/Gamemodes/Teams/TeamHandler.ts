@@ -86,7 +86,7 @@ export class TeamHandler {
                 }
             }
         } catch (e: any) {
-            Logger.Critical(`Error in TeamHandler.RandomHandler: ${e.Message}`)
+            Logger.Critical(`Error in TeamHandler.RandomHandler: ${e}`)
         }
     }
 

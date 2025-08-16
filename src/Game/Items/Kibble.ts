@@ -112,7 +112,7 @@ export class Kibble extends IDisposable {
                 kib.dispose()
             }
         } catch (e: any) {
-            Logger.Warning(`Kibble.Error KibblePickup: ${e.Message}`)
+            Logger.Warning(`Kibble.Error KibblePickup: ${e}`)
             throw e
         }
     }
@@ -158,7 +158,7 @@ export class Kibble extends IDisposable {
             kitty.Player.addGold(goldAmount)
 
             let jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
-            let msg = `${ColorUtils.PlayerNameColored(kitty.Player)}${ColorUtils.HighlightString(` has won the ${jackpotString}`)} ${ColorUtils.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}{goldAmount} Gold|r`
+            let msg = `${ColorUtils.PlayerNameColored(kitty.Player)}${ColorUtils.HighlightString(` has won the ${jackpotString}`)} ${ColorUtils.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}${goldAmount} Gold|r`
 
             Utility.TimedTextToAllPlayers(3.0, msg) // was too long previously.
             Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)
