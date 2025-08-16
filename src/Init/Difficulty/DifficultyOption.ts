@@ -20,7 +20,10 @@ export class DifficultyOption {
     }
 
     public AddButton(): DialogButton {
-        return DifficultyOption.DifficultyChoosing.addButton(this.toString(), ++DifficultyOption._OptionCount)!
+        return DifficultyOption.DifficultyChoosing.addButton(
+            `${this.Color}${this.name}|r`,
+            ++DifficultyOption._OptionCount
+        )!
     }
 
     public ToString(): string {
