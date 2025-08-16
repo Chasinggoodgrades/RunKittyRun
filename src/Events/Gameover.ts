@@ -150,6 +150,4 @@ export class Gameover {
             if (stats.WinStreak > stats.HighestWinStreak) stats.HighestWinStreak = stats.WinStreak
         } else stats.WinStreak = 0
     }
-
-
 }

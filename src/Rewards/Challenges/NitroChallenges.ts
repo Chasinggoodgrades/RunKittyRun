@@ -100,7 +100,7 @@ export class NitroChallenges {
         NitroChallenges.AwardingDivineLight(kitty)
     }
 
-        /// <summary>
+    /// <summary>
     /// Counts the number of safezones a player has touched.
     /// </summary>
     /// <param name="player"></param>

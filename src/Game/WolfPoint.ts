@@ -11,7 +11,7 @@ export class WolfPoint {
     private MaxDistance: number = 128 // Max distance between points
     public static readonly MoveOrderID: number = OrderId('move')
     public static readonly StopOrderID: number = OrderId('stop')
-    public static readonly AttackOrderID: number = OrderId('attack')    
+    public static readonly AttackOrderID: number = OrderId('attack')
     public static readonly HoldPositionOrderID: number = OrderId('holdposition')
     public static IsPausedTrigger: Trigger
 
@@ -98,7 +98,7 @@ export class WolfPoint {
 
         try {
             for (let i: number = this.PointInfo.length - 1; i >= 1; i--) {
-                if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue    
+                if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
                 let moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
                 BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
@@ -113,8 +113,14 @@ export class WolfPoint {
         this.IsPausedTrigger ??= Trigger.create()!
         WolfPoint.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 
-        TriggerAddCondition(WolfPoint.IsPausedTrigger.handle, Condition(() => GetIssuedOrderId() === WolfPoint.AttackOrderID))
-        TriggerAddCondition(WolfPoint.IsPausedTrigger.handle, Condition(() => getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG))
+        TriggerAddCondition(
+            WolfPoint.IsPausedTrigger.handle,
+            Condition(() => GetIssuedOrderId() === WolfPoint.AttackOrderID)
+        )
+        TriggerAddCondition(
+            WolfPoint.IsPausedTrigger.handle,
+            Condition(() => getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG)
+        )
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
         WolfPoint.IsPausedTrigger.addAction(WolfPoint.QueueOrderActions)

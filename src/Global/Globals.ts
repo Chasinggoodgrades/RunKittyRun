@@ -12,7 +12,6 @@ import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 import { Affix } from 'src/Affixes/Affix'
 
-
 export const DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
 export const DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
 
@@ -28,7 +27,6 @@ export class Globals {
     public static TempGroup: Group = Group.create()!
     public static WinGame: boolean = false
     public static NumberOfRounds: number = 5
-
 
     public static AllAffixes: Affix[] = []
 

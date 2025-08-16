@@ -104,8 +104,6 @@ export class Challenges {
         }
     }
 
-
-
     public static PurpleLighting(kitty: Kitty) {
         if (kitty.CurrentStats.TotalSaves < Challenges.PURPLE_LIGHTNING_SAVE_REQUIREMENT) return
         AwardManager.GiveReward(kitty.Player, 'PurpleLightning')

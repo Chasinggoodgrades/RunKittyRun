@@ -42,6 +42,4 @@ export class TimeSetter {
             throw e
         }
     }
-
-    
 }

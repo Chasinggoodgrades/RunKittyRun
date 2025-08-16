@@ -493,14 +493,9 @@ export class AIController {
             if (distance < 1) continue // Skip if the wolf is at the same position to avoid division by zero
 
             let centerAngle: number = Math.atan2(wolf.Unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
-            let clampedDistance: number = clamp(
-                distance,
-                DEFAULT_WOLF_COLLISION_RADIUS,
-                this.DODGE_RADIUS
-            )
+            let clampedDistance: number = clamp(distance, DEFAULT_WOLF_COLLISION_RADIUS, this.DODGE_RADIUS)
             let ratio: number =
-                (clampedDistance - DEFAULT_WOLF_COLLISION_RADIUS) /
-                (this.DODGE_RADIUS - DEFAULT_WOLF_COLLISION_RADIUS)
+                (clampedDistance - DEFAULT_WOLF_COLLISION_RADIUS) / (this.DODGE_RADIUS - DEFAULT_WOLF_COLLISION_RADIUS)
 
             let totalBlockedAngle: number =
                 MIN_TOTAL_BLOCKED_ANGLE + (MAX_TOTAL_BLOCKED_ANGLE - MIN_TOTAL_BLOCKED_ANGLE) * (1 - ratio)

@@ -71,9 +71,7 @@ export class Chaos extends Affix {
 
     private GenRandomAffixName(): string {
         let randomAffixName: string =
-            AffixTypes.length > 0
-                ? AffixTypes[GetRandomInt(0, AffixTypes.length - 1)]
-                : 'Speedster'
+            AffixTypes.length > 0 ? AffixTypes[GetRandomInt(0, AffixTypes.length - 1)] : 'Speedster'
         if (randomAffixName === 'Chaos') randomAffixName = 'Speedster'
         return randomAffixName
     }

@@ -14,14 +14,12 @@ import { BeaconOfUnitedLifeforce } from './Items/Relics/RelicTypes/BeaconOfUnite
 import { ChronoSphere } from './Items/Relics/RelicTypes/ChronoSphere'
 import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 
-
-
 export class CollisionDetection {
     private static CIRCLE_COLLISION_RADIUS: number = 78.0
 
     private static IsBeaconOfUnitedLifeforce = (r: Relic): r is BeaconOfUnitedLifeforce => {
         return r instanceof BeaconOfUnitedLifeforce
-}
+    }
 
     private static WolfCollisionFilter(k: Kitty): () => boolean {
         return () => {

@@ -7,7 +7,6 @@ import { StandardPodium } from './StandardPodium'
 import { TeamPodium } from './TeamPodium'
 
 export class PodiumManager {
-    
     public static BeginPodiumEvents() {
         switch (CurrentGameMode.active) {
             case GameMode.Standard:
@@ -23,6 +22,4 @@ export class PodiumManager {
                 break
         }
     }
-
-
 }

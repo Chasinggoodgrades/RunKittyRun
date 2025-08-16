@@ -9,8 +9,6 @@ import { ShopChanger } from './Shop/ShopChanger'
 import { TerrainChanger } from './Terrain/TerrainChanger'
 import { HolidaySeasons, Seasons } from './Seasons'
 
-
-
 export class SeasonalManager {
     private static CurrentMonth: number
     private static SnowEffect: number = FourCC('SNls') // light snow

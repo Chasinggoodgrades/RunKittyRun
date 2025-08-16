@@ -61,8 +61,7 @@ export class KittyMorphosis {
     private MorphKitty() {
         if (this.Active) return
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Kitty)
-        this.Kitty.CurrentStats.CollisonRadius =
-            DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
+        this.Kitty.CurrentStats.CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
         CollisionDetection.KittyRegisterCollisions(this.Kitty)
         Utility.SimpleTimer(0.1, this.ScaleUnit)
         this.Kitty.Player.DisplayTimedTextTo(

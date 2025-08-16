@@ -1,14 +1,14 @@
-import { GameTimer } from "src/Game/Rounds/GameTimer"
-import { Globals } from "src/Global/Globals"
-import { Difficulty } from "src/Init/Difficulty/Difficulty"
-import { DifficultyLevel } from "src/Init/Difficulty/DifficultyOption"
-import { RoundTimesData } from "src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData"
-import { roundDecimals } from "src/Utility/Utility"
-import { MapPlayer } from "w3ts"
-import { Logger } from "../Logger/Logger"
+import { GameTimer } from 'src/Game/Rounds/GameTimer'
+import { Globals } from 'src/Global/Globals'
+import { Difficulty } from 'src/Init/Difficulty/Difficulty'
+import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
+import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
+import { roundDecimals } from 'src/Utility/Utility'
+import { MapPlayer } from 'w3ts'
+import { Logger } from '../Logger/Logger'
 
 export class RoundEnums {
-public static GetRoundEnum(): string {
+    public static GetRoundEnum(): string {
         let currentDiff = Difficulty.DifficultyValue
         let roundEnum: string
         switch (currentDiff) {
@@ -170,5 +170,4 @@ public static GetRoundEnum(): string {
                 return ''
         }
     }
-
 }

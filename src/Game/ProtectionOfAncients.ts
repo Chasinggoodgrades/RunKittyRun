@@ -170,7 +170,6 @@ export class ProtectionOfAncients {
         })
     }
 
-    
     public static GetOneOfNineCooldown(Player: MapPlayer) {
         let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
         let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS

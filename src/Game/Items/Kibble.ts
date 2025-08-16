@@ -185,7 +185,7 @@ export class Kibble extends IDisposable {
         kibblePicker.SaveData.KibbleCurrency.Collected += 1
     }
 
-        /// <summary>
+    /// <summary>
     /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
     /// </summary>
     /// <param name="k"></param>

@@ -111,7 +111,7 @@ export class TeamsMultiboard {
             rowIndex++
         }
     }
-    
+
     public static UpdateCurrentTeamsMB() {
         TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size
         TeamsMultiboard.CurrentTeamsMB.columns = 2

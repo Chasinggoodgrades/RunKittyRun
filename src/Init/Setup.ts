@@ -49,7 +49,6 @@ export class Setup {
     private static timeToChoose: number = 0.0
     private static gameModeTimer: AchesTimers
 
-
     public static Initialize() {
         try {
             SetGameSpeed(MAP_SPEED_FASTEST)
@@ -128,9 +127,7 @@ export class Setup {
             RoundManager.Initialize()
             FirstPersonCameraManager.Initialize()
             Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
-            
-        } 
-        catch (e: any) {
+        } catch (e: any) {
             Logger.Critical('Error in Setup.StartGame: {e.Message}')
             throw e
         }
@@ -167,8 +164,6 @@ export class Setup {
             }
         }
     }
-
-
 
     public static SetupVIPList() {
         for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {

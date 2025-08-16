@@ -281,8 +281,4 @@ export class Wolf {
         FandF.BloodWolf.setVertexColor(100, 50, 50, 255)
         FandF.AppendCollectionsUnit()
     }
-
-
-
 }
-

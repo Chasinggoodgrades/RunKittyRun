@@ -1,10 +1,9 @@
-import { Logger } from "src/Events/Logger/Logger"
-import { Wolf } from "src/Game/Entities/Wolf"
-import { Affix } from "./Affix"
-import { Globals } from "src/Global/Globals"
+import { Logger } from 'src/Events/Logger/Logger'
+import { Wolf } from 'src/Game/Entities/Wolf'
+import { Affix } from './Affix'
+import { Globals } from 'src/Global/Globals'
 
 export class AffixUtil {
-
     public static RemoveAffix(affix: Affix, wolf: Wolf): void
     public static RemoveAffix(affixName: string, wolf: Wolf): void
     public static RemoveAffix(arg: Affix | string, wolf: Wolf): void {
@@ -20,7 +19,7 @@ export class AffixUtil {
             arg.Remove()
             Globals.AllAffixes.splice(Globals.AllAffixes.indexOf(arg), 1)
         }
-    }   
+    }
 }
 
 export const RemoveAllWolfAffixes = (wolf: Wolf) => {
