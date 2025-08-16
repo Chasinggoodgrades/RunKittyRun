@@ -27,6 +27,8 @@ export class Globals {
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
     public static WinGame: boolean = false
+    public static NumberOfRounds: number = 5
+
 
     public static AllAffixes: Affix[] = []
 

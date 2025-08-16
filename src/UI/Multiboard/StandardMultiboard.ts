@@ -120,7 +120,7 @@ export class StandardMultiboard {
 
     private static CurrentStatsRoundTimes() {
         let color = Colors.COLOR_GREEN
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
+        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
             StandardMultiboard.CurrentStats.GetItem(0, i).setText(
                 '{color}{Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i])}|r'
             )
@@ -301,8 +301,17 @@ export class StandardMultiboard {
 
     public static UpdateBestTimesMB() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        MultiboardUtil.FillPlayers(StandardMultiboard.BestTimes, 1)
+        this.FillPlayers(StandardMultiboard.BestTimes, 1)
         StandardMultiboard.BestTimesStats()
+    }
+
+    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
+        for (let player of Globals.ALL_PLAYERS) {
+            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+            mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
+            mb.GetItem(rowIndex, 0).setWidth(0.07)
+            rowIndex++
+        }
     }
 
     private static GetGameCount(data: KittyData) {

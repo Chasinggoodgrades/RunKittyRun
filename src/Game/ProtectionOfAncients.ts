@@ -7,8 +7,8 @@ import { MetaKey, Utility } from 'src/Utility/Utility'
 import { getFilterUnit, getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Effect, Group, MapPlayer, Trigger, Unit } from 'w3ts'
 import { Kitty } from './Entities/Kitty/Kitty'
-import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 import { WolfPoint } from './WolfPoint'
+import { PlayerUpgrades } from './Items/Relics/PlayerUpgrades'
 
 export class ProtectionOfAncients {
     private static ACTIVATION_EFFECT: string = 'war3mapImported\\Silver: Radiance.mdx'
@@ -159,7 +159,7 @@ export class ProtectionOfAncients {
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
         Utility.SimpleTimer(0.03, () =>
-            BlzStartUnitAbilityCooldown(Unit.handle, relic, OneOfNine.GetOneOfNineCooldown(player))
+            BlzStartUnitAbilityCooldown(Unit.handle, relic, this.GetOneOfNineCooldown(player))
         )
 
         let actiEffect = Effect.createAttachment(ProtectionOfAncients.ACTIVATION_EFFECT, Unit, 'chest')!
@@ -168,6 +168,29 @@ export class ProtectionOfAncients {
             ProtectionOfAncients.ApplyEffect(Unit)
             GC.RemoveEffect(actiEffect) // TODO; Cleanup:             GC.RemoveEffect(ref actiEffect);
         })
+    }
+
+    
+    public static GetOneOfNineCooldown(Player: MapPlayer) {
+        let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
+        let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+        let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+        let reduction = this.GetOneOfNineReduction(Player)
+
+        // remaining cooldown depending on relic or no relic
+        let cooldown: number =
+            kitty.getAbilityCooldownRemaining(noRelic) > 0.0
+                ? kitty.getAbilityCooldownRemaining(noRelic)
+                : kitty.getAbilityCooldownRemaining(relic)
+
+        cooldown -= reduction
+
+        return Math.max(0.0, cooldown) // gotta make sure its not negative
+    }
+
+    public static GetOneOfNineReduction(Player: MapPlayer) {
+        return 3.0
+        //return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof OneOfNine) * 3.0
     }
 
     private static ApplyEffect(Unit: Unit) {

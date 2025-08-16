@@ -2,7 +2,6 @@ import { AffixFactory } from 'src/Affixes/AffixFactory'
 import { Gameover } from 'src/Events/Gameover'
 import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { TeamsUtil } from 'src/Gamemodes/Teams/TeamsUtil'
 import { Globals } from 'src/Global/Globals'
@@ -115,7 +114,7 @@ export class RoundManager {
             DeathlessChallenges.ResetDeathless()
             WolfLaneHider.ResetLanes()
             SaveManager.SaveAll()
-            if (Globals.ROUND === Gamemode.NumberOfRounds) Globals.WinGame = true
+            if (Globals.ROUND === 5) Globals.WinGame = true
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
             Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)
@@ -133,6 +132,16 @@ export class RoundManager {
         }
         this.RoundEnd()
         return true
+    }
+
+    public static RoundEndCheckSolo() {
+        if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
+
+        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            if (kitty.isAlive()) return
+        }
+        RoundManager.RoundEnd()
     }
 
     public static DidTeamEnd(teamId: number) {

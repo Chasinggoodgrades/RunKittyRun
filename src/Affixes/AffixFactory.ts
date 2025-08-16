@@ -9,7 +9,7 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { sumNumbers } from 'src/Utility/Utility'
 import { Affix } from './Affix'
-import { AddAffix, AffixUtil, RemoveAllWolfAffixes } from './AffixUtil'
+import { AddAffix, RemoveAllWolfAffixes } from './AffixUtil'
 import { CreateAffix, AffixTypes } from './AffixCreate'
 
 export class AffixFactory {

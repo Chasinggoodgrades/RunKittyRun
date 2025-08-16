@@ -3,7 +3,6 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Queue } from 'src/Utility/Queue'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Unit } from 'w3ts'
-import { PodiumManager } from './PodiumManager'
 import { PodiumUtil } from './PodiumUtil'
 
 export class TeamPodium {
@@ -21,7 +20,7 @@ export class TeamPodium {
 
     private static EnqueueMVPPlayer() {
         let topRatios = PodiumUtil.SortPlayersByHighestRatio()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
             let player = topRatios[i]
             let position = podiumPositions[i]
@@ -32,7 +31,7 @@ export class TeamPodium {
 
     private static EnqueueTopSavesPlayer() {
         let topSaves = PodiumUtil.SortPlayersBySaves()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
             let player = topSaves[i]
             let position = podiumPositions[i]

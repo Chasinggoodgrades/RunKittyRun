@@ -1,7 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
-import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { KittyData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/KittyData'
@@ -10,7 +9,6 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Multiboard, Trigger } from 'w3ts'
 import { sumNumbers } from '../../Utility/Utility'
-import { MultiboardUtil } from './MultiboardUtil'
 
 export class SoloMultiboard {
     private static OverallBoard: Multiboard
@@ -208,8 +206,17 @@ export class SoloMultiboard {
 
     public static UpdateBestTimesMB() {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
-        MultiboardUtil.FillPlayers(SoloMultiboard.BestTimes, 1)
+        this.FillPlayers(SoloMultiboard.BestTimes, 1)
         SoloMultiboard.BestTimeStats()
+    }
+
+    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
+        for (let player of Globals.ALL_PLAYERS) {
+            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+            mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
+            mb.GetItem(rowIndex, 0).setWidth(0.07)
+            rowIndex++
+        }
     }
 
     public static UpdateDeathCount(player: MapPlayer) {

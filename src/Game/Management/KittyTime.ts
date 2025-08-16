@@ -6,6 +6,7 @@ import { Utility } from 'src/Utility/Utility'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { GameTimer } from '../Rounds/GameTimer'
 import { Progress } from './Progress'
+import { Globals } from 'src/Global/Globals'
 
 export class KittyTime {
     private readonly _cachedProgress: Action
@@ -22,8 +23,8 @@ export class KittyTime {
     }
 
     private Initialize() {
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
+        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
+        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
         this.PeriodicProgressTimer()
     }
 

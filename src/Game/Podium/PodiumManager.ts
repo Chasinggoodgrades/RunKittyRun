@@ -7,12 +7,7 @@ import { StandardPodium } from './StandardPodium'
 import { TeamPodium } from './TeamPodium'
 
 export class PodiumManager {
-    public static PodiumSpots: Point[]
-
-    public static Initialize() {
-        PodiumManager.SetPodiumPositions()
-    }
-
+    
     public static BeginPodiumEvents() {
         switch (CurrentGameMode.active) {
             case GameMode.Standard:
@@ -29,11 +24,5 @@ export class PodiumManager {
         }
     }
 
-    private static SetPodiumPositions() {
-        PodiumManager.PodiumSpots = [
-            Point.create(Regions.Podium_1.centerX, Regions.Podium_1.centerY),
-            Point.create(Regions.Podium_2.centerX, Regions.Podium_2.centerY),
-            Point.create(Regions.Podium_3.centerX, Regions.Podium_3.centerY),
-        ]
-    }
+
 }

@@ -12,9 +12,9 @@ import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
 import { DiscordFrame } from 'src/UI/Frames/DiscordFrame'
 import { Utility } from 'src/Utility/Utility'
 import { GameoverUtil } from './GameoverUtil'
+import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 
 export class Gameover {
-    private static EndingTimer: number = 90.0
     public static NoEnd: boolean = false
 
     public static GameOver(): boolean {
@@ -51,7 +51,7 @@ export class Gameover {
         GameoverUtil.SetFriendData()
         Gameover.GameStats(false)
         Gameover.SaveGame()
-        Gameover.NotifyEndingGame()
+        PodiumUtil.NotifyEndingGame()
     }
 
     private static SaveGame() {
@@ -151,13 +151,5 @@ export class Gameover {
         } else stats.WinStreak = 0
     }
 
-    public static NotifyEndingGame() {
-        DiscordFrame.Initialize()
-        Utility.TimedTextToAllPlayers(
-            Gameover.EndingTimer,
-            '{Colors.COLOR_YELLOW}game: will: end: The in {EndingTimer} seconds.{Colors.COLOR_RESET}'
-        )
-        Globals.GAME_ACTIVE = false
-        Utility.SimpleTimer(Gameover.EndingTimer, EndGame)
-    }
+
 }

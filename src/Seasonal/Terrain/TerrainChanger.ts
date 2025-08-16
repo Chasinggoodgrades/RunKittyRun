@@ -50,7 +50,7 @@ export class TerrainChanger {
         this.Terrains[3] = FourCC('Xhdg')
         this.Terrains[4] = FourCC('Ywmb')
 
-        for (let i: number = 0; i < Gamemode.NumberOfRounds; i++) {
+        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
             this.SafezoneTerrain[i] = FourCC('Xblm')
         }
         this.SetTerrain()
@@ -64,10 +64,10 @@ export class TerrainChanger {
                 SafezoneTerrain[3] = FourCC("Kdkt");
                 SafezoneTerrain[4] = FourCC("Oaby");*/
 
-        for (let i: number = 0; i < Gamemode.NumberOfRounds; i++) {
+        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
             TerrainChanger.SafezoneTerrain[i] = FourCC('Ibsq') // Icecrown Glaicer (Black Squares)
         }
-        for (let i: number = 0; i < Gamemode.NumberOfRounds; i++) {
+        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
             TerrainChanger.Terrains[i] = FourCC('Nrck')
         }
     }

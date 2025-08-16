@@ -3,7 +3,6 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Queue } from 'src/Utility/Queue'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Unit } from 'w3ts'
-import { PodiumManager } from './PodiumManager'
 import { PodiumUtil } from './PodiumUtil'
 
 /// <summary>
@@ -26,7 +25,7 @@ export class StandardPodium {
 
     private static EnqueueTopScorePlayers() {
         let topScores = PodiumUtil.SortPlayersByScore()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topScores.length - 1; i >= 0; i--) {
             let player = topScores[i]
             let position = podiumPositions[i]
@@ -37,7 +36,7 @@ export class StandardPodium {
 
     private static EnqueueTopSavesPlayers() {
         let topSaves = PodiumUtil.SortPlayersBySaves()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
             let player = topSaves[i]
             let position = podiumPositions[i]
@@ -48,7 +47,7 @@ export class StandardPodium {
 
     private static EnqueueTopRatioPlayers() {
         let topRatios = PodiumUtil.SortPlayersByHighestRatio()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
             let player = topRatios[i]
             let position = podiumPositions[i]
@@ -59,7 +58,7 @@ export class StandardPodium {
 
     private static EnqueueTopStreakPlayers() {
         let topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
-        let podiumPositions = PodiumManager.PodiumSpots
+        let podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topStreaks.length - 1; i >= 0; i--) {
             let player = topStreaks[i]
             let position = podiumPositions[i]

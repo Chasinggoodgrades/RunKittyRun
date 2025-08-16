@@ -1,5 +1,4 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
-import { Safezone } from 'src/Game/Management/Safezone'
 import { Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'

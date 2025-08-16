@@ -39,6 +39,7 @@ import { Circle } from '../Circle'
 import { ShadowKitty } from '../ShadowKitty'
 import { KittyMiscInfo } from './KittyMiscInfo'
 import { KittyStatsManager } from './KittyStatsManager'
+import { RoundManager } from 'src/Game/Rounds/RoundManager'
 
 export class Kitty {
     private KITTY_HERO_TYPE: number = Constants.UNIT_KITTY
@@ -149,7 +150,7 @@ export class Kitty {
             )
             circle.KittyDied(this)
             Solo.ReviveKittySoloTournament(this)
-            Solo.RoundEndCheck()
+            RoundManager.RoundEndCheckSolo()
 
             // Death Sounds
             SoundManager.PlayKittyDeathSound(this)

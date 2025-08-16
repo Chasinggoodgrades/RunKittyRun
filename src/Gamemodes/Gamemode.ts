@@ -13,7 +13,6 @@ export class Gamemode {
     public static HostPlayer: MapPlayer
     public static IsGameModeChosen: boolean = false
     public static PlayersPerTeam: number = 0
-    public static NumberOfRounds: number = 5
 
     public static Initialize() {
         this.ChoosingGameMode()

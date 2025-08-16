@@ -5,7 +5,6 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Team } from 'src/Gamemodes/Teams/Team'
 import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
-import { TeamsMultiboard } from 'src/UI/Multiboard/TeamsMultiboard'
 import { Timer } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
 import { NitroPacer } from '../Entities/NitroPacer'
@@ -33,7 +32,7 @@ export class Progress {
                 let team = Globals.ALL_TEAMS_LIST[i]
                 team.UpdateRoundProgress(Globals.ROUND, this.CalculateTeamProgress(team))
             }
-            TeamsMultiboard.UpdateTeamStatsMB()
+            // TeamsMultiboard.UpdateTeamStatsMB()
         } catch (e: any) {
             Logger.Warning('Error in TeamProgressTracker. {e.Message}')
         }

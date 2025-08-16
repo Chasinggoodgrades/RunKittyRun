@@ -46,18 +46,4 @@ export class MultiboardUtil {
         StandardMultiboard.BestTimes.minimize(minimize) // Possible Desync
         StandardMultiboard.OverallStats.minimize(minimize) // Possible Desync
     }
-
-    /// <summary>
-    /// Fills the players going down the rows on most left side of multiboard. Passing thru rowIndex for which starting row.
-    /// </summary>
-    /// <param name="mb"></param>
-    /// <param name="rowIndex"></param>
-    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
-        for (let player of Globals.ALL_PLAYERS) {
-            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
-            mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
-            mb.GetItem(rowIndex, 0).setWidth(0.07)
-            rowIndex++
-        }
-    }
 }

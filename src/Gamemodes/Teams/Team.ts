@@ -88,7 +88,7 @@ export class Team {
     }
 
     private InitRoundStats() {
-        for (let i: number = 1; i <= Gamemode.NumberOfRounds; i++) {
+        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
             this.RoundProgress.set(i, '0.0')
             this.TeamTimes.set(i, 0.0)
         }
@@ -166,6 +166,6 @@ export class Team {
             this.TeamMembersString += name
         }
 
-        TeamsUtil.UpdateTeamsMB()
+        Team.UpdateTeamsMB()
     }
 }

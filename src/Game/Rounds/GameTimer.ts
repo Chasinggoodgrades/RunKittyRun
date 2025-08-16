@@ -40,7 +40,7 @@ export class GameTimer {
     }
 
     private static UpdatingTimes() {
-        if (Globals.ROUND > Gamemode.NumberOfRounds) return
+        if (Globals.ROUND > Globals.NumberOfRounds) return
         this.UpdateIndividualTimes()
         this.UpdateTeamTimes()
     }
