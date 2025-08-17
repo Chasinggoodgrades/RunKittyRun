@@ -2,7 +2,6 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, Timer, Trigger } from 'w3ts'
@@ -82,7 +81,7 @@ export class FrameManager {
         shopText.setScale(0.9)
         shopText.enabled = false
         FrameManager.RewardsTrigger.triggerRegisterFrameEvent(FrameManager.RewardsButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.RewardsTrigger.addAction(ErrorHandler.Wrap(() => RewardsFrame.RewardsFrameActions()))
+        FrameManager.RewardsTrigger.addAction(RewardsFrame.RewardsFrameActions)
         FrameManager.RewardsButton.visible = false
     }
 
@@ -102,7 +101,7 @@ export class FrameManager {
         shopText.setScale(0.98)
         shopText.enabled = false
         FrameManager.StatsTrigger.triggerRegisterFrameEvent(FrameManager.MusicButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.StatsTrigger.addAction(ErrorHandler.Wrap(() => MusicFrame.MusicFrameActions()))
+        FrameManager.StatsTrigger.addAction(MusicFrame.MusicFrameActions)
         FrameManager.MusicButton.visible = false
     }
 
@@ -122,7 +121,7 @@ export class FrameManager {
         shopText.setScale(1.0)
         shopText.enabled = false
         FrameManager.ShopTrigger.triggerRegisterFrameEvent(FrameManager.ShopButton, FRAMEEVENT_CONTROL_CLICK)
-        FrameManager.ShopTrigger.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
+        FrameManager.ShopTrigger.addAction(ShopFrame.ShopFrameActions)
         FrameManager.ShopButton.visible = false
     }
 

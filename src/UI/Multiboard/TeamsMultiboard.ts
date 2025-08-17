@@ -5,7 +5,6 @@ import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Multiboard, Trigger } from 'w3ts'
@@ -137,7 +136,7 @@ export class TeamsMultiboard {
         for (const player of Globals.ALL_PLAYERS) {
             TeamsMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(() => TeamsMultiboard.ESCPressed()))
+        TeamsMultiboard.ESCTrigger.addAction(TeamsMultiboard.ESCPressed)
     }
 
     private static ESCPressed = () => {

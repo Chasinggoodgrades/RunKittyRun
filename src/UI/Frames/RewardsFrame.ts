@@ -5,7 +5,6 @@ import { Globals } from 'src/Global/Globals'
 import { Reward, RewardType } from 'src/Rewards/Rewards/Reward'
 import { RewardsManager } from 'src/Rewards/Rewards/RewardsManager'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
@@ -328,11 +327,7 @@ export class RewardsFrame {
         for (const player of Globals.ALL_PLAYERS) {
             rewardsHotKey.registerPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true)
         }
-        rewardsHotKey.addAction(
-            ErrorHandler.Wrap(() => {
-                RewardsFrame.RewardsFrameActions()
-            })
-        )
+        rewardsHotKey.addAction(RewardsFrame.RewardsFrameActions)
     }
 
     public static RewardsFrameActions = () => {

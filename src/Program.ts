@@ -12,20 +12,15 @@ import { MusicManager } from './Sounds/MusicManager'
 import { Quests } from './UI/Quests'
 import { Colors } from './Utility/Colors/Colors'
 import { ColorUtils } from './Utility/Colors/ColorUtils'
-import { ErrorHandler } from './Utility/ErrorHandler'
 
 export class Program {
     public constructor() {
         // Delay a little since some stuff can break otherwise
         const timer = Timer.create()
-        timer.start(
-            0.01,
-            false,
-            ErrorHandler.Wrap(() => {
-                timer.destroy()
-                Program.start()
-            })
-        )
+        timer.start(0.01, false, () => {
+            timer.destroy()
+            Program.start()
+        })
     }
 
     private static start = () => {

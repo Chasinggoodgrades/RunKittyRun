@@ -38,12 +38,3 @@ export class ExecuteLua {
         }
     }
 }
-
-export class DebugPrinter {
-    public static _G: any
-
-    // Converts the TypeScript function printDebugNames into C#.
-    public static PrintDebugNames(title: string) {
-        // {{ LUA_REPLACE }}
-    }
-}

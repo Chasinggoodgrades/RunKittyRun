@@ -4,7 +4,6 @@ import { NamedWolves } from 'src/Game/Entities/NamedWolves'
 import { Globals } from 'src/Global/Globals'
 import { Challenges } from 'src/Rewards/Challenges/Challenges'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { FilterList } from 'src/Utility/FilterList'
 import { GC } from 'src/Utility/GC'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
@@ -144,7 +143,7 @@ export class FrostbiteRing extends Relic {
         const trg = Trigger.create()!
         trg.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
         trg.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
-        trg.addAction(ErrorHandler.Wrap(() => this.FrostbiteCast(GetSpellTargetLoc()!)))
+        trg.addAction(() => this.FrostbiteCast(GetSpellTargetLoc()!))
     }
 }
 

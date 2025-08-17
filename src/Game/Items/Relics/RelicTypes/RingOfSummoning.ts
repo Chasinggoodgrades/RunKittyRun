@@ -6,7 +6,6 @@ import { Globals } from 'src/Global/Globals'
 import { TeamDeathless } from 'src/Rewards/Challenges/TeamDeathless'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
 import { getFilterUnit, getTriggerUnit } from 'src/Utility/w3tsUtils'
@@ -54,7 +53,7 @@ export class RingOfSummoning extends Relic {
         this.triggerHandle = Trigger.create()!
         TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
         this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
-        this.triggerHandle.addAction(ErrorHandler.Wrap(() => this.SacredRingOfSummoning()))
+        this.triggerHandle.addAction(this.SacredRingOfSummoning)
     }
 
     public override ApplyEffect(Unit: Unit) {

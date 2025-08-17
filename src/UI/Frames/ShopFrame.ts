@@ -7,7 +7,6 @@ import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { safeArraySplice } from 'src/Utility/ArrayUtils'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrame, blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
@@ -514,7 +513,7 @@ export class ShopFrame {
             for (const player of Globals.ALL_PLAYERS) {
                 shopFrameHotkey.registerPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
             }
-            shopFrameHotkey.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
+            shopFrameHotkey.addAction(ShopFrame.ShopFrameActions)
         } catch (ex: any) {
             Logger.Warning(`Error in SetRewardsFrameHotkey: ${ex}`)
         }

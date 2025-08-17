@@ -8,7 +8,6 @@ import { Globals } from 'src/Global/Globals'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
@@ -43,14 +42,14 @@ export class CrystalOfFire {
     private static RegisterTurnInFiery(): Trigger {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, CrystalOfFire.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.FieryfoxEvent()))
+        triggerHandle.addAction(CrystalOfFire.FieryfoxEvent)
         return triggerHandle
     }
 
     private static RegisterTurnInFandF(): Trigger {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, CrystalOfFire.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.FandFEvent()))
+        triggerHandle.addAction(CrystalOfFire.FandFEvent)
         return triggerHandle
     }
 
@@ -59,7 +58,7 @@ export class CrystalOfFire {
         for (const player of Globals.ALL_PLAYERS) {
             triggerHandle.registerPlayerChatEvent(player, 'yes!', false)
         }
-        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.AcceptedQuest()))
+        triggerHandle.addAction(CrystalOfFire.AcceptedQuest)
         return triggerHandle
     }
 

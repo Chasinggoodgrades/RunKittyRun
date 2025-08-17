@@ -1,7 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { MusicManager } from 'src/Sounds/MusicManager'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
@@ -119,21 +118,19 @@ export class MusicFrame {
 
             const trigger = Trigger.create()!
             trigger.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
-            trigger.addAction(
-                ErrorHandler.Wrap(() => {
-                    const frame = BlzGetTriggerFrame()
-                    const player = getTriggerPlayer()
+            trigger.addAction(() => {
+                const frame = BlzGetTriggerFrame()
+                const player = getTriggerPlayer()
 
-                    if (!frame) return
-                    if (!player.isLocal()) return
+                if (!frame) return
+                if (!player.isLocal()) return
 
-                    //MusicManager.StopAllMusic();
+                //MusicManager.StopAllMusic();
 
-                    const music = MusicManager.MusicList.find(m => m.name === BlzGetTriggerFrameText())
-                    music?.Play()
-                    MusicFrame.MusicFramehandle.visible = !MusicFrame.MusicFramehandle.visible
-                })
-            )
+                const music = MusicManager.MusicList.find(m => m.name === BlzGetTriggerFrameText())
+                music?.Play()
+                MusicFrame.MusicFramehandle.visible = !MusicFrame.MusicFramehandle.visible
+            })
         }
     }
 
@@ -186,7 +183,7 @@ export class MusicFrame {
         for (const player of Globals.ALL_PLAYERS) {
             musicHotkeyTrigger.registerPlayerKeyEvent(player, OSKEY_0, 0, true)
         }
-        musicHotkeyTrigger.addAction(ErrorHandler.Wrap(() => MusicFrame.MusicFrameActions()))
+        musicHotkeyTrigger.addAction(MusicFrame.MusicFrameActions)
     }
 
     /// <summary>

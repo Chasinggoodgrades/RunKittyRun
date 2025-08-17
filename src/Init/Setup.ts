@@ -37,7 +37,6 @@ import { MusicFrame } from 'src/UI/Frames/MusicFrame'
 import { ShopFrame } from 'src/UI/Frames/ShopFrame'
 import { MultiboardManager } from 'src/UI/Multiboard'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
@@ -84,11 +83,7 @@ export class Setup {
 
     private static StartGameModeTimer = () => {
         Setup.gameModeTimer = createAchesTimer()
-        Setup.gameModeTimer.Timer.start(
-            1.0,
-            true,
-            ErrorHandler.Wrap(() => Setup.ChoosingGameMode())
-        )
+        Setup.gameModeTimer.Timer.start(1.0, true, Setup.ChoosingGameMode)
     }
 
     private static ChoosingGameMode = () => {

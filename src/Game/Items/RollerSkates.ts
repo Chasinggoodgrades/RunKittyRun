@@ -3,7 +3,6 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Item, MapPlayer, Trigger } from 'w3ts'
 
@@ -18,7 +17,7 @@ export class RollerSkates {
         RollerSkates.OnUseTrigger.addCondition(
             Condition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS)
         )
-        RollerSkates.OnUseTrigger.addAction(ErrorHandler.Wrap(() => RollerSkates.SwitchingBoots()))
+        RollerSkates.OnUseTrigger.addAction(RollerSkates.SwitchingBoots)
     }
 
     private static SwitchingBoots = () => {

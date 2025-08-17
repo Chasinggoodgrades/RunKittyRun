@@ -3,7 +3,6 @@ import { Globals } from 'src/Global/Globals'
 import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { EncodingBase64 } from './Base64'
@@ -180,7 +179,7 @@ export class SyncSaveLoad {
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefix, false)
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefixFinish, false)
         }
-        this.SyncEvent.addAction(ErrorHandler.Wrap(() => this.OnSync()))
+        this.SyncEvent.addAction(this.OnSync)
     }
 
     /// <summary>

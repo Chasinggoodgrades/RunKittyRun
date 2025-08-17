@@ -1,6 +1,5 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { distanceBetweenXYPoints } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
@@ -47,11 +46,7 @@ export class RTR {
         this.ClickTrigger.enabled = true
         this.WidgetTrigger.enabled = true
 
-        this.RTRTimer.start(
-            this.RTR_INTERVAL,
-            true,
-            ErrorHandler.Wrap(() => this.UpdateRTR())
-        )
+        this.RTRTimer.start(this.RTR_INTERVAL, true, this.UpdateRTR)
     }
 
     public PauseRTR = () => {

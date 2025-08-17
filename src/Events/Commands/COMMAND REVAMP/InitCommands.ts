@@ -46,16 +46,16 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
 import { Utility } from 'src/Utility/Utility'
-import { Effect, MapPlayer } from 'w3ts'
+import { Effect, MapPlayer, Timer } from 'w3ts'
 import { ErrorMessagesOn } from '../../../Utility/ErrorMessagesOn'
 import { AwardingCmds } from '../AwardingCmds'
 import { ExecuteLua } from '../ExecuteLua'
 import { CommandsManager } from './CommandsManager'
 
 export class InitCommands {
-    public static _G: any
-
     public static InitializeCommands = () => {
+        const memState: { timer: Timer | undefined } = { timer: undefined }
+
         CommandsManager.RegisterCommand({
             name: 'help',
             alias: 'commands,?',
@@ -1099,11 +1099,36 @@ export class InitCommands {
             name: 'mem',
             alias: '',
             group: 'admin',
-            argDesc: '',
-            description: 'Prints debug names.',
+            argDesc: 'create | timer | all | (track <boolean>)',
+            description: 'Show memory usage',
             action: (player, args) => {
-                InitCommands._G['trackPrintMap'] = true
-                // this.DebugUtilities.DebugPrinter.PrintDebugNames('globals')
+                ;(_G as any)['printCreation'] = false
+                memState.timer?.destroy()
+
+                const debugObjects = args[0]
+                const param2 = args[1]
+
+                if (debugObjects === 'create' || debugObjects === 'all') {
+                    ;(_G as any)['printCreation'] = true
+                }
+
+                if (debugObjects === 'track') {
+                    ;(_G as any)['trackPrintMap'] = CommandsManager.GetBool(param2)
+                    print(`Mem: trackPrintMap ${CommandsManager.GetBool(param2) ? 'on' : 'off'}`)
+                    return true
+                }
+
+                if (debugObjects === 'timer' || debugObjects === 'all') {
+                    memState.timer = Timer.create().start(1, true, MemoryHandler.printDebugInfo)
+                }
+
+                if (debugObjects === '') {
+                    MemoryHandler.printDebugInfo()
+                } else {
+                    print(`Mem: ${debugObjects}`)
+                }
+
+                return true
             },
         })
 

@@ -4,7 +4,6 @@ import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
 import { Globals } from 'src/Global/Globals'
 import { TeamDeathless } from 'src/Rewards/Challenges/TeamDeathless'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
@@ -66,7 +65,7 @@ export class FangOfShadows extends Relic {
         this.SummonTrigger = Trigger.create()!
         TriggerRegisterUnitEvent(this.SummonTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.SummonTrigger.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
-        this.SummonTrigger.addAction(ErrorHandler.Wrap(() => this.SummonShadowKitty()))
+        this.SummonTrigger.addAction(this.SummonShadowKitty)
 
         this.TeleTrigger = Trigger.create()!
         this.KillTimer = Timer.create()
@@ -103,11 +102,7 @@ export class FangOfShadows extends Relic {
             shadowKitty.Unit.applyTimedLife(FourCC('BTLF'), FangOfShadows.SHADOW_KITTY_SUMMON_DURATION)
 
             // Set kill timer
-            this.KillTimer.start(
-                FangOfShadows.SHADOW_KITTY_SUMMON_DURATION,
-                false,
-                ErrorHandler.Wrap(() => shadowKitty?.KillShadowKitty())
-            )
+            this.KillTimer.start(FangOfShadows.SHADOW_KITTY_SUMMON_DURATION, false, shadowKitty.KillShadowKitty)
 
             // Apply relic cooldowns with a slight delay
             Utility.SimpleTimer(0.1, () =>

@@ -5,7 +5,6 @@ import { WolfArea } from 'src/Game/WolfArea'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { AwardManager } from 'src/Rewards/Rewards/AwardManager'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { FilterList } from 'src/Utility/FilterList'
 import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
@@ -47,7 +46,7 @@ export class FandF {
 
     private static RegisterCollection(): Trigger {
         const trig = Trigger.create()!
-        trig.addAction(ErrorHandler.Wrap(() => FandF.CollectionActions()))
+        trig.addAction(FandF.CollectionActions)
         return trig
     }
 
@@ -64,7 +63,7 @@ export class FandF {
     private static RegisterTurnIn(): Trigger {
         const trig = Trigger.create()!
         trig.registerUnitInRage(SpawnChampions.FandF2023.handle, FandF.TurnInRange, FilterList.KittyFilter)
-        trig.addAction(ErrorHandler.Wrap(() => FandF.TurnInActions()))
+        trig.addAction(FandF.TurnInActions)
         return trig
     }
 

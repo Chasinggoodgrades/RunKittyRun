@@ -4,7 +4,6 @@ import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { SoundManager } from 'src/Sounds/SoundManager'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { MapPlayer, Timer, TimerDialog } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 import { Challenges } from './Challenges'
@@ -78,7 +77,7 @@ export class NitroChallenges {
         NitroChallenges.NitroTimer.start(
             NitroChallenges.NitroRoundTimes.get(Globals.ROUND)!,
             false,
-            ErrorHandler.Wrap(() => NitroChallenges.StopNitroTimer())
+            NitroChallenges.StopNitroTimer
         )
     }
 

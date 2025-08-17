@@ -8,7 +8,6 @@ import { RegionList } from 'src/Global/RegionList'
 import { BurntMeat } from 'src/Rewards/EasterEggs/BurntMeat'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { RemoveItemFromUnit } from 'src/Utility/UnitUtility'
 import { Utility } from 'src/Utility/Utility'
 import { getKillingUnit } from 'src/Utility/w3tsUtils'
@@ -76,16 +75,14 @@ export class NamedWolves {
         BurntMeat.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
         if (BurntMeat.StanDeathActions !== null) return
         BurntMeat.RegisterTurnInTrigger()
-        BurntMeat.StanDeathActions = BurntMeat.StanDeath.addAction(
-            ErrorHandler.Wrap(() => {
-                const killer = getKillingUnit()
-                if (killer === null) return
-                NamedWolves.StanWolf.Texttag?.destroy()
-                RemoveItemFromUnit(killer, BurntMeat.ITEM_CLOAK_FLAMES)
-                killer.addItemById(BurntMeat.ITEM_BURNT_MEAT)
-                BurntMeat.Completed.push(killer)
-            })
-        )
+        BurntMeat.StanDeathActions = BurntMeat.StanDeath.addAction(() => {
+            const killer = getKillingUnit()
+            if (killer === null) return
+            NamedWolves.StanWolf.Texttag?.destroy()
+            RemoveItemFromUnit(killer, BurntMeat.ITEM_CLOAK_FLAMES)
+            killer.addItemById(BurntMeat.ITEM_BURNT_MEAT)
+            BurntMeat.Completed.push(killer)
+        })
     }
 
     public static KillExplodingWolf = () => {
@@ -100,26 +97,22 @@ export class NamedWolves {
                 NamedWolves.ExplodingWolf.Unit,
                 'origin'
             )
-            NamedWolves.ExplodingWolfRevive.start(
-                25.0,
-                false,
-                ErrorHandler.Wrap(() => {
-                    if (NamedWolves.ExplodingWolf.Unit === null) return
-                    Globals.DNTNamedWolves.splice(Globals.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
-                    NamedWolves.ExplodingWolf.IsReviving = false
-                    NamedWolves.ExplodingWolf.Unit?.destroy()
-                    Globals.ALL_WOLVES.delete(NamedWolves.ExplodingWolf.Unit)
-                    NamedWolves.ExplodingWolf.Unit = Unit.create(
-                        NamedWolves.ExplodingWolf.Unit.owner,
-                        Constants.UNIT_CUSTOM_DOG,
-                        NamedWolves.ExplodingWolf.Unit.x,
-                        NamedWolves.ExplodingWolf.Unit.y,
-                        360
-                    )!
-                    Globals.ALL_WOLVES.set(NamedWolves.ExplodingWolf.Unit, NamedWolves.ExplodingWolf)
-                    NamedWolves.ExplodingWolfDesc()
-                })
-            )
+            NamedWolves.ExplodingWolfRevive.start(25.0, false, () => {
+                if (NamedWolves.ExplodingWolf.Unit === null) return
+                Globals.DNTNamedWolves.splice(Globals.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
+                NamedWolves.ExplodingWolf.IsReviving = false
+                NamedWolves.ExplodingWolf.Unit?.destroy()
+                Globals.ALL_WOLVES.delete(NamedWolves.ExplodingWolf.Unit)
+                NamedWolves.ExplodingWolf.Unit = Unit.create(
+                    NamedWolves.ExplodingWolf.Unit.owner,
+                    Constants.UNIT_CUSTOM_DOG,
+                    NamedWolves.ExplodingWolf.Unit.x,
+                    NamedWolves.ExplodingWolf.Unit.y,
+                    360
+                )!
+                Globals.ALL_WOLVES.set(NamedWolves.ExplodingWolf.Unit, NamedWolves.ExplodingWolf)
+                NamedWolves.ExplodingWolfDesc()
+            })
         } catch (e: any) {
             Logger.Warning(`Error in KillExplodingWolf ${e}`)
         }

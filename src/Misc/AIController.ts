@@ -6,7 +6,6 @@ import { Safezone } from 'src/Game/Management/Safezone'
 import { WolfArea } from 'src/Game/WolfArea'
 import { DEFAULT_WOLF_COLLISION_RADIUS, Globals } from 'src/Global/Globals'
 import { IDisposable } from 'src/Utility/CSUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { clamp, int } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
@@ -81,11 +80,7 @@ export class AIController {
 
         if (this.moveTimer === null) {
             this.moveTimer = Timer.create()
-            this.moveTimer.start(
-                this.timerInterval,
-                true,
-                ErrorHandler.Wrap(() => this.PollMovement())
-            )
+            this.moveTimer.start(this.timerInterval, true, this.PollMovement)
         }
 
         // If I revive release me from the claimedKitties

@@ -7,7 +7,6 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { BarrierSetup } from 'src/Init/BarrierSetup'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getFilterUnit, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger, Unit } from 'w3ts'
 
@@ -33,7 +32,7 @@ export class VictoryZone {
             VictoryArea,
             Filter(() => VictoryZone.VictoryAreaConditions(getFilterUnit()))
         )
-        VictoryZone.InVictoryArea.addAction(ErrorHandler.Wrap(() => VictoryZone.VictoryAreaActions()))
+        VictoryZone.InVictoryArea.addAction(VictoryZone.VictoryAreaActions)
     }
 
     private static VictoryAreaActions = () => {

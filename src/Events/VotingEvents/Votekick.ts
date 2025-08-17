@@ -1,7 +1,6 @@
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Timer } from 'w3ts'
 import { PlayerLeaves } from '../PlayerLeavesEvent/PlayerLeaves'
@@ -58,11 +57,7 @@ export class Votekick {
         )
         Votekick.VoteKickPlayer = target
         Votekick.Voters.push(Votekick.VoteStarter!)
-        Votekick.VoteTimer.start(
-            Votekick.VOTE_DURATION,
-            false,
-            ErrorHandler.Wrap(() => Votekick.ExecuteVotekick(target))
-        )
+        Votekick.VoteTimer.start(Votekick.VOTE_DURATION, false, () => Votekick.ExecuteVotekick(target))
     }
 
     private static ExecuteVotekick(target: MapPlayer) {

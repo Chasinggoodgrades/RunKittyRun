@@ -7,7 +7,6 @@ import { Globals } from 'src/Global/Globals'
 import { TeamsMultiboard } from 'src/UI/Multiboard/TeamsMultiboard'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
 import { CurrentGameMode } from '../CurrentGameMode'
@@ -48,11 +47,7 @@ export class Team {
             Globals.ALL_TEAMS_LIST = []
             Globals.PLAYERS_TEAMS = new Map()
             Team.TeamTimer ??= Timer.create()
-            Team.TeamTimer.start(
-                0.1,
-                false,
-                ErrorHandler.Wrap(() => Team.TeamSetup())
-            )
+            Team.TeamTimer.start(0.1, false, Team.TeamSetup)
         } catch (e: any) {
             Logger.Critical(`Error in Team.Initialize: ${e}`)
             throw e
@@ -98,15 +93,11 @@ export class Team {
 
     public static UpdateTeamsMB = () => {
         const t = Timer.create()
-        t.start(
-            0.1,
-            false,
-            ErrorHandler.Wrap(() => {
-                TeamsMultiboard.UpdateCurrentTeamsMB()
-                TeamsMultiboard.UpdateTeamStatsMB()
-                t.destroy()
-            })
-        )
+        t.start(0.1, false, () => {
+            TeamsMultiboard.UpdateCurrentTeamsMB()
+            TeamsMultiboard.UpdateTeamStatsMB()
+            t.destroy()
+        })
     }
 
     private static TeamSetup = () => {

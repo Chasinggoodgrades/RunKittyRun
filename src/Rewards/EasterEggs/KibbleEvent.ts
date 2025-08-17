@@ -1,7 +1,6 @@
 import { PROD } from 'src/env'
 import { Kibble } from 'src/Game/Items/Kibble'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { GC } from 'src/Utility/GC'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
@@ -31,11 +30,7 @@ export class KibbleEvent {
         KibbleEvent.EventTimerDialog = TimerDialog.create(KibbleEvent.EventTimer)!
         KibbleEvent.EventTimerDialog.setTitle('Event: Kibble')
         KibbleEvent.EventTimerDialog.display = true
-        KibbleEvent.EventTimer.start(
-            KibbleEvent.EventLength,
-            false,
-            ErrorHandler.Wrap(() => KibbleEvent.EndKibbleEvent())
-        )
+        KibbleEvent.EventTimer.start(KibbleEvent.EventLength, false, KibbleEvent.EndKibbleEvent)
         Utility.TimedTextToAllPlayers(
             10.0,
             `${Colors.COLOR_YELLOW}A Kibble event has started! Collect ${KibbleEvent.TotalEventKibbles} kibbles to earn an award!${Colors.COLOR_RESET}`

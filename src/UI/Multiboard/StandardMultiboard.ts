@@ -7,7 +7,6 @@ import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
 import { KittyData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/KittyData'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Multiboard, Timer, Trigger } from 'w3ts'
@@ -37,16 +36,12 @@ export class StandardMultiboard {
     /// </summary>
     private static Init = () => {
         const t = Timer.create()
-        t.start(
-            1.0,
-            true,
-            ErrorHandler.Wrap(() => {
-                if (!Difficulty.IsDifficultyChosen) return
-                StandardMultiboard.MakeMultiboard()
-                StandardMultiboard.RegisterTriggers()
-                t.destroy()
-            })
-        )
+        t.start(1.0, true, () => {
+            if (!Difficulty.IsDifficultyChosen) return
+            StandardMultiboard.MakeMultiboard()
+            StandardMultiboard.RegisterTriggers()
+            t.destroy()
+        })
     }
 
     private static RegisterTriggers = () => {

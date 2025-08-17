@@ -1,7 +1,6 @@
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ItemSpatialGrid } from 'src/Game/Items/ItemSpatialGrid'
 import { TerrainChanger } from 'src/Seasonal/Terrain/TerrainChanger'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
 
@@ -110,55 +109,43 @@ export class Slider {
             this.forcedSlideSpeed = 0
             this.kitty.Invulnerable = true
 
-            this.ForcedSlideTimer.start(
-                1.4,
-                false,
-                ErrorHandler.Wrap(() => {
-                    this.forcedSlideSpeed = null
+            this.ForcedSlideTimer.start(1.4, false, () => {
+                this.forcedSlideSpeed = null
 
-                    this.ForcedSlideTimer.start(
-                        0.6,
-                        false,
-                        ErrorHandler.Wrap(() => {
-                            this.kitty.Invulnerable = false
-                        })
-                    )
+                this.ForcedSlideTimer.start(0.6, false, () => {
+                    this.kitty.Invulnerable = false
                 })
-            )
+            })
         }
 
-        this.SliderTimer.start(
-            this.SLIDE_INTERVAL,
-            true,
-            ErrorHandler.Wrap(() => {
-                if (this.kitty.Unit.paused) {
-                    return
-                }
+        this.SliderTimer.start(this.SLIDE_INTERVAL, true, () => {
+            if (this.kitty.Unit.paused) {
+                return
+            }
 
-                if (!this.IsOnSlideTerrain()) {
-                    if (this.wasSliding && this.kitty.IsMirror) {
-                        // Reverse hero
-                        this.kitty.Unit.setFacingEx(this.kitty.Unit.facing + 180)
-                    }
-
-                    this.wasSliding = false
-
-                    if (this.remainingDegreesToTurn !== 0) {
-                        this.escaperTurnForOnePeriod()
-                    }
-
-                    return
-                }
-
-                if (!this.wasSliding && this.kitty.IsMirror) {
+            if (!this.IsOnSlideTerrain()) {
+                if (this.wasSliding && this.kitty.IsMirror) {
                     // Reverse hero
                     this.kitty.Unit.setFacingEx(this.kitty.Unit.facing + 180)
                 }
 
-                this.wasSliding = true
-                this.UpdateSlider()
-            })
-        )
+                this.wasSliding = false
+
+                if (this.remainingDegreesToTurn !== 0) {
+                    this.escaperTurnForOnePeriod()
+                }
+
+                return
+            }
+
+            if (!this.wasSliding && this.kitty.IsMirror) {
+                // Reverse hero
+                this.kitty.Unit.setFacingEx(this.kitty.Unit.facing + 180)
+            }
+
+            this.wasSliding = true
+            this.UpdateSlider()
+        })
     }
 
     public PauseSlider = () => {

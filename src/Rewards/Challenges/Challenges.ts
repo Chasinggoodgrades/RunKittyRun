@@ -6,7 +6,6 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { DifficultyLevel } from 'src/Init/Difficulty/DifficultyOption'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
@@ -141,17 +140,15 @@ export class Challenges {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const t = Trigger.create()!
         t.registerEnterRegion(RegionList.SafeZones[0].region(), () => true)
-        t.addAction(
-            ErrorHandler.Wrap(() => {
-                const unit = getTriggerUnit()
-                const player = unit.owner
-                if (!Globals.GAME_ACTIVE) return
-                if (unit.typeId !== Constants.UNIT_KITTY) return
-                if (!Globals.ALL_PLAYERS.includes(player)) return
-                if (!Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundFinished) return
-                Challenges.DivineWindwalk(player)
-            })
-        )
+        t.addAction(() => {
+            const unit = getTriggerUnit()
+            const player = unit.owner
+            if (!Globals.GAME_ACTIVE) return
+            if (unit.typeId !== Constants.UNIT_KITTY) return
+            if (!Globals.ALL_PLAYERS.includes(player)) return
+            if (!Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundFinished) return
+            Challenges.DivineWindwalk(player)
+        })
     }
 }
 

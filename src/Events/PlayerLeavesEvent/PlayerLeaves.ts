@@ -5,7 +5,6 @@ import { Globals } from 'src/Global/Globals'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
-import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 
@@ -20,7 +19,7 @@ export class PlayerLeaves {
         for (const player of Globals.ALL_PLAYERS) {
             PlayerLeaves.triggerHandle.registerPlayerEvent(player, EVENT_PLAYER_LEAVE)
         }
-        PlayerLeaves.triggerHandle.addAction(ErrorHandler.Wrap(() => PlayerLeaves.PlayerLeavesActions()))
+        PlayerLeaves.triggerHandle.addAction(PlayerLeaves.PlayerLeavesActions)
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
@@ -28,7 +27,7 @@ export class PlayerLeaves {
         Globals.PLAYERS_TEAMS.get(player)?.RemoveMember(player)
     }
 
-    public static PlayerLeavesActions(player: MapPlayer | null = null) {
+    public static PlayerLeavesActions = (player: MapPlayer | null = null) => {
         try {
             let leavingPlayer = getTriggerPlayer()
             if (player !== null) leavingPlayer = player
