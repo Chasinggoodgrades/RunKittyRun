@@ -17,7 +17,7 @@ import { ErrorHandler } from './Utility/ErrorHandler'
 export class Program {
     public constructor() {
         // Delay a little since some stuff can break otherwise
-        let timer = Timer.create()
+        const timer = Timer.create()
         timer.start(
             0.01,
             false,
@@ -40,7 +40,7 @@ export class Program {
         BarrierSetup.Initialize()
         Quests.Initialize()
 
-        let t = Timer.create()
+        const t = Timer.create()
         let count = 0
         print(`${Colors.COLOR_RED}Loading . . . Please wait while everyone synchronizes.${Colors.COLOR_RESET}`)
         t.start(1.0, true, () => {

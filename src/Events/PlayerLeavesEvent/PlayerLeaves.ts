@@ -13,14 +13,14 @@ export class PlayerLeaves {
     private static triggerHandle: Trigger = Trigger.create()!
 
     public static Initialize() {
-        this.RegisterTrigger()
+        PlayerLeaves.RegisterTrigger()
     }
 
     private static RegisterTrigger() {
-        for (let player of Globals.ALL_PLAYERS) {
-            this.triggerHandle.registerPlayerEvent(player, EVENT_PLAYER_LEAVE)
+        for (const player of Globals.ALL_PLAYERS) {
+            PlayerLeaves.triggerHandle.registerPlayerEvent(player, EVENT_PLAYER_LEAVE)
         }
-        this.triggerHandle.addAction(ErrorHandler.Wrap(() => this.PlayerLeavesActions()))
+        PlayerLeaves.triggerHandle.addAction(ErrorHandler.Wrap(() => PlayerLeaves.PlayerLeavesActions()))
     }
 
     public static TeamRemovePlayer(player: MapPlayer) {
@@ -33,11 +33,11 @@ export class PlayerLeaves {
             let leavingPlayer = getTriggerPlayer()
             if (player !== null) leavingPlayer = player
             if (!Globals.ALL_PLAYERS.includes(leavingPlayer)) return
-            let kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
-            let circle = Globals.ALL_CIRCLES.get(leavingPlayer)
+            const kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
+            const circle = Globals.ALL_CIRCLES.get(leavingPlayer)
             if (!circle) return
-            let nameTag = kitty.NameTag
-            this.TeamRemovePlayer(leavingPlayer)
+            const nameTag = kitty.NameTag
+            PlayerLeaves.TeamRemovePlayer(leavingPlayer)
             kitty.dispose()
             circle.dispose()
             nameTag?.dispose()

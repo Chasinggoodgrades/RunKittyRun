@@ -61,7 +61,7 @@ export class Wolf {
     /// </summary>
     public static SpawnWolves() {
         try {
-            let wolvesInRound = Globals.WolvesPerRound.get(Globals.ROUND)
+            const wolvesInRound = Globals.WolvesPerRound.get(Globals.ROUND)
             Wolf.setWolfPlayers()
             if (wolvesInRound) {
                 for (const [laneStr, numberOfWolves] of Object.entries(wolvesInRound)) {
@@ -117,7 +117,7 @@ export class Wolf {
     /// Removes all wolves from the game and clears wolf list.
     /// </summary>
     public static RemoveAllWolves() {
-        for (let [_, wolf] of Globals.ALL_WOLVES) {
+        for (const [_, wolf] of Globals.ALL_WOLVES) {
             wolf.dispose()
         }
         Globals.ALL_WOLVES.clear()
@@ -128,13 +128,13 @@ export class Wolf {
     /// </summary>
     /// <param name="pause"></param>
     public static PauseAllWolves(pause: boolean) {
-        for (let [_, wolf] of Globals.ALL_WOLVES) {
+        for (const [_, wolf] of Globals.ALL_WOLVES) {
             wolf.PauseSelf(pause)
         }
     }
 
     public static PauseSelectedWolf(selectedUnit: Unit, pause: boolean) {
-        let wolf = Globals.ALL_WOLVES.get(selectedUnit)
+        const wolf = Globals.ALL_WOLVES.get(selectedUnit)
         if (!wolf) return
         wolf.PauseSelf(pause)
     }
@@ -169,11 +169,11 @@ export class Wolf {
     }
 
     private InitializeWolf() {
-        let selectedPlayer = Wolf.getNextWolfPlayer()
+        const selectedPlayer = Wolf.getNextWolfPlayer()
 
-        let randomX = GetRandomReal(this.WolfArea.Rectangle.minX, this.WolfArea.Rectangle.maxX)
-        let randomY = GetRandomReal(this.WolfArea.Rectangle.minY, this.WolfArea.Rectangle.maxY)
-        let facing = GetRandomReal(0, 360)
+        const randomX = GetRandomReal(this.WolfArea.Rectangle.minX, this.WolfArea.Rectangle.maxX)
+        const randomY = GetRandomReal(this.WolfArea.Rectangle.minY, this.WolfArea.Rectangle.maxY)
+        const facing = GetRandomReal(0, 360)
 
         this.Unit ??= Unit.create(selectedPlayer, Wolf.WOLF_MODEL, randomX, randomY, facing)!
         Utility.MakeUnitLocust(this.Unit)
@@ -191,15 +191,15 @@ export class Wolf {
     }
 
     private TournamentChance(): boolean {
-        let baseChance = 14.0
-        let increasePerRound = 2.0
-        let maxProbability = 22.5
+        const baseChance = 14.0
+        const increasePerRound = 2.0
+        const maxProbability = 22.5
 
-        let currentRound = Globals.ROUND
+        const currentRound = Globals.ROUND
         if (currentRound < 1 || currentRound > 5) return false
 
-        let linearProbability = baseChance + increasePerRound * (currentRound - 1)
-        let randomAdjustment = GetRandomReal(0, 4) // Random adjustment between 0 and 4%
+        const linearProbability = baseChance + increasePerRound * (currentRound - 1)
+        const randomAdjustment = GetRandomReal(0, 4) // Random adjustment between 0 and 4%
         let totalProbability = linearProbability + randomAdjustment
 
         // Cap the probability to the maximum limit
@@ -208,7 +208,7 @@ export class Wolf {
     }
 
     private ApplyEffect() {
-        let effectDuration = GetRandomReal(this.WANDER_LOWER_BOUND, this.WANDER_UPPER_BOUND)
+        const effectDuration = GetRandomReal(this.WANDER_LOWER_BOUND, this.WANDER_UPPER_BOUND)
 
         this.OverheadEffect ??= Effect.createAttachment(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
@@ -248,15 +248,15 @@ export class Wolf {
     ]
 
     public static getNextWolfPlayer(): MapPlayer {
-        let selectedPlayer = this.wolfPlayers[this.wolfPlayerIndex]
-        this.wolfPlayerIndex = (this.wolfPlayerIndex + 1) % this.wolfPlayers.length
+        const selectedPlayer = Wolf.wolfPlayers[Wolf.wolfPlayerIndex]
+        Wolf.wolfPlayerIndex = (Wolf.wolfPlayerIndex + 1) % Wolf.wolfPlayers.length
         return selectedPlayer
     }
 
     private static setWolfPlayers() {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) {
-                this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
+                Wolf.wolfPlayers.push(MapPlayer.fromIndex(i)!)
             }
         }
     }

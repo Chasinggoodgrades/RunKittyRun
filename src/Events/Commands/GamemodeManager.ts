@@ -17,7 +17,7 @@ export class GamemodeManager {
     private static AddCommand(cmd: string, desc: string, usage: string) {
         desc = Colors.COLOR_YELLOW_ORANGE + desc
         usage = Colors.COLOR_GOLD + usage
-        let command: GamemodeInfo = new GamemodeInfo(cmd, desc, usage)
+        const command: GamemodeInfo = new GamemodeInfo(cmd, desc, usage)
         GamemodeManager.commands.set(cmd.toLowerCase(), command)
     }
 

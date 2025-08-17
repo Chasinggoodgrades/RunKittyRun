@@ -1,6 +1,7 @@
-import { Effect, Frame, MapPlayer, Multiboard, MultiboardItem, Rectangle, Unit } from 'w3ts'
+import { Effect, Frame, MapPlayer, Multiboard, MultiboardItem, Rectangle, Timer, Trigger, Unit } from 'w3ts'
 import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
 import { Program } from './Program'
+import { ErrorHandler } from './Utility/ErrorHandler'
 
 function tsMain() {
     try {
@@ -73,6 +74,16 @@ function tsMain() {
 
         Frame.prototype.getName = function (): string {
             return BlzFrameGetName(this.handle) || ''
+        }
+
+        const origAddAction = Trigger.prototype.addAction
+        Trigger.prototype.addAction = function (action: () => void) {
+            return origAddAction.call(this, ErrorHandler.Wrap(action))
+        }
+
+        const origStart = Timer.prototype.start
+        Timer.prototype.start = function (timeout: number, periodic: boolean, callback: () => void) {
+            return origStart.call(this, timeout, periodic, ErrorHandler.Wrap(callback))
         }
 
         new Program()

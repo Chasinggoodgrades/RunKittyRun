@@ -86,8 +86,8 @@ export class Fixation extends Affix {
         this.PeriodicSpeed.addAction(() => this.UpdateChaseSpeed())
         this.InRangeTrigger.addAction(() => {
             try {
-                let target = getTriggerUnit()
-                let Region = RegionList.WolfRegions[this.Unit.RegionIndex]
+                const target = getTriggerUnit()
+                const Region = RegionList.WolfRegions[this.Unit.RegionIndex]
                 if (!Region.includes(target.x, target.y)) return
                 if (this.Unit.paused) return
                 if (target !== this.Unit.Unit && !this.IsChasing) {
@@ -101,7 +101,7 @@ export class Fixation extends Affix {
     }
 
     private ChasingEvent() {
-        let Region = RegionList.WolfRegions[this.Unit.RegionIndex]
+        const Region = RegionList.WolfRegions[this.Unit.RegionIndex]
         this.IsChasing = true
         this.Unit.WanderTimer?.pause()
         this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
@@ -128,7 +128,7 @@ export class Fixation extends Affix {
             FilterList.KittyFilter
         )
         if (this.UnitsInRange.size <= 0) return
-        let newTarget = this.GetClosestUnitInRange()
+        const newTarget = this.GetClosestUnitInRange()
         if (newTarget !== this.Target) {
             this.Target = newTarget
             GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:             GC.RemoveEffect(ref TargetEffect);
@@ -137,18 +137,18 @@ export class Fixation extends Affix {
     }
 
     private GetClosestUnitInRange(): Unit {
-        let unitX = this.Unit.Unit.x
-        let unitY = this.Unit.Unit.y
+        const unitX = this.Unit.Unit.x
+        const unitY = this.Unit.Unit.y
 
         // Determine closest unit in list
         let closestUnit = this.UnitsInRange.first!
         let closestDistance = distanceBetweenXYPoints(unitX, unitY, closestUnit.x, closestUnit.y)
         if (closestDistance > 0) {
             while (true) {
-                let unit = this.UnitsInRange.first
+                const unit = this.UnitsInRange.first
                 if (!unit) break
                 this.UnitsInRange.removeUnit(unit)
-                let distance = distanceBetweenXYPoints(unitX, unitY, unit.x, unit.y)
+                const distance = distanceBetweenXYPoints(unitX, unitY, unit.x, unit.y)
                 if (distance < closestDistance) {
                     closestUnit = unit
                     closestDistance = distance
@@ -159,27 +159,27 @@ export class Fixation extends Affix {
     }
 
     private UpdateChaseSpeed() {
-        let currentMS = this.Unit.Unit.moveSpeed
-        let speedIncrementer = 0.4 // 4 movespeed every second
+        const currentMS = this.Unit.Unit.moveSpeed
+        const speedIncrementer = 0.4 // 4 movespeed every second
 
         if (this.IsChasing) {
             if (currentMS <= 300) this.Unit.Unit.moveSpeed = this.FIXATION_MS
             if (currentMS >= this.FIXATION_MAX_MS) return
 
-            let newSpeed = currentMS + speedIncrementer
+            const newSpeed = currentMS + speedIncrementer
 
             this.Unit.Unit.moveSpeed = Math.min(newSpeed, this.FIXATION_MAX_MS)
         } else {
             if (currentMS <= this.FIXATION_MS) return
 
-            let newSpeed = currentMS - speedIncrementer / 2 // Decrease by half the rate
+            const newSpeed = currentMS - speedIncrementer / 2 // Decrease by half the rate
             this.Unit.Unit.moveSpeed = Math.max(newSpeed, this.FIXATION_MS)
         }
     }
 
     public static GetFixation(Unit: Unit): Fixation {
         if (Unit === null) return null as never
-        let affix = Globals.ALL_WOLVES.get(Unit)!.Affixes.find(Fixation.IsFixation)
+        const affix = Globals.ALL_WOLVES.get(Unit)!.Affixes.find(Fixation.IsFixation)
         return affix instanceof Fixation ? affix : (null as never)
     }
 

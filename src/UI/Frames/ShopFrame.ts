@@ -14,10 +14,10 @@ import { blzCreateFrame, blzCreateFrameByType, blzGetFrameByName, getTriggerPlay
 import { Frame, MapPlayer, Trigger, Unit } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
 import { FrameManager } from './FrameManager'
+import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RelicFunctions } from './RelicFunctions/RelicFunctions'
 import { ShopItem, ShopItemType } from './ShopItems/ShopItems'
 import { ShopUtil } from './ShopUtil'
-import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 
 export class ShopFrame {
     public static shopFrame: Frame
@@ -48,11 +48,11 @@ export class ShopFrame {
     private static DisabledPath: string = 'UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp'
 
     public static Initialize() {
-        this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
-        this.panelX = this.frameX / 2 - this.panelPadding
-        this.panelY = this.frameY / 3 - this.panelPadding * 2
-        this.detailsPanelX = this.frameX - (this.panelX + this.panelPadding * 2)
-        this.detailsPanelY = this.frameY - this.panelPadding * 2
+        ShopFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+        ShopFrame.panelX = ShopFrame.frameX / 2 - ShopFrame.panelPadding
+        ShopFrame.panelY = ShopFrame.frameY / 3 - ShopFrame.panelPadding * 2
+        ShopFrame.detailsPanelX = ShopFrame.frameX - (ShopFrame.panelX + ShopFrame.panelPadding * 2)
+        ShopFrame.detailsPanelY = ShopFrame.frameY - ShopFrame.panelPadding * 2
 
         ShopFrame.InitializeShopFrame()
         ShopFrame.shopFrame.visible = false
@@ -107,7 +107,7 @@ export class ShopFrame {
     }
 
     private static CreatePanelTitle(panel: Frame, title: string) {
-        let titleFrame = blzCreateFrameByType('TEXT', 'titleFrame', panel, '', 0)
+        const titleFrame = blzCreateFrameByType('TEXT', 'titleFrame', panel, '', 0)
         titleFrame.setPoint(FRAMEPOINT_TOP, panel, FRAMEPOINT_TOP, 0, 0.01)
         titleFrame.setText(title)
         titleFrame.setTextColor(BlzConvertColor(255, 255, 255, 0))
@@ -115,7 +115,7 @@ export class ShopFrame {
     }
 
     private static CreatePanel(parent: Frame, x: number, y: number): Frame {
-        let panel = blzCreateFrame('QuestButtonDisabledBackdropTemplate', parent, 0, 0)
+        const panel = blzCreateFrame('QuestButtonDisabledBackdropTemplate', parent, 0, 0)
         panel.setPoint(FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_BOTTOMLEFT, x, y)
         panel.setSize(ShopFrame.panelX, ShopFrame.panelY)
         return panel
@@ -123,8 +123,8 @@ export class ShopFrame {
 
     private static InitializeDetailsPanel() {
         ShopFrame.detailsPanel = blzCreateFrame('QuestButtonDisabledBackdropTemplate', ShopFrame.shopFrame, 0, 0)
-        let detailsPanelX = ShopFrame.frameX - (ShopFrame.panelX + ShopFrame.panelPadding * 2)
-        let detailsPanelY = ShopFrame.frameY - ShopFrame.panelPadding * 2
+        const detailsPanelX = ShopFrame.frameX - (ShopFrame.panelX + ShopFrame.panelPadding * 2)
+        const detailsPanelY = ShopFrame.frameY - ShopFrame.panelPadding * 2
         ShopFrame.detailsPanel.setPoint(
             FRAMEPOINT_TOPRIGHT,
             ShopFrame.shopFrame,
@@ -186,15 +186,15 @@ export class ShopFrame {
         ShopFrame.sellButton.text = 'Sell'
         ShopFrame.upgradeButton.text = 'Upgrade'
 
-        let BuyTrigger = Trigger.create()!
+        const BuyTrigger = Trigger.create()!
         BuyTrigger.triggerRegisterFrameEvent(ShopFrame.buyButton, FRAMEEVENT_CONTROL_CLICK)
         BuyTrigger.addAction(ShopFrame.BuySelectedItem)
 
-        let SellTrigger = Trigger.create()!
+        const SellTrigger = Trigger.create()!
         SellTrigger.triggerRegisterFrameEvent(ShopFrame.sellButton, FRAMEEVENT_CONTROL_CLICK)
         SellTrigger.addAction(ShopFrame.SellSelectedItem)
 
-        let UpgradeTrigger = Trigger.create()!
+        const UpgradeTrigger = Trigger.create()!
         UpgradeTrigger.triggerRegisterFrameEvent(ShopFrame.upgradeButton, FRAMEEVENT_CONTROL_CLICK)
         UpgradeTrigger.addAction(RelicFunctions.UpgradeRelic)
     }
@@ -211,16 +211,16 @@ export class ShopFrame {
     }
 
     private static AddItemsToPanel(panel: Frame, items: ShopItem[]) {
-        let columns = 6
-        let rows: number = Math.ceil(items.length / columns)
+        const columns = 6
+        const rows: number = Math.ceil(items.length / columns)
         for (let i = 0; i < items.length; i++) {
-            let relic = items[i]
+            const relic = items[i]
 
-            let row: number = i / columns
-            let column: number = i % columns
-            let name = relic.name
-            let button = blzCreateFrameByType('BUTTON', name, panel, 'ScoreScreenTabButtonTemplate', 0)
-            let icon = blzCreateFrameByType('BACKDROP', name + 'icon', button, '', 0)
+            const row: number = i / columns
+            const column: number = i % columns
+            const name = relic.name
+            const button = blzCreateFrameByType('BUTTON', name, panel, 'ScoreScreenTabButtonTemplate', 0)
+            const icon = blzCreateFrameByType('BACKDROP', name + 'icon', button, '', 0)
 
             let x = column * ShopFrame.buttonWidth
             let y = -row * ShopFrame.buttonHeight
@@ -233,13 +233,13 @@ export class ShopFrame {
             relic.IconPath && icon.setTexture(relic.IconPath, 0, false)
             icon.setAllPoints(button)
 
-            let itemDetails = Trigger.create()!
+            const itemDetails = Trigger.create()!
             ShopFrame.CreateShopitemTooltips(button, relic)
             itemDetails.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
             itemDetails.addAction(() => ShopFrame.ShowItemDetails(relic))
         }
 
-        let panelHeight: number = rows * ShopFrame.buttonHeight + ShopFrame.panelPadding
+        const panelHeight: number = rows * ShopFrame.buttonHeight + ShopFrame.panelPadding
         panel.setSize(columns * ShopFrame.buttonWidth + ShopFrame.panelPadding, panelHeight)
         if (panelHeight > ShopFrame.panelY) {
             ShopFrame.shopFrame.setSize(ShopFrame.frameX, ShopFrame.frameY + (panelHeight - ShopFrame.panelY))
@@ -255,8 +255,8 @@ export class ShopFrame {
             if (!player.isLocal()) return
             if (!ShopFrame.SelectedItems.has(player)) return
 
-            let item = ShopFrame.SelectedItems.get(player)!
-            let kitty = Globals.ALL_KITTIES.get(player)!
+            const item = ShopFrame.SelectedItems.get(player)!
+            const kitty = Globals.ALL_KITTIES.get(player)!
 
             ShopFrame.upgradeButton.visible = false
             ShopFrame.sellButton.visible = false
@@ -279,7 +279,7 @@ export class ShopFrame {
     private static RelicButtons(player: MapPlayer, item: ShopItem) {
         if (item === null) return
         if (item.Type !== ShopItemType.Relic) return
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         ShopFrame.upgradeButton.visible = true
         ShopFrame.sellButton.visible = true
         ShopFrame.buyButton.visible = true
@@ -296,8 +296,8 @@ export class ShopFrame {
     }
 
     private static ShowItemDetails(shopItem: ShopItem) {
-        let player = getTriggerPlayer()
-        let frame = Frame.fromHandle(BlzGetTriggerFrame())!
+        const player = getTriggerPlayer()
+        const frame = Frame.fromHandle(BlzGetTriggerFrame())!
 
         if (ShopFrame.SelectedItems.has(player)) {
             ShopFrame.SelectedItems.set(player, shopItem)
@@ -316,7 +316,7 @@ export class ShopFrame {
 
     private static CreateUpgradeTooltip() {
         try {
-            let background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
+            const background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
             ShopFrame.upgradeTooltip = blzCreateFrameByType('TEXT', 'UpgradeTooltip', background, '', 0)
 
             ShopFrame.upgradeTooltip.setSize(0.25, 0)
@@ -333,8 +333,8 @@ export class ShopFrame {
 
     private static CreateShopitemTooltips(parent: Frame, item: ShopItem) {
         try {
-            let background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
-            let tooltip = blzCreateFrameByType('TEXT', `${parent.getName()}Tooltip`, background, '', 0)
+            const background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
+            const tooltip = blzCreateFrameByType('TEXT', `${parent.getName()}Tooltip`, background, '', 0)
 
             tooltip.setSize(0.1, 0)
             background.setPoint(FRAMEPOINT_BOTTOMLEFT, tooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
@@ -351,11 +351,11 @@ export class ShopFrame {
     }
 
     public static RefreshUpgradeTooltip(relic: Relic) {
-        let finalString: string[] = []
-        let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.name)
+        const finalString: string[] = []
+        const playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.name)
 
         for (let i = 0; i < relic.Upgrades.length; i++) {
-            let upgrade = relic.Upgrades[i]
+            const upgrade = relic.Upgrades[i]
             let color: string, colorDescription
 
             if (i < playersUpgradeLevel - 1) {
@@ -381,7 +381,7 @@ export class ShopFrame {
     }
 
     private static BuySelectedItem() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         try {
             if (player.isLocal()) {
                 ShopFrame.buyButton.visible = false
@@ -391,7 +391,7 @@ export class ShopFrame {
 
             if (!ShopUtil.PlayerIsDead(player!) && selectedItem) {
                 // your logic here
-                let kitty = Globals.ALL_KITTIES.get(player)!
+                const kitty = Globals.ALL_KITTIES.get(player)!
 
                 if (!ShopFrame.HasEnoughGold(player, selectedItem.Cost)) {
                     ShopFrame.NotEnoughGold(player, selectedItem.Cost)
@@ -422,7 +422,7 @@ export class ShopFrame {
     }
 
     private static SellSelectedItem() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         try {
             if (player.isLocal()) {
                 ShopFrame.sellButton.visible = false
@@ -433,8 +433,8 @@ export class ShopFrame {
                 (selectedItem = ShopFrame.SelectedItems.get(player)!) /* TODO; Prepend: let */ &&
                 selectedItem !== null
             ) {
-                let itemID = selectedItem.ItemID
-                let kitty = Globals.ALL_KITTIES.get(player)!
+                const itemID = selectedItem.ItemID
+                const kitty = Globals.ALL_KITTIES.get(player)!
                 if (!Utility.UnitHasItem(kitty.Unit, itemID)) return
                 if (selectedItem.Type === ShopItemType.Relic) {
                     if (!kitty.isAlive() || kitty.ProtectionActive) {
@@ -454,7 +454,7 @@ export class ShopFrame {
                     }
 
                     // Find the shopItem type associated with the selected item that the player owns.
-                    let relic = kitty.Relics.find(x => x.name === selectedItem.Relic.name)
+                    const relic = kitty.Relics.find(x => x.name === selectedItem.Relic.name)
 
                     if (!RelicFunctions.CannotSellOnCD(kitty, relic!)) return
 
@@ -510,8 +510,8 @@ export class ShopFrame {
 
     private static SetRewardsFrameHotkey() {
         try {
-            let shopFrameHotkey: Trigger = Trigger.create()!
-            for (let player of Globals.ALL_PLAYERS) {
+            const shopFrameHotkey: Trigger = Trigger.create()!
+            for (const player of Globals.ALL_PLAYERS) {
                 shopFrameHotkey.registerPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
             }
             shopFrameHotkey.addAction(ErrorHandler.Wrap(() => ShopFrame.ShopFrameActions()))
@@ -521,7 +521,7 @@ export class ShopFrame {
     }
 
     public static ShopFrameActions() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         if (!player.isLocal()) return
         FrameManager.ShopButton.visible = false
         FrameManager.ShopButton.visible = true
@@ -530,7 +530,7 @@ export class ShopFrame {
             // solo mode.
             player.DisplayTimedTextTo(
                 6.0,
-                `${Colors.COLOR_RED}The shop is not accessible in this mode.${Colors.COLOR_RESET}`
+                `${Colors.COLOR_RED}The shop is not accessible in ShopFrame mode.${Colors.COLOR_RESET}`
             )
             return
         }

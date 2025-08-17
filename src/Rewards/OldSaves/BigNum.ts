@@ -10,7 +10,7 @@ export class BigNum {
 
     // Clean method
     public Clean() {
-        let current: BigNumL = this.List
+        const current: BigNumL = this.List
         current?.Clean()
     }
 
@@ -58,14 +58,13 @@ export class BigNumL {
 
     public DivSmall(baseValue: number, denom: number) {
         let remainder = 0
-        let num: number
 
         if (this.Next !== null) {
             remainder = this.Next.DivSmall(baseValue, denom)
         }
 
-        num = this.Leaf + remainder * baseValue
-        let quotient: number = num / denom
+        const num = this.Leaf + remainder * baseValue
+        const quotient: number = num / denom
         remainder = num - quotient * denom
         this.Leaf = quotient
         return remainder

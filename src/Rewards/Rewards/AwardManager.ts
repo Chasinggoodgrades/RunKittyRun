@@ -11,6 +11,7 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Trigger } from 'w3ts'
 import { GameAwardsDataSorted } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameAwardsDataSorted'
+import { GameSelectedData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameSelectedData'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { GameStatRewards } from './GameStatRewards'
 import { RewardsManager } from './RewardsManager'
@@ -31,12 +32,12 @@ export class AwardManager {
     public static GiveReward(player: MapPlayer, award: string, earnedPrompt: boolean = true) {
         // Check if the player already has the award
         if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return
-        let awardsList = Globals.ALL_KITTIES.get(player)!.CurrentStats.ObtainedAwards
+        const awardsList = Globals.ALL_KITTIES.get(player)!.CurrentStats.ObtainedAwards
 
         if (awardsList.includes(award)) return
 
-        let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())
+        const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
+        const reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())
 
         if (!reward) {
             print('Reward not found.')
@@ -48,7 +49,7 @@ export class AwardManager {
         AwardManager.EnableAbility(player, award)
 
         // ex: PurpleFire should be Purple Fire
-        let awardFormatted = Utility.FormatAwardName(award)
+        const awardFormatted = Utility.FormatAwardName(award)
         if (earnedPrompt) {
             Utility.TimedTextToAllPlayers(
                 5.0,
@@ -63,9 +64,9 @@ export class AwardManager {
     /// </summary>
     /// <param name="award"></param>
     public static GiveRewardAll(award: string, earnedPrompt: boolean = true) {
-        let color = Colors.COLOR_YELLOW_ORANGE
-        let rewardColor = Colors.COLOR_YELLOW
-        for (let player of Globals.ALL_PLAYERS) AwardManager.GiveReward(player, award, false)
+        const color = Colors.COLOR_YELLOW_ORANGE
+        const rewardColor = Colors.COLOR_YELLOW
+        for (const player of Globals.ALL_PLAYERS) AwardManager.GiveReward(player, award, false)
         if (earnedPrompt)
             Utility.TimedTextToAllPlayers(
                 5.0,
@@ -74,8 +75,8 @@ export class AwardManager {
     }
 
     private static EnableAbility(player: MapPlayer, award: string) {
-        let reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())!
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())!
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         if (!reward) return
         kitty.disableAbility(reward.GetAbilityID(), false, false)
     }
@@ -90,7 +91,7 @@ export class AwardManager {
     /// </summary>
     public static RegisterGamestatEvents() {
         try {
-            let gameStatsToIgnore = [
+            const gameStatsToIgnore = [
                 'NormalGames',
                 'HardGames',
                 'ImpossibleGames',
@@ -101,7 +102,7 @@ export class AwardManager {
             ]
 
             if (CurrentGameMode.active !== GameMode.Standard) return
-            for (let player of Globals.ALL_PLAYERS) {
+            for (const player of Globals.ALL_PLAYERS) {
                 if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers;
                 if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
 
@@ -123,10 +124,10 @@ export class AwardManager {
                     kittyProfile.SaveData = new KittyData()
                 }
 
-                let gameStats = kittyProfile.SaveData.GameStats
+                const gameStats = kittyProfile.SaveData.GameStats
 
-                for (let gameStatReward of GameStatRewards) {
-                    let gamestat = gameStatReward.GameStat
+                for (const gameStatReward of GameStatRewards) {
+                    const gamestat = gameStatReward.GameStat
                     if (gameStatsToIgnore.includes(gamestat)) continue
                     AwardManager.HandleGameStatTrigger(
                         player,
@@ -150,7 +151,7 @@ export class AwardManager {
         requiredValue: number,
         award: string
     ) {
-        let value = kittyStats.GameStats[gamestat as keyof GameStatsData]
+        const value = kittyStats.GameStats[gamestat as keyof GameStatsData]
         if (value < requiredValue) {
             const abc = AwardManager.AwardTrigger.addAction(() => {
                 if (kittyStats.GameStats[gamestat as keyof GameStatsData] < requiredValue) return
@@ -162,31 +163,31 @@ export class AwardManager {
 
     public static AwardGameStatRewards() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers
 
-            let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
-            let gameStats = kittyStats.GameStats
+            const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
+            const gameStats = kittyStats.GameStats
 
-            let normalGames = gameStats.NormalGames
-            let hardGames = gameStats.HardGames
-            let impossibleGames = gameStats.ImpossibleGames
+            const normalGames = gameStats.NormalGames
+            const hardGames = gameStats.HardGames
+            const impossibleGames = gameStats.ImpossibleGames
 
-            let normalWins = gameStats.NormalWins
-            let hardWins = gameStats.HardWins
-            let impossibleWins = gameStats.ImpossibleWins
+            const normalWins = gameStats.NormalWins
+            const hardWins = gameStats.HardWins
+            const impossibleWins = gameStats.ImpossibleWins
 
-            let normalPlusGames = normalGames + hardGames + impossibleGames
-            let normalPlusWins = normalWins + hardWins + impossibleWins
+            const normalPlusGames = normalGames + hardGames + impossibleGames
+            const normalPlusWins = normalWins + hardWins + impossibleWins
 
-            let hardPlusGames = hardGames + impossibleGames
-            let hardPlusWins = hardWins + impossibleWins
+            const hardPlusGames = hardGames + impossibleGames
+            const hardPlusWins = hardWins + impossibleWins
 
-            let impossiblePlusGames = impossibleGames
-            let impossiblePlusWins = impossibleWins
+            const impossiblePlusGames = impossibleGames
+            const impossiblePlusWins = impossibleWins
 
-            for (let gameStatReward of GameStatRewards) {
+            for (const gameStatReward of GameStatRewards) {
                 if (
                     gameStatReward.GameStat !== 'NormalGames' &&
                     gameStatReward.GameStat !== 'HardGames' &&
@@ -197,8 +198,8 @@ export class AwardManager {
                 )
                     continue
 
-                let gameStat = gameStatReward.GameStat
-                let requiredValue = gameStatReward.GameStatValue
+                const gameStat = gameStatReward.GameStat
+                const requiredValue = gameStatReward.GameStatValue
 
                 const typeProperty =
                     kittyStats.GameAwardsSorted[gameStatReward.TypeSorted as keyof GameAwardsDataSorted]
@@ -231,22 +232,21 @@ export class AwardManager {
         if (kitty.Player.controller !== MAP_CONTROL_USER) return // just reduce load, dont include bots.
         if (kitty.Player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
         if (CurrentGameMode.active !== GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
-        let selectedData = kitty.SaveData.SelectedData // GameSelectData class object
+        const selectedData = kitty.SaveData.SelectedData // GameSelectData class object
         ColorUtils.SetColorJoinedAs(kitty.Player)
 
-        const skinValue = (selectedData as any)['SelectedSkin'] as string
-        AwardManager.ProcessAward(kitty, skinValue)
+        AwardManager.ProcessAward(kitty, selectedData.SelectedSkin)
 
-        for (const key in selectedData) {
-            if (Object.prototype.hasOwnProperty.call(selectedData, key)) {
-                const selectedName = (selectedData as any)[key] as string
+        for (const key of Object.keys(selectedData)) {
+            if (selectedData[key as keyof GameSelectedData]) {
+                const selectedName = selectedData[key as keyof GameSelectedData]
                 AwardManager.ProcessAward(kitty, selectedName)
             }
         }
     }
 
     private static ProcessAward(kitty: Kitty, selectedAwardName: string) {
-        let reward = RewardsManager.Rewards.find(x => x.name === selectedAwardName)
+        const reward = RewardsManager.Rewards.find(x => x.name === selectedAwardName)
         if (!reward) return
         reward.ApplyReward(kitty.Player, false)
     }

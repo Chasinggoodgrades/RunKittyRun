@@ -96,14 +96,14 @@ export class DiscordFrame {
 
     private static RegisterESCTrigger() {
         DiscordFrame.ESCTrigger = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             DiscordFrame.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
         DiscordFrame.ESCTrigger.addAction(() => DiscordFrame.ESCPressed())
     }
 
     private static ESCPressed() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         if (!player.isLocal()) return
         DiscordFrame.Backdrop.visible = !DiscordFrame.Backdrop.visible
         DiscordFrame.EditBox.visible = !DiscordFrame.EditBox.visible

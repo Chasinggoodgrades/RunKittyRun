@@ -44,7 +44,7 @@ export class Chaos extends Affix {
     private RegisterTimer() {
         try {
             this.RotationTimer?.Timer.start(this.rotationTime, true, this.RotateAffix)
-            let randomAffix: string = this.GenRandomAffixName()
+            const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
         } catch (e: any) {
@@ -59,7 +59,7 @@ export class Chaos extends Affix {
         try {
             if (this.currentAffix !== null) AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.currentAffix = null as never
-            let randomAffix: string = this.GenRandomAffixName()
+            const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
         } catch (e: any) {

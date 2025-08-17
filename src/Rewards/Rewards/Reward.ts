@@ -137,8 +137,8 @@ export class Reward {
             if (this.SetSkin(player)) return
             if (this.SetWindwalk(player)) return
 
-            let kitty = Globals.ALL_KITTIES.get(player)!.Unit
-            let effectInstance = Effect.createAttachment(this.ModelPath, kitty, this.OriginPoint)!
+            const kitty = Globals.ALL_KITTIES.get(player)!.Unit
+            const effectInstance = Effect.createAttachment(this.ModelPath, kitty, this.OriginPoint)!
 
             this.DestroyCurrentEffect(player)
             this.ApplyEffect(player, effectInstance)
@@ -148,7 +148,7 @@ export class Reward {
     }
 
     private ApplyEffect(player: MapPlayer, effectInstance: Effect) {
-        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
+        const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings:
                 activeRewards.ActiveWings = effectInstance
@@ -178,29 +178,33 @@ export class Reward {
     }
 
     private DestroyCurrentEffect(player: MapPlayer) {
-        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
+        const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
-            case RewardType.Wings:
-                let x = activeRewards.ActiveWings
+            case RewardType.Wings: {
+                const x = activeRewards.ActiveWings
                 GC.RemoveEffect(x) // TODO; Cleanup:                 GC.RemoveEffect(ref x);
                 break
+            }
 
-            case RewardType.Hats:
-                let y = activeRewards.ActiveHats
+            case RewardType.Hats: {
+                const y = activeRewards.ActiveHats
                 GC.RemoveEffect(y) // TODO; Cleanup:                 GC.RemoveEffect(ref y);
                 break
+            }
 
-            case RewardType.Auras:
-                let z = activeRewards.ActiveAura
+            case RewardType.Auras: {
+                const z = activeRewards.ActiveAura
                 GC.RemoveEffect(z) // TODO; Cleanup:                 GC.RemoveEffect(ref z);
                 break
+            }
 
             case RewardType.Trails:
             case RewardType.Nitros:
-            case RewardType.Deathless:
-                let t = activeRewards.ActiveTrail
+            case RewardType.Deathless: {
+                const t = activeRewards.ActiveTrail
                 GC.RemoveEffect(t) // TODO; Cleanup:                 GC.RemoveEffect(ref t);
                 break
+            }
 
             case RewardType.Tournament:
                 this.SetTournamentReward(player, null, false)
@@ -213,7 +217,7 @@ export class Reward {
 
     private SetWindwalk(player: MapPlayer) {
         if (this.Type !== RewardType.Windwalks) return false
-        let kitty = Globals.ALL_KITTIES.get(player)!
+        const kitty = Globals.ALL_KITTIES.get(player)!
         kitty.ActiveAwards.WindwalkID = this.AbilityID
         return true
     }
@@ -221,7 +225,7 @@ export class Reward {
     private SetSkin(player: MapPlayer, tournament: boolean = false) {
         if (this.Type !== RewardType.Skins && tournament === false) return false
 
-        let kitty = Globals.ALL_KITTIES.get(player)!
+        const kitty = Globals.ALL_KITTIES.get(player)!
 
         if (this.SkinID !== 0) {
             kitty.Unit.skin = this.SkinID
@@ -235,7 +239,7 @@ export class Reward {
     private SetSelectedData(player: MapPlayer) {
         if (!Globals.ALL_KITTIES.has(player)) return
 
-        let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
+        const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
 
         switch (this.Type) {
             case RewardType.Skins:
@@ -276,7 +280,7 @@ export class Reward {
     private SetTournamentReward(player: MapPlayer, e: Effect | null, activate: boolean) {
         if (this.Type !== RewardType.Tournament) return false
 
-        let activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
+        const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         if (activate) {
             if (this.name.includes('Nitro')) e && (activeRewards.ActiveTrail = e)
             else if (this.name.includes('Aura')) e && (activeRewards.ActiveAura = e)

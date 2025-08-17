@@ -63,16 +63,16 @@ export class APMTracker {
     }
 
     private static CalculateAPM(kitty: Kitty) {
-        let totalActions = kitty.APMTracker.TotalActions
-        let timeOutsideSafeZones = kitty.APMTracker.TimeOutsideSafeZones / 60.0 // put in mins (APM)
+        const totalActions = kitty.APMTracker.TotalActions
+        const timeOutsideSafeZones = kitty.APMTracker.TimeOutsideSafeZones / 60.0 // put in mins (APM)
         return timeOutsideSafeZones > 0.0 ? totalActions / timeOutsideSafeZones : 0.0
     }
 
     public static CalculateAllAPM(): string {
         let apmString: string = ''
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
-            let apm = APMTracker.CalculateAPM(kitty)
+            const kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            const apm = APMTracker.CalculateAPM(kitty)
             apmString += `${ColorUtils.PlayerNameColored(kitty.Player)}:  ${apm} APM Active\n`
         }
         return apmString

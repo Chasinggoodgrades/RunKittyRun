@@ -15,30 +15,30 @@ export class Windwalk {
     private static HotkeyTrigger: Trigger
     private static WindwalkID: number = FourCC('BOwk') // Windwalk buff ID
     public static Initialize() {
-        this.RegisterHotKey()
-        this.RegisterWWCast()
+        Windwalk.RegisterHotKey()
+        Windwalk.RegisterWWCast()
     }
 
     private static RegisterWWCast() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        this.Trigger = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS)
-            this.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
-        this.Trigger.addCondition(Condition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK))
-        this.Trigger.addAction(() => this.ApplyWindwalkEffect())
+        Windwalk.Trigger = Trigger.create()!
+        for (const player of Globals.ALL_PLAYERS)
+            Windwalk.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
+        Windwalk.Trigger.addCondition(Condition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK))
+        Windwalk.Trigger.addAction(() => Windwalk.ApplyWindwalkEffect())
     }
 
     private static RegisterHotKey() {
-        this.HotkeyTrigger = Trigger.create()!
-        for (let p of Globals.ALL_PLAYERS) {
-            this.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_NUMPAD0, 0, true)
+        Windwalk.HotkeyTrigger = Trigger.create()!
+        for (const p of Globals.ALL_PLAYERS) {
+            Windwalk.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_NUMPAD0, 0, true)
         }
-        this.HotkeyTrigger.addAction(() => this.RegisterHotKeyEvents())
+        Windwalk.HotkeyTrigger.addAction(() => Windwalk.RegisterHotKeyEvents())
     }
 
     private static RegisterHotKeyEvents() {
-        let p: MapPlayer = getTriggerPlayer()
-        let k: Kitty = Globals.ALL_KITTIES.get(p)!
+        const p: MapPlayer = getTriggerPlayer()
+        const k: Kitty = Globals.ALL_KITTIES.get(p)!
 
         if (!k.isAlive()) return // cannot cast if dead obviously.
         if (UnitHasBuffBJ(k.Unit.handle, Windwalk.WindwalkID)) return
@@ -47,18 +47,18 @@ export class Windwalk {
     }
 
     private static ApplyWindwalkEffect() {
-        let caster = getTriggerUnit()
-        let player = caster.owner
-        let kitty = Globals.ALL_KITTIES.get(player)!
-        let abilityLevel = caster.getAbilityLevel(Constants.ABILITY_WIND_WALK)
-        let duration = 3.0 + 2.0 * abilityLevel
-        let wwID = kitty.ActiveAwards.WindwalkID
+        const caster = getTriggerUnit()
+        const player = caster.owner
+        const kitty = Globals.ALL_KITTIES.get(player)!
+        const abilityLevel = caster.getAbilityLevel(Constants.ABILITY_WIND_WALK)
+        const duration = 3.0 + 2.0 * abilityLevel
+        const wwID = kitty.ActiveAwards.WindwalkID
         try {
             // AmuletOfEvasiveness.AmuletWindwalkEffect(caster);
             if (wwID !== 0) {
-                let reward = RewardsManager.Rewards.find(r => r.GetAbilityID() === wwID)!
-                let visual = reward.ModelPath
-                let e = caster.addSpecialEffectTarget(visual, 'origin')
+                const reward = RewardsManager.Rewards.find(r => r.GetAbilityID() === wwID)!
+                const visual = reward.ModelPath
+                const e = caster.addSpecialEffectTarget(visual, 'origin')
                 if (e !== null) {
                     Utility.SimpleTimer(duration, () => {
                         if (e !== null) e.destroy()

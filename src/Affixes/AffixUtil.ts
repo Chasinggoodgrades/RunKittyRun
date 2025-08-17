@@ -10,7 +10,7 @@ export class AffixUtil {
         if (typeof arg === 'string') {
             for (let i = 0; i < wolf.Affixes.length; i++) {
                 if (wolf.Affixes[i].constructor.name === arg) {
-                    this.RemoveAffix(wolf.Affixes[i], wolf)
+                    AffixUtil.RemoveAffix(wolf.Affixes[i], wolf)
                     break
                 }
             }

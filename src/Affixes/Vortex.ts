@@ -72,13 +72,13 @@ export class Vortex extends Affix {
     }
 
     private EnterRegionActions() {
-        let enteringUnit = getTriggerUnit()
+        const enteringUnit = getTriggerUnit()
         if (this.UnitsInRange.includes(enteringUnit)) return
         this.UnitsInRange.push(enteringUnit)
     }
 
     private LeavesRegionActions() {
-        let leavingUnit = getTriggerUnit()
+        const leavingUnit = getTriggerUnit()
         if (!this.UnitsInRange.includes(leavingUnit)) return
         safeArraySplice(this.UnitsInRange, p => p === leavingUnit)
     }
@@ -97,14 +97,14 @@ export class Vortex extends Affix {
             this.ResetVortex()
             return // Exit early if the vortex is reset
         }
-        let distance = this.VORTEX_PULL_SPEED * this.VORTEX_PULSE_RATE
-        for (let unit of this.UnitsInRange) {
+        const distance = this.VORTEX_PULL_SPEED * this.VORTEX_PULSE_RATE
+        for (const unit of this.UnitsInRange) {
             if (!IsUnitInRange(unit.handle, this.Unit.Unit.handle, this.VORTEX_RADIUS)) continue
-            let x = unit.x
-            let y = unit.y
-            let angle = angleBetweenPoints(this.Unit.Unit.x, this.Unit.Unit.y, x, y)
-            let newX = x + distance * Cos(angle)
-            let newY = y + distance * Sin(angle)
+            const x = unit.x
+            const y = unit.y
+            const angle = angleBetweenPoints(this.Unit.Unit.x, this.Unit.Unit.y, x, y)
+            const newX = x + distance * Cos(angle)
+            const newY = y + distance * Sin(angle)
             unit.setPosition(newX, newY)
             unit.setFacingEx(angle)
             //let lastOrder = UnitOrders.GetLastOrderLocation(unit);

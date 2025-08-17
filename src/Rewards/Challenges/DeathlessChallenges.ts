@@ -16,17 +16,17 @@ export class DeathlessChallenges {
     public static DeathlessCount = 0 // Number of deaths allowed for the current round.
 
     public static Initialize() {
-        this.ResetDeathless()
+        DeathlessChallenges.ResetDeathless()
     }
 
     /// <summary>
     /// Resetes deathless progress for all players. Should be used at the beginning of new rounds.
     /// </summary>
     public static ResetDeathless() {
-        this.DeathlessCount = 0
+        DeathlessChallenges.DeathlessCount = 0
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-            let kitty = Globals.ALL_KITTIES_LIST[i]
-            this.ResetPlayerDeathless(kitty)
+            const kitty = Globals.ALL_KITTIES_LIST[i]
+            DeathlessChallenges.ResetPlayerDeathless(kitty)
         }
     }
 
@@ -47,9 +47,9 @@ export class DeathlessChallenges {
     public static DeathlessCheck(kitty: Kitty) {
         if (CurrentGameMode.active !== GameMode.Standard) return
         kitty.CurrentStats.DeathlessProgress++
-        if (kitty.CurrentStats.DeathlessProgress === this.DeathlessPerRound()) {
-            this.AwardDeathless(kitty)
-            this.ResetPlayerDeathless(kitty)
+        if (kitty.CurrentStats.DeathlessProgress === DeathlessChallenges.DeathlessPerRound()) {
+            DeathlessChallenges.AwardDeathless(kitty)
+            DeathlessChallenges.ResetPlayerDeathless(kitty)
         }
     }
 
@@ -58,15 +58,15 @@ export class DeathlessChallenges {
     }
 
     private static AwardDeathless(kitty: Kitty) {
-        this.DeathlessCount += 1
+        DeathlessChallenges.DeathlessCount += 1
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit)
-        this.AwardBasedOnDifficulty(kitty.Player)
-        this.PlayInvulnerableSoundWithText(kitty)
+        DeathlessChallenges.AwardBasedOnDifficulty(kitty.Player)
+        DeathlessChallenges.PlayInvulnerableSoundWithText(kitty)
     }
 
     private static AwardBasedOnDifficulty(player: MapPlayer) {
-        let difficulty = Difficulty.DifficultyValue
-        this.NormalDeathlessAward(player)
+        const difficulty = Difficulty.DifficultyValue
+        DeathlessChallenges.NormalDeathlessAward(player)
         /*        switch (difficulty)
                 {
                     case DifficultyLevel.Normal:
@@ -88,7 +88,7 @@ export class DeathlessChallenges {
 
     private static NormalDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        this.GiveRoundReward(
+        DeathlessChallenges.GiveRoundReward(
             player,
             'NormalDeathless1',
             'NormalDeathless2',
@@ -100,7 +100,7 @@ export class DeathlessChallenges {
 
     private static HardDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        this.GiveRoundReward(
+        DeathlessChallenges.GiveRoundReward(
             player,
             'HardDeathless1',
             'HardDeathless2',
@@ -112,7 +112,7 @@ export class DeathlessChallenges {
 
     private static ImpossibleDeathlessAward(player: MapPlayer) {
         let gameAwards: GameAwardsDataSorted
-        this.GiveRoundReward(
+        DeathlessChallenges.GiveRoundReward(
             player,
             'ImpossibleDeathless1',
             'ImpossibleDeathless2',
@@ -130,7 +130,7 @@ export class DeathlessChallenges {
 
     private static PlayInvulnerableSoundWithText(k: Kitty) {
         SoundManager.PlayInvulnerableSound()
-        let textTag = TextTag.create()!
+        const textTag = TextTag.create()!
         Utility.CreateSimpleTextTag(`${Colors.COLOR_RED}Deathless ${Globals.ROUND}!`, 2.0, k.Unit)
     }
 }

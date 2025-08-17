@@ -20,8 +20,8 @@ export class RectPoints {
     }
 
     public static InitPoints(): RectPoints[] {
-        let points: RectPoints[] = []
-        for (let point of RegionList.PathingPoints) {
+        const points: RectPoints[] = []
+        for (const point of RegionList.PathingPoints) {
             points.push(new RectPoints(point.centerX, point.centerY))
         }
         return points

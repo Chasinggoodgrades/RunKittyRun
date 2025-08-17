@@ -39,40 +39,39 @@ export class SoundManager {
     private static sounds: Record<string, Sound> = {}
 
     public static Initialize() {
-        this.sounds = {
-            KittyDeathSound: Sound.create(this.KITTY_DEATH_PATH, false, true, false, 10, 10, '')!,
-            Round1Sound: Sound.create(this.ROUND_1_PATH, false, false, false, 10, 10, '')!,
-            Round2Sound: Sound.create(this.ROUND_2_PATH, false, false, false, 10, 10, '')!,
-            Round3Sound: Sound.create(this.ROUND_3_PATH, false, false, false, 10, 10, '')!,
-            Round4Sound: Sound.create(this.ROUND_4_PATH, false, false, false, 10, 10, '')!,
-            Round5Sound: Sound.create(this.ROUND_5_PATH, false, false, false, 10, 10, '')!,
-            SpeedSound: Sound.create(this.SPEED_PATH, false, false, false, 10, 10, '')!,
-            InvulnerableSound: Sound.create(this.INVULNERABLE_PATH, false, false, false, 10, 10, '')!,
-            KibbleTomeSound: Sound.create(this.KIBBLE_TOME_PATH, false, true, false, 10, 10, '')!,
-            LastManStandingSound: Sound.create(this.LAST_MAN_STANDING_PATH, false, false, false, 10, 10, '')!,
-            FirstBloodSound: Sound.create(this.FIRST_BLOOD_PATH, false, false, false, 10, 10, '')!,
+        SoundManager.sounds = {
+            KittyDeathSound: Sound.create(SoundManager.KITTY_DEATH_PATH, false, true, false, 10, 10, '')!,
+            Round1Sound: Sound.create(SoundManager.ROUND_1_PATH, false, false, false, 10, 10, '')!,
+            Round2Sound: Sound.create(SoundManager.ROUND_2_PATH, false, false, false, 10, 10, '')!,
+            Round3Sound: Sound.create(SoundManager.ROUND_3_PATH, false, false, false, 10, 10, '')!,
+            Round4Sound: Sound.create(SoundManager.ROUND_4_PATH, false, false, false, 10, 10, '')!,
+            Round5Sound: Sound.create(SoundManager.ROUND_5_PATH, false, false, false, 10, 10, '')!,
+            SpeedSound: Sound.create(SoundManager.SPEED_PATH, false, false, false, 10, 10, '')!,
+            InvulnerableSound: Sound.create(SoundManager.INVULNERABLE_PATH, false, false, false, 10, 10, '')!,
+            KibbleTomeSound: Sound.create(SoundManager.KIBBLE_TOME_PATH, false, true, false, 10, 10, '')!,
+            LastManStandingSound: Sound.create(SoundManager.LAST_MAN_STANDING_PATH, false, false, false, 10, 10, '')!,
+            FirstBloodSound: Sound.create(SoundManager.FIRST_BLOOD_PATH, false, false, false, 10, 10, '')!,
         }
-        this.SetSoundAttributes()
-        this.AssignSounds()
+        SoundManager.SetSoundAttributes()
+        SoundManager.AssignSounds()
     }
 
     private static AssignSounds() {
-        this.KITTY_DEATH_SOUND = this.sounds['KittyDeathSound']
-        this.ROUND_1_SOUND = this.sounds['Round1Sound']
-        this.ROUND_2_SOUND = this.sounds['Round2Sound']
-        this.ROUND_3_SOUND = this.sounds['Round3Sound']
-        this.ROUND_4_SOUND = this.sounds['Round4Sound']
-        this.ROUND_5_SOUND = this.sounds['Round5Sound']
-        this.SPEED_SOUND = this.sounds['SpeedSound']
-        this.INVULNERABLE_SOUND = this.sounds['InvulnerableSound']
-        this.KIBBLE_TOME_SOUND = this.sounds['KibbleTomeSound']
-        this.LAST_MAN_STANDING_SOUND = this.sounds['LastManStandingSound']
-        this.FIRST_BLOOD_SOUND = this.sounds['FirstBloodSound']
+        SoundManager.KITTY_DEATH_SOUND = SoundManager.sounds['KittyDeathSound']
+        SoundManager.ROUND_1_SOUND = SoundManager.sounds['Round1Sound']
+        SoundManager.ROUND_2_SOUND = SoundManager.sounds['Round2Sound']
+        SoundManager.ROUND_3_SOUND = SoundManager.sounds['Round3Sound']
+        SoundManager.ROUND_4_SOUND = SoundManager.sounds['Round4Sound']
+        SoundManager.ROUND_5_SOUND = SoundManager.sounds['Round5Sound']
+        SoundManager.SPEED_SOUND = SoundManager.sounds['SpeedSound']
+        SoundManager.INVULNERABLE_SOUND = SoundManager.sounds['InvulnerableSound']
+        SoundManager.KIBBLE_TOME_SOUND = SoundManager.sounds['KibbleTomeSound']
+        SoundManager.LAST_MAN_STANDING_SOUND = SoundManager.sounds['LastManStandingSound']
+        SoundManager.FIRST_BLOOD_SOUND = SoundManager.sounds['FirstBloodSound']
     }
 
     private static SetSoundAttributes() {
-        for (const key in this.sounds) {
-            const sound = this.sounds[key]
+        for (const [_, sound] of pairs(SoundManager.sounds)) {
             sound.setChannel(0)
             sound.setVolume(127)
             sound.setPitch(1.0)
@@ -80,11 +79,11 @@ export class SoundManager {
     }
 
     public static PlaySpeedSound(): void {
-        PlaySoundBJ(this.SPEED_SOUND.handle)
+        PlaySoundBJ(SoundManager.SPEED_SOUND.handle)
     }
 
     public static PlayInvulnerableSound(): void {
-        PlaySoundBJ(this.INVULNERABLE_SOUND.handle)
+        PlaySoundBJ(SoundManager.INVULNERABLE_SOUND.handle)
     }
 
     /// <summary>
@@ -92,9 +91,9 @@ export class SoundManager {
     /// While playing team mode, only team members of the passed unit will hear the sound.
     /// </summary>
     public static PlayKittyDeathSound(k: Kitty) {
-        if (CurrentGameMode.active === GameMode.TeamTournament) this.TeamKittyDeathSound(k)
+        if (CurrentGameMode.active === GameMode.TeamTournament) SoundManager.TeamKittyDeathSound(k)
         else {
-            let s = this.KITTY_DEATH_SOUND
+            const s = SoundManager.KITTY_DEATH_SOUND
             StopSound(s.handle, false, false)
             AttachSoundToUnit(s.handle, k.Unit.handle)
             PlaySoundBJ(s.handle)
@@ -102,27 +101,27 @@ export class SoundManager {
     }
 
     public static PlayFirstBloodSound() {
-        if (this.FirstBloodSoundPlayed) return
-        let s = this.FIRST_BLOOD_SOUND
+        if (SoundManager.FirstBloodSoundPlayed) return
+        const s = SoundManager.FIRST_BLOOD_SOUND
         StopSound(s.handle, false, false)
         PlaySoundBJ(s.handle)
-        this.FirstBloodSoundPlayed = true
+        SoundManager.FirstBloodSoundPlayed = true
     }
 
     public static PlayKibbleTomeSound(Kitty: Unit) {
-        let s = this.KIBBLE_TOME_SOUND
+        const s = SoundManager.KIBBLE_TOME_SOUND
         StopSound(s.handle, false, false)
         AttachSoundToUnit(s.handle, Kitty.handle)
         PlaySoundBJ(s.handle)
     }
 
     private static TeamKittyDeathSound(k: Kitty) {
-        let s = this.KITTY_DEATH_SOUND
+        const s = SoundManager.KITTY_DEATH_SOUND
         AttachSoundToUnit(s.handle, k.Unit.handle)
-        let teamID: number = k.TeamID
-        let team: Team = Globals.ALL_TEAMS.get(teamID)!
+        const teamID: number = k.TeamID
+        const team: Team = Globals.ALL_TEAMS.get(teamID)!
         for (let i = 0; i < team.Teammembers.length; i++) {
-            let player = team.Teammembers[i]
+            const player = team.Teammembers[i]
             if (player.isLocal()) {
                 StopSound(s.handle, false, false)
                 PlaySoundBJ(s.handle)
@@ -135,23 +134,23 @@ export class SoundManager {
     /// Only rounds 1-5 are setup.
     /// </summary>
     public static PlayRoundSound() {
-        let currRound = Globals.ROUND
+        const currRound = Globals.ROUND
         let sound: Sound | null = null
         switch (currRound) {
             case 1:
-                sound = this.ROUND_1_SOUND
+                sound = SoundManager.ROUND_1_SOUND
                 break
             case 2:
-                sound = this.ROUND_2_SOUND
+                sound = SoundManager.ROUND_2_SOUND
                 break
             case 3:
-                sound = this.ROUND_3_SOUND
+                sound = SoundManager.ROUND_3_SOUND
                 break
             case 4:
-                sound = this.ROUND_4_SOUND
+                sound = SoundManager.ROUND_4_SOUND
                 break
             case 5:
-                sound = this.ROUND_5_SOUND
+                sound = SoundManager.ROUND_5_SOUND
                 break
             default:
                 sound = null
@@ -165,7 +164,7 @@ export class SoundManager {
     }
 
     public static PlayLastManStandingSound() {
-        this.LastManStanding.start(0.8, false, this.LastManStandingActions)
+        SoundManager.LastManStanding.start(0.8, false, SoundManager.LastManStandingActions)
     }
 
     private static LastManStandingActions() {
@@ -174,7 +173,7 @@ export class SoundManager {
 
         try {
             for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-                let kitty = Globals.ALL_KITTIES_LIST[i]
+                const kitty = Globals.ALL_KITTIES_LIST[i]
                 if (kitty.isAlive()) {
                     count += 1
                     k = kitty
@@ -186,8 +185,8 @@ export class SoundManager {
             if (!k) return
             if (k.ProtectionActive) return // no reason to play if pota is active.
 
-            let s = this.LAST_MAN_STANDING_SOUND
-            let e = AddSpecialEffectTarget(
+            const s = SoundManager.LAST_MAN_STANDING_SOUND
+            const e = AddSpecialEffectTarget(
                 'Abilities\\Spells\\Human\\Feedback\\FeedbackCaster.mdl',
                 k.Unit.handle,
                 'chest'

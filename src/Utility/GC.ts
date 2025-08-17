@@ -33,7 +33,7 @@ export class GC {
 
     public static RemoveAffix(affix: Affix) {
         if (affix === null) return
-        let index = GC.GCAffixes.indexOf(affix)
+        const index = GC.GCAffixes.indexOf(affix)
         if (index !== -1) (GC.GCAffixes as any)[index] = null
         safeArraySplice(GC.GCAffixes, a => a === affix)
     }

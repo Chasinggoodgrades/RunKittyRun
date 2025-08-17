@@ -80,7 +80,7 @@ export class FangOfShadows extends Relic {
 
     private SummonShadowKitty() {
         try {
-            let summoner = Globals.ALL_KITTIES.get(getTriggerUnit()!.owner)
+            const summoner = Globals.ALL_KITTIES.get(getTriggerUnit()!.owner)
 
             if (!summoner) return
 
@@ -93,7 +93,7 @@ export class FangOfShadows extends Relic {
                 return
             }
 
-            let shadowKitty = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
+            const shadowKitty = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
 
             if (!shadowKitty) return
 
@@ -120,7 +120,7 @@ export class FangOfShadows extends Relic {
 
     private TeleportToShadowKitty() {
         try {
-            let sk = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
+            const sk = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
             if (!sk) return
             sk.TeleportToShadowKitty()
             Utility.DropAllItems(getTriggerUnit())
@@ -143,9 +143,9 @@ export class FangOfShadows extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityCooldown(Unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
-        let currentCooldown = BlzGetAbilityCooldown(this.RelicAbilityID, 0)
-        let newCooldown = upgradeLevel >= 1 ? currentCooldown - this.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
+        const currentCooldown = BlzGetAbilityCooldown(this.RelicAbilityID, 0)
+        const newCooldown = upgradeLevel >= 1 ? currentCooldown - this.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
         //let ability = Unit.getAbility(RelicAbilityID);
         RelicUtil.SetAbilityCooldown(Unit, this.RelicItemID, this.RelicAbilityID, newCooldown)
@@ -154,12 +154,12 @@ export class FangOfShadows extends Relic {
     public ReduceCooldownAtSafezone(Unit: Unit) {
         // Have relic
         if (!Utility.UnitHasItem(Unit, this.RelicItemID)) return
-        let upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
+        const upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
         Unit.getAbility(this.RelicAbilityID)
-        let reduction: number = upgradeLevel >= 2 ? this.UPGRADE_SAFEZONE_REDUCTION : this.SAFEZONE_REDUCTION
-        let remainingCooldown: number = Unit.getAbilityCooldownRemaining(this.RelicAbilityID)
+        const reduction: number = upgradeLevel >= 2 ? this.UPGRADE_SAFEZONE_REDUCTION : this.SAFEZONE_REDUCTION
+        const remainingCooldown: number = Unit.getAbilityCooldownRemaining(this.RelicAbilityID)
         if (remainingCooldown <= 0) return
-        let newCooldown: number = remainingCooldown * (1.0 - reduction)
+        const newCooldown: number = remainingCooldown * (1.0 - reduction)
         //BlzStartUnitAbilityCooldown(Unit.handle,RelicAbilityID, newCooldown);
         RelicUtil.SetRelicCooldowns(Unit, this.RelicItemID, this.RelicAbilityID, newCooldown)
     }

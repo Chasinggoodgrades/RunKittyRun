@@ -35,22 +35,22 @@ export class RangeIndicator {
     /// <param name="segments">The number of segments into which the range indicator is divided. Higher values produce a smoother circle. Default is 20.</param>
     /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
     public CreateIndicator(unit: Unit, range: number, segments = 20, lightningType: string = this.LIGHTNING_TYPE) {
-        let x: number = unit.x
-        let y: number = unit.y
+        const x: number = unit.x
+        const y: number = unit.y
 
-        let angleStep = 360.0 / segments
+        const angleStep = 360.0 / segments
 
         // Creating a circular range indicator around the unit
         for (let i = 0; i < segments; i++) {
-            let angle1: number = i * angleStep * bj_DEGTORAD
-            let angle2: number = (i + 1) * angleStep * bj_DEGTORAD
+            const angle1: number = i * angleStep * bj_DEGTORAD
+            const angle2: number = (i + 1) * angleStep * bj_DEGTORAD
 
-            let startX: number = x + range * Cos(angle1)
-            let startY: number = y + range * Sin(angle1)
-            let endX: number = x + range * Cos(angle2)
-            let endY: number = y + range * Sin(angle2)
+            const startX: number = x + range * Cos(angle1)
+            const startY: number = y + range * Sin(angle1)
+            const endX: number = x + range * Cos(angle2)
+            const endY: number = y + range * Sin(angle2)
 
-            let lightning = AddLightning(lightningType, true, startX, startY, endX, endY)
+            const lightning = AddLightning(lightningType, true, startX, startY, endX, endY)
             this.LightningObjects.push(lightning!)
         }
     }

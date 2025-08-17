@@ -13,7 +13,7 @@ export class PodiumUtil {
     private static EndingTimer = 90.0
 
     public static Initialize() {
-        this.SetPodiumPositions()
+        PodiumUtil.SetPodiumPositions()
     }
 
     public static SortPlayersByScore() {
@@ -26,19 +26,19 @@ export class PodiumUtil {
 
     public static SortPlayersBySaves() {
         return Globals.ALL_PLAYERS.sort((a, b) => {
-            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
-            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
             return statsB.TotalSaves - statsA.TotalSaves
         }).slice(0, 3)
     }
 
     public static SortPlayersByHighestRatio() {
         return Globals.ALL_PLAYERS.sort((a, b) => {
-            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
-            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
 
-            let ratioA = statsA.TotalDeaths === 0 ? statsA.TotalSaves : statsA.TotalSaves / statsA.TotalDeaths
-            let ratioB = statsB.TotalDeaths === 0 ? statsB.TotalSaves : statsB.TotalSaves / statsB.TotalDeaths
+            const ratioA = statsA.TotalDeaths === 0 ? statsA.TotalSaves : statsA.TotalSaves / statsA.TotalDeaths
+            const ratioB = statsB.TotalDeaths === 0 ? statsB.TotalSaves : statsB.TotalSaves / statsB.TotalDeaths
 
             return ratioB - ratioA
         }).slice(0, 3)
@@ -46,31 +46,31 @@ export class PodiumUtil {
 
     public static SortPlayersByHighestSaveStreak() {
         return Globals.ALL_PLAYERS.sort((a, b) => {
-            let statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
-            let statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
+            const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
+            const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
             return statsB.MaxSaveStreak - statsA.MaxSaveStreak
         }).slice(0, 3)
     }
 
     public static SortPlayersTopProgress() {
         return Globals.ALL_PLAYERS.sort((a, b) => {
-            let statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
-            let statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
+            const statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
+            const statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
             return statsB.GetOverallProgress() - statsA.GetOverallProgress()
         }).slice(0, 3)
     }
 
     public static SortPlayersFastestTime() {
         return Globals.ALL_PLAYERS.sort((a, b) => {
-            let statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
-            let statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
+            const statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
+            const statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
             return statsA.GetTotalTime() - statsB.GetTotalTime()
         }).slice(0, 3)
     }
 
     public static SetCameraToPodium() {
-        for (let player of Globals.ALL_PLAYERS) {
-            let podium = Regions.Podium_cinematic
+        for (const player of Globals.ALL_PLAYERS) {
+            const podium = Regions.Podium_cinematic
             if (player.isLocal()) {
                 SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1400.0, 0.0)
                 PanCameraToTimed(podium.centerX, podium.centerY, 2.0)
@@ -80,7 +80,7 @@ export class PodiumUtil {
 
     public static ClearPodiumUnits(podiumUnits: Unit[]) {
         if (podiumUnits.length === 0) return
-        for (let kitty of podiumUnits) {
+        for (const kitty of podiumUnits) {
             kitty.setPosition(Regions.safe_Area_00.centerX, Regions.safe_Area_00.centerY)
             kitty.paused = false
         }
@@ -89,17 +89,17 @@ export class PodiumUtil {
 
     public static EndingGameThankyou() {
         print(`${Colors.COLOR_YELLOW}Thanks to everyone for playing, much love <3|r`)
-        this.NotifyEndingGame()
+        PodiumUtil.NotifyEndingGame()
     }
 
     public static NotifyEndingGame() {
         DiscordFrame.Initialize()
         Utility.TimedTextToAllPlayers(
-            this.EndingTimer,
+            PodiumUtil.EndingTimer,
             `${Colors.COLOR_YELLOW}The game will end in ${PodiumUtil.EndingTimer} seconds.${Colors.COLOR_RESET}`
         )
         Globals.GAME_ACTIVE = false
-        Utility.SimpleTimer(this.EndingTimer, EndGame)
+        Utility.SimpleTimer(PodiumUtil.EndingTimer, EndGame)
     }
 
     public static PlacementString(placement: number) {
@@ -121,7 +121,7 @@ export class PodiumUtil {
     public static PodiumSpots: Point[]
 
     public static SetPodiumPositions() {
-        this.PodiumSpots = [
+        PodiumUtil.PodiumSpots = [
             Point.create(Regions.Podium_1.centerX, Regions.Podium_1.centerY),
             Point.create(Regions.Podium_2.centerX, Regions.Podium_2.centerY),
             Point.create(Regions.Podium_3.centerX, Regions.Podium_3.centerY),

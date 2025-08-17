@@ -27,13 +27,13 @@ export class PersonalBestAwarder {
     /// </summary>
     /// <param name="player"></param>
     public static BeatRecordTime(player: MapPlayer) {
-        let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
+        const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let roundEnum = ''
         if (CurrentGameMode.active === GameMode.Standard) roundEnum = RoundEnums.GetRoundEnum()
         if (CurrentGameMode.active === GameMode.SoloTournament) roundEnum = RoundEnums.GetSoloRoundEnum()
-        let time = kittyStats.RoundTimes[roundEnum as keyof RoundTimesData]
-        let timeFormatted = Utility.ConvertFloatToTime(time)
-        let difficulty =
+        const time = kittyStats.RoundTimes[roundEnum as keyof RoundTimesData]
+        const timeFormatted = Utility.ConvertFloatToTime(time)
+        const difficulty =
             CurrentGameMode.active === GameMode.Standard
                 ? Difficulty.DifficultyOption.toString()
                 : `${Colors.COLOR_TURQUOISE}Solo${Colors.COLOR_RESET}`
@@ -49,8 +49,8 @@ export class PersonalBestAwarder {
     /// <param name="k"></param>
     public static BeatMostSavesInGame(k: Kitty) {
         if (k.aiController.IsEnabled()) return
-        let currentSaves = k.CurrentStats.TotalSaves
-        let bestSaves = k.SaveData.PersonalBests.Saves
+        const currentSaves = k.CurrentStats.TotalSaves
+        const bestSaves = k.SaveData.PersonalBests.Saves
         if (currentSaves < 10) return // avoid the spam for 1st timers.
         if (currentSaves > bestSaves) {
             k.SaveData.PersonalBests.Saves = currentSaves
@@ -70,8 +70,8 @@ export class PersonalBestAwarder {
     /// <param name="k"></param>
     public static BeatenSaveStreak(k: Kitty) {
         if (k.aiController.IsEnabled()) return
-        let currentStreak = k.SaveData.GameStats.SaveStreak
-        let bestStreak = k.SaveData.GameStats.HighestSaveStreak
+        const currentStreak = k.SaveData.GameStats.SaveStreak
+        const bestStreak = k.SaveData.GameStats.HighestSaveStreak
         if (currentStreak < 5) return // avoid the spam for 1st timers.
         if (currentStreak > bestStreak) {
             k.SaveData.GameStats.HighestSaveStreak = currentStreak

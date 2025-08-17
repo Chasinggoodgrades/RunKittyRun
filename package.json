@@ -18,13 +18,16 @@
         "release-test-publish": "yarn release && ts-node scripts/releaseTest.ts --publish",
         "dev": "npm-watch",
         "build:defs": "ts-node scripts/dev",
-        "prettier": "prettier --write src/**/*.ts"
+        "prettier": "prettier --write src/**/*.ts",
+        "lint": "eslint src/**/*.ts",
+        "lint:fix": "eslint src/**/*.ts --fix"
     },
     "devDependencies": {
         "@types/fs-extra": "8.1.1",
         "@types/node": "12.19.1",
         "@types/pako": "1.0.1",
         "@typescript-to-lua/language-extensions": "^1.0.0",
+        "eslint": "^9.33.0",
         "fs-extra": "8.1.0",
         "lua-types": "^2.13.1",
         "luamin": "^1.0.4",
@@ -35,6 +38,7 @@
         "tsconfig-paths": "3.9.0",
         "tsutils": "3.17.1",
         "typescript": "5.0.4",
+        "typescript-eslint": "^8.39.1",
         "typescript-to-lua": "1.31.4",
         "w3ts": "^3.0.2",
         "war3-objectdata-th": "^0.2.8",

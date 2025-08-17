@@ -44,7 +44,7 @@ export class SoloMultiboard {
 
     private static RegisterTriggers() {
         SoloMultiboard.ESCTrigger = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS)
+        for (const player of Globals.ALL_PLAYERS)
             SoloMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         SoloMultiboard.ESCTrigger.addAction(() => SoloMultiboard.ESCPressed())
     }
@@ -113,29 +113,29 @@ export class SoloMultiboard {
         let rowIndex = 1
 
         // Create a shallow copy of Globals.ALL_KITTIES and sort it
-        let sortedPlayers =
+        const sortedPlayers =
             Globals.CurrentGameModeType === Globals.SOLO_MODES[0]
                 ? Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
-                      let progDiff = b[1].TimeProg.GetOverallProgress() - a[1].TimeProg.GetOverallProgress()
+                      const progDiff = b[1].TimeProg.GetOverallProgress() - a[1].TimeProg.GetOverallProgress()
                       if (progDiff !== 0) return progDiff
                       return a[0].id - b[0].id
                   }) // Progression mode
                 : Array.from(Globals.ALL_KITTIES.entries()).sort((a, b) => {
-                      let timeDiff = a[1].TimeProg.GetTotalTime() - b[1].TimeProg.GetTotalTime()
+                      const timeDiff = a[1].TimeProg.GetTotalTime() - b[1].TimeProg.GetTotalTime()
                       if (timeDiff !== 0) return timeDiff
-                      let idDiff = a[0].id - b[0].id
+                      const idDiff = a[0].id - b[0].id
                       if (idDiff !== 0) return idDiff
                       return a[1].Finished === b[1].Finished ? 0 : a[1].Finished ? 1 : -1
                   }) // Race Mode       -- Holy BAD LEAKS
 
         SoloMultiboard.sortedDict = new Map(sortedPlayers) // Avoid pass by reference
 
-        for (let [player, _] of SoloMultiboard.sortedDict) {
-            let times = SoloMultiboard.sortedDict.get(player)!.TimeProg
-            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
-            let totalDeaths = SoloMultiboard.sortedDict.get(player)!.CurrentStats.TotalDeaths
-            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
-            let status = Globals.ALL_KITTIES.get(player)!.Finished ? 'Finished' : 'Racing'
+        for (const [player, _] of SoloMultiboard.sortedDict) {
+            const times = SoloMultiboard.sortedDict.get(player)!.TimeProg
+            const playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
+            const totalDeaths = SoloMultiboard.sortedDict.get(player)!.CurrentStats.TotalDeaths
+            const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+            const status = Globals.ALL_KITTIES.get(player)!.Finished ? 'Finished' : 'Racing'
             SoloMultiboard.MBSlot.set(player, rowIndex)
             let stats =
                 Globals.CurrentGameModeType === Globals.SOLO_MODES[0]
@@ -178,12 +178,12 @@ export class SoloMultiboard {
         SoloMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         let rowIndex = 1
 
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             // bad
-            let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
+            const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
+            const playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
-            let roundTimes = SoloMultiboard.GetGameRoundTime(saveData)
+            const roundTimes = SoloMultiboard.GetGameRoundTime(saveData)
 
             for (let i = 0; i < roundTimes.length; i++) {
                 if (roundTimes[i] !== 0)
@@ -192,7 +192,7 @@ export class SoloMultiboard {
                     )
                 else SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(`${playerColor}---${Colors.COLOR_RESET}`)
             }
-            let sum = sumNumbers(roundTimes)
+            const sum = sumNumbers(roundTimes)
             SoloMultiboard.BestTimes.GetItem(rowIndex, 6).setText(
                 `${playerColor}${Utility.ConvertFloatToTime(sum)}${Colors.COLOR_RESET}`
             )
@@ -208,13 +208,13 @@ export class SoloMultiboard {
 
     public static UpdateBestTimesMB() {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
-        this.FillPlayers(SoloMultiboard.BestTimes, 1)
+        SoloMultiboard.FillPlayers(SoloMultiboard.BestTimes, 1)
         SoloMultiboard.BestTimeStats()
     }
 
     public static FillPlayers(mb: Multiboard, rowIndex = 2) {
-        for (let player of Globals.ALL_PLAYERS) {
-            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+        for (const player of Globals.ALL_PLAYERS) {
+            const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
             mb.GetItem(rowIndex, 0).setWidth(0.07)
             rowIndex++
@@ -225,7 +225,7 @@ export class SoloMultiboard {
         try {
             if (CurrentGameMode.active !== GameMode.SoloTournament) return
             let value
-            let rowIndex = (value = SoloMultiboard.MBSlot.get(player) ? value : 0)
+            const rowIndex = (value = SoloMultiboard.MBSlot.get(player) ? value : 0)
             if (!rowIndex || rowIndex === 0) return
             SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
                 `${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}`
@@ -237,8 +237,8 @@ export class SoloMultiboard {
     }
 
     private static GetGameRoundTime(data: KittyData): number[] {
-        let gameData = data.RoundTimes
-        let roundTimes = []
+        const gameData = data.RoundTimes
+        const roundTimes = []
 
         switch (CurrentGameMode.active) {
             case GameMode.SoloTournament:

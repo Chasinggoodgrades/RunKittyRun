@@ -15,7 +15,7 @@ export class Standard {
 
     public static Initialize() {
         print('Standard Init')
-        RoundManager.ROUND_INTERMISSION = !PROD ? 0.0 : this.ROUND_INTERMISSION
+        RoundManager.ROUND_INTERMISSION = !PROD ? 0.0 : Standard.ROUND_INTERMISSION
         ShadowKitty.Initialize()
         Difficulty.Initialize()
         Windwalk.Initialize()

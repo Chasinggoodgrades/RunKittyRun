@@ -76,13 +76,13 @@ export class RingOfSummoning extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
-        let ability = Unit.getAbility(this.RelicAbilityID)!
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const ability = Unit.getAbility(this.RelicAbilityID)!
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
 
         // Summon radius thingy
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, RingOfSummoning.SUMMONING_RING_RADIUS)
 
-        let cooldown =
+        const cooldown =
             upgradeLevel >= 1
                 ? RingOfSummoning.SUMMONING_COOLDOWN - RingOfSummoning.UPGRADE_COOLDOWN_REDUCTION
                 : RingOfSummoning.SUMMONING_COOLDOWN
@@ -93,11 +93,11 @@ export class RingOfSummoning extends Relic {
 
     private SacredRingOfSummoning() {
         // Retrieve event details
-        let player: MapPlayer = getTriggerUnit().owner
-        let targetedPoint: location = GetSpellTargetLoc()!
-        let summoningKitty: Kitty = Globals.ALL_KITTIES.get(player)!
-        let summoningKittyUnit: Unit = summoningKitty.Unit
-        let numberOfSummons: number = this.GetNumberOfSummons(player)
+        const player: MapPlayer = getTriggerUnit().owner
+        const targetedPoint: location = GetSpellTargetLoc()!
+        const summoningKitty: Kitty = Globals.ALL_KITTIES.get(player)!
+        const summoningKittyUnit: Unit = summoningKitty.Unit
+        const numberOfSummons: number = this.GetNumberOfSummons(player)
 
         // Ensure SummonGroup exists
         this.SummonGroup ??= Group.create()!
@@ -110,7 +110,7 @@ export class RingOfSummoning extends Relic {
         )
 
         // Filter eligible summon targets
-        let filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
+        const filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
         this.SummonGroup.enumUnitsInRange(
             GetLocationX(targetedPoint),
             GetLocationY(targetedPoint),
@@ -122,10 +122,10 @@ export class RingOfSummoning extends Relic {
         // Summon loop
         let count = 0
         while (this.SummonGroup.first && count < numberOfSummons) {
-            let unit: Unit = this.SummonGroup.first
+            const unit: Unit = this.SummonGroup.first
             this.SummonGroup.removeUnit(unit)
 
-            let kitty: Kitty = Globals.ALL_KITTIES.get(unit.owner)!
+            const kitty: Kitty = Globals.ALL_KITTIES.get(unit.owner)!
             if (
                 !this.SummonDeadKitty(summoningKitty, kitty) ||
                 !this.DeathlessKitty(summoningKitty, kitty) ||
@@ -160,9 +160,9 @@ export class RingOfSummoning extends Relic {
     /// <param name="summoned"></param>
     /// <returns></returns>
     private SummonDeadKitty(summoner: Kitty, summoned: Kitty) {
-        let round = Globals.ROUND
-        let summoersProgress = summoner.TimeProg.GetRoundProgress(round)
-        let deadProg = summoned.TimeProg.GetRoundProgress(round)
+        const round = Globals.ROUND
+        const summoersProgress = summoner.TimeProg.GetRoundProgress(round)
+        const deadProg = summoned.TimeProg.GetRoundProgress(round)
 
         if (!PROD)
             Logger.Verbose(
@@ -204,7 +204,7 @@ export class RingOfSummoning extends Relic {
     /// <param name="player"></param>
     /// <returns></returns>
     private GetNumberOfSummons(player: MapPlayer) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof RingOfSummoning)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof RingOfSummoning)
         return upgradeLevel >= 2 ? 2 : 1
     }
 

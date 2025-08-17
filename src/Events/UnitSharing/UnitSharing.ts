@@ -23,7 +23,7 @@ export class UnitSharing {
         UnitSharing.Trigger = Trigger.create()!
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             if (UnitSharing.Action !== null) break
-            let player = Globals.ALL_PLAYERS[i]
+            const player = Globals.ALL_PLAYERS[i]
             UnitSharing.Trigger.registerPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
         }
         UnitSharing.Action = UnitSharing.TriggerActions()
@@ -36,11 +36,11 @@ export class UnitSharing {
     /// <returns></returns>
     private static TriggerActions(): triggeraction {
         UnitSharing.Action = UnitSharing.Trigger.addAction(() => {
-            let player = getTriggerPlayer() // Triggering Player
+            const player = getTriggerPlayer() // Triggering Player
             if (UnitSharing.AllowSharing(player)) return
 
             for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-                let otherPlayer = Globals.ALL_PLAYERS[i]
+                const otherPlayer = Globals.ALL_PLAYERS[i]
                 if (otherPlayer === player) continue
                 player.setAlliance(otherPlayer, ALLIANCE_SHARED_CONTROL, false)
                 otherPlayer.setAlliance(player, ALLIANCE_SHARED_CONTROL, false)

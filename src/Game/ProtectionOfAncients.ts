@@ -44,7 +44,7 @@ export class ProtectionOfAncients {
     /// </summary>
     /// <param name="unit"></param>
     private static AddProtectionOfAncients(unit: Unit) {
-        let player = unit.owner
+        const player = unit.owner
         unit.addAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS)
         player.DisplayTimedTextTo(
             7.0,
@@ -71,8 +71,8 @@ export class ProtectionOfAncients {
     /// <param name="unit"></param>
     /// <returns>Returns the integer level the ability was set to.</returns>
     public static SetProtectionOfAncientsLevel(unit: Unit) {
-        let player = unit.owner
-        let heroLevel = unit.getHeroLevel()
+        const player = unit.owner
+        const heroLevel = unit.getHeroLevel()
 
         if (unit.typeId !== Constants.UNIT_KITTY) return 0
 
@@ -80,7 +80,7 @@ export class ProtectionOfAncients {
         if (heroLevel < 6) return 0
 
         // Determine ability level based on hero level
-        let abilityLevel: number =
+        const abilityLevel: number =
             heroLevel >= ProtectionOfAncients.UPGRADE_LEVEL_3_REQUIREMENT
                 ? 3
                 : heroLevel >= ProtectionOfAncients.UPGRADE_LEVEL_2_REQUIREMENT
@@ -113,7 +113,7 @@ export class ProtectionOfAncients {
     }
 
     private static RegisterUpgradeLevelEvents() {
-        let LevelUpTrigger = Trigger.create()!
+        const LevelUpTrigger = Trigger.create()!
         LevelUpTrigger.registerAnyUnitEvent(EVENT_PLAYER_HERO_LEVEL)
         LevelUpTrigger.addCondition(
             Condition(() => getTriggerUnit().getHeroLevel() >= ProtectionOfAncients.UPGRADE_LEVEL_2_REQUIREMENT)
@@ -122,7 +122,7 @@ export class ProtectionOfAncients {
     }
 
     private static RegisterEvents() {
-        let trg = Trigger.create()!
+        const trg = Trigger.create()!
         trg.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
         trg.addCondition(
             Condition(
@@ -134,15 +134,15 @@ export class ProtectionOfAncients {
         trg.addAction(() => ProtectionOfAncients.ActivationEvent())
 
         ProtectionOfAncients.HotkeyTrigger = Trigger.create()!
-        for (let p of Globals.ALL_PLAYERS) {
+        for (const p of Globals.ALL_PLAYERS) {
             ProtectionOfAncients.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true)
         }
         ProtectionOfAncients.HotkeyTrigger.addAction(() => ProtectionOfAncients.RegisterHotKeyEvents())
     }
 
     private static RegisterHotKeyEvents() {
-        let p: MapPlayer = getTriggerPlayer()
-        let k: Kitty = Globals.ALL_KITTIES.get(p)!
+        const p: MapPlayer = getTriggerPlayer()
+        const k: Kitty = Globals.ALL_KITTIES.get(p)!
 
         if (!k.isAlive()) return // cannot cast if dead obviously.
         k.Unit.issueImmediateOrder('divineshield')
@@ -150,31 +150,31 @@ export class ProtectionOfAncients {
     }
 
     private static ActivationEvent() {
-        let Unit = getTriggerUnit()
-        let player = getTriggerPlayer()
-        let kitty = Globals.ALL_KITTIES.get(player)!
-        let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+        const Unit = getTriggerUnit()
+        const player = getTriggerPlayer()
+        const kitty = Globals.ALL_KITTIES.get(player)!
+        const relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
         Globals.ALL_KITTIES.get(player)!.ProtectionActive = true
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
         Utility.SimpleTimer(0.03, () =>
-            BlzStartUnitAbilityCooldown(Unit.handle, relic, this.GetOneOfNineCooldown(player))
+            BlzStartUnitAbilityCooldown(Unit.handle, relic, ProtectionOfAncients.GetOneOfNineCooldown(player))
         )
 
-        let actiEffect = Effect.createAttachment(ProtectionOfAncients.ACTIVATION_EFFECT, Unit, 'chest')!
+        const actiEffect = Effect.createAttachment(ProtectionOfAncients.ACTIVATION_EFFECT, Unit, 'chest')!
 
-        Utility.SimpleTimer(this.EFFECT_DELAY, () => {
+        Utility.SimpleTimer(ProtectionOfAncients.EFFECT_DELAY, () => {
             ProtectionOfAncients.ApplyEffect(Unit)
             GC.RemoveEffect(actiEffect) // TODO; Cleanup:             GC.RemoveEffect(ref actiEffect);
         })
     }
 
     public static GetOneOfNineCooldown(Player: MapPlayer) {
-        let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
-        let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-        let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
-        let reduction = this.GetOneOfNineReduction(Player)
+        const kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
+        const noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+        const relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+        const reduction = ProtectionOfAncients.GetOneOfNineReduction(Player)
 
         // remaining cooldown depending on relic or no relic
         let cooldown: number =
@@ -193,9 +193,9 @@ export class ProtectionOfAncients {
     }
 
     private static ApplyEffect(Unit: Unit) {
-        let owningPlayer = Unit.owner
-        let kitty = Globals.ALL_KITTIES.get(owningPlayer)!
-        let actiEffect = Effect.create(ProtectionOfAncients.APPLY_EFFECT, Unit.x, Unit.y)!
+        const owningPlayer = Unit.owner
+        const kitty = Globals.ALL_KITTIES.get(owningPlayer)!
+        const actiEffect = Effect.create(ProtectionOfAncients.APPLY_EFFECT, Unit.x, Unit.y)!
         if (!kitty.Unit.isAlive()) kitty.Invulnerable = true // unit genuinely dead
         GC.RemoveEffect(actiEffect) // TODO; Cleanup:         GC.RemoveEffect(ref actiEffect);
         ProtectionOfAncients.EndEffectActions(owningPlayer)
@@ -203,35 +203,35 @@ export class ProtectionOfAncients {
 
     private static AoEEffectFilter(): boolean {
         // Append units only if they're dead and a kitty circle.
-        let unit = getFilterUnit()
-        let player = unit.owner
+        const unit = getFilterUnit()
+        const player = unit.owner
         if (unit.typeId !== Constants.UNIT_KITTY_CIRCLE) return false
 
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         return !kitty.isAlive()
     }
 
     private static EndEffectActions(Player: MapPlayer) {
         // Get all units within range of the player unit (kitty) and revive them
-        let tempGroup = Group.create()! // consider changing this to a static group
-        let kitty = Globals.ALL_KITTIES.get(Player)!
+        const tempGroup = Group.create()! // consider changing this to a static group
+        const kitty = Globals.ALL_KITTIES.get(Player)!
         let levelOfAbility = kitty.Unit.getAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS)
-        let levelOfRelic = kitty.Unit.getAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC)
+        const levelOfRelic = kitty.Unit.getAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC)
         if (levelOfRelic > 0) levelOfAbility = levelOfRelic
-        let effectRadius =
+        const effectRadius =
             ProtectionOfAncients.EFFECT_RADIUS + levelOfAbility * ProtectionOfAncients.EFFECT_RADIUS_INCREASE
         let reviveCount = 0
-        let filter = Utility.CreateFilterFunc(ProtectionOfAncients.AoEEffectFilter)
+        const filter = Utility.CreateFilterFunc(ProtectionOfAncients.AoEEffectFilter)
 
         kitty.ProtectionActive = false
         tempGroup.enumUnitsInRange(kitty.Unit.x, kitty.Unit.y, effectRadius, filter)
 
         while (true) {
-            let unit = tempGroup.first
+            const unit = tempGroup.first
             if (!unit) break
             tempGroup.removeUnit(unit)
 
-            let playerToRevive = Globals.ALL_KITTIES.get(unit.owner)!
+            const playerToRevive = Globals.ALL_KITTIES.get(unit.owner)!
             // SELF.. Shouldn't get save points for reviving yourself.
             if (kitty.Unit === playerToRevive.Unit) {
                 kitty.ReviveKitty()

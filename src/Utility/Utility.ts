@@ -53,11 +53,11 @@ export class Utility {
     public static ConvertFloatToTimeTeam(time: number, teamID: number) {
         if (time <= 0.0) return '0:00.0'
 
-        let minutes = time / 60
-        let seconds = time % 60
-        let tenths = (time * 10) % 10
+        const minutes = time / 60
+        const seconds = time % 60
+        const tenths = (time * 10) % 10
 
-        let timeString: string = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
+        const timeString: string = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
         return ColorUtils.ColorString(timeString, teamID)
     }
 
@@ -68,9 +68,9 @@ export class Utility {
     public static ConvertFloatToTime(time: number) {
         if (time <= 0.0) return '0:00.0'
 
-        let minutes = time / 60
-        let seconds = time % 60
-        let tenths = (time * 10) % 10
+        const minutes = time / 60
+        const seconds = time % 60
+        const tenths = (time * 10) % 10
 
         return seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
     }
@@ -83,9 +83,9 @@ export class Utility {
     public static ConvertFloatToTimeInt(time: number) {
         if (time <= 0.0) return '0:00'
 
-        let totalSeconds = Math.floor(time)
-        let minutes = Math.floor(totalSeconds / 60)
-        let seconds = totalSeconds % 60
+        const totalSeconds = Math.floor(time)
+        const minutes = Math.floor(totalSeconds / 60)
+        const seconds = totalSeconds % 60
 
         return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`
     }
@@ -96,7 +96,7 @@ export class Utility {
     /// <param name="duration"></param>
     /// <param name="action"></param>
     public static SimpleTimer(duration: number, action: Action) {
-        let handle = createAchesTimer()
+        const handle = createAchesTimer()
         handle.Timer.start(duration, false, () => {
             action()
             handle?.dispose()
@@ -163,8 +163,8 @@ export class Utility {
     /// <param name="itemId"></param>
     /// <returns></returns>
     public static GetItemIconPath(itemId: number) {
-        let item = Item.create(itemId, 0, 0)!
-        let iconPath = item.icon
+        const item = Item.create(itemId, 0, 0)!
+        const iconPath = item.icon
         item.destroy()
         return iconPath
     }
@@ -188,7 +188,7 @@ export class Utility {
         green = 255,
         blue = 255
     ) {
-        let tt = TextTag.create()!
+        const tt = TextTag.create()!
         tt.setText(text, height)
         tt.setColor(red, green, blue, 255)
         tt.setPos(u.x, u.y, 0)
@@ -215,7 +215,7 @@ export class Utility {
     /// <param name="x">The x-coordinate at which to create the effect.</param>
     /// <param name="y">The y-coordinate at which to create the effect.</param>
     public static CreateEffectAndDispose(path: string, x: number, y: number) {
-        let e = Effect.create(path, x, y)!
+        const e = Effect.create(path, x, y)!
         e.destroy()
     }
 
@@ -226,7 +226,7 @@ export class Utility {
     /// <param name="u"></param>
     /// <param name="attachPoint"></param>
     public static CreateEffectAndDisposeAttach(path: string, u: Unit, attachPoint: string) {
-        let e = Effect.createAttachment(path, u, attachPoint)!
+        const e = Effect.createAttachment(path, u, attachPoint)!
         e.destroy()
     }
 
@@ -245,7 +245,7 @@ export class Utility {
     /// <param name="Unit">The unit whose items are to be dropped.</param>
     public static DropAllItems(Unit: Unit) {
         for (let i = 0; i < 6; i++) {
-            let item = Unit.getItemInSlot(i)
+            const item = Unit.getItemInSlot(i)
             if (item) Unit.dropItem(item, Unit.x, Unit.y)
         }
     }
@@ -256,9 +256,9 @@ export class Utility {
     /// <param name="unit">The unit to which mana is to be added.</param>
     /// <param name="amount">The amount of mana to add.</param>
     public static UnitAddMana(unit: Unit, amount: number) {
-        let maxMana = unit.maxMana
-        let currentMana = unit.mana
-        let newMana = currentMana + amount
+        const maxMana = unit.maxMana
+        const currentMana = unit.mana
+        const newMana = currentMana + amount
 
         unit.mana = newMana >= maxMana ? maxMana - 1 : newMana
     }
@@ -277,7 +277,7 @@ export class Utility {
             Utility.stringBuilder.push(char)
         }
 
-        let s = Utility.stringBuilder.join('')
+        const s = Utility.stringBuilder.join('')
         return s
     }
 
@@ -285,7 +285,7 @@ export class Utility {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let p = Globals.ALL_PLAYERS[i]
+            const p = Globals.ALL_PLAYERS[i]
             if (p.name.toLowerCase().includes(playerName.toLowerCase())) {
                 return p
             }
@@ -295,8 +295,8 @@ export class Utility {
 
     public static GetItemSkin(itemId: number) {
         if (itemId === 0) return 0
-        let item = Item.create(itemId, 0, 0)!
-        let skin = item.skin
+        const item = Item.create(itemId, 0, 0)!
+        const skin = item.skin
         item.destroy()
         return skin
     }
@@ -313,7 +313,7 @@ export class Utility {
 
     public static FormattedColorPlayerName(p: MapPlayer) {
         // removes everything after '#' in the player name
-        let name = p.name.split('#')[0]
+        const name = p.name.split('#')[0]
         return `${ColorUtils.ColorString(name, p.id + 1)}`
     }
 
@@ -325,7 +325,7 @@ export class Utility {
 export const sumNumbers = (arr: number[]) => {
     let i = 0
 
-    for (let num of arr) {
+    for (const num of arr) {
         i += num
     }
 
@@ -337,14 +337,14 @@ export const int = {
 }
 
 export const distanceBetweenXYPoints = (x1: number, y1: number, x2: number, y2: number) => {
-    let dx = x2 - x1
-    let dy = y2 - y1
+    const dx = x2 - x1
+    const dy = y2 - y1
     return Math.sqrt(dx * dx + dy * dy)
 }
 
 export const angleBetweenPoints = (x1: number, y1: number, x2: number, y2: number) => {
-    let dx = x2 - x1
-    let dy = y2 - y1
+    const dx = x2 - x1
+    const dy = y2 - y1
     return Math.atan2(dy, dx)
 }
 

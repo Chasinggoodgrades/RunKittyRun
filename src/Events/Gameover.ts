@@ -60,7 +60,7 @@ export class Gameover {
     }
 
     private static EndGame() {
-        for (let player of Globals.ALL_PLAYERS) CustomVictoryBJ(player.handle, true, true)
+        for (const player of Globals.ALL_PLAYERS) CustomVictoryBJ(player.handle, true, true)
     }
 
     private static LosingGameCheck(): boolean {
@@ -68,7 +68,7 @@ export class Gameover {
         if (Gameover.NoEnd) return false
 
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            const kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             if (kitty.isAlive()) return false
         }
         Gameover.LosingGame()
@@ -91,7 +91,7 @@ export class Gameover {
     /// </summary>
     /// <param name="win"></param>
     private static GameStats(win: boolean) {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             Gameover.IncrementGameStats(kitty)
             if (win) Gameover.IncrementWins(kitty)
             Gameover.IncrementWinStreak(kitty, win)
@@ -101,7 +101,7 @@ export class Gameover {
 
     private static IncrementGameStats(kitty: Kitty) {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let stats = kitty.SaveData.GameStats
+        const stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
                 stats.NormalGames += 1
@@ -122,7 +122,7 @@ export class Gameover {
 
     private static IncrementWins(kitty: Kitty) {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let stats = kitty.SaveData.GameStats
+        const stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
                 stats.NormalWins += 1
@@ -143,7 +143,7 @@ export class Gameover {
 
     private static IncrementWinStreak(kitty: Kitty, win: boolean) {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let stats = kitty.SaveData.GameStats
+        const stats = kitty.SaveData.GameStats
 
         if (win) {
             stats.WinStreak += 1

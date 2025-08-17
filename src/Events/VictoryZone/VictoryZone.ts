@@ -15,30 +15,30 @@ export class VictoryZone {
     private static InVictoryArea: Trigger
 
     public static Initialize() {
-        this.InVictoryArea = Trigger.create()!
-        this.VictoryAreaTrigger()
+        VictoryZone.InVictoryArea = Trigger.create()!
+        VictoryZone.VictoryAreaTrigger()
     }
 
     private static VictoryAreaConditions(u: Unit) {
         return (
-            this.VictoryAreaConditionsStandard(u) ||
-            this.VictoryAreaConditionsTeam(u) ||
-            this.VictoryAreaConditionsSolo(u)
+            VictoryZone.VictoryAreaConditionsStandard(u) ||
+            VictoryZone.VictoryAreaConditionsTeam(u) ||
+            VictoryZone.VictoryAreaConditionsSolo(u)
         )
     }
 
     private static VictoryAreaTrigger() {
-        let VictoryArea = Regions.Victory_Area.region()
-        this.InVictoryArea.registerEnterRegion(
+        const VictoryArea = Regions.Victory_Area.region()
+        VictoryZone.InVictoryArea.registerEnterRegion(
             VictoryArea,
-            Filter(() => this.VictoryAreaConditions(getFilterUnit()))
+            Filter(() => VictoryZone.VictoryAreaConditions(getFilterUnit()))
         )
-        this.InVictoryArea.addAction(ErrorHandler.Wrap(() => this.VictoryAreaActions()))
+        VictoryZone.InVictoryArea.addAction(ErrorHandler.Wrap(() => VictoryZone.VictoryAreaActions()))
     }
 
     private static VictoryAreaActions() {
-        let u = getTriggerUnit()
-        let player = u.owner
+        const u = getTriggerUnit()
+        const player = u.owner
         if (u.typeId !== Constants.UNIT_KITTY) return
         if (!Globals.GAME_ACTIVE) return
         if (CurrentGameMode.active === GameMode.Standard) {
@@ -52,7 +52,7 @@ export class VictoryZone {
             RoundManager.RoundEndCheck()
         } else if (CurrentGameMode.active === GameMode.TeamTournament) {
             // Team
-            let kitty = Globals.ALL_KITTIES.get(player)!
+            const kitty = Globals.ALL_KITTIES.get(player)!
             kitty.Finished = true
 
             if (RoundManager.DidTeamEnd(kitty.TeamID)) {
@@ -85,9 +85,9 @@ export class VictoryZone {
     private static VictoryAreaConditionsTeam(u: Unit) {
         // If a team enters the area, check if all the members of the team are in the area.
         if (CurrentGameMode.active !== GameMode.TeamTournament) return false
-        let team = Globals.ALL_KITTIES.get(u.owner)!.TeamID
-        for (let player of Globals.ALL_TEAMS.get(team)!.Teammembers) {
-            if (!this.VictoryContainerConditions(Globals.ALL_KITTIES.get(player)!.Unit)) return false
+        const team = Globals.ALL_KITTIES.get(u.owner)!.TeamID
+        for (const player of Globals.ALL_TEAMS.get(team)!.Teammembers) {
+            if (!VictoryZone.VictoryContainerConditions(Globals.ALL_KITTIES.get(player)!.Unit)) return false
         }
         return true
     }

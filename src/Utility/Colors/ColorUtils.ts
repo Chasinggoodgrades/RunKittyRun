@@ -100,7 +100,7 @@ export class ColorUtils {
     /// </summary>
     public static GetStringColorOfPlayer(playerColorID: number) {
         for (let i = 0; i < ColorUtils.ColorManager.length; i++) {
-            let color: ColorData = ColorUtils.ColorManager[i]
+            const color: ColorData = ColorUtils.ColorManager[i]
             if (color.colorID === playerColorID) {
                 return color.colorcode
             }
@@ -109,8 +109,8 @@ export class ColorUtils {
     }
 
     public static SetPlayerColor(p: MapPlayer, color: string) {
-        let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        for (let c of ColorUtils.ColorManager) {
+        const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
+        for (const c of ColorUtils.ColorManager) {
             if (ColorUtils.ColorContainsCommand(c, color)) {
                 kitty.Unit.color = ConvertPlayerColor(c.colorID - 1)!
                 kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.split(',')[0]
@@ -119,13 +119,13 @@ export class ColorUtils {
     }
 
     public static SetColorJoinedAs(p: MapPlayer) {
-        let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        let color = ColorUtils.ColorManager[p.id]
+        const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
+        const color = ColorUtils.ColorManager[p.id]
         kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.split(',')[0]
     }
 
     public static SetPlayerVertexColor(p: MapPlayer, RGB: string[]) {
-        let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
+        const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         let r = 0,
             g = 0,
             b = 0
@@ -143,10 +143,10 @@ export class ColorUtils {
     /// </summary>
     /// <param name="p">The player object</param>
     public static SetPlayerRandomVertexColor(p: MapPlayer) {
-        let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        let r: number = GetRandomInt(0, 255)
-        let g: number = GetRandomInt(0, 255)
-        let b: number = GetRandomInt(0, 255)
+        const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
+        const r: number = GetRandomInt(0, 255)
+        const g: number = GetRandomInt(0, 255)
+        const b: number = GetRandomInt(0, 255)
         kitty.Unit.setVertexColor(r, g, b, 255)
         p.DisplayTimedTextTo(
             5.0,
@@ -155,8 +155,8 @@ export class ColorUtils {
     }
 
     private static ColorContainsCommand(color: ColorData, inputColor: string) {
-        let colorCommands = color.colorname.split(',')
-        for (let command of colorCommands) if (command === inputColor) return true
+        const colorCommands = color.colorname.split(',')
+        for (const command of colorCommands) if (command === inputColor) return true
         return false
     }
 
@@ -177,7 +177,7 @@ export class ColorUtils {
     /// <param name="unit"></param>
     /// <param name="playerID"></param>
     public static SetUnitToVertexColor(unit: Unit, playerID: number) {
-        let color: ColorData = ColorUtils.ColorManager[playerID]
+        const color: ColorData = ColorUtils.ColorManager[playerID]
         unit.setVertexColor(color.red, color.green, color.blue, 255)
         if (unit.typeId === Constants.UNIT_CUSTOM_DOG) return
         Globals.ALL_KITTIES.get(unit.owner)!.SaveData.PlayerColorData.VortexColor =
@@ -186,13 +186,13 @@ export class ColorUtils {
 
     public static ListColorCommands(player: MapPlayer) {
         ColorUtils.sb = ''
-        for (let color of ColorUtils.ColorManager) ColorUtils.sb += `${color.colorcode}${color.colorname}|r, `
+        for (const color of ColorUtils.ColorManager) ColorUtils.sb += `${color.colorcode}${color.colorname}|r, `
 
         player.DisplayTimedTextTo(10.0, ColorUtils.sb)
     }
 
     public static GetPlayerByColor(colorName: string): MapPlayer | undefined {
-        for (let color of ColorUtils.ColorManager) {
+        for (const color of ColorUtils.ColorManager) {
             if (ColorUtils.ColorContainsCommand(color, colorName.toLowerCase())) {
                 return MapPlayer.fromIndex(color.colorID - 1)!
             }
@@ -202,7 +202,7 @@ export class ColorUtils {
 
     public static PopulateColorsData(kitty: Kitty) {
         try {
-            let colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
+            const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
             if (!isNullOrEmpty(colorData)) return // already populated
             ColorUtils.sb = ''
 
@@ -211,7 +211,7 @@ export class ColorUtils {
                 i < ColorUtils.ColorManager.length;
                 i++ // else populate it
             ) {
-                let colorName = ColorUtils.ColorManager[i].colorname.split(',')
+                const colorName = ColorUtils.ColorManager[i].colorname.split(',')
                 ColorUtils.sb += colorName[0] + ':0'
                 if (i < ColorUtils.ColorManager.length - 1) ColorUtils.sb += ','
             }
@@ -228,13 +228,13 @@ export class ColorUtils {
     /// <param name="kitty"></param>
     public static UpdateColors(kitty: Kitty) {
         try {
-            let colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
-            let currentColor: string = kitty.SaveData.PlayerColorData.LastPlayedColor
+            const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
+            const currentColor: string = kitty.SaveData.PlayerColorData.LastPlayedColor
 
             if (isNullOrEmpty(colorData) || isNullOrEmpty(currentColor)) return
 
             ColorUtils.sb = ''
-            let pairs = colorData.split(',')
+            const pairs = colorData.split(',')
 
             for (let i = 0; i < pairs.length; i++) {
                 const parts = pairs[i].split(':')
@@ -268,7 +268,7 @@ export class ColorUtils {
     /// <param name="kitty"></param>
     /// <returns></returns>
     public static GetMostPlayedColor(kitty: Kitty) {
-        let colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
+        const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
         if (isNullOrEmpty(colorData)) return null
 
         const pairs: string[] = colorData.split(',') // splits like .. "red:5", "blue:6", etc.

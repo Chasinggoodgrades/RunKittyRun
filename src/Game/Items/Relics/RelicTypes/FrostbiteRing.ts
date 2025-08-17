@@ -81,7 +81,7 @@ export class FrostbiteRing extends Relic {
             )
 
             while (true) {
-                let unit = this.FreezeGroup.first
+                const unit = this.FreezeGroup.first
                 if (!unit) break
                 this.FreezeGroup.removeUnit(unit)
                 if (Globals.ALL_WOLVES.has(unit) && Globals.ALL_WOLVES.get(unit)!.IsReviving) continue // reviving bomber wolves will not be allowed to be frozen.)
@@ -113,35 +113,35 @@ export class FrostbiteRing extends Relic {
     }
 
     private FrostbiteEffect(Unit: Unit) {
-        let duration = this.GetFreezeDuration()
+        const duration = this.GetFreezeDuration()
         Globals.ALL_KITTIES.get(this.Owner)!.CurrentStats.WolfFreezeCount += 1 // increment freeze count for freeze_aura reward
 
         if (FrostbiteRing.FrozenWolves.has(Unit)) {
             FrostbiteRing.FrozenWolves.get(Unit)!.BeginFreezeActions(this.Owner, Unit, duration)
             return
         } else {
-            let frozenWolf = MemoryHandler.getEmptyObject<FrozenWolf>()
+            const frozenWolf = MemoryHandler.getEmptyObject<FrozenWolf>()
             frozenWolf.BeginFreezeActions(this.Owner, Unit, duration)
             FrostbiteRing.FrozenWolves.set(Unit, frozenWolf)
         }
     }
 
     private SetAbilityCooldown(Unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
-        let currentCooldown = BlzGetAbilityCooldown(FrostbiteRing.RelicAbilityID, 0)
-        let newCooldown =
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const currentCooldown = BlzGetAbilityCooldown(FrostbiteRing.RelicAbilityID, 0)
+        const newCooldown =
             upgradeLevel >= 3 ? currentCooldown - FrostbiteRing.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
         RelicUtil.SetAbilityCooldown(Unit, FrostbiteRing.RelicItemID, FrostbiteRing.RelicAbilityID, newCooldown)
     }
 
     private GetFreezeDuration(): number {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(this.name)
         return FrostbiteRing.DEFAULT_FREEZE_DURATION + upgradeLevel
     }
 
     private RegisterTriggers(Unit: Unit) {
-        let trg = Trigger.create()!
+        const trg = Trigger.create()!
         trg.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
         trg.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
         trg.addAction(ErrorHandler.Wrap(() => this.FrostbiteCast(GetSpellTargetLoc()!)))
@@ -222,7 +222,7 @@ export class FrozenWolf {
             if (Unit === null) return
             if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
             Unit.moveSpeed = 365.0 / 2.0
-            let effect = Effect.fromHandle(
+            const effect = Effect.fromHandle(
                 AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit.handle, 'origin')
             )!
             Utility.SimpleTimer(FrostbiteRing.SLOW_DURATION, () => {

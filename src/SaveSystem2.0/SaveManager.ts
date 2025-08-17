@@ -18,7 +18,7 @@ export class SaveManager {
 
     public constructor() {
         this.syncSaveLoad = SyncSaveLoad.getInstance()
-        for (let player of Globals.ALL_PLAYERS) SaveManager.SaveData.set(player, undefined)
+        for (const player of Globals.ALL_PLAYERS) SaveManager.SaveData.set(player, undefined)
         this.LoadAll()
     }
 
@@ -27,11 +27,11 @@ export class SaveManager {
     }
 
     public static SaveAll() {
-        let date = DateTimeManager.DateTime.toString()
-        for (let player of Globals.ALL_PLAYERS) {
+        const date = DateTimeManager.DateTime.toString()
+        for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
-            let saveData = SaveManager.SaveData.get(player)
+            const saveData = SaveManager.SaveData.get(player)
             if (!saveData) continue
             saveData.Date = date
             Globals.SaveSystem.Save(player)
@@ -40,8 +40,8 @@ export class SaveManager {
 
     public Save(player: MapPlayer) {
         try {
-            let date = DateTimeManager.DateTime.toString()
-            let playerData = SaveManager.SaveData.get(player)
+            const date = DateTimeManager.DateTime.toString()
+            const playerData = SaveManager.SaveData.get(player)
             if (!playerData) return
             playerData.Date = date
             if (!player.isLocal()) return
@@ -64,13 +64,13 @@ export class SaveManager {
     }
 
     public static SaveAllDataToFile() {
-        let date = DateTimeManager.DateTime.toString()
-        for (let player of Globals.ALL_PLAYERS) {
+        const date = DateTimeManager.DateTime.toString()
+        for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
             if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) === null)
                 Globals.SaveSystem.NewSave(player) // Ensure save data exists for this player before saving.
-            let data = SaveManager.SaveData.get(player)
+            const data = SaveManager.SaveData.get(player)
             if (!data) continue
             data.Date = date
             Globals.SaveSystem.SaveAllDataToFile(player)
@@ -83,7 +83,7 @@ export class SaveManager {
 
     public LoadAll() {
         try {
-            for (let player of Globals.ALL_PLAYERS) {
+            for (const player of Globals.ALL_PLAYERS) {
                 if (player.controller === MAP_CONTROL_COMPUTER) continue
                 if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
                 this.Load(player)
@@ -98,7 +98,7 @@ export class SaveManager {
         try {
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
             SaveManager.SaveData.set(player, new KittyData())
-            let saveData = SaveManager.SaveData.get(player)
+            const saveData = SaveManager.SaveData.get(player)
             if (!saveData) return
             saveData.PlayerName = player.name
             if (!SaveManager.PlayersLoaded.includes(player)) SaveManager.PlayersLoaded.push(player)
@@ -111,8 +111,8 @@ export class SaveManager {
 
     private static FinishLoading(): Action<FilePromise> {
         return promise => {
-            let data = promise.DecodedString
-            let player = promise.SyncOwner
+            const data = promise.DecodedString
+            const player = promise.SyncOwner
             if (data.length < 1) {
                 Globals.SaveSystem.NewSave(player)
                 player.DisplayTimedTextTo(
@@ -121,12 +121,12 @@ export class SaveManager {
                 )
                 return
             }
-            this.ConvertJsonToSaveData(data, player)
+            SaveManager.ConvertJsonToSaveData(data, player)
         }
     }
 
     private static ConvertJsonToSaveData(data: string, player: MapPlayer) {
-        let decodedData = json().decode(data)
+        const decodedData = json().decode(data)
         if (!decodedData) {
             player.DisplayTimedTextTo(
                 8.0,
@@ -137,7 +137,7 @@ export class SaveManager {
         }
 
         // Create a new instance of KittyData and assign the decoded properties
-        let kittyData = new KittyData()
+        const kittyData = new KittyData()
         Object.assign(kittyData, decodedData)
         kittyData.SetRewardsFromUnavailableToAvailable()
         SaveManager.SaveData.set(player, kittyData)
@@ -145,7 +145,7 @@ export class SaveManager {
     }
 
     public static GetKittyData(player: MapPlayer): KittyData | undefined {
-        let kittyData = SaveManager.SaveData.get(player)
+        const kittyData = SaveManager.SaveData.get(player)
         if (kittyData) {
             return kittyData
         } else {
@@ -193,12 +193,12 @@ export class SyncSaveLoad {
         PreloadGenClear()
         PreloadGenStart()
 
-        let rawDataString: string =
+        const rawDataString: string =
             data !== null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64()
-        let toCompile: string = rawDataString
-        let chunkSize = 180
+        const toCompile: string = rawDataString
+        const chunkSize = 180
         let assemble: string = ''
-        let noOfChunks: number = Math.ceil(toCompile.length / chunkSize)
+        const noOfChunks: number = Math.ceil(toCompile.length / chunkSize)
 
         //print(`toCompile.length: ${toCompile.length}`);
 
@@ -206,7 +206,7 @@ export class SyncSaveLoad {
             for (let i = 0; i < toCompile.length; i++) {
                 assemble += toCompile[i]
                 if (assemble.length >= chunkSize) {
-                    let header: string =
+                    const header: string =
                         EncodingHex.To32BitHexString(noOfChunks) +
                         EncodingHex.To32BitHexString(Math.ceil(i / chunkSize))
                     Preload(`")\ncall BlzSendSyncData("${this.SyncPrefix}","${header + assemble}")\ncall S2I("`)
@@ -214,7 +214,8 @@ export class SyncSaveLoad {
                 }
             }
             if (assemble.length > 0) {
-                let header: string = EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
+                const header: string =
+                    EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
                 Preload(`")\ncall BlzSendSyncData("${this.SyncPrefix}","${header + assemble}")\ncall S2I("`)
             }
         } catch (ex: any) {
@@ -224,7 +225,7 @@ export class SyncSaveLoad {
     }
 
     public Read(filename: string, reader: MapPlayer, onFinish: Action<FilePromise>): FilePromise {
-        let playerId: number = reader.id
+        const playerId: number = reader.id
         if (!this.allPromises.has(playerId)) {
             this.allPromises.set(playerId, new FilePromise(reader, onFinish))
             if (reader.isLocal()) {
@@ -240,13 +241,13 @@ export class SyncSaveLoad {
     }
 
     private OnSync() {
-        let readData: string = BlzGetTriggerSyncData()!
-        let prefix: string = BlzGetTriggerSyncPrefix()!
-        let totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
-        let currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 16)) : 0
-        let theRest: string =
+        const readData: string = BlzGetTriggerSyncData()!
+        const prefix: string = BlzGetTriggerSyncPrefix()!
+        const totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
+        const currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 16)) : 0
+        const theRest: string =
             readData.length > 16 ? readData.substring(16) : readData.substring(Math.min(readData.length, 8))
-        let promise = this.allPromises.get(getTriggerPlayer().id)
+        const promise = this.allPromises.get(getTriggerPlayer().id)
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
         if (promise) {
@@ -280,7 +281,7 @@ export class FilePromise {
     public Finish() {
         try {
             this.HasLoaded = true
-            let loadString: string[] = []
+            const loadString: string[] = []
             for (let i = 0; i < this.Buffer.size; i++) {
                 if (this.Buffer.has(i)) {
                     const d = this.Buffer.get(i)
@@ -306,11 +307,11 @@ export class FilePromise {
 export class PropertyEncoder {
     public static EncodeToJsonBase64(obj: object) {
         try {
-            let jsonString = ['{']
-            this.AppendProperties(obj, jsonString)
+            const jsonString = ['{']
+            PropertyEncoder.AppendProperties(obj, jsonString)
             jsonString.push('}')
 
-            let base64String = EncodingBase64.Encode(jsonString.join(''))
+            const base64String = EncodingBase64.Encode(jsonString.join(''))
             return base64String
         } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
@@ -320,8 +321,8 @@ export class PropertyEncoder {
     }
 
     private static GetJsonData(obj: object) {
-        let jsonString = ['{']
-        this.AppendProperties(obj, jsonString)
+        const jsonString = ['{']
+        PropertyEncoder.AppendProperties(obj, jsonString)
         jsonString.push('}')
 
         return jsonString.join('')
@@ -331,8 +332,8 @@ export class PropertyEncoder {
         try {
             let jsonString: string = ''
             jsonString += '{'
-            for (let player of Globals.ALL_PLAYERS) {
-                let playerData = SaveManager.SaveData.get(player)
+            for (const player of Globals.ALL_PLAYERS) {
+                const playerData = SaveManager.SaveData.get(player)
                 if (!playerData) continue
                 jsonString += `"${player.name}":${PropertyEncoder.GetJsonData(playerData)},`
             }
@@ -341,7 +342,7 @@ export class PropertyEncoder {
             }
             jsonString += '}'
 
-            let base64String = EncodingBase64.Encode(jsonString)
+            const base64String = EncodingBase64.Encode(jsonString)
             return base64String
         } catch (ex: any) {
             Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${ex}`)
@@ -352,23 +353,21 @@ export class PropertyEncoder {
     private static AppendProperties(obj: object, jsonString: string[]) {
         if (obj === null) return
 
-        let properties = Object.keys(obj)
         let firstProperty: boolean = true
 
-        for (let i = 0; i < properties.length; i++) {
-            let name = properties[i]
-            let value = (obj as any)[name]
+        for (const prop of Object.keys(obj)) {
+            const value = obj[prop as keyof typeof obj]
 
             if (!firstProperty) {
                 jsonString.push(',')
             }
             firstProperty = false
 
-            jsonString.push(`"${name}":`)
+            jsonString.push(`"${prop}":`)
 
             if (value !== null && typeof value === 'object' && !Array.isArray(value) && typeof value !== 'string') {
                 jsonString.push('{')
-                this.AppendProperties(value, jsonString)
+                PropertyEncoder.AppendProperties(value, jsonString)
                 jsonString.push('}')
             } else {
                 typeof value === 'string' ? jsonString.push(`"${value}"`) : jsonString.push(`${value}`)
@@ -378,7 +377,7 @@ export class PropertyEncoder {
 
     public static DecodeFromJsonBase64(base64EncodedData: string[]) {
         // Decode the Base64 string to a JSON-like string
-        let jsonString = EncodingBase64.Decode(base64EncodedData.join(''))
+        const jsonString = EncodingBase64.Decode(base64EncodedData.join(''))
         return jsonString
     }
 }

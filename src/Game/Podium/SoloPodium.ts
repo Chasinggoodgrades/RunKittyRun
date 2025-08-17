@@ -16,66 +16,66 @@ export class SoloPodium {
 
     public static BeginPodiumActions() {
         PodiumUtil.SetCameraToPodium()
-        Utility.SimpleTimer(3.0, this.ProcessPodiumTypeActions)
+        Utility.SimpleTimer(3.0, SoloPodium.ProcessPodiumTypeActions)
     }
 
     private static EnqueueTopPlayerTimes() {
-        let topTimes = PodiumUtil.SortPlayersFastestTime()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topTimes = PodiumUtil.SortPlayersFastestTime()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
-            let player = topTimes[i]
-            let position = podiumPositions[i]
-            this.PodiumQueue.enqueue([player, position])
+            const player = topTimes[i]
+            const position = podiumPositions[i]
+            SoloPodium.PodiumQueue.enqueue([player, position])
         }
-        this.PodiumType = this.Time
+        SoloPodium.PodiumType = SoloPodium.Time
     }
 
     private static EnqueueTopPlayerProgress() {
-        let topProgress = PodiumUtil.SortPlayersTopProgress()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topProgress = PodiumUtil.SortPlayersTopProgress()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
-            let player = topProgress[i]
-            let position = podiumPositions[i]
-            this.PodiumQueue.enqueue([player, position])
+            const player = topProgress[i]
+            const position = podiumPositions[i]
+            SoloPodium.PodiumQueue.enqueue([player, position])
         }
-        this.PodiumType = this.Progress
+        SoloPodium.PodiumType = SoloPodium.Progress
     }
 
     private static ProcessNextPodiumAction() {
-        if (this.PodiumQueue.length === 0) {
+        if (SoloPodium.PodiumQueue.length === 0) {
             PodiumUtil.EndingGameThankyou()
             return
         }
-        let [player, position] = this.PodiumQueue.dequeue()!
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const [player, position] = SoloPodium.PodiumQueue.dequeue()!
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
-        this.MovedUnits.push(kitty)
+        SoloPodium.MovedUnits.push(kitty)
         print(
             `${ColorUtils.PlayerNameColored(player)}${SoloPodium.Color} earned ${PodiumUtil.PlacementString(SoloPodium.PodiumQueue.length + 1)} for: place ${SoloPodium.PodiumType} with ${SoloPodium.GetStatBasedOnType(player)}|r`
         )
-        Utility.SimpleTimer(5.0, this.ProcessNextPodiumAction)
+        Utility.SimpleTimer(5.0, SoloPodium.ProcessNextPodiumAction)
     }
 
     private static ProcessPodiumTypeActions() {
-        this.PodiumQueue.length = 0
-        PodiumUtil.ClearPodiumUnits(this.MovedUnits)
+        SoloPodium.PodiumQueue.length = 0
+        PodiumUtil.ClearPodiumUnits(SoloPodium.MovedUnits)
         switch (Globals.CurrentGameModeType) {
             case 'Race':
-                this.EnqueueTopPlayerTimes()
+                SoloPodium.EnqueueTopPlayerTimes()
                 break
 
             case 'Progression':
-                this.EnqueueTopPlayerProgress()
+                SoloPodium.EnqueueTopPlayerProgress()
                 break
         }
-        this.ProcessNextPodiumAction()
+        SoloPodium.ProcessNextPodiumAction()
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player)!.TimeProg
-        switch (this.PodiumType) {
+        const stats = Globals.ALL_KITTIES.get(player)!.TimeProg
+        switch (SoloPodium.PodiumType) {
             case 'Time':
                 return stats.GetTotalTimeFormatted()
 

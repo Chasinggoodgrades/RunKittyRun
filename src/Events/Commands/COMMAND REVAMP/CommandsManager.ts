@@ -34,7 +34,7 @@ export class CommandsManager {
         description: string
         action: CmdAction
     }) {
-        let command = new Commands()
+        const command = new Commands()
         command.name = props.name
         command.Alias = props.alias.split(',')
         command.Group = props.group
@@ -55,21 +55,21 @@ export class CommandsManager {
 
     private static ResolvePlayerIdArray(arg: string): Kitty[] {
         CommandsManager.KittiesList = []
-        let kitties = CommandsManager.KittiesList
-        let larg = arg.toLowerCase()
+        const kitties = CommandsManager.KittiesList
+        const larg = arg.toLowerCase()
 
         if (arg === '') {
             // no arg for self
-            let kitty = Globals.ALL_KITTIES.get(getTriggerPlayer()!)
+            const kitty = Globals.ALL_KITTIES.get(getTriggerPlayer()!)
             if (kitty) kitties.push(kitty)
         } else if (larg === 'a' || larg === 'all') {
             for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-                let kitty = Globals.ALL_KITTIES_LIST[i]
+                const kitty = Globals.ALL_KITTIES_LIST[i]
                 kitties.push(kitty) // add all players
             }
         } else if (larg === 'ai' || larg === 'computer' || larg === 'computers') {
             for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-                let kitty = Globals.ALL_KITTIES_LIST[i]
+                const kitty = Globals.ALL_KITTIES_LIST[i]
                 if (
                     kitty.Player.slotState === PLAYER_SLOT_STATE_PLAYING &&
                     kitty.Player.controller === MAP_CONTROL_COMPUTER
@@ -78,16 +78,16 @@ export class CommandsManager {
                 }
             }
         } else if (larg === 's' || larg === 'sel' || larg === 'select' || larg === 'selected') {
-            let selectedUnit = CustomStatFrame.SelectedUnit.get(getTriggerPlayer())
+            const selectedUnit = CustomStatFrame.SelectedUnit.get(getTriggerPlayer())
             if (selectedUnit) {
-                let kitty = Globals.ALL_KITTIES.get(selectedUnit.owner) ?? null
+                const kitty = Globals.ALL_KITTIES.get(selectedUnit.owner) ?? null
                 if (kitty) {
                     kitties.push(kitty)
                 }
             }
         } else if (!isNaN(parseInt(arg, 10))) {
-            let playerId = parseInt(arg, 10)
-            let kitty = Globals.ALL_KITTIES.get(MapPlayer.fromIndex(playerId - 1)!)
+            const playerId = parseInt(arg, 10)
+            const kitty = Globals.ALL_KITTIES.get(MapPlayer.fromIndex(playerId - 1)!)
             if (kitty) {
                 kitties.push(kitty)
             }
@@ -115,7 +115,7 @@ export class CommandsManager {
     }
 
     public static ResolvePlayerId(arg: string, action: Action<Kitty>) {
-        let kittyArray = this.ResolvePlayerIdArray(arg)
+        const kittyArray = CommandsManager.ResolvePlayerIdArray(arg)
 
         for (let i = 0; i < kittyArray.length; i++) {
             action(kittyArray[i])
@@ -124,34 +124,34 @@ export class CommandsManager {
 
     public static GetBool(arg: string) {
         if (isNullOrEmpty(arg)) return false
-        let lower = arg.toLowerCase()
+        const lower = arg.toLowerCase()
         return lower === 'true' || lower === 'on' || lower === '1'
     }
 
     public static HelpCommands(player: MapPlayer, arg: string = '') {
-        let filter = isNullOrEmpty(arg) ? '' : arg.toLowerCase()
-        this.CommandsList = [] // instead of creating a new list each time, just use 1 and clear it
-        let playerGroup = this.GetPlayerGroup(player)
+        const filter = isNullOrEmpty(arg) ? '' : arg.toLowerCase()
+        CommandsManager.CommandsList = [] // instead of creating a new list each time, just use 1 and clear it
+        const playerGroup = CommandsManager.GetPlayerGroup(player)
 
-        for (let [_, command] of this.AllCommands) {
-            let cmd = command
-            if (this.CommandsList.includes(cmd)) continue // already got cmd / alias
+        for (const [_, command] of CommandsManager.AllCommands) {
+            const cmd = command
+            if (CommandsManager.CommandsList.includes(cmd)) continue // already got cmd / alias
             if (cmd.Group === playerGroup || cmd.Group === 'all' || playerGroup === 'admin') {
                 // admins get ALL DUH
                 if (isNullOrEmpty(arg) || arg.length === 0) {
-                    this.CommandsList.push(cmd)
+                    CommandsManager.CommandsList.push(cmd)
                 } else {
                     if (
                         cmd.name.toLowerCase().includes(filter) ||
                         cmd.Alias.some(alias => alias.toLowerCase().includes(filter)) ||
                         cmd.Description.toLowerCase().includes(filter)
                     ) {
-                        this.CommandsList.push(cmd)
+                        CommandsManager.CommandsList.push(cmd)
                     }
                 }
             }
         }
-        if (this.CommandsList.length === 0) {
+        if (CommandsManager.CommandsList.length === 0) {
             player.DisplayTimedTextTo(
                 5.0,
                 `${Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: ${Colors.COLOR_GOLD}${filter}|r`
@@ -160,7 +160,7 @@ export class CommandsManager {
         }
 
         let commandList = ''
-        for (let cmd of this.CommandsList) {
+        for (const cmd of CommandsManager.CommandsList) {
             commandList += `${Colors.COLOR_YELLOW}( ${cmd.name} | ${cmd.Alias.join(', ')} )|r${Colors.COLOR_RED}[${cmd.ArgDesc}]${Colors.COLOR_RESET} - ${Colors.COLOR_GOLD}${cmd.Description}|r\n`
         }
 

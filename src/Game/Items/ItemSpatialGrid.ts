@@ -18,13 +18,13 @@ export class ItemSpatialGrid {
     private static itemCells: Map<Cell, Item[]> = new Map()
 
     public static GetCell(x: number, y: number): Cell {
-        let cellX: number = x / ItemSpatialGrid.CELL_SIZE
-        let cellY: number = y / ItemSpatialGrid.CELL_SIZE
+        const cellX: number = x / ItemSpatialGrid.CELL_SIZE
+        const cellY: number = y / ItemSpatialGrid.CELL_SIZE
         return new Cell(cellX, cellY)
     }
 
     public static RegisterKibble(kibble: Kibble) {
-        let cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
+        const cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
         let list: Kibble[]
         if (!(list = ItemSpatialGrid.kibbleCells.get(cell)!)) ItemSpatialGrid.kibbleCells.set(cell, (list = []))
         list.push(kibble)
@@ -32,8 +32,8 @@ export class ItemSpatialGrid {
 
     public static UnregisterKibble(kibble: Kibble) {
         if (!kibble.Item) return // If the item is not valid... no reason to unregister i guess
-        let cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
-        let list = ItemSpatialGrid.kibbleCells.get(cell) || []
+        const cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
+        const list = ItemSpatialGrid.kibbleCells.get(cell) || []
 
         ItemSpatialGrid.kibbleCells.set(
             cell,
@@ -42,7 +42,7 @@ export class ItemSpatialGrid {
     }
 
     public static RegisterItem(item: Item) {
-        let cell = ItemSpatialGrid.GetCell(item.x, item.y)
+        const cell = ItemSpatialGrid.GetCell(item.x, item.y)
         let list: Item[]
         if (!(list = ItemSpatialGrid.itemCells.get(cell)!)) ItemSpatialGrid.itemCells.set(cell, (list = []))
         list.push(item)
@@ -50,8 +50,8 @@ export class ItemSpatialGrid {
 
     public static UnregisterItem(item: Item) {
         if (!item) return // If the item is not valid... no reason to unregister i guess
-        let cell = ItemSpatialGrid.GetCell(item.x, item.y)
-        let list = ItemSpatialGrid.itemCells.get(cell) || []
+        const cell = ItemSpatialGrid.GetCell(item.x, item.y)
+        const list = ItemSpatialGrid.itemCells.get(cell) || []
 
         ItemSpatialGrid.itemCells.set(
             cell,
@@ -60,26 +60,26 @@ export class ItemSpatialGrid {
     }
 
     public static GetNearbyKibbles(x: number, y: number) {
-        let cell = ItemSpatialGrid.GetCell(x, y)
-        let list = ItemSpatialGrid.kibbleCells.get(cell)
+        const cell = ItemSpatialGrid.GetCell(x, y)
+        const list = ItemSpatialGrid.kibbleCells.get(cell)
         if (list) return list
         return null
     }
 
     public static GetNearbyItems(x: number, y: number) {
-        let cell = ItemSpatialGrid.GetCell(x, y)
-        let list = ItemSpatialGrid.itemCells.get(cell)
+        const cell = ItemSpatialGrid.GetCell(x, y)
+        const list = ItemSpatialGrid.itemCells.get(cell)
         if (list) return list
         return null
     }
 
     public static KittyItemPickup(kitty: Kitty) {
-        let kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
-        let itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
+        const kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
+        const itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
         if (kibbleList !== null && kibbleList.length > 0) {
             for (let i = 0; i < kibbleList.length; i++) {
-                let k = kibbleList[i]
+                const k = kibbleList[i]
                 if (k === null) continue
                 kitty.Unit.addItem(k.Item)
             }
@@ -87,7 +87,7 @@ export class ItemSpatialGrid {
 
         if (itemList !== null && itemList.length > 0) {
             for (let i = 0; i < itemList.length; i++) {
-                let item = itemList[i]
+                const item = itemList[i]
                 if (item === null) continue
                 if (item.isOwned()) continue
                 kitty.Unit.addItem(item)

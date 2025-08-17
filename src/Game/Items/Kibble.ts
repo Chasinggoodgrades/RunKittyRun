@@ -47,10 +47,10 @@ export class Kibble extends IDisposable {
     }
 
     public SpawnKibble() {
-        let regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
-        let region = RegionList.WolfRegions[regionNumber]
-        let x = GetRandomReal(region.minX, region.maxX)
-        let y = GetRandomReal(region.minY, region.maxY)
+        const regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
+        const region = RegionList.WolfRegions[regionNumber]
+        const x = GetRandomReal(region.minX, region.maxX)
+        const y = GetRandomReal(region.minY, region.maxY)
         this.StarFallEffect ??= Effect.fromHandle(AddSpecialEffect(Kibble.StarfallEffect, x, y))!
         this.StarFallEffect.setPosition(x, y, 0)
         this.StarFallEffect.playAnimation(ANIM_TYPE_BIRTH)
@@ -63,14 +63,14 @@ export class Kibble extends IDisposable {
     // #region Kibble Initialization
 
     private static RandomKibbleType(): number {
-        return Kibble.KibblesColors[GetRandomInt(0, this.KibblesColors.length - 1)]
+        return Kibble.KibblesColors[GetRandomInt(0, Kibble.KibblesColors.length - 1)]
     }
 
     private static KibblePickupEvents(): Trigger {
-        let trig = Trigger.create()!
+        const trig = Trigger.create()!
         trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addAction(() => {
-            let item = getManipulatedItem()
+            const item = getManipulatedItem()
             if (!Kibble.KibblesColors.includes(item.typeId)) return
             Kibble.KibblePickup(item)
         })
@@ -85,12 +85,12 @@ export class Kibble extends IDisposable {
         try {
             if (item === null) return
 
-            let unit = getTriggerUnit()
-            let player = unit.owner
-            let kitty = Globals.ALL_KITTIES.get(player)!
+            const unit = getTriggerUnit()
+            const player = unit.owner
+            const kitty = Globals.ALL_KITTIES.get(player)!
             let effect: Effect | undefined = undefined
-            let randomChance = GetRandomReal(0, 100)
-            let kib = ItemSpawnerTrackKibbles.active.find(k => k.Item?.handle === item?.handle)
+            const randomChance = GetRandomReal(0, 100)
+            const kib = ItemSpawnerTrackKibbles.active.find(k => k.Item?.handle === item?.handle)
 
             if (!kib) return
 
@@ -108,7 +108,7 @@ export class Kibble extends IDisposable {
             KibbleEvent.CollectEventKibble()
 
             Kibble.IncrementKibble(kitty)
-            this.BeatKibbleCollection(kitty)
+            Kibble.BeatKibbleCollection(kitty)
 
             if (kib !== null && kib.Item !== null) {
                 kib.dispose()
@@ -120,7 +120,7 @@ export class Kibble extends IDisposable {
     }
 
     private static KibbleGoldReward(kitty: Kitty, kib: Kibble) {
-        let jackPotChance = GetRandomInt(0, 100)
+        const jackPotChance = GetRandomInt(0, 100)
         let goldAmount: number
         if (jackPotChance <= 3) {
             Kibble.JackpotEffect(kitty, kib)
@@ -131,7 +131,7 @@ export class Kibble extends IDisposable {
     }
 
     private static KibbleXP(kitty: Kitty) {
-        let xpAmount = GetRandomInt(50, Kibble.XPMax)
+        const xpAmount = GetRandomInt(50, Kibble.XPMax)
         kitty.Unit.experience += xpAmount
         SoundManager.PlayKibbleTomeSound(kitty.Unit)
     }
@@ -141,12 +141,12 @@ export class Kibble extends IDisposable {
     }
 
     private static JackpotEffect(kitty: Kitty, kibble: Kibble) {
-        let unitX = kitty.Unit.x
-        let unitY = kitty.Unit.y
-        let newX = PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
-        let newY = PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0)
+        const unitX = kitty.Unit.x
+        const unitY = kitty.Unit.y
+        const newX = PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
+        const newY = PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0)
 
-        let effect = Effect.fromHandle(
+        const effect = Effect.fromHandle(
             AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', newX, newY)
         )!
         GC.RemoveEffect(effect) // TODO; Cleanup:         GC.RemoveEffect(ref effect);
@@ -154,13 +154,13 @@ export class Kibble extends IDisposable {
 
         if (kibble.JackPotIndex >= 20) {
             let goldAmount = GetRandomInt(Kibble.JackpotMin, Kibble.JackpotMax)
-            let isSuperJackpot = GetRandomInt(1, 10) === 1
+            const isSuperJackpot = GetRandomInt(1, 10) === 1
             if (isSuperJackpot) goldAmount *= 10
 
             kitty.Player.addGold(goldAmount)
 
-            let jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
-            let msg = `${ColorUtils.PlayerNameColored(kitty.Player)}${ColorUtils.HighlightString(` has won the ${jackpotString}`)} ${ColorUtils.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}${goldAmount} Gold|r`
+            const jackpotString = isSuperJackpot ? `${Colors.COLOR_RED}Super Jackpot${Colors.COLOR_RESET}` : 'jackpot'
+            const msg = `${ColorUtils.PlayerNameColored(kitty.Player)}${ColorUtils.HighlightString(` has won the ${jackpotString}`)} ${ColorUtils.HighlightString('for')} ${Colors.COLOR_YELLOW_ORANGE}${goldAmount} Gold|r`
 
             Utility.TimedTextToAllPlayers(3.0, msg) // was too long previously.
             Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0)
@@ -181,7 +181,7 @@ export class Kibble extends IDisposable {
     private static IncrementKibble(kibblePicker: Kitty) {
         kibblePicker.CurrentStats.CollectedKibble += 1
 
-        for (let player of Globals.ALL_PLAYERS) player.addLumber(1)
+        for (const player of Globals.ALL_PLAYERS) player.addLumber(1)
 
         kibblePicker.SaveData.KibbleCurrency.Collected += 1
     }
@@ -191,18 +191,18 @@ export class Kibble extends IDisposable {
     /// </summary>
     /// <param name="k"></param>
     public static BeatKibbleCollection(k: Kitty) {
-        let currentKibble = k.CurrentStats.CollectedKibble
-        let bestKibble = k.SaveData.PersonalBests.KibbleCollected
+        const currentKibble = k.CurrentStats.CollectedKibble
+        const bestKibble = k.SaveData.PersonalBests.KibbleCollected
         if (currentKibble < 10) return // avoid the spam for 1st timers.
         if (currentKibble > bestKibble) {
             k.SaveData.PersonalBests.KibbleCollected = currentKibble
 
-            if (this.KibbleCollectionBeatenList.includes(k.Player)) return
+            if (Kibble.KibbleCollectionBeatenList.includes(k.Player)) return
             Utility.TimedTextToAllPlayers(
                 3.0,
                 `${ColorUtils.PlayerNameColored(k.Player)} has set a new personal best by collecting ${Colors.COLOR_YELLOW}${currentKibble} kibbles!|r`
             )
-            this.KibbleCollectionBeatenList.push(k.Player)
+            Kibble.KibbleCollectionBeatenList.push(k.Player)
         }
     }
 

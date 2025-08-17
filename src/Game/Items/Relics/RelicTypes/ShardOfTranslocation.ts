@@ -62,8 +62,8 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private RegisterTrigger(Unit: Unit) {
-        let player = Unit.owner
-        let CastEventTrigger = Trigger.create()!
+        const player = Unit.owner
+        const CastEventTrigger = Trigger.create()!
         CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
         CastEventTrigger.addAction(() => this.TeleportActions())
     }
@@ -71,10 +71,10 @@ export class ShardOfTranslocation extends Relic {
     private TeleportActions() {
         if (!Globals.GAME_ACTIVE) return
         if (GetSpellAbilityId() !== this.RelicAbilityID) return
-        let unit = getTriggerUnit()
-        let targetLoc = GetSpellTargetLoc()!
-        let player = unit.owner
-        let currentSafezone = Globals.ALL_KITTIES.get(player)!.CurrentSafeZone
+        const unit = getTriggerUnit()
+        const targetLoc = GetSpellTargetLoc()!
+        const player = unit.owner
+        const currentSafezone = Globals.ALL_KITTIES.get(player)!.CurrentSafeZone
         try {
             if (!ShardOfTranslocation.EligibleLocation(targetLoc, currentSafezone)) {
                 player.DisplayTimedTextTo(
@@ -101,14 +101,14 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private UpdateBlinkRange(unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(this.name)
         this.MaxBlinkRange =
             upgradeLevel >= 1 ? ShardOfTranslocation.UPGRADE_BLINK_RANGE : ShardOfTranslocation.DEFAULT_BLINK_RANGE
         if (upgradeLevel >= 1) Utility.SimpleTimer(0.1, () => this.SetItemTooltip(unit))
     }
 
     private SetItemTooltip(unit: Unit) {
-        let item = Utility.UnitGetItem(unit, ShardOfTranslocation.RelicItemID)!
+        const item = Utility.UnitGetItem(unit, ShardOfTranslocation.RelicItemID)!
         BlzSetItemExtendedTooltip(
             item.handle,
             `${Colors.COLOR_YELLOW_ORANGE}The holder of this shard can harness arcane energy to blink to a new location within ${Colors.COLOR_LAVENDER}${this.MaxBlinkRange.toFixed(2)}|r range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r\r`
@@ -121,9 +121,9 @@ export class ShardOfTranslocation extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         Unit.getAbility(this.RelicAbilityID)
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
 
-        let cooldown =
+        const cooldown =
             upgradeLevel >= 2 // lvl 2 upgrade
                 ? ShardOfTranslocation.DEFAULT_COOLDOWN - ShardOfTranslocation.CooldownReduction
                 : ShardOfTranslocation.DEFAULT_COOLDOWN
@@ -135,10 +135,10 @@ export class ShardOfTranslocation extends Relic {
     private TeleportUnit(unit: Unit, targetLoc: location) {
         let x = GetLocationX(targetLoc)
         let y = GetLocationY(targetLoc)
-        let distance = distanceBetweenXYPoints(unit.x, unit.y, x, y)
+        const distance = distanceBetweenXYPoints(unit.x, unit.y, x, y)
 
         if (distance > this.MaxBlinkRange) {
-            let angle = Atan2(y - unit.y, x - unit.x)
+            const angle = Atan2(y - unit.y, x - unit.x)
             x = unit.x + this.MaxBlinkRange * Cos(angle)
             y = unit.y + this.MaxBlinkRange * Sin(angle)
         }
@@ -146,7 +146,7 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private static EligibleLocation(targetLoc: location, currentSafezone: number) {
-        let SAFEZONES = Globals.SAFE_ZONES
+        const SAFEZONES = Globals.SAFE_ZONES
         return (
             SAFEZONES[currentSafezone].Rectangle.includes(GetLocationX(targetLoc), GetLocationY(targetLoc)) ||
             (currentSafezone > 0 &&
@@ -159,7 +159,7 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private static WolfRegionEligible(targetLoc: location, currentSafezone: number) {
-        let WOLF_AREAS = RegionList.WolfRegions
+        const WOLF_AREAS = RegionList.WolfRegions
         if (WOLF_AREAS[currentSafezone].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
         if (
             currentSafezone > 0 &&

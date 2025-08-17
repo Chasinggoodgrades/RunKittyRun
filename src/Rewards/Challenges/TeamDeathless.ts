@@ -34,12 +34,12 @@ export class TeamDeathless {
     private static PICKUP_RANGE = 75
 
     /// <summary>
-    /// Chance that the orb will drop when the player dies with it. This is a percentage chance (0-100).
+    /// Chance that the orb will drop when the player dies with it. TeamDeathless is a percentage chance (0-100).
     /// </summary>
     private static ORB_DROP_CHANCE = 75 // 70% chance to reset on death
 
     /// <summary>
-    /// Flag to check if the event has been triggered. This is set to true when the # of DeathlessToActivate players have achieved deathless.
+    /// Flag to check if the event has been triggered. TeamDeathless is set to true when the # of DeathlessToActivate players have achieved deathless.
     /// </summary>
     private static EventTriggered: boolean = false
 
@@ -49,7 +49,7 @@ export class TeamDeathless {
     public static CurrentHolder: Kitty | null = null
 
     /// <summary>
-    /// Flag to check if the event has started. This is set to true when the event is started.
+    /// Flag to check if the event has started. TeamDeathless is set to true when the event is started.
     /// </summary>
     private static EventStarted: boolean = false
     /// <summary>
@@ -91,32 +91,36 @@ export class TeamDeathless {
     private static DummyUnit: Unit
 
     /// <summary>
-    /// Flag to check if the event has been won. This is set to true when the orb reaches the final safezone.
+    /// Flag to check if the event has been won. TeamDeathless is set to true when the orb reaches the final safezone.
     /// </summary>
     private static EventWon: boolean = false
 
     /// <summary>
-    /// This method should be fully executed whenever players meet the conditions to start the event.
+    /// TeamDeathless method should be fully executed whenever players meet the conditions to start the event.
     /// Then the next round will begin the StartEvent method.
     /// </summary>
     public static PrestartingEvent() {
         if (CurrentGameMode.active !== GameMode.Standard) return // Only occurs in Standard Gamemode.
-        if (this.EventStarted || this.EventTriggered) return // Don't trigger multiple times.
-        if (DeathlessChallenges.DeathlessCount < this.DeathlessToActivate) return // Not enough players have achieved deathless.
-        this.EventTriggered = true
-        this.AlreadyCarriedOrb = []
-        this.timerHandle = Timer.create()
-        this.DummyUnit = Unit.create(
-            MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!!,
+        if (TeamDeathless.EventStarted || TeamDeathless.EventTriggered) return // Don't trigger multiple times.
+        if (DeathlessChallenges.DeathlessCount < TeamDeathless.DeathlessToActivate) return // Not enough players have achieved deathless.
+        TeamDeathless.EventTriggered = true
+        TeamDeathless.AlreadyCarriedOrb = []
+        TeamDeathless.timerHandle = Timer.create()
+        TeamDeathless.DummyUnit = Unit.create(
+            MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!,
             Constants.UNIT_SPELLDUMMY,
             0,
             0,
             0
         )!
-        this.RangeTrigger = Trigger.create()!
-        this.RangeTrigger.registerUnitInRage(this.DummyUnit.handle, this.PICKUP_RANGE, FilterList.KittyFilter)
-        this.RangeTrigger.addAction(() => this.InRangeEvent())
-        this.RangeTrigger.enabled = false
+        TeamDeathless.RangeTrigger = Trigger.create()!
+        TeamDeathless.RangeTrigger.registerUnitInRage(
+            TeamDeathless.DummyUnit.handle,
+            TeamDeathless.PICKUP_RANGE,
+            FilterList.KittyFilter
+        )
+        TeamDeathless.RangeTrigger.addAction(() => TeamDeathless.InRangeEvent())
+        TeamDeathless.RangeTrigger.enabled = false
 
         Utility.TimedTextToAllPlayers(
             4.0,
@@ -125,25 +129,25 @@ export class TeamDeathless {
     }
 
     /// <summary>
-    /// This method is called whenever the event has been triggered and will begin on the following round.
+    /// TeamDeathless method is called whenever the event has been triggered and will begin on the following round.
     /// Starts the event, sets the orb in place, and puts the dummy unit to detect InRangeEvents
     /// </summary>
     public static StartEvent() {
         try {
-            if (!this.EventTriggered || this.EventWon) return // event hasn't been triggered yet.
-            this.EventStarted = true
-            this.CurrentSafezone = Globals.SAFE_ZONES[0]
-            this.RangeTrigger.enabled = true
-            this.CurrentHolder = null
-            this.AlreadyCarriedOrb = []
+            if (!TeamDeathless.EventTriggered || TeamDeathless.EventWon) return // event hasn't been triggered yet.
+            TeamDeathless.EventStarted = true
+            TeamDeathless.CurrentSafezone = Globals.SAFE_ZONES[0]
+            TeamDeathless.RangeTrigger.enabled = true
+            TeamDeathless.CurrentHolder = null
+            TeamDeathless.AlreadyCarriedOrb = []
 
-            let x: number = RegionList.SafeZones[0].centerX
-            let y: number = RegionList.SafeZones[0].centerY
-            this.OrbEffect ??= Effect.create(this.EFFECT_MODEL, x, y)!
-            this.OrbEffect.scale = 1.0
-            this.OrbEffect.x = x
-            this.OrbEffect.y = y
-            this.DummyUnit.setPosition(x, y)
+            const x: number = RegionList.SafeZones[0].centerX
+            const y: number = RegionList.SafeZones[0].centerY
+            TeamDeathless.OrbEffect ??= Effect.create(TeamDeathless.EFFECT_MODEL, x, y)!
+            TeamDeathless.OrbEffect.scale = 1.0
+            TeamDeathless.OrbEffect.x = x
+            TeamDeathless.OrbEffect.y = y
+            TeamDeathless.DummyUnit.setPosition(x, y)
 
             Utility.TimedTextToAllPlayers(
                 4.0,
@@ -156,110 +160,114 @@ export class TeamDeathless {
     }
 
     /// <summary>
-    /// Whenever a player with the orb reaches the proper safezone, this method calls to set the OrbEffect to the center of the passed safezone.
+    /// Whenever a player with the orb reaches the proper safezone, TeamDeathless method calls to set the OrbEffect to the center of the passed safezone.
     /// </summary>
     /// <param name="safezone"></param>
     public static ReachedSafezone(unit: Unit, safezone: Safezone) {
-        if (!this.EventStarted) return
-        if (this.CurrentHolder === null) return // No one holding orb.
-        if (safezone.ID <= this.CurrentSafezone.ID) return
-        if (safezone.ID > this.CurrentSafezone.ID + 1) return // no skipping safezones
-        if (this.CurrentHolder.Unit !== unit) return // The unit that reached the safezone is not the current holder of the orb.
-        if (!this.AlreadyCarriedOrb.includes(this.CurrentHolder.Player))
-            this.AlreadyCarriedOrb.push(this.CurrentHolder.Player)
+        if (!TeamDeathless.EventStarted) return
+        if (TeamDeathless.CurrentHolder === null) return // No one holding orb.
+        if (safezone.ID <= TeamDeathless.CurrentSafezone.ID) return
+        if (safezone.ID > TeamDeathless.CurrentSafezone.ID + 1) return // no skipping safezones
+        if (TeamDeathless.CurrentHolder.Unit !== unit) return // The unit that reached the safezone is not the current holder of the orb.
+        if (!TeamDeathless.AlreadyCarriedOrb.includes(TeamDeathless.CurrentHolder.Player))
+            TeamDeathless.AlreadyCarriedOrb.push(TeamDeathless.CurrentHolder.Player)
 
-        this.CurrentSafezone = safezone
-        this.CurrentHolder = null
+        TeamDeathless.CurrentSafezone = safezone
+        TeamDeathless.CurrentHolder = null
 
-        this.OrbEffect.x = safezone.Rectangle.centerX
-        this.OrbEffect.y = safezone.Rectangle.centerY
-        this.OrbEffect.scale = 1.0
+        TeamDeathless.OrbEffect.x = safezone.Rectangle.centerX
+        TeamDeathless.OrbEffect.y = safezone.Rectangle.centerY
+        TeamDeathless.OrbEffect.scale = 1.0
 
-        this.RangeTrigger.enabled = true
-        this.DummyUnit.setPosition(safezone.Rectangle.centerX, safezone.Rectangle.centerY)
+        TeamDeathless.RangeTrigger.enabled = true
+        TeamDeathless.DummyUnit.setPosition(safezone.Rectangle.centerX, safezone.Rectangle.centerY)
 
-        this.timerHandle?.pause()
+        TeamDeathless.timerHandle?.pause()
 
-        if (this.CurrentSafezone.ID === RegionList.SafeZones.length - 1) this.AwardTeamDeathless()
+        if (TeamDeathless.CurrentSafezone.ID === RegionList.SafeZones.length - 1) TeamDeathless.AwardTeamDeathless()
     }
 
     /// <summary>
-    /// Whenever a player dies with the deathless orb, this dictates whether the event should restart or if they got lucky to hold onto it for a bit longer.
+    /// Whenever a player dies with the deathless orb, TeamDeathless dictates whether the event should restart or if they got lucky to hold onto it for a bit longer.
     /// </summary>
     /// <param name="k"></param>
     public static DiedWithOrb(k: Kitty) {
         try {
-            if (!this.EventStarted) return // event hasn't started yet.
+            if (!TeamDeathless.EventStarted) return // event hasn't started yet.
             if (k.ProtectionActive) return // Player protected.
-            if (this.CurrentHolder !== k) return
+            if (TeamDeathless.CurrentHolder !== k) return
 
-            let RandomChance: number = GetRandomReal(0, 100) // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
-            if (RandomChance > this.ORB_DROP_CHANCE) return
+            const RandomChance: number = GetRandomReal(0, 100) // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
+            if (RandomChance > TeamDeathless.ORB_DROP_CHANCE) return
 
-            this.timerHandle?.pause()
-            this.StartEvent()
+            TeamDeathless.timerHandle?.pause()
+            TeamDeathless.StartEvent()
         } catch (e: any) {
             Logger.Warning(`Error in TeamDeathless.DiedWithOrb: ${e}`)
         }
     }
 
     private static InRangeEvent() {
-        if (this.CurrentHolder !== null) return
+        if (TeamDeathless.CurrentHolder !== null) return
 
-        let u = getTriggerUnit()
+        const u = getTriggerUnit()
 
-        this.CheckOrbList()
-        if (this.AlreadyCarriedOrb.includes(u.owner)) {
+        TeamDeathless.CheckOrbList()
+        if (TeamDeathless.AlreadyCarriedOrb.includes(u.owner)) {
             u.owner.DisplayTimedTextTo(
                 6.0,
                 `${Colors.COLOR_YELLOW}You've already carried the orb!${Colors.COLOR_RESET}`
             )
             return
         }
-        this.CurrentHolder = Globals.ALL_KITTIES.get(u.owner)!
+        TeamDeathless.CurrentHolder = Globals.ALL_KITTIES.get(u.owner)!
 
         Utility.TimedTextToAllPlayers(
             1.5,
-            `${ColorUtils.PlayerNameColored(this.CurrentHolder.Player)} has picked up the orb!`
+            `${ColorUtils.PlayerNameColored(TeamDeathless.CurrentHolder.Player)} has picked up the orb!`
         )
-        this.RippleEffect ??= Effect.create(this.RIPPLE_MODEL, this.CurrentHolder.Unit.x, this.CurrentHolder.Unit.y)!
-        this.RippleEffect.setTime(0)
-        this.RippleEffect.scale = 0.25
-        this.RippleEffect.x = this.CurrentHolder.Unit.x
-        this.RippleEffect.y = this.CurrentHolder.Unit.y
-        this.RippleEffect.playAnimation(ANIM_TYPE_BIRTH)
-        this.RangeTrigger.enabled = false
+        TeamDeathless.RippleEffect ??= Effect.create(
+            TeamDeathless.RIPPLE_MODEL,
+            TeamDeathless.CurrentHolder.Unit.x,
+            TeamDeathless.CurrentHolder.Unit.y
+        )!
+        TeamDeathless.RippleEffect.setTime(0)
+        TeamDeathless.RippleEffect.scale = 0.25
+        TeamDeathless.RippleEffect.x = TeamDeathless.CurrentHolder.Unit.x
+        TeamDeathless.RippleEffect.y = TeamDeathless.CurrentHolder.Unit.y
+        TeamDeathless.RippleEffect.playAnimation(ANIM_TYPE_BIRTH)
+        TeamDeathless.RangeTrigger.enabled = false
 
-        this.OrbEffect.scale = 0.5
-        this.timerHandle.start(0.03, true, this.OrbFollow)
+        TeamDeathless.OrbEffect.scale = 0.5
+        TeamDeathless.timerHandle.start(0.03, true, TeamDeathless.OrbFollow)
     }
 
     private static OrbFollow() {
-        if (this.CurrentHolder === null) {
-            this.timerHandle?.pause()
+        if (TeamDeathless.CurrentHolder === null) {
+            TeamDeathless.timerHandle?.pause()
             return
         }
 
-        let x: number = this.CurrentHolder.Unit.x
-        let y: number = this.CurrentHolder.Unit.y
-        this.OrbEffect.x = x
-        this.OrbEffect.y = y
+        const x: number = TeamDeathless.CurrentHolder.Unit.x
+        const y: number = TeamDeathless.CurrentHolder.Unit.y
+        TeamDeathless.OrbEffect.x = x
+        TeamDeathless.OrbEffect.y = y
     }
 
     private static CheckOrbList() {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let player = Globals.ALL_PLAYERS[i]
-            if (!this.AlreadyCarriedOrb.includes(player)) return
+            const player = Globals.ALL_PLAYERS[i]
+            if (!TeamDeathless.AlreadyCarriedOrb.includes(player)) return
         }
         print(`${Colors.COLOR_TURQUOISE}Orb List has been reset!${Colors.COLOR_RESET}`)
-        this.AlreadyCarriedOrb = []
+        TeamDeathless.AlreadyCarriedOrb = []
     }
 
     /// <summary>
-    /// This method is called to award the team deathless rewards based on the difficulty level. Accounts for doing harder difficulties so that the rewards are given accordingly.
+    /// TeamDeathless method is called to award the team deathless rewards based on the difficulty level. Accounts for doing harder difficulties so that the rewards are given accordingly.
     /// </summary>
     private static AwardTeamDeathless() {
-        this.EventWon = true
+        TeamDeathless.EventWon = true
 
         if (Difficulty.DifficultyValue >= DifficultyLevel.Normal) AwardManager.GiveRewardAll('NormalTeamDeathless')
 
@@ -268,10 +276,10 @@ export class TeamDeathless {
         if (Difficulty.DifficultyValue >= DifficultyLevel.Impossible)
             AwardManager.GiveRewardAll('ImpossibleTeamDeathless')
 
-        this.RangeTrigger.enabled = false
-        this.RangeTrigger.destroy()
-        this.OrbEffect?.destroy()
-        this.timerHandle?.pause()
-        this.timerHandle?.destroy()
+        TeamDeathless.RangeTrigger.enabled = false
+        TeamDeathless.RangeTrigger.destroy()
+        TeamDeathless.OrbEffect?.destroy()
+        TeamDeathless.timerHandle?.pause()
+        TeamDeathless.timerHandle?.destroy()
     }
 }

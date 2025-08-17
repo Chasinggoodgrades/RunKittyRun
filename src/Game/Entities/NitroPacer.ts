@@ -74,10 +74,10 @@ export class NitroPacer {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
         const instance = NitroPacer.getInstance()
-        this.ResetNitroPacer()
+        NitroPacer.ResetNitroPacer()
         instance.Unit!.useItem(instance.ghostBoots!)
-        this.NitroPacerQueueOrders()
-        instance.pacerTimer!.Timer.start(0.15, true, () => this.UpdateNitroPacer())
+        NitroPacer.NitroPacerQueueOrders()
+        instance.pacerTimer!.Timer.start(0.15, true, () => NitroPacer.UpdateNitroPacer())
     }
 
     /// <summary>
@@ -97,15 +97,15 @@ export class NitroPacer {
     public static UpdateNitroPacer() {
         try {
             const instance = NitroPacer.getInstance()
-            instance.currentDistance = this.CalculateNitroPacerProgress()
+            instance.currentDistance = NitroPacer.CalculateNitroPacerProgress()
             let remainingDistance = Progress.DistancesFromStart.get(RegionList.PathingPoints.length - 1)
             if (!remainingDistance) {
                 Logger.Warning('remainingDistance is undefined in UpdateNitroPacer.')
                 return
             }
             remainingDistance -= instance.currentDistance
-            let remainingTime: number = NitroChallenges.GetNitroTimeRemaining()
-            let speed: number = remainingTime !== 0.0 ? remainingDistance / remainingTime : 350.0
+            const remainingTime: number = NitroChallenges.GetNitroTimeRemaining()
+            const speed: number = remainingTime !== 0.0 ? remainingDistance / remainingTime : 350.0
             NitroPacer.SetSpeed(speed)
 
             if (instance.pathingPoints[instance.currentCheckpoint + 1].includes(instance.Unit!.x, instance.Unit!.y)) {
@@ -131,14 +131,14 @@ export class NitroPacer {
             i >= 1;
             i-- // exclude starting point
         ) {
-            let point: Rectangle = instance.pathingPoints[i]
+            const point: Rectangle = instance.pathingPoints[i]
             BlzQueuePointOrderById(instance.Unit.handle, WolfPoint.MoveOrderID, point.centerX, point.centerY)
         }
     }
 
     public VisionShare() {
-        for (let player of Globals.ALL_PLAYERS) {
-            let neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!
+        for (const player of Globals.ALL_PLAYERS) {
+            const neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!
             neutralPassive.setAlliance(player, ALLIANCE_SHARED_VISION_FORCED, true)
         }
     }
@@ -148,19 +148,19 @@ export class NitroPacer {
     }
 
     public static CalculateNitroPacerProgress(): number {
-        let nitroKitty = NitroPacer.getInstance()
+        const nitroKitty = NitroPacer.getInstance()
         if (nitroKitty.Unit === undefined) return 0.0
-        let currentSafezone = NitroPacer.GetCurrentCheckpoint()
+        const currentSafezone = NitroPacer.GetCurrentCheckpoint()
         if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y)) return 0.0 // if at start, 0 progress
         if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y))
             return 100.0 // if at end.. 100 progress
-        let currentProgress = Progress.DistanceBetweenPoints(
+        const currentProgress = Progress.DistanceBetweenPoints(
             nitroKitty.Unit.x,
             nitroKitty.Unit.y,
             ProgressPointHelper.Points[currentSafezone].x,
             ProgressPointHelper.Points[currentSafezone].y
         )
-        let totalProgress = Progress.DistancesFromStart.get(currentSafezone)! + currentProgress
+        const totalProgress = Progress.DistancesFromStart.get(currentSafezone)! + currentProgress
 
         return totalProgress
     }

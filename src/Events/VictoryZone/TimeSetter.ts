@@ -15,10 +15,10 @@ export class TimeSetter {
     /// <param name="player"></param>
     public static SetRoundTime(player: MapPlayer) {
         try {
-            let standard = CurrentGameMode.active === GameMode.Standard
-            let solo = CurrentGameMode.active === GameMode.SoloTournament // Solo
+            const standard = CurrentGameMode.active === GameMode.Standard
+            const solo = CurrentGameMode.active === GameMode.SoloTournament // Solo
             let roundString: string = ''
-            let currentTime = GameTimer.RoundTime[Globals.ROUND] || 0
+            const currentTime = GameTimer.RoundTime[Globals.ROUND] || 0
             if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return false
 
             if (currentTime <= 90) return false // Below 90 seconds is impossible and not valid.. Don't save
@@ -29,7 +29,7 @@ export class TimeSetter {
             if (solo) roundString = RoundEnums.GetSoloRoundEnum()
             if (currentTime >= 3599.0) return false // 59min 59 second cap
 
-            let value = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes[roundString as keyof RoundTimesData]
+            const value = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes[roundString as keyof RoundTimesData]
 
             if (currentTime >= value && value !== 0) return false
 

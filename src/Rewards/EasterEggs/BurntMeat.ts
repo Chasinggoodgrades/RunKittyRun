@@ -17,27 +17,27 @@ export class BurntMeat {
     public static Completed: Unit[] = []
 
     public static FlamesDropChance(k: Kitty) {
-        let randomRoll = GetRandomInt(1, 100)
+        const randomRoll = GetRandomInt(1, 100)
         if (randomRoll > 8) return // 8% chance
-        k.Unit.addItemById(this.ITEM_CLOAK_FLAMES)
+        k.Unit.addItemById(BurntMeat.ITEM_CLOAK_FLAMES)
     }
 
     public static RegisterTurnInTrigger() {
-        TriggerRegisterUnitInRangeSimple(this.StanTurnIn.handle, 200, SpawnChampions.Stan2025.handle)
-        if (this.StanTurnInActions !== null) return
-        this.StanTurnInActions = this.StanTurnIn.addAction(
+        TriggerRegisterUnitInRangeSimple(BurntMeat.StanTurnIn.handle, 200, SpawnChampions.Stan2025.handle)
+        if (BurntMeat.StanTurnInActions !== null) return
+        BurntMeat.StanTurnInActions = BurntMeat.StanTurnIn.addAction(
             ErrorHandler.Wrap(() => {
-                let unit = getTriggerUnit()
-                let player = unit.owner
-                if (!this.Completed.includes(unit)) return
+                const unit = getTriggerUnit()
+                const player = unit.owner
+                if (!BurntMeat.Completed.includes(unit)) return
                 player.DisplayTimedTextTo(
                     8.0,
                     'Bedankt vriend, je moet slide eens proberen! (Thanks friend, you should try slide!)'
                 )
                 // Violet Windwalk, awarded for killing stan with something, then taking some burnt meat n and turning it in.
                 AwardManager.GiveReward(player, 'WWViolet')
-                RemoveItemFromUnit(unit, this.ITEM_BURNT_MEAT)
-                this.Completed.splice(this.Completed.indexOf(unit), 1)
+                RemoveItemFromUnit(unit, BurntMeat.ITEM_BURNT_MEAT)
+                BurntMeat.Completed.splice(BurntMeat.Completed.indexOf(unit), 1)
             })
         )
     }

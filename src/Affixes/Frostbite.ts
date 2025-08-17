@@ -57,7 +57,7 @@ export class Frostbite extends Affix {
         if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
             for (let i = 0; i < this.FrostbittenKitties.length; i++) {
-                let frostbitten = this.FrostbittenKitties[i]
+                const frostbitten = this.FrostbittenKitties[i]
                 frostbitten.dispose()
             }
             this.FrostbittenKitties.length = 0
@@ -72,7 +72,7 @@ export class Frostbite extends Affix {
         this.PeriodicRangeTrigger.addAction(() => this.PeriodicRangeCheck())
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FROSTBITE_RADIUS, FilterList.KittyFilter)
         this.InRangeTrigger.addAction(() => {
-            let target = getTriggerUnit()
+            const target = getTriggerUnit()
             if (!target.isAlive()) return // must be alive
             if (!RegionList.WolfRegions[this.Unit.RegionIndex].includes(target.x, target.y)) return // must be in same lane
             this.SlowEffect(target)
@@ -87,7 +87,7 @@ export class Frostbite extends Affix {
                 i >= 0;
                 i-- // if go backwards, can avoid loop index issues
             ) {
-                let frostbitten = this.FrostbittenKitties[i]
+                const frostbitten = this.FrostbittenKitties[i]
 
                 if (IsUnitInRange(frostbitten.Kitty.Unit.handle, this.Unit.Unit.handle, this.FROSTBITE_RADIUS)) continue
 
@@ -102,9 +102,10 @@ export class Frostbite extends Affix {
     private SlowEffect(target: Unit) {
         if (target.getAbilityLevel(Frostbite.ADRENALINE_POTION_ABILITY) > 0) return // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
-        let k: Kitty = Globals.ALL_KITTIES.get(target.owner)!
+        const k: Kitty = Globals.ALL_KITTIES.get(target.owner)!
         if (k.KittyMiscInfo.FrostBitten !== null) return // already bitten.
-        let frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyObject<Frostbitten>())
+        const frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten =
+            MemoryHandler.getEmptyObject<Frostbitten>())
         frostBittenObject.OriginalSpeed = target.defaultMoveSpeed
         frostBittenObject.Effect = Effect.createAttachment(this.FROSTBITE_TARGET_EFFECT, target, 'chest')!
         frostBittenObject.Kitty = k

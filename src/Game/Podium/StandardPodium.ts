@@ -25,44 +25,44 @@ export class StandardPodium {
     }
 
     private static EnqueueTopScorePlayers() {
-        let topScores = PodiumUtil.SortPlayersByScore()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topScores = PodiumUtil.SortPlayersByScore()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topScores.length - 1; i >= 0; i--) {
-            let player = topScores[i]
-            let position = podiumPositions[i]
+            const player = topScores[i]
+            const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
         }
         StandardPodium.PodiumType = StandardPodium.HighestScore
     }
 
     private static EnqueueTopSavesPlayers() {
-        let topSaves = PodiumUtil.SortPlayersBySaves()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topSaves = PodiumUtil.SortPlayersBySaves()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
-            let player = topSaves[i]
-            let position = podiumPositions[i]
+            const player = topSaves[i]
+            const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
         }
         StandardPodium.PodiumType = StandardPodium.MostSaves
     }
 
     private static EnqueueTopRatioPlayers() {
-        let topRatios = PodiumUtil.SortPlayersByHighestRatio()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topRatios = PodiumUtil.SortPlayersByHighestRatio()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
-            let player = topRatios[i]
-            let position = podiumPositions[i]
+            const player = topRatios[i]
+            const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
         }
         StandardPodium.PodiumType = StandardPodium.HighestRatio
     }
 
     private static EnqueueTopStreakPlayers() {
-        let topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topStreaks.length - 1; i >= 0; i--) {
-            let player = topStreaks[i]
-            let position = podiumPositions[i]
+            const player = topStreaks[i]
+            const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
         }
         StandardPodium.PodiumType = StandardPodium.HighestStreak
@@ -73,8 +73,8 @@ export class StandardPodium {
             StandardPodium.ProcessPodiumTypeActions()
             return
         }
-        let [player, position] = StandardPodium.PodiumQueue.dequeue()!
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const [player, position] = StandardPodium.PodiumQueue.dequeue()!
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
@@ -119,7 +119,7 @@ export class StandardPodium {
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
+        const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (StandardPodium.PodiumType) {
             case StandardPodium.HighestScore:
                 return (stats.TotalSaves - stats.TotalDeaths).toString()

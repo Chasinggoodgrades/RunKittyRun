@@ -77,7 +77,7 @@ export class TeamsMultiboard {
         let rowIndex = 1
         let overallProgress: number
         for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-            let team = Globals.ALL_TEAMS_LIST[i]
+            const team = Globals.ALL_TEAMS_LIST[i]
             overallProgress = 0.0
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setText(team.TeamColor)
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setVisible(true, false)
@@ -113,11 +113,11 @@ export class TeamsMultiboard {
         TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size
         TeamsMultiboard.CurrentTeamsMB.columns = 2
 
-        let widthSize = 0.05 * Gamemode.PlayersPerTeam
+        const widthSize = 0.05 * Gamemode.PlayersPerTeam
         let rowIndex = 0
         for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-            let team = Globals.ALL_TEAMS_LIST[i]
-            let teamMembers: string = team.TeamMembersString
+            const team = Globals.ALL_TEAMS_LIST[i]
+            const teamMembers: string = team.TeamMembersString
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setWidth(0.05)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setText(`${team.TeamColor}:`)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setVisible(true, false)
@@ -134,14 +134,14 @@ export class TeamsMultiboard {
     // #region ESC Key Event & Actions
 
     private static ESCInit() {
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             TeamsMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
         TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(() => TeamsMultiboard.ESCPressed()))
     }
 
     private static ESCPressed() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         if (player.isLocal()) return
         // Swap multiboards
         if (TeamsMultiboard.CurrentTeamsMB.displayed) {

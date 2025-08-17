@@ -26,9 +26,9 @@ export class StandardMultiboard {
 
     public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        this.BestTimes = Multiboard.create()!
-        this.OverallStats = Multiboard.create()!
-        this.CurrentStats = Multiboard.create()!
+        StandardMultiboard.BestTimes = Multiboard.create()!
+        StandardMultiboard.OverallStats = Multiboard.create()!
+        StandardMultiboard.CurrentStats = Multiboard.create()!
         StandardMultiboard.Init()
     }
 
@@ -36,7 +36,7 @@ export class StandardMultiboard {
     /// Wait till difficulty is chosen, then begin..
     /// </summary>
     private static Init() {
-        let t = Timer.create()
+        const t = Timer.create()
         t.start(
             1.0,
             true,
@@ -50,14 +50,15 @@ export class StandardMultiboard {
     }
 
     private static RegisterTriggers() {
-        this.Updater = Trigger.create()!
-        this.ESCTrigger = Trigger.create()!
+        StandardMultiboard.Updater = Trigger.create()!
+        StandardMultiboard.ESCTrigger = Trigger.create()!
 
-        this.Updater.registerTimerEvent(1.0, true)
-        this.Updater.addAction(() => StandardMultiboard.CurrentStatsRoundTimes())
+        StandardMultiboard.Updater.registerTimerEvent(1.0, true)
+        StandardMultiboard.Updater.addAction(() => StandardMultiboard.CurrentStatsRoundTimes())
 
-        for (let player of Globals.ALL_PLAYERS) this.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
-        this.ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
+        for (const player of Globals.ALL_PLAYERS)
+            StandardMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
+        StandardMultiboard.ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
     }
 
     private static MakeMultiboard() {
@@ -71,14 +72,14 @@ export class StandardMultiboard {
     private static CurrentGameStatsMultiboard() {
         StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
         StandardMultiboard.CurrentStats.columns = 7
-        StandardMultiboard.CurrentStats.GetItem(0, 0).setText(`${this.color}Time: Round|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 0).setText(`${this.color}Player|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 1).setText(`${this.color}Score|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 2).setText(`${this.color}Saves|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 3).setText(`${this.color}Deaths|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 4).setText(`${this.color}Streak|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 5).setText(`${this.color}Ratio|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 6).setText(`${this.color}S / D|r`)
+        StandardMultiboard.CurrentStats.GetItem(0, 0).setText(`${StandardMultiboard.color}Time: Round|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 0).setText(`${StandardMultiboard.color}Player|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 1).setText(`${StandardMultiboard.color}Score|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 2).setText(`${StandardMultiboard.color}Saves|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 3).setText(`${StandardMultiboard.color}Deaths|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 4).setText(`${StandardMultiboard.color}Streak|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 5).setText(`${StandardMultiboard.color}Ratio|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 6).setText(`${StandardMultiboard.color}S / D|r`)
         StandardMultiboard.CurrentStats.SetChildVisibility(true, false)
         StandardMultiboard.CurrentStats.setItemsWidth(0.055)
         StandardMultiboard.CurrentStats.GetItem(1, 0).setWidth(0.07)
@@ -88,14 +89,14 @@ export class StandardMultiboard {
     private static OverallGamesStatsMultiboard() {
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.OverallStats.columns = 8
-        StandardMultiboard.OverallStats.GetItem(0, 0).setText(`${this.color}Player|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 1).setText(`${this.color}Score:|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 2).setText(`${this.color}Saves|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 3).setText(`${this.color}Deaths|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 4).setText(`${this.color}MaxStreak|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 5).setText(`${this.color}  Ratio|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 6).setText(`${this.color}Games|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 7).setText(`${this.color}Wins|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 0).setText(`${StandardMultiboard.color}Player|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 1).setText(`${StandardMultiboard.color}Score:|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 2).setText(`${StandardMultiboard.color}Saves|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 3).setText(`${StandardMultiboard.color}Deaths|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 4).setText(`${StandardMultiboard.color}MaxStreak|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 5).setText(`${StandardMultiboard.color}  Ratio|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 6).setText(`${StandardMultiboard.color}Games|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 7).setText(`${StandardMultiboard.color}Wins|r`)
         StandardMultiboard.OverallStats.SetChildVisibility(true, false)
         StandardMultiboard.OverallStats.setItemsWidth(0.052)
         StandardMultiboard.OverallStats.GetItem(0, 0).setWidth(0.07)
@@ -106,12 +107,12 @@ export class StandardMultiboard {
     private static BestTimesMultiboard() {
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.BestTimes.columns = 6
-        StandardMultiboard.BestTimes.GetItem(0, 0).setText(`${this.color}Player|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 1).setText(`${this.color}1: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 2).setText(`${this.color}2: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 3).setText(`${this.color}3: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 4).setText(`${this.color}4: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 5).setText(`${this.color}5: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 0).setText(`${StandardMultiboard.color}Player|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 1).setText(`${StandardMultiboard.color}1: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 2).setText(`${StandardMultiboard.color}2: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 3).setText(`${StandardMultiboard.color}3: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 4).setText(`${StandardMultiboard.color}4: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 5).setText(`${StandardMultiboard.color}5: Round|r`)
         StandardMultiboard.BestTimes.SetChildVisibility(true, false)
         StandardMultiboard.BestTimes.setItemsWidth(0.05)
         StandardMultiboard.BestTimes.GetItem(0, 0).setWidth(0.07)
@@ -120,10 +121,10 @@ export class StandardMultiboard {
     }
 
     private static CurrentStatsRoundTimes() {
-        let color = Colors.COLOR_GREEN
+        const color = Colors.COLOR_GREEN
         for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             StandardMultiboard.CurrentStats.GetItem(0, i).setText(
-                `${color}${Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i])}|r`
+                `${color}${Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i] || 0)}|r`
             )
         }
     }
@@ -144,17 +145,17 @@ export class StandardMultiboard {
             // Sort the array of keys based on custom criteria
             for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
                 for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
-                    let stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.CurrentStats
-                    let stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.CurrentStats
-                    let score1 = stats1.TotalSaves - stats1.TotalDeaths
-                    let score2 = stats2.TotalSaves - stats2.TotalDeaths
+                    const stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.CurrentStats
+                    const stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.CurrentStats
+                    const score1 = stats1.TotalSaves - stats1.TotalDeaths
+                    const score2 = stats2.TotalSaves - stats2.TotalDeaths
 
                     if (
                         score2 > score1 ||
                         (score2 === score1 &&
                             StandardMultiboard.PlayersList[j].id < StandardMultiboard.PlayersList[i].id)
                     ) {
-                        let temp = StandardMultiboard.PlayersList[i]
+                        const temp = StandardMultiboard.PlayersList[i]
                         StandardMultiboard.PlayersList[i] = StandardMultiboard.PlayersList[j]
                         StandardMultiboard.PlayersList[j] = temp
                     }
@@ -162,13 +163,13 @@ export class StandardMultiboard {
             }
 
             for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
-                let player = StandardMultiboard.PlayersList[i]
-                let currentStats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-                let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
+                const player = StandardMultiboard.PlayersList[i]
+                const currentStats = Globals.ALL_KITTIES.get(player)!.CurrentStats
+                const playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
-                let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
-                let score = currentStats.TotalSaves - currentStats.TotalDeaths
-                let kda =
+                const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+                const score = currentStats.TotalSaves - currentStats.TotalDeaths
+                const kda =
                     currentStats.TotalDeaths === 0
                         ? currentStats.TotalSaves.toFixed(2)
                         : (currentStats.TotalSaves / currentStats.TotalDeaths).toFixed(2)
@@ -212,16 +213,16 @@ export class StandardMultiboard {
         // Sort the array of keys based on custom criteria
         for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
             for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
-                let stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.SaveData.GameStats
-                let stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.SaveData.GameStats
-                let score1 = stats1.Saves - stats1.Deaths
-                let score2 = stats2.Saves - stats2.Deaths
+                const stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.SaveData.GameStats
+                const stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.SaveData.GameStats
+                const score1 = stats1.Saves - stats1.Deaths
+                const score2 = stats2.Saves - stats2.Deaths
 
                 if (
                     score2 > score1 ||
                     (score2 === score1 && StandardMultiboard.PlayersList[j].id < StandardMultiboard.PlayersList[i].id)
                 ) {
-                    let temp = StandardMultiboard.PlayersList[i]
+                    const temp = StandardMultiboard.PlayersList[i]
                     StandardMultiboard.PlayersList[i] = StandardMultiboard.PlayersList[j]
                     StandardMultiboard.PlayersList[j] = temp
                 }
@@ -229,17 +230,17 @@ export class StandardMultiboard {
         }
 
         for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
-            let player = StandardMultiboard.PlayersList[i]
-            let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
+            const player = StandardMultiboard.PlayersList[i]
+            const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
+            const playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
-            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
-            let allSaves = saveData.GameStats.Saves
-            let allDeaths = saveData.GameStats.Deaths
-            let score = allSaves - allDeaths
-            let kda = allDeaths === 0 ? allSaves.toFixed(2) : (allSaves / allDeaths).toFixed(2)
-            let gameCount = StandardMultiboard.GetGameCount(saveData)
-            let winCount = StandardMultiboard.GetWinCount(saveData)
+            const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+            const allSaves = saveData.GameStats.Saves
+            const allDeaths = saveData.GameStats.Deaths
+            const score = allSaves - allDeaths
+            const kda = allDeaths === 0 ? allSaves.toFixed(2) : (allSaves / allDeaths).toFixed(2)
+            const gameCount = StandardMultiboard.GetGameCount(saveData)
+            const winCount = StandardMultiboard.GetWinCount(saveData)
 
             StandardMultiboard.PlayerStats[0] = name
             StandardMultiboard.PlayerStats[1] = score.toString()
@@ -267,11 +268,11 @@ export class StandardMultiboard {
         let rowIndex = 1
 
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let player = Globals.ALL_PLAYERS[i]
-            let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
-            let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
+            const player = Globals.ALL_PLAYERS[i]
+            const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
+            const playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
-            let roundTimes = StandardMultiboard.GetGameRoundTime(saveData)
+            const roundTimes = StandardMultiboard.GetGameRoundTime(saveData)
 
             for (let j = 0; j < roundTimes.length; j++) {
                 if (roundTimes[j] !== 0)
@@ -299,13 +300,13 @@ export class StandardMultiboard {
 
     public static UpdateBestTimesMB() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        this.FillPlayers(StandardMultiboard.BestTimes, 1)
+        StandardMultiboard.FillPlayers(StandardMultiboard.BestTimes, 1)
         StandardMultiboard.BestTimesStats()
     }
 
     public static FillPlayers(mb: Multiboard, rowIndex = 2) {
-        for (let player of Globals.ALL_PLAYERS) {
-            let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
+        for (const player of Globals.ALL_PLAYERS) {
+            const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
             mb.GetItem(rowIndex, 0).setWidth(0.07)
             rowIndex++
@@ -313,7 +314,7 @@ export class StandardMultiboard {
     }
 
     private static GetGameCount(data: KittyData) {
-        let gameData = data.GameStats
+        const gameData = data.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
                 return gameData.NormalGames
@@ -330,7 +331,7 @@ export class StandardMultiboard {
     }
 
     private static GetWinCount(data: KittyData) {
-        let gameData = data.GameStats
+        const gameData = data.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
                 return gameData.NormalWins
@@ -347,7 +348,7 @@ export class StandardMultiboard {
     }
 
     private static GetGameRoundTime(data: KittyData): number[] {
-        let gameData = data.RoundTimes
+        const gameData = data.RoundTimes
 
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:

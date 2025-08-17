@@ -22,71 +22,71 @@ export class FandF {
     public static BloodWolf: Wolf
 
     public static Initialize() {
-        this.TurnInRange = 150.0
-        this.CollectionRange = 100.0
-        this.InRangeTrigger = this.RegisterTurnIn()
-        this.CollectionTrigger = this.RegisterCollection()
+        FandF.TurnInRange = 150.0
+        FandF.CollectionRange = 100.0
+        FandF.InRangeTrigger = FandF.RegisterTurnIn()
+        FandF.CollectionTrigger = FandF.RegisterCollection()
     }
 
     public static AppendCollectionsUnit() {
-        this.CollectionTrigger.registerUnitInRage(
-            this.BloodWolf.Unit.handle,
-            this.CollectionRange,
+        FandF.CollectionTrigger.registerUnitInRage(
+            FandF.BloodWolf.Unit.handle,
+            FandF.CollectionRange,
             FilterList.KittyFilter
         )
     }
 
     public static CreateBloodWolf() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let region = GetRandomInt(0, WolfArea.WolfAreas.size - 1)
-        this.BloodWolf = new Wolf(region)
+        const region = GetRandomInt(0, WolfArea.WolfAreas.size - 1)
+        FandF.BloodWolf = new Wolf(region)
         FandF.BloodWolf.Unit.name = '|cffffffff?|r|cffffcccc?|r|cffff9999?|r|cffff6666?|r|cffff3333?|r|cffff0000?|r'
         FandF.BloodWolf.Unit.setVertexColor(100, 50, 50, 255)
         FandF.AppendCollectionsUnit()
     }
 
     private static RegisterCollection(): Trigger {
-        let trig = Trigger.create()!
-        trig.addAction(ErrorHandler.Wrap(() => this.CollectionActions()))
+        const trig = Trigger.create()!
+        trig.addAction(ErrorHandler.Wrap(() => FandF.CollectionActions()))
         return trig
     }
 
     private static CollectionActions() {
-        let unit = getTriggerUnit()
+        const unit = getTriggerUnit()
 
-        if (!Utility.UnitHasItem(unit, this.EmptyVial)) return
+        if (!Utility.UnitHasItem(unit, FandF.EmptyVial)) return
 
         // Otherwise .. they have item.. Give them blood filled vial.
-        RemoveItemFromUnit(unit, this.EmptyVial)
-        unit.addItemById(this.BloodVial)
+        RemoveItemFromUnit(unit, FandF.EmptyVial)
+        unit.addItemById(FandF.BloodVial)
     }
 
     private static RegisterTurnIn(): Trigger {
-        let trig = Trigger.create()!
-        trig.registerUnitInRage(SpawnChampions.FandF2023.handle, this.TurnInRange, FilterList.KittyFilter)
-        trig.addAction(ErrorHandler.Wrap(() => this.TurnInActions()))
+        const trig = Trigger.create()!
+        trig.registerUnitInRage(SpawnChampions.FandF2023.handle, FandF.TurnInRange, FilterList.KittyFilter)
+        trig.addAction(ErrorHandler.Wrap(() => FandF.TurnInActions()))
         return trig
     }
 
     private static TurnInActions() {
-        this.EmptyVialQuest(getTriggerUnit())
-        this.BloodVialQuest(getTriggerUnit())
+        FandF.EmptyVialQuest(getTriggerUnit())
+        FandF.BloodVialQuest(getTriggerUnit())
     }
 
     private static EmptyVialQuest(u: Unit) {
-        if (!Utility.UnitHasItem(u, this.EmptyVial)) return
-        let player = u.owner
+        if (!Utility.UnitHasItem(u, FandF.EmptyVial)) return
+        const player = u.owner
         player.DisplayTimedTextTo(
             20.0,
-            "|cff00fffFast & Furriest:|r |cffffff00Greetings, fellow feline! What do you hold in those paws there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, this beast tends to wander. |r"
+            "|cff00fffFast & Furriest:|r |cffffff00Greetings, fellow feline! What do you hold in those paws there? An empty vial, eh? A predecessor's unfinished tale, it seems. In my wanderings, a wolf unlike any other crossed my path. Its blood holds mysteries.. Grab me a sample. Hurry, FandF beast tends to wander. |r"
         )
     }
 
     private static BloodVialQuest(u: Unit) {
-        if (!Utility.UnitHasItem(u, this.BloodVial)) return
+        if (!Utility.UnitHasItem(u, FandF.BloodVial)) return
 
-        if (this.BloodVialItems(u)) {
-            this.RemoveQuestItems(u)
+        if (FandF.BloodVialItems(u)) {
+            FandF.RemoveQuestItems(u)
             AwardManager.GiveReward(u.owner, 'WWBlood')
         }
         DisplayTimedTextToPlayer(
@@ -94,7 +94,7 @@ export class FandF {
             0,
             0,
             20.0,
-            "|cff00fffFast & Furriest:|r |cffffff00Ah, splendid! You've covered the sample. Your prowess is truly remarkable. Evidently, the potential within this sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r"
+            "|cff00fffFast & Furriest:|r |cffffff00Ah, splendid! You've covered the sample. Your prowess is truly remarkable. Evidently, the potential within FandF sample can be exponentially amplified. Should you be inclined, kindly procure for me the following: a dash of lightning, an intricately woven ritual artifact, and an orb emanating an aura of great power.|r"
         )
     }
 
@@ -103,12 +103,12 @@ export class FandF {
             Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION) &&
             Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) &&
             Utility.UnitHasItem(u, Constants.ITEM_ORB_OF_MYSTERIES) &&
-            Utility.UnitHasItem(u, this.BloodVial)
+            Utility.UnitHasItem(u, FandF.BloodVial)
         )
     }
 
     private static RemoveQuestItems(u: Unit) {
-        RemoveItemFromUnit(u, this.BloodVial)
+        RemoveItemFromUnit(u, FandF.BloodVial)
         RemoveItemFromUnit(u, Constants.ITEM_ADRENALINE_POTION)
         RemoveItemFromUnit(u, Constants.ITEM_RITUAL_MASK)
         RemoveItemFromUnit(u, Constants.ITEM_ORB_OF_MYSTERIES)

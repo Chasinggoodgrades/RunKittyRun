@@ -17,19 +17,19 @@ export class RewardsManager {
     public static Rewards: Reward[] = []
 
     public static RewardAbilitiesList() {
-        for (let reward of RewardsManager.Rewards) RewardsManager.RewardAbilities.push(reward.AbilityID)
+        for (const reward of RewardsManager.Rewards) RewardsManager.RewardAbilities.push(reward.AbilityID)
     }
 
     public static RegisterTrigger() {
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             RewardsManager.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
         }
         RewardsManager.Trigger.addAction(() => RewardsManager.CastedReward())
     }
 
     private static CastedReward() {
-        let spellID = GetSpellAbilityId()
-        let unit = getTriggerUnit()
+        const spellID = GetSpellAbilityId()
+        const unit = getTriggerUnit()
         if (RewardsManager.IsResetSpell(spellID)) {
             RewardsManager.ResetRewardSettings(unit)
             Globals.ALL_KITTIES.get(unit.owner)!.KittyMorphosis.ScaleUnit() // changes scale of unit if they have amulet.
@@ -46,26 +46,26 @@ export class RewardsManager {
     }
 
     private static ResetRewardSettings(Unit: Unit) {
-        let player = Unit.owner
-        let kitty = Globals.ALL_KITTIES.get(player)!
-        let activeRewards = kitty.ActiveAwards
+        const player = Unit.owner
+        const kitty = Globals.ALL_KITTIES.get(player)!
+        const activeRewards = kitty.ActiveAwards
 
-        let wings = activeRewards.ActiveWings
+        const wings = activeRewards.ActiveWings
         GC.RemoveEffect(wings) // TODO; Cleanup:         GC.RemoveEffect(ref wings);
 
-        let auras = activeRewards.ActiveAura
+        const auras = activeRewards.ActiveAura
         GC.RemoveEffect(auras) // TODO; Cleanup:         GC.RemoveEffect(ref auras);
 
-        let hats = activeRewards.ActiveHats
+        const hats = activeRewards.ActiveHats
         GC.RemoveEffect(hats) // TODO; Cleanup:         GC.RemoveEffect(ref hats);
 
-        let trails = activeRewards.ActiveTrail
+        const trails = activeRewards.ActiveTrail
         GC.RemoveEffect(trails) // TODO; Cleanup:         GC.RemoveEffect(ref trails);
 
         kitty.Unit.skin = Constants.UNIT_KITTY
         kitty.Unit.setVertexColor(255, 255, 255, 255)
 
-        for (let property of Object.keys(kitty.SaveData.SelectedData)) {
+        for (const property of Object.keys(kitty.SaveData.SelectedData)) {
             kitty.SaveData.SelectedData[property as keyof GameSelectedData] = ''
         }
 
@@ -147,8 +147,8 @@ export class RewardsManager {
     }
 
     public static SetupRewards() {
-        let awardsSorted = Globals.GAME_AWARDS_SORTED
-        let stats = Globals.GAME_STATS
+        const awardsSorted = Globals.GAME_AWARDS_SORTED
+        const stats = Globals.GAME_STATS
 
         // Hats
         RewardsManager.AddRewardFromModelWithStats(

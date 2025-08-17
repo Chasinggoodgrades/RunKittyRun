@@ -56,14 +56,14 @@ export class BeaconOfUnitedLifeforce extends Relic {
     public BeaconOfUnitedLifeforceEffect(player: MapPlayer) {
         // Make sure person has the relic
         if (player !== this.Owner) return
-        let kitty = Globals.ALL_KITTIES.get(player)!
+        const kitty = Globals.ALL_KITTIES.get(player)!
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE)) return
 
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(
             typeof BeaconOfUnitedLifeforce
         )
 
-        let chance = GetRandomReal(0.0, 1.0)
+        const chance = GetRandomReal(0.0, 1.0)
 
         if (chance > BeaconOfUnitedLifeforce.ReviveChance) return
 
@@ -71,9 +71,9 @@ export class BeaconOfUnitedLifeforce extends Relic {
         let reviveAll: boolean = chance <= BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_ALL
         if (upgradeLevel < 2) reviveAll = false
 
-        let color = Colors.COLOR_YELLOW_ORANGE
+        const color = Colors.COLOR_YELLOW_ORANGE
         let msgSent = false
-        for (let [_, k] of Globals.ALL_KITTIES) {
+        for (const [_, k] of Globals.ALL_KITTIES) {
             if (k.isAlive()) continue
 
             k.ReviveKitty(kitty)
@@ -111,7 +111,9 @@ export class BeaconOfUnitedLifeforce extends Relic {
     /// Upgrade Level 1: Increases the revive chance of the relic.
     /// </summary>
     private UpgradeReviveChance() {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner!).GetUpgradeLevel(typeof BeaconOfUnitedLifeforce)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner!).GetUpgradeLevel(
+            typeof BeaconOfUnitedLifeforce
+        )
         if (upgradeLevel >= 1)
             BeaconOfUnitedLifeforce.ReviveChance =
                 BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE +

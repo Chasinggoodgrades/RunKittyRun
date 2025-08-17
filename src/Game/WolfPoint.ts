@@ -40,17 +40,17 @@ export class WolfPoint {
             this.Cleanup()
 
             // Calculate the distance between points
-            let distance = distanceBetweenXYPoints(startX, startY, endX, endY)
-            let numRegions: number = Math.ceil(distance / this.MaxDistance)
+            const distance = distanceBetweenXYPoints(startX, startY, endX, endY)
+            const numRegions: number = Math.ceil(distance / this.MaxDistance)
 
             // Calculate angle and step sizes using trigonometry
-            let angle = Math.atan2(endY - startY, endX - startX)
-            let stepX = this.MaxDistance * Math.cos(angle)
-            let stepY = this.MaxDistance * Math.sin(angle)
+            const angle = Math.atan2(endY - startY, endX - startX)
+            const stepX = this.MaxDistance * Math.cos(angle)
+            const stepY = this.MaxDistance * Math.sin(angle)
 
             for (let i = 0; i < numRegions; i++) {
-                let regionX = startX + i * stepX
-                let regionY = startY + i * stepY
+                const regionX = startX + i * stepX
+                const regionY = startY + i * stepY
                 this.PointInfo[i].x = regionX
                 this.PointInfo[i].y = regionY
                 this.PointInfo[i].LastPoint = false
@@ -99,7 +99,7 @@ export class WolfPoint {
         try {
             for (let i: number = this.PointInfo.length - 1; i >= 1; i--) {
                 if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
-                let moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
+                const moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
                 BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
                 if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
@@ -110,7 +110,7 @@ export class WolfPoint {
     }
 
     private static InitTrigger(): Trigger {
-        this.IsPausedTrigger ??= Trigger.create()!
+        WolfPoint.IsPausedTrigger ??= Trigger.create()!
         WolfPoint.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 
         TriggerAddCondition(
@@ -150,7 +150,7 @@ export class WolfPointInfo {
     }
 
     public static GetWolfPointList(): WolfPointInfo[] {
-        let list = MemoryHandler.getEmptyArray<WolfPointInfo>()
+        const list = MemoryHandler.getEmptyArray<WolfPointInfo>()
         for (let i = 0; i < 48; i++) {
             list.push(MemoryHandler.getEmptyObject<WolfPointInfo>())
         }
@@ -160,7 +160,7 @@ export class WolfPointInfo {
     public static ClearWolfPointList(list: WolfPointInfo[]) {
         if (list === null) return
         for (let i = 0; i < list.length; i++) {
-            let item = list[i]
+            const item = list[i]
             MemoryHandler.destroyObject(item)
         }
         list = []

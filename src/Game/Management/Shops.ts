@@ -15,40 +15,40 @@ export class Shops {
     private static trigger: Trigger
 
     public static Initialize() {
-        this.KittyVendors = Group.create()!
-        this.trigger = Trigger.create()!
-        this.KittyVendorsList = []
-        this.KittyVendorItemList = []
-        this.VendorsItemList = new Map()
-        this.CollectAllVendors()
-        this.SetupAllItems()
-        this.ApplyItemListToVendor()
+        Shops.KittyVendors = Group.create()!
+        Shops.trigger = Trigger.create()!
+        Shops.KittyVendorsList = []
+        Shops.KittyVendorItemList = []
+        Shops.VendorsItemList = new Map()
+        Shops.CollectAllVendors()
+        Shops.SetupAllItems()
+        Shops.ApplyItemListToVendor()
     }
 
     private static SetupAllItems() {
-        this.ConstantItems()
+        Shops.ConstantItems()
 
         if (CurrentGameMode.active !== GameMode.Standard) return
 
-        this.StandardModeItems()
+        Shops.StandardModeItems()
     }
 
     private static ApplyItemListToVendor() {
-        for (let vendor of this.KittyVendorsList) this.AddRegularItemsToVendor(vendor, this.KittyVendorItemList)
+        for (const vendor of Shops.KittyVendorsList) Shops.AddRegularItemsToVendor(vendor, Shops.KittyVendorItemList)
     }
 
     private static RefreshItemsOnVendor(vendor: Unit) {
-        let vendorItems = this.VendorsItemList.get(vendor)!
-        for (let item of vendorItems) vendor.addItemToStock(item.Item, item.Stock, item.Stock)
+        const vendorItems = Shops.VendorsItemList.get(vendor)!
+        for (const item of vendorItems) vendor.addItemToStock(item.Item, item.Stock, item.Stock)
     }
 
     private static AddRegularItemsToVendor(vendor: Unit, items: number[]) {
-        let vendorList: VendorItem[] = []
-        for (let item of items) {
+        const vendorList: VendorItem[] = []
+        for (const item of items) {
             vendorList.push(new VendorItem(vendor, item, 2, 60))
         }
-        this.VendorsItemList.set(vendor, vendorList)
-        this.RefreshItemsOnVendor(vendor)
+        Shops.VendorsItemList.set(vendor, vendorList)
+        Shops.RefreshItemsOnVendor(vendor)
     }
 
     /// <summary>
@@ -71,41 +71,41 @@ export class Shops {
     /// </summary>
     private static StandardModeItems() {
         // Kitty Vendor
-        this.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_EMPTY_VIAL)
-        this.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL)
-        this.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_CAT_FIGURINE)
+        Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_EMPTY_VIAL)
+        Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL)
+        Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_CAT_FIGURINE)
     }
 
     private static CollectAllVendors() {
-        let filter = Utility.CreateFilterFunc(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
-        this.KittyVendors.enumUnitsInRect(Rectangle.getWorldBounds()!, filter)
-        this.KittyVendorsList = this.KittyVendors.getUnits()
+        const filter = Utility.CreateFilterFunc(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
+        Shops.KittyVendors.enumUnitsInRect(Rectangle.getWorldBounds()!, filter)
+        Shops.KittyVendorsList = Shops.KittyVendors.getUnits()
 
-        this.RegisterVendorSellingEvent()
+        Shops.RegisterVendorSellingEvent()
 
         GC.RemoveFilterFunc(filter) // TODO; Cleanup:         GC.RemoveFilterFunc(ref filter);
     }
 
     private static RegisterVendorSellingEvent() {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
-        for (let vendor of Shops.KittyVendorsList) this.trigger.registerUnitEvent(vendor, EVENT_UNIT_SELL_ITEM)
-        this.trigger.addAction(() => Shops.OnVendorSell())
+        for (const vendor of Shops.KittyVendorsList) Shops.trigger.registerUnitEvent(vendor, EVENT_UNIT_SELL_ITEM)
+        Shops.trigger.addAction(() => Shops.OnVendorSell())
     }
 
     private static OnVendorSell() {
         try {
-            let item = Item.fromHandle(GetSoldItem())!
-            let vendor = Unit.fromHandle(GetSellingUnit())!
+            const item = Item.fromHandle(GetSoldItem())!
+            const vendor = Unit.fromHandle(GetSellingUnit())!
             const u = GetBuyingUnit()
             if (!u) return
-            let player = GetOwningPlayer(u)
-            let itemID = item.typeId
+            const player = GetOwningPlayer(u)
+            const itemID = item.typeId
 
-            let vendorItems = Shops.VendorsItemList.get(vendor)!
-            let vendorItem = vendorItems.find(vi => vi.Item === itemID)
+            const vendorItems = Shops.VendorsItemList.get(vendor)!
+            const vendorItem = vendorItems.find(vi => vi.Item === itemID)
             if (vendorItem === null) return
 
-            this.RefreshItemsOnVendor(vendor)
+            Shops.RefreshItemsOnVendor(vendor)
         } catch (e: any) {
             Logger.Warning(`Error in OnVendorSell: ${e}`)
         }

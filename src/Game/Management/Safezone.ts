@@ -35,8 +35,8 @@ export class Safezone {
 
     public static Initialize() {
         let count = 0
-        for (let safeZone of RegionList.SafeZones) {
-            let safezone = new Safezone(count, safeZone.region())
+        for (const safeZone of RegionList.SafeZones) {
+            const safezone = new Safezone(count, safeZone.region())
             Globals.SAFE_ZONES.push(safezone)
             safezone.EnterSafezoneEvents()
             safezone.rect = safeZone.handle
@@ -53,15 +53,15 @@ export class Safezone {
 
     private EnterSafezoneActions() {
         try {
-            let unit = getTriggerUnit()
+            const unit = getTriggerUnit()
             if (!unit) return
             if (Safezone.WolfEntersSafezoneActions(unit)) return
             if (unit.typeId === Constants.UNIT_SHADOWKITTY_RELIC_SUMMON) {
                 WolfLaneHider.ShadowKittyLaneAdd(this.ID)
                 return
             }
-            let player = unit.owner
-            let kitty = Globals.ALL_KITTIES.get(player)!
+            const player = unit.owner
+            const kitty = Globals.ALL_KITTIES.get(player)!
             this.SafezoneAdditions(kitty)
             kitty.CurrentSafeZone = this.ID
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider()
@@ -81,7 +81,7 @@ export class Safezone {
     /// Runs if the players current safezone isn't the same as their previously touched safezone.
     /// </summary>
     private SafezoneAdditions(kitty: Kitty) {
-        let player = kitty.Player
+        const player = kitty.Player
 
         if (kitty.CurrentSafeZone === this.ID) return
 
@@ -90,9 +90,9 @@ export class Safezone {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
         for (let i = 0; i < kitty.Relics.length; i++) {
-            let relic = kitty.Relics[i]
+            const relic = kitty.Relics[i]
             if (relic instanceof FangOfShadows) {
-                let fangOfShadows: FangOfShadows = relic
+                const fangOfShadows: FangOfShadows = relic
                 fangOfShadows.ReduceCooldownAtSafezone(kitty.Unit)
                 break
             }
@@ -103,11 +103,11 @@ export class Safezone {
     /// Resets progress zones and reached safezones to initial state.
     /// </summary>
     public static ResetPlayerSafezones() {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             kitty.CurrentSafeZone = 0
             kitty.ProgressZone = 0
         }
-        for (let safezone of Globals.SAFE_ZONES) {
+        for (const safezone of Globals.SAFE_ZONES) {
             safezone.AwardedPlayers = []
         }
     }
@@ -120,7 +120,7 @@ export class Safezone {
     /// <returns>bool [true/false] if unit type is infact a wolf</returns>
     public static WolfEntersSafezoneActions(unit: Unit) {
         if (unit.typeId !== Wolf.WOLF_MODEL) return false
-        let wolf = Globals.ALL_WOLVES.get(unit)
+        const wolf = Globals.ALL_WOLVES.get(unit)
         if (!wolf) return false
         wolf.WolfMove(true) // forced move
         return true

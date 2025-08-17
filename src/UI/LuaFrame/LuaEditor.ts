@@ -50,7 +50,7 @@ export class LuaEditor {
         this.buttonTrigger = Trigger.create()!
         this.buttonTrigger.triggerRegisterFrameEvent(this.runButton, FRAMEEVENT_CONTROL_CLICK)
         this.buttonTrigger.addAction(() => {
-            let luaCode: string = this.editBox.text
+            const luaCode: string = this.editBox.text
             this.PassLua(luaCode)
         })
 
@@ -68,8 +68,8 @@ export class LuaEditor {
 
     private PassLua(luaCode: string) {
         try {
-            let p = getTriggerPlayer()
-            let output: string = this.RunLua(p, luaCode)
+            const p = getTriggerPlayer()
+            const output: string = this.RunLua(p, luaCode)
             this.outputText.setText(output)
         } catch (ex: any) {
             this.outputText.setText(`Error: ${ex}`)

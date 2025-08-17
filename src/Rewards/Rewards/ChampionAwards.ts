@@ -5,9 +5,9 @@ import { AwardManager } from './AwardManager'
 
 export class ChampionAwards {
     public static AwardAllChampions() {
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             if (!Globals.CHAMPIONS.includes(player.name)) continue
-            this.GiveAllChampionAwards(player)
+            ChampionAwards.GiveAllChampionAwards(player)
         }
     }
 

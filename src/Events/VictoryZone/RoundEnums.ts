@@ -9,22 +9,22 @@ import { Logger } from '../Logger/Logger'
 
 export class RoundEnums {
     public static GetRoundEnum(): string {
-        let currentDiff = Difficulty.DifficultyValue
+        const currentDiff = Difficulty.DifficultyValue
         let roundEnum: string
         switch (currentDiff) {
             case DifficultyLevel.Normal:
-                roundEnum = this.GetNormalRoundEnum()
+                roundEnum = RoundEnums.GetNormalRoundEnum()
                 break
 
             case DifficultyLevel.Hard:
-                roundEnum = this.GetHardRoundEnum()
+                roundEnum = RoundEnums.GetHardRoundEnum()
                 break
 
             case DifficultyLevel.Impossible:
-                roundEnum = this.GetImpossibleRoundEnum()
+                roundEnum = RoundEnums.GetImpossibleRoundEnum()
                 break
             case DifficultyLevel.Nightmare:
-                roundEnum = this.GetNightmareRoundEnum()
+                roundEnum = RoundEnums.GetNightmareRoundEnum()
                 break
             default:
                 Logger.Critical('Invalid difficulty level for GetRoundEnum')
@@ -34,12 +34,12 @@ export class RoundEnums {
     }
 
     public static GetSoloEnum(): string {
-        let roundEnum = this.GetSoloRoundEnum()
+        const roundEnum = RoundEnums.GetSoloRoundEnum()
         return roundEnum
     }
 
     public static SetSavedTime(player: MapPlayer, roundString: string) {
-        let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
+        const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         kittyStats.RoundTimes[roundString as keyof RoundTimesData] = roundDecimals(
             Math.max(GameTimer.RoundTime[Globals.ROUND], 0.01),
             2
@@ -47,8 +47,8 @@ export class RoundEnums {
     }
 
     private static GetNormalRoundEnum(): string {
-        let gameTimeData = Globals.GAME_TIMES
-        let round = Globals.ROUND
+        const gameTimeData = Globals.GAME_TIMES
+        const round = Globals.ROUND
         switch (round) {
             case 1:
                 return 'RoundOneNormal'
@@ -72,8 +72,8 @@ export class RoundEnums {
     }
 
     private static GetHardRoundEnum(): string {
-        let round = Globals.ROUND
-        let gameTimeData = Globals.GAME_TIMES
+        const round = Globals.ROUND
+        const gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
                 return 'RoundOneHard'
@@ -97,8 +97,8 @@ export class RoundEnums {
     }
 
     private static GetImpossibleRoundEnum(): string {
-        let round = Globals.ROUND
-        let gameTimeData = Globals.GAME_TIMES
+        const round = Globals.ROUND
+        const gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
                 return 'RoundOneImpossible'
@@ -122,8 +122,8 @@ export class RoundEnums {
     }
 
     private static GetNightmareRoundEnum(): string {
-        let round = Globals.ROUND
-        let gameTimeData = Globals.GAME_TIMES
+        const round = Globals.ROUND
+        const gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
                 return 'RoundOneNightmare'
@@ -147,8 +147,8 @@ export class RoundEnums {
     }
 
     public static GetSoloRoundEnum(): string {
-        let round = Globals.ROUND
-        let gameTimeData = Globals.GAME_TIMES
+        const round = Globals.ROUND
+        const gameTimeData = Globals.GAME_TIMES
         switch (round) {
             case 1:
                 return 'RoundOneSolo'

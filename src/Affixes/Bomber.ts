@@ -116,7 +116,7 @@ export class Bomber extends Affix {
             )
 
             while (true) {
-                let u = this.ExplodeGroup.first
+                const u = this.ExplodeGroup.first
                 if (!u) break
                 this.ExplodeGroup.removeUnit(u)
 

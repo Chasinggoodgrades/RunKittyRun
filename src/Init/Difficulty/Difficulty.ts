@@ -19,15 +19,15 @@ export class Difficulty {
     public static Initialize() {
         try {
             if (CurrentGameMode.active !== GameMode.Standard) return
-            if (this.IsDifficultyChosen) return
+            if (Difficulty.IsDifficultyChosen) return
 
             DifficultyOption.Initialize()
             DifficultyOption.DifficultyChoosing.setMessage(
                 `${Colors.COLOR_GOLD}Please choose a difficulty${Colors.COLOR_RESET}`
             )
-            this.RegisterSelectionEvent()
+            Difficulty.RegisterSelectionEvent()
 
-            Utility.SimpleTimer(2.0, () => this.ChooseDifficulty())
+            Utility.SimpleTimer(2.0, () => Difficulty.ChooseDifficulty())
         } catch (e: any) {
             Logger.Critical(`Error in Difficulty.Initialize: ${e}`)
             throw e
@@ -35,13 +35,13 @@ export class Difficulty {
     }
 
     private static RegisterSelectionEvent() {
-        this.triggerHandle ??= Trigger.create()!
-        this.triggerHandle.registerDialogEvent(DifficultyOption.DifficultyChoosing)
-        this.triggerHandle.addAction(() => {
-            let player = getTriggerPlayer()
-            let button = GetClickedButton()
+        Difficulty.triggerHandle ??= Trigger.create()!
+        Difficulty.triggerHandle.registerDialogEvent(DifficultyOption.DifficultyChoosing)
+        Difficulty.triggerHandle.addAction(() => {
+            const player = getTriggerPlayer()
+            const button = GetClickedButton()
 
-            let option = DifficultyOption.Options.find(o => o.Button.handle === button)
+            const option = DifficultyOption.Options.find(o => o.Button.handle === button)
             if (option) option.TallyCount++
 
             DifficultyOption.DifficultyChoosing.display(player, false)
@@ -53,37 +53,37 @@ export class Difficulty {
     }
 
     private static ChooseDifficulty() {
-        for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, true)
-        Utility.SimpleTimer(this.TIME_TO_CHOOSE_DIFFICULTY, () => this.TallyingVotes())
+        for (const player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, true)
+        Utility.SimpleTimer(Difficulty.TIME_TO_CHOOSE_DIFFICULTY, () => Difficulty.TallyingVotes())
     }
 
     private static TallyingVotes() {
         let highestTallyCount = 0
         let pickedOption: DifficultyOption | null = null
 
-        for (let option of DifficultyOption.Options) {
+        for (const option of DifficultyOption.Options) {
             if (option.TallyCount > highestTallyCount) {
                 highestTallyCount = option.TallyCount
                 pickedOption = option
             }
         }
 
-        this.RemoveDifficultyDialog()
+        Difficulty.RemoveDifficultyDialog()
         if (pickedOption === null) print('picked option is null')
-        if (pickedOption !== null) this.SetDifficulty(pickedOption)
+        if (pickedOption !== null) Difficulty.SetDifficulty(pickedOption)
     }
 
     private static SetDifficulty(difficulty: DifficultyOption) {
-        this.DifficultyOption = difficulty
-        this.DifficultyValue = difficulty.Value
-        this.IsDifficultyChosen = true
+        Difficulty.DifficultyOption = difficulty
+        Difficulty.DifficultyValue = difficulty.Value
+        Difficulty.IsDifficultyChosen = true
         print(
             `${Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r${difficulty.toString()}${Colors.COLOR_RESET}`
         )
     }
 
     private static RemoveDifficultyDialog() {
-        for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, false)
+        for (const player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, false)
     }
 
     /// <summary>
@@ -92,9 +92,9 @@ export class Difficulty {
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
     public static ChangeDifficulty(difficulty: string = 'normal') {
         for (let i = 0; i < DifficultyOption.Options.length; i++) {
-            let option = DifficultyOption.Options[i]
+            const option = DifficultyOption.Options[i]
             if (option.name.toLowerCase() === difficulty.toLowerCase()) {
-                this.SetDifficulty(option)
+                Difficulty.SetDifficulty(option)
                 return true
             }
         }

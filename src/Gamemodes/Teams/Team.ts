@@ -47,11 +47,11 @@ export class Team {
             Globals.ALL_TEAMS = new Map()
             Globals.ALL_TEAMS_LIST = []
             Globals.PLAYERS_TEAMS = new Map()
-            this.TeamTimer ??= Timer.create()
-            this.TeamTimer.start(
+            Team.TeamTimer ??= Timer.create()
+            Team.TeamTimer.start(
                 0.1,
                 false,
-                ErrorHandler.Wrap(() => this.TeamSetup())
+                ErrorHandler.Wrap(() => Team.TeamSetup())
             )
         } catch (e: any) {
             Logger.Critical(`Error in Team.Initialize: ${e}`)
@@ -78,7 +78,7 @@ export class Team {
 
     public TeamIsDeadActions() {
         for (let i = 0; i < this.Teammembers.length; i++) {
-            let kitty = Globals.ALL_KITTIES.get(this.Teammembers[i])!
+            const kitty = Globals.ALL_KITTIES.get(this.Teammembers[i])!
             kitty.Finished = true
         }
         this.Finished = true
@@ -97,7 +97,7 @@ export class Team {
     }
 
     public static UpdateTeamsMB() {
-        let t = Timer.create()
+        const t = Timer.create()
         t.start(
             0.1,
             false,
@@ -114,7 +114,7 @@ export class Team {
             // free pick
             RoundManager.ROUND_INTERMISSION += 15.0
             TeamHandler.FreepickEnabled = true
-            for (let player of Globals.ALL_PLAYERS) {
+            for (const player of Globals.ALL_PLAYERS) {
                 player.DisplayTimedTextTo(
                     RoundManager.ROUND_INTERMISSION - 30.0,
                     Colors.COLOR_YELLOW_ORANGE +
@@ -159,7 +159,7 @@ export class Team {
         // Sets the team member string whenever someone is added or removed.
         this.TeamMembersString = '' // Reset TeamMembersString
         for (let i = 0; i < this.Teammembers.length; i++) {
-            let member = this.Teammembers[i]
+            const member = this.Teammembers[i]
             let name: string = member.name.split('#')[0]
             if (name.length > 7) name = ColorUtils.ColorString(member.name.substring(0, 7), member.id + 1)
 

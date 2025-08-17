@@ -83,10 +83,10 @@ export class RTR {
             return
         }
 
-        let currentX: number = this.kitty.Unit.x
-        let currentY: number = this.kitty.Unit.y
+        const currentX: number = this.kitty.Unit.x
+        const currentY: number = this.kitty.Unit.y
 
-        let distanceToTarget: number = distanceBetweenXYPoints(currentX, currentY, this.targetX, this.targetY)
+        const distanceToTarget: number = distanceBetweenXYPoints(currentX, currentY, this.targetX, this.targetY)
 
         if (distanceToTarget < 10) {
             this.hasTarget = false
@@ -102,10 +102,10 @@ export class RTR {
             this.kitty.Unit.setAnimation(6)
         }
 
-        let moveSpeed: number = this.absoluteMoveSpeed ?? this.kitty.Unit.moveSpeed
-        let movePerTick: number = moveSpeed * this.RTR_INTERVAL
+        const moveSpeed: number = this.absoluteMoveSpeed ?? this.kitty.Unit.moveSpeed
+        const movePerTick: number = moveSpeed * this.RTR_INTERVAL
 
-        let angle: number = Atan2(this.targetY - currentY, this.targetX - currentX)
+        const angle: number = Atan2(this.targetY - currentY, this.targetX - currentX)
         this.kitty.Unit.facing = angle * bj_RADTODEG
 
         let newX: number = currentX + movePerTick * Cos(angle)
@@ -127,11 +127,11 @@ export class RTR {
     }
 
     private RegisterClickEvent() {
-        let ClickTrigger = Trigger.create()!
+        const ClickTrigger = Trigger.create()!
         ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         ClickTrigger.addAction(() => this.HandleClick(true))
 
-        let WidgetTrigger = Trigger.create()!
+        const WidgetTrigger = Trigger.create()!
         WidgetTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
         WidgetTrigger.addAction(() => this.HandleClick(false))
 
@@ -148,7 +148,7 @@ export class RTR {
             this.targetX = GetOrderPointX()
             this.targetY = GetOrderPointY()
         } else {
-            let target = GetOrderTarget()!
+            const target = GetOrderTarget()!
             this.targetX = GetWidgetX(target)
             this.targetY = GetWidgetY(target)
         }

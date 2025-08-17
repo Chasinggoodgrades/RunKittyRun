@@ -24,14 +24,14 @@ export class MirrorMovementHandler {
         if (this.kitty.Slider.IsEnabled()) return // Let slider handle its own mirror logic
         if (this.isProcessingMirror) return // Prevent recursion
 
-        let unit = getTriggerUnit()
-        let unitX = unit.x
-        let unitY = unit.y
+        const unit = getTriggerUnit()
+        const unitX = unit.x
+        const unitY = unit.y
 
         let orderX: number, orderY
 
         // Check if it's a point order or target order
-        let target = GetOrderTarget()
+        const target = GetOrderTarget()
         if (target) {
             // Target order - get target position
             orderX = GetWidgetX(target)
@@ -43,10 +43,10 @@ export class MirrorMovementHandler {
         }
 
         // Calculate the mirror position (opposite direction)
-        let deltaX = orderX - unitX
-        let deltaY = orderY - unitY
-        let mirrorX = unitX - deltaX
-        let mirrorY = unitY - deltaY
+        const deltaX = orderX - unitX
+        const deltaY = orderY - unitY
+        const mirrorX = unitX - deltaX
+        const mirrorY = unitY - deltaY
 
         // Issue the mirrored move order
         this.isProcessingMirror = true

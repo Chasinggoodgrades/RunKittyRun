@@ -26,8 +26,8 @@ export class WolfArea {
 
     public static Initialize() {
         let count = 0
-        for (let wolfRegion of RegionList.WolfRegions) {
-            let wolfArea = new WolfArea(count, wolfRegion.region())
+        for (const wolfRegion of RegionList.WolfRegions) {
+            const wolfArea = new WolfArea(count, wolfRegion.region())
             wolfArea.Rect = Rect(wolfRegion.minX, wolfRegion.minY, wolfRegion.maxX, wolfRegion.maxY)
             wolfArea.Rectangle = wolfRegion
             wolfArea.CalculateArea()
@@ -39,14 +39,14 @@ export class WolfArea {
     }
 
     private RegisterEnterEvents() {
-        let AreaTrigger = Trigger.create()!
+        const AreaTrigger = Trigger.create()!
         AreaTrigger.registerEnterRegion(this.Region, FilterList.KittyFilter)
         AreaTrigger.addAction(() => {
             try {
-                let unit = getTriggerUnit()
-                let player = unit.owner
+                const unit = getTriggerUnit()
+                const player = unit.owner
 
-                let kitty = Globals.ALL_KITTIES.get(player)!
+                const kitty = Globals.ALL_KITTIES.get(player)!
                 kitty.ProgressHelper.CurrentPoint = this.ID
                 kitty.ProgressZone = this.ID
             } catch (e: any) {
@@ -60,11 +60,11 @@ export class WolfArea {
     /// Prevents wolves from leaving the area with wander.
     /// </summary>
     private RegisterLeaveEvents() {
-        let AreaTrigger = Trigger.create()!
+        const AreaTrigger = Trigger.create()!
         AreaTrigger.registerLeaveRegion(this.Region, FilterList.DogFilter)
         AreaTrigger.addAction(() => {
             try {
-                let wolf = Globals.ALL_WOLVES.get(getTriggerUnit())!
+                const wolf = Globals.ALL_WOLVES.get(getTriggerUnit())!
                 wolf.WolfMove()
             } catch (e: any) {
                 Logger.Critical(`Error in WolfArea.RegisterLeaveEvents: ${e}`)

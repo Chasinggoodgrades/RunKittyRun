@@ -20,7 +20,7 @@ export const Progress = {
     },
 
     CalculateProgress(kitty: Kitty) {
-        let round = Globals.ROUND
+        const round = Globals.ROUND
         kitty.TimeProg.SetRoundProgress(round, this.CalculatePlayerProgress(kitty))
     },
 
@@ -28,7 +28,7 @@ export const Progress = {
         if (!Globals.GAME_ACTIVE) return
         try {
             for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-                let team = Globals.ALL_TEAMS_LIST[i]
+                const team = Globals.ALL_TEAMS_LIST[i]
                 team.UpdateRoundProgress(Globals.ROUND, Progress.CalculateTeamProgress(team))
             }
             // TeamsMultiboard.UpdateTeamStatsMB()
@@ -43,7 +43,7 @@ export const Progress = {
         if (Team.Teammembers.length === 0) return '0.00'
 
         for (let i = 0; i < Team.Teammembers.length; i++) {
-            let player = Team.Teammembers[i]
+            const player = Team.Teammembers[i]
             totalProgress += Globals.ALL_KITTIES.get(player)!.TimeProg.GetRoundProgress(Globals.ROUND)
         }
 
@@ -52,19 +52,19 @@ export const Progress = {
 
     CalculatePlayerProgress(kitty: Kitty) {
         try {
-            let currentSafezone = kitty.ProgressZone
+            const currentSafezone = kitty.ProgressZone
             if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(kitty.Unit.x, kitty.Unit.y))
                 return 100.0 // if at end.. 100 progress
             if (Regions.Victory_Area.includes(kitty.Unit.x, kitty.Unit.y)) return 100.0 // if in victory area, 100 progress
             if (Globals.SAFE_ZONES[0].Rectangle.includes(kitty.Unit.x, kitty.Unit.y) && !kitty.Finished) return 0.0 // if at start, 0 progress
             if (kitty.isAlive() && kitty.Finished) return 100.0
-            let currentProgress = Progress.DistanceBetweenPoints(
+            const currentProgress = Progress.DistanceBetweenPoints(
                 kitty.Unit.x,
                 kitty.Unit.y,
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].x,
                 ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].y
             )
-            let totalProgress = (Progress.DistancesFromStart.get(currentSafezone) ?? 0) + currentProgress
+            const totalProgress = (Progress.DistancesFromStart.get(currentSafezone) ?? 0) + currentProgress
 
             let progress =
                 (totalProgress / (Progress.DistancesFromStart.get(RegionList.PathingPoints.length - 1) ?? 1)) * 100
@@ -87,9 +87,9 @@ export const Progress = {
             let totalDistance = 0.0
             let count = 0
             Progress.DistancesFromStart.set(0, 0.0)
-            for (let pathPoint of RegionList.PathingPoints) {
+            for (const pathPoint of RegionList.PathingPoints) {
                 if (count >= RegionList.PathingPoints.length - 1) break
-                let nextPathPoint = RegionList.PathingPoints[count + 1]
+                const nextPathPoint = RegionList.PathingPoints[count + 1]
                 totalDistance += Progress.DistanceBetweenPoints(
                     pathPoint.centerX,
                     pathPoint.centerY,

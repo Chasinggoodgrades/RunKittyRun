@@ -8,11 +8,11 @@ export class ADMINDISABLE {
     public static AdminOnly: boolean = false // enable if restricted to admins/VIPs only.
 
     public static AdminsGame(): boolean {
-        if (!this.AdminOnly) return true
-        for (let player of Globals.ALL_PLAYERS) {
+        if (!ADMINDISABLE.AdminOnly) return true
+        for (const player of Globals.ALL_PLAYERS) {
             if (IsDeveloper(player)) return true
         }
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             player.DisplayTimedTextTo(
                 60.0,
                 `${Colors.COLOR_RED}This map is in the testing phase. Only Admins... Coming out soon.${Colors.COLOR_RESET}`

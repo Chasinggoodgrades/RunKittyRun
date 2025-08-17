@@ -41,13 +41,13 @@ export class ShopChanger {
     }
 
     private static SetShopsToSkin(skinType: number) {
-        let tempGroup = Group.create()!
+        const tempGroup = Group.create()!
         tempGroup.enumUnitsInRect(
             Globals.WORLD_BOUNDS,
             Filter(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
         )
         while (true) {
-            let vendor = tempGroup.first
+            const vendor = tempGroup.first
             if (!vendor) break
             tempGroup.removeUnit(vendor)
             vendor.skin = skinType

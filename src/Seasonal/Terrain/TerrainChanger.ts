@@ -14,10 +14,10 @@ export class TerrainChanger {
 
     public static Initialize() {
         try {
-            this.NoSeason()
+            TerrainChanger.NoSeason()
             if (CurrentGameMode.active !== GameMode.Standard) return
-            this.ChristmasTerrain()
-            this.SetTerrain()
+            TerrainChanger.ChristmasTerrain()
+            TerrainChanger.SetTerrain()
         } catch (e: any) {
             Logger.Critical(`Error in TerrainChanger.Initialize: ${e}`)
             throw e
@@ -28,31 +28,31 @@ export class TerrainChanger {
     /// Sets the terrain based on current round. Includes seasonal terrains.
     /// </summary>
     public static SetTerrain() {
-        this.SetWolfRegionTerrain()
-        this.SetSafezoneTerrain()
+        TerrainChanger.SetWolfRegionTerrain()
+        TerrainChanger.SetSafezoneTerrain()
     }
 
     public static NoSeason() {
-        this.NoSeasonTerrain()
-        this.SetTerrain()
+        TerrainChanger.NoSeasonTerrain()
+        TerrainChanger.SetTerrain()
     }
 
     public static ActivateChristmasTerrain() {
-        this.ChristmasTerrain()
-        this.SetTerrain()
+        TerrainChanger.ChristmasTerrain()
+        TerrainChanger.SetTerrain()
     }
 
     private static NoSeasonTerrain() {
-        this.Terrains[0] = FourCC('Lgrd')
-        this.Terrains[1] = FourCC('Ygsb')
-        this.Terrains[2] = FourCC('Vgrs')
-        this.Terrains[3] = FourCC('Xhdg')
-        this.Terrains[4] = FourCC('Ywmb')
+        TerrainChanger.Terrains[0] = FourCC('Lgrd')
+        TerrainChanger.Terrains[1] = FourCC('Ygsb')
+        TerrainChanger.Terrains[2] = FourCC('Vgrs')
+        TerrainChanger.Terrains[3] = FourCC('Xhdg')
+        TerrainChanger.Terrains[4] = FourCC('Ywmb')
 
         for (let i = 0; i < Globals.NumberOfRounds; i++) {
-            this.SafezoneTerrain[i] = FourCC('Xblm')
+            TerrainChanger.SafezoneTerrain[i] = FourCC('Xblm')
         }
-        this.SetTerrain()
+        TerrainChanger.SetTerrain()
     }
 
     private static ChristmasTerrain() {
@@ -72,27 +72,27 @@ export class TerrainChanger {
     }
 
     private static SetWolfRegionTerrain() {
-        let round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
+        const round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
         TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, TerrainChanger.Terrains[round])
         TerrainChanger.LastWolfTerrain = TerrainChanger.Terrains[round]
     }
 
     private static SetSafezoneTerrain() {
-        let round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
+        const round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
         TerrainChanger.ChangeMapTerrain(TerrainChanger.LastSafezoneTerrain, TerrainChanger.SafezoneTerrain[round])
         TerrainChanger.LastSafezoneTerrain = TerrainChanger.SafezoneTerrain[round]
     }
 
     public static ChangeMapTerrain(tileToChange: number, newTerrain: number) {
-        let mapRect = Globals.WORLD_BOUNDS
-        let minX = mapRect.minX
-        let minY = mapRect.minY
-        let maxX = mapRect.maxX
-        let maxY = mapRect.maxY
+        const mapRect = Globals.WORLD_BOUNDS
+        const minX = mapRect.minX
+        const minY = mapRect.minY
+        const maxX = mapRect.maxX
+        const maxY = mapRect.maxY
 
         for (let x = minX; x <= maxX; x += 128) {
             for (let y = minY; y <= maxY; y += 128) {
-                let type = GetTerrainType(x, y)
+                const type = GetTerrainType(x, y)
 
                 if (type === tileToChange) SetTerrainType(x, y, newTerrain, -1, 1, 1)
             }

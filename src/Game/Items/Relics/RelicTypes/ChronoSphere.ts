@@ -89,7 +89,7 @@ export class ChronoSphere extends Relic {
 
     private SetAbilityData() {
         try {
-            let item = Utility.UnitGetItem(this.Kitty.Unit, this.RelicItemID)
+            const item = Utility.UnitGetItem(this.Kitty.Unit, this.RelicItemID)
             if (!item) return
             this.Ability = item.getAbility(this.RelicAbilityID)!
             if (!this.Ability) return
@@ -114,7 +114,9 @@ export class ChronoSphere extends Relic {
     // Upgrade level 1, rotating aura slow
     private RotatingSlowAura() {
         try {
-            let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
+                typeof ChronoSphere
+            )
             if (upgradeLevel <= 0) return
 
             this.MagnitudeTimer ??= Timer.create()
@@ -129,7 +131,9 @@ export class ChronoSphere extends Relic {
     // Upgrade Level 2 Location Capture
     private RotatingLocationCapture() {
         try {
-            let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
+                typeof ChronoSphere
+            )
             if (upgradeLevel <= 1) return
             this.LocationCaptureTimer ??= Timer.create()
             this.CapturedLocation = [this.Kitty.Unit.x, this.Kitty.Unit.y, this.Kitty.Unit.facing] // reset to current location on buy
@@ -143,7 +147,7 @@ export class ChronoSphere extends Relic {
         try {
             this.LocationCaptureTimer.start(this.LOCATION_CAPTURE_INTERVAL, false, this.CaptureLocation)
             if (this.Kitty.CurrentStats.ChronoSphereCD) return
-            let unit = this.Kitty.Unit
+            const unit = this.Kitty.Unit
             this.CapturedLocation = [unit.x, unit.y, unit.facing]
             this.LocationEffect ??= Effect.create(this.LocationSaveEffectPath, unit.x, unit.y)!
             this.LocationEffect.scale = 0.55
@@ -155,9 +159,9 @@ export class ChronoSphere extends Relic {
     }
 
     private RandomMagnitude(): number {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
-        let lowerBound = (this.MAGNITUDE_LOWER_BOUND / 100.0) * -1.0
-        let upperBound = (this.MAGNITUDE_UPPER_BOUND / 100.0) * -1.0
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+        const lowerBound = (this.MAGNITUDE_LOWER_BOUND / 100.0) * -1.0
+        const upperBound = (this.MAGNITUDE_UPPER_BOUND / 100.0) * -1.0
         if (upgradeLevel === 0) return lowerBound
         return GetRandomReal(upperBound, lowerBound) // as weird as this is.. yes.
     }
@@ -191,10 +195,10 @@ export class ChronoSphere extends Relic {
             if (CurrentGameMode.active !== GameMode.Standard) return false // Only for Standard.
             if (kitty.ProtectionActive) return false // Don't rewind if ultimate has been casted.
             if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false
-            let relic = kitty.Relics.find(this.IsChronoSphere) as ChronoSphere
+            const relic = kitty.Relics.find(ChronoSphere.IsChronoSphere) as ChronoSphere
             if (relic === null) return false
             if (kitty.CurrentStats.ChronoSphereCD) return false
-            let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
             if (upgradeLevel < 2) return false
             relic.RewindTime()
             kitty.CurrentStats.ChronoSphereCD = true
@@ -202,7 +206,7 @@ export class ChronoSphere extends Relic {
             relicItem.ActivelyUsed = true;
             relicItem.AddAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE);
             kitty.Unit.UseItem(relicItem);*/
-            Utility.SimpleTimer(this.REWIND_COOLDOWN, () => {
+            Utility.SimpleTimer(ChronoSphere.REWIND_COOLDOWN, () => {
                 try {
                     kitty.CurrentStats.ChronoSphereCD = false
                     kitty.Player.DisplayTimedTextTo(1.0, `${Colors.COLOR_LAVENDER}Chrono Sphere recharged|r`)

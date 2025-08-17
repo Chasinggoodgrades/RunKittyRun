@@ -23,7 +23,7 @@ export class SeasonalAwards {
             8.0,
             `${Colors.COLOR_YELLOW}Special thanks to everyone for playing this holiday season! All players have been awarded the snow trail and snow wings from 2023 :)${Colors.COLOR_RESET}`
         )
-        let t = createAchesTimer()
+        const t = createAchesTimer()
         t.Timer.start(
             1.0,
             false,

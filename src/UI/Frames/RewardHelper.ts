@@ -46,7 +46,7 @@ export class RewardHelper {
 
     public static GetAwardNestedValueTwo(saveData: object, awardName: string) {
         // search rewardsList for this award name, then return getawardNestedvalue
-        let reward = RewardsManager.Rewards.find(r => r.name === awardName)
+        const reward = RewardsManager.Rewards.find(r => r.name === awardName)
         return reward ? RewardHelper.GetAwardNestedValue(saveData, reward.TypeSorted, reward.name) : -1
     }
 
@@ -58,11 +58,11 @@ export class RewardHelper {
     /// <param name="propertyName">Reward.name</param>
     /// <returns></returns>
     public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
-        let nestedProperty = (obj as any)[nestedPropertyName]
+        const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
         if (nestedProperty !== null) {
-            let nestedObject = nestedProperty
+            const nestedObject = nestedProperty
             if (nestedObject !== null) {
-                let property = (nestedObject as any)[propertyName]
+                const property = nestedObject[propertyName]
                 if (property !== null) {
                     return property
                 }
@@ -79,9 +79,9 @@ export class RewardHelper {
     /// <param name="propertyName">the name of reward.</param>
     /// <param name="value">value to set it to</param>
     public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: any) {
-        let nestedProperty = (obj as any)[nestedPropertyName]
+        const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
         if (nestedProperty !== null) {
-            let nestedObject = nestedProperty
+            const nestedObject = nestedProperty
             if (nestedObject !== null) {
                 RewardHelper.UpdateProperty(nestedObject, propertyName, value)
             }
@@ -91,7 +91,7 @@ export class RewardHelper {
     }
 
     private static UpdateProperty(obj: object, propertyName: string, value: object) {
-        let property = (obj as any)[propertyName]
+        const property = obj[propertyName as keyof typeof obj]
         if (property !== undefined) {
             ;(obj as any)[propertyName] = value
         } else {

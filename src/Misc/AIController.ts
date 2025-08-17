@@ -138,16 +138,16 @@ export class AIController {
     }
 
     private MoveKittyToPosition() {
-        let currentProgressZoneId = this.CalcProgressZone(this.kitty)
-        let currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId]
-        let nextSafezone =
+        const currentProgressZoneId = this.CalcProgressZone(this.kitty)
+        const currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId]
+        const nextSafezone =
             currentProgressZoneId + 1 < Globals.SAFE_ZONES.length - 1
                 ? Globals.SAFE_ZONES[currentProgressZoneId + 1]
                 : currentSafezone
-        let currentSafezoneCenter = this.GetCenterPositionInSafezone(currentSafezone)
-        let nextSafezoneCenter = this.GetCenterPositionInSafezone(nextSafezone)
+        const currentSafezoneCenter = this.GetCenterPositionInSafezone(currentSafezone)
+        const nextSafezoneCenter = this.GetCenterPositionInSafezone(nextSafezone)
 
-        let currentSafeZoneId: number | null = this.IsInSafeZone(
+        const currentSafeZoneId: number | null = this.IsInSafeZone(
             this.kitty.Unit.x,
             this.kitty.Unit.y,
             currentProgressZoneId
@@ -160,11 +160,11 @@ export class AIController {
             this.lastSafeZoneIndexId = currentSafeZoneId
         }
 
-        let distanceToCurrentCenter = Math.sqrt(
+        const distanceToCurrentCenter = Math.sqrt(
             Math.pow(this.kitty.Unit.x - currentSafezoneCenter[0], 2) +
                 Math.pow(this.kitty.Unit.y - currentSafezoneCenter[1], 2)
         )
-        let SAFEZONE_THRESHOLD = 128.0
+        const SAFEZONE_THRESHOLD = 128.0
 
         if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD) {
             this.reachedLastProgressZoneCenter = true
@@ -172,7 +172,7 @@ export class AIController {
 
         let allKittiesAtSameOrHigherSafezone: boolean = true // IEnumberable is dog shit for C# -> Lua conversion, this should -help-
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-            let k = Globals.ALL_KITTIES_LIST[i]
+            const k = Globals.ALL_KITTIES_LIST[i]
             if (!PROD && k.Player === MapPlayer.fromIndex(0)!) {
                 continue
             }
@@ -188,9 +188,9 @@ export class AIController {
                 ? nextSafezoneCenter
                 : currentSafezoneCenter
 
-        for (let [_, circle] of Globals.ALL_CIRCLES) {
-            let deadKitty = Globals.ALL_KITTIES.get(circle.Player)!
-            let deadKittyProgressZoneId = this.CalcProgressZone(deadKitty)
+        for (const [_, circle] of Globals.ALL_CIRCLES) {
+            const deadKitty = Globals.ALL_KITTIES.get(circle.Player)!
+            const deadKittyProgressZoneId = this.CalcProgressZone(deadKitty)
 
             if (deadKittyProgressZoneId > currentProgressZoneId) {
                 continue
@@ -202,26 +202,26 @@ export class AIController {
 
             if (!deadKitty.isAlive()) {
                 if (!this.claimedKitties.has(deadKitty)) {
-                    let thisDistance: number = Math.sqrt(
+                    const thisDistance: number = Math.sqrt(
                         Math.pow(this.kitty.Unit.x - deadKitty.Unit.x, 2) +
                             Math.pow(this.kitty.Unit.y - deadKitty.Unit.y, 2)
                     )
-                    let thisLaneDiff: number = Math.abs(currentProgressZoneId - deadKittyProgressZoneId)
+                    const thisLaneDiff: number = Math.abs(currentProgressZoneId - deadKittyProgressZoneId)
 
                     let isNearest: boolean = true
 
                     for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-                        let otherKitty = Globals.ALL_KITTIES_LIST[i]
+                        const otherKitty = Globals.ALL_KITTIES_LIST[i]
                         if (!PROD && otherKitty.Player === MapPlayer.fromIndex(0)!) {
                             continue
                         }
 
                         if (otherKitty !== this.kitty && otherKitty.isAlive()) {
-                            let otherDistance: number = Math.sqrt(
+                            const otherDistance: number = Math.sqrt(
                                 Math.pow(otherKitty.Unit.x - deadKitty.Unit.x, 2) +
                                     Math.pow(otherKitty.Unit.y - deadKitty.Unit.y, 2)
                             )
-                            let otherLaneDiff: number = Math.abs(
+                            const otherLaneDiff: number = Math.abs(
                                 this.CalcProgressZone(otherKitty) - deadKittyProgressZoneId
                             )
 
@@ -265,11 +265,11 @@ export class AIController {
             }
         }
 
-        let wolvesInLane = WolfArea.WolfAreas.get(currentProgressZoneId)!.Wolves
+        const wolvesInLane = WolfArea.WolfAreas.get(currentProgressZoneId)!.Wolves
 
         this.wolvesInRange = []
         for (let i = 0; i < wolvesInLane.length; i++) {
-            let wolf = wolvesInLane[i]
+            const wolf = wolvesInLane[i]
             if (
                 this.IsWithinRadius(
                     this.kitty.Unit.x,
@@ -283,13 +283,13 @@ export class AIController {
             }
         }
 
-        let forwardDirection: [number, number] = [
+        const forwardDirection: [number, number] = [
             targetPosition[0] - this.kitty.Unit.x,
             targetPosition[1] - this.kitty.Unit.y,
         ]
 
         if (this.wolvesInRange.length > 0) {
-            let dodgePosition = this.GetCompositeDodgePosition(this.wolvesInRange, forwardDirection) // TODO; Cleanup:             let dodgePosition = GetCompositeDodgePosition(wolvesInRange, ref forwardDirection);
+            const dodgePosition = this.GetCompositeDodgePosition(this.wolvesInRange, forwardDirection) // TODO; Cleanup:             let dodgePosition = GetCompositeDodgePosition(wolvesInRange, ref forwardDirection);
             this.IssueOrder('move', dodgePosition[0], dodgePosition[1], true)
             return
         } else {
@@ -297,13 +297,13 @@ export class AIController {
             this.HideAllFreeLightnings()
         }
 
-        let deltaX = targetPosition[0] - this.kitty.Unit.x
-        let deltaY = targetPosition[1] - this.kitty.Unit.y
-        let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+        const deltaX = targetPosition[0] - this.kitty.Unit.x
+        const deltaY = targetPosition[1] - this.kitty.Unit.y
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
         if (distance > 256) {
-            let scale = 256 / distance
-            let moveX = this.kitty.Unit.x + deltaX * scale
-            let moveY = this.kitty.Unit.y + deltaY * scale
+            const scale = 256 / distance
+            const moveX = this.kitty.Unit.x + deltaX * scale
+            const moveY = this.kitty.Unit.y + deltaY * scale
             this.IssueOrder('move', moveX, moveY, false)
         } else {
             this.IssueOrder('move', targetPosition[0], targetPosition[1], false)
@@ -311,8 +311,8 @@ export class AIController {
     }
 
     private IsWithinLaneBounds(x: number, y: number) {
-        let currentProgressZoneId = this.kitty.ProgressZone
-        let laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
+        const currentProgressZoneId = this.kitty.ProgressZone
+        const laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
 
         const width = laneBounds.maxX - laneBounds.minX
         const height = laneBounds.maxY - laneBounds.minY
@@ -331,7 +331,7 @@ export class AIController {
         if (safeZoneId < 0 || safeZoneId >= Globals.SAFE_ZONES.length) {
             return false // prevent out of bounds errors xd
         }
-        let safezone = Globals.SAFE_ZONES[safeZoneId]
+        const safezone = Globals.SAFE_ZONES[safeZoneId]
 
         return (
             x >= safezone.Rectangle.minX &&
@@ -342,7 +342,7 @@ export class AIController {
     }
 
     private IssueOrder(command: string, x: number, y: number, isDodge: boolean) {
-        let MIN_MOVE_DISTANCE: number = isDodge ? 16.0 : 64.0
+        const MIN_MOVE_DISTANCE: number = isDodge ? 16.0 : 64.0
 
         if (command === 'move') {
             if (this.lastLightning !== null) {
@@ -354,9 +354,9 @@ export class AIController {
             }
         }
 
-        let deltaX: number = x - this.lastX
-        let deltaY: number = y - this.lastY
-        let distanceSquared: number = deltaX * deltaX + deltaY * deltaY
+        const deltaX: number = x - this.lastX
+        const deltaY: number = y - this.lastY
+        const distanceSquared: number = deltaX * deltaX + deltaY * deltaY
 
         if (
             this.hasLastOrder &&
@@ -386,8 +386,8 @@ export class AIController {
     }
 
     private GetCenterPositionInSafezone(safezone: Safezone) {
-        let centerX = (safezone.Rectangle.minX + safezone.Rectangle.maxX) / 2
-        let centerY = (safezone.Rectangle.minY + safezone.Rectangle.maxY) / 2
+        const centerX = (safezone.Rectangle.minX + safezone.Rectangle.maxX) / 2
+        const centerY = (safezone.Rectangle.minY + safezone.Rectangle.maxY) / 2
         return [centerX, centerY]
     }
 
@@ -397,20 +397,20 @@ export class AIController {
      */
     CalcCrossingPoints() {
         for (let i = 0; i < this.wallPoints.length; i++) {
-            let point = this.wallPoints[i]
+            const point = this.wallPoints[i]
             point.dispose()
         }
 
         this.wallPoints = []
 
-        let dodgeRange = this.DODGE_DISTANCE * (this.timerInterval + 0.2)
-        let currentProgressZoneId = this.kitty.ProgressZone
-        let laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
+        const dodgeRange = this.DODGE_DISTANCE * (this.timerInterval + 0.2)
+        const currentProgressZoneId = this.kitty.ProgressZone
+        const laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
 
         const width = laneBounds.maxX - laneBounds.minX
         const height = laneBounds.maxY - laneBounds.minY
 
-        let isVertical: boolean = width < height
+        const isVertical: boolean = width < height
 
         if (isVertical) {
             // Handle vertical walls (left/right) as before.
@@ -419,14 +419,14 @@ export class AIController {
             else if (this.kitty.Unit.x + dodgeRange > laneBounds.maxX) constant = laneBounds.maxX
             else return
 
-            let relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
+            const relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
             if (!Number.isNaN(relativeY) && relativeY !== 0) {
-                let a = MemoryHandler.getEmptyObject<Point>()
+                const a = MemoryHandler.getEmptyObject<Point>()
                 a.x = constant
                 a.y = relativeY + this.kitty.Unit.y
                 this.wallPoints.push(a)
 
-                let b = MemoryHandler.getEmptyObject<Point>()
+                const b = MemoryHandler.getEmptyObject<Point>()
                 b.x = constant
                 b.y = -relativeY + this.kitty.Unit.y
                 this.wallPoints.push(b)
@@ -437,14 +437,14 @@ export class AIController {
             else if (this.kitty.Unit.y - dodgeRange < laneBounds.minY) constant = laneBounds.minY
             else return
 
-            let relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
+            const relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
             if (!Number.isNaN(relativeX) && relativeX !== 0) {
-                let a = MemoryHandler.getEmptyObject<Point>()
+                const a = MemoryHandler.getEmptyObject<Point>()
                 a.x = relativeX + this.kitty.Unit.x
                 a.y = constant
                 this.wallPoints.push(a)
 
-                let b = MemoryHandler.getEmptyObject<Point>()
+                const b = MemoryHandler.getEmptyObject<Point>()
                 b.x = -relativeX + this.kitty.Unit.x
                 b.y = constant
                 this.wallPoints.push(b)
@@ -459,27 +459,27 @@ export class AIController {
      * the: center: on: the: X: axis: and
      */
     AnglesFromCenter(pointA: [number, number], pointB: [number, number]) {
-        let angleA: number = this.AngleOf(pointA, [this.kitty.Unit.x, this.kitty.Unit.y])
-        let angleB: number = this.AngleOf(pointB, [this.kitty.Unit.x, this.kitty.Unit.y])
+        const angleA: number = this.AngleOf(pointA, [this.kitty.Unit.x, this.kitty.Unit.y])
+        const angleB: number = this.AngleOf(pointB, [this.kitty.Unit.x, this.kitty.Unit.y])
         return [angleA, angleB]
     }
 
     AngleOf(point: [number, number], center: [number, number]) {
-        let deltaX: number = point[0] - center[0]
-        let deltaY: number = point[1] - center[1]
-        let radians: number = Math.atan2(deltaY, deltaX)
+        const deltaX: number = point[0] - center[0]
+        const deltaY: number = point[1] - center[1]
+        const radians: number = Math.atan2(deltaY, deltaX)
         return this.NormalizeAngle(radians)
     }
 
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
     private GetCompositeDodgePosition(wolves: Wolf[], forwardDirection: [number, number]) {
         // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
-        let forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
-        let requiredClearance = 22.5 * (Math.PI / 180)
+        const forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
+        const requiredClearance = 22.5 * (Math.PI / 180)
 
         // Calculate the angle interval that each wolf “blocks.”
         for (let i = 0; i < wolves.length; i++) {
-            let wolf: Wolf = wolves[i]
+            const wolf: Wolf = wolves[i]
 
             let MIN_TOTAL_BLOCKED_ANGLE = 45.0 * (Math.PI / 180)
             let MAX_TOTAL_BLOCKED_ANGLE = 270.0 * (Math.PI / 180)
@@ -489,38 +489,38 @@ export class AIController {
                 MAX_TOTAL_BLOCKED_ANGLE = 150.0 * (Math.PI / 180)
             }
 
-            let dx: number = wolf.Unit.x - this.kitty.Unit.x
-            let dy: number = wolf.Unit.y - this.kitty.Unit.y
-            let distance: number = Math.sqrt(dx * dx + dy * dy)
+            const dx: number = wolf.Unit.x - this.kitty.Unit.x
+            const dy: number = wolf.Unit.y - this.kitty.Unit.y
+            const distance: number = Math.sqrt(dx * dx + dy * dy)
 
             if (distance < 1) continue // Skip if the wolf is at the same position to avoid division by zero
 
-            let centerAngle: number = Math.atan2(wolf.Unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
-            let clampedDistance: number = clamp(distance, DEFAULT_WOLF_COLLISION_RADIUS, this.DODGE_RADIUS)
-            let ratio: number =
+            const centerAngle: number = Math.atan2(wolf.Unit.y - this.kitty.Unit.y, wolf.Unit.x - this.kitty.Unit.x)
+            const clampedDistance: number = clamp(distance, DEFAULT_WOLF_COLLISION_RADIUS, this.DODGE_RADIUS)
+            const ratio: number =
                 (clampedDistance - DEFAULT_WOLF_COLLISION_RADIUS) / (this.DODGE_RADIUS - DEFAULT_WOLF_COLLISION_RADIUS)
 
-            let totalBlockedAngle: number =
+            const totalBlockedAngle: number =
                 MIN_TOTAL_BLOCKED_ANGLE + (MAX_TOTAL_BLOCKED_ANGLE - MIN_TOTAL_BLOCKED_ANGLE) * (1 - ratio)
-            let halfAngle: number = totalBlockedAngle / 2
+            const halfAngle: number = totalBlockedAngle / 2
 
             // Create the interval [centerAngle - halfAngle, centerAngle + halfAngle]
-            let start: number = this.NormalizeAngle(centerAngle - halfAngle)
-            let end: number = this.NormalizeAngle(centerAngle + halfAngle)
+            const start: number = this.NormalizeAngle(centerAngle - halfAngle)
+            const end: number = this.NormalizeAngle(centerAngle + halfAngle)
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
                 a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
-                let b = MemoryHandler.getEmptyObject<AngleInterval>()
+                const b = MemoryHandler.getEmptyObject<AngleInterval>()
                 b.Start = 0
                 b.End = end
                 this.blockedIntervals.push(b)
             } else {
-                let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
                 a.End = end
                 this.blockedIntervals.push(a)
@@ -536,7 +536,7 @@ export class AIController {
             )
 
             if (angleA > angleB) {
-                let temp: number = angleA
+                const temp: number = angleA
                 angleA = angleB
                 angleB = temp
             }
@@ -554,17 +554,17 @@ export class AIController {
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
                 a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
-                let b = MemoryHandler.getEmptyObject<AngleInterval>()
+                const b = MemoryHandler.getEmptyObject<AngleInterval>()
                 b.Start = 0
                 b.End = end
                 this.blockedIntervals.push(b)
             } else {
-                let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = start
                 a.End = end
                 this.blockedIntervals.push(a)
@@ -583,7 +583,7 @@ export class AIController {
         // Determine free angular gaps on the circle.
         if (this.mergedIntervals.length === 0) {
             // No wolves blocking any direction; entire circle is free.
-            let a = MemoryHandler.getEmptyObject<AngleInterval>()
+            const a = MemoryHandler.getEmptyObject<AngleInterval>()
             a.Start = 0
             a.End = 2 * Math.PI
             this.freeGaps.push(a)
@@ -593,19 +593,19 @@ export class AIController {
             this.SortAngleIntervals(this.mergedIntervals)
 
             // The gap between the end of the last interval and the start of the first (accounting for wrap-around).
-            let wrapGap: number =
+            const wrapGap: number =
                 this.mergedIntervals[0].Start + 2 * Math.PI - this.mergedIntervals[this.mergedIntervals.length - 1].End
             if (wrapGap > 0) {
-                let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyObject<AngleInterval>()
                 a.Start = this.mergedIntervals[this.mergedIntervals.length - 1].End
                 a.End = this.mergedIntervals[0].Start + 2 * Math.PI
                 this.freeGaps.push(a)
             }
             // Gaps between consecutive intervals.
             for (let i = 0; i < this.mergedIntervals.length - 1; i++) {
-                let gapSize: number = this.mergedIntervals[i + 1].Start - this.mergedIntervals[i].End
+                const gapSize: number = this.mergedIntervals[i + 1].Start - this.mergedIntervals[i].End
                 if (gapSize > 0) {
-                    let a = MemoryHandler.getEmptyObject<AngleInterval>()
+                    const a = MemoryHandler.getEmptyObject<AngleInterval>()
                     a.Start = this.mergedIntervals[i].End
                     a.End = this.mergedIntervals[i + 1].Start
                     this.freeGaps.push(a)
@@ -616,32 +616,32 @@ export class AIController {
         // Visualize the free intervals
         this.HideAllFreeLightnings()
         for (let i = 0; i < this.freeGaps.length; i++) {
-            let interval = this.freeGaps[i]
+            const interval = this.freeGaps[i]
             this.VisualizeFreeInterval(interval)
         }
 
-        let targetX: number = this.kitty.Unit.x + Math.cos(forwardAngle) * this.DODGE_DISTANCE
-        let targetY: number = this.kitty.Unit.y + Math.sin(forwardAngle) * this.DODGE_DISTANCE
+        const targetX: number = this.kitty.Unit.x + Math.cos(forwardAngle) * this.DODGE_DISTANCE
+        const targetY: number = this.kitty.Unit.y + Math.sin(forwardAngle) * this.DODGE_DISTANCE
 
         let bestCandidateScore: number = int.MaxValue
         let bestCandidateAngle: number = -500 // Default to the original forward angle
 
         for (let i = 0; i < AIController.offsets.length; i++) {
-            let offset: number = AIController.offsets[i]
-            let candidateAngle: number = this.NormalizeAngle(forwardAngle + offset)
+            const offset: number = AIController.offsets[i]
+            const candidateAngle: number = this.NormalizeAngle(forwardAngle + offset)
 
-            let bestAngle: number = this.calcAngle(candidateAngle, requiredClearance)
+            const bestAngle: number = this.calcAngle(candidateAngle, requiredClearance)
 
             if (bestAngle === -500) {
                 continue
             }
 
-            let candX: number = this.kitty.Unit.x + Math.cos(bestAngle) * this.DODGE_DISTANCE
-            let candY: number = this.kitty.Unit.y + Math.sin(bestAngle) * this.DODGE_DISTANCE
+            const candX: number = this.kitty.Unit.x + Math.cos(bestAngle) * this.DODGE_DISTANCE
+            const candY: number = this.kitty.Unit.y + Math.sin(bestAngle) * this.DODGE_DISTANCE
 
-            let dx: number = Math.abs(candX - targetX)
-            let dy: number = Math.abs(candY - targetY)
-            let score: number = dx * dx + dy * dy
+            const dx: number = Math.abs(candX - targetX)
+            const dy: number = Math.abs(candY - targetY)
+            const score: number = dx * dx + dy * dy
 
             if (score < bestCandidateScore) {
                 bestCandidateScore = score
@@ -655,7 +655,7 @@ export class AIController {
         }
 
         // Update the forward direction to the chosen dodge direction.
-        let forwardDirection2 = [Math.cos(bestCandidateAngle), Math.sin(bestCandidateAngle)]
+        const forwardDirection2 = [Math.cos(bestCandidateAngle), Math.sin(bestCandidateAngle)]
 
         this.cleanArrays()
 
@@ -673,7 +673,7 @@ export class AIController {
 
         // First, check if forwardAngle falls within any free gap.
         for (let i = 0; i < this.freeGaps.length; i++) {
-            let gap: AngleInterval = this.freeGaps[i]
+            const gap: AngleInterval = this.freeGaps[i]
 
             if (gap.End - gap.Start < requiredClearance) {
                 continue
@@ -682,8 +682,8 @@ export class AIController {
             if (this.IsAngleInInterval(forwardAngle, gap)) {
                 foundGapContainingForward = true
                 // Calculate the distance from forwardAngle to the gap boundaries.
-                let diffToStart: number = this.AngleDifference(forwardAngle, gap.Start)
-                let diffToEnd: number = this.AngleDifference(gap.End, forwardAngle)
+                const diffToStart: number = this.AngleDifference(forwardAngle, gap.Start)
+                const diffToEnd: number = this.AngleDifference(gap.End, forwardAngle)
 
                 // If too close to the start boundary, adjust forwardAngle to be 45° inside.
                 if (diffToStart < requiredClearance) {
@@ -709,18 +709,18 @@ export class AIController {
                 i < this.freeGaps.length;
                 i++ // Replacing for with for loop
             ) {
-                let gap: AngleInterval = this.freeGaps[i] // Accessing the element by index
+                const gap: AngleInterval = this.freeGaps[i] // Accessing the element by index
 
                 if (gap.End - gap.Start < requiredClearance) {
                     continue
                 }
 
                 // Calculate candidate angles from each gap’s boundaries (adjusted by required clearance).
-                let candidateFromStart: number = this.NormalizeAngle(gap.Start + requiredClearance)
-                let candidateFromEnd: number = this.NormalizeAngle(gap.End - requiredClearance)
+                const candidateFromStart: number = this.NormalizeAngle(gap.Start + requiredClearance)
+                const candidateFromEnd: number = this.NormalizeAngle(gap.End - requiredClearance)
 
-                let diffStart: number = this.AngleDifference(forwardAngle, candidateFromStart)
-                let diffEnd: number = this.AngleDifference(candidateFromEnd, forwardAngle)
+                const diffStart: number = this.AngleDifference(forwardAngle, candidateFromStart)
+                const diffEnd: number = this.AngleDifference(candidateFromEnd, forwardAngle)
 
                 if (diffStart < bestScore) {
                     bestScore = diffStart
@@ -740,8 +740,8 @@ export class AIController {
     private IsAngleInInterval(angle: number, interval: AngleInterval) {
         // Normalize the angle and interval boundaries to [0, 2π)
         angle = this.NormalizeAngle(angle)
-        let start: number = this.NormalizeAngle(interval.Start)
-        let end: number = this.NormalizeAngle(interval.End)
+        const start: number = this.NormalizeAngle(interval.Start)
+        const end: number = this.NormalizeAngle(interval.End)
 
         // Check if the interval does not wrap around.
         if (start <= end) {
@@ -772,13 +772,13 @@ export class AIController {
             return
         }
 
-        let radius: number = this.DODGE_RADIUS
-        let step = 0.1 // Adjust step size for smoother lines
+        const radius: number = this.DODGE_RADIUS
+        const step = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
-            let x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
-            let y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
-            let x2: number = this.kitty.Unit.x + radius * Math.cos(angle + step)
-            let y2: number = this.kitty.Unit.y + radius * Math.sin(angle + step)
+            const x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
+            const y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
+            const x2: number = this.kitty.Unit.x + radius * Math.cos(angle + step)
+            const y2: number = this.kitty.Unit.y + radius * Math.sin(angle + step)
 
             //
             let freeLightning: lightning | null = null
@@ -802,13 +802,13 @@ export class AIController {
             return
         }
 
-        let radius: number = this.DODGE_RADIUS
-        let step = 0.1 // Adjust step size for smoother lines
+        const radius: number = this.DODGE_RADIUS
+        const step = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
-            let x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
-            let y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
-            let x2: number = this.kitty.Unit.x + radius * Math.cos(angle + step)
-            let y2: number = this.kitty.Unit.y + radius * Math.sin(angle + step)
+            const x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
+            const y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
+            const x2: number = this.kitty.Unit.x + radius * Math.cos(angle + step)
+            const y2: number = this.kitty.Unit.y + radius * Math.sin(angle + step)
 
             //
             let freeLightning: lightning | null = null
@@ -829,7 +829,7 @@ export class AIController {
 
     private HideAllLightnings() {
         for (let i = 0; i < this.usedBlockedLightnings.length; i++) {
-            let lightning = this.usedBlockedLightnings[i]
+            const lightning = this.usedBlockedLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
             this.availableBlockedLightnings.push(lightning)
         }
@@ -839,7 +839,7 @@ export class AIController {
 
     private HideAllFreeLightnings() {
         for (let i = 0; i < this.usedClearLightnings.length; i++) {
-            let lightning = this.usedClearLightnings[i]
+            const lightning = this.usedClearLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
             this.availableClearLightnings.push(lightning)
         }
@@ -860,7 +860,7 @@ export class AIController {
     /// Returns the smallest difference (in radians) between two angles.
     /// </summary>
     private AngleDifference(a: number, b: number) {
-        let diff: number = ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI
+        const diff: number = ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI
         return Math.abs(diff)
     }
 
@@ -869,7 +869,7 @@ export class AIController {
             for (let j = 0; j < intervals.length - i - 1; j++) {
                 if (intervals[j].Start > intervals[j + 1].Start) {
                     // Swap intervals[j] and intervals[j + 1]
-                    let temp = intervals[j]
+                    const temp = intervals[j]
                     intervals[j] = intervals[j + 1]
                     intervals[j + 1] = temp
                 }
@@ -899,7 +899,7 @@ export class AIController {
     }
 
     private IsWithinRadius(x1: number, y1: number, x2: number, y2: number, radius: number) {
-        let distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+        const distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
         return distance <= radius
     }
 
@@ -920,7 +920,7 @@ export class AIController {
     }
 
     private UseWindWalkIfAvailable() {
-        let wwLvl = GetUnitAbilityLevel(this.kitty.Unit.handle, Constants.ABILITY_WIND_WALK)
+        const wwLvl = GetUnitAbilityLevel(this.kitty.Unit.handle, Constants.ABILITY_WIND_WALK)
 
         if (
             wwLvl === 0 ||

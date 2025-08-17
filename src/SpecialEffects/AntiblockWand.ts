@@ -16,28 +16,28 @@ export class AntiblockWand {
     /// </summary>
     public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        this.AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM
-        this.Radius = 250.0
-        this.CastEvent = this.RegisterCastEvents()
+        AntiblockWand.AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM
+        AntiblockWand.Radius = 250.0
+        AntiblockWand.CastEvent = AntiblockWand.RegisterCastEvents()
     }
 
     private static RegisterCastEvents(): Trigger {
-        let triggerHandle = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS)
+        const triggerHandle = Trigger.create()!
+        for (const player of Globals.ALL_PLAYERS)
             triggerHandle.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
-        triggerHandle.addAction(() => this.SpellActions())
+        triggerHandle.addAction(() => AntiblockWand.SpellActions())
         return triggerHandle
     }
 
     private static SpellActions() {
-        if (GetSpellAbilityId() !== this.AbilityID) return
-        let wolvesInArea = Group.create()!
-        wolvesInArea.enumUnitsInRange(GetSpellTargetX(), GetSpellTargetY(), this.Radius, () => true)
-        let list = wolvesInArea.getUnits()
-        for (let wolf of list) {
+        if (GetSpellAbilityId() !== AntiblockWand.AbilityID) return
+        const wolvesInArea = Group.create()!
+        wolvesInArea.enumUnitsInRange(GetSpellTargetX(), GetSpellTargetY(), AntiblockWand.Radius, () => true)
+        const list = wolvesInArea.getUnits()
+        for (const wolf of list) {
             if (wolf.typeId !== Wolf.WOLF_MODEL) continue
             if (Globals.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(wolf)!)) continue
-            let wolfUnit = Globals.ALL_WOLVES.get(wolf)!
+            const wolfUnit = Globals.ALL_WOLVES.get(wolf)!
             wolfUnit.StartWandering(true)
         }
 

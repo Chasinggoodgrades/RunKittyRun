@@ -13,19 +13,19 @@ export class TeamHandler {
     public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
         if (
             Globals.CurrentGameModeType === Globals.TEAM_MODES[0] &&
-            (adminForced || (!RoundManager.GAME_STARTED && this.FreepickEnabled))
+            (adminForced || (!RoundManager.GAME_STARTED && TeamHandler.FreepickEnabled))
         ) {
-            this.FreepickHandler(Player, TeamNumber, adminForced)
+            TeamHandler.FreepickHandler(Player, TeamNumber, adminForced)
         } else {
             Player.DisplayTextTo(
-                `${Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW_ORANGE}The -team command is not available for TeamHandler gamemode or the time to pick has expired.${Colors.COLOR_RESET}`
             )
         }
     }
 
     private static FreepickHandler(Player: MapPlayer, TeamNumber: number, adminForced: boolean) {
-        if (this.CanPlayerJoinTeam(Player, TeamNumber)) {
-            this.ApplyPlayerToTeam(Player, TeamNumber)
+        if (TeamHandler.CanPlayerJoinTeam(Player, TeamNumber)) {
+            TeamHandler.ApplyPlayerToTeam(Player, TeamNumber)
         }
     }
 
@@ -43,14 +43,14 @@ export class TeamHandler {
     /// Throws all players who are currently not on a team into a random team. Prioritizing already made teams before creating new ones.
     /// </summary>
     public static RandomHandler() {
-        this.FreepickEnabled = false
-        let shuffled = GameSeed.Shuffle(Globals.ALL_PLAYERS, Globals.GAME_SEED)
+        TeamHandler.FreepickEnabled = false
+        const shuffled = GameSeed.Shuffle(Globals.ALL_PLAYERS, Globals.GAME_SEED)
         let teamNumber = 1
         try {
             for (let i = 0; i < shuffled.length; i++) {
-                let player = shuffled[i]
+                const player = shuffled[i]
 
-                let currentTeam = Globals.PLAYERS_TEAMS.get(player)
+                const currentTeam = Globals.PLAYERS_TEAMS.get(player)
                 if (currentTeam) {
                     continue
                 }
@@ -58,7 +58,7 @@ export class TeamHandler {
 
                 // Attempt to add player to an existing team
                 for (let j = 0; j < Globals.ALL_TEAMS_LIST.length; j++) {
-                    let team = Globals.ALL_TEAMS_LIST[j]
+                    const team = Globals.ALL_TEAMS_LIST[j]
                     if (team.Teammembers.length < Gamemode.PlayersPerTeam) {
                         team.AddMember(player)
                         addedToExistingTeam = true
@@ -97,7 +97,7 @@ export class TeamHandler {
         }
 
         // If the team exists, we're going to check if full or if that player is already on the team
-        let team = Globals.ALL_TEAMS.get(TeamNumber)
+        const team = Globals.ALL_TEAMS.get(TeamNumber)
         if (team) {
             // If Team is full, return.
             if (team.Teammembers.length >= Gamemode.PlayersPerTeam) {
@@ -105,7 +105,7 @@ export class TeamHandler {
                 return false
             }
             // If player is on the team they're trying to join.. Return.
-            let currentTeam = Globals.PLAYERS_TEAMS.get(Player)
+            const currentTeam = Globals.PLAYERS_TEAMS.get(Player)
             if (currentTeam) {
                 if (currentTeam.TeamID === TeamNumber) {
                     Player.DisplayTextTo(
@@ -115,19 +115,19 @@ export class TeamHandler {
                 }
 
                 // If not the same team.. Remove them so they're ready to join another.
-                this.RemoveFromCurrentTeam(Player)
+                TeamHandler.RemoveFromCurrentTeam(Player)
             }
         }
         // If team doesnt exist, we're going to remove the player from current team and create that new team.
         else {
-            this.RemoveFromCurrentTeam(Player)
+            TeamHandler.RemoveFromCurrentTeam(Player)
             new Team(TeamNumber)
         }
         return true
     }
 
     private static RemoveFromCurrentTeam(Player: MapPlayer) {
-        let team = Globals.PLAYERS_TEAMS.get(Player)
+        const team = Globals.PLAYERS_TEAMS.get(Player)
         if (team) {
             team.RemoveMember(Player)
         }

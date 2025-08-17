@@ -8,7 +8,7 @@ export class RegionList {
     public static PathingPoints: Rectangle[] = []
 
     public static Initialize() {
-        this.SpawnRegions = [
+        RegionList.SpawnRegions = [
             Regions.Spawn_Area_01,
             Regions.Spawn_Area_02,
             Regions.Spawn_Area_03,
@@ -36,7 +36,7 @@ export class RegionList {
             Regions.Spawn_Area_03,
         ]
 
-        this.WolfRegions = [
+        RegionList.WolfRegions = [
             Regions.Wolf_Area_01,
             Regions.Wolf_Area_02,
             Regions.Wolf_Area_03,
@@ -56,7 +56,7 @@ export class RegionList {
             Regions.Wolf_Area_17,
         ]
 
-        this.SafeZones = [
+        RegionList.SafeZones = [
             Regions.safe_Area_00,
             Regions.safe_Area_01,
             Regions.safe_Area_02,
@@ -74,7 +74,7 @@ export class RegionList {
             Regions.safe_Area_14,
         ]
 
-        this.PathingPoints = [
+        RegionList.PathingPoints = [
             // Nitros and Progress classes
             Regions.safe_Area_00,
             Regions.safe_Area_01,

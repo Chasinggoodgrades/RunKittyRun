@@ -11,7 +11,7 @@ export class PlayerUpgrades {
     }
 
     public static Initialize() {
-        for (let player of Globals.ALL_PLAYERS) new PlayerUpgrades(player)
+        for (const player of Globals.ALL_PLAYERS) new PlayerUpgrades(player)
     }
 
     public static GetPlayerUpgrades(player: MapPlayer): PlayerUpgrades {
@@ -24,7 +24,7 @@ export class PlayerUpgrades {
     }
 
     public static IncreaseUpgradeLevel(relicType: string, Unit: Unit) {
-        let player = Unit.owner
+        const player = Unit.owner
         PlayerUpgrades.GetPlayerUpgrades(player).SetUpgradeLevel(
             relicType,
             PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(relicType) + 1

@@ -35,17 +35,17 @@ export class RoundManager {
     private static AddedTimeAlready: boolean = false
 
     public static Initialize() {
-        if (CurrentGameMode.active === GameMode.Standard) this.HasDifficultyBeenChosen()
-        else this.RoundSetup()
+        if (CurrentGameMode.active === GameMode.Standard) RoundManager.HasDifficultyBeenChosen()
+        else RoundManager.RoundSetup()
     }
 
     public static AddMoreRoundTime(): boolean {
         if (RoundManager.AddedTimeAlready) return false
-        let remainingTime = RoundTimer.StartRoundTimer.remaining
+        const remainingTime = RoundTimer.StartRoundTimer.remaining
         if (remainingTime <= 0.0) return false
         RoundManager.AddedTimeAlready = true
-        let tempTime = remainingTime + 20.0 // 20 seconds
-        RoundTimer.StartRoundTimer.start(tempTime, false, () => this.StartRound())
+        const tempTime = remainingTime + 20.0 // 20 seconds
+        RoundTimer.StartRoundTimer.start(tempTime, false, () => RoundManager.StartRound())
         return true
     }
 
@@ -88,7 +88,7 @@ export class RoundManager {
     }
 
     private static HasDifficultyBeenChosen() {
-        let Timer = createAchesTimer()
+        const Timer = createAchesTimer()
         Timer.Timer.start(0.35, true, () => {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND === 0) {
                 RoundManager.RoundSetup()
@@ -127,10 +127,10 @@ export class RoundManager {
     public static RoundEndCheck(): boolean {
         // Always returns for standard mode, and solo progression mode.
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-            let kitty = Globals.ALL_KITTIES_LIST[i]
+            const kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) return false
         }
-        this.RoundEnd()
+        RoundManager.RoundEnd()
         return true
     }
 
@@ -138,18 +138,18 @@ export class RoundManager {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
 
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
+            const kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             if (kitty.isAlive()) return
         }
         RoundManager.RoundEnd()
     }
 
     public static DidTeamEnd(teamId: number) {
-        let teamMemebers = Globals.ALL_TEAMS.get(teamId)!.Teammembers
+        const teamMemebers = Globals.ALL_TEAMS.get(teamId)!.Teammembers
         // Always returns for standard mode, and solo progression mode.
         for (let i = 0; i < teamMemebers.length; i++) {
-            let member = teamMemebers[i]
-            let kitty = Globals.ALL_KITTIES.get(member)!
+            const member = teamMemebers[i]
+            const kitty = Globals.ALL_KITTIES.get(member)!
             if (!kitty.Finished) return false
         }
         return true

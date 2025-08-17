@@ -113,7 +113,7 @@ export class Kitty {
     /// </summary>
     public static Initialize() {
         try {
-            for (let player of Globals.ALL_PLAYERS) {
+            for (const player of Globals.ALL_PLAYERS) {
                 new Circle(player)
                 new Kitty(player)
             }
@@ -130,7 +130,7 @@ export class Kitty {
         try {
             if (this.Invulnerable || !this.Alive) return
 
-            let circle = Globals.ALL_CIRCLES.get(this.Player)
+            const circle = Globals.ALL_CIRCLES.get(this.Player)
             if (!circle) return
 
             // Pause processes before unit death
@@ -180,7 +180,7 @@ export class Kitty {
         try {
             if (UnitAlive(this.Unit.handle)) return
 
-            let circle = Globals.ALL_CIRCLES.get(this.Player)
+            const circle = Globals.ALL_CIRCLES.get(this.Player)
 
             if (!circle) return
 
@@ -303,7 +303,7 @@ export class Kitty {
     }
 
     private TrueSightGhostWolves() {
-        let trueSight: number = FourCC('Atru')
+        const trueSight: number = FourCC('Atru')
         this.Unit.addAbility(trueSight)
         this.Unit.hideAbility(trueSight, true)
     }

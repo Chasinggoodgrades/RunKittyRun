@@ -12,14 +12,14 @@ export class WolfSpawning {
     private static MaxWolvesPerLane = 60
 
     public static SpawnWolves() {
-        let totalArea = WolfArea.TotalArea
-        let totalWolves = WolfSpawning.WolvesPerRound[Globals.ROUND - 1]
+        const totalArea = WolfArea.TotalArea
+        const totalWolves = WolfSpawning.WolvesPerRound[Globals.ROUND - 1]
 
         // List to hold excess wolves
         let excessWolves = 0
 
-        for (let [_, lane] of WolfArea.WolfAreas) {
-            let laneID: number = lane.ID
+        for (const [_, lane] of WolfArea.WolfAreas) {
+            const laneID: number = lane.ID
             let numberOfWolves: number = (lane.Area / totalArea) * totalWolves
 
             if (numberOfWolves > WolfSpawning.MaxWolvesPerLane) {
@@ -33,7 +33,7 @@ export class WolfSpawning {
         }
 
         while (excessWolves > 0) {
-            let randomLane = GetRandomInt(6, 12)
+            const randomLane = GetRandomInt(6, 12)
             new Wolf(randomLane)
             excessWolves--
         }

@@ -49,7 +49,7 @@ export class FloatingNameTag {
     public static ShowAllNameTags(Player: MapPlayer, shown: boolean) {
         if (!Player.isLocal()) return
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-            let k = Globals.ALL_KITTIES_LIST[i]
+            const k = Globals.ALL_KITTIES_LIST[i]
             k.NameTag.NameTag.setVisible(shown)
         }
     }

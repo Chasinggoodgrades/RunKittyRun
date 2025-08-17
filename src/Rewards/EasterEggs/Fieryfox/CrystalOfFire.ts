@@ -23,16 +23,16 @@ export class CrystalOfFire {
     private static QuestEligible: MapPlayer[]
 
     public static Initialize() {
-        this.ItemID = Constants.ITEM_CRYSTAL_OF_FIRE
-        this.TurnInRange = 150.0
-        this.TurnInEventFieryfox = this.RegisterTurnInFiery()
-        this.TurnInEventFandF = this.RegisterTurnInFandF()
-        this.QuestAccept = this.RegisterChatEvent()
-        this.QuestEligible = []
+        CrystalOfFire.ItemID = Constants.ITEM_CRYSTAL_OF_FIRE
+        CrystalOfFire.TurnInRange = 150.0
+        CrystalOfFire.TurnInEventFieryfox = CrystalOfFire.RegisterTurnInFiery()
+        CrystalOfFire.TurnInEventFandF = CrystalOfFire.RegisterTurnInFandF()
+        CrystalOfFire.QuestAccept = CrystalOfFire.RegisterChatEvent()
+        CrystalOfFire.QuestEligible = []
     }
 
     public static AwardCrystalOfFire(unit: Unit) {
-        return unit.addItemById(this.ItemID)
+        return unit.addItemById(CrystalOfFire.ItemID)
     }
 
     public static CrystalOfFireDeath(kitty: Kitty) {
@@ -41,64 +41,64 @@ export class CrystalOfFire {
     }
 
     private static RegisterTurnInFiery(): Trigger {
-        let triggerHandle = Trigger.create()!
-        triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, this.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(() => this.FieryfoxEvent()))
+        const triggerHandle = Trigger.create()!
+        triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, CrystalOfFire.TurnInRange, undefined)
+        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.FieryfoxEvent()))
         return triggerHandle
     }
 
     private static RegisterTurnInFandF(): Trigger {
-        let triggerHandle = Trigger.create()!
-        triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, this.TurnInRange, undefined)
-        triggerHandle.addAction(ErrorHandler.Wrap(() => this.FandFEvent()))
+        const triggerHandle = Trigger.create()!
+        triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, CrystalOfFire.TurnInRange, undefined)
+        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.FandFEvent()))
         return triggerHandle
     }
 
     private static RegisterChatEvent(): Trigger {
-        let triggerHandle = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS) {
+        const triggerHandle = Trigger.create()!
+        for (const player of Globals.ALL_PLAYERS) {
             triggerHandle.registerPlayerChatEvent(player, 'yes!', false)
         }
-        triggerHandle.addAction(ErrorHandler.Wrap(() => this.AcceptedQuest()))
+        triggerHandle.addAction(ErrorHandler.Wrap(() => CrystalOfFire.AcceptedQuest()))
         return triggerHandle
     }
 
     private static GetDeathAttempts(player: MapPlayer) {
-        let kitty = Globals.ALL_KITTIES.get(player)!
+        const kitty = Globals.ALL_KITTIES.get(player)!
         return kitty.CurrentStats.CrystalOfFireAttempts
     }
 
     private static StartMessage(player: MapPlayer) {
-        return `${Colors.COLOR_YELLOW}Greetings ${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW}, you were right to come to me about this. The Crystals of Fire are a sacred anomaly within this universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r ${Colors.COLOR_RED}Type ${Colors.COLOR_YELLOW_ORANGE}"yes!"|r${Colors.COLOR_RED} to accept! (30 seconds)|r`
+        return `${Colors.COLOR_YELLOW}Greetings ${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW}, you were right to come to me about CrystalOfFire. The Crystals of Fire are a sacred anomaly within CrystalOfFire universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r ${Colors.COLOR_RED}Type ${Colors.COLOR_YELLOW_ORANGE}"yes!"|r${Colors.COLOR_RED} to accept! (30 seconds)|r`
     }
 
     private static PartTwoMessage(player: MapPlayer): string {
         return (
             `${Colors.COLOR_YELLOW}It appears you're ready. Here's the formula: Bring forth to the legends of F&F: |r${Colors.COLOR_YELLOW_ORANGE}1 mysterious orb, A shot of lightning, The Crystals of Fire and a pair of Pegasus's.|r` +
-            `${Colors.COLOR_YELLOW} However, this must be done without scratches!|r ${Colors.COLOR_RED}(If failed, you'll have to redo the first challenge).|r`
+            `${Colors.COLOR_YELLOW} However, CrystalOfFire must be done without scratches!|r ${Colors.COLOR_RED}(If failed, you'll have to redo the first challenge).|r`
         )
     }
 
     private static FieryfoxEvent() {
-        if (!Utility.UnitHasItem(getTriggerUnit(), this.ItemID)) return
-        let player = getTriggerUnit().owner
-        if (this.GetDeathAttempts(player) >= 0) {
-            player.DisplayTextTo(this.StartMessage(player))
-            this.QuestEligible.push(player)
+        if (!Utility.UnitHasItem(getTriggerUnit(), CrystalOfFire.ItemID)) return
+        const player = getTriggerUnit().owner
+        if (CrystalOfFire.GetDeathAttempts(player) >= 0) {
+            player.DisplayTextTo(CrystalOfFire.StartMessage(player))
+            CrystalOfFire.QuestEligible.push(player)
             // 30 seconds to accept the quest.
             Utility.SimpleTimer(30.0, () => {
-                if (this.QuestEligible.includes(player))
-                    this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
+                if (CrystalOfFire.QuestEligible.includes(player))
+                    CrystalOfFire.QuestEligible.splice(CrystalOfFire.QuestEligible.indexOf(player), 1)
             })
-        } else if (this.GetDeathAttempts(player) === -1) {
-            player.DisplayTextTo(this.PartTwoMessage(player))
+        } else if (CrystalOfFire.GetDeathAttempts(player) === -1) {
+            player.DisplayTextTo(CrystalOfFire.PartTwoMessage(player))
         }
     }
 
     private static AcceptedQuest() {
-        let player = getTriggerPlayer()
-        if (!this.QuestEligible.includes(player)) return
-        let kitty = Globals.ALL_KITTIES.get(player)!
+        const player = getTriggerPlayer()
+        if (!CrystalOfFire.QuestEligible.includes(player)) return
+        const kitty = Globals.ALL_KITTIES.get(player)!
         kitty.Unit.setPosition(Regions.Spawn_Area_05.centerX, Regions.Spawn_Area_05.centerY)
         kitty.CurrentStats.CrystalOfFireAttempts = -1
         Utility.ClearScreen(player)
@@ -106,18 +106,18 @@ export class CrystalOfFire {
             5.0,
             `${Colors.COLOR_YELLOW_ORANGE}You've accepted the quest. Make it to Fieryfox without dying to proceed.|r`
         )
-        this.QuestEligible.splice(this.QuestEligible.indexOf(player), 1)
+        CrystalOfFire.QuestEligible.splice(CrystalOfFire.QuestEligible.indexOf(player), 1)
     }
 
     private static FandFEvent() {
-        let unit = getTriggerUnit()
-        if (!Utility.UnitHasItem(unit, this.ItemID)) return
-        let player = unit.owner
-        if (this.GetDeathAttempts(player) !== -1) return
+        const unit = getTriggerUnit()
+        if (!Utility.UnitHasItem(unit, CrystalOfFire.ItemID)) return
+        const player = unit.owner
+        if (CrystalOfFire.GetDeathAttempts(player) !== -1) return
 
-        let lightningShot = Constants.ITEM_ADRENALINE_POTION
-        let orb = Constants.ITEM_ORB_OF_MYSTERIES
-        let boots = Constants.ITEM_PEGASUS_BOOTS
+        const lightningShot = Constants.ITEM_ADRENALINE_POTION
+        const orb = Constants.ITEM_ORB_OF_MYSTERIES
+        const boots = Constants.ITEM_PEGASUS_BOOTS
 
         // Must have these items
         if (!Utility.UnitHasItem(unit, boots)) return
@@ -125,7 +125,7 @@ export class CrystalOfFire {
         if (!Utility.UnitHasItem(unit, lightningShot)) return
 
         // Remove Items
-        RemoveItemFromUnit(unit, this.ItemID)
+        RemoveItemFromUnit(unit, CrystalOfFire.ItemID)
         RemoveItemFromUnit(unit, boots)
         RemoveItemFromUnit(unit, orb)
         RemoveItemFromUnit(unit, lightningShot)

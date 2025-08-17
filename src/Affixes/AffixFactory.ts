@@ -32,25 +32,25 @@ export class AffixFactory {
     }
 
     public static CalculateAffixes(laneIndex: number = -1) {
-        for (let affix of Globals.AllAffixes) {
+        for (const affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) continue
             if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
             AffixFactory.TempAffixCounts.set(affix.name, 0)
         }
 
-        for (let affix of Globals.AllAffixes) {
+        for (const affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) {
                 if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
                 AffixFactory.TempAffixCounts.set(affix.name, (AffixFactory.TempAffixCounts.get(affix.name) || 0) + 1)
             }
         }
 
-        for (let [key, affix] of AffixFactory.TempAffixCounts) {
+        for (const [key, affix] of AffixFactory.TempAffixCounts) {
             if (affix > 0) {
                 AffixFactory.TempAffixesList.push(`${key} x${affix}`)
             }
         }
-        let arr = AffixFactory.TempAffixesList
+        const arr = AffixFactory.TempAffixesList
         AffixFactory.TempAffixCounts.clear()
         AffixFactory.TempAffixesList.length = 0
         return arr
@@ -60,11 +60,11 @@ export class AffixFactory {
     /// Initializes the lane weights for affix distribution.
     /// </summary>
     private static InitLaneWeights() {
-        let regionCount = RegionList.WolfRegions.length
+        const regionCount = RegionList.WolfRegions.length
         let totalArea = 0.0
         AffixFactory.LaneWeights = []
 
-        for (let [_, lane] of WolfArea.WolfAreas) {
+        for (const [_, lane] of WolfArea.WolfAreas) {
             totalArea += lane.Area
             AffixFactory.LaneWeights[lane.ID] = lane.Area
         }
@@ -87,14 +87,14 @@ export class AffixFactory {
 
     public static ApplyAffix(unit: Wolf, affixName: string): Affix {
         if (!AffixFactory.CanApplyAffix(unit, affixName)) return null as never
-        let affix = CreateAffix(unit, affixName)
+        const affix = CreateAffix(unit, affixName)
         AddAffix(affix, unit)
         return affix
     }
 
     private static AvailableAffixes(laneNumber: number) {
         let affixes = AffixTypes.join(', ') // Start with all affixes in a single string
-        let fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
+        const fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
         if (
             laneNumber > 6 ||
             Difficulty.DifficultyValue === DifficultyLevel.Hard ||
@@ -109,14 +109,14 @@ export class AffixFactory {
 
     private static ApplyRandomAffix(unit: Wolf, laneNumber: number): Affix {
         try {
-            let affixes = AffixFactory.AvailableAffixes(laneNumber)
+            const affixes = AffixFactory.AvailableAffixes(laneNumber)
 
-            let affixArray = affixes.split(', ').filter(Boolean)
+            const affixArray = affixes.split(', ').filter(v => !!v)
 
             if (affixArray.length === 0) return null as never
 
-            let randomIndex = Math.random()
-            let randomAffix = affixArray[randomIndex]
+            const randomIndex = Math.random()
+            const randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
         } catch (ex: any) {
             Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${ex}${Colors.COLOR_RESET}`)
@@ -140,7 +140,7 @@ export class AffixFactory {
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue === DifficultyLevel.Nightmare) {
-                for (let [_, wolf] of Globals.ALL_WOLVES) {
+                for (const [_, wolf] of Globals.ALL_WOLVES) {
                     if (!AffixFactory.ShouldAffixWolves(wolf, wolf.RegionIndex)) continue
                     AffixFactory.ApplyRandomAffix(wolf, wolf.RegionIndex)
                 }
@@ -148,13 +148,13 @@ export class AffixFactory {
             }
 
             // # per lane based on the weights
-            let totalWeight = sumNumbers(AffixFactory.LaneWeights) // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
-            let laneDistribution = []
+            const totalWeight = sumNumbers(AffixFactory.LaneWeights) // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
+            const laneDistribution = []
             let totalAssigned = 0
 
             for (let i = 0; i < AffixFactory.LaneWeights.length; i++) {
                 // Set proportions based on lane weights
-                let ratio: number = AffixFactory.LaneWeights[i] / totalWeight
+                const ratio: number = AffixFactory.LaneWeights[i] / totalWeight
                 laneDistribution[i] = Math.floor(AffixFactory.NUMBER_OF_AFFIXED_WOLVES * ratio)
                 totalAssigned += laneDistribution[i]
             }
@@ -170,16 +170,16 @@ export class AffixFactory {
 
             // Go thru and apply affixes to each lane
             for (let i = 0; i < laneDistribution.length; i++) {
-                let affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
-                let wolvesInLane = WolfArea.WolfAreas.get(i)!.Wolves
+                const affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
+                const wolvesInLane = WolfArea.WolfAreas.get(i)!.Wolves
 
                 // Add affixes to random wolves until the {affixTarget} is reached
                 let appliedCount = 0
                 for (let j = 0; j < wolvesInLane.length && appliedCount < affixTarget; j++) {
-                    let wolf = wolvesInLane[j]
+                    const wolf = wolvesInLane[j]
                     if (!AffixFactory.ShouldAffixWolves(wolf, i)) continue
 
-                    let affix = AffixFactory.ApplyRandomAffix(wolf, i)
+                    const affix = AffixFactory.ApplyRandomAffix(wolf, i)
                     if (affix !== null) appliedCount++
                 }
             }
@@ -207,7 +207,7 @@ export class AffixFactory {
     }
 
     public static RemoveAllAffixes() {
-        for (let [_, wolf] of Globals.ALL_WOLVES) {
+        for (const [_, wolf] of Globals.ALL_WOLVES) {
             RemoveAllWolfAffixes(wolf)
         }
         Globals.AllAffixes.length = 0

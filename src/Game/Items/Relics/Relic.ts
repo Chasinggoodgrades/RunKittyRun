@@ -66,22 +66,22 @@ export abstract class Relic {
     }
 
     public static GetRelicCountForLevel(currentLevel: number) {
-        let count = currentLevel - Relic.RelicIncrease + 1 // account for level 10 relic ..
+        const count = currentLevel - Relic.RelicIncrease + 1 // account for level 10 relic ..
         return count < 0 ? 0 : count >= Relic.MaxRelics ? Relic.MaxRelics : count
     }
 
     public SetUpgradeLevelDesc(Unit: Unit) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
         if (upgradeLevel === 0) return
 
-        let item = Utility.UnitGetItem(Unit, this.ItemID)
+        const item = Utility.UnitGetItem(Unit, this.ItemID)
         if (!item) return
 
         let tempName = item.name
-        let newUpgradeText = `${Colors.COLOR_TURQUOISE}[Upgrade: ${upgradeLevel}]${Colors.COLOR_RESET}`
+        const newUpgradeText = `${Colors.COLOR_TURQUOISE}[Upgrade: ${upgradeLevel}]${Colors.COLOR_RESET}`
 
         if (tempName.startsWith(`${Colors.COLOR_TURQUOISE}[Upgrade:`)) {
-            let endIndex = tempName.indexOf(']|r') + 3
+            const endIndex = tempName.indexOf(']|r') + 3
             tempName = tempName.substring(endIndex).trim()
         }
 

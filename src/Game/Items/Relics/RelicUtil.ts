@@ -31,7 +31,7 @@ export class RelicUtil {
     /// </summary>
     /// <param name="Unit"></param>
     public static CloseRelicBook(Unit: Unit) {
-        let player = Unit.owner
+        const player = Unit.owner
         if (!player.isLocal()) return
         ForceUICancel()
     }
@@ -49,17 +49,17 @@ export class RelicUtil {
     /// <param name="abilityID"></param>
     public static SetRelicCooldowns(unit: Unit, itemID: number, abilityID: number, cooldown = 0) {
         // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
-        let item = Utility.UnitGetItem(unit, itemID)
+        const item = Utility.UnitGetItem(unit, itemID)
         if (!item) return
-        let itemAbility = item.getAbility(abilityID)
+        const itemAbility = item.getAbility(abilityID)
         if (!itemAbility) return
-        let unitAbility = unit.getAbility(abilityID)
+        const unitAbility = unit.getAbility(abilityID)
         if (!unitAbility) return
 
-        let itemSlot = Utility.GetSlotOfItem(unit, itemID)
+        const itemSlot = Utility.GetSlotOfItem(unit, itemID)
 
-        let unitCooldown: number = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0)
-        let itemCooldown: number = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0)
+        const unitCooldown: number = BlzGetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0)
+        const itemCooldown: number = BlzGetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0)
 
         cooldown = cooldown === 0 ? Math.min(unitCooldown, itemCooldown) : cooldown
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
@@ -70,15 +70,15 @@ export class RelicUtil {
     }
 
     public static SetAbilityCooldown(unit: Unit, itemID: number, abilityID: number, cooldown: number) {
-        let item = Utility.UnitGetItem(unit, itemID)
+        const item = Utility.UnitGetItem(unit, itemID)
         if (!item) return
-        let itemSlot = Utility.GetSlotOfItem(unit, itemID)
-        let unitAbility = unit.getAbility(abilityID)!
+        const itemSlot = Utility.GetSlotOfItem(unit, itemID)
+        const unitAbility = unit.getAbility(abilityID)!
         if (Globals.ALL_KITTIES.get(unit.owner)!.isAlive()) unit.removeItem(item)
         BlzSetAbilityRealLevelField(unitAbility, ABILITY_RLF_COOLDOWN, 0, cooldown)
         unit.addItem(item)
         unit.dropItemFromSlot(item, itemSlot)
-        let itemAbility = item.getAbility(abilityID)
+        const itemAbility = item.getAbility(abilityID)
         if (!itemAbility) return
         BlzSetAbilityRealLevelField(itemAbility, ABILITY_RLF_COOLDOWN, 0, cooldown)
     }

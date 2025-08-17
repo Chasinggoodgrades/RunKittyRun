@@ -20,22 +20,22 @@ export class TeamPodium {
     }
 
     private static EnqueueMVPPlayer() {
-        let topRatios = PodiumUtil.SortPlayersByHighestRatio()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topRatios = PodiumUtil.SortPlayersByHighestRatio()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
-            let player = topRatios[i]
-            let position = podiumPositions[i]
+            const player = topRatios[i]
+            const position = podiumPositions[i]
             TeamPodium.PodiumQueue.enqueue([player, position])
         }
         TeamPodium.PodiumType = TeamPodium.MVP
     }
 
     private static EnqueueTopSavesPlayer() {
-        let topSaves = PodiumUtil.SortPlayersBySaves()
-        let podiumPositions = PodiumUtil.PodiumSpots
+        const topSaves = PodiumUtil.SortPlayersBySaves()
+        const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
-            let player = topSaves[i]
-            let position = podiumPositions[i]
+            const player = topSaves[i]
+            const position = podiumPositions[i]
             TeamPodium.PodiumQueue.enqueue([player, position])
         }
         TeamPodium.PodiumType = TeamPodium.MostSaves
@@ -46,8 +46,8 @@ export class TeamPodium {
             TeamPodium.ProcessPodiumTypeActions()
             return
         }
-        let [player, position] = TeamPodium.PodiumQueue.dequeue()!
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const [player, position] = TeamPodium.PodiumQueue.dequeue()!
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.setPosition(position.x, position.y)
         kitty.setFacingEx(270)
         kitty.paused = true
@@ -84,7 +84,7 @@ export class TeamPodium {
     }
 
     private static GetStatBasedOnType(player: MapPlayer) {
-        let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
+        const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (TeamPodium.PodiumType) {
             case TeamPodium.MostSaves:
                 return stats.TotalSaves.toString()

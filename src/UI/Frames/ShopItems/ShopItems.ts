@@ -75,7 +75,7 @@ export class ShopItem {
     }
 
     public static ShopItemsRelic(): ShopItem[] {
-        let shopItems: ShopItem[] = []
+        const shopItems: ShopItem[] = []
 
         try {
             if (CurrentGameMode.active === GameMode.Standard) {
@@ -102,10 +102,10 @@ export class ShopItem {
     }
 
     public static ShopItemsReward(): ShopItem[] {
-        let shopItems: ShopItem[] = []
-        let gameAwards = Globals.GAME_AWARDS_SORTED
+        const shopItems: ShopItem[] = []
+        const gameAwards = Globals.GAME_AWARDS_SORTED
 
-        let reward = RewardsManager.Rewards.find(x => x.name === 'GreenTendrils')!
+        const reward = RewardsManager.Rewards.find(x => x.name === 'GreenTendrils')!
 
         shopItems.push(
             new ShopItem(

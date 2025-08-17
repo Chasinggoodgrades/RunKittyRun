@@ -61,7 +61,7 @@ export class Howler extends Affix {
                 FilterList.DogFilter
             )
             while (true) {
-                let wolf = this.NearbyWolves.first
+                const wolf = this.NearbyWolves.first
                 if (!wolf) break
                 this.NearbyWolves.removeUnit(wolf)
                 if (NamedWolves.StanWolf !== null && NamedWolves.StanWolf.Unit === wolf) continue

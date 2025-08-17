@@ -15,53 +15,53 @@ export class Resources {
     private static EndRoundBonusXP = 550 * Globals.ROUND
 
     public static Initialize() {
-        this.SetResourcesForGamemode()
-        this.AdjustStartingGold()
+        Resources.SetResourcesForGamemode()
+        Resources.AdjustStartingGold()
     }
 
     public static BonusResources() {
-        this.EndRoundBonusXP = 750 * Globals.ROUND
-        this.EndRoundBonusGold = 150 + 50 * Globals.ROUND
-        for (let player of Globals.ALL_PLAYERS) player.addGold(this.EndRoundBonusGold) // May or may not work.. We'll see.
-        for (let [_, kitty] of Globals.ALL_KITTIES) kitty.Unit.experience += this.EndRoundBonusXP
+        Resources.EndRoundBonusXP = 750 * Globals.ROUND
+        Resources.EndRoundBonusGold = 150 + 50 * Globals.ROUND
+        for (const player of Globals.ALL_PLAYERS) player.addGold(Resources.EndRoundBonusGold) // May or may not work.. We'll see.
+        for (const [_, kitty] of Globals.ALL_KITTIES) kitty.Unit.experience += Resources.EndRoundBonusXP
     }
 
     public static StartingItems(kitty: Kitty) {
-        let unit = kitty.Unit
+        const unit = kitty.Unit
         unit.addItemById(Constants.ITEM_ADRENALINE_POTION)
     }
 
     public static SaveGoldBonus(streak: number) {
-        return this.SaveGold + this.SaveGold * (this.SaveStreakMultiplier * streak)
+        return Resources.SaveGold + Resources.SaveGold * (Resources.SaveStreakMultiplier * streak)
     }
 
     private static AdjustStartingGold() {
-        for (let player of Globals.ALL_PLAYERS) {
-            player.addGold(this.StartingGold)
+        for (const player of Globals.ALL_PLAYERS) {
+            player.addGold(Resources.StartingGold)
         }
     }
 
     private static SetResourcesForGamemode() {
-        if (CurrentGameMode.active === GameMode.Standard) this.StandardResources()
-        else if (CurrentGameMode.active === GameMode.SoloTournament) this.SoloResources()
-        else if (CurrentGameMode.active === GameMode.TeamTournament) this.TeamResources()
+        if (CurrentGameMode.active === GameMode.Standard) Resources.StandardResources()
+        else if (CurrentGameMode.active === GameMode.SoloTournament) Resources.SoloResources()
+        else if (CurrentGameMode.active === GameMode.TeamTournament) Resources.TeamResources()
     }
 
     private static StandardResources() {
-        this.StartingGold = 200
-        this.SaveExperience = 80
-        this.SaveGold = 25
+        Resources.StartingGold = 200
+        Resources.SaveExperience = 80
+        Resources.SaveGold = 25
     }
 
     private static SoloResources() {
-        this.SaveExperience = 0
-        this.SaveGold = 0
-        this.EndRoundBonusXP = 0
+        Resources.SaveExperience = 0
+        Resources.SaveGold = 0
+        Resources.EndRoundBonusXP = 0
     }
 
     private static TeamResources() {
-        this.SaveExperience = 15
-        this.SaveGold = 5
-        this.EndRoundBonusXP = 0
+        Resources.SaveExperience = 15
+        Resources.SaveGold = 5
+        Resources.EndRoundBonusXP = 0
     }
 }

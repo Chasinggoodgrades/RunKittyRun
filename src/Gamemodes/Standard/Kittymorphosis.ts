@@ -78,7 +78,7 @@ export class KittyMorphosis {
     /// <param name="Unit"></param>
     public ScaleUnit() {
         if (!this.Active) return
-        let scale = 0.6 - 0.6 * this.COLLISION_REDUCTION * 2.0
+        const scale = 0.6 - 0.6 * this.COLLISION_REDUCTION * 2.0
         this.Kitty.Unit.setScale(scale, scale, scale)
     }
 }

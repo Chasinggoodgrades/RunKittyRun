@@ -66,7 +66,7 @@ export class Blitzer extends Affix {
     private RegisterMoveTimer() {
         this.MoveTimer = createAchesTimer()
         this.PreBlitzerTimer = createAchesTimer()
-        let randomFlyTime = GetRandomReal(4.0, 10.0) // random time to move before blitzing
+        const randomFlyTime = GetRandomReal(4.0, 10.0) // random time to move before blitzing
         this.MoveTimer?.Timer.start(randomFlyTime, false, this.PreBlitzerMove) // initial move
         this.BlitzerTimer = createAchesTimer()
     }
@@ -90,7 +90,7 @@ export class Blitzer extends Affix {
 
     private BeginBlitz() {
         try {
-            let randomTime = GetRandomReal(this.BLITZER_LOWEND, this.BLITZER_HIGHEND) // blitz randomly between this time interval
+            const randomTime = GetRandomReal(this.BLITZER_LOWEND, this.BLITZER_HIGHEND) // blitz randomly between this time interval
             this.TargetX = GetRandomReal(this.Unit.WolfArea.Rectangle.minX, this.Unit.WolfArea.Rectangle.maxX)
             this.TargetY = GetRandomReal(this.Unit.WolfArea.Rectangle.minY, this.Unit.WolfArea.Rectangle.maxY)
             this.WanderEffect?.playAnimation(ANIM_TYPE_DEATH)
@@ -107,12 +107,12 @@ export class Blitzer extends Affix {
     }
 
     private BlitzerMove() {
-        let speed = this.BLITZER_SPEED // speed in yards per second
-        let currentX: number = this.Unit.Unit.x
-        let currentY: number = this.Unit.Unit.y
+        const speed = this.BLITZER_SPEED // speed in yards per second
+        const currentX: number = this.Unit.Unit.x
+        const currentY: number = this.Unit.Unit.y
 
         // Distance between current and target pos
-        let distance: number = distanceBetweenXYPoints(currentX, currentY, this.TargetX, this.TargetY)
+        const distance: number = distanceBetweenXYPoints(currentX, currentY, this.TargetX, this.TargetY)
 
         // stop if its within range of the target / collision thingy
         if (distance <= DEFAULT_WOLF_COLLISION_RADIUS) {
@@ -121,13 +121,13 @@ export class Blitzer extends Affix {
         }
 
         // determine direction
-        let directionX: number = (this.TargetX - currentX) / distance
-        let directionY: number = (this.TargetY - currentY) / distance
+        const directionX: number = (this.TargetX - currentX) / distance
+        const directionY: number = (this.TargetY - currentY) / distance
 
         // 60 fps for smooth movement, step distance
-        let stepDistance: number = speed / 50.0 // Assuming 60 calls per second
-        let nextX: number = currentX + directionX * stepDistance
-        let nextY: number = currentY + directionY * stepDistance
+        const stepDistance: number = speed / 50.0 // Assuming 60 calls per second
+        const nextX: number = currentX + directionX * stepDistance
+        const nextY: number = currentY + directionY * stepDistance
 
         // Move the unit one step
         this.Unit.Unit.setPathing(false)
@@ -137,7 +137,7 @@ export class Blitzer extends Affix {
         this.Unit.Unit.setFacingEx((Math.atan2(directionY, directionX) * 180.0) / Math.PI)
         this.Unit.Unit.setAnimation(2) // running animation: ;
 
-        let stepTime = 1.0 / 50.0
+        const stepTime = 1.0 / 50.0
 
         // Set a timer to call this method again after a short delay
         this.BlitzerTimer?.Timer.start(stepTime, false, this.BlitzerMove)
@@ -155,7 +155,7 @@ export class Blitzer extends Affix {
 
     public static GetBlitzer(unit: Unit): Blitzer {
         if (unit === null) return null as never
-        let affix = Globals.ALL_WOLVES.get(unit)!.Affixes.find(Blitzer.IsBlitzer)
+        const affix = Globals.ALL_WOLVES.get(unit)!.Affixes.find(Blitzer.IsBlitzer)
         return affix instanceof Blitzer ? affix : (null as never)
     }
 

@@ -20,44 +20,44 @@ export class KibbleEvent {
     private static EventLength = 300.0 // 5 minutes to collect 200 kibble xd
 
     public static StartKibbleEvent(chance: number) {
-        let adjustedChance = !PROD ? 5 : 1
-        if (chance > adjustedChance || this.EventPlayed) return
+        const adjustedChance = !PROD ? 5 : 1
+        if (chance > adjustedChance || KibbleEvent.EventPlayed) return
 
-        this.EventActive = true
-        this.EventPlayed = true // only once per game.
-        this.EventKibblesCollected = 0
+        KibbleEvent.EventActive = true
+        KibbleEvent.EventPlayed = true // only once per game.
+        KibbleEvent.EventKibblesCollected = 0
 
-        this.EventTimer = Timer.create()
-        this.EventTimerDialog = TimerDialog.create(this.EventTimer)!
-        this.EventTimerDialog.setTitle('Event: Kibble')
-        this.EventTimerDialog.display = true
-        this.EventTimer.start(
-            this.EventLength,
+        KibbleEvent.EventTimer = Timer.create()
+        KibbleEvent.EventTimerDialog = TimerDialog.create(KibbleEvent.EventTimer)!
+        KibbleEvent.EventTimerDialog.setTitle('Event: Kibble')
+        KibbleEvent.EventTimerDialog.display = true
+        KibbleEvent.EventTimer.start(
+            KibbleEvent.EventLength,
             false,
-            ErrorHandler.Wrap(() => this.EndKibbleEvent())
+            ErrorHandler.Wrap(() => KibbleEvent.EndKibbleEvent())
         )
         Utility.TimedTextToAllPlayers(
             10.0,
-            `${Colors.COLOR_YELLOW}A Kibble event has started! Collect ${this.TotalEventKibbles} kibbles to earn an award!${Colors.COLOR_RESET}`
+            `${Colors.COLOR_YELLOW}A Kibble event has started! Collect ${KibbleEvent.TotalEventKibbles} kibbles to earn an award!${Colors.COLOR_RESET}`
         )
 
         // Spawn event kibbles
-        for (let i = 0; i < this.TotalEventKibbles + this.EventExtraKibbles; i++) {
-            let kibble = MemoryHandler.getEmptyObject<Kibble>()
+        for (let i = 0; i < KibbleEvent.TotalEventKibbles + KibbleEvent.EventExtraKibbles; i++) {
+            const kibble = MemoryHandler.getEmptyObject<Kibble>()
             kibble.SpawnKibble() // Last error i recieved here was nil value (method 'SpawnKibble') ... MemoryHandler issue ig
             ItemSpawnerTrackKibbles.active.push(kibble)
         }
 
-        this.UpdateEventProgress()
+        KibbleEvent.UpdateEventProgress()
     }
 
     private static EndKibbleEvent() {
-        this.EventActive = false
-        GC.RemoveTimerDialog(this.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
-        GC.RemoveTimer(this.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
+        KibbleEvent.EventActive = false
+        GC.RemoveTimerDialog(KibbleEvent.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
+        GC.RemoveTimer(KibbleEvent.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
 
         for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
-            let kibble = ItemSpawnerTrackKibbles.active[i]
+            const kibble = ItemSpawnerTrackKibbles.active[i]
             if (kibble.Item === null) continue
             kibble.dispose()
         }
@@ -71,20 +71,20 @@ export class KibbleEvent {
     }
 
     private static UpdateEventProgress() {
-        this.EventTimerDialog.setTitle(
+        KibbleEvent.EventTimerDialog.setTitle(
             `Kibble Collected: ${Colors.COLOR_TURQUOISE}${KibbleEvent.EventKibblesCollected}|r/${Colors.COLOR_LAVENDER}${KibbleEvent.TotalEventKibbles}|r`
         )
     }
 
     public static CollectEventKibble() {
-        if (!this.EventActive) return
+        if (!KibbleEvent.EventActive) return
 
-        this.EventKibblesCollected++
-        this.UpdateEventProgress()
+        KibbleEvent.EventKibblesCollected++
+        KibbleEvent.UpdateEventProgress()
 
-        if (this.EventKibblesCollected >= this.TotalEventKibbles) {
+        if (KibbleEvent.EventKibblesCollected >= KibbleEvent.TotalEventKibbles) {
             Challenges.HuntressKitty()
-            this.EndKibbleEvent()
+            KibbleEvent.EndKibbleEvent()
         }
     }
 
@@ -93,6 +93,6 @@ export class KibbleEvent {
     /// </summary>
     /// <returns></returns>
     public static IsEventActive(): boolean {
-        return this.EventActive
+        return KibbleEvent.EventActive
     }
 }

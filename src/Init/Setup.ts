@@ -61,12 +61,12 @@ export class Setup {
             WolfPoint.AssignOrderIds()
             DoodadChanger.ShowSeasonalDoodads(false)
             Gamemode.Initialize()
-            this.SetupVIPList()
-            this.SetAlliedPlayers()
+            Setup.SetupVIPList()
+            Setup.SetAlliedPlayers()
             //if (!ADMINDISABLE.AdminsGame()) return;
             Safezone.Initialize()
             Savecode.Initialize()
-            Utility.SimpleTimer(2.0, () => this.StartGameModeTimer()) // Gives some delay time for the save system to sync
+            Utility.SimpleTimer(2.0, () => Setup.StartGameModeTimer()) // Gives some delay time for the save system to sync
             StopMusic(false)
             ClearMapMusic()
             Globals.GAME_INITIALIZED = true
@@ -80,26 +80,26 @@ export class Setup {
     }
 
     private static StartGameModeTimer() {
-        this.gameModeTimer = createAchesTimer()
-        this.gameModeTimer.Timer.start(
+        Setup.gameModeTimer = createAchesTimer()
+        Setup.gameModeTimer.Timer.start(
             1.0,
             true,
-            ErrorHandler.Wrap(() => this.ChoosingGameMode())
+            ErrorHandler.Wrap(() => Setup.ChoosingGameMode())
         )
     }
 
     private static ChoosingGameMode() {
-        this.timeToChoose += 1.0
-        if (this.timeToChoose === Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
+        Setup.timeToChoose += 1.0
+        if (Setup.timeToChoose === Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
         if (Gamemode.IsGameModeChosen) {
-            this.StartGame()
-            this.gameModeTimer.dispose()
+            Setup.StartGame()
+            Setup.gameModeTimer.dispose()
         }
     }
 
     private static StartGame() {
         try {
-            this.RemoveDisconnectedPlayers()
+            Setup.RemoveDisconnectedPlayers()
             FogEnable(false)
             FogMaskEnable(false)
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12)
@@ -165,8 +165,8 @@ export class Setup {
     }
 
     private static SetAlliedPlayers() {
-        for (let player of Globals.ALL_PLAYERS) {
-            for (let playerx of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
+            for (const playerx of Globals.ALL_PLAYERS) {
                 if (player === playerx) continue
                 player.setAlliance(playerx, ALLIANCE_PASSIVE, true)
                 player.setAlliance(playerx, ALLIANCE_HELP_REQUEST, true)
@@ -181,7 +181,7 @@ export class Setup {
     public static SetupVIPList() {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             for (let j = 0; j < Globals.VIPLIST.length; j++) {
-                let fromBase64Name = EncodingBase64.Decode(Globals.VIPLIST[j])
+                const fromBase64Name = EncodingBase64.Decode(Globals.VIPLIST[j])
                 if (Globals.ALL_PLAYERS[i].name === fromBase64Name) {
                     Globals.VIPLISTUNFILTERED.push(Globals.ALL_PLAYERS[i])
                 }

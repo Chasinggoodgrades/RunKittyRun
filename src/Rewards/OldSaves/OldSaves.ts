@@ -25,12 +25,12 @@ export class Savecode {
         try {
             OldsaveSync.Initialize()
             for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
-                let ability = OldSavesHelper.AbilityList[i]
-                let tooltip = BlzGetAbilityTooltip(ability, 0)
+                const ability = OldSavesHelper.AbilityList[i]
+                const tooltip = BlzGetAbilityTooltip(ability, 0)
                 if (tooltip && tooltip !== 'Tool tip missing!') Savecode.OriginalToolTips.push(tooltip)
                 else throw new Error(`Error, tooltip not available: ${ability}`)
             }
-            for (let player of Globals.ALL_PLAYERS) {
+            for (const player of Globals.ALL_PLAYERS) {
                 Savecode.InitializeSaveCode(player)
             }
         } catch (e: any) {
@@ -93,7 +93,7 @@ export class Savecode {
     }
 
     public Obfuscate(key: number, sign: number) {
-        let seed: number = GetRandomInt(0, int.MaxValue)
+        const seed: number = GetRandomInt(0, int.MaxValue)
         let advance = 0
         let x = 0
         let current: BigNumL = this.Bignum.List
@@ -133,7 +133,7 @@ export class Savecode {
 
     public Load(p: MapPlayer, code: string) {
         try {
-            let key: number = Savecode.SCommHash(p.name) + 1 * 73
+            const key: number = Savecode.SCommHash(p.name) + 1 * 73
             let inputhash = 0
 
             this.FromString(code)
@@ -154,15 +154,15 @@ export class Savecode {
             return
         }
 
-        let filePath = 'RunKittyRun\\SaveSlot_RKR.pld'
+        const filePath = 'RunKittyRun\\SaveSlot_RKR.pld'
         let sb = []
         Preloader(filePath)
 
         for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
-            let abilityID = OldSavesHelper.AbilityList[i]
-            let originalTooltip = Savecode.OriginalToolTips[i]
+            const abilityID = OldSavesHelper.AbilityList[i]
+            const originalTooltip = Savecode.OriginalToolTips[i]
 
-            let packet = BlzGetAbilityTooltip(abilityID, 0)
+            const packet = BlzGetAbilityTooltip(abilityID, 0)
             if (packet === originalTooltip) break
             else {
                 BlzSetAbilityTooltip(abilityID, originalTooltip, 0)
@@ -170,7 +170,7 @@ export class Savecode {
             }
         }
         let result = sb.join('')
-        let newLineStart = result.indexOf('\n')
+        const newLineStart = result.indexOf('\n')
         if (newLineStart >= 0) result = result.substring(newLineStart + 1)
 
         sb = [result]
@@ -182,13 +182,13 @@ export class Savecode {
     /// </summary>
     /// <param name="player"></param>
     public SetRewardValues(player: MapPlayer) {
-        let awardData = Globals.ALL_KITTIES.get(player)!.SaveData.GameAwardsSorted
-        let roundstats = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes
-        let kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats
+        const awardData = Globals.ALL_KITTIES.get(player)!.SaveData.GameAwardsSorted
+        const roundstats = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes
+        const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats
 
-        for (let value of DecodeOldsave.decodeValues) {
-            let decodedValue = this.Decode(value.value)
-            let propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.key)
+        for (const value of DecodeOldsave.decodeValues) {
+            const decodedValue = this.Decode(value.value)
+            const propertyValue = RewardHelper.GetAwardNestedValueTwo(awardData, value.key)
 
             // Award Events
             if (propertyValue !== -1 && decodedValue === 1) {
@@ -218,10 +218,10 @@ export class Savecode {
     }
 
     private static SCommHash(name: string) {
-        let charlen = Savecode.player_charset.length
-        let count: { [x: string]: number } = {}
+        const charlen = Savecode.player_charset.length
+        const count: { [x: string]: number } = {}
         let x: number
-        for (let c of name.toUpperCase()) {
+        for (const c of name.toUpperCase()) {
             x = OldSavesHelper.Player_CharToInt(c)
             if (x >= 0) count[x]++
         }

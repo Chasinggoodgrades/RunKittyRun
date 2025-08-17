@@ -14,42 +14,42 @@ export class NoKittyLeftBehind {
     private static RequiredCount = 3
 
     public static Initialize() {
-        this.ItemID = Constants.ITEM_EASTER_EGG_CAT_FIGURINE
-        this.CompletedRounds = []
+        NoKittyLeftBehind.ItemID = Constants.ITEM_EASTER_EGG_CAT_FIGURINE
+        NoKittyLeftBehind.CompletedRounds = []
     }
 
     public static CheckChallenge() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        if (!this.NoOneLeftBehind()) return
-        this.IncrementCompletedCount()
-        this.SendMessage()
+        if (!NoKittyLeftBehind.NoOneLeftBehind()) return
+        NoKittyLeftBehind.IncrementCompletedCount()
+        NoKittyLeftBehind.SendMessage()
     }
 
     private static IncrementCompletedCount() {
-        let round = Globals.ROUND
-        if (this.CompletedRounds.includes(round)) return
-        this.CompletedRounds.push(round)
-        this.CompletedCount++
-        this.SendMessage()
+        const round = Globals.ROUND
+        if (NoKittyLeftBehind.CompletedRounds.includes(round)) return
+        NoKittyLeftBehind.CompletedRounds.push(round)
+        NoKittyLeftBehind.CompletedCount++
+        NoKittyLeftBehind.SendMessage()
     }
 
     private static SendMessage() {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
-            if (!Utility.UnitHasItem(kitty.Unit, this.ItemID)) continue
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
+            if (!Utility.UnitHasItem(kitty.Unit, NoKittyLeftBehind.ItemID)) continue
             if (AwardManager.ReceivedAwardAlready(kitty.Player, 'WWSwift')) continue
             kitty.Player.DisplayTimedTextTo(
                 5.0,
                 `${Colors.COLOR_LAVENDER}No Kitty Left Behind|r ${Colors.COLOR_YELLOW_ORANGE}(${NoKittyLeftBehind.CompletedCount}/${NoKittyLeftBehind.RequiredCount})|r`
             )
-            if (this.CompletedCount >= this.RequiredCount) {
+            if (NoKittyLeftBehind.CompletedCount >= NoKittyLeftBehind.RequiredCount) {
                 AwardManager.GiveReward(kitty.Player, 'WWSwift')
             }
         }
     }
 
     private static NoOneLeftBehind(): boolean {
-        let rect = RegionList.SafeZones[RegionList.SafeZones.length - 1]
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        const rect = RegionList.SafeZones[RegionList.SafeZones.length - 1]
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (!rect.includes(kitty.Unit.x, kitty.Unit.y)) return false
         }
         return true

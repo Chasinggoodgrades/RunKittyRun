@@ -16,10 +16,10 @@ export class Votekick {
     private static VOTE_DURATION = 30.0
 
     public static InitiateVotekick(voteStarter: MapPlayer, player: string) {
-        if (this.VotekickAlreadyActive()) return
-        this.VoteStarter = voteStarter
-        let playerID = this.GetPlayerID(player)
-        if (playerID !== -1) this.StartVotekick(MapPlayer.fromIndex(playerID)!)
+        if (Votekick.VotekickAlreadyActive()) return
+        Votekick.VoteStarter = voteStarter
+        const playerID = Votekick.GetPlayerID(player)
+        if (playerID !== -1) Votekick.StartVotekick(MapPlayer.fromIndex(playerID)!)
         else
             voteStarter.DisplayTimedTextTo(
                 7.0,
@@ -28,20 +28,20 @@ export class Votekick {
     }
 
     public static IncrementTally() {
-        if (!this.VoteActive) return
-        let player = getTriggerPlayer()
-        let vote = (GetEventPlayerChatString() || '').toLowerCase()
+        if (!Votekick.VoteActive) return
+        const player = getTriggerPlayer()
+        const vote = (GetEventPlayerChatString() || '').toLowerCase()
         if (vote !== '-yes') return
-        if (this.Voters.includes(player)) {
+        if (Votekick.Voters.includes(player)) {
             player.DisplayTimedTextTo(
                 7.0,
-                `${Colors.COLOR_YELLOW}You have already voted to kick ${ColorUtils.PlayerNameColored(this.VoteKickPlayer!)}${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW}You have already voted to kick ${ColorUtils.PlayerNameColored(Votekick.VoteKickPlayer!)}${Colors.COLOR_RESET}`
             )
             return
         }
-        this.Voters.push(player)
+        Votekick.Voters.push(player)
         print(
-            `${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW} has voted yes to kick ${ColorUtils.PlayerNameColored(this.VoteKickPlayer!)}${Colors.COLOR_RESET}`
+            `${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW} has voted yes to kick ${ColorUtils.PlayerNameColored(Votekick.VoteKickPlayer!)}${Colors.COLOR_RESET}`
         )
     }
 
@@ -52,46 +52,46 @@ export class Votekick {
             )
             return
         }
-        this.VoteActive = true
+        Votekick.VoteActive = true
         print(
-            `${Colors.COLOR_YELLOW}A votekick has been initiated against ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW}. If you agree, type "-yes" ${Colors.COLOR_RED}(${this.VOTE_DURATION} seconds remain)${Colors.COLOR_RESET}`
+            `${Colors.COLOR_YELLOW}A votekick has been initiated against ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW}. If you agree, type "-yes" ${Colors.COLOR_RED}(${Votekick.VOTE_DURATION} seconds remain)${Colors.COLOR_RESET}`
         )
-        this.VoteKickPlayer = target
-        this.Voters.push(this.VoteStarter!)
-        this.VoteTimer.start(
-            this.VOTE_DURATION,
+        Votekick.VoteKickPlayer = target
+        Votekick.Voters.push(Votekick.VoteStarter!)
+        Votekick.VoteTimer.start(
+            Votekick.VOTE_DURATION,
             false,
-            ErrorHandler.Wrap(() => this.ExecuteVotekick(target))
+            ErrorHandler.Wrap(() => Votekick.ExecuteVotekick(target))
         )
     }
 
     private static ExecuteVotekick(target: MapPlayer) {
-        let totalPlayers: number = Globals.ALL_PLAYERS.length
-        let requiredVotes: number = totalPlayers / 2
+        const totalPlayers: number = Globals.ALL_PLAYERS.length
+        const requiredVotes: number = totalPlayers / 2
 
-        if (this.Voters.length >= requiredVotes) {
+        if (Votekick.Voters.length >= requiredVotes) {
             print(
-                `${Colors.COLOR_YELLOW}Votekick succeeded. ${this.Voters.length}/${totalPlayers} players voted yes. ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW} has been removed from the game.${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW}Votekick succeeded. ${Votekick.Voters.length}/${totalPlayers} players voted yes. ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW} has been removed from the game.${Colors.COLOR_RESET}`
             )
             PlayerLeaves.PlayerLeavesActions(target)
             target.remove(PLAYER_GAME_RESULT_DEFEAT)
         } else {
             print(
-                `${Colors.COLOR_YELLOW}Votekick failed. Only ${this.Voters.length}/${totalPlayers} players voted yes. Not enough votes to remove ${ColorUtils.PlayerNameColored(target)}.${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW}Votekick failed. Only ${Votekick.Voters.length}/${totalPlayers} players voted yes. Not enough votes to remove ${ColorUtils.PlayerNameColored(target)}.${Colors.COLOR_RESET}`
             )
         }
-        this.EndVotekick()
+        Votekick.EndVotekick()
     }
 
     private static EndVotekick() {
-        this.VoteActive = false
-        this.VoteStarter = undefined
-        this.VoteKickPlayer = undefined
-        this.Voters = []
+        Votekick.VoteActive = false
+        Votekick.VoteStarter = undefined
+        Votekick.VoteKickPlayer = undefined
+        Votekick.Voters = []
     }
 
     private static VotekickAlreadyActive(): boolean {
-        if (this.VoteActive || VoteEndRound.VoteActive) {
+        if (Votekick.VoteActive || VoteEndRound.VoteActive) {
             print(
                 `${Colors.COLOR_YELLOW}A vote is already active. Please wait for the current vote to finish.${Colors.COLOR_RESET}`
             )
@@ -106,7 +106,7 @@ export class Votekick {
     /// <param name="player"></param>
     /// <returns></returns>
     private static GetPlayerID(player: string) {
-        let playerID = S2I(player)
+        const playerID = S2I(player)
         return playerID && playerID > 0 ? playerID - 1 : -1
     }
 

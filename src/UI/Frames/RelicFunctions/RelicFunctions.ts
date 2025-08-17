@@ -53,20 +53,20 @@ export class RelicFunctions {
 
     public static UpgradeRelic() {
         try {
-            let player = getTriggerPlayer()
+            const player = getTriggerPlayer()
             if (player.isLocal()) {
                 ShopFrame.upgradeButton.visible = false
                 ShopFrame.upgradeButton.visible = true
             }
 
-            let selectedItem = ShopFrame.SelectedItems.get(player)
+            const selectedItem = ShopFrame.SelectedItems.get(player)
             if (selectedItem) {
-                let itemID = selectedItem.ItemID
-                let relicType = selectedItem.Relic.constructor
-                let playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor === relicType)
+                const itemID = selectedItem.ItemID
+                const relicType = selectedItem.Relic.constructor
+                const playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor === relicType)
                 if (!playerRelic) return
-                let playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
-                let playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
+                const playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
+                const playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
 
                 if (playerUpgradesRelic === null) return
                 if (RelicFunctions.ActiveShadowKitty(player)) return
@@ -81,7 +81,7 @@ export class RelicFunctions {
                 }
 
                 // Check if enough goldies
-                let goldCost = playerUpgradesRelic.Cost
+                const goldCost = playerUpgradesRelic.Cost
                 if (player.getGold() < goldCost) {
                     ShopFrame.NotEnoughGold(player, goldCost)
                     return
@@ -130,7 +130,7 @@ export class RelicFunctions {
     }
 
     private static RelicMaxedOut(player: MapPlayer) {
-        let relics = Globals.ALL_KITTIES.get(player)!.Relics
+        const relics = Globals.ALL_KITTIES.get(player)!.Relics
         if (relics.length < Relic.MaxRelics) return false
         player.DisplayTimedTextTo(
             8.0,
@@ -140,7 +140,7 @@ export class RelicFunctions {
     }
 
     private static CanGetAnotherRelic(unit: Unit) {
-        let relicCount = Globals.ALL_KITTIES.get(unit.owner)!.Relics.length
+        const relicCount = Globals.ALL_KITTIES.get(unit.owner)!.Relics.length
         if (relicCount < 1) return true // can get a first relic ofc.
         if (Relic.GetRelicCountForLevel(unit.getHeroLevel()) < relicCount) {
             unit.owner.DisplayTimedTextTo(
@@ -153,7 +153,7 @@ export class RelicFunctions {
     }
 
     private static ActiveShadowKitty(player: MapPlayer) {
-        let shadowkitty = ShadowKitty.ALL_SHADOWKITTIES.get(player)
+        const shadowkitty = ShadowKitty.ALL_SHADOWKITTIES.get(player)
         if (!shadowkitty) return false
         if (shadowkitty.Active) {
             player.DisplayTimedTextTo(
@@ -166,7 +166,7 @@ export class RelicFunctions {
     }
 
     public static CannotSellOnCD(kitty: Kitty, relic: Relic) {
-        let CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit.handle, relic.RelicAbilityID)
+        const CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit.handle, relic.RelicAbilityID)
         if (CD > 0.0 && relic.RelicAbilityID !== 0) {
             kitty.Player.DisplayTimedTextTo(
                 5.0,

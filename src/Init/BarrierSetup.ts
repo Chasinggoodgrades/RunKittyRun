@@ -11,26 +11,26 @@ export class BarrierSetup {
     public static destructables: Destructable[] = []
 
     public static Initialize() {
-        this.ActivateBarrier()
+        BarrierSetup.ActivateBarrier()
     }
 
     private static CreateDummyUnits() {
-        let neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!
-        this.DummyUnitOne = Unit.create(
+        const neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!
+        BarrierSetup.DummyUnitOne = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_1,
             Regions.Dummy1Region.centerX,
             Regions.Dummy1Region.centerY,
             360
         )!
-        this.DummyUnitTwo = Unit.create(
+        BarrierSetup.DummyUnitTwo = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_2,
             Regions.Dummy2Region.centerX,
             Regions.Dummy2Region.centerY,
             360
         )!
-        this.DummyUnitThree = Unit.create(
+        BarrierSetup.DummyUnitThree = Unit.create(
             neutralPassive,
             Constants.UNIT_DUMMY_3,
             Regions.Dummy3Region.centerX,
@@ -40,36 +40,36 @@ export class BarrierSetup {
     }
 
     private static CreateBarrier() {
-        let barrierRegion = Regions.BarrierRegion
-        let centerX = barrierRegion.centerX
-        let minY = barrierRegion.minY
-        let maxY = barrierRegion.maxY
+        const barrierRegion = Regions.BarrierRegion
+        const centerX = barrierRegion.centerX
+        const minY = barrierRegion.minY
+        const maxY = barrierRegion.maxY
 
-        let distanceY: number = maxY - minY
-        let intervalY: number = distanceY / 13
+        const distanceY: number = maxY - minY
+        const intervalY: number = distanceY / 13
         for (let i = 1; i < 13; i++) {
-            let currentY: number = minY + i * intervalY
-            let des = Destructable.create(this.BARRIERID, centerX, currentY)
-            if (des) this.destructables.push(des)
+            const currentY: number = minY + i * intervalY
+            const des = Destructable.create(BarrierSetup.BARRIERID, centerX, currentY)
+            if (des) BarrierSetup.destructables.push(des)
         }
     }
 
     public static ActivateBarrier() {
-        if (this.BarrierActive) return
-        this.CreateDummyUnits()
-        this.CreateBarrier()
-        this.BarrierActive = true
+        if (BarrierSetup.BarrierActive) return
+        BarrierSetup.CreateDummyUnits()
+        BarrierSetup.CreateBarrier()
+        BarrierSetup.BarrierActive = true
     }
 
     public static DeactivateBarrier() {
-        if (!this.BarrierActive) return
-        this.DummyUnitOne.destroy()
-        this.DummyUnitTwo.destroy()
-        this.DummyUnitThree.destroy()
-        for (let des of this.destructables) {
+        if (!BarrierSetup.BarrierActive) return
+        BarrierSetup.DummyUnitOne.destroy()
+        BarrierSetup.DummyUnitTwo.destroy()
+        BarrierSetup.DummyUnitThree.destroy()
+        for (const des of BarrierSetup.destructables) {
             des.destroy()
         }
-        this.destructables = []
-        this.BarrierActive = false
+        BarrierSetup.destructables = []
+        BarrierSetup.BarrierActive = false
     }
 }

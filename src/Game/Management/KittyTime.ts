@@ -69,7 +69,7 @@ export class KittyTime {
     private SetTotalTime() {
         // Solo Tournament Issue
         this.TotalTime = 0.0
-        for (let [_, time] of this.RoundTime) // IEnumberable
+        for (const [_, time] of this.RoundTime) // IEnumberable
             this.TotalTime += time
     }
 
@@ -88,7 +88,7 @@ export class KittyTime {
     public GetOverallProgress(): number {
         // Solo Tournament Issue
         let overallProgress = 0.0
-        for (let [_, progress] of this.RoundProgress) // IEnumberable
+        for (const [_, progress] of this.RoundProgress) // IEnumberable
             overallProgress += progress
         return overallProgress / this.RoundProgress.size
     }

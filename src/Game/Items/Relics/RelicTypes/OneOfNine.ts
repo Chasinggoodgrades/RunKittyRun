@@ -39,18 +39,18 @@ export class OneOfNine extends Relic {
         this.Upgrades.push(new RelicUpgrade(1, 'Your ultimate no longer costs mana.', 20, 1000))
     }
     public override ApplyEffect(Unit: Unit) {
-        let player: MapPlayer = Unit.owner
-        let cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        const player: MapPlayer = Unit.owner
+        const cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
         Unit.removeAbility(this.PreviousAbilityID)
         Unit.addAbility(OneOfNine.RelicAbilityID)
-        let abilityLevel: number = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
+        const abilityLevel: number = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
         BlzStartUnitAbilityCooldown(Unit.handle, OneOfNine.RelicAbilityID, cooldown)
         this.RemoveManaCost(Unit, abilityLevel)
     }
 
     public override RemoveEffect(Unit: Unit) {
-        let player: MapPlayer = Unit.owner
-        let cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        const player: MapPlayer = Unit.owner
+        const cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
         Unit.removeAbility(OneOfNine.RelicAbilityID)
         Unit.addAbility(this.PreviousAbilityID)
         ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
@@ -58,10 +58,10 @@ export class OneOfNine extends Relic {
     }
 
     public static GetOneOfNineCooldown(Player: MapPlayer) {
-        let kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
-        let noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-        let relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
-        let reduction = OneOfNine.GetOneOfNineReduction(Player)
+        const kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
+        const noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+        const relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+        const reduction = OneOfNine.GetOneOfNineReduction(Player)
 
         // remaining cooldown depending on relic or no relic
         let cooldown: number =
@@ -84,7 +84,7 @@ export class OneOfNine extends Relic {
     /// <param name="Unit"></param>
     /// <param name="abilityLevel"></param>
     private RemoveManaCost(Unit: Unit, abilityLevel: number) {
-        let upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
         if (upgradeLevel < 2) return
         Unit.getAbility(OneOfNine.RelicAbilityID)
         Unit.setAbilityManaCost(OneOfNine.RelicAbilityID, abilityLevel - 1, 0)

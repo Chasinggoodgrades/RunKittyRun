@@ -12,17 +12,19 @@ export class RollerSkates {
     private static RollerSkaters: MapPlayer[]
 
     public static Initialize() {
-        this.RollerSkaters = []
-        this.OnUseTrigger = Trigger.create()!
-        this.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
-        this.OnUseTrigger.addCondition(Condition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS))
-        this.OnUseTrigger.addAction(ErrorHandler.Wrap(() => this.SwitchingBoots()))
+        RollerSkates.RollerSkaters = []
+        RollerSkates.OnUseTrigger = Trigger.create()!
+        RollerSkates.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
+        RollerSkates.OnUseTrigger.addCondition(
+            Condition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS)
+        )
+        RollerSkates.OnUseTrigger.addAction(ErrorHandler.Wrap(() => RollerSkates.SwitchingBoots()))
     }
 
     private static SwitchingBoots() {
-        let unit = getTriggerUnit()
-        let item = getManipulatedItem()
-        let slider = Globals.ALL_KITTIES.get(unit.owner)!.Slider
+        const unit = getTriggerUnit()
+        const item = getManipulatedItem()
+        const slider = Globals.ALL_KITTIES.get(unit.owner)!.Slider
 
         if (CurrentGameMode.active !== GameMode.Standard) {
             unit.owner.DisplayTimedTextTo(
@@ -32,16 +34,16 @@ export class RollerSkates {
             return
         }
 
-        if (this.RollerSkaters.includes(unit.owner)) {
-            this.SetPegasusBoots(item)
+        if (RollerSkates.RollerSkaters.includes(unit.owner)) {
+            RollerSkates.SetPegasusBoots(item)
             slider.StopSlider()
-            this.RollerSkaters.splice(this.RollerSkaters.indexOf(unit.owner), 1)
+            RollerSkates.RollerSkaters.splice(RollerSkates.RollerSkaters.indexOf(unit.owner), 1)
             unit.owner.DisplayTimedTextTo(3.0, `${Colors.COLOR_YELLOW}Roller Skates Deactivated${Colors.COLOR_RESET}`)
         } else {
-            this.SetRollerSkates(item)
+            RollerSkates.SetRollerSkates(item)
             if (slider.IsEnabled()) slider.ResumeSlider(false)
             else slider.StartSlider()
-            this.RollerSkaters.push(unit.owner)
+            RollerSkates.RollerSkaters.push(unit.owner)
             unit.owner.DisplayTimedTextTo(3.0, `${Colors.COLOR_YELLOW}Roller Skates Activated${Colors.COLOR_RESET}`)
         }
     }

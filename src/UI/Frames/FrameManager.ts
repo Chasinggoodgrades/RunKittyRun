@@ -31,8 +31,8 @@ export class FrameManager {
 
     public static Initialize() {
         try {
-            this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
-            this._cachedUIPosition = FrameManager.RepositionBackdropAction()
+            FrameManager.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+            FrameManager._cachedUIPosition = FrameManager.RepositionBackdropAction()
             BlzLoadTOCFile('war3mapImported\\templates.toc')
             FrameManager.RemoveUnwantedFrames()
             FrameManager.ButtonsBackdrop()
@@ -54,7 +54,7 @@ export class FrameManager {
     }
 
     private static RemoveUnwantedFrames() {
-        let resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
+        const resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
         BlzFrameGetChild(BlzFrameGetChild(FrameManager.GameUI.handle, 5)!, 0)
         resourceBarText.text = '0:00'
         //timeDayDisplay.visible = false;
@@ -75,8 +75,8 @@ export class FrameManager {
             0
         )
         FrameManager.RewardsButton.setPoint(FRAMEPOINT_CENTER, FrameManager.Backdrop, FRAMEPOINT_CENTER, 0, 0)
-        FrameManager.RewardsButton.setSize(this.ButtonWidth, this.ButtonHeight)
-        let shopText = blzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton, '', 0)
+        FrameManager.RewardsButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
+        const shopText = blzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton, '', 0)
         shopText.text = `${Colors.COLOR_YELLOW}Rewards${Colors.COLOR_LAVENDER}(-)|r`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.RewardsButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.9)
@@ -95,8 +95,8 @@ export class FrameManager {
             0
         )
         FrameManager.MusicButton.setPoint(FRAMEPOINT_TOPRIGHT, FrameManager.RewardsButton, FRAMEPOINT_TOPLEFT, 0, 0)
-        FrameManager.MusicButton.setSize(this.ButtonWidth, this.ButtonHeight)
-        let shopText = blzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton, '', 0)
+        FrameManager.MusicButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
+        const shopText = blzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton, '', 0)
         shopText.text = `${Colors.COLOR_YELLOW}Music${Colors.COLOR_LAVENDER}(0)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.MusicButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.98)
@@ -115,8 +115,8 @@ export class FrameManager {
             0
         )
         FrameManager.ShopButton.setPoint(FRAMEPOINT_TOPLEFT, FrameManager.RewardsButton, FRAMEPOINT_TOPRIGHT, 0, 0)
-        FrameManager.ShopButton.setSize(this.ButtonWidth, this.ButtonHeight)
-        let shopText = blzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton, '', 0)
+        FrameManager.ShopButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
+        const shopText = blzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton, '', 0)
         shopText.text = `${Colors.COLOR_YELLOW}Shop${Colors.COLOR_LAVENDER}(=)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.ShopButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(1.0)
@@ -143,8 +143,8 @@ export class FrameManager {
     }
 
     private static RepositionBackdrop() {
-        let t = Timer.create()
-        let nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
+        const t = Timer.create()
+        const nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
 
         t.start(1.0, true, FrameManager._cachedUIPosition)
     }
@@ -152,10 +152,10 @@ export class FrameManager {
     private static RepositionBackdropAction(): Action {
         return () => {
             try {
-                let nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
-                let x = nameFrame.width / 4
-                let h = nameFrame.height / 8
-                let yOffSet = nameFrame.height / 8
+                const nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
+                const x = nameFrame.width / 4
+                const h = nameFrame.height / 8
+                const yOffSet = nameFrame.height / 8
                 FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, nameFrame, FRAMEPOINT_TOP, 0, yOffSet)
                 FrameManager.Backdrop.setSize(x, h)
             } catch (e: any) {
@@ -166,7 +166,7 @@ export class FrameManager {
 
     private static ESCHideFrames() {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            let player = Globals.ALL_PLAYERS[i]
+            const player = Globals.ALL_PLAYERS[i]
             FrameManager.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
         FrameManager.ESCTrigger.addAction(() => FrameManager.ESCActions())
@@ -178,7 +178,7 @@ export class FrameManager {
     }
 
     private static ESCActions() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         if (!player.isLocal()) return
         RewardsFrame.RewardFrame.visible = false
         ShopFrame.shopFrame.visible = false

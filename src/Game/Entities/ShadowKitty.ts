@@ -40,7 +40,7 @@ export class ShadowKitty {
     /// Summons shadow kitty to the position of this player's kitty object.
     /// </summary>
     public SummonShadowKitty() {
-        let kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         this.Unit = Unit.create(this.Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.x, kitty.y)!
         this.Unit.setVertexColor(0, 0, 0, 255)
 
@@ -60,7 +60,7 @@ export class ShadowKitty {
     /// Teleports the player's kitty to the shadow kitty's position.
     /// </summary>
     public TeleportToShadowKitty() {
-        let kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         kitty.setPosition(this.Unit.x, this.Unit.y)
     }
 
@@ -85,12 +85,12 @@ export class ShadowKitty {
     /// </summary>
     /// <param name="player"></param>
     public SelectReselectShadowKitty() {
-        let kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         Utility.SelectUnitForPlayer(this.Player, this.Unit)
     }
 
     private static PauseKitty(player: MapPlayer, paused: boolean) {
-        let kitty = Globals.ALL_KITTIES.get(player)!.Unit
+        const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.paused = paused
     }
 

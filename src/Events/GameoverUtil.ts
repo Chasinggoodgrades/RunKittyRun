@@ -8,7 +8,7 @@ import { isNullOrEmpty } from '../Utility/StringUtils'
 
 export class GameoverUtil {
     public static SetBestGameStats() {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             switch (Difficulty.DifficultyValue) {
                 case DifficultyLevel.Normal:
                     GameoverUtil.SetNormalGameStats(kitty)
@@ -29,7 +29,7 @@ export class GameoverUtil {
     }
 
     public static SetColorData() {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             ColorUtils.PopulateColorsData(kitty) // make sure its populated
             ColorUtils.UpdateColors(kitty) //
             ColorUtils.GetMostPlayedColor(kitty)
@@ -37,17 +37,17 @@ export class GameoverUtil {
     }
 
     public static SetFriendData() {
-        let friendDict: Map<string, number> = new Map()
+        const friendDict: Map<string, number> = new Map()
 
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
-            let friendsPlayedWith = kitty.SaveData.FriendsData.FriendsPlayedWith
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
+            const friendsPlayedWith = kitty.SaveData.FriendsData.FriendsPlayedWith
 
             friendDict.clear()
 
             // Splitting / Parsing the data of playerName:count pairs
             if (!isNullOrEmpty(friendsPlayedWith)) {
-                for (let entry of friendsPlayedWith.split(',').filter(Boolean)) {
-                    let parts = entry.split(':')
+                for (const entry of friendsPlayedWith.split(',').filter(v => !!v)) {
+                    const parts = entry.split(':')
                     let count
                     if (parts.length === 2 && (count = S2I(parts[1].trim()))) {
                         friendDict.set(parts[0].trim(), count)
@@ -56,9 +56,9 @@ export class GameoverUtil {
             }
 
             // takes all in-game kitties, increments count if they're present in dictionary else set to 1
-            for (let [_, other] of Globals.ALL_KITTIES) {
+            for (const [_, other] of Globals.ALL_KITTIES) {
                 if (other === kitty) continue
-                let friendName: string = other.Player.name // Get their full battle tag
+                const friendName: string = other.Player.name // Get their full battle tag
 
                 if (friendDict.has(friendName)) {
                     friendDict.set(friendName, (friendDict.get(friendName) || 0) + 1)
@@ -76,7 +76,7 @@ export class GameoverUtil {
     }
 
     private static SetNormalGameStats(kitty: Kitty) {
-        let stats = kitty.SaveData.BestGameTimes.NormalGameTime
+        const stats = kitty.SaveData.BestGameTimes.NormalGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
@@ -84,7 +84,7 @@ export class GameoverUtil {
     }
 
     private static SetHardGameStats(kitty: Kitty) {
-        let stats = kitty.SaveData.BestGameTimes.HardGameTime
+        const stats = kitty.SaveData.BestGameTimes.HardGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
@@ -92,7 +92,7 @@ export class GameoverUtil {
     }
 
     private static SetImpossibleGameStats(kitty: Kitty) {
-        let stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime
+        const stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()
@@ -100,7 +100,7 @@ export class GameoverUtil {
     }
 
     private static SetNightmareGameStats(kitty: Kitty) {
-        let stats = kitty.SaveData.BestGameTimes.NightmareGameTime
+        const stats = kitty.SaveData.BestGameTimes.NightmareGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
         stats.Date = DateTimeManager.DateTime.toString()

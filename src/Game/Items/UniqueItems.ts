@@ -11,8 +11,8 @@ export class UniqueItems {
 
     public static Initialize() {
         try {
-            this.UniqueList = this.UniqueItemList()
-            this.RegisterEvents()
+            UniqueItems.UniqueList = UniqueItems.UniqueItemList()
+            UniqueItems.RegisterEvents()
         } catch (e: any) {
             Logger.Critical(`Error in UniqueItems.Initialize. ${e}`)
             throw e
@@ -29,20 +29,20 @@ export class UniqueItems {
     }
 
     private static RegisterEvents() {
-        this.Trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-        this.Trigger.addAction(() => this.ItemPickup())
+        UniqueItems.Trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
+        UniqueItems.Trigger.addAction(() => UniqueItems.ItemPickup())
     }
 
     private static ItemPickup() {
         try {
-            let item = getManipulatedItem()
-            let player = getTriggerPlayer()
-            let kitty = getTriggerUnit()
+            const item = getManipulatedItem()
+            const player = getTriggerPlayer()
+            const kitty = getTriggerUnit()
 
             if (item.typeId === 0) Logger.Warning('Unique item bug, item ID is 0')
 
             if (!Uniques.UniqueIDs.includes(item.typeId)) return
-            let uniqueItem = this.UniqueList.find(u => u.ItemID === item.typeId)
+            const uniqueItem = UniqueItems.UniqueList.find(u => u.ItemID === item.typeId)
             if (!uniqueItem) return
             if (Utility.UnitHasItemCount(kitty, item.typeId) <= 1) return
 

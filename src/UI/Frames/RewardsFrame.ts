@@ -31,7 +31,7 @@ export class RewardsFrame {
 
     public static Initialize() {
         try {
-            this.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
+            RewardsFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             RewardsFrame.RewardFrame = RewardsFrame.CreateRewardFrame()
             RewardsFrame.TempHandle = RewardsFrame.RewardFrame
             RewardsFrame.SetRewardsFrameHotkey()
@@ -63,14 +63,14 @@ export class RewardsFrame {
     private static CountRewardFrames() {
         let count = 0
         let colCount = 0
-        let rewardTypes = Object.values(RewardType)
+        const rewardTypes = Object.values(RewardType)
             .filter((v): v is RewardType => typeof v === 'number')
             .sort((a, b) => a - b)
 
         // sorts by enum, no desync possibilies here.
 
-        for (let type of rewardTypes) {
-            let numberOfRewards = RewardsFrame.CountNumberOfRewards(type)
+        for (const type of rewardTypes) {
+            const numberOfRewards = RewardsFrame.CountNumberOfRewards(type)
             if (numberOfRewards === 0) continue
 
             colCount = numberOfRewards / RewardsFrame.RewardsPerRow
@@ -87,16 +87,16 @@ export class RewardsFrame {
 
     private static CountNumberOfRewards(type: RewardType) {
         let count = 0
-        for (let reward of RewardsManager.Rewards) {
+        for (const reward of RewardsManager.Rewards) {
             if (reward.Type === type) count++
         }
         return count
     }
 
     private static InitializePanels(name: string, colCount: number) {
-        let y = -RewardsFrame.Padding
-        let width = (RewardsFrame.FrameWidth - RewardsFrame.Padding * 2) / 2
-        let height = colCount === 1 ? 0.03 : 0.03 + (colCount - 1) * 0.02
+        const y = -RewardsFrame.Padding
+        const width = (RewardsFrame.FrameWidth - RewardsFrame.Padding * 2) / 2
+        const height = colCount === 1 ? 0.03 : 0.03 + (colCount - 1) * 0.02
         RewardsFrame.CreatePanel(RewardsFrame.TempHandle, 0, y, width, height, name)
     }
 
@@ -121,12 +121,12 @@ export class RewardsFrame {
             y = -RewardsFrame.Padding * 2
         }
 
-        let panel = blzCreateFrameByType('BACKDROP', `${title}`, parent, 'QuestButtonDisabledBackdropTemplate', 0)
+        const panel = blzCreateFrameByType('BACKDROP', `${title}`, parent, 'QuestButtonDisabledBackdropTemplate', 0)
         panel.setPoint(framePoint1, parent, framePoint2, x, y)
         panel.setSize(width, height)
 
         // title above each panel
-        let panelTitle = blzCreateFrameByType('TEXT', 'RewardPanelTitle', panel, '', 0)
+        const panelTitle = blzCreateFrameByType('TEXT', 'RewardPanelTitle', panel, '', 0)
         panelTitle.setPoint(FRAMEPOINT_TOPLEFT, panel, FRAMEPOINT_TOPLEFT, 0, RewardsFrame.Padding)
         panelTitle.text = title
 
@@ -139,13 +139,13 @@ export class RewardsFrame {
 
     private static CreateRandomRewardButton() {
         // Create the random rewards button at the bottom right of the rewards frame.
-        let ButtonSize = 0.025
-        let TooltipWidth = 0.25
-        let BackgroundPadding = 0.01
-        let TooltipYOffset = 0.01
-        let dice = 'ReplaceableTextures\\CommandButtons\\BTNDice.blp'
+        const ButtonSize = 0.025
+        const TooltipWidth = 0.25
+        const BackgroundPadding = 0.01
+        const TooltipYOffset = 0.01
+        const dice = 'ReplaceableTextures\\CommandButtons\\BTNDice.blp'
 
-        let button = blzCreateFrameByType(
+        const button = blzCreateFrameByType(
             'Button',
             'RandomRewardButton',
             RewardsFrame.RewardFrame,
@@ -161,11 +161,11 @@ export class RewardsFrame {
         )
         button.setSize(ButtonSize, ButtonSize)
 
-        let icon = blzCreateFrameByType('BACKDROP', 'RandomRewardButtonIcon', button, '', 0)
+        const icon = blzCreateFrameByType('BACKDROP', 'RandomRewardButtonIcon', button, '', 0)
         icon.setAllPoints(button)
 
-        let background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
-        let tooltipText = blzCreateFrameByType('TEXT', 'RandomRewardTooltip', background, '', 0)
+        const background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
+        const tooltipText = blzCreateFrameByType('TEXT', 'RandomRewardTooltip', background, '', 0)
         tooltipText.setSize(TooltipWidth, 0)
         background.setPoint(
             FRAMEPOINT_BOTTOMLEFT,
@@ -184,38 +184,38 @@ export class RewardsFrame {
 
         tooltipText.text = `${Colors.COLOR_YELLOW}Randomize Rewards${Colors.COLOR_RESET}\n${Colors.COLOR_ORANGE}Picks random cosmetics from your rewards list, applying them.${Colors.COLOR_RESET}`
 
-        let t = Trigger.create()!
+        const t = Trigger.create()!
         t.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK)
         t.addAction(RewardsFrame.RandomRewardsButtonActions)
     }
 
     private static RandomRewardsButtonActions() {
-        let player = getTriggerPlayer()
-        let frame = Frame.fromHandle(BlzGetTriggerFrame())!
+        const player = getTriggerPlayer()
+        const frame = Frame.fromHandle(BlzGetTriggerFrame())!
         try {
             RewardsFrame.RewardHelp.ClearRewards()
 
-            for (let reward of RewardsManager.Rewards) {
-                let stats = Globals.ALL_KITTIES.get(player)!.SaveData
-                let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
+            for (const reward of RewardsManager.Rewards) {
+                const stats = Globals.ALL_KITTIES.get(player)!.SaveData
+                const value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
                 if (value <= 0) continue
 
                 RewardsFrame.RewardHelp.AddReward(reward)
             }
 
-            let selectedHat =
+            const selectedHat =
                 RewardsFrame.RewardHelp.Hats.length > 0
                     ? RewardsFrame.RewardHelp.Hats[GetRandomInt(0, RewardsFrame.RewardHelp.Hats.length - 1)]
                     : null
-            let selectedWings =
+            const selectedWings =
                 RewardsFrame.RewardHelp.Wings.length > 0
                     ? RewardsFrame.RewardHelp.Wings[GetRandomInt(0, RewardsFrame.RewardHelp.Wings.length - 1)]
                     : null
-            let selectedTrail =
+            const selectedTrail =
                 RewardsFrame.RewardHelp.Trails.length > 0
                     ? RewardsFrame.RewardHelp.Trails[GetRandomInt(0, RewardsFrame.RewardHelp.Trails.length - 1)]
                     : null
-            let selectedAura =
+            const selectedAura =
                 RewardsFrame.RewardHelp.Auras.length > 0
                     ? RewardsFrame.RewardHelp.Auras[GetRandomInt(0, RewardsFrame.RewardHelp.Auras.length - 1)]
                     : null
@@ -233,20 +233,20 @@ export class RewardsFrame {
     }
 
     private static AppendRewardsToFrames() {
-        const cols = this.RewardsPerRow
+        const cols = RewardsFrame.RewardsPerRow
         const count: Map<number, number> = new Map()
 
         for (const reward of RewardsManager.Rewards) {
             const type = reward.Type
             count.set(type, (count.get(type) || 0) + 1)
 
-            const totalRewards = this.CountNumberOfRewards(reward.Type)
+            const totalRewards = RewardsFrame.CountNumberOfRewards(reward.Type)
             const col = ((count.get(type) || 0) - 1) % cols
             const row = Math.floor(((count.get(type) || 0) - 1) / cols)
 
-            // Get the panel for this reward type
+            // Get the panel for RewardsFrame reward type
             const panelName = RewardType[reward.Type]
-            const panel = this.FrameByName.get(panelName)
+            const panel = RewardsFrame.FrameByName.get(panelName)
             if (!panel) continue
 
             // Create the reward button
@@ -258,28 +258,28 @@ export class RewardsFrame {
                 0
             )
 
-            const x = col * this.IconSize + this.Padding
-            const y = -row * this.IconSize - this.Padding / 2
+            const x = col * RewardsFrame.IconSize + RewardsFrame.Padding
+            const y = -row * RewardsFrame.IconSize - RewardsFrame.Padding / 2
             rewardButton.setPoint(FRAMEPOINT_TOPLEFT, panel, FRAMEPOINT_TOPLEFT, x, y)
-            rewardButton.setSize(this.IconSize, this.IconSize)
+            rewardButton.setSize(RewardsFrame.IconSize, RewardsFrame.IconSize)
 
             // Create the icon
             const icon = blzCreateFrameByType('BACKDROP', reward.name.toString() + 'icon', rewardButton, '', 0)
             icon.setAllPoints(rewardButton)
 
-            this.RewardTooltip(rewardButton, reward)
-            this.RewardIcons.set(icon, reward)
+            RewardsFrame.RewardTooltip(rewardButton, reward)
+            RewardsFrame.RewardIcons.set(icon, reward)
 
             // Register click event
             const triggerObj = Trigger.create()!
             triggerObj.triggerRegisterFrameEvent(rewardButton, FRAMEEVENT_CONTROL_CLICK)
-            triggerObj.addAction(() => this.RewardButtonActions(reward))
+            triggerObj.addAction(() => RewardsFrame.RewardButtonActions(reward))
         }
     }
 
     private static RewardTooltip(parent: Frame, reward: Reward) {
-        let background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
-        let tooltipText = blzCreateFrameByType('TEXT', `${reward.name}Tooltip`, background, '', 0)
+        const background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
+        const tooltipText = blzCreateFrameByType('TEXT', `${reward.name}Tooltip`, background, '', 0)
 
         tooltipText.setSize(0.25, 0)
         background.setPoint(FRAMEPOINT_BOTTOMLEFT, tooltipText, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
@@ -289,17 +289,17 @@ export class RewardsFrame {
         tooltipText.setPoint(FRAMEPOINT_BOTTOM, parent, FRAMEPOINT_TOP, 0, 0.01)
         tooltipText.enabled = false
 
-        let name = BlzGetAbilityTooltip(reward.AbilityID, 0)
-        let desc = BlzGetAbilityExtendedTooltip(reward.AbilityID, 0)
+        const name = BlzGetAbilityTooltip(reward.AbilityID, 0)
+        const desc = BlzGetAbilityExtendedTooltip(reward.AbilityID, 0)
 
         tooltipText.text = `${name}\n${desc}`
     }
 
     private static RewardButtonActions(reward: Reward) {
-        let player = getTriggerPlayer()
-        let frame = Frame.fromEvent()
-        let stats = Globals.ALL_KITTIES.get(player)!.SaveData
-        let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
+        const player = getTriggerPlayer()
+        const frame = Frame.fromEvent()
+        const stats = Globals.ALL_KITTIES.get(player)!.SaveData
+        const value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
         if (value <= 0) return // Doesnt have the reward , dont apply.
         reward.ApplyReward(player)
         if (!player.isLocal()) return
@@ -309,10 +309,10 @@ export class RewardsFrame {
 
     private static UnavilableRewardIcons(player: MapPlayer) {
         try {
-            let stats = Globals.ALL_KITTIES.get(player)!.SaveData
-            let unavailablePath = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn'
-            for (let [frame, reward] of RewardsFrame.RewardIcons) {
-                let value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
+            const stats = Globals.ALL_KITTIES.get(player)!.SaveData
+            const unavailablePath = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn'
+            for (const [frame, reward] of RewardsFrame.RewardIcons) {
+                const value = RewardHelper.GetAwardNestedValue(stats.GameAwardsSorted, reward.TypeSorted, reward.name)
                 if (value <= 0)
                     // Doesnt have reward
                     frame.setTexture(unavailablePath, 0, false)
@@ -324,8 +324,8 @@ export class RewardsFrame {
     }
 
     private static SetRewardsFrameHotkey() {
-        let rewardsHotKey = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS) {
+        const rewardsHotKey = Trigger.create()!
+        for (const player of Globals.ALL_PLAYERS) {
             rewardsHotKey.registerPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true)
         }
         rewardsHotKey.addAction(
@@ -336,7 +336,7 @@ export class RewardsFrame {
     }
 
     public static RewardsFrameActions() {
-        let player = getTriggerPlayer()
+        const player = getTriggerPlayer()
         if (!player.isLocal()) return
         if (CurrentGameMode.active !== GameMode.Standard) {
             player.DisplayTimedTextTo(

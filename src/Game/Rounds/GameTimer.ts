@@ -15,10 +15,10 @@ export class GameTimer {
     /// </summary>
     public static Initialize() {
         Globals.GAME_TIMER_DIALOG.setTitle('Elapsed Game Time')
-        this.GameTimeBar = Frame.fromName('ResourceBarSupplyText', 0)!
-        this.RoundTime = []
-        let t = Timer.create()
-        t.start(this.RoundSpeedIncrement, true, () => this.StartGameTimer())
+        GameTimer.GameTimeBar = Frame.fromName('ResourceBarSupplyText', 0)!
+        GameTimer.RoundTime = []
+        const t = Timer.create()
+        t.start(GameTimer.RoundSpeedIncrement, true, () => GameTimer.StartGameTimer())
     }
 
     /// <summary>
@@ -27,25 +27,25 @@ export class GameTimer {
     private static StartGameTimer() {
         if (!Globals.GAME_ACTIVE) return
 
-        Globals.GAME_SECONDS += this.RoundSpeedIncrement
+        Globals.GAME_SECONDS += GameTimer.RoundSpeedIncrement
         Globals.GAME_TIMER.start(Globals.GAME_SECONDS, false, () => {})
         Globals.GAME_TIMER.pause()
 
-        this.RoundTime[Globals.ROUND] += this.RoundSpeedIncrement
-        this.GameTimeBar.text = `${Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}`
-        this.UpdatingTimes()
+        GameTimer.RoundTime[Globals.ROUND] += GameTimer.RoundSpeedIncrement
+        GameTimer.GameTimeBar.text = `${Utility.ConvertFloatToTimeInt(Globals.GAME_SECONDS)}`
+        GameTimer.UpdatingTimes()
     }
 
     private static UpdatingTimes() {
         if (Globals.ROUND > Globals.NumberOfRounds) return
-        this.UpdateIndividualTimes()
-        this.UpdateTeamTimes()
+        GameTimer.UpdateIndividualTimes()
+        GameTimer.UpdateTeamTimes()
     }
 
     private static UpdateIndividualTimes() {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
-            let kitty = Globals.ALL_KITTIES_LIST[i]
+            const kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND)
         }
         //MultiboardUtil.RefreshMultiboards();
@@ -54,11 +54,11 @@ export class GameTimer {
     private static UpdateTeamTimes() {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
-            let team = Globals.ALL_TEAMS_LIST[i]
+            const team = Globals.ALL_TEAMS_LIST[i]
             if (!team.Finished) {
-                let teamTime = team.TeamTimes.get(Globals.ROUND)
+                const teamTime = team.TeamTimes.get(Globals.ROUND)
                 if (teamTime) {
-                    team.TeamTimes.set(Globals.ROUND, teamTime + this.RoundSpeedIncrement)
+                    team.TeamTimes.set(Globals.ROUND, teamTime + GameTimer.RoundSpeedIncrement)
                 }
             }
         }
@@ -71,7 +71,7 @@ export class GameTimer {
     /// <returns></returns>
     public static TeamTotalTime(team: Team) {
         let totalTime = 0.0
-        for (let [round, time] of team.TeamTimes) {
+        for (const [round, time] of team.TeamTimes) {
             totalTime += time
         }
         return totalTime

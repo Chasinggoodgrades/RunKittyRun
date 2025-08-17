@@ -60,37 +60,37 @@ export class Challenges {
 
     public static ButterflyAura(player: MapPlayer) {
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
-        let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
+        const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (currentDeaths > 5) return
         AwardManager.GiveReward(player, 'ButterflyAura')
     }
 
     public static PurpleFire(player: MapPlayer) {
-        let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
+        const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (Globals.ROUND !== 2 || currentDeaths > Challenges.PURPLE_FIRE_DEATH_REQUIREMENT) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         AwardManager.GiveReward(player, 'PurpleFire')
     }
 
     public static BlueFire() {
-        for (let player of Globals.ALL_PLAYERS) {
-            let gameDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths
+        for (const player of Globals.ALL_PLAYERS) {
+            const gameDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths
             if (gameDeaths >= Challenges.BLUE_FIRE_DEATH_REQUIREMENT) continue
             AwardManager.GiveReward(player, 'BlueFire')
         }
     }
 
     public static TurquoiseFire(player: MapPlayer) {
-        let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
+        const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (Globals.ROUND !== 5 || currentDeaths > Challenges.TURQUOISE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'TurquoiseFire')
     }
 
     public static PinkFire() {
-        for (let player of Globals.ALL_PLAYERS) {
-            let stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
-            let currentSaves = stats.TotalSaves
-            let currentDeaths = stats.TotalDeaths
+        for (const player of Globals.ALL_PLAYERS) {
+            const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
+            const currentSaves = stats.TotalSaves
+            const currentDeaths = stats.TotalDeaths
 
             if (
                 currentDeaths === 0
@@ -109,16 +109,16 @@ export class Challenges {
     }
 
     public static GreenLightning(player: MapPlayer) {
-        let kitty = Globals.ALL_KITTIES.get(player)!
-        let currentDeaths = kitty.CurrentStats.RoundDeaths
-        let saveStreak = kitty.SaveData.GameStats.SaveStreak // current or overall, either is fine tbh.
+        const kitty = Globals.ALL_KITTIES.get(player)!
+        const currentDeaths = kitty.CurrentStats.RoundDeaths
+        const saveStreak = kitty.SaveData.GameStats.SaveStreak // current or overall, either is fine tbh.
         if (saveStreak < 10 || currentDeaths > 0) return
         AwardManager.GiveReward(player, 'GreenLightning')
     }
 
     public static FreezeAura() {
         if (!Globals.WinGame) return
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (kitty.CurrentStats.WolfFreezeCount < Challenges.FREEZE_AURA_WOLF_REQUIREMENT) continue
             AwardManager.GiveReward(kitty.Player, 'FreezeAura')
         }
@@ -131,7 +131,7 @@ export class Challenges {
     public static ZandalariKitty() {
         if (Difficulty.DifficultyValue < DifficultyLevel.Hard) return
         if (!Globals.WinGame) return
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (!kitty.CurrentStats.ObtainedNitros.includes(4)) continue
             AwardManager.GiveReward(kitty.Player, 'ZandalariKitty')
         }
@@ -139,12 +139,12 @@ export class Challenges {
 
     private static DoubleBackingTrigger() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let t = Trigger.create()!
+        const t = Trigger.create()!
         t.registerEnterRegion(RegionList.SafeZones[0].region(), () => true)
         t.addAction(
             ErrorHandler.Wrap(() => {
-                let unit = getTriggerUnit()
-                let player = unit.owner
+                const unit = getTriggerUnit()
+                const player = unit.owner
                 if (!Globals.GAME_ACTIVE) return
                 if (unit.typeId !== Constants.UNIT_KITTY) return
                 if (!Globals.ALL_PLAYERS.includes(player)) return

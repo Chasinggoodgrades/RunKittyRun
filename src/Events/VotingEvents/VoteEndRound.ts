@@ -15,46 +15,46 @@ export class VoteEndRound {
 
     public static InitiateVote(voteStarter: MapPlayer) {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
-        if (this.VoteAlreadyActive()) return
-        if (!this.GameActive()) return
-        this.VoteActive = true
-        this.Votes.push(voteStarter)
+        if (VoteEndRound.VoteAlreadyActive()) return
+        if (!VoteEndRound.GameActive()) return
+        VoteEndRound.VoteActive = true
+        VoteEndRound.Votes.push(voteStarter)
         print(
             `${Colors.COLOR_YELLOW}A vote has been initiated to end the round. If you agree, type "-yes" ${Colors.COLOR_RED}(Players have 20 seconds to decide).${Colors.COLOR_RESET}`
         )
-        Utility.SimpleTimer(20.0, this.VoteTally)
+        Utility.SimpleTimer(20.0, VoteEndRound.VoteTally)
     }
 
     public static IncrementVote(player: MapPlayer) {
-        if (!this.VoteActive) return
-        if (this.Votes.includes(player)) {
+        if (!VoteEndRound.VoteActive) return
+        if (VoteEndRound.Votes.includes(player)) {
             player.DisplayTimedTextTo(
                 7.0,
                 `${Colors.COLOR_YELLOW}You have already voted to end the round${Colors.COLOR_RESET}`
             )
             return
         }
-        this.Votes.push(player)
+        VoteEndRound.Votes.push(player)
         print(
             `${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW} has voted yes to end the round${Colors.COLOR_RESET}`
         )
     }
 
     private static VoteTally() {
-        if (!this.VoteActive) return
-        let totalPlayers: number = Globals.ALL_PLAYERS.length
-        let requiredVotes: number = totalPlayers / 2
+        if (!VoteEndRound.VoteActive) return
+        const totalPlayers: number = Globals.ALL_PLAYERS.length
+        const requiredVotes: number = totalPlayers / 2
 
-        if (this.Votes.length >= requiredVotes) {
+        if (VoteEndRound.Votes.length >= requiredVotes) {
             print(
-                `${Colors.COLOR_YELLOW}Vote to end the round has succeeded. ${this.Votes.length}/${totalPlayers} players voted yes. Ending round...${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW}Vote to end the round has succeeded. ${VoteEndRound.Votes.length}/${totalPlayers} players voted yes. Ending round...${Colors.COLOR_RESET}`
             )
-            this.SetUnfinishedPlayersTimes()
+            VoteEndRound.SetUnfinishedPlayersTimes()
         } else {
             print(
-                `${Colors.COLOR_YELLOW}Vote to end the round has failed. Only ${this.Votes.length}/${totalPlayers} players voted yes. Not enough votes to end the round.${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW}Vote to end the round has failed. Only ${VoteEndRound.Votes.length}/${totalPlayers} players voted yes. Not enough votes to end the round.${Colors.COLOR_RESET}`
             )
-            this.EndVoting()
+            VoteEndRound.EndVoting()
         }
     }
 
@@ -62,23 +62,23 @@ export class VoteEndRound {
     /// Sets unfinished players times to the max, and ends the round.
     /// </summary>
     private static SetUnfinishedPlayersTimes() {
-        for (let [_, kitty] of Globals.ALL_KITTIES) {
+        for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (kitty.Finished) continue
             kitty.TimeProg.SetRoundTime(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1])
             kitty.TimeProg.SetRoundProgress(Globals.ROUND, 0.0)
             kitty.Finished = true
         }
         RoundManager.RoundEnd()
-        this.EndVoting()
+        VoteEndRound.EndVoting()
     }
 
     private static EndVoting() {
-        this.VoteActive = false
-        this.Votes = []
+        VoteEndRound.VoteActive = false
+        VoteEndRound.Votes = []
     }
 
     private static VoteAlreadyActive(): boolean {
-        if (this.VoteActive || Votekick.VoteActive) {
+        if (VoteEndRound.VoteActive || Votekick.VoteActive) {
             print(
                 `${Colors.COLOR_YELLOW}A vote is already active. Please wait for the current vote to finish.${Colors.COLOR_RESET}`
             )

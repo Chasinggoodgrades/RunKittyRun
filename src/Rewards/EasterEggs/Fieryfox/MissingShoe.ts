@@ -21,7 +21,7 @@ export class MissingShoe {
 
     private static RegisterSpawnEvent() {
         // Between 10 mins - 15mins currently.
-        let randomTime = GetRandomReal(600.0, 900.0)
+        const randomTime = GetRandomReal(600.0, 900.0)
         MissingShoe.TimerEvent = Trigger.create()!
         MissingShoe.TimerEvent.registerTimerEvent(randomTime, false)
         MissingShoe.TimerEvent.addAction(ErrorHandler.Wrap(() => MissingShoe.EventStart()))
@@ -44,9 +44,9 @@ export class MissingShoe {
 
     // Ping Event + Shoe Spawn
     private static EventStart() {
-        let randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.length - 1)]
-        let randomX = GetRandomReal(randomWolfRegion.minX, randomWolfRegion.maxX)
-        let randomY = GetRandomReal(randomWolfRegion.minY, randomWolfRegion.maxY)
+        const randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.length - 1)]
+        const randomX = GetRandomReal(randomWolfRegion.minX, randomWolfRegion.maxX)
+        const randomY = GetRandomReal(randomWolfRegion.minY, randomWolfRegion.maxY)
         MissingShoe.Shoe = Item.create(MissingShoe.ItemID, randomX, randomY)!
         PingMinimapEx(randomX, randomY, 10.0, 255, 0, 0, true)
         MissingShoe.RegisterTurnInEvent()

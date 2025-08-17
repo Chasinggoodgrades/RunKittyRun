@@ -20,43 +20,43 @@ export class ItemSpawner {
 
     public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        this.SpawnableItems = this.StandardItems()
-        this.TrackItems = []
+        ItemSpawner.SpawnableItems = ItemSpawner.StandardItems()
+        ItemSpawner.TrackItems = []
         ItemSpawnerTrackKibbles.active = []
-        this.RegisterEvent()
-        this.SpawnItems()
+        ItemSpawner.RegisterEvent()
+        ItemSpawner.SpawnItems()
     }
 
     private static RegisterEvent() {
-        this.SpawnTimer.start(this.ITEM_SPAWN_INTERVAL, true, () => this.SpawnItems())
+        ItemSpawner.SpawnTimer.start(ItemSpawner.ITEM_SPAWN_INTERVAL, true, () => ItemSpawner.SpawnItems())
     }
 
     private static SpawnItems() {
         try {
-            this.RemoveSpawnedItems()
-            for (let i = 0; i < this.NUMBER_OF_ITEMS; i++) {
-                this.SpawnRegularItems()
+            ItemSpawner.RemoveSpawnedItems()
+            for (let i = 0; i < ItemSpawner.NUMBER_OF_ITEMS; i++) {
+                ItemSpawner.SpawnRegularItems()
             }
-            this.SpawnKibble(this.NUMBER_OF_ITEMS)
+            ItemSpawner.SpawnKibble(ItemSpawner.NUMBER_OF_ITEMS)
         } catch (e: any) {
             Logger.Critical(`ItemSpawner SpawnItems: ${e}`)
         }
     }
 
     private static RemoveSpawnedItems() {
-        for (let i = 0; i < this.TrackItems.length; i++) {
-            let item = this.TrackItems[i]
+        for (let i = 0; i < ItemSpawner.TrackItems.length; i++) {
+            const item = ItemSpawner.TrackItems[i]
             ItemSpatialGrid.UnregisterItem(item)
             if (item.isOwned()) continue
             item.destroy()
         }
 
-        this.TrackItems = []
+        ItemSpawner.TrackItems = []
 
         if (KibbleEvent.IsEventActive()) return
 
         for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
-            let kibble = ItemSpawnerTrackKibbles.active[i]
+            const kibble = ItemSpawnerTrackKibbles.active[i]
             ItemSpatialGrid.UnregisterKibble(kibble)
             if (kibble.Item === null) continue // Already been __destroyed.
             kibble.dispose()
@@ -71,21 +71,21 @@ export class ItemSpawner {
         if (KibbleEvent.IsEventActive()) return
 
         for (let i = 0; i < numberOfItems; i++) {
-            let kibble = MemoryHandler.getEmptyClass<Kibble>(new Kibble())
+            const kibble = MemoryHandler.getEmptyClass<Kibble>(new Kibble())
             kibble.SpawnKibble()
             ItemSpawnerTrackKibbles.active.push(kibble)
         }
     }
 
     private static SpawnRegularItems() {
-        let random = GetRandomInt(0, this.SpawnableItems.length - 1)
-        let item = this.SpawnableItems[random]
-        let regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
-        let region = RegionList.WolfRegions[regionNumber]
-        let x = GetRandomReal(region.minX, region.maxX)
-        let y = GetRandomReal(region.minY, region.maxY)
-        let i = Item.create(item, x, y)!
-        this.TrackItems.push(i)
+        const random = GetRandomInt(0, ItemSpawner.SpawnableItems.length - 1)
+        const item = ItemSpawner.SpawnableItems[random]
+        const regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
+        const region = RegionList.WolfRegions[regionNumber]
+        const x = GetRandomReal(region.minX, region.maxX)
+        const y = GetRandomReal(region.minY, region.maxY)
+        const i = Item.create(item, x, y)!
+        ItemSpawner.TrackItems.push(i)
         ItemSpatialGrid.RegisterItem(i)
     }
 

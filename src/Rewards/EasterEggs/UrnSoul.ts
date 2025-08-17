@@ -32,7 +32,7 @@ export class UrnSoul {
     }
 
     private static UnitCreation(): Unit {
-        let u = Unit.create(MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!, UrnSoul.UnitType, 0, 0, 0)!
+        const u = Unit.create(MapPlayer.fromIndex(PLAYER_NEUTRAL_AGGRESSIVE)!, UrnSoul.UnitType, 0, 0, 0)!
         BlzSetHeroProperName(u.handle, UrnSoul.Name)
         u.setPathing(false) // Disable Collision
         u.addAbility(FourCC('Agho')) // Ghost
@@ -50,7 +50,7 @@ export class UrnSoul {
     }
 
     private static RegisterPeriodicTrigger(): Trigger {
-        let trig = Trigger.create()!
+        const trig = Trigger.create()!
         trig.registerTimerEvent(UrnSoul.RotationTime, true)
         trig.addAction(() => UrnSoul.RotationActions())
         return trig
@@ -58,14 +58,14 @@ export class UrnSoul {
 
     private static RotationActions() {
         UrnSoul.RotationIndex = (UrnSoul.RotationIndex + 1) % 4
-        let x = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerX
-        let y = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerY
+        const x = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerX
+        const y = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerY
         UrnSoul.UrnGhostUnit.issueOrderAt('move', x, y)
     }
 
     private static RegisterUrnUsage(): Trigger {
-        let trig = Trigger.create()!
-        for (let player of Globals.ALL_PLAYERS)
+        const trig = Trigger.create()!
+        for (const player of Globals.ALL_PLAYERS)
             trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_USE_ITEM, null as never)
         trig.addAction(() => UrnSoul.UrnUsageActions())
         return trig
@@ -73,16 +73,16 @@ export class UrnSoul {
 
     private static UrnUsageActions() {
         try {
-            let item = getManipulatedItem()
-            let player = getTriggerPlayer()
-            let unit = getTriggerUnit()
+            const item = getManipulatedItem()
+            const player = getTriggerPlayer()
+            const unit = getTriggerUnit()
             UrnSoul.StartEventRegion = Regions.Urn_Soul_Region
 
             if (item.typeId !== Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL) return
             if (!UrnSoul.StartEventRegion.includes(unit.x, unit.y)) return
 
             // DRAMATIC EFFECT !!!! just writing shit to write it at this point lmao
-            let e = AddSpecialEffect('Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl', unit!.x, unit!.y)
+            const e = AddSpecialEffect('Doodads\\Cinematic\\Lightningbolt\\Lightningbolt.mdl', unit!.x, unit!.y)
             DestroyEffect(e!)
 
             // Quest text.. 4 sec delay for next part.
@@ -107,19 +107,19 @@ export class UrnSoul {
     }
 
     private static RegisterInRangeEvent(): Trigger {
-        let trig = Trigger.create()!
+        const trig = Trigger.create()!
         trig.registerUnitInRage(UrnSoul.UrnGhostUnit.handle, UrnSoul.InRangeDistance, FilterList.KittyFilter)
         trig.addAction(() => UrnSoul.InRangeActions())
         return trig
     }
 
     private static InRangeActions() {
-        let unit = getTriggerUnit()
+        const unit = getTriggerUnit()
 
-        let urn = Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL
-        let orb = Constants.ITEM_ORB_OF_MYSTERIES
-        let energyStone = Constants.ITEM_ENERGY_STONE
-        let water = Constants.ITEM_HEALING_WATER
+        const urn = Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL
+        const orb = Constants.ITEM_ORB_OF_MYSTERIES
+        const energyStone = Constants.ITEM_ENERGY_STONE
+        const water = Constants.ITEM_HEALING_WATER
 
         // Must have these items...
         if (!Utility.UnitHasItem(unit, urn)) return
@@ -127,13 +127,13 @@ export class UrnSoul {
         if (!Utility.UnitHasItem(unit, energyStone)) return
         if (!Utility.UnitHasItem(unit, water)) return
 
-        let player = unit.owner
+        const player = unit.owner
         player.DisplayTimedTextTo(
             10.0,
             "|r|cff8080fRestless Soul:|r |cffc878c8Could it be... Is this the moment I've yearned for? Have you come to release me from this eternal confinement? I can feel the life force coursing through my veins... AHHH...|r"
         )
 
-        let e = Effect.createAttachment(
+        const e = Effect.createAttachment(
             '"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl"',
             unit,
             'origin'

@@ -9,8 +9,8 @@ export class ItemStacker {
     private static StackableItemIDs: number[]
 
     public static Initialize() {
-        this.RegisterItemList()
-        this.RegisterEvents()
+        ItemStacker.RegisterItemList()
+        ItemStacker.RegisterEvents()
     }
 
     /// <summary>
@@ -18,34 +18,34 @@ export class ItemStacker {
     /// </summary>
     /// <returns></returns>
     private static RegisterItemList(): number[] {
-        if (this.StackableItemIDs !== null) return this.StackableItemIDs
-        this.StackableItemIDs = [
+        if (ItemStacker.StackableItemIDs !== null) return ItemStacker.StackableItemIDs
+        ItemStacker.StackableItemIDs = [
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,
             Constants.ITEM_ELIXIR,
             Constants.ITEM_ANTI_BLOCK_WAND,
         ]
-        return this.StackableItemIDs
+        return ItemStacker.StackableItemIDs
     }
 
     private static RegisterEvents(): Trigger {
-        let PickupTrigger = Trigger.create()!
+        const PickupTrigger = Trigger.create()!
         PickupTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-        PickupTrigger.addAction(() => this.StackActions())
+        PickupTrigger.addAction(() => ItemStacker.StackActions())
         return PickupTrigger
     }
 
     private static StackActions() {
         try {
-            let item = getManipulatedItem()
-            let itemID = item.typeId
-            if (!this.StackableItem(itemID)) return
-            let unit = getTriggerUnit()
-            let heldItem = Utility.UnitGetItem(unit, itemID)
+            const item = getManipulatedItem()
+            const itemID = item.typeId
+            if (!ItemStacker.StackableItem(itemID)) return
+            const unit = getTriggerUnit()
+            const heldItem = Utility.UnitGetItem(unit, itemID)
             item.setOwner(unit.owner, false)
             if (heldItem === item) return
             if (!heldItem) return
-            let itemCharges = item.charges
+            const itemCharges = item.charges
             if (itemCharges > 1) heldItem.charges += itemCharges
             else heldItem.charges += 1
             item.destroy()
@@ -56,6 +56,6 @@ export class ItemStacker {
     }
 
     private static StackableItem(itemID: number) {
-        return this.StackableItemIDs.includes(itemID)
+        return ItemStacker.StackableItemIDs.includes(itemID)
     }
 }

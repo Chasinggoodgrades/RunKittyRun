@@ -89,7 +89,7 @@ export class NitroChallenges {
 
     public static CompletedNitro(kitty: Kitty) {
         if (NitroChallenges.NitroTimer.remaining <= 0.0) return
-        if (this.CountHitSafezones(kitty.Player) <= 12) {
+        if (NitroChallenges.CountHitSafezones(kitty.Player) <= 12) {
             kitty.Player.DisplayTimedTextTo(
                 6.0,
                 `${Colors.COLOR_RED}You didn't hit enough safezones on your own to obtain nitro.${Colors.COLOR_RESET}`
@@ -108,7 +108,7 @@ export class NitroChallenges {
     /// <returns>int count of the # of safezones reached.</returns>
     public static CountHitSafezones(player: MapPlayer) {
         let count = 0
-        for (let safezone of Globals.SAFE_ZONES) {
+        for (const safezone of Globals.SAFE_ZONES) {
             if (safezone.AwardedPlayers.includes(player)) count++
         }
         return count
@@ -116,14 +116,14 @@ export class NitroChallenges {
 
     public static WhiteFire(player: MapPlayer) {
         if (NitroChallenges.GetNitroTimeRemaining() <= 0) return
-        let currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
-        if (Globals.ROUND !== 3 || currentDeaths > this.WHITE_FIRE_DEATH_REQUIREMENT) return
+        const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
+        if (Globals.ROUND !== 3 || currentDeaths > NitroChallenges.WHITE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'WhiteFire')
     }
 
     private static AwardingNitroEvents(kitty: Kitty) {
-        let nitroCount = kitty.CurrentStats.NitroCount
-        let player = kitty.Player
+        const nitroCount = kitty.CurrentStats.NitroCount
+        const player = kitty.Player
         if (nitroCount === Globals.ROUND) return // already awarded
         if (
             NitroChallenges.NitroTimer === null ||
@@ -131,7 +131,7 @@ export class NitroChallenges {
             !NitroChallenges.NitroDialog.display
         )
             return
-        let round = Globals.ROUND
+        const round = Globals.ROUND
 
         switch (round) {
             case 1:
@@ -171,7 +171,7 @@ export class NitroChallenges {
 
         NitroChallenges.PlayNitroSound(player)
 
-        let currentStats = kitty.CurrentStats
+        const currentStats = kitty.CurrentStats
         if (!currentStats.ObtainedNitros.includes(round)) currentStats.ObtainedNitros.push(round)
 
         currentStats.NitroCount += 1

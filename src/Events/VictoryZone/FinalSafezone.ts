@@ -18,17 +18,17 @@ export class FinalSafezone {
     private static Region: region
 
     public static Initialize() {
-        this.Region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
-        this.RegisterEvents()
+        FinalSafezone.Region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
+        FinalSafezone.RegisterEvents()
     }
 
     private static RegisterEvents() {
-        this.triggerHandle.registerEnterRegion(this.Region, FilterList.KittyFilter)
-        this.triggerHandle.addAction(
+        FinalSafezone.triggerHandle.registerEnterRegion(FinalSafezone.Region, FilterList.KittyFilter)
+        FinalSafezone.triggerHandle.addAction(
             ErrorHandler.Wrap(() => {
-                let unit = getTriggerUnit()
-                let player = unit.owner
-                let kitty = Globals.ALL_KITTIES.get(player)!
+                const unit = getTriggerUnit()
+                const player = unit.owner
+                const kitty = Globals.ALL_KITTIES.get(player)!
                 if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards()
                 if (CurrentGameMode.active !== GameMode.Standard) return
 

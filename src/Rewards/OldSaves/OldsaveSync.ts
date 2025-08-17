@@ -18,7 +18,7 @@ export class OldsaveSync {
     }
 
     public static Initialize() {
-        for (let player of Globals.ALL_PLAYERS) {
+        for (const player of Globals.ALL_PLAYERS) {
             OldsaveSync.Trigger.registerPlayerSyncEvent(player, OldsaveSync.SYNC_PREFIX, false)
         }
         OldsaveSync.Trigger.addAction(() => {
@@ -29,7 +29,7 @@ export class OldsaveSync {
     }
 
     public static LoadActions() {
-        let savecode: Savecode = new Savecode()
+        const savecode: Savecode = new Savecode()
         if (OldsaveSync.SaveLoadCode.length < 1) return
         if (!savecode.Load(OldsaveSync.SavePlayer, OldsaveSync.SaveLoadCode)) {
             OldsaveSync.SavePlayer.DisplayTimedTextTo(5.0, `${Colors.COLOR_RED}The save code is invalid :(`)

@@ -28,16 +28,16 @@ export class GamemodeCmd {
             )
             return
         }
-        let parts = command.split(' ')
-        this.CommandInfoCheck(parts)
+        const parts = command.split(' ')
+        GamemodeCmd.CommandInfoCheck(parts)
 
         switch (parts[0]) {
             case '-s':
-                this.HandleStandardMode(player)
+                GamemodeCmd.HandleStandardMode(player)
                 break
 
             case '-t':
-                this.HandleTeamOrSoloMode(player, parts)
+                GamemodeCmd.HandleTeamOrSoloMode(player, parts)
                 break
 
             default:
@@ -55,7 +55,7 @@ export class GamemodeCmd {
             return
         } else if (parts.length < 2) return
         else {
-            let commandXD = parts[0] + ' ' + parts[1]
+            const commandXD = parts[0] + ' ' + parts[1]
             GamemodeCmd.CmdInfo = GamemodeManager.GetCommandInfo(commandXD)
         }
     }
@@ -77,11 +77,11 @@ export class GamemodeCmd {
 
         switch (parts[1]) {
             case 'solo':
-                this.HandleSoloMode(player, parts)
+                GamemodeCmd.HandleSoloMode(player, parts)
                 break
 
             case 'team':
-                this.HandleTeamMode(player, parts)
+                GamemodeCmd.HandleTeamMode(player, parts)
                 break
 
             default:
@@ -103,7 +103,7 @@ export class GamemodeCmd {
             return
         }
 
-        let mode = parts[2]
+        const mode = parts[2]
         switch (mode) {
             case 'progression':
             case 'progress':
@@ -127,7 +127,7 @@ export class GamemodeCmd {
             return
         }
 
-        let mode = parts[2]
+        const mode = parts[2]
         let teamSize: number = Globals.DEFAULT_TEAM_SIZE
         let parsedTeamSize: number
 

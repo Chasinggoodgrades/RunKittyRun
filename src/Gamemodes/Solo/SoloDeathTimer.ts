@@ -23,8 +23,8 @@ export class SoloDeathTimer {
     }
 
     private CreateFloatingTimer(): TextTag {
-        let circle = Globals.ALL_CIRCLES.get(this.Player)
-        let floatText = TextTag.create()
+        const circle = Globals.ALL_CIRCLES.get(this.Player)
+        const floatText = TextTag.create()
         if (!circle || !floatText) return floatText! // xd
         floatText.setPos(circle.Unit.x, circle.Unit.y - this.Y_OFFSET, 0)
         floatText.setVisible(true)
@@ -46,10 +46,10 @@ export class SoloDeathTimer {
 
     private Revive() {
         try {
-            let kitty = Globals.ALL_KITTIES.get(this.Player)!
-            let lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone]
-            let x = lastCheckpoint.Rectangle.centerX
-            let y = lastCheckpoint.Rectangle.centerY
+            const kitty = Globals.ALL_KITTIES.get(this.Player)!
+            const lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone]
+            const x = lastCheckpoint.Rectangle.centerX
+            const y = lastCheckpoint.Rectangle.centerY
             kitty.ReviveKitty()
             kitty.Unit.setPosition(x, y)
             if (this.Player.isLocal()) PanCameraToTimed(x, y, 0.0)
