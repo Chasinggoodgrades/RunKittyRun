@@ -76,15 +76,22 @@ export function getFilesInDirectory(dir: string) {
     return files
 }
 
-function updateTSConfig(mapFolder: string) {
+function createTemporaryTSConfig(mapFolder: string) {
     const tsconfig = loadJsonFile('tsconfig.json')
     const plugin = tsconfig.compilerOptions.plugins[0]
 
-    plugin.mapDir = path.resolve('maps', mapFolder).replace(/\\/g, '/')
-    plugin.entryFile = path.resolve(tsconfig.tstl.luaBundleEntry).replace(/\\/g, '/')
-    plugin.outputDir = path.resolve('dist', mapFolder).replace(/\\/g, '/')
+    // Create a copy and modify the plugin settings
+    const tempConfig = JSON.parse(JSON.stringify(tsconfig))
+    const tempPlugin = tempConfig.compilerOptions.plugins[0]
 
-    writeFileSync('tsconfig.json', JSON.stringify(tsconfig, undefined, 4))
+    tempPlugin.mapDir = path.resolve('maps', mapFolder).replace(/\\/g, '/')
+    tempPlugin.entryFile = path.resolve(tsconfig.tstl.luaBundleEntry).replace(/\\/g, '/')
+    tempPlugin.outputDir = path.resolve('dist', mapFolder).replace(/\\/g, '/')
+
+    const tempConfigPath = 'tsconfig.build.json'
+    writeFileSync(tempConfigPath, JSON.stringify(tempConfig, undefined, 4))
+
+    return tempConfigPath
 }
 
 /**
@@ -105,11 +112,18 @@ export function compileMap(config: IProjectConfig) {
     logger.info(`Building "${config.mapFolder}"...`)
     fs.copySync(`./maps/${config.mapFolder}`, `./dist/${config.mapFolder}`)
 
-    logger.info('Modifying tsconfig.json to work with war3-transformer...')
-    updateTSConfig(config.mapFolder)
+    logger.info('Creating temporary tsconfig.json for war3-transformer...')
+    const tempConfigPath = createTemporaryTSConfig(config.mapFolder)
 
-    logger.info('Transpiling TypeScript to Lua...')
-    execSync('tstl -p tsconfig.json', { stdio: 'inherit' })
+    try {
+        logger.info('Transpiling TypeScript to Lua...')
+        execSync(`tstl -p ${tempConfigPath}`, { stdio: 'inherit' })
+    } finally {
+        // Clean up the temporary config file
+        if (fs.existsSync(tempConfigPath)) {
+            fs.unlinkSync(tempConfigPath)
+        }
+    }
 
     if (!fs.existsSync(tsLua)) {
         logger.error(`Could not find "${tsLua}"`)
