@@ -14,6 +14,7 @@ export class Standard {
     private static ROUND_INTERMISSION = 10.0
 
     public static Initialize() {
+        print('Standard Init')
         RoundManager.ROUND_INTERMISSION = !PROD ? 0.0 : this.ROUND_INTERMISSION
         ShadowKitty.Initialize()
         Difficulty.Initialize()

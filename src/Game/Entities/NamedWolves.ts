@@ -3,6 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { DEFAULT_OVERHEAD_EFFECT, Globals } from 'src/Global/Globals'
+import { RegionList } from 'src/Global/RegionList'
 import { BurntMeat } from 'src/Rewards/EasterEggs/BurntMeat'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
@@ -12,10 +13,11 @@ import { Utility } from 'src/Utility/Utility'
 import { getKillingUnit } from 'src/Utility/w3tsUtils'
 import { MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { Kitty } from './Kitty/Kitty'
+import { Wolf } from './Wolf'
 
 export class NamedWolves {
-    public static ExplodingWolf: any
-    public static StanWolf: any
+    public static ExplodingWolf: Wolf
+    public static StanWolf: Wolf
     public static STAN_NAME: string = `${Colors.COLOR_PURPLE}Stan|r`
     private static ExplodingTexttagTimer = Timer.create()
     private static ExplodingWolfRevive = Timer.create()
@@ -27,47 +29,45 @@ export class NamedWolves {
     public static CreateNamedWolves() {
         if (CurrentGameMode.active !== GameMode.Standard) return
         Globals.DNTNamedWolves = []
-        NamedWolves.CreateStanWolf()
-        NamedWolves.CreateExplodingWolf()
+        this.CreateStanWolf()
+        this.CreateExplodingWolf()
     }
 
     private static CreateExplodingWolf() {
-        NamedWolves.ExplodingWolf.Texttag.setPermanent(true)
-        NamedWolves.ExplodingTexttagTimer.start(0.03, true, NamedWolves.UpdateTextTag)
-        NamedWolves.ExplodingWolfDesc()
+        let index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
+        this.ExplodingWolf = new Wolf(index)
+        this.ExplodingWolf.Texttag.setPermanent(true)
+        this.ExplodingTexttagTimer.start(0.03, true, this.UpdateTextTag)
+        this.ExplodingWolfDesc()
     }
 
     private static UpdateTextTag() {
-        NamedWolves.ExplodingWolf?.Texttag?.setPos(
-            NamedWolves.ExplodingWolf.Unit.x,
-            NamedWolves.ExplodingWolf.Unit.y,
-            0.015
-        )
+        this.ExplodingWolf?.Texttag?.setPos(this.ExplodingWolf.Unit.x, this.ExplodingWolf.Unit.y, 0.015)
     }
 
     private static CreateStanWolf() {
-        NamedWolves.StanWolf.PauseSelf(true)
-        NamedWolves.StanWolf.Unit.setVertexColor(235, 115, 255, 255)
-        NamedWolves.StanWolf.Unit.name = this.STAN_NAME
-        NamedWolves.StanWolf.OVERHEAD_EFFECT_PATH = ''
+        let index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
+        this.StanWolf = new Wolf(index)
+        this.StanWolf.PauseSelf(true)
+        this.StanWolf.Unit.setVertexColor(235, 115, 255, 255)
+        this.StanWolf.Unit.name = this.STAN_NAME
+        this.StanWolf.OVERHEAD_EFFECT_PATH = ''
 
-        NamedWolves.StanWolf.Texttag ??= TextTag.create()!
-        NamedWolves.StanWolf.Texttag.setText(NamedWolves.StanWolf.Unit.name, 0.015)
-        NamedWolves.StanWolf.Texttag.setPermanent(true)
-        NamedWolves.StanWolf.paused = true
-        NamedWolves.StanWolf.Unit.invulnerable = false
+        this.StanWolf.Texttag ??= TextTag.create()!
+        this.StanWolf.Texttag.setText(this.StanWolf.Unit.name, 0.015)
+        this.StanWolf.Texttag.setPermanent(true)
+        this.StanWolf.paused = true
+        this.StanWolf.Unit.invulnerable = false
 
-        Utility.SimpleTimer(0.5, () => (NamedWolves.StanWolf.Unit.invulnerable = false))
+        Utility.SimpleTimer(0.5, () => (this.StanWolf.Unit.invulnerable = false))
         this.RegisterDeathTrigger()
 
-        Utility.SimpleTimer(0.5, () =>
-            NamedWolves.StanWolf.Texttag.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.Unit.y, 0.015)
-        )
-        Globals.DNTNamedWolves.push(NamedWolves.StanWolf)
+        Utility.SimpleTimer(0.5, () => this.StanWolf.Texttag.setPos(this.StanWolf.Unit.x, this.StanWolf.Unit.y, 0.015))
+        Globals.DNTNamedWolves.push(this.StanWolf)
     }
 
     public static RegisterDeathTrigger() {
-        BurntMeat.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
+        BurntMeat.StanDeath.registerUnitEvent(this.StanWolf.Unit, EVENT_UNIT_DEATH)
         if (BurntMeat.StanDeathActions !== null) return
         BurntMeat.RegisterTurnInTrigger()
         BurntMeat.StanDeathActions = BurntMeat.StanDeath.addAction(
@@ -84,34 +84,30 @@ export class NamedWolves {
 
     public static KillExplodingWolf() {
         try {
-            if (NamedWolves.ExplodingWolf.IsReviving) return
-            NamedWolves.ExplodingWolf.Unit.kill()
-            NamedWolves.ExplodingWolf.IsReviving = true
-            NamedWolves.ExplodingWolf.OVERHEAD_EFFECT_PATH = ''
-            NamedWolves.ExplodingWolf.Texttag.setText('', 0.015)
-            Utility.CreateEffectAndDisposeAttach(
-                NamedWolves.BLOOD_EFFECT_PATH,
-                NamedWolves.ExplodingWolf.Unit,
-                'origin'
-            )
+            if (this.ExplodingWolf.IsReviving) return
+            this.ExplodingWolf.Unit.kill()
+            this.ExplodingWolf.IsReviving = true
+            this.ExplodingWolf.OVERHEAD_EFFECT_PATH = ''
+            this.ExplodingWolf.Texttag.setText('', 0.015)
+            Utility.CreateEffectAndDisposeAttach(this.BLOOD_EFFECT_PATH, this.ExplodingWolf.Unit, 'origin')
             NamedWolves.ExplodingWolfRevive.start(
                 25.0,
                 false,
                 ErrorHandler.Wrap(() => {
-                    if (NamedWolves.ExplodingWolf.Unit === null) return
-                    Globals.DNTNamedWolves.splice(Globals.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
-                    NamedWolves.ExplodingWolf.IsReviving = false
-                    NamedWolves.ExplodingWolf.Unit?.destroy()
-                    Globals.ALL_WOLVES.delete(NamedWolves.ExplodingWolf.Unit)
-                    NamedWolves.ExplodingWolf.Unit = Unit.create(
-                        NamedWolves.ExplodingWolf.Unit.owner,
+                    if (this.ExplodingWolf.Unit === null) return
+                    Globals.DNTNamedWolves.splice(Globals.DNTNamedWolves.indexOf(this.ExplodingWolf), 1)
+                    this.ExplodingWolf.IsReviving = false
+                    this.ExplodingWolf.Unit?.destroy()
+                    Globals.ALL_WOLVES.delete(this.ExplodingWolf.Unit)
+                    this.ExplodingWolf.Unit = Unit.create(
+                        this.ExplodingWolf.Unit.owner,
                         Constants.UNIT_CUSTOM_DOG,
-                        NamedWolves.ExplodingWolf.Unit.x,
-                        NamedWolves.ExplodingWolf.Unit.y,
+                        this.ExplodingWolf.Unit.x,
+                        this.ExplodingWolf.Unit.y,
                         360
                     )!
-                    Globals.ALL_WOLVES.set(NamedWolves.ExplodingWolf.Unit, NamedWolves.ExplodingWolf)
-                    NamedWolves.ExplodingWolfDesc()
+                    Globals.ALL_WOLVES.set(this.ExplodingWolf.Unit, this.ExplodingWolf)
+                    this.ExplodingWolfDesc()
                 })
             )
         } catch (e: any) {
@@ -120,19 +116,19 @@ export class NamedWolves {
     }
 
     private static ExplodingTexttag() {
-        NamedWolves.ExplodingWolf.Texttag ??= TextTag.create()!
-        NamedWolves.ExplodingWolf.Texttag.setText(NamedWolves.ExplodingWolf.Unit.name, 0.015)
+        this.ExplodingWolf.Texttag ??= TextTag.create()!
+        this.ExplodingWolf.Texttag.setText(this.ExplodingWolf.Unit.name, 0.015)
     }
 
     private static ExplodingWolfDesc() {
         try {
-            Utility.MakeUnitLocust(NamedWolves.ExplodingWolf.Unit)
-            let randomPlayer = NamedWolves.GetRandomPlayerFromLobby()
-            NamedWolves.SetRandomVertexColor(NamedWolves.ExplodingWolf.Unit, randomPlayer.id)
-            NamedWolves.ExplodingWolf.Unit.name = Utility.FormattedColorPlayerName(randomPlayer)
-            NamedWolves.ExplodingTexttag()
-            NamedWolves.ExplodingWolf.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
-            Globals.DNTNamedWolves.push(NamedWolves.ExplodingWolf)
+            Utility.MakeUnitLocust(this.ExplodingWolf.Unit)
+            let randomPlayer = this.GetRandomPlayerFromLobby()
+            this.SetRandomVertexColor(this.ExplodingWolf.Unit, randomPlayer.id)
+            this.ExplodingWolf.Unit.name = Utility.FormattedColorPlayerName(randomPlayer)
+            this.ExplodingTexttag()
+            this.ExplodingWolf.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
+            Globals.DNTNamedWolves.push(this.ExplodingWolf)
         } catch (e: any) {
             Logger.Warning(`Error in ExplodingWolfDesc ${e} ${e.StackTrace}`)
         }
@@ -140,11 +136,13 @@ export class NamedWolves {
 
     public static ExplodingWolfCollision(unit: Unit, k: Kitty, shadowKitty: boolean = false) {
         if (CurrentGameMode.active !== GameMode.Standard) return false
-        if (unit !== NamedWolves.ExplodingWolf.Unit) return false
+        // Guard: ExplodingWolf may not be created yet or may be in a revive window
+        if (!this.ExplodingWolf || !this.ExplodingWolf.Unit) return false
+        if (unit !== this.ExplodingWolf.Unit) return false
         if (!shadowKitty) Utility.GiveGoldFloatingText(25, k.Unit)
         else Utility.GiveGoldFloatingText(25, k.ShadowKitty.Unit)
         BurntMeat.FlamesDropChance(k)
-        NamedWolves.KillExplodingWolf()
+        this.KillExplodingWolf()
         return true
     }
 

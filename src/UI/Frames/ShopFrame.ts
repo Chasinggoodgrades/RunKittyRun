@@ -17,6 +17,7 @@ import { FrameManager } from './FrameManager'
 import { RelicFunctions } from './RelicFunctions/RelicFunctions'
 import { ShopItem, ShopItemType } from './ShopItems/ShopItems'
 import { ShopUtil } from './ShopUtil'
+import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 
 export class ShopFrame {
     public static shopFrame: Frame
@@ -82,7 +83,7 @@ export class ShopFrame {
         )
         ShopFrame.shopFrame.setAbsPoint(FRAMEPOINT_CENTER, 0.4, 0.375)
         ShopFrame.shopFrame.setSize(ShopFrame.frameX, ShopFrame.frameY)
-        FrameManager.CreateHeaderFrame(ShopFrame.shopFrame)
+        CreateHeaderFrame(ShopFrame.shopFrame)
     }
 
     private static InitializePanels() {
@@ -524,7 +525,7 @@ export class ShopFrame {
         if (!player.isLocal()) return
         FrameManager.ShopButton.visible = false
         FrameManager.ShopButton.visible = true
-        FrameManager.HideOtherFrames(ShopFrame.shopFrame)
+        HideOtherFrames(ShopFrame.shopFrame)
         if (CurrentGameMode.active === GameMode.SoloTournament) {
             // solo mode.
             player.DisplayTimedTextTo(

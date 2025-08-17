@@ -28,7 +28,6 @@ export class FrameManager {
     private static HOTKEY_COLOR: string = Colors.COLOR_YELLOW_ORANGE
 
     private static _cachedUIPosition: Action
-    private static _frames: Frame[] = []
 
     public static Initialize() {
         try {
@@ -54,47 +53,6 @@ export class FrameManager {
         FrameManager.ShopButton.visible = true
     }
 
-    public static CreateHeaderFrame(parent: Frame): Frame {
-        let header = blzCreateFrameByType(
-            'BACKDROP',
-            `${parent.getName()}Header`,
-            parent,
-            'QuestButtonDisabledBackdropTemplate',
-            0
-        )
-        let width = parent.width
-        let height = 0.0225
-        header.setPoint(FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_TOPLEFT, 0, 0.0125)
-        header.setSize(width, height)
-
-        let title = blzCreateFrameByType('TEXT', `${parent.getName()}Title`, header, 'ScriptDialogText', 0)
-        title.setPoint(FRAMEPOINT_CENTER, header, FRAMEPOINT_CENTER, 0, 0)
-        title.setSize(width, height)
-        title.text = `${Colors.COLOR_YELLOW}${parent.getName()}${Colors.COLOR_RESET}`
-        BlzFrameSetTextAlignment(title.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
-
-        let closeButton = blzCreateFrameByType(
-            'GLUETEXTBUTTON',
-            `${parent.getName()}CloseButton`,
-            header,
-            'ScriptDialogButton',
-            0
-        )
-        closeButton.setPoint(FRAMEPOINT_TOPRIGHT, header, FRAMEPOINT_TOPRIGHT, -0.0025, -0.0025)
-        closeButton.setSize(height - 0.005, height - 0.005)
-        closeButton.text = 'X'
-
-        // Close Actions
-        let closeTrigger = Trigger.create()!
-        closeTrigger.triggerRegisterFrameEvent(closeButton, FRAMEEVENT_CONTROL_CLICK)
-        closeTrigger.addAction(() => {
-            if (!getTriggerPlayer().isLocal()) return
-            parent.visible = false
-        })
-
-        return header
-    }
-
     private static RemoveUnwantedFrames() {
         let resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
         BlzFrameGetChild(BlzFrameGetChild(FrameManager.GameUI.handle, 5)!, 0)
@@ -103,9 +61,9 @@ export class FrameManager {
     }
 
     public static InitFramesList() {
-        FrameManager._frames.push(ShopFrame.shopFrame)
-        FrameManager._frames.push(RewardsFrame.RewardFrame)
-        FrameManager._frames.push(MusicFrame.MusicFramehandle)
+        Globals.AllFrames.push(ShopFrame.shopFrame)
+        Globals.AllFrames.push(RewardsFrame.RewardFrame)
+        Globals.AllFrames.push(MusicFrame.MusicFramehandle)
     }
 
     private static CreateRewardsButton() {
@@ -225,11 +183,5 @@ export class FrameManager {
         RewardsFrame.RewardFrame.visible = false
         ShopFrame.shopFrame.visible = false
         MusicFrame.MusicFramehandle.visible = false
-    }
-
-    public static HideOtherFrames(currentFrame: Frame) {
-        for (let i = 0; i < FrameManager._frames.length; i++) {
-            if (FrameManager._frames[i] !== currentFrame) FrameManager._frames[i].visible = false
-        }
     }
 }

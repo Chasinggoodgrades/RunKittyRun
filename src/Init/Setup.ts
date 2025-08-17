@@ -16,6 +16,7 @@ import { PodiumUtil } from 'src/Game/Podium/PodiumUtil'
 import { GameTimer } from 'src/Game/Rounds/GameTimer'
 import { RoundManager } from 'src/Game/Rounds/RoundManager'
 import { WolfArea } from 'src/Game/WolfArea'
+import { WolfPoint } from 'src/Game/WolfPoint'
 import { Gamemode } from 'src/Gamemodes/Gamemode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
@@ -57,6 +58,7 @@ export class Setup {
             Globals.Initialize()
             ColorUtils.Initialize()
             GameSeed.Initialize()
+            WolfPoint.AssignOrderIds()
             DoodadChanger.ShowSeasonalDoodads(false)
             Gamemode.Initialize()
             this.SetupVIPList()
@@ -137,7 +139,7 @@ export class Setup {
             NitroPacer.Initialize()
             RoundManager.Initialize()
             FirstPersonCameraManager.Initialize()
-            Utility.SimpleTimer(6.0, MusicManager.PlayNumb)
+            Utility.SimpleTimer(6.0, () => MusicManager.PlayNumb())
         } catch (e: any) {
             Logger.Critical(`Error in Setup.StartGame: ${e}`)
             throw e

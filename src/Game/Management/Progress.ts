@@ -7,7 +7,6 @@ import { Globals } from 'src/Global/Globals'
 import { RegionList } from 'src/Global/RegionList'
 import { Timer } from 'w3ts'
 import { Kitty } from '../Entities/Kitty/Kitty'
-import { NitroPacer } from '../Entities/NitroPacer'
 import { ProgressPointHelper } from './ProgressPointHelper'
 
 export const Progress = {
@@ -76,23 +75,6 @@ export const Progress = {
             Logger.Warning(`Error in CalculatePlayerProgress. ${e}`)
             return 0.0
         }
-    },
-
-    CalculateNitroPacerProgress(): number {
-        let nitroKitty = NitroPacer.Unit
-        let currentSafezone = NitroPacer.GetCurrentCheckpoint()
-        if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.x, nitroKitty.y)) return 0.0 // if at start, 0 progress
-        if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.x, nitroKitty.y))
-            return 100.0 // if at end.. 100 progress
-        let currentProgress = Progress.DistanceBetweenPoints(
-            nitroKitty.x,
-            nitroKitty.y,
-            ProgressPointHelper.Points[currentSafezone].x,
-            ProgressPointHelper.Points[currentSafezone].y
-        )
-        let totalProgress = Progress.DistancesFromStart.get(currentSafezone)! + currentProgress
-
-        return totalProgress
     },
 
     CalculateTotalDistance() {

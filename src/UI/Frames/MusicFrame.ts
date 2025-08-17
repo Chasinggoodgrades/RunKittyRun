@@ -6,6 +6,7 @@ import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/U
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
 import { FrameManager } from './FrameManager'
+import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 
 export class MusicFrame {
     public static MusicFramehandle: Frame
@@ -45,7 +46,7 @@ export class MusicFrame {
         let ySize = MusicManager.MusicList.length * 0.03
         this.MusicFramehandle.setSize(0.2, ySize)
 
-        FrameManager.CreateHeaderFrame(this.MusicFramehandle)
+        CreateHeaderFrame(this.MusicFramehandle)
 
         // Slider
         this.RegisterMusicSlider()
@@ -197,7 +198,7 @@ export class MusicFrame {
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.MusicButton.visible = false
         FrameManager.MusicButton.visible = true
-        FrameManager.HideOtherFrames(this.MusicFramehandle)
+        HideOtherFrames(this.MusicFramehandle)
         this.MusicFramehandle.visible = !this.MusicFramehandle.visible
         if (this.MusicFramehandle.visible) MultiboardUtil.MinMultiboards(player, true)
         this.PopulateMusicFrame(player)

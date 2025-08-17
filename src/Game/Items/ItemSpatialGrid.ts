@@ -31,6 +31,7 @@ export class ItemSpatialGrid {
     }
 
     public static UnregisterKibble(kibble: Kibble) {
+        if (!kibble.Item) return // If the item is not valid... no reason to unregister i guess
         let cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
         let list = ItemSpatialGrid.kibbleCells.get(cell) || []
 
@@ -48,6 +49,7 @@ export class ItemSpatialGrid {
     }
 
     public static UnregisterItem(item: Item) {
+        if (!item) return // If the item is not valid... no reason to unregister i guess
         let cell = ItemSpatialGrid.GetCell(item.x, item.y)
         let list = ItemSpatialGrid.itemCells.get(cell) || []
 

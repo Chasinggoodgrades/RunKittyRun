@@ -6,22 +6,19 @@ import { Utility } from 'src/Utility/Utility'
 import { Frame, Timer } from 'w3ts'
 
 export class GameTimer {
-    private static readonly _cachedGameTimer: () => void = () => {
-        return this.StartGameTimer()
-    }
-
     public static RoundTime: number[]
     public static RoundSpeedIncrement = 0.12
-    private static GameTimeBar: Frame = Frame.fromName('ResourceBarSupplyText', 0)!
+    private static GameTimeBar: Frame
 
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>
     public static Initialize() {
         Globals.GAME_TIMER_DIALOG.setTitle('Elapsed Game Time')
+        this.GameTimeBar = Frame.fromName('ResourceBarSupplyText', 0)!
         this.RoundTime = []
         let t = Timer.create()
-        t.start(this.RoundSpeedIncrement, true, this._cachedGameTimer)
+        t.start(this.RoundSpeedIncrement, true, () => this.StartGameTimer())
     }
 
     /// <summary>

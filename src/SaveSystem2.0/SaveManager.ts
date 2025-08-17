@@ -288,14 +288,8 @@ export class FilePromise {
                     //if(!PROD) print(`${Buffer[i]}`);
                 }
             }
-
-            print(loadString.join(''))
-            print(loadString.join('').slice(-20))
-            print(loadString.join('').length)
             //FinalString = EncodingBase64.Decode(loadString.toString());
             this.DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString)
-            print(this.DecodedString.slice(-20))
-            print(this.DecodedString.length)
 
             /*            Logger.Verbose("loadString.length", loadString.length);
                         Logger.Verbose("Finished: ");

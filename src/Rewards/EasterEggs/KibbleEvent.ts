@@ -44,7 +44,7 @@ export class KibbleEvent {
         // Spawn event kibbles
         for (let i = 0; i < this.TotalEventKibbles + this.EventExtraKibbles; i++) {
             let kibble = MemoryHandler.getEmptyObject<Kibble>()
-            kibble.SpawnKibble()
+            kibble.SpawnKibble() // Last error i recieved here was nil value (method 'SpawnKibble') ... MemoryHandler issue ig
             ItemSpawnerTrackKibbles.active.push(kibble)
         }
 

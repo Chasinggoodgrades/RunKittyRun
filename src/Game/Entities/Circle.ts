@@ -7,7 +7,6 @@ import { Kitty } from './Kitty/Kitty'
 
 export class Circle {
     private CIRCLE_UNIT_MODEL = Constants.UNIT_KITTY_CIRCLE
-    private static CIRCLE_SPAWN_REGION = Regions.Circle_Area
     private ID = 0
     public Player: MapPlayer
     public Unit: Unit
@@ -24,8 +23,8 @@ export class Circle {
         this.Unit = Unit.create(
             this.Player,
             this.CIRCLE_UNIT_MODEL,
-            Circle.CIRCLE_SPAWN_REGION.centerX,
-            Circle.CIRCLE_SPAWN_REGION.centerY
+            Regions.Circle_Area.centerX,
+            Regions.Circle_Area.centerY
         )!
         Utility.MakeUnitLocust(this.Unit)
         Globals.ALL_CIRCLES.set(this.Player, this)

@@ -6,17 +6,13 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { DEFAULT_OVERHEAD_EFFECT, Globals } from 'src/Global/Globals'
-import { RegionList } from 'src/Global/RegionList'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { Disco } from 'src/Misc/Disco'
-import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
-import { Action } from 'src/Utility/CSUtils'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
-import { Effect, MapPlayer, TextTag, Unit } from 'w3ts'
+import { Effect, MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
 import { WolfPoint } from '../WolfPoint'
-import { NamedWolves } from './NamedWolves'
 
 export class Wolf {
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
@@ -25,12 +21,11 @@ export class Wolf {
     private WANDER_UPPER_BOUND = 0.83 // reaction time upper bound
     private NEXT_WANDER_DELAY = 1.9 // time before wolf can move again
 
-    private readonly _cachedWander: Action
-    private readonly _cachedEffect: Action
+    private static wolfPlayerIndex = 0
 
     public RegionIndex = 0
     public OVERHEAD_EFFECT_PATH: string
-    public WanderTimer: AchesTimers = createAchesTimer()
+    public WanderTimer: Timer
 
     public EffectTimer: AchesTimers
 
@@ -49,15 +44,13 @@ export class Wolf {
     public constructor(regionIndex: number) {
         this.RegionIndex = regionIndex
         this.WolfArea = WolfArea.WolfAreas.get(regionIndex)!
-        let Affixes: Affix[] = [] // Consider creating a new object that contains Affix[] so we're not making a new one each wolf.
+        this.Affixes = [] // Consider creating a new object that contains Affix[] so we're not making a new one each wolf.
         this.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
         this.WolfPoint = new WolfPoint(this) // Consider changing this to be a part of the memory handler. Remove the parameter
 
-        this._cachedWander = () => this.StartWandering()
-        this._cachedEffect = () => this.WolfMoveCancelEffect()
-
         this.InitializeWolf()
-        this.WanderTimer.Timer.start(GetRandomReal(2.0, 4.5), false, this._cachedWander)
+        this.WanderTimer = Timer.create()
+        this.WanderTimer.start(GetRandomReal(2.0, 4.5), false, () => this.StartWandering())
         Globals.ALL_WOLVES.set(this.Unit, this)
 
         this.WolfArea.Wolves.push(this)
@@ -75,10 +68,8 @@ export class Wolf {
                     const lane = Number(laneStr)
                     for (let i = 0; i < numberOfWolves; i++) new Wolf(lane)
                 }
-                this.CreateBloodWolf()
-                NamedWolves.ExplodingWolf = new Wolf(GetRandomInt(0, RegionList.WolfRegions.length - 1))
-                NamedWolves.StanWolf = new Wolf(GetRandomInt(0, RegionList.WolfRegions.length - 1))
-                NamedWolves.CreateNamedWolves()
+                // FandF.CreateBloodWolf()
+                // NamedWolves.CreateNamedWolves()
             }
         } catch (e: any) {
             Logger.Critical(`Error in Wolf.SpawnWolves: ${e}`)
@@ -88,11 +79,11 @@ export class Wolf {
 
     public StartWandering(forced: boolean = false) {
         let realTime = GetRandomReal(1.0, 1.12)
-        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving && this !== NamedWolves.StanWolf) {
+        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving) {
             this.ApplyEffect()
             realTime = this.NEXT_WANDER_DELAY // Gives a brief delay before the wolf has a chance to move again.
         }
-        this.WanderTimer?.Timer?.start(realTime, false, this._cachedWander)
+        this.WanderTimer?.start(realTime, false, () => this.StartWandering())
     }
 
     /// <summary>
@@ -114,7 +105,7 @@ export class Wolf {
         RemoveAllWolfAffixes(this)
         this.EffectTimer?.dispose()
         this.OverheadEffect?.destroy()
-        this.WanderTimer?.dispose()
+        this.WanderTimer?.destroy()
         this.Texttag?.destroy()
         this.WolfArea.Wolves.splice(this.WolfArea.Wolves.indexOf(this), 1)
         this.Disco?.dispose()
@@ -161,8 +152,10 @@ export class Wolf {
                 this.paused = true
                 this.Unit.paused = true // Wander Wolf
             } else {
-                for (let i = 0; i < this.Affixes.length; i++) {
-                    this.Affixes[i].pause(false)
+                if (this.Affixes.length > 1) {
+                    for (let i = 0; i < this.Affixes.length; i++) {
+                        //this.Affixes[i].pause(false)
+                    }
                 }
                 this.WanderTimer?.resume()
                 if (this.EffectTimer !== null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
@@ -221,7 +214,7 @@ export class Wolf {
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
 
         this.EffectTimer ??= createAchesTimer()
-        this.EffectTimer?.Timer?.start(effectDuration, false, this._cachedEffect)
+        this.EffectTimer?.Timer?.start(effectDuration, false, () => this.WolfMoveCancelEffect())
     }
 
     private WolfMoveCancelEffect() {
@@ -254,8 +247,6 @@ export class Wolf {
         MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!,
     ]
 
-    private static wolfPlayerIndex = 0
-
     public static getNextWolfPlayer(): MapPlayer {
         let selectedPlayer = this.wolfPlayers[this.wolfPlayerIndex]
         this.wolfPlayerIndex = (this.wolfPlayerIndex + 1) % this.wolfPlayers.length
@@ -268,15 +259,5 @@ export class Wolf {
                 this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
             }
         }
-    }
-
-    public static CreateBloodWolf() {
-        if (CurrentGameMode.active !== GameMode.Standard) return
-        let region = GetRandomInt(0, WolfArea.WolfAreas.size - 1)
-        let wolfObject = new Wolf(region)
-        FandF.BloodWolf = wolfObject.Unit
-        FandF.BloodWolf.name = '|cffffffff?|r|cffffcccc?|r|cffff9999?|r|cffff6666?|r|cffff3333?|r|cffff0000?|r'
-        FandF.BloodWolf.setVertexColor(100, 50, 50, 255)
-        FandF.AppendCollectionsUnit()
     }
 }

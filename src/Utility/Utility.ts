@@ -83,8 +83,9 @@ export class Utility {
     public static ConvertFloatToTimeInt(time: number) {
         if (time <= 0.0) return '0:00'
 
-        let minutes = time / 60
-        let seconds = time % 60
+        let totalSeconds = Math.floor(time)
+        let minutes = Math.floor(totalSeconds / 60)
+        let seconds = totalSeconds % 60
 
         return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`
     }

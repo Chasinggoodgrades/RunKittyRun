@@ -10,7 +10,7 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { color, MapPlayer, Multiboard, Timer, Trigger } from 'w3ts'
+import { MapPlayer, Multiboard, Timer, Trigger } from 'w3ts'
 
 export class StandardMultiboard {
     public static OverallStats: Multiboard
@@ -26,9 +26,9 @@ export class StandardMultiboard {
 
     public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
-        let BestTimes = Multiboard.create()!
-        let OverallStats = Multiboard.create()!
-        let CurrentStats = Multiboard.create()!
+        this.BestTimes = Multiboard.create()!
+        this.OverallStats = Multiboard.create()!
+        this.CurrentStats = Multiboard.create()!
         StandardMultiboard.Init()
     }
 
@@ -50,17 +50,18 @@ export class StandardMultiboard {
     }
 
     private static RegisterTriggers() {
-        let Updater = Trigger.create()!
-        let ESCTrigger = Trigger.create()!
+        this.Updater = Trigger.create()!
+        this.ESCTrigger = Trigger.create()!
 
-        Updater.registerTimerEvent(1.0, true)
-        Updater.addAction(() => StandardMultiboard.CurrentStatsRoundTimes())
+        this.Updater.registerTimerEvent(1.0, true)
+        this.Updater.addAction(() => StandardMultiboard.CurrentStatsRoundTimes())
 
-        for (let player of Globals.ALL_PLAYERS) ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
-        ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
+        for (let player of Globals.ALL_PLAYERS) this.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
+        this.ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
     }
 
     private static MakeMultiboard() {
+        print('Making Standard Multiboard')
         StandardMultiboard.OverallGamesStatsMultiboard()
         StandardMultiboard.BestTimesMultiboard()
         StandardMultiboard.CurrentGameStatsMultiboard()
@@ -70,14 +71,14 @@ export class StandardMultiboard {
     private static CurrentGameStatsMultiboard() {
         StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
         StandardMultiboard.CurrentStats.columns = 7
-        StandardMultiboard.CurrentStats.GetItem(0, 0).setText(`${StandardMultiboard.color}Time: Round|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 0).setText(`${StandardMultiboard.color}Player|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 1).setText(`${StandardMultiboard.color}Score|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 2).setText(`${StandardMultiboard.color}Saves|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 3).setText(`${StandardMultiboard.color}Deaths|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 4).setText(`${StandardMultiboard.color}Streak|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 5).setText(`${StandardMultiboard.color}Ratio|r`)
-        StandardMultiboard.CurrentStats.GetItem(1, 6).setText(`${StandardMultiboard.color}S / D|r`)
+        StandardMultiboard.CurrentStats.GetItem(0, 0).setText(`${this.color}Time: Round|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 0).setText(`${this.color}Player|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 1).setText(`${this.color}Score|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 2).setText(`${this.color}Saves|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 3).setText(`${this.color}Deaths|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 4).setText(`${this.color}Streak|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 5).setText(`${this.color}Ratio|r`)
+        StandardMultiboard.CurrentStats.GetItem(1, 6).setText(`${this.color}S / D|r`)
         StandardMultiboard.CurrentStats.SetChildVisibility(true, false)
         StandardMultiboard.CurrentStats.setItemsWidth(0.055)
         StandardMultiboard.CurrentStats.GetItem(1, 0).setWidth(0.07)
@@ -87,14 +88,14 @@ export class StandardMultiboard {
     private static OverallGamesStatsMultiboard() {
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.OverallStats.columns = 8
-        StandardMultiboard.OverallStats.GetItem(0, 0).setText(`${color}Player|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 1).setText(`${color}Score:|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 2).setText(`${color}Saves|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 3).setText(`${color}Deaths|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 4).setText(`${color}MaxStreak|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 5).setText(`${color}  Ratio|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 6).setText(`${color}Games|r`)
-        StandardMultiboard.OverallStats.GetItem(0, 7).setText(`${color}Wins|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 0).setText(`${this.color}Player|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 1).setText(`${this.color}Score:|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 2).setText(`${this.color}Saves|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 3).setText(`${this.color}Deaths|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 4).setText(`${this.color}MaxStreak|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 5).setText(`${this.color}  Ratio|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 6).setText(`${this.color}Games|r`)
+        StandardMultiboard.OverallStats.GetItem(0, 7).setText(`${this.color}Wins|r`)
         StandardMultiboard.OverallStats.SetChildVisibility(true, false)
         StandardMultiboard.OverallStats.setItemsWidth(0.052)
         StandardMultiboard.OverallStats.GetItem(0, 0).setWidth(0.07)
@@ -105,12 +106,12 @@ export class StandardMultiboard {
     private static BestTimesMultiboard() {
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.BestTimes.columns = 6
-        StandardMultiboard.BestTimes.GetItem(0, 0).setText(`${color}Player|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 1).setText(`${color}1: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 2).setText(`${color}2: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 3).setText(`${color}3: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 4).setText(`${color}4: Round|r`)
-        StandardMultiboard.BestTimes.GetItem(0, 5).setText(`${color}5: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 0).setText(`${this.color}Player|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 1).setText(`${this.color}1: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 2).setText(`${this.color}2: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 3).setText(`${this.color}3: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 4).setText(`${this.color}4: Round|r`)
+        StandardMultiboard.BestTimes.GetItem(0, 5).setText(`${this.color}5: Round|r`)
         StandardMultiboard.BestTimes.SetChildVisibility(true, false)
         StandardMultiboard.BestTimes.setItemsWidth(0.05)
         StandardMultiboard.BestTimes.GetItem(0, 0).setWidth(0.07)
@@ -129,7 +130,7 @@ export class StandardMultiboard {
 
     private static CurrentGameStats() {
         try {
-            StandardMultiboard.CurrentStats.title = `${Colors.COLOR_YELLOW_ORANGE}Current Stats [${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+            StandardMultiboard.CurrentStats.title = `${Colors.COLOR_YELLOW_ORANGE}Current Stats [${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
             StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
             let rowIndex = 2
 
@@ -199,7 +200,7 @@ export class StandardMultiboard {
     }
 
     private static OverallGameStats() {
-        StandardMultiboard.OverallStats.title = `Overall Stats ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+        StandardMultiboard.OverallStats.title = `Overall Stats ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
@@ -261,7 +262,7 @@ export class StandardMultiboard {
     }
 
     private static BestTimesStats() {
-        StandardMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+        StandardMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 

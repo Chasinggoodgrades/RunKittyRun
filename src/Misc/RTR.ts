@@ -55,6 +55,9 @@ export class RTR {
     }
 
     public PauseRTR() {
+        if (!this.enabled) {
+            return
+        }
         this.ClickTrigger.enabled = false
         this.WidgetTrigger.enabled = false
         this.RTRTimer.pause()

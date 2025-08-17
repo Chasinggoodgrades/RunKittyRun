@@ -10,6 +10,7 @@ import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer } from 'src/Util
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
 import { FrameManager } from './FrameManager'
+import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RewardHelper } from './RewardHelper'
 
 export class RewardsFrame {
@@ -37,7 +38,7 @@ export class RewardsFrame {
             RewardsFrame.CountRewardFrames()
             RewardsFrame.AppendRewardsToFrames()
             RewardsFrame.CreateRandomRewardButton()
-            FrameManager.CreateHeaderFrame(RewardsFrame.RewardFrame)
+            CreateHeaderFrame(RewardsFrame.RewardFrame)
         } catch (ex: any) {
             Logger.Critical(`Error in RewardsFrame: ${ex}`)
             throw ex
@@ -347,7 +348,7 @@ export class RewardsFrame {
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
         FrameManager.RewardsButton.visible = false
         FrameManager.RewardsButton.visible = true
-        FrameManager.HideOtherFrames(RewardsFrame.RewardFrame)
+        HideOtherFrames(RewardsFrame.RewardFrame)
         RewardsFrame.RewardFrame.visible = !RewardsFrame.RewardFrame.visible
         if (RewardsFrame.RewardFrame.visible) {
             RewardsFrame.UnavilableRewardIcons(player)

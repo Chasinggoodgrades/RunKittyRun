@@ -9,10 +9,10 @@ import { Wolf } from './Entities/Wolf'
 
 export class WolfPoint {
     private MaxDistance = 128 // Max distance between points
-    public static readonly MoveOrderID: number = OrderId('move')
-    public static readonly StopOrderID: number = OrderId('stop')
-    public static readonly AttackOrderID: number = OrderId('attack')
-    public static readonly HoldPositionOrderID: number = OrderId('holdposition')
+    public static MoveOrderID: number
+    public static StopOrderID: number
+    public static AttackOrderID: number
+    public static HoldPositionOrderID: number
     public static IsPausedTrigger: Trigger
 
     private Wolf: Wolf
@@ -125,6 +125,13 @@ export class WolfPoint {
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
         WolfPoint.IsPausedTrigger.addAction(() => WolfPoint.QueueOrderActions())
         return WolfPoint.IsPausedTrigger
+    }
+
+    public static AssignOrderIds() {
+        WolfPoint.MoveOrderID = OrderId('move')
+        WolfPoint.StopOrderID = OrderId('stop')
+        WolfPoint.AttackOrderID = OrderId('attack')
+        WolfPoint.HoldPositionOrderID = OrderId('holdposition')
     }
 
     private static QueueOrderActions() {

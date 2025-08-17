@@ -9,7 +9,7 @@ import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveOb
 import { GameStatsData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
-import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
+import { Frame, Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
 export const DEFAULT_WOLF_COLLISION_RADIUS = 74.0
@@ -29,6 +29,7 @@ export class Globals {
     public static NumberOfRounds = 5
 
     public static AllAffixes: Affix[] = []
+    public static AllFrames: Frame[] = []
 
     public static readonly GAME_MODES: string[] = [
         GameMode[GameMode.Standard],

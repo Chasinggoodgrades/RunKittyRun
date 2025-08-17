@@ -10,93 +10,109 @@ import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTi
 import { Utility } from 'src/Utility/Utility'
 import { Effect, Item, MapPlayer, Rectangle, Unit } from 'w3ts'
 import { Progress } from '../Management/Progress'
+import { ProgressPointHelper } from '../Management/ProgressPointHelper'
 import { WolfPoint } from '../WolfPoint'
 
-export const NitroPacer = {
-    Unit: undefined as unknown as Unit,
+export class NitroPacer {
+    private static instance: NitroPacer | undefined
 
-    currentDistance: 0,
-    currentCheckpoint: 0,
-    pacerTimer: undefined as AchesTimers | undefined,
-    spawnRect: RegionList.SpawnRegions[5],
-    pathingPoints: RegionList.PathingPoints,
-    nitroEffect: undefined as Effect | undefined,
-    ghostBoots: undefined as Item | undefined,
+    public Unit: Unit | undefined
+    public currentDistance = 0
+    public currentCheckpoint = 0
+    public pacerTimer: AchesTimers | undefined
+    public nitroEffect: Effect | undefined
+    public pathingPoints: Rectangle[] = []
+    public ghostBoots: Item | undefined
+
+    private constructor() {}
+
+    public static getInstance(): NitroPacer {
+        if (!NitroPacer.instance) {
+            NitroPacer.instance = new NitroPacer()
+        }
+        return NitroPacer.instance
+    }
 
     /// <summary>
     /// Initializes the Nitros Pacer unit and effect, only applies to the standard gamemode.
     /// </summary>
-    Initialize() {
+    public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
-        this.Unit ??= Unit.create(
+        const instance = NitroPacer.getInstance()
+
+        instance.Unit ??= Unit.create(
             MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!,
             Constants.UNIT_NITRO_PACER,
-            this.spawnRect.centerX,
-            this.spawnRect.centerY,
+            RegionList.SpawnRegions[5].centerX,
+            RegionList.SpawnRegions[5].centerY,
             360
         )!
-        Utility.MakeUnitLocust(this.Unit)
-        this.Unit.invulnerable = true
-        this.Unit.name = `${Colors.COLOR_TURQUOISE}Pacer: Nitro${Colors.COLOR_RESET}`
-        this.ghostBoots = this.Unit.addItemById(Constants.ITEM_GHOST_KITTY_BOOTS)!
-        this.nitroEffect = Effect.createAttachment('war3mapImported\\Nitro.mdx', this.Unit, 'origin')!
-        this.VisionShare()
+        Utility.MakeUnitLocust(instance.Unit)
+        instance.pathingPoints = RegionList.PathingPoints
+        instance.Unit.invulnerable = true
+        instance.Unit.name = `${Colors.COLOR_TURQUOISE}Pacer: Nitro${Colors.COLOR_RESET}`
+        instance.ghostBoots = instance.Unit.addItemById(Constants.ITEM_GHOST_KITTY_BOOTS)!
+        instance.nitroEffect = Effect.createAttachment('war3mapImported\\Nitro.mdx', instance.Unit, 'origin')!
+        instance.VisionShare()
 
-        this.pacerTimer = createAchesTimer()
-    },
+        instance.pacerTimer = createAchesTimer()
+    }
 
     /// <summary>
     /// Returns the current distance of the nitro pacer.
     /// </summary>
     /// <returns></returns>
-    GetCurrentCheckpoint(): number {
-        return this.currentCheckpoint
-    },
+    public static GetCurrentCheckpoint(): number {
+        return NitroPacer.getInstance().currentCheckpoint
+    }
 
     /// <summary>
     /// Starts the nitro pacer, resets the pacer and sets the speed of the unit to 0.
     /// </summary>
-    StartNitroPacer() {
+    public static StartNitroPacer() {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
+        const instance = NitroPacer.getInstance()
         this.ResetNitroPacer()
-        this.Unit!.useItem(this.ghostBoots!)
+        instance.Unit!.useItem(instance.ghostBoots!)
         this.NitroPacerQueueOrders()
-        this.pacerTimer!.Timer.start(0.15, true, this.UpdateNitroPacer.bind(this))
-    },
+        instance.pacerTimer!.Timer.start(0.15, true, () => this.UpdateNitroPacer())
+    }
 
     /// <summary>
     /// Resets the nitro pacer, sets the unit to the spawn point, and sets the speed of the unit to 0.
     /// </summary>
-    ResetNitroPacer() {
+    public static ResetNitroPacer() {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
-        this.pacerTimer?.pause()
-        this.Unit!.paused = false
-        this.Unit!.setPosition(this.spawnRect.centerX, this.spawnRect.centerY)
-        this.currentCheckpoint = 0
-        this.currentDistance = 0
-    },
+        const instance = NitroPacer.getInstance()
+        instance.pacerTimer?.pause()
+        instance.Unit!.paused = false
+        instance.Unit!.setPosition(RegionList.SpawnRegions[5].centerX, RegionList.SpawnRegions[5].centerY)
+        instance.currentCheckpoint = 0
+        instance.currentDistance = 0
+    }
 
-    UpdateNitroPacer() {
+    public static UpdateNitroPacer() {
         try {
-            this.currentDistance = Progress.CalculateNitroPacerProgress()
+            const instance = NitroPacer.getInstance()
+            instance.currentDistance = this.CalculateNitroPacerProgress()
             let remainingDistance = Progress.DistancesFromStart.get(RegionList.PathingPoints.length - 1)
             if (!remainingDistance) {
                 Logger.Warning('remainingDistance is undefined in UpdateNitroPacer.')
                 return
             }
-            remainingDistance -= this.currentDistance
+            remainingDistance -= instance.currentDistance
             let remainingTime: number = NitroChallenges.GetNitroTimeRemaining()
             let speed: number = remainingTime !== 0.0 ? remainingDistance / remainingTime : 350.0
-            this.SetSpeed(speed)
+            NitroPacer.SetSpeed(speed)
 
-            if (this.pathingPoints[this.currentCheckpoint + 1].includes(this.Unit!.x, this.Unit!.y)) {
-                this.currentCheckpoint++
-                if (this.currentCheckpoint >= this.pathingPoints.length - 1) {
-                    this.pacerTimer?.pause()
-                    Utility.SimpleTimer(2.0, () => (this.Unit!.paused = true)) // this is actually ok since we reset pacer before starting it again
+            if (instance.pathingPoints[instance.currentCheckpoint + 1].includes(instance.Unit!.x, instance.Unit!.y)) {
+                instance.currentCheckpoint++
+                if (instance.currentCheckpoint >= instance.pathingPoints.length - 1) {
+                    instance.pacerTimer?.pause()
+                    Utility.SimpleTimer(2.0, () => (instance.Unit!.paused = true)) // this is actually ok since we reset pacer before starting it again
                     return
                 }
             }
@@ -104,28 +120,48 @@ export const NitroPacer = {
             Logger.Warning(`Error in UpdateNitroPacer ${e}`)
             throw e
         }
-    },
+    }
 
-    NitroPacerQueueOrders() {
+    public static NitroPacerQueueOrders() {
         // backwards for pathingpoints, for stack queue order
+        const instance = NitroPacer.getInstance()
+        if (!instance.Unit) return
         for (
-            let i: number = this.pathingPoints.length - 1;
+            let i: number = instance.pathingPoints.length - 1;
             i >= 1;
             i-- // exclude starting point
         ) {
-            let point: Rectangle = this.pathingPoints[i]
-            this.Unit!.issueOrderAt(WolfPoint.MoveOrderID, point.centerX, point.centerY)
+            let point: Rectangle = instance.pathingPoints[i]
+            BlzQueuePointOrderById(instance.Unit.handle, WolfPoint.MoveOrderID, point.centerX, point.centerY)
         }
-    },
+    }
 
-    VisionShare() {
+    public VisionShare() {
         for (let player of Globals.ALL_PLAYERS) {
             let neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!
             neutralPassive.setAlliance(player, ALLIANCE_SHARED_VISION_FORCED, true)
         }
-    },
+    }
 
-    SetSpeed(speed: number) {
-        return (this.Unit!.moveSpeed = speed)
-    },
+    public static SetSpeed(speed: number) {
+        return (NitroPacer.getInstance().Unit!.moveSpeed = speed)
+    }
+
+    public static CalculateNitroPacerProgress(): number {
+        let nitroKitty = NitroPacer.getInstance()
+        if (nitroKitty.Unit === undefined) return 0.0
+        let currentSafezone = NitroPacer.GetCurrentCheckpoint()
+        if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y)) return 0.0 // if at start, 0 progress
+        if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y))
+            return 100.0 // if at end.. 100 progress
+        let currentProgress = Progress.DistanceBetweenPoints(
+            nitroKitty.Unit.x,
+            nitroKitty.Unit.y,
+            ProgressPointHelper.Points[currentSafezone].x,
+            ProgressPointHelper.Points[currentSafezone].y
+        )
+        let totalProgress = Progress.DistancesFromStart.get(currentSafezone)! + currentProgress
+
+        return totalProgress
+    }
 }

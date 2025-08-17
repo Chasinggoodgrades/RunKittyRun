@@ -1,15 +1,15 @@
 export enum GameMode {
-    Standard,
-    SoloTournament,
-    TeamTournament,
+    Standard = 'Standard',
+    SoloTournament = 'SoloTournament',
+    TeamTournament = 'TeamTournament',
 }
 
 export enum TeamTournamentModes {
-    FreePick,
-    Random,
+    FreePick = 'FreePick',
+    Random = 'Random',
 }
 
 export enum SoloTournamentModes {
-    Race,
-    Progression,
+    Race = 'Race',
+    Progression = 'Progression',
 }

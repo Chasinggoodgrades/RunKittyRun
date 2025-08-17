@@ -40,7 +40,7 @@ export class Gamemode {
         this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
-                GameMode.Standard + // Standard
+                GameMode[GameMode.Standard] + // Standard
                 Colors.COLOR_GOLD +
                 ' (-s)' +
                 Colors.COLOR_RESET
@@ -50,7 +50,7 @@ export class Gamemode {
         this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
-                GameMode.SoloTournament + // Solo
+                GameMode[GameMode.SoloTournament] + // Solo
                 Colors.COLOR_GOLD +
                 ' (-solo: t <prog | race>)' +
                 Colors.COLOR_RESET
@@ -60,7 +60,7 @@ export class Gamemode {
         this.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE +
-                GameMode.TeamTournament + // Team
+                GameMode[GameMode.TeamTournament] + // Team
                 Colors.COLOR_GOLD +
                 ' (-team: t <fp | freepick | r | random> <teamsize>)' +
                 Colors.COLOR_RESET
@@ -107,7 +107,7 @@ export class Gamemode {
                 Colors.COLOR_YELLOW_ORANGE +
                     'Gamemode chosen: ' +
                     Colors.COLOR_GOLD +
-                    CurrentGameMode.active.toString() +
+                    GameMode[CurrentGameMode.active] +
                     ' ' +
                     Globals.CurrentGameModeType
             )

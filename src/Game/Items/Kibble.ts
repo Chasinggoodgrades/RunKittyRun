@@ -55,6 +55,7 @@ export class Kibble extends IDisposable {
         this.StarFallEffect.setPosition(x, y, 0)
         this.StarFallEffect.playAnimation(ANIM_TYPE_BIRTH)
         this.JackPotIndex = 1
+        if (!this.Type) this.Type = Kibble.RandomKibbleType()
         this.Item = Item.create(this.Type, x, y)!
         ItemSpatialGrid.RegisterKibble(this)
     }
@@ -62,7 +63,7 @@ export class Kibble extends IDisposable {
     // #region Kibble Initialization
 
     private static RandomKibbleType(): number {
-        return Kibble.KibblesColors[GetRandomInt(0, Kibble.KibblesColors.length - 1)]
+        return Kibble.KibblesColors[GetRandomInt(0, this.KibblesColors.length - 1)]
     }
 
     private static KibblePickupEvents(): Trigger {
@@ -89,7 +90,7 @@ export class Kibble extends IDisposable {
             let kitty = Globals.ALL_KITTIES.get(player)!
             let effect: Effect | undefined = undefined
             let randomChance = GetRandomReal(0, 100)
-            let kib = ItemSpawnerTrackKibbles.active.find(k => k.Item.handle === item.handle)
+            let kib = ItemSpawnerTrackKibbles.active.find(k => k.Item?.handle === item?.handle)
 
             if (!kib) return
 

@@ -6,11 +6,8 @@ import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { Action } from 'src/Utility/CSUtils'
 import { Utility } from 'src/Utility/Utility'
-import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Timer, Trigger, Unit } from 'w3ts'
-import { blzGetFrameByName } from '../Utility/w3tsUtils'
 
 export class CustomStat {
     public Frame: Frame
@@ -37,68 +34,72 @@ export class CustomStatFrame {
     private static Gold: string = `${Colors.COLOR_YELLOW_ORANGE}Gold:|r`
     private static Ratio: string = `${Colors.COLOR_YELLOW_ORANGE}S/D:|r`
     private static Progress: string = `${Colors.COLOR_YELLOW_ORANGE}Prog.:|r`
-
-    private static readonly _cacheUpdate: Action = CustomStatFrame.Update
-
     private static t: Timer
 
     public static Add(icon: string, text: string, titleTooltip: string) {
-        CustomStatFrame.Count++
-        let fh: Frame = Frame.createSimple('CustomStat', CustomStatFrame.CustomStatFrameBoxS, CustomStatFrame.Count)!
-        let tooltipBox: Frame = blzCreateFrame(
-            'BoxedText',
-            CustomStatFrame.CustomStatFrameBoxF,
-            0,
-            CustomStatFrame.Count
-        )
-        let fhHover: Frame = blzCreateFrameByType(
+        this.Count++
+        let fh = BlzCreateSimpleFrame('CustomStat', CustomStatFrame.CustomStatFrameBoxS.handle, this.Count)
+        let tooltipBox = BlzCreateFrame('BoxedText', CustomStatFrame.CustomStatFrameBoxF.handle, 0, this.Count)
+        let fhHover = BlzCreateFrameByType(
             'FRAME',
             'CustomStatHover',
-            CustomStatFrame.CustomStatFrameBoxF,
+            CustomStatFrame.CustomStatFrameBoxF.handle,
             '',
-            CustomStatFrame.Count
+            this.Count
         )
 
-        fhHover.setPoint(FRAMEPOINT_BOTTOMLEFT, fh, FRAMEPOINT_BOTTOMLEFT, 0, 0)
-        fhHover.setPoint(
+        if (!fhHover || !fh || !tooltipBox) return
+
+        BlzFrameSetPoint(fhHover, FRAMEPOINT_BOTTOMLEFT, fh, FRAMEPOINT_BOTTOMLEFT, 0, 0)
+        BlzFrameSetPoint(
+            fhHover,
             FRAMEPOINT_TOPRIGHT,
-            blzGetFrameByName('CustomStatText', CustomStatFrame.Count),
+            BlzGetFrameByName('CustomStatText', this.Count)!,
             FRAMEPOINT_TOPRIGHT,
             0,
             0
         )
-        fhHover.setTooltip(tooltipBox)
+        BlzFrameSetTooltip(fhHover, tooltipBox)
 
-        tooltipBox.setAbsPoint(FRAMEPOINT_BOTTOM, 0.6, 0.2)
-        tooltipBox.setSize(0.15, 0.08)
+        BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_BOTTOM, 0.6, 0.2)
+        BlzFrameSetSize(tooltipBox, 0.15, 0.08)
 
-        blzGetFrameByName('CustomStatText', CustomStatFrame.Count).setText(text)
-        blzGetFrameByName('BoxedTextTitle', CustomStatFrame.Count).setText(titleTooltip)
-        blzGetFrameByName('BoxedTextValue', CustomStatFrame.Count).setText(text)
-        blzGetFrameByName('CustomStatIcon', CustomStatFrame.Count).setTexture(icon, 0, true)
+        BlzFrameSetText(BlzGetFrameByName('CustomStatText', this.Count)!, text)
+        BlzFrameSetText(BlzGetFrameByName('BoxedTextTitle', this.Count)!, titleTooltip)
+        BlzFrameSetText(BlzGetFrameByName('BoxedTextValue', this.Count)!, text)
+        BlzFrameSetTexture(BlzGetFrameByName('CustomStatIcon', this.Count)!, icon, 0, true)
 
-        if (CustomStatFrame.Count === 1)
-            fh.setPoint(FRAMEPOINT_TOPLEFT, CustomStatFrame.CustomStatFrameBoxS, FRAMEPOINT_TOPLEFT, 0.015, -0.035)
-        else if (CustomStatFrame.Count === 4)
-            fh.setPoint(FRAMEPOINT_TOPRIGHT, CustomStatFrame.CustomStatFrameBoxS, FRAMEPOINT_TOPRIGHT, -0.06, -0.035)
+        if (this.Count === 1)
+            BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, this.CustomStatFrameBoxS.handle, FRAMEPOINT_TOPLEFT, 0.015, -0.035)
+        else if (this.Count === 4)
+            BlzFrameSetPoint(
+                fh,
+                FRAMEPOINT_TOPRIGHT,
+                this.CustomStatFrameBoxS.handle,
+                FRAMEPOINT_TOPRIGHT,
+                -0.06,
+                -0.035
+            )
         else
-            fh.setPoint(
+            BlzFrameSetPoint(
+                fh,
                 FRAMEPOINT_TOPLEFT,
-                blzGetFrameByName('CustomStat', CustomStatFrame.Count - 1),
+                BlzGetFrameByName('CustomStat', this.Count - 1)!,
                 FRAMEPOINT_BOTTOMLEFT,
                 0,
                 -0.005
             )
 
+        let statFrame = new CustomStat()
         this.Stats.push(
-            Object.assign(new CustomStat(), {
+            Object.assign(statFrame, {
                 Frame: fh,
-                Icon: blzGetFrameByName('CustomStatIcon', CustomStatFrame.Count),
-                Text: blzGetFrameByName('CustomStatText', CustomStatFrame.Count),
-                Hover: fhHover,
-                ToolTipBox: tooltipBox,
-                ToolTipTitle: blzGetFrameByName('BoxedTextTitle', CustomStatFrame.Count),
-                ToolTipText: blzGetFrameByName('BoxedTextValue', CustomStatFrame.Count),
+                Icon: Frame.fromHandle(BlzGetFrameByName('CustomStatIcon', this.Count)),
+                Text: Frame.fromHandle(BlzGetFrameByName('CustomStatText', this.Count)),
+                Hover: Frame.fromHandle(fhHover),
+                ToolTipBox: Frame.fromHandle(tooltipBox),
+                ToolTipTitle: Frame.fromHandle(BlzGetFrameByName('BoxedTextTitle', this.Count)),
+                ToolTipText: Frame.fromHandle(BlzGetFrameByName('BoxedTextValue', this.Count)),
             })
         )
     }
@@ -106,12 +107,10 @@ export class CustomStatFrame {
     public static Update() {
         try {
             let selectedUnit: Unit
-            if (!(selectedUnit = CustomStatFrame.SelectedUnit.get(MapPlayer.fromLocal())!) /* TODO; Prepend: let */)
-                return
+            if (!(selectedUnit = this.SelectedUnit.get(MapPlayer.fromLocal())!) /* TODO; Prepend: let */) return
+            this.HandleFrameText(selectedUnit)
 
-            CustomStatFrame.HandleFrameText(selectedUnit)
-
-            CustomStatFrame.CustomStatFrameBoxF.visible = CustomStatFrame.CustomStatFrameBoxS.visible
+            this.CustomStatFrameBoxF.visible = this.CustomStatFrameBoxS.visible
         } catch (e: any) {
             Logger.Critical(`Error in CustomStatFrame.Update: ${e}`)
             throw e
@@ -122,21 +121,22 @@ export class CustomStatFrame {
         BlzLoadTOCFile('war3mapImported\\CustomStat.toc')
         BlzLoadTOCFile('war3mapImported\\BoxedText.toc')
 
-        let hideParent = blzCreateFrameByType('SIMPLEFRAME', 'HideParent', blzGetFrameByName('ConsoleUI', 0), '', 0)
-        hideParent.visible = false
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 0).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconDamage', 1).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconArmor', 2).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconRank', 3).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconFood', 4).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconGold', 5).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconHero', 6).handle, hideParent.handle)
-        BlzFrameSetParent(blzGetFrameByName('SimpleInfoPanelIconAlly', 7).handle, hideParent.handle)
+        let hideParent = BlzCreateFrameByType('SIMPLEFRAME', 'HideParent', BlzGetFrameByName('ConsoleUI', 0)!, '', 0)
+        if (!hideParent) return
+        BlzFrameSetVisible(hideParent, false)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconDamage', 0)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconDamage', 1)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconArmor', 2)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconRank', 3)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconFood', 4)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconGold', 5)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconHero', 6)!, hideParent)
+        BlzFrameSetParent(BlzGetFrameByName('SimpleInfoPanelIconAlly', 7)!, hideParent)
 
         let trig = Trigger.create()
         trig.addAction(() => {
-            let player = getTriggerPlayer()
-            let unit = getTriggerUnit()
+            let player = MapPlayer.fromHandle(GetTriggerPlayer())!
+            let unit = Unit.fromHandle(GetTriggerUnit())!
             CustomStatFrame.SelectedUnit.set(player, unit)
         })
 
@@ -144,39 +144,37 @@ export class CustomStatFrame {
             if (player.slotState === PLAYER_SLOT_STATE_PLAYING)
                 trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SELECTED, () => true)
 
-        CustomStatFrame.CustomStatFrameBoxS = blzCreateFrameByType(
-            'SIMPLEFRAME',
-            'CustomStatFrameBoxSBoss',
-            blzGetFrameByName('SimpleUnitStatsPanel', 0),
-            '',
-            0
-        )
-        CustomStatFrame.CustomStatFrameBoxF = blzCreateFrameByType(
-            'FRAME',
-            'CustomStatFrameBoxFBoss',
-            Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
-            '',
-            0
-        )
+        this.CustomStatFrameBoxS = Frame.fromHandle(
+            BlzCreateFrameByType(
+                'SIMPLEFRAME',
+                'CustomStatFrameBoxSBoss',
+                BlzGetFrameByName('SimpleUnitStatsPanel', 0)!,
+                '',
+                0
+            )
+        )!
+        this.CustomStatFrameBoxF = Frame.fromHandle(
+            BlzCreateFrameByType('FRAME', 'CustomStatFrameBoxFBoss', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)!, '', 0)
+        )!
 
-        CustomStatFrame.Add('war3mapImported\\BTNStopwatch.blp', '', 'Score')
-        CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp', '', 'Revives')
-        CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\Coil: BTNDeath.blp', '', 'Deaths')
-        CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga', '', 'Streak')
-        CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp', '', 'Gold')
-        CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp', '', 'Speed')
+        this.Add('war3mapImported\\BTNStopwatch.blp', '', 'Score')
+        this.Add('ReplaceableTextures\\CommandButtons\\BTNInnerFireOn.blp', '', 'Revives')
+        this.Add('ReplaceableTextures\\CommandButtons\\BTNDeath Coil.blp', '', 'Deaths')
+        this.Add('ReplaceableTextures\\CommandButtons\\BTNHealingWave.tga', '', 'Streak')
+        this.Add('ReplaceableTextures\\CommandButtons\\BTNGoldCoin.blp', '', 'Gold')
+        this.Add('ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp', '', 'Speed')
 
-        CustomStatFrame.t = Timer.create()
-        CustomStatFrame.t.start(0.1, true, CustomStatFrame._cacheUpdate)
+        this.t = Timer.create()
+        this.t.start(0.1, true, () => this.Update())
     }
 
     private static HandleFrameText(selectedUnit: Unit) {
         if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG || selectedUnit.typeId === Constants.UNIT_NITRO_PACER)
-            CustomStatFrame.SetWolfFrameText(selectedUnit)
+            this.SetWolfFrameText(selectedUnit)
         else if (selectedUnit.typeId === Constants.UNIT_KITTY) {
-            CustomStatFrame.SetCommonFrameText(selectedUnit)
-            CustomStatFrame.SetGamemodeFrameText(selectedUnit)
-        } else if (CustomStatFrame.SetChampionFrameText(selectedUnit)) {
+            this.SetCommonFrameText(selectedUnit)
+            this.SetGamemodeFrameText(selectedUnit)
+        } else if (this.SetChampionFrameText(selectedUnit)) {
         } else {
             // do nothing, particularly buildings and w/e else isnt listed to avoid dictionary errors.
         }
@@ -185,47 +183,47 @@ export class CustomStatFrame {
     private static SetChampionFrameText(selectedUnit: Unit) {
         // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
         if (selectedUnit === SpawnChampions.Fieryfox2023) {
-            CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 13:25|r'
-            CustomStatFrame.Stats[4].Text.text = '|cffffff00Qoz|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 15:36|r'
+            this.Stats[1].Text.text = '|cffff0000Fieryfox|r'
+            this.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            this.Stats[0].Text.text = '|cffffff00Time: 13:25|r'
+            this.Stats[4].Text.text = '|cffffff00Qoz|r'
+            this.Stats[5].Text.text = '|cffffff00Region: US|r'
+            this.Stats[3].Text.text = '|cffffff00Time: 15:36|r'
         } else if (selectedUnit === SpawnChampions.FandF2023) {
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: US|r'
-            CustomStatFrame.Stats[1].Text.text = '|cff00fffAches|r'
-            CustomStatFrame.Stats[3].Text.text = '|cff00fffBranFlake|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Time: 23:12|r'
-            CustomStatFrame.Stats[4].Text.text = '|cff00fffBalmydrop|r'
-            CustomStatFrame.Stats[0].Text.text = '|cff00fffUdo|r'
+            this.Stats[2].Text.text = '|cffffff00Region: US|r'
+            this.Stats[1].Text.text = '|cff00fffAches|r'
+            this.Stats[3].Text.text = '|cff00fffBranFlake|r'
+            this.Stats[5].Text.text = '|cffffff00Time: 23:12|r'
+            this.Stats[4].Text.text = '|cff00fffBalmydrop|r'
+            this.Stats[0].Text.text = '|cff00fffUdo|r'
         } else if (selectedUnit === SpawnChampions.Fieryfox2024) {
-            CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 13:23|r'
-            CustomStatFrame.Stats[4].Text.text = '|cff964bc8MrGheed|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 16:31|r'
+            this.Stats[1].Text.text = '|cffff0000Fieryfox|r'
+            this.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            this.Stats[0].Text.text = '|cffffff00Time: 13:23|r'
+            this.Stats[4].Text.text = '|cff964bc8MrGheed|r'
+            this.Stats[5].Text.text = '|cffffff00Region: US|r'
+            this.Stats[3].Text.text = '|cffffff00Time: 16:31|r'
         } else if (selectedUnit === SpawnChampions.Stan2025) {
-            CustomStatFrame.Stats[0].Text.text = '|cffffff00Time: 14:25|r'
-            CustomStatFrame.Stats[1].Text.text = '|cffa471e3Stan|r'
-            CustomStatFrame.Stats[2].Text.text = '|cffffff00Region: EU|r'
-            CustomStatFrame.Stats[3].Text.text = '|cffffff00Time: 14:56|r'
-            CustomStatFrame.Stats[4].Text.text = '|cff964bc8Balmydrop|r'
-            CustomStatFrame.Stats[5].Text.text = '|cffffff00Region: US|r'
+            this.Stats[0].Text.text = '|cffffff00Time: 14:25|r'
+            this.Stats[1].Text.text = '|cffa471e3Stan|r'
+            this.Stats[2].Text.text = '|cffffff00Region: EU|r'
+            this.Stats[3].Text.text = '|cffffff00Time: 14:56|r'
+            this.Stats[4].Text.text = '|cff964bc8Balmydrop|r'
+            this.Stats[5].Text.text = '|cffffff00Region: US|r'
         } else return false
         return true
     }
 
     private static SetWolfFrameText(selectedUnit: Unit) {
-        CustomStatFrame.Stats[0].Text.text = ''
-        CustomStatFrame.Stats[1].Text.text = ''
-        CustomStatFrame.Stats[2].Text.text = ''
-        CustomStatFrame.Stats[3].Text.text = ''
+        this.Stats[0].Text.text = ''
+        this.Stats[1].Text.text = ''
+        this.Stats[2].Text.text = ''
+        this.Stats[3].Text.text = ''
         //Stats[4].Text.text = "";
-        if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
+        if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG) this.SetWolfAffixTexts(selectedUnit)
         if (!PROD && selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG)
-            CustomStatFrame.Stats[4].Text.text = `Walk: ${Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}`
-        CustomStatFrame.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`
+            this.Stats[4].Text.text = `Walk: ${Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}`
+        this.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`
     }
 
     private static SetWolfAffixTexts(selectedUnit: Unit) {
@@ -236,7 +234,7 @@ export class CustomStatFrame {
         let affixes = wolf.Affixes
 
         for (let i = 0; i < affixes.length; i++) {
-            CustomStatFrame.Stats[i].Text.text = affixes[i].name
+            this.Stats[i].Text.text = affixes[i].name
         }
     }
 

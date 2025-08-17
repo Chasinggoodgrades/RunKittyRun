@@ -27,7 +27,7 @@ export class Difficulty {
             )
             this.RegisterSelectionEvent()
 
-            Utility.SimpleTimer(2.0, this.ChooseDifficulty)
+            Utility.SimpleTimer(2.0, () => this.ChooseDifficulty())
         } catch (e: any) {
             Logger.Critical(`Error in Difficulty.Initialize: ${e}`)
             throw e
@@ -47,14 +47,14 @@ export class Difficulty {
             DifficultyOption.DifficultyChoosing.display(player, false)
             Utility.TimedTextToAllPlayers(
                 3.0,
-                `${ColorUtils.PlayerNameColored(player)}|r has chosen ${option} difficulty.${Colors.COLOR_RESET}`
+                `${ColorUtils.PlayerNameColored(player)}|r has chosen ${option?.ToString()} difficulty.${Colors.COLOR_RESET}`
             )
         })
     }
 
     private static ChooseDifficulty() {
         for (let player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, true)
-        Utility.SimpleTimer(this.TIME_TO_CHOOSE_DIFFICULTY, this.TallyingVotes)
+        Utility.SimpleTimer(this.TIME_TO_CHOOSE_DIFFICULTY, () => this.TallyingVotes())
     }
 
     private static TallyingVotes() {
@@ -69,6 +69,7 @@ export class Difficulty {
         }
 
         this.RemoveDifficultyDialog()
+        if (pickedOption === null) print('picked option is null')
         if (pickedOption !== null) this.SetDifficulty(pickedOption)
     }
 
