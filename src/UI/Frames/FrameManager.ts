@@ -3,7 +3,7 @@ import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
 import { Utility } from 'src/Utility/Utility'
-import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, Timer, Trigger } from 'w3ts'
 import { MusicFrame } from './MusicFrame'
 import { RewardsFrame } from './RewardsFrame'
@@ -53,7 +53,7 @@ export class FrameManager {
     }
 
     private static RemoveUnwantedFrames = () => {
-        const resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
+        const resourceBarText = Frame.fromHandle(BlzGetFrameByName('ResourceBarSupplyText', 0))!
         BlzFrameGetChild(BlzFrameGetChild(FrameManager.GameUI.handle, 5)!, 0)
         resourceBarText.text = '0:00'
         //timeDayDisplay.visible = false;
@@ -66,16 +66,20 @@ export class FrameManager {
     }
 
     private static CreateRewardsButton = () => {
-        FrameManager.RewardsButton = blzCreateFrameByType(
-            'GLUETEXTBUTTON',
-            'RewardsButton',
-            FrameManager.Backdrop,
-            'ScriptDialogButton',
-            0
-        )
+        FrameManager.RewardsButton = Frame.fromHandle(
+            BlzCreateFrameByType(
+                'GLUETEXTBUTTON',
+                'RewardsButton',
+                FrameManager.Backdrop.handle,
+                'ScriptDialogButton',
+                0
+            )
+        )!
         FrameManager.RewardsButton.setPoint(FRAMEPOINT_CENTER, FrameManager.Backdrop, FRAMEPOINT_CENTER, 0, 0)
         FrameManager.RewardsButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
-        const shopText = blzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton, '', 0)
+        const shopText = Frame.fromHandle(
+            BlzCreateFrameByType('TEXT', 'RewardsText', FrameManager.RewardsButton.handle, '', 0)
+        )!
         shopText.text = `${Colors.COLOR_YELLOW}Rewards${Colors.COLOR_LAVENDER}(-)|r`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.RewardsButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.9)
@@ -86,16 +90,14 @@ export class FrameManager {
     }
 
     private static CreateMusicButton = () => {
-        FrameManager.MusicButton = blzCreateFrameByType(
-            'GLUETEXTBUTTON',
-            'MusicButton',
-            FrameManager.Backdrop,
-            'ScriptDialogButton',
-            0
-        )
+        FrameManager.MusicButton = Frame.fromHandle(
+            BlzCreateFrameByType('GLUETEXTBUTTON', 'MusicButton', FrameManager.Backdrop.handle, 'ScriptDialogButton', 0)
+        )!
         FrameManager.MusicButton.setPoint(FRAMEPOINT_TOPRIGHT, FrameManager.RewardsButton, FRAMEPOINT_TOPLEFT, 0, 0)
         FrameManager.MusicButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
-        const shopText = blzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton, '', 0)
+        const shopText = Frame.fromHandle(
+            BlzCreateFrameByType('TEXT', 'MusicText', FrameManager.MusicButton.handle, '', 0)
+        )!
         shopText.text = `${Colors.COLOR_YELLOW}Music${Colors.COLOR_LAVENDER}(0)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.MusicButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(0.98)
@@ -106,16 +108,14 @@ export class FrameManager {
     }
 
     private static CreateShopButton = () => {
-        FrameManager.ShopButton = blzCreateFrameByType(
-            'GLUETEXTBUTTON',
-            'ShopButton',
-            FrameManager.Backdrop,
-            'ScriptDialogButton',
-            0
-        )
+        FrameManager.ShopButton = Frame.fromHandle(
+            BlzCreateFrameByType('GLUETEXTBUTTON', 'ShopButton', FrameManager.Backdrop.handle, 'ScriptDialogButton', 0)
+        )!
         FrameManager.ShopButton.setPoint(FRAMEPOINT_TOPLEFT, FrameManager.RewardsButton, FRAMEPOINT_TOPRIGHT, 0, 0)
         FrameManager.ShopButton.setSize(FrameManager.ButtonWidth, FrameManager.ButtonHeight)
-        const shopText = blzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton, '', 0)
+        const shopText = Frame.fromHandle(
+            BlzCreateFrameByType('TEXT', 'ShopText', FrameManager.ShopButton.handle, '', 0)
+        )!
         shopText.text = `${Colors.COLOR_YELLOW}Shop${Colors.COLOR_LAVENDER}(=)`
         shopText.setPoint(FRAMEPOINT_CENTER, FrameManager.ShopButton, FRAMEPOINT_CENTER, 0, 0)
         shopText.setScale(1.0)
@@ -126,14 +126,15 @@ export class FrameManager {
     }
 
     private static ButtonsBackdrop = () => {
-        FrameManager.Backdrop = blzCreateFrameByType(
-            'BACKDROP',
-            'ButtonsBackdrop',
-            FrameManager.GameUI,
-            'QuestButtonDisabledBackdropTemplate',
-            0
-        )
-        blzGetFrameByName('ResourceBarGoldText', 0)
+        FrameManager.Backdrop = Frame.fromHandle(
+            BlzCreateFrameByType(
+                'BACKDROP',
+                'ButtonsBackdrop',
+                FrameManager.GameUI.handle,
+                'QuestButtonDisabledBackdropTemplate',
+                0
+            )
+        )!
         FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, FrameManager.GameUI, FRAMEPOINT_TOP, 0, 0)
         FrameManager.Backdrop.setSize(0.16, 0.035)
         FrameManager.Backdrop.setScale(1.0)
@@ -143,7 +144,7 @@ export class FrameManager {
 
     private static RepositionBackdrop = () => {
         const t = Timer.create()
-        const nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
+        const nameFrame = Frame.fromHandle(BlzGetFrameByName('ConsoleUIBackdrop', 0))!
 
         t.start(1.0, true, FrameManager._cachedUIPosition)
     }
@@ -151,7 +152,7 @@ export class FrameManager {
     private static RepositionBackdropAction(): Action {
         return () => {
             try {
-                const nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
+                const nameFrame = Frame.fromHandle(BlzGetFrameByName('ConsoleUIBackdrop', 0))!
                 const x = nameFrame.width / 4
                 const h = nameFrame.height / 8
                 const yOffSet = nameFrame.height / 8
@@ -168,7 +169,7 @@ export class FrameManager {
             const player = Globals.ALL_PLAYERS[i]
             FrameManager.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        FrameManager.ESCTrigger.addAction(() => FrameManager.ESCActions())
+        FrameManager.ESCTrigger.addAction(FrameManager.ESCActions)
     }
 
     public static RefreshFrame(frame: Frame) {

@@ -8,7 +8,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { blzCreateFrame, blzCreateFrameByType, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
-import { FrameManager } from './FrameManager'
+import * as FrameManager from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RewardHelper } from './RewardHelper'
 
@@ -72,7 +72,7 @@ export class RewardsFrame {
             const numberOfRewards = RewardsFrame.CountNumberOfRewards(type)
             if (numberOfRewards === 0) continue
 
-            colCount = numberOfRewards / RewardsFrame.RewardsPerRow
+            colCount = Math.floor(numberOfRewards / RewardsFrame.RewardsPerRow)
             if (numberOfRewards % RewardsFrame.RewardsPerRow !== 0) colCount++
             if (colCount === 0) colCount = 1
 
@@ -225,7 +225,7 @@ export class RewardsFrame {
             selectedAura?.ApplyReward(player)
 
             if (!player.isLocal()) return
-            FrameManager.RefreshFrame(frame)
+            FrameManager.FrameManager.RefreshFrame(frame)
         } catch (e: any) {
             Logger.Warning(`Error in RandomRewardsButtonActions: ${e}`)
         }
@@ -303,7 +303,7 @@ export class RewardsFrame {
         reward.ApplyReward(player)
         if (!player.isLocal()) return
         if (!frame) return
-        FrameManager.RefreshFrame(frame)
+        FrameManager.FrameManager.RefreshFrame(frame)
     }
 
     private static UnavilableRewardIcons(player: MapPlayer) {
@@ -341,8 +341,8 @@ export class RewardsFrame {
             return // Let's not activate rewards in tournament.
         }
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
-        FrameManager.RewardsButton.visible = false
-        FrameManager.RewardsButton.visible = true
+        FrameManager.FrameManager.RewardsButton.visible = false
+        FrameManager.FrameManager.RewardsButton.visible = true
         HideOtherFrames(RewardsFrame.RewardFrame)
         RewardsFrame.RewardFrame.visible = !RewardsFrame.RewardFrame.visible
         if (RewardsFrame.RewardFrame.visible) {

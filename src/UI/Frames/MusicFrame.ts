@@ -1,10 +1,10 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { MusicManager } from 'src/Sounds/MusicManager'
-import { blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
+import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
-import { FrameManager } from './FrameManager'
+import * as FrameManager from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 
 export class MusicFrame {
@@ -25,13 +25,15 @@ export class MusicFrame {
     public static Initialize = () => {
         try {
             MusicFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
-            MusicFrame.MusicFramehandle = blzCreateFrameByType(
-                'BACKDROP',
-                'Music Frame:',
-                MusicFrame.GameUI,
-                'QuestButtonPushedBackdropTemplate',
-                0
-            )
+            MusicFrame.MusicFramehandle = Frame.fromHandle(
+                BlzCreateFrameByType(
+                    'BACKDROP',
+                    'Music Frame:',
+                    MusicFrame.GameUI.handle,
+                    'QuestButtonPushedBackdropTemplate',
+                    0
+                )
+            )!
             MusicFrame.MusicFramehandle.setAbsPoint(FRAMEPOINT_CENTER, MusicFrame.MusicFrameX, MusicFrame.MusicFrameY)
             MusicFrame.CreateMusicFrames()
             MusicFrame.SetMusicFrameHotkeyEvent()
@@ -55,13 +57,15 @@ export class MusicFrame {
     }
 
     private static RegisterMusicSlider = () => {
-        MusicFrame.MusicSlider = blzCreateFrameByType(
-            'SLIDER',
-            'SliderFrame',
-            MusicFrame.MusicFramehandle,
-            'QuestMainListScrollBar',
-            0
-        )
+        MusicFrame.MusicSlider = Frame.fromHandle(
+            BlzCreateFrameByType(
+                'SLIDER',
+                'SliderFrame',
+                MusicFrame.MusicFramehandle.handle,
+                'QuestMainListScrollBar',
+                0
+            )
+        )!
         const numberOfSongs = MusicManager.MusicList.length
         MusicFrame.MusicSlider.clearPoints()
         MusicFrame.MusicSlider.setAbsPoint(FRAMEPOINT_TOPLEFT, 0.485, 0.455)
@@ -102,7 +106,9 @@ export class MusicFrame {
             const name = MusicManager.MusicList[i].name
             MusicFrame.MusicButtons.set(
                 i,
-                blzCreateFrameByType('GLUETEXTBUTTON', name, MusicFrame.MusicFramehandle, 'DebugButton', 0)
+                Frame.fromHandle(
+                    BlzCreateFrameByType('GLUETEXTBUTTON', name, MusicFrame.MusicFramehandle.handle, 'DebugButton', 0)
+                )!
             )
             MusicFrame.MusicButtons.get(i)?.setSize(MusicFrame.ButtonWidth, MusicFrame.ButtonHeight)
             const button = MusicFrame.MusicButtons.get(i)
@@ -117,7 +123,7 @@ export class MusicFrame {
             )
 
             const trigger = Trigger.create()!
-            trigger.triggerRegisterFrameEvent(blzGetFrameByName(name, 0), FRAMEEVENT_CONTROL_CLICK)
+            trigger.triggerRegisterFrameEvent(Frame.fromHandle(BlzGetFrameByName(name, 0))!, FRAMEEVENT_CONTROL_CLICK)
             trigger.addAction(() => {
                 const frame = BlzGetTriggerFrame()
                 const player = getTriggerPlayer()
@@ -127,7 +133,7 @@ export class MusicFrame {
 
                 //MusicManager.StopAllMusic();
 
-                const music = MusicManager.MusicList.find(m => m.name === BlzGetTriggerFrameText())
+                const music = MusicManager.MusicList.find(m => m.name === BlzFrameGetText(frame))
                 music?.Play()
                 MusicFrame.MusicFramehandle.visible = !MusicFrame.MusicFramehandle.visible
             })
@@ -193,8 +199,8 @@ export class MusicFrame {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
-        FrameManager.MusicButton.visible = false
-        FrameManager.MusicButton.visible = true
+        FrameManager.FrameManager.MusicButton.visible = false
+        FrameManager.FrameManager.MusicButton.visible = true
         HideOtherFrames(MusicFrame.MusicFramehandle)
         MusicFrame.MusicFramehandle.visible = !MusicFrame.MusicFramehandle.visible
         if (MusicFrame.MusicFramehandle.visible) MultiboardUtil.MinMultiboards(player, true)

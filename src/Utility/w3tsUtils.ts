@@ -13,11 +13,11 @@ export const getManipulatedItem = () => Item.fromHandle(GetManipulatedItem())!
 export const getKillingUnit = () => Unit.fromHandle(GetKillingUnit())!
 
 export const blzCreateFrameByType = (type: string, name: string, parent: Frame, template: string, id: number) => {
-    return Frame.createType(name, parent, id, template, type)!
+    return Frame.fromHandle(BlzCreateFrameByType(type, name, parent.handle, template, id))! // idk what was happening but the other 1 just didn't create anything
 }
 
-export const blzCreateFrame = (type: string, parent: Frame, template: number, id: number) => {
-    return Frame.createType('', parent, id, template as any, type)! // TODO; Most def wrong native call
+export const blzCreateFrame = (name: string, parent: Frame, priority: number, createContext: number) => {
+    return Frame.create(name, parent, priority, createContext)! // TODO
 }
 
 export const blzGetFrameByName = (name: string, id: number) => {

@@ -12,7 +12,7 @@ import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrame, blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger, Unit } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
-import { FrameManager } from './FrameManager'
+import * as FrameManager from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RelicFunctions } from './RelicFunctions/RelicFunctions'
 import { ShopItem, ShopItemType } from './ShopItems/ShopItems'
@@ -215,7 +215,7 @@ export class ShopFrame {
         for (let i = 0; i < items.length; i++) {
             const relic = items[i]
 
-            const row: number = i / columns
+            const row: number = Math.floor(i / columns)
             const column: number = i % columns
             const name = relic.name
             const button = blzCreateFrameByType('BUTTON', name, panel, 'ScoreScreenTabButtonTemplate', 0)
@@ -305,7 +305,7 @@ export class ShopFrame {
         }
 
         if (!player.isLocal()) return
-        FrameManager.RefreshFrame(frame)
+        FrameManager.FrameManager.RefreshFrame(frame)
         ShopFrame.nameLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Name:${Colors.COLOR_RESET} ${shopItem.name}`
         ShopFrame.costLabel.text = `${Colors.COLOR_YELLOW}Cost:${Colors.COLOR_RESET} ${shopItem.Cost}`
         ShopFrame.descriptionLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Description:${Colors.COLOR_RESET} ${shopItem.Description}`
@@ -522,8 +522,8 @@ export class ShopFrame {
     public static ShopFrameActions = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
-        FrameManager.ShopButton.visible = false
-        FrameManager.ShopButton.visible = true
+        FrameManager.FrameManager.ShopButton.visible = false
+        FrameManager.FrameManager.ShopButton.visible = true
         HideOtherFrames(ShopFrame.shopFrame)
         if (CurrentGameMode.active === GameMode.SoloTournament) {
             // solo mode.
