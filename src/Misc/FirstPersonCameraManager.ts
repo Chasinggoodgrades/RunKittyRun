@@ -50,7 +50,7 @@ export class FirstPersonCamera {
         }
     }
 
-    private UpdateCamera() {
+    private UpdateCamera = () => {
         if (this.hero === null || !this.hero.isAlive()) return
 
         let fwd = 0
@@ -132,14 +132,14 @@ export class FirstPersonCamera {
         }
     }
 
-    private ResetCamera() {
+    private ResetCamera = () => {
         if (!this.player.isLocal()) return
         SetCameraTargetControllerNoZForPlayer(this.player.handle, this.hero.handle, 0, 0, false)
         ResetToGameCamera(0)
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0, 0.0)
     }
 
-    private ItemPickup() {
+    private ItemPickup = () => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(this.player)!
         ItemSpatialGrid.KittyItemPickup(kitty)
     }
@@ -148,7 +148,7 @@ export class FirstPersonCamera {
 export class FirstPersonCameraManager {
     private static cameras: Map<MapPlayer, FirstPersonCamera> = new Map()
 
-    public static Initialize() {
+    public static Initialize = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const hero = FirstPersonCameraManager.GetHeroForPlayer(player)
             if (hero !== null) {
@@ -159,7 +159,7 @@ export class FirstPersonCameraManager {
         FirstPersonCameraManager.RegisterKeyEvents()
     }
 
-    private static RegisterKeyEvents() {
+    private static RegisterKeyEvents = () => {
         const keyStates: Map<boolean, number> = new Map([
             [true, bj_KEYEVENTTYPE_DEPRESS],
             [false, bj_KEYEVENTTYPE_RELEASE],

@@ -33,7 +33,7 @@ export class ProtectionOfAncients {
     private static UpgradeLevel2: MapPlayer[] = []
     private static UpgradeLevel3: MapPlayer[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
         ProtectionOfAncients.RegisterEvents()
         ProtectionOfAncients.RegisterUltimateGain()
         ProtectionOfAncients.RegisterUpgradeLevelEvents()
@@ -52,7 +52,7 @@ export class ProtectionOfAncients {
         )
     }
 
-    private static RegisterUltimateGain() {
+    private static RegisterUltimateGain = () => {
         // Ultimate, Protection of the Ancients
         ProtectionOfAncients.KittyReachedLevelSix ??= Trigger.create()!
         ProtectionOfAncients.HitLevel6 ??= []
@@ -112,7 +112,7 @@ export class ProtectionOfAncients {
         return abilityLevel
     }
 
-    private static RegisterUpgradeLevelEvents() {
+    private static RegisterUpgradeLevelEvents = () => {
         const LevelUpTrigger = Trigger.create()!
         LevelUpTrigger.registerAnyUnitEvent(EVENT_PLAYER_HERO_LEVEL)
         LevelUpTrigger.addCondition(
@@ -121,7 +121,7 @@ export class ProtectionOfAncients {
         LevelUpTrigger.addAction(() => ProtectionOfAncients.SetProtectionOfAncientsLevel(getTriggerUnit()))
     }
 
-    private static RegisterEvents() {
+    private static RegisterEvents = () => {
         const trg = Trigger.create()!
         trg.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
         trg.addCondition(
@@ -140,7 +140,7 @@ export class ProtectionOfAncients {
         ProtectionOfAncients.HotkeyTrigger.addAction(() => ProtectionOfAncients.RegisterHotKeyEvents())
     }
 
-    private static RegisterHotKeyEvents() {
+    private static RegisterHotKeyEvents = () => {
         const p: MapPlayer = getTriggerPlayer()
         const k: Kitty = Globals.ALL_KITTIES.get(p)!
 
@@ -149,7 +149,7 @@ export class ProtectionOfAncients {
         k.Unit.issueOrderAt(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY)
     }
 
-    private static ActivationEvent() {
+    private static ActivationEvent = () => {
         const Unit = getTriggerUnit()
         const player = getTriggerPlayer()
         const kitty = Globals.ALL_KITTIES.get(player)!

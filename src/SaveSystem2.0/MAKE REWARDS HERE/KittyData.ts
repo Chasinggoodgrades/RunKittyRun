@@ -42,7 +42,7 @@ export class KittyData {
     /// Updates rewards that were previously unavailable (-1) to be available (0).
     /// When transferred to the website, these rewards were set to -1 to not display.
     /// </summary>
-    public SetRewardsFromUnavailableToAvailable() {
+    public SetRewardsFromUnavailableToAvailable = () => {
         const data = this.GameAwardsSorted
         if (data.Skins.HuntressKitty < 0) data.Skins.HuntressKitty = 0
         if (data.Windwalks.WWDivine < 0) data.Windwalks.WWDivine = 0

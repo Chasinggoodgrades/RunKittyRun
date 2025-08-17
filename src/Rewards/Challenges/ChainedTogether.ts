@@ -22,7 +22,7 @@ export class ChainedTogether {
     private static EventStarted: boolean = false
     private static IsStartingContidionValid: boolean = true
 
-    private static TriggerEventOnLastSafeZone() {
+    private static TriggerEventOnLastSafeZone = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return // Only occurs in Standard Gamemode.
         if (ChainedTogether.EventStarted || ChainedTogether.EventTriggered) return // Don't trigger multiple times.
         if (!ChainedTogether.IsStartingContidionValid) return
@@ -40,7 +40,7 @@ export class ChainedTogether {
         ChainedTogether.TriggerEvent()
     }
 
-    public static TriggerEvent() {
+    public static TriggerEvent = () => {
         Utility.TimedTextToAllPlayers(
             4.0,
             `${Colors.COLOR_TURQUOISE}Chained Together Event Requirements Complete!${Colors.COLOR_RESET} ${Colors.COLOR_YELLOW}Activating next round!${Colors.COLOR_RESET}`
@@ -72,7 +72,7 @@ export class ChainedTogether {
     /// <summary>
     /// Starts the event
     /// </summary>
-    public static StartEvent() {
+    public static StartEvent = () => {
         if (!ChainedTogether.EventTriggered) {
             ChainedTogether.IsStartingContidionValid = true
             return
@@ -90,7 +90,7 @@ export class ChainedTogether {
         }
     }
 
-    private static MoveChain() {
+    private static MoveChain = () => {
         const kitties = Globals.ALL_KITTIES_LIST
         let isOutOfRange: boolean = false
         let kittyOutOfRange: string = ''
@@ -181,7 +181,7 @@ export class ChainedTogether {
         ChainedTogether.kittyGroups.splice(groupIndex, 1)
     }
 
-    private static SetGroups() {
+    private static SetGroups = () => {
         const allKitties = Globals.ALL_KITTIES_LIST
         const count: number = allKitties.length
 
@@ -347,7 +347,7 @@ export class Chain {
         return isOutOfRange
     }
 
-    public dispose() {
+    public dispose = () => {
         DestroyLightning(this.Lightning)
         this.FirstKitty.IsChained = false
         this.SecondKitty.IsChained = false

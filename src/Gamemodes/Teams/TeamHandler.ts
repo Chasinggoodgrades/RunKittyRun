@@ -42,7 +42,7 @@ export class TeamHandler {
     /// <summary>
     /// Throws all players who are currently not on a team into a random team. Prioritizing already made teams before creating new ones.
     /// </summary>
-    public static RandomHandler() {
+    public static RandomHandler = () => {
         TeamHandler.FreepickEnabled = false
         const shuffled = GameSeed.Shuffle(Globals.ALL_PLAYERS, Globals.GAME_SEED)
         let teamNumber = 1

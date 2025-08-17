@@ -69,7 +69,7 @@ export class WolfPoint {
         }
     }
 
-    public Cleanup() {
+    public Cleanup = () => {
         try {
             if (this.PointInfo === null) return
             BlzUnitClearOrders(this.Wolf.Unit.handle, false)
@@ -83,13 +83,13 @@ export class WolfPoint {
         }
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Cleanup()
         WolfPointInfo.ClearWolfPointList(this.PointInfo)
         BlzUnitClearOrders(this.Wolf.Unit.handle, false)
     }
 
-    private StartMovingOrders() {
+    private StartMovingOrders = () => {
         // WC3 QueueOrders works like a stack, so treat with LIFO.
         if (this.Wolf.paused || this.Wolf.IsReviving) {
             BlzUnitClearOrders(this.Wolf.Unit.handle, false)
@@ -127,14 +127,14 @@ export class WolfPoint {
         return WolfPoint.IsPausedTrigger
     }
 
-    public static AssignOrderIds() {
+    public static AssignOrderIds = () => {
         WolfPoint.MoveOrderID = OrderId('move')
         WolfPoint.StopOrderID = OrderId('stop')
         WolfPoint.AttackOrderID = OrderId('attack')
         WolfPoint.HoldPositionOrderID = OrderId('holdposition')
     }
 
-    private static QueueOrderActions() {
+    private static QueueOrderActions = () => {
         Globals.ALL_WOLVES.get(getTriggerUnit())!.IsWalking = !Globals.ALL_WOLVES.get(getTriggerUnit())!.IsWalking
     }
 }
@@ -144,7 +144,7 @@ export class WolfPointInfo {
     public y = 0
     public LastPoint = false
 
-    public WolfPointInfo() {
+    public WolfPointInfo = () => {
         this.x = 0
         this.y = 0
     }

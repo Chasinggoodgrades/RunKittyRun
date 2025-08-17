@@ -9,7 +9,7 @@ export class BigNum {
     }
 
     // Clean method
-    public Clean() {
+    public Clean = () => {
         const current: BigNumL = this.List
         current?.Clean()
     }

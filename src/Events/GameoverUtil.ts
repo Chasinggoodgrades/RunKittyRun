@@ -7,7 +7,7 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { isNullOrEmpty } from '../Utility/StringUtils'
 
 export class GameoverUtil {
-    public static SetBestGameStats() {
+    public static SetBestGameStats = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             switch (Difficulty.DifficultyValue) {
                 case DifficultyLevel.Normal:
@@ -28,7 +28,7 @@ export class GameoverUtil {
         }
     }
 
-    public static SetColorData() {
+    public static SetColorData = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             ColorUtils.PopulateColorsData(kitty) // make sure its populated
             ColorUtils.UpdateColors(kitty) //
@@ -36,7 +36,7 @@ export class GameoverUtil {
         }
     }
 
-    public static SetFriendData() {
+    public static SetFriendData = () => {
         const friendDict: Map<string, number> = new Map()
 
         for (const [_, kitty] of Globals.ALL_KITTIES) {

@@ -33,7 +33,7 @@ export class SpinCam {
         return this.SpinCamTimer !== null
     }
 
-    private SpinCamActions() {
+    private SpinCamActions = () => {
         if (!this.Kitty.Slider.IsOnSlideTerrain() || !this.Kitty.isAlive()) {
             if (!this.Kitty.isAlive() && !this.WasSpinCamReset) {
                 this.WasSpinCamReset = true

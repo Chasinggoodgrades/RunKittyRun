@@ -16,33 +16,33 @@ export class FloatingNameTag {
         this.Initialize()
     }
 
-    public Initialize() {
+    public Initialize = () => {
         this.NamePosUpdater = createAchesTimer()
         this.SetNameTagAttributes()
         this.NamePosTimer()
     }
 
-    public dispose() {
+    public dispose = () => {
         this.NameTag?.setVisible(false)
         this.NameTag?.destroy()
         this.NamePosUpdater?.dispose()
     }
 
-    private SetNameTagAttributes() {
+    private SetNameTagAttributes = () => {
         this.NameTag.setText(this.Kitty.name, this.NAME_TAG_HEIGHT)
         this.NameTag.setPermanent(true)
         this.NameTag.setColor(114, 188, 212, 255)
         this.NameTag.setVisible(true)
     }
 
-    private NamePosTimer() {
+    private NamePosTimer = () => {
         this.NamePosUpdater.Timer.start(this.NAME_TAG_UPDATE_INTERVAL, true, () => {
             this.UpdateNameTag()
             SetCameraQuickPositionForPlayer(this.Kitty.Player.handle, this.Kitty.Unit.x, this.Kitty.Unit.y)
         })
     }
 
-    private UpdateNameTag() {
+    private UpdateNameTag = () => {
         return this.NameTag.setPosUnit(this.Kitty.Unit, this.NAME_TAG_HEIGHT)
     }
 

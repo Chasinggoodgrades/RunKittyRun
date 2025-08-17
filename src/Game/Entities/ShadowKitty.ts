@@ -32,14 +32,14 @@ export class ShadowKitty {
         this.RegisterTriggers()
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         ShadowKitty.ALL_SHADOWKITTIES = new Map()
     }
 
     /// <summary>
     /// Summons shadow kitty to the position of this player's kitty object.
     /// </summary>
-    public SummonShadowKitty() {
+    public SummonShadowKitty = () => {
         const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         this.Unit = Unit.create(this.Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.x, kitty.y)!
         this.Unit.setVertexColor(0, 0, 0, 255)
@@ -59,7 +59,7 @@ export class ShadowKitty {
     /// <summary>
     /// Teleports the player's kitty to the shadow kitty's position.
     /// </summary>
-    public TeleportToShadowKitty() {
+    public TeleportToShadowKitty = () => {
         const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         kitty.setPosition(this.Unit.x, this.Unit.y)
     }
@@ -67,7 +67,7 @@ export class ShadowKitty {
     /// <summary>
     /// Kills this shadow kitty object, disposing and deregistering it from collision.
     /// </summary>
-    public KillShadowKitty() {
+    public KillShadowKitty = () => {
         try {
             UnitWithinRange.DeRegisterUnitWithinRangeUnitShadow(this)
             KillUnit(this.Unit.handle)
@@ -84,7 +84,7 @@ export class ShadowKitty {
     /// The game doesnt register the the abilities or movement, so a reselection is required.
     /// </summary>
     /// <param name="player"></param>
-    public SelectReselectShadowKitty() {
+    public SelectReselectShadowKitty = () => {
         const kitty = Globals.ALL_KITTIES.get(this.Player)!.Unit
         Utility.SelectUnitForPlayer(this.Player, this.Unit)
     }
@@ -94,7 +94,7 @@ export class ShadowKitty {
         kitty.paused = paused
     }
 
-    private RegisterTriggers() {
+    private RegisterTriggers = () => {
         this.wCollision = Trigger.create()!
         this.cCollision = Trigger.create()!
     }

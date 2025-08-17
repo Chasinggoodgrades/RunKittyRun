@@ -8,13 +8,9 @@ export abstract class Affix {
         this.Unit = unit
     }
 
-    public Apply() {
-        // GC.GCAffixes.push(this);
-    }
+    public abstract Apply: () => void
 
-    public Remove() {
-        // GC.RemoveAffix(this);
-    }
+    public abstract Remove: () => void
 
     public abstract pause(pause: boolean): void
 }

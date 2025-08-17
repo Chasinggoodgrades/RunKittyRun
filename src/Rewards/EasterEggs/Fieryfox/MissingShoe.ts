@@ -13,13 +13,13 @@ export class MissingShoe {
     private static Shoe: Item
     private static TurnInRange: number
 
-    public static Initialize() {
+    public static Initialize = () => {
         MissingShoe.RegisterSpawnEvent()
         MissingShoe.ItemID = Constants.ITEM_FIERYFOX_S_MISSING_SHOE
         MissingShoe.TurnInRange = 200.0
     }
 
-    private static RegisterSpawnEvent() {
+    private static RegisterSpawnEvent = () => {
         // Between 10 mins - 15mins currently.
         const randomTime = GetRandomReal(600.0, 900.0)
         MissingShoe.TimerEvent = Trigger.create()!
@@ -27,7 +27,7 @@ export class MissingShoe {
         MissingShoe.TimerEvent.addAction(ErrorHandler.Wrap(() => MissingShoe.EventStart()))
     }
 
-    private static RegisterTurnInEvent() {
+    private static RegisterTurnInEvent = () => {
         MissingShoe.TurnInEvent = Trigger.create()!
         MissingShoe.TurnInEvent.registerUnitInRage(
             SpawnChampions.Fieryfox2023.handle,
@@ -43,7 +43,7 @@ export class MissingShoe {
     }
 
     // Ping Event + Shoe Spawn
-    private static EventStart() {
+    private static EventStart = () => {
         const randomWolfRegion = RegionList.WolfRegions[GetRandomInt(0, RegionList.WolfRegions.length - 1)]
         const randomX = GetRandomReal(randomWolfRegion.minX, randomWolfRegion.maxX)
         const randomY = GetRandomReal(randomWolfRegion.minY, randomWolfRegion.maxY)
@@ -52,7 +52,7 @@ export class MissingShoe {
         MissingShoe.RegisterTurnInEvent()
     }
 
-    private static TurnInActions() {
+    private static TurnInActions = () => {
         if (!getTriggerUnit().hasItem(MissingShoe.Shoe)) return
         getTriggerUnit().removeItem(MissingShoe.Shoe)
         SpawnChampions.Fieryfox2023.addItem(MissingShoe.Shoe)

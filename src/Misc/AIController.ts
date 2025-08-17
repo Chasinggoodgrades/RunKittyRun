@@ -71,12 +71,12 @@ export class AIController {
         this.enabled = false
     }
 
-    public StartAi() {
+    public StartAi = () => {
         this.enabled = true
         this.ResumeAi()
     }
 
-    public ResumeAi() {
+    public ResumeAi = () => {
         if (!this.enabled) return
 
         if (this.moveTimer === null) {
@@ -94,12 +94,12 @@ export class AIController {
         }
     }
 
-    public StopAi() {
+    public StopAi = () => {
         this.enabled = false
         this.PauseAi()
     }
 
-    public PauseAi() {
+    public PauseAi = () => {
         this.lastCommand = ''
         this.lastX = 0
         this.lastY = 0
@@ -137,7 +137,7 @@ export class AIController {
         return currentProgressZoneId
     }
 
-    private MoveKittyToPosition() {
+    private MoveKittyToPosition = () => {
         const currentProgressZoneId = this.CalcProgressZone(this.kitty)
         const currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId]
         const nextSafezone =
@@ -395,7 +395,7 @@ export class AIController {
      * the: wall: to: be: within: range: For of kitty: the, what: has: to: basically happen is that a line passes through the circle at two points.
      * the: mathematical: formula: for: a: line: passing: through: two: points: Using on a circle, this can be calculated.
      */
-    CalcCrossingPoints() {
+    CalcCrossingPoints = () => {
         for (let i = 0; i < this.wallPoints.length; i++) {
             const point = this.wallPoints[i]
             point.dispose()
@@ -752,7 +752,7 @@ export class AIController {
         return angle >= start || angle <= end
     }
 
-    private cleanArrays() {
+    private cleanArrays = () => {
         for (let i = 0; i < this.blockedIntervals.length; i++) {
             this.blockedIntervals[i].dispose()
         }
@@ -827,7 +827,7 @@ export class AIController {
         }
     }
 
-    private HideAllLightnings() {
+    private HideAllLightnings = () => {
         for (let i = 0; i < this.usedBlockedLightnings.length; i++) {
             const lightning = this.usedBlockedLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
@@ -837,7 +837,7 @@ export class AIController {
         this.usedBlockedLightnings = []
     }
 
-    private HideAllFreeLightnings() {
+    private HideAllFreeLightnings = () => {
         for (let i = 0; i < this.usedClearLightnings.length; i++) {
             const lightning = this.usedClearLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
@@ -903,7 +903,7 @@ export class AIController {
         return distance <= radius
     }
 
-    private PollMovement() {
+    private PollMovement = () => {
         if (!this.enabled) return
         this.elapsedTime += this.timerInterval
         this.LearnSkills()
@@ -911,7 +911,7 @@ export class AIController {
         this.MoveKittyToPosition()
     }
 
-    private LearnSkills() {
+    private LearnSkills = () => {
         if (this.kitty.Unit.skillPoints > 0) {
             this.kitty.Unit.selectSkill(Constants.ABILITY_WIND_WALK)
             this.kitty.Unit.selectSkill(Constants.ABILITY_AGILITY_AURA)
@@ -919,7 +919,7 @@ export class AIController {
         }
     }
 
-    private UseWindWalkIfAvailable() {
+    private UseWindWalkIfAvailable = () => {
         const wwLvl = GetUnitAbilityLevel(this.kitty.Unit.handle, Constants.ABILITY_WIND_WALK)
 
         if (
@@ -948,7 +948,7 @@ export class AngleInterval extends IDisposable {
         super()
     }
 
-    public dispose() {
+    public dispose = () => {
         MemoryHandler.destroyObject(this)
     }
 }
@@ -961,7 +961,7 @@ export class Point extends IDisposable {
         super()
     }
 
-    public dispose() {
+    public dispose = () => {
         MemoryHandler.destroyObject(this)
     }
 }

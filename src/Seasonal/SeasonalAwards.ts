@@ -8,17 +8,17 @@ import { HolidaySeasons, Seasons } from './Seasons'
 export class SeasonalAwards {
     private static Season: HolidaySeasons
 
-    public static Initialize() {
+    public static Initialize = () => {
         SeasonalAwards.Season = Seasons.getCurrentSeason()
         if (SeasonalAwards.Season === HolidaySeasons.None) return
         Utility.SimpleTimer(180.0, SeasonalAwards.FreebeSeasonalAwards)
     }
 
-    public static FreebeSeasonalAwards() {
+    public static FreebeSeasonalAwards = () => {
         if (SeasonalAwards.Season === HolidaySeasons.Christmas) SeasonalAwards.ChristmasFreebies()
     }
 
-    private static ChristmasFreebies() {
+    private static ChristmasFreebies = () => {
         Utility.TimedTextToAllPlayers(
             8.0,
             `${Colors.COLOR_YELLOW}Special thanks to everyone for playing this holiday season! All players have been awarded the snow trail and snow wings from 2023 :)${Colors.COLOR_RESET}`

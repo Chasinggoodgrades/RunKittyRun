@@ -40,7 +40,7 @@ export class Fixation extends Affix {
         this.name = `${Colors.COLOR_RED}Fixation|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Type = this.RandomType()
         this.Unit.Unit.moveSpeed = this.FIXATION_MS
         this.Unit.Unit.setVertexColor(255, 0, 0, 255)
@@ -48,10 +48,9 @@ export class Fixation extends Affix {
         this.Unit.Unit.setField(UNIT_IF_TARGETED_AS, TargetTypes.Ward)
         this.RegisterEvents()
         this.Unit.WolfArea.FixationCount += 1
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.moveSpeed = this.Unit.Unit.defaultMoveSpeed
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.setField(UNIT_IF_TARGETED_AS, TargetTypes.Ground)
@@ -66,7 +65,6 @@ export class Fixation extends Affix {
         GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:         GC.RemoveEffect(ref TargetEffect);
         if (this.Unit.WolfArea.FixationCount > 0) this.Unit.WolfArea.FixationCount -= 1
         this.Unit.WanderTimer?.resume()
-        super.Remove()
     }
 
     /// <summary>
@@ -79,7 +77,7 @@ export class Fixation extends Affix {
         return GetRandomInt(0, 1)
     }
 
-    private RegisterEvents() {
+    private RegisterEvents = () => {
         if (this.Type === 1) this.UnitsInRange ??= Group.create()!
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FIXATION_RADIUS, FilterList.KittyFilter)
         this.PeriodicSpeed.registerTimerEvent(0.1, true)
@@ -100,7 +98,7 @@ export class Fixation extends Affix {
         })
     }
 
-    private ChasingEvent() {
+    private ChasingEvent = () => {
         const Region = RegionList.WolfRegions[this.Unit.RegionIndex]
         this.IsChasing = true
         this.Unit.WanderTimer?.pause()
@@ -119,7 +117,7 @@ export class Fixation extends Affix {
         })
     }
 
-    private GetClosestTarget() {
+    private GetClosestTarget = () => {
         this.UnitsInRange.clear()
         this.UnitsInRange.enumUnitsInRange(
             this.Unit.Unit.x,
@@ -158,7 +156,7 @@ export class Fixation extends Affix {
         return closestUnit
     }
 
-    private UpdateChaseSpeed() {
+    private UpdateChaseSpeed = () => {
         const currentMS = this.Unit.Unit.moveSpeed
         const speedIncrementer = 0.4 // 4 movespeed every second
 

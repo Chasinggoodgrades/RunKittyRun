@@ -21,7 +21,7 @@ export class Savecode {
     public Bignum: BigNum
     public static PlayerSaveObject: Map<MapPlayer, Savecode> = new Map()
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             OldsaveSync.Initialize()
             for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
@@ -54,7 +54,7 @@ export class Savecode {
         return this.Bignum.DivSmall(max + 1)
     }
 
-    public Clean() {
+    public Clean = () => {
         return this.Bignum.Clean()
     }
 
@@ -148,7 +148,7 @@ export class Savecode {
         }
     }
 
-    public static LoadString() {
+    public static LoadString = () => {
         if (CurrentGameMode.active !== GameMode.Standard) {
             print(`${Colors.COLOR_YELLOW}Old save codes only work in Standard`)
             return

@@ -6,7 +6,7 @@ import { GameMode } from '../GameModeEnum'
 import { SoloDeathTimer } from './SoloDeathTimer'
 
 export class Solo {
-    public static Initialize() {
+    public static Initialize = () => {
         ItemSpawner.NUMBER_OF_ITEMS = 8
     }
 

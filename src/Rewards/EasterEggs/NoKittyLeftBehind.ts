@@ -13,19 +13,19 @@ export class NoKittyLeftBehind {
     private static CompletedCount = 0
     private static RequiredCount = 3
 
-    public static Initialize() {
+    public static Initialize = () => {
         NoKittyLeftBehind.ItemID = Constants.ITEM_EASTER_EGG_CAT_FIGURINE
         NoKittyLeftBehind.CompletedRounds = []
     }
 
-    public static CheckChallenge() {
+    public static CheckChallenge = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         if (!NoKittyLeftBehind.NoOneLeftBehind()) return
         NoKittyLeftBehind.IncrementCompletedCount()
         NoKittyLeftBehind.SendMessage()
     }
 
-    private static IncrementCompletedCount() {
+    private static IncrementCompletedCount = () => {
         const round = Globals.ROUND
         if (NoKittyLeftBehind.CompletedRounds.includes(round)) return
         NoKittyLeftBehind.CompletedRounds.push(round)
@@ -33,7 +33,7 @@ export class NoKittyLeftBehind {
         NoKittyLeftBehind.SendMessage()
     }
 
-    private static SendMessage() {
+    private static SendMessage = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (!Utility.UnitHasItem(kitty.Unit, NoKittyLeftBehind.ItemID)) continue
             if (AwardManager.ReceivedAwardAlready(kitty.Player, 'WWSwift')) continue

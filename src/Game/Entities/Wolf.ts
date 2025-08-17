@@ -62,7 +62,7 @@ export class Wolf {
     /// <summary>
     /// Spawns wolves based on round and lane according to the Globals.WolvesPerRound dictionary.
     /// </summary>
-    public static SpawnWolves() {
+    public static SpawnWolves = () => {
         try {
             const wolvesInRound = Globals.WolvesPerRound.get(Globals.ROUND)
             Wolf.setWolfPlayers()
@@ -104,7 +104,7 @@ export class Wolf {
         )
     }
 
-    public dispose() {
+    public dispose = () => {
         RemoveAllWolfAffixes(this)
         this.EffectTimer?.dispose()
         this.OverheadEffect?.destroy()
@@ -119,7 +119,7 @@ export class Wolf {
     /// <summary>
     /// Removes all wolves from the game and clears wolf list.
     /// </summary>
-    public static RemoveAllWolves() {
+    public static RemoveAllWolves = () => {
         for (const [_, wolf] of Globals.ALL_WOLVES) {
             wolf.dispose()
         }
@@ -171,7 +171,7 @@ export class Wolf {
         }
     }
 
-    private InitializeWolf() {
+    private InitializeWolf = () => {
         const selectedPlayer = Wolf.getNextWolfPlayer()
 
         const randomX = GetRandomReal(this.WolfArea.Rectangle.minX, this.WolfArea.Rectangle.maxX)
@@ -210,7 +210,7 @@ export class Wolf {
         return GetRandomReal(0, 100) <= totalProbability
     }
 
-    private ApplyEffect() {
+    private ApplyEffect = () => {
         const effectDuration = GetRandomReal(this.WANDER_LOWER_BOUND, this.WANDER_UPPER_BOUND)
 
         this.OverheadEffect ??= Effect.createAttachment(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
@@ -220,7 +220,7 @@ export class Wolf {
         this.EffectTimer?.Timer?.start(effectDuration, false, () => this.WolfMoveCancelEffect())
     }
 
-    private WolfMoveCancelEffect() {
+    private WolfMoveCancelEffect = () => {
         this.WolfMove()
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_DEATH)
         if (this.IsAffixed()) {
@@ -256,7 +256,7 @@ export class Wolf {
         return selectedPlayer
     }
 
-    private static setWolfPlayers() {
+    private static setWolfPlayers = () => {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) {
                 Wolf.wolfPlayers.push(MapPlayer.fromIndex(i)!)

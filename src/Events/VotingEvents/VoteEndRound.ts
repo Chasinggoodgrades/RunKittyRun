@@ -40,7 +40,7 @@ export class VoteEndRound {
         )
     }
 
-    private static VoteTally() {
+    private static VoteTally = () => {
         if (!VoteEndRound.VoteActive) return
         const totalPlayers: number = Globals.ALL_PLAYERS.length
         const requiredVotes: number = totalPlayers / 2
@@ -61,7 +61,7 @@ export class VoteEndRound {
     /// <summary>
     /// Sets unfinished players times to the max, and ends the round.
     /// </summary>
-    private static SetUnfinishedPlayersTimes() {
+    private static SetUnfinishedPlayersTimes = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (kitty.Finished) continue
             kitty.TimeProg.SetRoundTime(Globals.ROUND, RoundTimer.ROUND_ENDTIMES[Globals.ROUND - 1])
@@ -72,7 +72,7 @@ export class VoteEndRound {
         VoteEndRound.EndVoting()
     }
 
-    private static EndVoting() {
+    private static EndVoting = () => {
         VoteEndRound.VoteActive = false
         VoteEndRound.Votes = []
     }

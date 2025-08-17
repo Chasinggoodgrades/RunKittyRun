@@ -9,7 +9,7 @@ export class UniqueItems {
     private static Trigger: Trigger = Trigger.create()!
     private static UniqueList: Uniques[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             UniqueItems.UniqueList = UniqueItems.UniqueItemList()
             UniqueItems.RegisterEvents()
@@ -28,12 +28,12 @@ export class UniqueItems {
         ]
     }
 
-    private static RegisterEvents() {
+    private static RegisterEvents = () => {
         UniqueItems.Trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         UniqueItems.Trigger.addAction(() => UniqueItems.ItemPickup())
     }
 
-    private static ItemPickup() {
+    private static ItemPickup = () => {
         try {
             const item = getManipulatedItem()
             const player = getTriggerPlayer()

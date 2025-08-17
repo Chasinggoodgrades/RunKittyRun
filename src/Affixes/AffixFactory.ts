@@ -26,7 +26,7 @@ export class AffixFactory {
     /// <summary>
     /// Only works in Standard mode. Initializes lane weights for affix distribution.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         Globals.AllAffixes = []
         AffixFactory.InitLaneWeights()
     }
@@ -59,7 +59,7 @@ export class AffixFactory {
     /// <summary>
     /// Initializes the lane weights for affix distribution.
     /// </summary>
-    private static InitLaneWeights() {
+    private static InitLaneWeights = () => {
         const regionCount = RegionList.WolfRegions.length
         let totalArea = 0.0
         AffixFactory.LaneWeights = []
@@ -129,7 +129,7 @@ export class AffixFactory {
     /// <summary>
     /// Distributes affixed wolves weighted by region area, difficulty, and round.
     /// </summary>
-    public static DistAffixes() {
+    public static DistAffixes = () => {
         try {
             AffixFactory.RemoveAllAffixes()
             if (CurrentGameMode.active === GameMode.SoloTournament) return // Solo Return.. Team tournament should work.
@@ -208,7 +208,7 @@ export class AffixFactory {
         return Difficulty.DifficultyValue !== DifficultyLevel.Normal
     }
 
-    public static RemoveAllAffixes() {
+    public static RemoveAllAffixes = () => {
         for (const [_, wolf] of Globals.ALL_WOLVES) {
             RemoveAllWolfAffixes(wolf)
         }

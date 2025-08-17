@@ -72,13 +72,13 @@ export class FangOfShadows extends Relic {
         this.KillTimer = Timer.create()
     }
 
-    private DeregisterTriggers() {
+    private DeregisterTriggers = () => {
         GC.RemoveTrigger(this.SummonTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref SummonTrigger);
         GC.RemoveTrigger(this.TeleTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref TeleTrigger);
         GC.RemoveTimer(this.KillTimer) // TODO; Cleanup:         GC.RemoveTimer(ref KillTimer);
     }
 
-    private SummonShadowKitty() {
+    private SummonShadowKitty = () => {
         try {
             const summoner = Globals.ALL_KITTIES.get(getTriggerUnit()!.owner)
 
@@ -118,7 +118,7 @@ export class FangOfShadows extends Relic {
         }
     }
 
-    private TeleportToShadowKitty() {
+    private TeleportToShadowKitty = () => {
         try {
             const sk = ShadowKitty.ALL_SHADOWKITTIES.get(getTriggerUnit().owner)
             if (!sk) return

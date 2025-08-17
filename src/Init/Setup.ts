@@ -51,7 +51,7 @@ export class Setup {
     private static timeToChoose = 0.0
     private static gameModeTimer: AchesTimers
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             SetGameSpeed(MAP_SPEED_FASTEST)
             LockGameSpeedBJ()
@@ -79,7 +79,7 @@ export class Setup {
         }
     }
 
-    private static StartGameModeTimer() {
+    private static StartGameModeTimer = () => {
         Setup.gameModeTimer = createAchesTimer()
         Setup.gameModeTimer.Timer.start(
             1.0,
@@ -88,7 +88,7 @@ export class Setup {
         )
     }
 
-    private static ChoosingGameMode() {
+    private static ChoosingGameMode = () => {
         Setup.timeToChoose += 1.0
         if (Setup.timeToChoose === Globals.TIME_TO_PICK_GAMEMODE) Gamemode.SetGameMode(GameMode.Standard)
         if (Gamemode.IsGameModeChosen) {
@@ -97,7 +97,7 @@ export class Setup {
         }
     }
 
-    private static StartGame() {
+    private static StartGame = () => {
         try {
             Setup.RemoveDisconnectedPlayers()
             FogEnable(false)
@@ -146,7 +146,7 @@ export class Setup {
         }
     }
 
-    public static GetActivePlayers() {
+    public static GetActivePlayers = () => {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState === PLAYER_SLOT_STATE_PLAYING)
                 Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
@@ -154,7 +154,7 @@ export class Setup {
         }
     }
 
-    private static RemoveDisconnectedPlayers() {
+    private static RemoveDisconnectedPlayers = () => {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             const player = Globals.ALL_PLAYERS[i]
             if (player.slotState === PLAYER_SLOT_STATE_LEFT) {
@@ -164,7 +164,7 @@ export class Setup {
         }
     }
 
-    private static SetAlliedPlayers() {
+    private static SetAlliedPlayers = () => {
         for (const player of Globals.ALL_PLAYERS) {
             for (const playerx of Globals.ALL_PLAYERS) {
                 if (player === playerx) continue
@@ -178,7 +178,7 @@ export class Setup {
         }
     }
 
-    public static SetupVIPList() {
+    public static SetupVIPList = () => {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             for (let j = 0; j < Globals.VIPLIST.length; j++) {
                 const fromBase64Name = EncodingBase64.Decode(Globals.VIPLIST[j])

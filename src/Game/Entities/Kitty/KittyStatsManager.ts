@@ -27,7 +27,7 @@ export class KittyStatsManager {
     /// <summary>
     /// This is called whenever the kitty dies, updating their death stats, resetting save streak, and deathless progress.
     /// </summary>
-    public DeathStatUpdate() {
+    public DeathStatUpdate = () => {
         DeathlessChallenges.ResetPlayerDeathless(this.Kitty)
         this.Kitty.CurrentStats.TotalDeaths += 1
         this.Kitty.CurrentStats.RoundDeaths += 1

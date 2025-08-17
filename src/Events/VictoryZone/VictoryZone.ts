@@ -14,7 +14,7 @@ import { Trigger, Unit } from 'w3ts'
 export class VictoryZone {
     private static InVictoryArea: Trigger
 
-    public static Initialize() {
+    public static Initialize = () => {
         VictoryZone.InVictoryArea = Trigger.create()!
         VictoryZone.VictoryAreaTrigger()
     }
@@ -27,7 +27,7 @@ export class VictoryZone {
         )
     }
 
-    private static VictoryAreaTrigger() {
+    private static VictoryAreaTrigger = () => {
         const VictoryArea = Regions.Victory_Area.region()
         VictoryZone.InVictoryArea.registerEnterRegion(
             VictoryArea,
@@ -36,7 +36,7 @@ export class VictoryZone {
         VictoryZone.InVictoryArea.addAction(ErrorHandler.Wrap(() => VictoryZone.VictoryAreaActions()))
     }
 
-    private static VictoryAreaActions() {
+    private static VictoryAreaActions = () => {
         const u = getTriggerUnit()
         const player = u.owner
         if (u.typeId !== Constants.UNIT_KITTY) return

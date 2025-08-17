@@ -91,7 +91,7 @@ export class RingOfSummoning extends Relic {
         RelicUtil.SetAbilityCooldown(Unit, RingOfSummoning.RelicItemID, this.RelicAbilityID, cooldown)
     }
 
-    private SacredRingOfSummoning() {
+    private SacredRingOfSummoning = () => {
         // Retrieve event details
         const player: MapPlayer = getTriggerUnit().owner
         const targetedPoint: location = GetSpellTargetLoc()!

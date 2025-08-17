@@ -38,7 +38,7 @@ export class Team {
         Globals.ALL_TEAMS_LIST.push(this)
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             ShadowKitty.Initialize()
             ProtectionOfAncients.Initialize()
@@ -76,7 +76,7 @@ export class Team {
         }
     }
 
-    public TeamIsDeadActions() {
+    public TeamIsDeadActions = () => {
         for (let i = 0; i < this.Teammembers.length; i++) {
             const kitty = Globals.ALL_KITTIES.get(this.Teammembers[i])!
             kitty.Finished = true
@@ -89,14 +89,14 @@ export class Team {
         this.RoundProgress.set(round, progress)
     }
 
-    private InitRoundStats() {
+    private InitRoundStats = () => {
         for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             this.RoundProgress.set(i, '0.0')
             this.TeamTimes.set(i, 0.0)
         }
     }
 
-    public static UpdateTeamsMB() {
+    public static UpdateTeamsMB = () => {
         const t = Timer.create()
         t.start(
             0.1,
@@ -109,7 +109,7 @@ export class Team {
         )
     }
 
-    private static TeamSetup() {
+    private static TeamSetup = () => {
         if (Globals.CurrentGameModeType === Globals.TEAM_MODES[0]) {
             // free pick
             RoundManager.ROUND_INTERMISSION += 15.0

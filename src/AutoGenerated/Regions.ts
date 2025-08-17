@@ -81,7 +81,7 @@ export class Regions {
     public static Solo2024: Rectangle
     public static Team2024: Rectangle
 
-    public static Initialize() {
+    public static Initialize = () => {
         Regions.Bronze_medal = Rectangle.create(-224, -800, -192, -736)
         Regions.Circle_Area = Rectangle.create(-1184, -1504, -992, 0)
         Regions.Deaths = Rectangle.create(-224, -608, -160, -576)

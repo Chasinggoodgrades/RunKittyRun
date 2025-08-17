@@ -6,7 +6,7 @@ export class WolfLaneHider {
     private static readonly lanesToEnable: Set<number> = new Set<number>()
     private static readonly currentlyVisibleLanes: Set<number> = new Set<number>()
 
-    public static LanesHider() {
+    public static LanesHider = () => {
         try {
             WolfLaneHider.UpdateLanesToEnable()
             WolfLaneHider.ApplyLaneVisibility()
@@ -15,7 +15,7 @@ export class WolfLaneHider {
         }
     }
 
-    private static UpdateLanesToEnable() {
+    private static UpdateLanesToEnable = () => {
         try {
             WolfLaneHider.lanesToEnable.clear()
 
@@ -52,7 +52,7 @@ export class WolfLaneHider {
         }
     }
 
-    private static ApplyLaneVisibility() {
+    private static ApplyLaneVisibility = () => {
         try {
             if (WolfArea.WolfAreas === null) return
 
@@ -93,7 +93,7 @@ export class WolfLaneHider {
         }
     }
 
-    public static HideAllLanes() {
+    public static HideAllLanes = () => {
         try {
             if (WolfArea.WolfAreas === null) return
 
@@ -106,7 +106,7 @@ export class WolfLaneHider {
         }
     }
 
-    public static ResetLanes() {
+    public static ResetLanes = () => {
         try {
             WolfLaneHider.lanesToEnable.clear()
             WolfLaneHider.currentlyVisibleLanes.clear()

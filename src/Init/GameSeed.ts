@@ -2,7 +2,7 @@ import { Globals } from 'src/Global/Globals'
 import { DateTimeManager } from 'src/Seasonal/DateTimeManager'
 
 export class GameSeed {
-    public static Initialize() {
+    public static Initialize = () => {
         if (GameSeed.SpecialSeed()) return
         Globals.GAME_SEED = GetRandomInt(1, 900000)
     }

@@ -27,7 +27,7 @@ export class APMTracker {
         this.Init()
     }
 
-    private Init() {
+    private Init = () => {
         this.ClicksTrigger.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         this.ClicksAction = this.ClicksTrigger.addAction(() => this.CaptureActions())
         this.PeriodicTimer = this.PeriodicCheck()
@@ -39,7 +39,7 @@ export class APMTracker {
         return this.PeriodicTimer
     }
 
-    private CaptureActions() {
+    private CaptureActions = () => {
         if (!APMTracker.IsInSafeZone(this.Kitty)) {
             this.TotalActions += 1
 
@@ -48,7 +48,7 @@ export class APMTracker {
         }
     }
 
-    private CheckKittyPositions() {
+    private CheckKittyPositions = () => {
         try {
             if (APMTracker.IsInSafeZone(this.Kitty)) return
             this.Kitty.APMTracker.TimeOutsideSafeZones += this.CAPTURE_INTERVAL
@@ -78,7 +78,7 @@ export class APMTracker {
         return apmString
     }
 
-    public dispose() {
+    public dispose = () => {
         this.PeriodicTimer.pause()
         this.PeriodicTimer?.destroy()
         this.ClicksTrigger.removeAction(this.ClicksAction)

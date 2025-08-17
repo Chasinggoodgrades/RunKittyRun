@@ -11,7 +11,7 @@ export class WolfSpawning {
     private static WolvesPerRound = [195, 264, 325, 365, 427]
     private static MaxWolvesPerLane = 60
 
-    public static SpawnWolves() {
+    public static SpawnWolves = () => {
         const totalArea = WolfArea.TotalArea
         const totalWolves = WolfSpawning.WolvesPerRound[Globals.ROUND - 1]
 

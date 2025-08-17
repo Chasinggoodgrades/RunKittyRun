@@ -10,11 +10,11 @@ export class BarrierSetup {
     private static DummyUnitThree: Unit
     public static destructables: Destructable[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
         BarrierSetup.ActivateBarrier()
     }
 
-    private static CreateDummyUnits() {
+    private static CreateDummyUnits = () => {
         const neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!
         BarrierSetup.DummyUnitOne = Unit.create(
             neutralPassive,
@@ -39,7 +39,7 @@ export class BarrierSetup {
         )!
     }
 
-    private static CreateBarrier() {
+    private static CreateBarrier = () => {
         const barrierRegion = Regions.BarrierRegion
         const centerX = barrierRegion.centerX
         const minY = barrierRegion.minY
@@ -54,14 +54,14 @@ export class BarrierSetup {
         }
     }
 
-    public static ActivateBarrier() {
+    public static ActivateBarrier = () => {
         if (BarrierSetup.BarrierActive) return
         BarrierSetup.CreateDummyUnits()
         BarrierSetup.CreateBarrier()
         BarrierSetup.BarrierActive = true
     }
 
-    public static DeactivateBarrier() {
+    public static DeactivateBarrier = () => {
         if (!BarrierSetup.BarrierActive) return
         BarrierSetup.DummyUnitOne.destroy()
         BarrierSetup.DummyUnitTwo.destroy()

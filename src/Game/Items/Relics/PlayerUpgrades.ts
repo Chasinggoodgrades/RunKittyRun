@@ -10,7 +10,7 @@ export class PlayerUpgrades {
         Globals.PLAYER_UPGRADES.set(player, this)
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         for (const player of Globals.ALL_PLAYERS) new PlayerUpgrades(player)
     }
 

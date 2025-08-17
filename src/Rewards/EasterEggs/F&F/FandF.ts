@@ -21,14 +21,14 @@ export class FandF {
     private static CollectionTrigger: Trigger
     public static BloodWolf: WolfEntity.Wolf
 
-    public static Initialize() {
+    public static Initialize = () => {
         FandF.TurnInRange = 150.0
         FandF.CollectionRange = 100.0
         FandF.InRangeTrigger = FandF.RegisterTurnIn()
         FandF.CollectionTrigger = FandF.RegisterCollection()
     }
 
-    public static AppendCollectionsUnit() {
+    public static AppendCollectionsUnit = () => {
         FandF.CollectionTrigger.registerUnitInRage(
             FandF.BloodWolf.Unit.handle,
             FandF.CollectionRange,
@@ -36,7 +36,7 @@ export class FandF {
         )
     }
 
-    public static CreateBloodWolf() {
+    public static CreateBloodWolf = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const region = GetRandomInt(0, WolfArea.WolfAreas.size - 1)
         FandF.BloodWolf = new WolfEntity.Wolf(region)
@@ -51,7 +51,7 @@ export class FandF {
         return trig
     }
 
-    private static CollectionActions() {
+    private static CollectionActions = () => {
         const unit = getTriggerUnit()
 
         if (!Utility.UnitHasItem(unit, FandF.EmptyVial)) return
@@ -68,7 +68,7 @@ export class FandF {
         return trig
     }
 
-    private static TurnInActions() {
+    private static TurnInActions = () => {
         FandF.EmptyVialQuest(getTriggerUnit())
         FandF.BloodVialQuest(getTriggerUnit())
     }

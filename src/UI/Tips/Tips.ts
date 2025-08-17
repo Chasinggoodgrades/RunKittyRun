@@ -4,7 +4,7 @@ import { Utility } from 'src/Utility/Utility'
 export class Tips {
     private static TipsList: string[] = []
 
-    private static RefillTipsList() {
+    private static RefillTipsList = () => {
         Tips.TipsList.push("Don't forget, you can buy boots from the kitty shops around the map!")
         Tips.TipsList.push("Use Protection of the Ancients if you think you'll die.")
         Tips.TipsList.push(
@@ -23,7 +23,7 @@ export class Tips {
         return tip
     }
 
-    public static DisplayTip() {
+    public static DisplayTip = () => {
         return Utility.TimedTextToAllPlayers(7.0, Tips.GetTip())
     }
 }

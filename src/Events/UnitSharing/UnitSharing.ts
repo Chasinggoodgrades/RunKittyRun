@@ -11,7 +11,7 @@ export class UnitSharing {
     /// <summary>
     /// Initializes the trigger that manages unit sharing.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         UnitSharing.Trigger ??= UnitSharing.RegisterTrigger()
     }
 

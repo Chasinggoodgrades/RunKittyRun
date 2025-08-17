@@ -7,7 +7,7 @@ export class DateTimeManager {
     public static CurrentDay: number
     public static Test: Date
 
-    public static Initialize() {
+    public static Initialize = () => {
         // Get the current date/time table directly from Lua
         const now = os.date('*t') as LuaDateInfoResult
         DateTimeManager.SetDateTime(now)

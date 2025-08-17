@@ -14,12 +14,12 @@ export class Windwalk {
     private static Trigger: Trigger
     private static HotkeyTrigger: Trigger
     private static WindwalkID: number = FourCC('BOwk') // Windwalk buff ID
-    public static Initialize() {
+    public static Initialize = () => {
         Windwalk.RegisterHotKey()
         Windwalk.RegisterWWCast()
     }
 
-    private static RegisterWWCast() {
+    private static RegisterWWCast = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         Windwalk.Trigger = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
@@ -28,7 +28,7 @@ export class Windwalk {
         Windwalk.Trigger.addAction(() => Windwalk.ApplyWindwalkEffect())
     }
 
-    private static RegisterHotKey() {
+    private static RegisterHotKey = () => {
         Windwalk.HotkeyTrigger = Trigger.create()!
         for (const p of Globals.ALL_PLAYERS) {
             Windwalk.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_NUMPAD0, 0, true)
@@ -36,7 +36,7 @@ export class Windwalk {
         Windwalk.HotkeyTrigger.addAction(() => Windwalk.RegisterHotKeyEvents())
     }
 
-    private static RegisterHotKeyEvents() {
+    private static RegisterHotKeyEvents = () => {
         const p: MapPlayer = getTriggerPlayer()
         const k: Kitty = Globals.ALL_KITTIES.get(p)!
 
@@ -46,7 +46,7 @@ export class Windwalk {
         k.Unit.issueOrderAt(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY)
     }
 
-    private static ApplyWindwalkEffect() {
+    private static ApplyWindwalkEffect = () => {
         const caster = getTriggerUnit()
         const player = caster.owner
         const kitty = Globals.ALL_KITTIES.get(player)!

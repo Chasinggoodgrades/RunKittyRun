@@ -12,11 +12,11 @@ import { Point, Unit } from 'w3ts'
 export class PodiumUtil {
     private static EndingTimer = 90.0
 
-    public static Initialize() {
+    public static Initialize = () => {
         PodiumUtil.SetPodiumPositions()
     }
 
-    public static SortPlayersByScore() {
+    public static SortPlayersByScore = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
             const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
@@ -24,7 +24,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SortPlayersBySaves() {
+    public static SortPlayersBySaves = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
             const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
@@ -32,7 +32,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SortPlayersByHighestRatio() {
+    public static SortPlayersByHighestRatio = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
             const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
@@ -44,7 +44,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SortPlayersByHighestSaveStreak() {
+    public static SortPlayersByHighestSaveStreak = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.CurrentStats
             const statsB = Globals.ALL_KITTIES.get(b)!.CurrentStats
@@ -52,7 +52,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SortPlayersTopProgress() {
+    public static SortPlayersTopProgress = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
             const statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
@@ -60,7 +60,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SortPlayersFastestTime() {
+    public static SortPlayersFastestTime = () => {
         return Globals.ALL_PLAYERS.sort((a, b) => {
             const statsA = Globals.ALL_KITTIES.get(a)!.TimeProg
             const statsB = Globals.ALL_KITTIES.get(b)!.TimeProg
@@ -68,7 +68,7 @@ export class PodiumUtil {
         }).slice(0, 3)
     }
 
-    public static SetCameraToPodium() {
+    public static SetCameraToPodium = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const podium = Regions.Podium_cinematic
             if (player.isLocal()) {
@@ -87,12 +87,12 @@ export class PodiumUtil {
         podiumUnits.length = 0
     }
 
-    public static EndingGameThankyou() {
+    public static EndingGameThankyou = () => {
         print(`${Colors.COLOR_YELLOW}Thanks to everyone for playing, much love <3|r`)
         PodiumUtil.NotifyEndingGame()
     }
 
-    public static NotifyEndingGame() {
+    public static NotifyEndingGame = () => {
         DiscordFrame.Initialize()
         Utility.TimedTextToAllPlayers(
             PodiumUtil.EndingTimer,
@@ -120,7 +120,7 @@ export class PodiumUtil {
 
     public static PodiumSpots: Point[]
 
-    public static SetPodiumPositions() {
+    public static SetPodiumPositions = () => {
         PodiumUtil.PodiumSpots = [
             Point.create(Regions.Podium_1.centerX, Regions.Podium_1.centerY),
             Point.create(Regions.Podium_2.centerX, Regions.Podium_2.centerY),

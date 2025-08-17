@@ -23,7 +23,7 @@ export class UrnSoul {
     private static RotationIndex = 0
     private static StartEventRegion: Rectangle
 
-    public static Initialize() {
+    public static Initialize = () => {
         UrnSoul.RegisterRegions()
         UrnSoul.UrnGhostUnit = UrnSoul.UnitCreation()
         UrnSoul.PeriodicTrigger = UrnSoul.RegisterPeriodicTrigger()
@@ -41,7 +41,7 @@ export class UrnSoul {
         return u
     }
 
-    private static RegisterRegions() {
+    private static RegisterRegions = () => {
         UrnSoul.UrnRegions = [] // 4 premade regions from editor / constants
         UrnSoul.UrnRegions[0] = Regions.UrnSoulRegion1
         UrnSoul.UrnRegions[1] = Regions.UrnSoulRegion2
@@ -56,7 +56,7 @@ export class UrnSoul {
         return trig
     }
 
-    private static RotationActions() {
+    private static RotationActions = () => {
         UrnSoul.RotationIndex = (UrnSoul.RotationIndex + 1) % 4
         const x = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerX
         const y = UrnSoul.UrnRegions[UrnSoul.RotationIndex].centerY
@@ -71,7 +71,7 @@ export class UrnSoul {
         return trig
     }
 
-    private static UrnUsageActions() {
+    private static UrnUsageActions = () => {
         try {
             const item = getManipulatedItem()
             const player = getTriggerPlayer()
@@ -113,7 +113,7 @@ export class UrnSoul {
         return trig
     }
 
-    private static InRangeActions() {
+    private static InRangeActions = () => {
         const unit = getTriggerUnit()
 
         const urn = Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL

@@ -48,7 +48,7 @@ export class KittyMorphosis {
     /// <summary>
     /// Registers the triggers so that when someone hits the required level they'll morph.
     /// </summary>
-    private RegisterTriggers() {
+    private RegisterTriggers = () => {
         if (CurrentGameMode.active === GameMode.SoloTournament) return // Solo Mode
         this.triggerHandle ??= Trigger.create()!
         this.triggerHandle.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_HERO_LEVEL)
@@ -59,7 +59,7 @@ export class KittyMorphosis {
     /// <summary>
     /// Deregisters the collision detection, to readd them with the proper collision radius.
     /// </summary>
-    private MorphKitty() {
+    private MorphKitty = () => {
         if (this.Active) return
         UnitWithinRange.DeRegisterUnitWithinRangeUnit(this.Kitty)
         this.Kitty.CurrentStats.CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS * (1.0 - this.COLLISION_REDUCTION)
@@ -76,7 +76,7 @@ export class KittyMorphosis {
     /// Changes the visual scale of the unit once they hit the REQUIRED_LEVEL to match what their collision radius may look like
     /// </summary>
     /// <param name="Unit"></param>
-    public ScaleUnit() {
+    public ScaleUnit = () => {
         if (!this.Active) return
         const scale = 0.6 - 0.6 * this.COLLISION_REDUCTION * 2.0
         this.Kitty.Unit.setScale(scale, scale, scale)

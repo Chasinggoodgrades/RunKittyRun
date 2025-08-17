@@ -87,7 +87,7 @@ export class ChronoSphere extends Relic {
         }
     }
 
-    private SetAbilityData() {
+    private SetAbilityData = () => {
         try {
             const item = Utility.UnitGetItem(this.Kitty.Unit, this.RelicItemID)
             if (!item) return
@@ -112,7 +112,7 @@ export class ChronoSphere extends Relic {
     }
 
     // Upgrade level 1, rotating aura slow
-    private RotatingSlowAura() {
+    private RotatingSlowAura = () => {
         try {
             const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
                 typeof ChronoSphere
@@ -129,7 +129,7 @@ export class ChronoSphere extends Relic {
     }
 
     // Upgrade Level 2 Location Capture
-    private RotatingLocationCapture() {
+    private RotatingLocationCapture = () => {
         try {
             const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
                 typeof ChronoSphere
@@ -143,7 +143,7 @@ export class ChronoSphere extends Relic {
         }
     }
 
-    private CaptureLocation() {
+    private CaptureLocation = () => {
         try {
             this.LocationCaptureTimer.start(this.LOCATION_CAPTURE_INTERVAL, false, this.CaptureLocation)
             if (this.Kitty.CurrentStats.ChronoSphereCD) return
@@ -166,7 +166,7 @@ export class ChronoSphere extends Relic {
         return GetRandomReal(upperBound, lowerBound) // as weird as this is.. yes.
     }
 
-    private RewindTime() {
+    private RewindTime = () => {
         try {
             this.Kitty.Invulnerable = true
             let x = this.CapturedLocation[0]

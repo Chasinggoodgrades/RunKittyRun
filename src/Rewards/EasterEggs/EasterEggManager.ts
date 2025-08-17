@@ -7,7 +7,7 @@ import { NoKittyLeftBehind } from './NoKittyLeftBehind'
 import { UrnSoul } from './UrnSoul'
 
 export class EasterEggManager {
-    public static LoadEasterEggs() {
+    public static LoadEasterEggs = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         MissingShoe.Initialize()
         NoKittyLeftBehind.Initialize()

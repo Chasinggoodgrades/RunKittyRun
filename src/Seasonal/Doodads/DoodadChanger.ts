@@ -20,16 +20,17 @@ export class DoodadChanger {
     private static RedLavaCracks: number = FourCC('B00B')
     private static BlueLavaCracks: number = FourCC('B00C')
     private static SuperChristmasTree: number = FourCC('B00D')
-    private static ChristmasDecor: number[] = DoodadChanger.InitChristmasDecor()
+    private static ChristmasDecor: number[]
     private static AllDestructables: destructable[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
+        DoodadChanger.ChristmasDecor = DoodadChanger.InitChristmasDecor()
         DoodadChanger.CreateInitDestructiables()
         if (CurrentGameMode.active !== GameMode.Standard) return
         DoodadChanger.SeasonalDoodads()
     }
 
-    private static InitChristmasDecor() {
+    private static InitChristmasDecor = () => {
         return [
             DoodadChanger.CrystalRed,
             DoodadChanger.CrystalBlue,
@@ -46,16 +47,16 @@ export class DoodadChanger {
         ]
     }
 
-    private static SeasonalDoodads() {
+    private static SeasonalDoodads = () => {
         DoodadChanger.ChristmasDoodads()
     }
 
-    public static NoSeasonDoodads() {
+    public static NoSeasonDoodads = () => {
         DoodadChanger.ReplaceDoodad(DoodadChanger.SafezoneLanterns, 1.0)
         DoodadChanger.ShowSeasonalDoodads(false)
     }
 
-    public static ChristmasDoodads() {
+    public static ChristmasDoodads = () => {
         if (Seasons.getCurrentSeason() !== HolidaySeasons.Christmas) return
         DoodadChanger.ReplaceDoodad(DoodadChanger.ChristmasTree, 2.5)
         DoodadChanger.ShowSeasonalDoodads(true)
@@ -77,7 +78,7 @@ export class DoodadChanger {
         GC.RemoveList(positions) // TODO; Cleanup:         GC.RemoveList(ref positions);
     }
 
-    private static CreateInitDestructiables() {
+    private static CreateInitDestructiables = () => {
         let counter = 0
 
         for (const safeZone of Globals.SAFE_ZONES) {

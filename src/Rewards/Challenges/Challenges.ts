@@ -22,12 +22,12 @@ export class Challenges {
     private static PINK_FIRE_SD_REQUIREMENT = 3.0
     private static PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175
 
-    public static Initialize() {
+    public static Initialize = () => {
         DeathlessChallenges.Initialize()
         Challenges.DoubleBackingTrigger()
     }
 
-    public static WhiteTendrils() {
+    public static WhiteTendrils = () => {
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         AwardManager.GiveRewardAll('WhiteTendrils')
     }
@@ -36,7 +36,7 @@ export class Challenges {
         return AwardManager.GiveReward(player, 'DivinityTendrils')
     }
 
-    public static NecroWindwalk() {
+    public static NecroWindwalk = () => {
         if (Globals.GAME_TIMER.remaining > 1500) return // only awarded if under 25 mins.
         AwardManager.GiveRewardAll('WWNecro')
     }
@@ -47,7 +47,7 @@ export class Challenges {
     }
 
     // Kibble Event, give all
-    public static HuntressKitty() {
+    public static HuntressKitty = () => {
         AwardManager.GiveRewardAll('HuntressKitty')
     }
 
@@ -72,7 +72,7 @@ export class Challenges {
         AwardManager.GiveReward(player, 'PurpleFire')
     }
 
-    public static BlueFire() {
+    public static BlueFire = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const gameDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths
             if (gameDeaths >= Challenges.BLUE_FIRE_DEATH_REQUIREMENT) continue
@@ -86,7 +86,7 @@ export class Challenges {
         AwardManager.GiveReward(player, 'TurquoiseFire')
     }
 
-    public static PinkFire() {
+    public static PinkFire = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
             const currentSaves = stats.TotalSaves
@@ -116,7 +116,7 @@ export class Challenges {
         AwardManager.GiveReward(player, 'GreenLightning')
     }
 
-    public static FreezeAura() {
+    public static FreezeAura = () => {
         if (!Globals.WinGame) return
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             if (kitty.CurrentStats.WolfFreezeCount < Challenges.FREEZE_AURA_WOLF_REQUIREMENT) continue
@@ -128,7 +128,7 @@ export class Challenges {
     /// Hard+, Nitro Round 4 and Win game.
     /// </summary>
     /// <param name="player"></param>
-    public static ZandalariKitty() {
+    public static ZandalariKitty = () => {
         if (Difficulty.DifficultyValue < DifficultyLevel.Hard) return
         if (!Globals.WinGame) return
         for (const [_, kitty] of Globals.ALL_KITTIES) {
@@ -137,7 +137,7 @@ export class Challenges {
         }
     }
 
-    private static DoubleBackingTrigger() {
+    private static DoubleBackingTrigger = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const t = Trigger.create()!
         t.registerEnterRegion(RegionList.SafeZones[0].region(), () => true)
@@ -167,19 +167,19 @@ export class YellowLightning {
         this.Timer = createAchesTimer()
     }
 
-    public SaveIncrement() {
+    public SaveIncrement = () => {
         if (this.Timer.Timer.remaining <= 0) this.Timer.Timer.start(this.YELLOW_LIGHTNING_TIMER, false, this.EndTimer)
         this.SaveCount++
     }
 
-    private EndTimer() {
+    private EndTimer = () => {
         if (this.SaveCount >= this.YELLOW_LIGHTNING_SAVE_REQUIREMENT && CurrentGameMode.active === GameMode.Standard) {
             AwardManager.GiveReward(this.Kitty.Player, 'YellowLightning')
         }
         this.SaveCount = 0
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Timer.pause()
         this.Timer.dispose()
     }

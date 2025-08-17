@@ -4,7 +4,7 @@ import { MapPlayer } from 'w3ts'
 import { AwardManager } from './AwardManager'
 
 export class ChampionAwards {
-    public static AwardAllChampions() {
+    public static AwardAllChampions = () => {
         for (const player of Globals.ALL_PLAYERS) {
             if (!Globals.CHAMPIONS.includes(player.name)) continue
             ChampionAwards.GiveAllChampionAwards(player)

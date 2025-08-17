@@ -34,7 +34,7 @@ export class RoundManager {
     public static GAME_STARTED: boolean = false
     private static AddedTimeAlready: boolean = false
 
-    public static Initialize() {
+    public static Initialize = () => {
         if (CurrentGameMode.active === GameMode.Standard) RoundManager.HasDifficultyBeenChosen()
         else RoundManager.RoundSetup()
     }
@@ -49,7 +49,7 @@ export class RoundManager {
         return true
     }
 
-    private static RoundSetup() {
+    private static RoundSetup = () => {
         try {
             Globals.ROUND += 1
             GameTimer.RoundTime[Globals.ROUND] = 0.0
@@ -74,7 +74,7 @@ export class RoundManager {
         }
     }
 
-    private static StartRound() {
+    private static StartRound = () => {
         RoundManager.GAME_STARTED = true
         Globals.GAME_ACTIVE = true
         RoundTimer.RoundTimerDialog.display = false
@@ -87,7 +87,7 @@ export class RoundManager {
         Utility.TimedTextToAllPlayers(2.0, `${Colors.COLOR_CYAN}Run Kitty Run!!|r`)
     }
 
-    private static HasDifficultyBeenChosen() {
+    private static HasDifficultyBeenChosen = () => {
         const Timer = createAchesTimer()
         Timer.Timer.start(0.35, true, () => {
             if (Difficulty.IsDifficultyChosen && Globals.ROUND === 0) {
@@ -97,7 +97,7 @@ export class RoundManager {
         })
     }
 
-    public static RoundEnd() {
+    public static RoundEnd = () => {
         try {
             Globals.GAME_ACTIVE = false
             MultiboardUtil.RefreshMultiboards()
@@ -134,7 +134,7 @@ export class RoundManager {
         return true
     }
 
-    public static RoundEndCheckSolo() {
+    public static RoundEndCheckSolo = () => {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
 
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {

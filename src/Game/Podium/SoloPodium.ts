@@ -14,12 +14,12 @@ export class SoloPodium {
     private static Time: string = 'time'
     private static Progress: string = 'progress'
 
-    public static BeginPodiumActions() {
+    public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
         Utility.SimpleTimer(3.0, SoloPodium.ProcessPodiumTypeActions)
     }
 
-    private static EnqueueTopPlayerTimes() {
+    private static EnqueueTopPlayerTimes = () => {
         const topTimes = PodiumUtil.SortPlayersFastestTime()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topTimes.length - 1; i >= 0; i--) {
@@ -30,7 +30,7 @@ export class SoloPodium {
         SoloPodium.PodiumType = SoloPodium.Time
     }
 
-    private static EnqueueTopPlayerProgress() {
+    private static EnqueueTopPlayerProgress = () => {
         const topProgress = PodiumUtil.SortPlayersTopProgress()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topProgress.length - 1; i >= 0; i--) {
@@ -41,7 +41,7 @@ export class SoloPodium {
         SoloPodium.PodiumType = SoloPodium.Progress
     }
 
-    private static ProcessNextPodiumAction() {
+    private static ProcessNextPodiumAction = () => {
         if (SoloPodium.PodiumQueue.length === 0) {
             PodiumUtil.EndingGameThankyou()
             return
@@ -58,7 +58,7 @@ export class SoloPodium {
         Utility.SimpleTimer(5.0, SoloPodium.ProcessNextPodiumAction)
     }
 
-    private static ProcessPodiumTypeActions() {
+    private static ProcessPodiumTypeActions = () => {
         SoloPodium.PodiumQueue.length = 0
         PodiumUtil.ClearPodiumUnits(SoloPodium.MovedUnits)
         switch (Globals.CurrentGameModeType) {

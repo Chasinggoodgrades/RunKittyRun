@@ -99,7 +99,7 @@ export class TeamDeathless {
     /// TeamDeathless method should be fully executed whenever players meet the conditions to start the event.
     /// Then the next round will begin the StartEvent method.
     /// </summary>
-    public static PrestartingEvent() {
+    public static PrestartingEvent = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return // Only occurs in Standard Gamemode.
         if (TeamDeathless.EventStarted || TeamDeathless.EventTriggered) return // Don't trigger multiple times.
         if (DeathlessChallenges.DeathlessCount < TeamDeathless.DeathlessToActivate) return // Not enough players have achieved deathless.
@@ -132,7 +132,7 @@ export class TeamDeathless {
     /// TeamDeathless method is called whenever the event has been triggered and will begin on the following round.
     /// Starts the event, sets the orb in place, and puts the dummy unit to detect InRangeEvents
     /// </summary>
-    public static StartEvent() {
+    public static StartEvent = () => {
         try {
             if (!TeamDeathless.EventTriggered || TeamDeathless.EventWon) return // event hasn't been triggered yet.
             TeamDeathless.EventStarted = true
@@ -207,7 +207,7 @@ export class TeamDeathless {
         }
     }
 
-    private static InRangeEvent() {
+    private static InRangeEvent = () => {
         if (TeamDeathless.CurrentHolder !== null) return
 
         const u = getTriggerUnit()
@@ -242,7 +242,7 @@ export class TeamDeathless {
         TeamDeathless.timerHandle.start(0.03, true, TeamDeathless.OrbFollow)
     }
 
-    private static OrbFollow() {
+    private static OrbFollow = () => {
         if (TeamDeathless.CurrentHolder === null) {
             TeamDeathless.timerHandle?.pause()
             return
@@ -254,7 +254,7 @@ export class TeamDeathless {
         TeamDeathless.OrbEffect.y = y
     }
 
-    private static CheckOrbList() {
+    private static CheckOrbList = () => {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             const player = Globals.ALL_PLAYERS[i]
             if (!TeamDeathless.AlreadyCarriedOrb.includes(player)) return
@@ -266,7 +266,7 @@ export class TeamDeathless {
     /// <summary>
     /// TeamDeathless method is called to award the team deathless rewards based on the difficulty level. Accounts for doing harder difficulties so that the rewards are given accordingly.
     /// </summary>
-    private static AwardTeamDeathless() {
+    private static AwardTeamDeathless = () => {
         TeamDeathless.EventWon = true
 
         if (Difficulty.DifficultyValue >= DifficultyLevel.Normal) AwardManager.GiveRewardAll('NormalTeamDeathless')

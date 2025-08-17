@@ -55,7 +55,7 @@ import { CommandsManager } from './CommandsManager'
 export class InitCommands {
     public static _G: any
 
-    public static InitializeCommands() {
+    public static InitializeCommands = () => {
         CommandsManager.RegisterCommand({
             name: 'help',
             alias: 'commands,?',

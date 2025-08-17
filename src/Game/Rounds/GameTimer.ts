@@ -13,7 +13,7 @@ export class GameTimer {
     /// <summary>
     /// Sets up the game timer for the game lambdas the next function.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         Globals.GAME_TIMER_DIALOG.setTitle('Elapsed Game Time')
         GameTimer.GameTimeBar = Frame.fromName('ResourceBarSupplyText', 0)!
         GameTimer.RoundTime = []
@@ -24,7 +24,7 @@ export class GameTimer {
     /// <summary>
     /// Ticks up the game timer every second while the game is active.
     /// </summary>
-    private static StartGameTimer() {
+    private static StartGameTimer = () => {
         if (!Globals.GAME_ACTIVE) return
 
         Globals.GAME_SECONDS += GameTimer.RoundSpeedIncrement
@@ -36,13 +36,13 @@ export class GameTimer {
         GameTimer.UpdatingTimes()
     }
 
-    private static UpdatingTimes() {
+    private static UpdatingTimes = () => {
         if (Globals.ROUND > Globals.NumberOfRounds) return
         GameTimer.UpdateIndividualTimes()
         GameTimer.UpdateTeamTimes()
     }
 
-    private static UpdateIndividualTimes() {
+    private static UpdateIndividualTimes = () => {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             const kitty = Globals.ALL_KITTIES_LIST[i]
@@ -51,7 +51,7 @@ export class GameTimer {
         //MultiboardUtil.RefreshMultiboards();
     }
 
-    private static UpdateTeamTimes() {
+    private static UpdateTeamTimes = () => {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             const team = Globals.ALL_TEAMS_LIST[i]

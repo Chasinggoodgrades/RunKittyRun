@@ -11,7 +11,7 @@ export class RollerSkates {
     private static OnUseTrigger: Trigger
     private static RollerSkaters: MapPlayer[]
 
-    public static Initialize() {
+    public static Initialize = () => {
         RollerSkates.RollerSkaters = []
         RollerSkates.OnUseTrigger = Trigger.create()!
         RollerSkates.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
@@ -21,7 +21,7 @@ export class RollerSkates {
         RollerSkates.OnUseTrigger.addAction(ErrorHandler.Wrap(() => RollerSkates.SwitchingBoots()))
     }
 
-    private static SwitchingBoots() {
+    private static SwitchingBoots = () => {
         const unit = getTriggerUnit()
         const item = getManipulatedItem()
         const slider = Globals.ALL_KITTIES.get(unit.owner)!.Slider

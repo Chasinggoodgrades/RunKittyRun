@@ -26,14 +26,14 @@ export class NamedWolves {
     /// <summary>
     /// Creates the named Wolves Marco and Stan. Only works in Standard mode.
     /// </summary>
-    public static CreateNamedWolves() {
+    public static CreateNamedWolves = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         Globals.DNTNamedWolves = []
         NamedWolves.CreateStanWolf()
         NamedWolves.CreateExplodingWolf()
     }
 
-    private static CreateExplodingWolf() {
+    private static CreateExplodingWolf = () => {
         const index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         NamedWolves.ExplodingWolf = new WolfEntity.Wolf(index)
         NamedWolves.ExplodingWolf.Texttag.setPermanent(true)
@@ -41,7 +41,7 @@ export class NamedWolves {
         NamedWolves.ExplodingWolfDesc()
     }
 
-    private static UpdateTextTag() {
+    private static UpdateTextTag = () => {
         NamedWolves.ExplodingWolf?.Texttag?.setPos(
             NamedWolves.ExplodingWolf.Unit.x,
             NamedWolves.ExplodingWolf.Unit.y,
@@ -49,7 +49,7 @@ export class NamedWolves {
         )
     }
 
-    private static CreateStanWolf() {
+    private static CreateStanWolf = () => {
         const index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         NamedWolves.StanWolf = new WolfEntity.Wolf(index)
         NamedWolves.StanWolf.PauseSelf(true)
@@ -72,7 +72,7 @@ export class NamedWolves {
         Globals.DNTNamedWolves.push(NamedWolves.StanWolf)
     }
 
-    public static RegisterDeathTrigger() {
+    public static RegisterDeathTrigger = () => {
         BurntMeat.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
         if (BurntMeat.StanDeathActions !== null) return
         BurntMeat.RegisterTurnInTrigger()
@@ -88,7 +88,7 @@ export class NamedWolves {
         )
     }
 
-    public static KillExplodingWolf() {
+    public static KillExplodingWolf = () => {
         try {
             if (NamedWolves.ExplodingWolf.IsReviving) return
             NamedWolves.ExplodingWolf.Unit.kill()
@@ -125,12 +125,12 @@ export class NamedWolves {
         }
     }
 
-    private static ExplodingTexttag() {
+    private static ExplodingTexttag = () => {
         NamedWolves.ExplodingWolf.Texttag ??= TextTag.create()!
         NamedWolves.ExplodingWolf.Texttag.setText(NamedWolves.ExplodingWolf.Unit.name, 0.015)
     }
 
-    private static ExplodingWolfDesc() {
+    private static ExplodingWolfDesc = () => {
         try {
             Utility.MakeUnitLocust(NamedWolves.ExplodingWolf.Unit)
             const randomPlayer = NamedWolves.GetRandomPlayerFromLobby()

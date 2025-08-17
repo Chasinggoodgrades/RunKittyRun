@@ -14,7 +14,7 @@ export class Shops {
     private static VendorsItemList: Map<Unit, VendorItem[]>
     private static trigger: Trigger
 
-    public static Initialize() {
+    public static Initialize = () => {
         Shops.KittyVendors = Group.create()!
         Shops.trigger = Trigger.create()!
         Shops.KittyVendorsList = []
@@ -25,7 +25,7 @@ export class Shops {
         Shops.ApplyItemListToVendor()
     }
 
-    private static SetupAllItems() {
+    private static SetupAllItems = () => {
         Shops.ConstantItems()
 
         if (CurrentGameMode.active !== GameMode.Standard) return
@@ -33,7 +33,7 @@ export class Shops {
         Shops.StandardModeItems()
     }
 
-    private static ApplyItemListToVendor() {
+    private static ApplyItemListToVendor = () => {
         for (const vendor of Shops.KittyVendorsList) Shops.AddRegularItemsToVendor(vendor, Shops.KittyVendorItemList)
     }
 
@@ -54,7 +54,7 @@ export class Shops {
     /// <summary>
     /// No longer has use. Constant items will just remain in the editor.
     /// </summary>
-    private static ConstantItems() {
+    private static ConstantItems = () => {
         // Items for all modes
         /*        KittyVendorItemList.push(Constants.ITEM_ADRENALINE_POTION);
                 KittyVendorItemList.push(Constants.ITEM_HEALING_WATER);
@@ -69,14 +69,14 @@ export class Shops {
     /// <summary>
     /// These items can go to the misc shop if we want space for constant items.
     /// </summary>
-    private static StandardModeItems() {
+    private static StandardModeItems = () => {
         // Kitty Vendor
         Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_EMPTY_VIAL)
         Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_URN_OF_A_BROKEN_SOUL)
         Shops.KittyVendorItemList.push(Constants.ITEM_EASTER_EGG_CAT_FIGURINE)
     }
 
-    private static CollectAllVendors() {
+    private static CollectAllVendors = () => {
         const filter = Utility.CreateFilterFunc(() => getFilterUnit().typeId === Constants.UNIT_KITTY_VENDOR)
         Shops.KittyVendors.enumUnitsInRect(Rectangle.getWorldBounds()!, filter)
         Shops.KittyVendorsList = Shops.KittyVendors.getUnits()
@@ -86,13 +86,13 @@ export class Shops {
         GC.RemoveFilterFunc(filter) // TODO; Cleanup:         GC.RemoveFilterFunc(ref filter);
     }
 
-    private static RegisterVendorSellingEvent() {
+    private static RegisterVendorSellingEvent = () => {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         for (const vendor of Shops.KittyVendorsList) Shops.trigger.registerUnitEvent(vendor, EVENT_UNIT_SELL_ITEM)
         Shops.trigger.addAction(() => Shops.OnVendorSell())
     }
 
-    private static OnVendorSell() {
+    private static OnVendorSell = () => {
         try {
             const item = Item.fromHandle(GetSoldItem())!
             const vendor = Unit.fromHandle(GetSellingUnit())!

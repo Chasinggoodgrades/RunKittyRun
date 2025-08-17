@@ -28,7 +28,7 @@ export class Program {
         )
     }
 
-    private static start() {
+    private static start = () => {
         Regions.Initialize()
         RegionList.Initialize()
         Setup.GetActivePlayers()

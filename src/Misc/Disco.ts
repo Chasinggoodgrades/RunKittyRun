@@ -14,7 +14,7 @@ export class Disco extends IDisposable {
         this.DiscoTimer = Timer.create()
     }
 
-    public dispose() {
+    public dispose = () => {
         this.DiscoTimer.pause()
         this.Enabled = false
         MemoryHandler.destroyObject(this)
@@ -35,7 +35,7 @@ export class Disco extends IDisposable {
         }
     }
 
-    private DiscoActions() {
+    private DiscoActions = () => {
         this.Unit.color = ConvertPlayerColor(GetRandomInt(0, 24))!
         this.Unit.setVertexColor(
             GetRandomPercentageBJ(),

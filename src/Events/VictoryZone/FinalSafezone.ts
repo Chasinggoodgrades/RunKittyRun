@@ -17,12 +17,12 @@ export class FinalSafezone {
     private static triggerHandle: Trigger = Trigger.create()!
     private static Region: region
 
-    public static Initialize() {
+    public static Initialize = () => {
         FinalSafezone.Region = RegionList.SafeZones[RegionList.SafeZones.length - 1].region()
         FinalSafezone.RegisterEvents()
     }
 
-    private static RegisterEvents() {
+    private static RegisterEvents = () => {
         FinalSafezone.triggerHandle.registerEnterRegion(FinalSafezone.Region, FilterList.KittyFilter)
         FinalSafezone.triggerHandle.addAction(
             ErrorHandler.Wrap(() => {

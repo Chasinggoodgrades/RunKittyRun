@@ -19,7 +19,7 @@ export class Circle {
         this.CreateCircle()
     }
 
-    private CreateCircle() {
+    private CreateCircle = () => {
         this.Unit = Unit.create(
             this.Player,
             this.CIRCLE_UNIT_MODEL,
@@ -31,7 +31,7 @@ export class Circle {
         this.Unit.show = false
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Unit.destroy()
         this.Collision.destroy()
         Globals.ALL_CIRCLES.delete(this.Player)
@@ -48,11 +48,11 @@ export class Circle {
         BlzSetUnitRealField(this.Unit.handle, UNIT_RF_MANA_REGENERATION, regenRate)
     }
 
-    public HideCircle() {
+    public HideCircle = () => {
         return (this.Unit.show = false)
     }
 
-    private ShowCircle() {
+    private ShowCircle = () => {
         return (this.Unit.show = true)
     }
 }

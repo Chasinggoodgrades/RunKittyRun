@@ -37,7 +37,7 @@ export class RewardHelper {
         }
     }
 
-    public ClearRewards() {
+    public ClearRewards = () => {
         this.Hats.length = 0
         this.Wings.length = 0
         this.Trails.length = 0

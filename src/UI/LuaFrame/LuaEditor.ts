@@ -17,7 +17,7 @@ export class LuaEditor {
         this.CreateLuaEditor()
     }
 
-    private CreateLuaEditor() {
+    private CreateLuaEditor = () => {
         // Background frame
         this.frameBackdrop = blzCreateFrame('EscMenuBackdrop', LuaEditor.GameUI, 0, 0)
         this.frameBackdrop.setSize(0.4, 0.25)
@@ -62,7 +62,7 @@ export class LuaEditor {
         })
     }
 
-    private ClearEditBox() {
+    private ClearEditBox = () => {
         this.editBox.setText('')
     }
 

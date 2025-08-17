@@ -116,7 +116,7 @@ export class CustomStatFrame {
         )
     }
 
-    public static Update() {
+    public static Update = () => {
         try {
             let selectedUnit: Unit
             if (!(selectedUnit = CustomStatFrame.SelectedUnit.get(MapPlayer.fromLocal())!) /* TODO; Prepend: let */)
@@ -130,7 +130,7 @@ export class CustomStatFrame {
         }
     }
 
-    public static Init() {
+    public static Init = () => {
         BlzLoadTOCFile('war3mapImported\\CustomStat.toc')
         BlzLoadTOCFile('war3mapImported\\BoxedText.toc')
 

@@ -176,7 +176,7 @@ export class FrozenWolf {
         }
     }
 
-    private EndingFreezeActions() {
+    private EndingFreezeActions = () => {
         try {
             this.FreezeEffect.destroy()
             this.FreezeEffect = null as never
@@ -189,7 +189,7 @@ export class FrozenWolf {
         }
     }
 
-    public dispose() {
+    public dispose = () => {
         try {
             let frozenWolf: FrozenWolf | undefined
             if (this.Unit !== null && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {

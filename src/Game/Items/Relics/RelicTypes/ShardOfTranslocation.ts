@@ -68,7 +68,7 @@ export class ShardOfTranslocation extends Relic {
         CastEventTrigger.addAction(() => this.TeleportActions())
     }
 
-    private TeleportActions() {
+    private TeleportActions = () => {
         if (!Globals.GAME_ACTIVE) return
         if (GetSpellAbilityId() !== this.RelicAbilityID) return
         const unit = getTriggerUnit()

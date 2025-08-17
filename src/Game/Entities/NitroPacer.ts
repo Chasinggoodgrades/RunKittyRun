@@ -36,7 +36,7 @@ export class NitroPacer {
     /// <summary>
     /// Initializes the Nitros Pacer unit and effect, only applies to the standard gamemode.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
         const instance = NitroPacer.getInstance()
@@ -70,7 +70,7 @@ export class NitroPacer {
     /// <summary>
     /// Starts the nitro pacer, resets the pacer and sets the speed of the unit to 0.
     /// </summary>
-    public static StartNitroPacer() {
+    public static StartNitroPacer = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
         const instance = NitroPacer.getInstance()
@@ -83,7 +83,7 @@ export class NitroPacer {
     /// <summary>
     /// Resets the nitro pacer, sets the unit to the spawn point, and sets the speed of the unit to 0.
     /// </summary>
-    public static ResetNitroPacer() {
+    public static ResetNitroPacer = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
 
         const instance = NitroPacer.getInstance()
@@ -94,7 +94,7 @@ export class NitroPacer {
         instance.currentDistance = 0
     }
 
-    public static UpdateNitroPacer() {
+    public static UpdateNitroPacer = () => {
         try {
             const instance = NitroPacer.getInstance()
             instance.currentDistance = NitroPacer.CalculateNitroPacerProgress()
@@ -122,7 +122,7 @@ export class NitroPacer {
         }
     }
 
-    public static NitroPacerQueueOrders() {
+    public static NitroPacerQueueOrders = () => {
         // backwards for pathingpoints, for stack queue order
         const instance = NitroPacer.getInstance()
         if (!instance.Unit) return
@@ -136,7 +136,7 @@ export class NitroPacer {
         }
     }
 
-    public VisionShare() {
+    public VisionShare = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const neutralPassive = MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE!)!
             neutralPassive.setAlliance(player, ALLIANCE_SHARED_VISION_FORCED, true)

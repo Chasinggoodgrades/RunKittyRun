@@ -18,7 +18,7 @@ export class ItemSpawner {
     private static ITEM_SPAWN_INTERVAL = 45.0
     public static NUMBER_OF_ITEMS = 15
 
-    public static Initialize() {
+    public static Initialize = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         ItemSpawner.SpawnableItems = ItemSpawner.StandardItems()
         ItemSpawner.TrackItems = []
@@ -27,11 +27,11 @@ export class ItemSpawner {
         ItemSpawner.SpawnItems()
     }
 
-    private static RegisterEvent() {
+    private static RegisterEvent = () => {
         ItemSpawner.SpawnTimer.start(ItemSpawner.ITEM_SPAWN_INTERVAL, true, () => ItemSpawner.SpawnItems())
     }
 
-    private static SpawnItems() {
+    private static SpawnItems = () => {
         try {
             ItemSpawner.RemoveSpawnedItems()
             for (let i = 0; i < ItemSpawner.NUMBER_OF_ITEMS; i++) {
@@ -43,7 +43,7 @@ export class ItemSpawner {
         }
     }
 
-    private static RemoveSpawnedItems() {
+    private static RemoveSpawnedItems = () => {
         for (let i = 0; i < ItemSpawner.TrackItems.length; i++) {
             const item = ItemSpawner.TrackItems[i]
             ItemSpatialGrid.UnregisterItem(item)
@@ -77,7 +77,7 @@ export class ItemSpawner {
         }
     }
 
-    private static SpawnRegularItems() {
+    private static SpawnRegularItems = () => {
         const random = GetRandomInt(0, ItemSpawner.SpawnableItems.length - 1)
         const item = ItemSpawner.SpawnableItems[random]
         const regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
@@ -89,7 +89,7 @@ export class ItemSpawner {
         ItemSpatialGrid.RegisterItem(i)
     }
 
-    private static StandardItems() {
+    private static StandardItems = () => {
         return [Constants.ITEM_ADRENALINE_POTION, Constants.ITEM_HEALING_WATER, Constants.ITEM_ELIXIR]
     }
 }

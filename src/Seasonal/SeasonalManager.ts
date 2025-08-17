@@ -5,9 +5,9 @@ import { WeatherEffect } from 'w3ts'
 import { DateTimeManager } from './DateTimeManager'
 import { DoodadChanger } from './Doodads/DoodadChanger'
 import { SeasonalAwards } from './SeasonalAwards'
+import { HolidaySeasons, Seasons } from './Seasons'
 import { ShopChanger } from './Shop/ShopChanger'
 import { TerrainChanger } from './Terrain/TerrainChanger'
-import { HolidaySeasons, Seasons } from './Seasons'
 
 export class SeasonalManager {
     private static CurrentMonth: number
@@ -24,7 +24,7 @@ export class SeasonalManager {
     /// <summary>
     /// Must be standard mode for seasonal changes to occur.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         SeasonalManager.CurrentMonth = DateTimeManager.DateTime.month
         SeasonalManager.DetermineSeason()
         SeasonalManager.SetMinimap()
@@ -35,7 +35,7 @@ export class SeasonalManager {
         ShopChanger.Initialize()
     }
 
-    public static DetermineSeason() {
+    public static DetermineSeason = () => {
         if (CurrentGameMode.active !== GameMode.Standard) {
             Seasons.setCurrentSeason(HolidaySeasons.None)
             return
@@ -64,7 +64,7 @@ export class SeasonalManager {
     /// <summary>
     /// Admin command to activate Christmas season. Only works in standard mode.
     /// </summary>
-    public static ActivateChristmas() {
+    public static ActivateChristmas = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         Seasons.setCurrentSeason(HolidaySeasons.Christmas)
         TerrainChanger.ActivateChristmasTerrain()
@@ -77,7 +77,7 @@ export class SeasonalManager {
     /// <summary>
     /// Admin Command for no seasons. Works regardless of mode.
     /// </summary>
-    public static NoSeason() {
+    public static NoSeason = () => {
         Seasons.setCurrentSeason(HolidaySeasons.None)
         TerrainChanger.NoSeason()
         DoodadChanger.NoSeasonDoodads()
@@ -86,7 +86,7 @@ export class SeasonalManager {
         SeasonalManager.SetWeather()
     }
 
-    private static SetMinimap() {
+    private static SetMinimap = () => {
         switch (Seasons.getCurrentSeason()) {
             case HolidaySeasons.Christmas:
                 BlzChangeMinimapTerrainTex('snowMap.blp')
@@ -98,7 +98,7 @@ export class SeasonalManager {
         }
     }
 
-    private static SetWeather() {
+    private static SetWeather = () => {
         if (Seasons.getCurrentSeason() === HolidaySeasons.Christmas) {
             SeasonalManager.CurrentWeather ??= WeatherEffect.create(Globals.WORLD_BOUNDS, SeasonalManager.SnowEffect)!
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23)

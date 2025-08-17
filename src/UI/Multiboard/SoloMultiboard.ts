@@ -21,7 +21,7 @@ export class SoloMultiboard {
     /// <summary>
     /// Initializes the solo multiboards. Only works in tournament solo mode.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             if (CurrentGameMode.active !== GameMode.SoloTournament) return
             SoloMultiboard.OverallBoard = Multiboard.create()!
@@ -36,20 +36,20 @@ export class SoloMultiboard {
         }
     }
 
-    private static MakeMultiboard() {
+    private static MakeMultiboard = () => {
         SoloMultiboard.BestTimesMultiboard()
         SoloMultiboard.OverallMultiboardRacemode()
         SoloMultiboard.OverallMultiboardProgressmode()
     }
 
-    private static RegisterTriggers() {
+    private static RegisterTriggers = () => {
         SoloMultiboard.ESCTrigger = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             SoloMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         SoloMultiboard.ESCTrigger.addAction(() => SoloMultiboard.ESCPressed())
     }
 
-    private static OverallMultiboardRacemode() {
+    private static OverallMultiboardRacemode = () => {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[1]) return // Race mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 9
@@ -70,7 +70,7 @@ export class SoloMultiboard {
         SoloMultiboard.UpdateOverallStatsMB()
     }
 
-    private static OverallMultiboardProgressmode() {
+    private static OverallMultiboardProgressmode = () => {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.OverallBoard.columns = 7
@@ -89,7 +89,7 @@ export class SoloMultiboard {
         SoloMultiboard.OverallStats()
     }
 
-    private static BestTimesMultiboard() {
+    private static BestTimesMultiboard = () => {
         SoloMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         SoloMultiboard.BestTimes.columns = 7
         SoloMultiboard.BestTimes.GetItem(0, 0).setText(`${Colors.COLOR_YELLOW}Player|r`)
@@ -107,7 +107,7 @@ export class SoloMultiboard {
         SoloMultiboard.UpdateBestTimesMB()
     }
 
-    private static OverallStats() {
+    private static OverallStats = () => {
         SoloMultiboard.OverallBoard.title = `Current Game ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         SoloMultiboard.OverallBoard.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
@@ -174,7 +174,7 @@ export class SoloMultiboard {
         SoloMultiboard.sortedDict = new Map()
     }
 
-    private static BestTimeStats() {
+    private static BestTimeStats = () => {
         SoloMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         let rowIndex = 1
 
@@ -201,12 +201,12 @@ export class SoloMultiboard {
         }
     }
 
-    public static UpdateOverallStatsMB() {
+    public static UpdateOverallStatsMB = () => {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
         SoloMultiboard.OverallStats()
     }
 
-    public static UpdateBestTimesMB() {
+    public static UpdateBestTimesMB = () => {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
         SoloMultiboard.FillPlayers(SoloMultiboard.BestTimes, 1)
         SoloMultiboard.BestTimeStats()
@@ -256,7 +256,7 @@ export class SoloMultiboard {
         return roundTimes
     }
 
-    private static ESCPressed() {
+    private static ESCPressed = () => {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return // Solo mode
         const triggerPlayer = getTriggerPlayer()
         if (!triggerPlayer || !triggerPlayer.isLocal()) return

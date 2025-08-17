@@ -33,7 +33,7 @@ export class Safezone {
         this.triggerHandle = Trigger.create()!
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         let count = 0
         for (const safeZone of RegionList.SafeZones) {
             const safezone = new Safezone(count, safeZone.region())
@@ -46,12 +46,12 @@ export class Safezone {
         FinalSafezone.Initialize()
     }
 
-    private EnterSafezoneEvents() {
+    private EnterSafezoneEvents = () => {
         this.triggerHandle.registerEnterRegion(this.Region, FilterList.KittyFilterOrShadow)
         this.triggerHandle.addAction(() => this.EnterSafezoneActions())
     }
 
-    private EnterSafezoneActions() {
+    private EnterSafezoneActions = () => {
         try {
             const unit = getTriggerUnit()
             if (!unit) return
@@ -102,7 +102,7 @@ export class Safezone {
     /// <summary>
     /// Resets progress zones and reached safezones to initial state.
     /// </summary>
-    public static ResetPlayerSafezones() {
+    public static ResetPlayerSafezones = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             kitty.CurrentSafeZone = 0
             kitty.ProgressZone = 0

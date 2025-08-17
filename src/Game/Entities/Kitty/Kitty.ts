@@ -111,7 +111,7 @@ export class Kitty {
     /// <summary>
     /// Initializes all kitty and circle objects for all players.
     /// </summary>
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             for (const player of Globals.ALL_PLAYERS) {
                 new Circle(player)
@@ -126,7 +126,7 @@ export class Kitty {
     /// <summary>
     /// Kills this kitty object, and increments death stats. Calls attached circle object.
     /// </summary>
-    public KillKitty() {
+    public KillKitty = () => {
         try {
             if (this.Invulnerable || !this.Alive) return
 
@@ -213,7 +213,7 @@ export class Kitty {
         }
     }
 
-    private InvulnerableKitty() {
+    private InvulnerableKitty = () => {
         if (!Kitty.InvulTest) return
         this.Invulnerable = true
         this.InvulTimer.start(this.InvulDuration, false, () => {
@@ -222,11 +222,11 @@ export class Kitty {
         })
     }
 
-    public ToggleMirror() {
+    public ToggleMirror = () => {
         this.IsMirror = !this.IsMirror
     }
 
-    private InitData() {
+    private InitData = () => {
         try {
             // Save Data
             if (this.Player.controller === MAP_CONTROL_USER && this.Player.slotState === PLAYER_SLOT_STATE_PLAYING) {
@@ -243,7 +243,7 @@ export class Kitty {
         }
     }
 
-    private SpawnEffect() {
+    private SpawnEffect = () => {
         const spawncenter = Point.create(
             RegionList.SpawnRegions[this.Player.id].centerX,
             RegionList.SpawnRegions[this.Player.id].centerY
@@ -251,7 +251,7 @@ export class Kitty {
         Utility.CreateEffectAndDispose(this.SPAWN_IN_EFFECT, spawncenter.x, spawncenter.y)
     }
 
-    private CreateKitty() {
+    private CreateKitty = () => {
         // Spawn Location
         const spawncenter = Point.create(
             RegionList.SpawnRegions[this.Player.id].centerX,
@@ -275,14 +275,14 @@ export class Kitty {
         Utility.SimpleTimer(1.0, () => AwardManager.SetPlayerSelectedData(this))
     }
 
-    private StartAIController() {
+    private StartAIController = () => {
         if (this.Player.controller === MAP_CONTROL_COMPUTER && CurrentGameMode.active === GameMode.Standard) {
             this.aiController?.StartAi()
             this.Unit.addItemById(FourCC('bspd')) // boots
         }
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Alive = false
         this.w_Collision.destroy()
         this.c_Collision.destroy()
@@ -302,7 +302,7 @@ export class Kitty {
         Globals.ALL_KITTIES.delete(this.Player)
     }
 
-    private TrueSightGhostWolves() {
+    private TrueSightGhostWolves = () => {
         const trueSight: number = FourCC('Atru')
         this.Unit.addAbility(trueSight)
         this.Unit.hideAbility(trueSight, true)

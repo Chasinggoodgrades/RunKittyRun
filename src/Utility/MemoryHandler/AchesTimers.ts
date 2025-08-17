@@ -18,16 +18,16 @@ export class AchesTimers {
         this.Timer.start(delay, repeat, callback)
     }
 
-    public resume() {
+    public resume = () => {
         if (this.Timer === null) Logger.Warning(`TIMER IS NULL in AchesTimers.resume()`)
         this.Timer.resume()
     }
 
-    public remaining() {
+    public remaining = () => {
         return this.Timer.remaining
     }
 
-    public dispose() {
+    public dispose = () => {
         this.pause()
         MemoryHandler.destroyObject(this)
     }

@@ -11,15 +11,13 @@ export class Stealth extends Affix {
         this.name = `${Colors.COLOR_GREY}Stealth|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
-        super.Remove()
     }
 
     public override pause(pause: boolean) {

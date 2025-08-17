@@ -27,7 +27,7 @@ export class Votekick {
             )
     }
 
-    public static IncrementTally() {
+    public static IncrementTally = () => {
         if (!Votekick.VoteActive) return
         const player = getTriggerPlayer()
         const vote = (GetEventPlayerChatString() || '').toLowerCase()
@@ -83,7 +83,7 @@ export class Votekick {
         Votekick.EndVotekick()
     }
 
-    private static EndVotekick() {
+    private static EndVotekick = () => {
         Votekick.VoteActive = false
         Votekick.VoteStarter = undefined
         Votekick.VoteKickPlayer = undefined

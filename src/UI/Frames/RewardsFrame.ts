@@ -29,7 +29,7 @@ export class RewardsFrame {
     private static IconSize = 0.02
     private static FrameCount = 0
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             RewardsFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             RewardsFrame.RewardFrame = RewardsFrame.CreateRewardFrame()
@@ -60,7 +60,7 @@ export class RewardsFrame {
         return RewardsFrame.RewardFrame
     }
 
-    private static CountRewardFrames() {
+    private static CountRewardFrames = () => {
         let count = 0
         let colCount = 0
         const rewardTypes = Object.values(RewardType)
@@ -137,7 +137,7 @@ export class RewardsFrame {
         return panel
     }
 
-    private static CreateRandomRewardButton() {
+    private static CreateRandomRewardButton = () => {
         // Create the random rewards button at the bottom right of the rewards frame.
         const ButtonSize = 0.025
         const TooltipWidth = 0.25
@@ -189,7 +189,7 @@ export class RewardsFrame {
         t.addAction(RewardsFrame.RandomRewardsButtonActions)
     }
 
-    private static RandomRewardsButtonActions() {
+    private static RandomRewardsButtonActions = () => {
         const player = getTriggerPlayer()
         const frame = Frame.fromHandle(BlzGetTriggerFrame())!
         try {
@@ -232,7 +232,7 @@ export class RewardsFrame {
         }
     }
 
-    private static AppendRewardsToFrames() {
+    private static AppendRewardsToFrames = () => {
         const cols = RewardsFrame.RewardsPerRow
         const count: Map<number, number> = new Map()
 
@@ -323,7 +323,7 @@ export class RewardsFrame {
         }
     }
 
-    private static SetRewardsFrameHotkey() {
+    private static SetRewardsFrameHotkey = () => {
         const rewardsHotKey = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS) {
             rewardsHotKey.registerPlayerKeyEvent(player, OSKEY_OEM_MINUS, 0, true)
@@ -335,7 +335,7 @@ export class RewardsFrame {
         )
     }
 
-    public static RewardsFrameActions() {
+    public static RewardsFrameActions = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         if (CurrentGameMode.active !== GameMode.Standard) {

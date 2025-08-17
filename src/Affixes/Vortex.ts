@@ -38,13 +38,12 @@ export class Vortex extends Affix {
         this.name = `${Colors.COLOR_PURPLE}Vortex|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.RegisterEvents()
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
 
@@ -54,12 +53,11 @@ export class Vortex extends Affix {
         GC.RemoveTrigger(this.EntersRange) // TODO; Cleanup:         GC.RemoveTrigger(ref EntersRange);
         GC.RemoveTrigger(this.LeavesRange) // TODO; Cleanup:         GC.RemoveTrigger(ref LeavesRange);
         GC.RemoveList(this.UnitsInRange) // TODO; Cleanup:         GC.RemoveList(ref UnitsInRange);
-        super.Remove()
     }
 
     public override pause(pause: boolean) {}
 
-    private RegisterEvents() {
+    private RegisterEvents = () => {
         this.EntersRange.registerUnitInRage(this.Unit.Unit.handle, this.VORTEX_RADIUS, FilterList.KittyFilter)
         this.EntersRange.addAction(() => this.EnterRegionActions())
         this.LeavesRange.registerUnitInRage(this.Unit.Unit.handle, this.VORTEX_RADIUS, FilterList.KittyFilter)
@@ -71,19 +69,19 @@ export class Vortex extends Affix {
         )
     }
 
-    private EnterRegionActions() {
+    private EnterRegionActions = () => {
         const enteringUnit = getTriggerUnit()
         if (this.UnitsInRange.includes(enteringUnit)) return
         this.UnitsInRange.push(enteringUnit)
     }
 
-    private LeavesRegionActions() {
+    private LeavesRegionActions = () => {
         const leavingUnit = getTriggerUnit()
         if (!this.UnitsInRange.includes(leavingUnit)) return
         safeArraySplice(this.UnitsInRange, p => p === leavingUnit)
     }
 
-    private PullBegin() {
+    private PullBegin = () => {
         this.PullStart.start(
             this.VORTEX_PULSE_RATE,
             true,
@@ -92,7 +90,7 @@ export class Vortex extends Affix {
         this.Unit.Unit.setVertexColor(255, 0, 255, 255)
     }
 
-    private PullActions() {
+    private PullActions = () => {
         if (this.Counter >= this.VORTEX_LENGTH / this.VORTEX_PULSE_RATE) {
             this.ResetVortex()
             return // Exit early if the vortex is reset
@@ -115,7 +113,7 @@ export class Vortex extends Affix {
         this.Counter += 1
     }
 
-    private ResetVortex() {
+    private ResetVortex = () => {
         this.PullStart.pause()
         this.Counter = 0
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)

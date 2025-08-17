@@ -12,18 +12,16 @@ export class Unpredictable extends Affix {
         this.name = 'Unpredictable'
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.addAbility(this.WANDER_ABILITY) // Wander
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.OVERHEAD_EFFECT_PATH = ''
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.removeAbility(this.WANDER_ABILITY) // Wander
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.Unit.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
-        super.Remove()
     }
 
     public override pause(pause: boolean) {}

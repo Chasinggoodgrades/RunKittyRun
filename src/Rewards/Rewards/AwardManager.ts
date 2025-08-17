@@ -89,7 +89,7 @@ export class AwardManager {
     /// Registers all gamestats for each player to earn rewards.
     /// Ex. If less than 200 saves, itll add every game stat to check periodically. to see if you've hit or gone over said value.
     /// </summary>
-    public static RegisterGamestatEvents() {
+    public static RegisterGamestatEvents = () => {
         try {
             const gameStatsToIgnore = [
                 'NormalGames',
@@ -161,7 +161,7 @@ export class AwardManager {
         }
     }
 
-    public static AwardGameStatRewards() {
+    public static AwardGameStatRewards = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         for (const player of Globals.ALL_PLAYERS) {
             if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers

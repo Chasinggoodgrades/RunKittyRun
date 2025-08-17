@@ -13,7 +13,7 @@ import { PROD } from 'src/env'
 export class Standard {
     private static ROUND_INTERMISSION = 10.0
 
-    public static Initialize() {
+    public static Initialize = () => {
         print('Standard Init')
         RoundManager.ROUND_INTERMISSION = !PROD ? 0.0 : Standard.ROUND_INTERMISSION
         ShadowKitty.Initialize()

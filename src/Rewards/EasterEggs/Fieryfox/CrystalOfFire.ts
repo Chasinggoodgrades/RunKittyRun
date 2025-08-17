@@ -22,7 +22,7 @@ export class CrystalOfFire {
     private static QuestAccept: Trigger
     private static QuestEligible: MapPlayer[]
 
-    public static Initialize() {
+    public static Initialize = () => {
         CrystalOfFire.ItemID = Constants.ITEM_CRYSTAL_OF_FIRE
         CrystalOfFire.TurnInRange = 150.0
         CrystalOfFire.TurnInEventFieryfox = CrystalOfFire.RegisterTurnInFiery()
@@ -79,7 +79,7 @@ export class CrystalOfFire {
         )
     }
 
-    private static FieryfoxEvent() {
+    private static FieryfoxEvent = () => {
         if (!Utility.UnitHasItem(getTriggerUnit(), CrystalOfFire.ItemID)) return
         const player = getTriggerUnit().owner
         if (CrystalOfFire.GetDeathAttempts(player) >= 0) {
@@ -95,7 +95,7 @@ export class CrystalOfFire {
         }
     }
 
-    private static AcceptedQuest() {
+    private static AcceptedQuest = () => {
         const player = getTriggerPlayer()
         if (!CrystalOfFire.QuestEligible.includes(player)) return
         const kitty = Globals.ALL_KITTIES.get(player)!
@@ -109,7 +109,7 @@ export class CrystalOfFire {
         CrystalOfFire.QuestEligible.splice(CrystalOfFire.QuestEligible.indexOf(player), 1)
     }
 
-    private static FandFEvent() {
+    private static FandFEvent = () => {
         const unit = getTriggerUnit()
         if (!Utility.UnitHasItem(unit, CrystalOfFire.ItemID)) return
         const player = unit.owner

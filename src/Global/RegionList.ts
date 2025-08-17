@@ -7,7 +7,7 @@ export class RegionList {
     public static SafeZones: Rectangle[] = []
     public static PathingPoints: Rectangle[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
         RegionList.SpawnRegions = [
             Regions.Spawn_Area_01,
             Regions.Spawn_Area_02,

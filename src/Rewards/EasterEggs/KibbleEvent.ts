@@ -51,7 +51,7 @@ export class KibbleEvent {
         KibbleEvent.UpdateEventProgress()
     }
 
-    private static EndKibbleEvent() {
+    private static EndKibbleEvent = () => {
         KibbleEvent.EventActive = false
         GC.RemoveTimerDialog(KibbleEvent.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(KibbleEvent.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
@@ -70,13 +70,13 @@ export class KibbleEvent {
         )
     }
 
-    private static UpdateEventProgress() {
+    private static UpdateEventProgress = () => {
         KibbleEvent.EventTimerDialog.setTitle(
             `Kibble Collected: ${Colors.COLOR_TURQUOISE}${KibbleEvent.EventKibblesCollected}|r/${Colors.COLOR_LAVENDER}${KibbleEvent.TotalEventKibbles}|r`
         )
     }
 
-    public static CollectEventKibble() {
+    public static CollectEventKibble = () => {
         if (!KibbleEvent.EventActive) return
 
         KibbleEvent.EventKibblesCollected++

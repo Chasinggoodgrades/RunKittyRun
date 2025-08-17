@@ -12,7 +12,7 @@ export class TerrainChanger {
     public static LastWolfTerrain = 0
     public static LastSafezoneTerrain = 0
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             TerrainChanger.NoSeason()
             if (CurrentGameMode.active !== GameMode.Standard) return
@@ -27,22 +27,22 @@ export class TerrainChanger {
     /// <summary>
     /// Sets the terrain based on current round. Includes seasonal terrains.
     /// </summary>
-    public static SetTerrain() {
+    public static SetTerrain = () => {
         TerrainChanger.SetWolfRegionTerrain()
         TerrainChanger.SetSafezoneTerrain()
     }
 
-    public static NoSeason() {
+    public static NoSeason = () => {
         TerrainChanger.NoSeasonTerrain()
         TerrainChanger.SetTerrain()
     }
 
-    public static ActivateChristmasTerrain() {
+    public static ActivateChristmasTerrain = () => {
         TerrainChanger.ChristmasTerrain()
         TerrainChanger.SetTerrain()
     }
 
-    private static NoSeasonTerrain() {
+    private static NoSeasonTerrain = () => {
         TerrainChanger.Terrains[0] = FourCC('Lgrd')
         TerrainChanger.Terrains[1] = FourCC('Ygsb')
         TerrainChanger.Terrains[2] = FourCC('Vgrs')
@@ -55,7 +55,7 @@ export class TerrainChanger {
         TerrainChanger.SetTerrain()
     }
 
-    private static ChristmasTerrain() {
+    private static ChristmasTerrain = () => {
         if (Seasons.getCurrentSeason() !== HolidaySeasons.Christmas) return
         /*        SafezoneTerrain[0] = FourCC("Xblm");
                 SafezoneTerrain[1] = FourCC("Ksmb");
@@ -71,13 +71,13 @@ export class TerrainChanger {
         }
     }
 
-    private static SetWolfRegionTerrain() {
+    private static SetWolfRegionTerrain = () => {
         const round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
         TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, TerrainChanger.Terrains[round])
         TerrainChanger.LastWolfTerrain = TerrainChanger.Terrains[round]
     }
 
-    private static SetSafezoneTerrain() {
+    private static SetSafezoneTerrain = () => {
         const round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0
         TerrainChanger.ChangeMapTerrain(TerrainChanger.LastSafezoneTerrain, TerrainChanger.SafezoneTerrain[round])
         TerrainChanger.LastSafezoneTerrain = TerrainChanger.SafezoneTerrain[round]

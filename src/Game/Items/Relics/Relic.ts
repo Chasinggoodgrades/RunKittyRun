@@ -88,7 +88,7 @@ export abstract class Relic {
         item.name = `${newUpgradeText} ${tempName}`
     }
 
-    public static RegisterRelicEnabler() {
+    public static RegisterRelicEnabler = () => {
         // Ability to Purchase Relics
         PlayerUpgrades.Initialize()
         Relic.CanBuyRelicsTrigger ??= Trigger.create()!

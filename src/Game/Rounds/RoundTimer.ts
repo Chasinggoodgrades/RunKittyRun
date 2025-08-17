@@ -16,7 +16,7 @@ export class RoundTimer {
     private static EndRoundTimerDialog = TimerDialog.create(RoundTimer.EndRoundTimer)!
     private static CountdownTimer = Timer.create()
 
-    public static InitEndRoundTimer() {
+    public static InitEndRoundTimer = () => {
         try {
             if (CurrentGameMode.active === GameMode.Standard) return
             RoundTimer.SetEndRoundTimes()
@@ -28,14 +28,14 @@ export class RoundTimer {
         }
     }
 
-    public static EndRoundTimerDialogs() {
+    public static EndRoundTimerDialogs = () => {
         Globals.GAME_TIMER_DIALOG.display = false
         RoundTimer.EndRoundTimerDialog.display = false
         RoundTimer.RoundTimerDialog.setTitle('Starts in:')
         RoundTimer.RoundTimerDialog.display = true
     }
 
-    public static StartEndRoundTimer() {
+    public static StartEndRoundTimer = () => {
         if (CurrentGameMode.active === GameMode.Standard) return
         RoundTimer.EndRoundTimerDialog.display = true
         RoundTimer.EndRoundTimer.start(
@@ -45,7 +45,7 @@ export class RoundTimer {
         )
     }
 
-    public static CountDown() {
+    public static CountDown = () => {
         if (RoundTimer.StartRoundTimer.remaining > 0) {
             RoundTimer.CountdownTimer.start(
                 1.0,
@@ -62,7 +62,7 @@ export class RoundTimer {
         }
     }
 
-    private static SetEndRoundTimes() {
+    private static SetEndRoundTimes = () => {
         if (CurrentGameMode.active === GameMode.TeamTournament) {
             // Team
             RoundTimer.ROUND_ENDTIMES.push(720.0)

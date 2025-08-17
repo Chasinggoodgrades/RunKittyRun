@@ -25,31 +25,29 @@ export class Howler extends Affix {
         this.name = `${Colors.COLOR_BLUE}Howler|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.RegisterTimerEvents()
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.setVertexColor(25, 25, 112, 255)
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.HowlTimer?.dispose()
         GC.RemoveGroup(this.NearbyWolves) // TODO; Cleanup:         GC.RemoveGroup(ref NearbyWolves);
-        super.Remove()
     }
 
     public override pause(pause: boolean) {
         this.HowlTimer.pause(pause)
     }
 
-    private RegisterTimerEvents() {
+    private RegisterTimerEvents = () => {
         this.HowlTimer = createAchesTimer()
         this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
     }
 
-    private Howl() {
+    private Howl = () => {
         try {
             this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
             if (this.Unit.paused) return

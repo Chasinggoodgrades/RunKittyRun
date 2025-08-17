@@ -15,7 +15,7 @@ export class NitroChallenges {
     private static NitroDialog = TimerDialog.create(NitroChallenges.NitroTimer)!
     private static WHITE_FIRE_DEATH_REQUIREMENT = 3
 
-    public static Initialize() {
+    public static Initialize = () => {
         NitroChallenges.NitroRoundTimes = new Map()
     }
 
@@ -23,7 +23,7 @@ export class NitroChallenges {
         return NitroChallenges.NitroTimer.remaining
     }
 
-    public static SetNitroRoundTimes() {
+    public static SetNitroRoundTimes = () => {
         NitroChallenges.NitroRoundTimes.clear()
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -47,7 +47,7 @@ export class NitroChallenges {
         }
     }
 
-    private static SetNormalNitroRoundTimes() {
+    private static SetNormalNitroRoundTimes = () => {
         NitroChallenges.NitroRoundTimes.set(1, 125) // 2:05
         NitroChallenges.NitroRoundTimes.set(2, 140) // 2:20
         NitroChallenges.NitroRoundTimes.set(3, 160) // 2:40
@@ -55,7 +55,7 @@ export class NitroChallenges {
         NitroChallenges.NitroRoundTimes.set(5, 330) // 5:30
     }
 
-    private static SetHardNitroRoundTimes() {
+    private static SetHardNitroRoundTimes = () => {
         NitroChallenges.NitroRoundTimes.set(1, 125) // 2:05
         NitroChallenges.NitroRoundTimes.set(2, 145) // 2:25
         NitroChallenges.NitroRoundTimes.set(3, 170) // 2:50
@@ -63,7 +63,7 @@ export class NitroChallenges {
         NitroChallenges.NitroRoundTimes.set(5, 330) // 5:30
     }
 
-    private static SetImpossibleNitroRoundTimes() {
+    private static SetImpossibleNitroRoundTimes = () => {
         NitroChallenges.NitroRoundTimes.set(1, 125) // 2:05
         NitroChallenges.NitroRoundTimes.set(2, 150) // 2:30
         NitroChallenges.NitroRoundTimes.set(3, 175) // 2:55
@@ -71,7 +71,7 @@ export class NitroChallenges {
         NitroChallenges.NitroRoundTimes.set(5, 330) // 5:30
     }
 
-    public static StartNitroTimer() {
+    public static StartNitroTimer = () => {
         NitroChallenges.NitroDialog.setTitle('Nitro: ')
         NitroChallenges.NitroDialog.setTitleColor(0, 255, 50, 255)
         NitroChallenges.NitroDialog.display = true
@@ -82,7 +82,7 @@ export class NitroChallenges {
         )
     }
 
-    public static StopNitroTimer() {
+    public static StopNitroTimer = () => {
         NitroChallenges.NitroDialog.display = false
         NitroChallenges.NitroTimer.pause()
     }

@@ -16,18 +16,18 @@ export class RewardsManager {
     private static RewardAbilities: number[] = []
     public static Rewards: Reward[] = []
 
-    public static RewardAbilitiesList() {
+    public static RewardAbilitiesList = () => {
         for (const reward of RewardsManager.Rewards) RewardsManager.RewardAbilities.push(reward.AbilityID)
     }
 
-    public static RegisterTrigger() {
+    public static RegisterTrigger = () => {
         for (const player of Globals.ALL_PLAYERS) {
             RewardsManager.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
         }
         RewardsManager.Trigger.addAction(() => RewardsManager.CastedReward())
     }
 
-    private static CastedReward() {
+    private static CastedReward = () => {
         const spellID = GetSpellAbilityId()
         const unit = getTriggerUnit()
         if (RewardsManager.IsResetSpell(spellID)) {
@@ -146,7 +146,7 @@ export class RewardsManager {
         return RewardsManager.AddReward(reward)
     }
 
-    public static SetupRewards() {
+    public static SetupRewards = () => {
         const awardsSorted = Globals.GAME_AWARDS_SORTED
         const stats = Globals.GAME_STATS
 

@@ -3,7 +3,7 @@ import { CurrentGameMode } from '../CurrentGameMode'
 import { GameMode } from '../GameModeEnum'
 
 export class TeamsUtil {
-    public static RoundResetAllTeams() {
+    public static RoundResetAllTeams = () => {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         for (const [_, team] of Globals.ALL_TEAMS) team.Finished = false
     }

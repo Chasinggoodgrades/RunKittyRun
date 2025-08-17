@@ -93,7 +93,7 @@ export class Slider {
         return this.enabled
     }
 
-    public StartSlider() {
+    public StartSlider = () => {
         this.enabled = true
         this.ResumeSlider(false)
     }
@@ -161,7 +161,7 @@ export class Slider {
         )
     }
 
-    public PauseSlider() {
+    public PauseSlider = () => {
         this.ClickTrigger.enabled = false
         this.WidgetTrigger.enabled = false
         this.SliderTimer.pause()
@@ -173,7 +173,7 @@ export class Slider {
         this.wasSliding = false
     }
 
-    public StopSlider() {
+    public StopSlider = () => {
         this.enabled = false
         this.PauseSlider()
     }
@@ -182,7 +182,7 @@ export class Slider {
         return !TerrainChanger.SafezoneTerrain.includes(GetTerrainType(this.kitty.Unit.x, this.kitty.Unit.y))
     }
 
-    private UpdateSlider() {
+    private UpdateSlider = () => {
         const slideSpeed: number =
             this.forcedSlideSpeed ??
             this.absoluteSlideSpeed ??
@@ -213,7 +213,7 @@ export class Slider {
         this.ItemPickup()
     }
 
-    private RegisterClickEvent() {
+    private RegisterClickEvent = () => {
         this.ClickTrigger = Trigger.create()!
         this.ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         this.ClickTrigger.addAction(() => this.HandleTurn(true))
@@ -269,7 +269,7 @@ export class Slider {
         this.remainingDegreesToTurn = remainingDegreesToTurn
     }
 
-    private escaperTurnForOnePeriod() {
+    private escaperTurnForOnePeriod = () => {
         const rotationSpeed = 1.3
         const maxSlideTurnPerPeriod: number = rotationSpeed * this.SLIDE_INTERVAL * 360
         const rotationTimeForMaximumSpeed = 0.11
@@ -325,7 +325,7 @@ export class Slider {
         }
     }
 
-    private ItemPickup() {
+    private ItemPickup = () => {
         if (!this.enabled) return
         ItemSpatialGrid.KittyItemPickup(this.kitty)
     }

@@ -95,7 +95,7 @@ export class Globals {
 
     public static CurrentGameModeType: string = ''
 
-    public static Initialize() {
+    public static Initialize = () => {
         Globals.WORLD_BOUNDS = Rectangle.getWorldBounds()!
     }
 

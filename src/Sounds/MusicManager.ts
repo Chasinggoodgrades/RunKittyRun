@@ -1,7 +1,7 @@
 export class MusicManager {
     public static MusicList: Music[]
 
-    public static Initialize() {
+    public static Initialize = () => {
         MusicManager.MusicList = MusicManager.RegisterMusicList()
     }
 
@@ -10,7 +10,7 @@ export class MusicManager {
 
     // Steps: Go into the wc3 editor -> Sound Editor, and replace the internal music file with the song you want.
     // Then place the name of whichever u replaced, and put in here the list below.
-    private static RegisterMusicList() {
+    private static RegisterMusicList = () => {
         return [
             new Music('Stop All Music', ''),
             new Music('Linkin Park - Numb', 'Human1'),
@@ -25,7 +25,7 @@ export class MusicManager {
         ]
     }
 
-    public static PlayNumb() {
+    public static PlayNumb = () => {
         return MusicManager.MusicList[1].Play()
     }
 }
@@ -39,7 +39,7 @@ export class Music {
         this.Path = path
     }
 
-    public Play() {
+    public Play = () => {
         StopMusic(false)
         ClearMapMusic()
         if (this.name === 'All Music Stop') return

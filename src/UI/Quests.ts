@@ -7,7 +7,7 @@ export class Quests {
     private static LeaderboardsQuest: Quest
     private static HowToPlay: Quest
 
-    public static Initialize() {
+    public static Initialize = () => {
         Quests.CommandsQuest = Quest.create()!
         Quests.ContributorsQuest = Quest.create()!
         Quests.LeaderboardsQuest = Quest.create()!
@@ -19,7 +19,7 @@ export class Quests {
         Quests.WebsiteQuest()
     }
 
-    private static CreateCommandsQuest() {
+    private static CreateCommandsQuest = () => {
         Quests.CommandsQuest.setTitle('Commands')
         Quests.CommandsQuest.setIcon('war3mapImported\\BTNArcaniteNightRing.blp')
         Quests.CommandsQuest.required = false
@@ -29,7 +29,7 @@ export class Quests {
         Quests.CommandsQuest.setDescription(`${Colors.COLOR_YELLOW}${description}|r`)
     }
 
-    private static CreateContributorsQuest() {
+    private static CreateContributorsQuest = () => {
         Quests.ContributorsQuest.setTitle('Contributors')
         Quests.ContributorsQuest.setIcon('ReplaceableTextures\\CommandButtons\\BTNHeartOff.blp')
         Quests.ContributorsQuest.setDescription(
@@ -41,7 +41,7 @@ export class Quests {
         )
     }
 
-    private static WebsiteQuest() {
+    private static WebsiteQuest = () => {
         Quests.LeaderboardsQuest.setTitle('Leaderboards')
         Quests.LeaderboardsQuest.setIcon('war3mapImported\\DiscordIcon.dds')
         Quests.LeaderboardsQuest.required = false
@@ -52,7 +52,7 @@ export class Quests {
         )
     }
 
-    private static CreateHowToPlayQuest() {
+    private static CreateHowToPlayQuest = () => {
         Quests.HowToPlay.setTitle('How to Play')
         Quests.HowToPlay.setIcon('ReplaceableTextures\\CommandButtons\\BTNTome.blp')
         Quests.HowToPlay.setDescription(

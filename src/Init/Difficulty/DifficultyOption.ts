@@ -30,7 +30,7 @@ export class DifficultyOption {
         return `${this.Color}${this.name}|r`
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         DifficultyOption.Options = []
         new DifficultyOption('Normal', DifficultyLevel.Normal, Colors.COLOR_YELLOW)
         new DifficultyOption('Hard', DifficultyLevel.Hard, Colors.COLOR_RED)

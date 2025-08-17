@@ -8,7 +8,7 @@ export class ItemStacker {
     private static PickupTrigger: Trigger
     private static StackableItemIDs: number[]
 
-    public static Initialize() {
+    public static Initialize = () => {
         ItemStacker.RegisterItemList()
         ItemStacker.RegisterEvents()
     }
@@ -35,7 +35,7 @@ export class ItemStacker {
         return PickupTrigger
     }
 
-    private static StackActions() {
+    private static StackActions = () => {
         try {
             const item = getManipulatedItem()
             const itemID = item.typeId

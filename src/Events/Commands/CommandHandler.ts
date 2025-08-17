@@ -12,7 +12,7 @@ export class CommandHandler {
     private static NewCmdHandler: Trigger = Trigger.create()!
     private static readonly EmptyStringArray = ['']
 
-    public static Initialize() {
+    public static Initialize = () => {
         InitCommands.InitializeCommands()
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
@@ -23,7 +23,7 @@ export class CommandHandler {
         CommandHandler.NewCmdHandler.addAction(CommandHandler.HandleCommands)
     }
 
-    private static HandleCommands() {
+    private static HandleCommands = () => {
         if (!Globals.GAME_INITIALIZED) return
         const chatString = GetEventPlayerChatString() || ''
         if (chatString.length < 2 || chatString[0] !== '-') return
@@ -76,7 +76,7 @@ export class CommandHandler {
         return true
     }
 
-    private static DebugHandle() {
+    private static DebugHandle = () => {
         const player = getTriggerPlayer()
         const chatString = GetEventPlayerChatString() || ''
         const command = chatString.toLowerCase()

@@ -23,7 +23,7 @@ export class MusicFrame {
     private static ButtonStartX = 0.4 // X coordinate for button positions
     private static ButtonStartY = 0.465 // Starting Y coordinate for the first button
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             MusicFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             MusicFrame.MusicFramehandle = blzCreateFrameByType(
@@ -42,7 +42,7 @@ export class MusicFrame {
         }
     }
 
-    private static CreateMusicFrames() {
+    private static CreateMusicFrames = () => {
         const ySize = MusicManager.MusicList.length * 0.03
         MusicFrame.MusicFramehandle.setSize(0.2, ySize)
 
@@ -55,7 +55,7 @@ export class MusicFrame {
         MusicFrame.MusicFramehandle.visible = false
     }
 
-    private static RegisterMusicSlider() {
+    private static RegisterMusicSlider = () => {
         MusicFrame.MusicSlider = blzCreateFrameByType(
             'SLIDER',
             'SliderFrame',
@@ -94,7 +94,7 @@ export class MusicFrame {
         })
     }
 
-    private static InitializeMusicButtons() {
+    private static InitializeMusicButtons = () => {
         const musicCount: number = MusicManager.MusicList.length
 
         // Create buttons for each music item
@@ -181,7 +181,7 @@ export class MusicFrame {
         }
     }
 
-    private static SetMusicFrameHotkeyEvent() {
+    private static SetMusicFrameHotkeyEvent = () => {
         const musicHotkeyTrigger = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS) {
             musicHotkeyTrigger.registerPlayerKeyEvent(player, OSKEY_0, 0, true)
@@ -192,7 +192,7 @@ export class MusicFrame {
     /// <summary>
     /// Whenever the player presses the music button, MusicFrame function shows the frame for that player using local player.
     /// </summary>
-    public static MusicFrameActions() {
+    public static MusicFrameActions = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;

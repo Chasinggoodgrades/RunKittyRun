@@ -29,7 +29,7 @@ export class FrameManager {
 
     private static _cachedUIPosition: Action
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             FrameManager.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
             FrameManager._cachedUIPosition = FrameManager.RepositionBackdropAction()
@@ -46,27 +46,27 @@ export class FrameManager {
         }
     }
 
-    public static InitalizeButtons() {
+    public static InitalizeButtons = () => {
         FrameManager.Backdrop.visible = true
         FrameManager.RewardsButton.visible = true
         FrameManager.MusicButton.visible = true
         FrameManager.ShopButton.visible = true
     }
 
-    private static RemoveUnwantedFrames() {
+    private static RemoveUnwantedFrames = () => {
         const resourceBarText = blzGetFrameByName('ResourceBarSupplyText', 0)
         BlzFrameGetChild(BlzFrameGetChild(FrameManager.GameUI.handle, 5)!, 0)
         resourceBarText.text = '0:00'
         //timeDayDisplay.visible = false;
     }
 
-    public static InitFramesList() {
+    public static InitFramesList = () => {
         Globals.AllFrames.push(ShopFrame.shopFrame)
         Globals.AllFrames.push(RewardsFrame.RewardFrame)
         Globals.AllFrames.push(MusicFrame.MusicFramehandle)
     }
 
-    private static CreateRewardsButton() {
+    private static CreateRewardsButton = () => {
         FrameManager.RewardsButton = blzCreateFrameByType(
             'GLUETEXTBUTTON',
             'RewardsButton',
@@ -86,7 +86,7 @@ export class FrameManager {
         FrameManager.RewardsButton.visible = false
     }
 
-    private static CreateMusicButton() {
+    private static CreateMusicButton = () => {
         FrameManager.MusicButton = blzCreateFrameByType(
             'GLUETEXTBUTTON',
             'MusicButton',
@@ -106,7 +106,7 @@ export class FrameManager {
         FrameManager.MusicButton.visible = false
     }
 
-    private static CreateShopButton() {
+    private static CreateShopButton = () => {
         FrameManager.ShopButton = blzCreateFrameByType(
             'GLUETEXTBUTTON',
             'ShopButton',
@@ -126,7 +126,7 @@ export class FrameManager {
         FrameManager.ShopButton.visible = false
     }
 
-    private static ButtonsBackdrop() {
+    private static ButtonsBackdrop = () => {
         FrameManager.Backdrop = blzCreateFrameByType(
             'BACKDROP',
             'ButtonsBackdrop',
@@ -142,7 +142,7 @@ export class FrameManager {
         FrameManager.RepositionBackdrop()
     }
 
-    private static RepositionBackdrop() {
+    private static RepositionBackdrop = () => {
         const t = Timer.create()
         const nameFrame = blzGetFrameByName('ConsoleUIBackdrop', 0)
 
@@ -164,7 +164,7 @@ export class FrameManager {
         }
     }
 
-    private static ESCHideFrames() {
+    private static ESCHideFrames = () => {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             const player = Globals.ALL_PLAYERS[i]
             FrameManager.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
@@ -177,7 +177,7 @@ export class FrameManager {
         frame.visible = !frame.visible
     }
 
-    private static ESCActions() {
+    private static ESCActions = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         RewardsFrame.RewardFrame.visible = false

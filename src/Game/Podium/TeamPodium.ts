@@ -14,12 +14,12 @@ export class TeamPodium {
     private static MVP: string = 'MVP'
     private static MostSaves: string = 'saves: most'
 
-    public static BeginPodiumActions() {
+    public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
         Utility.SimpleTimer(3.0, TeamPodium.ProcessPodiumTypeActions)
     }
 
-    private static EnqueueMVPPlayer() {
+    private static EnqueueMVPPlayer = () => {
         const topRatios = PodiumUtil.SortPlayersByHighestRatio()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
@@ -30,7 +30,7 @@ export class TeamPodium {
         TeamPodium.PodiumType = TeamPodium.MVP
     }
 
-    private static EnqueueTopSavesPlayer() {
+    private static EnqueueTopSavesPlayer = () => {
         const topSaves = PodiumUtil.SortPlayersBySaves()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
@@ -41,7 +41,7 @@ export class TeamPodium {
         TeamPodium.PodiumType = TeamPodium.MostSaves
     }
 
-    private static ProcessNextPodiumAction() {
+    private static ProcessNextPodiumAction = () => {
         if (TeamPodium.PodiumQueue.length === 0) {
             TeamPodium.ProcessPodiumTypeActions()
             return
@@ -61,7 +61,7 @@ export class TeamPodium {
     /// <summary>
     /// Topscore => Saves => Ratio => Streak .. End
     /// </summary>
-    private static ProcessPodiumTypeActions() {
+    private static ProcessPodiumTypeActions = () => {
         TeamPodium.PodiumQueue.length = 0
         PodiumUtil.ClearPodiumUnits(TeamPodium.MovedUnits)
         switch (TeamPodium.PodiumType) {

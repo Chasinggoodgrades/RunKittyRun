@@ -3,7 +3,7 @@ import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks'
 import { Program } from './Program'
 import { ErrorHandler } from './Utility/ErrorHandler'
 
-function tsMain() {
+const tsMain = () => {
     try {
         // Surely this'll work
         MapPlayer.prototype.DisplayTimedTextTo = function (duration: number, message: string) {

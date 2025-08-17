@@ -35,7 +35,7 @@ export class Gameover {
         return true
     }
 
-    private static StandardWinChallenges() {
+    private static StandardWinChallenges = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         Challenges.NecroWindwalk()
         Challenges.BlueFire()
@@ -45,7 +45,7 @@ export class Gameover {
         Challenges.FreezeAura()
     }
 
-    private static LosingGame() {
+    private static LosingGame = () => {
         Wolf.RemoveAllWolves()
         GameoverUtil.SetColorData()
         GameoverUtil.SetFriendData()
@@ -54,12 +54,12 @@ export class Gameover {
         PodiumUtil.NotifyEndingGame()
     }
 
-    private static SaveGame() {
+    private static SaveGame = () => {
         Utility.SimpleTimer(1.5, SaveManager.SaveAll)
         Utility.SimpleTimer(2.5, SaveManager.SaveAllDataToFile)
     }
 
-    private static EndGame() {
+    private static EndGame = () => {
         for (const player of Globals.ALL_PLAYERS) CustomVictoryBJ(player.handle, true, true)
     }
 
@@ -75,7 +75,7 @@ export class Gameover {
         return true
     }
 
-    private static SendWinMessage() {
+    private static SendWinMessage = () => {
         if (CurrentGameMode.active === GameMode.Standard)
             print(
                 `${Colors.COLOR_GREEN}Congratulations on winning the game on ${Difficulty.DifficultyOption.toString()}!${Colors.COLOR_RESET}`

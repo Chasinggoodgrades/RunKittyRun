@@ -33,13 +33,13 @@ export class RTR {
         return this.enabled
     }
 
-    public StartRTR() {
+    public StartRTR = () => {
         this.enabled = true
         this.kitty.CanEarnAwards = false
         this.ResumeRTR()
     }
 
-    public ResumeRTR() {
+    public ResumeRTR = () => {
         if (!this.enabled) {
             return
         }
@@ -54,7 +54,7 @@ export class RTR {
         )
     }
 
-    public PauseRTR() {
+    public PauseRTR = () => {
         if (!this.enabled) {
             return
         }
@@ -68,13 +68,13 @@ export class RTR {
         }
     }
 
-    public StopRTR() {
+    public StopRTR = () => {
         this.enabled = false
         // kitty.CanEarnAwards = true;
         this.PauseRTR()
     }
 
-    private UpdateRTR() {
+    private UpdateRTR = () => {
         if (!this.hasTarget) {
             if (this.lastUnitAnimation !== 'stand') {
                 this.lastUnitAnimation = 'stand'
@@ -126,7 +126,7 @@ export class RTR {
         this.ItemPickup()
     }
 
-    private RegisterClickEvent() {
+    private RegisterClickEvent = () => {
         const ClickTrigger = Trigger.create()!
         ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         ClickTrigger.addAction(() => this.HandleClick(true))
@@ -156,7 +156,7 @@ export class RTR {
         this.hasTarget = true
     }
 
-    private ItemPickup() {
+    private ItemPickup = () => {
         if (!this.enabled) return
         ItemSpatialGrid.KittyItemPickup(this.kitty)
     }

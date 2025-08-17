@@ -15,7 +15,7 @@ export class TeamsMultiboard {
     private static TeamsStatsMB: Multiboard
     private static ESCTrigger: Trigger
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             if (CurrentGameMode.active !== GameMode.TeamTournament) return
             TeamsMultiboard.ESCTrigger ??= Trigger.create()!
@@ -27,20 +27,20 @@ export class TeamsMultiboard {
         }
     }
 
-    private static TeamsMultiboardInit() {
+    private static TeamsMultiboardInit = () => {
         TeamsMultiboard.TeamsStatsMultiboard()
         TeamsMultiboard.CurrentTeamsMultiboard()
     }
 
     // #region Teams Multiboards
 
-    private static TeamsStatsMultiboard() {
+    private static TeamsStatsMultiboard = () => {
         TeamsMultiboard.TeamsStatsMB ??= Multiboard.create()!
         TeamsMultiboard.TeamsStatsMB.title = `Teams Stats ${Colors.COLOR_YELLOW_ORANGE}[${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         TeamsMultiboard.TeamsStatsMB.display(false)
     }
 
-    public static CurrentTeamsMultiboard() {
+    public static CurrentTeamsMultiboard = () => {
         TeamsMultiboard.CurrentTeamsMB ??= Multiboard.create()!
         TeamsMultiboard.CurrentTeamsMB.title = `Current Teams ${Colors.COLOR_YELLOW_ORANGE}[${Globals.CurrentGameModeType}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         TeamsMultiboard.CurrentTeamsMB.display(true)
@@ -52,7 +52,7 @@ export class TeamsMultiboard {
         TeamsMultiboard.CurrentTeamsMB.GetItem(0, 1).setVisible(true, false)
     }
 
-    public static UpdateTeamStatsMB() {
+    public static UpdateTeamStatsMB = () => {
         // Top Portion Setup
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         TeamsMultiboard.TeamsStatsMB.rows = Globals.ALL_TEAMS_LIST.length + 1
@@ -109,7 +109,7 @@ export class TeamsMultiboard {
         }
     }
 
-    public static UpdateCurrentTeamsMB() {
+    public static UpdateCurrentTeamsMB = () => {
         TeamsMultiboard.CurrentTeamsMB.rows = Globals.ALL_TEAMS.size
         TeamsMultiboard.CurrentTeamsMB.columns = 2
 
@@ -133,14 +133,14 @@ export class TeamsMultiboard {
 
     // #region ESC Key Event & Actions
 
-    private static ESCInit() {
+    private static ESCInit = () => {
         for (const player of Globals.ALL_PLAYERS) {
             TeamsMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
         TeamsMultiboard.ESCTrigger.addAction(ErrorHandler.Wrap(() => TeamsMultiboard.ESCPressed()))
     }
 
-    private static ESCPressed() {
+    private static ESCPressed = () => {
         const player = getTriggerPlayer()
         if (player.isLocal()) return
         // Swap multiboards

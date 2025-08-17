@@ -24,7 +24,7 @@ export class StandardMultiboard {
     private static RoundTimes: number[] = []
     private static PlayersList: MapPlayer[] = []
 
-    public static Initialize() {
+    public static Initialize = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.BestTimes = Multiboard.create()!
         StandardMultiboard.OverallStats = Multiboard.create()!
@@ -35,7 +35,7 @@ export class StandardMultiboard {
     /// <summary>
     /// Wait till difficulty is chosen, then begin..
     /// </summary>
-    private static Init() {
+    private static Init = () => {
         const t = Timer.create()
         t.start(
             1.0,
@@ -49,7 +49,7 @@ export class StandardMultiboard {
         )
     }
 
-    private static RegisterTriggers() {
+    private static RegisterTriggers = () => {
         StandardMultiboard.Updater = Trigger.create()!
         StandardMultiboard.ESCTrigger = Trigger.create()!
 
@@ -61,7 +61,7 @@ export class StandardMultiboard {
         StandardMultiboard.ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
     }
 
-    private static MakeMultiboard() {
+    private static MakeMultiboard = () => {
         print('Making Standard Multiboard')
         StandardMultiboard.OverallGamesStatsMultiboard()
         StandardMultiboard.BestTimesMultiboard()
@@ -69,7 +69,7 @@ export class StandardMultiboard {
         StandardMultiboard.CurrentGameStats()
     }
 
-    private static CurrentGameStatsMultiboard() {
+    private static CurrentGameStatsMultiboard = () => {
         StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
         StandardMultiboard.CurrentStats.columns = 7
         StandardMultiboard.CurrentStats.GetItem(0, 0).setText(`${StandardMultiboard.color}Time: Round|r`)
@@ -86,7 +86,7 @@ export class StandardMultiboard {
         StandardMultiboard.CurrentStats.display(true)
     }
 
-    private static OverallGamesStatsMultiboard() {
+    private static OverallGamesStatsMultiboard = () => {
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.OverallStats.columns = 8
         StandardMultiboard.OverallStats.GetItem(0, 0).setText(`${StandardMultiboard.color}Player|r`)
@@ -104,7 +104,7 @@ export class StandardMultiboard {
         StandardMultiboard.UpdateOverallStatsMB()
     }
 
-    private static BestTimesMultiboard() {
+    private static BestTimesMultiboard = () => {
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         StandardMultiboard.BestTimes.columns = 6
         StandardMultiboard.BestTimes.GetItem(0, 0).setText(`${StandardMultiboard.color}Player|r`)
@@ -120,7 +120,7 @@ export class StandardMultiboard {
         StandardMultiboard.UpdateBestTimesMB()
     }
 
-    private static CurrentStatsRoundTimes() {
+    private static CurrentStatsRoundTimes = () => {
         const color = Colors.COLOR_GREEN
         for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             StandardMultiboard.CurrentStats.GetItem(0, i).setText(
@@ -129,7 +129,7 @@ export class StandardMultiboard {
         }
     }
 
-    private static CurrentGameStats() {
+    private static CurrentGameStats = () => {
         try {
             StandardMultiboard.CurrentStats.title = `${Colors.COLOR_YELLOW_ORANGE}Current Stats [${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
             StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
@@ -200,7 +200,7 @@ export class StandardMultiboard {
         }
     }
 
-    private static OverallGameStats() {
+    private static OverallGameStats = () => {
         StandardMultiboard.OverallStats.title = `Overall Stats ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
@@ -262,7 +262,7 @@ export class StandardMultiboard {
         }
     }
 
-    private static BestTimesStats() {
+    private static BestTimesStats = () => {
         StandardMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
@@ -288,17 +288,17 @@ export class StandardMultiboard {
         }
     }
 
-    public static UpdateOverallStatsMB() {
+    public static UpdateOverallStatsMB = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.OverallGameStats()
     }
 
-    public static UpdateStandardCurrentStatsMB() {
+    public static UpdateStandardCurrentStatsMB = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.CurrentGameStats()
     }
 
-    public static UpdateBestTimesMB() {
+    public static UpdateBestTimesMB = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.FillPlayers(StandardMultiboard.BestTimes, 1)
         StandardMultiboard.BestTimesStats()
@@ -388,7 +388,7 @@ export class StandardMultiboard {
         return StandardMultiboard.RoundTimes
     }
 
-    private static ESCPressed() {
+    private static ESCPressed = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         if (!getTriggerPlayer().isLocal()) return
         if (StandardMultiboard.CurrentStats.displayed) {

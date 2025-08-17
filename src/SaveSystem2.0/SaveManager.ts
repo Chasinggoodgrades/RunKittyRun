@@ -22,11 +22,11 @@ export class SaveManager {
         this.LoadAll()
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         Globals.SaveSystem = new SaveManager()
     }
 
-    public static SaveAll() {
+    public static SaveAll = () => {
         const date = DateTimeManager.DateTime.toString()
         for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
@@ -63,7 +63,7 @@ export class SaveManager {
         }
     }
 
-    public static SaveAllDataToFile() {
+    public static SaveAllDataToFile = () => {
         const date = DateTimeManager.DateTime.toString()
         for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
@@ -81,7 +81,7 @@ export class SaveManager {
         this.syncSaveLoad.Read(`${this.SavePath}/${player.name}.txt`, player, SaveManager.FinishLoading())
     }
 
-    public LoadAll() {
+    public LoadAll = () => {
         try {
             for (const player of Globals.ALL_PLAYERS) {
                 if (player.controller === MAP_CONTROL_COMPUTER) continue
@@ -240,7 +240,7 @@ export class SyncSaveLoad {
         return this.allPromises.get(playerId)!
     }
 
-    private OnSync() {
+    private OnSync = () => {
         const readData: string = BlzGetTriggerSyncData()!
         const prefix: string = BlzGetTriggerSyncPrefix()!
         const totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
@@ -278,7 +278,7 @@ export class FilePromise {
         this.onFinish = onFinish
     }
 
-    public Finish() {
+    public Finish = () => {
         try {
             this.HasLoaded = true
             const loadString: string[] = []

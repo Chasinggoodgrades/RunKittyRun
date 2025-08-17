@@ -20,20 +20,20 @@ export class KittyTime {
         this.Initialize()
     }
 
-    private Initialize() {
+    private Initialize = () => {
         for (let i = 1; i <= Globals.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
         for (let i = 1; i <= Globals.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
         this.PeriodicProgressTimer()
     }
 
-    public dispose() {
+    public dispose = () => {
         this.ProgressTimer.pause()
         this.ProgressTimer?.dispose()
         this.RoundTime.clear()
         this.RoundProgress.clear()
     }
 
-    private PeriodicProgressTimer() {
+    private PeriodicProgressTimer = () => {
         this.ProgressTimer.Timer.start(0.2, true, this._cachedProgress)
     }
 
@@ -66,7 +66,7 @@ export class KittyTime {
         this.SetTotalTime()
     }
 
-    private SetTotalTime() {
+    private SetTotalTime = () => {
         // Solo Tournament Issue
         this.TotalTime = 0.0
         for (const [_, time] of this.RoundTime) // IEnumberable

@@ -14,7 +14,7 @@ export class DiscordFrame {
     private static JoinDiscord: string =
         '|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r'
 
-    public static Initialize() {
+    public static Initialize = () => {
         //BlzLoadTOCFile("war3mapImported\\templates.toc");
         DiscordFrame.SetupBackdrop()
         DiscordFrame.CreateFrame()
@@ -24,7 +24,7 @@ export class DiscordFrame {
         DiscordFrame.RegisterESCTrigger()
     }
 
-    private static CreateFrame() {
+    private static CreateFrame = () => {
         DiscordFrame.EditBox = blzCreateFrame(
             'EscMenuEditBoxTemplate',
             Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!,
@@ -38,7 +38,7 @@ export class DiscordFrame {
         BlzFrameSetTextAlignment(DiscordFrame.EditBox.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
     }
 
-    private static SetupBackdrop() {
+    private static SetupBackdrop = () => {
         DiscordFrame.Backdrop = blzCreateFrameByType(
             'BACKDROP',
             'DiscordBackDrop',
@@ -50,7 +50,7 @@ export class DiscordFrame {
         DiscordFrame.Backdrop.setSize(0.195, 0.035)
     }
 
-    private static SetupDiscordIcon() {
+    private static SetupDiscordIcon = () => {
         DiscordFrame.DiscordIconFront = blzCreateFrameByType(
             'BACKDROP',
             'FrameDiscordIconFront',
@@ -74,7 +74,7 @@ export class DiscordFrame {
         DiscordFrame.DiscordIconBack.setTexture('war3mapImported\\DiscordIcon.dds', 0, true)
     }
 
-    private static ApplyTextFrame() {
+    private static ApplyTextFrame = () => {
         DiscordFrame.DiscordText = blzCreateFrameByType(
             'TEXT',
             'DiscordText',
@@ -88,13 +88,13 @@ export class DiscordFrame {
         BlzFrameSetTextAlignment(DiscordFrame.DiscordText.handle, TEXT_JUSTIFY_CENTER, TEXT_JUSTIFY_CENTER)
     }
 
-    private static RegisterTrigger() {
+    private static RegisterTrigger = () => {
         DiscordFrame.triggerHandle = Trigger.create()!
         DiscordFrame.triggerHandle.triggerRegisterFrameEvent(DiscordFrame.EditBox, FRAMEEVENT_EDITBOX_ENTER)
         DiscordFrame.triggerHandle.addAction(() => DiscordFrame.UpdateTextBox())
     }
 
-    private static RegisterESCTrigger() {
+    private static RegisterESCTrigger = () => {
         DiscordFrame.ESCTrigger = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS) {
             DiscordFrame.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
@@ -102,7 +102,7 @@ export class DiscordFrame {
         DiscordFrame.ESCTrigger.addAction(() => DiscordFrame.ESCPressed())
     }
 
-    private static ESCPressed() {
+    private static ESCPressed = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         DiscordFrame.Backdrop.visible = !DiscordFrame.Backdrop.visible
@@ -112,7 +112,7 @@ export class DiscordFrame {
         DiscordFrame.DiscordText.visible = !DiscordFrame.DiscordText.visible
     }
 
-    private static UpdateTextBox() {
+    private static UpdateTextBox = () => {
         if (!getTriggerPlayer().isLocal()) return
         DiscordFrame.EditBox.text = DiscordFrame.Link
     }

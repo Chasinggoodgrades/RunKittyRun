@@ -14,12 +14,12 @@ export class Resources {
     private static EndRoundBonusGold = 150 + 50 * Globals.ROUND
     private static EndRoundBonusXP = 550 * Globals.ROUND
 
-    public static Initialize() {
+    public static Initialize = () => {
         Resources.SetResourcesForGamemode()
         Resources.AdjustStartingGold()
     }
 
-    public static BonusResources() {
+    public static BonusResources = () => {
         Resources.EndRoundBonusXP = 750 * Globals.ROUND
         Resources.EndRoundBonusGold = 150 + 50 * Globals.ROUND
         for (const player of Globals.ALL_PLAYERS) player.addGold(Resources.EndRoundBonusGold) // May or may not work.. We'll see.
@@ -35,31 +35,31 @@ export class Resources {
         return Resources.SaveGold + Resources.SaveGold * (Resources.SaveStreakMultiplier * streak)
     }
 
-    private static AdjustStartingGold() {
+    private static AdjustStartingGold = () => {
         for (const player of Globals.ALL_PLAYERS) {
             player.addGold(Resources.StartingGold)
         }
     }
 
-    private static SetResourcesForGamemode() {
+    private static SetResourcesForGamemode = () => {
         if (CurrentGameMode.active === GameMode.Standard) Resources.StandardResources()
         else if (CurrentGameMode.active === GameMode.SoloTournament) Resources.SoloResources()
         else if (CurrentGameMode.active === GameMode.TeamTournament) Resources.TeamResources()
     }
 
-    private static StandardResources() {
+    private static StandardResources = () => {
         Resources.StartingGold = 200
         Resources.SaveExperience = 80
         Resources.SaveGold = 25
     }
 
-    private static SoloResources() {
+    private static SoloResources = () => {
         Resources.SaveExperience = 0
         Resources.SaveGold = 0
         Resources.EndRoundBonusXP = 0
     }
 
-    private static TeamResources() {
+    private static TeamResources = () => {
         Resources.SaveExperience = 15
         Resources.SaveGold = 5
         Resources.EndRoundBonusXP = 0

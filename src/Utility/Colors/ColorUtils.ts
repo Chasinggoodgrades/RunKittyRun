@@ -52,7 +52,7 @@ export class ColorUtils {
         )
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         ColorUtils.AddColor('red', 1, '|cffff0303', PLAYER_COLOR_RED, 255, 3, 3)
         ColorUtils.AddColor('blue', 2, '|cff0042f', PLAYER_COLOR_BLUE, 0, 66, 255)
         ColorUtils.AddColor('teal', 3, '|cff1be7ba', PLAYER_COLOR_CYAN, 27, 231, 186)

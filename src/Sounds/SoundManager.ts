@@ -38,7 +38,7 @@ export class SoundManager {
     private static LastManStanding = Timer.create()
     private static sounds: Record<string, Sound> = {}
 
-    public static Initialize() {
+    public static Initialize = () => {
         SoundManager.sounds = {
             KittyDeathSound: Sound.create(SoundManager.KITTY_DEATH_PATH, false, true, false, 10, 10, '')!,
             Round1Sound: Sound.create(SoundManager.ROUND_1_PATH, false, false, false, 10, 10, '')!,
@@ -56,7 +56,7 @@ export class SoundManager {
         SoundManager.AssignSounds()
     }
 
-    private static AssignSounds() {
+    private static AssignSounds = () => {
         SoundManager.KITTY_DEATH_SOUND = SoundManager.sounds['KittyDeathSound']
         SoundManager.ROUND_1_SOUND = SoundManager.sounds['Round1Sound']
         SoundManager.ROUND_2_SOUND = SoundManager.sounds['Round2Sound']
@@ -70,7 +70,7 @@ export class SoundManager {
         SoundManager.FIRST_BLOOD_SOUND = SoundManager.sounds['FirstBloodSound']
     }
 
-    private static SetSoundAttributes() {
+    private static SetSoundAttributes = () => {
         for (const [_, sound] of pairs(SoundManager.sounds)) {
             sound.setChannel(0)
             sound.setVolume(127)
@@ -100,7 +100,7 @@ export class SoundManager {
         }
     }
 
-    public static PlayFirstBloodSound() {
+    public static PlayFirstBloodSound = () => {
         if (SoundManager.FirstBloodSoundPlayed) return
         const s = SoundManager.FIRST_BLOOD_SOUND
         StopSound(s.handle, false, false)
@@ -133,7 +133,7 @@ export class SoundManager {
     /// Plays the round starting sound based on current round.
     /// Only rounds 1-5 are setup.
     /// </summary>
-    public static PlayRoundSound() {
+    public static PlayRoundSound = () => {
         const currRound = Globals.ROUND
         let sound: Sound | null = null
         switch (currRound) {
@@ -163,11 +163,11 @@ export class SoundManager {
         }
     }
 
-    public static PlayLastManStandingSound() {
+    public static PlayLastManStandingSound = () => {
         SoundManager.LastManStanding.start(0.8, false, SoundManager.LastManStandingActions)
     }
 
-    private static LastManStandingActions() {
+    private static LastManStandingActions = () => {
         let count = 0
         let k: Kitty | null = null
 

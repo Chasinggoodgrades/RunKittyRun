@@ -31,14 +31,13 @@ export class Frostbite extends Affix {
         this.PeriodicRangeTrigger ??= Trigger.create()!
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.setVertexColor(80, 140, 250, 255)
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.RegisterEvents()
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         try {
             this.Unit.Unit.setVertexColor(150, 120, 255, 255)
             this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
@@ -46,14 +45,13 @@ export class Frostbite extends Affix {
             GC.RemoveTrigger(this.PeriodicRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref PeriodicRangeTrigger);
             this.RemoveAllEffects()
             GC.RemoveList(this.FrostbittenKitties) // TODO; Cleanup:             GC.RemoveList(ref FrostbittenKitties);
-            super.Remove()
         } catch (e: any) {
             Logger.Warning(`Error in Frostbite.Remove: ${e}`)
             throw e
         }
     }
 
-    private RemoveAllEffects() {
+    private RemoveAllEffects = () => {
         if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
             for (let i = 0; i < this.FrostbittenKitties.length; i++) {
@@ -67,7 +65,7 @@ export class Frostbite extends Affix {
         }
     }
 
-    private RegisterEvents() {
+    private RegisterEvents = () => {
         this.PeriodicRangeTrigger.registerTimerEvent(0.3, true)
         this.PeriodicRangeTrigger.addAction(() => this.PeriodicRangeCheck())
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FROSTBITE_RADIUS, FilterList.KittyFilter)
@@ -79,7 +77,7 @@ export class Frostbite extends Affix {
         })
     }
 
-    private PeriodicRangeCheck() {
+    private PeriodicRangeCheck = () => {
         if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
             for (
@@ -130,7 +128,7 @@ export class Frostbitten extends IDisposable {
         this.OriginalSpeed = 0.0
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Kitty.Unit.moveSpeed = this.OriginalSpeed !== 0 ? this.OriginalSpeed : this.Kitty.Unit.defaultMoveSpeed
         this.Effect?.destroy()
         this.Effect = null as never

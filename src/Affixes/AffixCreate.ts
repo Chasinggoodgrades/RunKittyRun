@@ -76,30 +76,27 @@ export class Chaos extends Affix {
         this.name = `${Colors.COLOR_GREEN}Chaos|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         try {
             this.RegisterTimer()
             this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
-            super.Apply()
         } catch (e: any) {
             Logger.Warning(`Chaos.Apply: ${e}`)
             throw e
         }
     }
 
-    public override Remove() {
+    public override Remove = () => {
         try {
             AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.RotationTimer?.dispose()
             this.Unit?.Unit?.removeAbility(this.AFFIX_ABILITY)
-            super.Remove()
         } catch (e: any) {
             Logger.Warning(`Error in Chaos.Remove: ${e}`)
-            super.Remove()
         }
     }
 
-    private RegisterTimer() {
+    private RegisterTimer = () => {
         try {
             this.RotationTimer?.Timer.start(this.rotationTime, true, () => this.RotateAffix())
             const randomAffix: string = this.GenRandomAffixName()
@@ -113,7 +110,7 @@ export class Chaos extends Affix {
         }
     }
 
-    private RotateAffix() {
+    private RotateAffix = () => {
         try {
             if (this.currentAffix !== null) AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.currentAffix = null as never

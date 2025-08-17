@@ -51,7 +51,7 @@ export class RelicFunctions {
         }
     }
 
-    public static UpgradeRelic() {
+    public static UpgradeRelic = () => {
         try {
             const player = getTriggerPlayer()
             if (player.isLocal()) {

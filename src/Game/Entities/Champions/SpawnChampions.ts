@@ -10,13 +10,13 @@ export class SpawnChampions {
     public static FandF2023: Unit
     public static Stan2025: Unit
 
-    public static Initialize() {
+    public static Initialize = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         SpawnChampions.SpawnUnits()
         SpawnChampions.ApplyCosmetics()
     }
 
-    private static SpawnUnits() {
+    private static SpawnUnits = () => {
         let rect = Regions.Solo2023
         let x = rect.centerX
         let y = rect.centerY
@@ -66,7 +66,7 @@ export class SpawnChampions {
         SpawnChampions.Stan2025.invulnerable = true
     }
 
-    private static ApplyCosmetics() {
+    private static ApplyCosmetics = () => {
         SpawnChampions.Fieryfox2023.addSpecialEffectTarget('war3mapImported\\NitroTurquoise.mdx', 'origin')
         SpawnChampions.Fieryfox2023.addSpecialEffectTarget('war3mapImported\\TurquoiseWings.mdx', 'chest')
 

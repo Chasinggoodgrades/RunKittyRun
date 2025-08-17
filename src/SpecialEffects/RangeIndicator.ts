@@ -55,7 +55,7 @@ export class RangeIndicator {
         }
     }
 
-    public DestroyIndicator() {
+    public DestroyIndicator = () => {
         try {
             for (let i = 0; i < this.LightningObjects.length; i++) {
                 DestroyLightning(this.LightningObjects[i])
@@ -69,7 +69,7 @@ export class RangeIndicator {
     /// <summary>
     /// Disposes of the range indicator by destroying all associated lightning effects and releasing the object back to the pool
     /// </summary>
-    public dispose() {
+    public dispose = () => {
         this.DestroyIndicator()
         MemoryHandler.destroyObject(this)
     }

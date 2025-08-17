@@ -16,7 +16,7 @@ export class Difficulty {
     private static TIME_TO_CHOOSE_DIFFICULTY = 10.0
     private static triggerHandle: Trigger
 
-    public static Initialize() {
+    public static Initialize = () => {
         try {
             if (CurrentGameMode.active !== GameMode.Standard) return
             if (Difficulty.IsDifficultyChosen) return
@@ -34,7 +34,7 @@ export class Difficulty {
         }
     }
 
-    private static RegisterSelectionEvent() {
+    private static RegisterSelectionEvent = () => {
         Difficulty.triggerHandle ??= Trigger.create()!
         Difficulty.triggerHandle.registerDialogEvent(DifficultyOption.DifficultyChoosing)
         Difficulty.triggerHandle.addAction(() => {
@@ -52,12 +52,12 @@ export class Difficulty {
         })
     }
 
-    private static ChooseDifficulty() {
+    private static ChooseDifficulty = () => {
         for (const player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, true)
         Utility.SimpleTimer(Difficulty.TIME_TO_CHOOSE_DIFFICULTY, () => Difficulty.TallyingVotes())
     }
 
-    private static TallyingVotes() {
+    private static TallyingVotes = () => {
         let highestTallyCount = 0
         let pickedOption: DifficultyOption | null = null
 
@@ -82,7 +82,7 @@ export class Difficulty {
         )
     }
 
-    private static RemoveDifficultyDialog() {
+    private static RemoveDifficultyDialog = () => {
         for (const player of Globals.ALL_PLAYERS) DifficultyOption.DifficultyChoosing.display(player, false)
     }
 

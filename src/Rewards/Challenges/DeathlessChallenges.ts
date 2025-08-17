@@ -15,14 +15,14 @@ import { AwardManager } from '../Rewards/AwardManager'
 export class DeathlessChallenges {
     public static DeathlessCount = 0 // Number of deaths allowed for the current round.
 
-    public static Initialize() {
+    public static Initialize = () => {
         DeathlessChallenges.ResetDeathless()
     }
 
     /// <summary>
     /// Resetes deathless progress for all players. Should be used at the beginning of new rounds.
     /// </summary>
-    public static ResetDeathless() {
+    public static ResetDeathless = () => {
         DeathlessChallenges.DeathlessCount = 0
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             const kitty = Globals.ALL_KITTIES_LIST[i]

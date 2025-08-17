@@ -31,12 +31,12 @@ export class SoloDeathTimer {
         return floatText
     }
 
-    private StartTimers() {
+    private StartTimers = () => {
         this.ReviveTimer.start(this.TIME_TO_REVIVE, false, this.Revive)
         this.UpdateTextTimer.start(0.03, true, this.UpdateFloatingText)
     }
 
-    private UpdateFloatingText() {
+    private UpdateFloatingText = () => {
         SetTextTagText(
             this.FloatingTimer.handle,
             `${ColorUtils.GetStringColorOfPlayer(this.Player.id + 1)}${this.ReviveTimer.remaining().toFixed(2)}|r`,
@@ -44,7 +44,7 @@ export class SoloDeathTimer {
         )
     }
 
-    private Revive() {
+    private Revive = () => {
         try {
             const kitty = Globals.ALL_KITTIES.get(this.Player)!
             const lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone]
@@ -61,7 +61,7 @@ export class SoloDeathTimer {
         }
     }
 
-    private Dispose() {
+    private Dispose = () => {
         this.ReviveTimer.dispose()
         this.UpdateTextTimer.dispose()
         this.FloatingTimer.destroy()

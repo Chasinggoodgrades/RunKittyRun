@@ -35,16 +35,15 @@ export class Blitzer extends Affix {
         this.name = `${Colors.COLOR_YELLOW}Blitzer|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
         this.Unit.WanderTimer?.pause()
         this.Unit.OVERHEAD_EFFECT_PATH = ''
         this.Unit.Unit.setVertexColor(224, 224, 120, 255)
         this.RegisterMoveTimer()
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.Unit.WanderTimer?.resume()
         this.Unit.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
@@ -60,10 +59,9 @@ export class Blitzer extends Affix {
         this.EndBlitz()
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.color = PLAYER_COLOR_BROWN
-        super.Remove()
     }
 
-    private RegisterMoveTimer() {
+    private RegisterMoveTimer = () => {
         this.MoveTimer = createAchesTimer()
         this.PreBlitzerTimer = createAchesTimer()
         const randomFlyTime = GetRandomReal(4.0, 10.0) // random time to move before blitzing
@@ -71,7 +69,7 @@ export class Blitzer extends Affix {
         this.BlitzerTimer = createAchesTimer()
     }
 
-    private PreBlitzerMove() {
+    private PreBlitzerMove = () => {
         try {
             if (this.Unit?.paused) {
                 this.MoveTimer?.Timer.start(GetRandomReal(3.0, 10.0), false, () => this.PreBlitzerMove())
@@ -88,7 +86,7 @@ export class Blitzer extends Affix {
         }
     }
 
-    private BeginBlitz() {
+    private BeginBlitz = () => {
         try {
             const randomTime = GetRandomReal(this.BLITZER_LOWEND, this.BLITZER_HIGHEND) // blitz randomly between this time interval
             this.TargetX = GetRandomReal(this.Unit.WolfArea.Rectangle.minX, this.Unit.WolfArea.Rectangle.maxX)
@@ -106,7 +104,7 @@ export class Blitzer extends Affix {
         }
     }
 
-    private BlitzerMove() {
+    private BlitzerMove = () => {
         const speed = this.BLITZER_SPEED // speed in yards per second
         const currentX: number = this.Unit.Unit.x
         const currentY: number = this.Unit.Unit.y
@@ -143,7 +141,7 @@ export class Blitzer extends Affix {
         this.BlitzerTimer?.Timer.start(stepTime, false, () => this.BlitzerMove())
     }
 
-    private EndBlitz() {
+    private EndBlitz = () => {
         this.BlitzerTimer?.pause()
         this.Effect?.playAnimation(ANIM_TYPE_DEATH)
         this.Unit.Unit.setAnimation(0)

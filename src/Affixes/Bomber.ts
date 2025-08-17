@@ -36,45 +36,40 @@ export class Bomber extends Affix {
         this.name = `${Colors.COLOR_ORANGE}Bomber|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         try {
             this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
             this.RangeIndicator = MemoryHandler.getEmptyClass<RangeIndicator>(new RangeIndicator())
             this.RegisterTimers()
-            super.Apply()
         } catch (e: any) {
             Logger.Warning(`Error in Bomber.Apply: ${e}`)
         }
     }
 
-    public override Remove() {
-        try {
-            this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
-            this.Unit.Unit.setVertexColor(150, 120, 255, 255)
+    public override Remove = () => {
+        this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
+        this.Unit.Unit.setVertexColor(150, 120, 255, 255)
 
-            this.ExplodeTimer?.dispose()
-            this.ReviveAlphaTimer?.dispose()
-            this.ExplodeTimer = null as never // These two timers are needed as it prevents the start explosion from continuing
-            this.ReviveAlphaTimer = null as never
-            this.RangeIndicator?.dispose()
-            this.RangeIndicator = null as never
-            this.TimerIndicator?.destroy()
-            this.TimerIndicator = null as never
+        this.ExplodeTimer?.dispose()
+        this.ReviveAlphaTimer?.dispose()
+        this.ExplodeTimer = null as never // These two timers are needed as it prevents the start explosion from continuing
+        this.ReviveAlphaTimer = null as never
+        this.RangeIndicator?.dispose()
+        this.RangeIndicator = null as never
+        this.TimerIndicator?.destroy()
+        this.TimerIndicator = null as never
 
-            if (this.Unit.paused) this.Unit?.PauseSelf(false)
-            this.Unit.IsReviving = false
-            this.Unit.paused = false
-        } catch (e: any) {
-            super.Remove()
-        }
+        if (this.Unit.paused) this.Unit?.PauseSelf(false)
+        this.Unit.IsReviving = false
+        this.Unit.paused = false
     }
 
-    private RegisterTimers() {
+    private RegisterTimers = () => {
         this.ExplodeTimer.Timer.start(Bomber.ExplosionInterval(), false, () => this.StartExplosion())
     }
 
-    private StartExplosion() {
+    private StartExplosion = () => {
         // Temporary for testing, will add an actual graphic ticker later
         try {
             if (this.Unit?.paused) {
@@ -103,7 +98,7 @@ export class Bomber extends Affix {
         }
     }
 
-    private Explode() {
+    private Explode = () => {
         try {
             if (this.RangeIndicator === null) return
             this.RangeIndicator.DestroyIndicator()
@@ -139,7 +134,7 @@ export class Bomber extends Affix {
         return GetRandomReal(Bomber.MIN_EXPLODE_INTERVAL, Bomber.MAX_EXPLODE_INTERVAL)
     }
 
-    private Revive() {
+    private Revive = () => {
         this.Unit.IsReviving = true
         if (this.Unit.WolfArea.IsEnabled) {
             this.TimerIndicator ??= Effect.create(Bomber.RING_TIMER_INDICATOR, this.Unit.Unit.x, this.Unit.Unit.y)!
@@ -151,7 +146,7 @@ export class Bomber extends Affix {
         this.ReviveAlphaTimer?.Timer?.start(1.0, true, () => this.ReviveActions())
     }
 
-    private ReviveActions() {
+    private ReviveActions = () => {
         if (this.ReviveAlpha < 10) {
             this.ReviveAlpha++
             this.Unit.Unit.setVertexColor(204, 102, 0, 25)

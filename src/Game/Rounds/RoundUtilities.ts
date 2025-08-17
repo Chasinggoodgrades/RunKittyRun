@@ -23,13 +23,13 @@ export class RoundUtilities {
         team.Finished = true
     }
 
-    public static MoveAllPlayersToStart() {
+    public static MoveAllPlayersToStart = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             RoundUtilities.MovePlayerToStart(kitty.Player)
         }
     }
 
-    public static RoundResetAll() {
+    public static RoundResetAll = () => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             kitty.Unit.revive(
                 RegionList.SpawnRegions[kitty.Player.id].centerX,
@@ -45,7 +45,7 @@ export class RoundUtilities {
         }
     }
 
-    public static MovedTimedCameraToStart() {
+    public static MovedTimedCameraToStart = () => {
         const x = RegionList.SpawnRegions[0].centerX
         const y = RegionList.SpawnRegions[0].centerY
         for (const player of Globals.ALL_PLAYERS) {

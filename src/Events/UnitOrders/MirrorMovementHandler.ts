@@ -12,14 +12,14 @@ export class MirrorMovementHandler {
         this.RegisterMovementEvents()
     }
 
-    private RegisterMovementEvents() {
+    private RegisterMovementEvents = () => {
         this.MovementTrigger = Trigger.create()!
         this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
         this.MovementTrigger.addAction(() => this.HandleMovementOrder())
     }
 
-    private HandleMovementOrder() {
+    private HandleMovementOrder = () => {
         if (!this.kitty.IsMirror) return
         if (this.kitty.Slider.IsEnabled()) return // Let slider handle its own mirror logic
         if (this.isProcessingMirror) return // Prevent recursion
@@ -54,7 +54,7 @@ export class MirrorMovementHandler {
         this.isProcessingMirror = false
     }
 
-    public dispose() {
+    public dispose = () => {
         this.MovementTrigger?.destroy()
     }
 }

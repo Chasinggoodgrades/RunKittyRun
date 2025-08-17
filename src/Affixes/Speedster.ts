@@ -11,16 +11,14 @@ export class Speedster extends Affix {
         this.name = `${Colors.COLOR_ORANGE}Speedster|r`
     }
 
-    public override Apply() {
+    public override Apply = () => {
         this.Unit.Unit.moveSpeed = 522
         this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
-        super.Apply()
     }
 
-    public override Remove() {
+    public override Remove = () => {
         this.Unit.Unit.moveSpeed = this.Unit.Unit.defaultMoveSpeed
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
-        super.Remove()
     }
 
     public override pause(pause: boolean) {}

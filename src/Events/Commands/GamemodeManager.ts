@@ -3,7 +3,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 export class GamemodeManager {
     private static commands: Map<string, GamemodeInfo> = new Map()
 
-    public static InitializeCommands() {
+    public static InitializeCommands = () => {
         // Add commands here
         GamemodeManager.AddCommand('-solo t', 'Solo Tournament', 'Usage: -solo t <prog | race >')
         GamemodeManager.AddCommand(

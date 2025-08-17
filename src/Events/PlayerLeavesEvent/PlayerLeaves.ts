@@ -12,11 +12,11 @@ import { MapPlayer, Trigger } from 'w3ts'
 export class PlayerLeaves {
     private static triggerHandle: Trigger = Trigger.create()!
 
-    public static Initialize() {
+    public static Initialize = () => {
         PlayerLeaves.RegisterTrigger()
     }
 
-    private static RegisterTrigger() {
+    private static RegisterTrigger = () => {
         for (const player of Globals.ALL_PLAYERS) {
             PlayerLeaves.triggerHandle.registerPlayerEvent(player, EVENT_PLAYER_LEAVE)
         }

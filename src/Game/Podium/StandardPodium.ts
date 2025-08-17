@@ -19,12 +19,12 @@ export class StandardPodium {
     private static HighestRatio: string = 'ratio: highest'
     private static HighestStreak: string = 'streak: highest'
 
-    public static BeginPodiumActions() {
+    public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
         Utility.SimpleTimer(3.0, StandardPodium.ProcessPodiumTypeActions)
     }
 
-    private static EnqueueTopScorePlayers() {
+    private static EnqueueTopScorePlayers = () => {
         const topScores = PodiumUtil.SortPlayersByScore()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topScores.length - 1; i >= 0; i--) {
@@ -35,7 +35,7 @@ export class StandardPodium {
         StandardPodium.PodiumType = StandardPodium.HighestScore
     }
 
-    private static EnqueueTopSavesPlayers() {
+    private static EnqueueTopSavesPlayers = () => {
         const topSaves = PodiumUtil.SortPlayersBySaves()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topSaves.length - 1; i >= 0; i--) {
@@ -46,7 +46,7 @@ export class StandardPodium {
         StandardPodium.PodiumType = StandardPodium.MostSaves
     }
 
-    private static EnqueueTopRatioPlayers() {
+    private static EnqueueTopRatioPlayers = () => {
         const topRatios = PodiumUtil.SortPlayersByHighestRatio()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topRatios.length - 1; i >= 0; i--) {
@@ -57,7 +57,7 @@ export class StandardPodium {
         StandardPodium.PodiumType = StandardPodium.HighestRatio
     }
 
-    private static EnqueueTopStreakPlayers() {
+    private static EnqueueTopStreakPlayers = () => {
         const topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
         const podiumPositions = PodiumUtil.PodiumSpots
         for (let i: number = topStreaks.length - 1; i >= 0; i--) {
@@ -68,7 +68,7 @@ export class StandardPodium {
         StandardPodium.PodiumType = StandardPodium.HighestStreak
     }
 
-    private static ProcessNextPodiumAction() {
+    private static ProcessNextPodiumAction = () => {
         if (StandardPodium.PodiumQueue.length === 0) {
             StandardPodium.ProcessPodiumTypeActions()
             return
@@ -88,7 +88,7 @@ export class StandardPodium {
     /// <summary>
     /// Topscore => Saves => Ratio => Streak .. End
     /// </summary>
-    private static ProcessPodiumTypeActions() {
+    private static ProcessPodiumTypeActions = () => {
         StandardPodium.PodiumQueue.length = 0
         PodiumUtil.ClearPodiumUnits(StandardPodium.MovedUnits)
         switch (StandardPodium.PodiumType) {

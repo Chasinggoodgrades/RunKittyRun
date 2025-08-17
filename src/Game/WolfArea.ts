@@ -24,7 +24,7 @@ export class WolfArea {
         this.Region = region
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         let count = 0
         for (const wolfRegion of RegionList.WolfRegions) {
             const wolfArea = new WolfArea(count, wolfRegion.region())
@@ -38,7 +38,7 @@ export class WolfArea {
         }
     }
 
-    private RegisterEnterEvents() {
+    private RegisterEnterEvents = () => {
         const AreaTrigger = Trigger.create()!
         AreaTrigger.registerEnterRegion(this.Region, FilterList.KittyFilter)
         AreaTrigger.addAction(() => {
@@ -59,7 +59,7 @@ export class WolfArea {
     /// <summary>
     /// Prevents wolves from leaving the area with wander.
     /// </summary>
-    private RegisterLeaveEvents() {
+    private RegisterLeaveEvents = () => {
         const AreaTrigger = Trigger.create()!
         AreaTrigger.registerLeaveRegion(this.Region, FilterList.DogFilter)
         AreaTrigger.addAction(() => {
@@ -72,7 +72,7 @@ export class WolfArea {
         })
     }
 
-    private CalculateArea() {
+    private CalculateArea = () => {
         const width = Math.abs(this.Rectangle.maxX - this.Rectangle.minX)
         const height = Math.abs(this.Rectangle.maxY - this.Rectangle.minY)
 

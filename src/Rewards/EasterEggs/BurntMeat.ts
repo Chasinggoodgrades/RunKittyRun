@@ -22,7 +22,7 @@ export class BurntMeat {
         k.Unit.addItemById(BurntMeat.ITEM_CLOAK_FLAMES)
     }
 
-    public static RegisterTurnInTrigger() {
+    public static RegisterTurnInTrigger = () => {
         TriggerRegisterUnitInRangeSimple(BurntMeat.StanTurnIn.handle, 200, SpawnChampions.Stan2025.handle)
         if (BurntMeat.StanTurnInActions !== null) return
         BurntMeat.StanTurnInActions = BurntMeat.StanTurnIn.addAction(

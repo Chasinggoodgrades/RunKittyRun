@@ -15,17 +15,17 @@ export class Gamemode {
     public static IsGameModeChosen: boolean = false
     public static PlayersPerTeam = 0
 
-    public static Initialize() {
+    public static Initialize = () => {
         Gamemode.ChoosingGameMode()
     }
 
-    private static ChoosingGameMode() {
+    private static ChoosingGameMode = () => {
         Gamemode.HostPlayer = Globals.ALL_PLAYERS[0]
         Gamemode.HostOptions()
         Gamemode.HostPickingGamemode()
     }
 
-    private static HostOptions() {
+    private static HostOptions = () => {
         if (!ADMINDISABLE.AdminsGame()) return
         Gamemode.HostPlayer.DisplayTimedTextTo(
             Globals.TIME_TO_PICK_GAMEMODE,
@@ -87,7 +87,7 @@ export class Gamemode {
         }
     }
 
-    private static HostPickingGamemode() {
+    private static HostPickingGamemode = () => {
         const color = Colors.COLOR_YELLOW_ORANGE
         for (const player of Globals.ALL_PLAYERS) {
             const localplayer = GetLocalPlayer()
@@ -100,7 +100,7 @@ export class Gamemode {
         }
     }
 
-    private static NotifyGamemodeChosen() {
+    private static NotifyGamemodeChosen = () => {
         for (const player of Globals.ALL_PLAYERS) {
             player.DisplayTimedTextTo(
                 Globals.TIME_TO_PICK_GAMEMODE / 3.0,
@@ -114,7 +114,7 @@ export class Gamemode {
         }
     }
 
-    private static SetupChosenGamemode() {
+    private static SetupChosenGamemode = () => {
         switch (CurrentGameMode.active) {
             case GameMode.Standard:
                 Standard.Initialize()

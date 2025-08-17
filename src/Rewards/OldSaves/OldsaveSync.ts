@@ -17,7 +17,7 @@ export class OldsaveSync {
         return BlzSendSyncData(OldsaveSync.SYNC_PREFIX, s)
     }
 
-    public static Initialize() {
+    public static Initialize = () => {
         for (const player of Globals.ALL_PLAYERS) {
             OldsaveSync.Trigger.registerPlayerSyncEvent(player, OldsaveSync.SYNC_PREFIX, false)
         }
@@ -28,7 +28,7 @@ export class OldsaveSync {
         })
     }
 
-    public static LoadActions() {
+    public static LoadActions = () => {
         const savecode: Savecode = new Savecode()
         if (OldsaveSync.SaveLoadCode.length < 1) return
         if (!savecode.Load(OldsaveSync.SavePlayer, OldsaveSync.SaveLoadCode)) {

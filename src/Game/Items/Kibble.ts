@@ -41,12 +41,12 @@ export class Kibble extends IDisposable {
         this.Type = Kibble.RandomKibbleType()
     }
 
-    public dispose() {
+    public dispose = () => {
         this.Item?.destroy()
         MemoryHandler.destroyObject(this)
     }
 
-    public SpawnKibble() {
+    public SpawnKibble = () => {
         const regionNumber = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         const region = RegionList.WolfRegions[regionNumber]
         const x = GetRandomReal(region.minX, region.maxX)

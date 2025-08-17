@@ -31,7 +31,7 @@ export class PlayerGameData {
         this.RoundDeaths = 0
     }
 
-    public ResetRoundData() {
+    public ResetRoundData = () => {
         this.RoundSaves = 0
         this.RoundDeaths = 0
         this.DeathlessProgress = 0
