@@ -78,7 +78,6 @@ export function getFilesInDirectory(dir: string) {
 
 function createTemporaryTSConfig(mapFolder: string) {
     const tsconfig = loadJsonFile('tsconfig.json')
-    const plugin = tsconfig.compilerOptions.plugins[0]
 
     // Create a copy and modify the plugin settings
     const tempConfig = JSON.parse(JSON.stringify(tsconfig))
