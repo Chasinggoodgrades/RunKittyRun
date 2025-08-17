@@ -92,30 +92,32 @@ export class AffixFactory {
         return affix
     }
 
-    private static AvailableAffixes(laneNumber: number) {
-        let affixes = AffixTypes.join(', ') // Start with all affixes in a single string
-        const fixationCount = WolfArea.WolfAreas.get(laneNumber)!.FixationCount
-        if (
-            laneNumber > 6 ||
-            Difficulty.DifficultyValue === DifficultyLevel.Hard ||
-            fixationCount >= AffixFactory.MAX_FIXIATION_PER_LANE
-        )
-            affixes = affixes.replace('Fixation, ', '').replace(', Fixation', '').replace('Fixation', '')
-        if (Difficulty.DifficultyValue === DifficultyLevel.Hard) {
-            affixes = affixes.replace('Chaos, ', '').replace(', Chaos', '').replace('Chaos', '')
-        }
-        return affixes.trim()
+    private static availableAffixes(laneNumber: number): string {
+        const { Hard } = DifficultyLevel
+        const affixes = [...AffixTypes] // Clone to avoid mutating original
+        const fixationCount = WolfArea.WolfAreas.get(laneNumber)?.FixationCount ?? 0
+
+        const isHard = Difficulty.DifficultyValue === Hard
+        const isFixationBlocked = laneNumber > 6 || isHard || fixationCount >= AffixFactory.MAX_FIXIATION_PER_LANE
+
+        const filtered = affixes.filter(type => {
+            if (type === 'Fixation' && isFixationBlocked) return false
+            if (type === 'Chaos' && isHard) return false
+            return true
+        })
+
+        return filtered.join(', ')
     }
 
     private static ApplyRandomAffix(unit: Wolf, laneNumber: number): Affix {
         try {
-            const affixes = AffixFactory.AvailableAffixes(laneNumber)
+            const affixes = AffixFactory.availableAffixes(laneNumber)
 
             const affixArray = affixes.split(', ').filter(v => !!v)
 
             if (affixArray.length === 0) return null as never
 
-            const randomIndex = Math.random()
+            const randomIndex = Math.floor(Math.random() * affixArray.length)
             const randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
         } catch (ex: any) {

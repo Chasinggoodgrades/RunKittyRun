@@ -46,12 +46,12 @@ export class Howler extends Affix {
 
     private RegisterTimerEvents() {
         this.HowlTimer = createAchesTimer()
-        this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, this.Howl)
+        this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
     }
 
     private Howl() {
         try {
-            this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, this.Howl)
+            this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
             if (this.Unit.paused) return
             Utility.CreateEffectAndDisposeAttach(this.ROAR_EFFECT, this.Unit.Unit, 'origin')
             this.NearbyWolves.enumUnitsInRange(

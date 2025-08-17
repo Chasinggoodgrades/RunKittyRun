@@ -101,7 +101,7 @@ export class Chaos extends Affix {
 
     private RegisterTimer() {
         try {
-            this.RotationTimer?.Timer.start(this.rotationTime, true, this.RotateAffix)
+            this.RotationTimer?.Timer.start(this.rotationTime, true, () => this.RotateAffix())
             const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)

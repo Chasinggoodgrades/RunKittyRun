@@ -40,7 +40,7 @@ export class Bomber extends Affix {
         try {
             this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
-            this.RangeIndicator = MemoryHandler.getEmptyObject<RangeIndicator>()
+            this.RangeIndicator = MemoryHandler.getEmptyClass<RangeIndicator>(new RangeIndicator())
             this.RegisterTimers()
             super.Apply()
         } catch (e: any) {
@@ -71,14 +71,14 @@ export class Bomber extends Affix {
     }
 
     private RegisterTimers() {
-        this.ExplodeTimer.Timer.start(Bomber.ExplosionInterval(), false, this.StartExplosion)
+        this.ExplodeTimer.Timer.start(Bomber.ExplosionInterval(), false, () => this.StartExplosion())
     }
 
     private StartExplosion() {
         // Temporary for testing, will add an actual graphic ticker later
         try {
-            if (this.Unit.paused) {
-                this.ExplodeTimer?.Timer.start(Bomber.ExplosionInterval(), false, this.StartExplosion)
+            if (this.Unit?.paused) {
+                this.ExplodeTimer?.Timer.start(Bomber.ExplosionInterval(), false, () => this.StartExplosion())
                 return
             }
             if (this.RangeIndicator === null) return
@@ -97,7 +97,7 @@ export class Bomber extends Affix {
                 )
             }
 
-            Utility.SimpleTimer(4.0, this.Explode)
+            Utility.SimpleTimer(4.0, () => this.Explode())
         } catch (e: any) {
             Logger.Warning(`Error in Bomber.StartExplosion: ${e}`)
         }
@@ -148,7 +148,7 @@ export class Bomber extends Affix {
             this.TimerIndicator.x = this.Unit.Unit.x
             this.TimerIndicator.y = this.Unit.Unit.y
         }
-        this.ReviveAlphaTimer?.Timer?.start(1.0, true, this.ReviveActions)
+        this.ReviveAlphaTimer?.Timer?.start(1.0, true, () => this.ReviveActions())
     }
 
     private ReviveActions() {
@@ -162,7 +162,7 @@ export class Bomber extends Affix {
             this.Unit.IsReviving = false
             this.TimerIndicator?.playAnimation(ANIM_TYPE_DEATH)
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
-            this.ExplodeTimer?.Timer?.start(Bomber.ExplosionInterval(), false, this.StartExplosion)
+            this.ExplodeTimer?.Timer?.start(Bomber.ExplosionInterval(), false, () => this.StartExplosion())
         }
     }
 

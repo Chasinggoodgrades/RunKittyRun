@@ -56,7 +56,7 @@ export class Blitzer extends Affix {
         this.BlitzerTimer = null
         this.MoveTimer = null
         this.PreBlitzerTimer = null
-        GC.RemoveEffect(this.Effect) // TODO; Cleanup:         GC.RemoveEffect(ref Effect);
+        GC.RemoveEffect(this.Effect) // TODO; Cleanup:         GC.RemoveEffect(ref Effec`t);
         this.EndBlitz()
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.color = PLAYER_COLOR_BROWN
@@ -67,21 +67,21 @@ export class Blitzer extends Affix {
         this.MoveTimer = createAchesTimer()
         this.PreBlitzerTimer = createAchesTimer()
         const randomFlyTime = GetRandomReal(4.0, 10.0) // random time to move before blitzing
-        this.MoveTimer?.Timer.start(randomFlyTime, false, this.PreBlitzerMove) // initial move
+        this.MoveTimer?.Timer.start(randomFlyTime, false, () => this.PreBlitzerMove()) // initial move
         this.BlitzerTimer = createAchesTimer()
     }
 
     private PreBlitzerMove() {
         try {
-            if (this.Unit.paused) {
-                this.MoveTimer?.Timer.start(GetRandomReal(3.0, 10.0), false, this.PreBlitzerMove)
+            if (this.Unit?.paused) {
+                this.MoveTimer?.Timer.start(GetRandomReal(3.0, 10.0), false, () => this.PreBlitzerMove())
                 return
             }
             this.WanderEffect ??= Effect.createAttachment(DEFAULT_OVERHEAD_EFFECT, this.Unit.Unit, 'overhead')!
             this.WanderEffect.playAnimation(ANIM_TYPE_STAND)
             this.Unit.Unit.setVertexColor(255, 255, 0, 255)
             this.Unit.Unit.color = PLAYER_COLOR_YELLOW
-            this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, this.BeginBlitz)
+            this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, () => this.BeginBlitz())
         } catch (e: any) {
             Logger.Warning(`Error in PreBlitzerMove: ${e}`)
             throw e
@@ -99,7 +99,7 @@ export class Blitzer extends Affix {
             this.Effect ??= Effect.createAttachment(this.BLITZER_EFFECT, this.Unit.Unit, 'origin')!
             this.Effect?.playAnimation(ANIM_TYPE_STAND)
             this.Unit.IsWalking = true
-            this.MoveTimer?.Timer.start(randomTime, false, this.PreBlitzerMove)
+            this.MoveTimer?.Timer.start(randomTime, false, () => this.PreBlitzerMove())
         } catch (e: any) {
             Logger.Warning(`Error in BeginBlitz: ${e}`)
             throw e
@@ -140,7 +140,7 @@ export class Blitzer extends Affix {
         const stepTime = 1.0 / 50.0
 
         // Set a timer to call this method again after a short delay
-        this.BlitzerTimer?.Timer.start(stepTime, false, this.BlitzerMove)
+        this.BlitzerTimer?.Timer.start(stepTime, false, () => this.BlitzerMove())
     }
 
     private EndBlitz() {
