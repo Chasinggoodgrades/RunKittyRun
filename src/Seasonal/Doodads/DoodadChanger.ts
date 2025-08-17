@@ -20,17 +20,16 @@ export class DoodadChanger {
     private static RedLavaCracks: number = FourCC('B00B')
     private static BlueLavaCracks: number = FourCC('B00C')
     private static SuperChristmasTree: number = FourCC('B00D')
-    private static ChristmasDecor: number[]
+    public static ChristmasDecor: number[]
     private static AllDestructables: destructable[] = []
 
     public static Initialize = () => {
-        DoodadChanger.ChristmasDecor = DoodadChanger.InitChristmasDecor()
         DoodadChanger.CreateInitDestructiables()
         if (CurrentGameMode.active !== GameMode.Standard) return
         DoodadChanger.SeasonalDoodads()
     }
 
-    private static InitChristmasDecor = () => {
+    public static InitChristmasDecor = () => {
         return [
             DoodadChanger.CrystalRed,
             DoodadChanger.CrystalBlue,

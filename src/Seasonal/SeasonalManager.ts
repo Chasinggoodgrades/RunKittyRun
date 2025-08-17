@@ -29,6 +29,7 @@ export class SeasonalManager {
         SeasonalManager.DetermineSeason()
         SeasonalManager.SetMinimap()
         SeasonalManager.SetWeather()
+        SeasonalManager.NoSeason()
         DoodadChanger.Initialize()
         TerrainChanger.Initialize()
         SeasonalAwards.Initialize()

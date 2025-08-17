@@ -46,6 +46,7 @@ import { RewardsFrame } from '../UI/Frames/RewardsFrame'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
+import { InitVariables } from './VariableInit'
 
 export class Setup {
     private static timeToChoose = 0.0
@@ -55,10 +56,12 @@ export class Setup {
         try {
             SetGameSpeed(MAP_SPEED_FASTEST)
             LockGameSpeedBJ()
+            InitVariables()
             Globals.Initialize()
             ColorUtils.Initialize()
             GameSeed.Initialize()
             WolfPoint.AssignOrderIds()
+            SeasonalManager.Initialize()
             DoodadChanger.ShowSeasonalDoodads(false)
             Gamemode.Initialize()
             Setup.SetupVIPList()
