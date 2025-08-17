@@ -6,7 +6,7 @@ import { Action } from 'src/Utility/CSUtils'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Trigger } from 'w3ts'
 import { EncodingBase64 } from './Base64'
-import { KittyData } from './MAKE REWARDS HERE/KittyData'
+import { KittyData, SetRewardsFromUnavailableToAvailable } from './MAKE REWARDS HERE/KittyData'
 import { EncodingHex } from './SyncUtil/EncodingHex'
 
 export class SaveManager {
@@ -26,7 +26,7 @@ export class SaveManager {
     }
 
     public static SaveAll = () => {
-        const date = DateTimeManager.DateTime.toString()
+        const date = DateTimeManager.GetStringDateFormat()
         for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
@@ -39,7 +39,7 @@ export class SaveManager {
 
     public Save(player: MapPlayer) {
         try {
-            const date = DateTimeManager.DateTime.toString()
+            const date = DateTimeManager.GetStringDateFormat()
             const playerData = SaveManager.SaveData.get(player)
             if (!playerData) return
             playerData.Date = date
@@ -138,7 +138,7 @@ export class SaveManager {
         // Create a new instance of KittyData and assign the decoded properties
         const kittyData = new KittyData()
         Object.assign(kittyData, decodedData)
-        kittyData.SetRewardsFromUnavailableToAvailable()
+        SetRewardsFromUnavailableToAvailable(kittyData)
         SaveManager.SaveData.set(player, kittyData)
         if (!SaveManager.PlayersLoaded.includes(player)) SaveManager.PlayersLoaded.push(player)
     }
@@ -306,11 +306,9 @@ export class FilePromise {
 export class PropertyEncoder {
     public static EncodeToJsonBase64(obj: object) {
         try {
-            const jsonString = ['{']
-            PropertyEncoder.AppendProperties(obj, jsonString)
-            jsonString.push('}')
+            const jsonString = json().encode(obj)
 
-            const base64String = EncodingBase64.Encode(jsonString.join(''))
+            const base64String = EncodingBase64.Encode(jsonString)
             return base64String
         } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
@@ -334,7 +332,7 @@ export class PropertyEncoder {
             for (const player of Globals.ALL_PLAYERS) {
                 const playerData = SaveManager.SaveData.get(player)
                 if (!playerData) continue
-                jsonString += `"${player.name}":${PropertyEncoder.GetJsonData(playerData)},`
+                jsonString += `"${player.name}":${json().encode(playerData)},`
             }
             if (jsonString.length > 0 && jsonString[jsonString.length - 1] === ',') {
                 jsonString = jsonString.slice(0, -1)

@@ -14,12 +14,17 @@ export class DateTimeManager {
     }
 
     private static SetDateTime(time: LuaDateInfoResult) {
-        print(
-            `${Colors.COLOR_YELLOW_ORANGE}Lobby date:|r ${Colors.COLOR_LAVENDER}${time.hour}:${time.min}:${time.sec} ${time.day}/${time.month}/${time.year}`
-        )
         DateTimeManager.DateTime = time
         DateTimeManager.CurrentMonth = time.month
         DateTimeManager.CurrentDay = time.day
         Globals.DATE_TIME_LOADED = true
+        print(
+            `${Colors.COLOR_YELLOW_ORANGE}Lobby date:${Colors.COLOR_RESET} ${Colors.COLOR_LAVENDER}${DateTimeManager.GetStringDateFormat()}${Colors.COLOR_RESET}`
+        )
+    }
+    //     "Date": "2025-08-09 20:45:51",
+
+    public static GetStringDateFormat = () => {
+        return `${DateTimeManager.DateTime.year}-${DateTimeManager.DateTime.month}-${DateTimeManager.DateTime.day} ${DateTimeManager.DateTime.hour}:${DateTimeManager.DateTime.min}:${DateTimeManager.DateTime.sec}`
     }
 }
