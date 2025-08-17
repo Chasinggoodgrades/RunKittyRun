@@ -154,7 +154,7 @@ export class CommandsManager {
         if (CommandsManager.CommandsList.length === 0) {
             player.DisplayTimedTextTo(
                 5.0,
-                `${Colors.COLOR_YELLOW_ORANGE}commands: found: for: filter: No: ${Colors.COLOR_GOLD}${filter}|r`
+                `${Colors.COLOR_YELLOW_ORANGE}No commands found for filter: ${Colors.COLOR_GOLD}${filter}|r`
             )
             return
         }
