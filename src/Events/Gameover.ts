@@ -78,7 +78,7 @@ export class Gameover {
     private static SendWinMessage() {
         if (CurrentGameMode.active === GameMode.Standard)
             print(
-                `${Colors.COLOR_GREEN}Congratulations on winning the game on ${Difficulty.DifficultyOption.ToString()}!${Colors.COLOR_RESET}`
+                `${Colors.COLOR_GREEN}Congratulations on winning the game on ${Difficulty.DifficultyOption.toString()}!${Colors.COLOR_RESET}`
             )
         else
             print(

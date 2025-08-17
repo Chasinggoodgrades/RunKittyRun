@@ -131,7 +131,7 @@ export class StandardMultiboard {
 
     private static CurrentGameStats() {
         try {
-            StandardMultiboard.CurrentStats.title = `${Colors.COLOR_YELLOW_ORANGE}Current Stats [${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+            StandardMultiboard.CurrentStats.title = `${Colors.COLOR_YELLOW_ORANGE}Current Stats [${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
             StandardMultiboard.CurrentStats.rows = Globals.ALL_PLAYERS.length + 2
             let rowIndex = 2
 
@@ -201,7 +201,7 @@ export class StandardMultiboard {
     }
 
     private static OverallGameStats() {
-        StandardMultiboard.OverallStats.title = `Overall Stats ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+        StandardMultiboard.OverallStats.title = `Overall Stats ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.OverallStats.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
@@ -263,7 +263,7 @@ export class StandardMultiboard {
     }
 
     private static BestTimesStats() {
-        StandardMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.ToString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
+        StandardMultiboard.BestTimes.title = `Best Times ${Colors.COLOR_YELLOW_ORANGE}[${CurrentGameMode.active}-${Difficulty.DifficultyOption.toString()}]|r ${Colors.COLOR_RED}[Press ESC]|r`
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 

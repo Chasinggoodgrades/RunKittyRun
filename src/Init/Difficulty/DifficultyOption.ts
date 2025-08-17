@@ -26,7 +26,7 @@ export class DifficultyOption {
         )!
     }
 
-    public ToString(): string {
+    public toString(): string {
         return `${this.Color}${this.name}|r`
     }
 

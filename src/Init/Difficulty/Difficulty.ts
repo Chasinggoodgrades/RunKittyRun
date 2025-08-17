@@ -47,7 +47,7 @@ export class Difficulty {
             DifficultyOption.DifficultyChoosing.display(player, false)
             Utility.TimedTextToAllPlayers(
                 3.0,
-                `${ColorUtils.PlayerNameColored(player)}|r has chosen ${option?.ToString()} difficulty.${Colors.COLOR_RESET}`
+                `${ColorUtils.PlayerNameColored(player)}|r has chosen ${option?.toString()} difficulty.${Colors.COLOR_RESET}`
             )
         })
     }

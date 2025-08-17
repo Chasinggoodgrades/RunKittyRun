@@ -8,11 +8,13 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { DEFAULT_OVERHEAD_EFFECT, Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { Disco } from 'src/Misc/Disco'
+import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
 import { WolfPoint } from '../WolfPoint'
+import * as NamedWolvesEntity from './NamedWolves'
 
 export class Wolf {
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
@@ -54,6 +56,7 @@ export class Wolf {
         Globals.ALL_WOLVES.set(this.Unit, this)
 
         this.WolfArea.Wolves.push(this)
+        this.Texttag = TextTag.create()!
     }
 
     /// <summary>
@@ -68,8 +71,8 @@ export class Wolf {
                     const lane = Number(laneStr)
                     for (let i = 0; i < numberOfWolves; i++) new Wolf(lane)
                 }
-                // FandF.CreateBloodWolf()
-                // NamedWolves.CreateNamedWolves()
+                FandF.CreateBloodWolf()
+                NamedWolvesEntity.NamedWolves.CreateNamedWolves()
             }
         } catch (e: any) {
             Logger.Critical(`Error in Wolf.SpawnWolves: ${e}`)
