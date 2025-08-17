@@ -13,7 +13,7 @@ import { CrystalOfFire } from '../EasterEggs/Fieryfox/CrystalOfFire'
 import { AwardManager } from '../Rewards/AwardManager'
 
 export class DeathlessChallenges {
-    public static DeathlessCount: number = 0 // Number of deaths allowed for the current round.
+    public static DeathlessCount = 0 // Number of deaths allowed for the current round.
 
     public static Initialize() {
         this.ResetDeathless()
@@ -24,7 +24,7 @@ export class DeathlessChallenges {
     /// </summary>
     public static ResetDeathless() {
         this.DeathlessCount = 0
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             this.ResetPlayerDeathless(kitty)
         }

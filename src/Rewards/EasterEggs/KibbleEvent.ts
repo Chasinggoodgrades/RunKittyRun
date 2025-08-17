@@ -12,12 +12,12 @@ import { Challenges } from '../Challenges/Challenges'
 export class KibbleEvent {
     private static EventActive: boolean = false
     private static EventPlayed: boolean = false
-    private static EventKibblesCollected: number = 0
-    private static TotalEventKibbles: number = 200
-    private static EventExtraKibbles: number = 5 // a little extra, the previous ones also don't despawn if theres any left.
+    private static EventKibblesCollected = 0
+    private static TotalEventKibbles = 200
+    private static EventExtraKibbles = 5 // a little extra, the previous ones also don't despawn if theres any left.
     private static EventTimer: Timer
     private static EventTimerDialog: TimerDialog
-    private static EventLength: number = 300.0 // 5 minutes to collect 200 kibble xd
+    private static EventLength = 300.0 // 5 minutes to collect 200 kibble xd
 
     public static StartKibbleEvent(chance: number) {
         let adjustedChance = !PROD ? 5 : 1
@@ -42,7 +42,7 @@ export class KibbleEvent {
         )
 
         // Spawn event kibbles
-        for (let i: number = 0; i < this.TotalEventKibbles + this.EventExtraKibbles; i++) {
+        for (let i = 0; i < this.TotalEventKibbles + this.EventExtraKibbles; i++) {
             let kibble = MemoryHandler.getEmptyObject<Kibble>()
             kibble.SpawnKibble()
             ItemSpawnerTrackKibbles.active.push(kibble)
@@ -56,7 +56,7 @@ export class KibbleEvent {
         GC.RemoveTimerDialog(this.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
         GC.RemoveTimer(this.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
 
-        for (let i: number = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
+        for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
             let kibble = ItemSpawnerTrackKibbles.active[i]
             if (kibble.Item === null) continue
             kibble.dispose()

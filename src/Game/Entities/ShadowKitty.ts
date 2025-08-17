@@ -16,13 +16,13 @@ export class ShadowKitty {
 
     public Kitty: Kitty
 
-    public Active: boolean
+    public Active = false
 
     public wCollision: Trigger
 
     public cCollision: Trigger
 
-    public ID: number
+    public ID = 0
 
     constructor(kitty: Kitty) {
         this.Kitty = kitty

@@ -11,7 +11,7 @@ export class GameTimer {
     }
 
     public static RoundTime: number[]
-    public static RoundSpeedIncrement: number = 0.12
+    public static RoundSpeedIncrement = 0.12
     private static GameTimeBar: Frame = Frame.fromName('ResourceBarSupplyText', 0)!
 
     /// <summary>
@@ -47,7 +47,7 @@ export class GameTimer {
 
     private static UpdateIndividualTimes() {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND)
         }
@@ -56,7 +56,7 @@ export class GameTimer {
 
     private static UpdateTeamTimes() {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
-        for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             let team = Globals.ALL_TEAMS_LIST[i]
             if (!team.Finished) {
                 let teamTime = team.TeamTimes.get(Globals.ROUND)

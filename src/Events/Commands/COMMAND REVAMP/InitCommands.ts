@@ -349,7 +349,7 @@ export class InitCommands {
             description: 'Displays the kibble collected by each player.',
             action: (player, args) => {
                 let kibbleList = ''
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+                for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                     let kitty = Globals.ALL_KITTIES_LIST[i]
                     let kibbleCollected = kitty.CurrentStats.CollectedKibble
                     kibbleList += `${ColorUtils.PlayerNameColored(kitty.Player)}: ${kibbleCollected}\n`
@@ -840,7 +840,7 @@ export class InitCommands {
             description: 'Moves all kitties to the spawn location.',
             action: (player, args) => {
                 let spawnCenter = RegionList.SpawnRegions[1]
-                for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+                for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                     let kitty = Globals.ALL_KITTIES_LIST[i]
                     kitty.Unit.setPosition(spawnCenter.centerX, spawnCenter.centerY)
                 }
@@ -1496,7 +1496,7 @@ export class InitCommands {
             description: 'Foreach memory test, executes 20k iterations of for loop.',
             action: (player, args) => {
                 // Roughly 3MB of memory per 20k iterations.
-                for (let i: number = 0; i < 20000; i++) {
+                for (let i = 0; i < 20000; i++) {
                     for (let [_, k] of Globals.ALL_KITTIES) {
                         k.TeamID = k.TeamID
                     }

@@ -9,8 +9,8 @@ export class TerrainChanger {
     public static SafezoneTerrain: number[] = []
     public static NormalCliff: string = 'cXc1'
     public static DirtCliff: string = 'cXc2'
-    public static LastWolfTerrain: number = 0
-    public static LastSafezoneTerrain: number = 0
+    public static LastWolfTerrain = 0
+    public static LastSafezoneTerrain = 0
 
     public static Initialize() {
         try {
@@ -49,7 +49,7 @@ export class TerrainChanger {
         this.Terrains[3] = FourCC('Xhdg')
         this.Terrains[4] = FourCC('Ywmb')
 
-        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
+        for (let i = 0; i < Globals.NumberOfRounds; i++) {
             this.SafezoneTerrain[i] = FourCC('Xblm')
         }
         this.SetTerrain()
@@ -63,10 +63,10 @@ export class TerrainChanger {
                 SafezoneTerrain[3] = FourCC("Kdkt");
                 SafezoneTerrain[4] = FourCC("Oaby");*/
 
-        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
+        for (let i = 0; i < Globals.NumberOfRounds; i++) {
             TerrainChanger.SafezoneTerrain[i] = FourCC('Ibsq') // Icecrown Glaicer (Black Squares)
         }
-        for (let i: number = 0; i < Globals.NumberOfRounds; i++) {
+        for (let i = 0; i < Globals.NumberOfRounds; i++) {
             TerrainChanger.Terrains[i] = FourCC('Nrck')
         }
     }

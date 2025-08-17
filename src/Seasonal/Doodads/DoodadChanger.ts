@@ -78,7 +78,7 @@ export class DoodadChanger {
     }
 
     private static CreateInitDestructiables() {
-        let counter: number = 0
+        let counter = 0
 
         for (let safeZone of Globals.SAFE_ZONES) {
             let rect = safeZone.Rectangle

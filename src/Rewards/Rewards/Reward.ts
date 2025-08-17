@@ -34,26 +34,41 @@ export enum RewardType {
 
 export class Reward {
     public name: string
-    public AbilityID: number
+    public AbilityID = 0
     public OriginPoint: string
     public ModelPath: string
-    public SkinID: number
+    public SkinID = 0
     public Type: RewardType
     public TypeSorted: string
     public GameStat: string
-    public GameStatValue: number
+    public GameStatValue = 0
 
-    constructor(name: string, abilityID: number, originPoint: string, modelPath: string, type: RewardType)
-    constructor(name: string, abilityID: number, skinID: number, type: RewardType)
-    constructor(
+    private constructor(name: string, abilityID: number, type: RewardType) {
+        this.name = name
+        this.AbilityID = abilityID
+        this.Type = type
+    }
+
+    /**
+     * Creates a reward with model path and origin point (for effects like auras, trails, wings, hats)
+     */
+    public static createRewardFromModel(
         name: string,
         abilityID: number,
-        skinID: number,
-        type: RewardType,
-        gameStat: string,
-        gameStatValue: number
-    )
-    constructor(
+        originPoint: string,
+        modelPath: string,
+        type: RewardType
+    ): Reward {
+        const reward = new Reward(name, abilityID, type)
+        reward.OriginPoint = originPoint
+        reward.ModelPath = modelPath
+        return reward
+    }
+
+    /**
+     * Creates a reward with model path, origin point, and game stat tracking
+     */
+    public static createRewardFromModelWithStats(
         name: string,
         abilityID: number,
         originPoint: string,
@@ -61,51 +76,42 @@ export class Reward {
         type: RewardType,
         gameStat: string,
         gameStatValue: number
-    )
-    constructor(
+    ): Reward {
+        const reward = new Reward(name, abilityID, type)
+        reward.OriginPoint = originPoint
+        reward.ModelPath = modelPath
+        reward.GameStat = gameStat
+        reward.GameStatValue = gameStatValue
+        GameStatRewards.push(reward)
+        return reward
+    }
+
+    /**
+     * Creates a reward with skin ID (for skin rewards)
+     */
+    public static createRewardFromSkin(name: string, abilityID: number, skinID: number, type: RewardType): Reward {
+        const reward = new Reward(name, abilityID, type)
+        reward.SkinID = skinID
+        return reward
+    }
+
+    /**
+     * Creates a reward with skin ID and game stat tracking
+     */
+    public static createRewardFromSkinWithStats(
         name: string,
         abilityID: number,
-        arg3: string | number,
-        arg4: string | RewardType,
-        arg5?: RewardType | string,
-        arg6?: string | number,
-        arg7?: number
-    ) {
-        this.name = name
-        this.AbilityID = abilityID
-
-        if (typeof arg3 === 'string' && typeof arg4 === 'string' && typeof arg5 === 'object') {
-            this.OriginPoint = arg3
-            this.ModelPath = arg4
-            this.Type = arg5 as RewardType
-        } else if (typeof arg3 === 'number' && typeof arg4 === 'object' && arg5 === undefined) {
-            this.SkinID = arg3
-            this.Type = arg4 as RewardType
-        } else if (
-            typeof arg3 === 'number' &&
-            typeof arg4 === 'object' &&
-            typeof arg5 === 'string' &&
-            typeof arg6 === 'number'
-        ) {
-            this.SkinID = arg3
-            this.Type = arg4 as RewardType
-            this.GameStat = arg5
-            this.GameStatValue = arg6
-            GameStatRewards.push(this)
-        } else if (
-            typeof arg3 === 'string' &&
-            typeof arg4 === 'string' &&
-            typeof arg5 === 'object' &&
-            typeof arg6 === 'string' &&
-            typeof arg7 === 'number'
-        ) {
-            this.OriginPoint = arg3
-            this.ModelPath = arg4
-            this.Type = arg5 as RewardType
-            this.GameStat = arg6
-            this.GameStatValue = arg7
-            GameStatRewards.push(this)
-        }
+        skinID: number,
+        type: RewardType,
+        gameStat: string,
+        gameStatValue: number
+    ): Reward {
+        const reward = new Reward(name, abilityID, type)
+        reward.SkinID = skinID
+        reward.GameStat = gameStat
+        reward.GameStatValue = gameStatValue
+        GameStatRewards.push(reward)
+        return reward
     }
 
     /// <summary>
@@ -137,7 +143,7 @@ export class Reward {
             this.DestroyCurrentEffect(player)
             this.ApplyEffect(player, effectInstance)
         } catch (e: any) {
-            Logger.Warning(e.Message)
+            Logger.Warning(e)
         }
     }
 

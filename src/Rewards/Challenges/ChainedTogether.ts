@@ -13,10 +13,10 @@ import { Timer } from 'w3ts'
 import { AwardManager } from '../Rewards/AwardManager'
 
 export class ChainedTogether {
-    private static REQUIRED_PLAYERS: number = 2
+    private static REQUIRED_PLAYERS = 2
     private static KittyLightnings: Map<string, Chain> = new Map()
     private static kittyGroups: Kitty[][] = [] // Convert this into a dictionary
-    private static timerInterval: number = 0.1
+    private static timerInterval = 0.1
     private static MoveChainTimer: Timer
     private static EventTriggered: boolean = false
     private static EventStarted: boolean = false
@@ -31,7 +31,7 @@ export class ChainedTogether {
 
         if (allKitties.length < ChainedTogether.REQUIRED_PLAYERS) return // Need at least 2 players to trigger event.
 
-        for (let i: number = 0; i < allKitties.length - 1; i++) {
+        for (let i = 0; i < allKitties.length - 1; i++) {
             if (!ChainedTogether.IsInLastSafezone(allKitties[i])) {
                 return
             }
@@ -53,7 +53,7 @@ export class ChainedTogether {
         let kitties = Globals.ALL_KITTIES_LIST
         let skippedSafezone: boolean = false
 
-        for (let i: number = 0; i < kitties.length; i++) {
+        for (let i = 0; i < kitties.length; i++) {
             let currentKitty: Kitty = kitties[i]
             if (
                 currentKitty.CurrentSafeZone !== currentSafezone - 1 &&
@@ -95,7 +95,7 @@ export class ChainedTogether {
         let isOutOfRange: boolean = false
         let kittyOutOfRange: string = ''
 
-        for (let i: number = 0; i < kitties.length - 1; i++) {
+        for (let i = 0; i < kitties.length - 1; i++) {
             let kitty = kitties[i]
             let kittyName = kitty.name
 
@@ -139,7 +139,7 @@ export class ChainedTogether {
 
             ChainedTogether.FreeKittiesFromGroup(kittyName, false)
 
-            for (let j: number = 0; j < currentGroup.length - 1; j++) {
+            for (let j = 0; j < currentGroup.length - 1; j++) {
                 let currentKitty = currentGroup[j]
                 let nextKitty = currentGroup[j + 1]
 
@@ -164,7 +164,7 @@ export class ChainedTogether {
 
         let currentGroup = ChainedTogether.kittyGroups[groupIndex]
 
-        for (let i: number = 0; i < currentGroup.length; i++) {
+        for (let i = 0; i < currentGroup.length; i++) {
             let kitty = currentGroup[i]
             kitty.IsChained = false
 
@@ -198,7 +198,7 @@ export class ChainedTogether {
             ChainedTogether.ChainGroup(allKitties)
         }
 
-        let index: number = 0
+        let index = 0
         let groupsOfThree: number = count / 3
         let remainder: number = count % 3
 
@@ -208,7 +208,7 @@ export class ChainedTogether {
             remainder += 3
         }
 
-        for (let i: number = 0; i < groupsOfThree; i++) {
+        for (let i = 0; i < groupsOfThree; i++) {
             let group = [allKitties[index], allKitties[index + 1], allKitties[index + 2]]
             ChainedTogether.kittyGroups.push(group)
             ChainedTogether.ChainGroup(group)
@@ -226,7 +226,7 @@ export class ChainedTogether {
     }
 
     private static ChainGroup(group: Kitty[]) {
-        for (let j: number = 0; j < group.length - 1; j++) {
+        for (let j = 0; j < group.length - 1; j++) {
             let currentKitty = group[j]
             let nextKitty = group[j + 1]
 
@@ -304,7 +304,7 @@ export class Chain {
         [DifficultyLevel.Nightmare]: { good: 750, far: 850, breakPoint: 950 },
     }
 
-    public Chain() {}
+    public constructor() {}
 
     public SetKitties(firstKitty: Kitty, secondKitty: Kitty) {
         this.FirstKitty = firstKitty
@@ -355,7 +355,7 @@ export class Chain {
     }
 
     public ChangeChainColor(distance: number) {
-        let red: number = 0.0,
+        let red = 0.0,
             green = 1.0,
             blue = 0.0,
             alpha = 1.0 // Default color is green

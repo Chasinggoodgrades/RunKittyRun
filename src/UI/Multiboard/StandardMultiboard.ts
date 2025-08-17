@@ -54,10 +54,10 @@ export class StandardMultiboard {
         let ESCTrigger = Trigger.create()!
 
         Updater.registerTimerEvent(1.0, true)
-        Updater.addAction(StandardMultiboard.CurrentStatsRoundTimes)
+        Updater.addAction(() => StandardMultiboard.CurrentStatsRoundTimes())
 
         for (let player of Globals.ALL_PLAYERS) ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
-        ESCTrigger.addAction(StandardMultiboard.ESCPressed)
+        ESCTrigger.addAction(() => StandardMultiboard.ESCPressed())
     }
 
     private static MakeMultiboard() {
@@ -120,7 +120,7 @@ export class StandardMultiboard {
 
     private static CurrentStatsRoundTimes() {
         let color = Colors.COLOR_GREEN
-        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
+        for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             StandardMultiboard.CurrentStats.GetItem(0, i).setText(
                 `${color}${Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i])}|r`
             )
@@ -136,12 +136,12 @@ export class StandardMultiboard {
             // Use a list to hold keys for manual sorting
             StandardMultiboard.PlayersList.length = 0
 
-            for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 StandardMultiboard.PlayersList.push(Globals.ALL_PLAYERS[i])
             }
 
             // Sort the array of keys based on custom criteria
-            for (let i: number = 0; i < StandardMultiboard.PlayersList.length; i++) {
+            for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
                 for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
                     let stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.CurrentStats
                     let stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.CurrentStats
@@ -160,7 +160,7 @@ export class StandardMultiboard {
                 }
             }
 
-            for (let i: number = 0; i < StandardMultiboard.PlayersList.length; i++) {
+            for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
                 let player = StandardMultiboard.PlayersList[i]
                 let currentStats = Globals.ALL_KITTIES.get(player)!.CurrentStats
                 let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
@@ -181,7 +181,7 @@ export class StandardMultiboard {
                 StandardMultiboard.PlayerStats[6] = `${currentStats.RoundSaves} / ${currentStats.RoundDeaths}`
 
                 for (
-                    let j: number = 0;
+                    let j = 0;
                     j < StandardMultiboard.PlayerStats.length - 1;
                     j++ // skip last element
                 ) {
@@ -204,12 +204,12 @@ export class StandardMultiboard {
         let rowIndex = 1
 
         StandardMultiboard.PlayersList.length = 0
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             StandardMultiboard.PlayersList.push(Globals.ALL_PLAYERS[i])
         }
 
         // Sort the array of keys based on custom criteria
-        for (let i: number = 0; i < StandardMultiboard.PlayersList.length; i++) {
+        for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
             for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
                 let stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.SaveData.GameStats
                 let stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.SaveData.GameStats
@@ -227,7 +227,7 @@ export class StandardMultiboard {
             }
         }
 
-        for (let i: number = 0; i < StandardMultiboard.PlayersList.length; i++) {
+        for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
             let player = StandardMultiboard.PlayersList[i]
             let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
             let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
@@ -249,7 +249,7 @@ export class StandardMultiboard {
             StandardMultiboard.PlayerStats[6] = gameCount.toString()
             StandardMultiboard.PlayerStats[7] = winCount.toString()
 
-            for (let j: number = 0; j < StandardMultiboard.PlayerStats.length; j++) {
+            for (let j = 0; j < StandardMultiboard.PlayerStats.length; j++) {
                 StandardMultiboard.OverallStats.GetItem(rowIndex, j).setText(
                     `${playerColor}${StandardMultiboard.PlayerStats[j]}${Colors.COLOR_RESET}`
                 )
@@ -265,14 +265,14 @@ export class StandardMultiboard {
         StandardMultiboard.BestTimes.rows = Globals.ALL_PLAYERS.length + 1
         let rowIndex = 1
 
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let player = Globals.ALL_PLAYERS[i]
             let saveData = Globals.ALL_KITTIES.get(player)!.SaveData
             let playerColor = ColorUtils.GetStringColorOfPlayer(player.id + 1)
 
             let roundTimes = StandardMultiboard.GetGameRoundTime(saveData)
 
-            for (let j: number = 0; j < roundTimes.length; j++) {
+            for (let j = 0; j < roundTimes.length; j++) {
                 if (roundTimes[j] !== 0)
                     StandardMultiboard.BestTimes.GetItem(rowIndex, j + 1).setText(
                         `${playerColor}${Utility.ConvertFloatToTime(roundTimes[j])}${Colors.COLOR_RESET}`
@@ -302,7 +302,7 @@ export class StandardMultiboard {
         StandardMultiboard.BestTimesStats()
     }
 
-    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
+    public static FillPlayers(mb: Multiboard, rowIndex = 2) {
         for (let player of Globals.ALL_PLAYERS) {
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)

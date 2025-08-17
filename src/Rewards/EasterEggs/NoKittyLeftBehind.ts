@@ -10,8 +10,8 @@ import { AwardManager } from '../Rewards/AwardManager'
 export class NoKittyLeftBehind {
     private static ItemID: number
     private static CompletedRounds: number[]
-    private static CompletedCount: number = 0
-    private static RequiredCount: number = 3
+    private static CompletedCount = 0
+    private static RequiredCount = 3
 
     public static Initialize() {
         this.ItemID = Constants.ITEM_EASTER_EGG_CAT_FIGURINE

@@ -15,14 +15,14 @@ import { RelicUtil } from '../RelicUtil'
 export class ShardOfTranslocation extends Relic {
     public static RelicItemID: number = Constants.ITEM_SHARD_OF_TRANSLOCATION
     public static RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE
-    private static RelicCost: number = 650
-    private static DEFAULT_BLINK_RANGE: number = 450.0
-    private static UPGRADE_BLINK_RANGE: number = 650.0
-    private static DEFAULT_COOLDOWN: number = 90.0
-    private static CooldownReduction: number = 30.0
+    private static RelicCost = 650
+    private static DEFAULT_BLINK_RANGE = 450.0
+    private static UPGRADE_BLINK_RANGE = 650.0
+    private static DEFAULT_COOLDOWN = 90.0
+    private static CooldownReduction = 30.0
     private Owner: Unit
     private static IconPath: string = 'ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp'
-    private MaxBlinkRange: number = ShardOfTranslocation.DEFAULT_BLINK_RANGE
+    private MaxBlinkRange = ShardOfTranslocation.DEFAULT_BLINK_RANGE
     private CastEventTrigger: Trigger
 
     public constructor() {
@@ -65,7 +65,7 @@ export class ShardOfTranslocation extends Relic {
         let player = Unit.owner
         let CastEventTrigger = Trigger.create()!
         CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
-        CastEventTrigger.addAction(this.TeleportActions)
+        CastEventTrigger.addAction(() => this.TeleportActions())
     }
 
     private TeleportActions() {
@@ -95,7 +95,7 @@ export class ShardOfTranslocation extends Relic {
             )
             RemoveLocation(targetLoc)
         } catch (e: any) {
-            Logger.Critical(e.Message)
+            Logger.Critical(e)
             throw e
         }
     }

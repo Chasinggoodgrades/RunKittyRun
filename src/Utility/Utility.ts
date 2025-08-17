@@ -37,7 +37,7 @@ export class Utility {
     /// <param name="duration">How long to show the message.</param>
     /// <param name="message">Whats the message?</param>
     public static TimedTextToAllPlayers(duration: number, message: string) {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             Globals.ALL_PLAYERS[i].DisplayTimedTextTo(duration, message)
         }
     }
@@ -109,7 +109,7 @@ export class Utility {
     /// <param name="itemId">The ID of the item to check for.</param>
     /// <returns>True if the unit has the item, otherwise false.</returns>
     public static UnitHasItem(u: Unit, itemId: number) {
-        for (let i: number = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return true
         }
         return false
@@ -123,7 +123,7 @@ export class Utility {
     /// <returns></returns>
     public static UnitHasItemCount(u: Unit, itemId: number) {
         let count = 0
-        for (let i: number = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) count++
         }
         return count
@@ -136,7 +136,7 @@ export class Utility {
     /// <param name="itemId"></param>
     /// <returns></returns>
     public static UnitGetItem(u: Unit, itemId: number) {
-        for (let i: number = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return u.getItemInSlot(i)
         }
 
@@ -150,7 +150,7 @@ export class Utility {
     /// <param name="itemId"></param>
     /// <returns></returns>
     public static GetSlotOfItem(u: Unit, itemId: number) {
-        for (let i: number = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return i
         }
         return -1
@@ -182,10 +182,10 @@ export class Utility {
         text: string,
         duration: number,
         u: Unit,
-        height: number = 0.015,
-        red: number = 255,
-        green: number = 255,
-        blue: number = 255
+        height = 0.015,
+        red = 255,
+        green = 255,
+        blue = 255
     ) {
         let tt = TextTag.create()!
         tt.setText(text, height)
@@ -243,7 +243,7 @@ export class Utility {
     /// </summary>
     /// <param name="Unit">The unit whose items are to be dropped.</param>
     public static DropAllItems(Unit: Unit) {
-        for (let i: number = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             let item = Unit.getItemInSlot(i)
             if (item) Unit.dropItem(item, Unit.x, Unit.y)
         }
@@ -268,7 +268,7 @@ export class Utility {
     /// <param name="awardName">The award name to be formatted.</param>
     public static FormatAwardName(awardName: string) {
         Utility.stringBuilder = []
-        for (let i: number = 0; i < awardName.length; i++) {
+        for (let i = 0; i < awardName.length; i++) {
             const char = awardName[i]
             if (i > 0 && char >= 'A' && char <= 'Z') {
                 Utility.stringBuilder.push(' ')
@@ -283,7 +283,7 @@ export class Utility {
     public static GetPlayerByName(playerName: string) {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let p = Globals.ALL_PLAYERS[i]
             if (p.name.toLowerCase().includes(playerName.toLowerCase())) {
                 return p
@@ -358,7 +358,7 @@ export enum MetaKey {
     META = 8,
 }
 
-export const roundDecimals = (value: number, decimals: number = 0) => {
+export const roundDecimals = (value: number, decimals = 0) => {
     const factor = Math.pow(10, decimals)
     return Math.round(value * factor) / factor
 }

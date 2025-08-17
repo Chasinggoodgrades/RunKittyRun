@@ -1,8 +1,8 @@
 export class RelicUpgrade {
-    public Level: number
+    public Level = 0
     public Description: string
-    public RequiredLevel: number
-    public Cost: number
+    public RequiredLevel = 0
+    public Cost = 0
 
     public constructor(level: number, description: string, requiredLevel: number, cost: number) {
         this.Level = level

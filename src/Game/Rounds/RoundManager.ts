@@ -29,8 +29,8 @@ import { RoundTimer } from './RoundTimer'
 import { RoundUtilities } from './RoundUtilities'
 
 export class RoundManager {
-    public static ROUND_INTERMISSION: number = 30.0
-    public static END_ROUND_DELAY: number = 3.0
+    public static ROUND_INTERMISSION = 30.0
+    public static END_ROUND_DELAY = 3.0
     public static GAME_STARTED: boolean = false
     private static AddedTimeAlready: boolean = false
 
@@ -126,7 +126,7 @@ export class RoundManager {
 
     public static RoundEndCheck(): boolean {
         // Always returns for standard mode, and solo progression mode.
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let kitty = Globals.ALL_KITTIES_LIST[i]
             if (!kitty.Finished) return false
         }
@@ -137,7 +137,7 @@ export class RoundManager {
     public static RoundEndCheckSolo() {
         if (Globals.CurrentGameModeType !== Globals.SOLO_MODES[0]) return // Progression mode
 
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             if (kitty.isAlive()) return
         }
@@ -147,7 +147,7 @@ export class RoundManager {
     public static DidTeamEnd(teamId: number) {
         let teamMemebers = Globals.ALL_TEAMS.get(teamId)!.Teammembers
         // Always returns for standard mode, and solo progression mode.
-        for (let i: number = 0; i < teamMemebers.length; i++) {
+        for (let i = 0; i < teamMemebers.length; i++) {
             let member = teamMemebers[i]
             let kitty = Globals.ALL_KITTIES.get(member)!
             if (!kitty.Finished) return false

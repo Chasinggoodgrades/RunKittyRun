@@ -1,20 +1,20 @@
 export class Deathless {
-    public NormalDeathless1: number
-    public NormalDeathless2: number
-    public NormalDeathless3: number
-    public NormalDeathless4: number
-    public NormalDeathless5: number
-    public HardDeathless1: number = -1
-    public HardDeathless2: number = -1
-    public HardDeathless3: number = -1
-    public HardDeathless4: number = -1
-    public HardDeathless5: number = -1
-    public ImpossibleDeathless1: number = -1
-    public ImpossibleDeathless2: number = -1
-    public ImpossibleDeathless3: number = -1
-    public ImpossibleDeathless4: number = -1
-    public ImpossibleDeathless5: number = -1
-    public NormalTeamDeathless: number
-    public HardTeamDeathless: number
-    public ImpossibleTeamDeathless: number
+    public NormalDeathless1 = 0
+    public NormalDeathless2 = 0
+    public NormalDeathless3 = 0
+    public NormalDeathless4 = 0
+    public NormalDeathless5 = 0
+    public HardDeathless1 = -1
+    public HardDeathless2 = -1
+    public HardDeathless3 = -1
+    public HardDeathless4 = -1
+    public HardDeathless5 = -1
+    public ImpossibleDeathless1 = -1
+    public ImpossibleDeathless2 = -1
+    public ImpossibleDeathless3 = -1
+    public ImpossibleDeathless4 = -1
+    public ImpossibleDeathless5 = -1
+    public NormalTeamDeathless = 0
+    public HardTeamDeathless = 0
+    public ImpossibleTeamDeathless = 0
 }

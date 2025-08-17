@@ -22,7 +22,7 @@ import { WolfLaneHider } from '../WolfLaneHider/WolfLaneHider'
 export class Safezone {
     public Region: region
     private triggerHandle: Trigger
-    public ID: number
+    public ID = 0
     public rect: rect
     public Rectangle: Rectangle
     public AwardedPlayers: MapPlayer[] = []
@@ -48,7 +48,7 @@ export class Safezone {
 
     private EnterSafezoneEvents() {
         this.triggerHandle.registerEnterRegion(this.Region, FilterList.KittyFilterOrShadow)
-        this.triggerHandle.addAction(this.EnterSafezoneActions)
+        this.triggerHandle.addAction(() => this.EnterSafezoneActions())
     }
 
     private EnterSafezoneActions() {
@@ -89,7 +89,7 @@ export class Safezone {
 
         if (CurrentGameMode.active !== GameMode.Standard) return
 
-        for (let i: number = 0; i < kitty.Relics.length; i++) {
+        for (let i = 0; i < kitty.Relics.length; i++) {
             let relic = kitty.Relics[i]
             if (relic instanceof FangOfShadows) {
                 let fangOfShadows: FangOfShadows = relic

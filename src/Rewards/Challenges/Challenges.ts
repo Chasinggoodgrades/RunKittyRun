@@ -14,13 +14,13 @@ import { AwardManager } from '../Rewards/AwardManager'
 import { DeathlessChallenges } from './DeathlessChallenges'
 
 export class Challenges {
-    public static DIVINITY_TENDRILS_COUNT: number = 4
-    public static FREEZE_AURA_WOLF_REQUIREMENT: number = 50
-    private static TURQUOISE_FIRE_DEATH_REQUIREMENT: number = 10
-    private static BLUE_FIRE_DEATH_REQUIREMENT: number = 25
-    private static PURPLE_FIRE_DEATH_REQUIREMENT: number = 0
-    private static PINK_FIRE_SD_REQUIREMENT: number = 3.0
-    private static PURPLE_LIGHTNING_SAVE_REQUIREMENT: number = 175
+    public static DIVINITY_TENDRILS_COUNT = 4
+    public static FREEZE_AURA_WOLF_REQUIREMENT = 50
+    private static TURQUOISE_FIRE_DEATH_REQUIREMENT = 10
+    private static BLUE_FIRE_DEATH_REQUIREMENT = 25
+    private static PURPLE_FIRE_DEATH_REQUIREMENT = 0
+    private static PINK_FIRE_SD_REQUIREMENT = 3.0
+    private static PURPLE_LIGHTNING_SAVE_REQUIREMENT = 175
 
     public static Initialize() {
         DeathlessChallenges.Initialize()
@@ -156,11 +156,11 @@ export class Challenges {
 }
 
 export class YellowLightning {
-    private YELLOW_LIGHTNING_SAVE_REQUIREMENT: number = 6
-    private YELLOW_LIGHTNING_TIMER: number = 3.0
+    private YELLOW_LIGHTNING_SAVE_REQUIREMENT = 6
+    private YELLOW_LIGHTNING_TIMER = 3.0
     public Kitty: Kitty
     public Timer: AchesTimers
-    public SaveCount: number
+    public SaveCount = 0
 
     public constructor(kitty: Kitty) {
         this.Kitty = kitty

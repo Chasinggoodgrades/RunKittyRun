@@ -47,7 +47,7 @@ export class RelicUtil {
     /// <param name="unit"></param>
     /// <param name="itemID"></param>
     /// <param name="abilityID"></param>
-    public static SetRelicCooldowns(unit: Unit, itemID: number, abilityID: number, cooldown: number = 0) {
+    public static SetRelicCooldowns(unit: Unit, itemID: number, abilityID: number, cooldown = 0) {
         // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
         let item = Utility.UnitGetItem(unit, itemID)
         if (!item) return

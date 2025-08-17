@@ -16,7 +16,7 @@ export class MirrorMovementHandler {
         this.MovementTrigger = Trigger.create()!
         this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
         this.MovementTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
-        this.MovementTrigger.addAction(this.HandleMovementOrder)
+        this.MovementTrigger.addAction(() => this.HandleMovementOrder())
     }
 
     private HandleMovementOrder() {

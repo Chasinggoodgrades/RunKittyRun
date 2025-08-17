@@ -13,10 +13,10 @@ export class NitroChallenges {
     private static NitroRoundTimes: Map<number, number>
     private static NitroTimer = Timer.create()
     private static NitroDialog = TimerDialog.create(NitroChallenges.NitroTimer)!
-    private static WHITE_FIRE_DEATH_REQUIREMENT: number = 3
+    private static WHITE_FIRE_DEATH_REQUIREMENT = 3
 
     public static Initialize() {
-        NitroChallenges.NitroRoundTimes.clear()
+        NitroChallenges.NitroRoundTimes = new Map()
     }
 
     public static GetNitroTimeRemaining(): number {
@@ -107,7 +107,7 @@ export class NitroChallenges {
     /// <param name="player"></param>
     /// <returns>int count of the # of safezones reached.</returns>
     public static CountHitSafezones(player: MapPlayer) {
-        let count: number = 0
+        let count = 0
         for (let safezone of Globals.SAFE_ZONES) {
             if (safezone.AwardedPlayers.includes(player)) count++
         }

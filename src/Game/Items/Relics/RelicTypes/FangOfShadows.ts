@@ -15,9 +15,9 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class FangOfShadows extends Relic {
-    public RelicItemID: number = Constants.ITEM_FANG_OF_SHADOWS
-    public RelicAbilityID: number = Constants.ABILITY_SUMMON_SHADOW_KITTY
-    private TeleportAbilityID: number = Constants.ABILITY_APPEAR_AT_SHADOWKITTY
+    public RelicItemID = Constants.ITEM_FANG_OF_SHADOWS
+    public RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY
+    private TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY
     private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
     private SummonTrigger: Trigger
     private TeleTrigger: Trigger
@@ -25,11 +25,11 @@ export class FangOfShadows extends Relic {
     private Owner: Unit
     private Active: boolean = false
 
-    private RelicCost: number = 650
-    private SAFEZONE_REDUCTION: number = 0.25 // 25%
-    private UPGRADE_SAFEZONE_REDUCTION: number = 0.5 // 50%
-    private UPGRADE_COOLDOWN_REDUCTION: number = 30.0
-    private static SHADOW_KITTY_SUMMON_DURATION: number = 75.0
+    private RelicCost = 650
+    private SAFEZONE_REDUCTION = 0.25 // 25%
+    private UPGRADE_SAFEZONE_REDUCTION = 0.5 // 50%
+    private UPGRADE_COOLDOWN_REDUCTION = 30.0
+    private static SHADOW_KITTY_SUMMON_DURATION = 75.0
 
     public constructor() {
         super(
@@ -135,7 +135,7 @@ export class FangOfShadows extends Relic {
     private RegisterTeleportAbility(Unit: Unit) {
         TriggerRegisterUnitEvent(this.TeleTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.TeleTrigger.addCondition(Condition(() => GetSpellAbilityId() === this.TeleportAbilityID))
-        this.TeleTrigger.addAction(this.TeleportToShadowKitty)
+        this.TeleTrigger.addAction(() => this.TeleportToShadowKitty())
     }
 
     /// <summary>

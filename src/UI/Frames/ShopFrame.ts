@@ -33,17 +33,17 @@ export class ShopFrame {
     private static sellButton: Frame
     private static upgradeTooltip: Frame
     private static GameUI: Frame
-    private static buttonWidth: number = 0.025
-    private static buttonHeight: number = 0.025
-    private static panelPadding: number = 0.015
-    private static frameX: number = 0.4
-    private static frameY: number = 0.25
+    private static buttonWidth = 0.025
+    private static buttonHeight = 0.025
+    private static panelPadding = 0.015
+    private static frameX = 0.4
+    private static frameY = 0.25
     private static panelX: number
     private static panelY: number
     private static detailsPanelX: number
     private static detailsPanelY: number
-    private static ActiveAlpha: number = 255
-    private static DisabledAlpha: number = 150
+    private static ActiveAlpha = 255
+    private static DisabledAlpha = 150
     private static DisabledPath: string = 'UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp'
 
     public static Initialize() {
@@ -210,9 +210,9 @@ export class ShopFrame {
     }
 
     private static AddItemsToPanel(panel: Frame, items: ShopItem[]) {
-        let columns: number = 6
+        let columns = 6
         let rows: number = Math.ceil(items.length / columns)
-        for (let i: number = 0; i < items.length; i++) {
+        for (let i = 0; i < items.length; i++) {
             let relic = items[i]
 
             let row: number = i / columns
@@ -353,7 +353,7 @@ export class ShopFrame {
         let finalString: string[] = []
         let playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.name)
 
-        for (let i: number = 0; i < relic.Upgrades.length; i++) {
+        for (let i = 0; i < relic.Upgrades.length; i++) {
             let upgrade = relic.Upgrades[i]
             let color: string, colorDescription
 

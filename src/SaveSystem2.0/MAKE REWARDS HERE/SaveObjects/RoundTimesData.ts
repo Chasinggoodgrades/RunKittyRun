@@ -1,31 +1,31 @@
 export class RoundTimesData {
-    public RoundOneNormal: number
-    public RoundTwoNormal: number
-    public RoundThreeNormal: number
-    public RoundFourNormal: number
-    public RoundFiveNormal: number
+    public RoundOneNormal = 0
+    public RoundTwoNormal = 0
+    public RoundThreeNormal = 0
+    public RoundFourNormal = 0
+    public RoundFiveNormal = 0
 
-    public RoundOneHard: number
-    public RoundTwoHard: number
-    public RoundThreeHard: number
-    public RoundFourHard: number
-    public RoundFiveHard: number
+    public RoundOneHard = 0
+    public RoundTwoHard = 0
+    public RoundThreeHard = 0
+    public RoundFourHard = 0
+    public RoundFiveHard = 0
 
-    public RoundOneImpossible: number
-    public RoundTwoImpossible: number
-    public RoundThreeImpossible: number
-    public RoundFourImpossible: number
-    public RoundFiveImpossible: number
+    public RoundOneImpossible = 0
+    public RoundTwoImpossible = 0
+    public RoundThreeImpossible = 0
+    public RoundFourImpossible = 0
+    public RoundFiveImpossible = 0
 
-    public RoundOneSolo: number
-    public RoundTwoSolo: number
-    public RoundThreeSolo: number
-    public RoundFourSolo: number
-    public RoundFiveSolo: number
+    public RoundOneSolo = 0
+    public RoundTwoSolo = 0
+    public RoundThreeSolo = 0
+    public RoundFourSolo = 0
+    public RoundFiveSolo = 0
 
-    public RoundOneNightmare: number
-    public RoundTwoNightmare: number
-    public RoundThreeNightmare: number
-    public RoundFourNightmare: number
-    public RoundFiveNightmare: number
+    public RoundOneNightmare = 0
+    public RoundTwoNightmare = 0
+    public RoundThreeNightmare = 0
+    public RoundFourNightmare = 0
+    public RoundFiveNightmare = 0
 }

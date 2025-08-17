@@ -6,19 +6,15 @@ import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTi
 import { MapPlayer, TextTag } from 'w3ts'
 
 export class SoloDeathTimer {
-    private TIME_TO_REVIVE: number = 6.0
-    private TextTagHeight: number = 0.018
-    private Y_OFFSET: number = 5.0
+    private TIME_TO_REVIVE = 6.0
+    private TextTagHeight = 0.018
+    private Y_OFFSET = 5.0
     public ReviveTimer: AchesTimers
     public UpdateTextTimer: AchesTimers
     public Player: MapPlayer
     public FloatingTimer: TextTag
 
-    constructor(player: MapPlayer) {
-        this.SoloDeathTimer(player)
-    }
-
-    public SoloDeathTimer(player: MapPlayer) {
+    public constructor(player: MapPlayer) {
         this.Player = player
         this.ReviveTimer = createAchesTimer()
         this.UpdateTextTimer = createAchesTimer()

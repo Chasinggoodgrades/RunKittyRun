@@ -2,7 +2,7 @@ import { RegionList } from 'src/Global/RegionList'
 
 export class ProgressPointHelper {
     public static Points: RectPoints[]
-    public CurrentPoint: number
+    public CurrentPoint = 0
 
     public constructor() {
         ProgressPointHelper.Points ??= RectPoints.InitPoints()
@@ -11,8 +11,8 @@ export class ProgressPointHelper {
 }
 
 export class RectPoints {
-    public x: number
-    public y: number
+    public x = 0
+    public y = 0
 
     public constructor(x: number, y: number) {
         this.x = x

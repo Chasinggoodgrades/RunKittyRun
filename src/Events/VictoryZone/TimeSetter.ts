@@ -18,7 +18,7 @@ export class TimeSetter {
             let standard = CurrentGameMode.active === GameMode.Standard
             let solo = CurrentGameMode.active === GameMode.SoloTournament // Solo
             let roundString: string = ''
-            let currentTime = GameTimer.RoundTime[Globals.ROUND]
+            let currentTime = GameTimer.RoundTime[Globals.ROUND] || 0
             if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return false
 
             if (currentTime <= 90) return false // Below 90 seconds is impossible and not valid.. Don't save

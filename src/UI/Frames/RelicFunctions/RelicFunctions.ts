@@ -102,7 +102,7 @@ export class RelicFunctions {
     }
 
     private static HasInventorySpace(unit: Unit) {
-        for (let i: number = 0; i < 6; i++) if (unit.getItemInSlot(i) === null) return true
+        for (let i = 0; i < 6; i++) if (unit.getItemInSlot(i) === null) return true
         return false
     }
 

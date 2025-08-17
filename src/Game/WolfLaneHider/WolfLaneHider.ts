@@ -19,7 +19,7 @@ export class WolfLaneHider {
         try {
             this.lanesToEnable.clear()
 
-            for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
                 let currentSafezone: number = kitty.CurrentSafeZone
                 this.AddAdjacentLanes(currentSafezone)
@@ -85,7 +85,7 @@ export class WolfLaneHider {
     }
 
     private static SetLaneVisibility(lane: WolfArea, isVisible: boolean) {
-        for (let i: number = 0; i < lane.Wolves.length; i++) {
+        for (let i = 0; i < lane.Wolves.length; i++) {
             let wolf = lane.Wolves[i]
             wolf.Unit.show = isVisible
             wolf.PauseSelf(!isVisible)

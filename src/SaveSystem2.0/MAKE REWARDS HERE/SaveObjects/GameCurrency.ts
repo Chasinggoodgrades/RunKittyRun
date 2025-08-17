@@ -7,7 +7,7 @@ export class GameCurrency {
 }
 
 export class KibbleCurrency {
-    public Collected: number
-    public Jackpots: number
-    public SuperJackpots: number
+    public Collected = 0
+    public Jackpots = 0
+    public SuperJackpots = 0
 }

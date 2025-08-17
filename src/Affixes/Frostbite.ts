@@ -15,9 +15,9 @@ import { Effect, Trigger, Unit } from 'w3ts'
 import { Affix } from './Affix'
 
 export class Frostbite extends Affix {
-    private FROSTBITE_RADIUS: number = 500.0
-    private FROSTBITE_SPEED_REDUCTION: number = 0.83
-    private AFFIX_ABILITY: number = Constants.ABILITY_FROSTBITE
+    private FROSTBITE_RADIUS = 500.0
+    private FROSTBITE_SPEED_REDUCTION = 0.83
+    private AFFIX_ABILITY = Constants.ABILITY_FROSTBITE
     private static ADRENALINE_POTION_ABILITY: number = FourCC('Bspe')
     private FROSTBITE_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
     private InRangeTrigger: Trigger
@@ -56,7 +56,7 @@ export class Frostbite extends Affix {
     private RemoveAllEffects() {
         if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
         try {
-            for (let i: number = 0; i < this.FrostbittenKitties.length; i++) {
+            for (let i = 0; i < this.FrostbittenKitties.length; i++) {
                 let frostbitten = this.FrostbittenKitties[i]
                 frostbitten.dispose()
             }
@@ -69,7 +69,7 @@ export class Frostbite extends Affix {
 
     private RegisterEvents() {
         this.PeriodicRangeTrigger.registerTimerEvent(0.3, true)
-        this.PeriodicRangeTrigger.addAction(this.PeriodicRangeCheck)
+        this.PeriodicRangeTrigger.addAction(() => this.PeriodicRangeCheck())
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FROSTBITE_RADIUS, FilterList.KittyFilter)
         this.InRangeTrigger.addAction(() => {
             let target = getTriggerUnit()
@@ -119,7 +119,7 @@ export class Frostbite extends Affix {
 
 export class Frostbitten extends IDisposable {
     public Effect: Effect
-    public OriginalSpeed: number
+    public OriginalSpeed = 0
     public Kitty: Kitty
 
     constructor() {

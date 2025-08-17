@@ -46,7 +46,7 @@ export class SoloMultiboard {
         SoloMultiboard.ESCTrigger = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS)
             SoloMultiboard.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
-        SoloMultiboard.ESCTrigger.addAction(SoloMultiboard.ESCPressed)
+        SoloMultiboard.ESCTrigger.addAction(() => SoloMultiboard.ESCPressed())
     }
 
     private static OverallMultiboardRacemode() {
@@ -160,7 +160,7 @@ export class SoloMultiboard {
                           status,
                       ]
 
-            for (let i: number = 0; i < stats.length; i++) {
+            for (let i = 0; i < stats.length; i++) {
                 SoloMultiboard.OverallBoard.GetItem(rowIndex, i).setText(
                     `${playerColor}${stats[i]}${Colors.COLOR_RESET}`
                 )
@@ -185,7 +185,7 @@ export class SoloMultiboard {
 
             let roundTimes = SoloMultiboard.GetGameRoundTime(saveData)
 
-            for (let i: number = 0; i < roundTimes.length; i++) {
+            for (let i = 0; i < roundTimes.length; i++) {
                 if (roundTimes[i] !== 0)
                     SoloMultiboard.BestTimes.GetItem(rowIndex, i + 1).setText(
                         `${playerColor}${Utility.ConvertFloatToTime(roundTimes[i])}${Colors.COLOR_RESET}`
@@ -212,7 +212,7 @@ export class SoloMultiboard {
         SoloMultiboard.BestTimeStats()
     }
 
-    public static FillPlayers(mb: Multiboard, rowIndex: number = 2) {
+    public static FillPlayers(mb: Multiboard, rowIndex = 2) {
         for (let player of Globals.ALL_PLAYERS) {
             let name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)

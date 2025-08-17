@@ -1,7 +1,8 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { base64Decode, MapPlayer } from 'w3ts'
+import { MapPlayer } from 'w3ts'
+import { EncodingBase64 } from '../SaveSystem2.0/Base64'
 
 export class ADMINDISABLE {
     public static AdminOnly: boolean = false // enable if restricted to admins/VIPs only.
@@ -24,8 +25,8 @@ export class ADMINDISABLE {
 
 export const IsDeveloper = (p: MapPlayer) => {
     try {
-        for (let i: number = 0; i < Globals.VIPLIST.length; i++) {
-            if (p.name === base64Decode(Globals.VIPLIST[i])) {
+        for (let i = 0; i < Globals.VIPLIST.length; i++) {
+            if (p.name === EncodingBase64.Decode(Globals.VIPLIST[i])) {
                 return true
             }
         }

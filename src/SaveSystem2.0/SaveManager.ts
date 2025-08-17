@@ -5,7 +5,8 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Action } from 'src/Utility/CSUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
-import { MapPlayer, Trigger, base64Decode, base64Encode } from 'w3ts'
+import { MapPlayer, Trigger } from 'w3ts'
+import { EncodingBase64 } from './Base64'
 import { KittyData } from './MAKE REWARDS HERE/KittyData'
 import { EncodingHex } from './SyncUtil/EncodingHex'
 
@@ -125,9 +126,8 @@ export class SaveManager {
     }
 
     private static ConvertJsonToSaveData(data: string, player: MapPlayer) {
-        print(data.length)
-        let kittyData = json().decode<KittyData>(data)
-        if (!kittyData) {
+        let decodedData = json().decode(data)
+        if (!decodedData) {
             player.DisplayTimedTextTo(
                 8.0,
                 `${Colors.COLOR_RED}Failed to deserialize data. Creating new save.${Colors.COLOR_RESET}`
@@ -135,6 +135,10 @@ export class SaveManager {
             Globals.SaveSystem.NewSave(player)
             return
         }
+
+        // Create a new instance of KittyData and assign the decoded properties
+        let kittyData = new KittyData()
+        Object.assign(kittyData, decodedData)
         kittyData.SetRewardsFromUnavailableToAvailable()
         SaveManager.SaveData.set(player, kittyData)
         if (!SaveManager.PlayersLoaded.includes(player)) SaveManager.PlayersLoaded.push(player)
@@ -172,7 +176,7 @@ export class SyncSaveLoad {
     private allPromises: Map<number, FilePromise> = new Map()
 
     private constructor() {
-        for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
+        for (let i = 0; i < GetBJMaxPlayers(); i++) {
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefix, false)
             this.SyncEvent.registerPlayerSyncEvent(MapPlayer.fromIndex(i)!, this.SyncPrefixFinish, false)
         }
@@ -192,14 +196,14 @@ export class SyncSaveLoad {
         let rawDataString: string =
             data !== null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64()
         let toCompile: string = rawDataString
-        let chunkSize: number = 180
+        let chunkSize = 180
         let assemble: string = ''
         let noOfChunks: number = Math.ceil(toCompile.length / chunkSize)
 
         //print(`toCompile.length: ${toCompile.length}`);
 
         try {
-            for (let i: number = 0; i < toCompile.length; i++) {
+            for (let i = 0; i < toCompile.length; i++) {
                 assemble += toCompile[i]
                 if (assemble.length >= chunkSize) {
                     let header: string =
@@ -277,7 +281,7 @@ export class FilePromise {
         try {
             this.HasLoaded = true
             let loadString: string[] = []
-            for (let i: number = 0; i < this.Buffer.size; i++) {
+            for (let i = 0; i < this.Buffer.size; i++) {
                 if (this.Buffer.has(i)) {
                     const d = this.Buffer.get(i)
                     d && loadString.push(d)
@@ -285,8 +289,13 @@ export class FilePromise {
                 }
             }
 
-            //FinalString = WCSharp.Shared.base64Decode(loadString.toString());
+            print(loadString.join(''))
+            print(loadString.join('').slice(-20))
+            print(loadString.join('').length)
+            //FinalString = EncodingBase64.Decode(loadString.toString());
             this.DecodedString = PropertyEncoder.DecodeFromJsonBase64(loadString)
+            print(this.DecodedString.slice(-20))
+            print(this.DecodedString.length)
 
             /*            Logger.Verbose("loadString.length", loadString.length);
                         Logger.Verbose("Finished: ");
@@ -307,7 +316,7 @@ export class PropertyEncoder {
             this.AppendProperties(obj, jsonString)
             jsonString.push('}')
 
-            let base64String = base64Encode(jsonString.join(''))
+            let base64String = EncodingBase64.Encode(jsonString.join(''))
             return base64String
         } catch (ex: any) {
             // Handle any exceptions that may occur during encoding
@@ -338,7 +347,7 @@ export class PropertyEncoder {
             }
             jsonString += '}'
 
-            let base64String = base64Encode(jsonString)
+            let base64String = EncodingBase64.Encode(jsonString)
             return base64String
         } catch (ex: any) {
             Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${ex}`)
@@ -375,7 +384,7 @@ export class PropertyEncoder {
 
     public static DecodeFromJsonBase64(base64EncodedData: string[]) {
         // Decode the Base64 string to a JSON-like string
-        let jsonString = base64Decode(base64EncodedData.join(''))
+        let jsonString = EncodingBase64.Decode(base64EncodedData.join(''))
         return jsonString
     }
 }

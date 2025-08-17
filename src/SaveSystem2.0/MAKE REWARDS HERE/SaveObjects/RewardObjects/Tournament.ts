@@ -1,8 +1,8 @@
 export class Tournament {
-    public TurquoiseNitro: number
-    public TurquoiseWings: number
-    public VioletWings: number
-    public VioletAura: number
-    public PenguinSkin: number
-    public LightningSpeed: number = -1
+    public TurquoiseNitro = 0
+    public TurquoiseWings = 0
+    public VioletWings = 0
+    public VioletAura = 0
+    public PenguinSkin = 0
+    public LightningSpeed = -1
 }

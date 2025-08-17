@@ -19,18 +19,18 @@ import { Affix } from './Affix'
 /// </summary>
 
 export class Vortex extends Affix {
-    private AFFIX_ABILITY: number = Constants.ABILITY_UNPREDICTABLE
-    private VORTEX_RADIUS: number = 500.0 // triggers witihn 500 yds
-    private VORTEX_PULL_SPEED: number = 40.0 // pulls 2 yds per second.
-    private VORTEX_PULSE_RATE: number = 0.4 // every second.
-    private VORTEX_PERIODIC_PULL: number = 30.0 // every 30 seconds
-    private VORTEX_LENGTH: number = 10.0 // lasts 10 seconds.
+    private AFFIX_ABILITY = Constants.ABILITY_UNPREDICTABLE
+    private VORTEX_RADIUS = 500.0 // triggers witihn 500 yds
+    private VORTEX_PULL_SPEED = 40.0 // pulls 2 yds per second.
+    private VORTEX_PULSE_RATE = 0.4 // every second.
+    private VORTEX_PERIODIC_PULL = 30.0 // every 30 seconds
+    private VORTEX_LENGTH = 10.0 // lasts 10 seconds.
     private EntersRange: Trigger = Trigger.create()!
     private LeavesRange: Trigger = Trigger.create()!
     private PullingInTimer = Timer.create()
     private PeriodicPull = Timer.create()
     private PullStart = Timer.create()
-    private Counter: number = 0
+    private Counter = 0
     private UnitsInRange: Unit[] = []
 
     public constructor(unit: Wolf) {
@@ -61,7 +61,7 @@ export class Vortex extends Affix {
 
     private RegisterEvents() {
         this.EntersRange.registerUnitInRage(this.Unit.Unit.handle, this.VORTEX_RADIUS, FilterList.KittyFilter)
-        this.EntersRange.addAction(this.EnterRegionActions)
+        this.EntersRange.addAction(() => this.EnterRegionActions())
         this.LeavesRange.registerUnitInRage(this.Unit.Unit.handle, this.VORTEX_RADIUS, FilterList.KittyFilter)
 
         this.PeriodicPull.start(

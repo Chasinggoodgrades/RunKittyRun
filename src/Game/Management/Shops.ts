@@ -89,7 +89,7 @@ export class Shops {
     private static RegisterVendorSellingEvent() {
         // Registers all Kitty Vendors and Panda Vendor for on sell event.
         for (let vendor of Shops.KittyVendorsList) this.trigger.registerUnitEvent(vendor, EVENT_UNIT_SELL_ITEM)
-        this.trigger.addAction(Shops.OnVendorSell)
+        this.trigger.addAction(() => Shops.OnVendorSell())
     }
 
     private static OnVendorSell() {
@@ -114,9 +114,9 @@ export class Shops {
 
 export class VendorItem {
     public Vendor: Unit
-    public Item: number
-    public Stock: number
-    public RestockTime: number
+    public Item = 0
+    public Stock = 0
+    public RestockTime = 0
 
     public constructor(vendor: Unit, item: number, stock: number, restockTime: number) {
         this.Vendor = vendor

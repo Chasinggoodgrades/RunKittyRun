@@ -18,9 +18,9 @@ export class UrnSoul {
     private static PeriodicTrigger: Trigger
     private static UrnUsageTrigger: Trigger
     private static InRangeTrigger: Trigger
-    private static RotationTime: number = 60.0
-    private static InRangeDistance: number = 150.0
-    private static RotationIndex: number = 0
+    private static RotationTime = 60.0
+    private static InRangeDistance = 150.0
+    private static RotationIndex = 0
     private static StartEventRegion: Rectangle
 
     public static Initialize() {
@@ -52,7 +52,7 @@ export class UrnSoul {
     private static RegisterPeriodicTrigger(): Trigger {
         let trig = Trigger.create()!
         trig.registerTimerEvent(UrnSoul.RotationTime, true)
-        trig.addAction(UrnSoul.RotationActions)
+        trig.addAction(() => UrnSoul.RotationActions())
         return trig
     }
 
@@ -67,7 +67,7 @@ export class UrnSoul {
         let trig = Trigger.create()!
         for (let player of Globals.ALL_PLAYERS)
             trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_USE_ITEM, null as never)
-        trig.addAction(UrnSoul.UrnUsageActions)
+        trig.addAction(() => UrnSoul.UrnUsageActions())
         return trig
     }
 
@@ -109,7 +109,7 @@ export class UrnSoul {
     private static RegisterInRangeEvent(): Trigger {
         let trig = Trigger.create()!
         trig.registerUnitInRage(UrnSoul.UrnGhostUnit.handle, UrnSoul.InRangeDistance, FilterList.KittyFilter)
-        trig.addAction(UrnSoul.InRangeActions)
+        trig.addAction(() => UrnSoul.InRangeActions())
         return trig
     }
 

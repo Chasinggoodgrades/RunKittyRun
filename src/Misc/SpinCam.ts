@@ -4,8 +4,8 @@ import { Timer } from 'w3ts'
 
 export class SpinCam {
     public Kitty: Kitty
-    public SpinCamSpeed: number = 0
-    public SpinCamRotation: number = 0 // Should just read current value but it doesn't seem to work :/
+    public SpinCamSpeed = 0
+    public SpinCamRotation = 0 // Should just read current value but it doesn't seem to work :/
     public SpinCamTimer: Timer
     public WasSpinCamReset: boolean = false
 

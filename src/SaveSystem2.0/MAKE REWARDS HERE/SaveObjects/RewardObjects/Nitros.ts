@@ -1,13 +1,13 @@
 export class Nitros {
-    public Nitro: number
-    public NitroBlue: number
-    public NitroRed: number
-    public NitroGreen: number
-    public NitroPurple: number
-    public DivineLight: number
-    public CrimsonLight: number
-    public AzureLight: number
-    public VioletLight: number
-    public EmeraldLight: number
-    public PatrioticLight: number
+    public Nitro = 0
+    public NitroBlue = 0
+    public NitroRed = 0
+    public NitroGreen = 0
+    public NitroPurple = 0
+    public DivineLight = 0
+    public CrimsonLight = 0
+    public AzureLight = 0
+    public VioletLight = 0
+    public EmeraldLight = 0
+    public PatrioticLight = 0
 }

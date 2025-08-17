@@ -16,7 +16,7 @@ export class Logger {
 
     private static Log(level: string, color: string, ...messages: string[]) {
         if (!ErrorMessagesOn.active) return
-        let formattedMessage = messages.join(' ')
+        let formattedMessage = info().GetStackTrace() + ' > ' + messages.join(' ')
         print(
             `${Colors.COLOR_TURQUOISE}(Use '-error off' to disable these messages')${Colors.COLOR_RESET}${color}[${level}] ${formattedMessage}|r`
         )

@@ -4,8 +4,8 @@ import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTi
 import { MapPlayer, TextTag } from 'w3ts'
 
 export class FloatingNameTag {
-    private NAME_TAG_HEIGHT: number = 0.015
-    private NAME_TAG_UPDATE_INTERVAL: number = 0.03
+    private NAME_TAG_HEIGHT = 0.015
+    private NAME_TAG_UPDATE_INTERVAL = 0.03
     private NamePosUpdater: AchesTimers
     public Kitty: Kitty
     public NameTag: TextTag
@@ -48,7 +48,7 @@ export class FloatingNameTag {
 
     public static ShowAllNameTags(Player: MapPlayer, shown: boolean) {
         if (!Player.isLocal()) return
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let k = Globals.ALL_KITTIES_LIST[i]
             k.NameTag.NameTag.setVisible(shown)
         }

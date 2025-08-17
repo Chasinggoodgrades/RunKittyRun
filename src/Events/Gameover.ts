@@ -67,7 +67,7 @@ export class Gameover {
         if (CurrentGameMode.active !== GameMode.Standard) return false
         if (Gameover.NoEnd) return false
 
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             if (kitty.isAlive()) return false
         }

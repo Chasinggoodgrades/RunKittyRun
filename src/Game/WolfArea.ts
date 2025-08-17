@@ -8,16 +8,16 @@ import { Wolf } from './Entities/Wolf'
 
 export class WolfArea {
     public static WolfAreas: Map<number, WolfArea> = new Map<number, WolfArea>()
-    public static TotalArea: number = 0.0
-    public ID: number
+    public static TotalArea = 0.0
+    public ID = 0
     public Rect: rect
     public Region: region
     public Rectangle: Rectangle
-    public Area: number
+    public Area = 0
     public IsEnabled: boolean = true
     private AreaTrigger: Trigger
     public Wolves: Wolf[] = []
-    public FixationCount: number
+    public FixationCount = 0
 
     public constructor(id: number, region: region) {
         this.ID = id
@@ -25,7 +25,7 @@ export class WolfArea {
     }
 
     public static Initialize() {
-        let count: number = 0
+        let count = 0
         for (let wolfRegion of RegionList.WolfRegions) {
             let wolfArea = new WolfArea(count, wolfRegion.region())
             wolfArea.Rect = Rect(wolfRegion.minX, wolfRegion.minY, wolfRegion.maxX, wolfRegion.maxY)

@@ -1,10 +1,10 @@
 export class Skins {
-    public UndeadKitty: number
-    public HighelfKitty: number
-    public AstralKitty: number
-    public SatyrKitty: number
-    public AncientKitty: number
-    public ZandalariKitty: number
-    public HuntressKitty: number
-    public KibbleSkin: number = -1
+    public UndeadKitty = 0
+    public HighelfKitty = 0
+    public AstralKitty = 0
+    public SatyrKitty = 0
+    public AncientKitty = 0
+    public ZandalariKitty = 0
+    public HuntressKitty = 0
+    public KibbleSkin = -1
 }

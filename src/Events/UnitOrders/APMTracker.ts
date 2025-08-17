@@ -8,15 +8,15 @@ import { Logger } from '../Logger/Logger'
 
 export class APMTracker {
     private readonly _cachedPositions: Action
-    private CAPTURE_INTERVAL: number = 0.1
+    private CAPTURE_INTERVAL = 0.1
     private ClicksTrigger: Trigger = Trigger.create()!
     private ClicksAction: triggeraction
     private PeriodicTimer: Timer
-    public LastX: number
-    public LastY: number
+    public LastX = 0
+    public LastY = 0
 
-    private TotalActions: number
-    private TimeOutsideSafeZones: number
+    private TotalActions = 0
+    private TimeOutsideSafeZones = 0
 
     // private (number X, number Y) LastPosition;
     private Kitty: Kitty
@@ -29,7 +29,7 @@ export class APMTracker {
 
     private Init() {
         this.ClicksTrigger.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
-        this.ClicksAction = this.ClicksTrigger.addAction(this.CaptureActions)
+        this.ClicksAction = this.ClicksTrigger.addAction(() => this.CaptureActions())
         this.PeriodicTimer = this.PeriodicCheck()
     }
 
@@ -70,7 +70,7 @@ export class APMTracker {
 
     public static CalculateAllAPM(): string {
         let apmString: string = ''
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             let apm = APMTracker.CalculateAPM(kitty)
             apmString += `${ColorUtils.PlayerNameColored(kitty.Player)}:  ${apm} APM Active\n`

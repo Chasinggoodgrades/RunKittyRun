@@ -12,17 +12,17 @@ export abstract class Relic {
     private static CanBuyRelicsTrigger: Trigger
     private static CanBuyRelics: MapPlayer[]
 
-    public static RequiredLevel: number = 12
-    public static RelicIncrease: number = 16
-    public static RelicSellLevel: number = 15
-    public static MaxRelics: number = 2
+    public static RequiredLevel = 12
+    public static RelicIncrease = 16
+    public static RelicSellLevel = 15
+    public static MaxRelics = 2
     public name: string
     public Description: string
-    public ItemID: number
-    public Cost: number
+    public ItemID = 0
+    public Cost = 0
     public IconPath: string
-    public UpgradeLevel: number = 0
-    public RelicAbilityID: number
+    public UpgradeLevel = 0
+    public RelicAbilityID = 0
     public Upgrades: RelicUpgrade[] = []
 
     public constructor(

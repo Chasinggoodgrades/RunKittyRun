@@ -6,19 +6,19 @@ import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
 
 export class Slider {
-    private SLIDE_INTERVAL: number = 0.0075
-    private SLIDE_ANGLE_PER_PERIOD: number = 0.3
-    private ITEM_PICKUP_RADIUS: number = 48
+    private SLIDE_INTERVAL = 0.0075
+    private SLIDE_ANGLE_PER_PERIOD = 0.3
+    private ITEM_PICKUP_RADIUS = 48
 
     private kitty: Kitty
     private SliderTimer: Timer
-    private enabled: boolean
+    private enabled = false
 
     private ClickTrigger: Trigger
     private WidgetTrigger: Trigger
 
-    private remainingDegreesToTurn: number = 0
-    private slideCurrentTurnPerPeriod: number = 0
+    private remainingDegreesToTurn = 0
+    private slideCurrentTurnPerPeriod = 0
 
     private wasSliding: boolean = false
     private forcedSlideSpeed: number | null = null
@@ -270,10 +270,10 @@ export class Slider {
     }
 
     private escaperTurnForOnePeriod() {
-        let rotationSpeed: number = 1.3
+        let rotationSpeed = 1.3
         let maxSlideTurnPerPeriod: number = rotationSpeed * this.SLIDE_INTERVAL * 360
-        let rotationTimeForMaximumSpeed: number = 0.11
-        let MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL: number = 51
+        let rotationTimeForMaximumSpeed = 0.11
+        let MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL = 51
 
         let remainingDegrees: number = this.remainingDegreesToTurn
         if (remainingDegrees !== 0) {

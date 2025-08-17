@@ -31,12 +31,12 @@ export class TeamDeathless {
     /// <summary>
     /// Range in which the orb can be picked up from.
     /// </summary>
-    private static PICKUP_RANGE: number = 75
+    private static PICKUP_RANGE = 75
 
     /// <summary>
     /// Chance that the orb will drop when the player dies with it. This is a percentage chance (0-100).
     /// </summary>
-    private static ORB_DROP_CHANCE: number = 75 // 70% chance to reset on death
+    private static ORB_DROP_CHANCE = 75 // 70% chance to reset on death
 
     /// <summary>
     /// Flag to check if the event has been triggered. This is set to true when the # of DeathlessToActivate players have achieved deathless.
@@ -55,7 +55,7 @@ export class TeamDeathless {
     /// <summary>
     /// The number of players that need to achieve deathless in order to activate the event.
     /// </summary>
-    private static DeathlessToActivate: number = 4
+    private static DeathlessToActivate = 4
 
     /// <summary>
     /// The current safezone that the orb last touched / was in.
@@ -115,7 +115,7 @@ export class TeamDeathless {
         )!
         this.RangeTrigger = Trigger.create()!
         this.RangeTrigger.registerUnitInRage(this.DummyUnit.handle, this.PICKUP_RANGE, FilterList.KittyFilter)
-        this.RangeTrigger.addAction(this.InRangeEvent)
+        this.RangeTrigger.addAction(() => this.InRangeEvent())
         this.RangeTrigger.enabled = false
 
         Utility.TimedTextToAllPlayers(
@@ -247,7 +247,7 @@ export class TeamDeathless {
     }
 
     private static CheckOrbList() {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let player = Globals.ALL_PLAYERS[i]
             if (!this.AlreadyCarriedOrb.includes(player)) return
         }

@@ -8,12 +8,12 @@ import { Colors } from './Colors'
 
 export class ColorData {
     public colorname: string
-    public colorID: number
+    public colorID = 0
     public colorcode: string
     public playercolor: playercolor
-    public red: number
-    public green: number
-    public blue: number
+    public red = 0
+    public green = 0
+    public blue = 0
 
     constructor(
         colorname: string,
@@ -99,7 +99,7 @@ export class ColorUtils {
     /// Use (1-24) for player ColorUtils. So.. (player.id + 1)
     /// </summary>
     public static GetStringColorOfPlayer(playerColorID: number) {
-        for (let i: number = 0; i < ColorUtils.ColorManager.length; i++) {
+        for (let i = 0; i < ColorUtils.ColorManager.length; i++) {
             let color: ColorData = ColorUtils.ColorManager[i]
             if (color.colorID === playerColorID) {
                 return color.colorcode
@@ -126,7 +126,7 @@ export class ColorUtils {
 
     public static SetPlayerVertexColor(p: MapPlayer, RGB: string[]) {
         let kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        let r: number = 0,
+        let r = 0,
             g = 0,
             b = 0
 
@@ -207,7 +207,7 @@ export class ColorUtils {
             ColorUtils.sb = ''
 
             for (
-                let i: number = 0;
+                let i = 0;
                 i < ColorUtils.ColorManager.length;
                 i++ // else populate it
             ) {

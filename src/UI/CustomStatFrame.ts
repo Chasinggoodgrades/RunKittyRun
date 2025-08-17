@@ -23,7 +23,7 @@ export class CustomStat {
 }
 
 export class CustomStatFrame {
-    private static Count: number = 0
+    private static Count = 0
     private static CustomStatFrameBoxS: Frame
     private static CustomStatFrameBoxF: Frame
 

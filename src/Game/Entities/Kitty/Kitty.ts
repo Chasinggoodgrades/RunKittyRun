@@ -43,10 +43,10 @@ import { KittyMiscInfo } from './KittyMiscInfo'
 import { KittyStatsManager } from './KittyStatsManager'
 
 export class Kitty {
-    private KITTY_HERO_TYPE: number = Constants.UNIT_KITTY
+    private KITTY_HERO_TYPE = Constants.UNIT_KITTY
     private SPAWN_IN_EFFECT: string = 'Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl'
-    private MANA_DEATH_PENALTY: number = 65.0
-    private InvulDuration: number = 0.3
+    private MANA_DEATH_PENALTY = 65.0
+    private InvulDuration = 0.3
     public static InvulTest: boolean = false
 
     public name: string
@@ -68,15 +68,15 @@ export class Kitty {
     public Slider: Slider
     public RTR: RTR
     public MirrorHandler: MirrorMovementHandler
-    public CurrentSafeZone: number = 0
+    public CurrentSafeZone = 0
     public Player: MapPlayer
     public Unit: Unit
     public ProtectionActive: boolean = false
     public Invulnerable: boolean = false
     public Alive: boolean = true
     public Finished: boolean = false
-    public TeamID: number = 0
-    public ProgressZone: number = 0
+    public TeamID = 0
+    public ProgressZone = 0
     public w_Collision: Trigger = Trigger.create()!
     public c_Collision: Trigger = Trigger.create()!
     public Disco: Disco

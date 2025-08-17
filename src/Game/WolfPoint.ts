@@ -8,7 +8,7 @@ import { Trigger } from 'w3ts'
 import { Wolf } from './Entities/Wolf'
 
 export class WolfPoint {
-    private MaxDistance: number = 128 // Max distance between points
+    private MaxDistance = 128 // Max distance between points
     public static readonly MoveOrderID: number = OrderId('move')
     public static readonly StopOrderID: number = OrderId('stop')
     public static readonly AttackOrderID: number = OrderId('attack')
@@ -48,7 +48,7 @@ export class WolfPoint {
             let stepX = this.MaxDistance * Math.cos(angle)
             let stepY = this.MaxDistance * Math.sin(angle)
 
-            for (let i: number = 0; i < numRegions; i++) {
+            for (let i = 0; i < numRegions; i++) {
                 let regionX = startX + i * stepX
                 let regionY = startY + i * stepY
                 this.PointInfo[i].x = regionX
@@ -74,7 +74,7 @@ export class WolfPoint {
             if (this.PointInfo === null) return
             BlzUnitClearOrders(this.Wolf.Unit.handle, false)
 
-            for (let i: number = 0; i < this.PointInfo.length; i++) {
+            for (let i = 0; i < this.PointInfo.length; i++) {
                 this.PointInfo[i].x = 0
                 this.PointInfo[i].y = 0
             }
@@ -123,7 +123,7 @@ export class WolfPoint {
         )
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        WolfPoint.IsPausedTrigger.addAction(WolfPoint.QueueOrderActions)
+        WolfPoint.IsPausedTrigger.addAction(() => WolfPoint.QueueOrderActions())
         return WolfPoint.IsPausedTrigger
     }
 
@@ -133,9 +133,9 @@ export class WolfPoint {
 }
 
 export class WolfPointInfo {
-    public x: number
-    public y: number
-    public LastPoint: boolean
+    public x = 0
+    public y = 0
+    public LastPoint = false
 
     public WolfPointInfo() {
         this.x = 0
@@ -144,7 +144,7 @@ export class WolfPointInfo {
 
     public static GetWolfPointList(): WolfPointInfo[] {
         let list = MemoryHandler.getEmptyArray<WolfPointInfo>()
-        for (let i: number = 0; i < 48; i++) {
+        for (let i = 0; i < 48; i++) {
             list.push(MemoryHandler.getEmptyObject<WolfPointInfo>())
         }
         return list
@@ -152,7 +152,7 @@ export class WolfPointInfo {
 
     public static ClearWolfPointList(list: WolfPointInfo[]) {
         if (list === null) return
-        for (let i: number = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
             let item = list[i]
             MemoryHandler.destroyObject(item)
         }

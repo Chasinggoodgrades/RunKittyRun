@@ -19,8 +19,8 @@ export class FrameManager {
     public static RewardsButton: Frame
     public static Backdrop: Frame
 
-    private static ButtonWidth: number = 0.053
-    private static ButtonHeight: number = 0.028
+    private static ButtonWidth = 0.053
+    private static ButtonHeight = 0.028
 
     private static GameUI: Frame
     private static ESCTrigger: Trigger = Trigger.create()!
@@ -45,13 +45,6 @@ export class FrameManager {
             Logger.Critical(`Error in FrameManager.Initialize: ${ex}`)
             throw ex
         }
-    }
-
-    public static InitAllFrames() {
-        ShopFrame.Initialize()
-        RewardsFrame.Initialize()
-        FrameManager.InitalizeButtons()
-        FrameManager.InitFramesList()
     }
 
     public static InitalizeButtons() {
@@ -109,7 +102,7 @@ export class FrameManager {
         //timeDayDisplay.visible = false;
     }
 
-    private static InitFramesList() {
+    public static InitFramesList() {
         FrameManager._frames.push(ShopFrame.shopFrame)
         FrameManager._frames.push(RewardsFrame.RewardFrame)
         FrameManager._frames.push(MusicFrame.MusicFramehandle)
@@ -214,11 +207,11 @@ export class FrameManager {
     }
 
     private static ESCHideFrames() {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             let player = Globals.ALL_PLAYERS[i]
             FrameManager.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        FrameManager.ESCTrigger.addAction(FrameManager.ESCActions)
+        FrameManager.ESCTrigger.addAction(() => FrameManager.ESCActions())
     }
 
     public static RefreshFrame(frame: Frame) {
@@ -235,7 +228,7 @@ export class FrameManager {
     }
 
     public static HideOtherFrames(currentFrame: Frame) {
-        for (let i: number = 0; i < FrameManager._frames.length; i++) {
+        for (let i = 0; i < FrameManager._frames.length; i++) {
             if (FrameManager._frames[i] !== currentFrame) FrameManager._frames[i].visible = false
         }
     }

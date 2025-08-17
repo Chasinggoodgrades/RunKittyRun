@@ -21,7 +21,7 @@ export class Commands {
 }
 
 export class CommandsManager {
-    public static Count: number = 0
+    public static Count = 0
     private static AllCommands: Map<string, Commands> = new Map()
     private static CommandsList: Commands[] = []
     private static KittiesList: Kitty[] = []
@@ -63,12 +63,12 @@ export class CommandsManager {
             let kitty = Globals.ALL_KITTIES.get(getTriggerPlayer()!)
             if (kitty) kitties.push(kitty)
         } else if (larg === 'a' || larg === 'all') {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+            for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 kitties.push(kitty) // add all players
             }
         } else if (larg === 'ai' || larg === 'computer' || larg === 'computers') {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+            for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 if (
                     kitty.Player.slotState === PLAYER_SLOT_STATE_PLAYING &&
@@ -117,7 +117,7 @@ export class CommandsManager {
     public static ResolvePlayerId(arg: string, action: Action<Kitty>) {
         let kittyArray = this.ResolvePlayerIdArray(arg)
 
-        for (let i: number = 0; i < kittyArray.length; i++) {
+        for (let i = 0; i < kittyArray.length; i++) {
             action(kittyArray[i])
         }
     }

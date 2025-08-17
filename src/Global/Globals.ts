@@ -12,21 +12,21 @@ import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
 import { Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
-export const DEFAULT_WOLF_COLLISION_RADIUS: number = 74.0
+export const DEFAULT_WOLF_COLLISION_RADIUS = 74.0
 export const DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
 
 export class Globals {
-    public static MAX_TEAM_SIZE: number = 24
-    public static DEFAULT_TEAM_SIZE: number = 3
-    public static TIME_TO_PICK_GAMEMODE: number = 20.0
-    public static ROUND: number = 0
+    public static MAX_TEAM_SIZE = 24
+    public static DEFAULT_TEAM_SIZE = 3
+    public static TIME_TO_PICK_GAMEMODE = 20.0
+    public static ROUND = 0
     public static GAME_ACTIVE: boolean = false
-    public static GAME_SECONDS: number = 0.0
+    public static GAME_SECONDS = 0.0
     public static WORLD_BOUNDS: Rectangle
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
     public static WinGame: boolean = false
-    public static NumberOfRounds: number = 5
+    public static NumberOfRounds = 5
 
     public static AllAffixes: Affix[] = []
 

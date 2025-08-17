@@ -25,7 +25,7 @@ export class Windwalk {
         for (let player of Globals.ALL_PLAYERS)
             this.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
         this.Trigger.addCondition(Condition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK))
-        this.Trigger.addAction(this.ApplyWindwalkEffect)
+        this.Trigger.addAction(() => this.ApplyWindwalkEffect())
     }
 
     private static RegisterHotKey() {
@@ -33,7 +33,7 @@ export class Windwalk {
         for (let p of Globals.ALL_PLAYERS) {
             this.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_NUMPAD0, 0, true)
         }
-        this.HotkeyTrigger.addAction(this.RegisterHotKeyEvents)
+        this.HotkeyTrigger.addAction(() => this.RegisterHotKeyEvents())
     }
 
     private static RegisterHotKeyEvents() {

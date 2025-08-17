@@ -11,7 +11,7 @@
 //    private number RelicCost = 650;
 //    private static number UnitScale = 0.60 - (0.60 * AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 2.0);
 
-//    public AmuletOfEvasiveness() // TODO; CALL super(
+//    public constructor() // TODO; CALL super(
 //        `${Colors.COLOR_LAVENDER}Amulet of Evasiveness|r`,
 //        `Makes you smaller and reduces collision range by ${Colors.COLOR_ORANGE}${(AMULET_OF_EVASIVENESS_COLLSION_REDUCTION * 100)}%|r${Colors.COLOR_LIGHTBLUE} (Passive)|r`,
 //        0,

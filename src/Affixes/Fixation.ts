@@ -13,22 +13,22 @@ import { Effect, Group, Trigger, Unit } from 'w3ts'
 import { Affix } from './Affix'
 
 export class Fixation extends Affix {
-    private FIXATION_RADIUS: number = 500.0
-    private FIXATION_MS: number = 325.0
-    private FIXATION_MAX_MS: number = 410.0
+    private FIXATION_RADIUS = 500.0
+    private FIXATION_MS = 325.0
+    private FIXATION_MAX_MS = 410.0
     private FIXATION_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl'
 
     private static readonly IsFixation = (r: Affix): r is Fixation => {
         return r instanceof Fixation
     }
 
-    private AFFIX_ABILITY: number = Constants.ABILITY_FIXATION
+    private AFFIX_ABILITY = Constants.ABILITY_FIXATION
     private InRangeTrigger: Trigger
     private PeriodicSpeed: Trigger
     private ChaseTimer: AchesTimers
     private UnitsInRange: Group
     private Target: Unit
-    private Type: number
+    private Type = 0
     private IsChasing: boolean = false
     private TargetEffect: Effect
 
@@ -83,7 +83,7 @@ export class Fixation extends Affix {
         if (this.Type === 1) this.UnitsInRange ??= Group.create()!
         this.InRangeTrigger.registerUnitInRage(this.Unit.Unit.handle, this.FIXATION_RADIUS, FilterList.KittyFilter)
         this.PeriodicSpeed.registerTimerEvent(0.1, true)
-        this.PeriodicSpeed.addAction(this.UpdateChaseSpeed)
+        this.PeriodicSpeed.addAction(() => this.UpdateChaseSpeed())
         this.InRangeTrigger.addAction(() => {
             try {
                 let target = getTriggerUnit()

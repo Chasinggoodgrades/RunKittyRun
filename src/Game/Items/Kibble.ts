@@ -24,18 +24,19 @@ export class Kibble extends IDisposable {
 
     private static KibblesColors: number[] = Kibble.KibbleList()
     private static StarfallEffect: string = 'Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl'
-    private static TextTagHeight: number = 0.018
-    private static XPMax: number = 350
-    private static GoldMax: number = 150
-    private static JackpotMin: number = 600
-    private static JackpotMax: number = 1500
+    private static TextTagHeight = 0.018
+    private static XPMax = 350
+    private static GoldMax = 150
+    private static JackpotMin = 600
+    private static JackpotMax = 1500
 
     public Item: Item
-    private Type: number
-    private JackPotIndex: number
+    private Type = 0
+    private JackPotIndex = 0
     private StarFallEffect: Effect
 
-    public Kibble() {
+    public constructor() {
+        super()
         Kibble.PickupTrigger ??= Kibble.KibblePickupEvents()
         this.Type = Kibble.RandomKibbleType()
     }

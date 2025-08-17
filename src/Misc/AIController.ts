@@ -13,15 +13,15 @@ import { MapPlayer, Timer } from 'w3ts'
 
 export class AIController {
     private kitty: Kitty
-    private enabled: boolean
-    public DODGE_RADIUS: number = 192.0
-    public DODGE_RADIUS_STILL: number = 128.0
-    private DODGE_DISTANCE: number = 128 // Amount to walk away
+    private enabled = false
+    public DODGE_RADIUS = 192.0
+    public DODGE_RADIUS_STILL = 128.0
+    private DODGE_DISTANCE = 128 // Amount to walk away
     public static FREE_LASER_COLOR: string = 'GRSB'
     public static BLOCKED_LASER_COLOR: string = 'RESB'
     private static WindwalkID: number = FourCC('BOwk')
     private static offsets: number[] = [-90, -45, 0.0, 45, 90]
-    public _timerInterval: number = 0.1
+    public _timerInterval = 0.1
 
     public get timerInterval(): number {
         return this._timerInterval
@@ -44,11 +44,11 @@ export class AIController {
     public laser: boolean = !PROD
 
     private lastCommand: string = ''
-    private lastX: number
-    private lastY: number
+    private lastX = 0
+    private lastY = 0
     private hasLastOrder: boolean = false
-    private lastOrderTime: number = 0
-    private elapsedTime: number = 0
+    private lastOrderTime = 0
+    private elapsedTime = 0
 
     private moveTimer: Timer
     private wolvesInRange: Wolf[] = []
@@ -164,14 +164,14 @@ export class AIController {
             Math.pow(this.kitty.Unit.x - currentSafezoneCenter[0], 2) +
                 Math.pow(this.kitty.Unit.y - currentSafezoneCenter[1], 2)
         )
-        let SAFEZONE_THRESHOLD: number = 128.0
+        let SAFEZONE_THRESHOLD = 128.0
 
         if (distanceToCurrentCenter <= SAFEZONE_THRESHOLD) {
             this.reachedLastProgressZoneCenter = true
         }
 
         let allKittiesAtSameOrHigherSafezone: boolean = true // IEnumberable is dog shit for C# -> Lua conversion, this should -help-
-        for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             let k = Globals.ALL_KITTIES_LIST[i]
             if (!PROD && k.Player === MapPlayer.fromIndex(0)!) {
                 continue
@@ -210,7 +210,7 @@ export class AIController {
 
                     let isNearest: boolean = true
 
-                    for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+                    for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                         let otherKitty = Globals.ALL_KITTIES_LIST[i]
                         if (!PROD && otherKitty.Player === MapPlayer.fromIndex(0)!) {
                             continue
@@ -268,7 +268,7 @@ export class AIController {
         let wolvesInLane = WolfArea.WolfAreas.get(currentProgressZoneId)!.Wolves
 
         this.wolvesInRange = []
-        for (let i: number = 0; i < wolvesInLane.length; i++) {
+        for (let i = 0; i < wolvesInLane.length; i++) {
             let wolf = wolvesInLane[i]
             if (
                 this.IsWithinRadius(
@@ -396,7 +396,7 @@ export class AIController {
      * the: mathematical: formula: for: a: line: passing: through: two: points: Using on a circle, this can be calculated.
      */
     CalcCrossingPoints() {
-        for (let i: number = 0; i < this.wallPoints.length; i++) {
+        for (let i = 0; i < this.wallPoints.length; i++) {
             let point = this.wallPoints[i]
             point.dispose()
         }
@@ -475,14 +475,14 @@ export class AIController {
     private GetCompositeDodgePosition(wolves: Wolf[], forwardDirection: [number, number]) {
         // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
         let forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
-        let requiredClearance: number = 22.5 * (Math.PI / 180)
+        let requiredClearance = 22.5 * (Math.PI / 180)
 
         // Calculate the angle interval that each wolf “blocks.”
-        for (let i: number = 0; i < wolves.length; i++) {
+        for (let i = 0; i < wolves.length; i++) {
             let wolf: Wolf = wolves[i]
 
-            let MIN_TOTAL_BLOCKED_ANGLE: number = 45.0 * (Math.PI / 180)
-            let MAX_TOTAL_BLOCKED_ANGLE: number = 270.0 * (Math.PI / 180)
+            let MIN_TOTAL_BLOCKED_ANGLE = 45.0 * (Math.PI / 180)
+            let MAX_TOTAL_BLOCKED_ANGLE = 270.0 * (Math.PI / 180)
 
             if (!wolf.IsWalking) {
                 MIN_TOTAL_BLOCKED_ANGLE = 30.0 * (Math.PI / 180)
@@ -576,7 +576,7 @@ export class AIController {
 
         // Visualize the blocked intervals
         this.HideAllLightnings()
-        for (let i: number = 0; i < this.mergedIntervals.length; i++) {
+        for (let i = 0; i < this.mergedIntervals.length; i++) {
             this.VisualizeBlockedInterval(this.mergedIntervals[i])
         }
 
@@ -602,7 +602,7 @@ export class AIController {
                 this.freeGaps.push(a)
             }
             // Gaps between consecutive intervals.
-            for (let i: number = 0; i < this.mergedIntervals.length - 1; i++) {
+            for (let i = 0; i < this.mergedIntervals.length - 1; i++) {
                 let gapSize: number = this.mergedIntervals[i + 1].Start - this.mergedIntervals[i].End
                 if (gapSize > 0) {
                     let a = MemoryHandler.getEmptyObject<AngleInterval>()
@@ -615,7 +615,7 @@ export class AIController {
 
         // Visualize the free intervals
         this.HideAllFreeLightnings()
-        for (let i: number = 0; i < this.freeGaps.length; i++) {
+        for (let i = 0; i < this.freeGaps.length; i++) {
             let interval = this.freeGaps[i]
             this.VisualizeFreeInterval(interval)
         }
@@ -626,7 +626,7 @@ export class AIController {
         let bestCandidateScore: number = int.MaxValue
         let bestCandidateAngle: number = -500 // Default to the original forward angle
 
-        for (let i: number = 0; i < AIController.offsets.length; i++) {
+        for (let i = 0; i < AIController.offsets.length; i++) {
             let offset: number = AIController.offsets[i]
             let candidateAngle: number = this.NormalizeAngle(forwardAngle + offset)
 
@@ -672,7 +672,7 @@ export class AIController {
         let foundGapContainingForward: boolean = false
 
         // First, check if forwardAngle falls within any free gap.
-        for (let i: number = 0; i < this.freeGaps.length; i++) {
+        for (let i = 0; i < this.freeGaps.length; i++) {
             let gap: AngleInterval = this.freeGaps[i]
 
             if (gap.End - gap.Start < requiredClearance) {
@@ -705,7 +705,7 @@ export class AIController {
         if (!foundGapContainingForward) {
             let bestScore: number = int.MaxValue
             for (
-                let i: number = 0;
+                let i = 0;
                 i < this.freeGaps.length;
                 i++ // Replacing for with for loop
             ) {
@@ -753,12 +753,12 @@ export class AIController {
     }
 
     private cleanArrays() {
-        for (let i: number = 0; i < this.blockedIntervals.length; i++) {
+        for (let i = 0; i < this.blockedIntervals.length; i++) {
             this.blockedIntervals[i].dispose()
         }
         this.blockedIntervals = []
 
-        for (let i: number = 0; i < this.freeGaps.length; i++) {
+        for (let i = 0; i < this.freeGaps.length; i++) {
             this.freeGaps[i].dispose()
         }
         this.freeGaps = []
@@ -773,7 +773,7 @@ export class AIController {
         }
 
         let radius: number = this.DODGE_RADIUS
-        let step: number = 0.1 // Adjust step size for smoother lines
+        let step = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
             let x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
             let y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
@@ -803,7 +803,7 @@ export class AIController {
         }
 
         let radius: number = this.DODGE_RADIUS
-        let step: number = 0.1 // Adjust step size for smoother lines
+        let step = 0.1 // Adjust step size for smoother lines
         for (let angle: number = interval.Start; angle < interval.End; angle += step) {
             let x1: number = this.kitty.Unit.x + radius * Math.cos(angle)
             let y1: number = this.kitty.Unit.y + radius * Math.sin(angle)
@@ -828,7 +828,7 @@ export class AIController {
     }
 
     private HideAllLightnings() {
-        for (let i: number = 0; i < this.usedBlockedLightnings.length; i++) {
+        for (let i = 0; i < this.usedBlockedLightnings.length; i++) {
             let lightning = this.usedBlockedLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
             this.availableBlockedLightnings.push(lightning)
@@ -838,7 +838,7 @@ export class AIController {
     }
 
     private HideAllFreeLightnings() {
-        for (let i: number = 0; i < this.usedClearLightnings.length; i++) {
+        for (let i = 0; i < this.usedClearLightnings.length; i++) {
             let lightning = this.usedClearLightnings[i]
             MoveLightning(lightning, false, 0.0, 0.0, 0.0, 0.0)
             this.availableClearLightnings.push(lightning)
@@ -865,8 +865,8 @@ export class AIController {
     }
 
     private SortAngleIntervals(intervals: AngleInterval[]) {
-        for (let i: number = 0; i < intervals.length - 1; i++) {
-            for (let j: number = 0; j < intervals.length - i - 1; j++) {
+        for (let i = 0; i < intervals.length - 1; i++) {
+            for (let j = 0; j < intervals.length - i - 1; j++) {
                 if (intervals[j].Start > intervals[j + 1].Start) {
                     // Swap intervals[j] and intervals[j + 1]
                     let temp = intervals[j]
@@ -885,7 +885,7 @@ export class AIController {
 
         let current: AngleInterval = intervals[0]
 
-        for (let i: number = 1; i < intervals.length; i++) {
+        for (let i = 1; i < intervals.length; i++) {
             if (this.IsAngleInInterval(intervals[i].Start, current)) {
                 // Extend the current interval if needed.
                 current.End = Math.max(current.End, intervals[i].End)

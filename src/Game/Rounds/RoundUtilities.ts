@@ -15,7 +15,7 @@ export class RoundUtilities {
     }
 
     public static MoveTeamToStart(team: Team) {
-        for (let i: number = 0; i < team.Teammembers.length; i++) {
+        for (let i = 0; i < team.Teammembers.length; i++) {
             let player = team.Teammembers[i]
             let kitty = (Globals.ALL_KITTIES.get(player)!.Finished = true)
             this.MovePlayerToStart(player)

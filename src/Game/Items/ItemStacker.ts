@@ -31,7 +31,7 @@ export class ItemStacker {
     private static RegisterEvents(): Trigger {
         let PickupTrigger = Trigger.create()!
         PickupTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-        PickupTrigger.addAction(this.StackActions)
+        PickupTrigger.addAction(() => this.StackActions())
         return PickupTrigger
     }
 
@@ -50,7 +50,7 @@ export class ItemStacker {
             else heldItem.charges += 1
             item.destroy()
         } catch (e: any) {
-            Logger.Critical(e.Message)
+            Logger.Critical(e)
             throw e
         }
     }

@@ -39,13 +39,15 @@ import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { ErrorHandler } from 'src/Utility/ErrorHandler'
 import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
-import { MapPlayer, base64Decode } from 'w3ts'
+import { MapPlayer } from 'w3ts'
+import { EncodingBase64 } from '../SaveSystem2.0/Base64'
+import { RewardsFrame } from '../UI/Frames/RewardsFrame'
 import { Difficulty } from './Difficulty/Difficulty'
 import { GameSeed } from './GameSeed'
 import { Resources } from './Resources'
 
 export class Setup {
-    private static timeToChoose: number = 0.0
+    private static timeToChoose = 0.0
     private static gameModeTimer: AchesTimers
 
     public static Initialize() {
@@ -118,11 +120,15 @@ export class Setup {
             VictoryZone.Initialize()
             AffixFactory.Initialize()
             RewardsManager.RegisterTrigger()
+            RewardsManager.SetupRewards()
             RewardsManager.RewardAbilitiesList()
             AwardManager.RegisterGamestatEvents()
             ChampionAwards.AwardAllChampions()
             PodiumUtil.Initialize()
-            FrameManager.InitAllFrames()
+            ShopFrame.Initialize()
+            RewardsFrame.Initialize()
+            FrameManager.InitalizeButtons()
+            FrameManager.InitFramesList()
             Challenges.Initialize()
             NitroChallenges.Initialize()
             SoundManager.Initialize()
@@ -139,7 +145,7 @@ export class Setup {
     }
 
     public static GetActivePlayers() {
-        for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
+        for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState === PLAYER_SLOT_STATE_PLAYING)
                 Globals.ALL_PLAYERS.push(MapPlayer.fromIndex(i)!)
             SetPlayerTeam(MapPlayer.fromIndex(i)!.handle, 0) // Need to check C# implementation
@@ -171,9 +177,9 @@ export class Setup {
     }
 
     public static SetupVIPList() {
-        for (let i: number = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            for (let j: number = 0; j < Globals.VIPLIST.length; j++) {
-                let fromBase64Name = base64Decode(Globals.VIPLIST[j])
+        for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
+            for (let j = 0; j < Globals.VIPLIST.length; j++) {
+                let fromBase64Name = EncodingBase64.Decode(Globals.VIPLIST[j])
                 if (Globals.ALL_PLAYERS[i].name === fromBase64Name) {
                     Globals.VIPLISTUNFILTERED.push(Globals.ALL_PLAYERS[i])
                 }

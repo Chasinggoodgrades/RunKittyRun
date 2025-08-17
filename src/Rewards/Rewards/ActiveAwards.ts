@@ -5,5 +5,5 @@ export class ActiveAwards {
     public ActiveHats: Effect
     public ActiveTrail: Effect
     public ActiveAura: Effect
-    public WindwalkID: number
+    public WindwalkID = 0
 }

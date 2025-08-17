@@ -18,17 +18,17 @@ import { RelicUtil } from '../RelicUtil'
 
 export class FrostbiteRing extends Relic {
     public static RelicItemID: number = Constants.ITEM_FROSTBITE_RING
-    public static SLOW_DURATION: number = 5.0
+    public static SLOW_DURATION = 5.0
     public static FROSTBITE_FREEZE_RING_EFFECT: string = 'war3mapImported\\FreezingBreathTargetArt.mdl'
     public static FROSTBITE_SLOW_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
     public static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE
     public static FrozenWolves: Map<Unit, FrozenWolf> = new Map()
 
-    private static RelicCost: number = 650
-    private static FROSTBITE_RING_RADIUS: number = 450.0
-    private static DEFAULT_FREEZE_DURATION: number = 5.0
-    private static UPGRADE_COOLDOWN_REDUCTION: number = 15.0
-    private FREEZE_DURATION: number = 5.0
+    private static RelicCost = 650
+    private static FROSTBITE_RING_RADIUS = 450.0
+    private static DEFAULT_FREEZE_DURATION = 5.0
+    private static UPGRADE_COOLDOWN_REDUCTION = 15.0
+    private FREEZE_DURATION = 5.0
     private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp'
     private Owner: MapPlayer
     private Trigger: Trigger
@@ -155,7 +155,7 @@ export class FrozenWolf {
     private Caster: MapPlayer
     private Active: boolean = false
 
-    public FrozenWolf() {}
+    public constructor() {}
 
     public BeginFreezeActions(castingPlayer: MapPlayer, wolfToFreeze: Unit, duration: number) {
         try {

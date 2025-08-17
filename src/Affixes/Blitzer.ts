@@ -16,14 +16,14 @@ export class Blitzer extends Affix {
         return r instanceof Blitzer
     }
 
-    private AFFIX_ABILITY: number = Constants.ABILITY_BLITZER
+    private AFFIX_ABILITY = Constants.ABILITY_BLITZER
     private BLITZER_EFFECT: string = 'war3mapImported\\ChargerCasterArt.mdx'
-    private BLITZER_SPEED: number = 650.0
-    private BLITZER_OVERHEAD_DELAY: number = 1.5
-    private BLITZER_LOWEND: number = 6.0
-    private BLITZER_HIGHEND: number = 11.0
-    private TargetX: number
-    private TargetY: number
+    private BLITZER_SPEED = 650.0
+    private BLITZER_OVERHEAD_DELAY = 1.5
+    private BLITZER_LOWEND = 6.0
+    private BLITZER_HIGHEND = 11.0
+    private TargetX = 0
+    private TargetY = 0
     private MoveTimer: AchesTimers | null
     private BlitzerTimer: AchesTimers | null
     private PreBlitzerTimer: AchesTimers | null

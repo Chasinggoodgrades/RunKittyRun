@@ -21,14 +21,14 @@ import { NamedWolves } from './NamedWolves'
 export class Wolf {
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
     public static DisableEffects: boolean = false
-    private WANDER_LOWER_BOUND: number = 0.7 // reaction time lower bound
-    private WANDER_UPPER_BOUND: number = 0.83 // reaction time upper bound
-    private NEXT_WANDER_DELAY: number = 1.9 // time before wolf can move again
+    private WANDER_LOWER_BOUND = 0.7 // reaction time lower bound
+    private WANDER_UPPER_BOUND = 0.83 // reaction time upper bound
+    private NEXT_WANDER_DELAY = 1.9 // time before wolf can move again
 
     private readonly _cachedWander: Action
     private readonly _cachedEffect: Action
 
-    public RegionIndex: number
+    public RegionIndex = 0
     public OVERHEAD_EFFECT_PATH: string
     public WanderTimer: AchesTimers = createAchesTimer()
 
@@ -73,7 +73,7 @@ export class Wolf {
             if (wolvesInRound) {
                 for (const [laneStr, numberOfWolves] of Object.entries(wolvesInRound)) {
                     const lane = Number(laneStr)
-                    for (let i: number = 0; i < numberOfWolves; i++) new Wolf(lane)
+                    for (let i = 0; i < numberOfWolves; i++) new Wolf(lane)
                 }
                 this.CreateBloodWolf()
                 NamedWolves.ExplodingWolf = new Wolf(GetRandomInt(0, RegionList.WolfRegions.length - 1))
@@ -153,7 +153,7 @@ export class Wolf {
             if (pause) {
                 this.WanderTimer?.pause()
                 this.EffectTimer?.pause()
-                for (let i: number = 0; i < this.Affixes.length; i++) {
+                for (let i = 0; i < this.Affixes.length; i++) {
                     this.Affixes[i].pause(true)
                 }
                 BlzUnitClearOrders(this.Unit.handle, false)
@@ -161,7 +161,7 @@ export class Wolf {
                 this.paused = true
                 this.Unit.paused = true // Wander Wolf
             } else {
-                for (let i: number = 0; i < this.Affixes.length; i++) {
+                for (let i = 0; i < this.Affixes.length; i++) {
                     this.Affixes[i].pause(false)
                 }
                 this.WanderTimer?.resume()
@@ -234,8 +234,7 @@ export class Wolf {
 
     public HasAffix(affixName: string) {
         if (this.Affixes.length === 0) return false
-        for (let i: number = 0; i < this.Affixes.length; i++)
-            if (this.Affixes[i].constructor.name === affixName) return true
+        for (let i = 0; i < this.Affixes.length; i++) if (this.Affixes[i].constructor.name === affixName) return true
 
         return false
     }
@@ -255,7 +254,7 @@ export class Wolf {
         MapPlayer.fromIndex(PLAYER_NEUTRAL_PASSIVE)!,
     ]
 
-    private static wolfPlayerIndex: number = 0
+    private static wolfPlayerIndex = 0
 
     public static getNextWolfPlayer(): MapPlayer {
         let selectedPlayer = this.wolfPlayers[this.wolfPlayerIndex]
@@ -264,7 +263,7 @@ export class Wolf {
     }
 
     private static setWolfPlayers() {
-        for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
+        for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) {
                 this.wolfPlayers.push(MapPlayer.fromIndex(i)!)
             }

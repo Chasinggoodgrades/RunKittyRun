@@ -6,21 +6,21 @@ import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Timer, Trigger } from 'w3ts'
 
 export class RTR {
-    private RTR_INTERVAL: number = 0.001
-    private ITEM_PICKUP_RADIUS: number = 48
+    private RTR_INTERVAL = 0.001
+    private ITEM_PICKUP_RADIUS = 48
 
     private kitty: Kitty
     private RTRTimer: Timer
-    private enabled: boolean
+    private enabled = false
 
     private ClickTrigger: Trigger
     private WidgetTrigger: Trigger
 
-    private targetX: number = 0
-    private targetY: number = 0
+    private targetX = 0
+    private targetY = 0
     private hasTarget: boolean = false
     private lastUnitAnimation: string
-    public absoluteMoveSpeed: number
+    public absoluteMoveSpeed = 0
 
     public constructor(kitty: Kitty) {
         this.kitty = kitty

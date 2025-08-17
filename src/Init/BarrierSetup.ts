@@ -47,7 +47,7 @@ export class BarrierSetup {
 
         let distanceY: number = maxY - minY
         let intervalY: number = distanceY / 13
-        for (let i: number = 1; i < 13; i++) {
+        for (let i = 1; i < 13; i++) {
             let currentY: number = minY + i * intervalY
             let des = Destructable.create(this.BARRIERID, centerX, currentY)
             if (des) this.destructables.push(des)

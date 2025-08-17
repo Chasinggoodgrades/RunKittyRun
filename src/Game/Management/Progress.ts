@@ -28,7 +28,7 @@ export const Progress = {
     TeamProgressTracker() {
         if (!Globals.GAME_ACTIVE) return
         try {
-            for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+            for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
                 let team = Globals.ALL_TEAMS_LIST[i]
                 team.UpdateRoundProgress(Globals.ROUND, Progress.CalculateTeamProgress(team))
             }
@@ -39,11 +39,11 @@ export const Progress = {
     },
 
     CalculateTeamProgress(Team: Team) {
-        let totalProgress: number = 0.0
+        let totalProgress = 0.0
 
         if (Team.Teammembers.length === 0) return '0.00'
 
-        for (let i: number = 0; i < Team.Teammembers.length; i++) {
+        for (let i = 0; i < Team.Teammembers.length; i++) {
             let player = Team.Teammembers[i]
             totalProgress += Globals.ALL_KITTIES.get(player)!.TimeProg.GetRoundProgress(Globals.ROUND)
         }

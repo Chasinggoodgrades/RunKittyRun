@@ -19,10 +19,10 @@ import { RelicUtil } from '../RelicUtil'
 export class RingOfSummoning extends Relic {
     public static RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING
     public static RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE
-    private static RelicCost: number = 650
-    private static SUMMONING_RING_RADIUS: number = 300.0
-    private static SUMMONING_COOLDOWN: number = 90.0
-    private static UPGRADE_COOLDOWN_REDUCTION: number = 30.0
+    private static RelicCost = 650
+    private static SUMMONING_RING_RADIUS = 300.0
+    private static SUMMONING_COOLDOWN = 90.0
+    private static UPGRADE_COOLDOWN_REDUCTION = 30.0
     private static IconPath: string = 'war3mapImported\\BTNArcaniteNightRing.blp'
     private triggerHandle: Trigger
     private Owner: Unit | null
@@ -120,7 +120,7 @@ export class RingOfSummoning extends Relic {
         this.SummonGroup.removeUnit(summoningKittyUnit) // Ensure self is not included
 
         // Summon loop
-        let count: number = 0
+        let count = 0
         while (this.SummonGroup.first && count < numberOfSummons) {
             let unit: Unit = this.SummonGroup.first
             this.SummonGroup.removeUnit(unit)

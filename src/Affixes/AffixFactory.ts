@@ -17,9 +17,9 @@ export class AffixFactory {
     private static LaneWeights: number[]
 
     private static NUMBER_OF_AFFIXED_WOLVES: number // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
-    private static MAX_NUMBER_OF_AFFIXES: number = 1
-    private static MAX_AFFIXED_PER_LANE: number = 6
-    private static MAX_FIXIATION_PER_LANE: number = 3
+    private static MAX_NUMBER_OF_AFFIXES = 1
+    private static MAX_AFFIXED_PER_LANE = 6
+    private static MAX_FIXIATION_PER_LANE = 3
 
     private static TempAffixesList: string[] = []
     private static TempAffixCounts: Map<string, number> = new Map()
@@ -70,7 +70,7 @@ export class AffixFactory {
         }
 
         // Normalizing Weights
-        for (let i: number = 0; i < regionCount; i++) {
+        for (let i = 0; i < regionCount; i++) {
             AffixFactory.LaneWeights[i] = (AffixFactory.LaneWeights[i] / totalArea) * 100
             //if(!PROD) print(`Lane ${i + 1} weight: ${AffixFactory.LaneWeights[i]}`);
         }
@@ -150,9 +150,9 @@ export class AffixFactory {
             // # per lane based on the weights
             let totalWeight = sumNumbers(AffixFactory.LaneWeights) // IEnumerable is shit still but this doesnt call but 5 times a game so its fine
             let laneDistribution = []
-            let totalAssigned: number = 0
+            let totalAssigned = 0
 
-            for (let i: number = 0; i < AffixFactory.LaneWeights.length; i++) {
+            for (let i = 0; i < AffixFactory.LaneWeights.length; i++) {
                 // Set proportions based on lane weights
                 let ratio: number = AffixFactory.LaneWeights[i] / totalWeight
                 laneDistribution[i] = Math.floor(AffixFactory.NUMBER_OF_AFFIXED_WOLVES * ratio)
@@ -161,7 +161,7 @@ export class AffixFactory {
 
             // ^ rounding can cause some left overs so here we are
             let leftover: number = AffixFactory.NUMBER_OF_AFFIXED_WOLVES - totalAssigned
-            for (let i: number = 0; i < AffixFactory.LaneWeights.length && leftover > 0; i++) {
+            for (let i = 0; i < AffixFactory.LaneWeights.length && leftover > 0; i++) {
                 if (laneDistribution[i] < AffixFactory.MAX_AFFIXED_PER_LANE) {
                     laneDistribution[i]++
                     leftover--
@@ -169,13 +169,13 @@ export class AffixFactory {
             }
 
             // Go thru and apply affixes to each lane
-            for (let i: number = 0; i < laneDistribution.length; i++) {
+            for (let i = 0; i < laneDistribution.length; i++) {
                 let affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
                 let wolvesInLane = WolfArea.WolfAreas.get(i)!.Wolves
 
                 // Add affixes to random wolves until the {affixTarget} is reached
-                let appliedCount: number = 0
-                for (let j: number = 0; j < wolvesInLane.length && appliedCount < affixTarget; j++) {
+                let appliedCount = 0
+                for (let j = 0; j < wolvesInLane.length && appliedCount < affixTarget; j++) {
                     let wolf = wolvesInLane[j]
                     if (!AffixFactory.ShouldAffixWolves(wolf, i)) continue
 

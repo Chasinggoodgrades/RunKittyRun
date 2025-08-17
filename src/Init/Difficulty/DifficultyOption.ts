@@ -6,10 +6,10 @@ export class DifficultyOption {
     public static DifficultyChoosing: Dialog = Dialog.create()!
     private static _OptionCount: number = -1
     public name: string
-    public Value: number
+    public Value = 0
     public Color: string
     public Button: DialogButton
-    public TallyCount: number
+    public TallyCount = 0
 
     constructor(name: string, value: number, color: string) {
         this.name = name

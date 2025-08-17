@@ -15,8 +15,8 @@ export class ItemSpawner {
 
     private static SpawnableItems: number[]
     private static SpawnTimer = Timer.create()
-    private static ITEM_SPAWN_INTERVAL: number = 45.0
-    public static NUMBER_OF_ITEMS: number = 15
+    private static ITEM_SPAWN_INTERVAL = 45.0
+    public static NUMBER_OF_ITEMS = 15
 
     public static Initialize() {
         if (CurrentGameMode.active !== GameMode.Standard) return
@@ -28,7 +28,7 @@ export class ItemSpawner {
     }
 
     private static RegisterEvent() {
-        this.SpawnTimer.start(this.ITEM_SPAWN_INTERVAL, true, this.SpawnItems)
+        this.SpawnTimer.start(this.ITEM_SPAWN_INTERVAL, true, () => this.SpawnItems())
     }
 
     private static SpawnItems() {
@@ -44,7 +44,7 @@ export class ItemSpawner {
     }
 
     private static RemoveSpawnedItems() {
-        for (let i: number = 0; i < this.TrackItems.length; i++) {
+        for (let i = 0; i < this.TrackItems.length; i++) {
             let item = this.TrackItems[i]
             ItemSpatialGrid.UnregisterItem(item)
             if (item.isOwned()) continue
@@ -55,7 +55,7 @@ export class ItemSpawner {
 
         if (KibbleEvent.IsEventActive()) return
 
-        for (let i: number = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
+        for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
             let kibble = ItemSpawnerTrackKibbles.active[i]
             ItemSpatialGrid.UnregisterKibble(kibble)
             if (kibble.Item === null) continue // Already been __destroyed.
@@ -70,8 +70,9 @@ export class ItemSpawner {
         if (!Kibble.SpawningKibble) return
         if (KibbleEvent.IsEventActive()) return
 
-        for (let i: number = 0; i < numberOfItems; i++) {
-            let kibble = MemoryHandler.getEmptyObject<Kibble>()
+        for (let i = 0; i < numberOfItems; i++) {
+            let kibble = MemoryHandler.getEmptyClass<Kibble>(new Kibble())
+            print(kibble)
             kibble.SpawnKibble()
             ItemSpawnerTrackKibbles.active.push(kibble)
         }

@@ -11,12 +11,12 @@ import { RelicUpgrade } from '../RelicUpgrade'
 
 export class BeaconOfUnitedLifeforce extends Relic {
     public static RelicItemID: number = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE
-    private static INVULNERABILITY_DURATION: number = 1.0
-    private static EXTRA_REVIVE_CHANCE_SINGLE: number = 0.125 // 12.5%
-    private static EXTRA_REVIVE_CHANCE_ALL: number = 0.0175 // 1.75%
-    private static EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE: number = 0.01 // 1%
+    private static INVULNERABILITY_DURATION = 1.0
+    private static EXTRA_REVIVE_CHANCE_SINGLE = 0.125 // 12.5%
+    private static EXTRA_REVIVE_CHANCE_ALL = 0.0175 // 1.75%
+    private static EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE = 0.01 // 1%
     private static IconPath: string = 'war3mapImported\\BTNTicTac.blp'
-    private static RelicCost: number = 650
+    private static RelicCost = 650
     private static ReviveChance: number = BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE
 
     private Owner: MapPlayer | null

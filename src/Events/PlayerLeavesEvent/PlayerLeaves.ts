@@ -47,7 +47,7 @@ export class PlayerLeaves {
             if (Globals.WinGame) return
             MultiboardUtil.RefreshMultiboards()
         } catch (e: any) {
-            print('Error in PlayerLeavesActions: ' + e.Message)
+            print('Error in PlayerLeavesActions: ' + e)
         }
     }
 }

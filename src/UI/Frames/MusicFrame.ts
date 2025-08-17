@@ -14,13 +14,13 @@ export class MusicFrame {
     private static MusicSliderValues: Map<MapPlayer, number> = new Map()
     private static MusicButtons: Map<number, Frame> = new Map()
     private static Headers: string[]
-    private static MusicFrameX: number = 0.4
-    private static MusicFrameY: number = 0.36
-    private static ButtonWidth: number = 0.17
-    private static ButtonHeight: number = 0.023
-    private static ButtonSpacing: number = 0.025 // Space between buttons
-    private static ButtonStartX: number = 0.4 // X coordinate for button positions
-    private static ButtonStartY: number = 0.465 // Starting Y coordinate for the first button
+    private static MusicFrameX = 0.4
+    private static MusicFrameY = 0.36
+    private static ButtonWidth = 0.17
+    private static ButtonHeight = 0.023
+    private static ButtonSpacing = 0.025 // Space between buttons
+    private static ButtonStartX = 0.4 // X coordinate for button positions
+    private static ButtonStartY = 0.465 // Starting Y coordinate for the first button
 
     public static Initialize() {
         try {
@@ -148,7 +148,7 @@ export class MusicFrame {
         if (value === undefined) return
 
         let maxSongs: number = MusicManager.MusicList.length
-        let visibleButtons: number = 9
+        let visibleButtons = 9
 
         // Ensure the value stays within valid bounds
         if (value < 0) value = 0
@@ -163,7 +163,7 @@ export class MusicFrame {
         if (end - start < visibleButtons) start = Math.max(0, end - visibleButtons)
 
         // Display the buttons in the visible range and hide others
-        for (let i: number = 0; i < maxSongs; i++) {
+        for (let i = 0; i < maxSongs; i++) {
             if (i >= start && i < end) {
                 let positionY: number =
                     i === end - 1

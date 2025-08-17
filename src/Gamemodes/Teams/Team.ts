@@ -16,13 +16,13 @@ import { TeamHandler } from './TeamHandler'
 
 export class Team {
     private static TeamTimer: Timer
-    public TeamID: number
+    public TeamID = 0
     public TeamColor: string
     public TeamTimes: Map<number, number>
     public Teammembers: MapPlayer[]
     public TeamMembersString: string = ''
     public RoundProgress: Map<number, string>
-    public Finished: boolean
+    public Finished = false
 
     constructor(id: number) {
         this.TeamID = id
@@ -77,7 +77,7 @@ export class Team {
     }
 
     public TeamIsDeadActions() {
-        for (let i: number = 0; i < this.Teammembers.length; i++) {
+        for (let i = 0; i < this.Teammembers.length; i++) {
             let kitty = Globals.ALL_KITTIES.get(this.Teammembers[i])!
             kitty.Finished = true
         }
@@ -90,7 +90,7 @@ export class Team {
     }
 
     private InitRoundStats() {
-        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
+        for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             this.RoundProgress.set(i, '0.0')
             this.TeamTimes.set(i, 0.0)
         }
@@ -158,7 +158,7 @@ export class Team {
 
         // Sets the team member string whenever someone is added or removed.
         this.TeamMembersString = '' // Reset TeamMembersString
-        for (let i: number = 0; i < this.Teammembers.length; i++) {
+        for (let i = 0; i < this.Teammembers.length; i++) {
             let member = this.Teammembers[i]
             let name: string = member.name.split('#')[0]
             if (name.length > 7) name = ColorUtils.ColorString(member.name.substring(0, 7), member.id + 1)

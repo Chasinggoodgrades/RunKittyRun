@@ -13,8 +13,8 @@ export class OneOfNine extends Relic {
     public static RelicItemID: number = Constants.ITEM_ONE_OF_NINE
     public static RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
-    private PreviousAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-    private static RelicCost: number = 650
+    private PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+    private static RelicCost = 650
     private static IconPath: string = 'war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp'
 
     public constructor() {

@@ -6,9 +6,9 @@ import { MapPlayer, Trigger, Unit } from 'w3ts'
 import { Kitty } from './Kitty/Kitty'
 
 export class Circle {
-    private CIRCLE_UNIT_MODEL: number = Constants.UNIT_KITTY_CIRCLE
+    private CIRCLE_UNIT_MODEL = Constants.UNIT_KITTY_CIRCLE
     private static CIRCLE_SPAWN_REGION = Regions.Circle_Area
-    private ID: number
+    private ID = 0
     public Player: MapPlayer
     public Unit: Unit
     public Collision: Trigger

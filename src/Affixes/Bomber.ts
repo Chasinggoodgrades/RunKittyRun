@@ -12,8 +12,8 @@ import { Effect, Group } from 'w3ts'
 import { Affix } from './Affix'
 
 export class Bomber extends Affix {
-    private AFFIX_ABILITY: number = Constants.ABILITY_BOMBER // replace with bomber ability in WE later after i make it.
-    private EXPLOSION_RANGE: number = 250.0
+    private AFFIX_ABILITY = Constants.ABILITY_BOMBER // replace with bomber ability in WE later after i make it.
+    private EXPLOSION_RANGE = 250.0
 
     private static readonly IsBomber = (r: Affix): r is Bomber => {
         return r instanceof Bomber
@@ -22,12 +22,12 @@ export class Bomber extends Affix {
     private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
     private static RING_TIMER_INDICATOR: string = 'war3mapImported\\RingProgress.mdx'
 
-    private static MIN_EXPLODE_INTERVAL: number = 10.0
-    private static MAX_EXPLODE_INTERVAL: number = 15.0
+    private static MIN_EXPLODE_INTERVAL = 10.0
+    private static MAX_EXPLODE_INTERVAL = 15.0
     private ExplodeTimer: AchesTimers = createAchesTimer()
     private ReviveAlphaTimer: AchesTimers = createAchesTimer()
     private ExplodeGroup: Group = Group.create()!
-    private ReviveAlpha: number = 1
+    private ReviveAlpha = 1
     private RangeIndicator: RangeIndicator
     private TimerIndicator: Effect
 

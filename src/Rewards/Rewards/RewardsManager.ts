@@ -24,7 +24,7 @@ export class RewardsManager {
         for (let player of Globals.ALL_PLAYERS) {
             RewardsManager.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
         }
-        RewardsManager.Trigger.addAction(RewardsManager.CastedReward)
+        RewardsManager.Trigger.addAction(() => RewardsManager.CastedReward())
     }
 
     private static CastedReward() {
@@ -72,61 +72,78 @@ export class RewardsManager {
         if (kitty.SaveData.SelectedData.SelectedWindwalk === '') kitty.ActiveAwards.WindwalkID = 0
     }
 
-    public static AddReward(reward: Reward): Reward
-    public static AddReward(
+    public static AddReward(reward: Reward): Reward {
+        RewardsManager.Rewards.push(reward)
+        reward.TypeSorted = reward.SetRewardTypeSorted()
+        return reward
+    }
+
+    /**
+     * Creates and adds a reward with model path and origin point (for effects like auras, trails, wings, hats)
+     */
+    public static AddRewardFromModel(
         name: string,
         abilityID: number,
         originPoint: string,
         modelPath: string,
         rewardType: RewardType
-    ): Reward
-    public static AddReward(name: string, abilityID: number, skinID: number, rewardType: RewardType): Reward
-    public static AddReward(
+    ): Reward {
+        const reward = Reward.createRewardFromModel(name, abilityID, originPoint, modelPath, rewardType)
+        return RewardsManager.AddReward(reward)
+    }
+
+    /**
+     * Creates and adds a reward with model path, origin point, and game stat tracking
+     */
+    public static AddRewardFromModelWithStats(
+        name: string,
+        abilityID: number,
+        originPoint: string,
+        modelPath: string,
+        rewardType: RewardType,
+        gameStat: string,
+        gameStatValue: number
+    ): Reward {
+        const reward = Reward.createRewardFromModelWithStats(
+            name,
+            abilityID,
+            originPoint,
+            modelPath,
+            rewardType,
+            gameStat,
+            gameStatValue
+        )
+        return RewardsManager.AddReward(reward)
+    }
+
+    /**
+     * Creates and adds a reward with skin ID (for skin rewards)
+     */
+    public static AddRewardFromSkin(name: string, abilityID: number, skinID: number, rewardType: RewardType): Reward {
+        const reward = Reward.createRewardFromSkin(name, abilityID, skinID, rewardType)
+        return RewardsManager.AddReward(reward)
+    }
+
+    /**
+     * Creates and adds a reward with skin ID and game stat tracking
+     */
+    public static AddRewardFromSkinWithStats(
         name: string,
         abilityID: number,
         skinID: number,
         rewardType: RewardType,
         gameStat: string,
         gameStatValue: number
-    ): Reward
-    public static AddReward(
-        name: string,
-        abilityID: number,
-        originPoint: string,
-        modelPath: string,
-        rewardType: RewardType,
-        gameStat: string,
-        gameStatValue: number
-    ): Reward
-
-    public static AddReward(
-        rewardOrName: Reward | string,
-        abilityID?: number,
-        originPointOrSkinID?: string | number,
-        modelPathOrRewardType?: string | RewardType,
-        rewardTypeOrGameStat?: RewardType | string,
-        gameStatOrValue?: string | number,
-        gameStatValue?: number
     ): Reward {
-        let reward: Reward
-
-        if (rewardOrName instanceof Reward) {
-            reward = rewardOrName
-        } else {
-            reward = new Reward(
-                rewardOrName,
-                abilityID as any,
-                originPointOrSkinID as any,
-                modelPathOrRewardType as any,
-                rewardTypeOrGameStat as any,
-                gameStatOrValue as any,
-                gameStatValue as any
-            )
-        }
-
-        RewardsManager.Rewards.push(reward)
-        reward.TypeSorted = reward.SetRewardTypeSorted()
-        return reward
+        const reward = Reward.createRewardFromSkinWithStats(
+            name,
+            abilityID,
+            skinID,
+            rewardType,
+            gameStat,
+            gameStatValue
+        )
+        return RewardsManager.AddReward(reward)
     }
 
     public static SetupRewards() {
@@ -134,7 +151,7 @@ export class RewardsManager {
         let stats = Globals.GAME_STATS
 
         // Hats
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'Bandana',
             Constants.ABILITY_HAT_BANDANA,
             'head',
@@ -143,7 +160,7 @@ export class RewardsManager {
             'Saves',
             200
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'PirateHat',
             Constants.ABILITY_HAT_PIRATE,
             'head',
@@ -152,7 +169,7 @@ export class RewardsManager {
             'Saves',
             250
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'ChefHat',
             Constants.ABILITY_HAT_CHEF,
             'head',
@@ -161,7 +178,7 @@ export class RewardsManager {
             'Saves',
             300
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'TikiMask',
             Constants.ABILITY_HAT_TIKI,
             'head',
@@ -170,7 +187,7 @@ export class RewardsManager {
             'Saves',
             350
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'SamuraiHelm',
             Constants.ABILITY_HAT_SAMURAI,
             'head',
@@ -179,7 +196,7 @@ export class RewardsManager {
             'Saves',
             400
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'SantaHat',
             Constants.ABILITY_HAT_SANTA,
             'head',
@@ -190,7 +207,7 @@ export class RewardsManager {
         )
 
         // Auras
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'SpecialAura',
             Constants.ABILITY_AURA_SPECIAL,
             'origin',
@@ -199,7 +216,7 @@ export class RewardsManager {
             'HardWins',
             5
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'StarlightAura',
             Constants.ABILITY_AURA_STARLIGHT,
             'origin',
@@ -208,7 +225,7 @@ export class RewardsManager {
             'NormalGames',
             65
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'SpectacularAura',
             Constants.ABILITY_AURA_SPECTACULAR,
             'origin',
@@ -217,7 +234,7 @@ export class RewardsManager {
             'NormalWins',
             30
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'ManaAura',
             Constants.ABILITY_AURA_MANATAP,
             'origin',
@@ -226,21 +243,21 @@ export class RewardsManager {
             'NormalWins',
             20
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ButterflyAura',
             Constants.ABILITY_AURA_BUTTERFLY,
             'origin',
             'war3mapImported\\ButterflyAura.mdx',
             RewardType.Auras
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'FreezeAura',
             Constants.ABILITY_AURA_FREEZE,
             'origin',
             'war3mapImported\\HolyFreezeAuraD2.mdx',
             RewardType.Auras
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'VioletAura',
             Constants.ABILITY_CHAMPION_AURAPURPLERUNIC,
             'origin',
@@ -248,28 +265,28 @@ export class RewardsManager {
             RewardType.Tournament
         )
         // Chained Together Awards
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ChainedNormalAura',
             Constants.ABILITY_AURA_CHAINEDNORMAL,
             'origin',
             'war3mapImported\\ChainedNormalAura.mdx',
             RewardType.Auras
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ChainedHardAura',
             Constants.ABILITY_AURA_CHAINEDHARD,
             'origin',
             'war3mapImported\\ChainedHardAura.mdx',
             RewardType.Auras
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ChainedImpossibleAura',
             Constants.ABILITY_AURA_CHAINEDIMPOSSIBLE,
             'origin',
             'war3mapImported\\ChainedImpossibleAura.mdx',
             RewardType.Auras
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ChainedNightmareAura',
             Constants.ABILITY_AURA_CHAINEDNIGHTMARE,
             'origin',
@@ -278,7 +295,7 @@ export class RewardsManager {
         )
 
         // Wings
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'PhoenixWings',
             Constants.ABILITY_WINGS_PHOENIX,
             'chest',
@@ -287,7 +304,7 @@ export class RewardsManager {
             'Saves',
             375
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'FairyWings',
             Constants.ABILITY_WINGS_FAIRY,
             'chest',
@@ -296,7 +313,7 @@ export class RewardsManager {
             'Saves',
             275
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'NightmareWings',
             Constants.ABILITY_WINGS_NIGHTMARE,
             'chest',
@@ -305,7 +322,7 @@ export class RewardsManager {
             'Saves',
             325
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'ArchangelWings',
             Constants.ABILITY_WINGS_ARCHANGEL,
             'chest',
@@ -314,7 +331,7 @@ export class RewardsManager {
             'Saves',
             425
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'CosmicWings',
             Constants.ABILITY_WINGS_COSMIC,
             'chest',
@@ -323,7 +340,7 @@ export class RewardsManager {
             'Saves',
             550
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'VoidWings',
             Constants.ABILITY_WINGS_VOID,
             'chest',
@@ -332,7 +349,7 @@ export class RewardsManager {
             'Saves',
             500
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'ChaosWings',
             Constants.ABILITY_WINGS_CHAOS,
             'chest',
@@ -341,7 +358,7 @@ export class RewardsManager {
             'Saves',
             450
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'PinkWings',
             Constants.ABILITY_WINGS_PINK,
             'chest',
@@ -350,7 +367,7 @@ export class RewardsManager {
             'Saves',
             600
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'NatureWings',
             Constants.ABILITY_WINGS_NATURE,
             'chest',
@@ -361,35 +378,35 @@ export class RewardsManager {
         )
 
         // Tendrils
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'RedTendrils',
             Constants.ABILITY_WINGS_TRED,
             'chest',
             'war3mapImported\\RedTendrils.mdx',
             RewardType.Wings
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WhiteTendrils',
             Constants.ABILITY_WINGS_TWHITE,
             'chest',
             'war3mapImported\\WhiteTendrils.mdx',
             RewardType.Wings
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'DivinityTendrils',
             Constants.ABILITY_WINGS_TYELLOW,
             'chest',
             'war3mapImported\\YellowTendrils.mdx',
             RewardType.Wings
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'GreenTendrils',
             Constants.ABILITY_WINGS_TGREEN,
             'chest',
             'war3mapImported\\GreenTendrils.mdx',
             RewardType.Wings
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'PatrioticTendrils',
             Constants.ABILITY_WINGS_PATRIOTIC,
             'chest',
@@ -398,14 +415,14 @@ export class RewardsManager {
             'SaveStreak',
             50
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'VioletWings',
             Constants.ABILITY_CHAMPION_WINGSTVIOLET,
             'chest',
             'war3mapImported\\VoidTendrilsWings.mdx',
             RewardType.Tournament
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'TurquoiseWings',
             Constants.ABILITY_CHAMPION_WINGSTURQUOISE,
             'chest',
@@ -414,35 +431,35 @@ export class RewardsManager {
         )
 
         // Fires
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'PurpleFire',
             Constants.ABILITY_TRAIL_FIREPURPLE,
             'origin',
             'war3mapImported\\PurpleFire.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'BlueFire',
             Constants.ABILITY_TRAIL_FIREBLUE,
             'origin',
             'war3mapImported\\BlueFire.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'TurquoiseFire',
             Constants.ABILITY_TRAIL_FIRETURQUOISE,
             'origin',
             'war3mapImported\\TurquoiseFire.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'PinkFire',
             Constants.ABILITY_TRAIL_FIREPINK,
             'origin',
             'war3mapImported\\PinkFire.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WhiteFire',
             Constants.ABILITY_TRAIL_FIREWHITE,
             'origin',
@@ -451,42 +468,42 @@ export class RewardsManager {
         )
 
         // Nitros
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'Nitro',
             Constants.ABILITY_NITRO,
             'origin',
             'war3mapImported\\Nitro.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NitroBlue',
             Constants.ABILITY_NITROBLUE,
             'origin',
             'war3mapImported\\NitroBlue.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NitroRed',
             Constants.ABILITY_NITRORED,
             'origin',
             'war3mapImported\\NitroRed.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NitroGreen',
             Constants.ABILITY_NITROGREEN,
             'origin',
             'war3mapImported\\NitroGreen.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NitroPurple',
             Constants.ABILITY_NITROPURPLE,
             'origin',
             'war3mapImported\\NitroPurple.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'TurquoiseNitro',
             Constants.ABILITY_CHAMION_NITROTURQUOISE,
             'origin',
@@ -495,42 +512,42 @@ export class RewardsManager {
         )
 
         // Divine Lights
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'DivineLight',
             Constants.ABILITY_TRAIL_DIVINELIGHT,
             'origin',
             'DivineLight.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'AzureLight',
             Constants.ABILITY_TRAIL_AZURELIGHT,
             'origin',
             'AzureLight.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'CrimsonLight',
             Constants.ABILITY_TRAIL_CRIMSONLIGHT,
             'origin',
             'CrimsonLight.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'EmeraldLight',
             Constants.ABILITY_TRAIL_EMERALDLIGHT,
             'origin',
             'EmeraldLight.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'VioletLight',
             Constants.ABILITY_TRAIL_VIOLETLIGHT,
             'origin',
             'VioletLight.mdx',
             RewardType.Nitros
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'PatrioticLight',
             Constants.ABILITY_TRAIL_PATRIOTICLIGHT,
             'origin',
@@ -539,7 +556,7 @@ export class RewardsManager {
         )
 
         // Lightning
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'BlueLightning',
             Constants.ABILITY_TRAIL_LIGHTNINGBLUE,
             'origin',
@@ -548,7 +565,7 @@ export class RewardsManager {
             'Saves',
             2000
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModelWithStats(
             'RedLightning',
             Constants.ABILITY_TRAIL_LIGHTNINGRED,
             'origin',
@@ -557,21 +574,21 @@ export class RewardsManager {
             'SaveStreak',
             15
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'PurpleLightning',
             Constants.ABILITY_TRAIL_LIGHTNINGPURPLE,
             'origin',
             'war3mapImported\\PurpleLightning.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'YellowLightning',
             Constants.ABILITY_TRAIL_LIGHTNINGYELLOW,
             'origin',
             'war3mapImported\\YellowLightning.mdx',
             RewardType.Trails
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'GreenLightning',
             Constants.ABILITY_TRAIL_LIGHTNINGGREEN,
             'origin',
@@ -581,49 +598,49 @@ export class RewardsManager {
         // AddReward("LightningSpeed", Constants.ABILITY_AURA_BUTTERFLY, "origin", "lightning_shield.mdx", RewardType.Tournament);
 
         // WindWalks
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWBlood',
             Constants.ABILITY_WW_BLOOD,
             'chest',
             'war3mapImported\\Blood: Windwalk.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWBlue',
             Constants.ABILITY_WW_BLUE,
             'chest',
             'war3mapImported\\BlueWindwalk.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWFire',
             Constants.ABILITY_WW_FIRE,
             'chest',
             'war3mapImported\\Fire: Windwalk.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWNecro',
             Constants.ABILITY_WW_NECRO,
             'chest',
             'war3mapImported\\NecroWindwalk.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWSwift',
             Constants.ABILITY_WW_SWIFT,
             'chest',
             'war3mapImported\\Windwalk.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWDivine',
             Constants.ABILITY_WW_DIVINE,
             'chest',
             'war3mapImported\\WindwalkDivine.mdx',
             RewardType.Windwalks
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'WWViolet',
             Constants.ABILITY_WW_VIOLET,
             'chest',
@@ -631,35 +648,35 @@ export class RewardsManager {
             RewardType.Windwalks
         )
         // Deathless
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalDeathless1',
             Constants.ABILITY_DEATHLESS_FIRE_1_01,
             'origin',
             'Doodads\\Cinematic\\FireRockSmall\\FireRockSmall.mdl',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalDeathless2',
             Constants.ABILITY_DEATHLESS_FIRE_1_02,
             'origin',
             'war3mapImported\\Deathless2.mdx',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalDeathless3',
             Constants.ABILITY_DEATHLESS_FIRE_1_03,
             'origin',
             'war3mapImported\\Deathless3.mdx',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalDeathless4',
             Constants.ABILITY_DEATHLESS_FIRE_1_04,
             'origin',
             'war3mapImported\\Deathless4.mdx',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalDeathless5',
             Constants.ABILITY_DEATHLESS_FIRE_1_05,
             'origin',
@@ -668,21 +685,21 @@ export class RewardsManager {
         )
 
         // Team Deathless
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'NormalTeamDeathless',
             Constants.ABILITY_NORMAL_TEAM_DEATHLESS,
             'origin',
             'war3mapImported\\NormalTeamDeathless.mdx',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'HardTeamDeathless',
             Constants.ABILITY_HARD_TEAM_DEATHLESS,
             'origin',
             'war3mapImported\\HardTeamDeathless.mdx',
             RewardType.Deathless
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'ImpossibleTeamDeathless',
             Constants.ABILITY_IMPOSSIBLE_TEAM_DEATHLESS,
             'origin',
@@ -691,7 +708,7 @@ export class RewardsManager {
         )
 
         // Skins
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkinWithStats(
             'UndeadKitty',
             Constants.ABILITY_SKIN_KITTYUNDEAD,
             Constants.UNIT_UNDEAD_KITTY,
@@ -699,7 +716,7 @@ export class RewardsManager {
             'NormalWins',
             30
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkinWithStats(
             'HighelfKitty',
             Constants.ABILITY_SKIN_KITTYHIGHELF,
             Constants.UNIT_HIGHELF_KITTY,
@@ -707,7 +724,7 @@ export class RewardsManager {
             'NormalGames',
             40
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkinWithStats(
             'AncientKitty',
             Constants.ABILITY_SKIN_KITTYANCIENT,
             Constants.UNIT_ANCIENT_KITTY,
@@ -715,7 +732,7 @@ export class RewardsManager {
             'NormalWins',
             40
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkinWithStats(
             'SatyrKitty',
             Constants.ABILITY_SKIN_KITTYSATYR,
             Constants.UNIT_SATYR_KITTY,
@@ -723,7 +740,7 @@ export class RewardsManager {
             'NormalWins',
             25
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkinWithStats(
             'AstralKitty',
             Constants.ABILITY_SKIN_KITTYASTRAL,
             Constants.UNIT_ASTRAL_KITTY,
@@ -731,19 +748,19 @@ export class RewardsManager {
             'NormalGames',
             55
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkin(
             'ZandalariKitty',
             Constants.ABILITY_SKIN_KITTYZANDALARI,
             Constants.UNIT_ZANDALARI_KITTY,
             RewardType.Skins
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkin(
             'HuntressKitty',
             Constants.ABILITY_SKIN_KITTYHUNTRESS,
             Constants.UNIT_HUNTRESS_KITTY,
             RewardType.Skins
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromSkin(
             'PenguinSkin',
             Constants.ABILITY_CHAMPION_SKINPENGUIN,
             Constants.UNIT_PENGUIN,
@@ -751,14 +768,14 @@ export class RewardsManager {
         )
 
         // Holiday
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'SnowWings2023',
             Constants.ABILITY_HOLIDAY_WINGS_C2023,
             'chest',
             'war3mapImported\\SnowflakeWings.mdx',
             RewardType.Wings
         )
-        RewardsManager.AddReward(
+        RewardsManager.AddRewardFromModel(
             'SnowTrail2023',
             Constants.ABILITY_HOLIDAY_TRAIL_C2023,
             'origin',

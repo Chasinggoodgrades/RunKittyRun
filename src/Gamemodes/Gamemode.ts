@@ -13,7 +13,7 @@ import { Team } from './Teams/Team'
 export class Gamemode {
     public static HostPlayer: MapPlayer
     public static IsGameModeChosen: boolean = false
-    public static PlayersPerTeam: number = 0
+    public static PlayersPerTeam = 0
 
     public static Initialize() {
         this.ChoosingGameMode()

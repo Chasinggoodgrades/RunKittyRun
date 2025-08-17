@@ -9,14 +9,14 @@ import { WolfArea } from '../WolfArea'
 
 export class WolfSpawning {
     private static WolvesPerRound = [195, 264, 325, 365, 427]
-    private static MaxWolvesPerLane: number = 60
+    private static MaxWolvesPerLane = 60
 
     public static SpawnWolves() {
         let totalArea = WolfArea.TotalArea
         let totalWolves = WolfSpawning.WolvesPerRound[Globals.ROUND - 1]
 
         // List to hold excess wolves
-        let excessWolves: number = 0
+        let excessWolves = 0
 
         for (let [_, lane] of WolfArea.WolfAreas) {
             let laneID: number = lane.ID
@@ -27,7 +27,7 @@ export class WolfSpawning {
                 numberOfWolves = WolfSpawning.MaxWolvesPerLane
             }
 
-            for (let i: number = 0; i < numberOfWolves; i++) {
+            for (let i = 0; i < numberOfWolves; i++) {
                 new Wolf(laneID)
             }
         }

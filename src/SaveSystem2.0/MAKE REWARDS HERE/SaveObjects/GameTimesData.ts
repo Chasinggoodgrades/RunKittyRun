@@ -4,7 +4,7 @@ export class GameTimesData {
     public ImpossibleGameTime: ImpossibleGameTimeData
     public NightmareGameTime: NightmareGameTimeData
 
-    public GameTimesData() {
+    public constructor() {
         this.NormalGameTime = new NormalGameTimeData()
         this.HardGameTime = new HardGameTimeData()
         this.ImpossibleGameTime = new ImpossibleGameTimeData()
@@ -14,7 +14,7 @@ export class GameTimesData {
 
 export class NormalGameTimeData {
     public Date: string = ''
-    public Time: number
+    public Time = 0
     public TeamMembers: string = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
@@ -25,7 +25,7 @@ export class NormalGameTimeData {
 
 export class HardGameTimeData {
     public Date: string = ''
-    public Time: number
+    public Time = 0
     public TeamMembers: string = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
@@ -36,7 +36,7 @@ export class HardGameTimeData {
 
 export class ImpossibleGameTimeData {
     public Date: string = ''
-    public Time: number
+    public Time = 0
     public TeamMembers: string = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
@@ -47,7 +47,7 @@ export class ImpossibleGameTimeData {
 
 export class NightmareGameTimeData {
     public Date: string = ''
-    public Time: number
+    public Time = 0
     public TeamMembers: string = ''
     /*    public RoundOneTime: number 
         public RoundTwoTime: number 

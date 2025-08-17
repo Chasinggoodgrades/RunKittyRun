@@ -13,12 +13,12 @@ export class KittyMorphosis {
     /// <summary>
     /// The level required to morph (reduction in size / collision).
     /// </summary>
-    private REQUIRED_LEVEL: number = 10
+    private REQUIRED_LEVEL = 10
 
     /// <summary>
     /// The amount of collision reduction applied to the Kitty when they morph.
     /// </summary>
-    private COLLISION_REDUCTION: number = 0.1
+    private COLLISION_REDUCTION = 0.1
 
     /// <summary>
     /// Trigger that will detect whenever the Kitty.Player levels up..
@@ -33,7 +33,7 @@ export class KittyMorphosis {
     /// <summary>
     /// Indicates whether the morphosis is currently active or not.
     /// </summary>
-    public Active: boolean
+    public Active = false
 
     /// <summary>
     /// Initializes a new instance of the <see cref="KittyMorphosis"/> class.
@@ -53,7 +53,7 @@ export class KittyMorphosis {
         this.triggerHandle ??= Trigger.create()!
         this.triggerHandle.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_HERO_LEVEL)
         this.triggerHandle.addCondition(Condition(() => getTriggerUnit().getHeroLevel() >= this.REQUIRED_LEVEL))
-        this.triggerHandle.addAction(this.MorphKitty)
+        this.triggerHandle.addAction(() => this.MorphKitty())
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ export class KittyMorphosis {
     /// <param name="Unit"></param>
     public ScaleUnit() {
         if (!this.Active) return
-        let scale: number = 0.6 - 0.6 * this.COLLISION_REDUCTION * 2.0
+        let scale = 0.6 - 0.6 * this.COLLISION_REDUCTION * 2.0
         this.Kitty.Unit.setScale(scale, scale, scale)
     }
 }

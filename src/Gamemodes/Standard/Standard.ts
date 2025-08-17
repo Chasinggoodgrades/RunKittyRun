@@ -11,7 +11,7 @@ import { Windwalk } from 'src/SpecialEffects/Windwalk'
 import { PROD } from 'src/env'
 
 export class Standard {
-    private static ROUND_INTERMISSION: number = 10.0
+    private static ROUND_INTERMISSION = 10.0
 
     public static Initialize() {
         RoundManager.ROUND_INTERMISSION = !PROD ? 0.0 : this.ROUND_INTERMISSION

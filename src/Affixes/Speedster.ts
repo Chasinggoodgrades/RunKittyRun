@@ -4,7 +4,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Affix } from './Affix'
 
 export class Speedster extends Affix {
-    private AFFIX_ABILITY: number = Constants.ABILITY_SPEEDSTER
+    private AFFIX_ABILITY = Constants.ABILITY_SPEEDSTER
 
     public constructor(unit: Wolf) {
         super(unit)

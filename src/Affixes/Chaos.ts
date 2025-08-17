@@ -8,10 +8,10 @@ import { AffixTypes, CreateAffix } from './AffixCreate'
 import { AddAffix, AffixUtil } from './AffixUtil'
 
 export class Chaos extends Affix {
-    private AFFIX_ABILITY: number = Constants.ABILITY_CHAOS
+    private AFFIX_ABILITY = Constants.ABILITY_CHAOS
     private RotationTimer: AchesTimers = createAchesTimer()
     private currentAffix: Affix
-    private rotationTime: number = GetRandomReal(25, 45)
+    private rotationTime = GetRandomReal(25, 45)
 
     public constructor(unit: Wolf) {
         super(unit)

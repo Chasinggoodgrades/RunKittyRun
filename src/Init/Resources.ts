@@ -5,14 +5,14 @@ import { GameMode } from 'src/Gamemodes/GameModeEnum'
 import { Globals } from 'src/Global/Globals'
 
 export class Resources {
-    private static StartingGold: number = 100
-    public static SaveExperience: number = 80
-    public static SaveGold: number = 30
-    public static SaveStreakMultiplier: number = 0.1
-    public static SafezoneExperience: number = 100
-    public static SafezoneGold: number = 20
-    private static EndRoundBonusGold: number = 150 + 50 * Globals.ROUND
-    private static EndRoundBonusXP: number = 550 * Globals.ROUND
+    private static StartingGold = 100
+    public static SaveExperience = 80
+    public static SaveGold = 30
+    public static SaveStreakMultiplier = 0.1
+    public static SafezoneExperience = 100
+    public static SafezoneGold = 20
+    private static EndRoundBonusGold = 150 + 50 * Globals.ROUND
+    private static EndRoundBonusXP = 550 * Globals.ROUND
 
     public static Initialize() {
         this.SetResourcesForGamemode()

@@ -10,7 +10,7 @@ import { Point, Unit } from 'w3ts'
 /// </summary>
 
 export class PodiumUtil {
-    private static EndingTimer: number = 90.0
+    private static EndingTimer = 90.0
 
     public static Initialize() {
         this.SetPodiumPositions()

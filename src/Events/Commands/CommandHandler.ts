@@ -14,13 +14,13 @@ export class CommandHandler {
 
     public static Initialize() {
         InitCommands.InitializeCommands()
-        for (let i: number = 0; i < GetBJMaxPlayers(); i++) {
+        for (let i = 0; i < GetBJMaxPlayers(); i++) {
             if (MapPlayer.fromIndex(i)!.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
             CommandHandler.DebugCmdTrigger.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '?', false)
             CommandHandler.NewCmdHandler.registerPlayerChatEvent(MapPlayer.fromIndex(i)!, '-', false)
         }
-        this.DebugCmdTrigger.addAction(this.DebugHandle)
-        this.NewCmdHandler.addAction(this.HandleCommands)
+        this.DebugCmdTrigger.addAction(() => this.DebugHandle())
+        this.NewCmdHandler.addAction(() => this.HandleCommands())
     }
 
     private static HandleCommands() {

@@ -91,7 +91,7 @@ export class DiscordFrame {
     private static RegisterTrigger() {
         DiscordFrame.triggerHandle = Trigger.create()!
         DiscordFrame.triggerHandle.triggerRegisterFrameEvent(DiscordFrame.EditBox, FRAMEEVENT_EDITBOX_ENTER)
-        DiscordFrame.triggerHandle.addAction(DiscordFrame.UpdateTextBox)
+        DiscordFrame.triggerHandle.addAction(() => DiscordFrame.UpdateTextBox())
     }
 
     private static RegisterESCTrigger() {
@@ -99,7 +99,7 @@ export class DiscordFrame {
         for (let player of Globals.ALL_PLAYERS) {
             DiscordFrame.ESCTrigger.registerPlayerEvent(player, EVENT_PLAYER_END_CINEMATIC)
         }
-        DiscordFrame.ESCTrigger.addAction(DiscordFrame.ESCPressed)
+        DiscordFrame.ESCTrigger.addAction(() => DiscordFrame.ESCPressed())
     }
 
     private static ESCPressed() {

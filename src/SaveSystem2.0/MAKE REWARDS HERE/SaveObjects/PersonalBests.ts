@@ -1,6 +1,6 @@
 export class PersonalBests {
-    public Saves: number
-    public Deaths: number
-    public Score: number
-    public KibbleCollected: number
+    public Saves = 0
+    public Deaths = 0
+    public Score = 0
+    public KibbleCollected = 0
 }

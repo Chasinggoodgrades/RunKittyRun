@@ -17,14 +17,14 @@ import { OldsaveSync } from './OldsaveSync'
 export class Savecode {
     private static player_charset: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     private static OriginalToolTips: string[] = []
-    public Digits: number
+    public Digits = 0
     public Bignum: BigNum
     public static PlayerSaveObject: Map<MapPlayer, Savecode> = new Map()
 
     public static Initialize() {
         try {
             OldsaveSync.Initialize()
-            for (let i: number = 0; i < OldSavesHelper.AbilityList.length; i++) {
+            for (let i = 0; i < OldSavesHelper.AbilityList.length; i++) {
                 let ability = OldSavesHelper.AbilityList[i]
                 let tooltip = BlzGetAbilityTooltip(ability, 0)
                 if (tooltip && tooltip !== 'Tool tip missing!') Savecode.OriginalToolTips.push(tooltip)
@@ -45,7 +45,7 @@ export class Savecode {
         }
     }
 
-    public Savecode() {
+    public constructor() {
         this.Digits = 0.0
         this.Bignum = new BigNum(Savecode.BASE())
     }
@@ -94,8 +94,8 @@ export class Savecode {
 
     public Obfuscate(key: number, sign: number) {
         let seed: number = GetRandomInt(0, int.MaxValue)
-        let advance: number = 0
-        let x: number = 0
+        let advance = 0
+        let x = 0
         let current: BigNumL = this.Bignum.List
 
         if (sign === -1) {
@@ -134,7 +134,7 @@ export class Savecode {
     public Load(p: MapPlayer, code: string) {
         try {
             let key: number = Savecode.SCommHash(p.name) + 1 * 73
-            let inputhash: number = 0
+            let inputhash = 0
 
             this.FromString(code)
             this.Obfuscate(key, -1)

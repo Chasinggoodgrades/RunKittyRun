@@ -4,7 +4,7 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Affix } from './Affix'
 
 export class Stealth extends Affix {
-    private AFFIX_ABILITY: number = Constants.ABILITY_GHOSTAFFIX
+    private AFFIX_ABILITY = Constants.ABILITY_GHOSTAFFIX
 
     public constructor(unit: Wolf) {
         super(unit)

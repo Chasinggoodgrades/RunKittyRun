@@ -6,7 +6,7 @@ import { Unit } from 'w3ts'
 /// <param name="u"></param>
 /// <param name="itemId"></param>
 export const RemoveItemFromUnit = (u: Unit, itemId: number) => {
-    for (let i: number = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
         if (u.getItemInSlot(i)?.typeId === itemId) {
             u.removeItemFromSlot(i)
             return

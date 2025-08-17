@@ -1,12 +1,12 @@
 export class Auras {
-    public SpecialAura: number
-    public StarlightAura: number
-    public ManaAura: number
-    public SpectacularAura: number
-    public ButterflyAura: number
-    public FreezeAura: number
-    public ChainedImpossibleAura: number
-    public ChainedNightmareAura: number
-    public ChainedHardAura: number
-    public ChainedNormalAura: number
+    public SpecialAura = 0
+    public StarlightAura = 0
+    public ManaAura = 0
+    public SpectacularAura = 0
+    public ButterflyAura = 0
+    public FreezeAura = 0
+    public ChainedImpossibleAura = 0
+    public ChainedNightmareAura = 0
+    public ChainedHardAura = 0
+    public ChainedNormalAura = 0
 }

@@ -34,19 +34,14 @@ export class RangeIndicator {
     /// <param name="range">The radius of the range indicator in game units.</param>
     /// <param name="segments">The number of segments into which the range indicator is divided. Higher values produce a smoother circle. Default is 20.</param>
     /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
-    public CreateIndicator(
-        unit: Unit,
-        range: number,
-        segments: number = 20,
-        lightningType: string = this.LIGHTNING_TYPE
-    ) {
+    public CreateIndicator(unit: Unit, range: number, segments = 20, lightningType: string = this.LIGHTNING_TYPE) {
         let x: number = unit.x
         let y: number = unit.y
 
-        let angleStep: number = 360.0 / segments
+        let angleStep = 360.0 / segments
 
         // Creating a circular range indicator around the unit
-        for (let i: number = 0; i < segments; i++) {
+        for (let i = 0; i < segments; i++) {
             let angle1: number = i * angleStep * bj_DEGTORAD
             let angle2: number = (i + 1) * angleStep * bj_DEGTORAD
 
@@ -62,7 +57,7 @@ export class RangeIndicator {
 
     public DestroyIndicator() {
         try {
-            for (let i: number = 0; i < this.LightningObjects.length; i++) {
+            for (let i = 0; i < this.LightningObjects.length; i++) {
                 DestroyLightning(this.LightningObjects[i])
             }
             this.LightningObjects = []

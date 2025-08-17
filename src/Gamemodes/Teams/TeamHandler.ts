@@ -47,7 +47,7 @@ export class TeamHandler {
         let shuffled = GameSeed.Shuffle(Globals.ALL_PLAYERS, Globals.GAME_SEED)
         let teamNumber = 1
         try {
-            for (let i: number = 0; i < shuffled.length; i++) {
+            for (let i = 0; i < shuffled.length; i++) {
                 let player = shuffled[i]
 
                 let currentTeam = Globals.PLAYERS_TEAMS.get(player)
@@ -57,7 +57,7 @@ export class TeamHandler {
                 let addedToExistingTeam: boolean = false
 
                 // Attempt to add player to an existing team
-                for (let j: number = 0; j < Globals.ALL_TEAMS_LIST.length; j++) {
+                for (let j = 0; j < Globals.ALL_TEAMS_LIST.length; j++) {
                     let team = Globals.ALL_TEAMS_LIST[j]
                     if (team.Teammembers.length < Gamemode.PlayersPerTeam) {
                         team.AddMember(player)

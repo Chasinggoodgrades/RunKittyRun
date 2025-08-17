@@ -30,7 +30,7 @@ export class UniqueItems {
 
     private static RegisterEvents() {
         this.Trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-        this.Trigger.addAction(this.ItemPickup)
+        this.Trigger.addAction(() => this.ItemPickup())
     }
 
     private static ItemPickup() {
@@ -57,8 +57,8 @@ export class UniqueItems {
 
 export class Uniques {
     public static UniqueIDs: number[] = []
-    public ItemID: number
-    public GoldCost: number
+    public ItemID = 0
+    public GoldCost = 0
 
     public constructor(itemID: number, goldCost: number) {
         this.ItemID = itemID

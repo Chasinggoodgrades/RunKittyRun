@@ -13,7 +13,7 @@ export class Votekick {
     private static Voters: MapPlayer[] = []
     private static VoteKickPlayer: MapPlayer | undefined
     private static VoteStarter: MapPlayer | undefined
-    private static VOTE_DURATION: number = 30.0
+    private static VOTE_DURATION = 30.0
 
     public static InitiateVotekick(voteStarter: MapPlayer, player: string) {
         if (this.VotekickAlreadyActive()) return

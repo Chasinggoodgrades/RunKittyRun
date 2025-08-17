@@ -121,7 +121,7 @@ export class SoundManager {
         AttachSoundToUnit(s.handle, k.Unit.handle)
         let teamID: number = k.TeamID
         let team: Team = Globals.ALL_TEAMS.get(teamID)!
-        for (let i: number = 0; i < team.Teammembers.length; i++) {
+        for (let i = 0; i < team.Teammembers.length; i++) {
             let player = team.Teammembers[i]
             if (player.isLocal()) {
                 StopSound(s.handle, false, false)
@@ -173,7 +173,7 @@ export class SoundManager {
         let k: Kitty | null = null
 
         try {
-            for (let i: number = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
+            for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
                 let kitty = Globals.ALL_KITTIES_LIST[i]
                 if (kitty.isAlive()) {
                     count += 1

@@ -1,6 +1,6 @@
 export class BigNum {
     public List: BigNumL
-    public Base: number
+    public Base = 0
 
     // Constructor
     public constructor(baseValue: number) {
@@ -30,9 +30,9 @@ export class BigNum {
 }
 
 export class BigNumL {
-    public Leaf: number
+    public Leaf = 0
     public Next: BigNumL
-    private static _nalloc: number = 0
+    private static _nalloc = 0
 
     // Constructor
     public constructor() {
@@ -57,7 +57,7 @@ export class BigNumL {
     }
 
     public DivSmall(baseValue: number, denom: number) {
-        let remainder: number = 0
+        let remainder = 0
         let num: number
 
         if (this.Next !== null) {

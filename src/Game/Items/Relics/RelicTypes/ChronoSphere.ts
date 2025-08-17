@@ -12,26 +12,26 @@ import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
 
 export class ChronoSphere extends Relic {
-    public RelicItemID: number = Constants.ITEM_CHRONO_ORB
-    public RelicAbilityID: number = Constants.ABILITY_THE_AURA_OF_THE_RING
+    public RelicItemID = Constants.ITEM_CHRONO_ORB
+    public RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING
     private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\Orb: BTNChrono.dds'
 
     public static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
         return r instanceof ChronoSphere
     }
 
-    private static REWIND_COOLDOWN: number = 120.0
+    private static REWIND_COOLDOWN = 120.0
     private LocationSaveEffectPath: string = 'war3mapImported\\ChronoLocationSave.mdx'
-    private RelicCost: number = 650
-    private static SLOW_AURA_RADIUS: number = 400.0
-    private MAGNITUDE_CHANGE_INTERVAL: number = 15.0
-    private MAGNITUDE_LOWER_BOUND: number = 10.0
-    private MAGNITUDE_UPPER_BOUND: number = 17.0
-    private LOCATION_CAPTURE_INTERVAL: number = 5.0
+    private RelicCost = 650
+    private static SLOW_AURA_RADIUS = 400.0
+    private MAGNITUDE_CHANGE_INTERVAL = 15.0
+    private MAGNITUDE_LOWER_BOUND = 10.0
+    private MAGNITUDE_UPPER_BOUND = 17.0
+    private LOCATION_CAPTURE_INTERVAL = 5.0
 
     private Ability: ability
     private Kitty: Kitty
-    private Magnitude: number
+    private Magnitude = 0
     private MagnitudeTimer = Timer.create()
     private LocationCaptureTimer = Timer.create()
     private LocationEffect: Effect | null = null

@@ -7,8 +7,8 @@ import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Timer, Trigger, Unit } from 'w3ts'
 
 export class FirstPersonCamera {
-    private timerPeriod: number = 0.001
-    private FIRSTPERSON_ANGLE_PER_PERIOD: number = 0.3
+    private timerPeriod = 0.001
+    private FIRSTPERSON_ANGLE_PER_PERIOD = 0.3
 
     private forceCamTimer: Timer
     private hero: Unit
@@ -53,7 +53,7 @@ export class FirstPersonCamera {
     private UpdateCamera() {
         if (this.hero === null || !this.hero.isAlive()) return
 
-        let fwd: number = 0
+        let fwd = 0
 
         if (
             !(this.keyDownState.get('LEFT') && this.keyDownState.get('RIGHT')) &&

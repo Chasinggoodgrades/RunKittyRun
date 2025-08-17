@@ -60,7 +60,7 @@ export class TeamsMultiboard {
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setText('Team')
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setVisible(true, false)
         TeamsMultiboard.TeamsStatsMB.GetItem(0, 0).setWidth(0.05)
-        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) {
+        for (let i = 1; i <= Globals.NumberOfRounds; i++) {
             if (Globals.ROUND === i) TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText(`|c0000FF00Round ${i}|r`)
             else TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setText(`Round ${i}`)
             TeamsMultiboard.TeamsStatsMB.GetItem(0, i).setVisible(true, false)
@@ -74,23 +74,23 @@ export class TeamsMultiboard {
         TeamsMultiboard.TeamsStatsMB.GetItem(0, Globals.NumberOfRounds + 2).setWidth(0.05)
 
         // Actual Stats
-        let rowIndex: number = 1
+        let rowIndex = 1
         let overallProgress: number
-        for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+        for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             let team = Globals.ALL_TEAMS_LIST[i]
             overallProgress = 0.0
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setText(team.TeamColor)
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setVisible(true, false)
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, 0).setWidth(0.05)
             // Each Round Progress
-            for (let j: number = 1; j <= Globals.NumberOfRounds; j++) {
+            for (let j = 1; j <= Globals.NumberOfRounds; j++) {
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setText('_')
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setText(`${team.RoundProgress.get(j)}%`)
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setVisible(true, false)
                 TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, j).setWidth(0.05)
             }
             // Overall Progress
-            for (let j: number = 1; j <= Globals.NumberOfRounds; j++) {
+            for (let j = 1; j <= Globals.NumberOfRounds; j++) {
                 overallProgress = overallProgress + S2I(team.RoundProgress.get(j)!) // possibly bad?
             }
             TeamsMultiboard.TeamsStatsMB.GetItem(rowIndex, Globals.NumberOfRounds + 1).setText(
@@ -114,8 +114,8 @@ export class TeamsMultiboard {
         TeamsMultiboard.CurrentTeamsMB.columns = 2
 
         let widthSize = 0.05 * Gamemode.PlayersPerTeam
-        let rowIndex: number = 0
-        for (let i: number = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
+        let rowIndex = 0
+        for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             let team = Globals.ALL_TEAMS_LIST[i]
             let teamMembers: string = team.TeamMembersString
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setWidth(0.05)

@@ -21,9 +21,9 @@ export enum ShopItemType {
 
 export class ShopItem {
     public name: string
-    public Cost: number
-    public ItemID: number
-    public AbilityID: number
+    public Cost = 0
+    public ItemID = 0
+    public AbilityID = 0
     public Description: string
     public IconPath: string | undefined
     public Relic: Relic

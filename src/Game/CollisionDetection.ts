@@ -15,7 +15,7 @@ import { ChronoSphere } from './Items/Relics/RelicTypes/ChronoSphere'
 import { OneOfNine } from './Items/Relics/RelicTypes/OneOfNine'
 
 export class CollisionDetection {
-    private static CIRCLE_COLLISION_RADIUS: number = 78.0
+    private static CIRCLE_COLLISION_RADIUS = 78.0
 
     private static IsBeaconOfUnitedLifeforce = (r: Relic): r is BeaconOfUnitedLifeforce => {
         return r instanceof BeaconOfUnitedLifeforce
@@ -151,7 +151,7 @@ export class CollisionDetection {
     public static CheckTeamDead(k: Kitty) {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         let team = Globals.ALL_TEAMS.get(k.TeamID)!
-        for (let i: number = 0; i < team.Teammembers.length; i++) {
+        for (let i = 0; i < team.Teammembers.length; i++) {
             if (Globals.ALL_KITTIES.get(team.Teammembers[i])!.isAlive()) return
         }
         team.TeamIsDeadActions()

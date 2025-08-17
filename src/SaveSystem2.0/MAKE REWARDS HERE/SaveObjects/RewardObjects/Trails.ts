@@ -1,13 +1,13 @@
 export class Trails {
-    public PurpleFire: number
-    public BlueFire: number
-    public TurquoiseFire: number
-    public PinkFire: number
-    public WhiteFire: number
-    public BlueLightning: number
-    public RedLightning: number
-    public PurpleLightning: number
-    public YellowLightning: number
-    public GreenLightning: number
-    public SnowTrail2023: number
+    public PurpleFire = 0
+    public BlueFire = 0
+    public TurquoiseFire = 0
+    public PinkFire = 0
+    public WhiteFire = 0
+    public BlueLightning = 0
+    public RedLightning = 0
+    public PurpleLightning = 0
+    public YellowLightning = 0
+    public GreenLightning = 0
+    public SnowTrail2023 = 0
 }

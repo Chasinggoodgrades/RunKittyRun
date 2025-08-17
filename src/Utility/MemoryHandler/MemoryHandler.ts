@@ -159,6 +159,33 @@ const initMemoryHandler = () => {
     }
 
     return {
+        getEmptyClass: <T>(classInstance: T, debugName?: string) => {
+            let obj: T & IDestroyable = cachedObjects.shift()
+
+            if (!!obj) {
+                // Causes bugs if debugName changes where getEmptyClass gets called
+                if (debugName) {
+                    ;(getmetatable(obj) as any).__debugName = debugName
+                    ;(getmetatable(obj) as any).__destroyed = false
+                }
+            } else {
+                obj = {} as any
+                numCreatedObjects++
+                setmetatable(obj, debugName ? getObjectMeta(debugName) : defaultObjectMeta)
+            }
+
+            if (debugName) {
+                if (!debugObjects[debugName]) {
+                    debugObjects[debugName] = 0
+                }
+
+                debugObjects[debugName]++
+            }
+
+            Object.assign(classInstance as any, obj)
+
+            return classInstance
+        },
         getEmptyObject: <T>(debugName?: string) => {
             let obj: T & IDestroyable = cachedObjects.shift()
 

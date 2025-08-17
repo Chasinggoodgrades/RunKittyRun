@@ -13,7 +13,7 @@ export class Difficulty {
     public static DifficultyValue: number
     public static DifficultyOption: DifficultyOption
     public static IsDifficultyChosen: boolean = false
-    private static TIME_TO_CHOOSE_DIFFICULTY: number = 10.0
+    private static TIME_TO_CHOOSE_DIFFICULTY = 10.0
     private static triggerHandle: Trigger
 
     public static Initialize() {
@@ -58,7 +58,7 @@ export class Difficulty {
     }
 
     private static TallyingVotes() {
-        let highestTallyCount: number = 0
+        let highestTallyCount = 0
         let pickedOption: DifficultyOption | null = null
 
         for (let option of DifficultyOption.Options) {
@@ -90,7 +90,7 @@ export class Difficulty {
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
     public static ChangeDifficulty(difficulty: string = 'normal') {
-        for (let i: number = 0; i < DifficultyOption.Options.length; i++) {
+        for (let i = 0; i < DifficultyOption.Options.length; i++) {
             let option = DifficultyOption.Options[i]
             if (option.name.toLowerCase() === difficulty.toLowerCase()) {
                 this.SetDifficulty(option)

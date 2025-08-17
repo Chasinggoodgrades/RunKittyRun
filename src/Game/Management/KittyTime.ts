@@ -11,7 +11,7 @@ export class KittyTime {
     private RoundTime: Map<number, number> = new Map()
     private RoundProgress: Map<number, number> = new Map()
     private ProgressTimer: AchesTimers = createAchesTimer()
-    private TotalTime: number
+    private TotalTime = 0
     private Kitty: Kitty
 
     public constructor(kitty: Kitty) {
@@ -21,8 +21,8 @@ export class KittyTime {
     }
 
     private Initialize() {
-        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
-        for (let i: number = 1; i <= Globals.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
+        for (let i = 1; i <= Globals.NumberOfRounds; i++) this.RoundTime.set(i, 0.0)
+        for (let i = 1; i <= Globals.NumberOfRounds; i++) this.RoundProgress.set(i, 0.0)
         this.PeriodicProgressTimer()
     }
 
@@ -87,7 +87,7 @@ export class KittyTime {
 
     public GetOverallProgress(): number {
         // Solo Tournament Issue
-        let overallProgress: number = 0.0
+        let overallProgress = 0.0
         for (let [_, progress] of this.RoundProgress) // IEnumberable
             overallProgress += progress
         return overallProgress / this.RoundProgress.size

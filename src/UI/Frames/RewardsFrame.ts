@@ -19,14 +19,14 @@ export class RewardsFrame {
     private static FrameByName: Map<string, Frame> = new Map()
     private static RewardIcons: Map<Frame, Reward> = new Map()
     private static RewardHelp: RewardHelper = new RewardHelper()
-    private static RewardsPerRow: number = 6
-    private static FrameX: number = 0.4
-    private static FrameY: number = 0.35
-    private static FrameWidth: number = 0.3
-    private static FrameHeight: number = 0.29
-    private static Padding: number = 0.01
-    private static IconSize: number = 0.02
-    private static FrameCount: number = 0
+    private static RewardsPerRow = 6
+    private static FrameX = 0.4
+    private static FrameY = 0.35
+    private static FrameWidth = 0.3
+    private static FrameHeight = 0.29
+    private static Padding = 0.01
+    private static IconSize = 0.02
+    private static FrameCount = 0
 
     public static Initialize() {
         try {
@@ -138,10 +138,10 @@ export class RewardsFrame {
 
     private static CreateRandomRewardButton() {
         // Create the random rewards button at the bottom right of the rewards frame.
-        let ButtonSize: number = 0.025
-        let TooltipWidth: number = 0.25
-        let BackgroundPadding: number = 0.01
-        let TooltipYOffset: number = 0.01
+        let ButtonSize = 0.025
+        let TooltipWidth = 0.25
+        let BackgroundPadding = 0.01
+        let TooltipYOffset = 0.01
         let dice = 'ReplaceableTextures\\CommandButtons\\BTNDice.blp'
 
         let button = blzCreateFrameByType(
@@ -235,13 +235,8 @@ export class RewardsFrame {
         const cols = this.RewardsPerRow
         const count: Map<number, number> = new Map()
 
-        // Initialize the count dictionary with zeros for each RewardType
-        for (const type of Object.values(RewardType)) {
-            count.set(type as number, 0)
-        }
-
         for (const reward of RewardsManager.Rewards) {
-            const type = reward.Type as number
+            const type = reward.Type
             count.set(type, (count.get(type) || 0) + 1)
 
             const totalRewards = this.CountNumberOfRewards(reward.Type)

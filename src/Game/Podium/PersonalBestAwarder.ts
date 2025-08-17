@@ -20,7 +20,7 @@ let all: other: stats: i: and'say: d. streak: so/     saves/deaths in game: 1 / 
 export class PersonalBestAwarder {
     private static BeatenMostSavesList: MapPlayer[] = []
     private static SaveStreakBeatenList: MapPlayer[] = []
-    private static MessageTime: number = 3.0
+    private static MessageTime = 3.0
 
     /// <summary>
     /// Checks if the current round time is higher than the best time and updates it if so. Also notifies all players :).

@@ -13,7 +13,7 @@ export class Cell {
 }
 
 export class ItemSpatialGrid {
-    private static CELL_SIZE: number = 128
+    private static CELL_SIZE = 128
     private static kibbleCells: Map<Cell, Kibble[]> = new Map()
     private static itemCells: Map<Cell, Item[]> = new Map()
 
@@ -76,7 +76,7 @@ export class ItemSpatialGrid {
         let itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
         if (kibbleList !== null && kibbleList.length > 0) {
-            for (let i: number = 0; i < kibbleList.length; i++) {
+            for (let i = 0; i < kibbleList.length; i++) {
                 let k = kibbleList[i]
                 if (k === null) continue
                 kitty.Unit.addItem(k.Item)
@@ -84,7 +84,7 @@ export class ItemSpatialGrid {
         }
 
         if (itemList !== null && itemList.length > 0) {
-            for (let i: number = 0; i < itemList.length; i++) {
+            for (let i = 0; i < itemList.length; i++) {
                 let item = itemList[i]
                 if (item === null) continue
                 if (item.isOwned()) continue
