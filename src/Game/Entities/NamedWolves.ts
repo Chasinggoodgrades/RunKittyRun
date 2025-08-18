@@ -35,6 +35,7 @@ export class NamedWolves {
     private static CreateExplodingWolf = () => {
         const index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         NamedWolves.ExplodingWolf = new WolfEntity.Wolf(index)
+        NamedWolves.ExplodingWolf.Texttag = TextTag.create()!
         NamedWolves.ExplodingWolf.Texttag.setPermanent(true)
         NamedWolves.ExplodingTexttagTimer.start(0.03, true, NamedWolves.UpdateTextTag)
         NamedWolves.ExplodingWolfDesc()
@@ -66,7 +67,7 @@ export class NamedWolves {
         NamedWolves.RegisterDeathTrigger()
 
         Utility.SimpleTimer(0.5, () =>
-            NamedWolves.StanWolf.Texttag.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.Unit.y, 0.015)
+            NamedWolves.StanWolf.Texttag?.setPos(NamedWolves.StanWolf.Unit.x, NamedWolves.StanWolf.Unit.y, 0.015)
         )
         Globals.DNTNamedWolves.push(NamedWolves.StanWolf)
     }
@@ -91,7 +92,7 @@ export class NamedWolves {
             NamedWolves.ExplodingWolf.Unit.kill()
             NamedWolves.ExplodingWolf.IsReviving = true
             NamedWolves.ExplodingWolf.OVERHEAD_EFFECT_PATH = ''
-            NamedWolves.ExplodingWolf.Texttag.setText('', 0.015)
+            NamedWolves.ExplodingWolf.Texttag?.setText('', 0.015)
             Utility.CreateEffectAndDisposeAttach(
                 NamedWolves.BLOOD_EFFECT_PATH,
                 NamedWolves.ExplodingWolf.Unit,

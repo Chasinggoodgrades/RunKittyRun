@@ -30,7 +30,7 @@ export class Wolf {
 
     public EffectTimer: Timer
 
-    public Texttag: TextTag
+    public Texttag: TextTag | null
     public Disco: Disco
     public WolfArea: WolfArea
     public Unit: Unit
@@ -55,7 +55,6 @@ export class Wolf {
         Globals.ALL_WOLVES.set(this.Unit, this)
 
         this.WolfArea.Wolves.push(this)
-        this.Texttag = TextTag.create()!
     }
 
     /// <summary>
