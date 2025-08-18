@@ -9,7 +9,6 @@ import { DEFAULT_OVERHEAD_EFFECT, Globals } from 'src/Global/Globals'
 import { Difficulty } from 'src/Init/Difficulty/Difficulty'
 import { Disco } from 'src/Misc/Disco'
 import { FandF } from 'src/Rewards/EasterEggs/F&F/FandF'
-import { AchesTimers, createAchesTimer } from 'src/Utility/MemoryHandler/AchesTimers'
 import { Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
@@ -29,7 +28,7 @@ export class Wolf {
     public OVERHEAD_EFFECT_PATH: string
     public WanderTimer: Timer
 
-    public EffectTimer: AchesTimers
+    public EffectTimer: Timer
 
     public Texttag: TextTag
     public Disco: Disco
@@ -106,12 +105,12 @@ export class Wolf {
 
     public dispose = () => {
         RemoveAllWolfAffixes(this)
-        this.EffectTimer?.dispose()
+        this.EffectTimer?.destroy()
         this.OverheadEffect?.destroy()
         this.WanderTimer?.destroy()
         this.Texttag?.destroy()
         this.WolfArea.Wolves.splice(this.WolfArea.Wolves.indexOf(this), 1)
-        this.Disco?.dispose()
+        //this.Disco?.dispose()
         this.WolfPoint?.dispose()
         this.Unit?.destroy()
     }
@@ -161,7 +160,7 @@ export class Wolf {
                     }
                 }
                 this.WanderTimer?.resume()
-                if (this.EffectTimer !== null && this.EffectTimer.Timer.remaining > 0) this.EffectTimer.resume()
+                if (this.EffectTimer !== null && this.EffectTimer.remaining > 0) this.EffectTimer.resume()
                 this.IsWalking = true
                 this.paused = false
                 this.Unit.paused = false
@@ -216,8 +215,8 @@ export class Wolf {
         this.OverheadEffect ??= Effect.createAttachment(this.OVERHEAD_EFFECT_PATH, this.Unit, 'overhead')!
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
 
-        this.EffectTimer ??= createAchesTimer()
-        this.EffectTimer?.Timer?.start(effectDuration, false, () => this.WolfMoveCancelEffect())
+        this.EffectTimer ??= Timer.create()
+        this.EffectTimer?.start(effectDuration, false, () => this.WolfMoveCancelEffect())
     }
 
     private WolfMoveCancelEffect = () => {

@@ -27,6 +27,7 @@ export class Globals {
     public static TempGroup: Group = Group.create()!
     public static WinGame: boolean = false
     public static NumberOfRounds = 5
+    public static END_ROUND_DELAY = 3.0
 
     public static AllAffixes: Affix[] = []
     public static AllFrames: Frame[] = []

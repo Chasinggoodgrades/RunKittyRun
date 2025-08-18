@@ -53,9 +53,10 @@ export class Utility {
     public static ConvertFloatToTimeTeam(time: number, teamID: number) {
         if (time <= 0.0) return '0:00.0'
 
-        const minutes = time / 60
-        const seconds = time % 60
-        const tenths = (time * 10) % 10
+        const minutes = Math.floor(time / 60)
+        const remainingSeconds = time % 60
+        const seconds = Math.floor(remainingSeconds)
+        const tenths = Math.floor((remainingSeconds - seconds) * 10)
 
         const timeString: string = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
         return ColorUtils.ColorString(timeString, teamID)
@@ -68,9 +69,10 @@ export class Utility {
     public static ConvertFloatToTime(time: number) {
         if (time <= 0.0) return '0:00.0'
 
-        const minutes = time / 60
-        const seconds = time % 60
-        const tenths = (time * 10) % 10
+        const minutes = Math.floor(time / 60)
+        const remainingSeconds = time % 60
+        const seconds = Math.floor(remainingSeconds)
+        const tenths = Math.floor((remainingSeconds - seconds) * 10)
 
         return seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
     }

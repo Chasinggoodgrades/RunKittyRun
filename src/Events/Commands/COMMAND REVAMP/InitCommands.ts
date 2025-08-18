@@ -1791,7 +1791,7 @@ export class InitCommands {
                 if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 const wolf = Globals.ALL_WOLVES.get(selectedUnit)!
-                const timerAddress: string = `WCTimerAddresses:${wolf.WanderTimer} : ${wolf.EffectTimer.Timer}`
+                const timerAddress: string = `WCTimerAddresses:${wolf.WanderTimer} : ${wolf.EffectTimer}`
                 print(`${timerAddress}`)
             },
         })

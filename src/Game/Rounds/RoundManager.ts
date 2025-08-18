@@ -30,7 +30,6 @@ import { RoundUtilities } from './RoundUtilities'
 
 export class RoundManager {
     public static ROUND_INTERMISSION = 30.0
-    public static END_ROUND_DELAY = 3.0
     public static GAME_STARTED: boolean = false
     private static AddedTimeAlready: boolean = false
 
@@ -117,7 +116,7 @@ export class RoundManager {
             if (Globals.ROUND === 5) Globals.WinGame = true
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
-            Utility.SimpleTimer(RoundManager.END_ROUND_DELAY, RoundManager.RoundSetup)
+            Utility.SimpleTimer(Globals.END_ROUND_DELAY, RoundManager.RoundSetup)
         } catch (e: any) {
             Logger.Critical(`Error in RoundManager.RoundEnd ${e}`)
             throw e

@@ -144,26 +144,25 @@ export class WolfPointInfo {
     public y = 0
     public LastPoint = false
 
-    public WolfPointInfo = () => {
-        this.x = 0
-        this.y = 0
-    }
-
     public static GetWolfPointList(): WolfPointInfo[] {
         const list = MemoryHandler.getEmptyArray<WolfPointInfo>()
         for (let i = 0; i < 48; i++) {
-            list.push(MemoryHandler.getEmptyObject<WolfPointInfo>())
+            list.push(MemoryHandler.getEmptyClass<WolfPointInfo>(new WolfPointInfo()))
         }
         return list
     }
 
     public static ClearWolfPointList(list: WolfPointInfo[]) {
         if (list === null) return
-        for (let i = 0; i < list.length; i++) {
-            const item = list[i]
-            MemoryHandler.destroyObject(item)
+        try {
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i]
+                if (item !== null) MemoryHandler.destroyObject(item)
+            }
+            list = []
+            //MemoryHandler.destroyArray(list)
+        } catch (e: any) {
+            Logger.Critical(`WolfPointInfo.ClearWolfPointList error: ${e}`)
         }
-        list = []
-        MemoryHandler.destroyArray(list)
     }
 }
