@@ -190,7 +190,8 @@ export class Utility {
         green = 255,
         blue = 255
     ) {
-        const tt = TextTag.create()!
+        let tt = TextTag.create()!
+        // print(u.name + ' ' + u.nameProper) // What the fuck???
         tt.setText(text, height)
         tt.setColor(red, green, blue, 255)
         tt.setPos(u.x, u.y, 0)
