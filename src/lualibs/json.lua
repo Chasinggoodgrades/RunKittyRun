@@ -82,7 +82,7 @@ local function encode_table(val, stack)
   end
 
   -- Circular reference?
-  if stack[val] then error("circular reference") end
+  if stack[val] then return "@circular" end
 
   stack[val] = true
 
