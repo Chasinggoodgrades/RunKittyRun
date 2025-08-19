@@ -48,7 +48,7 @@ export class Team {
             Globals.PLAYERS_TEAMS = new Map()
             Team.TeamTimer ??= Timer.create()
             Team.TeamTimer.start(0.1, false, Team.TeamSetup)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Team.Initialize: ${e}`)
             throw e
         }

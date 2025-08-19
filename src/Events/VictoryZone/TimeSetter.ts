@@ -37,7 +37,7 @@ export class TimeSetter {
             PersonalBestAwarder.BeatRecordTime(player)
 
             return true
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in TimeSetter.SetRoundTime: ${e}`)
             throw e
         }

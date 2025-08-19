@@ -42,7 +42,7 @@ export class Bomber extends Affix {
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
             this.RangeIndicator = MemoryHandler.getEmptyClass<RangeIndicator>(new RangeIndicator())
             this.RegisterTimers()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Bomber.Apply: ${e}`)
         }
     }
@@ -93,7 +93,7 @@ export class Bomber extends Affix {
             }
 
             Utility.SimpleTimer(4.0, () => this.Explode())
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Bomber.StartExplosion: ${e}`)
         }
     }
@@ -122,7 +122,7 @@ export class Bomber extends Affix {
             }
             this.Revive()
             this.Unit.Unit.setVertexColor(204, 102, 0, 25)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Bomber.Explode: ${e}`)
             this.ReviveAlphaTimer.pause()
             this.Unit?.PauseSelf(false)

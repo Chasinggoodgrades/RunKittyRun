@@ -64,8 +64,8 @@ export class WolfPoint {
             if (this.PointInfo !== null && this.PointInfo.length > 0) {
                 this.StartMovingOrders()
             }
-        } catch (ex: any) {
-            Logger.Warning(`WolfPoint.DiagonalRegionCreate ${ex}`)
+        } catch (e) {
+            Logger.Warning(`WolfPoint.DiagonalRegionCreate ${e}`)
         }
     }
 
@@ -78,8 +78,8 @@ export class WolfPoint {
                 this.PointInfo[i].x = 0
                 this.PointInfo[i].y = 0
             }
-        } catch (ex: any) {
-            Logger.Critical(`WolfPoint cleanup error: ${ex}`)
+        } catch (e) {
+            Logger.Critical(`WolfPoint cleanup error: ${e}`)
         }
     }
 
@@ -104,8 +104,8 @@ export class WolfPoint {
                 BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
                 if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
             }
-        } catch (ex: any) {
-            Logger.Critical(`WolfPoint.StartMovingOrders ${ex}`)
+        } catch (e) {
+            Logger.Critical(`WolfPoint.StartMovingOrders ${e}`)
         }
     }
 
@@ -161,7 +161,7 @@ export class WolfPointInfo {
             }
             list = []
             //MemoryHandler.destroyArray(list)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`WolfPointInfo.ClearWolfPointList error: ${e}`)
         }
     }

@@ -104,7 +104,7 @@ export class CollisionDetection {
                 OneOfNine.OneOfNineEffect(k)
                 k.KillKitty()
                 CollisionDetection.CheckTeamDead(k)
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Warning(`Error WolfCollisionTrigger: ${e}`)
                 throw e
             }
@@ -118,7 +118,7 @@ export class CollisionDetection {
                 const circle = Globals.ALL_KITTIES.get(getFilterUnit()!.owner)!
                 circle.ReviveKitty(k)
                 k.Relics.find(CollisionDetection.IsBeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player)
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Warning(`Error CircleCollisionTrigger: ${e}`)
                 throw e
             }
@@ -140,7 +140,7 @@ export class CollisionDetection {
                 const circle = Globals.ALL_KITTIES.get(getFilterUnit().owner)!
                 const saviorKitty = Globals.ALL_KITTIES.get(sk.Player)!
                 circle.ReviveKitty(saviorKitty)
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Warning(`Error CircleCollisionShadowTrigger: ${e}`)
                 throw e
             }

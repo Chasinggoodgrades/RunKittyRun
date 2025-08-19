@@ -31,11 +31,11 @@ export const IsDeveloper = (p: MapPlayer) => {
             }
         }
         return false
-    } catch (ex: any) {
-        if (ex instanceof Error) {
-            Logger.Warning(ex.stack || '')
+    } catch (e) {
+        if (e instanceof Error) {
+            Logger.Warning(e.stack || '')
         } else {
-            Logger.Warning('' + ex)
+            Logger.Warning('' + e)
         }
 
         return false

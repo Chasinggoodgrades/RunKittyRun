@@ -33,7 +33,7 @@ export class Savecode {
             for (const player of Globals.ALL_PLAYERS) {
                 Savecode.InitializeSaveCode(player)
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in OldSaves.Initialize: ${e}`)
             throw e
         }
@@ -142,7 +142,7 @@ export class Savecode {
             this.Clean()
 
             return inputhash === this.Hash()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in OldSaves.Load, save code must be from v4.2 or greater: ${e}`)
             return false
         }

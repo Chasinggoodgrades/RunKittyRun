@@ -92,7 +92,7 @@ export class Fixation extends Affix {
                     this.Target = target
                     this.ChasingEvent()
                 }
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Warning(`Error in Fixation.InRangeTrigger: ${e}`)
             }
         })

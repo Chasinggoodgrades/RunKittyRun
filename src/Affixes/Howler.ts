@@ -70,7 +70,7 @@ export class Howler extends Affix {
                 wolfObject.StartWandering(true) // Start wandering
             }
             this.NearbyWolves.clear()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Howl: ${e}`)
             throw e
         }

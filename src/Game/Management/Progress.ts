@@ -32,7 +32,7 @@ export const Progress = {
                 team.UpdateRoundProgress(Globals.ROUND, Progress.CalculateTeamProgress(team))
             }
             // TeamsMultiboard.UpdateTeamStatsMB()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in TeamProgressTracker. ${e}`)
         }
     },
@@ -71,7 +71,7 @@ export const Progress = {
             if (progress > 100) progress = 100.0
 
             return progress
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in CalculatePlayerProgress. ${e}`)
             return 0.0
         }
@@ -100,7 +100,7 @@ export const Progress = {
                     Progress.DistancesFromStart.set(count + 1, totalDistance)
                 count++
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in CalculateTotalDistance. ${e}`)
             throw e
         }

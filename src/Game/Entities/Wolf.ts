@@ -72,7 +72,7 @@ export class Wolf {
                 FandF.CreateBloodWolf()
                 NamedWolves.CreateNamedWolves()
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Wolf.SpawnWolves: ${e}`)
             throw e
         }
@@ -164,7 +164,7 @@ export class Wolf {
                 this.paused = false
                 this.Unit.paused = false
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Wolf.PauseSelf: ${e}`)
         }
     }

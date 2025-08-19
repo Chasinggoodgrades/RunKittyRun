@@ -38,7 +38,7 @@ export class ItemSpawner {
                 ItemSpawner.SpawnRegularItems()
             }
             ItemSpawner.SpawnKibble(ItemSpawner.NUMBER_OF_ITEMS)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`ItemSpawner SpawnItems: ${e}`)
         }
     }

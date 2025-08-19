@@ -45,7 +45,7 @@ export class RelicFunctions {
                 RelicFunctions.AddItem(player, selectedItem.ItemID)
                 Utility.SimpleTimer(0.21, () => newRelic.SetUpgradeLevelDesc(kitty.Unit))
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in HandleRelicPurchase: ${e}`)
         }
     }
@@ -95,7 +95,7 @@ export class RelicFunctions {
                 player.addGold(-goldCost)
                 if (player.isLocal()) RefreshUpgradeTooltip(playerRelic)
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UpgradeRelic: ${e}`)
         }
     }

@@ -72,7 +72,7 @@ export class Safezone {
             unit.experience += Resources.SafezoneExperience
             this.AwardedPlayers.push(player)
             DeathlessChallenges.DeathlessCheck(kitty)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in EnterSafezoneActions: ${e}`)
         }
     }

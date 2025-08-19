@@ -124,7 +124,7 @@ export class CustomStatFrame {
             CustomStatFrame.HandleFrameText(selectedUnit)
 
             CustomStatFrame.CustomStatFrameBoxF.visible = CustomStatFrame.CustomStatFrameBoxS.visible
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in CustomStatFrame.Update: ${e}`)
             throw e
         }
@@ -296,10 +296,9 @@ export class CustomStatFrame {
     }
 
     private static GetPlayerTeamName(u: Unit) {
-        let team: any
-        return (team = Globals.PLAYERS_TEAMS.get(u.owner) /* TODO; Prepend: Team */
-            ? team.TeamColor
-            : `${Colors.COLOR_YELLOW_ORANGE}Team: Aches${Colors.COLOR_RESET}`)
+        const team = Globals.PLAYERS_TEAMS.get(u.owner)
+
+        return team ? team.TeamColor : `${Colors.COLOR_YELLOW_ORANGE}Team: Aches${Colors.COLOR_RESET}`
     }
 
     private static GetPlayerGold(u: Unit) {

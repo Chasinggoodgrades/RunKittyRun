@@ -80,7 +80,7 @@ export class Chaos extends Affix {
         try {
             this.RegisterTimer()
             this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Chaos.Apply: ${e}`)
             throw e
         }
@@ -91,7 +91,7 @@ export class Chaos extends Affix {
             AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.RotationTimer?.dispose()
             this.Unit?.Unit?.removeAbility(this.AFFIX_ABILITY)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Chaos.Remove: ${e}`)
         }
     }
@@ -102,7 +102,7 @@ export class Chaos extends Affix {
             const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Chaos.RegisterTimer: ${e}`)
             this.RotationTimer.dispose()
             AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
@@ -117,7 +117,7 @@ export class Chaos extends Affix {
             const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
-        } catch (e: any) {
+        } catch (e) {
             // Handle exceptions gracefully, log if necessary
             Logger.Warning(`Error in Chaos.RotateAffix: ${e}`)
             AffixUtil.RemoveAffix(this.currentAffix, this.Unit)

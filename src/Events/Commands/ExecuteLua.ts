@@ -33,8 +33,8 @@ export class ExecuteLua {
                     player.DisplayTextTo('Syntax Error')
                 }
             }
-        } catch (ex: any) {
-            player.DisplayTextTo(`Error: ${ex?.message ?? ex}`)
+        } catch (e) {
+            player.DisplayTextTo(`Error: ${e}`)
         }
     }
 }

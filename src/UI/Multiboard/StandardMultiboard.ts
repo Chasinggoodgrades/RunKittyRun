@@ -190,8 +190,8 @@ export class StandardMultiboard {
 
                 rowIndex++
             }
-        } catch (ex: any) {
-            print(`${Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: ${ex}`)
+        } catch (e) {
+            print(`${Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: ${e}`)
         }
     }
 

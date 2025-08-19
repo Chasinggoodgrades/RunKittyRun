@@ -116,7 +116,7 @@ export class NitroPacer {
                     return
                 }
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UpdateNitroPacer ${e}`)
             throw e
         }

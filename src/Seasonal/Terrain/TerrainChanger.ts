@@ -18,7 +18,7 @@ export class TerrainChanger {
             if (CurrentGameMode.active !== GameMode.Standard) return
             TerrainChanger.ChristmasTerrain()
             TerrainChanger.SetTerrain()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in TerrainChanger.Initialize: ${e}`)
             throw e
         }

@@ -20,7 +20,7 @@ export class TeamsMultiboard {
             TeamsMultiboard.ESCTrigger ??= Trigger.create()!
             TeamsMultiboard.TeamsMultiboardInit()
             TeamsMultiboard.ESCInit()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in TeamsMultiboard.Initialize: ${e}`)
             throw e
         }

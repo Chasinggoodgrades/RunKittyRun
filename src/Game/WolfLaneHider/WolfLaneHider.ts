@@ -10,7 +10,7 @@ export class WolfLaneHider {
         try {
             WolfLaneHider.UpdateLanesToEnable()
             WolfLaneHider.ApplyLaneVisibility()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in WolfLaneHider: ${e}`)
         }
     }
@@ -24,7 +24,7 @@ export class WolfLaneHider {
                 const currentSafezone: number = kitty.CurrentSafeZone
                 WolfLaneHider.AddAdjacentLanes(currentSafezone)
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UpdateLanesToEnable: ${e}`)
         }
     }
@@ -79,7 +79,7 @@ export class WolfLaneHider {
             // Update the set for next time
             WolfLaneHider.currentlyVisibleLanes.clear()
             for (const laneId of WolfLaneHider.lanesToEnable) WolfLaneHider.currentlyVisibleLanes.add(laneId)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ApplyLaneVisibility: ${e}`)
         }
     }
@@ -101,7 +101,7 @@ export class WolfLaneHider {
                 WolfLaneHider.SetLaneVisibility(lane, false)
                 lane.IsEnabled = false
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in HideAllLanes: ${e}`)
         }
     }
@@ -115,7 +115,7 @@ export class WolfLaneHider {
                 lane.IsEnabled = true
                 WolfLaneHider.SetLaneVisibility(lane, true)
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ResetLanes: ${e}`)
         }
     }

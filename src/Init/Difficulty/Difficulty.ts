@@ -28,7 +28,7 @@ export class Difficulty {
             Difficulty.RegisterSelectionEvent()
 
             Utility.SimpleTimer(2.0, () => Difficulty.ChooseDifficulty())
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Difficulty.Initialize: ${e}`)
             throw e
         }

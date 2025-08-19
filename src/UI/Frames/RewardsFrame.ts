@@ -38,9 +38,9 @@ export class RewardsFrame {
             RewardsFrame.AppendRewardsToFrames()
             RewardsFrame.CreateRandomRewardButton()
             CreateHeaderFrame(RewardsFrame.RewardFrame)
-        } catch (ex: any) {
-            Logger.Critical(`Error in RewardsFrame: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in RewardsFrame: ${e}`)
+            throw e
         }
     }
 
@@ -226,7 +226,7 @@ export class RewardsFrame {
 
             if (!player.isLocal()) return
             FrameManager.RefreshFrame(frame)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in RandomRewardsButtonActions: ${e}`)
         }
     }
@@ -317,7 +317,7 @@ export class RewardsFrame {
                     frame.setTexture(unavailablePath, 0, false)
                 else frame.setTexture(BlzGetAbilityIcon(reward.AbilityID)!, 0, false)
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UnavilableRewardIcons: ${e}`)
         }
     }

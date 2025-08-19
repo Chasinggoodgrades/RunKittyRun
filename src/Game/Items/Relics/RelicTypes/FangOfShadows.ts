@@ -108,7 +108,7 @@ export class FangOfShadows extends Relic {
             Utility.SimpleTimer(0.1, () =>
                 RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID)
             )
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in SummonShadowKitty: ${e}`)
         }
     }
@@ -121,7 +121,7 @@ export class FangOfShadows extends Relic {
             Utility.DropAllItems(getTriggerUnit())
             Utility.SimpleTimer(0.09, sk.KillShadowKitty)
             this.KillTimer.pause()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FangOfShadows.TeleportToShadowKitty: ${e}`)
             return
         }

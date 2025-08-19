@@ -48,7 +48,7 @@ export class WolfArea {
                 const kitty = Globals.ALL_KITTIES.get(player)!
                 kitty.ProgressHelper.CurrentPoint = this.ID
                 kitty.ProgressZone = this.ID
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Warning(`Error in WolfArea.RegisterEnterEvents: ${e}`)
                 throw e
             }
@@ -65,7 +65,7 @@ export class WolfArea {
             try {
                 const wolf = Globals.ALL_WOLVES.get(getTriggerUnit())!
                 wolf.WolfMove()
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Critical(`Error in WolfArea.RegisterLeaveEvents: ${e}`)
             }
         })

@@ -139,8 +139,8 @@ export class AwardManager {
                 }
             }
             AwardManager.AwardTrigger.registerTimerEvent(1.0, true)
-        } catch (ex: any) {
-            Logger.Critical(`Error in AwardManager.RegisterGamestatEvents: ${ex}`)
+        } catch (e) {
+            Logger.Critical(`Error in AwardManager.RegisterGamestatEvents: ${e}`)
         }
     }
 

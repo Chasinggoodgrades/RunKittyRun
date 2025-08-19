@@ -142,8 +142,8 @@ export class Reward {
 
             this.DestroyCurrentEffect(player)
             this.ApplyEffect(player, effectInstance)
-        } catch (e: any) {
-            Logger.Warning(e)
+        } catch (e) {
+            Logger.Warning(e as string)
         }
     }
 

@@ -124,8 +124,8 @@ export class SoundManager {
             SoundManager.createSounds()
             SoundManager.configureSounds()
             SoundManager.mapRoundSounds()
-        } catch (error: any) {
-            Logger.Critical(`Failed to initialize SoundManager: ${error}`)
+        } catch (e) {
+            Logger.Critical(`Failed to initialize SoundManager: ${e}`)
         }
     }
 
@@ -304,8 +304,8 @@ export class SoundManager {
             Utility.SimpleTimer(2.0, () => {
                 GC.RemoveEffect(Effect.fromHandle(effect)!)
             })
-        } catch (error: any) {
-            Logger.Warning(`Error in SoundManager.LastManStandingActions: ${error}`)
+        } catch (e) {
+            Logger.Warning(`Error in SoundManager.LastManStandingActions: ${e}`)
         }
     }
 }

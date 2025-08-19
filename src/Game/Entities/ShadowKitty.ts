@@ -74,7 +74,7 @@ export class ShadowKitty {
             this.Unit.destroy()
             this.Active = false
             ShadowKitty.PauseKitty(this.Player, false)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`ShadowKitty.KillShadowKitty: ${e}`)
             throw e
         }

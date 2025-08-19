@@ -70,7 +70,7 @@ export class ChronoSphere extends Relic {
             this.Kitty = Globals.ALL_KITTIES.get(Unit.owner)!
             Utility.SimpleTimer(0.1, this.RotatingSlowAura)
             Utility.SimpleTimer(0.1, this.RotatingLocationCapture)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.ApplyEffect: ${e}`)
         }
     }
@@ -82,7 +82,7 @@ export class ChronoSphere extends Relic {
             this.LocationCaptureTimer?.pause()
             this.LocationCaptureTimer?.destroy()
             this.LocationEffect?.destroy()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.RemoveEffect: ${e}`)
         }
     }
@@ -106,7 +106,7 @@ export class ChronoSphere extends Relic {
                 item.handle,
                 `${Colors.COLOR_YELLOW}The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by ${Colors.COLOR_LAVENDER}${Math.abs(this.Magnitude * 100).toFixed(0)}%.|r |cffadd8e6(Passive)|r\r\n`
             )
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.SetAbilityData: ${e}`)
         }
     }
@@ -121,7 +121,7 @@ export class ChronoSphere extends Relic {
 
             this.MagnitudeTimer.start(this.MAGNITUDE_CHANGE_INTERVAL, true, this.SetAbilityData)
             this.SetAbilityData()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.RotatingSlowAura: ${e}`)
         }
     }
@@ -134,7 +134,7 @@ export class ChronoSphere extends Relic {
             this.LocationCaptureTimer ??= Timer.create()
             this.CapturedLocation = [this.Kitty.Unit.x, this.Kitty.Unit.y, this.Kitty.Unit.facing] // reset to current location on buy
             this.LocationCaptureTimer.start(this.LOCATION_CAPTURE_INTERVAL, false, this.CaptureLocation)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.RotatingLocationCapture: ${e}`)
         }
     }
@@ -149,8 +149,8 @@ export class ChronoSphere extends Relic {
             this.LocationEffect.scale = 0.55
             this.LocationEffect.destroy()
             this.LocationEffect = null
-        } catch (er: any) {
-            Logger.Warning(`Error in ChronoSphere.CaptureLocation: ${er}`)
+        } catch (e) {
+            Logger.Warning(`Error in ChronoSphere.CaptureLocation: ${e}`)
         }
     }
 
@@ -181,7 +181,7 @@ export class ChronoSphere extends Relic {
                 this.Kitty.Unit.paused = false
                 Utility.SimpleTimer(1.0, () => (this.Kitty.Invulnerable = false))
             })
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.RewindTime: ${e}`)
         }
     }
@@ -207,12 +207,12 @@ export class ChronoSphere extends Relic {
                     kitty.CurrentStats.ChronoSphereCD = false
                     kitty.Player.DisplayTimedTextTo(1.0, `${Colors.COLOR_LAVENDER}Chrono Sphere recharged|r`)
                     relic?.LocationCaptureTimer?.start(0, false, relic.CaptureLocation)
-                } catch (e: any) {
+                } catch (e) {
                     Logger.Warning(`Error in ChronoSphere.RewindDeath: ${e}`)
                 }
             })
             return true
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChronoSphere.RewindDeath: ${e}`)
             return false
         }

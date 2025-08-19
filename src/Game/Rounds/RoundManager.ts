@@ -67,7 +67,7 @@ export class RoundManager {
             ChainedTogether.StartEvent()
             WolfLaneHider.HideAllLanes()
             WolfLaneHider.LanesHider()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in RoundManager.RoundSetup ${e}`)
             throw e
         }
@@ -117,7 +117,7 @@ export class RoundManager {
             if (Gameover.GameOver()) return
             Tips.DisplayTip()
             Utility.SimpleTimer(Globals.END_ROUND_DELAY, RoundManager.RoundSetup)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in RoundManager.RoundEnd ${e}`)
             throw e
         }

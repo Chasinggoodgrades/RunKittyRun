@@ -80,7 +80,7 @@ export class Blitzer extends Affix {
             this.Unit.Unit.setVertexColor(255, 255, 0, 255)
             this.Unit.Unit.color = PLAYER_COLOR_YELLOW
             this.PreBlitzerTimer?.Timer.start(this.BLITZER_OVERHEAD_DELAY, false, () => this.BeginBlitz())
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in PreBlitzerMove: ${e}`)
             throw e
         }
@@ -98,7 +98,7 @@ export class Blitzer extends Affix {
             this.Effect?.playAnimation(ANIM_TYPE_STAND)
             this.Unit.IsWalking = true
             this.MoveTimer?.Timer.start(randomTime, false, () => this.PreBlitzerMove())
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in BeginBlitz: ${e}`)
             throw e
         }

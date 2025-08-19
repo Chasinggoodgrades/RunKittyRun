@@ -106,7 +106,7 @@ export class Shops {
             if (vendorItem === null) return
 
             Shops.RefreshItemsOnVendor(vendor)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in OnVendorSell: ${e}`)
         }
     }

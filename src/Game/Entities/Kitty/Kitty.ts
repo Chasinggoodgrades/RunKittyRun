@@ -117,8 +117,8 @@ export class Kitty {
                 new Circle(player)
                 new Kitty(player)
             }
-        } catch (e: any) {
-            Logger.Critical(`Error in Kitty.Initalize. ${e.StackTrace}`)
+        } catch (e) {
+            Logger.Critical(`Error in Kitty.Initalize. ${e}`)
             throw e
         }
     }
@@ -168,7 +168,7 @@ export class Kitty {
                 Gameover.GameOver()
                 MultiboardUtil.RefreshMultiboards()
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in KillKitty: ${e}`)
         }
     }
@@ -207,7 +207,7 @@ export class Kitty {
                 this.StatsManager.UpdateSaviorStats(savior)
                 MultiboardUtil.RefreshMultiboards()
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in ReviveKitty: ${e}`)
             throw e
         }
@@ -237,7 +237,7 @@ export class Kitty {
             }
 
             this.Relics = []
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in InitData: ${e}`)
             throw e
         }

@@ -107,7 +107,7 @@ export class FrostbiteRing extends Relic {
 
             RemoveLocation(freezeLocation)
             this.FreezeGroup.clear()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrostbiteRing.FrostbiteCast: ${e}`)
         }
     }
@@ -170,7 +170,7 @@ export class FrozenWolf {
 
             this.Timer.Timer.start(duration, false, this.EndingFreezeActions)
             this.Active = true
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrozenWolf.BeginFreezeActions: ${e}`)
             this.dispose()
         }
@@ -183,7 +183,7 @@ export class FrozenWolf {
             this.PausingWolf(this.Unit, false)
             this.SlowWolves(this.Unit)
             this.dispose()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrozenWolf.EndingFreezeActions: ${e}`)
             this.dispose()
         }
@@ -198,7 +198,7 @@ export class FrozenWolf {
             this.Timer.dispose()
             this.Active = false
             MemoryHandler.destroyObject(this)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrozenWolf.Dispose: ${e}`)
         }
     }
@@ -208,7 +208,7 @@ export class FrozenWolf {
             if (unit === null) return
             if (NamedWolves.StanWolf !== null && unit === NamedWolves.StanWolf.Unit) return
             if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit)!.PauseSelf(pause)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrozenWolf.PausingWolf: ${e}`)
         }
     }
@@ -220,7 +220,7 @@ export class FrozenWolf {
     private SlowWolves(Unit: Unit) {
         try {
             if (Unit === null) return
-            let playerUpgradeLvl = PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(FrostbiteRing.name)
+            const playerUpgradeLvl = PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(FrostbiteRing.name)
             if (playerUpgradeLvl < 2) return
             // if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
             Unit.moveSpeed = 365.0 / 2.0
@@ -231,7 +231,7 @@ export class FrozenWolf {
                 Unit.moveSpeed = Unit.defaultMoveSpeed
                 GC.RemoveEffect(effect) // TODO; Cleanup:                 GC.RemoveEffect(ref effect);
             })
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in FrozenWolf.SlowWolves: ${e}`)
         }
     }

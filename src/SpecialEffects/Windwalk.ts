@@ -65,7 +65,7 @@ export class Windwalk {
                     })
                 }
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in Windwalk.ApplyWindwalkEffect: ${e}`)
         }
     }

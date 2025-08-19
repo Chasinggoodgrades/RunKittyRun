@@ -95,9 +95,9 @@ export class ShopItem {
             shopItems.push(new ShopItem(new FrostbiteRing()))
 
             return shopItems
-        } catch (ex: any) {
-            Logger.Critical(`Error in ShopItemsRelic: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in ShopItemsRelic: ${e}`)
+            throw e
         }
     }
 

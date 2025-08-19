@@ -87,7 +87,7 @@ const tsMain = () => {
         }
 
         new Program()
-    } catch (e: any) {
+    } catch (e) {
         print(e)
     }
 }

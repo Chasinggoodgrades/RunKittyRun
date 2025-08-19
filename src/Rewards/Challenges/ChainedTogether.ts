@@ -84,7 +84,7 @@ export class ChainedTogether {
             ChainedTogether.SetGroups()
             ChainedTogether.MoveChainTimer ??= Timer.create()
             ChainedTogether.MoveChainTimer.start(ChainedTogether.timerInterval, true, ChainedTogether.MoveChain)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChainedTogether.StartEvent: ${e}`)
             throw e
         }
@@ -118,7 +118,7 @@ export class ChainedTogether {
 
         try {
             ChainedTogether.FreeKittiesFromGroup(kittyNameOutSideRange, false)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChainedTogether.LoseEvent ${e}`)
             throw e
         }
@@ -150,7 +150,7 @@ export class ChainedTogether {
             }
 
             ChainedTogether.kittyGroups.push(currentGroup)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChainedTogether.LoseEvent: ${e}`)
             throw e
         }
@@ -252,7 +252,7 @@ export class ChainedTogether {
 
             //finish event
             ChainedTogether.FreeKittiesFromGroup(kitty.name, true)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in ChainedTogether.ReachedSafezone ${e}`)
             throw e
         }

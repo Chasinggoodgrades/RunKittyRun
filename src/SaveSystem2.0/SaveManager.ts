@@ -46,9 +46,9 @@ export class SaveManager {
             if (!player.isLocal()) return
             this.syncSaveLoad.WriteFileObjects(`${this.SavePath}/${player.name}.txt`, playerData)
             player.DisplayTimedTextTo(4.0, `${Colors.COLOR_GOLD}Stats have been saved.${Colors.COLOR_RESET}`)
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.Save: ${ex}${Colors.COLOR_RESET}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.Save: ${e}${Colors.COLOR_RESET}`)
+            throw e
         }
     }
 
@@ -56,9 +56,9 @@ export class SaveManager {
         try {
             if (!player.isLocal()) return
             this.syncSaveLoad.WriteFileObjects(`${this.SavePath}/AllSaveData.txt`)
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: ${ex}${Colors.COLOR_RESET}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: ${e}${Colors.COLOR_RESET}`)
+            throw e
         }
     }
 
@@ -87,9 +87,9 @@ export class SaveManager {
                 if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
                 this.Load(player)
             }
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: ${ex}${Colors.COLOR_RESET}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: ${e}${Colors.COLOR_RESET}`)
+            throw e
         }
     }
 
@@ -102,9 +102,9 @@ export class SaveManager {
             saveData.PlayerName = player.name
             if (!SaveManager.PlayersLoaded.includes(player)) SaveManager.PlayersLoaded.push(player)
             // if (!Gamemode.IsGameModeChosen) return
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: ${ex} ${Colors.COLOR_RESET}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: ${e} ${Colors.COLOR_RESET}`)
+            throw e
         }
     }
 
@@ -217,7 +217,7 @@ export class SyncSaveLoad {
                     EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
                 Preload(`")\ncall BlzSendSyncData("${this.SyncPrefix}","${header + assemble}")\ncall S2I("`)
             }
-        } catch (ex: any) {
+        } catch (e) {
             Logger.Critical('Error in SyncSaveSystem.WriteFileObjects')
         }
         PreloadGenEnd(filename)
@@ -297,8 +297,8 @@ export class FilePromise {
             //Logger.Verbose("FinalString: ", FinalString);
 
             this.onFinish?.(this)
-        } catch (ex: any) {
-            Logger.Critical(ex)
+        } catch (e) {
+            Logger.Critical(e as string)
         }
     }
 }
@@ -310,10 +310,10 @@ export class PropertyEncoder {
 
             const base64String = EncodingBase64.Encode(jsonString)
             return base64String
-        } catch (ex: any) {
+        } catch (e) {
             // Handle any exceptions that may occur during encoding
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: ${ex}`)
-            throw ex
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeToJsonBase64: ${e}`)
+            throw e
         }
     }
 
@@ -341,9 +341,9 @@ export class PropertyEncoder {
 
             const base64String = EncodingBase64.Encode(jsonString)
             return base64String
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_DARK_RED}Error in PropertyEncoder.EncodeAllDataToJsonBase64: ${e}`)
+            throw e
         }
     }
 

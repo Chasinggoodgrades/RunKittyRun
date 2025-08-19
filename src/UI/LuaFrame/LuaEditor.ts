@@ -71,8 +71,8 @@ export class LuaEditor {
             const p = getTriggerPlayer()
             const output: string = this.RunLua(p, luaCode)
             this.outputText.setText(output)
-        } catch (ex: any) {
-            this.outputText.setText(`Error: ${ex}`)
+        } catch (e) {
+            this.outputText.setText(`Error: ${e}`)
         }
     }
 

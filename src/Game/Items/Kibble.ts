@@ -114,7 +114,7 @@ export class Kibble extends IDisposable {
             if (kib !== null && kib.Item !== null) {
                 kib.dispose()
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Kibble.Error KibblePickup: ${e}`)
             throw e
         }

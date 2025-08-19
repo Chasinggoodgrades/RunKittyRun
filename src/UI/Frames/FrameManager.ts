@@ -39,9 +39,9 @@ export class FrameManager {
             FrameManager.CreateMusicButton()
             FrameManager.CreateShopButton()
             Utility.SimpleTimer(1.0, FrameManager.ESCHideFrames)
-        } catch (ex: any) {
-            Logger.Critical(`Error in FrameManager.Initialize: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in FrameManager.Initialize: ${e}`)
+            throw e
         }
     }
 
@@ -158,7 +158,7 @@ export class FrameManager {
                 const yOffSet = nameFrame.height / 8
                 FrameManager.Backdrop.setPoint(FRAMEPOINT_TOP, nameFrame, FRAMEPOINT_TOP, 0, yOffSet)
                 FrameManager.Backdrop.setSize(x, h)
-            } catch (e: any) {
+            } catch (e) {
                 Logger.Critical(`Error in RepositionBackdropAction: ${e}`)
             }
         }

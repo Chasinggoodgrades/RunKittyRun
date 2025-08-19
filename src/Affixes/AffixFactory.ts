@@ -120,8 +120,8 @@ export class AffixFactory {
             const randomIndex = Math.floor(Math.random() * affixArray.length)
             const randomAffix = affixArray[randomIndex]
             return AffixFactory.ApplyAffix(unit, randomAffix)
-        } catch (ex: any) {
-            Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${ex}${Colors.COLOR_RESET}`)
+        } catch (e) {
+            Logger.Warning(`${Colors.COLOR_RED}Error in ApplyRandomAffix: ${e}${Colors.COLOR_RESET}`)
             return null as never
         }
     }
@@ -185,8 +185,8 @@ export class AffixFactory {
                     if (affix !== null) appliedCount++
                 }
             }
-        } catch (ex: any) {
-            Logger.Critical(`${Colors.COLOR_RED}Error in DistAffixes: ${ex}${Colors.COLOR_RESET}`)
+        } catch (e) {
+            Logger.Critical(`${Colors.COLOR_RED}Error in DistAffixes: ${e}${Colors.COLOR_RESET}`)
             AffixFactory.RemoveAllAffixes()
         }
     }

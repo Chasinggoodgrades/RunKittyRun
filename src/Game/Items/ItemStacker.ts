@@ -48,8 +48,8 @@ export class ItemStacker {
             if (itemCharges > 1) heldItem.charges += itemCharges
             else heldItem.charges += 1
             item.destroy()
-        } catch (e: any) {
-            Logger.Critical(e)
+        } catch (e) {
+            Logger.Critical(e as string)
             throw e
         }
     }

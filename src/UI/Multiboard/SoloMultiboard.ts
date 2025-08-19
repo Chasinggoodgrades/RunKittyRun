@@ -30,9 +30,9 @@ export class SoloMultiboard {
             SoloMultiboard.MBSlot = new Map()
             SoloMultiboard.MakeMultiboard()
             SoloMultiboard.RegisterTriggers()
-        } catch (ex: any) {
-            Logger.Critical(`Error in SoloMultiboard: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in SoloMultiboard: ${e}`)
+            throw e
         }
     }
 
@@ -230,9 +230,9 @@ export class SoloMultiboard {
             SoloMultiboard.OverallBoard.GetItem(rowIndex, 1).setText(
                 `${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${Globals.ALL_KITTIES.get(player)!.CurrentStats.TotalDeaths}`
             )
-        } catch (ex: any) {
-            Logger.Critical(`Error in SoloMultiboard.UpdateDeathCount: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in SoloMultiboard.UpdateDeathCount: ${e}`)
+            throw e
         }
     }
 

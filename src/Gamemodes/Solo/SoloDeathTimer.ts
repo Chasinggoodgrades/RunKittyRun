@@ -55,7 +55,7 @@ export class SoloDeathTimer {
             if (this.Player.isLocal()) PanCameraToTimed(x, y, 0.0)
             CameraUtil.RelockCamera(this.Player)
             this.Dispose()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in SoloDeathTimer.Revive: ${e}`)
             this.Dispose()
         }

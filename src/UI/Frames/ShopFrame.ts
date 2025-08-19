@@ -62,9 +62,9 @@ export class ShopFrame {
             ShopFrame.CreateUpgradeTooltip()
             ShopFrame.SetRewardsFrameHotkey()
             ShopFrame.shopFrame.visible = false
-        } catch (ex: any) {
-            Logger.Critical(`Error in ShopFrame: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in ShopFrame: ${e}`)
+            throw e
         }
     }
 
@@ -199,9 +199,9 @@ export class ShopFrame {
             ShopFrame.AddItemsToPanel(ShopFrame.relicsPanel, ShopFrame.GetRelicItems())
             ShopFrame.AddItemsToPanel(ShopFrame.rewardsPanel, ShopFrame.GetRewardItems())
             ShopFrame.AddItemsToPanel(ShopFrame.miscPanel, ShopFrame.GetMiscItems())
-        } catch (ex: any) {
-            Logger.Critical(`Error in LoadItemsIntoPanels: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in LoadItemsIntoPanels: ${e}`)
+            throw e
         }
     }
 
@@ -266,8 +266,8 @@ export class ShopFrame {
                 RefreshUpgradeTooltip(item.Relic)
                 if (Utility.UnitHasItem(kitty.Unit, item.ItemID)) ShopFrame.sellButton.alpha = ShopFrame.ActiveAlpha
             }
-        } catch (ex: any) {
-            Logger.Warning(`Error in UpdateButtonStatus: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in UpdateButtonStatus: ${e}`)
         }
     }
 
@@ -321,8 +321,8 @@ export class ShopFrame {
             Globals.upgradeButton.setTooltip(background)
             Globals.upgradeTooltip.setPoint(FRAMEPOINT_BOTTOM, Globals.upgradeButton, FRAMEPOINT_TOP, 0, 0.01)
             Globals.upgradeTooltip.enabled = false
-        } catch (ex: any) {
-            Logger.Warning(`Error in CreateUpgradeTooltip: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in CreateUpgradeTooltip: ${e}`)
         }
     }
 
@@ -340,8 +340,8 @@ export class ShopFrame {
             tooltip.enabled = false
 
             tooltip.text = item.name
-        } catch (ex: any) {
-            Logger.Warning(`Error in CreateShopitemTooltips: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in CreateShopitemTooltips: ${e}`)
         }
     }
 
@@ -381,8 +381,8 @@ export class ShopFrame {
             }
             // hide shop after purchase
             if (player.isLocal()) ShopFrame.shopFrame.visible = !ShopFrame.shopFrame.visible
-        } catch (ex: any) {
-            Logger.Warning(`Error in BuySelectedItem: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in BuySelectedItem: ${e}`)
         }
     }
 
@@ -430,8 +430,8 @@ export class ShopFrame {
                 RemoveItemFromUnit(kitty.Unit, itemID)
                 player.addGold(selectedItem.Cost)
             }
-        } catch (ex: any) {
-            Logger.Warning(`Error in SellSelectedItem: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in SellSelectedItem: ${e}`)
         }
     }
 
@@ -477,8 +477,8 @@ export class ShopFrame {
                 shopFrameHotkey.registerPlayerKeyEvent(player, OSKEY_OEM_PLUS, 0, true)
             }
             shopFrameHotkey.addAction(ShopFrame.ShopFrameActions)
-        } catch (ex: any) {
-            Logger.Warning(`Error in SetRewardsFrameHotkey: ${ex}`)
+        } catch (e) {
+            Logger.Warning(`Error in SetRewardsFrameHotkey: ${e}`)
         }
     }
 

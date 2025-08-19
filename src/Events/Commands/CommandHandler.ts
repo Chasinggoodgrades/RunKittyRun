@@ -57,10 +57,10 @@ export class CommandHandler {
             } else {
                 getTriggerPlayer().DisplayTimedTextTo(4.0, `${Colors.COLOR_YELLOW_ORANGE}Command not found.|r`)
             }
-        } catch (ex: any) {
+        } catch (e) {
             getTriggerPlayer().DisplayTimedTextTo(
                 4.0,
-                `${Colors.COLOR_YELLOW_ORANGE}Error executing command:${Colors.COLOR_RESET} ${Colors.COLOR_RED}${ex} ${ex.StackTrace}${Colors.COLOR_RESET}`
+                `${Colors.COLOR_YELLOW_ORANGE}Error executing command:${Colors.COLOR_RESET} ${Colors.COLOR_RED}${e}${Colors.COLOR_RESET}`
             )
             return
         }

@@ -13,7 +13,7 @@ export class UniqueItems {
         try {
             UniqueItems.UniqueList = UniqueItems.UniqueItemList()
             UniqueItems.RegisterEvents()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in UniqueItems.Initialize. ${e}`)
             throw e
         }
@@ -49,7 +49,7 @@ export class UniqueItems {
             player.DisplayTimedTextTo(3.0, `${Colors.COLOR_RED}You may only carry one of each unique item.|r`)
             player.addGold(uniqueItem.GoldCost)
             RemoveItem(item.handle)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UniqueItems.ItemPickup: ${e}`)
         }
     }

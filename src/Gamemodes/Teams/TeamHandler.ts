@@ -85,7 +85,7 @@ export class TeamHandler {
                     team.AddMember(player)
                 }
             }
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in TeamHandler.RandomHandler: ${e}`)
         }
     }

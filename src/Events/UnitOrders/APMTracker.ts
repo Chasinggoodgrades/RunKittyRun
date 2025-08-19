@@ -52,7 +52,7 @@ export class APMTracker {
         try {
             if (APMTracker.IsInSafeZone(this.Kitty)) return
             this.Kitty.APMTracker.TimeOutsideSafeZones += this.CAPTURE_INTERVAL
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in APMTracker.CheckKittyPositions: ${e}`)
             throw e
         }

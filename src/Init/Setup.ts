@@ -75,7 +75,7 @@ export class Setup {
             if (!PROD) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(GameMode.Standard)
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Setup.Initialize: ${e}`)
             throw e
         }
@@ -138,7 +138,7 @@ export class Setup {
             RoundManager.Initialize()
             FirstPersonCameraManager.Initialize()
             Utility.SimpleTimer(6.0, () => MusicManager.PlayNumb())
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Setup.StartGame: ${e}`)
             throw e
         }

@@ -37,9 +37,9 @@ export class MusicFrame {
             MusicFrame.MusicFramehandle.setAbsPoint(FRAMEPOINT_CENTER, MusicFrame.MusicFrameX, MusicFrame.MusicFrameY)
             MusicFrame.CreateMusicFrames()
             MusicFrame.SetMusicFrameHotkeyEvent()
-        } catch (ex: any) {
-            Logger.Critical(`Error in MusicFrame: ${ex}`)
-            throw ex
+        } catch (e) {
+            Logger.Critical(`Error in MusicFrame: ${e}`)
+            throw e
         }
     }
 

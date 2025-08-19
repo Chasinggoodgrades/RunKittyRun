@@ -45,7 +45,7 @@ export class PlayerLeaves {
             RoundManager.RoundEndCheck()
             if (Globals.WinGame) return
             MultiboardUtil.RefreshMultiboards()
-        } catch (e: any) {
+        } catch (e) {
             print('Error in PlayerLeavesActions: ' + e)
         }
     }

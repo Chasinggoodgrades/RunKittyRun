@@ -82,7 +82,7 @@ export class Gamemode {
             ClearTextMessages()
             Gamemode.NotifyGamemodeChosen()
             Gamemode.SetupChosenGamemode()
-        } catch (e: any) {
+        } catch (e) {
             Logger.Critical(`Error in Gamemode.SetGameMode: ${e}`)
         }
     }

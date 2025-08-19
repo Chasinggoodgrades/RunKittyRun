@@ -217,7 +217,7 @@ export class ColorUtils {
             }
 
             kitty.SaveData.PlayerColorData.PlayedColors = ColorUtils.sb
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in PopulateColorsData: ${e}`)
         }
     }
@@ -257,7 +257,7 @@ export class ColorUtils {
             }
 
             kitty.SaveData.PlayerColorData.PlayedColors = ColorUtils.sb
-        } catch (e: any) {
+        } catch (e) {
             Logger.Warning(`Error in UpdateColors: ${e}`)
         }
     }

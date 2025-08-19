@@ -30,7 +30,7 @@ export const RemoveAllWolfAffixes = (wolf: Wolf) => {
             wolf.Affixes[i].Remove()
             Globals.AllAffixes.splice(Globals.AllAffixes.indexOf(wolf.Affixes[i]), 1)
         }
-    } catch (e: any) {
+    } catch (e) {
         Logger.Warning(`Error in RemoveAllWolfAffixes: ${e}`)
     }
 
