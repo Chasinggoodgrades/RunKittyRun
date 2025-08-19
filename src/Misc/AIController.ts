@@ -591,7 +591,7 @@ export class AIController {
             const wrapGap: number =
                 this.mergedIntervals[0].Start + 2 * Math.PI - this.mergedIntervals[this.mergedIntervals.length - 1].End
             if (wrapGap > 0) {
-                const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 a.Start = this.mergedIntervals[this.mergedIntervals.length - 1].End
                 a.End = this.mergedIntervals[0].Start + 2 * Math.PI
                 this.freeGaps.push(a)
