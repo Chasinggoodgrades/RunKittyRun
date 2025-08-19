@@ -4,7 +4,7 @@ import { MusicManager } from 'src/Sounds/MusicManager'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
-import * as FrameManager from './FrameManager'
+import { FrameManager } from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 
 export class MusicFrame {
@@ -199,8 +199,8 @@ export class MusicFrame {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
         // if (ShopUtil.IsPlayerInWolfLane(player)) return;
-        FrameManager.FrameManager.MusicButton.visible = false
-        FrameManager.FrameManager.MusicButton.visible = true
+        FrameManager.MusicButton.visible = false
+        FrameManager.MusicButton.visible = true
         HideOtherFrames(MusicFrame.MusicFramehandle)
         MusicFrame.MusicFramehandle.visible = !MusicFrame.MusicFramehandle.visible
         if (MusicFrame.MusicFramehandle.visible) MultiboardUtil.MinMultiboards(player, true)

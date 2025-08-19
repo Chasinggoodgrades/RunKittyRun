@@ -11,7 +11,7 @@ import { Utility } from 'src/Utility/Utility'
 import { blzCreateFrame, blzCreateFrameByType, blzGetFrameByName, getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { Frame, MapPlayer, Trigger, Unit } from 'w3ts'
 import { MultiboardUtil } from '../Multiboard/MultiboardUtil'
-import * as FrameManager from './FrameManager'
+import { FrameManager } from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RelicFunctions } from './RelicFunctions/RelicFunctions'
 import { ShopItem, ShopItemType } from './ShopItems/ShopItems'
@@ -301,7 +301,7 @@ export class ShopFrame {
         }
 
         if (!player.isLocal()) return
-        FrameManager.FrameManager.RefreshFrame(frame)
+        FrameManager.RefreshFrame(frame)
         ShopFrame.nameLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Name:${Colors.COLOR_RESET} ${shopItem.name}`
         ShopFrame.costLabel.text = `${Colors.COLOR_YELLOW}Cost:${Colors.COLOR_RESET} ${shopItem.Cost}`
         ShopFrame.descriptionLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Description:${Colors.COLOR_RESET} ${shopItem.Description}`
@@ -485,8 +485,8 @@ export class ShopFrame {
     public static ShopFrameActions = () => {
         const player = getTriggerPlayer()
         if (!player.isLocal()) return
-        FrameManager.FrameManager.ShopButton.visible = false
-        FrameManager.FrameManager.ShopButton.visible = true
+        FrameManager.ShopButton.visible = false
+        FrameManager.ShopButton.visible = true
         HideOtherFrames(ShopFrame.shopFrame)
         if (CurrentGameMode.active === GameMode.SoloTournament) {
             // solo mode.

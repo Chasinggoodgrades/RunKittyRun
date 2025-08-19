@@ -181,53 +181,226 @@ local function require(file, ...)
         end
     end
 end`,
-                to: `local ____modules = {}
-local ____moduleCache = {}
-local ____originalRequire = require
+                to: `-- bundler tables you already have (keep them)
+local ____modules = ____modules or {}
+local ____moduleCache = ____moduleCache or {}
 
-local function require(file, ...)
-    -- Return cached value if present
-    local cached = ____moduleCache[file]
-    if cached then
-        return cached.value
+-- capture original require before overriding
+local ____originalRequire = ____originalRequire or require
+
+-- helpers
+local function __starts_with_src(file)
+    return type(file) == "string" and file:sub(1,4) == "src." and file ~= "src.main"
+end
+
+-- no-op iterator for non-table fields
+local function __nopairs()
+    return function() return nil end
+end
+
+-- Create a loader that resolves and caches the real module value
+local function __make_loader(file, argv, cacheEntry)
+    return function()
+        -- if we've already resolved, return it
+        if cacheEntry.value and not cacheEntry.__is_proxy then
+            return cacheEntry.value
+        end
+
+        local value
+        if ____modules[file] then
+            local moduleFactory = ____modules[file]
+            if #argv > 0 then
+                value = moduleFactory(table.unpack(argv))
+            else
+                value = moduleFactory(file)
+            end
+        else
+            if ____originalRequire then
+                -- pass through varargs to original require in case the host uses them
+                value = ____originalRequire(file, table.unpack(argv))
+            else
+                error("module '" .. file .. "' not found")
+            end
+        end
+
+        -- replace proxy with the real thing in cache
+        cacheEntry.value = value
+        cacheEntry.__is_proxy = false
+        return value
+    end
+end
+
+-- Create a proxy for a specific field of a (not-yet-loaded) module
+local function __make_field_proxy(file, key, resolve_module)
+    local fp -- forward declare for self reference
+    fp = setmetatable({
+        __lazy_proxy = true, __kind = "field", __file = file, __key = key
+    }, {
+        -- Calling the field: lazy-load module, then call if it's a function; else return the value
+        __call = function(_, ...)
+            local real = resolve_module()
+            local target = real[key]
+            -- If the target is already a proxy, just forward the call or return it
+            if type(target) == "table" and target.__lazy_proxy then
+                local mt = getmetatable(target)
+                if mt and mt.__call then
+                    return mt.__call(target, ...)
+                end
+                return target
+            end
+            if type(target) == "function" then
+                return target(...)
+            else
+                -- not a function; return the actual value (first touch resolves)
+                return target
+            end
+        end,
+        -- Treating the field as a table: resolve and forward
+        __index = function(_, subkey)
+            local real = resolve_module()
+            local target = real[key]
+            if type(target) == "table" and target.__lazy_proxy then
+                return target[subkey] -- already a proxy, return it untouched
+            end
+            if type(target) == "table" then
+                return target[subkey]
+            end
+            return nil
+        end,
+        __newindex = function(_, subkey, v)
+            local real = resolve_module()
+            local target = real[key]
+            if type(target) ~= "table" then
+                error(("attempt to index non-table field '%s' of module '%s'"):format(tostring(key), tostring(file)))
+            end
+            target[subkey] = v
+        end,
+        __pairs = function(_)
+            local real = resolve_module()
+            local target = real[key]
+            if type(target) == "table" then
+                return pairs(target)
+            end
+            return __nopairs()
+        end,
+        __len = function(_)
+            local real = resolve_module()
+            local target = real[key]
+            return (type(target) == "table" or type(target) == "string") and #target or 0
+        end,
+        __tostring = function(_)
+            return ("ProxyField(%s.%s)"):format(tostring(file), tostring(key))
+        end,
+    })
+    return fp
+end
+
+-- Create the top-level module proxy
+local function __make_module_proxy(file, loader, cacheEntry)
+    local proxy -- forward decl
+    local function resolve_module()
+        return loader()
     end
 
-    -- Our module table?
-    local moduleFactory = ____modules[file]
-    if moduleFactory then
-        -- Pre-populate cache with a placeholder to allow circular deps
-        local placeholder = {}
-        ____moduleCache[file] = { value = placeholder, initializing = true }
+    proxy = setmetatable({
+        __lazy_proxy = true, __kind = "module", __file = file
+    }, {
+        -- Accessing a field (2nd level)
+        __index = function(_, key)
+            -- if already resolved, return real field (and respect existing proxies)
+            if cacheEntry.value and not cacheEntry.__is_proxy then
+                local v = cacheEntry.value[key]
+                if type(v) == "table" and v.__lazy_proxy then
+                    return v -- already a proxy, return as-is
+                end
+                -- For functions we could return them directly, but to keep "2nd level lazy for functions"
+                -- we wrap only when it's a function; otherwise return actual value.
+                if type(v) == "function" then
+                    -- wrap a callable that just forwards without re-resolving cost
+                    return function(...)
+                        return cacheEntry.value[key](...)
+                    end
+                end
+                return v
+            end
+            -- Not resolved yet:
+            -- Return a field proxy that will only resolve when called (function path)
+            -- or when treated like a table (index/iterate).
+            return __make_field_proxy(file, key, resolve_module)
+        end,
+        -- Writing into module table forces resolution
+        __newindex = function(_, key, v)
+            local real = resolve_module()
+            real[key] = v
+        end,
+        -- Calling the module directly (if it exports a function)
+        __call = function(_, ...)
+            local real = resolve_module()
+            if type(real) ~= "function" then
+                error(("attempt to call non-function module '%s'"):format(tostring(file)))
+            end
+            return real(...)
+        end,
+        __pairs = function(_)
+            local real = resolve_module()
+            return pairs(real)
+        end,
+        __len = function(_)
+            local real = resolve_module()
+            return (type(real) == "table" or type(real) == "string") and #real or 0
+        end,
+        __tostring = function(_)
+            return ("ProxyModule(%s)"):format(tostring(file))
+        end,
+    })
 
-        -- Run the module factory
+    return proxy
+end
+
+-- The overridden require
+local function require(file, ...)
+    -- Honor existing cache first (already-resolved or existing proxy)
+    if ____moduleCache[file] and ____moduleCache[file].value then
+        return ____moduleCache[file].value
+    end
+
+    -- Only lazy-wrap "src.*" (except "src.main")
+    if __starts_with_src(file) then
+        local argv = { ... }
+
+        -- Create a cache entry up front with a placeholder proxy marker
+        local cacheEntry = { value = nil, __is_proxy = true }
+
+        local loader = __make_loader(file, argv, cacheEntry)
+        local proxy = __make_module_proxy(file, loader, cacheEntry)
+
+        -- Put the proxy in cache immediately so repeated requires return same proxy
+        cacheEntry.value = proxy
+        ____moduleCache[file] = cacheEntry
+
+        return proxy
+    end
+
+    -- For non-src.* or src.main, fall back to your bundler/original logic
+    if ____modules[file] then
+        local moduleFactory = ____modules[file]
         local value
-        if select("#", ...) > 0 then
+        if (select("#", ...) > 0) then
             value = moduleFactory(...)
         else
             value = moduleFactory(file)
         end
-
-        -- If the module returned a table, copy fields into the placeholder
-        if type(value) == "table" then
-            for k, v in pairs(value) do
-                placeholder[k] = v
-            end
-            ____moduleCache[file].value = placeholder
-        else
-            -- For non-tables (numbers/strings/functions), just overwrite
-            ____moduleCache[file].value = value
-        end
-
-        ____moduleCache[file].initializing = false
-        return ____moduleCache[file].value
+        ____moduleCache[file] = { value = value }
+        return value
     end
 
-    -- Fall back to the host's require
     if ____originalRequire then
-        return ____originalRequire(file)
-    else
-        error("module '" .. file .. "' not found")
+        local value = ____originalRequire(file, ...)
+        ____moduleCache[file] = { value = value }
+        return value
     end
+
+    error("module '" .. file .. "' not found")
 end`,
             },
             {

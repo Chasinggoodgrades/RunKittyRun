@@ -13,7 +13,7 @@ import { Utility } from 'src/Utility/Utility'
 import { Effect, MapPlayer, TextTag, Timer, Unit } from 'w3ts'
 import { WolfArea } from '../WolfArea'
 import { WolfPoint } from '../WolfPoint'
-import * as NamedWolvesEntity from './NamedWolves'
+import { NamedWolves } from './NamedWolves'
 
 export class Wolf {
     public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
@@ -70,7 +70,7 @@ export class Wolf {
                     for (let i = 0; i < numberOfWolves; i++) new Wolf(lane)
                 }
                 FandF.CreateBloodWolf()
-                NamedWolvesEntity.NamedWolves.CreateNamedWolves()
+                NamedWolves.CreateNamedWolves()
             }
         } catch (e: any) {
             Logger.Critical(`Error in Wolf.SpawnWolves: ${e}`)
