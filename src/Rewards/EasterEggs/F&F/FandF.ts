@@ -16,14 +16,13 @@ export class FandF {
     private static BloodVial: number = Constants.ITEM_EASTER_EGG_BLOOD_FILLED_VIAL
     private static TurnInRange: number
     private static CollectionRange: number
-    private static InRangeTrigger: Trigger
     private static CollectionTrigger: Trigger
     public static BloodWolf: Wolf
 
     public static Initialize = () => {
         FandF.TurnInRange = 150.0
         FandF.CollectionRange = 100.0
-        FandF.InRangeTrigger = FandF.RegisterTurnIn()
+        FandF.RegisterTurnIn()
         FandF.CollectionTrigger = FandF.RegisterCollection()
     }
 

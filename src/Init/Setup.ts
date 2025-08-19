@@ -72,7 +72,7 @@ export class Setup {
             StopMusic(false)
             ClearMapMusic()
             Globals.GAME_INITIALIZED = true
-            if (PROD) return
+            if (!PROD) return
             Difficulty.ChangeDifficulty('normal')
             Gamemode.SetGameMode(GameMode.Standard)
         } catch (e: any) {

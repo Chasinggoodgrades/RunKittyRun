@@ -19,14 +19,9 @@ export class ProtectionOfAncients {
     private static POTA_NO_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
     private static POTA_WITH_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
-    private static Trigger: Trigger
-    private static LevelUpTrigger: Trigger
-    private static HotkeyTrigger: Trigger
-
     private static readonly UPGRADE_LEVEL_2_REQUIREMENT = 9
     private static readonly UPGRADE_LEVEL_3_REQUIREMENT = 12
 
-    private static KittyReachedLevelSix: Trigger
     private static readonly INVULNERABLE_DURATION = 1.0
 
     private static HitLevel6: MapPlayer[] = []
@@ -54,10 +49,10 @@ export class ProtectionOfAncients {
 
     private static RegisterUltimateGain = () => {
         // Ultimate, Protection of the Ancients
-        ProtectionOfAncients.KittyReachedLevelSix ??= Trigger.create()!
+        const KittyReachedLevelSix = Trigger.create()!
         ProtectionOfAncients.HitLevel6 ??= []
-        ProtectionOfAncients.KittyReachedLevelSix.registerAnyUnitEvent(EVENT_PLAYER_HERO_LEVEL)
-        ProtectionOfAncients.KittyReachedLevelSix.addAction(() => {
+        KittyReachedLevelSix.registerAnyUnitEvent(EVENT_PLAYER_HERO_LEVEL)
+        KittyReachedLevelSix.addAction(() => {
             if (ProtectionOfAncients.HitLevel6.includes(getTriggerUnit().owner)) return
             if (getTriggerUnit().getHeroLevel() < 6) return
             ProtectionOfAncients.HitLevel6.push(getTriggerUnit().owner)
@@ -133,11 +128,11 @@ export class ProtectionOfAncients {
         )
         trg.addAction(() => ProtectionOfAncients.ActivationEvent())
 
-        ProtectionOfAncients.HotkeyTrigger = Trigger.create()!
+        const HotkeyTrigger = Trigger.create()!
         for (const p of Globals.ALL_PLAYERS) {
-            ProtectionOfAncients.HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true)
+            HotkeyTrigger.registerPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true)
         }
-        ProtectionOfAncients.HotkeyTrigger.addAction(() => ProtectionOfAncients.RegisterHotKeyEvents())
+        HotkeyTrigger.addAction(() => ProtectionOfAncients.RegisterHotKeyEvents())
     }
 
     private static RegisterHotKeyEvents = () => {

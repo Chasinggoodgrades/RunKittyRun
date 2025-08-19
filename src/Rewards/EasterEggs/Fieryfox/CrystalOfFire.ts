@@ -16,17 +16,14 @@ import { MapPlayer, Trigger, Unit } from 'w3ts'
 export class CrystalOfFire {
     private static ItemID: number
     private static TurnInRange: number
-    private static TurnInEventFieryfox: Trigger
-    private static TurnInEventFandF: Trigger
-    private static QuestAccept: Trigger
     private static QuestEligible: MapPlayer[]
 
     public static Initialize = () => {
         CrystalOfFire.ItemID = Constants.ITEM_CRYSTAL_OF_FIRE
         CrystalOfFire.TurnInRange = 150.0
-        CrystalOfFire.TurnInEventFieryfox = CrystalOfFire.RegisterTurnInFiery()
-        CrystalOfFire.TurnInEventFandF = CrystalOfFire.RegisterTurnInFandF()
-        CrystalOfFire.QuestAccept = CrystalOfFire.RegisterChatEvent()
+        CrystalOfFire.RegisterTurnInFiery()
+        CrystalOfFire.RegisterTurnInFandF()
+        CrystalOfFire.RegisterChatEvent()
         CrystalOfFire.QuestEligible = []
     }
 
@@ -39,27 +36,24 @@ export class CrystalOfFire {
         kitty.CurrentStats.CrystalOfFireAttempts++
     }
 
-    private static RegisterTurnInFiery(): Trigger {
+    private static RegisterTurnInFiery() {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, CrystalOfFire.TurnInRange, undefined)
         triggerHandle.addAction(CrystalOfFire.FieryfoxEvent)
-        return triggerHandle
     }
 
-    private static RegisterTurnInFandF(): Trigger {
+    private static RegisterTurnInFandF() {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, CrystalOfFire.TurnInRange, undefined)
         triggerHandle.addAction(CrystalOfFire.FandFEvent)
-        return triggerHandle
     }
 
-    private static RegisterChatEvent(): Trigger {
+    private static RegisterChatEvent() {
         const triggerHandle = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS) {
             triggerHandle.registerPlayerChatEvent(player, 'yes!', false)
         }
         triggerHandle.addAction(CrystalOfFire.AcceptedQuest)
-        return triggerHandle
     }
 
     private static GetDeathAttempts(player: MapPlayer) {

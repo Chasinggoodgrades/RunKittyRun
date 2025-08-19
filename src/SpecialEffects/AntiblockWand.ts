@@ -7,7 +7,6 @@ import { GC } from 'src/Utility/GC'
 import { Group, Trigger } from 'w3ts'
 
 export class AntiblockWand {
-    private static CastEvent: Trigger
     private static AbilityID: number
     private static Radius: number
 
@@ -18,15 +17,14 @@ export class AntiblockWand {
         if (CurrentGameMode.active !== GameMode.Standard) return
         AntiblockWand.AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM
         AntiblockWand.Radius = 250.0
-        AntiblockWand.CastEvent = AntiblockWand.RegisterCastEvents()
+        AntiblockWand.RegisterCastEvents()
     }
 
-    private static RegisterCastEvents(): Trigger {
+    private static RegisterCastEvents() {
         const triggerHandle = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             triggerHandle.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
         triggerHandle.addAction(() => AntiblockWand.SpellActions())
-        return triggerHandle
     }
 
     private static SpellActions = () => {

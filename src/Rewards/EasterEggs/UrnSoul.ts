@@ -15,9 +15,6 @@ export class UrnSoul {
     private static UrnGhostUnit: Unit
     private static UnitType: number = Constants.UNIT_ASTRAL_KITTY
     private static Name: string = '|cff8080f?|r|cff6666f?|r|cff4d4dff?|r|cff3333f?|r|cff1a1aff?|r|cff0000f?|r'
-    private static PeriodicTrigger: Trigger
-    private static UrnUsageTrigger: Trigger
-    private static InRangeTrigger: Trigger
     private static RotationTime = 60.0
     private static InRangeDistance = 150.0
     private static RotationIndex = 0
@@ -26,9 +23,9 @@ export class UrnSoul {
     public static Initialize = () => {
         UrnSoul.RegisterRegions()
         UrnSoul.UrnGhostUnit = UrnSoul.UnitCreation()
-        UrnSoul.PeriodicTrigger = UrnSoul.RegisterPeriodicTrigger()
-        UrnSoul.UrnUsageTrigger = UrnSoul.RegisterUrnUsage()
-        UrnSoul.InRangeTrigger = UrnSoul.RegisterInRangeEvent()
+        UrnSoul.RegisterPeriodicTrigger()
+        UrnSoul.RegisterUrnUsage()
+        UrnSoul.RegisterInRangeEvent()
     }
 
     private static UnitCreation(): Unit {
@@ -49,11 +46,10 @@ export class UrnSoul {
         UrnSoul.UrnRegions[3] = Regions.UrnSoulRegion4
     }
 
-    private static RegisterPeriodicTrigger(): Trigger {
+    private static RegisterPeriodicTrigger() {
         const trig = Trigger.create()!
         trig.registerTimerEvent(UrnSoul.RotationTime, true)
         trig.addAction(() => UrnSoul.RotationActions())
-        return trig
     }
 
     private static RotationActions = () => {
@@ -63,12 +59,11 @@ export class UrnSoul {
         UrnSoul.UrnGhostUnit.issueOrderAt('move', x, y)
     }
 
-    private static RegisterUrnUsage(): Trigger {
+    private static RegisterUrnUsage() {
         const trig = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_USE_ITEM, null as never)
         trig.addAction(() => UrnSoul.UrnUsageActions())
-        return trig
     }
 
     private static UrnUsageActions = () => {
@@ -106,11 +101,10 @@ export class UrnSoul {
         }
     }
 
-    private static RegisterInRangeEvent(): Trigger {
+    private static RegisterInRangeEvent() {
         const trig = Trigger.create()!
         trig.registerUnitInRage(UrnSoul.UrnGhostUnit.handle, UrnSoul.InRangeDistance, FilterList.KittyFilter)
         trig.addAction(() => UrnSoul.InRangeActions())
-        return trig
     }
 
     private static InRangeActions = () => {

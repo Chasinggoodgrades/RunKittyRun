@@ -18,7 +18,6 @@ import { ItemSpatialGrid } from './ItemSpatialGrid'
 import { ItemSpawnerTrackKibbles } from './ItemSpawnerTrackKibbles'
 
 export class Kibble extends IDisposable {
-    public static PickupTrigger: Trigger
     public static SpawningKibble: boolean = true
     public static KibbleCollectionBeatenList: MapPlayer[] = []
 
@@ -37,7 +36,7 @@ export class Kibble extends IDisposable {
 
     public constructor() {
         super()
-        Kibble.PickupTrigger ??= Kibble.KibblePickupEvents()
+        Kibble.KibblePickupEvents()
         this.Type = Kibble.RandomKibbleType()
     }
 
@@ -66,7 +65,7 @@ export class Kibble extends IDisposable {
         return Kibble.KibblesColors[GetRandomInt(0, Kibble.KibblesColors.length - 1)]
     }
 
-    private static KibblePickupEvents(): Trigger {
+    private static KibblePickupEvents() {
         const trig = Trigger.create()!
         trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addCondition(() => {
@@ -77,7 +76,6 @@ export class Kibble extends IDisposable {
         trig.addAction(() => {
             Kibble.KibblePickup(getManipulatedItem())
         })
-        return trig
     }
 
     // #endregion Kibble Initialization

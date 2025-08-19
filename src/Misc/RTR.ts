@@ -122,16 +122,16 @@ export class RTR {
     }
 
     private RegisterClickEvent = () => {
-        const ClickTrigger = Trigger.create()!
-        ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
-        ClickTrigger.addAction(() => this.HandleClick(true))
+        this.ClickTrigger = Trigger.create()!
+        this.ClickTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER)
+        this.ClickTrigger.addAction(() => this.HandleClick(true))
 
-        const WidgetTrigger = Trigger.create()!
-        WidgetTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
-        WidgetTrigger.addAction(() => this.HandleClick(false))
+        this.WidgetTrigger = Trigger.create()!
+        this.WidgetTrigger.registerUnitEvent(this.kitty.Unit, EVENT_UNIT_ISSUED_TARGET_ORDER)
+        this.WidgetTrigger.addAction(() => this.HandleClick(false))
 
-        ClickTrigger.enabled = false
-        WidgetTrigger.enabled = false
+        this.ClickTrigger.enabled = false
+        this.WidgetTrigger.enabled = false
     }
 
     private HandleClick(isToLocation: boolean) {

@@ -5,7 +5,6 @@ import { getManipulatedItem, getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 
 export class ItemStacker {
-    private static PickupTrigger: Trigger
     private static StackableItemIDs: number[]
 
     public static Initialize = () => {

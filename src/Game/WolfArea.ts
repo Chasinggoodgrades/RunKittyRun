@@ -15,7 +15,6 @@ export class WolfArea {
     public Rectangle: Rectangle
     public Area = 0
     public IsEnabled: boolean = true
-    private AreaTrigger: Trigger
     public Wolves: Wolf[] = []
     public FixationCount = 0
 
