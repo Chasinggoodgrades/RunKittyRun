@@ -113,14 +113,8 @@ export class WolfPoint {
         WolfPoint.IsPausedTrigger ??= Trigger.create()!
         WolfPoint.IsPausedTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 
-        TriggerAddCondition(
-            WolfPoint.IsPausedTrigger.handle,
-            Condition(() => GetIssuedOrderId() === WolfPoint.AttackOrderID)
-        )
-        TriggerAddCondition(
-            WolfPoint.IsPausedTrigger.handle,
-            Condition(() => getTriggerUnit().typeId === Constants.UNIT_CUSTOM_DOG)
-        )
+        WolfPoint.IsPausedTrigger.addCondition(() => GetIssuedOrderId() === WolfPoint.AttackOrderID)
+        WolfPoint.IsPausedTrigger.addCondition(() => getTriggerUnit().typeId === Constants.UNIT_CUSTOM_DOG)
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
         WolfPoint.IsPausedTrigger.addAction(WolfPoint.QueueOrderActions)

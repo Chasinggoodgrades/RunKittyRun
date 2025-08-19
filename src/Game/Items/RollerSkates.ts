@@ -14,9 +14,7 @@ export class RollerSkates {
         RollerSkates.RollerSkaters = []
         RollerSkates.OnUseTrigger = Trigger.create()!
         RollerSkates.OnUseTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM)
-        RollerSkates.OnUseTrigger.addCondition(
-            Condition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS)
-        )
+        RollerSkates.OnUseTrigger.addCondition(() => getManipulatedItem().typeId === Constants.ITEM_PEGASUS_BOOTS)
         RollerSkates.OnUseTrigger.addAction(RollerSkates.SwitchingBoots)
     }
 

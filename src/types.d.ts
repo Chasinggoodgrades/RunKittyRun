@@ -36,6 +36,10 @@ declare module 'w3ts' {
     interface Frame {
         getName(): string
     }
+
+    interface Trigger {
+        addCondition(condition: boolexpr | (() => boolean)): triggercondition | undefined
+    }
 }
 
 export {}

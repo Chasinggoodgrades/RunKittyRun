@@ -111,7 +111,7 @@ export class ProtectionOfAncients {
         const LevelUpTrigger = Trigger.create()!
         LevelUpTrigger.registerAnyUnitEvent(EVENT_PLAYER_HERO_LEVEL)
         LevelUpTrigger.addCondition(
-            Condition(() => getTriggerUnit().getHeroLevel() >= ProtectionOfAncients.UPGRADE_LEVEL_2_REQUIREMENT)
+            () => getTriggerUnit().getHeroLevel() >= ProtectionOfAncients.UPGRADE_LEVEL_2_REQUIREMENT
         )
         LevelUpTrigger.addAction(() => ProtectionOfAncients.SetProtectionOfAncientsLevel(getTriggerUnit()))
     }
@@ -120,11 +120,9 @@ export class ProtectionOfAncients {
         const trg = Trigger.create()!
         trg.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
         trg.addCondition(
-            Condition(
-                () =>
-                    GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS ||
-                    GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
-            )
+            () =>
+                GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS ||
+                GetSpellAbilityId() === Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
         )
         trg.addAction(() => ProtectionOfAncients.ActivationEvent())
 

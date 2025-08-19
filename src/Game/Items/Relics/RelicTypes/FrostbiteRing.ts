@@ -143,7 +143,7 @@ export class FrostbiteRing extends Relic {
     private RegisterTriggers(Unit: Unit) {
         this.Trigger = Trigger.create()!
         this.Trigger.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
-        this.Trigger.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
+        this.Trigger.addCondition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID)
         this.Trigger.addAction(() => this.FrostbiteCast(GetSpellTargetLoc()!))
     }
 }

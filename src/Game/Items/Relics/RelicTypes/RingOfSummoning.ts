@@ -52,7 +52,7 @@ export class RingOfSummoning extends Relic {
     private RegisterTriggers(Unit: Unit) {
         this.triggerHandle = Trigger.create()!
         TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
-        this.triggerHandle.addCondition(Condition(() => GetSpellAbilityId() === this.RelicAbilityID))
+        this.triggerHandle.addCondition(() => GetSpellAbilityId() === this.RelicAbilityID)
         this.triggerHandle.addAction(this.SacredRingOfSummoning)
     }
 

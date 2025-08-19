@@ -24,7 +24,7 @@ export class Windwalk {
         Windwalk.Trigger = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             Windwalk.Trigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
-        Windwalk.Trigger.addCondition(Condition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK))
+        Windwalk.Trigger.addCondition(() => GetSpellAbilityId() === Constants.ABILITY_WIND_WALK)
         Windwalk.Trigger.addAction(() => Windwalk.ApplyWindwalkEffect())
     }
 

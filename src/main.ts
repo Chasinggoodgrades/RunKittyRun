@@ -81,6 +81,11 @@ const tsMain = () => {
             return origAddAction.call(this, ErrorHandler.Wrap(action))
         }
 
+        const origAddCondition = Trigger.prototype.addCondition
+        Trigger.prototype.addCondition = function (condition: () => boolean) {
+            return origAddCondition.call(this, Condition(ErrorHandler.Wrap(condition)))
+        }
+
         const origStart = Timer.prototype.start
         Timer.prototype.start = function (timeout: number, periodic: boolean, callback: () => void) {
             return origStart.call(this, timeout, periodic, ErrorHandler.Wrap(callback))
