@@ -1,7 +1,6 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Kitty } from 'src/Game/Entities/Kitty/Kitty'
 import { ShadowKitty } from 'src/Game/Entities/ShadowKitty'
-import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
 import { Relic } from 'src/Game/Items/Relics/Relic'
 import { ChronoSphere } from 'src/Game/Items/Relics/RelicTypes/ChronoSphere'
 import { Globals } from 'src/Global/Globals'
@@ -9,8 +8,8 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { Utility } from 'src/Utility/Utility'
 import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer, Unit } from 'w3ts'
-import { ShopFrame } from '../ShopFrame'
 import { ShopItem } from '../ShopItems/ShopItems'
+import { RefreshUpgradeTooltip } from '../ShopUtil'
 
 export class RelicFunctions {
     public static HandleRelicPurchase(player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) {
@@ -55,17 +54,15 @@ export class RelicFunctions {
         try {
             const player = getTriggerPlayer()
             if (player.isLocal()) {
-                ShopFrame.upgradeButton.visible = false
-                ShopFrame.upgradeButton.visible = true
+                Globals.upgradeButton.visible = false
+                Globals.upgradeButton.visible = true
             }
 
-            const selectedItem = ShopFrame.SelectedItems.get(player)
+            const selectedItem = Globals.SelectedItems.get(player)
             if (selectedItem) {
-                const itemID = selectedItem.ItemID
-                const relicType = selectedItem.Relic.constructor
-                const playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor === relicType)
+                const relicType = selectedItem.Relic.constructor.name
+                const playerRelic = Globals.ALL_KITTIES.get(player)!.Relics.find(x => x.constructor.name === relicType)
                 if (!playerRelic) return
-                const playerUpgrades = PlayerUpgrades.GetPlayerUpgrades(player)
                 const playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
 
                 if (playerUpgradesRelic === null) return
@@ -83,8 +80,10 @@ export class RelicFunctions {
                 // Check if enough goldies
                 const goldCost = playerUpgradesRelic.Cost
                 if (player.getGold() < goldCost) {
-                    ShopFrame.NotEnoughGold(player, goldCost)
-                    return
+                    return player.DisplayTimedTextTo(
+                        8.0,
+                        `${Colors.COLOR_RED}You do not have enough gold.|r ${Colors.COLOR_YELLOW}(${goldCost} gold)|r`
+                    )
                 }
 
                 // Ok upgrade em! pog
@@ -94,7 +93,7 @@ export class RelicFunctions {
                     `${Colors.COLOR_YELLOW}You've upgraded: ${playerRelic.name}.${Colors.COLOR_RESET}`
                 )
                 player.addGold(-goldCost)
-                if (player.isLocal()) ShopFrame.RefreshUpgradeTooltip(playerRelic)
+                if (player.isLocal()) RefreshUpgradeTooltip(playerRelic)
             }
         } catch (e: any) {
             Logger.Warning(`Error in UpgradeRelic: ${e}`)

@@ -76,7 +76,7 @@ export class RingOfSummoning extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         const ability = Unit.getAbility(this.RelicAbilityID)!
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(RingOfSummoning.name)
 
         // Summon radius thingy
         BlzSetAbilityRealLevelField(ability, ABILITY_RLF_AREA_OF_EFFECT, 0, RingOfSummoning.SUMMONING_RING_RADIUS)
@@ -203,7 +203,7 @@ export class RingOfSummoning extends Relic {
     /// <param name="player"></param>
     /// <returns></returns>
     private GetNumberOfSummons(player: MapPlayer) {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(typeof RingOfSummoning)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(RingOfSummoning.name)
         return upgradeLevel >= 2 ? 2 : 1
     }
 

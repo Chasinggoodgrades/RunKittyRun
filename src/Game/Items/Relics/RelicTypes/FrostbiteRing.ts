@@ -60,12 +60,13 @@ export class FrostbiteRing extends Relic {
     public override ApplyEffect(Unit: Unit) {
         this.RegisterTriggers(Unit)
         Unit.disableAbility(FrostbiteRing.RelicAbilityID, false, false)
-        this.Owner = Unit.owner
+        this.Owner = Unit.getOwner()!
         this.SetAbilityCooldown(Unit)
     }
 
     public override RemoveEffect(Unit: Unit) {
-        GC.RemoveTrigger(this.Trigger) // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
+        this.Trigger?.destroy() // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
+        this.FreezeGroup?.destroy()
         Unit.disableAbility(FrostbiteRing.RelicAbilityID, false, true)
     }
 
@@ -119,7 +120,7 @@ export class FrostbiteRing extends Relic {
             FrostbiteRing.FrozenWolves.get(Unit)!.BeginFreezeActions(this.Owner, Unit, duration)
             return
         } else {
-            const frozenWolf = MemoryHandler.getEmptyObject<FrozenWolf>()
+            const frozenWolf = MemoryHandler.getEmptyClass<FrozenWolf>(new FrozenWolf())
             frozenWolf.BeginFreezeActions(this.Owner, Unit, duration)
             FrostbiteRing.FrozenWolves.set(Unit, frozenWolf)
         }
@@ -140,10 +141,10 @@ export class FrostbiteRing extends Relic {
     }
 
     private RegisterTriggers(Unit: Unit) {
-        const trg = Trigger.create()!
-        trg.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
-        trg.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
-        trg.addAction(() => this.FrostbiteCast(GetSpellTargetLoc()!))
+        this.Trigger = Trigger.create()!
+        this.Trigger.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
+        this.Trigger.addCondition(Condition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID))
+        this.Trigger.addAction(() => this.FrostbiteCast(GetSpellTargetLoc()!))
     }
 }
 
@@ -214,12 +215,14 @@ export class FrozenWolf {
 
     /// <summary>
     /// Upgrade Level 2, Reducing Wolves Movement Speed
-    /// </summary>
+    /// </summary>=
     /// <param name="Unit"></param>
     private SlowWolves(Unit: Unit) {
         try {
             if (Unit === null) return
-            if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
+            let playerUpgradeLvl = PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(FrostbiteRing.name)
+            if (playerUpgradeLvl < 2) return
+            // if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return
             Unit.moveSpeed = 365.0 / 2.0
             const effect = Effect.fromHandle(
                 AddSpecialEffectTarget(FrostbiteRing.FROSTBITE_SLOW_TARGET_EFFECT, Unit.handle, 'origin')

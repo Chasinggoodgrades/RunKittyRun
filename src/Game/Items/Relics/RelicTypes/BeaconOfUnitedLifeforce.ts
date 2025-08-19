@@ -111,9 +111,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     /// Upgrade Level 1: Increases the revive chance of the relic.
     /// </summary>
     private UpgradeReviveChance = () => {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner!).GetUpgradeLevel(
-            typeof BeaconOfUnitedLifeforce
-        )
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner!).GetUpgradeLevel(BeaconOfUnitedLifeforce.name)
         if (upgradeLevel >= 1)
             BeaconOfUnitedLifeforce.ReviveChance =
                 BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE +

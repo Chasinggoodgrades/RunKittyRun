@@ -114,9 +114,7 @@ export class ChronoSphere extends Relic {
     // Upgrade level 1, rotating aura slow
     private RotatingSlowAura = () => {
         try {
-            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
-                typeof ChronoSphere
-            )
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(ChronoSphere.name)
             if (upgradeLevel <= 0) return
 
             this.MagnitudeTimer ??= Timer.create()
@@ -131,9 +129,7 @@ export class ChronoSphere extends Relic {
     // Upgrade Level 2 Location Capture
     private RotatingLocationCapture = () => {
         try {
-            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(
-                typeof ChronoSphere
-            )
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(ChronoSphere.name)
             if (upgradeLevel <= 1) return
             this.LocationCaptureTimer ??= Timer.create()
             this.CapturedLocation = [this.Kitty.Unit.x, this.Kitty.Unit.y, this.Kitty.Unit.facing] // reset to current location on buy
@@ -159,7 +155,7 @@ export class ChronoSphere extends Relic {
     }
 
     private RandomMagnitude(): number {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Kitty.Player).GetUpgradeLevel(ChronoSphere.name)
         const lowerBound = (this.MAGNITUDE_LOWER_BOUND / 100.0) * -1.0
         const upperBound = (this.MAGNITUDE_UPPER_BOUND / 100.0) * -1.0
         if (upgradeLevel === 0) return lowerBound
@@ -198,7 +194,7 @@ export class ChronoSphere extends Relic {
             const relic = kitty.Relics.find(ChronoSphere.IsChronoSphere) as ChronoSphere
             if (relic === null) return false
             if (kitty.CurrentStats.ChronoSphereCD) return false
-            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(typeof ChronoSphere)
+            const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(ChronoSphere.name)
             if (upgradeLevel < 2) return false
             relic.RewindTime()
             kitty.CurrentStats.ChronoSphereCD = true

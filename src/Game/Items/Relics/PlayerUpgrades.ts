@@ -3,10 +3,11 @@ import { MapPlayer, Unit } from 'w3ts'
 
 export class PlayerUpgrades {
     private Player: MapPlayer
-    private UpgradeLevels: Map<string, number> = new Map()
+    private UpgradeLevels: Map<string, number>
 
     public constructor(player: MapPlayer) {
         this.Player = player
+        this.UpgradeLevels = new Map<string, number>()
         Globals.PLAYER_UPGRADES.set(player, this)
     }
 
@@ -15,8 +16,11 @@ export class PlayerUpgrades {
     }
 
     public static GetPlayerUpgrades(player: MapPlayer): PlayerUpgrades {
-        if (Globals.PLAYER_UPGRADES.has(player)) return Globals.PLAYER_UPGRADES.get(player)!
-        else return new PlayerUpgrades(player)
+        if (Globals.PLAYER_UPGRADES.has(player)) {
+            return Globals.PLAYER_UPGRADES.get(player)!
+        } else {
+            return new PlayerUpgrades(player)
+        }
     }
 
     public SetUpgradeLevel(relicType: string, level: number) {
@@ -24,7 +28,8 @@ export class PlayerUpgrades {
     }
 
     public static IncreaseUpgradeLevel(relicType: string, Unit: Unit) {
-        const player = Unit.owner
+        const player = Unit.getOwner()
+        if (!player) return
         PlayerUpgrades.GetPlayerUpgrades(player).SetUpgradeLevel(
             relicType,
             PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(relicType) + 1

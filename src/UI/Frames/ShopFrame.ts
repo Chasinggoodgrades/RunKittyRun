@@ -1,5 +1,4 @@
 import { Logger } from 'src/Events/Logger/Logger'
-import { PlayerUpgrades } from 'src/Game/Items/Relics/PlayerUpgrades'
 import { Relic } from 'src/Game/Items/Relics/Relic'
 import { CurrentGameMode } from 'src/Gamemodes/CurrentGameMode'
 import { GameMode } from 'src/Gamemodes/GameModeEnum'
@@ -16,12 +15,10 @@ import * as FrameManager from './FrameManager'
 import { CreateHeaderFrame, HideOtherFrames } from './FrameUtil'
 import { RelicFunctions } from './RelicFunctions/RelicFunctions'
 import { ShopItem, ShopItemType } from './ShopItems/ShopItems'
-import { ShopUtil } from './ShopUtil'
+import { RefreshUpgradeTooltip, ShopUtil } from './ShopUtil'
 
 export class ShopFrame {
     public static shopFrame: Frame
-    public static upgradeButton: Frame
-    public static SelectedItems: Map<MapPlayer, ShopItem> = new Map()
     private static relicsPanel: Frame
     private static rewardsPanel: Frame
     private static miscPanel: Frame
@@ -31,7 +28,6 @@ export class ShopFrame {
     private static costLabel: Frame
     private static buyButton: Frame
     private static sellButton: Frame
-    private static upgradeTooltip: Frame
     private static GameUI: Frame
     private static buttonWidth = 0.025
     private static buttonHeight = 0.025
@@ -139,7 +135,7 @@ export class ShopFrame {
 
         ShopFrame.buyButton = blzCreateFrame('ScriptDialogButton', ShopFrame.detailsPanel, 0, 0)
         ShopFrame.sellButton = blzCreateFrame('ScriptDialogButton', ShopFrame.detailsPanel, 0, 0)
-        ShopFrame.upgradeButton = blzCreateFrame('DebugButton', ShopFrame.detailsPanel, 0, 0)
+        Globals.upgradeButton = blzCreateFrame('DebugButton', ShopFrame.detailsPanel, 0, 0)
 
         ShopFrame.nameLabel.setSize(detailsPanelX - ShopFrame.panelPadding, detailsPanelY / 6)
         ShopFrame.costLabel.setSize(detailsPanelX - ShopFrame.panelPadding, detailsPanelY / 6)
@@ -147,7 +143,7 @@ export class ShopFrame {
 
         ShopFrame.buyButton.setSize(detailsPanelX / 3.0, detailsPanelY / 6)
         ShopFrame.sellButton.setSize(detailsPanelX / 3.0, detailsPanelY / 6)
-        ShopFrame.upgradeButton.setSize(detailsPanelX / 3.0, detailsPanelY / 6)
+        Globals.upgradeButton.setSize(detailsPanelX / 3.0, detailsPanelY / 6)
 
         ShopFrame.nameLabel.setPoint(
             FRAMEPOINT_TOPLEFT,
@@ -165,7 +161,7 @@ export class ShopFrame {
         )
         ShopFrame.descriptionLabel.setPoint(FRAMEPOINT_TOPLEFT, ShopFrame.costLabel, FRAMEPOINT_BOTTOMLEFT, 0, 0)
 
-        ShopFrame.upgradeButton.setPoint(
+        Globals.upgradeButton.setPoint(
             FRAMEPOINT_BOTTOMLEFT,
             ShopFrame.detailsPanel,
             FRAMEPOINT_BOTTOMLEFT,
@@ -183,7 +179,7 @@ export class ShopFrame {
 
         ShopFrame.buyButton.text = 'Buy'
         ShopFrame.sellButton.text = 'Sell'
-        ShopFrame.upgradeButton.text = 'Upgrade'
+        Globals.upgradeButton.text = 'Upgrade'
 
         const BuyTrigger = Trigger.create()!
         BuyTrigger.triggerRegisterFrameEvent(ShopFrame.buyButton, FRAMEEVENT_CONTROL_CLICK)
@@ -194,7 +190,7 @@ export class ShopFrame {
         SellTrigger.addAction(ShopFrame.SellSelectedItem)
 
         const UpgradeTrigger = Trigger.create()!
-        UpgradeTrigger.triggerRegisterFrameEvent(ShopFrame.upgradeButton, FRAMEEVENT_CONTROL_CLICK)
+        UpgradeTrigger.triggerRegisterFrameEvent(Globals.upgradeButton, FRAMEEVENT_CONTROL_CLICK)
         UpgradeTrigger.addAction(RelicFunctions.UpgradeRelic)
     }
 
@@ -252,12 +248,12 @@ export class ShopFrame {
     private static UpdateButtonStatus(player: MapPlayer) {
         try {
             if (!player.isLocal()) return
-            if (!ShopFrame.SelectedItems.has(player)) return
+            if (!Globals.SelectedItems.has(player)) return
 
-            const item = ShopFrame.SelectedItems.get(player)!
+            const item = Globals.SelectedItems.get(player)!
             const kitty = Globals.ALL_KITTIES.get(player)!
 
-            ShopFrame.upgradeButton.visible = false
+            Globals.upgradeButton.visible = false
             ShopFrame.sellButton.visible = false
             ShopFrame.buyButton.visible = true
 
@@ -267,7 +263,7 @@ export class ShopFrame {
             if (item.Type === ShopItemType.Relic) {
                 ShopFrame.sellButton.visible = true
                 ShopFrame.sellButton.alpha = ShopFrame.DisabledAlpha
-                ShopFrame.RefreshUpgradeTooltip(item.Relic)
+                RefreshUpgradeTooltip(item.Relic)
                 if (Utility.UnitHasItem(kitty.Unit, item.ItemID)) ShopFrame.sellButton.alpha = ShopFrame.ActiveAlpha
             }
         } catch (ex: any) {
@@ -279,17 +275,17 @@ export class ShopFrame {
         if (item === null) return
         if (item.Type !== ShopItemType.Relic) return
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
-        ShopFrame.upgradeButton.visible = true
+        Globals.upgradeButton.visible = true
         ShopFrame.sellButton.visible = true
         ShopFrame.buyButton.visible = true
         if (!Utility.UnitHasItem(kitty, item.ItemID)) {
             ShopFrame.buyButton.alpha = ShopFrame.ActiveAlpha
             ShopFrame.sellButton.alpha = ShopFrame.DisabledAlpha
-            ShopFrame.upgradeButton.alpha = ShopFrame.DisabledAlpha
+            Globals.upgradeButton.alpha = ShopFrame.DisabledAlpha
         } else {
             ShopFrame.buyButton.alpha = ShopFrame.DisabledAlpha
             ShopFrame.sellButton.alpha = ShopFrame.ActiveAlpha
-            ShopFrame.upgradeButton.alpha = ShopFrame.ActiveAlpha
+            Globals.upgradeButton.alpha = ShopFrame.ActiveAlpha
         }
         // Need to add another check for upgrades per player.
     }
@@ -298,10 +294,10 @@ export class ShopFrame {
         const player = getTriggerPlayer()
         const frame = Frame.fromHandle(BlzGetTriggerFrame())!
 
-        if (ShopFrame.SelectedItems.has(player)) {
-            ShopFrame.SelectedItems.set(player, shopItem)
+        if (Globals.SelectedItems.has(player)) {
+            Globals.SelectedItems.set(player, shopItem)
         } else {
-            ShopFrame.SelectedItems.set(player, shopItem)
+            Globals.SelectedItems.set(player, shopItem)
         }
 
         if (!player.isLocal()) return
@@ -310,21 +306,21 @@ export class ShopFrame {
         ShopFrame.costLabel.text = `${Colors.COLOR_YELLOW}Cost:${Colors.COLOR_RESET} ${shopItem.Cost}`
         ShopFrame.descriptionLabel.text = `${Colors.COLOR_YELLOW_ORANGE}Description:${Colors.COLOR_RESET} ${shopItem.Description}`
         ShopFrame.UpdateButtonStatus(player)
-        if (shopItem.Type === ShopItemType.Relic) ShopFrame.RefreshUpgradeTooltip(shopItem.Relic)
+        if (shopItem.Type === ShopItemType.Relic) RefreshUpgradeTooltip(shopItem.Relic)
     }
 
     private static CreateUpgradeTooltip = () => {
         try {
             const background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
-            ShopFrame.upgradeTooltip = blzCreateFrameByType('TEXT', 'UpgradeTooltip', background, '', 0)
+            Globals.upgradeTooltip = blzCreateFrameByType('TEXT', 'UpgradeTooltip', background, '', 0)
 
-            ShopFrame.upgradeTooltip.setSize(0.25, 0)
-            background.setPoint(FRAMEPOINT_BOTTOMLEFT, ShopFrame.upgradeTooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
-            background.setPoint(FRAMEPOINT_TOPRIGHT, ShopFrame.upgradeTooltip, FRAMEPOINT_TOPRIGHT, 0.01, 0.01)
+            Globals.upgradeTooltip.setSize(0.25, 0)
+            background.setPoint(FRAMEPOINT_BOTTOMLEFT, Globals.upgradeTooltip, FRAMEPOINT_BOTTOMLEFT, -0.01, -0.01)
+            background.setPoint(FRAMEPOINT_TOPRIGHT, Globals.upgradeTooltip, FRAMEPOINT_TOPRIGHT, 0.01, 0.01)
 
-            ShopFrame.upgradeButton.setTooltip(background)
-            ShopFrame.upgradeTooltip.setPoint(FRAMEPOINT_BOTTOM, ShopFrame.upgradeButton, FRAMEPOINT_TOP, 0, 0.01)
-            ShopFrame.upgradeTooltip.enabled = false
+            Globals.upgradeButton.setTooltip(background)
+            Globals.upgradeTooltip.setPoint(FRAMEPOINT_BOTTOM, Globals.upgradeButton, FRAMEPOINT_TOP, 0, 0.01)
+            Globals.upgradeTooltip.enabled = false
         } catch (ex: any) {
             Logger.Warning(`Error in CreateUpgradeTooltip: ${ex}`)
         }
@@ -349,36 +345,6 @@ export class ShopFrame {
         }
     }
 
-    public static RefreshUpgradeTooltip(relic: Relic) {
-        const finalString: string[] = []
-        const playersUpgradeLevel = PlayerUpgrades.GetPlayerUpgrades(getTriggerPlayer()).GetUpgradeLevel(relic.name)
-
-        for (let i = 0; i < relic.Upgrades.length; i++) {
-            const upgrade = relic.Upgrades[i]
-            let color: string, colorDescription
-
-            if (i < playersUpgradeLevel - 1) {
-                color = Colors.COLOR_GREY // Grey out past upgrades
-                colorDescription = Colors.COLOR_GREY
-            } else if (i === playersUpgradeLevel - 1) {
-                color = Colors.COLOR_GREY // INCASE WE WANT TO CHANGE THE COLOR OF THE CURRENT UPGRADE OR ADD DETAILS
-                colorDescription = Colors.COLOR_GREY
-            } else if (i === playersUpgradeLevel) {
-                color = Colors.COLOR_YELLOW // Yellow for the next available upgrade
-                colorDescription = Colors.COLOR_YELLOW_ORANGE
-            } else {
-                color = Colors.COLOR_GREY // Grey for upgrades past next available upgrade.
-                colorDescription = Colors.COLOR_GREY
-            }
-
-            finalString.push(`${color}[Upgrade ${i + 1}] ${upgrade.Cost}g${Colors.COLOR_RESET}`)
-            finalString.push(`${colorDescription}${upgrade.Description}${Colors.COLOR_RESET}`)
-            finalString.push('----------------------------')
-        }
-
-        ShopFrame.upgradeTooltip.text = finalString.join('\n')
-    }
-
     private static BuySelectedItem = () => {
         const player = getTriggerPlayer()
         try {
@@ -386,7 +352,7 @@ export class ShopFrame {
                 ShopFrame.buyButton.visible = false
                 ShopFrame.buyButton.visible = true
             }
-            const selectedItem = ShopFrame.SelectedItems.get(player)
+            const selectedItem = Globals.SelectedItems.get(player)
 
             if (!ShopUtil.PlayerIsDead(player!) && selectedItem) {
                 // your logic here
@@ -428,10 +394,7 @@ export class ShopFrame {
                 ShopFrame.sellButton.visible = true
             }
             let selectedItem: ShopItem
-            if (
-                (selectedItem = ShopFrame.SelectedItems.get(player)!) /* TODO; Prepend: let */ &&
-                selectedItem !== null
-            ) {
+            if ((selectedItem = Globals.SelectedItems.get(player)!) /* TODO; Prepend: let */ && selectedItem !== null) {
                 const itemID = selectedItem.ItemID
                 const kitty = Globals.ALL_KITTIES.get(player)!
                 if (!Utility.UnitHasItem(kitty.Unit, itemID)) return

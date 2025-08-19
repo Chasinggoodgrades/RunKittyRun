@@ -9,6 +9,7 @@ import { GameAwardsDataSorted } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveOb
 import { GameStatsData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { SaveManager } from 'src/SaveSystem2.0/SaveManager'
+import { ShopItem } from 'src/UI/Frames/ShopItems/ShopItems'
 import { Frame, Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3ts'
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
@@ -95,6 +96,11 @@ export class Globals {
     public static GAME_INITIALIZED: boolean
 
     public static CurrentGameModeType: string = ''
+
+    // ShopFrame variables
+    public static upgradeButton: Frame
+    public static SelectedItems: Map<MapPlayer, ShopItem> = new Map()
+    public static upgradeTooltip: Frame
 
     public static Initialize = () => {
         Globals.WORLD_BOUNDS = Rectangle.getWorldBounds()!

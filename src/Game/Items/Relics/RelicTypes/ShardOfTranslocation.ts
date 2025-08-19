@@ -101,7 +101,7 @@ export class ShardOfTranslocation extends Relic {
     }
 
     private UpdateBlinkRange(unit: Unit) {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(ShardOfTranslocation.name)
         this.MaxBlinkRange =
             upgradeLevel >= 1 ? ShardOfTranslocation.UPGRADE_BLINK_RANGE : ShardOfTranslocation.DEFAULT_BLINK_RANGE
         if (upgradeLevel >= 1) Utility.SimpleTimer(0.1, () => this.SetItemTooltip(unit))
@@ -121,7 +121,7 @@ export class ShardOfTranslocation extends Relic {
     /// <param name="Unit"></param>
     private SetAbilityData(Unit: Unit) {
         Unit.getAbility(this.RelicAbilityID)
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(ShardOfTranslocation.name)
 
         const cooldown =
             upgradeLevel >= 2 // lvl 2 upgrade

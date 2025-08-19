@@ -35,8 +35,8 @@ export class FangOfShadows extends Relic {
             `${Colors.COLOR_PURPLE}Fang of Shadows`,
             `Ability to summon a shadowy image for ${Colors.COLOR_CYAN}${FangOfShadows.SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r ` +
                 `${Colors.COLOR_ORANGE}(Active)|r ${Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r`,
-            Constants.ITEM_FANG_OF_SHADOWS,
             Constants.ABILITY_SUMMON_SHADOW_KITTY,
+            Constants.ITEM_FANG_OF_SHADOWS,
             650,
             'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
         )
@@ -138,7 +138,7 @@ export class FangOfShadows extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     private SetAbilityCooldown(Unit: Unit) {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)
         const currentCooldown = BlzGetAbilityCooldown(this.RelicAbilityID, 0)
         const newCooldown = upgradeLevel >= 1 ? currentCooldown - this.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
@@ -149,7 +149,7 @@ export class FangOfShadows extends Relic {
     public ReduceCooldownAtSafezone(Unit: Unit) {
         // Have relic
         if (!Utility.UnitHasItem(Unit, this.RelicItemID)) return
-        const upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(typeof FangOfShadows)
+        const upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)
         Unit.getAbility(this.RelicAbilityID)
         const reduction: number = upgradeLevel >= 2 ? this.UPGRADE_SAFEZONE_REDUCTION : this.SAFEZONE_REDUCTION
         const remainingCooldown: number = Unit.getAbilityCooldownRemaining(this.RelicAbilityID)

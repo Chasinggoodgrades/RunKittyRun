@@ -8,7 +8,7 @@ import { Unit } from 'w3ts'
 export const RemoveItemFromUnit = (u: Unit, itemId: number) => {
     for (let i = 0; i < 6; i++) {
         if (u.getItemInSlot(i)?.typeId === itemId) {
-            u.removeItemFromSlot(i)
+            u.removeItemFromSlot(i)?.destroy()
             return
         }
     }

@@ -75,7 +75,7 @@ export class OneOfNine extends Relic {
     }
 
     public static GetOneOfNineReduction(Player: MapPlayer) {
-        return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof OneOfNine) * 3.0
+        return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(OneOfNine.name) * 3.0
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ export class OneOfNine extends Relic {
     /// <param name="Unit"></param>
     /// <param name="abilityLevel"></param>
     private RemoveManaCost(Unit: Unit, abilityLevel: number) {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(OneOfNine.name)
         if (upgradeLevel < 2) return
         Unit.getAbility(OneOfNine.RelicAbilityID)
         Unit.setAbilityManaCost(OneOfNine.RelicAbilityID, abilityLevel - 1, 0)

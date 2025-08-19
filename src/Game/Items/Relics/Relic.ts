@@ -52,13 +52,13 @@ export abstract class Relic {
     }
 
     public CanUpgrade(player: MapPlayer) {
-        return PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(this.name) < this.Upgrades.length
+        return PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(this.constructor.name) < this.Upgrades.length
     }
 
     public Upgrade(Unit: Unit) {
         if (!this.CanUpgrade(Unit.owner)) return false
-        this.UpgradeLevel++
-        PlayerUpgrades.IncreaseUpgradeLevel(this.name, Unit)
+        this.UpgradeLevel = this.UpgradeLevel + 1
+        PlayerUpgrades.IncreaseUpgradeLevel(this.constructor.name, Unit)
         this.SetUpgradeLevelDesc(Unit)
         this.RemoveEffect(Unit)
         this.ApplyEffect(Unit)
@@ -71,7 +71,7 @@ export abstract class Relic {
     }
 
     public SetUpgradeLevelDesc(Unit: Unit) {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.constructor.name)
         if (upgradeLevel === 0) return
 
         const item = Utility.UnitGetItem(Unit, this.ItemID)
@@ -102,10 +102,12 @@ export abstract class Relic {
                 RelicUtil.EnableRelicBook(getTriggerUnit())
                 RelicUtil.DisableRelicAbilities(getTriggerUnit())
                 ProtectionOfAncients.SetProtectionOfAncientsLevel(getTriggerUnit())
-                getTriggerUnit().owner.DisplayTimedTextTo(
-                    4.0,
-                    `${Colors.COLOR_TURQUOISE}You may now buy relics from the shop!${Colors.COLOR_RESET}`
-                )
+                getTriggerUnit()
+                    .getOwner()!
+                    .DisplayTimedTextTo(
+                        4.0,
+                        `${Colors.COLOR_TURQUOISE}You may now buy relics from the shop!${Colors.COLOR_RESET}`
+                    )
             } catch (e: any) {
                 Logger.Warning(`Error in RegisterLevelTenTrigger: ${e}`)
             }
