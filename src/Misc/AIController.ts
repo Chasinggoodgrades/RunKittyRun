@@ -416,12 +416,12 @@ export class AIController {
 
             const relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
             if (!Number.isNaN(relativeY) && relativeY !== 0) {
-                const a = MemoryHandler.getEmptyObject<Point>()
+                const a = MemoryHandler.getEmptyClass<Point>(new Point())
                 a.x = constant
                 a.y = relativeY + this.kitty.Unit.y
                 this.wallPoints.push(a)
 
-                const b = MemoryHandler.getEmptyObject<Point>()
+                const b = MemoryHandler.getEmptyClass<Point>(new Point())
                 b.x = constant
                 b.y = -relativeY + this.kitty.Unit.y
                 this.wallPoints.push(b)
@@ -434,12 +434,12 @@ export class AIController {
 
             const relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
             if (!Number.isNaN(relativeX) && relativeX !== 0) {
-                const a = MemoryHandler.getEmptyObject<Point>()
+                const a = MemoryHandler.getEmptyClass<Point>(new Point())
                 a.x = relativeX + this.kitty.Unit.x
                 a.y = constant
                 this.wallPoints.push(a)
 
-                const b = MemoryHandler.getEmptyObject<Point>()
+                const b = MemoryHandler.getEmptyClass<Point>(new Point())
                 b.x = -relativeX + this.kitty.Unit.x
                 b.y = constant
                 this.wallPoints.push(b)
@@ -505,17 +505,17 @@ export class AIController {
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 a.Start = start
                 a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
-                const b = MemoryHandler.getEmptyObject<AngleInterval>()
+                const b = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 b.Start = 0
                 b.End = end
                 this.blockedIntervals.push(b)
             } else {
-                const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 a.Start = start
                 a.End = end
                 this.blockedIntervals.push(a)
@@ -549,17 +549,17 @@ export class AIController {
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 a.Start = start
                 a.End = 2 * Math.PI
                 this.blockedIntervals.push(a)
 
-                const b = MemoryHandler.getEmptyObject<AngleInterval>()
+                const b = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 b.Start = 0
                 b.End = end
                 this.blockedIntervals.push(b)
             } else {
-                const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                 a.Start = start
                 a.End = end
                 this.blockedIntervals.push(a)
@@ -578,7 +578,7 @@ export class AIController {
         // Determine free angular gaps on the circle.
         if (this.mergedIntervals.length === 0) {
             // No wolves blocking any direction; entire circle is free.
-            const a = MemoryHandler.getEmptyObject<AngleInterval>()
+            const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
             a.Start = 0
             a.End = 2 * Math.PI
             this.freeGaps.push(a)
@@ -600,7 +600,7 @@ export class AIController {
             for (let i = 0; i < this.mergedIntervals.length - 1; i++) {
                 const gapSize: number = this.mergedIntervals[i + 1].Start - this.mergedIntervals[i].End
                 if (gapSize > 0) {
-                    const a = MemoryHandler.getEmptyObject<AngleInterval>()
+                    const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
                     a.Start = this.mergedIntervals[i].End
                     a.End = this.mergedIntervals[i + 1].Start
                     this.freeGaps.push(a)

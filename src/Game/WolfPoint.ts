@@ -3,7 +3,7 @@ import { Logger } from 'src/Events/Logger/Logger'
 import { Globals } from 'src/Global/Globals'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { distanceBetweenXYPoints } from 'src/Utility/Utility'
-import { getFilterUnit, getTriggerUnit } from 'src/Utility/w3tsUtils'
+import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger } from 'w3ts'
 import { Wolf } from './Entities/Wolf'
 
@@ -119,11 +119,11 @@ export class WolfPoint {
         )
         TriggerAddCondition(
             WolfPoint.IsPausedTrigger.handle,
-            Condition(() => getFilterUnit().typeId === Constants.UNIT_CUSTOM_DOG)
+            Condition(() => getTriggerUnit().typeId === Constants.UNIT_CUSTOM_DOG)
         )
 
         // When Queued orders, it will proc twice. Once for being queued, then again once finishing the order.
-        WolfPoint.IsPausedTrigger.addAction(() => WolfPoint.QueueOrderActions())
+        WolfPoint.IsPausedTrigger.addAction(WolfPoint.QueueOrderActions)
         return WolfPoint.IsPausedTrigger
     }
 
