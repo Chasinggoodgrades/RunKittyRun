@@ -40,7 +40,7 @@ export class Bomber extends Affix {
         try {
             this.Unit.Unit.addAbility(this.AFFIX_ABILITY)
             this.Unit.Unit.setVertexColor(204, 102, 0, 255)
-            this.RangeIndicator = MemoryHandler.getEmptyClass<RangeIndicator>(new RangeIndicator())
+            this.RangeIndicator = MemoryHandler.getEmptyClass(RangeIndicator)
             this.RegisterTimers()
         } catch (e) {
             Logger.Warning(`Error in Bomber.Apply: ${e}`)

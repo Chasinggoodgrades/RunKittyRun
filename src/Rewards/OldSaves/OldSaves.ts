@@ -5,7 +5,6 @@ import { Globals } from 'src/Global/Globals'
 import { RoundTimesData } from 'src/SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/RoundTimesData'
 import { RewardHelper } from 'src/UI/Frames/RewardHelper'
 import { Colors } from 'src/Utility/Colors/Colors'
-import { int } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
 import { AwardManager } from '../Rewards/AwardManager'
@@ -93,7 +92,7 @@ export class Savecode {
     }
 
     public Obfuscate(key: number, sign: number) {
-        const seed: number = GetRandomInt(0, int.MaxValue)
+        const seed: number = GetRandomInt(0, math.maxinteger)
         let advance = 0
         let x = 0
         let current: BigNumL = this.Bignum.List

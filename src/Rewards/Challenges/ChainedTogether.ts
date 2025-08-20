@@ -144,7 +144,7 @@ export class ChainedTogether {
                 const nextKitty = currentGroup[j + 1]
 
                 currentKitty.IsChained = true
-                const chain: Chain = MemoryHandler.getEmptyObject<Chain>()
+                const chain: Chain = MemoryHandler.getEmptyClass(Chain)
                 chain.SetKitties(currentKitty, nextKitty)
                 ChainedTogether.KittyLightnings.set(currentKitty.name, chain)
             }
@@ -231,7 +231,7 @@ export class ChainedTogether {
             const nextKitty = group[j + 1]
 
             currentKitty.IsChained = true
-            const chain: Chain = MemoryHandler.getEmptyObject<Chain>()
+            const chain: Chain = MemoryHandler.getEmptyClass(Chain)
             chain.SetKitties(currentKitty, nextKitty)
             ChainedTogether.KittyLightnings.set(currentKitty.name, chain)
         }

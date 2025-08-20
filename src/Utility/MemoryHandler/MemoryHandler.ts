@@ -4,7 +4,6 @@ const initMemoryHandler = () => {
     let numCreatedObjects = 0
 
     const debugObjects: { [x: string]: number } = {}
-
     const cachedObjects: any[] = []
 
     const purgeObject = (obj: any | any[], recursive?: boolean) => {
@@ -30,6 +29,11 @@ const initMemoryHandler = () => {
     }
 
     const destroyObject = (self: any, recursive = false) => {
+        if (!self.__destroy) {
+            print(info().GetStackTrace())
+            throw 'Object is not memory handled'
+        }
+
         purgeObject(self, recursive)
         cachedObjects.push(self)
     }
@@ -97,6 +101,49 @@ const initMemoryHandler = () => {
         sortedTargets.__destroy(true)
     }
 
+    const getEmptyClass = <T extends new (...args: any) => any>(
+        classInstance: T,
+        ..._params: ConstructorParameters<T>
+    ) => {
+        let params = _params as unknown[] // We cast params to array so that TSTL adds a +1 since arrays are 1-indexed
+        let debugName: string | undefined = undefined
+
+        if (typeof classInstance === 'string') {
+            debugName = classInstance
+            classInstance = params[0] as T
+            params = params.slice(1)
+        }
+
+        const obj = getEmptyObject<InstanceType<T>>(debugName)
+
+        // local function __TS__Class(self)
+        //     local c = {prototype = {}}
+        //     c.prototype.__index = c.prototype
+        //     c.prototype.constructor = c
+        //     return c
+        // end
+
+        // local function __TS__New(target, ...)
+        //     local instance = setmetatable({}, target.prototype)
+        //     instance:____constructor(...)
+        //     return instance
+        // end
+
+        // MIGHT NEED IN FUTURE
+        // obj.__index = classInstance.prototype
+
+        // MIGHT NEED IN FUTURE; basically do new classInstance above somewhere and cache one per name
+        // for (const [k, v] of pairs(classCache[classInstance.name])) {
+        //     if (typeof k !== 'string') continue
+        //     if (k.startsWith('_')) continue
+        //     obj[k] = v
+        // }
+
+        classInstance.prototype.____constructor?.(obj, ...params)
+
+        return obj
+    }
+
     const getEmptyObject = <T>(debugName?: string) => {
         let obj: T & IDestroyable = cachedObjects.shift()
 
@@ -124,33 +171,7 @@ const initMemoryHandler = () => {
     }
 
     return {
-        getEmptyClass: <T>(classInstance: T, debugName?: string) => {
-            let obj: T & IDestroyable = cachedObjects.shift()
-
-            if (!!obj) {
-                // Causes bugs if debugName changes where getEmptyClass gets called
-                if (debugName) {
-                    ;(getmetatable(obj) as any).__debugName = debugName
-                    ;(getmetatable(obj) as any).__destroyed = false
-                }
-            } else {
-                obj = {} as any
-                numCreatedObjects++
-                setmetatable(obj, debugName ? getObjectMeta(debugName) : defaultObjectMeta)
-            }
-
-            if (debugName) {
-                if (!debugObjects[debugName]) {
-                    debugObjects[debugName] = 0
-                }
-
-                debugObjects[debugName]++
-            }
-
-            Object.assign(classInstance as any, obj)
-
-            return classInstance
-        },
+        getEmptyClass,
         getEmptyObject,
         getEmptyArray: <T>(debugName?: string) => {
             return getEmptyObject<T[]>(debugName) as T[] & IDestroyable

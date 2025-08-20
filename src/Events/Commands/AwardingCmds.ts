@@ -7,7 +7,7 @@ import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { Colors } from 'src/Utility/Colors/Colors'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
 import { isNullOrEmpty } from 'src/Utility/StringUtils'
-import { int, Utility } from 'src/Utility/Utility'
+import { Utility } from 'src/Utility/Utility'
 import { MapPlayer } from 'w3ts'
 import { KibbleCurrency } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameCurrency'
 import { GameStatsData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObjects/GameStatsData'
@@ -268,7 +268,7 @@ export class AwardingCmds {
         if (propertyName.includes('Four')) return 4
         if (propertyName.includes('Five')) return 5
 
-        return int.MaxValue
+        return math.maxinteger
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ import { WolfArea } from 'src/Game/WolfArea'
 import { DEFAULT_WOLF_COLLISION_RADIUS, Globals } from 'src/Global/Globals'
 import { IDisposable } from 'src/Utility/CSUtils'
 import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
-import { clamp, int } from 'src/Utility/Utility'
+import { clamp } from 'src/Utility/Utility'
 import { MapPlayer, Timer } from 'w3ts'
 
 export class AIController {
@@ -62,7 +62,7 @@ export class AIController {
     private blockedIntervals: AngleInterval[] = []
     private freeGaps: AngleInterval[] = []
     private mergedIntervals: AngleInterval[] = []
-    private claimedKitties: Map<Kitty, Kitty> = new Map()
+    private static claimedKitties: Map<Kitty, Kitty> = new Map()
     private wallPoints: Point[] = []
 
     public constructor(kitty: Kitty) {
@@ -84,8 +84,8 @@ export class AIController {
         }
 
         // If I revive release me from the claimedKitties
-        if (this.claimedKitties.has(this.kitty)) {
-            this.claimedKitties.delete(this.kitty)
+        if (AIController.claimedKitties.has(this.kitty)) {
+            AIController.claimedKitties.delete(this.kitty)
         }
     }
 
@@ -113,8 +113,8 @@ export class AIController {
         this.HideAllFreeLightnings()
 
         // If I die release my target from the claimedKitties
-        if (this.claimedKitties.has(this.kitty)) {
-            this.claimedKitties.delete(this.kitty)
+        if (AIController.claimedKitties.has(this.kitty)) {
+            AIController.claimedKitties.delete(this.kitty)
         }
     }
 
@@ -196,7 +196,7 @@ export class AIController {
             }
 
             if (!deadKitty.isAlive()) {
-                if (!this.claimedKitties.has(deadKitty)) {
+                if (!AIController.claimedKitties.has(deadKitty)) {
                     const thisDistance: number = Math.sqrt(
                         Math.pow(this.kitty.Unit.x - deadKitty.Unit.x, 2) +
                             Math.pow(this.kitty.Unit.y - deadKitty.Unit.y, 2)
@@ -233,11 +233,14 @@ export class AIController {
                     }
 
                     if (isNearest) {
-                        this.claimedKitties.set(deadKitty, this.kitty)
+                        AIController.claimedKitties.set(deadKitty, this.kitty)
                     }
                 }
 
-                if (this.claimedKitties.has(deadKitty) && this.claimedKitties.get(deadKitty) === this.kitty) {
+                if (
+                    AIController.claimedKitties.has(deadKitty) &&
+                    AIController.claimedKitties.get(deadKitty) === this.kitty
+                ) {
                     if (deadKittyProgressZoneId !== currentProgressZoneId) {
                         if (
                             this.IsInSafeZone(this.kitty.Unit.x, this.kitty.Unit.y, currentProgressZoneId) &&
@@ -387,8 +390,8 @@ export class AIController {
     }
 
     /**
-     * the: wall: to: be: within: range: For of kitty: the, what: has: to: basically happen is that a line passes through the circle at two points.
-     * the: mathematical: formula: for: a: line: passing: through: two: points: Using on a circle, this can be calculated.
+     * For the wall to be within range of the kitty, basically what has to happen is that a line passes through the circle at two points.
+     * Using the mathematical formula for a line passing through two points on a circle, this can be calculated.
      */
     CalcCrossingPoints = () => {
         for (let i = 0; i < this.wallPoints.length; i++) {
@@ -416,14 +419,10 @@ export class AIController {
 
             const relativeY: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.x - constant, 2))
             if (!Number.isNaN(relativeY) && relativeY !== 0) {
-                const a = MemoryHandler.getEmptyClass<Point>(new Point())
-                a.x = constant
-                a.y = relativeY + this.kitty.Unit.y
+                const a = MemoryHandler.getEmptyClass(Point, constant, relativeY + this.kitty.Unit.y)
                 this.wallPoints.push(a)
 
-                const b = MemoryHandler.getEmptyClass<Point>(new Point())
-                b.x = constant
-                b.y = -relativeY + this.kitty.Unit.y
+                const b = MemoryHandler.getEmptyClass(Point, constant, -relativeY + this.kitty.Unit.y)
                 this.wallPoints.push(b)
             }
         } else {
@@ -434,14 +433,10 @@ export class AIController {
 
             const relativeX: number = Math.sqrt(dodgeRange * dodgeRange - Math.pow(this.kitty.Unit.y - constant, 2))
             if (!Number.isNaN(relativeX) && relativeX !== 0) {
-                const a = MemoryHandler.getEmptyClass<Point>(new Point())
-                a.x = relativeX + this.kitty.Unit.x
-                a.y = constant
+                const a = MemoryHandler.getEmptyClass(Point, relativeX + this.kitty.Unit.x, constant)
                 this.wallPoints.push(a)
 
-                const b = MemoryHandler.getEmptyClass<Point>(new Point())
-                b.x = -relativeX + this.kitty.Unit.x
-                b.y = constant
+                const b = MemoryHandler.getEmptyClass(Point, -relativeX + this.kitty.Unit.x, constant)
                 this.wallPoints.push(b)
             }
         }
@@ -505,19 +500,13 @@ export class AIController {
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                a.Start = start
-                a.End = 2 * Math.PI
+                const a = MemoryHandler.getEmptyClass(AngleInterval, start, 2 * Math.PI)
                 this.blockedIntervals.push(a)
 
-                const b = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                b.Start = 0
-                b.End = end
+                const b = MemoryHandler.getEmptyClass(AngleInterval, 0, end)
                 this.blockedIntervals.push(b)
             } else {
-                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                a.Start = start
-                a.End = end
+                const a = MemoryHandler.getEmptyClass(AngleInterval, start, end)
                 this.blockedIntervals.push(a)
             }
         }
@@ -549,19 +538,13 @@ export class AIController {
 
             // If the interval wraps around 0, split it into two parts.
             if (start > end) {
-                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                a.Start = start
-                a.End = 2 * Math.PI
+                const a = MemoryHandler.getEmptyClass(AngleInterval, start, 2 * Math.PI)
                 this.blockedIntervals.push(a)
 
-                const b = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                b.Start = 0
-                b.End = end
+                const b = MemoryHandler.getEmptyClass(AngleInterval, 0, end)
                 this.blockedIntervals.push(b)
             } else {
-                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                a.Start = start
-                a.End = end
+                const a = MemoryHandler.getEmptyClass(AngleInterval, start, end)
                 this.blockedIntervals.push(a)
             }
         }
@@ -578,9 +561,7 @@ export class AIController {
         // Determine free angular gaps on the circle.
         if (this.mergedIntervals.length === 0) {
             // No wolves blocking any direction; entire circle is free.
-            const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-            a.Start = 0
-            a.End = 2 * Math.PI
+            const a = MemoryHandler.getEmptyClass(AngleInterval, 0, 2 * Math.PI)
             this.freeGaps.push(a)
         } else {
             // Ensure the merged intervals are sorted by their start angle.
@@ -591,18 +572,22 @@ export class AIController {
             const wrapGap: number =
                 this.mergedIntervals[0].Start + 2 * Math.PI - this.mergedIntervals[this.mergedIntervals.length - 1].End
             if (wrapGap > 0) {
-                const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                a.Start = this.mergedIntervals[this.mergedIntervals.length - 1].End
-                a.End = this.mergedIntervals[0].Start + 2 * Math.PI
+                const a = MemoryHandler.getEmptyClass(
+                    AngleInterval,
+                    this.mergedIntervals[this.mergedIntervals.length - 1].End,
+                    this.mergedIntervals[0].Start + 2 * Math.PI
+                )
                 this.freeGaps.push(a)
             }
             // Gaps between consecutive intervals.
             for (let i = 0; i < this.mergedIntervals.length - 1; i++) {
                 const gapSize: number = this.mergedIntervals[i + 1].Start - this.mergedIntervals[i].End
                 if (gapSize > 0) {
-                    const a = MemoryHandler.getEmptyClass<AngleInterval>(new AngleInterval())
-                    a.Start = this.mergedIntervals[i].End
-                    a.End = this.mergedIntervals[i + 1].Start
+                    const a = MemoryHandler.getEmptyClass(
+                        AngleInterval,
+                        this.mergedIntervals[i].End,
+                        this.mergedIntervals[i + 1].Start
+                    )
                     this.freeGaps.push(a)
                 }
             }
@@ -618,7 +603,7 @@ export class AIController {
         const targetX: number = this.kitty.Unit.x + Math.cos(forwardAngle) * this.DODGE_DISTANCE
         const targetY: number = this.kitty.Unit.y + Math.sin(forwardAngle) * this.DODGE_DISTANCE
 
-        let bestCandidateScore: number = int.MaxValue
+        let bestCandidateScore: number = math.maxinteger
         let bestCandidateAngle: number = -500 // Default to the original forward angle
 
         for (let i = 0; i < AIController.offsets.length; i++) {
@@ -698,7 +683,7 @@ export class AIController {
 
         // If forwardAngle isn't within any free gap, find the candidate edge closest to forwardAngle.
         if (!foundGapContainingForward) {
-            let bestScore: number = int.MaxValue
+            let bestScore: number = math.maxinteger
             for (
                 let i = 0;
                 i < this.freeGaps.length;
@@ -939,8 +924,10 @@ export class AngleInterval extends IDisposable {
     public Start = 0
     public End = 0
 
-    public constructor() {
+    public constructor(start: number, end: number) {
         super()
+        this.Start = start
+        this.End = end
     }
 
     public dispose = () => {
@@ -952,8 +939,10 @@ export class Point extends IDisposable {
     public x = 0
     public y = 0
 
-    public constructor() {
+    public constructor(x: number, y: number) {
         super()
+        this.x = x
+        this.y = y
     }
 
     public dispose = () => {

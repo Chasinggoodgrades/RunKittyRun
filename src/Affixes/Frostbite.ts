@@ -102,9 +102,7 @@ export class Frostbite extends Affix {
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
         const k: Kitty = Globals.ALL_KITTIES.get(target.owner)!
         if (k.KittyMiscInfo.FrostBitten !== null) return // already bitten.
-        const frostBittenObject: Frostbitten = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyClass<Frostbitten>(
-            new Frostbitten()
-        ))
+        const frostBittenObject = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyClass(Frostbitten))
         frostBittenObject.OriginalSpeed = target.defaultMoveSpeed
         frostBittenObject.Effect = Effect.createAttachment(this.FROSTBITE_TARGET_EFFECT, target, 'chest')!
         frostBittenObject.Kitty = k

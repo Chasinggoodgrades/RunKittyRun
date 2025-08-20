@@ -71,7 +71,7 @@ export class ItemSpawner {
         if (KibbleEvent.IsEventActive()) return
 
         for (let i = 0; i < numberOfItems; i++) {
-            const kibble = MemoryHandler.getEmptyClass<Kibble>(new Kibble())
+            const kibble = MemoryHandler.getEmptyClass(Kibble)
             kibble.SpawnKibble()
             ItemSpawnerTrackKibbles.active.push(kibble)
         }

@@ -1,6 +1,5 @@
 import { Logger } from 'src/Events/Logger/Logger'
 import { Timer } from 'w3ts'
-import { MemoryHandler } from './MemoryHandler'
 
 export class AchesTimers {
     public Timer = Timer.create()
@@ -29,7 +28,7 @@ export class AchesTimers {
 
     public dispose = () => {
         this.pause()
-        MemoryHandler.destroyObject(this)
+        // MemoryHandler.destroyObject(this)
     }
 }
 

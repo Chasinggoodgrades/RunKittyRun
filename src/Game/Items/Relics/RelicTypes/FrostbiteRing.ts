@@ -120,7 +120,7 @@ export class FrostbiteRing extends Relic {
             FrostbiteRing.FrozenWolves.get(Unit)!.BeginFreezeActions(this.Owner, Unit, duration)
             return
         } else {
-            const frozenWolf = MemoryHandler.getEmptyClass<FrozenWolf>(new FrozenWolf())
+            const frozenWolf = MemoryHandler.getEmptyClass(FrozenWolf)
             frozenWolf.BeginFreezeActions(this.Owner, Unit, duration)
             FrostbiteRing.FrozenWolves.set(Unit, frozenWolf)
         }

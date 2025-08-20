@@ -335,10 +335,6 @@ export const sumNumbers = (arr: number[]) => {
     return i
 }
 
-export const int = {
-    MaxValue: Number.MAX_SAFE_INTEGER,
-}
-
 export const distanceBetweenXYPoints = (x1: number, y1: number, x2: number, y2: number) => {
     const dx = x2 - x1
     const dy = y2 - y1

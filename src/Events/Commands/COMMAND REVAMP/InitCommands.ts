@@ -436,8 +436,7 @@ export class InitCommands {
                 if (CommandsManager.GetPlayerGroup(player) === 'admin' && args.length > 1) {
                     if (args[1] === 'wolves' || args[1] === 'wolf') {
                         for (const [_, wolf] of Globals.ALL_WOLVES) {
-                            wolf.Disco ??= MemoryHandler.getEmptyObject<Disco>()
-                            wolf.Disco.Unit = wolf.Unit
+                            wolf.Disco ??= MemoryHandler.getEmptyClass(Disco, wolf.Unit)
                             wolf.Disco.ToggleDisco(status)
                             if (!status) {
                                 wolf.Disco = null as never

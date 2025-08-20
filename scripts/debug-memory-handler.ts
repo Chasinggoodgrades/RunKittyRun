@@ -8,6 +8,10 @@ const objPrefix = '' //"info():GetStackTrace() .. ' > ' .. "
 let contents = readFileSync(targetFile).toString()
 let counter = 0
 
+contents = contents.replace(new RegExp('MemoryHandler.getEmptyClass\\((.*?)\\)', 'gmi'), (_, m1) => {
+    return `MemoryHandler.getEmptyClass(${objPrefix}'obj.${counter++}', ${m1})`
+})
+
 contents = contents.replace(new RegExp('MemoryHandler.getEmptyObject\\(\\)', 'gmi'), () => {
     return `MemoryHandler.getEmptyObject(${objPrefix}'obj.${counter++}')`
 })
