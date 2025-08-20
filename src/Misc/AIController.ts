@@ -49,7 +49,7 @@ export class AIController {
     private lastOrderTime = 0
     private elapsedTime = 0
 
-    private moveTimer: Timer
+    private moveTimer: Timer | undefined
     private wolvesInRange: Wolf[] = []
     private lastLightning: lightning
 
@@ -105,6 +105,7 @@ export class AIController {
         if (!!this.moveTimer) {
             this.moveTimer.pause()
             this.moveTimer.destroy()
+            this.moveTimer = undefined
         }
 
         DestroyLightning(this.lastLightning)
