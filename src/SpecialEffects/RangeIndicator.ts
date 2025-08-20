@@ -34,7 +34,12 @@ export class RangeIndicator {
     /// <param name="range">The radius of the range indicator in game units.</param>
     /// <param name="segments">The number of segments into which the range indicator is divided. Higher values produce a smoother circle. Default is 20.</param>
     /// <parm name="lightningType">The type of lightning effect to use for the range indicator. Default is "BLNL".</param>
-    public CreateIndicator(unit: Unit, range: number, segments = 20, lightningType: string = this.LIGHTNING_TYPE) {
+    public CreateIndicator = (
+        unit: Unit,
+        range: number,
+        segments = 20,
+        lightningType: string = this.LIGHTNING_TYPE
+    ) => {
         const x: number = unit.x
         const y: number = unit.y
 

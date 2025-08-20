@@ -4,14 +4,14 @@ import { ErrorMessagesOn } from './ErrorMessagesOn'
 export class ErrorHandler {
     public static Wrap(cb: () => void, errorCb?: (e: unknown) => void) {
         return () => {
-            try {
-                return cb()
-            } catch (e) {
+            const [a, b] = pcall(cb)
+
+            if (!a) {
                 if (ErrorMessagesOn.active) {
-                    Logger.Warning(`Error caught: ${e}`)
+                    Logger.Warning(`Error caught: ${b}`)
                 }
 
-                errorCb?.(e)
+                errorCb?.(b)
             }
         }
     }
