@@ -18,7 +18,7 @@ export class SpinCam {
         this.WasSpinCamReset = false
 
         if (this.SpinCamSpeed !== 0) {
-            if (this.SpinCamTimer === null) {
+            if (!this.SpinCamTimer) {
                 this.SpinCamTimer = Timer.create()
                 this.SpinCamTimer.start(0.0075, true, this.SpinCamActions)
             }
@@ -29,8 +29,8 @@ export class SpinCam {
         }
     }
 
-    public IsSpinCamActive(): boolean {
-        return this.SpinCamTimer !== null
+    public IsSpinCamActive() {
+        return !!this.SpinCamTimer
     }
 
     private SpinCamActions = () => {

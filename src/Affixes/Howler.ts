@@ -62,7 +62,7 @@ export class Howler extends Affix {
                 const wolf = this.NearbyWolves.first
                 if (!wolf) break
                 this.NearbyWolves.removeUnit(wolf)
-                if (NamedWolves.StanWolf !== null && NamedWolves.StanWolf.Unit === wolf) continue
+                if (NamedWolves.StanWolf && NamedWolves.StanWolf.Unit === wolf) continue
                 if (wolf.paused) continue
                 const wolfObject = Globals.ALL_WOLVES.get(wolf)
                 if (!wolfObject) continue

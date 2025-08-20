@@ -272,7 +272,7 @@ export class ShopFrame {
     }
 
     private static RelicButtons = (player: MapPlayer, item: ShopItem) => {
-        if (item === null) return
+        if (!item) return
         if (item.Type !== ShopItemType.Relic) return
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         Globals.upgradeButton.visible = true

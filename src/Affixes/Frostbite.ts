@@ -52,7 +52,7 @@ export class Frostbite extends Affix {
     }
 
     private RemoveAllEffects = () => {
-        if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
+        if (!this.FrostbittenKitties || this.FrostbittenKitties.length === 0) return
         try {
             for (let i = 0; i < this.FrostbittenKitties.length; i++) {
                 const frostbitten = this.FrostbittenKitties[i]
@@ -78,7 +78,7 @@ export class Frostbite extends Affix {
     }
 
     private PeriodicRangeCheck = () => {
-        if (this.FrostbittenKitties === null || this.FrostbittenKitties.length === 0) return
+        if (!this.FrostbittenKitties || this.FrostbittenKitties.length === 0) return
         try {
             for (
                 let i: number = this.FrostbittenKitties.length - 1;
@@ -101,7 +101,7 @@ export class Frostbite extends Affix {
         if (target.getAbilityLevel(Frostbite.ADRENALINE_POTION_ABILITY) > 0) return // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
         const k: Kitty = Globals.ALL_KITTIES.get(target.owner)!
-        if (k.KittyMiscInfo.FrostBitten !== null) return // already bitten.
+        if (!!k.KittyMiscInfo.FrostBitten) return // already bitten.
         const frostBittenObject = (k.KittyMiscInfo.FrostBitten = MemoryHandler.getEmptyClass(Frostbitten))
         frostBittenObject.OriginalSpeed = target.defaultMoveSpeed
         frostBittenObject.Effect = Effect.createAttachment(this.FROSTBITE_TARGET_EFFECT, target, 'chest')!

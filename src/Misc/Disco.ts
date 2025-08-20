@@ -21,7 +21,7 @@ export class Disco extends IDisposable {
     }
 
     public ToggleDisco = (enable: boolean) => {
-        if (this.Unit === null) return
+        if (!this.Unit) return
 
         if (enable) {
             if (this.Enabled) return

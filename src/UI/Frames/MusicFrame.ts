@@ -149,7 +149,7 @@ export class MusicFrame {
 
         // Retrieve the scroll value for the player
         let value = MusicFrame.MusicSliderValues.get(player)
-        if (value === undefined) return
+        if (!value) return
 
         const maxSongs: number = MusicManager.MusicList.length
         const visibleButtons = 9

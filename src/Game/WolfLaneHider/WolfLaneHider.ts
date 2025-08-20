@@ -54,7 +54,7 @@ export class WolfLaneHider {
 
     private static ApplyLaneVisibility = () => {
         try {
-            if (WolfArea.WolfAreas === null) return
+            if (!WolfArea.WolfAreas) return
 
             // Show lanes that are now visible but weren't before
             for (const laneId of WolfLaneHider.lanesToEnable) {
@@ -95,7 +95,7 @@ export class WolfLaneHider {
 
     public static HideAllLanes = () => {
         try {
-            if (WolfArea.WolfAreas === null) return
+            if (!WolfArea.WolfAreas) return
 
             for (const [_, lane] of WolfArea.WolfAreas) {
                 WolfLaneHider.SetLaneVisibility(lane, false)
@@ -110,7 +110,7 @@ export class WolfLaneHider {
         try {
             WolfLaneHider.lanesToEnable.clear()
             WolfLaneHider.currentlyVisibleLanes.clear()
-            if (WolfArea.WolfAreas === null) return
+            if (!WolfArea.WolfAreas) return
             for (const [_, lane] of WolfArea.WolfAreas) {
                 lane.IsEnabled = true
                 WolfLaneHider.SetLaneVisibility(lane, true)

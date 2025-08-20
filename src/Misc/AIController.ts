@@ -78,7 +78,7 @@ export class AIController {
     public ResumeAi = () => {
         if (!this.enabled) return
 
-        if (this.moveTimer === null) {
+        if (!this.moveTimer) {
             this.moveTimer = Timer.create()
             this.moveTimer.start(this.timerInterval, true, this.PollMovement)
         }
@@ -102,7 +102,7 @@ export class AIController {
         this.lastOrderTime = 0
         this.elapsedTime = 0
 
-        if (this.moveTimer !== null) {
+        if (!!this.moveTimer) {
             this.moveTimer.pause()
             this.moveTimer.destroy()
         }
@@ -151,7 +151,7 @@ export class AIController {
             : null
 
         if (currentSafeZoneId !== this.lastSafeZoneIndexId) {
-            this.reachedLastProgressZoneCenter = currentSafeZoneId === null
+            this.reachedLastProgressZoneCenter = !currentSafeZoneId
             this.lastSafeZoneIndexId = currentSafeZoneId
         }
 
@@ -343,7 +343,7 @@ export class AIController {
         const MIN_MOVE_DISTANCE: number = isDodge ? 16.0 : 64.0
 
         if (command === 'move') {
-            if (this.lastLightning !== null) {
+            if (!!this.lastLightning) {
                 MoveLightning(this.lastLightning, false, this.kitty.Unit.x, this.kitty.Unit.y, x, y)
             } else {
                 if (this.laser) {
@@ -768,7 +768,7 @@ export class AIController {
                 this.availableBlockedLightnings.splice(this.availableBlockedLightnings.length - 1, 1)
             }
 
-            if (freeLightning === null) {
+            if (!freeLightning) {
                 freeLightning = AddLightning(AIController.BLOCKED_LASER_COLOR, false, x1, y1, x2, y2)! // "AFOD" is finger of death code
             }
 
@@ -798,7 +798,7 @@ export class AIController {
                 this.availableClearLightnings.splice(this.availableClearLightnings.length - 1, 1)
             }
 
-            if (freeLightning === null) {
+            if (!freeLightning) {
                 freeLightning = AddLightning(AIController.FREE_LASER_COLOR, false, x1, y1, x2, y2)!
             }
 

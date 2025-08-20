@@ -192,7 +192,7 @@ export class FrozenWolf {
     public dispose = () => {
         try {
             let frozenWolf: FrozenWolf | undefined
-            if (this.Unit !== null && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {
+            if (this.Unit && (frozenWolf = FrostbiteRing.FrozenWolves.get(this.Unit))) {
                 FrostbiteRing.FrozenWolves.delete(this.Unit)
             }
             this.Timer.dispose()
@@ -205,8 +205,8 @@ export class FrozenWolf {
 
     private PausingWolf = (unit: Unit, pause: boolean = true) => {
         try {
-            if (unit === null) return
-            if (NamedWolves.StanWolf !== null && unit === NamedWolves.StanWolf.Unit) return
+            if (!unit) return
+            if (NamedWolves.StanWolf && unit === NamedWolves.StanWolf.Unit) return
             if (Globals.ALL_WOLVES.has(unit)) Globals.ALL_WOLVES.get(unit)!.PauseSelf(pause)
         } catch (e) {
             Logger.Warning(`Error in FrozenWolf.PausingWolf: ${e}`)
@@ -219,7 +219,7 @@ export class FrozenWolf {
     /// <param name="Unit"></param>
     private SlowWolves = (Unit: Unit) => {
         try {
-            if (Unit === null) return
+            if (!Unit) return
             const playerUpgradeLvl = PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(FrostbiteRing.name)
             if (playerUpgradeLvl < 2) return
             // if (PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(typeof FrostbiteRing) < 2) return

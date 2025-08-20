@@ -23,7 +23,7 @@ export class BurntMeat {
 
     public static RegisterTurnInTrigger = () => {
         TriggerRegisterUnitInRangeSimple(BurntMeat.StanTurnIn.handle, 200, SpawnChampions.Stan2025.handle)
-        if (BurntMeat.StanTurnInActions !== null) return
+        if (!!BurntMeat.StanTurnInActions) return
         BurntMeat.StanTurnInActions = BurntMeat.StanTurnIn.addAction(() => {
             const unit = getTriggerUnit()
             const player = unit.owner

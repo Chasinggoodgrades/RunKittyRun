@@ -36,7 +36,7 @@ export class ShopItem {
     constructor(...args: any[]) {
         if (args.length === 1 && args[0] instanceof Relic) {
             const relic = args[0] as Relic
-            if (relic === null) throw new Error('Invalid relic')
+            if (!relic) throw new Error('Invalid relic')
 
             this.InitializeShopItem(
                 relic.name,

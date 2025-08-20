@@ -61,7 +61,7 @@ export class WolfPoint {
             this.PointInfo[numRegions].y = endY
             this.PointInfo[numRegions].LastPoint = true
 
-            if (this.PointInfo !== null && this.PointInfo.length > 0) {
+            if (this.PointInfo && this.PointInfo.length > 0) {
                 this.StartMovingOrders()
             }
         } catch (e) {
@@ -71,7 +71,7 @@ export class WolfPoint {
 
     public Cleanup = () => {
         try {
-            if (this.PointInfo === null) return
+            if (!this.PointInfo) return
             BlzUnitClearOrders(this.Wolf.Unit.handle, false)
 
             for (let i = 0; i < this.PointInfo.length; i++) {

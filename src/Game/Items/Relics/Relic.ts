@@ -46,7 +46,7 @@ export abstract class Relic {
     public abstract RemoveEffect(Unit: Unit): void
 
     public GetCurrentUpgrade(): RelicUpgrade {
-        if (this.Upgrades === null || this.Upgrades.length === 0) return null as never
+        if (!this.Upgrades || this.Upgrades.length === 0) return null as never
         if (this.UpgradeLevel >= this.Upgrades.length) return this.Upgrades[this.Upgrades.length - 1]
         return this.Upgrades[this.UpgradeLevel]
     }

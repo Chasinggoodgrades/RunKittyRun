@@ -109,7 +109,7 @@ export class Shops {
 
             const vendorItems = Shops.VendorsItemList.get(vendor)!
             const vendorItem = vendorItems.find(vi => vi.Item === itemID)
-            if (vendorItem === null) return
+            if (!vendorItem) return
 
             Shops.RefreshItemsOnVendor(vendor)
         } catch (e) {

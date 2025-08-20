@@ -22,7 +22,7 @@ export class UnitSharing {
     private static RegisterTrigger(): Trigger {
         UnitSharing.Trigger = Trigger.create()!
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
-            if (UnitSharing.Action !== null) break
+            if (!!UnitSharing.Action) break
             const player = Globals.ALL_PLAYERS[i]
             UnitSharing.Trigger.registerPlayerAllianceChange(player, ALLIANCE_SHARED_CONTROL)
         }

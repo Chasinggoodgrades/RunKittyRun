@@ -77,18 +77,18 @@ export class ItemSpatialGrid {
         const kibbleList = ItemSpatialGrid.GetNearbyKibbles(kitty.Unit.x, kitty.Unit.y)
         const itemList = ItemSpatialGrid.GetNearbyItems(kitty.Unit.x, kitty.Unit.y)
 
-        if (kibbleList !== null && kibbleList.length > 0) {
+        if (kibbleList && kibbleList.length > 0) {
             for (let i = 0; i < kibbleList.length; i++) {
                 const k = kibbleList[i]
-                if (k === null) continue
+                if (!k) continue
                 kitty.Unit.addItem(k.Item)
             }
         }
 
-        if (itemList !== null && itemList.length > 0) {
+        if (itemList && itemList.length > 0) {
             for (let i = 0; i < itemList.length; i++) {
                 const item = itemList[i]
-                if (item === null) continue
+                if (!item) continue
                 if (item.isOwned()) continue
                 kitty.Unit.addItem(item)
                 break

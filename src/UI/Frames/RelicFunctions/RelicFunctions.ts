@@ -39,7 +39,7 @@ export class RelicFunctions {
             RelicFunctions.ReduceGold(player, selectedItem.Cost)
             const relicCtor = selectedItem.Relic.constructor as new () => Relic
             const newRelic = new relicCtor()
-            if (newRelic !== null) {
+            if (!!newRelic) {
                 kitty.Relics.push(newRelic)
                 newRelic.ApplyEffect(kitty.Unit)
                 RelicFunctions.AddItem(player, selectedItem.ItemID)
@@ -65,7 +65,7 @@ export class RelicFunctions {
                 if (!playerRelic) return
                 const playerUpgradesRelic = playerRelic.GetCurrentUpgrade()
 
-                if (playerUpgradesRelic === null) return
+                if (!playerUpgradesRelic) return
                 if (RelicFunctions.ActiveShadowKitty(player)) return
 
                 // Check if they can upgrade..
@@ -101,7 +101,7 @@ export class RelicFunctions {
     }
 
     private static HasInventorySpace = (unit: Unit) => {
-        for (let i = 0; i < 6; i++) if (unit.getItemInSlot(i) === null) return true
+        for (let i = 0; i < 6; i++) if (!unit.getItemInSlot(i)) return true
         return false
     }
 

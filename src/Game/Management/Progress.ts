@@ -79,7 +79,7 @@ export const Progress = {
 
     CalculateTotalDistance() {
         try {
-            if (RegionList.PathingPoints === null || RegionList.PathingPoints.length === 0) {
+            if (!RegionList.PathingPoints || RegionList.PathingPoints.length === 0) {
                 Logger.Warning('PathingPoints list is null or empty.')
                 return
             }

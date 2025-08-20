@@ -30,7 +30,7 @@ export class PlayerLeaves {
     public static PlayerLeavesActions = (player: MapPlayer | null = null) => {
         try {
             let leavingPlayer = getTriggerPlayer()
-            if (player !== null) leavingPlayer = player
+            if (player) leavingPlayer = player
             if (!Globals.ALL_PLAYERS.includes(leavingPlayer)) return
             const kitty = Globals.ALL_KITTIES.get(leavingPlayer)!
             const circle = Globals.ALL_CIRCLES.get(leavingPlayer)

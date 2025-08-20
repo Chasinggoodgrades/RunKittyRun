@@ -49,10 +49,7 @@ export class CommandHandler {
         try {
             const command = CommandsManager.GetCommand(commandName.toLowerCase())
             const playerGroup = CommandsManager.GetPlayerGroup(getTriggerPlayer())
-            if (
-                command !== null &&
-                (command.Group === playerGroup || command.Group === 'all' || playerGroup === 'admin')
-            ) {
+            if (command && (command.Group === playerGroup || command.Group === 'all' || playerGroup === 'admin')) {
                 command.Action(getTriggerPlayer(), args)
             } else {
                 getTriggerPlayer().DisplayTimedTextTo(4.0, `${Colors.COLOR_YELLOW_ORANGE}Command not found.|r`)

@@ -176,7 +176,7 @@ export class Fixation extends Affix {
     }
 
     public static GetFixation(Unit: Unit): Fixation {
-        if (Unit === null) return null as never
+        if (!Unit) return null as never
         const affix = Globals.ALL_WOLVES.get(Unit)!.Affixes.find(Fixation.IsFixation)
         return affix instanceof Fixation ? affix : (null as never)
     }

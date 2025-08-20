@@ -22,7 +22,7 @@ export class BigNum {
     // LastDigit method
     public LastDigit(): number {
         let current: BigNumL = this.List
-        while (current?.Next !== null) {
+        while (!!current?.Next) {
             current = current.Next
         }
         return current?.Leaf ?? 0
@@ -46,9 +46,9 @@ export class BigNumL {
     }
 
     public Clean(): boolean {
-        if (this.Next === null && this.Leaf === 0) {
+        if (!this.Next && this.Leaf === 0) {
             return true
-        } else if (this.Next !== null && this.Next.Clean()) {
+        } else if (this.Next && this.Next.Clean()) {
             this.Next = null as never
             return this.Leaf === 0
         } else {
@@ -59,7 +59,7 @@ export class BigNumL {
     public DivSmall = (baseValue: number, denom: number) => {
         let remainder = 0
 
-        if (this.Next !== null) {
+        if (!!this.Next) {
             remainder = this.Next.DivSmall(baseValue, denom)
         }
 

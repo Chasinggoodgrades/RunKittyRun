@@ -74,11 +74,11 @@ export class NamedWolves {
 
     public static RegisterDeathTrigger = () => {
         BurntMeat.StanDeath.registerUnitEvent(NamedWolves.StanWolf.Unit, EVENT_UNIT_DEATH)
-        if (BurntMeat.StanDeathActions !== null) return
+        if (!!BurntMeat.StanDeathActions) return
         BurntMeat.RegisterTurnInTrigger()
         BurntMeat.StanDeathActions = BurntMeat.StanDeath.addAction(() => {
             const killer = getKillingUnit()
-            if (killer === null) return
+            if (!killer) return
             NamedWolves.StanWolf.Texttag?.destroy()
             RemoveItemFromUnit(killer, BurntMeat.ITEM_CLOAK_FLAMES)
             killer.addItemById(BurntMeat.ITEM_BURNT_MEAT)
@@ -99,7 +99,7 @@ export class NamedWolves {
                 'origin'
             )
             NamedWolves.ExplodingWolfRevive.start(25.0, false, () => {
-                if (NamedWolves.ExplodingWolf.Unit === null) return
+                if (!NamedWolves.ExplodingWolf.Unit) return
                 Globals.DNTNamedWolves.splice(Globals.DNTNamedWolves.indexOf(NamedWolves.ExplodingWolf), 1)
                 NamedWolves.ExplodingWolf.IsReviving = false
                 NamedWolves.ExplodingWolf.Unit?.destroy()

@@ -76,8 +76,8 @@ export class Bomber extends Affix {
                 this.ExplodeTimer?.Timer.start(Bomber.ExplosionInterval(), false, () => this.StartExplosion())
                 return
             }
-            if (this.RangeIndicator === null) return
-            if (this.Unit.Unit === null) return
+            if (!this.RangeIndicator) return
+            if (!this.Unit.Unit) return
             this.Unit.PauseSelf(true)
             if (this.Unit.WolfArea.IsEnabled) {
                 this.RangeIndicator.CreateIndicator(this.Unit.Unit, this.EXPLOSION_RANGE, 20, 'FINL') // "FINL" is an orange indicator.
@@ -100,7 +100,7 @@ export class Bomber extends Affix {
 
     private Explode = () => {
         try {
-            if (this.RangeIndicator === null) return
+            if (!this.RangeIndicator) return
             this.RangeIndicator.DestroyIndicator()
             Utility.CreateEffectAndDisposeAttach(Bomber.BLOOD_EFFECT_PATH, this.Unit.Unit, 'origin')
             this.ExplodeGroup.enumUnitsInRange(

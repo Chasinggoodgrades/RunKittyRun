@@ -166,7 +166,7 @@ export class ColorUtils {
     /// <param name="text"></param>
     /// <returns></returns>
     public static HighlightString = (text: string) => {
-        return text !== null && text.length > 0
+        return text && text.length > 0
             ? Colors.COLOR_YELLOW + text + Colors.COLOR_RESET
             : `${Colors.COLOR_RED}ERROR${Colors.COLOR_RESET}`
     }

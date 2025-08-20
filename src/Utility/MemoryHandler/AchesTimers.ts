@@ -7,18 +7,18 @@ export class AchesTimers {
     public constructor() {}
 
     public pause = (pause: boolean = true) => {
-        if (this.Timer === null) Logger.Warning(`TIMER IS NULL in AchesTimers.pause()`)
+        if (!this.Timer) Logger.Warning(`TIMER IS NULL in AchesTimers.pause()`)
         if (pause) this.Timer.pause()
         else this.Timer.resume()
     }
 
     public start = (delay: number, repeat: boolean, callback: () => void) => {
-        if (this.Timer === null) Logger.Warning(`TIMER IS NULL in AchesTimers.start()`)
+        if (!this.Timer) Logger.Warning(`TIMER IS NULL in AchesTimers.start()`)
         this.Timer.start(delay, repeat, callback)
     }
 
     public resume = () => {
-        if (this.Timer === null) Logger.Warning(`TIMER IS NULL in AchesTimers.resume()`)
+        if (!this.Timer) Logger.Warning(`TIMER IS NULL in AchesTimers.resume()`)
         this.Timer.resume()
     }
 

@@ -149,7 +149,7 @@ export class NitroPacer {
 
     public static CalculateNitroPacerProgress(): number {
         const nitroKitty = NitroPacer.getInstance()
-        if (nitroKitty.Unit === undefined) return 0.0
+        if (!nitroKitty.Unit) return 0.0
         const currentSafezone = NitroPacer.GetCurrentCheckpoint()
         if (Globals.SAFE_ZONES[0].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y)) return 0.0 // if at start, 0 progress
         if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.length - 1].Rectangle.includes(nitroKitty.Unit.x, nitroKitty.Unit.y))

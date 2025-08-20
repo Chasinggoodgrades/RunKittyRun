@@ -67,7 +67,7 @@ export class SaveManager {
         for (const player of Globals.ALL_PLAYERS) {
             if (player.controller === MAP_CONTROL_COMPUTER) continue
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue
-            if (!SaveManager.SaveData.has(player) || SaveManager.SaveData.get(player) === null)
+            if (!SaveManager.SaveData.has(player) || !SaveManager.SaveData.get(player))
                 Globals.SaveSystem.NewSave(player) // Ensure save data exists for this player before saving.
             const data = SaveManager.SaveData.get(player)
             if (!data) continue
@@ -192,8 +192,9 @@ export class SyncSaveLoad {
         PreloadGenClear()
         PreloadGenStart()
 
-        const rawDataString: string =
-            data !== null ? PropertyEncoder.EncodeToJsonBase64(data) : PropertyEncoder.EncodeAllDataToJsonBase64()
+        const rawDataString: string = data
+            ? PropertyEncoder.EncodeToJsonBase64(data)
+            : PropertyEncoder.EncodeAllDataToJsonBase64()
         const toCompile: string = rawDataString
         const chunkSize = 180
         let assemble: string = ''
@@ -348,7 +349,7 @@ export class PropertyEncoder {
     }
 
     private static AppendProperties = (obj: object, jsonString: string[]) => {
-        if (obj === null) return
+        if (!obj) return
 
         let firstProperty: boolean = true
 
@@ -362,7 +363,7 @@ export class PropertyEncoder {
 
             jsonString.push(`"${prop}":`)
 
-            if (value !== null && typeof value === 'object' && !Array.isArray(value) && typeof value !== 'string') {
+            if (value && typeof value === 'object' && !Array.isArray(value) && typeof value !== 'string') {
                 jsonString.push('{')
                 PropertyEncoder.AppendProperties(value, jsonString)
                 jsonString.push('}')

@@ -59,9 +59,9 @@ export class Windwalk {
                 const reward = RewardsManager.Rewards.find(r => r.GetAbilityID() === wwID)!
                 const visual = reward.ModelPath
                 const e = caster.addSpecialEffectTarget(visual, 'origin')
-                if (e !== null) {
+                if (!!e) {
                     Utility.SimpleTimer(duration, () => {
-                        if (e !== null) e.destroy()
+                        if (!!e) e.destroy()
                     })
                 }
             }

@@ -182,7 +182,7 @@ export class AffixFactory {
                     if (!AffixFactory.ShouldAffixWolves(wolf, i)) continue
 
                     const affix = AffixFactory.ApplyRandomAffix(wolf, i)
-                    if (affix !== null) appliedCount++
+                    if (!!affix) appliedCount++
                 }
             }
         } catch (e) {

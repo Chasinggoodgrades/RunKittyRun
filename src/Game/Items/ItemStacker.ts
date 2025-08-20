@@ -17,7 +17,7 @@ export class ItemStacker {
     /// </summary>
     /// <returns></returns>
     private static RegisterItemList(): number[] {
-        if (ItemStacker.StackableItemIDs !== null) return ItemStacker.StackableItemIDs
+        if (!!ItemStacker.StackableItemIDs) return ItemStacker.StackableItemIDs
         ItemStacker.StackableItemIDs = [
             Constants.ITEM_ADRENALINE_POTION,
             Constants.ITEM_HEALING_WATER,

@@ -152,7 +152,7 @@ export class Blitzer extends Affix {
     }
 
     public static GetBlitzer(unit: Unit): Blitzer {
-        if (unit === null) return null as never
+        if (!unit) return null as never
         const affix = Globals.ALL_WOLVES.get(unit)!.Affixes.find(Blitzer.IsBlitzer)
         return affix instanceof Blitzer ? affix : (null as never)
     }

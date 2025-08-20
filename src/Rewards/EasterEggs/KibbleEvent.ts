@@ -53,7 +53,7 @@ export class KibbleEvent {
 
         for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
             const kibble = ItemSpawnerTrackKibbles.active[i]
-            if (kibble.Item === null) continue
+            if (!kibble.Item) continue
             kibble.dispose()
         }
 

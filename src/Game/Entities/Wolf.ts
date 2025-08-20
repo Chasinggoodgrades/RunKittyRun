@@ -159,7 +159,7 @@ export class Wolf {
                     }
                 }
                 this.WanderTimer?.resume()
-                if (this.EffectTimer !== null && this.EffectTimer.remaining > 0) this.EffectTimer.resume()
+                if (this.EffectTimer && this.EffectTimer.remaining > 0) this.EffectTimer.resume()
                 this.IsWalking = true
                 this.paused = false
                 this.Unit.paused = false

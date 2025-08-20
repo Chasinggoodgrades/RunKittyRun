@@ -58,7 +58,7 @@ export class ItemSpawner {
         for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
             const kibble = ItemSpawnerTrackKibbles.active[i]
             ItemSpatialGrid.UnregisterKibble(kibble)
-            if (kibble.Item === null) continue // Already been __destroyed.
+            if (!kibble.Item) continue // Already been __destroyed.
             kibble.dispose()
         }
 

@@ -69,8 +69,8 @@ export class Difficulty {
         }
 
         Difficulty.RemoveDifficultyDialog()
-        if (pickedOption === null) print('picked option is null')
-        if (pickedOption !== null) Difficulty.SetDifficulty(pickedOption)
+        if (!pickedOption) print('picked option is null')
+        if (pickedOption) Difficulty.SetDifficulty(pickedOption)
     }
 
     private static SetDifficulty = (difficulty: DifficultyOption) => {

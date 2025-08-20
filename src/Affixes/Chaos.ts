@@ -54,7 +54,7 @@ export class Chaos extends Affix {
 
     private RotateAffix = () => {
         try {
-            if (this.currentAffix !== null) AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
+            if (!!this.currentAffix) AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.currentAffix = null as never
             const randomAffix: string = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)

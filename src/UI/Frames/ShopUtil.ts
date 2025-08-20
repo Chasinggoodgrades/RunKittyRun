@@ -25,7 +25,7 @@ export class ShopUtil {
     /// <returns></returns>
     public static PlayerIsDead = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
-        if (kitty === null || !kitty.isAlive() || kitty.ProtectionActive) {
+        if (!kitty || !kitty.isAlive() || kitty.ProtectionActive) {
             // not null, cannot be alive, and pota active
             player.DisplayTimedTextTo(
                 1.0,

@@ -26,18 +26,18 @@ export class FirstPersonCamera {
         ])
     }
 
-    public IsFirstPerson(): boolean {
-        return this.forceCamTimer !== null
+    public IsFirstPerson() {
+        return !!this.forceCamTimer
     }
 
     public ToggleFirstPerson = (active: boolean) => {
         if (active) {
-            if (this.forceCamTimer === null) {
+            if (!this.forceCamTimer) {
                 this.forceCamTimer = Timer.create()
                 this.forceCamTimer.start(this.timerPeriod, true, this.UpdateCamera)
             }
         } else {
-            if (this.forceCamTimer !== null) {
+            if (!!this.forceCamTimer) {
                 this.forceCamTimer.pause()
                 this.forceCamTimer.destroy()
                 this.ResetCamera()
@@ -46,7 +46,7 @@ export class FirstPersonCamera {
     }
 
     private UpdateCamera = () => {
-        if (this.hero === null || !this.hero.isAlive()) return
+        if (!this.hero || !this.hero.isAlive()) return
 
         let fwd = 0
 
@@ -146,7 +146,7 @@ export class FirstPersonCameraManager {
     public static Initialize = () => {
         for (const player of Globals.ALL_PLAYERS) {
             const hero = FirstPersonCameraManager.GetHeroForPlayer(player)
-            if (hero !== null) {
+            if (!!hero) {
                 FirstPersonCameraManager.cameras.set(player, new FirstPersonCamera(hero, player))
             }
         }

@@ -125,7 +125,7 @@ export class NitroChallenges {
         const player = kitty.Player
         if (nitroCount === Globals.ROUND) return // already awarded
         if (
-            NitroChallenges.NitroTimer === null ||
+            !NitroChallenges.NitroTimer ||
             NitroChallenges.NitroTimer.remaining <= 0.0 ||
             !NitroChallenges.NitroDialog.display
         )

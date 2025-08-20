@@ -76,7 +76,7 @@ export class Savecode {
         let x: number
         let current: BigNumL = this.Bignum.List
 
-        while (current !== null) {
+        while (!!current) {
             x = current.Leaf
             hash = OldSavesHelper.ModuloInteger(
                 hash +
@@ -104,7 +104,7 @@ export class Savecode {
         }
         SetRandomSeed(key)
 
-        while (current !== null) {
+        while (!!current) {
             if (sign === -1) {
                 advance = current.Leaf
             }

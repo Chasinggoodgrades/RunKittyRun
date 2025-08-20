@@ -165,7 +165,7 @@ export class TeamDeathless {
     /// <param name="safezone"></param>
     public static ReachedSafezone = (unit: Unit, safezone: Safezone) => {
         if (!TeamDeathless.EventStarted) return
-        if (TeamDeathless.CurrentHolder === null) return // No one holding orb.
+        if (!TeamDeathless.CurrentHolder) return // No one holding orb.
         if (safezone.ID <= TeamDeathless.CurrentSafezone.ID) return
         if (safezone.ID > TeamDeathless.CurrentSafezone.ID + 1) return // no skipping safezones
         if (TeamDeathless.CurrentHolder.Unit !== unit) return // The unit that reached the safezone is not the current holder of the orb.
@@ -208,7 +208,7 @@ export class TeamDeathless {
     }
 
     private static InRangeEvent = () => {
-        if (TeamDeathless.CurrentHolder !== null) return
+        if (TeamDeathless.CurrentHolder) return
 
         const u = getTriggerUnit()
 
@@ -243,7 +243,7 @@ export class TeamDeathless {
     }
 
     private static OrbFollow = () => {
-        if (TeamDeathless.CurrentHolder === null) {
+        if (!TeamDeathless.CurrentHolder) {
             TeamDeathless.timerHandle?.pause()
             return
         }

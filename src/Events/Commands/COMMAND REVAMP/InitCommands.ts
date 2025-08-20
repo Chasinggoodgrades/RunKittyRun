@@ -526,7 +526,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     isMatch = true
 
                     if (mode) {
@@ -1065,7 +1065,7 @@ export class InitCommands {
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     kitty.Unit.setScale(scale, scale, scale)
                 })
             },
@@ -1209,7 +1209,7 @@ export class InitCommands {
                 }
 
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(10.0, `${Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.|r`)
                         return
@@ -1261,7 +1261,7 @@ export class InitCommands {
             description: 'Toggles AI for the specified player.',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     if (!Globals.ALL_KITTIES.has(kitty.Player)) {
                         player.DisplayTimedTextTo(10.0, `${Colors.COLOR_YELLOW_ORANGE}Player does not have a hero.`)
                         return
@@ -1566,7 +1566,7 @@ export class InitCommands {
             description: 'Sends the passed player to the start',
             action: (player, args) => {
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     const spawnCenter = RegionList.SpawnRegions[1]
                     kitty.Unit.setPosition(spawnCenter.centerX, spawnCenter.centerY)
                 })
@@ -1614,7 +1614,7 @@ export class InitCommands {
                     return
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     const safeZones = RegionList.SafeZones
                     for (const safeZone of safeZones) {
                         kitty.Unit.setPosition(safeZone.centerX, safeZone.centerY)
@@ -1833,7 +1833,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     isMatch = true
                     kitty.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                 })
@@ -1868,7 +1868,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     isMatch = true
                     kitty.RTR.absoluteMoveSpeed = speed > 0 ? speed : 0
                 })
@@ -1910,7 +1910,7 @@ export class InitCommands {
                 let isMatch: boolean = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
-                    if (kitty === null) return
+                    if (!kitty) return
                     isMatch = true
                     if (mode) {
                         kitty.RTR.StartRTR()

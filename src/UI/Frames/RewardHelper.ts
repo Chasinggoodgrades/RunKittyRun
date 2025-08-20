@@ -59,11 +59,11 @@ export class RewardHelper {
     /// <returns></returns>
     public static GetAwardNestedValue = (obj: object, nestedPropertyName: string, propertyName: string) => {
         const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
-        if (nestedProperty !== null) {
+        if (nestedProperty) {
             const nestedObject = nestedProperty
-            if (nestedObject !== null) {
+            if (nestedObject) {
                 const property = nestedObject[propertyName]
-                if (property !== null) {
+                if (property) {
                     return property
                 }
             }
@@ -85,9 +85,9 @@ export class RewardHelper {
         value: any
     ) => {
         const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
-        if (nestedProperty !== null) {
+        if (nestedProperty) {
             const nestedObject = nestedProperty
-            if (nestedObject !== null) {
+            if (nestedObject) {
                 RewardHelper.UpdateProperty(nestedObject, propertyName, value)
             }
         } else {
@@ -97,7 +97,7 @@ export class RewardHelper {
 
     private static UpdateProperty = (obj: object, propertyName: string, value: object) => {
         const property = obj[propertyName as keyof typeof obj]
-        if (property !== undefined) {
+        if (property) {
             ;(obj as any)[propertyName] = value
         } else {
             Logger.Warning(`Property not found: ${propertyName}.`)

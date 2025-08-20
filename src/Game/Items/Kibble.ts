@@ -70,7 +70,7 @@ export class Kibble extends IDisposable {
         trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addCondition(() => {
             const item = getManipulatedItem()
-            if (item === null) return false
+            if (!item) return false
             return Kibble.KibblesColors.includes(item.typeId)
         })
         trig.addAction(() => {
@@ -84,7 +84,7 @@ export class Kibble extends IDisposable {
 
     private static KibblePickup = (item: Item) => {
         try {
-            if (item === null) return
+            if (!item) return
 
             const unit = getTriggerUnit()
             const player = unit.owner
@@ -111,7 +111,7 @@ export class Kibble extends IDisposable {
             Kibble.IncrementKibble(kitty)
             Kibble.BeatKibbleCollection(kitty)
 
-            if (kib !== null && kib.Item !== null) {
+            if (!!kib.Item) {
                 kib.dispose()
             }
         } catch (e) {

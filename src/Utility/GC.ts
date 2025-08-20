@@ -7,13 +7,13 @@ export class GC {
 
     public static RemoveTrigger = (t: Trigger) => {
         // TODO; Cleanup:     public static RemoveTrigger(ref trigger t)
-        if (t === null) return
+        if (!t) return
         t.destroy()
     }
 
     public static RemoveTimer = (t: Timer) => {
         // TODO; Cleanup:     public static RemoveTimer(ref timer t)
-        if (t === null) return
+        if (!t) return
         t.pause()
         t.destroy()
     }
@@ -26,13 +26,13 @@ export class GC {
 
     public static RemoveGroup = (g: Group) => {
         // TODO; Cleanup:     public static RemoveGroup(ref group g)
-        if (g === null) return
+        if (!g) return
         g.clear()
         g.destroy()
     }
 
     public static RemoveAffix = (affix: Affix) => {
-        if (affix === null) return
+        if (!affix) return
         const index = GC.GCAffixes.indexOf(affix)
         if (index !== -1) (GC.GCAffixes as any)[index] = null
         safeArraySplice(GC.GCAffixes, a => a === affix)
@@ -40,7 +40,7 @@ export class GC {
 
     public static RemoveList<T>(list: T[]) {
         // TODO; Cleanup:     public static RemoveList<T>(ref list: T[])
-        if (list === null) return
+        if (!list) return
         list.length = 0
     }
 
@@ -48,7 +48,7 @@ export class GC {
 
     public static RemoveTimerDialog = (td: timerdialog) => {
         // TODO; Cleanup:     public static RemoveTimerDialog(ref timerdialog td)
-        if (td === null) return
+        if (!td) return
         DestroyTimerDialog(td)
     }
 }

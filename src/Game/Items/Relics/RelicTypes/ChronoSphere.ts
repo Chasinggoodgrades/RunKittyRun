@@ -192,7 +192,7 @@ export class ChronoSphere extends Relic {
             if (kitty.ProtectionActive) return false // Don't rewind if ultimate has been casted.
             if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_CHRONO_ORB)) return false
             const relic = kitty.Relics.find(ChronoSphere.IsChronoSphere) as ChronoSphere
-            if (relic === null) return false
+            if (!relic) return false
             if (kitty.CurrentStats.ChronoSphereCD) return false
             const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(kitty.Player).GetUpgradeLevel(ChronoSphere.name)
             if (upgradeLevel < 2) return false

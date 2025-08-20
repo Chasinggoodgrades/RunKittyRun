@@ -120,7 +120,7 @@ export class AwardManager {
                     kittyProfile = Globals.ALL_KITTIES.get(player)!
                 }
 
-                if (kittyProfile.SaveData === null) {
+                if (!kittyProfile.SaveData) {
                     kittyProfile.SaveData = new KittyData()
                 }
 
