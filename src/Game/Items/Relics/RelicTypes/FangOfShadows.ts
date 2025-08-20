@@ -63,7 +63,7 @@ export class FangOfShadows extends Relic {
 
     private RegisterTriggers(Unit: Unit) {
         this.SummonTrigger = Trigger.create()!
-        TriggerRegisterUnitEvent(this.SummonTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
+        this.SummonTrigger.registerUnitEvent(Unit, EVENT_UNIT_SPELL_CAST)
         this.SummonTrigger.addCondition(() => GetSpellAbilityId() === this.RelicAbilityID)
         this.SummonTrigger.addAction(this.SummonShadowKitty)
 
@@ -130,7 +130,7 @@ export class FangOfShadows extends Relic {
     private RegisterTeleportAbility(Unit: Unit) {
         TriggerRegisterUnitEvent(this.TeleTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.TeleTrigger.addCondition(() => GetSpellAbilityId() === this.TeleportAbilityID)
-        this.TeleTrigger.addAction(() => this.TeleportToShadowKitty())
+        this.TeleTrigger.addAction(this.TeleportToShadowKitty)
     }
 
     /// <summary>

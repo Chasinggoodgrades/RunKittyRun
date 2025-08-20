@@ -24,17 +24,13 @@ export class UnitWithinRange {
         kitty.c_Collision.removeActions()
         kitty.w_Collision.destroy()
         kitty.c_Collision.destroy()
-        kitty.w_Collision = null as never
-        kitty.c_Collision = null as never
     }
 
-    public static DeRegisterUnitWithinRangeUnitShadow(kitty: ShadowKitty) {
-        kitty.cCollision.removeActions()
-        kitty.wCollision.removeActions()
-        kitty.wCollision.destroy()
-        kitty.cCollision.destroy()
-        kitty.wCollision = null as never
-        kitty.cCollision = null as never
+    public static DeRegisterUnitWithinRangeUnitShadow(shadowKitty: ShadowKitty) {
+        shadowKitty.cCollision.removeActions()
+        shadowKitty.wCollision.removeActions()
+        shadowKitty.wCollision.destroy()
+        shadowKitty.cCollision.destroy()
     }
 
     public static RegisterUnitWithinRangeTrigger(u: Unit, range: number, filter: () => boolean, execution: Trigger) {

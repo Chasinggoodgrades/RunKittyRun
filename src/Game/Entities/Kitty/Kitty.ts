@@ -77,8 +77,8 @@ export class Kitty {
     public Finished: boolean = false
     public TeamID = 0
     public ProgressZone = 0
-    public w_Collision: Trigger = Trigger.create()!
-    public c_Collision: Trigger = Trigger.create()!
+    public w_Collision: Trigger
+    public c_Collision: Trigger
     public Disco: Disco
     public InvulTimer = Timer.create()
     public IsChained: boolean = false

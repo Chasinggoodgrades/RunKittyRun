@@ -29,7 +29,6 @@ export class ShadowKitty {
         this.Player = kitty.Player
         this.ID = kitty.Player.id
         ShadowKitty.ALL_SHADOWKITTIES.set(this.Player, this)
-        this.RegisterTriggers()
     }
 
     public static Initialize = () => {
@@ -92,10 +91,5 @@ export class ShadowKitty {
     private static PauseKitty(player: MapPlayer, paused: boolean) {
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.paused = paused
-    }
-
-    private RegisterTriggers = () => {
-        this.wCollision = Trigger.create()!
-        this.cCollision = Trigger.create()!
     }
 }

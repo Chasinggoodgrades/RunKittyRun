@@ -126,7 +126,7 @@ export class Reward {
         if (setData)
             player.DisplayTimedTextTo(
                 3.0,
-                `${Colors.COLOR_RED}Applied:|r ${this.GetRewardName()} ${Colors.COLOR_ORANGE}[${this.Type.toString()}]`
+                `${Colors.COLOR_RED}Applied:|r ${this.GetRewardName()} ${Colors.COLOR_ORANGE}[${this.SetRewardTypeSorted()}]`
             )
     }
 

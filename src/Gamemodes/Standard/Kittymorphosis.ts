@@ -53,7 +53,7 @@ export class KittyMorphosis {
         this.triggerHandle ??= Trigger.create()!
         this.triggerHandle.registerUnitEvent(this.Kitty.Unit, EVENT_UNIT_HERO_LEVEL)
         this.triggerHandle.addCondition(() => getTriggerUnit().getHeroLevel() >= this.REQUIRED_LEVEL)
-        this.triggerHandle.addAction(() => this.MorphKitty())
+        this.triggerHandle.addAction(this.MorphKitty)
     }
 
     /// <summary>

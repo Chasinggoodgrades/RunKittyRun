@@ -58,8 +58,8 @@ export class CollisionDetection {
 
     public static KittyRegisterCollisions(k: Kitty) {
         const WOLF_COLL_RADIUS = k.CurrentStats.CollisonRadius
-        k.w_Collision ??= Trigger.create()!
-        k.c_Collision ??= Trigger.create()!
+        k.w_Collision = Trigger.create()!
+        k.c_Collision = Trigger.create()!
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
@@ -76,8 +76,8 @@ export class CollisionDetection {
     }
 
     public static ShadowKittyRegisterCollision(sk: ShadowKitty) {
-        sk.wCollision ??= Trigger.create()!
-        sk.cCollision ??= Trigger.create()!
+        sk.wCollision = Trigger.create()!
+        sk.cCollision = Trigger.create()!
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,

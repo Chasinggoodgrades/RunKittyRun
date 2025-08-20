@@ -22,7 +22,7 @@ export class SoundManager {
     // Sound configurations
     private static readonly SOUND_CONFIGS: Record<string, SoundConfig> = {
         KittyDeath: {
-            path: 'Units\\NightElf\\HeroMoonPriestess\\HeroMoonPriistessDeath1.wav',
+            path: 'Units\\NightElf\\HeroMoonPriestess\\HeroMoonPriestessDeath1.wav',
             is3D: false,
             stopWhenOutOfRange: true,
             fadeIn: false,
@@ -195,9 +195,9 @@ export class SoundManager {
             return
         }
 
-        StopSound(sound.handle, false, false)
-        AttachSoundToUnit(sound.handle, unit.handle)
-        PlaySoundBJ(sound.handle)
+        sound.stop(false, false)
+        sound.setPosition(unit.x, unit.y, unit.z)
+        sound.start()
     }
 
     // Public API methods
