@@ -10,7 +10,6 @@ export class WolfArea {
     public static WolfAreas: Map<number, WolfArea> = new Map<number, WolfArea>()
     public static TotalArea = 0.0
     public ID = 0
-    public Rect: rect
     public Region: region
     public Rectangle: Rectangle
     public Area = 0
@@ -27,7 +26,6 @@ export class WolfArea {
         let count = 0
         for (const wolfRegion of RegionList.WolfRegions) {
             const wolfArea = new WolfArea(count, wolfRegion.region())
-            wolfArea.Rect = Rect(wolfRegion.minX, wolfRegion.minY, wolfRegion.maxX, wolfRegion.maxY)
             wolfArea.Rectangle = wolfRegion
             wolfArea.CalculateArea()
             wolfArea.RegisterEnterEvents()

@@ -23,7 +23,6 @@ export class Safezone {
     public Region: region
     private triggerHandle: Trigger
     public ID = 0
-    public rect: rect
     public Rectangle: Rectangle
     public AwardedPlayers: MapPlayer[] = []
 
@@ -39,7 +38,6 @@ export class Safezone {
             const safezone = new Safezone(count, safeZone.region())
             Globals.SAFE_ZONES.push(safezone)
             safezone.EnterSafezoneEvents()
-            safezone.rect = safeZone.handle
             safezone.Rectangle = safeZone
             count++
         }
