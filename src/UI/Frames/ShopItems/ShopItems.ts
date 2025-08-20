@@ -121,7 +121,7 @@ export class ShopItem {
 
     public static ShopItemsMisc(): ShopItem[] {
         return [
-            (new ShopItem(
+            new ShopItem(
                 'Anti-Block-Wand',
                 100,
                 Constants.ITEM_ANTI_BLOCK_WAND,
@@ -134,7 +134,7 @@ export class ShopItem {
                 Constants.ITEM_ORB_OF_MYSTERIES,
                 Utility.GetItemIconPath(Constants.ITEM_ORB_OF_MYSTERIES),
                 'A mysterious orb that has mysterious usefulness!'
-            )),
+            ),
         ]
     }
 }

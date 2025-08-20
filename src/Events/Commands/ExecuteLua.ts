@@ -4,9 +4,11 @@ export class ExecuteLua {
     public static LuaCode(player: MapPlayer, args: string) {
         player.DisplayTextTo(`Args: '${args}'`)
 
-        const luaChunk = `return function()
+        /*
             local self = Globals.ALL_KITTIES:get(getTriggerPlayer())
             local target = Globals.ALL_KITTIES:get(GetOwningPlayer(CustomStatFrame.SelectedUnit:get(getTriggerPlayer())))
+        */
+        const luaChunk = `return function()
             return ${args}
         end`
 
