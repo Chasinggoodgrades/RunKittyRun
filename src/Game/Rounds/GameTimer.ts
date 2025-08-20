@@ -69,7 +69,7 @@ export class GameTimer {
     /// </summary>
     /// <param name="team"></param>
     /// <returns></returns>
-    public static TeamTotalTime(team: Team) {
+    public static TeamTotalTime = (team: Team) => {
         let totalTime = 0.0
         for (const [round, time] of team.TeamTimes) {
             totalTime += time

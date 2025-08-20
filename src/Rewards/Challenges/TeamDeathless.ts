@@ -163,7 +163,7 @@ export class TeamDeathless {
     /// Whenever a player with the orb reaches the proper safezone, TeamDeathless method calls to set the OrbEffect to the center of the passed safezone.
     /// </summary>
     /// <param name="safezone"></param>
-    public static ReachedSafezone(unit: Unit, safezone: Safezone) {
+    public static ReachedSafezone = (unit: Unit, safezone: Safezone) => {
         if (!TeamDeathless.EventStarted) return
         if (TeamDeathless.CurrentHolder === null) return // No one holding orb.
         if (safezone.ID <= TeamDeathless.CurrentSafezone.ID) return
@@ -191,7 +191,7 @@ export class TeamDeathless {
     /// Whenever a player dies with the deathless orb, TeamDeathless dictates whether the event should restart or if they got lucky to hold onto it for a bit longer.
     /// </summary>
     /// <param name="k"></param>
-    public static DiedWithOrb(k: Kitty) {
+    public static DiedWithOrb = (k: Kitty) => {
         try {
             if (!TeamDeathless.EventStarted) return // event hasn't started yet.
             if (k.ProtectionActive) return // Player protected.

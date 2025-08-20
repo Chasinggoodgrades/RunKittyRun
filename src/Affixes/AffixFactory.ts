@@ -31,7 +31,7 @@ export class AffixFactory {
         AffixFactory.InitLaneWeights()
     }
 
-    public static CalculateAffixes(laneIndex: number = -1) {
+    public static CalculateAffixes = (laneIndex: number = -1) => {
         for (const affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) continue
             if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
@@ -81,7 +81,7 @@ export class AffixFactory {
      * @unit: parm: Wolf
      * @affixName: optional: string
      */
-    private static CanApplyAffix(unit: Wolf, affixName: string = 'x') {
+    private static CanApplyAffix = (unit: Wolf, affixName: string = 'x') => {
         return unit.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName)
     }
 
@@ -195,7 +195,7 @@ export class AffixFactory {
     // 1. Must be in the same lane
     // 2. Must have fewer than the maximum number of affixes
     // 3. Must not be a blood wolf, or named wolves
-    private static ShouldAffixWolves(wolf: Wolf, laneIndex: number) {
+    private static ShouldAffixWolves = (wolf: Wolf, laneIndex: number) => {
         return (
             wolf.RegionIndex === laneIndex &&
             wolf.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES &&

@@ -10,7 +10,7 @@ import { Team } from './Team'
 export class TeamHandler {
     public static FreepickEnabled: boolean = false
 
-    public static Handler(Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) {
+    public static Handler = (Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) => {
         if (
             Globals.CurrentGameModeType === Globals.TEAM_MODES[0] &&
             (adminForced || (!RoundManager.GAME_STARTED && TeamHandler.FreepickEnabled))
@@ -23,13 +23,13 @@ export class TeamHandler {
         }
     }
 
-    private static FreepickHandler(Player: MapPlayer, TeamNumber: number, adminForced: boolean) {
+    private static FreepickHandler = (Player: MapPlayer, TeamNumber: number, adminForced: boolean) => {
         if (TeamHandler.CanPlayerJoinTeam(Player, TeamNumber)) {
             TeamHandler.ApplyPlayerToTeam(Player, TeamNumber)
         }
     }
 
-    private static ApplyPlayerToTeam(Player: MapPlayer, TeamNumber: number) {
+    private static ApplyPlayerToTeam = (Player: MapPlayer, TeamNumber: number) => {
         const team = Globals.ALL_TEAMS.get(TeamNumber)
         if (team) {
             team.AddMember(Player)
@@ -90,7 +90,7 @@ export class TeamHandler {
         }
     }
 
-    private static CanPlayerJoinTeam(Player: MapPlayer, TeamNumber: number) {
+    private static CanPlayerJoinTeam = (Player: MapPlayer, TeamNumber: number) => {
         if (TeamNumber > 24) {
             Player.DisplayTextTo(`${Colors.COLOR_YELLOW_ORANGE}Usage: -team 1-24${Colors.COLOR_RESET}`)
             return false
@@ -126,7 +126,7 @@ export class TeamHandler {
         return true
     }
 
-    private static RemoveFromCurrentTeam(Player: MapPlayer) {
+    private static RemoveFromCurrentTeam = (Player: MapPlayer) => {
         const team = Globals.PLAYERS_TEAMS.get(Player)
         if (team) {
             team.RemoveMember(Player)

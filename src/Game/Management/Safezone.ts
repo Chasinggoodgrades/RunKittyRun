@@ -80,7 +80,7 @@ export class Safezone {
     /// <summary>
     /// Runs if the players current safezone isn't the same as their previously touched safezone.
     /// </summary>
-    private SafezoneAdditions(kitty: Kitty) {
+    private SafezoneAdditions = (kitty: Kitty) => {
         const player = kitty.Player
 
         if (kitty.CurrentSafeZone === this.ID) return
@@ -118,7 +118,7 @@ export class Safezone {
     /// </summary>
     /// <param name="unit"></param>
     /// <returns>bool [true/false] if unit type is infact a wolf</returns>
-    public static WolfEntersSafezoneActions(unit: Unit) {
+    public static WolfEntersSafezoneActions = (unit: Unit) => {
         if (unit.typeId !== Wolf.WOLF_MODEL) return false
         const wolf = Globals.ALL_WOLVES.get(unit)
         if (!wolf) return false

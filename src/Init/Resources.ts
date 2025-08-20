@@ -26,12 +26,12 @@ export class Resources {
         for (const [_, kitty] of Globals.ALL_KITTIES) kitty.Unit.experience += Resources.EndRoundBonusXP
     }
 
-    public static StartingItems(kitty: Kitty) {
+    public static StartingItems = (kitty: Kitty) => {
         const unit = kitty.Unit
         unit.addItemById(Constants.ITEM_ADRENALINE_POTION)
     }
 
-    public static SaveGoldBonus(streak: number) {
+    public static SaveGoldBonus = (streak: number) => {
         return Resources.SaveGold + Resources.SaveGold * (Resources.SaveStreakMultiplier * streak)
     }
 

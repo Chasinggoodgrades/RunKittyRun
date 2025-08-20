@@ -14,7 +14,7 @@ export class Votekick {
     private static VoteStarter: MapPlayer | undefined
     private static VOTE_DURATION = 30.0
 
-    public static InitiateVotekick(voteStarter: MapPlayer, player: string) {
+    public static InitiateVotekick = (voteStarter: MapPlayer, player: string) => {
         if (Votekick.VotekickAlreadyActive()) return
         Votekick.VoteStarter = voteStarter
         const playerID = Votekick.GetPlayerID(player)
@@ -44,7 +44,7 @@ export class Votekick {
         )
     }
 
-    private static StartVotekick(target: MapPlayer) {
+    private static StartVotekick = (target: MapPlayer) => {
         if (Globals.VIPLISTUNFILTERED.includes(target)) {
             print(
                 `${Colors.COLOR_YELLOW}You cannot votekick ${ColorUtils.PlayerNameColored(target)}${Colors.COLOR_YELLOW}. They are a VIP.${Colors.COLOR_RESET}`
@@ -60,7 +60,7 @@ export class Votekick {
         Votekick.VoteTimer.start(Votekick.VOTE_DURATION, false, () => Votekick.ExecuteVotekick(target))
     }
 
-    private static ExecuteVotekick(target: MapPlayer) {
+    private static ExecuteVotekick = (target: MapPlayer) => {
         const totalPlayers: number = Globals.ALL_PLAYERS.length
         const requiredVotes: number = totalPlayers / 2
 
@@ -100,12 +100,12 @@ export class Votekick {
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private static GetPlayerID(player: string) {
+    private static GetPlayerID = (player: string) => {
         const playerID = S2I(player)
         return playerID && playerID > 0 ? playerID - 1 : -1
     }
 
-    private static GetPlayer(player: string) {
+    private static GetPlayer = (player: string) => {
         // doesnt quite work yet.
         // let basePlayerName: string = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
         // for (let p of Globals.ALL_PLAYERS) {

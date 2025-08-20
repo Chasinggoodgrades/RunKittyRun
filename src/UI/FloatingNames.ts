@@ -46,7 +46,7 @@ export class FloatingNameTag {
         return this.NameTag.setPosUnit(this.Kitty.Unit, this.NAME_TAG_HEIGHT)
     }
 
-    public static ShowAllNameTags(Player: MapPlayer, shown: boolean) {
+    public static ShowAllNameTags = (Player: MapPlayer, shown: boolean) => {
         if (!Player.isLocal()) return
         for (let i = 0; i < Globals.ALL_KITTIES_LIST.length; i++) {
             const k = Globals.ALL_KITTIES_LIST[i]

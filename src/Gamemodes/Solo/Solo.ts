@@ -10,7 +10,7 @@ export class Solo {
         ItemSpawner.NUMBER_OF_ITEMS = 8
     }
 
-    public static ReviveKittySoloTournament(kitty: Kitty) {
+    public static ReviveKittySoloTournament = (kitty: Kitty) => {
         if (CurrentGameMode.active !== GameMode.SoloTournament || Globals.CurrentGameModeType !== 'Race') return // Solo Gamemode & Race GamemodeType.
         new SoloDeathTimer(kitty.Player)
     }

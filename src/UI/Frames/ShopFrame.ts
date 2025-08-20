@@ -101,7 +101,7 @@ export class ShopFrame {
         ShopFrame.CreatePanelTitle(ShopFrame.miscPanel, 'Miscellaneous')
     }
 
-    private static CreatePanelTitle(panel: Frame, title: string) {
+    private static CreatePanelTitle = (panel: Frame, title: string) => {
         const titleFrame = blzCreateFrameByType('TEXT', 'titleFrame', panel, '', 0)
         titleFrame.setPoint(FRAMEPOINT_TOP, panel, FRAMEPOINT_TOP, 0, 0.01)
         titleFrame.setText(title)
@@ -205,7 +205,7 @@ export class ShopFrame {
         }
     }
 
-    private static AddItemsToPanel(panel: Frame, items: ShopItem[]) {
+    private static AddItemsToPanel = (panel: Frame, items: ShopItem[]) => {
         const columns = 6
         const rows: number = Math.ceil(items.length / columns)
         for (let i = 0; i < items.length; i++) {
@@ -245,7 +245,7 @@ export class ShopFrame {
         }
     }
 
-    private static UpdateButtonStatus(player: MapPlayer) {
+    private static UpdateButtonStatus = (player: MapPlayer) => {
         try {
             if (!player.isLocal()) return
             if (!Globals.SelectedItems.has(player)) return
@@ -271,7 +271,7 @@ export class ShopFrame {
         }
     }
 
-    private static RelicButtons(player: MapPlayer, item: ShopItem) {
+    private static RelicButtons = (player: MapPlayer, item: ShopItem) => {
         if (item === null) return
         if (item.Type !== ShopItemType.Relic) return
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
@@ -290,7 +290,7 @@ export class ShopFrame {
         // Need to add another check for upgrades per player.
     }
 
-    private static ShowItemDetails(shopItem: ShopItem) {
+    private static ShowItemDetails = (shopItem: ShopItem) => {
         const player = getTriggerPlayer()
         const frame = Frame.fromHandle(BlzGetTriggerFrame())!
 
@@ -326,7 +326,7 @@ export class ShopFrame {
         }
     }
 
-    private static CreateShopitemTooltips(parent: Frame, item: ShopItem) {
+    private static CreateShopitemTooltips = (parent: Frame, item: ShopItem) => {
         try {
             const background = blzCreateFrame('QuestButtonBaseTemplate', ShopFrame.GameUI, 0, 0)
             const tooltip = blzCreateFrameByType('TEXT', `${parent.getName()}Tooltip`, background, '', 0)
@@ -447,26 +447,26 @@ export class ShopFrame {
         return ShopItem.ShopItemsMisc()
     }
 
-    private static HasEnoughGold(player: MapPlayer, cost: number) {
+    private static HasEnoughGold = (player: MapPlayer, cost: number) => {
         return player.getGold() >= cost
     }
 
-    private static CanSellRelic(unit: Unit) {
+    private static CanSellRelic = (unit: Unit) => {
         return unit.getHeroLevel() >= Relic.RelicSellLevel
     }
 
-    private static ReduceGold(player: MapPlayer, amount: number) {
+    private static ReduceGold = (player: MapPlayer, amount: number) => {
         return player.addGold(-amount)
     }
 
-    public static NotEnoughGold(player: MapPlayer, cost: number) {
+    public static NotEnoughGold = (player: MapPlayer, cost: number) => {
         return player.DisplayTimedTextTo(
             8.0,
             `${Colors.COLOR_RED}You do not have enough gold.|r ${Colors.COLOR_YELLOW}(${cost} gold)|r`
         )
     }
 
-    private static AddItem(player: MapPlayer, itemID: number) {
+    private static AddItem = (player: MapPlayer, itemID: number) => {
         return Globals.ALL_KITTIES.get(player)!.Unit.addItemById(itemID)
     }
 

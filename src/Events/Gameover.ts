@@ -90,7 +90,7 @@ export class Gameover {
     /// True if the game is over and the kitties have won. False if they lost.
     /// </summary>
     /// <param name="win"></param>
-    private static GameStats(win: boolean) {
+    private static GameStats = (win: boolean) => {
         for (const [_, kitty] of Globals.ALL_KITTIES) {
             Gameover.IncrementGameStats(kitty)
             if (win) Gameover.IncrementWins(kitty)
@@ -99,7 +99,7 @@ export class Gameover {
         AwardManager.AwardGameStatRewards()
     }
 
-    private static IncrementGameStats(kitty: Kitty) {
+    private static IncrementGameStats = (kitty: Kitty) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
@@ -120,7 +120,7 @@ export class Gameover {
         }
     }
 
-    private static IncrementWins(kitty: Kitty) {
+    private static IncrementWins = (kitty: Kitty) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const stats = kitty.SaveData.GameStats
         switch (Difficulty.DifficultyValue) {
@@ -141,7 +141,7 @@ export class Gameover {
         }
     }
 
-    private static IncrementWinStreak(kitty: Kitty, win: boolean) {
+    private static IncrementWinStreak = (kitty: Kitty, win: boolean) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         const stats = kitty.SaveData.GameStats
 

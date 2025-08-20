@@ -75,7 +75,7 @@ export class GameoverUtil {
         }
     }
 
-    private static SetNormalGameStats(kitty: Kitty) {
+    private static SetNormalGameStats = (kitty: Kitty) => {
         const stats = kitty.SaveData.BestGameTimes.NormalGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
@@ -83,7 +83,7 @@ export class GameoverUtil {
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
-    private static SetHardGameStats(kitty: Kitty) {
+    private static SetHardGameStats = (kitty: Kitty) => {
         const stats = kitty.SaveData.BestGameTimes.HardGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
@@ -91,7 +91,7 @@ export class GameoverUtil {
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
-    private static SetImpossibleGameStats(kitty: Kitty) {
+    private static SetImpossibleGameStats = (kitty: Kitty) => {
         const stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining
@@ -99,7 +99,7 @@ export class GameoverUtil {
         stats.TeamMembers = GameoverUtil.GetTeamMembers()
     }
 
-    private static SetNightmareGameStats(kitty: Kitty) {
+    private static SetNightmareGameStats = (kitty: Kitty) => {
         const stats = kitty.SaveData.BestGameTimes.NightmareGameTime
         if (Globals.GAME_TIMER.remaining > stats.Time && stats.Time !== 0) return
         stats.Time = Globals.GAME_TIMER.remaining

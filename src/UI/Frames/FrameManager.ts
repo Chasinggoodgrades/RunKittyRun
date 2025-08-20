@@ -172,7 +172,7 @@ export class FrameManager {
         FrameManager.ESCTrigger.addAction(FrameManager.ESCActions)
     }
 
-    public static RefreshFrame(frame: Frame) {
+    public static RefreshFrame = (frame: Frame) => {
         frame.visible = !frame.visible
         frame.visible = !frame.visible
     }

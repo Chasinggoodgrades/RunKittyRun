@@ -30,7 +30,7 @@ export class FirstPersonCamera {
         return this.forceCamTimer !== null
     }
 
-    public ToggleFirstPerson(active: boolean) {
+    public ToggleFirstPerson = (active: boolean) => {
         if (active) {
             if (this.forceCamTimer === null) {
                 this.forceCamTimer = Timer.create()
@@ -121,7 +121,7 @@ export class FirstPersonCamera {
         this.ItemPickup()
     }
 
-    public SetKeyDownState(key: string, state: boolean) {
+    public SetKeyDownState = (key: string, state: boolean) => {
         if (this.keyDownState.has(key)) {
             this.keyDownState.set(key, state)
         }
@@ -180,7 +180,7 @@ export class FirstPersonCameraManager {
         }
     }
 
-    private static OnKeyEvent(key: string, isDown: boolean) {
+    private static OnKeyEvent = (key: string, isDown: boolean) => {
         if (FirstPersonCameraManager.cameras.has(getTriggerPlayer())) {
             FirstPersonCameraManager.cameras.get(getTriggerPlayer())!.SetKeyDownState(key, isDown)
         }
@@ -190,7 +190,7 @@ export class FirstPersonCameraManager {
         return Globals.ALL_KITTIES.has(player) ? Globals.ALL_KITTIES.get(player)!.Unit : (null as never)
     }
 
-    public static ToggleFirstPerson(player: MapPlayer) {
+    public static ToggleFirstPerson = (player: MapPlayer) => {
         if (FirstPersonCameraManager.cameras.has(player)) {
             FirstPersonCameraManager.cameras
                 .get(player)!
@@ -198,7 +198,7 @@ export class FirstPersonCameraManager {
         }
     }
 
-    public static SetFirstPerson(player: MapPlayer, active: boolean) {
+    public static SetFirstPerson = (player: MapPlayer, active: boolean) => {
         if (FirstPersonCameraManager.cameras.has(player)) {
             FirstPersonCameraManager.cameras.get(player)!.ToggleFirstPerson(active)
         }

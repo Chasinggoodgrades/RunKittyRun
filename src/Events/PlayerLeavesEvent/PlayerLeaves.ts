@@ -22,7 +22,7 @@ export class PlayerLeaves {
         PlayerLeaves.triggerHandle.addAction(PlayerLeaves.PlayerLeavesActions)
     }
 
-    public static TeamRemovePlayer(player: MapPlayer) {
+    public static TeamRemovePlayer = (player: MapPlayer) => {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         Globals.PLAYERS_TEAMS.get(player)?.RemoveMember(player)
     }

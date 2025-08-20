@@ -15,7 +15,7 @@ export class BigNum {
     }
 
     // DivSmall method
-    public DivSmall(denom: number) {
+    public DivSmall = (denom: number) => {
         return this.List?.DivSmall(this.Base, denom) ?? 0
     }
 
@@ -56,7 +56,7 @@ export class BigNumL {
         }
     }
 
-    public DivSmall(baseValue: number, denom: number) {
+    public DivSmall = (baseValue: number, denom: number) => {
         let remainder = 0
 
         if (this.Next !== null) {

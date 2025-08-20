@@ -11,11 +11,11 @@ export class OldSavesHelper {
         return -1
     }
 
-    public static ModuloInteger(x: number, n: number) {
+    public static ModuloInteger = (x: number, n: number) => {
         return ((x % n) + n) % n
     }
 
-    public static CharToInt(c: string) {
+    public static CharToInt = (c: string) => {
         let i = 0
         while (i < OldSavesHelper.charset.length && c !== OldSavesHelper.charset[i]) {
             i++

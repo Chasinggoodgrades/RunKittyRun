@@ -66,7 +66,7 @@ export class CommandHandler {
         }
     }
 
-    private static GamemodeSetting(chatString: string) {
+    private static GamemodeSetting = (chatString: string) => {
         const player = getTriggerPlayer()
         const command = chatString.toLowerCase()
 

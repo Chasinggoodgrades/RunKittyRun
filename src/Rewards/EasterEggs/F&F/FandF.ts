@@ -71,7 +71,7 @@ export class FandF {
         FandF.BloodVialQuest(getTriggerUnit())
     }
 
-    private static EmptyVialQuest(u: Unit) {
+    private static EmptyVialQuest = (u: Unit) => {
         if (!Utility.UnitHasItem(u, FandF.EmptyVial)) return
         const player = u.owner
         player.DisplayTimedTextTo(
@@ -80,7 +80,7 @@ export class FandF {
         )
     }
 
-    private static BloodVialQuest(u: Unit) {
+    private static BloodVialQuest = (u: Unit) => {
         if (!Utility.UnitHasItem(u, FandF.BloodVial)) return
 
         if (FandF.BloodVialItems(u)) {
@@ -96,7 +96,7 @@ export class FandF {
         )
     }
 
-    private static BloodVialItems(u: Unit) {
+    private static BloodVialItems = (u: Unit) => {
         return (
             Utility.UnitHasItem(u, Constants.ITEM_ADRENALINE_POTION) &&
             Utility.UnitHasItem(u, Constants.ITEM_RITUAL_MASK) &&
@@ -105,7 +105,7 @@ export class FandF {
         )
     }
 
-    private static RemoveQuestItems(u: Unit) {
+    private static RemoveQuestItems = (u: Unit) => {
         RemoveItemFromUnit(u, FandF.BloodVial)
         RemoveItemFromUnit(u, Constants.ITEM_ADRENALINE_POTION)
         RemoveItemFromUnit(u, Constants.ITEM_RITUAL_MASK)

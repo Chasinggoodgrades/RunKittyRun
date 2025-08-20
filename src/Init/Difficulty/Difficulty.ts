@@ -73,7 +73,7 @@ export class Difficulty {
         if (pickedOption !== null) Difficulty.SetDifficulty(pickedOption)
     }
 
-    private static SetDifficulty(difficulty: DifficultyOption) {
+    private static SetDifficulty = (difficulty: DifficultyOption) => {
         Difficulty.DifficultyOption = difficulty
         Difficulty.DifficultyValue = difficulty.Value
         Difficulty.IsDifficultyChosen = true
@@ -90,7 +90,7 @@ export class Difficulty {
     /// Changes the difficulty of the game to the specified difficulty.
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
-    public static ChangeDifficulty(difficulty: string = 'normal') {
+    public static ChangeDifficulty = (difficulty: string = 'normal') => {
         for (let i = 0; i < DifficultyOption.Options.length; i++) {
             const option = DifficultyOption.Options[i]
             if (option.name.toLowerCase() === difficulty.toLowerCase()) {

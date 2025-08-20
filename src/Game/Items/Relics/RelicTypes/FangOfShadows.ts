@@ -61,7 +61,7 @@ export class FangOfShadows extends Relic {
         Unit.disableAbility(this.RelicAbilityID, false, true)
     }
 
-    private RegisterTriggers(Unit: Unit) {
+    private RegisterTriggers = (Unit: Unit) => {
         this.SummonTrigger = Trigger.create()!
         this.SummonTrigger.registerUnitEvent(Unit, EVENT_UNIT_SPELL_CAST)
         this.SummonTrigger.addCondition(() => GetSpellAbilityId() === this.RelicAbilityID)
@@ -127,7 +127,7 @@ export class FangOfShadows extends Relic {
         }
     }
 
-    private RegisterTeleportAbility(Unit: Unit) {
+    private RegisterTeleportAbility = (Unit: Unit) => {
         TriggerRegisterUnitEvent(this.TeleTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.TeleTrigger.addCondition(() => GetSpellAbilityId() === this.TeleportAbilityID)
         this.TeleTrigger.addAction(this.TeleportToShadowKitty)
@@ -137,7 +137,7 @@ export class FangOfShadows extends Relic {
     /// Upgrade Level 1 Cooldown Reduction
     /// </summary>
     /// <param name="Unit"></param>
-    private SetAbilityCooldown(Unit: Unit) {
+    private SetAbilityCooldown = (Unit: Unit) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)
         const currentCooldown = BlzGetAbilityCooldown(this.RelicAbilityID, 0)
         const newCooldown = upgradeLevel >= 1 ? currentCooldown - this.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
@@ -146,7 +146,7 @@ export class FangOfShadows extends Relic {
         RelicUtil.SetAbilityCooldown(Unit, this.RelicItemID, this.RelicAbilityID, newCooldown)
     }
 
-    public ReduceCooldownAtSafezone(Unit: Unit) {
+    public ReduceCooldownAtSafezone = (Unit: Unit) => {
         // Have relic
         if (!Utility.UnitHasItem(Unit, this.RelicItemID)) return
         const upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)

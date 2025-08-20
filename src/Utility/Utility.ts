@@ -13,7 +13,7 @@ export class Utility {
     /// Makes the unit unclickable while remaining selectable.
     /// </summary>
     /// <param name="u"></param>
-    public static MakeUnitLocust(u: Unit) {
+    public static MakeUnitLocust = (u: Unit) => {
         u.addAbility(Utility.Locust)
         u.show = false
         u.removeAbility(Utility.Locust)
@@ -25,7 +25,7 @@ export class Utility {
     /// </summary>
     /// <param name="p"></param>
     /// <param name="u"></param>
-    public static SelectUnitForPlayer(p: MapPlayer, u: Unit) {
+    public static SelectUnitForPlayer = (p: MapPlayer, u: Unit) => {
         if (!p.isLocal()) return
         ClearSelection()
         u.select(true)
@@ -36,7 +36,7 @@ export class Utility {
     /// </summary>
     /// <param name="duration">How long to show the message.</param>
     /// <param name="message">Whats the message?</param>
-    public static TimedTextToAllPlayers(duration: number, message: string) {
+    public static TimedTextToAllPlayers = (duration: number, message: string) => {
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             Globals.ALL_PLAYERS[i].DisplayTimedTextTo(duration, message)
         }
@@ -50,7 +50,7 @@ export class Utility {
     /// Converts a number to time string tenths.
     /// Used for colorizing the time string in Teams mode.
     /// </summary>
-    public static ConvertFloatToTimeTeam(time: number, teamID: number) {
+    public static ConvertFloatToTimeTeam = (time: number, teamID: number) => {
         if (time <= 0.0) return '0:00.0'
 
         const minutes = Math.floor(time / 60)
@@ -66,7 +66,7 @@ export class Utility {
     /// Converts a number to time string tenths.
     /// No colorization.
     /// </summary>
-    public static ConvertFloatToTime(time: number) {
+    public static ConvertFloatToTime = (time: number) => {
         if (time <= 0.0) return '0:00.0'
 
         const minutes = Math.floor(time / 60)
@@ -82,7 +82,7 @@ export class Utility {
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public static ConvertFloatToTimeInt(time: number) {
+    public static ConvertFloatToTimeInt = (time: number) => {
         if (time <= 0.0) return '0:00'
 
         const totalSeconds = Math.floor(time)
@@ -97,7 +97,7 @@ export class Utility {
     /// </summary>
     /// <param name="duration"></param>
     /// <param name="action"></param>
-    public static SimpleTimer(duration: number, action: Action) {
+    public static SimpleTimer = (duration: number, action: Action) => {
         const handle = createAchesTimer()
         handle.Timer.start(duration, false, () => {
             action()
@@ -111,7 +111,7 @@ export class Utility {
     /// <param name="u">The unit to check for the item.</param>
     /// <param name="itemId">The ID of the item to check for.</param>
     /// <returns>True if the unit has the item, otherwise false.</returns>
-    public static UnitHasItem(u: Unit, itemId: number) {
+    public static UnitHasItem = (u: Unit, itemId: number) => {
         for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return true
         }
@@ -124,7 +124,7 @@ export class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static UnitHasItemCount(u: Unit, itemId: number) {
+    public static UnitHasItemCount = (u: Unit, itemId: number) => {
         let count = 0
         for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) count++
@@ -138,7 +138,7 @@ export class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static UnitGetItem(u: Unit, itemId: number) {
+    public static UnitGetItem = (u: Unit, itemId: number) => {
         for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return u.getItemInSlot(i)
         }
@@ -152,7 +152,7 @@ export class Utility {
     /// <param name="u"></param>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static GetSlotOfItem(u: Unit, itemId: number) {
+    public static GetSlotOfItem = (u: Unit, itemId: number) => {
         for (let i = 0; i < 6; i++) {
             if (u.getItemInSlot(i)?.typeId === itemId) return i
         }
@@ -164,7 +164,7 @@ export class Utility {
     /// </summary>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public static GetItemIconPath(itemId: number) {
+    public static GetItemIconPath = (itemId: number) => {
         const item = Item.create(itemId, 0, 0)!
         const iconPath = item.icon
         item.destroy()
@@ -181,7 +181,7 @@ export class Utility {
     /// <param name="red"></param>
     /// <param name="green"></param>
     /// <param name="blue"></param>
-    public static CreateSimpleTextTag(
+    public static CreateSimpleTextTag = (
         text: string,
         duration: number,
         u: Unit,
@@ -189,7 +189,7 @@ export class Utility {
         red = 255,
         green = 255,
         blue = 255
-    ) {
+    ) => {
         const tt = TextTag.create()!
         // print(u.name + ' ' + u.nameProper) // What the fuck???
         tt.setText(text, height)
@@ -205,7 +205,7 @@ export class Utility {
     /// </summary>
     /// <param name="amount"></param>
     /// <param name="u"></param>
-    public static GiveGoldFloatingText(amount: number, u: Unit) {
+    public static GiveGoldFloatingText = (amount: number, u: Unit) => {
         u.owner.addGold(amount)
         Utility.CreateSimpleTextTag(`+${amount} Gold`, 2.0, u, 0.018, 255, 215, 0)
     }
@@ -217,7 +217,7 @@ export class Utility {
     /// <param name="path">The path to the effect resource.</param>
     /// <param name="x">The x-coordinate at which to create the effect.</param>
     /// <param name="y">The y-coordinate at which to create the effect.</param>
-    public static CreateEffectAndDispose(path: string, x: number, y: number) {
+    public static CreateEffectAndDispose = (path: string, x: number, y: number) => {
         const e = Effect.create(path, x, y)!
         e.destroy()
     }
@@ -228,7 +228,7 @@ export class Utility {
     /// <param name="path"></param>
     /// <param name="u"></param>
     /// <param name="attachPoint"></param>
-    public static CreateEffectAndDisposeAttach(path: string, u: Unit, attachPoint: string) {
+    public static CreateEffectAndDisposeAttach = (path: string, u: Unit, attachPoint: string) => {
         const e = Effect.createAttachment(path, u, attachPoint)!
         e.destroy()
     }
@@ -237,7 +237,7 @@ export class Utility {
     /// Clears the screen of all messages for the given player.
     /// </summary>
     /// <param name="player"></param>
-    public static ClearScreen(player: MapPlayer) {
+    public static ClearScreen = (player: MapPlayer) => {
         if (!player.isLocal()) return
         ClearTextMessages()
     }
@@ -246,7 +246,7 @@ export class Utility {
     /// Drops all items held by the specified unit.
     /// </summary>
     /// <param name="Unit">The unit whose items are to be dropped.</param>
-    public static DropAllItems(Unit: Unit) {
+    public static DropAllItems = (Unit: Unit) => {
         for (let i = 0; i < 6; i++) {
             const item = Unit.getItemInSlot(i)
             if (item) Unit.dropItem(item, Unit.x, Unit.y)
@@ -258,7 +258,7 @@ export class Utility {
     /// </summary>
     /// <param name="unit">The unit to which mana is to be added.</param>
     /// <param name="amount">The amount of mana to add.</param>
-    public static UnitAddMana(unit: Unit, amount: number) {
+    public static UnitAddMana = (unit: Unit, amount: number) => {
         const maxMana = unit.maxMana
         const currentMana = unit.mana
         const newMana = currentMana + amount
@@ -270,7 +270,7 @@ export class Utility {
     /// Formats an award name by inserting spaces before capital letters.
     /// </summary>
     /// <param name="awardName">The award name to be formatted.</param>
-    public static FormatAwardName(awardName: string) {
+    public static FormatAwardName = (awardName: string) => {
         Utility.stringBuilder = []
         for (let i = 0; i < awardName.length; i++) {
             const char = awardName[i]
@@ -284,7 +284,7 @@ export class Utility {
         return s
     }
 
-    public static GetPlayerByName(playerName: string) {
+    public static GetPlayerByName = (playerName: string) => {
         // if playername is close to a player name, return.. However playerName should be atleast 3 chars long
         if (playerName.length < 3) return null
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
@@ -296,7 +296,7 @@ export class Utility {
         return null
     }
 
-    public static GetItemSkin(itemId: number) {
+    public static GetItemSkin = (itemId: number) => {
         if (itemId === 0) return 0
         const item = Item.create(itemId, 0, 0)!
         const skin = item.skin
@@ -304,7 +304,7 @@ export class Utility {
         return skin
     }
 
-    public static EffectReplayMagic(effect: Effect, x: number, y: number, z: number) {
+    public static EffectReplayMagic = (effect: Effect, x: number, y: number, z: number) => {
         effect.setAlpha(255)
         effect.setColor(255, 255, 255)
         effect.setTime(0)
@@ -314,13 +314,13 @@ export class Utility {
         effect.playAnimation(ANIM_TYPE_BIRTH)
     }
 
-    public static FormattedColorPlayerName(p: MapPlayer) {
+    public static FormattedColorPlayerName = (p: MapPlayer) => {
         // removes everything after '#' in the player name
         const name = p.name.split('#')[0]
         return `${ColorUtils.ColorString(name, p.id + 1)}`
     }
 
-    public static CreateFilterFunc(func: () => boolean) {
+    public static CreateFilterFunc = (func: () => boolean) => {
         return func
     }
 }

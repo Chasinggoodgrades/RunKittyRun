@@ -15,7 +15,7 @@ export class BurntMeat {
     public static ITEM_BURNT_MEAT: number = Constants.ITEM_WOLF_MEAT
     public static Completed: Unit[] = []
 
-    public static FlamesDropChance(k: Kitty) {
+    public static FlamesDropChance = (k: Kitty) => {
         const randomRoll = GetRandomInt(1, 100)
         if (randomRoll > 8) return // 8% chance
         k.Unit.addItemById(BurntMeat.ITEM_CLOAK_FLAMES)

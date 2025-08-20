@@ -39,11 +39,11 @@ export class KittyTime {
 
     // #region Time Section
 
-    public GetRoundTime(round: number) {
+    public GetRoundTime = (round: number) => {
         return this.RoundTime.has(round) ? this.RoundTime.get(round)! : 0.0
     }
 
-    public GetRoundTimeFormatted(round: number) {
+    public GetRoundTimeFormatted = (round: number) => {
         return this.RoundTime.has(round) ? Utility.ConvertFloatToTime(this.RoundTime.get(round)!) : '0:00'
     }
 
@@ -55,12 +55,12 @@ export class KittyTime {
         return Utility.ConvertFloatToTime(this.TotalTime)
     }
 
-    public SetRoundTime(round: number, time: number) {
+    public SetRoundTime = (round: number, time: number) => {
         if (this.RoundTime.has(round)) this.RoundTime.set(round, time)
         this.SetTotalTime()
     }
 
-    public IncrementRoundTime(round: number) {
+    public IncrementRoundTime = (round: number) => {
         if (this.RoundTime.has(round))
             this.RoundTime.set(round, this.RoundTime.get(round)! + GameTimer.RoundSpeedIncrement)
         this.SetTotalTime()
@@ -77,11 +77,11 @@ export class KittyTime {
 
     // #region Progress Section
 
-    public GetRoundProgress(round: number) {
+    public GetRoundProgress = (round: number) => {
         return this.RoundProgress.has(round) ? this.RoundProgress.get(round)! : 0.0
     }
 
-    public SetRoundProgress(round: number, progress: number) {
+    public SetRoundProgress = (round: number, progress: number) => {
         this.RoundProgress.set(round, progress)
     }
 

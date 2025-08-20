@@ -54,11 +54,11 @@ export class Team {
         }
     }
 
-    public AddMember(player: MapPlayer) {
+    public AddMember = (player: MapPlayer) => {
         this.AssignTeamMember(player, true)
     }
 
-    public RemoveMember(player: MapPlayer) {
+    public RemoveMember = (player: MapPlayer) => {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.has(player)) return
         this.AssignTeamMember(player, false)
@@ -80,7 +80,7 @@ export class Team {
         RoundManager.RoundEndCheck()
     }
 
-    public UpdateRoundProgress(round: number, progress: string) {
+    public UpdateRoundProgress = (round: number, progress: string) => {
         this.RoundProgress.set(round, progress)
     }
 
@@ -134,7 +134,7 @@ export class Team {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="adding"></param>
-    private AssignTeamMember(player: MapPlayer, adding: boolean) {
+    private AssignTeamMember = (player: MapPlayer, adding: boolean) => {
         if (adding) {
             this.Teammembers.push(player)
             Globals.ALL_KITTIES.get(player)!.TeamID = this.TeamID

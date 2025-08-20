@@ -61,7 +61,7 @@ export class DoodadChanger {
         DoodadChanger.ShowSeasonalDoodads(true)
     }
 
-    private static ReplaceDoodad(newType: number, scale: number) {
+    private static ReplaceDoodad = (newType: number, scale: number) => {
         const positions: { x: number; y: number }[] = []
 
         for (const des of DoodadChanger.AllDestructables) {
@@ -109,13 +109,13 @@ export class DoodadChanger {
         }
     }
 
-    public static ShowSeasonalDoodads(show: boolean = false) {
+    public static ShowSeasonalDoodads = (show: boolean = false) => {
         return EnumDestructablesInRect(Globals.WORLD_BOUNDS.handle, null as never, () =>
             DoodadChanger.HideDoodads(show)
         )
     }
 
-    private static HideDoodads(show: boolean) {
+    private static HideDoodads = (show: boolean) => {
         const des = Destructable.fromHandle(GetEnumDestructable())!
         if (DoodadChanger.ChristmasDecor.includes(des.typeId)) des.show(show)
     }

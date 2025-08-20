@@ -54,7 +54,7 @@ export class ItemStacker {
         }
     }
 
-    private static StackableItem(itemID: number) {
+    private static StackableItem = (itemID: number) => {
         return ItemStacker.StackableItemIDs.includes(itemID)
     }
 }

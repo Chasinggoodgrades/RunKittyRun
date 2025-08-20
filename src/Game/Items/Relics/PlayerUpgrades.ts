@@ -23,11 +23,11 @@ export class PlayerUpgrades {
         }
     }
 
-    public SetUpgradeLevel(relicType: string, level: number) {
+    public SetUpgradeLevel = (relicType: string, level: number) => {
         return this.UpgradeLevels.set(relicType, level)
     }
 
-    public static IncreaseUpgradeLevel(relicType: string, Unit: Unit) {
+    public static IncreaseUpgradeLevel = (relicType: string, Unit: Unit) => {
         const player = Unit.getOwner()
         if (!player) return
         PlayerUpgrades.GetPlayerUpgrades(player).SetUpgradeLevel(
@@ -36,7 +36,7 @@ export class PlayerUpgrades {
         )
     }
 
-    public GetUpgradeLevel(relicType: string) {
+    public GetUpgradeLevel = (relicType: string) => {
         return this.UpgradeLevels.get(relicType) || 0
     }
 }

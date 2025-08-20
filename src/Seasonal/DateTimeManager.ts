@@ -13,7 +13,7 @@ export class DateTimeManager {
         DateTimeManager.SetDateTime(now)
     }
 
-    private static SetDateTime(time: LuaDateInfoResult) {
+    private static SetDateTime = (time: LuaDateInfoResult) => {
         DateTimeManager.DateTime = time
         DateTimeManager.CurrentMonth = time.month
         DateTimeManager.CurrentDay = time.day

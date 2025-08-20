@@ -14,7 +14,7 @@ export class GamemodeManager {
         GamemodeManager.AddCommand('-team', 'Team Pick', 'Usage: -team <team number>')
     }
 
-    private static AddCommand(cmd: string, desc: string, usage: string) {
+    private static AddCommand = (cmd: string, desc: string, usage: string) => {
         desc = Colors.COLOR_YELLOW_ORANGE + desc
         usage = Colors.COLOR_GOLD + usage
         const command: GamemodeInfo = new GamemodeInfo(cmd, desc, usage)

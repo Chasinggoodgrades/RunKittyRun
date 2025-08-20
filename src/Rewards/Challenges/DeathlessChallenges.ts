@@ -44,7 +44,7 @@ export class DeathlessChallenges {
     /// Increments the players progress for deathless and awards them if they've reached the required checkpoints.
     /// </summary>
     /// <param name="player"></param>
-    public static DeathlessCheck(kitty: Kitty) {
+    public static DeathlessCheck = (kitty: Kitty) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         kitty.CurrentStats.DeathlessProgress++
         if (kitty.CurrentStats.DeathlessProgress === DeathlessChallenges.DeathlessPerRound()) {
@@ -53,18 +53,18 @@ export class DeathlessChallenges {
         }
     }
 
-    public static ResetPlayerDeathless(kitty: Kitty) {
+    public static ResetPlayerDeathless = (kitty: Kitty) => {
         return (kitty.CurrentStats.DeathlessProgress = 0)
     }
 
-    private static AwardDeathless(kitty: Kitty) {
+    private static AwardDeathless = (kitty: Kitty) => {
         DeathlessChallenges.DeathlessCount += 1
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit)
         DeathlessChallenges.AwardBasedOnDifficulty(kitty.Player)
         DeathlessChallenges.PlayInvulnerableSoundWithText(kitty)
     }
 
-    private static AwardBasedOnDifficulty(player: MapPlayer) {
+    private static AwardBasedOnDifficulty = (player: MapPlayer) => {
         const difficulty = Difficulty.DifficultyValue
         DeathlessChallenges.NormalDeathlessAward(player)
         /*        switch (difficulty)
@@ -86,7 +86,7 @@ export class DeathlessChallenges {
                 }*/
     }
 
-    private static NormalDeathlessAward(player: MapPlayer) {
+    private static NormalDeathlessAward = (player: MapPlayer) => {
         let gameAwards: GameAwardsDataSorted
         DeathlessChallenges.GiveRoundReward(
             player,
@@ -98,7 +98,7 @@ export class DeathlessChallenges {
         )
     }
 
-    private static HardDeathlessAward(player: MapPlayer) {
+    private static HardDeathlessAward = (player: MapPlayer) => {
         let gameAwards: GameAwardsDataSorted
         DeathlessChallenges.GiveRoundReward(
             player,
@@ -110,7 +110,7 @@ export class DeathlessChallenges {
         )
     }
 
-    private static ImpossibleDeathlessAward(player: MapPlayer) {
+    private static ImpossibleDeathlessAward = (player: MapPlayer) => {
         let gameAwards: GameAwardsDataSorted
         DeathlessChallenges.GiveRoundReward(
             player,
@@ -122,13 +122,13 @@ export class DeathlessChallenges {
         )
     }
 
-    private static GiveRoundReward(player: MapPlayer, ...rewards: string[]) {
+    private static GiveRoundReward = (player: MapPlayer, ...rewards: string[]) => {
         if (Globals.ROUND >= 1 && Globals.ROUND <= rewards.length) {
             AwardManager.GiveReward(player, rewards[Globals.ROUND - 1])
         }
     }
 
-    private static PlayInvulnerableSoundWithText(k: Kitty) {
+    private static PlayInvulnerableSoundWithText = (k: Kitty) => {
         SoundManager.PlayInvulnerableSound()
         const textTag = TextTag.create()!
         Utility.CreateSimpleTextTag(`${Colors.COLOR_RED}Deathless ${Globals.ROUND}!`, 2.0, k.Unit)

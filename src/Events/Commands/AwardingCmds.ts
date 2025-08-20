@@ -57,7 +57,7 @@ export class AwardingCmds {
         )
     }
 
-    private static AwardingHelp(player: MapPlayer) {
+    private static AwardingHelp = (player: MapPlayer) => {
         let combined = ''
 
         for (const category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
@@ -73,7 +73,7 @@ export class AwardingCmds {
         )
     }
 
-    private static AwardAll(player: MapPlayer) {
+    private static AwardAll = (player: MapPlayer) => {
         for (const category of Object.keys(Globals.GAME_AWARDS_SORTED)) {
             const subCategory = Globals.GAME_AWARDS_SORTED[category as keyof GameAwardsDataSorted]
             for (const property of Object.keys(subCategory)) {
@@ -87,7 +87,7 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>
-    public static SettingGameStats(player: MapPlayer, args: string[]) {
+    public static SettingGameStats = (player: MapPlayer, args: string[]) => {
         const stats = args[0].toLowerCase()
         const selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         const selectedPlayer = selectedUnit.owner
@@ -128,7 +128,7 @@ export class AwardingCmds {
         }
     }
 
-    private static GameStatsHelp(player: MapPlayer) {
+    private static GameStatsHelp = (player: MapPlayer) => {
         let combined = ''
         for (const property of Object.keys(Globals.GAME_STATS)) {
             combined += property + ', '
@@ -139,7 +139,7 @@ export class AwardingCmds {
         )
     }
 
-    public static SettingGameTimes(player: MapPlayer, args: string[]) {
+    public static SettingGameTimes = (player: MapPlayer, args: string[]) => {
         const roundTime = args[0].toLowerCase()
         const selectedUnit = CustomStatFrame.SelectedUnit.get(player)!
         const selectedPlayer = selectedUnit.owner
@@ -179,7 +179,7 @@ export class AwardingCmds {
         }
     }
 
-    private static GameTimesHelp(player: MapPlayer) {
+    private static GameTimesHelp = (player: MapPlayer) => {
         let combined = ''
         for (const property of Object.keys(Globals.GAME_TIMES)) {
             combined += property + ', '
@@ -195,7 +195,7 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="kitty"></param>
-    public static GetAllGameStats(player: MapPlayer, kitty: Kitty) {
+    public static GetAllGameStats = (player: MapPlayer, kitty: Kitty) => {
         if (!Globals.ALL_PLAYERS.includes(player)) return
         let combined = ''
         for (const property of Object.keys(Globals.GAME_STATS)) {
@@ -213,7 +213,7 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="kitty"></param>
-    public static GetAllPersonalBests(player: MapPlayer, kitty: Kitty) {
+    public static GetAllPersonalBests = (player: MapPlayer, kitty: Kitty) => {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined = ''
         const personalBests = kitty.SaveData.PersonalBests
@@ -232,7 +232,7 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="kitty"></param>
-    public static GetAllGameTimes(player: MapPlayer, kitty: Kitty, difficultyArg: string) {
+    public static GetAllGameTimes = (player: MapPlayer, kitty: Kitty, difficultyArg: string) => {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined: string = ''
 
@@ -261,7 +261,7 @@ export class AwardingCmds {
         )
     }
 
-    private static GetRoundNumber(propertyName: string) {
+    private static GetRoundNumber = (propertyName: string) => {
         if (propertyName.includes('One')) return 1
         if (propertyName.includes('Two')) return 2
         if (propertyName.includes('Three')) return 3
@@ -276,7 +276,7 @@ export class AwardingCmds {
     /// </summary>
     /// <param name="player"></param>
     /// <param name="kitty"></param>
-    public static GetKibbleCurrencyInfo(player: MapPlayer, kitty: Kitty) {
+    public static GetKibbleCurrencyInfo = (player: MapPlayer, kitty: Kitty) => {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
         let combined = ''
         const kibbleCurrency = kitty.SaveData.KibbleCurrency
@@ -291,7 +291,7 @@ export class AwardingCmds {
         )
     }
 
-    private static CurrentKibbleInfo(kitty: Kitty) {
+    private static CurrentKibbleInfo = (kitty: Kitty) => {
         let combined: string = ''
         combined += `${Colors.COLOR_YELLOW_ORANGE}Collected:|r ${kitty.CurrentStats.CollectedKibble}\n`
         combined += `${Colors.COLOR_YELLOW_ORANGE}Jackpots:|r ${kitty.CurrentStats.CollectedJackpots}\n`

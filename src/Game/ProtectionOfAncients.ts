@@ -38,7 +38,7 @@ export class ProtectionOfAncients {
     /// Gives the unit the ProtectionOfAncients Ability.
     /// </summary>
     /// <param name="unit"></param>
-    private static AddProtectionOfAncients(unit: Unit) {
+    private static AddProtectionOfAncients = (unit: Unit) => {
         const player = unit.owner
         unit.addAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS)
         player.DisplayTimedTextTo(
@@ -65,7 +65,7 @@ export class ProtectionOfAncients {
     /// </summary>
     /// <param name="unit"></param>
     /// <returns>Returns the integer level the ability was set to.</returns>
-    public static SetProtectionOfAncientsLevel(unit: Unit) {
+    public static SetProtectionOfAncientsLevel = (unit: Unit) => {
         const player = unit.owner
         const heroLevel = unit.getHeroLevel()
 
@@ -163,7 +163,7 @@ export class ProtectionOfAncients {
         })
     }
 
-    public static GetOneOfNineCooldown(Player: MapPlayer) {
+    public static GetOneOfNineCooldown = (Player: MapPlayer) => {
         const kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
         const noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
         const relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
@@ -180,12 +180,12 @@ export class ProtectionOfAncients {
         return Math.max(0.0, cooldown) // gotta make sure its not negative
     }
 
-    public static GetOneOfNineReduction(Player: MapPlayer) {
+    public static GetOneOfNineReduction = (Player: MapPlayer) => {
         return 3.0
         //return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(typeof OneOfNine) * 3.0
     }
 
-    private static ApplyEffect(Unit: Unit) {
+    private static ApplyEffect = (Unit: Unit) => {
         const owningPlayer = Unit.owner
         const kitty = Globals.ALL_KITTIES.get(owningPlayer)!
         const actiEffect = Effect.create(ProtectionOfAncients.APPLY_EFFECT, Unit.x, Unit.y)!
@@ -204,7 +204,7 @@ export class ProtectionOfAncients {
         return !kitty.isAlive()
     }
 
-    private static EndEffectActions(Player: MapPlayer) {
+    private static EndEffectActions = (Player: MapPlayer) => {
         // Get all units within range of the player unit (kitty) and revive them
         const tempGroup = Group.create()! // consider changing this to a static group
         const kitty = Globals.ALL_KITTIES.get(Player)!

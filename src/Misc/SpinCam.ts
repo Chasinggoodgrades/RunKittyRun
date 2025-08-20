@@ -13,7 +13,7 @@ export class SpinCam {
         this.Kitty = kitty
     }
 
-    public ToggleSpinCam(speed: number) {
+    public ToggleSpinCam = (speed: number) => {
         this.SpinCamSpeed = speed / 360
         this.WasSpinCamReset = false
 

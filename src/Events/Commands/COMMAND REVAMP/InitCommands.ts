@@ -1936,7 +1936,7 @@ export class InitCommands {
     /// disposing of their in-game objects, and refreshing the game state.
     /// </summary>
     /// <param name="player">The player to be made a spectator.</param>
-    public static MakePlayerSpectator(player: MapPlayer) {
+    public static MakePlayerSpectator = (player: MapPlayer) => {
         PlayerLeaves.TeamRemovePlayer(player)
         Globals.ALL_KITTIES.get(player)?.dispose()
         Globals.ALL_CIRCLES.get(player)?.dispose()

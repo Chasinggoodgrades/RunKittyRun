@@ -58,14 +58,14 @@ export class ShopItem {
         }
     }
 
-    private InitializeShopItem(
+    private InitializeShopItem = (
         name: string,
         cost: number,
         itemID: number,
         description: string,
         iconPath: string | undefined,
         type: ShopItemType
-    ) {
+    ) => {
         this.name = name
         this.Cost = cost
         this.ItemID = itemID

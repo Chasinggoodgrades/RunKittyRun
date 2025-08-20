@@ -143,7 +143,7 @@ export class MusicFrame {
     /// <summary>
     /// Applies columns of data to the music frame, use only once for initialization.
     /// </summary>
-    public static PopulateMusicFrame(player: MapPlayer) {
+    public static PopulateMusicFrame = (player: MapPlayer) => {
         // Ensure MusicFrame code runs only for the local player
         if (!player.isLocal()) return
 

@@ -33,12 +33,12 @@ export class MultiboardUtil {
     /// </summary>
     /// <param name="player">the player object.</param>
     /// <param name="minMax">true to minimize, false to maximize</param>
-    public static MinMultiboards(player: MapPlayer, minimize: boolean) {
+    public static MinMultiboards = (player: MapPlayer, minimize: boolean) => {
         if (!player.isLocal()) return
         MultiboardUtil.MinStandardMultiboards(minimize)
     }
 
-    private static MinStandardMultiboards(minimize: boolean) {
+    private static MinStandardMultiboards = (minimize: boolean) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         StandardMultiboard.CurrentStats.minimize(minimize) // Possible Desync
         StandardMultiboard.BestTimes.minimize(minimize) // Possible Desync

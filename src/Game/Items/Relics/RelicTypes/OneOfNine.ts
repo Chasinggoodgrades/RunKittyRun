@@ -57,7 +57,7 @@ export class OneOfNine extends Relic {
         BlzStartUnitAbilityCooldown(Unit.handle, this.PreviousAbilityID, cooldown)
     }
 
-    public static GetOneOfNineCooldown(Player: MapPlayer) {
+    public static GetOneOfNineCooldown = (Player: MapPlayer) => {
         const kitty: Unit = Globals.ALL_KITTIES.get(Player)!.Unit
         const noRelic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
         const relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
@@ -74,7 +74,7 @@ export class OneOfNine extends Relic {
         return Math.max(0.0, cooldown) // gotta make sure its not negative
     }
 
-    public static GetOneOfNineReduction(Player: MapPlayer) {
+    public static GetOneOfNineReduction = (Player: MapPlayer) => {
         return PlayerUpgrades.GetPlayerUpgrades(Player).GetUpgradeLevel(OneOfNine.name) * 3.0
     }
 
@@ -83,14 +83,14 @@ export class OneOfNine extends Relic {
     /// </summary>
     /// <param name="Unit"></param>
     /// <param name="abilityLevel"></param>
-    private RemoveManaCost(Unit: Unit, abilityLevel: number) {
+    private RemoveManaCost = (Unit: Unit, abilityLevel: number) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(OneOfNine.name)
         if (upgradeLevel < 2) return
         Unit.getAbility(OneOfNine.RelicAbilityID)
         Unit.setAbilityManaCost(OneOfNine.RelicAbilityID, abilityLevel - 1, 0)
     }
 
-    public static OneOfNineEffect(kitty: Kitty) {
+    public static OneOfNineEffect = (kitty: Kitty) => {
         if (!Utility.UnitHasItem(kitty.Unit, Constants.ITEM_ONE_OF_NINE)) return false
         if (kitty.Unit.getAbilityCooldownRemaining(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC) <= 0.0) {
             kitty.Unit.issueImmediateOrder('divineshield')

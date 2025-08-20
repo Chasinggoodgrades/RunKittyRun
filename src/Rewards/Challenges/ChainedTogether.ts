@@ -48,7 +48,7 @@ export class ChainedTogether {
         ChainedTogether.EventTriggered = true
     }
 
-    private static UpdateStartingCondition(kitty: Kitty) {
+    private static UpdateStartingCondition = (kitty: Kitty) => {
         const currentSafezone: number = kitty.CurrentSafeZone
         const kitties = Globals.ALL_KITTIES_LIST
         let skippedSafezone: boolean = false
@@ -113,7 +113,7 @@ export class ChainedTogether {
         }
     }
 
-    public static LoseEvent(kittyNameOutSideRange: string) {
+    public static LoseEvent = (kittyNameOutSideRange: string) => {
         if (!ChainedTogether.EventStarted) return // Event not started or already ended.
 
         try {
@@ -128,7 +128,7 @@ export class ChainedTogether {
     /// Purpose is to regenerate the group chains if a player leaves the game or disconnects.
     /// </summary>
     /// <param name="kittyName"></param>
-    public static RegenerateGroup(kittyName: string) {
+    public static RegenerateGroup = (kittyName: string) => {
         const groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
             group.some(kitty => kitty.name === kittyName)
         ) // IEnumerable "Any" leaks
@@ -156,7 +156,7 @@ export class ChainedTogether {
         }
     }
 
-    private static FreeKittiesFromGroup(kittyName: string, isVictory: boolean = false) {
+    private static FreeKittiesFromGroup = (kittyName: string, isVictory: boolean = false) => {
         const groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
             group.some(kitty => kitty.name === kittyName)
         ) //IEnumerable with "Any" leaks
@@ -225,7 +225,7 @@ export class ChainedTogether {
         }
     }
 
-    private static ChainGroup(group: Kitty[]) {
+    private static ChainGroup = (group: Kitty[]) => {
         for (let j = 0; j < group.length - 1; j++) {
             const currentKitty = group[j]
             const nextKitty = group[j + 1]
@@ -237,7 +237,7 @@ export class ChainedTogether {
         }
     }
 
-    public static ReachedSafezone(kitty: Kitty) {
+    public static ReachedSafezone = (kitty: Kitty) => {
         try {
             if (!ChainedTogether.EventStarted) {
                 ChainedTogether.UpdateStartingCondition(kitty)
@@ -258,7 +258,7 @@ export class ChainedTogether {
         }
     }
 
-    private static AwardChainedTogether(kitty: Kitty) {
+    private static AwardChainedTogether = (kitty: Kitty) => {
         Utility.CreateSimpleTextTag(`${Colors.COLOR_RED}Chained Together!${Colors.COLOR_RESET}`, 2.0, kitty.Unit)
 
         const level: DifficultyLevel = Difficulty.DifficultyValue
@@ -284,7 +284,7 @@ export class ChainedTogether {
         AwardManager.GiveReward(kitty.Player, nameOfAward)
     }
 
-    private static IsInLastSafezone(kitty: Kitty) {
+    private static IsInLastSafezone = (kitty: Kitty) => {
         // Check if the checks made with this function can be removed by calling the
         // functions TriggerEventOnLastSafeZone and ReachedSafezone on Source\Events\VictoryZone\FinalSafezone.cs
         // I'm afraid there could be a race condition by doing so
@@ -306,7 +306,7 @@ export class Chain {
 
     public constructor() {}
 
-    public SetKitties(firstKitty: Kitty, secondKitty: Kitty) {
+    public SetKitties = (firstKitty: Kitty, secondKitty: Kitty) => {
         this.FirstKitty = firstKitty
         this.SecondKitty = secondKitty
         DestroyLightning(this.Lightning)
@@ -354,7 +354,7 @@ export class Chain {
         MemoryHandler.destroyObject(this)
     }
 
-    public ChangeChainColor(distance: number) {
+    public ChangeChainColor = (distance: number) => {
         let red = 0.0
         let green = 1.0
         let blue = 0.0
@@ -376,7 +376,7 @@ export class Chain {
         SetLightningColor(this.Lightning, red, green, blue, alpha)
     }
 
-    public static CalculateRangeByDifficulty(rangeType: string) {
+    public static CalculateRangeByDifficulty = (rangeType: string) => {
         const level = Difficulty.DifficultyValue
         let selectedRange: { good: number; far: number; breakPoint: number }
 

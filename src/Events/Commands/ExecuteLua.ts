@@ -1,7 +1,7 @@
 import { MapPlayer } from 'w3ts'
 
 export class ExecuteLua {
-    public static LuaCode(player: MapPlayer, args: string) {
+    public static LuaCode = (player: MapPlayer, args: string) => {
         player.DisplayTextTo(`Args: '${args}'`)
 
         /*

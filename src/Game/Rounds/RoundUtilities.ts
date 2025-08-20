@@ -5,7 +5,7 @@ import { CameraUtil } from 'src/Utility/CameraUtil'
 import { MapPlayer } from 'w3ts'
 
 export class RoundUtilities {
-    public static MovePlayerToStart(Player: MapPlayer) {
+    public static MovePlayerToStart = (Player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(Player)!
         const x = RegionList.SpawnRegions[Player.id].centerX
         const y = RegionList.SpawnRegions[Player.id].centerY
@@ -13,7 +13,7 @@ export class RoundUtilities {
         kitty.Unit.facing = 360.0
     }
 
-    public static MoveTeamToStart(team: Team) {
+    public static MoveTeamToStart = (team: Team) => {
         for (let i = 0; i < team.Teammembers.length; i++) {
             const player = team.Teammembers[i]
             const kitty = (Globals.ALL_KITTIES.get(player)!.Finished = true)

@@ -84,7 +84,7 @@ export class RewardsFrame {
         //print(`There are ${count} types`);
     }
 
-    private static CountNumberOfRewards(type: RewardType) {
+    private static CountNumberOfRewards = (type: RewardType) => {
         let count = 0
         for (const reward of RewardsManager.Rewards) {
             if (reward.Type === type) count++
@@ -92,7 +92,7 @@ export class RewardsFrame {
         return count
     }
 
-    private static InitializePanels(name: string, colCount: number) {
+    private static InitializePanels = (name: string, colCount: number) => {
         const y = -RewardsFrame.Padding
         const width = (RewardsFrame.FrameWidth - RewardsFrame.Padding * 2) / 2
         const height = colCount === 1 ? 0.03 : 0.03 + (colCount - 1) * 0.02
@@ -276,7 +276,7 @@ export class RewardsFrame {
         }
     }
 
-    private static RewardTooltip(parent: Frame, reward: Reward) {
+    private static RewardTooltip = (parent: Frame, reward: Reward) => {
         const background = blzCreateFrame('QuestButtonBaseTemplate', RewardsFrame.GameUI, 0, 0)
         const tooltipText = blzCreateFrameByType('TEXT', `${reward.name}Tooltip`, background, '', 0)
 
@@ -294,7 +294,7 @@ export class RewardsFrame {
         tooltipText.text = `${name}\n${desc}`
     }
 
-    private static RewardButtonActions(reward: Reward) {
+    private static RewardButtonActions = (reward: Reward) => {
         const player = getTriggerPlayer()
         const frame = Frame.fromEvent()
         const stats = Globals.ALL_KITTIES.get(player)!.SaveData
@@ -306,7 +306,7 @@ export class RewardsFrame {
         FrameManager.RefreshFrame(frame)
     }
 
-    private static UnavilableRewardIcons(player: MapPlayer) {
+    private static UnavilableRewardIcons = (player: MapPlayer) => {
         try {
             const stats = Globals.ALL_KITTIES.get(player)!.SaveData
             const unavailablePath = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn'

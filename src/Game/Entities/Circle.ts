@@ -37,12 +37,12 @@ export class Circle {
         Globals.ALL_CIRCLES.delete(this.Player)
     }
 
-    public KittyDied(kitty: Kitty) {
+    public KittyDied = (kitty: Kitty) => {
         this.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
         this.ShowCircle()
     }
 
-    public SetMana(mana: number, maxMana: number, regenRate: number) {
+    public SetMana = (mana: number, maxMana: number, regenRate: number) => {
         this.Unit.mana = mana
         this.Unit.maxMana = maxMana
         BlzSetUnitRealField(this.Unit.handle, UNIT_RF_MANA_REGENERATION, regenRate)

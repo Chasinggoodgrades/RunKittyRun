@@ -61,7 +61,7 @@ export class ShardOfTranslocation extends Relic {
         Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
     }
 
-    private RegisterTrigger(Unit: Unit) {
+    private RegisterTrigger = (Unit: Unit) => {
         const player = Unit.owner
         const CastEventTrigger = Trigger.create()!
         CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
@@ -100,14 +100,14 @@ export class ShardOfTranslocation extends Relic {
         }
     }
 
-    private UpdateBlinkRange(unit: Unit) {
+    private UpdateBlinkRange = (unit: Unit) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(unit.owner).GetUpgradeLevel(ShardOfTranslocation.name)
         this.MaxBlinkRange =
             upgradeLevel >= 1 ? ShardOfTranslocation.UPGRADE_BLINK_RANGE : ShardOfTranslocation.DEFAULT_BLINK_RANGE
         if (upgradeLevel >= 1) Utility.SimpleTimer(0.1, () => this.SetItemTooltip(unit))
     }
 
-    private SetItemTooltip(unit: Unit) {
+    private SetItemTooltip = (unit: Unit) => {
         const item = Utility.UnitGetItem(unit, ShardOfTranslocation.RelicItemID)!
         BlzSetItemExtendedTooltip(
             item.handle,
@@ -119,7 +119,7 @@ export class ShardOfTranslocation extends Relic {
     /// Sets ability cooldown and radius based on upgrade level.
     /// </summary>
     /// <param name="Unit"></param>
-    private SetAbilityData(Unit: Unit) {
+    private SetAbilityData = (Unit: Unit) => {
         Unit.getAbility(this.RelicAbilityID)
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(ShardOfTranslocation.name)
 
@@ -132,7 +132,7 @@ export class ShardOfTranslocation extends Relic {
         RelicUtil.SetAbilityCooldown(Unit, ShardOfTranslocation.RelicItemID, this.RelicAbilityID, cooldown)
     }
 
-    private TeleportUnit(unit: Unit, targetLoc: location) {
+    private TeleportUnit = (unit: Unit, targetLoc: location) => {
         let x = GetLocationX(targetLoc)
         let y = GetLocationY(targetLoc)
         const distance = distanceBetweenXYPoints(unit.x, unit.y, x, y)
@@ -145,7 +145,7 @@ export class ShardOfTranslocation extends Relic {
         unit.setPosition(x, y)
     }
 
-    private static EligibleLocation(targetLoc: location, currentSafezone: number) {
+    private static EligibleLocation = (targetLoc: location, currentSafezone: number) => {
         const SAFEZONES = Globals.SAFE_ZONES
         return (
             SAFEZONES[currentSafezone].Rectangle.includes(GetLocationX(targetLoc), GetLocationY(targetLoc)) ||
@@ -158,7 +158,7 @@ export class ShardOfTranslocation extends Relic {
         )
     }
 
-    private static WolfRegionEligible(targetLoc: location, currentSafezone: number) {
+    private static WolfRegionEligible = (targetLoc: location, currentSafezone: number) => {
         const WOLF_AREAS = RegionList.WolfRegions
         if (WOLF_AREAS[currentSafezone].includes(GetLocationX(targetLoc), GetLocationY(targetLoc))) return true
         if (

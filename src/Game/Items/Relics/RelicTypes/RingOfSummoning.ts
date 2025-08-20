@@ -49,7 +49,7 @@ export class RingOfSummoning extends Relic {
         this.Upgrades.push(new RelicUpgrade(1, 'Summons one additional player within your targeted AoE.', 20, 1000))
     }
 
-    private RegisterTriggers(Unit: Unit) {
+    private RegisterTriggers = (Unit: Unit) => {
         this.triggerHandle = Trigger.create()!
         TriggerRegisterUnitEvent(this.triggerHandle.handle, Unit.handle, EVENT_UNIT_SPELL_EFFECT)
         this.triggerHandle.addCondition(() => GetSpellAbilityId() === this.RelicAbilityID)
@@ -74,7 +74,7 @@ export class RingOfSummoning extends Relic {
     /// Sets ability cooldown and radius based on upgrade level.
     /// </summary>
     /// <param name="Unit"></param>
-    private SetAbilityData(Unit: Unit) {
+    private SetAbilityData = (Unit: Unit) => {
         const ability = Unit.getAbility(this.RelicAbilityID)!
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(RingOfSummoning.name)
 
@@ -158,7 +158,7 @@ export class RingOfSummoning extends Relic {
     /// <param name="summoner"></param>
     /// <param name="summoned"></param>
     /// <returns></returns>
-    private SummonDeadKitty(summoner: Kitty, summoned: Kitty) {
+    private SummonDeadKitty = (summoner: Kitty, summoned: Kitty) => {
         const round = Globals.ROUND
         const summoersProgress = summoner.TimeProg.GetRoundProgress(round)
         const deadProg = summoned.TimeProg.GetRoundProgress(round)
@@ -178,7 +178,7 @@ export class RingOfSummoning extends Relic {
         return true
     }
 
-    private DeathlessKitty(summonerKitty: Kitty, summonedKittyUnit: Kitty) {
+    private DeathlessKitty = (summonerKitty: Kitty, summonedKittyUnit: Kitty) => {
         if (TeamDeathless.CurrentHolder !== summonedKittyUnit) return true
 
         summonerKitty.Player.DisplayTimedTextTo(
@@ -188,7 +188,7 @@ export class RingOfSummoning extends Relic {
         return false
     }
 
-    private ChainedKitty(summonerKitty: Kitty, summonedKittyUnit: Kitty) {
+    private ChainedKitty = (summonerKitty: Kitty, summonedKittyUnit: Kitty) => {
         if (!summonedKittyUnit.IsChained) return true
         summonerKitty.Player.DisplayTimedTextTo(
             5.0,
@@ -202,7 +202,7 @@ export class RingOfSummoning extends Relic {
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private GetNumberOfSummons(player: MapPlayer) {
+    private GetNumberOfSummons = (player: MapPlayer) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(RingOfSummoning.name)
         return upgradeLevel >= 2 ? 2 : 1
     }

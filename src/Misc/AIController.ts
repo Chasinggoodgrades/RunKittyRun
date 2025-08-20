@@ -122,7 +122,7 @@ export class AIController {
         return this.enabled
     }
 
-    private CalcProgressZone(kitty: Kitty) {
+    private CalcProgressZone = (kitty: Kitty) => {
         let currentProgressZoneId = kitty.ProgressZone
 
         if (this.IsInSafeZone(kitty.Unit.x, kitty.Unit.y, currentProgressZoneId + 1)) {
@@ -308,7 +308,7 @@ export class AIController {
         }
     }
 
-    private IsWithinLaneBounds(x: number, y: number) {
+    private IsWithinLaneBounds = (x: number, y: number) => {
         const currentProgressZoneId = this.kitty.ProgressZone
         const laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
 
@@ -325,7 +325,7 @@ export class AIController {
         }
     }
 
-    private IsInSafeZone(x: number, y: number, safeZoneId: number) {
+    private IsInSafeZone = (x: number, y: number, safeZoneId: number) => {
         if (safeZoneId < 0 || safeZoneId >= Globals.SAFE_ZONES.length) {
             return false // prevent out of bounds errors xd
         }
@@ -339,7 +339,7 @@ export class AIController {
         )
     }
 
-    private IssueOrder(command: string, x: number, y: number, isDodge: boolean) {
+    private IssueOrder = (command: string, x: number, y: number, isDodge: boolean) => {
         const MIN_MOVE_DISTANCE: number = isDodge ? 16.0 : 64.0
 
         if (command === 'move') {
@@ -374,7 +374,7 @@ export class AIController {
         this.kitty.Unit.issueOrderAt(command, x, y)
     }
 
-    private IssueOrderBasic(command: string) {
+    private IssueOrderBasic = (command: string) => {
         this.lastCommand = command
         this.lastX = -1
         this.lastY = -1
@@ -383,7 +383,7 @@ export class AIController {
         this.kitty.Unit.issueImmediateOrder(command)
     }
 
-    private GetCenterPositionInSafezone(safezone: Safezone) {
+    private GetCenterPositionInSafezone = (safezone: Safezone) => {
         const centerX = (safezone.Rectangle.minX + safezone.Rectangle.maxX) / 2
         const centerY = (safezone.Rectangle.minY + safezone.Rectangle.maxY) / 2
         return [centerX, centerY]
@@ -462,7 +462,7 @@ export class AIController {
     }
 
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
-    private GetCompositeDodgePosition(wolves: Wolf[], forwardDirection: [number, number]) {
+    private GetCompositeDodgePosition = (wolves: Wolf[], forwardDirection: [number, number]) => {
         // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
         const forwardAngle: number = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
         const requiredClearance = 22.5 * (Math.PI / 180)
@@ -646,7 +646,7 @@ export class AIController {
         ]
     }
 
-    private calcAngle(forwardAngle: number, requiredClearance: number) {
+    private calcAngle = (forwardAngle: number, requiredClearance: number) => {
         // Initialize bestAngle to the original forward direction
         let bestAngle: number = -500
         let foundGapContainingForward: boolean = false
@@ -717,7 +717,7 @@ export class AIController {
         return bestAngle
     }
 
-    private IsAngleInInterval(angle: number, interval: AngleInterval) {
+    private IsAngleInInterval = (angle: number, interval: AngleInterval) => {
         // Normalize the angle and interval boundaries to [0, 2π)
         angle = this.NormalizeAngle(angle)
         const start: number = this.NormalizeAngle(interval.Start)
@@ -747,7 +747,7 @@ export class AIController {
         this.mergedIntervals = []
     }
 
-    private VisualizeBlockedInterval(interval: AngleInterval) {
+    private VisualizeBlockedInterval = (interval: AngleInterval) => {
         if (!this.laser) {
             return
         }
@@ -777,7 +777,7 @@ export class AIController {
         }
     }
 
-    private VisualizeFreeInterval(interval: AngleInterval) {
+    private VisualizeFreeInterval = (interval: AngleInterval) => {
         if (!this.laser) {
             return
         }
@@ -830,7 +830,7 @@ export class AIController {
     /// <summary>
     /// Normalizes an angle (in radians) to the range [0, 2π).
     /// </summary>
-    private NormalizeAngle(angle: number) {
+    private NormalizeAngle = (angle: number) => {
         while (angle < 0) angle += 2 * Math.PI
         while (angle >= 2 * Math.PI) angle -= 2 * Math.PI
         return angle
@@ -839,12 +839,12 @@ export class AIController {
     /// <summary>
     /// Returns the smallest difference (in radians) between two angles.
     /// </summary>
-    private AngleDifference(a: number, b: number) {
+    private AngleDifference = (a: number, b: number) => {
         const diff: number = ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI
         return Math.abs(diff)
     }
 
-    private SortAngleIntervals(intervals: AngleInterval[]) {
+    private SortAngleIntervals = (intervals: AngleInterval[]) => {
         for (let i = 0; i < intervals.length - 1; i++) {
             for (let j = 0; j < intervals.length - i - 1; j++) {
                 if (intervals[j].Start > intervals[j + 1].Start) {
@@ -860,7 +860,7 @@ export class AIController {
     /// <summary>
     /// Merges overlapping angular intervals.
     /// </summary>
-    private MergeIntervals(intervals: AngleInterval[]) {
+    private MergeIntervals = (intervals: AngleInterval[]) => {
         this.SortAngleIntervals(intervals)
 
         let current: AngleInterval = intervals[0]
@@ -878,7 +878,7 @@ export class AIController {
         this.mergedIntervals.push(current)
     }
 
-    private IsWithinRadius(x1: number, y1: number, x2: number, y2: number, radius: number) {
+    private IsWithinRadius = (x1: number, y1: number, x2: number, y2: number, radius: number) => {
         const distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
         return distance <= radius
     }

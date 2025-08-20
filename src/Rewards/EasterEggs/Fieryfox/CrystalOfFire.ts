@@ -27,28 +27,28 @@ export class CrystalOfFire {
         CrystalOfFire.QuestEligible = []
     }
 
-    public static AwardCrystalOfFire(unit: Unit) {
+    public static AwardCrystalOfFire = (unit: Unit) => {
         return unit.addItemById(CrystalOfFire.ItemID)
     }
 
-    public static CrystalOfFireDeath(kitty: Kitty) {
+    public static CrystalOfFireDeath = (kitty: Kitty) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         kitty.CurrentStats.CrystalOfFireAttempts++
     }
 
-    private static RegisterTurnInFiery() {
+    private static RegisterTurnInFiery = () => {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.Fieryfox2023.handle, CrystalOfFire.TurnInRange, undefined)
         triggerHandle.addAction(CrystalOfFire.FieryfoxEvent)
     }
 
-    private static RegisterTurnInFandF() {
+    private static RegisterTurnInFandF = () => {
         const triggerHandle = Trigger.create()!
         triggerHandle.registerUnitInRage(SpawnChampions.FandF2023.handle, CrystalOfFire.TurnInRange, undefined)
         triggerHandle.addAction(CrystalOfFire.FandFEvent)
     }
 
-    private static RegisterChatEvent() {
+    private static RegisterChatEvent = () => {
         const triggerHandle = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS) {
             triggerHandle.registerPlayerChatEvent(player, 'yes!', false)
@@ -56,12 +56,12 @@ export class CrystalOfFire {
         triggerHandle.addAction(CrystalOfFire.AcceptedQuest)
     }
 
-    private static GetDeathAttempts(player: MapPlayer) {
+    private static GetDeathAttempts = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
         return kitty.CurrentStats.CrystalOfFireAttempts
     }
 
-    private static StartMessage(player: MapPlayer) {
+    private static StartMessage = (player: MapPlayer) => {
         return `${Colors.COLOR_YELLOW}Greetings ${ColorUtils.PlayerNameColored(player)}${Colors.COLOR_YELLOW}, you were right to come to me about CrystalOfFire. The Crystals of Fire are a sacred anomaly within CrystalOfFire universe... However, I'm not sure you're quite worthy of it... Prove me wrong... Return to me without any scratches and you may proceed. (May be attempted multiple times)|r ${Colors.COLOR_RED}Type ${Colors.COLOR_YELLOW_ORANGE}"yes!"|r${Colors.COLOR_RED} to accept! (30 seconds)|r`
     }
 

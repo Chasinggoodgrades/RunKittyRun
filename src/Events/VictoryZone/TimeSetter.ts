@@ -13,7 +13,7 @@ export class TimeSetter {
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
     /// </summary>
     /// <param name="player"></param>
-    public static SetRoundTime(player: MapPlayer) {
+    public static SetRoundTime = (player: MapPlayer) => {
         try {
             const standard = CurrentGameMode.active === GameMode.Standard
             const solo = CurrentGameMode.active === GameMode.SoloTournament // Solo

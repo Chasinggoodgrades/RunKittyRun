@@ -56,7 +56,7 @@ export class CollisionDetection {
         }
     }
 
-    public static KittyRegisterCollisions(k: Kitty) {
+    public static KittyRegisterCollisions = (k: Kitty) => {
         const WOLF_COLL_RADIUS = k.CurrentStats.CollisonRadius
         k.w_Collision = Trigger.create()!
         k.c_Collision = Trigger.create()!
@@ -75,7 +75,7 @@ export class CollisionDetection {
         )
     }
 
-    public static ShadowKittyRegisterCollision(sk: ShadowKitty) {
+    public static ShadowKittyRegisterCollision = (sk: ShadowKitty) => {
         sk.wCollision = Trigger.create()!
         sk.cCollision = Trigger.create()!
 
@@ -148,7 +148,7 @@ export class CollisionDetection {
         return sk.cCollision
     }
 
-    public static CheckTeamDead(k: Kitty) {
+    public static CheckTeamDead = (k: Kitty) => {
         if (CurrentGameMode.active !== GameMode.TeamTournament) return
         const team = Globals.ALL_TEAMS.get(k.TeamID)!
         for (let i = 0; i < team.Teammembers.length; i++) {

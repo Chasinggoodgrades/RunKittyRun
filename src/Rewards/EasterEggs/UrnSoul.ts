@@ -46,7 +46,7 @@ export class UrnSoul {
         UrnSoul.UrnRegions[3] = Regions.UrnSoulRegion4
     }
 
-    private static RegisterPeriodicTrigger() {
+    private static RegisterPeriodicTrigger = () => {
         const trig = Trigger.create()!
         trig.registerTimerEvent(UrnSoul.RotationTime, true)
         trig.addAction(() => UrnSoul.RotationActions())
@@ -59,7 +59,7 @@ export class UrnSoul {
         UrnSoul.UrnGhostUnit.issueOrderAt('move', x, y)
     }
 
-    private static RegisterUrnUsage() {
+    private static RegisterUrnUsage = () => {
         const trig = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             trig.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_USE_ITEM, null as never)
@@ -101,7 +101,7 @@ export class UrnSoul {
         }
     }
 
-    private static RegisterInRangeEvent() {
+    private static RegisterInRangeEvent = () => {
         const trig = Trigger.create()!
         trig.registerUnitInRage(UrnSoul.UrnGhostUnit.handle, UrnSoul.InRangeDistance, FilterList.KittyFilter)
         trig.addAction(() => UrnSoul.InRangeActions())

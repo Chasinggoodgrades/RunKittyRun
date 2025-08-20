@@ -9,7 +9,7 @@ import { GamemodeInfo, GamemodeManager } from './GamemodeManager'
 export class GamemodeCmd {
     private static CmdInfo: GamemodeInfo
 
-    public static Handle(player: MapPlayer, command: string) {
+    public static Handle = (player: MapPlayer, command: string) => {
         if (player !== Gamemode.HostPlayer && !Globals.VIPLISTUNFILTERED.includes(player)) {
             player.DisplayTimedTextTo(
                 10.0,
@@ -49,7 +49,7 @@ export class GamemodeCmd {
         }
     }
 
-    private static CommandInfoCheck(parts: string[]) {
+    private static CommandInfoCheck = (parts: string[]) => {
         if (parts[0] === '-s') {
             GamemodeCmd.CmdInfo = GamemodeManager.GetCommandInfo(parts[0])
             return
@@ -60,11 +60,11 @@ export class GamemodeCmd {
         }
     }
 
-    private static HandleStandardMode(player: MapPlayer) {
+    private static HandleStandardMode = (player: MapPlayer) => {
         Gamemode.SetGameMode(GameMode.Standard)
     }
 
-    private static HandleTeamOrSoloMode(player: MapPlayer, parts: string[]) {
+    private static HandleTeamOrSoloMode = (player: MapPlayer, parts: string[]) => {
         if (parts.length < 2) {
             player.DisplayTimedTextTo(
                 10.0,
@@ -95,7 +95,7 @@ export class GamemodeCmd {
         }
     }
 
-    private static HandleSoloMode(player: MapPlayer, parts: string[]) {
+    private static HandleSoloMode = (player: MapPlayer, parts: string[]) => {
         // let = parts [1] and 2
 
         if (parts.length !== 3) {
@@ -121,7 +121,7 @@ export class GamemodeCmd {
         }
     }
 
-    private static HandleTeamMode(player: MapPlayer, parts: string[]) {
+    private static HandleTeamMode = (player: MapPlayer, parts: string[]) => {
         if (parts.length < 3) {
             player.DisplayTimedTextTo(10.0, GamemodeCmd.CmdInfo.Error + GamemodeCmd.CmdInfo.Usage)
             return

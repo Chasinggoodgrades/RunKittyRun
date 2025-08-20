@@ -26,14 +26,14 @@ export class CommandsManager {
     private static CommandsList: Commands[] = []
     private static KittiesList: Kitty[] = []
 
-    public static RegisterCommand(props: {
+    public static RegisterCommand = (props: {
         name: string
         alias: string
         group: string
         argDesc: string
         description: string
         action: CmdAction
-    }) {
+    }) => {
         const command = new Commands()
         command.name = props.name
         command.Alias = props.alias.split(',')
@@ -114,7 +114,7 @@ export class CommandsManager {
         return kitties
     }
 
-    public static ResolvePlayerId(arg: string, action: Action<Kitty>) {
+    public static ResolvePlayerId = (arg: string, action: Action<Kitty>) => {
         const kittyArray = CommandsManager.ResolvePlayerIdArray(arg)
 
         for (let i = 0; i < kittyArray.length; i++) {
@@ -122,13 +122,13 @@ export class CommandsManager {
         }
     }
 
-    public static GetBool(arg: string) {
+    public static GetBool = (arg: string) => {
         if (isNullOrEmpty(arg)) return false
         const lower = arg.toLowerCase()
         return lower === 'true' || lower === 'on' || lower === '1'
     }
 
-    public static HelpCommands(player: MapPlayer, arg: string = '') {
+    public static HelpCommands = (player: MapPlayer, arg: string = '') => {
         const filter = isNullOrEmpty(arg) ? '' : arg.toLowerCase()
         CommandsManager.CommandsList = [] // instead of creating a new list each time, just use 1 and clear it
         const playerGroup = CommandsManager.GetPlayerGroup(player)
@@ -167,7 +167,7 @@ export class CommandsManager {
         player.DisplayTimedTextTo(15.0, `${Colors.COLOR_TURQUOISE}Commands: Available:|r\n${commandList}`)
     }
 
-    public static GetPlayerGroup(player: MapPlayer) {
+    public static GetPlayerGroup = (player: MapPlayer) => {
         return Globals.VIPLISTUNFILTERED.includes(player) ? 'admin' : player.id === 0 ? 'red' : 'all'
     }
 }

@@ -66,7 +66,7 @@ export class LuaEditor {
         this.editBox.setText('')
     }
 
-    private PassLua(luaCode: string) {
+    private PassLua = (luaCode: string) => {
         try {
             const p = getTriggerPlayer()
             const output: string = this.RunLua(p, luaCode)
@@ -76,7 +76,7 @@ export class LuaEditor {
         }
     }
 
-    private RunLua(player: MapPlayer, luaCode: string) {
+    private RunLua = (player: MapPlayer, luaCode: string) => {
         ExecuteLua.LuaCode(player, luaCode)
         return 'Executed Lua: ' + luaCode
     }

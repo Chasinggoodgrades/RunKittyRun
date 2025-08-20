@@ -13,7 +13,7 @@ export class VoteEndRound {
     public static VoteActive: boolean
     private static Votes: MapPlayer[] = []
 
-    public static InitiateVote(voteStarter: MapPlayer) {
+    public static InitiateVote = (voteStarter: MapPlayer) => {
         if (CurrentGameMode.active !== GameMode.SoloTournament) return
         if (VoteEndRound.VoteAlreadyActive()) return
         if (!VoteEndRound.GameActive()) return
@@ -25,7 +25,7 @@ export class VoteEndRound {
         Utility.SimpleTimer(20.0, VoteEndRound.VoteTally)
     }
 
-    public static IncrementVote(player: MapPlayer) {
+    public static IncrementVote = (player: MapPlayer) => {
         if (!VoteEndRound.VoteActive) return
         if (VoteEndRound.Votes.includes(player)) {
             player.DisplayTimedTextTo(

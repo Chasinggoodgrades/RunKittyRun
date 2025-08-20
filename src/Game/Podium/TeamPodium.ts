@@ -83,7 +83,7 @@ export class TeamPodium {
         TeamPodium.ProcessNextPodiumAction()
     }
 
-    private static GetStatBasedOnType(player: MapPlayer) {
+    private static GetStatBasedOnType = (player: MapPlayer) => {
         const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (TeamPodium.PodiumType) {
             case TeamPodium.MostSaves:

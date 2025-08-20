@@ -38,7 +38,7 @@ export class RoundEnums {
         return roundEnum
     }
 
-    public static SetSavedTime(player: MapPlayer, roundString: string) {
+    public static SetSavedTime = (player: MapPlayer, roundString: string) => {
         const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         kittyStats.RoundTimes[roundString as keyof RoundTimesData] = roundDecimals(
             Math.max(GameTimer.RoundTime[Globals.ROUND], 0.01),

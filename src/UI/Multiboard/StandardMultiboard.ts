@@ -299,7 +299,7 @@ export class StandardMultiboard {
         StandardMultiboard.BestTimesStats()
     }
 
-    public static FillPlayers(mb: Multiboard, rowIndex = 2) {
+    public static FillPlayers = (mb: Multiboard, rowIndex = 2) => {
         for (const player of Globals.ALL_PLAYERS) {
             const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
@@ -308,7 +308,7 @@ export class StandardMultiboard {
         }
     }
 
-    private static GetGameCount(data: KittyData) {
+    private static GetGameCount = (data: KittyData) => {
         const gameData = data.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:
@@ -325,7 +325,7 @@ export class StandardMultiboard {
         }
     }
 
-    private static GetWinCount(data: KittyData) {
+    private static GetWinCount = (data: KittyData) => {
         const gameData = data.GameStats
         switch (Difficulty.DifficultyValue) {
             case DifficultyLevel.Normal:

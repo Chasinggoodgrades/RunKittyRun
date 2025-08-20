@@ -5,33 +5,33 @@ import { safeArraySplice } from './ArrayUtils'
 export class GC {
     public static GCAffixes: Affix[] = []
 
-    public static RemoveTrigger(t: Trigger) {
+    public static RemoveTrigger = (t: Trigger) => {
         // TODO; Cleanup:     public static RemoveTrigger(ref trigger t)
         if (t === null) return
         t.destroy()
     }
 
-    public static RemoveTimer(t: Timer) {
+    public static RemoveTimer = (t: Timer) => {
         // TODO; Cleanup:     public static RemoveTimer(ref timer t)
         if (t === null) return
         t.pause()
         t.destroy()
     }
 
-    public static RemoveEffect(e: Effect | undefined) {
+    public static RemoveEffect = (e: Effect | undefined) => {
         // TODO; Cleanup:     public static RemoveEffect(ref effect e)
         if (!e) return
         e.destroy()
     }
 
-    public static RemoveGroup(g: Group) {
+    public static RemoveGroup = (g: Group) => {
         // TODO; Cleanup:     public static RemoveGroup(ref group g)
         if (g === null) return
         g.clear()
         g.destroy()
     }
 
-    public static RemoveAffix(affix: Affix) {
+    public static RemoveAffix = (affix: Affix) => {
         if (affix === null) return
         const index = GC.GCAffixes.indexOf(affix)
         if (index !== -1) (GC.GCAffixes as any)[index] = null
@@ -44,9 +44,9 @@ export class GC {
         list.length = 0
     }
 
-    public static RemoveFilterFunc(filter: filterfunc | (() => boolean)) {}
+    public static RemoveFilterFunc = (filter: filterfunc | (() => boolean)) => {}
 
-    public static RemoveTimerDialog(td: timerdialog) {
+    public static RemoveTimerDialog = (td: timerdialog) => {
         // TODO; Cleanup:     public static RemoveTimerDialog(ref timerdialog td)
         if (td === null) return
         DestroyTimerDialog(td)

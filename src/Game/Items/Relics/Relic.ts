@@ -51,11 +51,11 @@ export abstract class Relic {
         return this.Upgrades[this.UpgradeLevel]
     }
 
-    public CanUpgrade(player: MapPlayer) {
+    public CanUpgrade = (player: MapPlayer) => {
         return PlayerUpgrades.GetPlayerUpgrades(player).GetUpgradeLevel(this.constructor.name) < this.Upgrades.length
     }
 
-    public Upgrade(Unit: Unit) {
+    public Upgrade = (Unit: Unit) => {
         if (!this.CanUpgrade(Unit.owner)) return false
         this.UpgradeLevel = this.UpgradeLevel + 1
         PlayerUpgrades.IncreaseUpgradeLevel(this.constructor.name, Unit)
@@ -65,12 +65,12 @@ export abstract class Relic {
         return true
     }
 
-    public static GetRelicCountForLevel(currentLevel: number) {
+    public static GetRelicCountForLevel = (currentLevel: number) => {
         const count = currentLevel - Relic.RelicIncrease + 1 // account for level 10 relic ..
         return count < 0 ? 0 : count >= Relic.MaxRelics ? Relic.MaxRelics : count
     }
 
-    public SetUpgradeLevelDesc(Unit: Unit) {
+    public SetUpgradeLevelDesc = (Unit: Unit) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.constructor.name)
         if (upgradeLevel === 0) return
 

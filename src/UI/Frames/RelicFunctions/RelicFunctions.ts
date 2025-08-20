@@ -12,7 +12,7 @@ import { ShopItem } from '../ShopItems/ShopItems'
 import { RefreshUpgradeTooltip } from '../ShopUtil'
 
 export class RelicFunctions {
-    public static HandleRelicPurchase(player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) {
+    public static HandleRelicPurchase = (player: MapPlayer, selectedItem: ShopItem, kitty: Kitty) => {
         try {
             if (Utility.UnitHasItem(kitty.Unit, selectedItem.ItemID)) {
                 RelicFunctions.AlreadyHaveRelic(player)
@@ -100,35 +100,35 @@ export class RelicFunctions {
         }
     }
 
-    private static HasInventorySpace(unit: Unit) {
+    private static HasInventorySpace = (unit: Unit) => {
         for (let i = 0; i < 6; i++) if (unit.getItemInSlot(i) === null) return true
         return false
     }
 
-    private static ReduceGold(player: MapPlayer, amount: number) {
+    private static ReduceGold = (player: MapPlayer, amount: number) => {
         return player.addGold(-amount)
     }
 
-    private static RelicLevel(unit: Unit) {
+    private static RelicLevel = (unit: Unit) => {
         return unit.level >= Relic.RequiredLevel
     }
 
-    private static NotHighEnoughLevel(player: MapPlayer) {
+    private static NotHighEnoughLevel = (player: MapPlayer) => {
         return player.DisplayTimedTextTo(
             8.0,
             `${Colors.COLOR_RED}You are not high enough level to purchase this relic!${Colors.COLOR_RESET} ${Colors.COLOR_YELLOW}(Level ${Relic.RequiredLevel})${Colors.COLOR_RESET}`
         )
     }
 
-    private static AlreadyHaveRelic(player: MapPlayer) {
+    private static AlreadyHaveRelic = (player: MapPlayer) => {
         return player.DisplayTimedTextTo(8.0, `${Colors.COLOR_RED}You already own this relic!${Colors.COLOR_RESET}`)
     }
 
-    private static AddItem(player: MapPlayer, itemID: number) {
+    private static AddItem = (player: MapPlayer, itemID: number) => {
         Globals.ALL_KITTIES.get(player)!.Unit.addItemById(itemID)
     }
 
-    private static RelicMaxedOut(player: MapPlayer) {
+    private static RelicMaxedOut = (player: MapPlayer) => {
         const relics = Globals.ALL_KITTIES.get(player)!.Relics
         if (relics.length < Relic.MaxRelics) return false
         player.DisplayTimedTextTo(
@@ -138,7 +138,7 @@ export class RelicFunctions {
         return true
     }
 
-    private static CanGetAnotherRelic(unit: Unit) {
+    private static CanGetAnotherRelic = (unit: Unit) => {
         const relicCount = Globals.ALL_KITTIES.get(unit.owner)!.Relics.length
         if (relicCount < 1) return true // can get a first relic ofc.
         if (Relic.GetRelicCountForLevel(unit.getHeroLevel()) < relicCount) {
@@ -151,7 +151,7 @@ export class RelicFunctions {
         return true
     }
 
-    private static ActiveShadowKitty(player: MapPlayer) {
+    private static ActiveShadowKitty = (player: MapPlayer) => {
         const shadowkitty = ShadowKitty.ALL_SHADOWKITTIES.get(player)
         if (!shadowkitty) return false
         if (shadowkitty.Active) {
@@ -164,7 +164,7 @@ export class RelicFunctions {
         return false
     }
 
-    public static CannotSellOnCD(kitty: Kitty, relic: Relic) {
+    public static CannotSellOnCD = (kitty: Kitty, relic: Relic) => {
         const CD = BlzGetUnitAbilityCooldownRemaining(kitty.Unit.handle, relic.RelicAbilityID)
         if (CD > 0.0 && relic.RelicAbilityID !== 0) {
             kitty.Player.DisplayTimedTextTo(

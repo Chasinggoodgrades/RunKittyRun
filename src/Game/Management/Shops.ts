@@ -36,14 +36,14 @@ export class Shops {
         for (const vendor of Shops.KittyVendorsList) Shops.AddRegularItemsToVendor(vendor, Shops.KittyVendorItemList)
     }
 
-    private static RefreshItemsOnVendor(vendor: Unit) {
+    private static RefreshItemsOnVendor = (vendor: Unit) => {
         const vendorItems = Shops.VendorsItemList.get(vendor)!
         for (const item of vendorItems) {
             vendor.addItemToStock(item.Item, item.Stock, item.Stock)
         }
     }
 
-    private static AddRegularItemsToVendor(vendor: Unit, items: number[]) {
+    private static AddRegularItemsToVendor = (vendor: Unit, items: number[]) => {
         const vendorList: VendorItem[] = []
         for (const item of items) {
             vendorList.push(new VendorItem(vendor, item, 2, 60))

@@ -88,7 +88,7 @@ export class ShadowKitty {
         Utility.SelectUnitForPlayer(this.Player, this.Unit)
     }
 
-    private static PauseKitty(player: MapPlayer, paused: boolean) {
+    private static PauseKitty = (player: MapPlayer, paused: boolean) => {
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         kitty.paused = paused
     }

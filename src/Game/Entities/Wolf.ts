@@ -78,7 +78,7 @@ export class Wolf {
         }
     }
 
-    public StartWandering(forced: boolean = false) {
+    public StartWandering = (forced: boolean = false) => {
         let realTime = GetRandomReal(1.0, 1.12)
         if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving) {
             this.ApplyEffect()
@@ -90,7 +90,7 @@ export class Wolf {
     /// <summary>
     /// Wolf moves to a random location within its lane.
     /// </summary>
-    public WolfMove(forced: boolean = false) {
+    public WolfMove = (forced: boolean = false) => {
         if (this.paused || this.IsReviving) return
         if (this.HasAffix('Blitzer')) return
         if (this.paused && this.HasAffix('Bomber')) return
@@ -128,19 +128,19 @@ export class Wolf {
     /// Pauses or resumes all wolves in the game.
     /// </summary>
     /// <param name="pause"></param>
-    public static PauseAllWolves(pause: boolean) {
+    public static PauseAllWolves = (pause: boolean) => {
         for (const [_, wolf] of Globals.ALL_WOLVES) {
             wolf.PauseSelf(pause)
         }
     }
 
-    public static PauseSelectedWolf(selectedUnit: Unit, pause: boolean) {
+    public static PauseSelectedWolf = (selectedUnit: Unit, pause: boolean) => {
         const wolf = Globals.ALL_WOLVES.get(selectedUnit)
         if (!wolf) return
         wolf.PauseSelf(pause)
     }
 
-    public PauseSelf(pause: boolean) {
+    public PauseSelf = (pause: boolean) => {
         try {
             if (pause) {
                 this.WanderTimer?.pause()
@@ -226,7 +226,7 @@ export class Wolf {
         }
     }
 
-    public HasAffix(affixName: string) {
+    public HasAffix = (affixName: string) => {
         if (this.Affixes.length === 0) return false
         for (let i = 0; i < this.Affixes.length; i++) if (this.Affixes[i].constructor.name === affixName) return true
 

@@ -73,7 +73,7 @@ export class SoloPodium {
         SoloPodium.ProcessNextPodiumAction()
     }
 
-    private static GetStatBasedOnType(player: MapPlayer) {
+    private static GetStatBasedOnType = (player: MapPlayer) => {
         const stats = Globals.ALL_KITTIES.get(player)!.TimeProg
         switch (SoloPodium.PodiumType) {
             case 'Time':

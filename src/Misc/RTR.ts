@@ -134,7 +134,7 @@ export class RTR {
         this.WidgetTrigger.enabled = false
     }
 
-    private HandleClick(isToLocation: boolean) {
+    private HandleClick = (isToLocation: boolean) => {
         if (!this.IsEnabled()) return
 
         getTriggerUnit().issueImmediateOrder('stop')

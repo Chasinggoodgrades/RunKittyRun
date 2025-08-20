@@ -138,7 +138,7 @@ export class NamedWolves {
         }
     }
 
-    public static ExplodingWolfCollision(unit: Unit, k: Kitty, shadowKitty: boolean = false) {
+    public static ExplodingWolfCollision = (unit: Unit, k: Kitty, shadowKitty: boolean = false) => {
         if (CurrentGameMode.active !== GameMode.Standard) return false
         // Guard: ExplodingWolf may not be created yet or may be in a revive window
         if (!NamedWolves.ExplodingWolf || !NamedWolves.ExplodingWolf.Unit) return false
@@ -154,7 +154,7 @@ export class NamedWolves {
         return Globals.ALL_PLAYERS[GetRandomInt(0, Globals.ALL_PLAYERS.length - 1)]
     }
 
-    private static SetRandomVertexColor(u: Unit, playerID: number) {
+    private static SetRandomVertexColor = (u: Unit, playerID: number) => {
         ColorUtils.SetUnitToVertexColor(u, playerID)
     }
 }

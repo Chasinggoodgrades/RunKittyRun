@@ -45,11 +45,11 @@ export class RollerSkates {
         }
     }
 
-    private static SetPegasusBoots(item: Item) {
+    private static SetPegasusBoots = (item: Item) => {
         item.name = 'Pegasus Boots'
     }
 
-    private static SetRollerSkates(item: Item) {
+    private static SetRollerSkates = (item: Item) => {
         item.name = `${Colors.COLOR_ORANGE}[Roller Skates]${Colors.COLOR_RESET} Pegasus Boots`
     }
 }

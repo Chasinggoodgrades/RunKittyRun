@@ -78,7 +78,7 @@ export class PodiumUtil {
         }
     }
 
-    public static ClearPodiumUnits(podiumUnits: Unit[]) {
+    public static ClearPodiumUnits = (podiumUnits: Unit[]) => {
         if (podiumUnits.length === 0) return
         for (const kitty of podiumUnits) {
             kitty.setPosition(Regions.safe_Area_00.centerX, Regions.safe_Area_00.centerY)
@@ -102,7 +102,7 @@ export class PodiumUtil {
         Utility.SimpleTimer(PodiumUtil.EndingTimer, EndGame)
     }
 
-    public static PlacementString(placement: number) {
+    public static PlacementString = (placement: number) => {
         switch (placement) {
             case 1:
                 return '1st'

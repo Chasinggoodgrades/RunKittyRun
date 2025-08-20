@@ -118,7 +118,7 @@ export class StandardPodium {
         StandardPodium.ProcessNextPodiumAction()
     }
 
-    private static GetStatBasedOnType(player: MapPlayer) {
+    private static GetStatBasedOnType = (player: MapPlayer) => {
         const stats = Globals.ALL_KITTIES.get(player)!.CurrentStats
         switch (StandardPodium.PodiumType) {
             case StandardPodium.HighestScore:

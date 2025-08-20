@@ -7,7 +7,7 @@ import { getTriggerPlayer } from 'src/Utility/w3tsUtils'
 import { MapPlayer } from 'w3ts'
 
 export class ShopUtil {
-    public static IsPlayerInWolfLane(player: MapPlayer) {
+    public static IsPlayerInWolfLane = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
         const currentZone = kitty.ProgressZone
         const region = RegionList.WolfRegions[currentZone]
@@ -23,7 +23,7 @@ export class ShopUtil {
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    public static PlayerIsDead(player: MapPlayer) {
+    public static PlayerIsDead = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
         if (kitty === null || !kitty.isAlive() || kitty.ProtectionActive) {
             // not null, cannot be alive, and pota active

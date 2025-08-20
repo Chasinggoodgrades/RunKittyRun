@@ -13,7 +13,7 @@ export class OldsaveSync {
     private static SavePlayer: MapPlayer
     public static LoadEvent: number
 
-    public static SyncString(s: string) {
+    public static SyncString = (s: string) => {
         return BlzSendSyncData(OldsaveSync.SYNC_PREFIX, s)
     }
 

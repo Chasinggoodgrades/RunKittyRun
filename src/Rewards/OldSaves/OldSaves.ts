@@ -38,7 +38,7 @@ export class Savecode {
         }
     }
 
-    private static InitializeSaveCode(p: MapPlayer) {
+    private static InitializeSaveCode = (p: MapPlayer) => {
         if (!Savecode.PlayerSaveObject.has(p)) {
             Savecode.PlayerSaveObject.set(p, new Savecode())
         }
@@ -49,7 +49,7 @@ export class Savecode {
         this.Bignum = new BigNum(Savecode.BASE())
     }
 
-    public Decode(max: number) {
+    public Decode = (max: number) => {
         return this.Bignum.DivSmall(max + 1)
     }
 
@@ -57,7 +57,7 @@ export class Savecode {
         return this.Bignum.Clean()
     }
 
-    public FromString(s: string) {
+    public FromString = (s: string) => {
         let i = s.length - 1
         let cur = BigNumL.Create()
         this.Bignum.List = cur
@@ -91,7 +91,7 @@ export class Savecode {
         return hash
     }
 
-    public Obfuscate(key: number, sign: number) {
+    public Obfuscate = (key: number, sign: number) => {
         const seed: number = GetRandomInt(0, math.maxinteger)
         let advance = 0
         let x = 0
@@ -130,7 +130,7 @@ export class Savecode {
         SetRandomSeed(seed)
     }
 
-    public Load(p: MapPlayer, code: string) {
+    public Load = (p: MapPlayer, code: string) => {
         try {
             const key: number = Savecode.SCommHash(p.name) + 1 * 73
             let inputhash = 0
@@ -180,7 +180,7 @@ export class Savecode {
     /// Method that is setting the values of rewards for the players.
     /// </summary>
     /// <param name="player"></param>
-    public SetRewardValues(player: MapPlayer) {
+    public SetRewardValues = (player: MapPlayer) => {
         const awardData = Globals.ALL_KITTIES.get(player)!.SaveData.GameAwardsSorted
         const roundstats = Globals.ALL_KITTIES.get(player)!.SaveData.RoundTimes
         const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData.GameStats
@@ -216,7 +216,7 @@ export class Savecode {
         }
     }
 
-    private static SCommHash(name: string) {
+    private static SCommHash = (name: string) => {
         const charlen = Savecode.player_charset.length
         const count: { [x: string]: number } = {}
         let x: number
@@ -241,7 +241,7 @@ export class Savecode {
         return 5000
     }
 
-    private static Modb(x: number) {
+    private static Modb = (x: number) => {
         if (x >= Savecode.BASE()) return x - Savecode.BASE()
         else if (x < 0) return x + Savecode.BASE()
         return x

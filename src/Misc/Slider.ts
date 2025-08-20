@@ -97,7 +97,7 @@ export class Slider {
         this.ResumeSlider(false)
     }
 
-    public ResumeSlider(isRevive: boolean) {
+    public ResumeSlider = (isRevive: boolean) => {
         if (!this.enabled) {
             return
         }
@@ -213,7 +213,7 @@ export class Slider {
         this.WidgetTrigger.enabled = false
     }
 
-    private HandleTurn(isToLocation: boolean) {
+    private HandleTurn = (isToLocation: boolean) => {
         if (!this.IsEnabled()) return
         if (!this.IsOnSlideTerrain()) return
 
@@ -234,13 +234,13 @@ export class Slider {
         this.setRemainingDegreesToTurn(this.AnglesDiff(angle, currentAngle))
     }
 
-    public ForceAngleBetween0And360(angle: number) {
+    public ForceAngleBetween0And360 = (angle: number) => {
         while (angle < 0) angle += 360
         while (angle >= 360) angle -= 360
         return angle
     }
 
-    private AnglesDiff(endAngle: number, startAngle: number) {
+    private AnglesDiff = (endAngle: number, startAngle: number) => {
         endAngle = this.ForceAngleBetween0And360(endAngle)
         startAngle = this.ForceAngleBetween0And360(startAngle)
 
@@ -251,7 +251,7 @@ export class Slider {
         return anglesDiff
     }
 
-    private setRemainingDegreesToTurn(remainingDegreesToTurn: number) {
+    private setRemainingDegreesToTurn = (remainingDegreesToTurn: number) => {
         if (RAbsBJ(remainingDegreesToTurn) < 0.01) remainingDegreesToTurn = 0
         this.remainingDegreesToTurn = remainingDegreesToTurn
     }

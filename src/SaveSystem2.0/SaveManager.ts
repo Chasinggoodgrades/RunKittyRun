@@ -37,7 +37,7 @@ export class SaveManager {
         }
     }
 
-    public Save(player: MapPlayer) {
+    public Save = (player: MapPlayer) => {
         try {
             const date = DateTimeManager.GetStringDateFormat()
             const playerData = SaveManager.SaveData.get(player)
@@ -52,7 +52,7 @@ export class SaveManager {
         }
     }
 
-    private SaveAllDataToFile(player: MapPlayer) {
+    private SaveAllDataToFile = (player: MapPlayer) => {
         try {
             if (!player.isLocal()) return
             this.syncSaveLoad.WriteFileObjects(`${this.SavePath}/AllSaveData.txt`)
@@ -76,7 +76,7 @@ export class SaveManager {
         }
     }
 
-    public Load(player: MapPlayer) {
+    public Load = (player: MapPlayer) => {
         this.syncSaveLoad.Read(`${this.SavePath}/${player.name}.txt`, player, SaveManager.FinishLoading())
     }
 
@@ -93,7 +93,7 @@ export class SaveManager {
         }
     }
 
-    private NewSave(player: MapPlayer) {
+    private NewSave = (player: MapPlayer) => {
         try {
             if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
             SaveManager.SaveData.set(player, new KittyData())
@@ -124,7 +124,7 @@ export class SaveManager {
         }
     }
 
-    private static ConvertJsonToSaveData(data: string, player: MapPlayer) {
+    private static ConvertJsonToSaveData = (data: string, player: MapPlayer) => {
         const decodedData = json().decode(data)
         if (!decodedData) {
             player.DisplayTimedTextTo(
@@ -188,7 +188,7 @@ export class SyncSaveLoad {
     /// </summary>
     /// <param name="filename">The name of the file to write to.</param>
     /// <param name="data">The object to be encoded and written.</param>
-    public WriteFileObjects(filename: string, data: object | null = null) {
+    public WriteFileObjects = (filename: string, data: object | null = null) => {
         PreloadGenClear()
         PreloadGenStart()
 
@@ -304,7 +304,7 @@ export class FilePromise {
 }
 
 export class PropertyEncoder {
-    public static EncodeToJsonBase64(obj: object) {
+    public static EncodeToJsonBase64 = (obj: object) => {
         try {
             const jsonString = json().encode(obj)
 
@@ -317,7 +317,7 @@ export class PropertyEncoder {
         }
     }
 
-    private static GetJsonData(obj: object) {
+    private static GetJsonData = (obj: object) => {
         const jsonString = ['{']
         PropertyEncoder.AppendProperties(obj, jsonString)
         jsonString.push('}')
@@ -347,7 +347,7 @@ export class PropertyEncoder {
         }
     }
 
-    private static AppendProperties(obj: object, jsonString: string[]) {
+    private static AppendProperties = (obj: object, jsonString: string[]) => {
         if (obj === null) return
 
         let firstProperty: boolean = true
@@ -372,7 +372,7 @@ export class PropertyEncoder {
         }
     }
 
-    public static DecodeFromJsonBase64(base64EncodedData: string[]) {
+    public static DecodeFromJsonBase64 = (base64EncodedData: string[]) => {
         // Decode the Base64 string to a JSON-like string
         const jsonString = EncodingBase64.Decode(base64EncodedData.join(''))
         return jsonString

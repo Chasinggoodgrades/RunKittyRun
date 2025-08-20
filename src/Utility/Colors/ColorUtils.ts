@@ -38,7 +38,7 @@ export class ColorUtils {
     public static ColorManager: ColorData[] = []
     public static sb: string = ''
 
-    public static AddColor(
+    public static AddColor = (
         colorname: string,
         colorID: number,
         colorcode: string,
@@ -46,7 +46,7 @@ export class ColorUtils {
         redValue: number,
         greenValue: number,
         blueValue: number
-    ) {
+    ) => {
         ColorUtils.ColorManager.push(
             new ColorData(colorname, colorID, colorcode, playercolor, redValue, greenValue, blueValue)
         )
@@ -82,7 +82,7 @@ export class ColorUtils {
     /// <summary>
     /// Colorizes a player's name based on their player ID.
     /// </summary>
-    public static PlayerNameColored(p: MapPlayer) {
+    public static PlayerNameColored = (p: MapPlayer) => {
         return ColorUtils.GetStringColorOfPlayer(p.id + 1) + p.name + Colors.COLOR_RESET
     }
 
@@ -90,7 +90,7 @@ export class ColorUtils {
     /// Colorizes a string based on integer value of player color ID.
     /// Use (1-24) for player ColorUtils.
     /// </summary>
-    public static ColorString(text: string, playerColorID: number) {
+    public static ColorString = (text: string, playerColorID: number) => {
         return ColorUtils.GetStringColorOfPlayer(playerColorID) + text + Colors.COLOR_RESET
     }
 
@@ -98,7 +98,7 @@ export class ColorUtils {
     /// Returns the color code string for that particular color.
     /// Use (1-24) for player ColorUtils. So.. (player.id + 1)
     /// </summary>
-    public static GetStringColorOfPlayer(playerColorID: number) {
+    public static GetStringColorOfPlayer = (playerColorID: number) => {
         for (let i = 0; i < ColorUtils.ColorManager.length; i++) {
             const color: ColorData = ColorUtils.ColorManager[i]
             if (color.colorID === playerColorID) {
@@ -108,7 +108,7 @@ export class ColorUtils {
         return '|cffffffff'
     }
 
-    public static SetPlayerColor(p: MapPlayer, color: string) {
+    public static SetPlayerColor = (p: MapPlayer, color: string) => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         for (const c of ColorUtils.ColorManager) {
             if (ColorUtils.ColorContainsCommand(c, color)) {
@@ -118,13 +118,13 @@ export class ColorUtils {
         }
     }
 
-    public static SetColorJoinedAs(p: MapPlayer) {
+    public static SetColorJoinedAs = (p: MapPlayer) => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         const color = ColorUtils.ColorManager[p.id]
         kitty.SaveData.PlayerColorData.LastPlayedColor = color.colorname.split(',')[0]
     }
 
-    public static SetPlayerVertexColor(p: MapPlayer, RGB: string[]) {
+    public static SetPlayerVertexColor = (p: MapPlayer, RGB: string[]) => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         let r = 0,
             g = 0,
@@ -142,7 +142,7 @@ export class ColorUtils {
     /// Sets a player's vertex color to a random RGB value.
     /// </summary>
     /// <param name="p">The player object</param>
-    public static SetPlayerRandomVertexColor(p: MapPlayer) {
+    public static SetPlayerRandomVertexColor = (p: MapPlayer) => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
         const r: number = GetRandomInt(0, 255)
         const g: number = GetRandomInt(0, 255)
@@ -154,7 +154,7 @@ export class ColorUtils {
         )
     }
 
-    private static ColorContainsCommand(color: ColorData, inputColor: string) {
+    private static ColorContainsCommand = (color: ColorData, inputColor: string) => {
         const colorCommands = color.colorname.split(',')
         for (const command of colorCommands) if (command === inputColor) return true
         return false
@@ -165,7 +165,7 @@ export class ColorUtils {
     /// </summary>
     /// <param name="text"></param>
     /// <returns></returns>
-    public static HighlightString(text: string) {
+    public static HighlightString = (text: string) => {
         return text !== null && text.length > 0
             ? Colors.COLOR_YELLOW + text + Colors.COLOR_RESET
             : `${Colors.COLOR_RED}ERROR${Colors.COLOR_RESET}`
@@ -176,7 +176,7 @@ export class ColorUtils {
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="playerID"></param>
-    public static SetUnitToVertexColor(unit: Unit, playerID: number) {
+    public static SetUnitToVertexColor = (unit: Unit, playerID: number) => {
         const color: ColorData = ColorUtils.ColorManager[playerID]
         unit.setVertexColor(color.red, color.green, color.blue, 255)
         if (unit.typeId === Constants.UNIT_CUSTOM_DOG) return
@@ -184,7 +184,7 @@ export class ColorUtils {
             `${color.red},${color.green},${color.blue}`
     }
 
-    public static ListColorCommands(player: MapPlayer) {
+    public static ListColorCommands = (player: MapPlayer) => {
         ColorUtils.sb = ''
         for (const color of ColorUtils.ColorManager) ColorUtils.sb += `${color.colorcode}${color.colorname}|r, `
 
@@ -200,7 +200,7 @@ export class ColorUtils {
         return undefined
     }
 
-    public static PopulateColorsData(kitty: Kitty) {
+    public static PopulateColorsData = (kitty: Kitty) => {
         try {
             const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
             if (!isNullOrEmpty(colorData)) return // already populated
@@ -226,7 +226,7 @@ export class ColorUtils {
     /// This function only calls at the end of the game for SaveData purposes. So it should be okay to run and update all player colors accordingly.
     /// </summary>
     /// <param name="kitty"></param>
-    public static UpdateColors(kitty: Kitty) {
+    public static UpdateColors = (kitty: Kitty) => {
         try {
             const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
             const currentColor: string = kitty.SaveData.PlayerColorData.LastPlayedColor
@@ -267,7 +267,7 @@ export class ColorUtils {
     /// </summary>
     /// <param name="kitty"></param>
     /// <returns></returns>
-    public static GetMostPlayedColor(kitty: Kitty) {
+    public static GetMostPlayedColor = (kitty: Kitty) => {
         const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
         if (isNullOrEmpty(colorData)) return null
 

@@ -113,7 +113,7 @@ export class SeasonalManager {
         }
     }
 
-    public static SetWeatherArg(weather: string) {
+    public static SetWeatherArg = (weather: string) => {
         if (SeasonalManager.CurrentWeather !== null) {
             SeasonalManager.CurrentWeather.destroy()
             SeasonalManager.CurrentWeather = null as never

@@ -26,7 +26,7 @@ export class PersonalBestAwarder {
     /// Checks if the current round time is higher than the best time and updates it if so. Also notifies all players :).
     /// </summary>
     /// <param name="player"></param>
-    public static BeatRecordTime(player: MapPlayer) {
+    public static BeatRecordTime = (player: MapPlayer) => {
         const kittyStats = Globals.ALL_KITTIES.get(player)!.SaveData
         let roundEnum = ''
         if (CurrentGameMode.active === GameMode.Standard) roundEnum = RoundEnums.GetRoundEnum()
@@ -47,7 +47,7 @@ export class PersonalBestAwarder {
     /// Check if the current save count is higher than the best save count and update it if so. Also notify all players.
     /// </summary>
     /// <param name="k"></param>
-    public static BeatMostSavesInGame(k: Kitty) {
+    public static BeatMostSavesInGame = (k: Kitty) => {
         if (k.aiController.IsEnabled()) return
         const currentSaves = k.CurrentStats.TotalSaves
         const bestSaves = k.SaveData.PersonalBests.Saves
@@ -68,7 +68,7 @@ export class PersonalBestAwarder {
     /// Check if the current save streak is higher than the best save streak and update it if so. Also notify all players.
     /// </summary>
     /// <param name="k"></param>
-    public static BeatenSaveStreak(k: Kitty) {
+    public static BeatenSaveStreak = (k: Kitty) => {
         if (k.aiController.IsEnabled()) return
         const currentStreak = k.SaveData.GameStats.SaveStreak
         const bestStreak = k.SaveData.GameStats.HighestSaveStreak

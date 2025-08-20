@@ -143,7 +143,7 @@ export class RoundManager {
         RoundManager.RoundEnd()
     }
 
-    public static DidTeamEnd(teamId: number) {
+    public static DidTeamEnd = (teamId: number) => {
         const teamMemebers = Globals.ALL_TEAMS.get(teamId)!.Teammembers
         // Always returns for standard mode, and solo progression mode.
         for (let i = 0; i < teamMemebers.length; i++) {

@@ -15,7 +15,7 @@ export class RewardHelper {
         this.Auras = []
     }
 
-    public AddReward(reward: Reward) {
+    public AddReward = (reward: Reward) => {
         switch (reward.Type) {
             case RewardType.Hats:
                 this.Hats.push(reward)
@@ -44,7 +44,7 @@ export class RewardHelper {
         this.Auras.length = 0
     }
 
-    public static GetAwardNestedValueTwo(saveData: object, awardName: string) {
+    public static GetAwardNestedValueTwo = (saveData: object, awardName: string) => {
         // search rewardsList for this award name, then return getawardNestedvalue
         const reward = RewardsManager.Rewards.find(r => r.name === awardName)
         return reward ? RewardHelper.GetAwardNestedValue(saveData, reward.TypeSorted, reward.name) : -1
@@ -57,7 +57,7 @@ export class RewardHelper {
     /// <param name="nestedPropertyName">The Reward.TypeSorted</param>
     /// <param name="propertyName">Reward.name</param>
     /// <returns></returns>
-    public static GetAwardNestedValue(obj: object, nestedPropertyName: string, propertyName: string) {
+    public static GetAwardNestedValue = (obj: object, nestedPropertyName: string, propertyName: string) => {
         const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
         if (nestedProperty !== null) {
             const nestedObject = nestedProperty
@@ -78,7 +78,12 @@ export class RewardHelper {
     /// <param name="nestedPropertyName">reward.TypeSorted</param>
     /// <param name="propertyName">the name of reward.</param>
     /// <param name="value">value to set it to</param>
-    public static UpdateNestedProperty(obj: object, nestedPropertyName: string, propertyName: string, value: any) {
+    public static UpdateNestedProperty = (
+        obj: object,
+        nestedPropertyName: string,
+        propertyName: string,
+        value: any
+    ) => {
         const nestedProperty = obj[nestedPropertyName as keyof typeof obj]
         if (nestedProperty !== null) {
             const nestedObject = nestedProperty
@@ -90,7 +95,7 @@ export class RewardHelper {
         }
     }
 
-    private static UpdateProperty(obj: object, propertyName: string, value: object) {
+    private static UpdateProperty = (obj: object, propertyName: string, value: object) => {
         const property = obj[propertyName as keyof typeof obj]
         if (property !== undefined) {
             ;(obj as any)[propertyName] = value

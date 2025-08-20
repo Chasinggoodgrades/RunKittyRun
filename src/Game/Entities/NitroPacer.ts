@@ -143,7 +143,7 @@ export class NitroPacer {
         }
     }
 
-    public static SetSpeed(speed: number) {
+    public static SetSpeed = (speed: number) => {
         return (NitroPacer.getInstance().Unit!.moveSpeed = speed)
     }
 

@@ -72,7 +72,11 @@ export class Gamemode {
         )
     }
 
-    public static SetGameMode(mode: GameMode, modeType: string = '', teamSize: number = Globals.DEFAULT_TEAM_SIZE) {
+    public static SetGameMode = (
+        mode: GameMode,
+        modeType: string = '',
+        teamSize: number = Globals.DEFAULT_TEAM_SIZE
+    ) => {
         try {
             CurrentGameMode.active = mode
             Globals.CurrentGameModeType = modeType

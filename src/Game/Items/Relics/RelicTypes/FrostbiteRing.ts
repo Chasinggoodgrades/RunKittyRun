@@ -70,7 +70,7 @@ export class FrostbiteRing extends Relic {
         Unit.disableAbility(FrostbiteRing.RelicAbilityID, false, true)
     }
 
-    private FrostbiteCast(freezeLocation: location) {
+    private FrostbiteCast = (freezeLocation: location) => {
         try {
             this.FreezeGroup ??= Group.create()!
             this.FreezeGroup.enumUnitsInRange(
@@ -112,7 +112,7 @@ export class FrostbiteRing extends Relic {
         }
     }
 
-    private FrostbiteEffect(Unit: Unit) {
+    private FrostbiteEffect = (Unit: Unit) => {
         const duration = this.GetFreezeDuration()
         Globals.ALL_KITTIES.get(this.Owner)!.CurrentStats.WolfFreezeCount += 1 // increment freeze count for freeze_aura reward
 
@@ -126,7 +126,7 @@ export class FrostbiteRing extends Relic {
         }
     }
 
-    private SetAbilityCooldown(Unit: Unit) {
+    private SetAbilityCooldown = (Unit: Unit) => {
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
         const currentCooldown = BlzGetAbilityCooldown(FrostbiteRing.RelicAbilityID, 0)
         const newCooldown =
@@ -140,7 +140,7 @@ export class FrostbiteRing extends Relic {
         return FrostbiteRing.DEFAULT_FREEZE_DURATION + upgradeLevel
     }
 
-    private RegisterTriggers(Unit: Unit) {
+    private RegisterTriggers = (Unit: Unit) => {
         this.Trigger = Trigger.create()!
         this.Trigger.registerUnitEvent(Unit, EVENT_UNIT_SPELL_EFFECT)
         this.Trigger.addCondition(() => GetSpellAbilityId() === FrostbiteRing.RelicAbilityID)
@@ -157,7 +157,7 @@ export class FrozenWolf {
 
     public constructor() {}
 
-    public BeginFreezeActions(castingPlayer: MapPlayer, wolfToFreeze: Unit, duration: number) {
+    public BeginFreezeActions = (castingPlayer: MapPlayer, wolfToFreeze: Unit, duration: number) => {
         try {
             if (!this.Active) this.Timer = createAchesTimer()
             this.Unit = wolfToFreeze
@@ -203,7 +203,7 @@ export class FrozenWolf {
         }
     }
 
-    private PausingWolf(unit: Unit, pause: boolean = true) {
+    private PausingWolf = (unit: Unit, pause: boolean = true) => {
         try {
             if (unit === null) return
             if (NamedWolves.StanWolf !== null && unit === NamedWolves.StanWolf.Unit) return
@@ -217,7 +217,7 @@ export class FrozenWolf {
     /// Upgrade Level 2, Reducing Wolves Movement Speed
     /// </summary>=
     /// <param name="Unit"></param>
-    private SlowWolves(Unit: Unit) {
+    private SlowWolves = (Unit: Unit) => {
         try {
             if (Unit === null) return
             const playerUpgradeLvl = PlayerUpgrades.GetPlayerUpgrades(this.Caster).GetUpgradeLevel(FrostbiteRing.name)

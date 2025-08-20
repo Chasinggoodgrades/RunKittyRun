@@ -29,7 +29,7 @@ export class AwardManager {
     /// <param name="player">The Player</param>
     /// <param name="award">The Awards.{award} that you're handing out.</param>
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
-    public static GiveReward(player: MapPlayer, award: string, earnedPrompt: boolean = true) {
+    public static GiveReward = (player: MapPlayer, award: string, earnedPrompt: boolean = true) => {
         // Check if the player already has the award
         if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return
         const awardsList = Globals.ALL_KITTIES.get(player)!.CurrentStats.ObtainedAwards
@@ -63,7 +63,7 @@ export class AwardManager {
     /// Gives reward to all players, set Prompt to false if you don't want to show the earned prompt.
     /// </summary>
     /// <param name="award"></param>
-    public static GiveRewardAll(award: string, earnedPrompt: boolean = true) {
+    public static GiveRewardAll = (award: string, earnedPrompt: boolean = true) => {
         const color = Colors.COLOR_YELLOW_ORANGE
         const rewardColor = Colors.COLOR_YELLOW
         for (const player of Globals.ALL_PLAYERS) AwardManager.GiveReward(player, award, false)
@@ -74,14 +74,14 @@ export class AwardManager {
             )
     }
 
-    private static EnableAbility(player: MapPlayer, award: string) {
+    private static EnableAbility = (player: MapPlayer, award: string) => {
         const reward = RewardsManager.Rewards.find(x => x.SystemRewardName() === award.toString())!
         const kitty = Globals.ALL_KITTIES.get(player)!.Unit
         if (!reward) return
         kitty.disableAbility(reward.GetAbilityID(), false, false)
     }
 
-    public static ReceivedAwardAlready(player: MapPlayer, award: string) {
+    public static ReceivedAwardAlready = (player: MapPlayer, award: string) => {
         return Globals.ALL_KITTIES.get(player)!.CurrentStats.ObtainedAwards.includes(award)
     }
 
@@ -144,13 +144,13 @@ export class AwardManager {
         }
     }
 
-    private static HandleGameStatTrigger(
+    private static HandleGameStatTrigger = (
         player: MapPlayer,
         kittyStats: KittyData,
         gamestat: string,
         requiredValue: number,
         award: string
-    ) {
+    ) => {
         const value = kittyStats.GameStats[gamestat as keyof GameStatsData]
         if (value < requiredValue) {
             const abc = AwardManager.AwardTrigger.addAction(() => {
@@ -228,7 +228,7 @@ export class AwardManager {
     /// Applies all previously selected awards onto the player. Based on their save data.
     /// </summary>
     /// <param name="kitty"></param>
-    public static SetPlayerSelectedData(kitty: Kitty) {
+    public static SetPlayerSelectedData = (kitty: Kitty) => {
         if (kitty.Player.controller !== MAP_CONTROL_USER) return // just reduce load, dont include bots.
         if (kitty.Player.slotState !== PLAYER_SLOT_STATE_PLAYING) return
         if (CurrentGameMode.active !== GameMode.Standard) return // only apply awards in standard mode (not in tournament modes).
@@ -245,7 +245,7 @@ export class AwardManager {
         }
     }
 
-    private static ProcessAward(kitty: Kitty, selectedAwardName: string) {
+    private static ProcessAward = (kitty: Kitty, selectedAwardName: string) => {
         const reward = RewardsManager.Rewards.find(x => x.name === selectedAwardName)
         if (!reward) return
         reward.ApplyReward(kitty.Player, false)

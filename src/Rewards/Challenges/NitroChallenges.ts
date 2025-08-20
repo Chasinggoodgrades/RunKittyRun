@@ -86,7 +86,7 @@ export class NitroChallenges {
         NitroChallenges.NitroTimer.pause()
     }
 
-    public static CompletedNitro(kitty: Kitty) {
+    public static CompletedNitro = (kitty: Kitty) => {
         if (NitroChallenges.NitroTimer.remaining <= 0.0) return
         if (NitroChallenges.CountHitSafezones(kitty.Player) <= 12) {
             kitty.Player.DisplayTimedTextTo(
@@ -105,7 +105,7 @@ export class NitroChallenges {
     /// </summary>
     /// <param name="player"></param>
     /// <returns>int count of the # of safezones reached.</returns>
-    public static CountHitSafezones(player: MapPlayer) {
+    public static CountHitSafezones = (player: MapPlayer) => {
         let count = 0
         for (const safezone of Globals.SAFE_ZONES) {
             if (safezone.AwardedPlayers.includes(player)) count++
@@ -113,14 +113,14 @@ export class NitroChallenges {
         return count
     }
 
-    public static WhiteFire(player: MapPlayer) {
+    public static WhiteFire = (player: MapPlayer) => {
         if (NitroChallenges.GetNitroTimeRemaining() <= 0) return
         const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (Globals.ROUND !== 3 || currentDeaths > NitroChallenges.WHITE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'WhiteFire')
     }
 
-    private static AwardingNitroEvents(kitty: Kitty) {
+    private static AwardingNitroEvents = (kitty: Kitty) => {
         const nitroCount = kitty.CurrentStats.NitroCount
         const player = kitty.Player
         if (nitroCount === Globals.ROUND) return // already awarded
@@ -177,7 +177,7 @@ export class NitroChallenges {
         kitty.SaveData.GameStats.NitrosObtained += 1
     }
 
-    private static AwardingDivineLight(kitty: Kitty) {
+    private static AwardingDivineLight = (kitty: Kitty) => {
         if (Difficulty.DifficultyValue >= DifficultyLevel.Impossible) return
         let requiredCount = 5
         if (Difficulty.DifficultyValue === DifficultyLevel.Hard) requiredCount = 4
@@ -185,7 +185,7 @@ export class NitroChallenges {
         if (kitty.CurrentStats.NitroCount === requiredCount) AwardManager.GiveReward(kitty.Player, 'DivineLight')
     }
 
-    private static PlayNitroSound(player: MapPlayer) {
+    private static PlayNitroSound = (player: MapPlayer) => {
         if (Globals.ALL_KITTIES.get(player)!.CurrentStats.NitroObtained) return // first time
         Globals.ALL_KITTIES.get(player)!.CurrentStats.NitroObtained = true
         SoundManager.PlaySpeedSound()

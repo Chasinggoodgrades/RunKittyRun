@@ -97,7 +97,7 @@ export class Frostbite extends Affix {
         }
     }
 
-    private SlowEffect(target: Unit) {
+    private SlowEffect = (target: Unit) => {
         if (target.getAbilityLevel(Frostbite.ADRENALINE_POTION_ABILITY) > 0) return // Adrenaline Potion
         if (Utility.UnitHasItem(target, Constants.ITEM_FROSTBITE_RING)) return // Frostbite ring
         const k: Kitty = Globals.ALL_KITTIES.get(target.owner)!

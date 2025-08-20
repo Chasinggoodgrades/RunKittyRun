@@ -54,7 +54,7 @@ export class UnitSharing {
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private static AllowSharing(player: MapPlayer) {
+    private static AllowSharing = (player: MapPlayer) => {
         if (CurrentGameMode.active !== GameMode.Standard) return false // Tournament Modes Disable Sharing
 
         if (Globals.ALL_KITTIES.get(player)!.IsChained) return false // Chained Kitties Disable Sharing

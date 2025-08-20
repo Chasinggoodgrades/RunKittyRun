@@ -40,7 +40,7 @@ export class ShopChanger {
         }
     }
 
-    private static SetShopsToSkin(skinType: number) {
+    private static SetShopsToSkin = (skinType: number) => {
         const tempGroup = Group.create()!
         tempGroup.enumUnitsInRect(
             Globals.WORLD_BOUNDS,

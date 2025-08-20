@@ -34,7 +34,7 @@ export class WolfPoint {
     /// <param name="startY">The start point Y coordinate.</param>
     /// <param name="endX">The end point X coordinate.</param>
     /// <param name="endY">The end point Y coordinate.</param>
-    public DiagonalRegionCreate(startX: number, startY: number, endX: number, endY: number) {
+    public DiagonalRegionCreate = (startX: number, startY: number, endX: number, endY: number) => {
         try {
             this.PointInfo ??= WolfPointInfo.GetWolfPointList()
             this.Cleanup()
@@ -138,7 +138,7 @@ export class WolfPointInfo {
     public y = 0
     public LastPoint = false
 
-    public static GetWolfPointList() {
+    public static GetWolfPointList = () => {
         const list = MemoryHandler.getEmptyArray<WolfPointInfo>()
         for (let i = 0; i < 48; i++) {
             list.push(MemoryHandler.getEmptyClass(WolfPointInfo))
@@ -146,7 +146,7 @@ export class WolfPointInfo {
         return list
     }
 
-    public static ClearWolfPointList(list: WolfPointInfo[] & IDestroyable) {
+    public static ClearWolfPointList = (list: WolfPointInfo[] & IDestroyable) => {
         try {
             list.__destroy(true)
         } catch (e) {

@@ -2,7 +2,7 @@ const PADCHAR = '='
 const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 export class EncodingBase64 {
-    private static getbyte64(s: string, i: number) {
+    private static getbyte64 = (s: string, i: number) => {
         const idx = ALPHA.indexOf(s.charAt(i))
         if (idx === -1) {
             throw 'Cannot decode base64'
@@ -10,7 +10,7 @@ export class EncodingBase64 {
         return idx
     }
 
-    public static Decode(s: string) {
+    public static Decode = (s: string) => {
         let pads: number, i: number, b10: number
         let imax = s.length
         if (imax === 0) {
@@ -57,7 +57,7 @@ export class EncodingBase64 {
         return x.join('')
     }
 
-    private static getbyte(s: string, i: number) {
+    private static getbyte = (s: string, i: number) => {
         const x = s.charCodeAt(i)
         if (x > 255) {
             throw 'INVALID_CHARACTER_ERR: DOM Exception 5'
@@ -65,7 +65,7 @@ export class EncodingBase64 {
         return x
     }
 
-    public static Encode(s: string) {
+    public static Encode = (s: string) => {
         let b10: number
         let i: number
         const x: string[] = []

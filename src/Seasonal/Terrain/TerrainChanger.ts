@@ -83,7 +83,7 @@ export class TerrainChanger {
         TerrainChanger.LastSafezoneTerrain = TerrainChanger.SafezoneTerrain[round]
     }
 
-    public static ChangeMapTerrain(tileToChange: number, newTerrain: number) {
+    public static ChangeMapTerrain = (tileToChange: number, newTerrain: number) => {
         const mapRect = Globals.WORLD_BOUNDS
         const minX = mapRect.minX
         const minY = mapRect.minY

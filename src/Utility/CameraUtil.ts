@@ -8,7 +8,7 @@ export class CameraUtil {
     private static LockedCameras: MapPlayer[] = []
     private static KomotoCamEnabled: MapPlayer[] = []
 
-    public static LockCamera(player: MapPlayer) {
+    public static LockCamera = (player: MapPlayer) => {
         if (CameraUtil.LockedCameras.includes(player)) return
         const kitty = Globals.ALL_KITTIES.get(player)!
         CameraUtil.LockedCameras.push(player)
@@ -16,7 +16,7 @@ export class CameraUtil {
         SetCameraTargetController(kitty.Unit.handle, 0, 0, false)
     }
 
-    public static UnlockCamera(player: MapPlayer) {
+    public static UnlockCamera = (player: MapPlayer) => {
         safeArraySplice(CameraUtil.LockedCameras, p => p === player)
         safeArraySplice(CameraUtil.KomotoCamEnabled, p => p === player)
         FirstPersonCameraManager.SetFirstPerson(player, false)
@@ -25,26 +25,26 @@ export class CameraUtil {
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400.0, 0.0)
     }
 
-    public static RelockCamera(player: MapPlayer) {
+    public static RelockCamera = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
         if (!CameraUtil.LockedCameras.includes(player)) return
         if (!player.isLocal()) return
         SetCameraTargetController(kitty.Unit.handle, 0, 0, false)
     }
 
-    public static OverheadCamera(player: MapPlayer, value: number) {
+    public static OverheadCamera = (player: MapPlayer, value: number) => {
         if (!player.isLocal()) return
         SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, value, 0)
     }
 
-    public static HandleZoomCommand(p: MapPlayer, args: string[]) {
+    public static HandleZoomCommand = (p: MapPlayer, args: string[]) => {
         if (args[0] === '') return
         const zoom: number = S2I(args[0])
         if (!p.isLocal()) return
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0)
     }
 
-    public static ToggleKomotoCam(player: MapPlayer) {
+    public static ToggleKomotoCam = (player: MapPlayer) => {
         if (CameraUtil.KomotoCamEnabled.includes(player)) {
             safeArraySplice(CameraUtil.KomotoCamEnabled, p => p === player)
             player.DisplayTextTo(Colors.COLOR_YELLOW_ORANGE + 'disabled: KomotoCam!|r')
@@ -58,7 +58,7 @@ export class CameraUtil {
         }
     }
 
-    public static UpdateKomotoCam(player: MapPlayer, safezoneIndex: number) {
+    public static UpdateKomotoCam = (player: MapPlayer, safezoneIndex: number) => {
         if (!CameraUtil.KomotoCamEnabled.includes(player)) return
 
         const rotation: number = (4 - (safezoneIndex % 4)) * 90.0 + 90.0

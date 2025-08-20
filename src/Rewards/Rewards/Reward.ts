@@ -120,7 +120,7 @@ export class Reward {
     /// </summary>
     /// <param name="player">The player object to which the reward will be applied.</param>
     /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
-    public ApplyReward(player: MapPlayer, setData: boolean = true) {
+    public ApplyReward = (player: MapPlayer, setData: boolean = true) => {
         if (setData) this.SetSelectedData(player)
         this.SetEffect(player)
         if (setData)
@@ -130,7 +130,7 @@ export class Reward {
             )
     }
 
-    private SetEffect(player: MapPlayer) {
+    private SetEffect = (player: MapPlayer) => {
         try {
             if (!Globals.ALL_KITTIES.has(player)) return
 
@@ -147,7 +147,7 @@ export class Reward {
         }
     }
 
-    private ApplyEffect(player: MapPlayer, effectInstance: Effect) {
+    private ApplyEffect = (player: MapPlayer, effectInstance: Effect) => {
         const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings:
@@ -177,7 +177,7 @@ export class Reward {
         }
     }
 
-    private DestroyCurrentEffect(player: MapPlayer) {
+    private DestroyCurrentEffect = (player: MapPlayer) => {
         const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards
         switch (this.Type) {
             case RewardType.Wings: {
@@ -215,14 +215,14 @@ export class Reward {
         }
     }
 
-    private SetWindwalk(player: MapPlayer) {
+    private SetWindwalk = (player: MapPlayer) => {
         if (this.Type !== RewardType.Windwalks) return false
         const kitty = Globals.ALL_KITTIES.get(player)!
         kitty.ActiveAwards.WindwalkID = this.AbilityID
         return true
     }
 
-    private SetSkin(player: MapPlayer, tournament: boolean = false) {
+    private SetSkin = (player: MapPlayer, tournament: boolean = false) => {
         if (this.Type !== RewardType.Skins && tournament === false) return false
 
         const kitty = Globals.ALL_KITTIES.get(player)!
@@ -236,7 +236,7 @@ export class Reward {
         return true
     }
 
-    private SetSelectedData(player: MapPlayer) {
+    private SetSelectedData = (player: MapPlayer) => {
         if (!Globals.ALL_KITTIES.has(player)) return
 
         const saveData = Globals.ALL_KITTIES.get(player)!.SaveData
@@ -277,7 +277,7 @@ export class Reward {
         }
     }
 
-    private SetTournamentReward(player: MapPlayer, e: Effect | null, activate: boolean) {
+    private SetTournamentReward = (player: MapPlayer, e: Effect | null, activate: boolean) => {
         if (this.Type !== RewardType.Tournament) return false
 
         const activeRewards = Globals.ALL_KITTIES.get(player)!.ActiveAwards

@@ -36,7 +36,7 @@ export class CustomStatFrame {
     private static Progress: string = `${Colors.COLOR_YELLOW_ORANGE}Prog.:|r`
     private static t: Timer
 
-    public static Add(icon: string, text: string, titleTooltip: string) {
+    public static Add = (icon: string, text: string, titleTooltip: string) => {
         CustomStatFrame.Count++
         const fh = BlzCreateSimpleFrame('CustomStat', CustomStatFrame.CustomStatFrameBoxS.handle, CustomStatFrame.Count)
         const tooltipBox = BlzCreateFrame(
@@ -181,7 +181,7 @@ export class CustomStatFrame {
         CustomStatFrame.t.start(0.1, true, () => CustomStatFrame.Update())
     }
 
-    private static HandleFrameText(selectedUnit: Unit) {
+    private static HandleFrameText = (selectedUnit: Unit) => {
         if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG || selectedUnit.typeId === Constants.UNIT_NITRO_PACER)
             CustomStatFrame.SetWolfFrameText(selectedUnit)
         else if (selectedUnit.typeId === Constants.UNIT_KITTY) {
@@ -193,7 +193,7 @@ export class CustomStatFrame {
         }
     }
 
-    private static SetChampionFrameText(selectedUnit: Unit) {
+    private static SetChampionFrameText = (selectedUnit: Unit) => {
         // GetUnitName is an async function, may have been prone to desync, now just reference if its the same unit in memory.
         if (selectedUnit === SpawnChampions.Fieryfox2023) {
             CustomStatFrame.Stats[1].Text.text = '|cffff0000Fieryfox|r'
@@ -227,7 +227,7 @@ export class CustomStatFrame {
         return true
     }
 
-    private static SetWolfFrameText(selectedUnit: Unit) {
+    private static SetWolfFrameText = (selectedUnit: Unit) => {
         CustomStatFrame.Stats[0].Text.text = ''
         CustomStatFrame.Stats[1].Text.text = ''
         CustomStatFrame.Stats[2].Text.text = ''
@@ -239,7 +239,7 @@ export class CustomStatFrame {
         CustomStatFrame.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`
     }
 
-    private static SetWolfAffixTexts(selectedUnit: Unit) {
+    private static SetWolfAffixTexts = (selectedUnit: Unit) => {
         if (CurrentGameMode.active === GameMode.SoloTournament) return
         let wolf
         if (!(wolf = Globals.ALL_WOLVES.get(selectedUnit)) /* TODO; Prepend: let */) return
@@ -251,7 +251,7 @@ export class CustomStatFrame {
         }
     }
 
-    private static SetGamemodeFrameText(selectedUnit: Unit) {
+    private static SetGamemodeFrameText = (selectedUnit: Unit) => {
         if (CurrentGameMode.active === GameMode.Standard) {
             // Standard
             CustomStatFrame.Stats[3].Text.setText(
@@ -287,7 +287,7 @@ export class CustomStatFrame {
         }
     }
 
-    private static SetCommonFrameText(selectedUnit: Unit) {
+    private static SetCommonFrameText = (selectedUnit: Unit) => {
         CustomStatFrame.Stats[4].Text.setText(`${CustomStatFrame.Gold} ${CustomStatFrame.GetPlayerGold(selectedUnit)}`)
         CustomStatFrame.Stats[5].Text.setText(`${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`)
         CustomStatFrame.Stats[2].Text.setText(
@@ -295,49 +295,49 @@ export class CustomStatFrame {
         )
     }
 
-    private static GetPlayerTeamName(u: Unit) {
+    private static GetPlayerTeamName = (u: Unit) => {
         const team = Globals.PLAYERS_TEAMS.get(u.owner)
 
         return team ? team.TeamColor : `${Colors.COLOR_YELLOW_ORANGE}Team: Aches${Colors.COLOR_RESET}`
     }
 
-    private static GetPlayerGold(u: Unit) {
+    private static GetPlayerGold = (u: Unit) => {
         return u.owner.getGold()
     }
 
-    private static GetPlayerProgress(u: Unit) {
+    private static GetPlayerProgress = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.TimeProg.GetRoundProgress(Globals.ROUND).toFixed(2)
     }
 
-    private static GetPlayerSaves(u: Unit) {
+    private static GetPlayerSaves = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.SaveData.GameStats.Saves
     }
 
-    private static GetPlayerDeaths(u: Unit) {
+    private static GetPlayerDeaths = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.SaveData.GameStats.Deaths
     }
 
-    private static GetPlayerSaveStreak(u: Unit) {
+    private static GetPlayerSaveStreak = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.SaveData.GameStats.SaveStreak
     }
 
-    private static GetPlayerTime(u: Unit) {
+    private static GetPlayerTime = (u: Unit) => {
         return Utility.ConvertFloatToTime(Globals.ALL_KITTIES.get(u.owner)!.TimeProg.GetRoundTime(Globals.ROUND))
     }
 
-    private static GetCurrentRoundSaves(u: Unit) {
+    private static GetCurrentRoundSaves = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.CurrentStats.RoundSaves
     }
 
-    private static GetCurrentRoundDeaths(u: Unit) {
+    private static GetCurrentRoundDeaths = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.CurrentStats.RoundDeaths
     }
 
-    private static GetGameTotalSaves(u: Unit) {
+    private static GetGameTotalSaves = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.CurrentStats.TotalSaves
     }
 
-    private static GetGameTotalDeaths(u: Unit) {
+    private static GetGameTotalDeaths = (u: Unit) => {
         return Globals.ALL_KITTIES.get(u.owner)!.CurrentStats.TotalDeaths
     }
 }

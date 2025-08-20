@@ -18,7 +18,7 @@ export class VictoryZone {
         VictoryZone.VictoryAreaTrigger()
     }
 
-    private static VictoryAreaConditions(u: Unit) {
+    private static VictoryAreaConditions = (u: Unit) => {
         return (
             VictoryZone.VictoryAreaConditionsStandard(u) ||
             VictoryZone.VictoryAreaConditionsTeam(u) ||
@@ -73,15 +73,15 @@ export class VictoryZone {
         MultiboardUtil.RefreshMultiboards()
     }
 
-    private static VictoryAreaConditionsStandard(u: Unit) {
+    private static VictoryAreaConditionsStandard = (u: Unit) => {
         return CurrentGameMode.active === GameMode.Standard
     }
 
-    private static VictoryAreaConditionsSolo(u: Unit) {
+    private static VictoryAreaConditionsSolo = (u: Unit) => {
         return CurrentGameMode.active === GameMode.SoloTournament
     }
 
-    private static VictoryAreaConditionsTeam(u: Unit) {
+    private static VictoryAreaConditionsTeam = (u: Unit) => {
         // If a team enters the area, check if all the members of the team are in the area.
         if (CurrentGameMode.active !== GameMode.TeamTournament) return false
         const team = Globals.ALL_KITTIES.get(u.owner)!.TeamID
@@ -91,7 +91,7 @@ export class VictoryZone {
         return true
     }
 
-    private static VictoryContainerConditions(u: Unit) {
+    private static VictoryContainerConditions = (u: Unit) => {
         return Regions.Victory_Area.includes(u.x, u.y) || Regions.safe_Area_14.includes(u.x, u.y)
     }
 }

@@ -176,7 +176,7 @@ export class Kitty {
     /// <summary>
     /// Revives this object and increments savior's stats if provided.
     /// </summary>
-    public ReviveKitty(savior?: Kitty) {
+    public ReviveKitty = (savior?: Kitty) => {
         try {
             if (UnitAlive(this.Unit.handle)) return
 

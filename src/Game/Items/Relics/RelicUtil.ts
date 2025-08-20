@@ -4,22 +4,22 @@ import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Unit } from 'w3ts'
 
 export class RelicUtil {
-    public static DisableRelicBook(Unit: Unit) {
+    public static DisableRelicBook = (Unit: Unit) => {
         return Unit.disableAbility(Constants.ABILITY_BOOK_OF_RELICS, true, true)
     }
 
-    public static EnableRelicBook(Unit: Unit) {
+    public static EnableRelicBook = (Unit: Unit) => {
         return Unit.disableAbility(Constants.ABILITY_BOOK_OF_RELICS, false, false)
     }
 
-    public static DisableRelicAbilities(Unit: Unit) {
+    public static DisableRelicAbilities = (Unit: Unit) => {
         Unit.disableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, true)
         Unit.disableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, true)
         Unit.disableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, true)
         Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
     }
 
-    public static EnableRelicAbilities(Unit: Unit) {
+    public static EnableRelicAbilities = (Unit: Unit) => {
         Unit.disableAbility(Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE, false, false)
         Unit.disableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, false)
         Unit.disableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, false)
@@ -30,13 +30,13 @@ export class RelicUtil {
     /// Technically does the job it's assigned to do, however it toggles the multiboard in the process. Should be fixed later. TODO:
     /// </summary>
     /// <param name="Unit"></param>
-    public static CloseRelicBook(Unit: Unit) {
+    public static CloseRelicBook = (Unit: Unit) => {
         const player = Unit.owner
         if (!player.isLocal()) return
         ForceUICancel()
     }
 
-    public static CloseRelicBookPlayer(Player: MapPlayer) {
+    public static CloseRelicBookPlayer = (Player: MapPlayer) => {
         if (!Player.isLocal()) return
         ForceUICancel()
     }
@@ -47,7 +47,7 @@ export class RelicUtil {
     /// <param name="unit"></param>
     /// <param name="itemID"></param>
     /// <param name="abilityID"></param>
-    public static SetRelicCooldowns(unit: Unit, itemID: number, abilityID: number, cooldown = 0) {
+    public static SetRelicCooldowns = (unit: Unit, itemID: number, abilityID: number, cooldown = 0) => {
         // Get item from unit.. Drop it.. Set Cooldown of it, and set cooldown of ability on the unit to cooldown
         const item = Utility.UnitGetItem(unit, itemID)
         if (!item) return
@@ -69,7 +69,7 @@ export class RelicUtil {
         BlzStartUnitAbilityCooldown(unit.handle, abilityID, cooldown)
     }
 
-    public static SetAbilityCooldown(unit: Unit, itemID: number, abilityID: number, cooldown: number) {
+    public static SetAbilityCooldown = (unit: Unit, itemID: number, abilityID: number, cooldown: number) => {
         const item = Utility.UnitGetItem(unit, itemID)
         if (!item) return
         const itemSlot = Utility.GetSlotOfItem(unit, itemID)

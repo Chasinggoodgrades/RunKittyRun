@@ -20,7 +20,7 @@ export class AntiblockWand {
         AntiblockWand.RegisterCastEvents()
     }
 
-    private static RegisterCastEvents() {
+    private static RegisterCastEvents = () => {
         const triggerHandle = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             triggerHandle.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)

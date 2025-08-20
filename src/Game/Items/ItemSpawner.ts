@@ -65,7 +65,7 @@ export class ItemSpawner {
         ItemSpawnerTrackKibbles.active = []
     }
 
-    public static SpawnKibble(numberOfItems: number) {
+    public static SpawnKibble = (numberOfItems: number) => {
         if (CurrentGameMode.active !== GameMode.Standard) return
         if (!Kibble.SpawningKibble) return
         if (KibbleEvent.IsEventActive()) return

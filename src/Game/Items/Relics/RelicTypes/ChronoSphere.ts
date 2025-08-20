@@ -186,7 +186,7 @@ export class ChronoSphere extends Relic {
         }
     }
 
-    public static RewindDeath(kitty: Kitty) {
+    public static RewindDeath = (kitty: Kitty) => {
         try {
             if (CurrentGameMode.active !== GameMode.Standard) return false // Only for Standard.
             if (kitty.ProtectionActive) return false // Don't rewind if ultimate has been casted.

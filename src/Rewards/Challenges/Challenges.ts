@@ -31,7 +31,7 @@ export class Challenges {
         AwardManager.GiveRewardAll('WhiteTendrils')
     }
 
-    public static DivinityTendrils(player: MapPlayer) {
+    public static DivinityTendrils = (player: MapPlayer) => {
         return AwardManager.GiveReward(player, 'DivinityTendrils')
     }
 
@@ -41,7 +41,7 @@ export class Challenges {
     }
 
     // finished round, then run all the way back to the start.
-    public static DivineWindwalk(player: MapPlayer) {
+    public static DivineWindwalk = (player: MapPlayer) => {
         AwardManager.GiveReward(player, 'WWDivine')
     }
 
@@ -50,21 +50,21 @@ export class Challenges {
         AwardManager.GiveRewardAll('HuntressKitty')
     }
 
-    public static PatrioticLight(kitty: Kitty) {
+    public static PatrioticLight = (kitty: Kitty) => {
         if (Globals.ROUND !== 5) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         if (Globals.GAME_TIMER.remaining > 995) return // Formally 20 mins, now 16:35 and awards to all players.
         AwardManager.GiveRewardAll('PatrioticLight')
     }
 
-    public static ButterflyAura(player: MapPlayer) {
+    public static ButterflyAura = (player: MapPlayer) => {
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
         const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (currentDeaths > 5) return
         AwardManager.GiveReward(player, 'ButterflyAura')
     }
 
-    public static PurpleFire(player: MapPlayer) {
+    public static PurpleFire = (player: MapPlayer) => {
         const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (Globals.ROUND !== 2 || currentDeaths > Challenges.PURPLE_FIRE_DEATH_REQUIREMENT) return
         if (Difficulty.DifficultyValue < DifficultyLevel.Impossible) return
@@ -79,7 +79,7 @@ export class Challenges {
         }
     }
 
-    public static TurquoiseFire(player: MapPlayer) {
+    public static TurquoiseFire = (player: MapPlayer) => {
         const currentDeaths = Globals.ALL_KITTIES.get(player)!.CurrentStats.RoundDeaths
         if (Globals.ROUND !== 5 || currentDeaths > Challenges.TURQUOISE_FIRE_DEATH_REQUIREMENT) return
         AwardManager.GiveReward(player, 'TurquoiseFire')
@@ -102,12 +102,12 @@ export class Challenges {
         }
     }
 
-    public static PurpleLighting(kitty: Kitty) {
+    public static PurpleLighting = (kitty: Kitty) => {
         if (kitty.CurrentStats.TotalSaves < Challenges.PURPLE_LIGHTNING_SAVE_REQUIREMENT) return
         AwardManager.GiveReward(kitty.Player, 'PurpleLightning')
     }
 
-    public static GreenLightning(player: MapPlayer) {
+    public static GreenLightning = (player: MapPlayer) => {
         const kitty = Globals.ALL_KITTIES.get(player)!
         const currentDeaths = kitty.CurrentStats.RoundDeaths
         const saveStreak = kitty.SaveData.GameStats.SaveStreak // current or overall, either is fine tbh.

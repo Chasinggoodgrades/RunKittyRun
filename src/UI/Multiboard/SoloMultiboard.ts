@@ -212,7 +212,7 @@ export class SoloMultiboard {
         SoloMultiboard.BestTimeStats()
     }
 
-    public static FillPlayers(mb: Multiboard, rowIndex = 2) {
+    public static FillPlayers = (mb: Multiboard, rowIndex = 2) => {
         for (const player of Globals.ALL_PLAYERS) {
             const name = player.name.length > 8 ? player.name.substring(0, 8) : MapPlayer.name
             mb.GetItem(rowIndex, 0).setText(`${ColorUtils.GetStringColorOfPlayer(player.id + 1)}${name}|r`)
@@ -221,7 +221,7 @@ export class SoloMultiboard {
         }
     }
 
-    public static UpdateDeathCount(player: MapPlayer) {
+    public static UpdateDeathCount = (player: MapPlayer) => {
         try {
             if (CurrentGameMode.active !== GameMode.SoloTournament) return
             let value

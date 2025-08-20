@@ -2,19 +2,19 @@ import { Colors } from 'src/Utility/Colors/Colors'
 import { ErrorMessagesOn } from '../../Utility/ErrorMessagesOn'
 
 export class Logger {
-    public static Verbose(...messages: string[]) {
+    public static Verbose = (...messages: string[]) => {
         Logger.Log('VERBOSE', Colors.COLOR_GREY, ...messages)
     }
 
-    public static Warning(...messages: string[]) {
+    public static Warning = (...messages: string[]) => {
         Logger.Log('WARNING', Colors.COLOR_YELLOW, ...messages)
     }
 
-    public static Critical(...messages: string[]) {
+    public static Critical = (...messages: string[]) => {
         Logger.Log('CRITICAL', Colors.COLOR_RED, ...messages)
     }
 
-    private static Log(level: string, color: string, ...messages: string[]) {
+    private static Log = (level: string, color: string, ...messages: string[]) => {
         if (!ErrorMessagesOn.active) return
         const formattedMessage = info().GetStackTrace() + ' > ' + messages.join(' ')
         print(

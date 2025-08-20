@@ -29,12 +29,12 @@ export class WolfLaneHider {
         }
     }
 
-    public static ShadowKittyLaneAdd(safezone: number) {
+    public static ShadowKittyLaneAdd = (safezone: number) => {
         WolfLaneHider.AddAdjacentLanes(safezone)
         WolfLaneHider.ApplyLaneVisibility()
     }
 
-    private static AddAdjacentLanes(currentSafezone: number) {
+    private static AddAdjacentLanes = (currentSafezone: number) => {
         WolfLaneHider.AddLane(currentSafezone)
         WolfLaneHider.AddLane(currentSafezone + 1)
         WolfLaneHider.AddLane(currentSafezone - 1)
@@ -46,7 +46,7 @@ export class WolfLaneHider {
         }
     }
 
-    private static AddLane(lane: number) {
+    private static AddLane = (lane: number) => {
         if (lane >= 0 && lane <= 17) {
             WolfLaneHider.lanesToEnable.add(lane)
         }
@@ -84,7 +84,7 @@ export class WolfLaneHider {
         }
     }
 
-    private static SetLaneVisibility(lane: WolfArea, isVisible: boolean) {
+    private static SetLaneVisibility = (lane: WolfArea, isVisible: boolean) => {
         for (let i = 0; i < lane.Wolves.length; i++) {
             const wolf = lane.Wolves[i]
             wolf.Unit.show = isVisible

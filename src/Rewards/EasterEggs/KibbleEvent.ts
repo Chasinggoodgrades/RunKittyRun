@@ -18,7 +18,7 @@ export class KibbleEvent {
     private static EventTimerDialog: TimerDialog
     private static EventLength = 300.0 // 5 minutes to collect 200 kibble xd
 
-    public static StartKibbleEvent(chance: number) {
+    public static StartKibbleEvent = (chance: number) => {
         const adjustedChance = !PROD ? 5 : 1
         if (chance > adjustedChance || KibbleEvent.EventPlayed) return
 

@@ -20,7 +20,7 @@ export class Disco extends IDisposable {
         MemoryHandler.destroyObject(this)
     }
 
-    public ToggleDisco(enable: boolean) {
+    public ToggleDisco = (enable: boolean) => {
         if (this.Unit === null) return
 
         if (enable) {

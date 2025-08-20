@@ -37,15 +37,15 @@ export class RewardsManager {
         }
     }
 
-    private static IsRewardAbility(spellID: number) {
+    private static IsRewardAbility = (spellID: number) => {
         return RewardsManager.RewardAbilities.includes(spellID)
     }
 
-    private static IsResetSpell(spellID: number) {
+    private static IsResetSpell = (spellID: number) => {
         return spellID === Constants.ABILITY_RESET
     }
 
-    private static ResetRewardSettings(Unit: Unit) {
+    private static ResetRewardSettings = (Unit: Unit) => {
         const player = Unit.owner
         const kitty = Globals.ALL_KITTIES.get(player)!
         const activeRewards = kitty.ActiveAwards

@@ -58,11 +58,11 @@ export class APMTracker {
         }
     }
 
-    private static IsInSafeZone(kitty: Kitty) {
+    private static IsInSafeZone = (kitty: Kitty) => {
         return RegionList.SafeZones[kitty.CurrentSafeZone].includes(kitty.Unit.x, kitty.Unit.y)
     }
 
-    private static CalculateAPM(kitty: Kitty) {
+    private static CalculateAPM = (kitty: Kitty) => {
         const totalActions = kitty.APMTracker.TotalActions
         const timeOutsideSafeZones = kitty.APMTracker.TimeOutsideSafeZones / 60.0 // put in mins (APM)
         return timeOutsideSafeZones > 0.0 ? totalActions / timeOutsideSafeZones : 0.0

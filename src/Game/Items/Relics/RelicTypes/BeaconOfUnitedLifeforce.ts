@@ -53,7 +53,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
         this.Owner = null
     }
 
-    public BeaconOfUnitedLifeforceEffect(player: MapPlayer) {
+    public BeaconOfUnitedLifeforceEffect = (player: MapPlayer) => {
         // Make sure person has the relic
         if (player !== this.Owner) return
         const kitty = Globals.ALL_KITTIES.get(player)!
@@ -99,7 +99,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     /// </summary>
     /// <param name="beaconHolder"></param>
     /// <param name="extraRevivedKitty"></param>
-    private Invulnerability(beaconHolder: Kitty, extraRevivedKitty: Kitty) {
+    private Invulnerability = (beaconHolder: Kitty, extraRevivedKitty: Kitty) => {
         extraRevivedKitty.Invulnerable = true
         Utility.SimpleTimer(
             BeaconOfUnitedLifeforce.INVULNERABILITY_DURATION,

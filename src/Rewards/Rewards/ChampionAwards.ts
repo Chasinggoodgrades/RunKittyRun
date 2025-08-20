@@ -11,7 +11,7 @@ export class ChampionAwards {
         }
     }
 
-    private static GiveAllChampionAwards(player: MapPlayer) {
+    private static GiveAllChampionAwards = (player: MapPlayer) => {
         let awards: Tournament
         AwardManager.GiveReward(player, 'TurquoiseNitro', false)
         AwardManager.GiveReward(player, 'TurquoiseWings', false)

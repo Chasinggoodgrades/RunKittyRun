@@ -65,7 +65,7 @@ export class Kibble extends IDisposable {
         return Kibble.KibblesColors[GetRandomInt(0, Kibble.KibblesColors.length - 1)]
     }
 
-    private static KibblePickupEvents() {
+    private static KibblePickupEvents = () => {
         const trig = Trigger.create()!
         trig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
         trig.addCondition(() => {
@@ -82,7 +82,7 @@ export class Kibble extends IDisposable {
 
     // #region Kibble Pickup Logic
 
-    private static KibblePickup(item: Item) {
+    private static KibblePickup = (item: Item) => {
         try {
             if (item === null) return
 
@@ -120,7 +120,7 @@ export class Kibble extends IDisposable {
         }
     }
 
-    private static KibbleGoldReward(kitty: Kitty, kib: Kibble) {
+    private static KibbleGoldReward = (kitty: Kitty, kib: Kibble) => {
         const jackPotChance = GetRandomInt(0, 100)
         let goldAmount: number
         if (jackPotChance <= 3) {
@@ -131,17 +131,17 @@ export class Kibble extends IDisposable {
         Utility.CreateSimpleTextTag(`+${goldAmount} Gold`, 2.0, kitty.Unit, Kibble.TextTagHeight, 255, 215, 0) // ?????? what.
     }
 
-    private static KibbleXP(kitty: Kitty) {
+    private static KibbleXP = (kitty: Kitty) => {
         const xpAmount = GetRandomInt(50, Kibble.XPMax)
         kitty.Unit.experience += xpAmount
         SoundManager.PlayKibbleTomeSound(kitty.Unit)
     }
 
-    private static KibbleNothing(kitty: Kitty) {
+    private static KibbleNothing = (kitty: Kitty) => {
         Utility.CreateSimpleTextTag('Nothing!', 2.0, kitty.Unit, Kibble.TextTagHeight, 50, 150, 150)
     }
 
-    private static JackpotEffect(kitty: Kitty, kibble: Kibble) {
+    private static JackpotEffect = (kitty: Kitty, kibble: Kibble) => {
         const unitX = kitty.Unit.x
         const unitY = kitty.Unit.y
         const newX = PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
@@ -179,7 +179,7 @@ export class Kibble extends IDisposable {
 
     // #region Utility Methods
 
-    private static IncrementKibble(kibblePicker: Kitty) {
+    private static IncrementKibble = (kibblePicker: Kitty) => {
         kibblePicker.CurrentStats.CollectedKibble += 1
 
         for (const player of Globals.ALL_PLAYERS) player.addLumber(1)
@@ -191,7 +191,7 @@ export class Kibble extends IDisposable {
     /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
     /// </summary>
     /// <param name="k"></param>
-    public static BeatKibbleCollection(k: Kitty) {
+    public static BeatKibbleCollection = (k: Kitty) => {
         const currentKibble = k.CurrentStats.CollectedKibble
         const bestKibble = k.SaveData.PersonalBests.KibbleCollected
         if (currentKibble < 10) return // avoid the spam for 1st timers.

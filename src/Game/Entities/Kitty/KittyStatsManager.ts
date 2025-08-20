@@ -18,7 +18,7 @@ export class KittyStatsManager {
     /// Updates the resources of the savior kitty then calls to update their save stats data.
     /// </summary>
     /// <param name="savior"></param>
-    public UpdateSaviorStats(savior: Kitty) {
+    public UpdateSaviorStats = (savior: Kitty) => {
         savior.Player.addGold(Resources.SaveGoldBonus(savior.CurrentStats.SaveStreak))
         savior.Unit.experience += Resources.SaveExperience
         this.SaveStatUpdate(savior)
@@ -47,7 +47,7 @@ export class KittyStatsManager {
     /// Updates the savior kitty's stats when they save another kitty. This includes updating their save streak, total saves, and round saves.
     /// </summary>
     /// <param name="savior"></param>
-    public SaveStatUpdate(savior: Kitty) {
+    public SaveStatUpdate = (savior: Kitty) => {
         if (this.Kitty.aiController.IsEnabled()) return
 
         savior.CurrentStats.TotalSaves += 1
