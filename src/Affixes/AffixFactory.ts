@@ -77,9 +77,9 @@ export class AffixFactory {
     }
 
     /* summary
-     * if: we: can: apply: affix: to: Wolf: type: Checks.
-     * @unit: parm: Wolf
-     * @affixName: optional: string
+     * Checks if we can apply affix to Wolf type.
+     * @parm unit: Wolf
+     * @optional affixName: string
      */
     private static CanApplyAffix = (unit: Wolf, affixName: string = 'x') => {
         return unit.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName)

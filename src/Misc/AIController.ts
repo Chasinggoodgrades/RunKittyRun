@@ -445,8 +445,8 @@ export class AIController {
     }
 
     /**
-     * function: find: the: angle: formed: among: two: points: This of circumference: the
-     * the: center: on: the: X: axis: and
+     * This function find the angle formed among two points of the circumference
+     * and the center on the X axis
      */
     AnglesFromCenter(pointA: [number, number], pointB: [number, number]) {
         const angleA: number = this.AngleOf(pointA, [this.kitty.Unit.x, this.kitty.Unit.y])

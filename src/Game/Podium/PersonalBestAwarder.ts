@@ -11,11 +11,11 @@ import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObject
 import { Kitty } from '../Entities/Kitty/Kitty'
 
 /*
-let PERSONAL: BESTS: FOR: SHOW:
+SHOW PERSONAL BESTS FOR:
 
-let score: highest in game: a
-let KD: highest in game: a
-let all: other: stats: i: and'say: d. streak: so/     saves/deaths in game: 1 / w/other: stats: we: got: e
+highest score in a game
+highest KD in a game
+and all other stats i'd say. so streak/     saves/deaths in 1 game / w/e other stats we got
 */
 export class PersonalBestAwarder {
     private static BeatenMostSavesList: MapPlayer[] = []

@@ -3,8 +3,8 @@ import { Wolf } from '../Entities/Wolf'
 import { WolfArea } from '../WolfArea'
 
 /*
- * CLASS: IS: UNUSED: THIS.. idea: was: to: spawn: wolves: based: on: The the area of the lane.
- * technically: works: just: fine: It, not: each: lane: however is equal in terms of difficulty.
+ * THIS CLASS IS UNUSED.. The idea was to spawn wolves based on the area of the lane.
+ * It technically works just fine, however not each lane is equal in terms of difficulty.
  */
 
 export class WolfSpawning {
