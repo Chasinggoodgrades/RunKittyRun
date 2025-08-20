@@ -393,8 +393,8 @@ export class ShopFrame {
                 ShopFrame.sellButton.visible = false
                 ShopFrame.sellButton.visible = true
             }
-            let selectedItem: ShopItem
-            if ((selectedItem = Globals.SelectedItems.get(player)!) /* TODO; Prepend: let */ && selectedItem !== null) {
+            const selectedItem = Globals.SelectedItems.get(player)
+            if (selectedItem) {
                 const itemID = selectedItem.ItemID
                 const kitty = Globals.ALL_KITTIES.get(player)!
                 if (!Utility.UnitHasItem(kitty.Unit, itemID)) return

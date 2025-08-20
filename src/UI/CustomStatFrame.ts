@@ -118,9 +118,8 @@ export class CustomStatFrame {
 
     public static Update = () => {
         try {
-            let selectedUnit: Unit
-            if (!(selectedUnit = CustomStatFrame.SelectedUnit.get(MapPlayer.fromLocal())!) /* TODO; Prepend: let */)
-                return
+            const selectedUnit = CustomStatFrame.SelectedUnit.get(MapPlayer.fromLocal())
+            if (!selectedUnit) return
             CustomStatFrame.HandleFrameText(selectedUnit)
 
             CustomStatFrame.CustomStatFrameBoxF.visible = CustomStatFrame.CustomStatFrameBoxS.visible
@@ -241,9 +240,8 @@ export class CustomStatFrame {
 
     private static SetWolfAffixTexts = (selectedUnit: Unit) => {
         if (CurrentGameMode.active === GameMode.SoloTournament) return
-        let wolf
-        if (!(wolf = Globals.ALL_WOLVES.get(selectedUnit)) /* TODO; Prepend: let */) return
-
+        const wolf = Globals.ALL_WOLVES.get(selectedUnit)
+        if (!wolf) return
         const affixes = wolf.Affixes
 
         for (let i = 0; i < affixes.length; i++) {

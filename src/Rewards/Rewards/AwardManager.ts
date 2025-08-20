@@ -106,10 +106,10 @@ export class AwardManager {
                 if (player.controller !== MAP_CONTROL_USER) continue // no bots, reduce triggers;
                 if (player.slotState !== PLAYER_SLOT_STATE_PLAYING) continue // no obs, no leavers.
 
-                let kittyProfile
-                if (!(kittyProfile = Globals.ALL_KITTIES.get(player)) /* TODO; Prepend: let */) {
-                    let saveData
-                    if (!(saveData = SaveManager.SaveData.get(player)) /* TODO; Prepend: let */) {
+                let kittyProfile = Globals.ALL_KITTIES.get(player)
+                if (!kittyProfile) {
+                    const saveData = SaveManager.SaveData.get(player)
+                    if (!saveData) {
                         Logger.Critical(
                             `Save data wasn't finished loading / SaveData not found. Defaulting for ${player}.`
                         )
