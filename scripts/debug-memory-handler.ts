@@ -26,9 +26,39 @@ contents = contents.replace(new RegExp('MemoryHandler.getEmptyArray\\(\\)', 'gmi
     return `MemoryHandler.getEmptyArray(${objPrefix}'arr.${counter++}')`
 })
 
+// Print all native wc3 functions that return game objects
+{
+    const nativeFunctions = [
+        {
+            name: 'MultiboardItem',
+            leaks: ['MultiboardGetItem'],
+            plugs: ['MultiboardReleaseItem'],
+        },
+        {
+            name: 'Item',
+            leaks: ['CreateItem', 'BlzCreateItemWithSkin'],
+            plugs: ['RemoveItem'],
+        },
+    ]
+
+    for (const nativeFunction of nativeFunctions) {
+        for (const leak of nativeFunction.leaks) {
+            contents = contents.replace(new RegExp(`^.*?\\b${leak}\\b`, 'gmi'), _ => {
+                return `__fakePrint('Native ${nativeFunction.name}')\n${_}`
+            })
+        }
+
+        for (const plug of nativeFunction.plugs) {
+            contents = contents.replace(new RegExp(`^.*?\\b${plug}\\b`, 'gmi'), _ => {
+                return `__fakePrint('Native ${nativeFunction.name}', -1)\n${_}`
+            })
+        }
+    }
+}
+
 // Print all created objects and functions
 {
-    contents = contents.replace(new RegExp('(=|return|,|\\()\\s+{', 'gmi'), (_, a) => {
+    contents = contents.replace(new RegExp('(=|return|,|\\()\\s*{', 'gmi'), (_, a) => {
         return `${a} __fakePrint(${objPrefix}'Object #${counter++}') or {`
     })
 
@@ -43,13 +73,15 @@ contents = contents.replace(new RegExp('MemoryHandler.getEmptyArray\\(\\)', 'gmi
     const fakePrint = `local __fakePrintMap = {}
 _G['__fakePrintMap'] = __fakePrintMap
 
-function __fakePrint(s)
+function __fakePrint(s, n)
+    n = n or 1
+
     if _G['trackPrintMap'] then
         if (not __fakePrintMap[s]) then
             __fakePrintMap[s] = 0
         end
 
-        __fakePrintMap[s] = __fakePrintMap[s] + 1
+        __fakePrintMap[s] = __fakePrintMap[s] + n
     end
 
     if _G['printCreation'] then
