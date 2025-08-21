@@ -51,7 +51,7 @@ export class Wolf {
 
         this.InitializeWolf()
         this.WanderTimer = Timer.create()
-        this.WanderTimer.start(GetRandomReal(2.0, 4.5), false, () => this.StartWandering())
+        this.WanderTimer.start(GetRandomReal(2.0, 4.5), false, this.StartWandering)
         Globals.ALL_WOLVES.set(this.Unit, this)
 
         this.WolfArea.Wolves.push(this)
@@ -84,7 +84,7 @@ export class Wolf {
             this.ApplyEffect()
             realTime = this.NEXT_WANDER_DELAY // Gives a brief delay before the wolf has a chance to move again.
         }
-        this.WanderTimer?.start(realTime, false, () => this.StartWandering())
+        this.WanderTimer?.start(realTime, false, this.StartWandering)
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ export class Wolf {
         BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_STAND)
 
         this.EffectTimer ??= Timer.create()
-        this.EffectTimer?.start(effectDuration, false, () => this.WolfMoveCancelEffect())
+        this.EffectTimer?.start(effectDuration, false, this.WolfMoveCancelEffect)
     }
 
     private WolfMoveCancelEffect = () => {

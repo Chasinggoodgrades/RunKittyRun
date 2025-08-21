@@ -18,7 +18,7 @@ export class GameTimer {
         GameTimer.GameTimeBar = Frame.fromName('ResourceBarSupplyText', 0)!
         GameTimer.RoundTime = []
         const t = Timer.create()
-        t.start(GameTimer.RoundSpeedIncrement, true, () => GameTimer.StartGameTimer())
+        t.start(GameTimer.RoundSpeedIncrement, true, GameTimer.StartGameTimer)
     }
 
     /// <summary>

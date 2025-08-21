@@ -44,7 +44,7 @@ export class RoundManager {
         if (remainingTime <= 0.0) return false
         RoundManager.AddedTimeAlready = true
         const tempTime = remainingTime + 20.0 // 20 seconds
-        RoundTimer.StartRoundTimer.start(tempTime, false, () => RoundManager.StartRound())
+        RoundTimer.StartRoundTimer.start(tempTime, false, RoundManager.StartRound)
         return true
     }
 

@@ -77,7 +77,7 @@ export class NitroPacer {
         NitroPacer.ResetNitroPacer()
         instance.Unit!.useItem(instance.ghostBoots!)
         NitroPacer.NitroPacerQueueOrders()
-        instance.pacerTimer!.Timer.start(0.15, true, () => NitroPacer.UpdateNitroPacer())
+        instance.pacerTimer!.Timer.start(0.15, true, NitroPacer.UpdateNitroPacer)
     }
 
     /// <summary>

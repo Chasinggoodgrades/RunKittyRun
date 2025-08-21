@@ -28,7 +28,7 @@ export class ItemSpawner {
     }
 
     private static RegisterEvent = () => {
-        ItemSpawner.SpawnTimer.start(ItemSpawner.ITEM_SPAWN_INTERVAL, true, () => ItemSpawner.SpawnItems())
+        ItemSpawner.SpawnTimer.start(ItemSpawner.ITEM_SPAWN_INTERVAL, true, ItemSpawner.SpawnItems)
     }
 
     private static SpawnItems = () => {

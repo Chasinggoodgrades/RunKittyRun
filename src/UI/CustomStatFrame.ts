@@ -177,7 +177,7 @@ export class CustomStatFrame {
         CustomStatFrame.Add('ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp', '', 'Speed')
 
         CustomStatFrame.t = Timer.create()
-        CustomStatFrame.t.start(0.1, true, () => CustomStatFrame.Update())
+        CustomStatFrame.t.start(0.1, true, CustomStatFrame.Update)
     }
 
     private static HandleFrameText = (selectedUnit: Unit) => {

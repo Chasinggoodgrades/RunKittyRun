@@ -26,7 +26,7 @@ export class Disco extends IDisposable {
         if (enable) {
             if (this.Enabled) return
             this.Enabled = true
-            this.DiscoTimer.start(0.4, true, () => this.DiscoActions())
+            this.DiscoTimer.start(0.4, true, this.DiscoActions)
         } else {
             this.DiscoTimer.pause()
             this.Enabled = false
