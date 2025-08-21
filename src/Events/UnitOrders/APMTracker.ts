@@ -10,8 +10,8 @@ export class APMTracker {
     private readonly _cachedPositions: Action
     private CAPTURE_INTERVAL = 0.1
     private ClicksTrigger: Trigger = Trigger.create()!
-    private ClicksAction: triggeraction
-    private PeriodicTimer: Timer
+    private ClicksAction: triggeraction | undefined
+    private PeriodicTimer: Timer | undefined
     public LastX = 0
     public LastY = 0
 
@@ -79,9 +79,9 @@ export class APMTracker {
     }
 
     public dispose = () => {
-        this.PeriodicTimer.pause()
+        this.PeriodicTimer?.pause()
         this.PeriodicTimer?.destroy()
-        this.ClicksTrigger.removeAction(this.ClicksAction)
+        this.ClicksAction && this.ClicksTrigger.removeAction(this.ClicksAction)
         this.ClicksTrigger.destroy()
     }
 

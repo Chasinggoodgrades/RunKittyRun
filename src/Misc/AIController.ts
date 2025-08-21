@@ -51,9 +51,9 @@ export class AIController {
 
     private moveTimer: Timer | undefined
     private wolvesInRange: Wolf[] = []
-    private lastLightning: lightning
+    private lastLightning: lightning | undefined
 
-    private lastSafeZoneIndexId: number | null
+    private lastSafeZoneIndexId: number | undefined
     private reachedLastProgressZoneCenter = false
     private availableBlockedLightnings: lightning[] = []
     private availableClearLightnings: lightning[] = []
@@ -108,7 +108,7 @@ export class AIController {
             this.moveTimer = undefined
         }
 
-        DestroyLightning(this.lastLightning)
+        this.lastLightning && DestroyLightning(this.lastLightning)
 
         this.HideAllLightnings()
         this.HideAllFreeLightnings()
@@ -143,13 +143,9 @@ export class AIController {
         const currentSafezoneCenter = this.GetCenterPositionInSafezone(currentSafezone)
         const nextSafezoneCenter = this.GetCenterPositionInSafezone(nextSafezone)
 
-        const currentSafeZoneId: number | null = this.IsInSafeZone(
-            this.kitty.Unit.x,
-            this.kitty.Unit.y,
-            currentProgressZoneId
-        )
+        const currentSafeZoneId = this.IsInSafeZone(this.kitty.Unit.x, this.kitty.Unit.y, currentProgressZoneId)
             ? currentProgressZoneId
-            : null
+            : undefined
 
         if (currentSafeZoneId !== this.lastSafeZoneIndexId) {
             this.reachedLastProgressZoneCenter = !currentSafeZoneId

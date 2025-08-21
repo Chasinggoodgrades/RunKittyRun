@@ -33,8 +33,7 @@
             "war3-types-strict/1.33.0",
             "war3-transformer/types",
             "war3-objectdata-th/dist/cjs/objectdata"
-        ],
-        "strictPropertyInitialization": false
+        ]
     },
     "include": ["src"],
     "exclude": [],

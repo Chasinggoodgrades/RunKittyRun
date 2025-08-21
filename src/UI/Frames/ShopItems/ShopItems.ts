@@ -20,15 +20,15 @@ export enum ShopItemType {
 }
 
 export class ShopItem {
-    public name: string
+    public name!: string
     public Cost = 0
     public ItemID = 0
     public AbilityID = 0
-    public Description: string
+    public Description!: string
     public IconPath: string | undefined
-    public Relic: Relic
-    public Award: string
-    public Type: ShopItemType
+    public Relic!: Relic
+    public Award!: string
+    public Type!: ShopItemType
 
     constructor(relic: Relic)
     constructor(award: string, cost: number, abilityID: number, description: string)

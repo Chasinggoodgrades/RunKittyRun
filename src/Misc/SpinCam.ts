@@ -6,7 +6,7 @@ export class SpinCam {
     public Kitty: Kitty
     public SpinCamSpeed = 0
     public SpinCamRotation = 0 // Should just read current value but it doesn't seem to work :/
-    public SpinCamTimer: Timer
+    public SpinCamTimer: Timer | undefined
     public WasSpinCamReset = false
 
     public constructor(kitty: Kitty) {

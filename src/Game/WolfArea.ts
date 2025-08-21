@@ -11,7 +11,7 @@ export class WolfArea {
     public static TotalArea = 0.0
     public ID = 0
     public Region: region
-    public Rectangle: Rectangle
+    public Rectangle!: Rectangle
     public Area = 0
     public IsEnabled = true
     public Wolves: Wolf[] = []

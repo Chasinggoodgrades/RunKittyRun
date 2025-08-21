@@ -50,8 +50,8 @@ export class Kitty {
     public static InvulTest = false
 
     public name: string
-    public SaveData: KittyData
-    public Relics: Relic[]
+    public SaveData!: KittyData
+    public Relics!: Relic[]
     public TimeProg: KittyTime
     public ShadowKitty: ShadowKitty
     public CurrentStats: PlayerGameData = new PlayerGameData()
@@ -70,15 +70,15 @@ export class Kitty {
     public MirrorHandler: MirrorMovementHandler
     public CurrentSafeZone = 0
     public Player: MapPlayer
-    public Unit: Unit
+    public Unit!: Unit
     public ProtectionActive = false
     public Invulnerable = false
     public Alive = true
     public Finished = false
     public TeamID = 0
     public ProgressZone = 0
-    public w_Collision: Trigger
-    public c_Collision: Trigger
+    public w_Collision!: Trigger
+    public c_Collision!: Trigger
     public Disco: Disco
     public InvulTimer = Timer.create()
     public IsChained = false

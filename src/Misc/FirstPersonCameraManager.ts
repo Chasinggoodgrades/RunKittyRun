@@ -9,11 +9,11 @@ export class FirstPersonCamera {
     private timerPeriod = 0.001
     private FIRSTPERSON_ANGLE_PER_PERIOD = 0.3
 
-    private forceCamTimer: Timer
+    private forceCamTimer: Timer | undefined
     private hero: Unit
     private player: MapPlayer
     private keyDownState: Map<string, boolean>
-    private lastUnitAnimation: string
+    private lastUnitAnimation: string | undefined
 
     public constructor(hero: Unit, player: MapPlayer) {
         this.hero = hero

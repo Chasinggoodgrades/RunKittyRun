@@ -23,7 +23,7 @@ export class KittyMorphosis {
     /// <summary>
     /// Trigger that will detect whenever the Kitty.Player levels up..
     /// </summary>
-    private triggerHandle: Trigger
+    private triggerHandle: Trigger | undefined
 
     /// <summary>
     /// The Kitty instance that this morphosis is applied to.

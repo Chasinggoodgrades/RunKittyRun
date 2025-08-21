@@ -19,7 +19,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     private static RelicCost = 650
     private static ReviveChance = BeaconOfUnitedLifeforce.EXTRA_REVIVE_CHANCE_SINGLE
 
-    private Owner: MapPlayer | null
+    private Owner: MapPlayer | undefined
 
     public constructor() {
         super(
@@ -50,7 +50,7 @@ export class BeaconOfUnitedLifeforce extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        this.Owner = null
+        this.Owner = undefined
     }
 
     public BeaconOfUnitedLifeforceEffect = (player: MapPlayer) => {

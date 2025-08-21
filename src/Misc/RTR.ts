@@ -12,13 +12,13 @@ export class RTR {
     private RTRTimer: Timer
     private enabled = false
 
-    private ClickTrigger: Trigger
-    private WidgetTrigger: Trigger
+    private ClickTrigger!: Trigger
+    private WidgetTrigger!: Trigger
 
     private targetX = 0
     private targetY = 0
     private hasTarget = false
-    private lastUnitAnimation: string
+    private lastUnitAnimation: string | undefined
     public absoluteMoveSpeed = 0
 
     public constructor(kitty: Kitty) {

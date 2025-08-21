@@ -26,11 +26,11 @@ export class Fixation extends Affix {
     private InRangeTrigger: Trigger
     private PeriodicSpeed: Trigger
     private ChaseTimer: AchesTimers
-    private UnitsInRange: Group
-    private Target: Unit
+    private UnitsInRange: Group | undefined
+    private Target: Unit | undefined
     private Type = 0
     private IsChasing = false
-    private TargetEffect: Effect
+    private TargetEffect: Effect | undefined
 
     public constructor(unit: Wolf) {
         super(unit)
@@ -99,11 +99,15 @@ export class Fixation extends Affix {
     }
 
     private ChasingEvent = () => {
+        if (!this.Target) return
+
         const Region = RegionList.WolfRegions[this.Unit.RegionIndex]
         this.IsChasing = true
         this.Unit.WanderTimer?.pause()
         this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
         this.ChaseTimer.start(0.1, true, () => {
+            if (!this.Target) return
+
             if (!this.Target.isAlive() || !Region.includes(this.Target.x, this.Target.y)) {
                 this.IsChasing = false
                 this.Unit.WolfMove()
@@ -112,12 +116,15 @@ export class Fixation extends Affix {
                 this.ChaseTimer.pause()
                 return
             }
+
             if (this.Type === 1) this.GetClosestTarget()
+
             this.Unit.Unit.issueOrderAt('move', this.Target.x, this.Target.y)
         })
     }
 
     private GetClosestTarget = () => {
+        if (!this.UnitsInRange) return
         this.UnitsInRange.clear()
         this.UnitsInRange.enumUnitsInRange(
             this.Unit.Unit.x,
@@ -127,14 +134,15 @@ export class Fixation extends Affix {
         )
         if (this.UnitsInRange.size <= 0) return
         const newTarget = this.GetClosestUnitInRange()
-        if (newTarget !== this.Target) {
+        if (newTarget && newTarget !== this.Target) {
             this.Target = newTarget
             GC.RemoveEffect(this.TargetEffect)
             this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
         }
     }
 
-    private GetClosestUnitInRange(): Unit {
+    private GetClosestUnitInRange = () => {
+        if (!this.UnitsInRange) return
         const unitX = this.Unit.Unit.x
         const unitY = this.Unit.Unit.y
 

@@ -17,7 +17,7 @@ export class Howler extends Affix {
     private ROAR_EFFECT = 'Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl'
     private static MIN_HOWL_TIME = 10.0
     private static MAX_HOWL_TIME = 20.0
-    private HowlTimer: AchesTimers
+    private HowlTimer: AchesTimers | undefined
     private NearbyWolves: Group = Group.create()!
 
     public constructor(unit: Wolf) {
@@ -39,7 +39,7 @@ export class Howler extends Affix {
     }
 
     public override pause(pause: boolean) {
-        this.HowlTimer.pause(pause)
+        this.HowlTimer?.pause(pause)
     }
 
     private RegisterTimerEvents = () => {
@@ -49,7 +49,7 @@ export class Howler extends Affix {
 
     private Howl = () => {
         try {
-            this.HowlTimer.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
+            this.HowlTimer?.Timer.start(Howler.GetRandomHowlTime(), false, () => this.Howl())
             if (this.Unit.paused) return
             Utility.CreateEffectAndDisposeAttach(this.ROAR_EFFECT, this.Unit.Unit, 'origin')
             this.NearbyWolves.enumUnitsInRange(

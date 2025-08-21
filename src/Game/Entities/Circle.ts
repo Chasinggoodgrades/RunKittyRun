@@ -9,7 +9,7 @@ export class Circle {
     private CIRCLE_UNIT_MODEL = Constants.UNIT_KITTY_CIRCLE
     private ID = 0
     public Player: MapPlayer
-    public Unit: Unit
+    public Unit!: Unit
     public Collision: Trigger
 
     public constructor(player: MapPlayer) {
@@ -32,27 +32,30 @@ export class Circle {
     }
 
     public dispose = () => {
-        this.Unit.destroy()
+        this.Unit?.destroy()
         this.Collision.destroy()
         Globals.ALL_CIRCLES.delete(this.Player)
     }
 
     public KittyDied = (kitty: Kitty) => {
-        this.Unit.setPosition(kitty.Unit.x, kitty.Unit.y)
+        this.Unit?.setPosition(kitty.Unit.x, kitty.Unit.y)
         this.ShowCircle()
     }
 
     public SetMana = (mana: number, maxMana: number, regenRate: number) => {
+        if (!this.Unit) return
         this.Unit.mana = mana
         this.Unit.maxMana = maxMana
         BlzSetUnitRealField(this.Unit.handle, UNIT_RF_MANA_REGENERATION, regenRate)
     }
 
     public HideCircle = () => {
-        return (this.Unit.show = false)
+        if (!this.Unit) return
+        this.Unit.show = false
     }
 
     private ShowCircle = () => {
-        return (this.Unit.show = true)
+        if (!this.Unit) return
+        this.Unit.show = true
     }
 }

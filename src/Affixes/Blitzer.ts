@@ -24,11 +24,11 @@ export class Blitzer extends Affix {
     private BLITZER_HIGHEND = 11.0
     private TargetX = 0
     private TargetY = 0
-    private MoveTimer: AchesTimers | null
-    private BlitzerTimer: AchesTimers | null
-    private PreBlitzerTimer: AchesTimers | null
-    private Effect: Effect
-    private WanderEffect: Effect
+    private MoveTimer: AchesTimers | undefined
+    private BlitzerTimer: AchesTimers | undefined
+    private PreBlitzerTimer: AchesTimers | undefined
+    private Effect: Effect | undefined
+    private WanderEffect: Effect | undefined
 
     public constructor(unit: Wolf) {
         super(unit)
@@ -52,9 +52,9 @@ export class Blitzer extends Affix {
         this.BlitzerTimer?.dispose()
         this.MoveTimer?.dispose()
         this.PreBlitzerTimer?.dispose()
-        this.BlitzerTimer = null
-        this.MoveTimer = null
-        this.PreBlitzerTimer = null
+        this.BlitzerTimer = undefined
+        this.MoveTimer = undefined
+        this.PreBlitzerTimer = undefined
         GC.RemoveEffect(this.Effect)
         this.EndBlitz()
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)

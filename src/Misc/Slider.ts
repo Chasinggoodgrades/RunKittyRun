@@ -13,8 +13,8 @@ export class Slider {
     private SliderTimer: Timer
     private enabled = false
 
-    private ClickTrigger: Trigger
-    private WidgetTrigger: Trigger
+    private ClickTrigger!: Trigger
+    private WidgetTrigger!: Trigger
 
     private remainingDegreesToTurn = 0
     private slideCurrentTurnPerPeriod = 0

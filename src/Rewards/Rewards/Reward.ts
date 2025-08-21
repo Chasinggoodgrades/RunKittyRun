@@ -35,12 +35,12 @@ export enum RewardType {
 export class Reward {
     public name: string
     public AbilityID = 0
-    public OriginPoint: string
-    public ModelPath: string
+    public OriginPoint!: string
+    public ModelPath!: string
     public SkinID = 0
     public Type: RewardType
-    public TypeSorted: string
-    public GameStat: string
+    public TypeSorted!: string
+    public GameStat!: string
     public GameStatValue = 0
 
     private constructor(name: string, abilityID: number, type: RewardType) {

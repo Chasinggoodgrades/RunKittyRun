@@ -29,8 +29,7 @@ export class ChronoSphere extends Relic {
     private MAGNITUDE_UPPER_BOUND = 17.0
     private LOCATION_CAPTURE_INTERVAL = 5.0
 
-    private Ability: ability
-    private Kitty: Kitty
+    private Kitty!: Kitty
     private Magnitude = 0
     private MagnitudeTimer = Timer.create()
     private LocationCaptureTimer = Timer.create()
@@ -91,16 +90,11 @@ export class ChronoSphere extends Relic {
         try {
             const item = Utility.UnitGetItem(this.Kitty.Unit, this.RelicItemID)
             if (!item) return
-            this.Ability = item.getAbility(this.RelicAbilityID)!
-            if (!this.Ability) return
+            const Ability = item.getAbility(this.RelicAbilityID)
+            if (!Ability) return
             this.Magnitude = this.RandomMagnitude()
-            BlzSetAbilityRealLevelField(
-                this.Ability,
-                ABILITY_RLF_MOVEMENT_SPEED_INCREASE_PERCENT_OAE1,
-                0,
-                this.Magnitude
-            )
-            BlzSetAbilityRealLevelField(this.Ability, ABILITY_RLF_AREA_OF_EFFECT, 0, ChronoSphere.SLOW_AURA_RADIUS)
+            BlzSetAbilityRealLevelField(Ability, ABILITY_RLF_MOVEMENT_SPEED_INCREASE_PERCENT_OAE1, 0, this.Magnitude)
+            BlzSetAbilityRealLevelField(Ability, ABILITY_RLF_AREA_OF_EFFECT, 0, ChronoSphere.SLOW_AURA_RADIUS)
 
             BlzSetItemExtendedTooltip(
                 item.handle,

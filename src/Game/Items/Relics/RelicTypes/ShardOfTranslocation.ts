@@ -20,10 +20,10 @@ export class ShardOfTranslocation extends Relic {
     private static UPGRADE_BLINK_RANGE = 650.0
     private static DEFAULT_COOLDOWN = 90.0
     private static CooldownReduction = 30.0
-    private Owner: Unit
+    private Owner: Unit | undefined
     private static IconPath = 'ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp'
     private MaxBlinkRange = ShardOfTranslocation.DEFAULT_BLINK_RANGE
-    private CastEventTrigger: Trigger
+    private CastEventTrigger: Trigger | undefined
 
     public constructor() {
         super(
@@ -81,18 +81,31 @@ export class ShardOfTranslocation extends Relic {
                     5.0,
                     `${Colors.COLOR_RED}Invalid location. Must be within safezone bounds.${Colors.COLOR_RESET}`
                 )
-                Utility.SimpleTimer(0.1, () =>
-                    RelicUtil.SetRelicCooldowns(this.Owner, ShardOfTranslocation.RelicItemID, this.RelicAbilityID, 1)
-                )
-                Utility.SimpleTimer(0.15, () => Utility.UnitAddMana(this.Owner, 200))
+                Utility.SimpleTimer(0.1, () => {
+                    if (this.Owner) {
+                        RelicUtil.SetRelicCooldowns(
+                            this.Owner,
+                            ShardOfTranslocation.RelicItemID,
+                            this.RelicAbilityID,
+                            1
+                        )
+                    }
+                })
+                Utility.SimpleTimer(0.15, () => {
+                    if (this.Owner) {
+                        Utility.UnitAddMana(this.Owner, 200)
+                    }
+                })
                 return
             }
 
             this.TeleportUnit(unit, targetLoc)
             RelicUtil.CloseRelicBook(unit)
-            Utility.SimpleTimer(0.1, () =>
-                RelicUtil.SetRelicCooldowns(this.Owner, ShardOfTranslocation.RelicItemID, this.RelicAbilityID)
-            )
+            Utility.SimpleTimer(0.1, () => {
+                if (this.Owner) {
+                    RelicUtil.SetRelicCooldowns(this.Owner, ShardOfTranslocation.RelicItemID, this.RelicAbilityID)
+                }
+            })
             RemoveLocation(targetLoc)
         } catch (e) {
             Logger.Critical(e as string)

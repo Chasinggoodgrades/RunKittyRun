@@ -4,7 +4,7 @@ import { Trigger } from 'w3ts'
 
 export class MirrorMovementHandler {
     private kitty: Kitty
-    private MovementTrigger: Trigger
+    private MovementTrigger: Trigger | undefined
     private isProcessingMirror = false
 
     public constructor(kitty: Kitty) {

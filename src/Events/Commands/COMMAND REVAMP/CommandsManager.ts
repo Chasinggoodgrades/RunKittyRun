@@ -18,6 +18,22 @@ export class Commands {
     public ArgDesc: string
     public Description: string
     public Action: CmdAction
+
+    constructor(props: {
+        name: string
+        alias: string
+        group: string
+        argDesc: string
+        description: string
+        action: CmdAction
+    }) {
+        this.name = props.name
+        this.Alias = props.alias.split(',')
+        this.Group = props.group
+        this.ArgDesc = props.argDesc
+        this.Description = props.description
+        this.Action = props.action
+    }
 }
 
 export class CommandsManager {
@@ -34,13 +50,7 @@ export class CommandsManager {
         description: string
         action: CmdAction
     }) => {
-        const command = new Commands()
-        command.name = props.name
-        command.Alias = props.alias.split(',')
-        command.Group = props.group
-        command.ArgDesc = props.argDesc
-        command.Description = props.description
-        command.Action = props.action
+        const command = new Commands(props)
         CommandsManager.Count = CommandsManager.Count + 1
         CommandsManager.AllCommands.set(props.name, command)
         for (const al of command.Alias) {

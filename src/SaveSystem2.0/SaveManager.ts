@@ -112,7 +112,7 @@ export class SaveManager {
         return promise => {
             const data = promise.DecodedString
             const player = promise.SyncOwner
-            if (data.length < 1) {
+            if (!data || data.length < 1) {
                 Globals.SaveSystem.NewSave(player)
                 player.DisplayTimedTextTo(
                     5.0,
@@ -268,7 +268,7 @@ export class FilePromise {
     public SyncOwner: MapPlayer
     public HasLoaded = false
     public Buffer: Map<number, string> = new Map()
-    public DecodedString: string
+    public DecodedString: string | undefined
     private onFinish: Action<FilePromise>
 
     public constructor(syncOwner: MapPlayer, onFinish: Action<FilePromise>) {

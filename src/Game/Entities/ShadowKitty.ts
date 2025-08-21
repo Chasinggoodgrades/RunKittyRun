@@ -10,7 +10,7 @@ import { Kitty } from './Kitty/Kitty'
 
 export class ShadowKitty {
     public static ALL_SHADOWKITTIES: Map<MapPlayer, ShadowKitty>
-    public Unit: Unit
+    public Unit!: Unit
 
     public Player: MapPlayer
 
@@ -18,9 +18,9 @@ export class ShadowKitty {
 
     public Active = false
 
-    public wCollision: Trigger
+    public wCollision!: Trigger
 
-    public cCollision: Trigger
+    public cCollision!: Trigger
 
     public ID = 0
 

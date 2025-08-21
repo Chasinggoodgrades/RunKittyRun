@@ -4,9 +4,11 @@ import { Globals } from 'src/Global/Globals'
 import { Affix } from './Affix'
 
 export class AffixUtil {
-    public static RemoveAffix(affix: Affix, wolf: Wolf): void
+    public static RemoveAffix(affix: Affix | undefined, wolf: Wolf): void
     public static RemoveAffix(affixName: string, wolf: Wolf): void
-    public static RemoveAffix(arg: Affix | string, wolf: Wolf): void {
+    public static RemoveAffix(arg: Affix | string | undefined, wolf: Wolf): void {
+        if (!arg) return
+
         if (typeof arg === 'string') {
             for (let i = 0; i < wolf.Affixes.length; i++) {
                 if (wolf.Affixes[i].constructor.name === arg) {

@@ -118,7 +118,7 @@ export class Frostbite extends Affix {
 export class Frostbitten extends IDisposable {
     public Effect: Effect
     public OriginalSpeed = 0
-    public Kitty: Kitty
+    public Kitty!: Kitty
 
     constructor() {
         super()
@@ -127,11 +127,14 @@ export class Frostbitten extends IDisposable {
     }
 
     public dispose = () => {
-        this.Kitty.Unit.moveSpeed = this.OriginalSpeed !== 0 ? this.OriginalSpeed : this.Kitty.Unit.defaultMoveSpeed
+        if (!!this.Kitty) {
+            this.Kitty.Unit.moveSpeed = this.OriginalSpeed !== 0 ? this.OriginalSpeed : this.Kitty.Unit.defaultMoveSpeed
+            this.Kitty.KittyMiscInfo.FrostBitten = null as never
+        }
+
         this.Effect?.destroy()
         this.Effect = null as never
         this.OriginalSpeed = 0.0
-        this.Kitty.KittyMiscInfo.FrostBitten = null as never
         MemoryHandler.destroyObject(this)
     }
 }

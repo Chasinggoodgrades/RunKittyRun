@@ -28,8 +28,8 @@ export class Bomber extends Affix {
     private ReviveAlphaTimer: AchesTimers = createAchesTimer()
     private ExplodeGroup: Group = Group.create()!
     private ReviveAlpha = 1
-    private RangeIndicator: RangeIndicator
-    private TimerIndicator: Effect
+    private RangeIndicator: RangeIndicator | undefined
+    private TimerIndicator: Effect | undefined
 
     public constructor(unit: Wolf) {
         super(unit)

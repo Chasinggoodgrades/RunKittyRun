@@ -54,7 +54,7 @@ export class ColorUtils {
 
     public static Initialize = () => {
         ColorUtils.AddColor('red', 1, '|cffff0303', PLAYER_COLOR_RED, 255, 3, 3)
-        ColorUtils.AddColor('blue', 2, '|cff0042f', PLAYER_COLOR_BLUE, 0, 66, 255)
+        ColorUtils.AddColor('blue', 2, '|cff0042ff', PLAYER_COLOR_BLUE, 0, 66, 255)
         ColorUtils.AddColor('teal', 3, '|cff1be7ba', PLAYER_COLOR_CYAN, 27, 231, 186)
         ColorUtils.AddColor('purple', 4, '|cff550081', PLAYER_COLOR_PURPLE, 85, 0, 129)
         ColorUtils.AddColor('yellow', 5, '|cfffefc00', PLAYER_COLOR_YELLOW, 254, 252, 0)

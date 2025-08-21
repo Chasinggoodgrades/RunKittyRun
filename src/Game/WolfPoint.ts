@@ -16,7 +16,7 @@ export class WolfPoint {
     public static IsPausedTrigger: Trigger
 
     private Wolf: Wolf
-    private PointInfo: WolfPointInfo[] & IDestroyable
+    private PointInfo: (WolfPointInfo[] & IDestroyable) | undefined
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WolfPoint"/> class.
@@ -85,7 +85,7 @@ export class WolfPoint {
 
     public dispose = () => {
         this.Cleanup()
-        WolfPointInfo.ClearWolfPointList(this.PointInfo)
+        this.PointInfo && WolfPointInfo.ClearWolfPointList(this.PointInfo)
         BlzUnitClearOrders(this.Wolf.Unit.handle, false)
     }
 
@@ -97,12 +97,14 @@ export class WolfPoint {
         }
 
         try {
-            for (let i = this.PointInfo.length - 1; i >= 1; i--) {
-                if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
-                const moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
+            if (this.PointInfo) {
+                for (let i = this.PointInfo.length - 1; i >= 1; i--) {
+                    if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
+                    const moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 
-                BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
-                if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
+                    BlzQueuePointOrderById(this.Wolf.Unit.handle, moveID, this.PointInfo[i].x, this.PointInfo[i].y)
+                    if (!this.Wolf.IsWalking) this.Wolf.IsWalking = true // ensure its set after queued order.
+                }
             }
         } catch (e) {
             Logger.Critical(`WolfPoint.StartMovingOrders ${e}`)

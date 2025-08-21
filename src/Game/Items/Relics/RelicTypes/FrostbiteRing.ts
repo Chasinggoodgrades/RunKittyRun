@@ -29,9 +29,9 @@ export class FrostbiteRing extends Relic {
     private static UPGRADE_COOLDOWN_REDUCTION = 15.0
     private FREEZE_DURATION = 5.0
     private static IconPath = 'ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp'
-    private Owner: MapPlayer
-    private Trigger: Trigger
-    private FreezeGroup: Group
+    private Owner: MapPlayer | undefined
+    private Trigger: Trigger | undefined
+    private FreezeGroup: Group | undefined
 
     public constructor() {
         super(
@@ -71,6 +71,8 @@ export class FrostbiteRing extends Relic {
     }
 
     private FrostbiteCast = (freezeLocation: location) => {
+        if (!this.Owner) return
+
         try {
             this.FreezeGroup ??= Group.create()!
             this.FreezeGroup.enumUnitsInRange(
@@ -91,19 +93,21 @@ export class FrostbiteRing extends Relic {
 
             RelicUtil.CloseRelicBookPlayer(this.Owner)
 
-            Utility.SimpleTimer(1.0, () =>
+            Utility.SimpleTimer(1.0, () => {
+                if (!this.Owner) return
                 this.Owner.DisplayTimedTextTo(
                     4.0,
                     `${Colors.COLOR_LAVENDER}${Globals.ALL_KITTIES.get(this.Owner)!.CurrentStats.WolfFreezeCount}/${Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r`
                 )
-            )
-            Utility.SimpleTimer(0.1, () =>
+            })
+            Utility.SimpleTimer(0.1, () => {
+                if (!this.Owner) return
                 RelicUtil.SetRelicCooldowns(
                     Globals.ALL_KITTIES.get(this.Owner)!.Unit,
                     FrostbiteRing.RelicItemID,
                     FrostbiteRing.RelicAbilityID
                 )
-            )
+            })
 
             RemoveLocation(freezeLocation)
             this.FreezeGroup.clear()
@@ -113,6 +117,7 @@ export class FrostbiteRing extends Relic {
     }
 
     private FrostbiteEffect = (Unit: Unit) => {
+        if (!this.Owner) return
         const duration = this.GetFreezeDuration()
         Globals.ALL_KITTIES.get(this.Owner)!.CurrentStats.WolfFreezeCount += 1 // increment freeze count for freeze_aura reward
 
@@ -136,6 +141,7 @@ export class FrostbiteRing extends Relic {
     }
 
     private GetFreezeDuration(): number {
+        if (!this.Owner) return 0
         const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(this.name)
         return FrostbiteRing.DEFAULT_FREEZE_DURATION + upgradeLevel
     }
@@ -149,10 +155,10 @@ export class FrostbiteRing extends Relic {
 }
 
 export class FrozenWolf {
-    public Unit: Unit
-    public Timer: AchesTimers
-    private FreezeEffect: Effect
-    private Caster: MapPlayer
+    public Unit!: Unit
+    public Timer!: AchesTimers
+    private FreezeEffect!: Effect
+    private Caster!: MapPlayer
     private Active = false
 
     public constructor() {}

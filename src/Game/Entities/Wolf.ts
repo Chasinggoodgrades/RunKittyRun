@@ -28,14 +28,14 @@ export class Wolf {
     public OVERHEAD_EFFECT_PATH: string
     public WanderTimer: Timer
 
-    public EffectTimer: Timer
+    public EffectTimer: Timer | undefined
 
-    public Texttag: TextTag | null
-    public Disco: Disco
+    public Texttag: TextTag | undefined
+    public Disco: Disco | undefined
     public WolfArea: WolfArea
-    public Unit: Unit
+    public Unit!: Unit
     public Affixes: Affix[]
-    private OverheadEffect: Effect
+    private OverheadEffect: Effect | undefined
     // private effect RandomEffect // some random cool event - can do later on (roar, stomps, whatever)
     public WolfPoint: WolfPoint
     public paused = false
@@ -220,9 +220,13 @@ export class Wolf {
 
     private WolfMoveCancelEffect = () => {
         this.WolfMove()
-        BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_DEATH)
-        if (this.IsAffixed()) {
-            this.OverheadEffect.destroy()
+
+        if (this.OverheadEffect) {
+            BlzPlaySpecialEffect(this.OverheadEffect.handle, ANIM_TYPE_DEATH)
+
+            if (this.IsAffixed()) {
+                this.OverheadEffect.destroy()
+            }
         }
     }
 

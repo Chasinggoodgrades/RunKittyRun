@@ -23,9 +23,9 @@ export class RingOfSummoning extends Relic {
     private static SUMMONING_COOLDOWN = 90.0
     private static UPGRADE_COOLDOWN_REDUCTION = 30.0
     private static IconPath = 'war3mapImported\\BTNArcaniteNightRing.blp'
-    private triggerHandle: Trigger
-    private Owner: Unit | null
-    private SummonGroup: Group
+    private triggerHandle: Trigger | undefined
+    private Owner: Unit | undefined
+    private SummonGroup!: Group
 
     public constructor() {
         super(
@@ -66,7 +66,7 @@ export class RingOfSummoning extends Relic {
     public override RemoveEffect(Unit: Unit) {
         GC.RemoveTrigger(this.triggerHandle)
         GC.RemoveGroup(this.SummonGroup)
-        this.Owner = null
+        this.Owner = undefined
         Unit.disableAbility(this.RelicAbilityID, false, true)
     }
 

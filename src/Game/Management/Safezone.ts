@@ -23,7 +23,7 @@ export class Safezone {
     public Region: region
     private triggerHandle: Trigger
     public ID = 0
-    public Rectangle: Rectangle
+    public Rectangle!: Rectangle
     public AwardedPlayers: MapPlayer[] = []
 
     public constructor(id: number, region: region) {

@@ -4,13 +4,13 @@ import { Frame, MapPlayer, Trigger } from 'w3ts'
 
 export class LuaEditor {
     private static GameUI: Frame
-    private frameBackdrop: Frame
-    private editBox: Frame
-    private runButton: Frame
-    private outputText: Frame
-    private clearButton: Frame
-    private buttonTrigger: Trigger
-    private clearButtonTrigger: Trigger
+    private frameBackdrop!: Frame
+    private editBox!: Frame
+    private runButton!: Frame
+    private outputText!: Frame
+    private clearButton!: Frame
+    private buttonTrigger!: Trigger
+    private clearButtonTrigger!: Trigger
 
     public constructor() {
         LuaEditor.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!

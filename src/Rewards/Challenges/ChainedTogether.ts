@@ -289,9 +289,9 @@ export class ChainedTogether {
 }
 
 export class Chain {
-    public FirstKitty: Kitty
-    public SecondKitty: Kitty
-    public Lightning: lightning
+    public FirstKitty!: Kitty
+    public SecondKitty!: Kitty
+    public Lightning!: lightning
 
     private static readonly ranges: { [key in DifficultyLevel]: { good: number; far: number; breakPoint: number } } = {
         [DifficultyLevel.Normal]: { good: 600, far: 700, breakPoint: 800 },

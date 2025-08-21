@@ -3,10 +3,16 @@ import { resolve } from 'path'
 
 const targetFile = process.argv[2] || resolve('./dist/map.w3x/war3map.lua')
 
-const objPrefix = '' //"info():GetStackTrace() .. ' > ' .. "
+const objPrefix = "info():GetStackTrace() .. ' > ' .. "
 
-let contents = readFileSync(targetFile).toString()
+let contentsRaw = readFileSync(targetFile).toString()
+const lines = contentsRaw.split('\n')
 let counter = 0
+
+// Keep first x lines unchanged, they contain the info() object.. would cause issues if modified
+const TOUCH_AFTER = 22
+const unchangedLines = lines.slice(0, TOUCH_AFTER)
+let contents = lines.slice(TOUCH_AFTER).join('\n')
 
 contents = contents.replace(new RegExp('MemoryHandler.getEmptyClass\\((.*?)\\)', 'gmi'), (_, m1) => {
     return `MemoryHandler.getEmptyClass(${objPrefix}'obj.${counter++}', ${m1})`
@@ -17,25 +23,25 @@ contents = contents.replace(new RegExp('MemoryHandler.getEmptyObject\\(\\)', 'gm
 })
 
 contents = contents.replace(new RegExp('MemoryHandler.getEmptyArray\\(\\)', 'gmi'), () => {
-    return `MemoryHandler.getEmptyArray('arr.${counter++}')`
+    return `MemoryHandler.getEmptyArray(${objPrefix}'arr.${counter++}')`
 })
 
 // Print all created objects and functions
 {
     contents = contents.replace(new RegExp('(=|return|,)\\s+{', 'gmi'), (_, a) => {
-        return `${a} __fakePrint('Object #${counter++}') or {`
+        return `${a} __fakePrint(${objPrefix}'Object #${counter++}') or {`
     })
 
     contents = contents.replace(new RegExp('\\({', 'gmi'), () => {
-        return `(__fakePrint('Object #${counter++}') or {`
+        return `(__fakePrint(${objPrefix}'Object #${counter++}') or {`
     })
 
     contents = contents.replace(new RegExp('(=|return|,)\\s+function\\(', 'gmi'), (_, a) => {
-        return `${a} __fakePrint('Function #${counter++}') or function(`
+        return `${a} __fakePrint(${objPrefix}'Function #${counter++}') or function(`
     })
 
     contents = contents.replace(new RegExp('local function', 'gmi'), () => {
-        return `__fakePrint('Function #${counter++}')\nlocal function`
+        return `__fakePrint(${objPrefix}'Function #${counter++}')\nlocal function`
     })
 
     const fakePrint = `local __fakePrintMap = {}
@@ -58,6 +64,9 @@ end`
     contents = fakePrint + '\n\n' + contents
 }
 
-writeFileSync(targetFile, contents)
+// Combine unchanged lines with processed content
+contentsRaw = unchangedLines.join('\n') + '\n' + contents
+
+writeFileSync(targetFile, contentsRaw)
 
 console.log('OK')

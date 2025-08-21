@@ -6,7 +6,7 @@ import { MapPlayer, TextTag } from 'w3ts'
 export class FloatingNameTag {
     private NAME_TAG_HEIGHT = 0.015
     private NAME_TAG_UPDATE_INTERVAL = 0.03
-    private NamePosUpdater: AchesTimers
+    private NamePosUpdater!: AchesTimers
     public Kitty: Kitty
     public NameTag: TextTag
 

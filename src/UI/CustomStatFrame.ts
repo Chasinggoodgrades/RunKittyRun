@@ -10,13 +10,13 @@ import { Utility } from 'src/Utility/Utility'
 import { Frame, MapPlayer, Timer, Trigger, Unit } from 'w3ts'
 
 export class CustomStat {
-    public Frame: Frame
-    public Icon: Frame
-    public Text: Frame
-    public Hover: Frame
-    public ToolTipBox: Frame
-    public ToolTipTitle: Frame
-    public ToolTipText: Frame
+    public Frame!: Frame
+    public Icon!: Frame
+    public Text!: Frame
+    public Hover!: Frame
+    public ToolTipBox!: Frame
+    public ToolTipTitle!: Frame
+    public ToolTipText!: Frame
 }
 
 export class CustomStatFrame {

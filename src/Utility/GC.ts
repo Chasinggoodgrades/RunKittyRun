@@ -5,12 +5,12 @@ import { safeArraySplice } from './ArrayUtils'
 export class GC {
     public static GCAffixes: Affix[] = []
 
-    public static RemoveTrigger = (t: Trigger) => {
+    public static RemoveTrigger = (t: Trigger | undefined) => {
         if (!t) return
         t.destroy()
     }
 
-    public static RemoveTimer = (t: Timer) => {
+    public static RemoveTimer = (t: Timer | undefined) => {
         if (!t) return
         t.pause()
         t.destroy()
@@ -21,20 +21,20 @@ export class GC {
         e.destroy()
     }
 
-    public static RemoveGroup = (g: Group) => {
+    public static RemoveGroup = (g: Group | undefined) => {
         if (!g) return
         g.clear()
         g.destroy()
     }
 
-    public static RemoveAffix = (affix: Affix) => {
+    public static RemoveAffix = (affix: Affix | undefined) => {
         if (!affix) return
         const index = GC.GCAffixes.indexOf(affix)
         if (index !== -1) (GC.GCAffixes as any)[index] = null
         safeArraySplice(GC.GCAffixes, a => a === affix)
     }
 
-    public static RemoveList<T>(list: T[]) {
+    public static RemoveList<T>(list: T[] | undefined) {
         if (!list) return
         list.length = 0
     }

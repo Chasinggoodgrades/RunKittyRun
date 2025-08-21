@@ -24,9 +24,10 @@ export class ItemSpatialGrid {
     }
 
     public static RegisterKibble = (kibble: Kibble) => {
+        if (!kibble.Item) return // If the item is not valid... no reason to register i guess
         const cell = ItemSpatialGrid.GetCell(kibble.Item.x, kibble.Item.y)
-        let list: Kibble[]
-        if (!(list = ItemSpatialGrid.kibbleCells.get(cell)!)) ItemSpatialGrid.kibbleCells.set(cell, (list = []))
+        let list = ItemSpatialGrid.kibbleCells.get(cell)
+        if (!list) ItemSpatialGrid.kibbleCells.set(cell, (list = []))
         list.push(kibble)
     }
 
@@ -80,7 +81,7 @@ export class ItemSpatialGrid {
         if (kibbleList && kibbleList.length > 0) {
             for (let i = 0; i < kibbleList.length; i++) {
                 const k = kibbleList[i]
-                if (!k) continue
+                if (!k?.Item) continue
                 kitty.Unit.addItem(k.Item)
             }
         }

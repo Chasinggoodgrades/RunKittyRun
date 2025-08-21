@@ -68,7 +68,7 @@ export const CreateAffix = (unit: Wolf, affixName: string): Affix => {
 export class Chaos extends Affix {
     private AFFIX_ABILITY = Constants.ABILITY_CHAOS
     private RotationTimer: AchesTimers = createAchesTimer()
-    private currentAffix: Affix
+    private currentAffix: Affix | undefined
     private rotationTime = GetRandomReal(25, 45)
 
     public constructor(unit: Wolf) {
@@ -132,6 +132,6 @@ export class Chaos extends Affix {
 
     public override pause(pause: boolean) {
         this.RotationTimer.pause(pause)
-        this.currentAffix.pause(pause)
+        this.currentAffix?.pause(pause)
     }
 }

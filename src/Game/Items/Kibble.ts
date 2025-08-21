@@ -29,10 +29,10 @@ export class Kibble extends IDisposable {
     private static JackpotMin = 600
     private static JackpotMax = 1500
 
-    public Item: Item
+    public Item: Item | undefined
     private Type = 0
     private JackPotIndex = 0
-    private StarFallEffect: Effect
+    private StarFallEffect: Effect | undefined
 
     public constructor() {
         super()

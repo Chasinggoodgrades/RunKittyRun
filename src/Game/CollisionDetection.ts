@@ -93,7 +93,7 @@ export class CollisionDetection {
         )
     }
 
-    private static WolfCollisionTrigger(k: Kitty): Trigger {
+    private static WolfCollisionTrigger(k: Kitty) {
         k.w_Collision.addAction(() => {
             try {
                 if (!k.Unit.isAlive()) return
@@ -109,6 +109,7 @@ export class CollisionDetection {
                 throw e
             }
         })
+
         return k.w_Collision
     }
 

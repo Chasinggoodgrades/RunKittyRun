@@ -18,10 +18,10 @@ export class FangOfShadows extends Relic {
     public RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY
     private TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY
     private static IconPath = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
-    private SummonTrigger: Trigger
-    private TeleTrigger: Trigger
-    private KillTimer: Timer
-    private Owner: Unit
+    private SummonTrigger: Trigger | undefined
+    private TeleTrigger: Trigger | undefined
+    private KillTimer: Timer | undefined
+    private Owner: Unit | undefined
     private Active = false
 
     private RelicCost = 650
@@ -102,12 +102,14 @@ export class FangOfShadows extends Relic {
             shadowKitty.Unit.applyTimedLife(FourCC('BTLF'), FangOfShadows.SHADOW_KITTY_SUMMON_DURATION)
 
             // Set kill timer
-            this.KillTimer.start(FangOfShadows.SHADOW_KITTY_SUMMON_DURATION, false, shadowKitty.KillShadowKitty)
+            this.KillTimer?.start(FangOfShadows.SHADOW_KITTY_SUMMON_DURATION, false, shadowKitty.KillShadowKitty)
 
             // Apply relic cooldowns with a slight delay
-            Utility.SimpleTimer(0.1, () =>
-                RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID)
-            )
+            Utility.SimpleTimer(0.1, () => {
+                if (this.Owner) {
+                    RelicUtil.SetRelicCooldowns(this.Owner, this.RelicItemID, this.RelicAbilityID)
+                }
+            })
         } catch (e) {
             Logger.Warning(`Error in SummonShadowKitty: ${e}`)
         }
@@ -120,7 +122,7 @@ export class FangOfShadows extends Relic {
             sk.TeleportToShadowKitty()
             Utility.DropAllItems(getTriggerUnit())
             Utility.SimpleTimer(0.09, sk.KillShadowKitty)
-            this.KillTimer.pause()
+            this.KillTimer?.pause()
         } catch (e) {
             Logger.Warning(`Error in FangOfShadows.TeleportToShadowKitty: ${e}`)
             return
@@ -128,6 +130,7 @@ export class FangOfShadows extends Relic {
     }
 
     private RegisterTeleportAbility = (Unit: Unit) => {
+        if (!this.TeleTrigger) return
         TriggerRegisterUnitEvent(this.TeleTrigger.handle, Unit.handle, EVENT_UNIT_SPELL_CAST)
         this.TeleTrigger.addCondition(() => GetSpellAbilityId() === this.TeleportAbilityID)
         this.TeleTrigger.addAction(this.TeleportToShadowKitty)
