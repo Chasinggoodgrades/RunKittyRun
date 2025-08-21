@@ -28,15 +28,11 @@ contents = contents.replace(new RegExp('MemoryHandler.getEmptyArray\\(\\)', 'gmi
 
 // Print all created objects and functions
 {
-    contents = contents.replace(new RegExp('(=|return|,)\\s+{', 'gmi'), (_, a) => {
+    contents = contents.replace(new RegExp('(=|return|,|\\()\\s+{', 'gmi'), (_, a) => {
         return `${a} __fakePrint(${objPrefix}'Object #${counter++}') or {`
     })
 
-    contents = contents.replace(new RegExp('\\({', 'gmi'), () => {
-        return `(__fakePrint(${objPrefix}'Object #${counter++}') or {`
-    })
-
-    contents = contents.replace(new RegExp('(=|return|,)\\s+function\\(', 'gmi'), (_, a) => {
+    contents = contents.replace(new RegExp('(=|return|,|\\()\\s*function\\(', 'gmi'), (_, a) => {
         return `${a} __fakePrint(${objPrefix}'Function #${counter++}') or function(`
     })
 
