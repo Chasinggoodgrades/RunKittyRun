@@ -24,14 +24,20 @@ export class AntiblockWand {
         const triggerHandle = Trigger.create()!
         for (const player of Globals.ALL_PLAYERS)
             triggerHandle.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, undefined)
-        triggerHandle.addAction(() => AntiblockWand.SpellActions())
+        triggerHandle.addAction(AntiblockWand.SpellActions)
     }
 
     private static SpellActions = () => {
         if (GetSpellAbilityId() !== AntiblockWand.AbilityID) return
         const wolvesInArea = Group.create()!
         wolvesInArea.enumUnitsInRange(GetSpellTargetX(), GetSpellTargetY(), AntiblockWand.Radius, () => true)
-        const list = wolvesInArea.getUnits()
+        const list = []
+        while (wolvesInArea.size > 0) {
+            const wolf = wolvesInArea.first
+            if (!wolf) return
+            wolvesInArea.removeUnit(wolf)
+            list.push(wolf)
+        }
         for (const wolf of list) {
             if (wolf.typeId !== Wolf.WOLF_MODEL) continue
             if (Globals.DNTNamedWolves.includes(Globals.ALL_WOLVES.get(wolf)!)) continue
