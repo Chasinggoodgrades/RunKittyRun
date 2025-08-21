@@ -5,7 +5,7 @@ import { IDisposable } from '../Utility/CSUtils'
 
 export class Disco extends IDisposable {
     public DiscoTimer: Timer
-    public Enabled: boolean = false
+    public Enabled = false
     public Unit: Unit
 
     public constructor(u: Unit) {

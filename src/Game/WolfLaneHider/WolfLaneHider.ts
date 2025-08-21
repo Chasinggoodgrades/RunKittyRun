@@ -21,7 +21,7 @@ export class WolfLaneHider {
 
             for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
                 const kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
-                const currentSafezone: number = kitty.CurrentSafeZone
+                const currentSafezone = kitty.CurrentSafeZone
                 WolfLaneHider.AddAdjacentLanes(currentSafezone)
             }
         } catch (e) {

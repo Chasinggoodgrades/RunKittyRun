@@ -13,7 +13,7 @@ export class WolfArea {
     public Region: region
     public Rectangle: Rectangle
     public Area = 0
-    public IsEnabled: boolean = true
+    public IsEnabled = true
     public Wolves: Wolf[] = []
     public FixationCount = 0
 

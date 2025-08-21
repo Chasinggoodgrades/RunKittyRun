@@ -17,7 +17,7 @@ export class TimeSetter {
         try {
             const standard = CurrentGameMode.active === GameMode.Standard
             const solo = CurrentGameMode.active === GameMode.SoloTournament // Solo
-            let roundString: string = ''
+            let roundString = ''
             const currentTime = GameTimer.RoundTime[Globals.ROUND] || 0
             if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return false
 

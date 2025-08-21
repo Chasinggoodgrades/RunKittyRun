@@ -9,10 +9,10 @@ import { PodiumUtil } from './PodiumUtil'
 export class SoloPodium {
     private static PodiumQueue = new Queue<[MapPlayer, Point]>()
     private static MovedUnits: Unit[] = []
-    private static PodiumType: string = ''
-    private static Color: string = Colors.COLOR_YELLOW_ORANGE
-    private static Time: string = 'time'
-    private static Progress: string = 'progress'
+    private static PodiumType = ''
+    private static Color = Colors.COLOR_YELLOW_ORANGE
+    private static Time = 'time'
+    private static Progress = 'progress'
 
     public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
@@ -22,7 +22,7 @@ export class SoloPodium {
     private static EnqueueTopPlayerTimes = () => {
         const topTimes = PodiumUtil.SortPlayersFastestTime()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topTimes.length - 1; i >= 0; i--) {
+        for (let i = topTimes.length - 1; i >= 0; i--) {
             const player = topTimes[i]
             const position = podiumPositions[i]
             SoloPodium.PodiumQueue.enqueue([player, position])
@@ -33,7 +33,7 @@ export class SoloPodium {
     private static EnqueueTopPlayerProgress = () => {
         const topProgress = PodiumUtil.SortPlayersTopProgress()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topProgress.length - 1; i >= 0; i--) {
+        for (let i = topProgress.length - 1; i >= 0; i--) {
             const player = topProgress[i]
             const position = podiumPositions[i]
             SoloPodium.PodiumQueue.enqueue([player, position])

@@ -17,12 +17,12 @@ export class FangOfShadows extends Relic {
     public RelicItemID = Constants.ITEM_FANG_OF_SHADOWS
     public RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY
     private TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY
-    private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
+    private static IconPath = 'ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp'
     private SummonTrigger: Trigger
     private TeleTrigger: Trigger
     private KillTimer: Timer
     private Owner: Unit
-    private Active: boolean = false
+    private Active = false
 
     private RelicCost = 650
     private SAFEZONE_REDUCTION = 0.25 // 25%
@@ -149,12 +149,12 @@ export class FangOfShadows extends Relic {
     public ReduceCooldownAtSafezone = (Unit: Unit) => {
         // Have relic
         if (!Utility.UnitHasItem(Unit, this.RelicItemID)) return
-        const upgradeLevel: number = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FangOfShadows.name)
         Unit.getAbility(this.RelicAbilityID)
-        const reduction: number = upgradeLevel >= 2 ? this.UPGRADE_SAFEZONE_REDUCTION : this.SAFEZONE_REDUCTION
-        const remainingCooldown: number = Unit.getAbilityCooldownRemaining(this.RelicAbilityID)
+        const reduction = upgradeLevel >= 2 ? this.UPGRADE_SAFEZONE_REDUCTION : this.SAFEZONE_REDUCTION
+        const remainingCooldown = Unit.getAbilityCooldownRemaining(this.RelicAbilityID)
         if (remainingCooldown <= 0) return
-        const newCooldown: number = remainingCooldown * (1.0 - reduction)
+        const newCooldown = remainingCooldown * (1.0 - reduction)
         //BlzStartUnitAbilityCooldown(Unit.handle,RelicAbilityID, newCooldown);
         RelicUtil.SetRelicCooldowns(Unit, this.RelicItemID, this.RelicAbilityID, newCooldown)
     }

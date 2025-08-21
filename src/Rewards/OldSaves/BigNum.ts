@@ -64,7 +64,7 @@ export class BigNumL {
         }
 
         const num = this.Leaf + remainder * baseValue
-        const quotient: number = num / denom
+        const quotient = num / denom
         remainder = num - quotient * denom
         this.Leaf = quotient
         return remainder

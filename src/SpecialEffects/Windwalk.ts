@@ -13,7 +13,7 @@ import { MapPlayer, Trigger } from 'w3ts'
 export class Windwalk {
     private static Trigger: Trigger
     private static HotkeyTrigger: Trigger
-    private static WindwalkID: number = FourCC('BOwk') // Windwalk buff ID
+    private static WindwalkID = FourCC('BOwk') // Windwalk buff ID
     public static Initialize = () => {
         Windwalk.RegisterHotKey()
         Windwalk.RegisterWWCast()

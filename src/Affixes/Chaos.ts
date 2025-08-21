@@ -41,7 +41,7 @@ export class Chaos extends Affix {
     private RegisterTimer = () => {
         try {
             this.RotationTimer?.Timer.start(this.rotationTime, true, this.RotateAffix)
-            const randomAffix: string = this.GenRandomAffixName()
+            const randomAffix = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
         } catch (e) {
@@ -56,7 +56,7 @@ export class Chaos extends Affix {
         try {
             if (!!this.currentAffix) AffixUtil.RemoveAffix(this.currentAffix, this.Unit)
             this.currentAffix = null as never
-            const randomAffix: string = this.GenRandomAffixName()
+            const randomAffix = this.GenRandomAffixName()
             this.currentAffix = CreateAffix(this.Unit, randomAffix)
             AddAffix(this.currentAffix, this.Unit)
         } catch (e) {
@@ -66,9 +66,8 @@ export class Chaos extends Affix {
         }
     }
 
-    private GenRandomAffixName(): string {
-        let randomAffixName: string =
-            AffixTypes.length > 0 ? AffixTypes[GetRandomInt(0, AffixTypes.length - 1)] : 'Speedster'
+    private GenRandomAffixName() {
+        let randomAffixName = AffixTypes.length > 0 ? AffixTypes[GetRandomInt(0, AffixTypes.length - 1)] : 'Speedster'
         if (randomAffixName === 'Chaos') randomAffixName = 'Speedster'
         return randomAffixName
     }

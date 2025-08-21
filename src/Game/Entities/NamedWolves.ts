@@ -17,10 +17,10 @@ import { Kitty } from './Kitty/Kitty'
 export class NamedWolves {
     public static ExplodingWolf: Wolf
     public static StanWolf: Wolf
-    public static STAN_NAME: string = `${Colors.COLOR_PURPLE}Stan|r`
+    public static STAN_NAME = `${Colors.COLOR_PURPLE}Stan|r`
     private static ExplodingTexttagTimer = Timer.create()
     private static ExplodingWolfRevive = Timer.create()
-    private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
+    private static BLOOD_EFFECT_PATH = 'war3mapImported\\Bloodstrike.mdx'
 
     /// <summary>
     /// Creates the named Wolves Marco and Stan. Only works in Standard mode.
@@ -138,7 +138,7 @@ export class NamedWolves {
         }
     }
 
-    public static ExplodingWolfCollision = (unit: Unit, k: Kitty, shadowKitty: boolean = false) => {
+    public static ExplodingWolfCollision = (unit: Unit, k: Kitty, shadowKitty = false) => {
         if (CurrentGameMode.active !== GameMode.Standard) return false
         // Guard: ExplodingWolf may not be created yet or may be in a revive window
         if (!NamedWolves.ExplodingWolf || !NamedWolves.ExplodingWolf.Unit) return false

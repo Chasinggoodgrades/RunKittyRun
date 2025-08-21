@@ -39,7 +39,7 @@ export class CameraUtil {
 
     public static HandleZoomCommand = (p: MapPlayer, args: string[]) => {
         if (args[0] === '') return
-        const zoom: number = S2I(args[0])
+        const zoom = S2I(args[0])
         if (!p.isLocal()) return
         SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, zoom, 1.0)
     }
@@ -61,7 +61,7 @@ export class CameraUtil {
     public static UpdateKomotoCam = (player: MapPlayer, safezoneIndex: number) => {
         if (!CameraUtil.KomotoCamEnabled.includes(player)) return
 
-        const rotation: number = (4 - (safezoneIndex % 4)) * 90.0 + 90.0
+        const rotation = (4 - (safezoneIndex % 4)) * 90.0 + 90.0
         if (!player.isLocal()) return
         SetCameraField(CAMERA_FIELD_ROTATION, rotation, 0.0)
     }

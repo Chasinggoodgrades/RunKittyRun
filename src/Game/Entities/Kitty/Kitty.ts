@@ -44,10 +44,10 @@ import { KittyStatsManager } from './KittyStatsManager'
 
 export class Kitty {
     private KITTY_HERO_TYPE = Constants.UNIT_KITTY
-    private SPAWN_IN_EFFECT: string = 'Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl'
+    private SPAWN_IN_EFFECT = 'Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl'
     private MANA_DEATH_PENALTY = 65.0
     private InvulDuration = 0.3
-    public static InvulTest: boolean = false
+    public static InvulTest = false
 
     public name: string
     public SaveData: KittyData
@@ -71,19 +71,19 @@ export class Kitty {
     public CurrentSafeZone = 0
     public Player: MapPlayer
     public Unit: Unit
-    public ProtectionActive: boolean = false
-    public Invulnerable: boolean = false
-    public Alive: boolean = true
-    public Finished: boolean = false
+    public ProtectionActive = false
+    public Invulnerable = false
+    public Alive = true
+    public Finished = false
     public TeamID = 0
     public ProgressZone = 0
     public w_Collision: Trigger
     public c_Collision: Trigger
     public Disco: Disco
     public InvulTimer = Timer.create()
-    public IsChained: boolean = false
-    public IsMirror: boolean = false
-    public CanEarnAwards: boolean = true
+    public IsChained = false
+    public IsMirror = false
+    public CanEarnAwards = true
 
     public constructor(player: MapPlayer) {
         this.Player = player
@@ -303,7 +303,7 @@ export class Kitty {
     }
 
     private TrueSightGhostWolves = () => {
-        const trueSight: number = FourCC('Atru')
+        const trueSight = FourCC('Atru')
         this.Unit.addAbility(trueSight)
         this.Unit.hideAbility(trueSight, true)
     }

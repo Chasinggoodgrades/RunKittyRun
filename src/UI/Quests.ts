@@ -24,7 +24,7 @@ export class Quests {
         Quests.CommandsQuest.setIcon('war3mapImported\\BTNArcaniteNightRing.blp')
         Quests.CommandsQuest.required = false
 
-        const description: string =
+        const description =
             'Commands can be retrieved with -help, they have a filter so you can type -help <command> to get more information about a specific command.\n\n'
         Quests.CommandsQuest.setDescription(`${Colors.COLOR_YELLOW}${description}|r`)
     }

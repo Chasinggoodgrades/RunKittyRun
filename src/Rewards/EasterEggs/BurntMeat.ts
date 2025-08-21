@@ -11,8 +11,8 @@ export class BurntMeat {
     public static StanTurnIn: Trigger = Trigger.create()!
     public static StanDeathActions: triggeraction
     public static StanTurnInActions: triggeraction
-    public static ITEM_CLOAK_FLAMES: number = Constants.ITEM_CLOAK_OF_FLAMES
-    public static ITEM_BURNT_MEAT: number = Constants.ITEM_WOLF_MEAT
+    public static ITEM_CLOAK_FLAMES = Constants.ITEM_CLOAK_OF_FLAMES
+    public static ITEM_BURNT_MEAT = Constants.ITEM_WOLF_MEAT
     public static Completed: Unit[] = []
 
     public static FlamesDropChance = (k: Kitty) => {

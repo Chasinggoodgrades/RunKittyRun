@@ -41,7 +41,7 @@ export class WolfPoint {
 
             // Calculate the distance between points
             const distance = distanceBetweenXYPoints(startX, startY, endX, endY)
-            const numRegions: number = Math.ceil(distance / this.MaxDistance)
+            const numRegions = Math.ceil(distance / this.MaxDistance)
 
             // Calculate angle and step sizes using trigonometry
             const angle = Math.atan2(endY - startY, endX - startX)
@@ -97,7 +97,7 @@ export class WolfPoint {
         }
 
         try {
-            for (let i: number = this.PointInfo.length - 1; i >= 1; i--) {
+            for (let i = this.PointInfo.length - 1; i >= 1; i--) {
                 if (this.PointInfo[i].x === 0 && this.PointInfo[i].y === 0) continue
                 const moveID = this.PointInfo[i].LastPoint ? WolfPoint.AttackOrderID : WolfPoint.MoveOrderID
 

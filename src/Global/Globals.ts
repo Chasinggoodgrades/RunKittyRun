@@ -14,19 +14,19 @@ import { Frame, Group, MapPlayer, Rectangle, Timer, TimerDialog, Unit } from 'w3
 import { GameMode } from '../Gamemodes/GameModeEnum'
 
 export const DEFAULT_WOLF_COLLISION_RADIUS = 74.0
-export const DEFAULT_OVERHEAD_EFFECT: string = 'TalkToMe.mdx'
+export const DEFAULT_OVERHEAD_EFFECT = 'TalkToMe.mdx'
 
 export class Globals {
     public static MAX_TEAM_SIZE = 24
     public static DEFAULT_TEAM_SIZE = 3
     public static TIME_TO_PICK_GAMEMODE = 20.0
     public static ROUND = 0
-    public static GAME_ACTIVE: boolean = false
+    public static GAME_ACTIVE = false
     public static GAME_SECONDS = 0.0
     public static WORLD_BOUNDS: Rectangle
     public static GAME_SEED: number
     public static TempGroup: Group = Group.create()!
-    public static WinGame: boolean = false
+    public static WinGame = false
     public static NumberOfRounds = 5
     public static END_ROUND_DELAY = 3.0
 
@@ -95,7 +95,7 @@ export class Globals {
     public static DATE_TIME_LOADED: boolean
     public static GAME_INITIALIZED: boolean
 
-    public static CurrentGameModeType: string = ''
+    public static CurrentGameModeType = ''
 
     // ShopFrame variables
     public static upgradeButton: Frame

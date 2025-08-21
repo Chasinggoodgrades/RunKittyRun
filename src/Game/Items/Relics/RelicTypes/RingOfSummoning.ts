@@ -16,13 +16,13 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class RingOfSummoning extends Relic {
-    public static RelicItemID: number = Constants.ITEM_SACRED_RING_OF_SUMMONING
-    public static RelicAbilityID: number = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE
+    public static RelicItemID = Constants.ITEM_SACRED_RING_OF_SUMMONING
+    public static RelicAbilityID = Constants.ABILITY_TAKE_EM_WITH_RING_ULTIMATE
     private static RelicCost = 650
     private static SUMMONING_RING_RADIUS = 300.0
     private static SUMMONING_COOLDOWN = 90.0
     private static UPGRADE_COOLDOWN_REDUCTION = 30.0
-    private static IconPath: string = 'war3mapImported\\BTNArcaniteNightRing.blp'
+    private static IconPath = 'war3mapImported\\BTNArcaniteNightRing.blp'
     private triggerHandle: Trigger
     private Owner: Unit | null
     private SummonGroup: Group
@@ -96,7 +96,7 @@ export class RingOfSummoning extends Relic {
         const targetedPoint: location = GetSpellTargetLoc()!
         const summoningKitty: Kitty = Globals.ALL_KITTIES.get(player)!
         const summoningKittyUnit: Unit = summoningKitty.Unit
-        const numberOfSummons: number = this.GetNumberOfSummons(player)
+        const numberOfSummons = this.GetNumberOfSummons(player)
 
         // Ensure SummonGroup exists
         this.SummonGroup ??= Group.create()!

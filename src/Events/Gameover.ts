@@ -15,7 +15,7 @@ import { Utility } from 'src/Utility/Utility'
 import { GameoverUtil } from './GameoverUtil'
 
 export class Gameover {
-    public static NoEnd: boolean = false
+    public static NoEnd = false
 
     public static GameOver(): boolean {
         return Gameover.WinningGame() || Gameover.LosingGameCheck()

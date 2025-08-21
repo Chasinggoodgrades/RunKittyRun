@@ -5,7 +5,7 @@ import { Action } from './CSUtils'
 import { createAchesTimer } from './MemoryHandler/AchesTimers'
 
 export class Utility {
-    private static Locust: number = FourCC('Aloc')
+    private static Locust = FourCC('Aloc')
     // StringBuilder is not available in TypeScript, so we'll use a string array for efficient concatenation
     private static stringBuilder: string[] = []
 
@@ -58,7 +58,7 @@ export class Utility {
         const seconds = Math.floor(remainingSeconds)
         const tenths = Math.floor((remainingSeconds - seconds) * 10)
 
-        const timeString: string = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
+        const timeString = seconds < 10 ? `${minutes}:0${seconds}.${tenths}` : `${minutes}:${seconds}.${tenths}`
         return ColorUtils.ColorString(timeString, teamID)
     }
 
@@ -402,14 +402,14 @@ export enum TargetTypes {
     Friend = 0x6000,
 }
 
-export const PositionWithPolarOffsetRadX = (x: number, radius: number, angle: number): number => {
+export const PositionWithPolarOffsetRadX = (x: number, radius: number, angle: number) => {
     return x + radius * Math.cos(angle)
 }
 
-export const PositionWithPolarOffsetRadY = (y: number, radius: number, angle: number): number => {
+export const PositionWithPolarOffsetRadY = (y: number, radius: number, angle: number) => {
     return y + radius * Math.sin(angle)
 }
 
-export const clamp = (value: number, min: number, max: number): number => {
+export const clamp = (value: number, min: number, max: number) => {
     return Math.max(min, Math.min(max, value))
 }

@@ -6,20 +6,20 @@ import { Destructable } from 'w3ts'
 import { HolidaySeasons, Seasons } from '../Seasons'
 
 export class DoodadChanger {
-    private static SafezoneLanterns: number = FourCC('B005')
-    private static ChristmasTree: number = FourCC('B001')
-    private static CrystalRed: number = FourCC('B002')
-    private static CrystalBlue: number = FourCC('B003')
-    private static CrystalGreen: number = FourCC('B004')
-    private static Snowglobe: number = FourCC('B006')
-    private static Lantern: number = FourCC('B007')
-    private static Fireplace: number = FourCC('B008')
-    private static Snowman: number = FourCC('B009')
-    private static Firepit: number = FourCC('B00A')
-    private static Igloo: number = FourCC('ITig')
-    private static RedLavaCracks: number = FourCC('B00B')
-    private static BlueLavaCracks: number = FourCC('B00C')
-    private static SuperChristmasTree: number = FourCC('B00D')
+    private static SafezoneLanterns = FourCC('B005')
+    private static ChristmasTree = FourCC('B001')
+    private static CrystalRed = FourCC('B002')
+    private static CrystalBlue = FourCC('B003')
+    private static CrystalGreen = FourCC('B004')
+    private static Snowglobe = FourCC('B006')
+    private static Lantern = FourCC('B007')
+    private static Fireplace = FourCC('B008')
+    private static Snowman = FourCC('B009')
+    private static Firepit = FourCC('B00A')
+    private static Igloo = FourCC('ITig')
+    private static RedLavaCracks = FourCC('B00B')
+    private static BlueLavaCracks = FourCC('B00C')
+    private static SuperChristmasTree = FourCC('B00D')
     public static ChristmasDecor: number[]
     private static AllDestructables: destructable[] = []
 
@@ -109,7 +109,7 @@ export class DoodadChanger {
         }
     }
 
-    public static ShowSeasonalDoodads = (show: boolean = false) => {
+    public static ShowSeasonalDoodads = (show = false) => {
         return EnumDestructablesInRect(Globals.WORLD_BOUNDS.handle, null as never, () =>
             DoodadChanger.HideDoodads(show)
         )

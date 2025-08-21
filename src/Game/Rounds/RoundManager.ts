@@ -30,8 +30,8 @@ import { RoundUtilities } from './RoundUtilities'
 
 export class RoundManager {
     public static ROUND_INTERMISSION = 30.0
-    public static GAME_STARTED: boolean = false
-    private static AddedTimeAlready: boolean = false
+    public static GAME_STARTED = false
+    private static AddedTimeAlready = false
 
     public static Initialize = () => {
         if (CurrentGameMode.active === GameMode.Standard) RoundManager.HasDifficultyBeenChosen()

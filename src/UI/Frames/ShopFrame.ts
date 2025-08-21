@@ -40,7 +40,7 @@ export class ShopFrame {
     private static detailsPanelY: number
     private static ActiveAlpha = 255
     private static DisabledAlpha = 150
-    private static DisabledPath: string = 'UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp'
+    private static DisabledPath = 'UI\\Widgets\\EscMenu\\Human\\human-options-button-background-disabled.blp'
 
     public static Initialize = () => {
         ShopFrame.GameUI = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0))!
@@ -207,12 +207,12 @@ export class ShopFrame {
 
     private static AddItemsToPanel = (panel: Frame, items: ShopItem[]) => {
         const columns = 6
-        const rows: number = Math.ceil(items.length / columns)
+        const rows = Math.ceil(items.length / columns)
         for (let i = 0; i < items.length; i++) {
             const relic = items[i]
 
-            const row: number = Math.floor(i / columns)
-            const column: number = i % columns
+            const row = Math.floor(i / columns)
+            const column = i % columns
             const name = relic.name
             const button = blzCreateFrameByType('BUTTON', name, panel, 'ScoreScreenTabButtonTemplate', 0)
             const icon = blzCreateFrameByType('BACKDROP', name + 'icon', button, '', 0)
@@ -234,7 +234,7 @@ export class ShopFrame {
             itemDetails.addAction(() => ShopFrame.ShowItemDetails(relic))
         }
 
-        const panelHeight: number = rows * ShopFrame.buttonHeight + ShopFrame.panelPadding
+        const panelHeight = rows * ShopFrame.buttonHeight + ShopFrame.panelPadding
         panel.setSize(columns * ShopFrame.buttonWidth + ShopFrame.panelPadding, panelHeight)
         if (panelHeight > ShopFrame.panelY) {
             ShopFrame.shopFrame.setSize(ShopFrame.frameX, ShopFrame.frameY + (panelHeight - ShopFrame.panelY))

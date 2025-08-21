@@ -98,7 +98,7 @@ export class MusicFrame {
     }
 
     private static InitializeMusicButtons = () => {
-        const musicCount: number = MusicManager.MusicList.length
+        const musicCount = MusicManager.MusicList.length
 
         // Create buttons for each music item
         for (let i = 0; i < musicCount; i++) {
@@ -151,7 +151,7 @@ export class MusicFrame {
         let value = MusicFrame.MusicSliderValues.get(player)
         if (!value) return
 
-        const maxSongs: number = MusicManager.MusicList.length
+        const maxSongs = MusicManager.MusicList.length
         const visibleButtons = 9
 
         // Ensure the value stays within valid bounds
@@ -159,9 +159,9 @@ export class MusicFrame {
         if (value > maxSongs - 1) value = maxSongs - 1
 
         // Calculates the start and end indexes for the visible buttons
-        let start: number = value - visibleButtons / 2
+        let start = value - visibleButtons / 2
         if (start < 0) start = 0
-        const end: number = Math.min(start + visibleButtons, maxSongs)
+        const end = Math.min(start + visibleButtons, maxSongs)
 
         // Adjust start in case end is too small
         if (end - start < visibleButtons) start = Math.max(0, end - visibleButtons)
@@ -169,7 +169,7 @@ export class MusicFrame {
         // Display the buttons in the visible range and hide others
         for (let i = 0; i < maxSongs; i++) {
             if (i >= start && i < end) {
-                const positionY: number =
+                const positionY =
                     i === end - 1
                         ? MusicFrame.ButtonStartY - (visibleButtons - 1) * MusicFrame.ButtonSpacing
                         : MusicFrame.ButtonStartY - (i - start) * MusicFrame.ButtonSpacing

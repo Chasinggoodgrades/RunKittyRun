@@ -26,14 +26,14 @@ export class CustomStatFrame {
 
     public static SelectedUnit: Map<MapPlayer, Unit> = new Map()
     private static Stats: CustomStat[] = []
-    private static MoveSpeed: string = `${Colors.COLOR_YELLOW_ORANGE}MS:|r`
-    private static Time: string = `${Colors.COLOR_YELLOW_ORANGE}Time:|r`
-    private static Saves: string = `${Colors.COLOR_YELLOW_ORANGE}Saves:|r`
-    private static Deaths: string = `${Colors.COLOR_YELLOW_ORANGE}Deaths:|r`
-    private static Streak: string = `${Colors.COLOR_YELLOW_ORANGE}Streak:|r`
-    private static Gold: string = `${Colors.COLOR_YELLOW_ORANGE}Gold:|r`
-    private static Ratio: string = `${Colors.COLOR_YELLOW_ORANGE}S/D:|r`
-    private static Progress: string = `${Colors.COLOR_YELLOW_ORANGE}Prog.:|r`
+    private static MoveSpeed = `${Colors.COLOR_YELLOW_ORANGE}MS:|r`
+    private static Time = `${Colors.COLOR_YELLOW_ORANGE}Time:|r`
+    private static Saves = `${Colors.COLOR_YELLOW_ORANGE}Saves:|r`
+    private static Deaths = `${Colors.COLOR_YELLOW_ORANGE}Deaths:|r`
+    private static Streak = `${Colors.COLOR_YELLOW_ORANGE}Streak:|r`
+    private static Gold = `${Colors.COLOR_YELLOW_ORANGE}Gold:|r`
+    private static Ratio = `${Colors.COLOR_YELLOW_ORANGE}S/D:|r`
+    private static Progress = `${Colors.COLOR_YELLOW_ORANGE}Prog.:|r`
     private static t: Timer
 
     public static Add = (icon: string, text: string, titleTooltip: string) => {

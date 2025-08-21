@@ -19,7 +19,7 @@ export class Slider {
     private remainingDegreesToTurn = 0
     private slideCurrentTurnPerPeriod = 0
 
-    private wasSliding: boolean = false
+    private wasSliding = false
     private forcedSlideSpeed: number | null = null
     public absoluteSlideSpeed: number | null = null
     private ForcedSlideTimer: Timer
@@ -170,21 +170,21 @@ export class Slider {
     }
 
     private UpdateSlider = () => {
-        const slideSpeed: number =
+        const slideSpeed =
             this.forcedSlideSpeed ??
             this.absoluteSlideSpeed ??
             (this.kitty.IsMirror ? -1 : 1) * this.kitty.Unit.moveSpeed
-        const slidePerTick: number = slideSpeed * this.SLIDE_INTERVAL
+        const slidePerTick = slideSpeed * this.SLIDE_INTERVAL
 
-        const angle: number = Rad2Deg(this.kitty.Unit.facing)
+        const angle = Rad2Deg(this.kitty.Unit.facing)
 
-        const oldX: number = this.kitty.Unit.x
-        const oldY: number = this.kitty.Unit.y
+        const oldX = this.kitty.Unit.x
+        const oldY = this.kitty.Unit.y
 
         this.escaperTurnForOnePeriod()
 
-        let newX: number = oldX + slidePerTick * Cos(angle)
-        let newY: number = oldY + slidePerTick * Sin(angle)
+        let newX = oldX + slidePerTick * Cos(angle)
+        let newY = oldY + slidePerTick * Sin(angle)
 
         if (IsTerrainPathable(newX, oldY, PATHING_TYPE_WALKABILITY)) {
             newX = oldX
@@ -258,36 +258,36 @@ export class Slider {
 
     private escaperTurnForOnePeriod = () => {
         const rotationSpeed = 1.3
-        const maxSlideTurnPerPeriod: number = rotationSpeed * this.SLIDE_INTERVAL * 360
+        const maxSlideTurnPerPeriod = rotationSpeed * this.SLIDE_INTERVAL * 360
         const rotationTimeForMaximumSpeed = 0.11
         const MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL = 51
 
-        const remainingDegrees: number = this.remainingDegreesToTurn
+        const remainingDegrees = this.remainingDegreesToTurn
         if (remainingDegrees !== 0) {
-            const currentAngle: number = GetUnitFacing(this.kitty.Unit.handle)
+            const currentAngle = GetUnitFacing(this.kitty.Unit.handle)
 
-            const diffToApplyAbs: number = Math.min(Math.abs(remainingDegrees), Math.abs(maxSlideTurnPerPeriod))
+            const diffToApplyAbs = Math.min(Math.abs(remainingDegrees), Math.abs(maxSlideTurnPerPeriod))
 
             if (diffToApplyAbs > 0.05) {
-                const sens: number = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1
-                const maxIncreaseRotationSpeedPerPeriod: number = Math.abs(
+                const sens = remainingDegrees * maxSlideTurnPerPeriod > 0 ? 1 : -1
+                const maxIncreaseRotationSpeedPerPeriod = Math.abs(
                     (maxSlideTurnPerPeriod * this.SLIDE_INTERVAL) / rotationTimeForMaximumSpeed
                 )
 
                 let newSlideTurn: number
-                const curSlideTurn: number = this.slideCurrentTurnPerPeriod
-                const increaseRotationSpeedPerPeriod: number = maxIncreaseRotationSpeedPerPeriod
+                const curSlideTurn = this.slideCurrentTurnPerPeriod
+                const increaseRotationSpeedPerPeriod = maxIncreaseRotationSpeedPerPeriod
                 let diffToApply: number
 
                 if (Math.abs(remainingDegrees) <= MAX_DEGREE_ON_WHICH_SPEED_TABLE_TAKES_CONTROL) {
-                    const tableInd: number = Math.round(Math.abs(remainingDegrees))
-                    const aimedSpeedPercentage: number = this.SPEED_AT_LEAST_THAN_50_DEGREES[tableInd]
-                    const aimedNewSpeedPerPeriod: number = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100
-                    const diffSpeed: number = aimedNewSpeedPerPeriod - curSlideTurn
+                    const tableInd = Math.round(Math.abs(remainingDegrees))
+                    const aimedSpeedPercentage = this.SPEED_AT_LEAST_THAN_50_DEGREES[tableInd]
+                    const aimedNewSpeedPerPeriod = (maxSlideTurnPerPeriod * aimedSpeedPercentage * sens) / 100
+                    const diffSpeed = aimedNewSpeedPerPeriod - curSlideTurn
                     if (Math.abs(diffSpeed) < maxIncreaseRotationSpeedPerPeriod) {
                         diffToApply = aimedNewSpeedPerPeriod
                     } else {
-                        const sensDiffToApply: number = diffSpeed > 0 ? 1 : -1
+                        const sensDiffToApply = diffSpeed > 0 ? 1 : -1
                         diffToApply = curSlideTurn + sensDiffToApply * maxIncreaseRotationSpeedPerPeriod
                     }
                     this.slideCurrentTurnPerPeriod = diffToApply
@@ -306,7 +306,7 @@ export class Slider {
 
                 this.setRemainingDegreesToTurn(remainingDegrees - diffToApply)
 
-                const newAngle: number = currentAngle + diffToApply
+                const newAngle = currentAngle + diffToApply
                 BlzSetUnitFacingEx(this.kitty.Unit.handle, newAngle)
             }
         }

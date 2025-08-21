@@ -21,12 +21,12 @@ export class TeamDeathless {
     /// <summary>
     /// The path string of the orb model used for the event.
     /// </summary>
-    private static EFFECT_MODEL: string = 'war3mapImported\\OrbFireX.mdx'
+    private static EFFECT_MODEL = 'war3mapImported\\OrbFireX.mdx'
 
     /// <summary>
     /// The path string of the ripple effect used for the event.
     /// </summary>
-    private static RIPPLE_MODEL: string = 'war3mapImported\\FireNova2.mdx'
+    private static RIPPLE_MODEL = 'war3mapImported\\FireNova2.mdx'
 
     /// <summary>
     /// Range in which the orb can be picked up from.
@@ -41,7 +41,7 @@ export class TeamDeathless {
     /// <summary>
     /// Flag to check if the event has been triggered. TeamDeathless is set to true when the # of DeathlessToActivate players have achieved deathless.
     /// </summary>
-    private static EventTriggered: boolean = false
+    private static EventTriggered = false
 
     /// <summary>
     /// The Kitty object of the player who is currently holding the orb / effect.
@@ -51,7 +51,7 @@ export class TeamDeathless {
     /// <summary>
     /// Flag to check if the event has started. TeamDeathless is set to true when the event is started.
     /// </summary>
-    private static EventStarted: boolean = false
+    private static EventStarted = false
     /// <summary>
     /// The number of players that need to achieve deathless in order to activate the event.
     /// </summary>
@@ -93,7 +93,7 @@ export class TeamDeathless {
     /// <summary>
     /// Flag to check if the event has been won. TeamDeathless is set to true when the orb reaches the final safezone.
     /// </summary>
-    private static EventWon: boolean = false
+    private static EventWon = false
 
     /// <summary>
     /// TeamDeathless method should be fully executed whenever players meet the conditions to start the event.
@@ -141,8 +141,8 @@ export class TeamDeathless {
             TeamDeathless.CurrentHolder = null
             TeamDeathless.AlreadyCarriedOrb = []
 
-            const x: number = RegionList.SafeZones[0].centerX
-            const y: number = RegionList.SafeZones[0].centerY
+            const x = RegionList.SafeZones[0].centerX
+            const y = RegionList.SafeZones[0].centerY
             TeamDeathless.OrbEffect ??= Effect.create(TeamDeathless.EFFECT_MODEL, x, y)!
             TeamDeathless.OrbEffect.scale = 1.0
             TeamDeathless.OrbEffect.x = x
@@ -197,7 +197,7 @@ export class TeamDeathless {
             if (k.ProtectionActive) return // Player protected.
             if (TeamDeathless.CurrentHolder !== k) return
 
-            const RandomChance: number = GetRandomReal(0, 100) // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
+            const RandomChance = GetRandomReal(0, 100) // 0-100 .. If it's less than ORB_DROP_CHANCE, orb drops and is reset.
             if (RandomChance > TeamDeathless.ORB_DROP_CHANCE) return
 
             TeamDeathless.timerHandle?.pause()
@@ -248,8 +248,8 @@ export class TeamDeathless {
             return
         }
 
-        const x: number = TeamDeathless.CurrentHolder.Unit.x
-        const y: number = TeamDeathless.CurrentHolder.Unit.y
+        const x = TeamDeathless.CurrentHolder.Unit.x
+        const y = TeamDeathless.CurrentHolder.Unit.y
         TeamDeathless.OrbEffect.x = x
         TeamDeathless.OrbEffect.y = y
     }

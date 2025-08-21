@@ -23,8 +23,8 @@ export class FrameManager {
 
     private static GameUI: Frame
     private static ESCTrigger: Trigger = Trigger.create()!
-    private static TEXT_COLOR: string = Colors.COLOR_YELLOW
-    private static HOTKEY_COLOR: string = Colors.COLOR_YELLOW_ORANGE
+    private static TEXT_COLOR = Colors.COLOR_YELLOW
+    private static HOTKEY_COLOR = Colors.COLOR_YELLOW_ORANGE
 
     private static _cachedUIPosition: Action
 

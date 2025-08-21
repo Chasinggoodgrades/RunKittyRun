@@ -12,12 +12,12 @@ import { PodiumUtil } from './PodiumUtil'
 export class StandardPodium {
     private static PodiumQueue = new Queue<[MapPlayer, Point]>()
     private static MovedUnits: Unit[] = []
-    private static PodiumType: string = ''
-    private static Color: string = Colors.COLOR_YELLOW_ORANGE
-    private static HighestScore: string = 'score: highest'
-    private static MostSaves: string = 'saves: most'
-    private static HighestRatio: string = 'ratio: highest'
-    private static HighestStreak: string = 'streak: highest'
+    private static PodiumType = ''
+    private static Color = Colors.COLOR_YELLOW_ORANGE
+    private static HighestScore = 'score: highest'
+    private static MostSaves = 'saves: most'
+    private static HighestRatio = 'ratio: highest'
+    private static HighestStreak = 'streak: highest'
 
     public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
@@ -27,7 +27,7 @@ export class StandardPodium {
     private static EnqueueTopScorePlayers = () => {
         const topScores = PodiumUtil.SortPlayersByScore()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topScores.length - 1; i >= 0; i--) {
+        for (let i = topScores.length - 1; i >= 0; i--) {
             const player = topScores[i]
             const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
@@ -38,7 +38,7 @@ export class StandardPodium {
     private static EnqueueTopSavesPlayers = () => {
         const topSaves = PodiumUtil.SortPlayersBySaves()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topSaves.length - 1; i >= 0; i--) {
+        for (let i = topSaves.length - 1; i >= 0; i--) {
             const player = topSaves[i]
             const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
@@ -49,7 +49,7 @@ export class StandardPodium {
     private static EnqueueTopRatioPlayers = () => {
         const topRatios = PodiumUtil.SortPlayersByHighestRatio()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topRatios.length - 1; i >= 0; i--) {
+        for (let i = topRatios.length - 1; i >= 0; i--) {
             const player = topRatios[i]
             const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])
@@ -60,7 +60,7 @@ export class StandardPodium {
     private static EnqueueTopStreakPlayers = () => {
         const topStreaks = PodiumUtil.SortPlayersByHighestSaveStreak()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topStreaks.length - 1; i >= 0; i--) {
+        for (let i = topStreaks.length - 1; i >= 0; i--) {
             const player = topStreaks[i]
             const position = podiumPositions[i]
             StandardPodium.PodiumQueue.enqueue([player, position])

@@ -58,7 +58,7 @@ export class GameoverUtil {
             // takes all in-game kitties, increments count if they're present in dictionary else set to 1
             for (const [_, other] of Globals.ALL_KITTIES) {
                 if (other === kitty) continue
-                const friendName: string = other.Player.name // Get their full battle tag
+                const friendName = other.Player.name // Get their full battle tag
 
                 if (friendDict.has(friendName)) {
                     friendDict.set(friendName, (friendDict.get(friendName) || 0) + 1)

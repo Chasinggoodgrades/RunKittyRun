@@ -15,11 +15,11 @@ export class PlayerGameData {
     public ObtainedNitros: number[] = []
     public ObtainedAwards: string[] = []
     public WolfFreezeCount = 0
-    public RoundFinished: boolean = false
-    public NitroObtained: boolean = false
+    public RoundFinished = false
+    public NitroObtained = false
     public CollectedKibble = 0
     public CrystalOfFireAttempts = 0
-    public ChronoSphereCD: boolean = false
+    public ChronoSphereCD = false
     public CollisonRadius = DEFAULT_WOLF_COLLISION_RADIUS
     public CollectedJackpots = 0
     public CollectedSuperJackpots = 0

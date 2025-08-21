@@ -11,13 +11,13 @@ import { Kitty } from './Entities/Kitty/Kitty'
 import { WolfPoint } from './WolfPoint'
 
 export class ProtectionOfAncients {
-    private static ACTIVATION_EFFECT: string = 'war3mapImported\\Silver: Radiance.mdx'
-    private static APPLY_EFFECT: string = 'war3mapImported\\Edict: Divine.mdx'
+    private static ACTIVATION_EFFECT = 'war3mapImported\\Silver: Radiance.mdx'
+    private static APPLY_EFFECT = 'war3mapImported\\Edict: Divine.mdx'
     public static EFFECT_DELAY = 3.0
     private static EFFECT_RADIUS = 150.0
     private static EFFECT_RADIUS_INCREASE = 50.0
-    private static POTA_NO_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
-    private static POTA_WITH_RELIC: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+    private static POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
+    private static POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
     private static readonly UPGRADE_LEVEL_2_REQUIREMENT = 9
     private static readonly UPGRADE_LEVEL_3_REQUIREMENT = 12
@@ -75,7 +75,7 @@ export class ProtectionOfAncients {
         if (heroLevel < 6) return 0
 
         // Determine ability level based on hero level
-        const abilityLevel: number =
+        const abilityLevel =
             heroLevel >= ProtectionOfAncients.UPGRADE_LEVEL_3_REQUIREMENT
                 ? 3
                 : heroLevel >= ProtectionOfAncients.UPGRADE_LEVEL_2_REQUIREMENT
@@ -170,7 +170,7 @@ export class ProtectionOfAncients {
         const reduction = ProtectionOfAncients.GetOneOfNineReduction(Player)
 
         // remaining cooldown depending on relic or no relic
-        let cooldown: number =
+        let cooldown =
             kitty.getAbilityCooldownRemaining(noRelic) > 0.0
                 ? kitty.getAbilityCooldownRemaining(noRelic)
                 : kitty.getAbilityCooldownRemaining(relic)

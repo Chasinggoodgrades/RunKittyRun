@@ -116,7 +116,7 @@ export class SoundManager {
     private static roundSounds: Map<number, Sound> = new Map()
 
     // State tracking
-    private static firstBloodPlayed: boolean = false
+    private static firstBloodPlayed = false
     private static lastManStandingTimer = Timer.create()
 
     public static Initialize = () => {
@@ -241,7 +241,7 @@ export class SoundManager {
         const sound = SoundManager.getSound('KittyDeath')
         AttachSoundToUnit(sound.handle, k.Unit.handle)
 
-        const teamID: number = k.TeamID
+        const teamID = k.TeamID
         const team: Team = Globals.ALL_TEAMS.get(teamID)!
 
         for (const player of team.Teammembers) {

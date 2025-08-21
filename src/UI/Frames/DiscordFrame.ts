@@ -10,9 +10,8 @@ export class DiscordFrame {
     private static Backdrop: Frame
     private static triggerHandle: Trigger
     private static ESCTrigger: Trigger
-    private static Link: string = 'https://discord.gg/GSu6zkNvx5'
-    private static JoinDiscord: string =
-        '|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r'
+    private static Link = 'https://discord.gg/GSu6zkNvx5'
+    private static JoinDiscord = '|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r'
 
     public static Initialize = () => {
         //BlzLoadTOCFile("war3mapImported\\templates.toc");

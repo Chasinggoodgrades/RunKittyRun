@@ -29,7 +29,7 @@ export class AwardManager {
     /// <param name="player">The Player</param>
     /// <param name="award">The Awards.{award} that you're handing out.</param>
     /// <param name="earnedPrompt">Whether or not to show the player has earned prompt or not.</param>
-    public static GiveReward = (player: MapPlayer, award: string, earnedPrompt: boolean = true) => {
+    public static GiveReward = (player: MapPlayer, award: string, earnedPrompt = true) => {
         // Check if the player already has the award
         if (!Globals.ALL_KITTIES.get(player)!.CanEarnAwards) return
         const awardsList = Globals.ALL_KITTIES.get(player)!.CurrentStats.ObtainedAwards
@@ -63,7 +63,7 @@ export class AwardManager {
     /// Gives reward to all players, set Prompt to false if you don't want to show the earned prompt.
     /// </summary>
     /// <param name="award"></param>
-    public static GiveRewardAll = (award: string, earnedPrompt: boolean = true) => {
+    public static GiveRewardAll = (award: string, earnedPrompt = true) => {
         const color = Colors.COLOR_YELLOW_ORANGE
         const rewardColor = Colors.COLOR_YELLOW
         for (const player of Globals.ALL_PLAYERS) AwardManager.GiveReward(player, award, false)

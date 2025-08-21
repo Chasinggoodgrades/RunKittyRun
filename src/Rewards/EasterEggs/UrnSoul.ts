@@ -13,8 +13,8 @@ import { AwardManager } from '../Rewards/AwardManager'
 export class UrnSoul {
     private static UrnRegions: Rectangle[]
     private static UrnGhostUnit: Unit
-    private static UnitType: number = Constants.UNIT_ASTRAL_KITTY
-    private static Name: string = '|cff8080ff?|r|cff6666ff?|r|cff4d4dff?|r|cff3333ff?|r|cff1a1aff?|r|cff0000ff?|r'
+    private static UnitType = Constants.UNIT_ASTRAL_KITTY
+    private static Name = '|cff8080ff?|r|cff6666ff?|r|cff4d4dff?|r|cff3333ff?|r|cff1a1aff?|r|cff0000ff?|r'
     private static RotationTime = 60.0
     private static InRangeDistance = 150.0
     private static RotationIndex = 0

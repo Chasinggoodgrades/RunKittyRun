@@ -18,8 +18,8 @@ export class Frostbite extends Affix {
     private FROSTBITE_RADIUS = 500.0
     private FROSTBITE_SPEED_REDUCTION = 0.83
     private AFFIX_ABILITY = Constants.ABILITY_FROSTBITE
-    private static ADRENALINE_POTION_ABILITY: number = FourCC('Bspe')
-    private FROSTBITE_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
+    private static ADRENALINE_POTION_ABILITY = FourCC('Bspe')
+    private FROSTBITE_TARGET_EFFECT = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
     private InRangeTrigger: Trigger
     private PeriodicRangeTrigger: Trigger
     private FrostbittenKitties: Frostbitten[] = []
@@ -81,7 +81,7 @@ export class Frostbite extends Affix {
         if (!this.FrostbittenKitties || this.FrostbittenKitties.length === 0) return
         try {
             for (
-                let i: number = this.FrostbittenKitties.length - 1;
+                let i = this.FrostbittenKitties.length - 1;
                 i >= 0;
                 i-- // if go backwards, can avoid loop index issues
             ) {

@@ -11,7 +11,7 @@ import { EncodingHex } from './SyncUtil/EncodingHex'
 
 export class SaveManager {
     private syncSaveLoad: SyncSaveLoad
-    private SavePath: string = 'Run-Kitty-Run'
+    private SavePath = 'Run-Kitty-Run'
     public static SaveData: Map<MapPlayer, KittyData | undefined> = new Map()
     public static PlayersLoaded: MapPlayer[] = []
 
@@ -169,8 +169,8 @@ export class SyncSaveLoad {
         return SyncSaveLoad.instance
     }
 
-    public SyncPrefix: string = 'S_TIO'
-    public SyncPrefixFinish: string = 'S_TIOF'
+    public SyncPrefix = 'S_TIO'
+    public SyncPrefixFinish = 'S_TIOF'
     public SyncEvent: Trigger = Trigger.create()!
     private allPromises: Map<number, FilePromise> = new Map()
 
@@ -192,13 +192,13 @@ export class SyncSaveLoad {
         PreloadGenClear()
         PreloadGenStart()
 
-        const rawDataString: string = data
+        const rawDataString = data
             ? PropertyEncoder.EncodeToJsonBase64(data)
             : PropertyEncoder.EncodeAllDataToJsonBase64()
-        const toCompile: string = rawDataString
+        const toCompile = rawDataString
         const chunkSize = 180
-        let assemble: string = ''
-        const noOfChunks: number = Math.ceil(toCompile.length / chunkSize)
+        let assemble = ''
+        const noOfChunks = Math.ceil(toCompile.length / chunkSize)
 
         //print(`toCompile.length: ${toCompile.length}`);
 
@@ -206,7 +206,7 @@ export class SyncSaveLoad {
             for (let i = 0; i < toCompile.length; i++) {
                 assemble += toCompile[i]
                 if (assemble.length >= chunkSize) {
-                    const header: string =
+                    const header =
                         EncodingHex.To32BitHexString(noOfChunks) +
                         EncodingHex.To32BitHexString(Math.ceil(i / chunkSize))
                     Preload(`")\ncall BlzSendSyncData("${this.SyncPrefix}","${header + assemble}")\ncall S2I("`)
@@ -214,8 +214,7 @@ export class SyncSaveLoad {
                 }
             }
             if (assemble.length > 0) {
-                const header: string =
-                    EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
+                const header = EncodingHex.To32BitHexString(noOfChunks) + EncodingHex.To32BitHexString(noOfChunks)
                 Preload(`")\ncall BlzSendSyncData("${this.SyncPrefix}","${header + assemble}")\ncall S2I("`)
             }
         } catch (e) {
@@ -225,7 +224,7 @@ export class SyncSaveLoad {
     }
 
     public Read(filename: string, reader: MapPlayer, onFinish: Action<FilePromise>): FilePromise {
-        const playerId: number = reader.id
+        const playerId = reader.id
         if (!this.allPromises.has(playerId)) {
             this.allPromises.set(playerId, new FilePromise(reader, onFinish))
             if (reader.isLocal()) {
@@ -241,12 +240,11 @@ export class SyncSaveLoad {
     }
 
     private OnSync = () => {
-        const readData: string = BlzGetTriggerSyncData()!
-        const prefix: string = BlzGetTriggerSyncPrefix()!
-        const totalChunkSize: number = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
-        const currentChunk: number = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 16)) : 0
-        const theRest: string =
-            readData.length > 16 ? readData.substring(16) : readData.substring(Math.min(readData.length, 8))
+        const readData = BlzGetTriggerSyncData()!
+        const prefix = BlzGetTriggerSyncPrefix()!
+        const totalChunkSize = readData.length >= 8 ? EncodingHex.ToNumber(readData.substring(0, 8)) : 0
+        const currentChunk = readData.length >= 16 ? EncodingHex.ToNumber(readData.substring(8, 16)) : 0
+        const theRest = readData.length > 16 ? readData.substring(16) : readData.substring(Math.min(readData.length, 8))
         const promise = this.allPromises.get(getTriggerPlayer().id)
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
@@ -268,7 +266,7 @@ export class SyncSaveLoad {
 
 export class FilePromise {
     public SyncOwner: MapPlayer
-    public HasLoaded: boolean = false
+    public HasLoaded = false
     public Buffer: Map<number, string> = new Map()
     public DecodedString: string
     private onFinish: Action<FilePromise>
@@ -328,7 +326,7 @@ export class PropertyEncoder {
 
     public static EncodeAllDataToJsonBase64(): string {
         try {
-            let jsonString: string = ''
+            let jsonString = ''
             jsonString += '{'
             for (const player of Globals.ALL_PLAYERS) {
                 const playerData = SaveManager.SaveData.get(player)
@@ -351,7 +349,7 @@ export class PropertyEncoder {
     private static AppendProperties = (obj: object, jsonString: string[]) => {
         if (!obj) return
 
-        let firstProperty: boolean = true
+        let firstProperty = true
 
         for (const prop of Object.keys(obj)) {
             const value = obj[prop as keyof typeof obj]

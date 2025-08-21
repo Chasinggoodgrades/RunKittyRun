@@ -16,7 +16,7 @@ export class Fixation extends Affix {
     private FIXATION_RADIUS = 500.0
     private FIXATION_MS = 325.0
     private FIXATION_MAX_MS = 410.0
-    private FIXATION_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl'
+    private FIXATION_TARGET_EFFECT = 'Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl'
 
     private static readonly IsFixation = (r: Affix): r is Fixation => {
         return r instanceof Fixation
@@ -29,7 +29,7 @@ export class Fixation extends Affix {
     private UnitsInRange: Group
     private Target: Unit
     private Type = 0
-    private IsChasing: boolean = false
+    private IsChasing = false
     private TargetEffect: Effect
 
     public constructor(unit: Wolf) {

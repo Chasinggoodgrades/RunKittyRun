@@ -69,7 +69,7 @@ export class APMTracker {
     }
 
     public static CalculateAllAPM(): string {
-        let apmString: string = ''
+        let apmString = ''
         for (let i = 0; i < Globals.ALL_PLAYERS.length; i++) {
             const kitty = Globals.ALL_KITTIES.get(Globals.ALL_PLAYERS[i])!
             const apm = APMTracker.CalculateAPM(kitty)

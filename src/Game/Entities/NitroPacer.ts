@@ -104,8 +104,8 @@ export class NitroPacer {
                 return
             }
             remainingDistance -= instance.currentDistance
-            const remainingTime: number = NitroChallenges.GetNitroTimeRemaining()
-            const speed: number = remainingTime !== 0.0 ? remainingDistance / remainingTime : 350.0
+            const remainingTime = NitroChallenges.GetNitroTimeRemaining()
+            const speed = remainingTime !== 0.0 ? remainingDistance / remainingTime : 350.0
             NitroPacer.SetSpeed(speed)
 
             if (instance.pathingPoints[instance.currentCheckpoint + 1].includes(instance.Unit!.x, instance.Unit!.y)) {
@@ -127,7 +127,7 @@ export class NitroPacer {
         const instance = NitroPacer.getInstance()
         if (!instance.Unit) return
         for (
-            let i: number = instance.pathingPoints.length - 1;
+            let i = instance.pathingPoints.length - 1;
             i >= 1;
             i-- // exclude starting point
         ) {

@@ -4,7 +4,7 @@ import { Dialog, DialogButton } from 'w3ts'
 export class DifficultyOption {
     public static Options: DifficultyOption[] = []
     public static DifficultyChoosing: Dialog = Dialog.create()!
-    private static _OptionCount: number = -1
+    private static _OptionCount = -1
     public name: string
     public Value = 0
     public Color: string

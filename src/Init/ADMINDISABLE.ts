@@ -5,7 +5,7 @@ import { MapPlayer } from 'w3ts'
 import { EncodingBase64 } from '../SaveSystem2.0/Base64'
 
 export class ADMINDISABLE {
-    public static AdminOnly: boolean = false // enable if restricted to admins/VIPs only.
+    public static AdminOnly = false // enable if restricted to admins/VIPs only.
 
     public static AdminsGame(): boolean {
         if (!ADMINDISABLE.AdminOnly) return true

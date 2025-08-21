@@ -11,14 +11,14 @@ import { TerrainChanger } from './Terrain/TerrainChanger'
 
 export class SeasonalManager {
     private static CurrentMonth: number
-    private static SnowEffect: number = FourCC('SNls') // light snow
-    private static BlizzardEffect: number = FourCC('SNbs') // blizzard
-    private static HeavySnowEffect: number = FourCC('SNhs') // heavy snow
-    private static HeavyRain: number = FourCC('RLhr') // heavy rain
-    private static LightRain: number = FourCC('RLlr') // light rain
-    private static RaysOfLight: number = FourCC('LRaa') // rays of light
-    private static RaysOfMoonlight: number = FourCC('LRma') // rays of moonlight
-    private static DalaranShield: number = FourCC('MEds') // Dalaran shield
+    private static SnowEffect = FourCC('SNls') // light snow
+    private static BlizzardEffect = FourCC('SNbs') // blizzard
+    private static HeavySnowEffect = FourCC('SNhs') // heavy snow
+    private static HeavyRain = FourCC('RLhr') // heavy rain
+    private static LightRain = FourCC('RLlr') // light rain
+    private static RaysOfLight = FourCC('LRaa') // rays of light
+    private static RaysOfMoonlight = FourCC('LRma') // rays of moonlight
+    private static DalaranShield = FourCC('MEds') // Dalaran shield
     private static CurrentWeather: WeatherEffect
 
     /// <summary>

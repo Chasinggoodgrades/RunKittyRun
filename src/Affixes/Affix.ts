@@ -2,7 +2,7 @@ import { Wolf } from 'src/Game/Entities/Wolf'
 
 export abstract class Affix {
     public Unit: Wolf
-    public name: string = ''
+    public name = ''
 
     public constructor(unit: Wolf) {
         this.Unit = unit

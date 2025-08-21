@@ -7,7 +7,7 @@ export class SpinCam {
     public SpinCamSpeed = 0
     public SpinCamRotation = 0 // Should just read current value but it doesn't seem to work :/
     public SpinCamTimer: Timer
-    public WasSpinCamReset: boolean = false
+    public WasSpinCamReset = false
 
     public constructor(kitty: Kitty) {
         this.Kitty = kitty

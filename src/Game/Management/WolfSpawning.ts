@@ -19,8 +19,8 @@ export class WolfSpawning {
         let excessWolves = 0
 
         for (const [_, lane] of WolfArea.WolfAreas) {
-            const laneID: number = lane.ID
-            let numberOfWolves: number = (lane.Area / totalArea) * totalWolves
+            const laneID = lane.ID
+            let numberOfWolves = (lane.Area / totalArea) * totalWolves
 
             if (numberOfWolves > WolfSpawning.MaxWolvesPerLane) {
                 excessWolves += numberOfWolves - WolfSpawning.MaxWolvesPerLane

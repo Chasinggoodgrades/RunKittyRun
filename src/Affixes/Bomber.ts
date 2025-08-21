@@ -19,8 +19,8 @@ export class Bomber extends Affix {
         return r instanceof Bomber
     }
 
-    private static BLOOD_EFFECT_PATH: string = 'war3mapImported\\Bloodstrike.mdx'
-    private static RING_TIMER_INDICATOR: string = 'war3mapImported\\RingProgress.mdx'
+    private static BLOOD_EFFECT_PATH = 'war3mapImported\\Bloodstrike.mdx'
+    private static RING_TIMER_INDICATOR = 'war3mapImported\\RingProgress.mdx'
 
     private static MIN_EXPLODE_INTERVAL = 10.0
     private static MAX_EXPLODE_INTERVAL = 15.0

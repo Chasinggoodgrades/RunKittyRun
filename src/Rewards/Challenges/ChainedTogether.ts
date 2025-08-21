@@ -18,9 +18,9 @@ export class ChainedTogether {
     private static kittyGroups: Kitty[][] = [] // Convert this into a dictionary
     private static timerInterval = 0.1
     private static MoveChainTimer: Timer
-    private static EventTriggered: boolean = false
-    private static EventStarted: boolean = false
-    private static IsStartingContidionValid: boolean = true
+    private static EventTriggered = false
+    private static EventStarted = false
+    private static IsStartingContidionValid = true
 
     private static TriggerEventOnLastSafeZone = () => {
         if (CurrentGameMode.active !== GameMode.Standard) return // Only occurs in Standard Gamemode.
@@ -49,9 +49,9 @@ export class ChainedTogether {
     }
 
     private static UpdateStartingCondition = (kitty: Kitty) => {
-        const currentSafezone: number = kitty.CurrentSafeZone
+        const currentSafezone = kitty.CurrentSafeZone
         const kitties = Globals.ALL_KITTIES_LIST
-        let skippedSafezone: boolean = false
+        let skippedSafezone = false
 
         for (let i = 0; i < kitties.length; i++) {
             const currentKitty: Kitty = kitties[i]
@@ -92,8 +92,8 @@ export class ChainedTogether {
 
     private static MoveChain = () => {
         const kitties = Globals.ALL_KITTIES_LIST
-        let isOutOfRange: boolean = false
-        let kittyOutOfRange: string = ''
+        let isOutOfRange = false
+        let kittyOutOfRange = ''
 
         for (let i = 0; i < kitties.length - 1; i++) {
             const kitty = kitties[i]
@@ -129,9 +129,7 @@ export class ChainedTogether {
     /// </summary>
     /// <param name="kittyName"></param>
     public static RegenerateGroup = (kittyName: string) => {
-        const groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
-            group.some(kitty => kitty.name === kittyName)
-        ) // IEnumerable "Any" leaks
+        const groupIndex = ChainedTogether.kittyGroups.findIndex(group => group.some(kitty => kitty.name === kittyName)) // IEnumerable "Any" leaks
         if (groupIndex < 0) return
 
         try {
@@ -156,10 +154,8 @@ export class ChainedTogether {
         }
     }
 
-    private static FreeKittiesFromGroup = (kittyName: string, isVictory: boolean = false) => {
-        const groupIndex: number = ChainedTogether.kittyGroups.findIndex(group =>
-            group.some(kitty => kitty.name === kittyName)
-        ) //IEnumerable with "Any" leaks
+    private static FreeKittiesFromGroup = (kittyName: string, isVictory = false) => {
+        const groupIndex = ChainedTogether.kittyGroups.findIndex(group => group.some(kitty => kitty.name === kittyName)) //IEnumerable with "Any" leaks
         if (groupIndex < 0) return
 
         const currentGroup = ChainedTogether.kittyGroups[groupIndex]
@@ -183,11 +179,11 @@ export class ChainedTogether {
 
     private static SetGroups = () => {
         const allKitties = Globals.ALL_KITTIES_LIST
-        const count: number = allKitties.length
+        const count = allKitties.length
 
         // Shuffle the kitties list to ensure randomness
-        for (let i: number = allKitties.length - 1; i > 0; i--) {
-            const j: number = Math.random()
+        for (let i = allKitties.length - 1; i > 0; i--) {
+            const j = Math.random()
             const temp: Kitty = allKitties[i]
             allKitties[i] = allKitties[j]
             allKitties[j] = temp
@@ -199,8 +195,8 @@ export class ChainedTogether {
         }
 
         let index = 0
-        let groupsOfThree: number = count / 3
-        let remainder: number = count % 3
+        let groupsOfThree = count / 3
+        let remainder = count % 3
 
         if (remainder === 1) {
             // convert two groups of 3 into two groups of 4 to avoid a group of 1
@@ -217,7 +213,7 @@ export class ChainedTogether {
 
         if (remainder > 0) {
             const lastGroup: Kitty[] = []
-            for (let i: number = index; i < allKitties.length; i++) {
+            for (let i = index; i < allKitties.length; i++) {
                 lastGroup.push(allKitties[i])
             }
             ChainedTogether.kittyGroups.push(lastGroup)
@@ -323,8 +319,8 @@ export class Chain {
     }
 
     public Move(): boolean {
-        const outOfRange: number = Chain.CalculateRangeByDifficulty('breakPoint')
-        let isOutOfRange: boolean = false
+        const outOfRange = Chain.CalculateRangeByDifficulty('breakPoint')
+        let isOutOfRange = false
         const x1 = this.FirstKitty.Unit.x
         const y1 = this.FirstKitty.Unit.y
         const x2 = this.SecondKitty.Unit.x
@@ -337,7 +333,7 @@ export class Chain {
             this.SecondKitty.Unit.x,
             this.SecondKitty.Unit.y
         )
-        const distance: number = Math.abs(x2 - x1) + Math.abs(y2 - y1)
+        const distance = Math.abs(x2 - x1) + Math.abs(y2 - y1)
 
         if (distance > outOfRange) {
             isOutOfRange = true
@@ -360,8 +356,8 @@ export class Chain {
         let blue = 0.0
         const alpha = 1.0 // Default color is green
 
-        const far: number = Chain.CalculateRangeByDifficulty('far')
-        const good: number = Chain.CalculateRangeByDifficulty('good')
+        const far = Chain.CalculateRangeByDifficulty('far')
+        const good = Chain.CalculateRangeByDifficulty('good')
 
         if (distance > far) {
             red = 1.0

@@ -14,8 +14,8 @@ import { RoundTimesData } from './SaveObjects/RoundTimesData'
 /// selected configurations, round timings, awards, best game times, and personal achievements.
 /// </summary>
 export class KittyData {
-    public PlayerName: string = ''
-    public Date: string = ''
+    public PlayerName = ''
+    public Date = ''
     public GameStats: GameStatsData
     public SelectedData: GameSelectedData
     public RoundTimes: RoundTimesData

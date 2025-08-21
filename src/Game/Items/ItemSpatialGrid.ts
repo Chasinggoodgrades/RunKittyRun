@@ -18,8 +18,8 @@ export class ItemSpatialGrid {
     private static itemCells: Map<Cell, Item[]> = new Map()
 
     public static GetCell(x: number, y: number): Cell {
-        const cellX: number = x / ItemSpatialGrid.CELL_SIZE
-        const cellY: number = y / ItemSpatialGrid.CELL_SIZE
+        const cellX = x / ItemSpatialGrid.CELL_SIZE
+        const cellY = y / ItemSpatialGrid.CELL_SIZE
         return new Cell(cellX, cellY)
     }
 

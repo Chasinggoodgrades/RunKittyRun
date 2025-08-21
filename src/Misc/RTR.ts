@@ -17,7 +17,7 @@ export class RTR {
 
     private targetX = 0
     private targetY = 0
-    private hasTarget: boolean = false
+    private hasTarget = false
     private lastUnitAnimation: string
     public absoluteMoveSpeed = 0
 
@@ -78,10 +78,10 @@ export class RTR {
             return
         }
 
-        const currentX: number = this.kitty.Unit.x
-        const currentY: number = this.kitty.Unit.y
+        const currentX = this.kitty.Unit.x
+        const currentY = this.kitty.Unit.y
 
-        const distanceToTarget: number = distanceBetweenXYPoints(currentX, currentY, this.targetX, this.targetY)
+        const distanceToTarget = distanceBetweenXYPoints(currentX, currentY, this.targetX, this.targetY)
 
         if (distanceToTarget < 10) {
             this.hasTarget = false
@@ -97,14 +97,14 @@ export class RTR {
             this.kitty.Unit.setAnimation(6)
         }
 
-        const moveSpeed: number = this.absoluteMoveSpeed ?? this.kitty.Unit.moveSpeed
-        const movePerTick: number = moveSpeed * this.RTR_INTERVAL
+        const moveSpeed = this.absoluteMoveSpeed ?? this.kitty.Unit.moveSpeed
+        const movePerTick = moveSpeed * this.RTR_INTERVAL
 
-        const angle: number = Atan2(this.targetY - currentY, this.targetX - currentX)
+        const angle = Atan2(this.targetY - currentY, this.targetX - currentX)
         this.kitty.Unit.facing = angle * bj_RADTODEG
 
-        let newX: number = currentX + movePerTick * Cos(angle)
-        let newY: number = currentY + movePerTick * Sin(angle)
+        let newX = currentX + movePerTick * Cos(angle)
+        let newY = currentY + movePerTick * Sin(angle)
 
         if (IsTerrainPathable(newX, currentY, PATHING_TYPE_WALKABILITY)) {
             newX = currentX

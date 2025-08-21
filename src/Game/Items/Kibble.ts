@@ -18,11 +18,11 @@ import { ItemSpatialGrid } from './ItemSpatialGrid'
 import { ItemSpawnerTrackKibbles } from './ItemSpawnerTrackKibbles'
 
 export class Kibble extends IDisposable {
-    public static SpawningKibble: boolean = true
+    public static SpawningKibble = true
     public static KibbleCollectionBeatenList: MapPlayer[] = []
 
     private static KibblesColors: number[] = Kibble.KibbleList()
-    private static StarfallEffect: string = 'Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl'
+    private static StarfallEffect = 'Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl'
     private static TextTagHeight = 0.018
     private static XPMax = 350
     private static GoldMax = 150

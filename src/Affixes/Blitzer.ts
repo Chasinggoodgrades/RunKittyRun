@@ -10,14 +10,14 @@ import { Effect, Unit } from 'w3ts'
 import { Affix } from './Affix'
 
 export class Blitzer extends Affix {
-    private static readonly GHOST_VISIBLE: number = FourCC('Aeth')
+    private static readonly GHOST_VISIBLE = FourCC('Aeth')
 
     private static readonly IsBlitzer = (r: Affix): r is Blitzer => {
         return r instanceof Blitzer
     }
 
     private AFFIX_ABILITY = Constants.ABILITY_BLITZER
-    private BLITZER_EFFECT: string = 'war3mapImported\\ChargerCasterArt.mdx'
+    private BLITZER_EFFECT = 'war3mapImported\\ChargerCasterArt.mdx'
     private BLITZER_SPEED = 650.0
     private BLITZER_OVERHEAD_DELAY = 1.5
     private BLITZER_LOWEND = 6.0
@@ -106,11 +106,11 @@ export class Blitzer extends Affix {
 
     private BlitzerMove = () => {
         const speed = this.BLITZER_SPEED // speed in yards per second
-        const currentX: number = this.Unit.Unit.x
-        const currentY: number = this.Unit.Unit.y
+        const currentX = this.Unit.Unit.x
+        const currentY = this.Unit.Unit.y
 
         // Distance between current and target pos
-        const distance: number = distanceBetweenXYPoints(currentX, currentY, this.TargetX, this.TargetY)
+        const distance = distanceBetweenXYPoints(currentX, currentY, this.TargetX, this.TargetY)
 
         // stop if its within range of the target / collision thingy
         if (distance <= DEFAULT_WOLF_COLLISION_RADIUS) {
@@ -119,13 +119,13 @@ export class Blitzer extends Affix {
         }
 
         // determine direction
-        const directionX: number = (this.TargetX - currentX) / distance
-        const directionY: number = (this.TargetY - currentY) / distance
+        const directionX = (this.TargetX - currentX) / distance
+        const directionY = (this.TargetY - currentY) / distance
 
         // 60 fps for smooth movement, step distance
-        const stepDistance: number = speed / 50.0 // Assuming 60 calls per second
-        const nextX: number = currentX + directionX * stepDistance
-        const nextY: number = currentY + directionY * stepDistance
+        const stepDistance = speed / 50.0 // Assuming 60 calls per second
+        const nextX = currentX + directionX * stepDistance
+        const nextY = currentY + directionY * stepDistance
 
         // Move the unit one step
         this.Unit.Unit.setPathing(false)

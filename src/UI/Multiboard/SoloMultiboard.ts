@@ -16,7 +16,7 @@ export class SoloMultiboard {
     private static ESCTrigger: Trigger
     private static sortedDict: Map<MapPlayer, Kitty>
     private static MBSlot: Map<MapPlayer, number>
-    private static color: string = Colors.COLOR_YELLOW_ORANGE
+    private static color = Colors.COLOR_YELLOW_ORANGE
 
     /// <summary>
     /// Initializes the solo multiboards. Only works in tournament solo mode.

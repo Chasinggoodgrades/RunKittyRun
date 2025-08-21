@@ -234,7 +234,7 @@ export class AwardingCmds {
     /// <param name="kitty"></param>
     public static GetAllGameTimes = (player: MapPlayer, kitty: Kitty, difficultyArg: string) => {
         if (!Globals.ALL_PLAYERS.includes(kitty.Player)) return
-        let combined: string = ''
+        let combined = ''
 
         // Previously this wasn't sorted by round number, so i had to hard code the order with one two three etc.. but ye its sorted now
         const properties = Object.keys(Globals.GAME_TIMES)
@@ -244,7 +244,7 @@ export class AwardingCmds {
         for (const property of properties) {
             const value = kitty.SaveData.RoundTimes[property as keyof RoundTimesData] || 0
 
-            const color: string = property.includes('Normal')
+            const color = property.includes('Normal')
                 ? Colors.COLOR_YELLOW
                 : property.includes('Hard')
                   ? Colors.COLOR_RED
@@ -292,7 +292,7 @@ export class AwardingCmds {
     }
 
     private static CurrentKibbleInfo = (kitty: Kitty) => {
-        let combined: string = ''
+        let combined = ''
         combined += `${Colors.COLOR_YELLOW_ORANGE}Collected:|r ${kitty.CurrentStats.CollectedKibble}\n`
         combined += `${Colors.COLOR_YELLOW_ORANGE}Jackpots:|r ${kitty.CurrentStats.CollectedJackpots}\n`
         combined += `${Colors.COLOR_YELLOW_ORANGE}Super Jackpots:|r ${kitty.CurrentStats.CollectedSuperJackpots}\n`

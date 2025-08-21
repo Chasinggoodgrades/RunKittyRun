@@ -13,9 +13,9 @@ export class GameTimesData {
 }
 
 export class NormalGameTimeData {
-    public Date: string = ''
+    public Date = ''
     public Time = 0
-    public TeamMembers: string = ''
+    public TeamMembers = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
     public RoundThreeTime: number 
@@ -24,9 +24,9 @@ export class NormalGameTimeData {
 }
 
 export class HardGameTimeData {
-    public Date: string = ''
+    public Date = ''
     public Time = 0
-    public TeamMembers: string = ''
+    public TeamMembers = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
     public RoundThreeTime: number 
@@ -35,9 +35,9 @@ export class HardGameTimeData {
 }
 
 export class ImpossibleGameTimeData {
-    public Date: string = ''
+    public Date = ''
     public Time = 0
-    public TeamMembers: string = ''
+    public TeamMembers = ''
     /*    public RoundOneTime: number 
     public RoundTwoTime: number 
     public RoundThreeTime: number 
@@ -46,9 +46,9 @@ export class ImpossibleGameTimeData {
 }
 
 export class NightmareGameTimeData {
-    public Date: string = ''
+    public Date = ''
     public Time = 0
-    public TeamMembers: string = ''
+    public TeamMembers = ''
     /*    public RoundOneTime: number 
         public RoundTwoTime: number 
         public RoundThreeTime: number 

@@ -6,7 +6,7 @@ export class AchesTimers {
 
     public constructor() {}
 
-    public pause = (pause: boolean = true) => {
+    public pause = (pause = true) => {
         if (!this.Timer) Logger.Warning(`TIMER IS NULL in AchesTimers.pause()`)
         if (pause) this.Timer.pause()
         else this.Timer.resume()

@@ -8,9 +8,9 @@ import { Gamemode } from '../Gamemode'
 import { Team } from './Team'
 
 export class TeamHandler {
-    public static FreepickEnabled: boolean = false
+    public static FreepickEnabled = false
 
-    public static Handler = (Player: MapPlayer, TeamNumber: number, adminForced: boolean = false) => {
+    public static Handler = (Player: MapPlayer, TeamNumber: number, adminForced = false) => {
         if (
             Globals.CurrentGameModeType === Globals.TEAM_MODES[0] &&
             (adminForced || (!RoundManager.GAME_STARTED && TeamHandler.FreepickEnabled))
@@ -54,7 +54,7 @@ export class TeamHandler {
                 if (currentTeam) {
                     continue
                 }
-                let addedToExistingTeam: boolean = false
+                let addedToExistingTeam = false
 
                 // Attempt to add player to an existing team
                 for (let j = 0; j < Globals.ALL_TEAMS_LIST.length; j++) {

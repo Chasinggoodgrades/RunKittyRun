@@ -14,7 +14,7 @@ import { Affix } from './Affix'
 export class Howler extends Affix {
     private HOWL_RADIUS = 900.0
     private AFFIX_ABILITY = Constants.ABILITY_HOWLER
-    private ROAR_EFFECT: string = 'Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl'
+    private ROAR_EFFECT = 'Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl'
     private static MIN_HOWL_TIME = 10.0
     private static MAX_HOWL_TIME = 20.0
     private HowlTimer: AchesTimers

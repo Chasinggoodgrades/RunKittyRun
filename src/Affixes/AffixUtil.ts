@@ -26,7 +26,7 @@ export const RemoveAllWolfAffixes = (wolf: Wolf) => {
     if (wolf.AffixCount() === 0) return
 
     try {
-        for (let i: number = wolf.Affixes.length - 1; i >= 0; i--) {
+        for (let i = wolf.Affixes.length - 1; i >= 0; i--) {
             wolf.Affixes[i].Remove()
             Globals.AllAffixes.splice(Globals.AllAffixes.indexOf(wolf.Affixes[i]), 1)
         }

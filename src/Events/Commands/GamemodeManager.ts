@@ -32,7 +32,7 @@ export class GamemodeInfo {
     public Cmd: string
     public Desc: string
     public Usage: string
-    public Error: string = Colors.COLOR_YELLOW_ORANGE + 'Invalid command or usage ' + Colors.COLOR_RESET
+    public Error = Colors.COLOR_YELLOW_ORANGE + 'Invalid command or usage ' + Colors.COLOR_RESET
 
     public constructor(cmd: string, desc: string, usage: string) {
         this.Cmd = cmd

@@ -7,8 +7,8 @@ import { HolidaySeasons, Seasons } from '../Seasons'
 export class TerrainChanger {
     public static Terrains: number[] = []
     public static SafezoneTerrain: number[] = []
-    public static NormalCliff: string = 'cXc1'
-    public static DirtCliff: string = 'cXc2'
+    public static NormalCliff = 'cXc1'
+    public static DirtCliff = 'cXc2'
     public static LastWolfTerrain = 0
     public static LastSafezoneTerrain = 0
 

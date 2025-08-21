@@ -7,7 +7,7 @@ import { PlayerLeaves } from '../PlayerLeavesEvent/PlayerLeaves'
 import { VoteEndRound } from './VoteEndRound'
 
 export class Votekick {
-    public static VoteActive: boolean = false
+    public static VoteActive = false
     private static VoteTimer = Timer.create()
     private static Voters: MapPlayer[] = []
     private static VoteKickPlayer: MapPlayer | undefined
@@ -61,8 +61,8 @@ export class Votekick {
     }
 
     private static ExecuteVotekick = (target: MapPlayer) => {
-        const totalPlayers: number = Globals.ALL_PLAYERS.length
-        const requiredVotes: number = totalPlayers / 2
+        const totalPlayers = Globals.ALL_PLAYERS.length
+        const requiredVotes = totalPlayers / 2
 
         if (Votekick.Voters.length >= requiredVotes) {
             print(
@@ -107,7 +107,7 @@ export class Votekick {
 
     private static GetPlayer = (player: string) => {
         // doesnt quite work yet.
-        // let basePlayerName: string = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
+        // let basePlayerName = (player.match(/^[^\W_]+/) || [''])[0].toLowerCase()
         // for (let p of Globals.ALL_PLAYERS) {
         //     if (p.name.toLowerCase().indexOf(basePlayerName) >= 0) {
         //         return p

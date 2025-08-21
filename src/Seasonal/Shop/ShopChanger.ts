@@ -6,11 +6,11 @@ import { Group } from 'w3ts'
 import { HolidaySeasons, Seasons } from '../Seasons'
 
 export class ShopChanger {
-    private static SantaSkin: number = Constants.UNIT_SANTA
+    private static SantaSkin = Constants.UNIT_SANTA
     private static HalloweenSkin: number
     private static ValentinesSkin: number
     private static EasterSkin: number
-    private static NormalSkin: number = Constants.UNIT_KITTY_VENDOR
+    private static NormalSkin = Constants.UNIT_KITTY_VENDOR
 
     public static Initialize = () => {
         if (Seasons.getCurrentSeason() === HolidaySeasons.None) return

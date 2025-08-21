@@ -16,8 +16,8 @@ import { WolfPoint } from '../WolfPoint'
 import { NamedWolves } from './NamedWolves'
 
 export class Wolf {
-    public static WOLF_MODEL: number = Constants.UNIT_CUSTOM_DOG
-    public static DisableEffects: boolean = false
+    public static WOLF_MODEL = Constants.UNIT_CUSTOM_DOG
+    public static DisableEffects = false
     private WANDER_LOWER_BOUND = 0.7 // reaction time lower bound
     private WANDER_UPPER_BOUND = 0.83 // reaction time upper bound
     private NEXT_WANDER_DELAY = 1.9 // time before wolf can move again
@@ -38,9 +38,9 @@ export class Wolf {
     private OverheadEffect: Effect
     // private effect RandomEffect // some random cool event - can do later on (roar, stomps, whatever)
     public WolfPoint: WolfPoint
-    public paused: boolean = false
-    public IsReviving: boolean = false
-    public IsWalking: boolean = false
+    public paused = false
+    public IsReviving = false
+    public IsWalking = false
 
     public constructor(regionIndex: number) {
         this.RegionIndex = regionIndex
@@ -78,7 +78,7 @@ export class Wolf {
         }
     }
 
-    public StartWandering = (forced: boolean = false) => {
+    public StartWandering = (forced = false) => {
         let realTime = GetRandomReal(1.0, 1.12)
         if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving) {
             this.ApplyEffect()
@@ -90,7 +90,7 @@ export class Wolf {
     /// <summary>
     /// Wolf moves to a random location within its lane.
     /// </summary>
-    public WolfMove = (forced: boolean = false) => {
+    public WolfMove = (forced = false) => {
         if (this.paused || this.IsReviving) return
         if (this.HasAffix('Blitzer')) return
         if (this.paused && this.HasAffix('Bomber')) return

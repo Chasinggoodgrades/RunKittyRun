@@ -10,12 +10,12 @@ import { Relic } from '../Relic'
 import { RelicUpgrade } from '../RelicUpgrade'
 
 export class OneOfNine extends Relic {
-    public static RelicItemID: number = Constants.ITEM_ONE_OF_NINE
-    public static RelicAbilityID: number = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
+    public static RelicItemID = Constants.ITEM_ONE_OF_NINE
+    public static RelicAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC
 
     private PreviousAbilityID = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS
     private static RelicCost = 650
-    private static IconPath: string = 'war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp'
+    private static IconPath = 'war3mapImported\\BTNSpell_Holy_BlessingOfProtection.blp'
 
     public constructor() {
         super(
@@ -40,17 +40,17 @@ export class OneOfNine extends Relic {
     }
     public override ApplyEffect(Unit: Unit) {
         const player: MapPlayer = Unit.owner
-        const cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        const cooldown = OneOfNine.GetOneOfNineCooldown(player)
         Unit.removeAbility(this.PreviousAbilityID)
         Unit.addAbility(OneOfNine.RelicAbilityID)
-        const abilityLevel: number = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
+        const abilityLevel = ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
         BlzStartUnitAbilityCooldown(Unit.handle, OneOfNine.RelicAbilityID, cooldown)
         this.RemoveManaCost(Unit, abilityLevel)
     }
 
     public override RemoveEffect(Unit: Unit) {
         const player: MapPlayer = Unit.owner
-        const cooldown: number = OneOfNine.GetOneOfNineCooldown(player)
+        const cooldown = OneOfNine.GetOneOfNineCooldown(player)
         Unit.removeAbility(OneOfNine.RelicAbilityID)
         Unit.addAbility(this.PreviousAbilityID)
         ProtectionOfAncients.SetProtectionOfAncientsLevel(Unit)
@@ -64,7 +64,7 @@ export class OneOfNine extends Relic {
         const reduction = OneOfNine.GetOneOfNineReduction(Player)
 
         // remaining cooldown depending on relic or no relic
-        let cooldown: number =
+        let cooldown =
             kitty.getAbilityCooldownRemaining(noRelic) > 0.0
                 ? kitty.getAbilityCooldownRemaining(noRelic)
                 : kitty.getAbilityCooldownRemaining(relic)

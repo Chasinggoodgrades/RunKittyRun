@@ -36,7 +36,7 @@ export class ColorData {
 
 export class ColorUtils {
     public static ColorManager: ColorData[] = []
-    public static sb: string = ''
+    public static sb = ''
 
     public static AddColor = (
         colorname: string,
@@ -144,9 +144,9 @@ export class ColorUtils {
     /// <param name="p">The player object</param>
     public static SetPlayerRandomVertexColor = (p: MapPlayer) => {
         const kitty: Kitty = Globals.ALL_KITTIES.get(p)!
-        const r: number = GetRandomInt(0, 255)
-        const g: number = GetRandomInt(0, 255)
-        const b: number = GetRandomInt(0, 255)
+        const r = GetRandomInt(0, 255)
+        const g = GetRandomInt(0, 255)
+        const b = GetRandomInt(0, 255)
         kitty.Unit.setVertexColor(r, g, b, 255)
         p.DisplayTimedTextTo(
             5.0,
@@ -202,7 +202,7 @@ export class ColorUtils {
 
     public static PopulateColorsData = (kitty: Kitty) => {
         try {
-            const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
+            const colorData = kitty.SaveData.PlayerColorData.PlayedColors
             if (!isNullOrEmpty(colorData)) return // already populated
             ColorUtils.sb = ''
 
@@ -228,8 +228,8 @@ export class ColorUtils {
     /// <param name="kitty"></param>
     public static UpdateColors = (kitty: Kitty) => {
         try {
-            const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
-            const currentColor: string = kitty.SaveData.PlayerColorData.LastPlayedColor
+            const colorData = kitty.SaveData.PlayerColorData.PlayedColors
+            const currentColor = kitty.SaveData.PlayerColorData.LastPlayedColor
 
             if (isNullOrEmpty(colorData) || isNullOrEmpty(currentColor)) return
 
@@ -268,7 +268,7 @@ export class ColorUtils {
     /// <param name="kitty"></param>
     /// <returns></returns>
     public static GetMostPlayedColor = (kitty: Kitty) => {
-        const colorData: string = kitty.SaveData.PlayerColorData.PlayedColors
+        const colorData = kitty.SaveData.PlayerColorData.PlayedColors
         if (isNullOrEmpty(colorData)) return null
 
         const pairs: string[] = colorData.split(',') // splits like .. "red:5", "blue:6", etc.

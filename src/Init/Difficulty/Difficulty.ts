@@ -12,7 +12,7 @@ import { DifficultyOption } from './DifficultyOption'
 export class Difficulty {
     public static DifficultyValue: number
     public static DifficultyOption: DifficultyOption
-    public static IsDifficultyChosen: boolean = false
+    public static IsDifficultyChosen = false
     private static TIME_TO_CHOOSE_DIFFICULTY = 10.0
     private static triggerHandle: Trigger
 
@@ -90,7 +90,7 @@ export class Difficulty {
     /// Changes the difficulty of the game to the specified difficulty.
     /// </summary>
     /// <param name="difficulty">"normal", "hard", "impossible"</param>
-    public static ChangeDifficulty = (difficulty: string = 'normal') => {
+    public static ChangeDifficulty = (difficulty = 'normal') => {
         for (let i = 0; i < DifficultyOption.Options.length; i++) {
             const option = DifficultyOption.Options[i]
             if (option.name.toLowerCase() === difficulty.toLowerCase()) {

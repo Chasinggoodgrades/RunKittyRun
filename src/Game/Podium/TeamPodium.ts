@@ -9,10 +9,10 @@ import { PodiumUtil } from './PodiumUtil'
 export class TeamPodium {
     private static PodiumQueue = new Queue<[MapPlayer, Point]>()
     private static MovedUnits: Unit[] = []
-    private static PodiumType: string = ''
-    private static Color: string = Colors.COLOR_YELLOW_ORANGE
-    private static MVP: string = 'MVP'
-    private static MostSaves: string = 'saves: most'
+    private static PodiumType = ''
+    private static Color = Colors.COLOR_YELLOW_ORANGE
+    private static MVP = 'MVP'
+    private static MostSaves = 'saves: most'
 
     public static BeginPodiumActions = () => {
         PodiumUtil.SetCameraToPodium()
@@ -22,7 +22,7 @@ export class TeamPodium {
     private static EnqueueMVPPlayer = () => {
         const topRatios = PodiumUtil.SortPlayersByHighestRatio()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topRatios.length - 1; i >= 0; i--) {
+        for (let i = topRatios.length - 1; i >= 0; i--) {
             const player = topRatios[i]
             const position = podiumPositions[i]
             TeamPodium.PodiumQueue.enqueue([player, position])
@@ -33,7 +33,7 @@ export class TeamPodium {
     private static EnqueueTopSavesPlayer = () => {
         const topSaves = PodiumUtil.SortPlayersBySaves()
         const podiumPositions = PodiumUtil.PodiumSpots
-        for (let i: number = topSaves.length - 1; i >= 0; i--) {
+        for (let i = topSaves.length - 1; i >= 0; i--) {
             const player = topSaves[i]
             const position = podiumPositions[i]
             TeamPodium.PodiumQueue.enqueue([player, position])

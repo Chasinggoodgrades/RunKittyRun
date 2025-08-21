@@ -14,14 +14,14 @@ import { RelicUpgrade } from '../RelicUpgrade'
 export class ChronoSphere extends Relic {
     public RelicItemID = Constants.ITEM_CHRONO_ORB
     public RelicAbilityID = Constants.ABILITY_THE_AURA_OF_THE_RING
-    private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\Orb: BTNChrono.dds'
+    private static IconPath = 'ReplaceableTextures\\CommandButtons\\Orb: BTNChrono.dds'
 
     public static readonly IsChronoSphere = (r: Relic): r is ChronoSphere => {
         return r instanceof ChronoSphere
     }
 
     private static REWIND_COOLDOWN = 120.0
-    private LocationSaveEffectPath: string = 'war3mapImported\\ChronoLocationSave.mdx'
+    private LocationSaveEffectPath = 'war3mapImported\\ChronoLocationSave.mdx'
     private RelicCost = 650
     private static SLOW_AURA_RADIUS = 400.0
     private MAGNITUDE_CHANGE_INTERVAL = 15.0

@@ -6,7 +6,7 @@ import { MapPlayer, Trigger } from 'w3ts'
 import { Savecode } from './OldSaves'
 
 export class OldsaveSync {
-    private static SYNC_PREFIX: string = 'S'
+    private static SYNC_PREFIX = 'S'
     private static Trigger: Trigger = Trigger.create()!
     private static VariableEvent: Trigger = Trigger.create()!
     private static SaveLoadCode: string

@@ -120,7 +120,7 @@ export class Reward {
     /// </summary>
     /// <param name="player">The player object to which the reward will be applied.</param>
     /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
-    public ApplyReward = (player: MapPlayer, setData: boolean = true) => {
+    public ApplyReward = (player: MapPlayer, setData = true) => {
         if (setData) this.SetSelectedData(player)
         this.SetEffect(player)
         if (setData)
@@ -222,7 +222,7 @@ export class Reward {
         return true
     }
 
-    private SetSkin = (player: MapPlayer, tournament: boolean = false) => {
+    private SetSkin = (player: MapPlayer, tournament = false) => {
         if (this.Type !== RewardType.Skins && tournament === false) return false
 
         const kitty = Globals.ALL_KITTIES.get(player)!

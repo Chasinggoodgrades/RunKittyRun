@@ -42,8 +42,8 @@ export class VoteEndRound {
 
     private static VoteTally = () => {
         if (!VoteEndRound.VoteActive) return
-        const totalPlayers: number = Globals.ALL_PLAYERS.length
-        const requiredVotes: number = totalPlayers / 2
+        const totalPlayers = Globals.ALL_PLAYERS.length
+        const requiredVotes = totalPlayers / 2
 
         if (VoteEndRound.Votes.length >= requiredVotes) {
             print(

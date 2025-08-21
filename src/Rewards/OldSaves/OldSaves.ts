@@ -14,7 +14,7 @@ import { OldSavesHelper } from './OldSavesHelper'
 import { OldsaveSync } from './OldsaveSync'
 
 export class Savecode {
-    private static player_charset: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    private static player_charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     private static OriginalToolTips: string[] = []
     public Digits = 0
     public Bignum: BigNum
@@ -92,7 +92,7 @@ export class Savecode {
     }
 
     public Obfuscate = (key: number, sign: number) => {
-        const seed: number = GetRandomInt(0, math.maxinteger)
+        const seed = GetRandomInt(0, math.maxinteger)
         let advance = 0
         let x = 0
         let current: BigNumL = this.Bignum.List
@@ -132,7 +132,7 @@ export class Savecode {
 
     public Load = (p: MapPlayer, code: string) => {
         try {
-            const key: number = Savecode.SCommHash(p.name) + 1 * 73
+            const key = Savecode.SCommHash(p.name) + 1 * 73
             let inputhash = 0
 
             this.FromString(code)

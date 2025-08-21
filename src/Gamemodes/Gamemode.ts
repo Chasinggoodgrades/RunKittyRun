@@ -12,7 +12,7 @@ import { Team } from './Teams/Team'
 
 export class Gamemode {
     public static HostPlayer: MapPlayer
-    public static IsGameModeChosen: boolean = false
+    public static IsGameModeChosen = false
     public static PlayersPerTeam = 0
 
     public static Initialize = () => {
@@ -72,11 +72,7 @@ export class Gamemode {
         )
     }
 
-    public static SetGameMode = (
-        mode: GameMode,
-        modeType: string = '',
-        teamSize: number = Globals.DEFAULT_TEAM_SIZE
-    ) => {
+    public static SetGameMode = (mode: GameMode, modeType = '', teamSize = Globals.DEFAULT_TEAM_SIZE) => {
         try {
             CurrentGameMode.active = mode
             Globals.CurrentGameModeType = modeType

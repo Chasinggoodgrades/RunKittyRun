@@ -13,15 +13,15 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class ShardOfTranslocation extends Relic {
-    public static RelicItemID: number = Constants.ITEM_SHARD_OF_TRANSLOCATION
-    public static RelicAbilityID: number = Constants.ABILITY_TRANSLOCATE
+    public static RelicItemID = Constants.ITEM_SHARD_OF_TRANSLOCATION
+    public static RelicAbilityID = Constants.ABILITY_TRANSLOCATE
     private static RelicCost = 650
     private static DEFAULT_BLINK_RANGE = 450.0
     private static UPGRADE_BLINK_RANGE = 650.0
     private static DEFAULT_COOLDOWN = 90.0
     private static CooldownReduction = 30.0
     private Owner: Unit
-    private static IconPath: string = 'ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp'
+    private static IconPath = 'ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp'
     private MaxBlinkRange = ShardOfTranslocation.DEFAULT_BLINK_RANGE
     private CastEventTrigger: Trigger
 

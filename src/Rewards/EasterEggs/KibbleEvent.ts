@@ -9,8 +9,8 @@ import { ItemSpawnerTrackKibbles } from '../../Game/Items/ItemSpawnerTrackKibble
 import { Challenges } from '../Challenges/Challenges'
 
 export class KibbleEvent {
-    private static EventActive: boolean = false
-    private static EventPlayed: boolean = false
+    private static EventActive = false
+    private static EventPlayed = false
     private static EventKibblesCollected = 0
     private static TotalEventKibbles = 200
     private static EventExtraKibbles = 5 // a little extra, the previous ones also don't despawn if theres any left.

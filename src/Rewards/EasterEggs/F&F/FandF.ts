@@ -12,8 +12,8 @@ import { getTriggerUnit } from 'src/Utility/w3tsUtils'
 import { Trigger, Unit } from 'w3ts'
 
 export class FandF {
-    private static EmptyVial: number = Constants.ITEM_EASTER_EGG_EMPTY_VIAL
-    private static BloodVial: number = Constants.ITEM_EASTER_EGG_BLOOD_FILLED_VIAL
+    private static EmptyVial = Constants.ITEM_EASTER_EGG_EMPTY_VIAL
+    private static BloodVial = Constants.ITEM_EASTER_EGG_BLOOD_FILLED_VIAL
     private static TurnInRange: number
     private static CollectionRange: number
     private static CollectionTrigger: Trigger

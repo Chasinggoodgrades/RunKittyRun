@@ -475,7 +475,7 @@ export class InitCommands {
             argDesc: '[speed]',
             description: 'SpinCam: Toggle.',
             action: (player, args) => {
-                const speed: number = args[0] !== '' ? S2I(args[0]) : 0
+                const speed = args[0] !== '' ? S2I(args[0]) : 0
                 Globals.ALL_KITTIES.get(player)!.SpinCam.ToggleSpinCam(speed)
                 player.DisplayTextTo(
                     Colors.COLOR_GOLD +
@@ -509,7 +509,7 @@ export class InitCommands {
                     return
                 }
 
-                const mode: boolean = CommandsManager.GetBool(args[0])
+                const mode = CommandsManager.GetBool(args[0])
 
                 if (args.length < 2 || args[1] === '') {
                     // Apply to self
@@ -523,7 +523,7 @@ export class InitCommands {
                     return
                 }
 
-                let isMatch: boolean = false
+                let isMatch = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (!kitty) return
@@ -1168,7 +1168,7 @@ export class InitCommands {
             description: 'Creates a hero for the specified player.',
             action: (player, args) => {
                 for (let i = 0; i < 24; i++) {
-                    const target: number =
+                    const target =
                         args.length > 0 && args[0] !== 'all'
                             ? S2I(args[0]) - 1
                             : args.length > 0 && args[0] === 'all'
@@ -1236,7 +1236,7 @@ export class InitCommands {
             argDesc: '[skinId], [player]',
             description: 'Sets the skin of the passed player parameter. Use "none" for default skin.',
             action: (player, args) => {
-                const skin: number = args[0] === '' || args[0] === 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
+                const skin = args[0] === '' || args[0] === 'none' ? Constants.UNIT_KITTY : FourCC(args[0])
 
                 if (args.length < 2 || args[1] === '') {
                     const kitty = Globals.ALL_KITTIES.get(player)
@@ -1488,7 +1488,7 @@ export class InitCommands {
             argDesc: '[on][off]',
             description: 'Activates the revive invul for 6.0 seconds. Served as a test run.',
             action: (player, args) => {
-                const status: boolean = args[0] !== '' && CommandsManager.GetBool(args[0])
+                const status = args[0] !== '' && CommandsManager.GetBool(args[0])
                 Kitty.InvulTest = status
                 player.DisplayTimedTextTo(3.0, `${Colors.COLOR_YELLOW_ORANGE}Revive invul test: ${status}`)
             },
@@ -1551,7 +1551,7 @@ export class InitCommands {
             description: 'Sets you to your previously last saved vortex color if you have one.',
             action: (player, args) => {
                 const kitty: Kitty = Globals.ALL_KITTIES.get(player)!
-                const vortexColor: string = kitty.SaveData.PlayerColorData.VortexColor
+                const vortexColor = kitty.SaveData.PlayerColorData.VortexColor
                 if (vortexColor === '') return
                 const rgb = vortexColor.split(',')
                 ColorUtils.SetPlayerVertexColor(kitty.Player, rgb)
@@ -1699,7 +1699,7 @@ export class InitCommands {
             argDesc: '',
             description: 'Lists all kitties',
             action: (player, args) => {
-                let x: string = ''
+                let x = ''
                 for (const k of Globals.ALL_KITTIES_LIST) {
                     x += `${ColorUtils.PlayerNameColored(k.Player)} (${k.Player.id})\n`
                 }
@@ -1792,7 +1792,7 @@ export class InitCommands {
                 if (!selectedUnit) return
                 if (!Globals.ALL_WOLVES.has(selectedUnit)) return
                 const wolf = Globals.ALL_WOLVES.get(selectedUnit)!
-                const timerAddress: string = `WCTimerAddresses:${wolf.WanderTimer} : ${wolf.EffectTimer}`
+                const timerAddress = `WCTimerAddresses:${wolf.WanderTimer} : ${wolf.EffectTimer}`
                 print(`${timerAddress}`)
             },
         })
@@ -1823,14 +1823,14 @@ export class InitCommands {
                     return
                 }
 
-                const speed: number = S2I(args[0])
+                const speed = S2I(args[0])
                 if (args.length < 2 || args[1] === '') {
                     Globals.ALL_KITTIES.get(player)!.Slider.absoluteSlideSpeed = speed > 0 ? speed : null
                     player.DisplayTimedTextTo(5.0, `${Colors.COLOR_YELLOW_ORANGE}Set your slide speed to ${speed}|r`)
                     return
                 }
 
-                let isMatch: boolean = false
+                let isMatch = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (!kitty) return
@@ -1856,7 +1856,7 @@ export class InitCommands {
                     return
                 }
 
-                const speed: number = S2I(args[0])
+                const speed = S2I(args[0])
                 if (args.length < 2 || args[1] === '') {
                     const kitty = Globals.ALL_KITTIES.get(player)
                     if (!kitty) return
@@ -1865,7 +1865,7 @@ export class InitCommands {
                     return
                 }
 
-                let isMatch: boolean = false
+                let isMatch = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (!kitty) return
@@ -1891,7 +1891,7 @@ export class InitCommands {
                     return
                 }
 
-                const mode: boolean = CommandsManager.GetBool(args[0])
+                const mode = CommandsManager.GetBool(args[0])
 
                 if (args.length < 2 || args[1] === '') {
                     // Apply to self
@@ -1907,7 +1907,7 @@ export class InitCommands {
                     return
                 }
 
-                let isMatch: boolean = false
+                let isMatch = false
 
                 CommandsManager.ResolvePlayerId(args[1], kitty => {
                     if (!kitty) return

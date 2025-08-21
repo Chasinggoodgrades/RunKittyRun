@@ -116,7 +116,7 @@ export class TeamsMultiboard {
         let rowIndex = 0
         for (let i = 0; i < Globals.ALL_TEAMS_LIST.length; i++) {
             const team = Globals.ALL_TEAMS_LIST[i]
-            const teamMembers: string = team.TeamMembersString
+            const teamMembers = team.TeamMembersString
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setWidth(0.05)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setText(`${team.TeamColor}:`)
             TeamsMultiboard.CurrentTeamsMB.GetItem(rowIndex, 0).setVisible(true, false)

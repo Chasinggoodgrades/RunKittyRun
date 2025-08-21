@@ -128,7 +128,7 @@ export class CommandsManager {
         return lower === 'true' || lower === 'on' || lower === '1'
     }
 
-    public static HelpCommands = (player: MapPlayer, arg: string = '') => {
+    public static HelpCommands = (player: MapPlayer, arg = '') => {
         const filter = isNullOrEmpty(arg) ? '' : arg.toLowerCase()
         CommandsManager.CommandsList = [] // instead of creating a new list each time, just use 1 and clear it
         const playerGroup = CommandsManager.GetPlayerGroup(player)

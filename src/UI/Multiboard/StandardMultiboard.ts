@@ -18,7 +18,7 @@ export class StandardMultiboard {
     private static Updater: Trigger
     private static ESCTrigger: Trigger
 
-    private static color: string = Colors.COLOR_YELLOW_ORANGE
+    private static color = Colors.COLOR_YELLOW_ORANGE
     private static PlayerStats: string[] = []
     private static RoundTimes: number[] = []
     private static PlayersList: MapPlayer[] = []
@@ -139,7 +139,7 @@ export class StandardMultiboard {
 
             // Sort the array of keys based on custom criteria
             for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
-                for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
+                for (let j = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
                     const stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.CurrentStats
                     const stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.CurrentStats
                     const score1 = stats1.TotalSaves - stats1.TotalDeaths
@@ -207,7 +207,7 @@ export class StandardMultiboard {
 
         // Sort the array of keys based on custom criteria
         for (let i = 0; i < StandardMultiboard.PlayersList.length; i++) {
-            for (let j: number = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
+            for (let j = i + 1; j < StandardMultiboard.PlayersList.length; j++) {
                 const stats1 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[i])!.SaveData.GameStats
                 const stats2 = Globals.ALL_KITTIES.get(StandardMultiboard.PlayersList[j])!.SaveData.GameStats
                 const score1 = stats1.Saves - stats1.Deaths

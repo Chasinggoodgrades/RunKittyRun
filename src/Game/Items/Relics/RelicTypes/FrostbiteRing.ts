@@ -16,11 +16,11 @@ import { RelicUpgrade } from '../RelicUpgrade'
 import { RelicUtil } from '../RelicUtil'
 
 export class FrostbiteRing extends Relic {
-    public static RelicItemID: number = Constants.ITEM_FROSTBITE_RING
+    public static RelicItemID = Constants.ITEM_FROSTBITE_RING
     public static SLOW_DURATION = 5.0
-    public static FROSTBITE_FREEZE_RING_EFFECT: string = 'war3mapImported\\FreezingBreathTargetArt.mdl'
-    public static FROSTBITE_SLOW_TARGET_EFFECT: string = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
-    public static RelicAbilityID: number = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE
+    public static FROSTBITE_FREEZE_RING_EFFECT = 'war3mapImported\\FreezingBreathTargetArt.mdl'
+    public static FROSTBITE_SLOW_TARGET_EFFECT = 'Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl'
+    public static RelicAbilityID = Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE
     public static FrozenWolves: Map<Unit, FrozenWolf> = new Map()
 
     private static RelicCost = 650
@@ -28,7 +28,7 @@ export class FrostbiteRing extends Relic {
     private static DEFAULT_FREEZE_DURATION = 5.0
     private static UPGRADE_COOLDOWN_REDUCTION = 15.0
     private FREEZE_DURATION = 5.0
-    private static IconPath: string = 'ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp'
+    private static IconPath = 'ReplaceableTextures\\CommandButtons\\BTNFrostRing.blp'
     private Owner: MapPlayer
     private Trigger: Trigger
     private FreezeGroup: Group
@@ -153,7 +153,7 @@ export class FrozenWolf {
     public Timer: AchesTimers
     private FreezeEffect: Effect
     private Caster: MapPlayer
-    private Active: boolean = false
+    private Active = false
 
     public constructor() {}
 
@@ -203,7 +203,7 @@ export class FrozenWolf {
         }
     }
 
-    private PausingWolf = (unit: Unit, pause: boolean = true) => {
+    private PausingWolf = (unit: Unit, pause = true) => {
         try {
             if (!unit) return
             if (NamedWolves.StanWolf && unit === NamedWolves.StanWolf.Unit) return

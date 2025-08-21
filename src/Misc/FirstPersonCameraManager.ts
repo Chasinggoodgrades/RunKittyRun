@@ -54,7 +54,7 @@ export class FirstPersonCamera {
             !(this.keyDownState.get('LEFT') && this.keyDownState.get('RIGHT')) &&
             (this.keyDownState.get('LEFT') || this.keyDownState.get('RIGHT'))
         ) {
-            let angle: number = this.hero.facing
+            let angle = this.hero.facing
             if (this.keyDownState.get('LEFT')) angle += this.FIRSTPERSON_ANGLE_PER_PERIOD
             if (this.keyDownState.get('RIGHT')) angle -= this.FIRSTPERSON_ANGLE_PER_PERIOD
             this.hero.setFacingEx(angle)
@@ -64,8 +64,8 @@ export class FirstPersonCamera {
             !(this.keyDownState.get('UP') && this.keyDownState.get('DOWN')) &&
             (this.keyDownState.get('UP') || this.keyDownState.get('DOWN'))
         ) {
-            const moveSpeed: number = this.hero.moveSpeed
-            let movePerTick: number = moveSpeed * this.timerPeriod
+            const moveSpeed = this.hero.moveSpeed
+            let movePerTick = moveSpeed * this.timerPeriod
 
             const kitty: Kitty = Globals.ALL_KITTIES.get(this.player)!
 
@@ -73,15 +73,15 @@ export class FirstPersonCamera {
                 movePerTick = 0.2
             }
 
-            const angle: number = Rad2Deg(this.hero.facing)
+            const angle = Rad2Deg(this.hero.facing)
             if (this.keyDownState.get('UP')) fwd += movePerTick
             if (this.keyDownState.get('DOWN')) fwd -= movePerTick
 
-            const oldX: number = this.hero.x
-            const oldY: number = this.hero.y
+            const oldX = this.hero.x
+            const oldY = this.hero.y
 
-            let newX: number = oldX + fwd * Cos(angle)
-            let newY: number = oldY + fwd * Sin(angle)
+            let newX = oldX + fwd * Cos(angle)
+            let newY = oldY + fwd * Sin(angle)
 
             if (!Globals.GAME_ACTIVE && Regions.BarrierRegion.includes(newX, newY)) {
                 return

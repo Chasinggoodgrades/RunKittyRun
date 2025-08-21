@@ -128,7 +128,7 @@ export class GamemodeCmd {
         }
 
         const mode = parts[2]
-        let teamSize: number = Globals.DEFAULT_TEAM_SIZE
+        let teamSize = Globals.DEFAULT_TEAM_SIZE
         let parsedTeamSize: number
 
         if (parts.length === 4 && !S2I(parts[3])) {

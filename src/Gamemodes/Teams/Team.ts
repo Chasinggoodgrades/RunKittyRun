@@ -19,7 +19,7 @@ export class Team {
     public TeamColor: string
     public TeamTimes: Map<number, number>
     public Teammembers: MapPlayer[]
-    public TeamMembersString: string = ''
+    public TeamMembersString = ''
     public RoundProgress: Map<number, string>
     public Finished = false
 
@@ -151,7 +151,7 @@ export class Team {
         this.TeamMembersString = '' // Reset TeamMembersString
         for (let i = 0; i < this.Teammembers.length; i++) {
             const member = this.Teammembers[i]
-            let name: string = member.name.split('#')[0]
+            let name = member.name.split('#')[0]
             if (name.length > 7) name = ColorUtils.ColorString(member.name.substring(0, 7), member.id + 1)
 
             if (this.TeamMembersString.length > 0) this.TeamMembersString += ', '

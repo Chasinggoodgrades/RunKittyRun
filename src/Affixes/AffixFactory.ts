@@ -31,7 +31,7 @@ export class AffixFactory {
         AffixFactory.InitLaneWeights()
     }
 
-    public static CalculateAffixes = (laneIndex: number = -1) => {
+    public static CalculateAffixes = (laneIndex = -1) => {
         for (const affix of Globals.AllAffixes) {
             if (AffixFactory.TempAffixCounts.has(affix.name)) continue
             if (laneIndex !== -1 && affix.Unit.RegionIndex !== laneIndex) continue
@@ -81,7 +81,7 @@ export class AffixFactory {
      * @parm unit: Wolf
      * @optional affixName: string
      */
-    private static CanApplyAffix = (unit: Wolf, affixName: string = 'x') => {
+    private static CanApplyAffix = (unit: Wolf, affixName = 'x') => {
         return unit.AffixCount() < AffixFactory.MAX_NUMBER_OF_AFFIXES && !unit.HasAffix(affixName)
     }
 
@@ -156,13 +156,13 @@ export class AffixFactory {
 
             for (let i = 0; i < AffixFactory.LaneWeights.length; i++) {
                 // Set proportions based on lane weights
-                const ratio: number = AffixFactory.LaneWeights[i] / totalWeight
+                const ratio = AffixFactory.LaneWeights[i] / totalWeight
                 laneDistribution[i] = Math.floor(AffixFactory.NUMBER_OF_AFFIXED_WOLVES * ratio)
                 totalAssigned += laneDistribution[i]
             }
 
             // ^ rounding can cause some left overs so here we are
-            let leftover: number = AffixFactory.NUMBER_OF_AFFIXED_WOLVES - totalAssigned
+            let leftover = AffixFactory.NUMBER_OF_AFFIXED_WOLVES - totalAssigned
             for (let i = 0; i < AffixFactory.LaneWeights.length && leftover > 0; i++) {
                 if (laneDistribution[i] < AffixFactory.MAX_AFFIXED_PER_LANE) {
                     laneDistribution[i]++
@@ -172,7 +172,7 @@ export class AffixFactory {
 
             // Go thru and apply affixes to each lane
             for (let i = 0; i < laneDistribution.length; i++) {
-                const affixTarget: number = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
+                const affixTarget = Math.min(laneDistribution[i], AffixFactory.MAX_AFFIXED_PER_LANE)
                 const wolvesInLane = WolfArea.WolfAreas.get(i)!.Wolves
 
                 // Add affixes to random wolves until the {affixTarget} is reached
