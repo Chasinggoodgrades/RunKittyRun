@@ -46,12 +46,12 @@ export class Vortex extends Affix {
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
 
-        GC.RemoveTimer(this.PullingInTimer) // TODO; Cleanup:         GC.RemoveTimer(ref PullingInTimer);
-        GC.RemoveTimer(this.PeriodicPull) // TODO; Cleanup:         GC.RemoveTimer(ref PeriodicPull);
-        GC.RemoveTimer(this.PullStart) // TODO; Cleanup:         GC.RemoveTimer(ref PullStart);
-        GC.RemoveTrigger(this.EntersRange) // TODO; Cleanup:         GC.RemoveTrigger(ref EntersRange);
-        GC.RemoveTrigger(this.LeavesRange) // TODO; Cleanup:         GC.RemoveTrigger(ref LeavesRange);
-        GC.RemoveList(this.UnitsInRange) // TODO; Cleanup:         GC.RemoveList(ref UnitsInRange);
+        GC.RemoveTimer(this.PullingInTimer)
+        GC.RemoveTimer(this.PeriodicPull)
+        GC.RemoveTimer(this.PullStart)
+        GC.RemoveTrigger(this.EntersRange)
+        GC.RemoveTrigger(this.LeavesRange)
+        GC.RemoveList(this.UnitsInRange)
     }
 
     public override pause(pause: boolean) {}

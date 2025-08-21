@@ -51,16 +51,16 @@ export class RewardsManager {
         const activeRewards = kitty.ActiveAwards
 
         const wings = activeRewards.ActiveWings
-        GC.RemoveEffect(wings) // TODO; Cleanup:         GC.RemoveEffect(ref wings);
+        GC.RemoveEffect(wings)
 
         const auras = activeRewards.ActiveAura
-        GC.RemoveEffect(auras) // TODO; Cleanup:         GC.RemoveEffect(ref auras);
+        GC.RemoveEffect(auras)
 
         const hats = activeRewards.ActiveHats
-        GC.RemoveEffect(hats) // TODO; Cleanup:         GC.RemoveEffect(ref hats);
+        GC.RemoveEffect(hats)
 
         const trails = activeRewards.ActiveTrail
-        GC.RemoveEffect(trails) // TODO; Cleanup:         GC.RemoveEffect(ref trails);
+        GC.RemoveEffect(trails)
 
         kitty.Unit.skin = Constants.UNIT_KITTY
         kitty.Unit.setVertexColor(255, 255, 255, 255)

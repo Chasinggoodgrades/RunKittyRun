@@ -74,7 +74,7 @@ export class DoodadChanger {
             const newDestructible = CreateDeadDestructable(newType, pos.x, pos.y, 0, scale, 0)!
             DoodadChanger.AllDestructables.push(newDestructible)
         }
-        GC.RemoveList(positions) // TODO; Cleanup:         GC.RemoveList(ref positions);
+        GC.RemoveList(positions)
     }
 
     private static CreateInitDestructiables = () => {

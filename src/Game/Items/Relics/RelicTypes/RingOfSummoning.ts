@@ -64,8 +64,8 @@ export class RingOfSummoning extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        GC.RemoveTrigger(this.triggerHandle) // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
-        GC.RemoveGroup(this.SummonGroup) // TODO; Cleanup:         GC.RemoveGroup(ref SummonGroup);
+        GC.RemoveTrigger(this.triggerHandle)
+        GC.RemoveGroup(this.SummonGroup)
         this.Owner = null
         Unit.disableAbility(this.RelicAbilityID, false, true)
     }
@@ -149,7 +149,7 @@ export class RingOfSummoning extends Relic {
 
         // Cleanup
         RemoveLocation(targetedPoint)
-        GC.RemoveFilterFunc(filter) // TODO; Cleanup:         GC.RemoveFilterFunc(ref filter);
+        GC.RemoveFilterFunc(filter)
     }
 
     /// <summary>

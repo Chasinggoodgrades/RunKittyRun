@@ -103,7 +103,7 @@ export class Kibble extends IDisposable {
                 effect = Effect.fromHandle(
                     AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', kitty.Unit.x, kitty.Unit.y)
                 )
-            GC.RemoveEffect(effect) // TODO; Cleanup:             GC.RemoveEffect(ref effect);
+            GC.RemoveEffect(effect)
 
             KibbleEvent.StartKibbleEvent(randomChance)
             KibbleEvent.CollectEventKibble()
@@ -150,7 +150,7 @@ export class Kibble extends IDisposable {
         const effect = Effect.fromHandle(
             AddSpecialEffect('Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl', newX, newY)
         )!
-        GC.RemoveEffect(effect) // TODO; Cleanup:         GC.RemoveEffect(ref effect);
+        GC.RemoveEffect(effect)
         kibble.JackPotIndex += 1
 
         if (kibble.JackPotIndex >= 20) {

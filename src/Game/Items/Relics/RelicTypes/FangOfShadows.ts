@@ -72,9 +72,9 @@ export class FangOfShadows extends Relic {
     }
 
     private DeregisterTriggers = () => {
-        GC.RemoveTrigger(this.SummonTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref SummonTrigger);
-        GC.RemoveTrigger(this.TeleTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref TeleTrigger);
-        GC.RemoveTimer(this.KillTimer) // TODO; Cleanup:         GC.RemoveTimer(ref KillTimer);
+        GC.RemoveTrigger(this.SummonTrigger)
+        GC.RemoveTrigger(this.TeleTrigger)
+        GC.RemoveTimer(this.KillTimer)
     }
 
     private SummonShadowKitty = () => {

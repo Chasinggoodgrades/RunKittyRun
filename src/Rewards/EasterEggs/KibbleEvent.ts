@@ -48,8 +48,8 @@ export class KibbleEvent {
 
     private static EndKibbleEvent = () => {
         KibbleEvent.EventActive = false
-        GC.RemoveTimerDialog(KibbleEvent.EventTimerDialog.handle) // TODO; Cleanup:         GC.RemoveTimerDialog(ref EventTimerDialog);
-        GC.RemoveTimer(KibbleEvent.EventTimer) // TODO; Cleanup:         GC.RemoveTimer(ref EventTimer);
+        GC.RemoveTimerDialog(KibbleEvent.EventTimerDialog.handle)
+        GC.RemoveTimer(KibbleEvent.EventTimer)
 
         for (let i = 0; i < ItemSpawnerTrackKibbles.active.length; i++) {
             const kibble = ItemSpawnerTrackKibbles.active[i]

@@ -16,7 +16,7 @@ import { RoundTimesData } from '../../SaveSystem2.0/MAKE REWARDS HERE/SaveObject
 
 export class AwardingCmds {
     /// <summary>
-    /// Awards the owning player of the selected <param name="player"/> unit with the given reward input. Use ?award help to see all valid awards. // TODO; Cleanup:     /// Awards the owning player of the selected <paramref name="player"/> unit with the given reward input. Use ?award help to see all valid awards.
+    /// Awards the owning player of the selected <param name="player"/> unit with the given reward input. Use ?award help to see all valid awards.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="command"></param>

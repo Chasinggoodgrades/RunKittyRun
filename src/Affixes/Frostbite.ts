@@ -41,10 +41,10 @@ export class Frostbite extends Affix {
         try {
             this.Unit.Unit.setVertexColor(150, 120, 255, 255)
             this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
-            GC.RemoveTrigger(this.InRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref InRangeTrigger);
-            GC.RemoveTrigger(this.PeriodicRangeTrigger) // TODO; Cleanup:             GC.RemoveTrigger(ref PeriodicRangeTrigger);
+            GC.RemoveTrigger(this.InRangeTrigger)
+            GC.RemoveTrigger(this.PeriodicRangeTrigger)
             this.RemoveAllEffects()
-            GC.RemoveList(this.FrostbittenKitties) // TODO; Cleanup:             GC.RemoveList(ref FrostbittenKitties);
+            GC.RemoveList(this.FrostbittenKitties)
         } catch (e) {
             Logger.Warning(`Error in Frostbite.Remove: ${e}`)
             throw e

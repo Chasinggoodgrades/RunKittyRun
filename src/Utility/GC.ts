@@ -6,26 +6,22 @@ export class GC {
     public static GCAffixes: Affix[] = []
 
     public static RemoveTrigger = (t: Trigger) => {
-        // TODO; Cleanup:     public static RemoveTrigger(ref trigger t)
         if (!t) return
         t.destroy()
     }
 
     public static RemoveTimer = (t: Timer) => {
-        // TODO; Cleanup:     public static RemoveTimer(ref timer t)
         if (!t) return
         t.pause()
         t.destroy()
     }
 
     public static RemoveEffect = (e: Effect | undefined) => {
-        // TODO; Cleanup:     public static RemoveEffect(ref effect e)
         if (!e) return
         e.destroy()
     }
 
     public static RemoveGroup = (g: Group) => {
-        // TODO; Cleanup:     public static RemoveGroup(ref group g)
         if (!g) return
         g.clear()
         g.destroy()
@@ -39,7 +35,6 @@ export class GC {
     }
 
     public static RemoveList<T>(list: T[]) {
-        // TODO; Cleanup:     public static RemoveList<T>(ref list: T[])
         if (!list) return
         list.length = 0
     }
@@ -47,7 +42,6 @@ export class GC {
     public static RemoveFilterFunc = (filter: filterfunc | (() => boolean)) => {}
 
     public static RemoveTimerDialog = (td: timerdialog) => {
-        // TODO; Cleanup:     public static RemoveTimerDialog(ref timerdialog td)
         if (!td) return
         DestroyTimerDialog(td)
     }

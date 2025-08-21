@@ -57,12 +57,12 @@ export class Fixation extends Affix {
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.IsChasing = false
 
-        GC.RemoveTrigger(this.InRangeTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref InRangeTrigger);
-        GC.RemoveTrigger(this.PeriodicSpeed) // TODO; Cleanup:         GC.RemoveTrigger(ref PeriodicSpeed);
+        GC.RemoveTrigger(this.InRangeTrigger)
+        GC.RemoveTrigger(this.PeriodicSpeed)
         this.ChaseTimer?.dispose()
         this.ChaseTimer = null as never
-        GC.RemoveGroup(this.UnitsInRange) // TODO; Cleanup:         GC.RemoveGroup(ref UnitsInRange);
-        GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:         GC.RemoveEffect(ref TargetEffect);
+        GC.RemoveGroup(this.UnitsInRange)
+        GC.RemoveEffect(this.TargetEffect)
         if (this.Unit.WolfArea.FixationCount > 0) this.Unit.WolfArea.FixationCount -= 1
         this.Unit.WanderTimer?.resume()
     }
@@ -107,7 +107,7 @@ export class Fixation extends Affix {
             if (!this.Target.isAlive() || !Region.includes(this.Target.x, this.Target.y)) {
                 this.IsChasing = false
                 this.Unit.WolfMove()
-                GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:                 GC.RemoveEffect(ref TargetEffect);
+                GC.RemoveEffect(this.TargetEffect)
                 this.Unit.WanderTimer.resume()
                 this.ChaseTimer.pause()
                 return
@@ -129,7 +129,7 @@ export class Fixation extends Affix {
         const newTarget = this.GetClosestUnitInRange()
         if (newTarget !== this.Target) {
             this.Target = newTarget
-            GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:             GC.RemoveEffect(ref TargetEffect);
+            GC.RemoveEffect(this.TargetEffect)
             this.TargetEffect = Effect.createAttachment(this.FIXATION_TARGET_EFFECT, this.Target, 'overhead')!
         }
     }
@@ -187,7 +187,7 @@ export class Fixation extends Affix {
             this.ChaseTimer.pause()
             this.InRangeTrigger.enabled = false
             this.IsChasing = false
-            GC.RemoveEffect(this.TargetEffect) // TODO; Cleanup:             GC.RemoveEffect(ref TargetEffect);
+            GC.RemoveEffect(this.TargetEffect)
         } else {
             this.InRangeTrigger.enabled = true
             this.ChaseTimer.resume()

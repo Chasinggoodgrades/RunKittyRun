@@ -159,7 +159,7 @@ export class ProtectionOfAncients {
 
         Utility.SimpleTimer(ProtectionOfAncients.EFFECT_DELAY, () => {
             ProtectionOfAncients.ApplyEffect(Unit)
-            GC.RemoveEffect(actiEffect) // TODO; Cleanup:             GC.RemoveEffect(ref actiEffect);
+            GC.RemoveEffect(actiEffect)
         })
     }
 
@@ -190,7 +190,7 @@ export class ProtectionOfAncients {
         const kitty = Globals.ALL_KITTIES.get(owningPlayer)!
         const actiEffect = Effect.create(ProtectionOfAncients.APPLY_EFFECT, Unit.x, Unit.y)!
         if (!kitty.Unit.isAlive()) kitty.Invulnerable = true // unit genuinely dead
-        GC.RemoveEffect(actiEffect) // TODO; Cleanup:         GC.RemoveEffect(ref actiEffect);
+        GC.RemoveEffect(actiEffect)
         ProtectionOfAncients.EndEffectActions(owningPlayer)
     }
 
@@ -244,7 +244,7 @@ export class ProtectionOfAncients {
 
         Utility.SimpleTimer(ProtectionOfAncients.INVULNERABLE_DURATION, () => (kitty.Invulnerable = false))
 
-        GC.RemoveGroup(tempGroup) // TODO; Cleanup:         GC.RemoveGroup(ref tempGroup);
-        GC.RemoveFilterFunc(filter) // TODO; Cleanup:         GC.RemoveFilterFunc(ref filter);
+        GC.RemoveGroup(tempGroup)
+        GC.RemoveFilterFunc(filter)
     }
 }

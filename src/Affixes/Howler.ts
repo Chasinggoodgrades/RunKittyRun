@@ -35,7 +35,7 @@ export class Howler extends Affix {
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.removeAbility(this.AFFIX_ABILITY)
         this.HowlTimer?.dispose()
-        GC.RemoveGroup(this.NearbyWolves) // TODO; Cleanup:         GC.RemoveGroup(ref NearbyWolves);
+        GC.RemoveGroup(this.NearbyWolves)
     }
 
     public override pause(pause: boolean) {

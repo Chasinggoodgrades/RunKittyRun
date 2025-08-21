@@ -116,7 +116,7 @@ export class Reward {
 
     /// <summary>
     /// Applies the reward and cosmetic appearance to the player.
-    /// If the <param name="setData"/> parameter is true, it also alters the saved data. // TODO; Cleanup:     /// If the <paramref name="setData"/> parameter is true, it also alters the saved data.
+    /// If the <param name="setData"/> parameter is true, it also alters the saved data.
     /// </summary>
     /// <param name="player">The player object to which the reward will be applied.</param>
     /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
@@ -182,19 +182,19 @@ export class Reward {
         switch (this.Type) {
             case RewardType.Wings: {
                 const x = activeRewards.ActiveWings
-                GC.RemoveEffect(x) // TODO; Cleanup:                 GC.RemoveEffect(ref x);
+                GC.RemoveEffect(x)
                 break
             }
 
             case RewardType.Hats: {
                 const y = activeRewards.ActiveHats
-                GC.RemoveEffect(y) // TODO; Cleanup:                 GC.RemoveEffect(ref y);
+                GC.RemoveEffect(y)
                 break
             }
 
             case RewardType.Auras: {
                 const z = activeRewards.ActiveAura
-                GC.RemoveEffect(z) // TODO; Cleanup:                 GC.RemoveEffect(ref z);
+                GC.RemoveEffect(z)
                 break
             }
 
@@ -202,7 +202,7 @@ export class Reward {
             case RewardType.Nitros:
             case RewardType.Deathless: {
                 const t = activeRewards.ActiveTrail
-                GC.RemoveEffect(t) // TODO; Cleanup:                 GC.RemoveEffect(ref t);
+                GC.RemoveEffect(t)
                 break
             }
 

@@ -52,6 +52,6 @@ export class ShopChanger {
             tempGroup.removeUnit(vendor)
             vendor.skin = skinType
         }
-        GC.RemoveGroup(tempGroup) // TODO; Cleanup:         GC.RemoveGroup(ref tempGroup);
+        GC.RemoveGroup(tempGroup)
     }
 }

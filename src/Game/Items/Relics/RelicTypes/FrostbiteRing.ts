@@ -65,7 +65,7 @@ export class FrostbiteRing extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        this.Trigger?.destroy() // TODO; Cleanup:         GC.RemoveTrigger(ref Trigger);
+        this.Trigger?.destroy()
         this.FreezeGroup?.destroy()
         Unit.disableAbility(FrostbiteRing.RelicAbilityID, false, true)
     }
@@ -229,7 +229,7 @@ export class FrozenWolf {
             )!
             Utility.SimpleTimer(FrostbiteRing.SLOW_DURATION, () => {
                 Unit.moveSpeed = Unit.defaultMoveSpeed
-                GC.RemoveEffect(effect) // TODO; Cleanup:                 GC.RemoveEffect(ref effect);
+                GC.RemoveEffect(effect)
             })
         } catch (e) {
             Logger.Warning(`Error in FrozenWolf.SlowWolves: ${e}`)

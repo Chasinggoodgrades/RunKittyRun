@@ -45,7 +45,7 @@ export class AntiblockWand {
             wolfUnit.StartWandering(true)
         }
 
-        GC.RemoveGroup(wolvesInArea) // TODO; Cleanup:         GC.RemoveGroup(ref wolvesInArea);
-        GC.RemoveList(list) // TODO; Cleanup:         GC.RemoveList(ref list);
+        GC.RemoveGroup(wolvesInArea)
+        GC.RemoveList(list)
     }
 }

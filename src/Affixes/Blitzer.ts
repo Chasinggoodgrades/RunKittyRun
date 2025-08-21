@@ -48,14 +48,14 @@ export class Blitzer extends Affix {
         this.Unit.WanderTimer?.resume()
         this.Unit.OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT
 
-        GC.RemoveEffect(this.WanderEffect) // TODO; Cleanup:         GC.RemoveEffect(ref WanderEffect);
+        GC.RemoveEffect(this.WanderEffect)
         this.BlitzerTimer?.dispose()
         this.MoveTimer?.dispose()
         this.PreBlitzerTimer?.dispose()
         this.BlitzerTimer = null
         this.MoveTimer = null
         this.PreBlitzerTimer = null
-        GC.RemoveEffect(this.Effect) // TODO; Cleanup:         GC.RemoveEffect(ref Effec`t);
+        GC.RemoveEffect(this.Effect)
         this.EndBlitz()
         this.Unit.Unit.setVertexColor(150, 120, 255, 255)
         this.Unit.Unit.color = PLAYER_COLOR_BROWN

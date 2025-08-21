@@ -29,7 +29,7 @@ export class MultiboardUtil {
     }
 
     /// <summary>
-    /// Minimize or maximize all multiboards for the <param name="player"/> // TODO; Cleanup:     /// Minimize or maximize all multiboards for the <paramref name="player"/>
+    /// Minimize or maximize all multiboards for the <param name="player"/>
     /// </summary>
     /// <param name="player">the player object.</param>
     /// <param name="minMax">true to minimize, false to maximize</param>

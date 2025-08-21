@@ -57,7 +57,7 @@ export class ShardOfTranslocation extends Relic {
     }
 
     public override RemoveEffect(Unit: Unit) {
-        GC.RemoveTrigger(this.CastEventTrigger) // TODO; Cleanup:         GC.RemoveTrigger(ref CastEventTrigger);
+        GC.RemoveTrigger(this.CastEventTrigger)
         Unit.disableAbility(Constants.ABILITY_TRANSLOCATE, false, true)
     }
 

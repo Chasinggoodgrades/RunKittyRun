@@ -286,7 +286,7 @@ export class AIController {
         ]
 
         if (this.wolvesInRange.length > 0) {
-            const dodgePosition = this.GetCompositeDodgePosition(this.wolvesInRange, forwardDirection) // TODO; Cleanup:             let dodgePosition = GetCompositeDodgePosition(wolvesInRange, ref forwardDirection);
+            const dodgePosition = this.GetCompositeDodgePosition(this.wolvesInRange, forwardDirection)
             this.IssueOrder('move', dodgePosition[0], dodgePosition[1], true)
             return
         } else {
@@ -462,7 +462,6 @@ export class AIController {
 
     // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
     private GetCompositeDodgePosition = (wolves: Wolf[], forwardDirection: [number, number]) => {
-        // TODO; Cleanup:     private (number X, number Y) GetCompositeDodgePosition(wolves: Wolf[], ref (number X, number Y) forwardDirection)
         const forwardAngle = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
         const requiredClearance = 22.5 * (Math.PI / 180)
 
