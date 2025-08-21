@@ -63,9 +63,9 @@ export class ShardOfTranslocation extends Relic {
 
     private RegisterTrigger = (Unit: Unit) => {
         const player = Unit.owner
-        const CastEventTrigger = Trigger.create()!
-        CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
-        CastEventTrigger.addAction(() => this.TeleportActions())
+        this.CastEventTrigger = Trigger.create()!
+        this.CastEventTrigger.registerPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, () => true)
+        this.CastEventTrigger.addAction(() => this.TeleportActions())
     }
 
     private TeleportActions = () => {
