@@ -25,7 +25,7 @@ export class RingOfSummoning extends Relic {
     private static IconPath = 'war3mapImported\\BTNArcaniteNightRing.blp'
     private triggerHandle: Trigger | undefined
     private Owner: Unit | undefined
-    private SummonGroup!: Group
+    private static SummonGroup: Group
 
     public constructor() {
         super(
@@ -65,7 +65,6 @@ export class RingOfSummoning extends Relic {
 
     public override RemoveEffect(Unit: Unit) {
         GC.RemoveTrigger(this.triggerHandle)
-        GC.RemoveGroup(this.SummonGroup)
         this.Owner = undefined
         Unit.disableAbility(this.RelicAbilityID, false, true)
     }
@@ -99,7 +98,7 @@ export class RingOfSummoning extends Relic {
         const numberOfSummons = this.GetNumberOfSummons(player)
 
         // Ensure SummonGroup exists
-        this.SummonGroup ??= Group.create()!
+        RingOfSummoning.SummonGroup ??= Group.create()!
 
         // Prepare relic mechanics
         RelicUtil.CloseRelicBookPlayer(player)
@@ -110,19 +109,19 @@ export class RingOfSummoning extends Relic {
 
         // Filter eligible summon targets
         const filter = Utility.CreateFilterFunc(() => RingOfSummoning.CircleFilter() || RingOfSummoning.KittyFilter())
-        this.SummonGroup.enumUnitsInRange(
+        RingOfSummoning.SummonGroup.enumUnitsInRange(
             GetLocationX(targetedPoint),
             GetLocationY(targetedPoint),
             RingOfSummoning.SUMMONING_RING_RADIUS,
             filter
         )
-        this.SummonGroup.removeUnit(summoningKittyUnit) // Ensure self is not included
+        RingOfSummoning.SummonGroup.removeUnit(summoningKittyUnit) // Ensure self is not included
 
         // Summon loop
         let count = 0
-        while (this.SummonGroup.first && count < numberOfSummons) {
-            const unit: Unit = this.SummonGroup.first
-            this.SummonGroup.removeUnit(unit)
+        while (RingOfSummoning.SummonGroup.first && count < numberOfSummons) {
+            const unit: Unit = RingOfSummoning.SummonGroup.first
+            RingOfSummoning.SummonGroup.removeUnit(unit)
 
             const kitty: Kitty = Globals.ALL_KITTIES.get(unit.owner)!
             if (
