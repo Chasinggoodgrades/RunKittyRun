@@ -20,17 +20,23 @@ export class UnitWithinRange {
     }
 
     public static DeRegisterUnitWithinRangeUnit = (kitty: Kitty) => {
+        if (!kitty.c_Collision || !kitty.w_Collision) return
         kitty.w_Collision.removeActions()
         kitty.c_Collision.removeActions()
         kitty.w_Collision.destroy()
         kitty.c_Collision.destroy()
+        kitty.w_Collision = null as never
+        kitty.c_Collision = null as never
     }
 
     public static DeRegisterUnitWithinRangeUnitShadow = (shadowKitty: ShadowKitty) => {
+        if (!shadowKitty.cCollision || !shadowKitty.wCollision) return
         shadowKitty.cCollision.removeActions()
         shadowKitty.wCollision.removeActions()
         shadowKitty.wCollision.destroy()
         shadowKitty.cCollision.destroy()
+        shadowKitty.wCollision = null as never
+        shadowKitty.cCollision = null as never
     }
 
     public static RegisterUnitWithinRangeTrigger = (

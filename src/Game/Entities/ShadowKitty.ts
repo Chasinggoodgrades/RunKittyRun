@@ -18,9 +18,9 @@ export class ShadowKitty {
 
     public Active = false
 
-    public wCollision!: Trigger
+    public wCollision!: Trigger | null
 
-    public cCollision!: Trigger
+    public cCollision!: Trigger | null
 
     public ID = 0
 

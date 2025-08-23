@@ -58,14 +58,15 @@ export class CollisionDetection {
 
     public static KittyRegisterCollisions = (k: Kitty) => {
         const WOLF_COLL_RADIUS = k.CurrentStats.CollisonRadius
-        k.w_Collision = Trigger.create()!
-        k.c_Collision = Trigger.create()!
+        k.w_Collision ??= Trigger.create()!
+        k.c_Collision ??= Trigger.create()!
+        if (!k.w_Collision || !k.c_Collision) return
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
             WOLF_COLL_RADIUS,
             CollisionDetection.WolfCollisionFilter(k),
-            CollisionDetection.WolfCollisionTrigger(k)
+            CollisionDetection.WolfCollisionTrigger(k)!
         )
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             k.Unit,
@@ -76,8 +77,8 @@ export class CollisionDetection {
     }
 
     public static ShadowKittyRegisterCollision = (sk: ShadowKitty) => {
-        sk.wCollision = Trigger.create()!
-        sk.cCollision = Trigger.create()!
+        sk.wCollision ??= Trigger.create()!
+        sk.cCollision ??= Trigger.create()!
 
         UnitWithinRange.RegisterUnitWithinRangeTrigger(
             sk.Unit,
@@ -94,6 +95,7 @@ export class CollisionDetection {
     }
 
     private static WolfCollisionTrigger(k: Kitty) {
+        if (!k.w_Collision) return
         k.w_Collision.addAction(() => {
             try {
                 if (!k.Unit.isAlive()) return
@@ -114,6 +116,7 @@ export class CollisionDetection {
     }
 
     private static CircleCollisionTrigger(k: Kitty): Trigger {
+        if (!k.c_Collision) return null as never
         k.c_Collision.addAction(() => {
             try {
                 const circle = Globals.ALL_KITTIES.get(getFilterUnit()!.owner)!
@@ -128,6 +131,7 @@ export class CollisionDetection {
     }
 
     private static WolfCollisionShadowTrigger(sk: ShadowKitty): Trigger {
+        if (!sk.wCollision) return null as never
         sk.wCollision.addAction(() => {
             if (NamedWolves.ExplodingWolfCollision(getFilterUnit(), sk.Kitty, true)) return // Floating text will appear on kitty instead of SK tho.
             sk.KillShadowKitty()
@@ -136,6 +140,7 @@ export class CollisionDetection {
     }
 
     private static CircleCollisionShadowTrigger(sk: ShadowKitty): Trigger {
+        if (!sk.cCollision) return null as never
         sk.cCollision.addAction(() => {
             try {
                 const circle = Globals.ALL_KITTIES.get(getFilterUnit().owner)!

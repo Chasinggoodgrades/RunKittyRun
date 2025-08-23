@@ -77,8 +77,8 @@ export class Kitty {
     public Finished = false
     public TeamID = 0
     public ProgressZone = 0
-    public w_Collision!: Trigger
-    public c_Collision!: Trigger
+    public w_Collision!: Trigger | null
+    public c_Collision!: Trigger | null
     public Disco: Disco
     public InvulTimer = Timer.create()
     public IsChained = false
@@ -284,8 +284,8 @@ export class Kitty {
 
     public dispose = () => {
         this.Alive = false
-        this.w_Collision.destroy()
-        this.c_Collision.destroy()
+        this.w_Collision?.destroy()
+        this.c_Collision?.destroy()
         this.YellowLightning.dispose()
         this.TimeProg.dispose()
         this.APMTracker.dispose()

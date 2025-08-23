@@ -110,7 +110,7 @@ export class Slider {
             this.kitty.Invulnerable = true
 
             this.ForcedSlideTimer.start(1.4, false, () => {
-                this.forcedSlideSpeed = null
+                this.forcedSlideSpeed = null as never
 
                 this.ForcedSlideTimer.start(0.6, false, () => {
                     this.kitty.Invulnerable = false
@@ -153,7 +153,7 @@ export class Slider {
         this.WidgetTrigger.enabled = false
         this.SliderTimer.pause()
         this.ForcedSlideTimer.pause()
-        this.forcedSlideSpeed = null
+        this.forcedSlideSpeed = null as never
         this.kitty.Invulnerable = false
         this.remainingDegreesToTurn = 0
         this.slideCurrentTurnPerPeriod = 0
@@ -176,7 +176,7 @@ export class Slider {
             (this.kitty.IsMirror ? -1 : 1) * this.kitty.Unit.moveSpeed
         const slidePerTick = slideSpeed * this.SLIDE_INTERVAL
 
-        const angle = Rad2Deg(this.kitty.Unit.facing)
+        const angle = Deg2Rad(this.kitty.Unit.facing)
 
         const oldX = this.kitty.Unit.x
         const oldY = this.kitty.Unit.y
@@ -230,7 +230,7 @@ export class Slider {
             angle = Atan2(orderY - unit.y, orderX - unit.x) * bj_RADTODEG
         }
 
-        const currentAngle = GetUnitFacing(unit.handle)
+        const currentAngle = unit.facing
         this.setRemainingDegreesToTurn(this.AnglesDiff(angle, currentAngle))
     }
 

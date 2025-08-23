@@ -70,11 +70,17 @@ export class AIController {
         this.enabled = false
     }
 
+    /**
+     * Starts the AI controller for the kitty
+     */
     public StartAi = () => {
         this.enabled = true
         this.ResumeAi()
     }
 
+    /**
+     * Resumes the AI movement timer and clears any claimed kitties
+     */
     public ResumeAi = () => {
         if (!this.enabled) return
 
@@ -89,11 +95,17 @@ export class AIController {
         }
     }
 
+    /**
+     * Stops the AI controller completely
+     */
     public StopAi = () => {
         this.enabled = false
         this.PauseAi()
     }
 
+    /**
+     * Pauses the AI movement timer and cleans up resources
+     */
     public PauseAi = () => {
         this.lastCommand = ''
         this.lastX = 0
@@ -119,10 +131,18 @@ export class AIController {
         }
     }
 
+    /**
+     * Returns whether the AI controller is currently enabled
+     */
     public IsEnabled(): boolean {
         return this.enabled
     }
 
+    /**
+     * Calculates the current progress zone for the given kitty
+     * @param kitty The kitty to calculate the progress zone for
+     * @returns The current progress zone ID
+     */
     private CalcProgressZone = (kitty: Kitty) => {
         let currentProgressZoneId = kitty.ProgressZone
 
@@ -133,6 +153,9 @@ export class AIController {
         return currentProgressZoneId
     }
 
+    /**
+     * Handles the main AI movement logic - determines target position and moves kitty
+     */
     private MoveKittyToPosition = () => {
         const currentProgressZoneId = this.CalcProgressZone(this.kitty)
         const currentSafezone = Globals.SAFE_ZONES[currentProgressZoneId]
@@ -303,6 +326,12 @@ export class AIController {
         }
     }
 
+    /**
+     * Checks if the given coordinates are within the lane bounds for the current progress zone
+     * @param x The X coordinate to check
+     * @param y The Y coordinate to check
+     * @returns True if the position is within lane bounds
+     */
     private IsWithinLaneBounds = (x: number, y: number) => {
         const currentProgressZoneId = this.kitty.ProgressZone
         const laneBounds = WolfArea.WolfAreas.get(currentProgressZoneId)!.Rectangle
@@ -320,6 +349,13 @@ export class AIController {
         }
     }
 
+    /**
+     * Checks if the given coordinates are within a specific safe zone
+     * @param x The X coordinate to check
+     * @param y The Y coordinate to check
+     * @param safeZoneId The ID of the safe zone to check
+     * @returns True if the position is within the safe zone
+     */
     private IsInSafeZone = (x: number, y: number, safeZoneId: number) => {
         if (safeZoneId < 0 || safeZoneId >= Globals.SAFE_ZONES.length) {
             return false // prevent out of bounds errors xd
@@ -334,6 +370,13 @@ export class AIController {
         )
     }
 
+    /**
+     * Issues a movement or position order to the kitty with debouncing
+     * @param command The command to issue (e.g., 'move')
+     * @param x The target X coordinate
+     * @param y The target Y coordinate
+     * @param isDodge Whether this is a dodge movement (affects minimum distance threshold)
+     */
     private IssueOrder = (command: string, x: number, y: number, isDodge: boolean) => {
         const MIN_MOVE_DISTANCE = isDodge ? 16.0 : 64.0
 
@@ -369,6 +412,10 @@ export class AIController {
         this.kitty.Unit.issueOrderAt(command, x, y)
     }
 
+    /**
+     * Issues a basic order to the kitty without coordinates
+     * @param command The command to issue
+     */
     private IssueOrderBasic = (command: string) => {
         this.lastCommand = command
         this.lastX = -1
@@ -378,6 +425,11 @@ export class AIController {
         this.kitty.Unit.issueImmediateOrder(command)
     }
 
+    /**
+     * Gets the center position of a given safe zone
+     * @param safezone The safe zone to get the center of
+     * @returns Array containing [centerX, centerY] coordinates
+     */
     private GetCenterPositionInSafezone = (safezone: Safezone) => {
         const centerX = (safezone.Rectangle.minX + safezone.Rectangle.maxX) / 2
         const centerY = (safezone.Rectangle.minY + safezone.Rectangle.maxY) / 2
@@ -385,8 +437,9 @@ export class AIController {
     }
 
     /**
-     * For the wall to be within range of the kitty, basically what has to happen is that a line passes through the circle at two points.
-     * Using the mathematical formula for a line passing through two points on a circle, this can be calculated.
+     * Calculates crossing points where the kitty's dodge range intersects with lane boundaries.
+     * For walls to be within range of the kitty, a line must pass through the circle at two points.
+     * Uses mathematical formula for a line passing through two points on a circle.
      */
     CalcCrossingPoints = () => {
         for (let i = 0; i < this.wallPoints.length; i++) {
@@ -440,8 +493,10 @@ export class AIController {
     }
 
     /**
-     * This function find the angle formed among two points of the circumference
-     * and the center on the X axis
+     * Calculates the angles formed by two points on the circumference relative to the center
+     * @param pointA First point on the circumference
+     * @param pointB Second point on the circumference
+     * @returns Array containing [angleA, angleB] in radians
      */
     AnglesFromCenter(pointA: [number, number], pointB: [number, number]) {
         const angleA = this.AngleOf(pointA, [this.kitty.Unit.x, this.kitty.Unit.y])
@@ -449,6 +504,12 @@ export class AIController {
         return [angleA, angleB]
     }
 
+    /**
+     * Calculates the angle of a point relative to a center point
+     * @param point The point to calculate the angle for
+     * @param center The center point to calculate from
+     * @returns The normalized angle in radians
+     */
     AngleOf(point: [number, number], center: [number, number]) {
         const deltaX = point[0] - center[0]
         const deltaY = point[1] - center[1]
@@ -456,7 +517,13 @@ export class AIController {
         return this.NormalizeAngle(radians)
     }
 
-    // Rewritten GetCompositeDodgePosition using a reusable struct array instead of creating new objects.
+    /**
+     * Calculates the optimal dodge position to avoid wolves while moving toward the target.
+     * Uses a reusable struct array instead of creating new objects for better performance.
+     * @param wolves Array of wolves to dodge
+     * @param forwardDirection The desired forward direction as [x, y]
+     * @returns The optimal dodge position as [x, y] coordinates
+     */
     private GetCompositeDodgePosition = (wolves: Wolf[], forwardDirection: [number, number]) => {
         const forwardAngle = this.NormalizeAngle(Math.atan2(forwardDirection[1], forwardDirection[0]))
         const requiredClearance = 22.5 * (Math.PI / 180)
@@ -624,6 +691,7 @@ export class AIController {
         }
 
         if (bestCandidateAngle === -500) {
+            print('No valid dodge angle found')
             this.cleanArrays()
             return [this.kitty.Unit.x, this.kitty.Unit.y]
         }
@@ -640,6 +708,12 @@ export class AIController {
         ]
     }
 
+    /**
+     * Calculates the best angle to move in, considering required clearance from obstacles
+     * @param forwardAngle The desired forward angle in radians
+     * @param requiredClearance The minimum clearance required in radians
+     * @returns The best angle to move in, or -500 if no valid angle found
+     */
     private calcAngle = (forwardAngle: number, requiredClearance: number) => {
         // Initialize bestAngle to the original forward direction
         let bestAngle = -500
@@ -711,6 +785,12 @@ export class AIController {
         return bestAngle
     }
 
+    /**
+     * Checks if an angle falls within a given angle interval
+     * @param angle The angle to check (in radians)
+     * @param interval The angle interval to check against
+     * @returns True if the angle is within the interval
+     */
     private IsAngleInInterval = (angle: number, interval: AngleInterval) => {
         // Normalize the angle and interval boundaries to [0, 2π)
         angle = this.NormalizeAngle(angle)
@@ -726,6 +806,9 @@ export class AIController {
         return angle >= start || angle <= end
     }
 
+    /**
+     * Cleans up temporary arrays used for angle calculations and disposes of objects
+     */
     private cleanArrays = () => {
         for (let i = 0; i < this.blockedIntervals.length; i++) {
             this.blockedIntervals[i].dispose()
@@ -741,6 +824,10 @@ export class AIController {
         this.mergedIntervals = []
     }
 
+    /**
+     * Visualizes a blocked angle interval using lightning effects
+     * @param interval The angle interval to visualize
+     */
     private VisualizeBlockedInterval = (interval: AngleInterval) => {
         if (!this.laser) {
             return
@@ -771,6 +858,10 @@ export class AIController {
         }
     }
 
+    /**
+     * Visualizes a free angle interval using lightning effects
+     * @param interval The angle interval to visualize
+     */
     private VisualizeFreeInterval = (interval: AngleInterval) => {
         if (!this.laser) {
             return
@@ -801,6 +892,9 @@ export class AIController {
         }
     }
 
+    /**
+     * Hides all blocked lightning effects by moving them to (0,0) and returning them to the available pool
+     */
     private HideAllLightnings = () => {
         for (let i = 0; i < this.usedBlockedLightnings.length; i++) {
             const lightning = this.usedBlockedLightnings[i]
@@ -811,6 +905,9 @@ export class AIController {
         this.usedBlockedLightnings = []
     }
 
+    /**
+     * Hides all free lightning effects by moving them to (0,0) and returning them to the available pool
+     */
     private HideAllFreeLightnings = () => {
         for (let i = 0; i < this.usedClearLightnings.length; i++) {
             const lightning = this.usedClearLightnings[i]
@@ -821,23 +918,32 @@ export class AIController {
         this.usedClearLightnings = []
     }
 
-    /// <summary>
-    /// Normalizes an angle (in radians) to the range [0, 2π).
-    /// </summary>
+    /**
+     * Normalizes an angle (in radians) to the range [0, 2π)
+     * @param angle The angle to normalize
+     * @returns The normalized angle
+     */
     private NormalizeAngle = (angle: number) => {
         while (angle < 0) angle += 2 * Math.PI
         while (angle >= 2 * Math.PI) angle -= 2 * Math.PI
         return angle
     }
 
-    /// <summary>
-    /// Returns the smallest difference (in radians) between two angles.
-    /// </summary>
+    /**
+     * Returns the smallest difference (in radians) between two angles
+     * @param a First angle
+     * @param b Second angle
+     * @returns The absolute difference between the angles
+     */
     private AngleDifference = (a: number, b: number) => {
         const diff = ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI
         return Math.abs(diff)
     }
 
+    /**
+     * Sorts an array of angle intervals by their start angle using bubble sort
+     * @param intervals The array of angle intervals to sort
+     */
     private SortAngleIntervals = (intervals: AngleInterval[]) => {
         for (let i = 0; i < intervals.length - 1; i++) {
             for (let j = 0; j < intervals.length - i - 1; j++) {
@@ -851,9 +957,10 @@ export class AIController {
         }
     }
 
-    /// <summary>
-    /// Merges overlapping angular intervals.
-    /// </summary>
+    /**
+     * Merges overlapping angular intervals into a single merged list
+     * @param intervals The array of intervals to merge
+     */
     private MergeIntervals = (intervals: AngleInterval[]) => {
         this.SortAngleIntervals(intervals)
 
@@ -872,11 +979,23 @@ export class AIController {
         this.mergedIntervals.push(current)
     }
 
+    /**
+     * Checks if two points are within a specified radius of each other
+     * @param x1 First point X coordinate
+     * @param y1 First point Y coordinate
+     * @param x2 Second point X coordinate
+     * @param y2 Second point Y coordinate
+     * @param radius The radius to check within
+     * @returns True if the points are within the specified radius
+     */
     private IsWithinRadius = (x1: number, y1: number, x2: number, y2: number, radius: number) => {
         const distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
         return distance <= radius
     }
 
+    /**
+     * Main polling method that handles AI movement, skill learning, and windwalk usage
+     */
     private PollMovement = () => {
         if (!this.enabled) return
         this.elapsedTime += this.timerInterval
@@ -885,6 +1004,9 @@ export class AIController {
         this.MoveKittyToPosition()
     }
 
+    /**
+     * Automatically learns available skills for the kitty
+     */
     private LearnSkills = () => {
         if (this.kitty.Unit.skillPoints > 0) {
             this.kitty.Unit.selectSkill(Constants.ABILITY_WIND_WALK)
@@ -893,6 +1015,9 @@ export class AIController {
         }
     }
 
+    /**
+     * Uses windwalk ability if available and kitty has sufficient mana
+     */
     private UseWindWalkIfAvailable = () => {
         const wwLvl = GetUnitAbilityLevel(this.kitty.Unit.handle, Constants.ABILITY_WIND_WALK)
 
@@ -911,9 +1036,9 @@ export class AIController {
     }
 }
 
-/// <summary>
-/// Helper class representing an angular interval [Start, End] in radians.
-/// </summary>
+/**
+ * Helper class representing an angular interval [Start, End] in radians.
+ */
 export class AngleInterval extends IDisposable {
     public Start = 0
     public End = 0
@@ -924,11 +1049,17 @@ export class AngleInterval extends IDisposable {
         this.End = end
     }
 
+    /**
+     * Disposes of the angle interval object
+     */
     public dispose = () => {
         MemoryHandler.destroyObject(this)
     }
 }
 
+/**
+ * Helper class representing a 2D point with x and y coordinates
+ */
 export class Point extends IDisposable {
     public x = 0
     public y = 0
@@ -939,6 +1070,9 @@ export class Point extends IDisposable {
         this.y = y
     }
 
+    /**
+     * Disposes of the point object
+     */
     public dispose = () => {
         MemoryHandler.destroyObject(this)
     }

@@ -13,7 +13,7 @@ export class WolfPoint {
     public static StopOrderID: number
     public static AttackOrderID: number
     public static HoldPositionOrderID: number
-    public static IsPausedTrigger: Trigger
+    public static IsPausedTrigger: Trigger | null
 
     private Wolf: Wolf
     private PointInfo: (WolfPointInfo[] & IDestroyable) | undefined

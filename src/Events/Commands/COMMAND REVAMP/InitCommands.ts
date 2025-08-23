@@ -1786,14 +1786,18 @@ export class InitCommands {
             alias: '',
             group: 'admin',
             argDesc: '',
-            description: 'Getting wolf timer address information',
+            description: 'Testing if we can null something...',
             action: (player, args) => {
-                const selectedUnit = CustomStatFrame.SelectedUnit.get(player)
-                if (!selectedUnit) return
-                if (!Globals.ALL_WOLVES.has(selectedUnit)) return
-                const wolf = Globals.ALL_WOLVES.get(selectedUnit)!
-                const timerAddress = `WCTimerAddresses:${wolf.WanderTimer} : ${wolf.EffectTimer}`
-                print(`${timerAddress}`)
+                let timer = Timer.create()
+                timer = null as never
+                print(`${timer} A`)
+                timer ??= Timer.create()
+                print(`${timer} B`)
+                timer = null as any
+                print(`${timer} C`)
+                timer ??= Timer.create()
+                print(`${timer} D`)
+                let test = 5
             },
         })
 
