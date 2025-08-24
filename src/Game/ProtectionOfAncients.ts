@@ -11,8 +11,8 @@ import { Kitty } from './Entities/Kitty/Kitty'
 import { WolfPoint } from './WolfPoint'
 
 export class ProtectionOfAncients {
-    private static ACTIVATION_EFFECT = 'war3mapImported\\Silver: Radiance.mdx'
-    private static APPLY_EFFECT = 'war3mapImported\\Edict: Divine.mdx'
+    private static ACTIVATION_EFFECT = 'war3mapImported\\Silver Radiance.mdx'
+    private static APPLY_EFFECT = 'war3mapImported\\Divine Edict.mdx'
     public static EFFECT_DELAY = 3.0
     private static EFFECT_RADIUS = 150.0
     private static EFFECT_RADIUS_INCREASE = 50.0

@@ -52,6 +52,7 @@ export class NamedWolves {
     private static CreateStanWolf = () => {
         const index = GetRandomInt(0, RegionList.WolfRegions.length - 1)
         NamedWolves.StanWolf = new Wolf(index)
+
         NamedWolves.StanWolf.PauseSelf(true)
         NamedWolves.StanWolf.Unit.setVertexColor(235, 115, 255, 255)
         NamedWolves.StanWolf.Unit.name = NamedWolves.STAN_NAME

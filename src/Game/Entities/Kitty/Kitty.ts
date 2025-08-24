@@ -35,6 +35,7 @@ import { FloatingNameTag } from 'src/UI/FloatingNames'
 import { MultiboardUtil } from 'src/UI/Multiboard/MultiboardUtil'
 import { CameraUtil } from 'src/Utility/CameraUtil'
 import { ColorUtils } from 'src/Utility/Colors/ColorUtils'
+import { MemoryHandler } from 'src/Utility/MemoryHandler/MemoryHandler'
 import { Utility } from 'src/Utility/Utility'
 import { MapPlayer, Point, Timer, Trigger, Unit } from 'w3ts'
 import { Circle } from '../Circle'
@@ -79,7 +80,7 @@ export class Kitty {
     public ProgressZone = 0
     public w_Collision!: Trigger | null
     public c_Collision!: Trigger | null
-    public Disco: Disco
+    public Disco: Disco | null
     public InvulTimer = Timer.create()
     public IsChained = false
     public IsMirror = false
@@ -104,7 +105,7 @@ export class Kitty {
         this.KittyMorphosis = new KittyMorphosis(this)
         this.ShadowKitty = new ShadowKitty(this)
         Globals.ALL_KITTIES_LIST.push(this)
-        this.Disco = new Disco(this.Unit)
+        this.Disco = MemoryHandler.getEmptyClass(Disco, this.Unit)
         this.StartAIController()
     }
 

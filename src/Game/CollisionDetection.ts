@@ -18,7 +18,7 @@ export class CollisionDetection {
     private static CIRCLE_COLLISION_RADIUS = 78.0
 
     private static IsBeaconOfUnitedLifeforce = (r: Relic): r is BeaconOfUnitedLifeforce => {
-        return r instanceof BeaconOfUnitedLifeforce
+        return r.constructor.name === BeaconOfUnitedLifeforce.name
     }
 
     private static WolfCollisionFilter(k: Kitty): () => boolean {

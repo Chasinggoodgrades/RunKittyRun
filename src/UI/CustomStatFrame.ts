@@ -235,7 +235,7 @@ export class CustomStatFrame {
         if (selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG) CustomStatFrame.SetWolfAffixTexts(selectedUnit)
         if (!PROD && selectedUnit.typeId === Constants.UNIT_CUSTOM_DOG)
             CustomStatFrame.Stats[4].Text.text = `Walk: ${Globals.ALL_WOLVES.get(selectedUnit)!.IsWalking}`
-        CustomStatFrame.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`
+        CustomStatFrame.Stats[5].Text.text = `${CustomStatFrame.MoveSpeed} ${Math.ceil(selectedUnit.moveSpeed)}`
     }
 
     private static SetWolfAffixTexts = (selectedUnit: Unit) => {
@@ -287,7 +287,7 @@ export class CustomStatFrame {
 
     private static SetCommonFrameText = (selectedUnit: Unit) => {
         CustomStatFrame.Stats[4].Text.setText(`${CustomStatFrame.Gold} ${CustomStatFrame.GetPlayerGold(selectedUnit)}`)
-        CustomStatFrame.Stats[5].Text.setText(`${CustomStatFrame.MoveSpeed} ${selectedUnit.moveSpeed}`)
+        CustomStatFrame.Stats[5].Text.setText(`${CustomStatFrame.MoveSpeed} ${Math.ceil(selectedUnit.moveSpeed)}`)
         CustomStatFrame.Stats[2].Text.setText(
             `${CustomStatFrame.Deaths} ${Colors.COLOR_RED}${CustomStatFrame.GetPlayerDeaths(selectedUnit)}|r`
         )

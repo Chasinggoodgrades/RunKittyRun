@@ -144,6 +144,7 @@ export class Kibble extends IDisposable {
     private static JackpotEffect = (kitty: Kitty, kibble: Kibble) => {
         const unitX = kitty.Unit.x
         const unitY = kitty.Unit.y
+        if (!kibble.JackPotIndex) kibble.JackPotIndex = 0
         const newX = PositionWithPolarOffsetRadX(unitX, 150.0, kibble.JackPotIndex * 36.0)
         const newY = PositionWithPolarOffsetRadY(unitY, 150.0, kibble.JackPotIndex * 36.0)
 

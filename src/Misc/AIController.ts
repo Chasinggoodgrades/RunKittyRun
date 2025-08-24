@@ -691,7 +691,6 @@ export class AIController {
         }
 
         if (bestCandidateAngle === -500) {
-            print('No valid dodge angle found')
             this.cleanArrays()
             return [this.kitty.Unit.x, this.kitty.Unit.y]
         }

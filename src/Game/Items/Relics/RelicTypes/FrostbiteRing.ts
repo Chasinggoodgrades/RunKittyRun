@@ -67,6 +67,7 @@ export class FrostbiteRing extends Relic {
     public override RemoveEffect(Unit: Unit) {
         this.Trigger?.destroy()
         this.FreezeGroup?.destroy()
+        this.FreezeGroup = undefined
         Unit.disableAbility(FrostbiteRing.RelicAbilityID, false, true)
     }
 
@@ -132,17 +133,19 @@ export class FrostbiteRing extends Relic {
     }
 
     private SetAbilityCooldown = (Unit: Unit) => {
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.owner).GetUpgradeLevel(FrostbiteRing.name)
         const currentCooldown = BlzGetAbilityCooldown(FrostbiteRing.RelicAbilityID, 0)
-        const newCooldown =
+        let newCooldown =
             upgradeLevel >= 3 ? currentCooldown - FrostbiteRing.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
+        print(`FrostbiteRing cooldown for ${Unit.id} set to ${newCooldown}`)
+        print('Upgrade Level: ' + upgradeLevel)
         RelicUtil.SetAbilityCooldown(Unit, FrostbiteRing.RelicItemID, FrostbiteRing.RelicAbilityID, newCooldown)
     }
 
     private GetFreezeDuration(): number {
         if (!this.Owner) return 0
-        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(this.name)
+        const upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(this.Owner).GetUpgradeLevel(FrostbiteRing.name)
         return FrostbiteRing.DEFAULT_FREEZE_DURATION + upgradeLevel
     }
 

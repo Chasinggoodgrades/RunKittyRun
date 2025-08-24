@@ -80,7 +80,7 @@ export class Wolf {
 
     public StartWandering = (forced = false) => {
         let realTime = GetRandomReal(1.0, 1.12)
-        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving) {
+        if ((this.ShouldStartEffect() || forced) && !this.paused && !this.IsReviving && this != NamedWolves.StanWolf) {
             this.ApplyEffect()
             realTime = this.NEXT_WANDER_DELAY // Gives a brief delay before the wolf has a chance to move again.
         }

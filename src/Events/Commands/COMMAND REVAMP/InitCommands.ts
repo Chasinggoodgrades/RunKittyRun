@@ -446,12 +446,12 @@ export class InitCommands {
                         }
                     } else {
                         CommandsManager.ResolvePlayerId(args[1], kitty => {
-                            kitty.Disco.ToggleDisco(status)
+                            kitty.Disco?.ToggleDisco(status)
                         })
                     }
                 } else {
                     const playerKitty = Globals.ALL_KITTIES.get(player)!
-                    playerKitty.Disco.ToggleDisco(status)
+                    playerKitty.Disco?.ToggleDisco(status)
                 }
 
                 player.DisplayTextTo(Colors.COLOR_GOLD + 'Disco: ' + (status ? 'On' : 'Off'))

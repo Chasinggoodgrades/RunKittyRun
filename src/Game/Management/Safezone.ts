@@ -89,9 +89,8 @@ export class Safezone {
 
         for (let i = 0; i < kitty.Relics.length; i++) {
             const relic = kitty.Relics[i]
-            if (relic instanceof FangOfShadows) {
-                const fangOfShadows: FangOfShadows = relic
-                fangOfShadows.ReduceCooldownAtSafezone(kitty.Unit)
+            if (relic.constructor.name === FangOfShadows.name) {
+                ;(relic as FangOfShadows).ReduceCooldownAtSafezone(kitty.Unit)
                 break
             }
         }
