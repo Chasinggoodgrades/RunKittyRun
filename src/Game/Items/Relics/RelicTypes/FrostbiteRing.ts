@@ -138,8 +138,6 @@ export class FrostbiteRing extends Relic {
         let newCooldown =
             upgradeLevel >= 3 ? currentCooldown - FrostbiteRing.UPGRADE_COOLDOWN_REDUCTION : currentCooldown
 
-        print(`FrostbiteRing cooldown for ${Unit.id} set to ${newCooldown}`)
-        print('Upgrade Level: ' + upgradeLevel)
         RelicUtil.SetAbilityCooldown(Unit, FrostbiteRing.RelicItemID, FrostbiteRing.RelicAbilityID, newCooldown)
     }
 

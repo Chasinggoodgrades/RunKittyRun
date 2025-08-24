@@ -26,7 +26,7 @@ export class Disco extends IDisposable {
         if (enable) {
             if (this.Enabled) return
             this.Enabled = true
-            this.DiscoTimer.start(0.4, true, this.DiscoActions)
+            this.DiscoTimer.start(0.4, true, () => this.DiscoActions())
         } else {
             this.DiscoTimer.pause()
             this.Enabled = false
@@ -37,11 +37,12 @@ export class Disco extends IDisposable {
 
     private DiscoActions = () => {
         this.Unit.color = ConvertPlayerColor(GetRandomInt(0, 24))!
-        this.Unit.setVertexColor(
+        SetUnitVertexColorBJ(
+            this.Unit.handle,
             GetRandomPercentageBJ(),
             GetRandomPercentageBJ(),
             GetRandomPercentageBJ(),
-            GetRandomReal(0, 25)
+            GetRandomInt(0, 25)
         )
     }
 }
