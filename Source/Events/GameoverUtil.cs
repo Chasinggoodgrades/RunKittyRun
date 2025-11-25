@@ -26,6 +26,7 @@ public static class GameoverUtil
                     SetNightmareGameStats(kitty.Value);
                     break;
             }
+            SetBestGameRoundTimes(kitty.Value);
         }
     }
 
@@ -90,7 +91,7 @@ public static class GameoverUtil
     {
         var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
         if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = Globals.GAME_TIMER.Remaining;
+        stats.Time = GetOverallGameTime();
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -99,7 +100,7 @@ public static class GameoverUtil
     {
         var stats = kitty.SaveData.BestGameTimes.HardGameTime;
         if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = Globals.GAME_TIMER.Remaining;
+        stats.Time = GetOverallGameTime();
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -108,7 +109,7 @@ public static class GameoverUtil
     {
         var stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime;
         if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = Globals.GAME_TIMER.Remaining;
+        stats.Time = GetOverallGameTime();
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -117,7 +118,7 @@ public static class GameoverUtil
     {
         var stats = kitty.SaveData.BestGameTimes.NightmareGameTime;
         if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = Globals.GAME_TIMER.Remaining;
+        stats.Time = GetOverallGameTime();
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -126,4 +127,61 @@ public static class GameoverUtil
     {
         return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
     }
+
+    /// <summary>
+    /// Goes based off finished game times incase players want to wait at the finish for players to catch up.
+    /// </summary>
+    /// <returns></returns>
+    private static float GetOverallGameTime()
+    {
+        var total = 0.0f;
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        {
+            total += GameTimer.FinishedTimes[i];
+        }
+        return total;
+    }
+
+    private static void SetBestGameRoundTimes(Kitty kitty)
+    {
+        // Get the correct best game time data object based on difficulty
+        object bestGameTimeData = Difficulty.DifficultyValue switch
+        {
+            (int)DifficultyLevel.Normal => kitty.SaveData.BestGameTimes.NormalGameTime,
+            (int)DifficultyLevel.Hard => kitty.SaveData.BestGameTimes.HardGameTime,
+            (int)DifficultyLevel.Impossible => kitty.SaveData.BestGameTimes.ImpossibleGameTime,
+            (int)DifficultyLevel.Nightmare => kitty.SaveData.BestGameTimes.NightmareGameTime,
+            _ => null
+        };
+
+        if (bestGameTimeData == null)
+            return;
+
+        // For each round, set the RoundXTime property using FinishedTimes
+        for (int round = 1; round <= Gamemode.NumberOfRounds; round++)
+        {
+            string propertyName = round switch
+            {
+                1 => "RoundOneTime",
+                2 => "RoundTwoTime",
+                3 => "RoundThreeTime",
+                4 => "RoundFourTime",
+                5 => "RoundFiveTime",
+                _ => null
+            };
+
+            if (propertyName == null)
+                continue;
+
+            var prop = bestGameTimeData.GetType().GetProperty(propertyName);
+            if (prop != null)
+            {
+                float finishedTime = GameTimer.FinishedTimes[round];
+                prop.SetValue(bestGameTimeData, finishedTime);
+            }
+        }
+    }
+
+
+
 }

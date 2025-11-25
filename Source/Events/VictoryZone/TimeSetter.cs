@@ -1,13 +1,21 @@
 ﻿using System;
 using WCSharp.Api;
 
-public static class TimeSetter
+public class TimeSetter
 {
+    private static readonly TimeSetter _instance = new TimeSetter();
+    public static TimeSetter Instance => _instance;
+    public bool RoundTimeSet { get; private set; }
+
+    private TimeSetter()
+    {
+    }
+
     /// <summary>
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
     /// </summary>
     /// <param name="player"></param>
-    public static bool SetRoundTime(player player)
+    public bool SetRoundTime(Kitty kitty)
     {
         try
         {
@@ -15,9 +23,11 @@ public static class TimeSetter
             var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
-            if (!Globals.ALL_KITTIES[player].CanEarnAwards) return false;
 
-            if (currentTime <= 90) return false; // Below 90 seconds is impossible and not valid.. Don't save
+            if (kitty.CurrentStats.RoundFinished) return false;
+            if (!kitty.CanEarnAwards) return false;
+
+            if (currentTime <= 90 && !Source.Program.Debug) return false; // Below 90 seconds is impossible and not valid.. Don't save, particularly with debug / dev testing
 
             if (!standard && !solo) return false;
 
@@ -25,13 +35,14 @@ public static class TimeSetter
             if (solo) roundString = GetSoloEnum();
             if (currentTime >= 3599.00f) return false; // 59min 59 second cap
 
-            var property = Globals.ALL_KITTIES[player].SaveData.RoundTimes.GetType().GetProperty(roundString);
-            var value = (float)property.GetValue(Globals.ALL_KITTIES[player].SaveData.RoundTimes);
+            var property = kitty.SaveData.RoundTimes.GetType().GetProperty(roundString);
+            var value = (float)property.GetValue(kitty.SaveData.RoundTimes);
+
+            CreateTimeTextTag(kitty, currentTime);
 
             if (currentTime >= value && value != 0) return false;
-
-            SetSavedTime(player, roundString);
-            PersonalBestAwarder.BeatRecordTime(player);
+            SetSavedTime(kitty.Player, roundString);
+            PersonalBestAwarder.BeatRecordTime(kitty.Player);
 
             return true;
         }
@@ -42,7 +53,17 @@ public static class TimeSetter
         }
     }
 
-    public static string GetRoundEnum()
+    private void CreateTimeTextTag(Kitty k, float currentTime)
+    {
+        texttag timeText = texttag.Create();
+        timeText.SetPosition(k.Unit.X, k.Unit.Y, -120.0f);
+        timeText.SetText($"{Colors.GetStringColorOfPlayer(k.Player.Id + 1)}{Utility.ConvertFloatToTime(currentTime, k.Player.Id + 1)}", 0.025f);
+        timeText.SetVelocity(0, 0.02f);
+        timeText.SetVisibility(true);
+        Utility.SimpleTimer(3.0f, () => timeText.Dispose());
+    }
+
+    public string GetRoundEnum()
     {
         var currentDiff = Difficulty.DifficultyValue;
         string roundEnum;
@@ -69,20 +90,20 @@ public static class TimeSetter
         return roundEnum;
     }
 
-    public static string GetSoloEnum()
+    public string GetSoloEnum()
     {
         var roundEnum = GetSoloRoundEnum();
         return roundEnum;
     }
 
-    private static void SetSavedTime(player player, string roundString)
+    private void SetSavedTime(player player, string roundString)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
         property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
     }
 
-    private static string GetNormalRoundEnum()
+    private string GetNormalRoundEnum()
     {
         var gameTimeData = Globals.GAME_TIMES;
         var round = Globals.ROUND;
@@ -109,7 +130,7 @@ public static class TimeSetter
         }
     }
 
-    private static string GetHardRoundEnum()
+    private string GetHardRoundEnum()
     {
         var round = Globals.ROUND;
         var gameTimeData = Globals.GAME_TIMES;
@@ -136,7 +157,7 @@ public static class TimeSetter
         }
     }
 
-    private static string GetImpossibleRoundEnum()
+    private string GetImpossibleRoundEnum()
     {
         var round = Globals.ROUND;
         var gameTimeData = Globals.GAME_TIMES;
@@ -163,7 +184,7 @@ public static class TimeSetter
         }
     }
 
-    private static string GetNightmareRoundEnum()
+    private string GetNightmareRoundEnum()
     {
         var round = Globals.ROUND;
         var gameTimeData = Globals.GAME_TIMES;
@@ -190,7 +211,7 @@ public static class TimeSetter
         }
     }
 
-    private static string GetSoloRoundEnum()
+    private string GetSoloRoundEnum()
     {
         var round = Globals.ROUND;
         var gameTimeData = Globals.GAME_TIMES;
@@ -216,4 +237,28 @@ public static class TimeSetter
                 return "";
         }
     }
+
+    public void SetRoundFinishedTime()
+    {
+        try
+        {
+            var currentTime = GameTimer.RoundTime[Globals.ROUND];
+
+            if (RoundTimeSet) return;
+
+            GameTimer.FinishedTimes[Globals.ROUND] = (float)Math.Round(currentTime, 2);
+            RoundTimeSet = true;
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Error in TimeSetter.SetRoundFinishedTime: {e.Message}");
+            throw;
+        }
+    }
+
+    public void ResetFinishedTimeCapture()
+    {
+        RoundTimeSet = false;
+    }
+
 }

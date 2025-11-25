@@ -116,11 +116,16 @@ public static class StandardMultiboard
 
     private static void CurrentStatsRoundTimes()
     {
-        var color = Colors.COLOR_GREEN;
+        var roundColor = Colors.COLOR_GREEN;
+        var totalColor = Colors.COLOR_YELLOW_ORANGE;
+        var totalTime = 0.0f;
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
         {
-            CurrentStats.GetItem(0, i).SetText($"{color}{Utility.ConvertFloatToTimeInt(GameTimer.RoundTime[i])}|r");
+            CurrentStats.GetItem(0, i).SetText($"{roundColor}{Utility.ConvertFloatToTimeInt(GameTimer.FinishedTimes[i])}|r");
+            totalTime += GameTimer.FinishedTimes[i];
         }
+        CurrentStats.GetItem(0, Gamemode.NumberOfRounds + 1).SetText($"{totalColor}{Utility.ConvertFloatToTimeInt(totalTime)}|r");
+
     }
 
     private static void CurrentGameStats()

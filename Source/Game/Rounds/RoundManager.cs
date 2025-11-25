@@ -14,13 +14,13 @@ public static class RoundManager
         else RoundSetup();
     }
 
-    public static bool AddMoreRoundTime()
+    public static bool AddMoreRoundTime(float seconds = 20)
     {
         if (AddedTimeAlready) return false;
         var remainingTime = RoundTimer.StartRoundTimer.Remaining;
         if (remainingTime <= 0.0f) return false;
         AddedTimeAlready = true;
-        var tempTime = remainingTime + 20.0f; // 20 seconds
+        var tempTime = remainingTime + seconds; // 20 seconds
         RoundTimer.StartRoundTimer.Start(tempTime, false, StartRound);
         return true;
     }
@@ -99,6 +99,7 @@ public static class RoundManager
             NitroPacer.ResetNitroPacer();
             DeathlessChallenges.ResetDeathless();
             WolfLaneHider.ResetLanes();
+            TimeSetter.Instance.ResetFinishedTimeCapture();
             SaveManager.SaveAll();
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;

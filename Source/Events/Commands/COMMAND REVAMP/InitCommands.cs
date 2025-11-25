@@ -852,19 +852,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "moretime",
-            alias: "mt",
-            group: "all",
-            argDesc: "",
-            description: "Adds 20 secondsd to the round timer. Can only happen once per round.",
-            action: (player, args) =>
-            {
-                if (!RoundManager.AddMoreRoundTime()) return;
-                Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
-            }
-        );
-
-        CommandsManager.RegisterCommand(
             name: "unpauseround",
             alias: "roundunpause,rup",
             group: "admin",
@@ -1540,6 +1527,39 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "moretime",
+            alias: "mt",
+            group: "all",
+            argDesc: "",
+            description: "Adds 20 secondsd to the round timer. Can only happen once per round.",
+            action: (player, args) =>
+            {
+                if (!RoundManager.AddMoreRoundTime()) return;
+                Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "automt",
+            alias: "amt, automoretime",
+            group: "all",
+            argDesc: "[seconds] (20.00 default)",
+            description: "Automatically applies this extra time at the start of each round. Limit is 60 seconds.",
+            action: (player, args) =>
+            {
+                var timeValue = args[0] != "" ? float.Parse(args[0]) : 20.0f; // Default to 20
+                if (timeValue < 0 || timeValue > 60.0f)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: automt [seconds], seconds must be between 0 and 60.{Colors.COLOR_RESET}");
+                    return;
+                }
+                RoundManager.AddMoreRoundTime(timeValue);
+                RoundManager.ROUND_INTERMISSION = timeValue;
+                Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round and all future rounds.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "spawnkibble",
             alias: "skb",
             group: "admin",
@@ -1550,6 +1570,25 @@ public static class InitCommands
                 var amount = args[0] != "" ? int.Parse(args[0]) : ItemSpawner.NUMBER_OF_ITEMS;
                 ItemSpawner.SpawnKibble(amount);
 
+            }
+        );
+
+        // -jackpot command
+        CommandsManager.RegisterCommand(
+            name: "jackpot",
+            alias: "jp",
+            group: "all",
+            argDesc: "",
+            description: "Tells the number of jackpots all players have recieved this game.",
+            action: (player, args) =>
+            {
+                var finalString = "";
+                for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+                {
+                    var kitty = Globals.ALL_KITTIES_LIST[i];
+                    finalString += $"{Colors.PlayerNameColored(kitty.Player)}: {kitty.CurrentStats.CollectedJackpots} jackpots\n";
+                }
+                player.DisplayTimedTextTo(7.0f, finalString);
             }
         );
 
