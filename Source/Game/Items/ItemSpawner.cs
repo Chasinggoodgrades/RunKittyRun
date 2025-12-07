@@ -82,7 +82,6 @@ public static class ItemSpawner
             var kibble = ObjectPool<Kibble>.GetEmptyObject();
             kibble.SpawnKibble();
             TrackKibbles.Add(kibble);
-            ItemSpatialGrid.RegisterKibble(kibble);
         }
     }
 

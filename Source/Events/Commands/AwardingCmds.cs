@@ -192,10 +192,10 @@ public static class AwardingCmds
         var combined = "";
         foreach (var property in Globals.GAME_STATS.GetType().GetProperties())
         {
-            var value = property.GetValue(Globals.ALL_KITTIES[player].SaveData.GameStats);
+            var value = property.GetValue(Globals.ALL_KITTIES[kitty.Player].SaveData.GameStats);
             combined += $"{Colors.COLOR_YELLOW_ORANGE}{Utility.FormatAwardName(property.Name)}{Colors.COLOR_RESET}: {value}\n";
         }
-        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}");
+        player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_YELLOW}Game stats for {Colors.PlayerNameColored(kitty.Player)}:\n{Colors.HighlightString(combined)}{Colors.COLOR_RESET}", 0, 10);
     }
 
     /// <summary>

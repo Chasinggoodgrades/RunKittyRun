@@ -45,6 +45,7 @@ public class Kibble : IDisposable
         StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
         JackPotIndex = 1;
         Item = CreateItem(Type, x, y);
+        ItemSpatialGrid.RegisterKibble(this);
     }
 
     #region Kibble Initialization
@@ -157,6 +158,7 @@ public class Kibble : IDisposable
 
             Utility.TimedTextToAllPlayers(3.0f, msg); // was too long previously.
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
+            kitty.CurrentStats.GoldCollectedFromJackpots += goldAmount;
             if (isSuperJackpot)
             {
                 kitty.SaveData.KibbleCurrency.SuperJackpots += 1;

@@ -7,7 +7,7 @@ namespace Launcher
 {
     public static class MapDesc
     {
-        public static readonly string VERSION = "1.4.3TEST";
+        public static readonly string VERSION = "1.4.4";
         private static readonly string DISCORD = "discord.gg/GSu6zkNvx5";
         private static readonly string TITLE = $"|cffff0000RKR Remastered v{VERSION}|r";
         private static readonly string DATE = DateTime.Now.ToString("MM/dd/yyyy");

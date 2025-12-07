@@ -37,22 +37,18 @@ public static class VictoryZone
         else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
-            //MoveAndFinish(player);
+            MoveAndFinish(player);
             RoundManager.RoundEndCheck();
         }
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
-            var kitty = Globals.ALL_KITTIES[player];
-            kitty.Finished = true;
-
-            if (RoundManager.DidTeamEnd(kitty.TeamID))
+            // Move all team members to the start, save their time. Wait for all teams to finish.
+            foreach (var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
             {
-                Globals.ALL_TEAMS[kitty.TeamID].Finished = true;
-                if (RoundManager.RoundEndCheck()) return;
+                MoveAndFinish(teamMember);
             }
-            RoundUtilities.MoveTeamToStart(Globals.ALL_TEAMS[kitty.TeamID]);
-            if (RoundManager.RoundEndCheck()) return;
-            BarrierSetup.ActivateBarrier();
+            Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
+            RoundManager.RoundEndCheck();
         }
         MultiboardUtil.RefreshMultiboards();
     }
@@ -77,6 +73,15 @@ public static class VictoryZone
             if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false;
         }
         return true;
+    }
+
+    private static void MoveAndFinish(player player)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+        kitty.Finished = true;
+        kitty.Unit.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y);
+        Progress.CalculateProgress(kitty);
+        BarrierSetup.ActivateBarrier();
     }
 
     private static bool VictoryContainerConditions(unit u)

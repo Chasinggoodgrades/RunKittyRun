@@ -90,8 +90,9 @@ public static class GameoverUtil
     private static void SetNormalGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
-        if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = GetOverallGameTime();
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
+        stats.Time = gameTime;
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -99,8 +100,9 @@ public static class GameoverUtil
     private static void SetHardGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.HardGameTime;
-        if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = GetOverallGameTime();
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
+        stats.Time = gameTime;
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -108,8 +110,9 @@ public static class GameoverUtil
     private static void SetImpossibleGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime;
-        if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = GetOverallGameTime();
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
+        stats.Time = gameTime;
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }
@@ -117,8 +120,9 @@ public static class GameoverUtil
     private static void SetNightmareGameStats(Kitty kitty)
     {
         var stats = kitty.SaveData.BestGameTimes.NightmareGameTime;
-        if (Globals.GAME_TIMER.Remaining > stats.Time && stats.Time != 0) return;
-        stats.Time = GetOverallGameTime();
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
+        stats.Time = gameTime;
         stats.Date = DateTimeManager.DateTime.ToString();
         stats.TeamMembers = GetTeamMembers();
     }

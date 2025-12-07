@@ -1405,7 +1405,7 @@ public static class InitCommands
             name: "personalbests",
             alias: "pbs,bests",
             group: "all",
-            argDesc: "[player]",
+            argDesc: "[resolvePlayerId]",
             description: "Gets personal best stats of the passed parm player, if no parm then yourself.",
             action: (player, args) =>
             {
@@ -1422,7 +1422,7 @@ public static class InitCommands
             name: "stats",
             alias: "",
             group: "all",
-            argDesc: "",
+            argDesc: "[resolvePlayerId]",
             description: "Gets the game stats of the passed parm player, if no parm then yourself.",
             action: (player, args) =>
             {
@@ -1553,8 +1553,8 @@ public static class InitCommands
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: automt [seconds], seconds must be between 0 and 60.{Colors.COLOR_RESET}");
                     return;
                 }
-                RoundManager.AddMoreRoundTime(timeValue);
-                RoundManager.ROUND_INTERMISSION = timeValue;
+                RoundManager.AddMoreRoundTime(timeValue); // Account for current round intermission.
+                RoundManager.ROUND_INTERMISSION = timeValue + Standard.ROUND_INTERMISSION;
                 Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round and all future rounds.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
             }
         );
@@ -1586,7 +1586,7 @@ public static class InitCommands
                 for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
                 {
                     var kitty = Globals.ALL_KITTIES_LIST[i];
-                    finalString += $"{Colors.PlayerNameColored(kitty.Player)}: {kitty.CurrentStats.CollectedJackpots} jackpots\n";
+                    finalString += $"{Colors.PlayerNameColored(kitty.Player)}: {kitty.CurrentStats.CollectedJackpots} jackpots {Colors.COLOR_YELLOW}({kitty.CurrentStats.GoldCollectedFromJackpots}){Colors.COLOR_RESET}\n";
                 }
                 player.DisplayTimedTextTo(7.0f, finalString);
             }
