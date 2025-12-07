@@ -92,7 +92,7 @@ public static class AffixFactory
                 return new Vortex(unit);
 
             default:
-                Logger.Warning($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix|r");
+                Logger.Warning($"{Colors.COLOR_YELLOW_ORANGE}Invalid affix{Colors.COLOR_RESET}");
                 return null;
         }
     }

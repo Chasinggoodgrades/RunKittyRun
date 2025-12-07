@@ -4,8 +4,21 @@ using WCSharp.Api;
 public static class GameTimer
 {
     private static readonly Action _cachedGameTimer = () => StartGameTimer();
+    /// <summary>
+    /// Array of CURRENT round times in seconds for each round. Index 0 is unused.
+    /// </summary>
     public static float[] RoundTime { get; set; }
+    /// <summary>
+    /// Array of FINISHED (reached safezone 14) round times in seconds for each round. Index 0 is unused.
+    /// </summary>
+    public static float[] FinishedTimes { get; set; }
+    /// <summary>
+    /// Increment speed for the game timer.
+    /// </summary>
     public static float RoundSpeedIncrement { get; set; } = 0.12f;
+    /// <summary>
+    /// Frame handle for the game time bar display.
+    /// </summary>
     private static framehandle GameTimeBar { get; set; } = framehandle.Get("ResourceBarSupplyText", 0);
 
     /// <summary>
@@ -15,6 +28,7 @@ public static class GameTimer
     {
         Globals.GAME_TIMER_DIALOG.SetTitle("Elapsed Game Time");
         RoundTime = new float[Gamemode.NumberOfRounds + 1];
+        FinishedTimes = new float[Gamemode.NumberOfRounds + 1];
         var t = timer.Create();
         t.Start(RoundSpeedIncrement, true, _cachedGameTimer);
     }
@@ -40,6 +54,7 @@ public static class GameTimer
         if (Globals.ROUND > Gamemode.NumberOfRounds) return;
         UpdateIndividualTimes();
         UpdateTeamTimes();
+        UpdateFinishedTimes();
     }
 
     private static void UpdateIndividualTimes()
@@ -51,6 +66,13 @@ public static class GameTimer
             if (!kitty.Finished) kitty.TimeProg.IncrementRoundTime(Globals.ROUND);
         }
         //MultiboardUtil.RefreshMultiboards();
+    }
+
+    private static void UpdateFinishedTimes()
+    {
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
+        if (TimeSetter.Instance.RoundTimeSet) return; 
+        FinishedTimes[Globals.ROUND] += RoundSpeedIncrement;
     }
 
     private static void UpdateTeamTimes()

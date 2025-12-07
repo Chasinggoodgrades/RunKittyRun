@@ -18,18 +18,19 @@ public static class FinalSafezone
             var unit = @event.Unit;
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
-            if (TimeSetter.SetRoundTime(player)) MultiboardUtil.RefreshMultiboards();
+            if (TimeSetter.Instance.SetRoundTime(kitty)) MultiboardUtil.RefreshMultiboards();
             if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
-            kitty.CurrentStats.RoundFinished = true;
+            TimeSetter.Instance.SetRoundFinishedTime(); // Sets the finished time for the round (when someone hits the final safezone)
             NitroChallenges.CompletedNitro(kitty);
             Challenges.PurpleFire(player);
             Challenges.TurquoiseFire(player);
             Challenges.WhiteFire(player);
             Challenges.GreenLightning(player);
-            Challenges.PatrioticLight(kitty); // transition to using kitty object later.
+            Challenges.PatrioticLight(kitty);
             TeamDeathless.PrestartingEvent();
             NoKittyLeftBehind.CheckChallenge();
+            kitty.CurrentStats.RoundFinished = true;
         }));
     }
 }

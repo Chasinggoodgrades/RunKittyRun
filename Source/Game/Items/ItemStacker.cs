@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 public static class ItemStacker
@@ -41,19 +42,28 @@ public static class ItemStacker
     {
         try
         {
-            item item = @event.ManipulatedItem;
-            var itemID = item.TypeId;
+            item pickedUpItem = @event.ManipulatedItem;
+            var itemID = pickedUpItem.TypeId;
             if (!StackableItem(itemID)) return;
             var unit = @event.Unit;
-            var heldItem = Utility.UnitGetItem(unit, itemID);
-            item.Owner = unit.Owner;
-            if (heldItem == item) return;
-            if (heldItem == null) return;
-            var itemCharges = item.Charges;
-            if (itemCharges > 1) heldItem.Charges += itemCharges;
-            else heldItem.Charges += 1;
-            item.Dispose();
-            item = null;
+
+            item existingItem = null;
+            for (int slot = 1; slot <= 6; slot++)
+            {
+                var invItem = Blizzard.UnitItemInSlotBJ(unit, slot);
+                if (invItem != null && invItem != pickedUpItem && invItem.TypeId == itemID)
+                {
+                    existingItem = invItem;
+                    break;
+                }
+            }
+
+            if (existingItem == null) return;
+
+            pickedUpItem.Owner = unit.Owner;
+            var itemCharges = pickedUpItem.Charges;
+            existingItem.Charges += Math.Max(1, itemCharges);
+            pickedUpItem.Dispose();
         }
         catch (System.Exception e)
         {
@@ -61,6 +71,7 @@ public static class ItemStacker
             throw;
         }
     }
+
 
     private static bool StackableItem(int itemID)
     {

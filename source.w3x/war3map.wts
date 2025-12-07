@@ -1,6 +1,6 @@
 STRING 1
 {
-|cffff0000RKR Remastered v1.3.7|r
+|cffff0000RKR Remastered v1.4.4|r
 }
 
 STRING 2
@@ -10,10 +10,10 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.3.7 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.4.4 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Music, and more! 
 |n|n- Check out our leaderboard in discord!
-|n|n|n|cff00ffffLast updated:|r |c00FF000007/21/2025|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000012/02/2025|r
 }
 
 STRING 4
@@ -793,7 +793,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.3.7
+Run Kitty Run Remastered v1.4.4
 }
 
 STRING 2035
