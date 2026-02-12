@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using static WCSharp.Api.Common;
 
 public enum ShopItemType
@@ -7,6 +6,7 @@ public enum ShopItemType
 
 public class ShopItem
 {
+    public static List<ShopItem> ShopItems { get; set; } = new List<ShopItem>();
     public string Name { get; set; }
     public int Cost { get; set; }
     public int ItemID { get; set; }
@@ -19,9 +19,6 @@ public class ShopItem
 
     public ShopItem(Relic relic)
     {
-        if (relic == null)
-            throw new ArgumentNullException(nameof(relic));
-
         InitializeShopItem(relic.Name, relic.Cost, relic.ItemID, relic.Description, relic.IconPath, ShopItemType.Relic);
         Relic = relic;
     }
@@ -50,34 +47,27 @@ public class ShopItem
 
     public static List<ShopItem> ShopItemsRelic()
     {
-        var shopItems = new List<ShopItem>();
-
-        try
+        if (Gamemode.CurrentGameMode == GameMode.Standard)
         {
-            if (Gamemode.CurrentGameMode == GameMode.Standard)
-            {
-                shopItems.Add(new ShopItem(new OneOfNine()));
-
-                shopItems.Add(new ShopItem(new RingOfSummoning()));
-
-                shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
-
-                shopItems.Add(new ShopItem(new ShardOfTranslocation()));
-
-                // shopItems.Add(new ShopItem(new ChronoSphere()));
-            }
-
-            shopItems.Add(new ShopItem(new FangOfShadows()));
-
-            shopItems.Add(new ShopItem(new FrostbiteRing()));
-
-            return shopItems;
+            AddRelicToShopItems(new OneOfNine());
+            AddRelicToShopItems(new RingOfSummoning());
+            AddRelicToShopItems(new BeaconOfUnitedLifeforce());
+            AddRelicToShopItems(new ShardOfTranslocation());
+            AddRelicToShopItems(new ChronoSphere());
         }
-        catch (Exception ex)
+        AddRelicToShopItems(new FangOfShadows());
+        AddRelicToShopItems(new FrostbiteRing());
+
+        return ShopItems;
+    }
+
+    public static void AddRelicToShopItems(Relic relic)
+    {
+        if (!ShopItems.Exists(x => x.Name == relic.Name)) // predicate leak if called too much.
         {
-            Logger.Critical($"Error in ShopItemsRelic: {ex}");
-            throw;
+            ShopItems.Add(new ShopItem(relic));
         }
+        else Logger.Critical($"Relic {relic.Name} already exists in shop items, not adding.");
     }
 
     public static List<ShopItem> ShopItemsReward()

@@ -6,81 +6,95 @@ namespace CommandExtractor
     {
         public static void Main()
         {
-            Console.WriteLine("[POOL STRESS TEST STARTED]");
-            const int timerAllocCount = 5000;
-            const int enemyAllocCount = 3000;
-            const int listAllocCount = 1000;
-
-            var timerInstances = new TimerHandle[timerAllocCount];
-            var enemyInstances = new Enemy[enemyAllocCount];
-            var listInstances = new List<TimerHandle>[listAllocCount];
-
-            int timerReuse = 0;
-            int enemyReuse = 0;
-            int listReuse = 0;
-
-            // Allocate timers
-            for (int i = 0; i < timerAllocCount; i++)
+            string repoRoot = FindRepositoryRoot();
+            if (repoRoot == null)
             {
-                var timer = ObjectPool<TimerHandle>.Get();
-                timer.Duration = i * 0.01f;
-                timer.IsPaused = i % 5 == 0;
-                timerInstances[i] = timer;
-
-                if (ObjectPool<TimerHandle>.Count > 0) timerReuse++;
+                Console.WriteLine("Could not find repository root. Make sure you're running from within the RunKittyRun repository.");
+                return;
             }
 
-            // Release half of them
-            for (int i = 0; i < timerAllocCount; i += 2)
+            string inputFilePath = Path.Combine(repoRoot, @"Source\Events\Commands\COMMAND REVAMP\InitCommands.cs");
+
+            if (!File.Exists(inputFilePath))
             {
-                ObjectPool<TimerHandle>.Return(timerInstances[i]);
+                Console.WriteLine($"File not found at: {inputFilePath}");
+                return;
             }
 
-            // Allocate enemies
-            for (int i = 0; i < enemyAllocCount; i++)
-            {
-                var enemy = ObjectPool<Enemy>.Get();
-                enemy.Health = 100 - (i % 100);
-                enemy.X = i * 0.5f;
-                enemy.Y = i * 0.3f;
-                enemyInstances[i] = enemy;
+            Console.WriteLine($"Reading commands from: {inputFilePath}");
+            string fileContent = File.ReadAllText(inputFilePath);
 
-                if (ObjectPool<Enemy>.Count > 0) enemyReuse++;
+            var regex = new Regex(
+                @"CommandsManager\.RegisterCommand\(\s*.*?name\s*:\s*""(?<name>[^""]+)""\s*,.*?group\s*:\s*""(?<group>[^""]+)""\s*,.*?argDesc\s*:\s*""(?<args>[^""]*)""\s*,.*?description\s*:\s*""(?<desc>[^""]+)""",
+                RegexOptions.Singleline);
+
+            MatchCollection matches = regex.Matches(fileContent);
+            var commandDictionary = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (Match match in matches)
+            {
+                string commandName = match.Groups["name"].Value;
+                string groupName = match.Groups["group"].Value;
+                string arguments = match.Groups["args"].Value;
+                string description = match.Groups["desc"].Value;
+
+                string formattedCommand = $"{commandName} [{arguments}] - {description}";
+
+                if (!commandDictionary.ContainsKey(groupName))
+                {
+                    commandDictionary[groupName] = new List<string>();
+                }
+                commandDictionary[groupName].Add(formattedCommand);
             }
 
-            // Release most of them
-            for (int i = 0; i < enemyAllocCount; i += 3)
+            foreach (var key in commandDictionary.Keys.ToList())
             {
-                ObjectPool<Enemy>.Return(enemyInstances[i]);
+                commandDictionary[key].Sort(StringComparer.OrdinalIgnoreCase);
             }
 
-            // Allocate and return lists
-            for (int i = 0; i < listAllocCount; i++)
-            {
-                var list = ListPool<TimerHandle>.Get();
-                list.Add(new TimerHandle { Duration = i, IsPaused = false });
-                listInstances[i] = list;
+            var sortedGroups = commandDictionary.Keys.OrderBy(g => g, StringComparer.OrdinalIgnoreCase).ToList();
 
-                if (ListPool<TimerHandle>.Count > 0) listReuse++;
+            List<string> outputLines = new List<string>();
+            foreach (var group in sortedGroups)
+            {
+                outputLines.Add($"**{group} Commands**");
+                foreach (var command in commandDictionary[group])
+                {
+                    outputLines.Add($"- {command}");
+                }
+                outputLines.Add("");
             }
 
-            for (int i = 0; i < listAllocCount; i += 4)
+            string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "ExtractedCommands.txt");
+
+            try
             {
-                ListPool<TimerHandle>.Return(listInstances[i]);
+                File.WriteAllLines(outputFilePath, outputLines);
+                Console.WriteLine($"Output successfully saved to: {outputFilePath}");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing output: {ex.Message}");
+            }
+        }
 
-            // Summary
-            Console.WriteLine("\n[POOL SUMMARY]");
-            Console.WriteLine($"TimerHandle reuse count: {timerReuse}");
-            Console.WriteLine($"TimerHandle pool size: {ObjectPool<TimerHandle>.Count}");
-
-            Console.WriteLine($"Enemy reuse count: {enemyReuse}");
-            Console.WriteLine($"Enemy pool size: {ObjectPool<Enemy>.Count}");
-
-            Console.WriteLine($"List<TimerHandle> reuse count: {listReuse}");
-            Console.WriteLine($"List<TimerHandle> pool size: {ListPool<TimerHandle>.Count}");
-
-            Console.WriteLine("[POOL STRESS TEST COMPLETE]");
+        private static string FindRepositoryRoot()
+        {
+            string currentDir = AppContext.BaseDirectory;
+            
+            while (currentDir != null)
+            {
+                // Look for .git directory or Source directory as indicators of repo root
+                if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
+                    Directory.Exists(Path.Combine(currentDir, "Source")))
+                {
+                    return currentDir;
+                }
+                
+                currentDir = Directory.GetParent(currentDir)?.FullName;
+            }
+            
+            return null;
         }
     }
 }

@@ -142,7 +142,7 @@ public static class AffixFactory
     {
         var affixes = string.Join(", ", AffixTypes); // Start with all affixes in a single string
         var fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount;
-        if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE)
+        if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE || Gamemode.CurrentGameMode == GameMode.SoloTournament)
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
         if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
         {
@@ -174,7 +174,6 @@ public static class AffixFactory
 
     }
 
-
     /// <summary>
     /// Distributes affixed wolves weighted by region area, difficulty, and round.
     /// </summary>
@@ -183,12 +182,10 @@ public static class AffixFactory
         try
         {
             RemoveAllAffixes();
-            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Return.. Team tournament should work.
+            // if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return; // Solo Return.. Team tournament should work.
             if (!CanDistributeAffixes()) return;
 
-            NUMBER_OF_AFFIXED_WOLVES = Gamemode.CurrentGameMode == GameMode.Standard
-                ? (int)(Difficulty.DifficultyValue * 3) + (Globals.ROUND * 8)
-                : 26 + (Globals.ROUND * 8);
+            NUMBER_OF_AFFIXED_WOLVES = CalculateAffixedWolfCount();
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)
@@ -248,6 +245,32 @@ public static class AffixFactory
             Logger.Critical($"{Colors.COLOR_RED}Error in DistAffixes: {ex.Message}{Colors.COLOR_RESET}");
             RemoveAllAffixes();
         }
+    }
+
+    /// <summary>
+    /// Calculates the number of wolves to affix based on the current game mode, difficulty, and round.
+    /// </summary>
+    /// <returns>Total number of wolves to affix</returns>
+    private static int CalculateAffixedWolfCount()
+    {
+        int baseCount = 0;
+        int roundModifier = Globals.ROUND * 8;
+
+        switch (Gamemode.CurrentGameMode)
+        {
+            case GameMode.Standard:
+                baseCount = Difficulty.DifficultyValue * 3;
+                break;
+            case GameMode.TeamTournament:
+                baseCount = 26;
+                break;
+            case GameMode.SoloTournament:
+                 baseCount = 8;
+                break;
+            default:
+                return 0; // No affixes for other game modes
+        }
+        return baseCount + roundModifier;
     }
 
     // Conditions for affixing wolves:

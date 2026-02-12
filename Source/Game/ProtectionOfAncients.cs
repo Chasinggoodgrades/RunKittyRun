@@ -8,11 +8,11 @@ public static class ProtectionOfAncients
 {
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
     private const string APPLY_EFFECT = "war3mapImported\\Divine Edict.mdx";
-    public const float EFFECT_DELAY = 3.0f;
     private const float EFFECT_RADIUS = 150.0f;
     private const float EFFECT_RADIUS_INCREASE = 50.0f;
     private const int POTA_NO_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS;
     private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
+    public const float EFFECT_DELAY = 3.0f;
 
     private static trigger Trigger;
     private static trigger LevelUpTrigger;

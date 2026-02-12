@@ -213,17 +213,15 @@ public class Wolf
 
     private bool TournamentChance()
     {
-        var baseChance = 14.0f;
-        var increasePerRound = 2.0f;
-        var maxProbability = 22.5f;
+        float baseChance = Gamemode.CurrentGameMode == GameMode.TeamTournament ? 12.5f + (0.15f * Gamemode.PlayersPerTeam) : 8.0f;
+        float increasePerRound = 2.0f;
+        float maxProbability = 22.5f;
 
-        var currentRound = Globals.ROUND;
-        if (currentRound < 1 || currentRound > 5)
-            return false;
+        int currentRound = Globals.ROUND;
 
-        var linearProbability = baseChance + (increasePerRound * (currentRound - 1));
-        var randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%
-        var totalProbability = linearProbability + randomAdjustment;
+        float linearProbability = baseChance + (increasePerRound * (currentRound - 1));
+        float randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%
+        float totalProbability = linearProbability + randomAdjustment;
 
         // Cap the probability to the maximum limit
         totalProbability = Math.Min(totalProbability, maxProbability);

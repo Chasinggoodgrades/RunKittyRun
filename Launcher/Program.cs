@@ -156,7 +156,7 @@ namespace Launcher
                     var isReforged = Version.Parse(FileVersionInfo.GetVersionInfo(wc3exe).FileVersion) >= new Version(1, 32);
                     if (isReforged)
                     {
-                        commandLineArgs.Append(" -launch");
+                        commandLineArgs.Append(" -windowed -launch");
                     }
                     else if (GRAPHICS_API != null)
                     {
