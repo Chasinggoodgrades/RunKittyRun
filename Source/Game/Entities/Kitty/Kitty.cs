@@ -7,7 +7,7 @@ public class Kitty
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
-    private const float MANA_DEATH_PENALTY = 65.0f;
+    private const float MANA_DEATH_PENALTY = 0.125f; // 12.5% mana loss on death
     private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
@@ -114,7 +114,7 @@ public class Kitty
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
-            circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
+            circle.SetMana(Unit.Mana - (Unit.MaxMana * MANA_DEATH_PENALTY), Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             circle.KittyDied(this);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();

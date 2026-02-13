@@ -1783,6 +1783,17 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "savetesting",
+            alias: "ast",
+            group: "admin",
+            argDesc: "",
+            description: "Save Testing for Lane Times",
+            action: (player, args) =>
+            {
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",
             group: "admin",
