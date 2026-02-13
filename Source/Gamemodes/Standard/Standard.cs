@@ -1,6 +1,6 @@
 ﻿public static class Standard
 {
-    private const float ROUND_INTERMISSION = 10.0f;
+    public const float ROUND_INTERMISSION = 10.0f;
 
     public static void Initialize()
     {

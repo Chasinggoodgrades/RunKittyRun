@@ -47,14 +47,11 @@ public static class Utility
     }
 
     /// <summary>
-    /// Converts a float to time string.
-    /// Used for colorizing the time string in Teams mode.
-    /// </summary>
-    /// <summary>
     /// Converts a float to time string tenths.
     /// Used for colorizing the time string in Teams mode.
+    /// (1-24 colors, red being 1, use player.Id + 1)
     /// </summary>
-    public static string ConvertFloatToTime(float time, int teamID)
+    public static string ConvertFloatToTime(float time, int playerColorId)
     {
         if (time <= 0.0f) return "0:00.0";
 
@@ -63,7 +60,7 @@ public static class Utility
         var tenths = (int)(time * 10 % 10);
 
         string timeString = seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
-        return Colors.ColorString(timeString, teamID);
+        return Colors.ColorString(timeString, playerColorId);
     }
 
     /// <summary>

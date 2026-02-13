@@ -24,6 +24,7 @@ public class PlayerGameData
     public float CollisonRadius { get; set; } = CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS;
     public int CollectedJackpots { get; set; } = 0;
     public int CollectedSuperJackpots { get; set; } = 0;
+    public int GoldCollectedFromJackpots { get; set; } = 0;
 
     public PlayerGameData()
     {
