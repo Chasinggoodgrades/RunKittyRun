@@ -21,7 +21,7 @@ public class FangOfShadows : Relic
     private static float SHADOW_KITTY_SUMMON_DURATION = 75.0f;
 
     public FangOfShadows() : base(
-        $"{Colors.COLOR_PURPLE}Fang of Shadows",
+        $"{Colors.COLOR_PURPLE}Fang of Shadows|r",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
         $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r",
         RelicAbilityID,

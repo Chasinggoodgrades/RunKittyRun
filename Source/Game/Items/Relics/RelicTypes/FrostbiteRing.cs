@@ -23,7 +23,7 @@ public class FrostbiteRing : Relic
     private group FreezeGroup;
 
     public FrostbiteRing() : base(
-        $"{Colors.COLOR_BLUE}Frostbite Ring",
+        $"{Colors.COLOR_BLUE}Frostbite Ring|r",
         $"Freezes wolves in place for {Colors.COLOR_CYAN}{(int)DEFAULT_FREEZE_DURATION} seconds|r {Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(1 min)|r",
         RelicAbilityID,
         RelicItemID,
