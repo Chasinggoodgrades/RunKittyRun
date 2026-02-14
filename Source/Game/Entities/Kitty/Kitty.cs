@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class Kitty
+public class Kitty : IFloatingTags
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
@@ -54,7 +54,7 @@ public class Kitty
         InitData();
         SpawnEffect();
         CreateKitty();
-        TimeProg = new KittyTime(this);
+        TimeProg = new KittyTime(this, Progress.Instance);
         Slider = new Slider(this);
         RTR = new RTR(this);
         MirrorHandler = new MirrorMovementHandler(this);

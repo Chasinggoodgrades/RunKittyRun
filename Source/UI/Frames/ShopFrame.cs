@@ -171,9 +171,9 @@ public static class ShopFrame
         {
             int row = i / columns;
             int column = i % columns;
-            var name = items[i].Name;
-            var button = BlzCreateFrameByType("BUTTON", name, panel, "ScoreScreenTabButtonTemplate", 0);
-            var icon = BlzCreateFrameByType("BACKDROP", name + "icon", button, "", 0);
+            var frameName = $"ShopItem_{items[i].ItemID}_{i}";
+            var button = BlzCreateFrameByType("BUTTON", frameName, panel, "ScoreScreenTabButtonTemplate", 0);
+            var icon = BlzCreateFrameByType("BACKDROP", frameName + "icon", button, "", 0);
 
             var x = column * buttonWidth;
             var y = -row * buttonHeight;
@@ -183,13 +183,18 @@ public static class ShopFrame
 
             button.SetSize(buttonWidth, buttonHeight);
             button.SetPoint(framepointtype.TopLeft, x, y, panel, framepointtype.TopLeft);
-            icon.SetTexture(items[i].IconPath, 0, false);
+            var iconPath = items[i].IconPath;
+            if (string.IsNullOrWhiteSpace(iconPath) || iconPath.EndsWith(".dds", StringComparison.OrdinalIgnoreCase))
+            {
+                iconPath = Utility.GetItemIconPath(items[i].ItemID);
+            }
+            icon.SetTexture(iconPath, 0, false);
             icon.SetPoints(button);
 
             var itemDetails = trigger.Create();
             var relic = items[i];
             CreateShopitemTooltips(button, relic);
-            itemDetails.RegisterFrameEvent(BlzGetFrameByName(name, 0), frameeventtype.Click);
+            itemDetails.RegisterFrameEvent(button, frameeventtype.Click);
             itemDetails.AddAction( () => ShowItemDetails(relic));
         }
 
