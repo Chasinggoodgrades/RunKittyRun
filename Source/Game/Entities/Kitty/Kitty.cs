@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
-public class Kitty : IFloatingTags
+public class Kitty : IFloatingTags, ICircleOwner
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
@@ -30,6 +30,7 @@ public class Kitty : IFloatingTags
     public Slider Slider { get; private set; }
     public RTR RTR { get; private set; }
     public MirrorMovementHandler MirrorHandler { get; private set; }
+    public Circle Circle { get; private set; }
     public int CurrentSafeZone { get; set; } = 0;
     public player Player { get; }
     public unit Unit { get; set; }
@@ -54,6 +55,7 @@ public class Kitty : IFloatingTags
         InitData();
         SpawnEffect();
         CreateKitty();
+        Circle = new Circle(player);
         TimeProg = new KittyTime(this, Progress.Instance);
         Slider = new Slider(this);
         RTR = new RTR(this);
@@ -80,7 +82,6 @@ public class Kitty : IFloatingTags
         {
             foreach (player player in Globals.ALL_PLAYERS)
             {
-                new Circle(player);
                 new Kitty(player);
             }
         }
@@ -100,8 +101,6 @@ public class Kitty : IFloatingTags
         {
             if (Invulnerable || !Alive) return;
 
-            Circle circle = Globals.ALL_CIRCLES[Player];
-
             // Pause processes before unit death
             Slider.PauseSlider();
             RTR.PauseRTR();
@@ -114,8 +113,8 @@ public class Kitty : IFloatingTags
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
-            circle.SetMana(Unit.Mana - (Unit.MaxMana * MANA_DEATH_PENALTY), Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
-            circle.KittyDied(this);
+            Circle.SetMana(Unit.Mana - (Unit.MaxMana * MANA_DEATH_PENALTY), Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
+            Circle.KittyDied(this);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();
 
@@ -151,16 +150,14 @@ public class Kitty : IFloatingTags
         {
             if (Unit.Alive) return;
 
-            Circle circle = Globals.ALL_CIRCLES[Player];
-
             // Hide visual indicators before revival
-            circle.HideCircle();
+            Circle.HideCircle();
             InvulnerableKitty();
             Alive = true;
 
             // Revive the unit at its respective position
-            Unit.Revive(circle.Unit.X, circle.Unit.Y, false);
-            Unit.Mana = circle.Unit.Mana;
+            Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
+            Unit.Mana = Circle.Unit.Mana;
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
@@ -268,6 +265,7 @@ public class Kitty : IFloatingTags
         MirrorHandler.Dispose();
         InvulTimer.Pause();
         InvulTimer.Dispose();
+        Circle?.Dispose();
         Disco?.Dispose();
         aiController.StopAi();
         RTR.StopRTR();

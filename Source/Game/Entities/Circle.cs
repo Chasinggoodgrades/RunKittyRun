@@ -32,9 +32,9 @@ public class Circle
         Globals.ALL_CIRCLES.Remove(Player);
     }
 
-    public void KittyDied(Kitty kitty)
+    public void KittyDied(ICircleOwner owner)
     {
-        Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
+        Unit.SetPosition(owner.Unit.X, owner.Unit.Y);
         ShowCircle();
     }
 

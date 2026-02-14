@@ -1160,7 +1160,6 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
-                        new Circle(compPlayer);
                         var newKitty = new Kitty(compPlayer);
                         newKitty.Unit.AddItem(FourCC("bspd"));
                     }

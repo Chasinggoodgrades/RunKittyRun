@@ -35,7 +35,7 @@ public static class Globals
 
 
     public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
-    public static Dictionary<player, Circle> ALL_CIRCLES = new Dictionary<player, Circle>();
+    public static Dictionary<player, Circle> ALL_CIRCLES { get; set; } = new Dictionary<player, Circle>();
     public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
 
     public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();

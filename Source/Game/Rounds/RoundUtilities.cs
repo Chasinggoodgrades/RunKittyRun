@@ -36,7 +36,7 @@ public static class RoundUtilities
         foreach (var kitty in Globals.ALL_KITTIES)
         {
             kitty.Value.Unit.Revive(RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y, false);
-            Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle();
+            kitty.Value.Circle.HideCircle();
             kitty.Value.Alive = true;
             kitty.Value.ProgressZone = 0;
             kitty.Value.Finished = false;
