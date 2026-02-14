@@ -28,6 +28,7 @@ public static class VictoryZone
         var u = @event.Unit;
         var player = u.Owner;
         if (u.UnitType != Constants.UNIT_KITTY) return;
+        var kitty = Globals.ALL_KITTIES[player];
         if (!Globals.GAME_ACTIVE) return;
         if (Gamemode.CurrentGameMode == GameMode.Standard) // Standard
         {
@@ -37,12 +38,12 @@ public static class VictoryZone
         else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
-            //MoveAndFinish(player);
+            kitty.Finished = true;
+            RoundUtilities.MovePlayerToStart(player);
             RoundManager.RoundEndCheck();
         }
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
-            var kitty = Globals.ALL_KITTIES[player];
             kitty.Finished = true;
 
             if (RoundManager.DidTeamEnd(kitty.TeamID))
