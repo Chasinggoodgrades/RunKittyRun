@@ -209,6 +209,18 @@ public class Colors
         return null;
     }
 
+    public static string GetColorNameByTeamID(int teamID)
+    {
+        foreach (Colors color in ColorManager)
+        {
+            if (color.colorID == teamID)
+            {
+                return color.colorname.Split(',')[0];
+            }
+        }
+        return null;
+    }
+
     public static void PopulateColorsData(Kitty kitty)
     {
         try

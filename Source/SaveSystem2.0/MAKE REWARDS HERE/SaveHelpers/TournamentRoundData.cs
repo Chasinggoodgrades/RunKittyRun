@@ -10,4 +10,13 @@
     {
 
     }
+
+    public void Reset()
+    {
+        RoundTime = 0.0f;
+        Progress = 0.0f;
+        Saves = 0;
+        Deaths = 0;
+        Level = 1;
+    }
 }

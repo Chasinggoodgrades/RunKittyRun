@@ -100,10 +100,10 @@ public class Safezone
     /// </summary>
     public static void ResetPlayerSafezones()
     {
-        foreach (var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES_LIST)
         {
-            kitty.Value.CurrentSafeZone = 0;
-            kitty.Value.ProgressZone = 0;
+            kitty.CurrentSafeZone = 0;
+            kitty.ProgressZone = 0;
         }
         foreach (var safezone in Globals.SAFE_ZONES)
         {

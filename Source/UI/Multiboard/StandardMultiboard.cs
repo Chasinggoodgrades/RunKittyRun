@@ -11,6 +11,7 @@ public static class StandardMultiboard
     private static trigger ESCTrigger;
 
     private static string color = Colors.COLOR_YELLOW_ORANGE;
+    private static string roundColor = Colors.COLOR_GREEN;
     private static string[] PlayerStats = new string[8];
     private static float[] RoundTimes = new float[5];
     private static List<player> PlayersList = new List<player>();
@@ -132,7 +133,7 @@ public static class StandardMultiboard
     {
         try
         {
-            CurrentStats.Title = $"Current Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
+            CurrentStats.Title = $"{roundColor}[R{Globals.ROUND}]{Colors.COLOR_RESET} Current Stats [{Colors.COLOR_YELLOW_ORANGE}{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}|r] {Colors.COLOR_RED}[Press ESC]|r";
             CurrentStats.Rows = Globals.ALL_PLAYERS.Count + 2;
             var rowIndex = 2;
 
@@ -200,7 +201,7 @@ public static class StandardMultiboard
 
     private static void OverallGameStats()
     {
-        OverallStats.Title = $"Overall Stats {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        OverallStats.Title = $"{roundColor}[R{Globals.ROUND}]{Colors.COLOR_RESET} Overall Stats [{Colors.COLOR_YELLOW_ORANGE}{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}|r] {Colors.COLOR_RED}[Press ESC]|r";
         OverallStats.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 
@@ -264,7 +265,7 @@ public static class StandardMultiboard
 
     private static void BestTimesStats()
     {
-        BestTimes.Title = $"Best Times {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}]|r {Colors.COLOR_RED}[Press ESC]|r";
+        BestTimes.Title = $"{roundColor}[R{Globals.ROUND}]{Colors.COLOR_RESET} Best Times [{Colors.COLOR_YELLOW_ORANGE}{Gamemode.CurrentGameMode}-{Difficulty.DifficultyOption.ToString()}|r] {Colors.COLOR_RED}[Press ESC]|r";
         BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
         var rowIndex = 1;
 

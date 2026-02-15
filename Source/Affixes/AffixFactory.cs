@@ -44,7 +44,7 @@ public static class AffixFactory
             }
         }
 
-        foreach (var affix in TempAffixCounts)
+        foreach (var affix in TempAffixCounts.ToList()) // deterministic order needed.
         {
             if (affix.Value > 0)
             {
@@ -106,10 +106,10 @@ public static class AffixFactory
         var totalArea = 0.0f;
         LaneWeights = new float[regionCount];
 
-        foreach (var lane in WolfArea.WolfAreas)
+        foreach (var lane in WolfArea.WolfAreas_List)
         {
-            totalArea += lane.Value.Area;
-            LaneWeights[lane.Value.ID] = lane.Value.Area;
+            totalArea += lane.Area;
+            LaneWeights[lane.ID] = lane.Area;
         }
 
         // Normalizing Weights
@@ -190,7 +190,7 @@ public static class AffixFactory
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
             if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)
             {
-                foreach (var wolf in Globals.ALL_WOLVES.Values)
+                foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
                     if (!ShouldAffixWolves(wolf, wolf.RegionIndex)) continue;
                     ApplyRandomAffix(wolf, wolf.RegionIndex);
@@ -292,9 +292,9 @@ public static class AffixFactory
 
     public static void RemoveAllAffixes()
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
+        foreach (var wolf in Globals.ALL_WOLVES_LIST)
         {
-            wolf.Value.RemoveAllWolfAffixes();
+            wolf?.RemoveAllWolfAffixes();
         }
         AllAffixes.Clear();
     }

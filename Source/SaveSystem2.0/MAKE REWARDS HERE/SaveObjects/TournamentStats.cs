@@ -1,9 +1,17 @@
 ﻿public class TournamentStats
 {
+    public string PlayerName { get; set; } = "";
     public string DateTime { get; set; } = "";
+    public string Region { get; set; } = "";
     public string Gamemode { get; set; } = "";
     public string GameType { get; set; } = "";
     public string Team { get; set; } = ""; // Should this be team colors or by team #.. Likely team colors, be easier to tie together on the webend I believe.
+    public string TeamMembers { get; set; } = "";
+    public float TotalTime { get; set; }
+    public int TotalDeaths { get; set; }
+    public int TotalSaves { get; set; }
+    public float TotalProgress { get; set; }
+
     public TournamentRoundData Round_1 { get; set; }
     public TournamentRoundData Round_2 { get; set; }
     public TournamentRoundData Round_3 { get; set; }

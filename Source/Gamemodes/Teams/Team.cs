@@ -30,6 +30,7 @@ public class Team
     {
         try
         {
+            TournamentSaver.Instance.NewTournamentResetData();
             ShadowKitty.Initialize();
             ProtectionOfAncients.Initialize();
             Relic.RegisterRelicEnabler();

@@ -40,7 +40,11 @@ public static class InitCommands
             group: "all",
             argDesc: "",
             description: "Save your current game stats.",
-            action: (player, args) => Globals.SaveSystem.Save(player)
+            action: (player, args) =>
+            {
+                TournamentSaver.Instance.SaveTournamentData();
+                Globals.SaveSystem.Save(player);
+            } 
         );
 
         CommandsManager.RegisterCommand(
@@ -879,11 +883,11 @@ public static class InitCommands
             {
                 var affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {affixName} to all wolves.");
-                foreach (var wolf in Globals.ALL_WOLVES)
+                foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
-                    var affix = AffixFactory.CreateAffix(wolf.Value, affixName);
-                    wolf.Value.AddAffix(affix);
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
+                    var affix = AffixFactory.CreateAffix(wolf, affixName);
+                    wolf.AddAffix(affix);
                 }
             }
         );
@@ -930,9 +934,9 @@ public static class InitCommands
             description: "Clears all affixes from all wolves.",
             action: (player, args) =>
             {
-                foreach (var wolf in Globals.ALL_WOLVES)
+                foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
-                    wolf.Value.RemoveAllWolfAffixes();
+                    wolf?.RemoveAllWolfAffixes();
                 }
             }
         );

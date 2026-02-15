@@ -40,6 +40,7 @@ public static class VictoryZone
             // Move player to start, save their time. Wait for everyone to finish.
             kitty.Finished = true;
             RoundUtilities.MovePlayerToStart(player);
+            BarrierSetup.ActivateBarrier();
             RoundManager.RoundEndCheck();
         }
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team

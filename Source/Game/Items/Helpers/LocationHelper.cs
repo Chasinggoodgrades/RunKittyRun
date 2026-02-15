@@ -12,4 +12,9 @@
         Z = z;
         Facing = facing;
     }
+
+    public LocationHelper()
+    {
+
+    }
 }

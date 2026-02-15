@@ -5,6 +5,8 @@ using WCSharp.Shared.Data;
 public class WolfArea
 {
     public static Dictionary<int, WolfArea> WolfAreas { get; } = new();
+    private static readonly List<WolfArea> WolfAreasList = new List<WolfArea>();
+    public static List<WolfArea> WolfAreas_List => WolfAreasList;
     public static float TotalArea { get; private set; } = 0.0f;
     public int ID { get; set; }
     public rect Rect { get; set; }
@@ -36,6 +38,7 @@ public class WolfArea
             wolfArea.RegisterEnterEvents();
             wolfArea.RegisterLeaveEvents();
             WolfAreas.Add(count, wolfArea);
+            WolfAreas_List.Add(wolfArea);
             count++;
         }
     }

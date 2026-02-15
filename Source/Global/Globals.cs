@@ -28,22 +28,23 @@ public static class Globals
     public static timer GAME_TIMER = timer.Create();
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);
 
-    public static List<player> ALL_PLAYERS = new List<player>();
-    public static List<Safezone> SAFE_ZONES = new List<Safezone>();
-    public static List<player> LockedCamera = new List<player>();
-    public static List<Kitty> ALL_KITTIES_LIST = new List<Kitty>();
+    public static List<player> ALL_PLAYERS { get; set; } = new List<player>();
+    public static List<Safezone> SAFE_ZONES { get; set; } = new List<Safezone>();
+    public static List<player> LockedCamera { get; set; } = new List<player>();
+    public static List<Kitty> ALL_KITTIES_LIST { get; set; } = new List<Kitty>();
 
 
-    public static Dictionary<player, Kitty> ALL_KITTIES = new Dictionary<player, Kitty>();
+    public static Dictionary<player, Kitty> ALL_KITTIES { get; set; } = new Dictionary<player, Kitty>();
     public static Dictionary<player, Circle> ALL_CIRCLES { get; set; } = new Dictionary<player, Circle>();
-    public static Dictionary<unit, Wolf> ALL_WOLVES = new Dictionary<unit, Wolf>();
+    public static Dictionary<unit, Wolf> ALL_WOLVES { get; set; } = new Dictionary<unit, Wolf>();
+    public static List<Wolf> ALL_WOLVES_LIST { get; set; } = new List<Wolf>();
 
-    public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES = new Dictionary<player, PlayerUpgrades>();
+    public static Dictionary<player, PlayerUpgrades> PLAYER_UPGRADES { get; set; } = new Dictionary<player, PlayerUpgrades>();
 
-    public static SaveManager SaveSystem;
+    public static SaveManager SaveSystem { get; set; }
     public static GameAwardsDataSorted GAME_AWARDS_SORTED { get; } = new GameAwardsDataSorted();
-    public static RoundTimesData GAME_TIMES = new RoundTimesData();
-    public static GameStatsData GAME_STATS = new GameStatsData();
+    public static RoundTimesData GAME_TIMES { get; set; } = new RoundTimesData();
+    public static GameStatsData GAME_STATS { get; set; } = new GameStatsData();
     // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
     public static Random RANDOM_GEN { get; set; }
@@ -64,7 +65,6 @@ public static class Globals
         { 4, new Dictionary<int, int> { { 0, 48 }, { 1, 48 }, { 2, 48 }, { 3, 46 }, { 4, 32 }, { 5, 31 }, { 6, 27 }, { 7, 26 }, { 8, 20 }, { 9, 20 }, { 10, 18 }, { 11, 14 }, { 12, 14 }, { 13, 10 }, { 14, 9 }, { 15, 4 }, { 16, 4 } } },
         { 5, new Dictionary<int, int> { { 0, 57 }, { 1, 57 }, { 2, 57 }, { 3, 57 }, { 4, 37 }, { 5, 35 }, { 6, 30 }, { 7, 29 }, { 8, 21 }, { 9, 21 }, { 10, 20 }, { 11, 16 }, { 12, 16 }, { 13, 11 }, { 14, 10 }, { 15, 5 }, { 16, 5 } } }
     };
-
 
     /// <summary>
     /// Mock Data to Test Whatever lanes, and # of wolves as needed.

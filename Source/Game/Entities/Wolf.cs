@@ -48,6 +48,7 @@ public class Wolf
         InitializeWolf();
         WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
+        Globals.ALL_WOLVES_LIST.Add(this);
 
         WolfArea.Wolves.Add(this);
     }
@@ -126,11 +127,11 @@ public class Wolf
     /// </summary>
     public static void RemoveAllWolves()
     {
-        foreach (var wolfKey in Globals.ALL_WOLVES)
+        foreach (var wolf in Globals.ALL_WOLVES_LIST)
         {
-            Globals.ALL_WOLVES[wolfKey.Key]?.Dispose();
+            wolf?.Dispose();
         }
-        Globals.ALL_WOLVES.Clear();
+        Globals.ALL_WOLVES_LIST.Clear();
     }
 
     /// <summary>
@@ -139,9 +140,9 @@ public class Wolf
     /// <param name="pause"></param>
     public static void PauseAllWolves(bool pause)
     {
-        foreach (var wolf in Globals.ALL_WOLVES)
+        foreach (var wolf in Globals.ALL_WOLVES_LIST)
         {
-            wolf.Value.PauseSelf(pause);
+            wolf?.PauseSelf(pause);
         }
     }
 

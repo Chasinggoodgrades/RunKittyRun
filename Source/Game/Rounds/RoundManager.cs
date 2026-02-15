@@ -65,7 +65,7 @@ public static class RoundManager
         NitroChallenges.StartNitroTimer();
         NitroPacer.StartNitroPacer();
         SoundManager.PlayRoundSound();
-        Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!|r");
+        Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!{Colors.COLOR_RESET}");
     }
 
     private static void HasDifficultyBeenChosen()
@@ -91,7 +91,8 @@ public static class RoundManager
             NitroChallenges.StopNitroTimer();
             Wolf.RemoveAllWolves();
             BarrierSetup.ActivateBarrier();
-            Resources.BonusResources();
+            TournamentSaver.Instance.SaveTournamentData();
+
             RoundUtilities.MovedTimedCameraToStart();
             RoundUtilities.RoundResetAll();
             RoundUtilities.MoveAllPlayersToStart();
@@ -100,9 +101,13 @@ public static class RoundManager
             DeathlessChallenges.ResetDeathless();
             WolfLaneHider.ResetLanes();
             TimeSetter.Instance.ResetFinishedTimeCapture();
+
             SaveManager.SaveAll();
+            Resources.BonusResources();
+
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             if (Gameover.GameOver()) return;
+
             Tips.DisplayTip();
             Utility.SimpleTimer(END_ROUND_DELAY, RoundSetup);
         }
