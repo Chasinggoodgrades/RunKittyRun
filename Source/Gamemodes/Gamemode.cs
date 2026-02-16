@@ -38,13 +38,13 @@ public static class Gamemode
         // Solo Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE + GameMode.SoloTournament + // Solo
-            Colors.COLOR_GOLD + " (-t solo <prog | race>)" +
+            Colors.COLOR_GOLD + " (-t solo <prog | race> <NA | EU>)" +
             Colors.COLOR_RESET);
 
         // Team Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE + GameMode.TeamTournament + // Team
-            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize>)" +
+            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize> <NA | EU>)" +
             Colors.COLOR_RESET);
 
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);

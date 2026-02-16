@@ -6,12 +6,21 @@ using WCSharp.DateTime;
 public class TournamentSaver
 {
     private static TournamentSaver _instance;
-    private string GAME_ID;
+    public string GAME_ID { get; private set; }
+    public string TOURNAMENT_ID { get; private set; }
     public static TournamentSaver Instance => _instance ??= new TournamentSaver();
     public string REGION { get; private set; }
+    public bool ApprovedForUpload { get; set; } = false;
 
     public TournamentSaver()
     {
+        GAME_ID ??= GenerateUniqueGameID();
+        TOURNAMENT_ID ??= GenerateUniqueTournamentID();
+    }
+
+    public void SetRegion(string region)
+    {
+        REGION = region;
     }
 
     /// <summary>
@@ -21,11 +30,10 @@ public class TournamentSaver
     {
         try
         {
-            GAME_ID ??= GenerateUniqueGameID();
+            if (Gamemode.CurrentGameMode == GameMode.Standard) return;
 
             foreach (var kitty in Globals.ALL_KITTIES_LIST)
             {
-                if (Gamemode.CurrentGameMode == GameMode.Standard) return;
                 if (kitty == null) return;
 
                 var stats = kitty.SaveData?.TournamentStats;
@@ -35,7 +43,7 @@ public class TournamentSaver
                 if (currentGame == null) return;
 
                 if (string.IsNullOrWhiteSpace(stats.Tournament_ID))
-                    stats.Tournament_ID = GenerateUniqueTournamentID();
+                    stats.Tournament_ID = TOURNAMENT_ID;
 
                 if (string.IsNullOrWhiteSpace(stats.PlayerName))
                     stats.PlayerName = kitty.Player.Name;
@@ -44,7 +52,10 @@ public class TournamentSaver
                     stats.DateTime = DateTimeManager.DateTime.ToString();
 
                 if (string.IsNullOrWhiteSpace(stats.Region))
-                    stats.Region = "Unknown";
+                    stats.Region = REGION;
+
+                if (stats.AdminApproved == false && ApprovedForUpload)
+                    stats.AdminApproved = ApprovedForUpload;
 
                 stats.Gamemode = Gamemode.CurrentGameMode.ToString();
                 stats.GameType = Gamemode.CurrentGameModeType;
@@ -196,10 +207,14 @@ public class TournamentSaver
         var currentTime = DateTimeManager.DateTime;
         if (!TryGetLastGameTime(stats.DateTime, currentTime, out var lastGameTime))
         {
+            Logger.Debug($"Failed to parse last game time for player {kitty.Player.Name}. Defaulting to current time.");
             stats.DateTime = currentTime.ToString();
         }
 
-        // Over 12 hrs , reset all games
+        // Over 12 hours, reset all games
+
+        Logger.Debug($"Current Time: {currentTime}, Last Game Time: {lastGameTime}, Elapsed Seconds: {(currentTime.TotalSeconds - lastGameTime.TotalSeconds)}");
+
         var elapsedSeconds = currentTime.TotalSeconds - lastGameTime.TotalSeconds;
         if (elapsedSeconds >= 12 * 3600) // 12 hours
         {
@@ -251,22 +266,41 @@ public class TournamentSaver
 
         try
         {
+            if (TryParseSavedDateTime(savedTime, out lastGameTime))
+            {
+                return true;
+            }
 
-            lastGameTime = DateTime.TryParseExact(
-            savedTime,
-            "M/d/yyyy h:mm:ss tt",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.None,
-                out var parsedDateTime)
-                ? new WcDateTime(parsedDateTime.Year, parsedDateTime.Month, parsedDateTime.Day, parsedDateTime.Hour, parsedDateTime.Minute, parsedDateTime.Second)
-                : fallbackTime;
-            return true;
+            lastGameTime = fallbackTime;
+            return false;
         }
         catch (Exception)
         {
             lastGameTime = fallbackTime;
             return false;
         }
+    }
+
+    private static bool TryParseSavedDateTime(string savedTime, out WcDateTime parsedDateTime)
+    {
+        parsedDateTime = null;
+        if (string.IsNullOrWhiteSpace(savedTime)) return false;
+
+        var trimmed = savedTime.Trim();
+        if (trimmed.Length < 19) return false;
+
+        if (trimmed[4] != '-' || trimmed[7] != '-' || (trimmed[10] != ' ' && trimmed[10] != 'T') || trimmed[13] != ':' || trimmed[16] != ':')
+            return false;
+
+        if (!int.TryParse(trimmed.Substring(0, 4), NumberStyles.None, CultureInfo.InvariantCulture, out var year)) return false;
+        if (!int.TryParse(trimmed.Substring(5, 2), NumberStyles.None, CultureInfo.InvariantCulture, out var month)) return false;
+        if (!int.TryParse(trimmed.Substring(8, 2), NumberStyles.None, CultureInfo.InvariantCulture, out var day)) return false;
+        if (!int.TryParse(trimmed.Substring(11, 2), NumberStyles.None, CultureInfo.InvariantCulture, out var hour)) return false;
+        if (!int.TryParse(trimmed.Substring(14, 2), NumberStyles.None, CultureInfo.InvariantCulture, out var minute)) return false;
+        if (!int.TryParse(trimmed.Substring(17, 2), NumberStyles.None, CultureInfo.InvariantCulture, out var second)) return false;
+
+        parsedDateTime = new WcDateTime(year, month, day, hour, minute, second);
+        return true;
     }
 
     /// <summary>

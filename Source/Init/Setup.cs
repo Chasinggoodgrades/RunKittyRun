@@ -32,9 +32,9 @@ namespace Source.Init
                 StopMusic(false);
                 ClearMapMusic();
                 Globals.GAME_INITIALIZED = true;
-                if (!Source.Program.Debug) return;
-                Difficulty.ChangeDifficulty("normal");
-                Gamemode.SetGameMode(Globals.GAME_MODES[0]);
+                //if (!Source.Program.Debug) return;
+                //Difficulty.ChangeDifficulty("normal");
+                //Gamemode.SetGameMode(Globals.GAME_MODES[0]);
             }
             catch (Exception e)
             {

@@ -46,6 +46,7 @@ public static class RoundManager
             ChainedTogether.StartEvent();
             WolfLaneHider.HideAllLanes();
             WolfLaneHider.LanesHider();
+            MultiboardUtil.RefreshMultiboards();
         }
         catch (Exception e)
         {

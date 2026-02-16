@@ -1881,6 +1881,22 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "approved",
+            alias: "appt",
+            group: "admin",
+            argDesc: "[true][false]",
+            description: "Approves the current TOURNAMENT_ID, this only needs to get approved once per tournament series.",
+            action: (player, args) =>
+            {
+                bool approved = CommandsManager.GetBool(args[0]);
+
+                TournamentSaver.Instance.ApprovedForUpload = approved;
+                string status = approved ? "Approved" : "Denied";
+                player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament ID {status}: {TournamentSaver.Instance.TOURNAMENT_ID}{Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "slidespeed",
             alias: "ss",
             group: "admin",
