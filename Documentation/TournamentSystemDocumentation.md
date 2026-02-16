@@ -76,7 +76,7 @@ public class TournamentStats
 **Key Points:**
 - One `TournamentStats` instance per player
 - `Tournament_ID` groups multiple games into a single tournament session
-- `DateTime` is used for session timeout detection (3-minute threshold)
+- `DateTime` is used for session timeout detection (12 hr threshold)
 - `AdminApproved` flag controls web visibility
 
 ---
@@ -160,7 +160,7 @@ SaveTournamentData()
     │       │       ├─► GetInProgressGame() → Check for existing game with matching Game_ID
     │       │       │
     │       │       ├─► If not found, evaluate session conditions:
-    │       │       │       ├─► 3+ minutes since last game? → Reset all games
+    │       │       │       ├─► 12+ hrs since last game? → Reset all games
     │       │       │       ├─► Gamemode or GameType changed? → Reset all games
     │       │       │       └─► All 3 slots full? → Reset all games
     │       │       │
@@ -470,16 +470,8 @@ else
 ### Potential Improvements
 1. **Dynamic Slot Count**: Support configurable number of games per tournament
 2. **Historical Archiving**: Move older tournaments to separate storage
-3. **Real-time Sync**: Push updates to web backend during gameplay
+3. **Real-time Sync**: Push updates to web backend during gameplay (Unlikely but we'll see)
 4. **Spectator Mode**: Read-only access to tournament data for observers
-5. **Replay System**: Store input commands for game replay functionality
-
-### Scalability Considerations
-- Current design handles ~1,000 players with minimal overhead
-- For larger scale (10,000+ players), consider:
-  - Database integration instead of in-memory storage
-  - Batch writes at interval checkpoints
-  - Separate game slots into individual files
 
 ---
 
