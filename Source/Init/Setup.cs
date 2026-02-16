@@ -94,7 +94,6 @@ namespace Source.Init
                 ShopFrame.FinishInitialization();
                 UnitSharing.Initialize();
                 NitroPacer.Initialize();
-                TournamentSaver.Instance.NewTournamentResetData();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
                 Utility.SimpleTimer(6.0f, MusicManager.PlayNumb);

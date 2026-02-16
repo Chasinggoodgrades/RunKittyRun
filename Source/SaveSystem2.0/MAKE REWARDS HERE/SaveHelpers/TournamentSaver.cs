@@ -1,79 +1,84 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using WCSharp.DateTime;
 
 public class TournamentSaver
 {
     private static TournamentSaver _instance;
+    private string GAME_ID;
     public static TournamentSaver Instance => _instance ??= new TournamentSaver();
+    public string REGION { get; private set; }
 
+    public TournamentSaver()
+    {
+    }
+
+    /// <summary>
+    /// Saves tournament stats for all active kitties during non-standard modes.
+    /// </summary>
     public void SaveTournamentData()
     {
-        foreach (var kitty in Globals.ALL_KITTIES_LIST)
+        try
         {
-            if (Gamemode.CurrentGameMode == GameMode.Standard) return;
-            if (kitty == null) return;
+            GAME_ID ??= GenerateUniqueGameID();
 
-            var stats = kitty.SaveData?.TournamentStats;
-            if (stats == null) return;
-
-            if (string.IsNullOrWhiteSpace(stats.PlayerName))
-                stats.PlayerName = kitty.Player.Name;
-
-            if (string.IsNullOrWhiteSpace(stats.DateTime))
-                stats.DateTime = DateTimeManager.DateTime.ToString();
-
-            if (string.IsNullOrWhiteSpace(stats.Region))
-                stats.Region = "Unknown";
-
-            stats.Gamemode = Gamemode.CurrentGameMode.ToString();
-            stats.GameType = Gamemode.CurrentGameModeType;
-
-            if (Gamemode.CurrentGameMode == GameMode.TeamTournament && kitty.TeamID > 0)
+            foreach (var kitty in Globals.ALL_KITTIES_LIST)
             {
-                stats.Team = TeamsUtil.GetTeamColor(kitty);
-                stats.TeamMembers = TeamsUtil.GetTeamMembers(kitty);
+                if (Gamemode.CurrentGameMode == GameMode.Standard) return;
+                if (kitty == null) return;
+
+                var stats = kitty.SaveData?.TournamentStats;
+                if (stats == null) return;
+
+                var currentGame = GetCurrentGameData(kitty);
+                if (currentGame == null) return;
+
+                if (string.IsNullOrWhiteSpace(stats.Tournament_ID))
+                    stats.Tournament_ID = GenerateUniqueTournamentID();
+
+                if (string.IsNullOrWhiteSpace(stats.PlayerName))
+                    stats.PlayerName = kitty.Player.Name;
+
+                if (string.IsNullOrWhiteSpace(stats.DateTime))
+                    stats.DateTime = DateTimeManager.DateTime.ToString();
+
+                if (string.IsNullOrWhiteSpace(stats.Region))
+                    stats.Region = "Unknown";
+
+                stats.Gamemode = Gamemode.CurrentGameMode.ToString();
+                stats.GameType = Gamemode.CurrentGameModeType;
+
+                if (Gamemode.CurrentGameMode == GameMode.TeamTournament && kitty.TeamID > 0)
+                {
+                    currentGame.Team = TeamsUtil.GetTeamColor(kitty);
+                    currentGame.TeamMembers = TeamsUtil.GetTeamMembers(kitty);
+                }
+                else if (Gamemode.CurrentGameMode == GameMode.SoloTournament)
+                    currentGame.Team = "Solo";
+
+                SaveRoundTime(kitty, currentGame);
+                SaveRoundProgress(kitty, currentGame);
+                SaveRoundSaves(kitty, currentGame);
+                SaveRoundDeaths(kitty, currentGame);
+                SaveRoundLevel(kitty, currentGame);
+
+                UpdateTotals(currentGame);
+
             }
-            else if (Gamemode.CurrentGameMode == GameMode.SoloTournament)
-                stats.Team = "Solo";
-
-            SaveRoundTime(kitty);
-            SaveRoundProgress(kitty);
-            SaveRoundSaves(kitty);
-            SaveRoundDeaths(kitty);
-            SaveRoundLevel(kitty);
-
-            UpdateTotals(kitty);
         }
-    }
-
-    public void NewTournamentResetData()
-    {
-        foreach (var kitty in Globals.ALL_KITTIES_LIST)
+        catch (Exception ex)
         {
-            if (Gamemode.CurrentGameMode == GameMode.Standard) return;
-            if (kitty == null) return;
-            var stats = kitty.SaveData?.TournamentStats;
-            if (stats == null) return;
-            stats.DateTime = string.Empty;
-            stats.Region = string.Empty;
-            stats.Gamemode = string.Empty;
-            stats.GameType = string.Empty;
-            stats.Team = string.Empty;
-            stats.Round_1.Reset();
-            stats.Round_2.Reset();
-            stats.Round_3.Reset();
-            stats.Round_4.Reset();
-            stats.Round_5.Reset();
-            stats.TotalTime = 0f;
-            stats.TotalProgress = 0f;
-            stats.TotalSaves = 0;
-            stats.TotalDeaths = 0;
+            Console.WriteLine($"Error saving tournament data: {ex.Message} " + ex.StackTrace);
         }
     }
 
-    private void SaveRoundTime(Kitty kitty)
+    /// <summary>
+    /// Saves the current round time into the active tournament game.
+    /// </summary>
+    private void SaveRoundTime(Kitty kitty, TournamentGameData currentGame)
     {
-        var roundData = GetCurrentRoundData(kitty);
+        var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
         if (Gamemode.CurrentGameMode == GameMode.TeamTournament
@@ -87,9 +92,12 @@ public class TournamentSaver
         roundData.RoundTime = kitty.TimeProg.GetRoundTime(Globals.ROUND);
     }
 
-    private void SaveRoundProgress(Kitty kitty)
+    /// <summary>
+    /// Saves the current round progress into the active tournament game.
+    /// </summary>
+    private void SaveRoundProgress(Kitty kitty, TournamentGameData currentGame)
     {
-        var roundData = GetCurrentRoundData(kitty);
+        var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
         if (Gamemode.CurrentGameMode == GameMode.TeamTournament
@@ -104,62 +112,234 @@ public class TournamentSaver
         roundData.Progress = kitty.TimeProg.GetRoundProgress(Globals.ROUND);
     }
 
-    private void SaveRoundSaves(Kitty kitty)
+    /// <summary>
+    /// Saves the current round saves into the active tournament game.
+    /// </summary>
+    private void SaveRoundSaves(Kitty kitty, TournamentGameData currentGame)
     {
-        var roundData = GetCurrentRoundData(kitty);
+        var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
         roundData.Saves = kitty.CurrentStats.RoundSaves;
     }
 
-    private void SaveRoundDeaths(Kitty kitty)
+    /// <summary>
+    /// Saves the current round deaths into the active tournament game.
+    /// </summary>
+    private void SaveRoundDeaths(Kitty kitty, TournamentGameData currentGame)
     {
-        var roundData = GetCurrentRoundData(kitty);
+        var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
         roundData.Deaths = kitty.CurrentStats.RoundDeaths;
     }
 
-    private void SaveRoundLevel(Kitty kitty)
+    /// <summary>
+    /// Saves the current round hero level into the active tournament game.
+    /// </summary>
+    private void SaveRoundLevel(Kitty kitty, TournamentGameData currentGame)
     {
-        var roundData = GetCurrentRoundData(kitty);
+        var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
         roundData.Level = kitty.Unit.HeroLevel;
     }
 
-    private void UpdateTotals(Kitty kitty)
+    /// <summary>
+    /// Recalculates totals for the active tournament game.
+    /// </summary>
+    private void UpdateTotals(TournamentGameData currentGame)
     {
-        var stats = kitty.SaveData?.TournamentStats;
-        if (stats == null) return;
-        stats.TotalTime = stats.Round_1.RoundTime + stats.Round_2.RoundTime + stats.Round_3.RoundTime + stats.Round_4.RoundTime + stats.Round_5.RoundTime;
-        stats.TotalProgress = stats.Round_1.Progress + stats.Round_2.Progress + stats.Round_3.Progress + stats.Round_4.Progress + stats.Round_5.Progress;
-        stats.TotalSaves = stats.Round_1.Saves + stats.Round_2.Saves + stats.Round_3.Saves + stats.Round_4.Saves + stats.Round_5.Saves;
-        stats.TotalDeaths = stats.Round_1.Deaths + stats.Round_2.Deaths + stats.Round_3.Deaths + stats.Round_4.Deaths + stats.Round_5.Deaths;
+        if (currentGame == null) return;
+        currentGame.TotalTime = currentGame.Round_1.RoundTime + currentGame.Round_2.RoundTime + currentGame.Round_3.RoundTime + currentGame.Round_4.RoundTime + currentGame.Round_5.RoundTime;
+        currentGame.TotalProgress = currentGame.Round_1.Progress + currentGame.Round_2.Progress + currentGame.Round_3.Progress + currentGame.Round_4.Progress + currentGame.Round_5.Progress;
+        currentGame.TotalSaves = currentGame.Round_1.Saves + currentGame.Round_2.Saves + currentGame.Round_3.Saves + currentGame.Round_4.Saves + currentGame.Round_5.Saves;
+        currentGame.TotalDeaths = currentGame.Round_1.Deaths + currentGame.Round_2.Deaths + currentGame.Round_3.Deaths + currentGame.Round_4.Deaths + currentGame.Round_5.Deaths;
     }
 
-    // Get current round TournamentData property
-    // When calling SaveRoundTime, we should be able to call this method to get the current round's TournamentData property to update Round_1 or Round_2 etc.. with proper time.
-
-    private TournamentRoundData GetCurrentRoundData(Kitty kitty)
+    /// <summary>
+    /// Gets the tournament round data for the active game and current round.
+    /// </summary>
+    private TournamentRoundData GetCurrentRoundData(TournamentGameData currentGame)
     {
-        var stats = kitty.SaveData.TournamentStats;
-        if (stats == null) return null;
+        if (currentGame == null) return null;
 
         switch (Globals.ROUND)
         {
             case 1:
-                return stats.Round_1;
+                return currentGame.Round_1;
             case 2:
-                return stats.Round_2;
+                return currentGame.Round_2;
             case 3:
-                return stats.Round_3;
+                return currentGame.Round_3;
             case 4:
-                return stats.Round_4;
+                return currentGame.Round_4;
             case 5:
-                return stats.Round_5;
+                return currentGame.Round_5;
             default:
                 return null;
         }
     }
+
+    /// <summary>
+    /// Determines which tournament game slot should receive data based on last played time.
+    /// </summary>
+    private TournamentGameData GetCurrentGameData(Kitty kitty)
+    {
+        var stats = kitty.SaveData.TournamentStats;
+        if (stats == null) return null;
+
+        // Get current game if possible
+        var inProgressGame = GetInProgressGame(stats);
+        if (inProgressGame != null) return inProgressGame;
+
+        var currentTime = DateTimeManager.DateTime;
+        if (!TryGetLastGameTime(stats.DateTime, currentTime, out var lastGameTime))
+        {
+            stats.DateTime = currentTime.ToString();
+        }
+
+        // Over 12 hrs , reset all games
+        var elapsedSeconds = currentTime.TotalSeconds - lastGameTime.TotalSeconds;
+        if (elapsedSeconds >= 12 * 3600) // 12 hours
+        {
+            ResetAllGamesData(stats, currentTime);
+            return stats.Game_1;
+        }
+
+        // If gamemodes or types arent matching.. then reset.
+        if (stats.Gamemode != Gamemode.CurrentGameMode.ToString() || stats.GameType != Gamemode.CurrentGameModeType)
+        {
+            ResetAllGamesData(stats, currentTime);
+            return stats.Game_1;
+        }
+
+        // if no slots availalbe, just reset it all
+        var currentGame = GetNextAvailableGame(stats);
+        if (currentGame == null)
+        {
+            ResetAllGamesData(stats, currentTime);
+            return stats.Game_1;
+        }
+        currentGame.Reset(); // if slot 1 happens to be next available game, reset just in case there was a restart.
+        currentGame.Game_ID = GAME_ID;
+
+        return currentGame;
+    }
+
+    /// <summary>
+    /// Resets all tournament game slots and stamps the new game timestamp.
+    /// </summary>
+    private bool ResetAllGamesData(TournamentStats stats, WcDateTime currentTime)
+    {
+        stats.Reset();
+        stats.DateTime = currentTime.ToString();
+        stats.Game_1.Game_ID = GAME_ID;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to parse the saved game timestamp into a WcDateTime instance.
+    /// </summary>
+    private bool TryGetLastGameTime(string savedTime, WcDateTime fallbackTime, out WcDateTime lastGameTime)
+    {
+        if (string.IsNullOrWhiteSpace(savedTime))
+        {
+            lastGameTime = fallbackTime;
+            return false;
+        }
+
+        try
+        {
+
+            lastGameTime = DateTime.TryParseExact(
+            savedTime,
+            "M/d/yyyy h:mm:ss tt",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.None,
+                out var parsedDateTime)
+                ? new WcDateTime(parsedDateTime.Year, parsedDateTime.Month, parsedDateTime.Day, parsedDateTime.Hour, parsedDateTime.Minute, parsedDateTime.Second)
+                : fallbackTime;
+            return true;
+        }
+        catch (Exception)
+        {
+            lastGameTime = fallbackTime;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Gets the next available tournament game slot.
+    /// </summary>
+    private TournamentGameData GetNextAvailableGame(TournamentStats stats)
+    {
+        if (IsGameEmpty(stats.Game_1)) return stats.Game_1;
+        if (IsGameEmpty(stats.Game_2)) return stats.Game_2;
+        if (IsGameEmpty(stats.Game_3)) return stats.Game_3;
+        return null;
+    }
+
+    /// <summary>
+    /// Finds an active game slot that already has data recorded.
+    /// </summary>
+    private TournamentGameData GetInProgressGame(TournamentStats stats)
+    {
+        // returning the game slot that has the same Game_ID as the current GAME_ID, if none match, return null
+        if (stats.Game_1 != null && stats.Game_1.Game_ID == GAME_ID) return stats.Game_1;
+        if (stats.Game_2 != null && stats.Game_2.Game_ID == GAME_ID) return stats.Game_2;
+        if (stats.Game_3 != null && stats.Game_3.Game_ID == GAME_ID) return stats.Game_3;
+        return null;
+    }
+
+    /// <summary>
+    /// Determines whether a game slot has any stored data.
+    /// </summary>
+    private bool IsGameEmpty(TournamentGameData game)
+    {
+        if (game == null) return true;
+        if (IsRoundEmpty(game.Round_1)
+            || IsRoundEmpty(game.Round_2)
+            || IsRoundEmpty(game.Round_3)
+            || IsRoundEmpty(game.Round_4)
+            || IsRoundEmpty(game.Round_5))
+            return true;
+
+        if (!string.IsNullOrWhiteSpace(game.Game_ID)) return false;
+
+        return game.TotalTime <= 0.0f
+            && game.TotalProgress <= 0.0f
+            && game.TotalSaves == 0
+            && game.TotalDeaths == 0;
+    }
+
+    private bool IsRoundEmpty(TournamentRoundData round)
+    {
+        if (round == null) return true;
+
+        return round.RoundTime <= 0.0f
+            && round.Progress <= 0.0f
+            && round.Saves == 0
+            && round.Deaths == 0;
+    }
+
+    /// <summary>
+    /// Generates a short unique game ID using the current timestamp.
+    /// </summary>
+    private string GenerateUniqueGameID()
+    {
+        var currentTime = DateTimeManager.DateTime;
+        var stringToConvert = $"{currentTime.Second}{currentTime.Day}{currentTime.Month}{currentTime.ToString()}{Globals.GAME_SEED}";
+        var base64String = WCSharp.Shared.Base64.ToBase64(stringToConvert);
+        return base64String.Substring(0, base64String.Length - 2);
+    }
+
+    private string GenerateUniqueTournamentID()
+    {
+        var currentTime = DateTimeManager.DateTime;
+        var stringToConvert = $"{Globals.GAME_SEED}{currentTime.ToString()}{currentTime.Month}{currentTime.Day}{currentTime.Second}";
+        var base64String = WCSharp.Shared.Base64.ToBase64(stringToConvert);
+        return base64String.Substring(0, base64String.Length - 2);
+    }
+
 }

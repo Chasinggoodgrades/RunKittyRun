@@ -1,28 +1,35 @@
-﻿public class TournamentStats
+﻿using System.Threading;
+
+public class TournamentStats
 {
+    public string Tournament_ID { get; set; } = "";
     public string PlayerName { get; set; } = "";
-    public string DateTime { get; set; } = "";
     public string Region { get; set; } = "";
     public string Gamemode { get; set; } = "";
     public string GameType { get; set; } = "";
-    public string Team { get; set; } = ""; // Should this be team colors or by team #.. Likely team colors, be easier to tie together on the webend I believe.
-    public string TeamMembers { get; set; } = "";
-    public float TotalTime { get; set; }
-    public int TotalDeaths { get; set; }
-    public int TotalSaves { get; set; }
-    public float TotalProgress { get; set; }
+    public string DateTime { get; set; } = "";
+    public TournamentGameData Game_1 { get; set; }
+    public TournamentGameData Game_2 { get; set; }
+    public TournamentGameData Game_3 { get; set; }
 
-    public TournamentRoundData Round_1 { get; set; }
-    public TournamentRoundData Round_2 { get; set; }
-    public TournamentRoundData Round_3 { get; set; }
-    public TournamentRoundData Round_4 { get; set; }
-    public TournamentRoundData Round_5 { get; set; }
     public TournamentStats()
     {
-        Round_1 = new TournamentRoundData();
-        Round_2 = new TournamentRoundData();
-        Round_3 = new TournamentRoundData();
-        Round_4 = new TournamentRoundData();
-        Round_5 = new TournamentRoundData();
+        Game_1 = new TournamentGameData();
+        Game_2 = new TournamentGameData();
+        Game_3 = new TournamentGameData();
     }
+
+    public void Reset()
+    {
+        Tournament_ID = "";
+        PlayerName = "";
+        Region = "";
+        Gamemode = "";
+        GameType = "";
+        DateTime = "";
+        Game_1.Reset();
+        Game_2.Reset();
+        Game_3.Reset();
+    }
+
 }
