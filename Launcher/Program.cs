@@ -198,6 +198,12 @@ public static class LuaScriptProcessor
     {
         // script = script.Replace(@"  return function(x, y) " + "\r\n" + "    if x == null then x = nil end" + "\r\n" + "    if y == null then y = nil end" + "\r\n" + "    return compare(x, y) < 0" + "\r\n" + "  end", @"  return compare(x, y) < 0");
 
+        script = Regex.Replace(
+        script,
+        @"CompiledVERSION\s*=\s*""DoNotTouch""",
+        $"CompiledVERSION = \"{Launcher.MapDesc.VERSION}\"",
+        RegexOptions.Multiline);
+
         return script;
     }
 

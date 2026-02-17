@@ -6,6 +6,7 @@ public class SaveManager
 {
     private SyncSaveLoad syncSaveLoad;
     private static string SavePath { get; } = "Run-Kitty-Run";
+    private static string CompiledVERSION = "DoNotTouch"; // Set during compile time Launcher/Program.cs
     public static Dictionary<player, KittyData> SaveData { get; set; } = new Dictionary<player, KittyData>();
     public static List<player> PlayersLoaded { get; } = new List<player>();
     public SaveManager()
@@ -108,6 +109,7 @@ public class SaveManager
             if (player.SlotState != playerslotstate.Playing) return;
             SaveData[player] = new KittyData();
             SaveData[player].PlayerName = player.Name;
+            SaveData[player].Version = CompiledVERSION;
             if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
             if (!Gamemode.IsGameModeChosen) return;
         }
@@ -143,6 +145,7 @@ public class SaveManager
             return;
         }
         kittyData.SetRewardsFromUnavailableToAvailable();
+        kittyData.Version = CompiledVERSION;
         SaveData[player] = kittyData;
         if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
     }

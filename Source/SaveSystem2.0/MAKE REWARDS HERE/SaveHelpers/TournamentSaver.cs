@@ -10,7 +10,7 @@ public class TournamentSaver
     public string TOURNAMENT_ID { get; private set; }
     public static TournamentSaver Instance => _instance ??= new TournamentSaver();
     public string REGION { get; private set; }
-    public bool ApprovedForUpload { get; set; } = false;
+    public int ApprovedForUpload { get; set; } = 0;
 
     public TournamentSaver()
     {
@@ -54,7 +54,7 @@ public class TournamentSaver
                 if (string.IsNullOrWhiteSpace(stats.Region))
                     stats.Region = REGION;
 
-                if (stats.AdminApproved == false && ApprovedForUpload)
+                if (stats.AdminApproved == 0 && ApprovedForUpload == 1)
                     stats.AdminApproved = ApprovedForUpload;
 
                 stats.Gamemode = Gamemode.CurrentGameMode.ToString();
@@ -236,7 +236,7 @@ public class TournamentSaver
             ResetAllGamesData(stats, currentTime);
             return stats.Game_1;
         }
-        currentGame.Reset(); // if slot 1 happens to be next available game, reset just in case there was a restart.
+        currentGame.Reset(); // reset game slot to clear residue data.
         currentGame.Game_ID = GAME_ID;
 
         return currentGame;
@@ -249,6 +249,19 @@ public class TournamentSaver
     {
         stats.Reset();
         stats.DateTime = currentTime.ToString();
+        stats.Game_1.Game_ID = GAME_ID;
+        return true;
+    }
+
+    /// <summary>
+    /// Resets all tournament game slots and stamps the new game timestamp.
+    /// </summary>
+    public bool ResetAllGamesData(Kitty kitty)
+    {
+        var stats = kitty?.SaveData?.TournamentStats;
+        if (stats == null) return false;
+        stats.Reset();
+        stats.DateTime = DateTimeManager.DateTime.ToString();
         stats.Game_1.Game_ID = GAME_ID;
         return true;
     }
@@ -308,7 +321,11 @@ public class TournamentSaver
     /// </summary>
     private TournamentGameData GetNextAvailableGame(TournamentStats stats)
     {
-        if (IsGameEmpty(stats.Game_1)) return stats.Game_1;
+        if (IsGameEmpty(stats.Game_1))
+        {
+            ResetAllGamesData(stats, DateTimeManager.DateTime); // includes tournament_ID to reset.
+            return stats.Game_1;
+        }
         if (IsGameEmpty(stats.Game_2)) return stats.Game_2;
         if (IsGameEmpty(stats.Game_3)) return stats.Game_3;
         return null;

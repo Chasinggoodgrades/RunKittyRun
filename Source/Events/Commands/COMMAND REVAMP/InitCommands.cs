@@ -1890,9 +1890,46 @@ public static class InitCommands
             {
                 bool approved = CommandsManager.GetBool(args[0]);
 
-                TournamentSaver.Instance.ApprovedForUpload = approved;
+                var bitApproval = approved ? 1 : 0;
+                TournamentSaver.Instance.ApprovedForUpload = bitApproval;
                 string status = approved ? "Approved" : "Denied";
                 player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament ID {status}: {TournamentSaver.Instance.TOURNAMENT_ID}{Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "resettournamentdata",
+            alias: "rtd",
+            group: "admin",
+            argDesc: "[resolvePlayerId]",
+            description: "Resets the resolvePlayerId Tournament Data",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: resettournamentdata [ResolvePlayerId]{Colors.COLOR_RESET}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    TournamentSaver.Instance.ResetAllGamesData(kitty);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "resetmytournamentdata",
+            alias: "rmtd",
+            group: "all",
+            argDesc: "[]",
+            description: "Resets your Tournament Data",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                TournamentSaver.Instance.ResetAllGamesData(kitty);
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
             }
         );
 

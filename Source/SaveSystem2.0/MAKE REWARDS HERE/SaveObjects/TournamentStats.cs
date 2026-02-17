@@ -3,7 +3,7 @@
 public class TournamentStats
 {
     public string Tournament_ID { get; set; } = "";
-    public bool AdminApproved { get; set; } = false; // Dictates whether this tournament can be shown on webend.
+    public int AdminApproved { get; set; } = 0; // Dictates whether this tournament can be shown on webend.
     public string PlayerName { get; set; } = "";
     public string Region { get; set; } = "";
     public string Gamemode { get; set; } = "";
@@ -23,7 +23,7 @@ public class TournamentStats
     public void Reset()
     {
         Tournament_ID = "";
-        AdminApproved = false;
+        AdminApproved = 0;
         PlayerName = "";
         Region = "";
         Gamemode = "";

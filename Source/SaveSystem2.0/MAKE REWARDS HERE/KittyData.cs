@@ -7,6 +7,7 @@ public class KittyData
 {
     public string PlayerName { get; set; } = "";
     public string Date { get; set; } = "";
+    public string Version { get; set; } = "";
     public GameStatsData GameStats { get; set; }
     public GameSelectedData SelectedData { get; set; }
     public RoundTimesData RoundTimes { get; set; }
