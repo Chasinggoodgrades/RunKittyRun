@@ -28,6 +28,7 @@ public static class VictoryZone
         var u = @event.Unit;
         var player = u.Owner;
         if (u.UnitType != Constants.UNIT_KITTY) return;
+        var kitty = Globals.ALL_KITTIES[player];
         if (!Globals.GAME_ACTIVE) return;
         if (Gamemode.CurrentGameMode == GameMode.Standard) // Standard
         {
@@ -37,18 +38,31 @@ public static class VictoryZone
         else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
-            MoveAndFinish(player);
+            kitty.Finished = true;
+            RoundUtilities.MovePlayerToStart(player);
+            BarrierSetup.ActivateBarrier();
             RoundManager.RoundEndCheck();
         }
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
         {
-            // Move all team members to the start, save their time. Wait for all teams to finish.
-            foreach (var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
+            kitty.Finished = true;
+
+            if (RoundManager.DidTeamEnd(kitty.TeamID))
             {
-                MoveAndFinish(teamMember);
+                Globals.ALL_TEAMS[kitty.TeamID].Finished = true;
+                if (RoundManager.RoundEndCheck()) return;
             }
-            Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
-            RoundManager.RoundEndCheck();
+            RoundUtilities.MoveTeamToStart(Globals.ALL_TEAMS[kitty.TeamID]);
+            if (RoundManager.RoundEndCheck()) return;
+            BarrierSetup.ActivateBarrier();
+
+            // // Move all team members to the start, save their time. Wait for all teams to finish.
+            // foreach (var teamMember in Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Teammembers)
+            // {
+            //     MoveAndFinish(teamMember);
+            // }
+            // Globals.ALL_TEAMS[Globals.ALL_KITTIES[player].TeamID].Finished = true;
+            // RoundManager.RoundEndCheck();
         }
         MultiboardUtil.RefreshMultiboards();
     }
@@ -73,15 +87,6 @@ public static class VictoryZone
             if (!VictoryContainerConditions(Globals.ALL_KITTIES[player].Unit)) return false;
         }
         return true;
-    }
-
-    private static void MoveAndFinish(player player)
-    {
-        var kitty = Globals.ALL_KITTIES[player];
-        kitty.Finished = true;
-        kitty.Unit.SetPosition(Regions.safe_Area_00.Center.X, Regions.safe_Area_00.Center.Y);
-        Progress.CalculateProgress(kitty);
-        BarrierSetup.ActivateBarrier();
     }
 
     private static bool VictoryContainerConditions(unit u)

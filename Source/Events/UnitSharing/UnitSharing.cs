@@ -21,7 +21,7 @@ public static class UnitSharing
     /// <returns></returns>
     private static trigger RegisterTrigger()
     {
-        Trigger ??= CreateTrigger();
+        Trigger = CreateTrigger();
         for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {
             if (Action != null) break;
@@ -38,7 +38,7 @@ public static class UnitSharing
     /// <returns></returns>
     private static triggeraction TriggerActions()
     {
-        Action ??= Trigger.AddAction(() =>
+        Action = Trigger.AddAction(() =>
         {
             var player = @event.Player; // Triggering Player
             if (AllowSharing(player)) return;                

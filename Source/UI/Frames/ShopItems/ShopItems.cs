@@ -6,6 +6,7 @@ public enum ShopItemType
 
 public class ShopItem
 {
+    public static List<ShopItem> ShopItems { get; set; } = new List<ShopItem>();
     public string Name { get; set; }
     public int Cost { get; set; }
     public int ItemID { get; set; }
@@ -46,20 +47,27 @@ public class ShopItem
 
     public static List<ShopItem> ShopItemsRelic()
     {
-        var shopItems = new List<ShopItem>();
-
         if (Gamemode.CurrentGameMode == GameMode.Standard)
         {
-            shopItems.Add(new ShopItem(new OneOfNine()));
-            shopItems.Add(new ShopItem(new RingOfSummoning()));
-            shopItems.Add(new ShopItem(new BeaconOfUnitedLifeforce()));
-            shopItems.Add(new ShopItem(new ShardOfTranslocation()));
-            shopItems.Add(new ShopItem(new ChronoSphere()));
+            AddRelicToShopItems(new OneOfNine());
+            AddRelicToShopItems(new RingOfSummoning());
+            AddRelicToShopItems(new BeaconOfUnitedLifeforce());
+            AddRelicToShopItems(new ShardOfTranslocation());
+            AddRelicToShopItems(new ChronoSphere());
         }
-        shopItems.Add(new ShopItem(new FangOfShadows()));
-        shopItems.Add(new ShopItem(new FrostbiteRing()));
+        AddRelicToShopItems(new FangOfShadows());
+        AddRelicToShopItems(new FrostbiteRing());
 
-        return shopItems;
+        return ShopItems;
+    }
+
+    public static void AddRelicToShopItems(Relic relic)
+    {
+        if (!ShopItems.Exists(x => x.Name == relic.Name)) // predicate leak if called too much.
+        {
+            ShopItems.Add(new ShopItem(relic));
+        }
+        else Logger.Critical($"Relic {relic.Name} already exists in shop items, not adding.");
     }
 
     public static List<ShopItem> ShopItemsReward()

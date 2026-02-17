@@ -17,6 +17,11 @@ public static class Logger
         Log("CRITICAL", Colors.COLOR_RED, messages);
     }
 
+    public static void Debug(params object[] messages)
+    {
+        if (!Source.Program.Debug) return;
+        Log("DEBUG", Colors.COLOR_LIGHTBLUE, messages);
+    }
     private static void Log(string level, string color, params object[] messages)
     {
         if (!ErrorHandler.ErrorMessagesOn) return;

@@ -8,37 +8,41 @@ public static class RoundUtilities
         var kitty = Globals.ALL_KITTIES[Player];
         var x = RegionList.SpawnRegions[Player.Id].Center.X;
         var y = RegionList.SpawnRegions[Player.Id].Center.Y;
-        kitty.Unit.SetPosition(x, y);
-        kitty.Unit.Facing = 360.0f;
+        kitty.Unit.X = x;
+        kitty.Unit.Y = y;
+        kitty.Unit.Facing = 359.000f;
     }
 
     public static void MoveTeamToStart(Team team)
     {
-        foreach (var player in team.Teammembers)
+        for (int i = 0; i < team.Teammembers.Count; i++)
         {
+            var player = team.Teammembers[i];
+            Globals.ALL_KITTIES[player].Finished = true;
             MovePlayerToStart(player);
         }
+        team.Finished = true;
     }
 
     public static void MoveAllPlayersToStart()
     {
-        foreach (var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES_LIST)
         {
-            MovePlayerToStart(kitty.Value.Player);
+            MovePlayerToStart(kitty.Player);
         }
     }
 
     public static void RoundResetAll()
     {
-        foreach (var kitty in Globals.ALL_KITTIES)
+        foreach (var kitty in Globals.ALL_KITTIES_LIST)
         {
-            kitty.Value.Unit.Revive(RegionList.SpawnRegions[kitty.Value.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Value.Player.Id].Center.Y, false);
-            Globals.ALL_CIRCLES[kitty.Value.Player].HideCircle();
-            kitty.Value.Alive = true;
-            kitty.Value.ProgressZone = 0;
-            kitty.Value.Finished = false;
-            kitty.Value.Unit.Mana = kitty.Value.Unit.MaxMana;
-            kitty.Value.CurrentStats.ResetRoundData();
+            kitty.Unit.Revive(RegionList.SpawnRegions[kitty.Player.Id].Center.X, RegionList.SpawnRegions[kitty.Player.Id].Center.Y, false);
+            kitty.Circle.HideCircle();
+            kitty.Alive = true;
+            kitty.ProgressZone = 0;
+            kitty.Finished = false;
+            kitty.Unit.Mana = kitty.Unit.MaxMana;
+            kitty.CurrentStats.ResetRoundData();
         }
     }
 

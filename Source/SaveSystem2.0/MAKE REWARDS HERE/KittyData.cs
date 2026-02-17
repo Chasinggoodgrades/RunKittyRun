@@ -7,6 +7,7 @@ public class KittyData
 {
     public string PlayerName { get; set; } = "";
     public string Date { get; set; } = "";
+    public string Version { get; set; } = "";
     public GameStatsData GameStats { get; set; }
     public GameSelectedData SelectedData { get; set; }
     public RoundTimesData RoundTimes { get; set; }
@@ -15,7 +16,8 @@ public class KittyData
     public KibbleCurrency KibbleCurrency { get; set; }
     public PersonalBests PersonalBests { get; set; }
     public PlayerColorData PlayerColorData { get; set; }
-    public GameFriendsData FriendsData { get; set; } = new GameFriendsData();
+    public GameFriendsData FriendsData { get; set; }
+    public TournamentStats TournamentStats { get; set; }
 
     public KittyData()
     {
@@ -28,6 +30,7 @@ public class KittyData
         PersonalBests = new PersonalBests();
         PlayerColorData = new PlayerColorData();
         FriendsData = new GameFriendsData();
+        TournamentStats = new TournamentStats();
     }
 
     /// <summary>

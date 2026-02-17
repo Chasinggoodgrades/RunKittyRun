@@ -182,9 +182,10 @@ public class AIController
 
         var targetPosition = reachedLastProgressZoneCenter && allKittiesAtSameOrHigherSafezone ? nextSafezoneCenter : currentSafezoneCenter;
 
-        foreach (var circle in Globals.ALL_CIRCLES)
+        foreach (var kitCir in Globals.ALL_KITTIES_LIST)
         {
-            var deadKitty = Globals.ALL_KITTIES[circle.Value.Player];
+            var circle = kitCir.Circle;
+            var deadKitty = Globals.ALL_KITTIES[circle.Player];
             var deadKittyProgressZoneId = CalcProgressZone(deadKitty);
 
             if (deadKittyProgressZoneId > currentProgressZoneId)
@@ -251,7 +252,7 @@ public class AIController
                         break;
                     }
 
-                    targetPosition = (circle.Value.Unit.X, circle.Value.Unit.Y);
+                    targetPosition = (circle.Unit.X, circle.Unit.Y);
                     break;
                 }
             }

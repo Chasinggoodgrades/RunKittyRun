@@ -149,6 +149,9 @@ public static class GameoverUtil
     private static void SetBestGameRoundTimes(Kitty kitty)
     {
         // Get the correct best game time data object based on difficulty
+        var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
         object bestGameTimeData = Difficulty.DifficultyValue switch
         {
             (int)DifficultyLevel.Normal => kitty.SaveData.BestGameTimes.NormalGameTime,

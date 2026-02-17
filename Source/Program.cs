@@ -1,5 +1,6 @@
 ﻿using Source.Init;
 using System;
+using WCSharp.Api;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
 

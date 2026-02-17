@@ -5,17 +5,41 @@ using WCSharp.Api;
 public class KittyTime
 {
     private readonly Action _cachedProgress;
+    private readonly IProgressService _progressService;
     private Dictionary<int, float> RoundTime { get; set; } = new Dictionary<int, float>();
     private Dictionary<int, float> RoundProgress { get; set; } = new Dictionary<int, float>();
     private AchesTimers ProgressTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
     private float TotalTime { get; set; }
     private Kitty Kitty { get; set; }
 
-    public KittyTime(Kitty kitty)
+    public KittyTime(Kitty kitty, IProgressService progressService)
     {
         Kitty = kitty;
-        _cachedProgress = () => Progress.CalculateProgress(Kitty);
+        _progressService = progressService;
+        _cachedProgress = UpdateProgress;
         Initialize();
+    }
+
+    private void UpdateProgress()
+    {
+        var request = ObjectPool<ProgressRequest>.GetEmptyObject();
+        try
+        {
+            request.Update(
+                Kitty.Unit.X,
+                Kitty.Unit.Y,
+                Kitty.ProgressZone,
+                Kitty.ProgressHelper.CurrentPoint,
+                Kitty.Finished,
+                Kitty.Alive);
+
+            var progress = _progressService.CalculateProgress(request);
+            Kitty.TimeProg.SetRoundProgress(Globals.ROUND, progress);
+        }
+        finally
+        {
+            ObjectPool<ProgressRequest>.ReturnObject(request);
+        }
     }
 
     private void Initialize()
@@ -96,8 +120,7 @@ public class KittyTime
 
     public void SetRoundProgress(int round, float progress)
     {
-        if (RoundProgress.ContainsKey(round))
-            RoundProgress[round] = progress;
+        RoundProgress[round] = progress;
     }
 
     public float GetOverallProgress() // Solo Tournament Issue

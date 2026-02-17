@@ -24,7 +24,7 @@ public static class RollerSkates
 
         if (Gamemode.CurrentGameMode != GameMode.Standard)
         {
-            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Roller Skates can only be used in Standard Mode!{Colors.COLOR_RESET}");
+            unit.Owner.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Roller Skates are only available in Standard Mode{Colors.COLOR_RESET}");
             return;
         }
 

@@ -108,7 +108,7 @@ public class RingOfSummoning : Relic
             // Position adjustments and revival
             kitty.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ProgressZone = summoningKitty.ProgressZone;
-            Globals.ALL_CIRCLES[unit.Owner].Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
+            kitty.Circle.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
 
             // Notify players

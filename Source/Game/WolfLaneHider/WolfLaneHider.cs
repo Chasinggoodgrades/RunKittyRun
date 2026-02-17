@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 public static class WolfLaneHider
 {
-    private static readonly HashSet<int> lanesToEnable = new HashSet<int>();
-    private static readonly HashSet<int> currentlyVisibleLanes = new HashSet<int>();
+    private const int MaxLaneIndex = 17;
+    private static readonly List<int> lanesToEnable = new List<int>();
+    private static readonly bool[] lanesToEnableLookup = new bool[MaxLaneIndex + 1];
+    private static readonly bool[] currentlyVisibleLanesLookup = new bool[MaxLaneIndex + 1];
 
     public static void LanesHider()
     {
@@ -24,6 +26,7 @@ public static class WolfLaneHider
         try
         {
             lanesToEnable.Clear();
+            Array.Clear(lanesToEnableLookup, 0, lanesToEnableLookup.Length);
 
             for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
@@ -36,6 +39,12 @@ public static class WolfLaneHider
         {
             Logger.Warning($"Error in UpdateLanesToEnable: {e.Message}");
         }
+    }
+
+    public static void ShadowKittyLaneAdd(int safezone)
+    {
+        AddAdjacentLanes(safezone);
+        ApplyLaneVisibility();
     }
 
     private static void AddAdjacentLanes(int currentSafezone)
@@ -54,10 +63,14 @@ public static class WolfLaneHider
 
     private static void AddLane(int lane)
     {
-        if (lane >= 0 && lane <= 17)
-        {
-            lanesToEnable.Add(lane);
-        }
+        if (lane < 0 || lane > MaxLaneIndex)
+            return;
+
+        if (lanesToEnableLookup[lane])
+            return;
+
+        lanesToEnableLookup[lane] = true;
+        lanesToEnable.Add(lane);
     }
 
     private static void ApplyLaneVisibility()
@@ -67,30 +80,35 @@ public static class WolfLaneHider
             if (WolfArea.WolfAreas == null)
                 return;
 
-            // Show lanes that are now visible but weren't before
-            foreach (var laneId in lanesToEnable)
+            var lanes = WolfArea.WolfAreas_List;
+
+            for (int i = 0; i < lanes.Count; i++)
             {
-                if (!currentlyVisibleLanes.Contains(laneId) && WolfArea.WolfAreas.TryGetValue(laneId, out var lane))
+                var lane = lanes[i];
+                var laneId = lane.ID;
+                var shouldBeVisible = laneId >= 0
+                    && laneId <= MaxLaneIndex
+                    && lanesToEnableLookup[laneId];
+                var isVisible = laneId >= 0
+                    && laneId <= MaxLaneIndex
+                    && currentlyVisibleLanesLookup[laneId];
+
+                if (shouldBeVisible && !isVisible)
                 {
                     lane.IsEnabled = true;
                     SetLaneVisibility(lane, true);
                 }
-            }
-
-            // Hide lanes that are no longer visible
-            foreach (var laneId in currentlyVisibleLanes)
-            {
-                if (!lanesToEnable.Contains(laneId) && WolfArea.WolfAreas.TryGetValue(laneId, out var lane))
+                else if (!shouldBeVisible && isVisible)
                 {
                     lane.IsEnabled = false;
                     SetLaneVisibility(lane, false);
                 }
-            }
 
-            // Update the set for next time
-            currentlyVisibleLanes.Clear();
-            foreach (var laneId in lanesToEnable)
-                currentlyVisibleLanes.Add(laneId);
+                if (laneId >= 0 && laneId <= MaxLaneIndex)
+                {
+                    currentlyVisibleLanesLookup[laneId] = shouldBeVisible;
+                }
+            }
         }
         catch (Exception e)
         {
@@ -116,10 +134,10 @@ public static class WolfLaneHider
             if (WolfArea.WolfAreas == null)
                 return;
 
-            foreach (var lane in WolfArea.WolfAreas)
+            foreach (var lane in WolfArea.WolfAreas_List)
             {
-                SetLaneVisibility(lane.Value, false);
-                lane.Value.IsEnabled = false;
+                SetLaneVisibility(lane, false);
+                lane.IsEnabled = false;
             }
         }
         catch (Exception e)
@@ -133,13 +151,14 @@ public static class WolfLaneHider
         try
         {
             lanesToEnable.Clear();
-            currentlyVisibleLanes.Clear();
+            Array.Clear(lanesToEnableLookup, 0, lanesToEnableLookup.Length);
+            Array.Clear(currentlyVisibleLanesLookup, 0, currentlyVisibleLanesLookup.Length);
             if (WolfArea.WolfAreas == null)
                 return;
-            foreach (var lane in WolfArea.WolfAreas)
+            foreach (var lane in WolfArea.WolfAreas_List)
             {
-                lane.Value.IsEnabled = true;
-                SetLaneVisibility(lane.Value, true);
+                lane.IsEnabled = true;
+                SetLaneVisibility(lane, true);
             }
         }
         catch (Exception e)

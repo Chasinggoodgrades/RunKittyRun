@@ -3,6 +3,7 @@
     public static void Initialize()
     {
         ItemSpawner.NUMBER_OF_ITEMS = 8;
+        ShadowKitty.Initialize();
     }
 
     public static void ReviveKittySoloTournament(Kitty kitty)

@@ -40,7 +40,11 @@ public static class InitCommands
             group: "all",
             argDesc: "",
             description: "Save your current game stats.",
-            action: (player, args) => Globals.SaveSystem.Save(player)
+            action: (player, args) =>
+            {
+                TournamentSaver.Instance.SaveTournamentData();
+                Globals.SaveSystem.Save(player);
+            } 
         );
 
         CommandsManager.RegisterCommand(
@@ -879,11 +883,11 @@ public static class InitCommands
             {
                 var affixName = args[0] != "" ? char.ToUpper(args[0][0]) + args[0].Substring(1).ToLower() : "Speedster";
                 Console.WriteLine($"Applying {affixName} to all wolves.");
-                foreach (var wolf in Globals.ALL_WOLVES)
+                foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
-                    if (NamedWolves.DNTNamedWolves.Contains(wolf.Value)) continue;
-                    var affix = AffixFactory.CreateAffix(wolf.Value, affixName);
-                    wolf.Value.AddAffix(affix);
+                    if (NamedWolves.DNTNamedWolves.Contains(wolf)) continue;
+                    var affix = AffixFactory.CreateAffix(wolf, affixName);
+                    wolf.AddAffix(affix);
                 }
             }
         );
@@ -930,9 +934,9 @@ public static class InitCommands
             description: "Clears all affixes from all wolves.",
             action: (player, args) =>
             {
-                foreach (var wolf in Globals.ALL_WOLVES)
+                foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
-                    wolf.Value.RemoveAllWolfAffixes();
+                    wolf?.RemoveAllWolfAffixes();
                 }
             }
         );
@@ -1160,7 +1164,6 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
-                        new Circle(compPlayer);
                         var newKitty = new Kitty(compPlayer);
                         newKitty.Unit.AddItem(FourCC("bspd"));
                     }
@@ -1783,6 +1786,17 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "savetesting",
+            alias: "ast",
+            group: "admin",
+            argDesc: "",
+            description: "Save Testing for Lane Times",
+            action: (player, args) =>
+            {
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",
             group: "admin",
@@ -1851,6 +1865,71 @@ public static class InitCommands
                 var wolf = Globals.ALL_WOLVES[selectedUnit];
                 string timerAddress = $"WCTimerAddresses:{wolf.WanderTimer.Timer} : {wolf.EffectTimer.Timer}";
                 Console.WriteLine($"{timerAddress}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "getdate",
+            alias: "",
+            group: "all",
+            argDesc: "",
+            description: "Gets the current date, time, day, month, etc.",
+            action: (player, args) =>
+            {
+                player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Date: {DateTimeManager.DateTime.ToString()}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "approved",
+            alias: "appt",
+            group: "admin",
+            argDesc: "[true][false]",
+            description: "Approves the current TOURNAMENT_ID, this only needs to get approved once per tournament series.",
+            action: (player, args) =>
+            {
+                bool approved = CommandsManager.GetBool(args[0]);
+
+                var bitApproval = approved ? 1 : 0;
+                TournamentSaver.Instance.ApprovedForUpload = bitApproval;
+                string status = approved ? "Approved" : "Denied";
+                player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament ID {status}: {TournamentSaver.Instance.TOURNAMENT_ID}{Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "resettournamentdata",
+            alias: "rtd",
+            group: "admin",
+            argDesc: "[resolvePlayerId]",
+            description: "Resets the resolvePlayerId Tournament Data",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: resettournamentdata [ResolvePlayerId]{Colors.COLOR_RESET}");
+                    return;
+                }
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    TournamentSaver.Instance.ResetAllGamesData(kitty);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "resetmytournamentdata",
+            alias: "rmtd",
+            group: "all",
+            argDesc: "[]",
+            description: "Resets your Tournament Data",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                TournamentSaver.Instance.ResetAllGamesData(kitty);
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
             }
         );
 

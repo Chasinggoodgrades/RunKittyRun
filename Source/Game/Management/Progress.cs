@@ -3,25 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using WCSharp.Api;
 
-public static class Progress
+public sealed class Progress : IProgressService
 {
-    public static Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
-    private static timer TeamProgTimer { get; set; } = timer.Create();
+    private static Progress _instance;
+    public static Progress Instance => _instance
+        ?? throw new InvalidOperationException("Progress has not been initialized. Call Progress.Initialize() before accessing the instance.");
+
+    public Dictionary<int, float> DistancesFromStart { get; private set; } = new Dictionary<int, float>();
+    private timer TeamProgTimer { get; set; } = timer.Create();
 
     public static void Initialize()
+    {
+        _instance ??= new Progress();
+    }
+
+    private Progress()
     {
         CalculateTotalDistance();
         if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
         TeamProgTimer.Start(0.2f, true, TeamProgressTracker);
     }
 
-    public static void CalculateProgress(Kitty kitty)
+    public float CalculateProgress(ProgressRequest request)
     {
-        var round = Globals.ROUND;
-        kitty.TimeProg.SetRoundProgress(round, CalculatePlayerProgress(kitty));
+        return CalculatePlayerProgress(request);
     }
 
-    private static void TeamProgressTracker()
+    private void TeamProgressTracker()
     {
         if (!Globals.GAME_ACTIVE) return;
         try
@@ -40,7 +48,7 @@ public static class Progress
         }
     }
 
-    private static string CalculateTeamProgress(Team Team)
+    private string CalculateTeamProgress(Team Team)
     {
         float totalProgress = 0.0f;
 
@@ -55,17 +63,17 @@ public static class Progress
         return (totalProgress / Team.Teammembers.Count).ToString("F2");
     }
 
-    private static float CalculatePlayerProgress(Kitty kitty)
+    private float CalculatePlayerProgress(ProgressRequest request)
     {
         try
         {
-            var currentSafezone = kitty.ProgressZone;
-            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y)) return 100.0f; // if at end.. 100 progress
-            if (Regions.Victory_Area.Contains(kitty.Unit.X, kitty.Unit.Y)) return 100.0f; // if in victory area, 100 progress
-            if (Globals.SAFE_ZONES[0].Rectangle.Contains(kitty.Unit.X, kitty.Unit.Y) && !kitty.Finished) return 0.0f; // if at start, 0 progress
-            if (kitty.Alive && kitty.Finished) return 100.0f;
-            var currentProgress = DistanceBetweenPoints(kitty.Unit.X, kitty.Unit.Y,
-                ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].X, ProgressPointHelper.Points[kitty.ProgressHelper.CurrentPoint].Y);
+            var currentSafezone = request.ProgressZone;
+            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(request.UnitX, request.UnitY)) return 100.0f; // if at end.. 100 progress
+            if (Regions.Victory_Area.Contains(request.UnitX, request.UnitY)) return 100.0f; // if in victory area, 100 progress
+            if (Globals.SAFE_ZONES[0].Rectangle.Contains(request.UnitX, request.UnitY) && !request.Finished) return 0.0f; // if at start, 0 progress
+            if (request.Alive && request.Finished) return 100.0f;
+            var currentProgress = DistanceBetweenPoints(request.UnitX, request.UnitY,
+                ProgressPointHelper.Points[request.CurrentPoint].X, ProgressPointHelper.Points[request.CurrentPoint].Y);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
 
             var progress = totalProgress / DistancesFromStart[RegionList.PathingPoints.Length - 1] * 100;
@@ -80,7 +88,7 @@ public static class Progress
         }
     }
 
-    public static float CalculateNitroPacerProgress()
+    public float CalculateNitroPacerProgress()
     {
         var nitroKitty = NitroPacer.Unit;
         var currentSafezone = NitroPacer.GetCurrentCheckpoint();
@@ -93,7 +101,7 @@ public static class Progress
         return totalProgress;
     }
 
-    private static void CalculateTotalDistance()
+    private void CalculateTotalDistance()
     {
         try
         {

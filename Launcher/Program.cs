@@ -110,9 +110,7 @@ namespace Launcher
                 };
 
                 // Collect required paths and compile
-                var coreSystemFiles = CSharpLua.CoreSystem.CoreSystemProvider.GetCoreSystemFiles()
-                    .Where(x => !x.EndsWith("Common.lua"))
-                    .Concat(new[] { "CoreSystem/WCSharp.lua", "PriorityQueue.lua", "SortedDictionary.lua", "SortedList.lua" });
+                var coreSystemFiles = CSharpLua.CoreSystem.CoreSystemProvider.GetCoreSystemFiles(CSharpLua.CoreSystem.Wc3Api.WCSharp, GetCoreSystemDirectory());
                 var blizzardJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/Blizzard.j");
                 var commonJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/common.j");
                 var compileResult = map.CompileScript(compiler, coreSystemFiles, blizzardJ, commonJ);
@@ -158,7 +156,7 @@ namespace Launcher
                     var isReforged = Version.Parse(FileVersionInfo.GetVersionInfo(wc3exe).FileVersion) >= new Version(1, 32);
                     if (isReforged)
                     {
-                        commandLineArgs.Append(" -launch");
+                        commandLineArgs.Append(" -windowed -launch");
                     }
                     else if (GRAPHICS_API != null)
                     {
@@ -182,6 +180,15 @@ namespace Launcher
                 }
             }
         }
+
+        private static string GetCoreSystemDirectory()
+        {
+#if CSHARPLUADEV
+			return @"..\..\..\..\..\CSharp.lua\CSharp.lua\CoreSystem.Lua\CoreSystem";
+#else
+            return null;
+#endif
+        }
     }
 }
 
@@ -190,6 +197,12 @@ public static class LuaScriptProcessor
     public static string FixLuaScript(string script)
     {
         // script = script.Replace(@"  return function(x, y) " + "\r\n" + "    if x == null then x = nil end" + "\r\n" + "    if y == null then y = nil end" + "\r\n" + "    return compare(x, y) < 0" + "\r\n" + "  end", @"  return compare(x, y) < 0");
+
+        script = Regex.Replace(
+        script,
+        @"CompiledVERSION\s*=\s*""DoNotTouch""",
+        $"CompiledVERSION = \"{Launcher.MapDesc.VERSION}\"",
+        RegexOptions.Multiline);
 
         return script;
     }

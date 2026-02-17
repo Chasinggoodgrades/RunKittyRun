@@ -23,10 +23,10 @@ public class ChronoSphere : Relic
     private timer MagnitudeTimer = timer.Create();
     private timer LocationCaptureTimer = timer.Create();
     private effect LocationEffect = null;
-    private (float, float, float) CapturedLocation = (100, 100, 100);
+    private LocationHelper CapturedLocation = new LocationHelper(0, 0, 0, 0);
 
     public ChronoSphere() : base(
-        $"{Colors.COLOR_YELLOW}Chrono Sphere",
+        $"{Colors.COLOR_YELLOW}Chrono Sphere|r",
         $"Slows time around you, slowing wolves by 10% within {(int)SLOW_AURA_RADIUS} range.{Colors.COLOR_LIGHTBLUE}(Passive)|r",
         RelicAbilityID,
         RelicItemID,
@@ -76,7 +76,9 @@ public class ChronoSphere : Relic
         try
         {
             var item = Utility.UnitGetItem(Kitty.Unit, RelicItemID);
+            if (item == null) return;
             Ability = item.GetAbility(RelicAbilityID);
+            if (Ability == null) return;
             Magnitude = RandomMagnitude();
             Ability.SetMovementSpeedIncreasePercent_Oae1(0, Magnitude);
             Ability.SetAreaOfEffect_aare(0, SLOW_AURA_RADIUS);
@@ -115,7 +117,9 @@ public class ChronoSphere : Relic
             var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Kitty.Player).GetUpgradeLevel(typeof(ChronoSphere));
             if (upgradeLevel <= 1) return;
             LocationCaptureTimer ??= timer.Create();
-            CapturedLocation = (Kitty.Unit.X, Kitty.Unit.Y, Kitty.Unit.Facing); // reset to current location on buy
+            CapturedLocation.X = Kitty.Unit.X;
+            CapturedLocation.Y = Kitty.Unit.Y;
+            CapturedLocation.Facing = Kitty.Unit.Facing;
             LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
 
         }
@@ -132,7 +136,9 @@ public class ChronoSphere : Relic
             LocationCaptureTimer.Start(LOCATION_CAPTURE_INTERVAL, false, CaptureLocation);
             if (Kitty.CurrentStats.ChronoSphereCD) return;
             var unit = Kitty.Unit;
-            CapturedLocation = (unit.X, unit.Y, unit.Facing);
+            CapturedLocation.X = unit.X;
+            CapturedLocation.Y = unit.Y;
+            CapturedLocation.Facing = unit.Facing;
             LocationEffect ??= effect.Create(LocationSaveEffectPath, unit.X, unit.Y);
             LocationEffect.Scale = 0.55f;
             LocationEffect.Dispose();
@@ -158,15 +164,15 @@ public class ChronoSphere : Relic
         try
         {
             Kitty.Invulnerable = true;
-            var x = CapturedLocation.Item1;
-            var y = CapturedLocation.Item2;
+            var x = CapturedLocation.X;
+            var y = CapturedLocation.Y;
             if (x == 0 && y == 0)
             {
                 x = Kitty.Unit.X;
                 y = Kitty.Unit.Y;
             }
             Kitty.Unit.SetPosition(x, y);
-            Kitty.Unit.SetFacing(CapturedLocation.Item3);
+            Kitty.Unit.SetFacing(CapturedLocation.Facing);
             Kitty.Unit.IsPaused = true;
             Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit);
 

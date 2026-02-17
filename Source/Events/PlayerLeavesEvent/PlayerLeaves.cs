@@ -33,7 +33,7 @@ public static class PlayerLeaves
             if (player != null) leavingPlayer = player;
             if (!Globals.ALL_PLAYERS.Contains(leavingPlayer)) return;
             var kitty = Globals.ALL_KITTIES[leavingPlayer];
-            var circle = Globals.ALL_CIRCLES[leavingPlayer];
+            var circle = kitty.Circle;
             var nameTag = kitty.NameTag;
             TeamRemovePlayer(leavingPlayer);
             kitty.Dispose();
