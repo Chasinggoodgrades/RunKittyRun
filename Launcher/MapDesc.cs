@@ -14,8 +14,8 @@ namespace Launcher
 
         private static readonly string DESCRIPTION =
             $"|cff00ffffRun Kitty Run|r v{VERSION} - |cff00ffff{DISCORD}|r\r\n"
-          + "|n|n- Save System, Challenges, Music, and more! \r\n"
-          + "|n|n- Check out our leaderboard in discord!\r\n"
+          + "|n|n- Save System, Challenges, Website\r\n"
+          + "|n|n- Next Tournament: 03/07/2026\r\n"
           + $"|n|n|n|cff00ffffLast updated:|r |c00FF0000{DATE}|r";
 
         private static readonly Dictionary<string, string> replacements = new()

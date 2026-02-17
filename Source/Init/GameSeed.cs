@@ -12,21 +12,21 @@ public static class GameSeed
 
     private static bool SpecialSeed()
     {
-        if (TeamTournament2025Seed()) return true;
+        if (SoloTournamentSeed()) return true;
         return false;
     }
 
-    private static bool TeamTournament2025Seed()
+    private static bool SoloTournamentSeed()
     {
-        // Tournament Date: August 9, 2025
-        var expectedMonth = 8; // August
-        var expectedDay = 9; // 9th Day
+        // Tournament Date: March 7, 2026
+        var expectedMonth = 3; // March
+        var expectedDay = 7; // 7th Day
 
         if (DateTimeManager.CurrentDay != expectedDay || DateTimeManager.CurrentMonth != expectedMonth)
         {
             return false;
         }
-        var OmnisSeed = 458266; // Omnis' Seed for the Team Tournament 2025
+        var OmnisSeed = 674209; // Omnis' Seed for the Solo Tournament 2026
         Globals.GAME_SEED = OmnisSeed;
         Globals.RANDOM_GEN = new Random(OmnisSeed);
 
