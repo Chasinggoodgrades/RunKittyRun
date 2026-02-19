@@ -30,9 +30,11 @@ public static class AffixFactory
 
         foreach (var affix in AllAffixes)
         {
-            if (TempAffixCounts.ContainsKey(affix.Name)) continue;
             if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
-            TempAffixCounts[affix.Name] = 0;
+            if (!TempAffixCounts.ContainsKey(affix.Name))
+            {
+                TempAffixCounts[affix.Name] = 0;
+            }
         }
 
         foreach (var affix in AllAffixes)

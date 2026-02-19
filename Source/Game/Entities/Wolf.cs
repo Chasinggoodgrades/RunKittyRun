@@ -118,8 +118,12 @@ public class Wolf
         Disco?.Dispose();
         WolfPoint?.Dispose();
         WolfPoint = null;
-        Unit?.Dispose();
-        Unit = null;
+        if (Unit != null)
+        {
+            Globals.ALL_WOLVES.Remove(Unit);
+            Unit.Dispose();
+            Unit = null;
+        }
     }
 
     /// <summary>
@@ -131,6 +135,7 @@ public class Wolf
         {
             wolf?.Dispose();
         }
+        Globals.ALL_WOLVES.Clear();
         Globals.ALL_WOLVES_LIST.Clear();
     }
 
