@@ -142,9 +142,9 @@ public static class AffixFactory
     {
         var affixes = string.Join(", ", AffixTypes); // Start with all affixes in a single string
         var fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount;
-        if (laneNumber > 6 || Difficulty.DifficultyValue == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE || Gamemode.CurrentGameMode == GameMode.SoloTournament)
+        if (laneNumber > 6 || DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE || Gamemode.CurrentGameMode == GameMode.SoloTournament)
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
-        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard)
+        if (DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard)
         {
             affixes = affixes.Replace("Chaos, ", "").Replace(", Chaos", "").Replace("Chaos", "");
         }
@@ -188,7 +188,7 @@ public static class AffixFactory
             NUMBER_OF_AFFIXED_WOLVES = CalculateAffixedWolfCount();
 
             // Nightmare Difficulty Adjustment.. All Wolves get affixed
-            if (Difficulty.DifficultyValue == (int)DifficultyLevel.Nightmare)
+            if (DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Nightmare)
             {
                 foreach (var wolf in Globals.ALL_WOLVES_LIST)
                 {
@@ -259,7 +259,7 @@ public static class AffixFactory
         switch (Gamemode.CurrentGameMode)
         {
             case GameMode.Standard:
-                baseCount = Difficulty.DifficultyValue * 3;
+                baseCount = DifficultyConfig.GetEffectiveDifficultyValue() * 3;
                 break;
             case GameMode.TeamTournament:
                 baseCount = 26;
@@ -287,7 +287,7 @@ public static class AffixFactory
 
     private static bool CanDistributeAffixes()
     {
-        return Difficulty.DifficultyValue != (int)DifficultyLevel.Normal;
+        return DifficultyConfig.GetEffectiveDifficultyValue() != (int)DifficultyLevel.Normal;
     }
 
     public static void RemoveAllAffixes()
