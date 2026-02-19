@@ -29,4 +29,8 @@
     public float RoundThreeNightmare { get; set; }
     public float RoundFourNightmare { get; set; }
     public float RoundFiveNightmare { get; set; }
+
+    public float RoundOneProgressive { get; set; }
+    public float RoundTwoProgressive { get; set; }
+    public float RoundThreeProgressive { get; set; }
 }

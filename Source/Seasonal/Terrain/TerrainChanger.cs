@@ -85,14 +85,14 @@ public static class TerrainChanger
 
     private static void SetWolfRegionTerrain()
     {
-        var round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0;
+        var round = Globals.ROUND > 1 ? DifficultyConfig.GetVirtualRound(Globals.ROUND) - 1 : 0;
         ChangeMapTerrain(LastWolfTerrain, Terrains[round]);
         LastWolfTerrain = Terrains[round];
     }
 
     private static void SetSafezoneTerrain()
     {
-        var round = Globals.ROUND > 1 ? Globals.ROUND - 1 : 0;
+        var round = Globals.ROUND > 1 ? DifficultyConfig.GetVirtualRound(Globals.ROUND) - 1 : 0;
         ChangeMapTerrain(LastSafezoneTerrain, SafezoneTerrain[round]);
         LastSafezoneTerrain = SafezoneTerrain[round];
     }

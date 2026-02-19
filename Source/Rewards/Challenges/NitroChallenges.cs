@@ -33,11 +33,24 @@ public static class NitroChallenges
             case (int)DifficultyLevel.Nightmare:
                 SetImpossibleNitroRoundTimes(); // Nightmare Nitros at a later date.. Cannot determine at the moment what it should be.
                 break;
+            case (int)DifficultyLevel.Progressive:
+                SetProgressiveNitroRoundTimes();
+                break;
             default:
                 // Gamemode being solo / team;
                 SetNormalNitroRoundTimes();
                 break;
         }
+    }
+
+    private static void SetProgressiveNitroRoundTimes()
+    {
+        // Progressive Round 1 = Normal difficulty (R1)
+        NitroRoundTimes.Add(1, 125); // 2:05
+        // Progressive Round 2 = Hard difficulty (R3)
+        NitroRoundTimes.Add(2, 170); // 2:50
+        // Progressive Round 3 = Impossible difficulty (R5)
+        NitroRoundTimes.Add(3, 330); // 5:30
     }
 
     private static void SetNormalNitroRoundTimes()
@@ -106,32 +119,32 @@ public static class NitroChallenges
         {
             case 1:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.Nitro));
-                if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));
                 break;
 
             case 2:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroBlue));
-                if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.AzureLight));
                 break;
 
             case 3:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroRed));
-                if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.CrimsonLight));
                 break;
 
             case 4:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroGreen));
                 Challenges.ButterflyAura(player);
-                if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.EmeraldLight));
                 break;
 
             case 5:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroPurple));
-                if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
                 break;
 
@@ -151,9 +164,9 @@ public static class NitroChallenges
 
     private static void AwardingDivineLight(Kitty kitty)
     {
-        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible) return;
+        if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         var requiredCount = 5;
-        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Hard) requiredCount = 4;
+        if (DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard) requiredCount = 4;
 
         if (kitty.CurrentStats.NitroCount == requiredCount)
             AwardManager.GiveReward(kitty.Player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.DivineLight));

@@ -60,7 +60,7 @@ public class Wolf
     {
         try
         {
-            if (Globals.WolvesPerRound.TryGetValue(Globals.ROUND, out var wolvesInRound))
+            if (Globals.WolvesPerRound.TryGetValue(DifficultyConfig.GetVirtualRound(Globals.ROUND), out var wolvesInRound))
             {
                 foreach (var laneEntry in wolvesInRound)
                 {
@@ -209,7 +209,7 @@ public class Wolf
     {
         return Gamemode.CurrentGameMode != GameMode.Standard
             ? TournamentChance()
-            : GetRandomInt(1, 18 - (Difficulty.DifficultyValue + Globals.ROUND)) == 1;
+            : GetRandomInt(1, 18 - (DifficultyConfig.GetEffectiveDifficultyValue() + Globals.ROUND)) == 1;
     }
 
     private bool TournamentChance()

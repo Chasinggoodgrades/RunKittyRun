@@ -15,4 +15,6 @@
     public int ImpossibleGames { get; set; }
     public int NightmareGames { get; set; }
     public int NightmareWins { get; set; }
+    public int ProgressiveGames { get; set; }
+    public int ProgressiveWins { get; set; }
 }

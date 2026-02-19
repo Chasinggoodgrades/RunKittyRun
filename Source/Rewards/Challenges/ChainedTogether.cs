@@ -297,7 +297,7 @@ public static class ChainedTogether
     {
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!{Colors.COLOR_RESET}", 2.0f, kitty.Unit);
 
-        DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
+        DifficultyLevel level = (DifficultyLevel)DifficultyConfig.GetEffectiveDifficultyValue();
 
         var awards = Globals.GAME_AWARDS_SORTED.Auras;
         string nameOfAward;
@@ -408,7 +408,7 @@ public class Chain
 
     public static int CalculateRangeByDifficulty(string rangeType)
     {
-        DifficultyLevel level = (DifficultyLevel)Difficulty.DifficultyValue;
+        DifficultyLevel level = (DifficultyLevel)DifficultyConfig.GetEffectiveDifficultyValue();
 
         (int good, int far, int breakPoint) selectedRange;
 

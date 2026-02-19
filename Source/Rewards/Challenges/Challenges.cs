@@ -20,7 +20,7 @@ public static class Challenges
 
     public static void WhiteTendrils()
     {
-        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
+        if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.WhiteTendrils));
     }
 
@@ -52,15 +52,15 @@ public static class Challenges
 
     public static void PatrioticLight(Kitty kitty)
     {
-        if (Globals.ROUND != 5) return;
-        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
+        if (!DifficultyConfig.IsVirtualRound(5, 5)) return;
+        if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         if (Globals.GAME_TIMER.Remaining > 995) return; // Formally 20 mins, now 16:35 and awards to all players.
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Nitros.PatrioticLight));
     }
 
     public static void ButterflyAura(player player)
     {
-        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
+        if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
         if (currentDeaths > 5) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Auras.ButterflyAura));
@@ -69,8 +69,8 @@ public static class Challenges
     public static void PurpleFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 2 || currentDeaths > PURPLE_FIRE_DEATH_REQUIREMENT) return;
-        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Impossible) return;
+        if (!DifficultyConfig.IsVirtualRound(2, 2) || currentDeaths > PURPLE_FIRE_DEATH_REQUIREMENT) return;
+        if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.PurpleFire));
     }
 
@@ -87,7 +87,7 @@ public static class Challenges
     public static void TurquoiseFire(player player)
     {
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 5 || currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return;
+        if (!DifficultyConfig.IsVirtualRound(5, 5) || currentDeaths > TURQUOISE_FIRE_DEATH_REQUIREMENT) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.TurquoiseFire));
     }
 
@@ -109,7 +109,7 @@ public static class Challenges
     {
         if (NitroChallenges.GetNitroTimeRemaining() <= 0) return;
         var currentDeaths = Globals.ALL_KITTIES[player].CurrentStats.RoundDeaths;
-        if (Globals.ROUND != 3 || currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return;
+        if (!DifficultyConfig.IsVirtualRound(3, 3) || currentDeaths > WHITE_FIRE_DEATH_REQUIREMENT) return;
         AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Trails.WhiteFire));
     }
 
@@ -138,17 +138,16 @@ public static class Challenges
         }
     }
 
-    /// <summary>
-    /// Hard+, Nitro Round 4 and Win game.
-    /// </summary>
-    /// <param name="player"></param>
     public static void ZandalariKitty()
     {
-        if (Difficulty.DifficultyValue < (int)DifficultyLevel.Hard) return;
+        if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Hard)) return;
         if (!Gameover.WinGame) return;
+
+        var requiredNitroRound = DifficultyConfig.IsProgressive ? 2 : 4;
+
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(4)) continue;
+            if (!kitty.Value.CurrentStats.ObtainedNitros.Contains(requiredNitroRound)) continue;
             AwardManager.GiveReward(kitty.Value.Player, nameof(Globals.GAME_AWARDS_SORTED.Skins.ZandalariKitty));
         }
     }

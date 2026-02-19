@@ -76,7 +76,20 @@ public static class Difficulty
         DifficultyOption = difficulty;
         DifficultyValue = difficulty.Value;
         IsDifficultyChosen = true;
+        SetupGamemodeBasedOnDifficulty();
         Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty.ToString()}{Colors.COLOR_RESET}");
+    }
+
+    private static void SetupGamemodeBasedOnDifficulty()
+    {
+        if (DifficultyValue == (int)DifficultyLevel.Progressive)
+        {
+            Standard.SetupProgressive();
+        }
+        else
+        {
+            Standard.SetupStandard();
+        }
     }
 
     private static void RemoveDifficultyDialog()

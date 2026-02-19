@@ -38,7 +38,7 @@ public class DifficultyOption
         new DifficultyOption("Hard", (int)DifficultyLevel.Hard, Colors.COLOR_RED);
         new DifficultyOption("Impossible", (int)DifficultyLevel.Impossible, Colors.COLOR_DARK_RED);
         new DifficultyOption("Nightmare", (int)DifficultyLevel.Nightmare, Colors.COLOR_PURPLE);
-        new DifficultyOption("Progressive", (int)DifficultyLevel.Progressive, Colors.COLOR_YELLOW_ORANGE);
+        new DifficultyOption("Progressive", (int)DifficultyLevel.Progressive, Colors.COLOR_GREEN);
     }
 }
 
@@ -47,5 +47,6 @@ public enum DifficultyLevel
     Normal = 4,
     Hard = 6,
     Impossible = 9,
-    Nightmare = 11
+    Nightmare = 11,
+    Progressive = 99
 }

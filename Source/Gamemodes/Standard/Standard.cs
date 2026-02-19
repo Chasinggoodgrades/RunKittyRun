@@ -4,7 +4,6 @@
 
     public static void Initialize()
     {
-        RoundManager.ROUND_INTERMISSION = Source.Program.Debug ? 0.0f : ROUND_INTERMISSION;
         ShadowKitty.Initialize();
         Difficulty.Initialize();
         Windwalk.Initialize();
@@ -14,5 +13,15 @@
         EasterEggManager.LoadEasterEggs();
         AntiblockWand.Initialize();
         Relic.RegisterRelicEnabler();
+    }
+
+    public static void SetupProgressive()
+    {
+        Gamemode.NumberOfRounds = 3;
+    }
+
+    public static void SetupStandard()
+    {
+        Gamemode.NumberOfRounds = 5;
     }
 }

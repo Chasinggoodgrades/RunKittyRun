@@ -38,9 +38,12 @@ public class TimeSetter
             var property = kitty.SaveData.RoundTimes.GetType().GetProperty(roundString);
             var value = (float)property.GetValue(kitty.SaveData.RoundTimes);
 
+            Logger.Debug($"Current Time: {currentTime}, Saved Time: {value} for player {kitty.Player.Name} on round {Globals.ROUND} with difficulty {Difficulty.DifficultyValue}");
+
             CreateTimeTextTag(kitty, currentTime);
 
             if (currentTime >= value && value != 0) return false;
+
             SetSavedTime(kitty.Player, roundString);
             PersonalBestAwarder.BeatRecordTime(kitty.Player);
 
@@ -83,6 +86,9 @@ public class TimeSetter
             case (int)DifficultyLevel.Nightmare:
                 roundEnum = GetNightmareRoundEnum();
                 break;
+            case (int)DifficultyLevel.Progressive:
+                roundEnum = GetProgressiveRoundEnum();
+                break;
             default:
                 Logger.Critical("Invalid difficulty level for GetRoundEnum");
                 return "";
@@ -101,6 +107,7 @@ public class TimeSetter
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
         property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
+        Logger.Debug($"Set new time for player {player.Name} on round {Globals.ROUND} with difficulty {Difficulty.DifficultyValue}: {GameTimer.RoundTime[Globals.ROUND]}");
     }
 
     private string GetNormalRoundEnum()
@@ -153,6 +160,24 @@ public class TimeSetter
 
             default:
                 Logger.Critical("Invalid round number for GetHardRoundEnum");
+                return "";
+        }
+    }
+
+    private string GetProgressiveRoundEnum()
+    {
+        var round = Globals.ROUND;
+        var gameTimeData = Globals.GAME_TIMES;
+        switch (round)
+        {
+            case 1:
+                return nameof(gameTimeData.RoundOneProgressive);
+            case 2:
+                return nameof(gameTimeData.RoundTwoProgressive);
+            case 3:
+                return nameof(gameTimeData.RoundThreeProgressive);
+            default:
+                Logger.Critical("Invalid round number for GetProgressiveRoundEnum");
                 return "";
         }
     }
