@@ -131,6 +131,7 @@ public class Wolf
         {
             wolf?.Dispose();
         }
+        Globals.ALL_WOLVES.Clear();
         Globals.ALL_WOLVES_LIST.Clear();
     }
 

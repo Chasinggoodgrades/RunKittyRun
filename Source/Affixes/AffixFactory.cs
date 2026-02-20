@@ -14,11 +14,6 @@ public static class AffixFactory
     private static int MAX_FIXIATION_PER_LANE = 3;
     private static Random Random = Globals.RANDOM_GEN; // Seeded for consistency
 
-    private static List<string> TempAffixesList = new List<string>();
-    private static Dictionary<string, int> TempAffixCounts = new Dictionary<string, int>();
-    /// <summary>
-    /// Only works in Standard mode. Initializes lane weights for affix distribution.
-    /// </summary>
     public static void Initialize()
     {
         AllAffixes = new List<Affix>();
@@ -27,34 +22,17 @@ public static class AffixFactory
 
     public static string[] CalculateAffixes(int laneIndex = -1)
     {
+        var counter = AffixCounter.Instance;
+        counter.Reset();
 
-        foreach (var affix in AllAffixes)
+        for (int i = 0; i < AllAffixes.Count; i++)
         {
-            if (TempAffixCounts.ContainsKey(affix.Name)) continue;
+            var affix = AllAffixes[i];
             if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
-            TempAffixCounts[affix.Name] = 0;
+            counter.IncrementAffix(affix.Name);
         }
 
-        foreach (var affix in AllAffixes)
-        {
-            if (TempAffixCounts.ContainsKey(affix.Name))
-            {
-                if (laneIndex != -1 && affix.Unit.RegionIndex != laneIndex) continue;
-                TempAffixCounts[affix.Name]++;
-            }
-        }
-
-        foreach (var affix in TempAffixCounts.ToList()) // deterministic order needed.
-        {
-            if (affix.Value > 0)
-            {
-                TempAffixesList.Add($"{affix.Key} x{affix.Value}");
-            }
-        }
-        var arr = TempAffixesList.ToArray();
-        TempAffixCounts.Clear();
-        TempAffixesList.Clear();
-        return arr;
+        return counter.GetResults();
     }
 
     public static Affix CreateAffix(Wolf unit, string affixName)
