@@ -1,10 +1,12 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 using WCSharp.Shared.Extensions;
 
 public static class AntiblockWand
 {
     private static trigger CastEvent;
     private static int AbilityID;
+    private static int AbilitySpellID;
     private static float Radius;
 
     /// <summary>
@@ -12,10 +14,26 @@ public static class AntiblockWand
     /// </summary>
     public static void Initialize()
     {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         AbilityID = Constants.ABILITY_ANTI_BLOCK_WAND_ITEM;
+        AbilitySpellID = Constants.ABILITY_ANTIBLOCK_SPELL;
         Radius = 250.0f;
         CastEvent = RegisterCastEvents();
+        CreateAntiblockSpell();
+    }
+
+    public static void CreateAntiblockSpell()
+    {
+        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return;
+        AddAntiblockAbility();
+    }
+
+    private static void AddAntiblockAbility()
+    {
+        foreach (var kitty in Globals.ALL_KITTIES_LIST)
+        {
+            kitty.Unit.AddAbility(AbilitySpellID);
+            Logger.Debug("adding ability now for kitty " + kitty.Name);
+        }
     }
 
     private static trigger RegisterCastEvents()
@@ -29,7 +47,7 @@ public static class AntiblockWand
 
     private static void SpellActions()
     {
-        if (@event.SpellAbilityId != AbilityID) return;
+        if (@event.SpellAbilityId != AbilityID && @event.SpellAbilityId != AbilitySpellID) return;
         var location = @event.SpellTargetLoc;
         var wolvesInArea = group.Create();
         wolvesInArea.EnumUnitsInRange(location.X, location.Y, Radius, null);

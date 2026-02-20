@@ -84,6 +84,7 @@ namespace Source.Init
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();
+                AntiblockWand.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();

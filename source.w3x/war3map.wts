@@ -1,6 +1,6 @@
 STRING 1
 {
-|cffff0000RKR Remastered v1.4.6DEV|r
+|cffff0000RKR Remastered v1.4.6|r
 }
 
 STRING 2
@@ -10,10 +10,10 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.4.6DEV - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.4.6 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
 |n|n- Next Tournament: 03/07/2026
-|n|n|n|cff00ffffLast updated:|r |c00FF000002/19/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000002/20/2026|r
 }
 
 STRING 4
@@ -793,7 +793,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.4.6DEV
+Run Kitty Run Remastered v1.4.6
 }
 
 STRING 2035
@@ -3602,7 +3602,6 @@ STRING 3636
 // Items: I00L (|c7eb66ff1Shard of Translocation|r), Ubertip (Tooltip - Extended)
 {
 |cffffcc00The holder of this shard can harness arcane energy to blink to a new location within 400 range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r
-
 }
 
 STRING 3641
@@ -3615,7 +3614,6 @@ STRING 3642
 // Items: I00L (|c7eb66ff1Shard of Translocation|r), Description (Description)
 {
 |cffffcc00The holder of this shard can harness arcane energy to blink to a new location within 600 range.|nThe shard recharges over time.|n|cffff8c00Allows the holder to teleport within lane bounds.|r |cffadd8e6(Activate)|r
-
 }
 
 STRING 3644
@@ -4270,14 +4268,12 @@ STRING 3773
 // Items: I00N (|cffffff00Chrono Orb|r), Ubertip (Tooltip - Extended)
 {
 |cffffcc00The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by 10%. |cffadd8e6(Passive)|r
-
 }
 
 STRING 3774
 // Items: I00N (|cffffff00Chrono Orb|r), Description (Description)
 {
 |cffffcc00The possessor of this mystical orb emits a temporal distortion field, slowing the movement of all enemies within a 400 range by 10%. |cffadd8e6(Passive)|r
-
 }
 
 STRING 3775
@@ -4857,7 +4853,6 @@ STRING 3883
 // Abilities: A017 (Trail_PatrioticLight), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by reaching the end for Round 5 on |cff800000Impossible|r difficulty in under |cffffff0016 minutes and 35 seconds|r of total game time.
-
 }
 
 STRING 3884
@@ -4876,7 +4871,6 @@ STRING 3886
 // Abilities: A01C (Normal Team Deathless), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by completeing the team deathless challenge on |cffffff00Normal+|r.
-
 }
 
 STRING 3887
@@ -4895,7 +4889,6 @@ STRING 3889
 // Abilities: A01D (Hard Team Deathless), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by completeing the team deathless challenge on |cffff0000Hard+|r.
-
 }
 
 STRING 3890
@@ -4914,7 +4907,6 @@ STRING 3892
 // Abilities: A01E (Impossible Team Deathless), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by completeing the team deathless challenge on |cff960000Impossible|r.
-
 }
 
 STRING 3893
@@ -5029,5 +5021,29 @@ STRING 3911
 // Abilities: A01O (Aura_ChainedNightmare), Ubertip (Tooltip - Normal - Extended)
 {
 Obtained by beating the Chained Together Event on |cffff00ffNightmare|r
+}
+
+STRING 3912
+// Abilities: A01Y (Antiblock Spell), Name (Name)
+{
+Antiblock Spell
+}
+
+STRING 3913
+// Abilities: A01Y (Antiblock Spell), Tip (Tooltip - Normal)
+{
+Antiblock Spell
+}
+
+STRING 3914
+// Abilities: A01Y (Antiblock Spell), Ubertip (Tooltip - Normal - Extended)
+{
+Use on wolves to force them to move out of the way. |cffff8f19250 AoE, 650 Range|r (10 Second CD)
+}
+
+STRING 3915
+// Abilities: A01Y (Antiblock Spell), Hotkey (Hotkey - Normal)
+{
+T
 }
 

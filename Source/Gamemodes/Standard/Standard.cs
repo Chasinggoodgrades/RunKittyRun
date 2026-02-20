@@ -11,7 +11,6 @@
         SpawnChampions.Initialize();
         RollerSkates.Initialize();
         EasterEggManager.LoadEasterEggs();
-        AntiblockWand.Initialize();
         Relic.RegisterRelicEnabler();
     }
 

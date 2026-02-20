@@ -129,6 +129,7 @@ public static class Constants
 	public const int ABILITY_AURA_CHAINEDHARD = 1093677389;
 	public const int ABILITY_AURA_CHAINEDIMPOSSIBLE = 1093677390;
 	public const int ABILITY_AURA_CHAINEDNIGHTMARE = 1093677391;
+	public const int ABILITY_ANTIBLOCK_SPELL = 1093677401;
 	public const int BUFF_SPEEDSTER = 1110454320;
 	public const int BUFF_UNPREDICTABLE = 1110454321;
 	public const int BUFF_FIXATED = 1110454322;
