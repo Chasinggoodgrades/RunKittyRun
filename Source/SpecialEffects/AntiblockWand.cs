@@ -32,7 +32,6 @@ public static class AntiblockWand
         foreach (var kitty in Globals.ALL_KITTIES_LIST)
         {
             kitty.Unit.AddAbility(AbilitySpellID);
-            Logger.Debug("adding ability now for kitty " + kitty.Name);
         }
     }
 

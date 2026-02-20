@@ -267,8 +267,10 @@ public class Kitty : IFloatingTags, ICircleOwner
         InvulTimer.Dispose();
         Circle?.Dispose();
         Disco?.Dispose();
-        aiController.StopAi();
-        RTR.StopRTR();
+        aiController?.StopAi();
+        RTR?.Dispose();
+        Slider?.Dispose();
+        SpinCam?.Dispose();
         Unit.Dispose();
         ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
