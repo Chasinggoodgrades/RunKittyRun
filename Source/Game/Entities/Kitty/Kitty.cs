@@ -268,7 +268,8 @@ public class Kitty : IFloatingTags, ICircleOwner
         RTR?.Dispose();
         Slider?.Dispose();
         SpinCam?.Dispose();
-        Unit.Dispose();
+        NameTag?.Dispose();
+        Unit?.Dispose();
         ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);

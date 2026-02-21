@@ -349,10 +349,10 @@ public static class Utility
     public static void MakePlayerSpectator(player player)
     {
         PlayerLeaves.TeamRemovePlayer(player);
-        Globals.ALL_KITTIES[player].Dispose();
-        Globals.ALL_CIRCLES[player].Dispose();
+        Globals.ALL_KITTIES[player].Dispose(); // removes from all kitties in dispose
+        // Globals.ALL_CIRCLES[player].Dispose(); --gets done in kitty dispose
         Globals.ALL_PLAYERS.Remove(player);
-        Globals.ALL_KITTIES[player].NameTag?.Dispose();
+        // Globals.ALL_KITTIES[player].NameTag?.Dispose(); // handled in kitty dispose
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
     }
