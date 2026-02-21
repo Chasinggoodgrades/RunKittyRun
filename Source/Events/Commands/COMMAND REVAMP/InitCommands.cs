@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -1488,6 +1490,47 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "benchmarktest",
+            alias: "bmt",
+            group: "admin",
+            argDesc: "Testing performance in collision detection",
+            description: "Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.",
+            action: (player, args) =>
+            {
+             /*
+                var k = Globals.ALL_KITTIES[player];
+                var func = CollisionDetection.CircleCollisionFilter(k);
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int j = 0; j < 5; j++)
+                {
+                    // Warmup
+                    for (int i = 0; i < 10000; i++)
+                        func();
+
+                    var sw = Stopwatch.StartNew();
+
+                    const int iterations = 2_000_000;
+                    int hits = 0;
+
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        if (func())
+                            hits++;
+                    }
+
+                    sw.Stop();
+
+                    sb.AppendLine($"\nTime: {sw.ElapsedMilliseconds} ms\n Ops/sec: {(iterations / sw.Elapsed.TotalSeconds):N0}\n Hits: {hits}\n\n");
+                }
+
+                SyncSaveLoad.Instance.WriteStringNoEncodeNoLoad("Run-Kitty-Run/DebugBenchMarkAches.txt", sb.ToString());
+             */
+            }
+
+        );
 
         CommandsManager.RegisterCommand(
             name: "revivetest",
