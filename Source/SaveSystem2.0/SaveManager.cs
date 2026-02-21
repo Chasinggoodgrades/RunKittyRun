@@ -51,7 +51,11 @@ public class SaveManager
         }
     }
 
-    private void SaveAllDataToFile(player player)
+    /// <summary>
+    /// Admin Command to save all data to a single file for debugging purposes. Not intended for regular use.
+    /// </summary>
+    /// <param name="player"></param>
+    public void SaveAllDataToFile(player player)
     {
         try
         {
@@ -106,7 +110,6 @@ public class SaveManager
     {
         try
         {
-            if (player.SlotState != playerslotstate.Playing) return;
             SaveData[player] = new KittyData();
             SaveData[player].PlayerName = player.Name;
             SaveData[player].Version = CompiledVERSION;
@@ -152,6 +155,12 @@ public class SaveManager
 
     public static KittyData GetKittyData(player player)
     {
+        // this is more of less for comps than anything else
+        if (!SaveData.ContainsKey(player))
+        {
+            SaveData.Add(player, null);
+        }
+        
         if (SaveData.TryGetValue(player, out KittyData kittyData) && kittyData != null)
         {
             return kittyData;

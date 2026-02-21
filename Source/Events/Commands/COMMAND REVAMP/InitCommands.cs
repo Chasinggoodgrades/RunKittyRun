@@ -48,6 +48,18 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "saveall",
+            alias: "",
+            group: "admin",
+            argDesc: "Saves to alldata file, mock data purposes only",
+            description: "Saves to alldata file, mock data purposes only",
+            action: (player, args) =>
+            {
+                Globals.SaveSystem.SaveAllDataToFile(player);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "wolfeffects",
             alias: "we,wolfe",
             group: "admin",
@@ -1164,7 +1176,9 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
+                        SaveManager.PlayersLoaded.Add(compPlayer);
                         var newKitty = new Kitty(compPlayer);
+                        newKitty.ComputerControlled = true;
                         newKitty.Unit.AddItem(FourCC("bspd"));
                     }
                 }
@@ -1806,6 +1820,23 @@ public static class InitCommands
             {
                 var kitty = Globals.ALL_KITTIES[player];
                 effect.Create("ChainTest.mdx", kitty.Unit, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "mockdata",
+            alias: "mock,mockstats",
+            group: "admin",
+            argDesc: "[resolvePlayerId] or [all]",
+            description: "Generates mock save data for testing. Use 'all' for all players or specify a player.",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    MockDataGenerator.GenerateMockSaveData(kitty);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Mock data generated for {Colors.PlayerNameColored(kitty.Player)}!{Colors.COLOR_RESET}");
+                });
             }
         );
 

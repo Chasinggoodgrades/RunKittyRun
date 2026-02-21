@@ -11,6 +11,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
+    public bool ComputerControlled = false;
     public string Name { get; set; }
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
@@ -202,11 +203,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     {
         try
         {
-            // Save Data
-            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing)
-                SaveData = SaveManager.GetKittyData(Player);
-            else
-                SaveData = new KittyData(); // dummy data for comps
+            SaveData = SaveManager.GetKittyData(Player);
 
             Relics = new List<Relic>();
         }
