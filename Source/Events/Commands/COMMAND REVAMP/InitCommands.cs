@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -45,6 +47,18 @@ public static class InitCommands
                 TournamentSaver.Instance.SaveTournamentData();
                 Globals.SaveSystem.Save(player);
             } 
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "saveall",
+            alias: "",
+            group: "admin",
+            argDesc: "Saves to alldata file, mock data purposes only",
+            description: "Saves to alldata file, mock data purposes only",
+            action: (player, args) =>
+            {
+                Globals.SaveSystem.SaveAllDataToFile(player);
+            }
         );
 
         CommandsManager.RegisterCommand(
@@ -950,31 +964,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var name = args[0] != "" ? args[0] : "??__";
-                foreach (var p in Globals.ALL_PLAYERS)
+                CommandsManager.ResolvePlayerId(name, kitty =>
                 {
-                    if (p.Name.ToLower().StartsWith(name))
-                    {
-                        Utility.MakePlayerSpectator(p);
-                        break;
-                    }
-                }
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "summonall",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "Summons all players to your location.",
-            action: (player, args) =>
-            {
-                var kitty = Globals.ALL_KITTIES[player];
-                foreach (var k in Globals.ALL_KITTIES)
-                {
-                    if (k.Value.Unit.Owner == player) continue;
-                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
-                }
+                    if (kitty == null) return;
+                    Utility.MakePlayerSpectator(kitty.Player);
+                });
             }
         );
 
@@ -1164,7 +1158,9 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
+                        SaveManager.PlayersLoaded.Add(compPlayer);
                         var newKitty = new Kitty(compPlayer);
+                        newKitty.ComputerControlled = true;
                         newKitty.Unit.AddItem(FourCC("bspd"));
                     }
                 }
@@ -1474,6 +1470,47 @@ public static class InitCommands
             }
         );
 
+        CommandsManager.RegisterCommand(
+            name: "benchmarktest",
+            alias: "bmt",
+            group: "admin",
+            argDesc: "Testing performance in collision detection",
+            description: "Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.",
+            action: (player, args) =>
+            {
+             /*
+                var k = Globals.ALL_KITTIES[player];
+                var func = CollisionDetection.CircleCollisionFilter(k);
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int j = 0; j < 5; j++)
+                {
+                    // Warmup
+                    for (int i = 0; i < 10000; i++)
+                        func();
+
+                    var sw = Stopwatch.StartNew();
+
+                    const int iterations = 2_000_000;
+                    int hits = 0;
+
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        if (func())
+                            hits++;
+                    }
+
+                    sw.Stop();
+
+                    sb.AppendLine($"\nTime: {sw.ElapsedMilliseconds} ms\n Ops/sec: {(iterations / sw.Elapsed.TotalSeconds):N0}\n Hits: {hits}\n\n");
+                }
+
+                SyncSaveLoad.Instance.WriteStringNoEncodeNoLoad("Run-Kitty-Run/DebugBenchMarkAches.txt", sb.ToString());
+             */
+            }
+
+        );
 
         CommandsManager.RegisterCommand(
             name: "revivetest",
@@ -1806,6 +1843,23 @@ public static class InitCommands
             {
                 var kitty = Globals.ALL_KITTIES[player];
                 effect.Create("ChainTest.mdx", kitty.Unit, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "mockdata",
+            alias: "mock,mockstats",
+            group: "admin",
+            argDesc: "[resolvePlayerId] or [all]",
+            description: "Generates mock save data for testing. Use 'all' for all players or specify a player.",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    MockDataGenerator.GenerateMockSaveData(kitty);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Mock data generated for {Colors.PlayerNameColored(kitty.Player)}!{Colors.COLOR_RESET}");
+                });
             }
         );
 

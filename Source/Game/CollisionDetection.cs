@@ -13,8 +13,9 @@ public static class CollisionDetection
     {
         return () =>
         {
-            return (GetFilterUnit().UnitType == Constants.UNIT_CUSTOM_DOG)
-                    && k.Alive && GetFilterUnit().Alive; // wolf should be alive too (exploding / stan wolf)
+            var filterUnit = GetFilterUnit();
+            return filterUnit.UnitType == Constants.UNIT_CUSTOM_DOG
+                    && k.Alive && filterUnit.Alive;
         };
     }
 
@@ -31,23 +32,29 @@ public static class CollisionDetection
     {
         return () =>
         {
-            return GetUnitTypeId(GetFilterUnit()) == Constants.UNIT_KITTY_CIRCLE
-                    && GetFilterUnit().Owner != sk.Player // Not Same Player
+            var filterUnit = GetFilterUnit();
+            return GetUnitTypeId(filterUnit) == Constants.UNIT_KITTY_CIRCLE
+                    && filterUnit.Owner != sk.Player // Not Same Player
                     && sk.Unit.Alive // Has to Be Alive
-                    && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[sk.Player].TeamID; // Must be same team
+                    && Globals.ALL_KITTIES[filterUnit.Owner].TeamID == Globals.ALL_KITTIES[sk.Player].TeamID; // Must be same team
 
         };
     }
 
     private static Func<bool> CircleCollisionFilter(Kitty k)
     {
+        var kTeamID = k.TeamID;
+        var kPlayer = k.Player;
+
         return () =>
         {
-            return GetFilterUnit().UnitType == Constants.UNIT_KITTY_CIRCLE
-                    && GetFilterUnit().Owner != k.Player // Not Same Player
-                    && k.Alive // Has to Be Alive
-                    && Globals.ALL_KITTIES[GetFilterUnit().Owner].TeamID == Globals.ALL_KITTIES[k.Player].TeamID // Must be same team
-                    && Gamemode.CurrentGameMode != GameMode.SoloTournament; // Not Solo Mode
+            var filterUnit = GetFilterUnit();
+            if (filterUnit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
+            if (filterUnit.Owner == kPlayer) return false; // Not Same Player
+            if (!k.Alive) return false;
+            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return false;
+
+            return Globals.ALL_KITTIES[filterUnit.Owner].TeamID == kTeamID;
         };
     }
 
@@ -76,11 +83,12 @@ public static class CollisionDetection
         {
             try
             {
+                var filterUnit = GetFilterUnit();
                 if (!k.Unit.Alive) return;
-                if (NamedWolves.ExplodingWolfCollision(GetFilterUnit(), k)) return;
-                if (Globals.ALL_WOLVES[GetFilterUnit()].IsReviving) return; // bomber wolf
+                if (k.Invulnerable) return; // proc before rewind and logic wise
+                if (Globals.ALL_WOLVES[filterUnit].IsReviving) return; // bomber wolf
+                if (NamedWolves.ExplodingWolfCollision(filterUnit, k)) return;
                 if (ChronoSphere.RewindDeath(k)) return;
-                if (k.Invulnerable) return;
                 OneOfNine.OneOfNineEffect(k);
                 k.KillKitty();
                 TeamsUtil.CheckTeamDead(k);

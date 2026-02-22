@@ -101,13 +101,14 @@ public static class StandardMultiboard
     private static void BestTimesMultiboard()
     {
         BestTimes.Rows = Globals.ALL_PLAYERS.Count + 1;
-        BestTimes.Columns = 6;
+        BestTimes.Columns = Gamemode.NumberOfRounds + 1; // Player column + rounds
         BestTimes.GetItem(0, 0).SetText($"{color}Player|r");
-        BestTimes.GetItem(0, 1).SetText($"{color}Round 1|r");
-        BestTimes.GetItem(0, 2).SetText($"{color}Round 2|r");
-        BestTimes.GetItem(0, 3).SetText($"{color}Round 3|r");
-        BestTimes.GetItem(0, 4).SetText($"{color}Round 4|r");
-        BestTimes.GetItem(0, 5).SetText($"{color}Round 5|r");
+        
+        for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
+        {
+            BestTimes.GetItem(0, i).SetText($"{color}Round {i}|r");
+        }
+        
         BestTimes.SetChildVisibility(true, false);
         BestTimes.SetChildWidth(0.05f);
         BestTimes.GetItem(0, 0).SetWidth(0.07f);
@@ -277,7 +278,7 @@ public static class StandardMultiboard
 
             var roundTimes = GetGameRoundTime(saveData);
 
-            for (int j = 0; j < roundTimes.Length; j++)
+            for (int j = 0; j < Gamemode.NumberOfRounds; j++)
             {
                 if (roundTimes[j] != 0)
                     BestTimes.GetItem(rowIndex, j + 1).SetText($"{playerColor}{Utility.ConvertFloatToTime(roundTimes[j])}{Colors.COLOR_RESET}");
@@ -320,6 +321,8 @@ public static class StandardMultiboard
                 return gameData.ImpossibleGames;
             case DifficultyLevel.Nightmare:
                 return gameData.NightmareGames;
+            case DifficultyLevel.Progressive:
+                return gameData.ProgressiveGames;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting game count.");
                 return 0;
@@ -339,6 +342,8 @@ public static class StandardMultiboard
                 return gameData.ImpossibleWins;
             case DifficultyLevel.Nightmare:
                 return gameData.NightmareWins;
+            case DifficultyLevel.Progressive:
+                return gameData.ProgressiveWins;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting win count.");
                 return 0;
@@ -349,7 +354,10 @@ public static class StandardMultiboard
     {
         var gameData = data.RoundTimes;
 
-        switch (Difficulty.DifficultyValue)
+        // For Progressive mode, use the virtual difficulty's times based on current round
+        int difficultyToUse = Difficulty.DifficultyValue;
+
+        switch (difficultyToUse)
         {
             case (int)DifficultyLevel.Normal:
                 RoundTimes[0] = gameData.RoundOneNormal;
@@ -380,6 +388,11 @@ public static class StandardMultiboard
                 RoundTimes[2] = gameData.RoundThreeNightmare;
                 RoundTimes[3] = gameData.RoundFourNightmare;
                 RoundTimes[4] = gameData.RoundFiveNightmare;
+                break;
+            case (int)DifficultyLevel.Progressive:
+                RoundTimes[0] = gameData.RoundOneProgressive;
+                RoundTimes[1] = gameData.RoundTwoProgressive;
+                RoundTimes[2] = gameData.RoundThreeProgressive;
                 break;
             default:
                 Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");

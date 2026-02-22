@@ -56,4 +56,11 @@ public class SpinCam
         SpinCamRotation = this.Kitty.Slider.ForceAngleBetween0And360(SpinCamRotation + this.SpinCamSpeed);
         Blizzard.SetCameraFieldForPlayer(Kitty.Player, CAMERA_FIELD_ROTATION, SpinCamRotation, 0);
     }
+
+    public void Dispose()
+    {
+        SpinCamTimer?.Pause();
+        SpinCamTimer?.Dispose();
+        SpinCamTimer = null;
+    }
 }

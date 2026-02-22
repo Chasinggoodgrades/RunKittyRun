@@ -249,13 +249,13 @@ public static class TeamDeathless
     {
         EventWon = true;
 
-        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Normal)
+        if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Normal))
             AwardManager.GiveRewardAll(nameof(Deathless.NormalTeamDeathless));
 
-        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Hard)
+        if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Hard))
             AwardManager.GiveRewardAll(nameof(Deathless.HardTeamDeathless));
 
-        if (Difficulty.DifficultyValue >= (int)DifficultyLevel.Impossible)
+        if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
             AwardManager.GiveRewardAll(nameof(Deathless.ImpossibleTeamDeathless));
 
         RangeTrigger.Disable();

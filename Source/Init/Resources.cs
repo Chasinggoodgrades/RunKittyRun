@@ -12,6 +12,7 @@
     public static void Initialize()
     {
         SetResourcesForGamemode();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) return;
         AdjustStartingGold();
     }
 
@@ -48,11 +49,37 @@
         else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) TeamResources();
     }
 
+    /// <summary>
+    /// Progressive mode since it's a faster mode will have more resources to compensate for faster pace. 
+    /// </summary>
     private static void StandardResources()
     {
-        StartingGold = 200; 
-        SaveExperience = 80;
-        SaveGold = 25;
+        var timer = ObjectPool<AchesTimers>.GetEmptyObject();
+
+        timer.Timer.Start(0.25f, true, () =>
+        {
+
+            if (!Difficulty.IsDifficultyChosen) return;
+
+            if (Difficulty.DifficultyValue == (int)DifficultyLevel.Progressive)
+            {
+                StartingGold = 350;
+                SaveExperience = 95;
+                SaveGold = 40;
+                SafezoneExperience = 160;
+            }
+            else
+            {
+                StartingGold = 200;
+                SaveExperience = 80;
+                SaveGold = 25;
+                SafezoneExperience = 100;
+            }
+            AdjustStartingGold();
+
+            timer?.Pause();
+            timer?.Dispose();
+        });
     }
 
     private static void SoloResources()
@@ -60,6 +87,7 @@
         SaveExperience = 0;
         SaveGold = 0;
         EndRoundBonusXP = 0;
+        SafezoneExperience = 100;
     }
 
     private static void TeamResources()
@@ -67,5 +95,6 @@
         SaveExperience = 15;
         SaveGold = 5;
         EndRoundBonusXP = 0;
+        SafezoneExperience = 100;
     }
 }

@@ -14,7 +14,8 @@ public class WolfArea
     public Rectangle Rectangle { get; set; }
     public float Area { get; private set; }
     public bool IsEnabled { get; set; } = true;
-    private trigger AreaTrigger { get; set; }
+    private trigger EnterAreaTrigger { get; set; }
+    private trigger LeaveAreaTrigger { get; set; }
     public List<Wolf> Wolves { get; set; } = new List<Wolf>();
     public int FixationCount { get; set; }
 
@@ -45,9 +46,9 @@ public class WolfArea
 
     private void RegisterEnterEvents()
     {
-        AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
-        AreaTrigger.AddAction(() =>
+        EnterAreaTrigger = trigger.Create();
+        EnterAreaTrigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
+        EnterAreaTrigger.AddAction(() =>
         {
             try
             {
@@ -71,9 +72,9 @@ public class WolfArea
     /// </summary>
     private void RegisterLeaveEvents()
     {
-        AreaTrigger = trigger.Create();
-        AreaTrigger.RegisterLeaveRegion(Region, FilterList.DogFilter);
-        AreaTrigger.AddAction(() =>
+        LeaveAreaTrigger = trigger.Create();
+        LeaveAreaTrigger.RegisterLeaveRegion(Region, FilterList.DogFilter);
+        LeaveAreaTrigger.AddAction(() =>
         {
             try
             {

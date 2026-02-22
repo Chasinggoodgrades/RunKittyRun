@@ -183,6 +183,21 @@ public class Slider
         this.PauseSlider();
     }
 
+    public void Dispose()
+    {
+        StopSlider();
+        SliderTimer?.Pause();
+        SliderTimer?.Dispose();
+        SliderTimer = null;
+        ForcedSlideTimer?.Pause();
+        ForcedSlideTimer?.Dispose();
+        ForcedSlideTimer = null;
+        ClickTrigger?.Dispose();
+        ClickTrigger = null;
+        WidgetTrigger?.Dispose();
+        WidgetTrigger = null;
+    }
+
     public bool IsOnSlideTerrain()
     {
         return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.Unit.Y));

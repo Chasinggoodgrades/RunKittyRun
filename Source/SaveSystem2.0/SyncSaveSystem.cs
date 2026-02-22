@@ -79,6 +79,23 @@ public class SyncSaveLoad
         PreloadGenEnd(filename);
     }
 
+    /// <summary>
+    /// Writes raw string data to a local file without encoding, syncing, or chunking.
+    /// This file is write-only and never loaded back, primarily intended for debugging purposes. Will cause desyncs otherwise.. xd
+    /// </summary>
+    /// <param name="fileName">The name of the file to write to.</param>
+    /// <param name="data">The raw string data to write.</param>
+    public void WriteStringNoEncodeNoLoad(string fileName, string data)
+    {
+        PreloadGenClear();
+        PreloadGenStart();
+
+        // i have no idea if this will work. pray?
+        Preload($"{data}");
+        
+        PreloadGenEnd(fileName);
+    }
+
     public FilePromise Read(string filename, player reader, Action<FilePromise> onFinish = null)
     {
         int playerId = reader.Id;

@@ -93,7 +93,7 @@ public class Chaos : Affix
     public override void Pause(bool pause)
     {
         RotationTimer.Pause(pause);
-        currentAffix.Pause(pause);
+        currentAffix?.Pause(pause);
     }
 
 }

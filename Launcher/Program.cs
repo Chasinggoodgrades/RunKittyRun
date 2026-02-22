@@ -1,4 +1,4 @@
-using CSharpLua;
+﻿using CSharpLua;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Configuration;
@@ -123,6 +123,9 @@ namespace Launcher
 
                 map.Script = LuaScriptProcessor.FixLuaScript(map.Script);
 
+                // Inject custom Lua libraries
+                // map.Script = LuaScriptProcessor.InjectCustomLuaLibraries(map.Script);
+
                 if (mem)
                 {
                     map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
@@ -206,6 +209,43 @@ public static class LuaScriptProcessor
 
         return script;
     }
+
+    /*
+    public static string InjectCustomLuaLibraries(string script)
+    {
+        string libsFolder = @"..\..\..\..\Launcher\InjectingLuaLibs\";
+        string[] libFiles = new[]
+        {
+            "DebugUtils.lua",
+            "IngameConsole.lua",
+        };
+
+        StringBuilder injectedLibs = new StringBuilder();
+
+        foreach (var libFile in libFiles)
+        {
+            string fullPath = Path.Combine(libsFolder, libFile);
+            if (File.Exists(fullPath))
+            {
+                injectedLibs.AppendLine(File.ReadAllText(fullPath));
+                Console.WriteLine($"Injected {libFile}");
+            }
+            else
+            {
+                Console.WriteLine($"Warning: {libFile} not found at {fullPath}");
+            }
+        }
+
+        if (injectedLibs.Length == 0)
+        {
+            return script;
+        }
+
+        injectedLibs.Append(script);
+
+        return injectedLibs.ToString();
+    }
+    */
 
     public static string ProcessLuaScript(string script)
     {

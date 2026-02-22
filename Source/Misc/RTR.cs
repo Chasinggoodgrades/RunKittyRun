@@ -73,6 +73,18 @@ public class RTR
         this.PauseRTR();
     }
 
+    public void Dispose()
+    {
+        StopRTR();
+        RTRTimer?.Pause();
+        RTRTimer?.Dispose();
+        RTRTimer = null;
+        ClickTrigger?.Dispose();
+        ClickTrigger = null;
+        WidgetTrigger?.Dispose();
+        WidgetTrigger = null;
+    }
+
     private void UpdateRTR()
     {
         if (!hasTarget)

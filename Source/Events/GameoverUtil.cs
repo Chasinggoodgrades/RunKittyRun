@@ -25,6 +25,9 @@ public static class GameoverUtil
                 case (int)DifficultyLevel.Nightmare:
                     SetNightmareGameStats(kitty.Value);
                     break;
+                case (int)DifficultyLevel.Progressive:
+                    SetProgressiveGameStats(kitty.Value);
+                    break;
             }
             SetBestGameRoundTimes(kitty.Value);
         }
@@ -127,6 +130,16 @@ public static class GameoverUtil
         stats.TeamMembers = GetTeamMembers();
     }
 
+    private static void SetProgressiveGameStats(Kitty kitty)
+    {
+        var stats = kitty.SaveData.BestGameTimes.ProgressiveGameTime;
+        var gameTime = GetOverallGameTime();
+        if (gameTime > stats.Time && stats.Time != 0) return;
+        stats.Time = gameTime;
+        stats.Date = DateTimeManager.DateTime.ToString();
+        stats.TeamMembers = GetTeamMembers();
+    }
+
     private static string GetTeamMembers()
     {
         return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
@@ -158,6 +171,7 @@ public static class GameoverUtil
             (int)DifficultyLevel.Hard => kitty.SaveData.BestGameTimes.HardGameTime,
             (int)DifficultyLevel.Impossible => kitty.SaveData.BestGameTimes.ImpossibleGameTime,
             (int)DifficultyLevel.Nightmare => kitty.SaveData.BestGameTimes.NightmareGameTime,
+            (int)DifficultyLevel.Progressive => kitty.SaveData.BestGameTimes.ProgressiveGameTime,
             _ => null
         };
 

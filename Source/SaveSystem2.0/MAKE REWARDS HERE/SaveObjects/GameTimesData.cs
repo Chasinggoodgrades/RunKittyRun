@@ -4,6 +4,7 @@
     public HardGameTimeData HardGameTime { get; set; }
     public ImpossibleGameTimeData ImpossibleGameTime { get; set; }
     public NightmareGameTimeData NightmareGameTime { get; set; }
+    public ProgressiveGameTimeData ProgressiveGameTime { get; set; }
 
 
     public GameTimesData()
@@ -12,6 +13,7 @@
         HardGameTime = new HardGameTimeData();
         ImpossibleGameTime = new ImpossibleGameTimeData();
         NightmareGameTime = new NightmareGameTimeData();
+        ProgressiveGameTime = new ProgressiveGameTimeData();
     }
 }
 
@@ -64,4 +66,14 @@ public class NightmareGameTimeData
     public float RoundThreeTime { get; set; }
     public float RoundFourTime { get; set; }
     public float RoundFiveTime { get; set; }
+}
+
+public class ProgressiveGameTimeData
+{
+    public string Date { get; set; } = "";
+    public float Time { get; set; }
+    public string TeamMembers { get; set; } = "";
+    public float RoundOneTime { get; set; }
+    public float RoundTwoTime { get; set; }
+    public float RoundThreeTime { get; set; }
 }

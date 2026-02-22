@@ -49,7 +49,7 @@ public static class RoundTimer
         {
             CountdownTimer.Start(1.0f, false, ErrorHandler.Wrap(() =>
             {
-                string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND}|r{Colors.COLOR_YELLOW_ORANGE} will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
+                string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND} |r{Colors.COLOR_YELLOW_ORANGE}will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
                 if (StartRoundTimer.Remaining % 5 <= 0.1 && StartRoundTimer.Remaining > 5)
                     Utility.TimedTextToAllPlayers(5.0f, RoundStartingString);
                 if (StartRoundTimer.Remaining <= 5 && StartRoundTimer.Remaining > 0)

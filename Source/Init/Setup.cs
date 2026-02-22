@@ -84,6 +84,7 @@ namespace Source.Init
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();
+                AntiblockWand.Initialize();
                 VictoryZone.Initialize();
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
@@ -125,12 +126,11 @@ namespace Source.Init
 
         private static void RemoveDisconnectedPlayers()
         {
-            foreach (var player in Globals.ALL_PLAYERS)
+            for (int i = Globals.ALL_PLAYERS.Count - 1; i >= 0; i--)
             {
-                if (player.SlotState == playerslotstate.Left)
+                if (Globals.ALL_PLAYERS[i].SlotState == playerslotstate.Left)
                 {
-                    Globals.ALL_PLAYERS.Remove(player);
-                    break;
+                    Globals.ALL_PLAYERS.RemoveAt(i);
                 }
             }
         }

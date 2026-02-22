@@ -117,6 +117,9 @@ public static class Gameover
             case (int)DifficultyLevel.Nightmare:
                 stats.NightmareGames += 1;
                 break;
+            case (int)DifficultyLevel.Progressive:
+                stats.ProgressiveGames += 1;
+                break;
         }
     }
 
@@ -139,6 +142,9 @@ public static class Gameover
                 break;
             case (int)DifficultyLevel.Nightmare:
                 stats.NightmareWins += 1;
+                break;
+            case (int)DifficultyLevel.Progressive:
+                stats.ProgressiveWins += 1;
                 break;
         }
     }

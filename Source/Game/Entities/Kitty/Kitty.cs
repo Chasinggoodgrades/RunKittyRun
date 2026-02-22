@@ -7,10 +7,11 @@ public class Kitty : IFloatingTags, ICircleOwner
 {
     private const int KITTY_HERO_TYPE = Constants.UNIT_KITTY;
     private const string SPAWN_IN_EFFECT = "Abilities\\Spells\\Undead\\DeathPact\\DeathPactTarget.mdl";
-    private const float MANA_DEATH_PENALTY = 0.125f; // 12.5% mana loss on death
+    private const float MANA_DEATH_PENALTY = 65.0f;
     private const float InvulDuration = 0.3f;
     public static bool InvulTest = false;
 
+    public bool ComputerControlled = false;
     public string Name { get; set; }
     public KittyData SaveData { get; set; }
     public List<Relic> Relics { get; set; }
@@ -113,7 +114,7 @@ public class Kitty : IFloatingTags, ICircleOwner
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
-            Circle.SetMana(Unit.Mana - (Unit.MaxMana * MANA_DEATH_PENALTY), Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
+            Circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             Circle.KittyDied(this);
             Solo.ReviveKittySoloTournament(this);
             Solo.RoundEndCheck();
@@ -202,11 +203,12 @@ public class Kitty : IFloatingTags, ICircleOwner
     {
         try
         {
-            // Save Data
-            if (Player.Controller == mapcontrol.User && Player.SlotState == playerslotstate.Playing)
-                SaveData = SaveManager.GetKittyData(Player);
-            else
-                SaveData = new KittyData(); // dummy data for comps
+            if (Player.Controller == mapcontrol.Computer)
+            {
+                ComputerControlled = true;
+                SaveData = new KittyData();
+            }
+            else SaveData = SaveManager.GetKittyData(Player);
 
             Relics = new List<Relic>();
         }
@@ -267,9 +269,12 @@ public class Kitty : IFloatingTags, ICircleOwner
         InvulTimer.Dispose();
         Circle?.Dispose();
         Disco?.Dispose();
-        aiController.StopAi();
-        RTR.StopRTR();
-        Unit.Dispose();
+        aiController?.StopAi();
+        RTR?.Dispose();
+        Slider?.Dispose();
+        SpinCam?.Dispose();
+        NameTag?.Dispose();
+        Unit?.Dispose();
         ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);

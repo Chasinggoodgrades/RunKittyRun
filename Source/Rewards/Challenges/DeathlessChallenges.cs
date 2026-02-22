@@ -30,7 +30,7 @@ public static class DeathlessChallenges
     public static int DeathlessPerRound()
     {
         var requiredValue = 14 - ((Globals.ROUND - 3) * 4);
-        if (requiredValue > 14 || Difficulty.DifficultyValue == (int)DifficultyLevel.Normal) requiredValue = 14;
+        if (requiredValue > 14 || DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Normal) requiredValue = 14;
         return requiredValue;
     }
 
@@ -61,7 +61,7 @@ public static class DeathlessChallenges
 
     private static void AwardBasedOnDifficulty(player player)
     {
-        var difficulty = (DifficultyLevel)Difficulty.DifficultyValue;
+        var difficulty = (DifficultyLevel)DifficultyConfig.GetEffectiveDifficultyValue();
         NormalDeathlessAward(player);
         /*        switch (difficulty)
                 {

@@ -34,6 +34,7 @@ public class DifficultyOption
     public static void Initialize()
     {
         Options.Clear();
+        new DifficultyOption("Progressive (3 Rounds)", (int)DifficultyLevel.Progressive, Colors.COLOR_GREEN);
         new DifficultyOption("Normal", (int)DifficultyLevel.Normal, Colors.COLOR_YELLOW);
         new DifficultyOption("Hard", (int)DifficultyLevel.Hard, Colors.COLOR_RED);
         new DifficultyOption("Impossible", (int)DifficultyLevel.Impossible, Colors.COLOR_DARK_RED);
@@ -46,5 +47,6 @@ public enum DifficultyLevel
     Normal = 4,
     Hard = 6,
     Impossible = 9,
-    Nightmare = 11
+    Nightmare = 11,
+    Progressive = 99
 }
