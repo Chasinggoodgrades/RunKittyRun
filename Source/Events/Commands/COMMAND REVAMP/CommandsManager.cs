@@ -67,7 +67,8 @@ public static class CommandsManager
             for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
             {
                 var kitty = Globals.ALL_KITTIES_LIST[i];
-                if (kitty.Player.SlotState == playerslotstate.Playing && kitty.Player.Controller == mapcontrol.Computer)
+                if ( ( kitty.Player.SlotState == playerslotstate.Playing && kitty.Player.Controller == mapcontrol.Computer) // Slotted Comp Players
+                    || ( kitty.Player.SlotState == playerslotstate.Empty && kitty.Player.Controller == mapcontrol.User) )  // Ingame added comp players
                 {
                     kitties.Add(kitty); // add all AI players
                 }

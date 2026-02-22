@@ -44,7 +44,12 @@ public class SoloDeathTimer
     {
         try
         {
-            var kitty = Globals.ALL_KITTIES[Player];
+            var kitty = Globals.ALL_KITTIES.TryGetValue(Player, out var k) ? k : null;
+            if (kitty == null)
+            {
+                Dispose();
+                return;
+            }
             var lastCheckpoint = Globals.SAFE_ZONES[kitty.CurrentSafeZone];
             var x = lastCheckpoint.Rect_.CenterX;
             var y = lastCheckpoint.Rect_.CenterY;

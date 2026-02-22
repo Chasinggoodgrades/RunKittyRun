@@ -964,31 +964,11 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var name = args[0] != "" ? args[0] : "??__";
-                foreach (var p in Globals.ALL_PLAYERS)
+                CommandsManager.ResolvePlayerId(name, kitty =>
                 {
-                    if (p.Name.ToLower().StartsWith(name))
-                    {
-                        Utility.MakePlayerSpectator(p);
-                        break;
-                    }
-                }
-            }
-        );
-
-        CommandsManager.RegisterCommand(
-            name: "summonall",
-            alias: "",
-            group: "admin",
-            argDesc: "",
-            description: "Summons all players to your location.",
-            action: (player, args) =>
-            {
-                var kitty = Globals.ALL_KITTIES[player];
-                foreach (var k in Globals.ALL_KITTIES)
-                {
-                    if (k.Value.Unit.Owner == player) continue;
-                    k.Value.Unit.SetPosition(kitty.Unit.X, kitty.Unit.Y);
-                }
+                    if (kitty == null) return;
+                    Utility.MakePlayerSpectator(kitty.Player);
+                });
             }
         );
 
