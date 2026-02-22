@@ -54,6 +54,7 @@ namespace Source
                 {
                     for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
                     {
+                        if (Globals.ALL_PLAYERS[i].Controller == mapcontrol.Computer) continue;
                         if (!SaveManager.PlayersLoaded.Contains(Globals.ALL_PLAYERS[i]))
                         {
                             Console.WriteLine($"Waiting on {Colors.PlayerNameColored(Globals.ALL_PLAYERS[i])} to synchronize.");

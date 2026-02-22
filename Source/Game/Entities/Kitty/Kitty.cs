@@ -203,7 +203,12 @@ public class Kitty : IFloatingTags, ICircleOwner
     {
         try
         {
-            SaveData = SaveManager.GetKittyData(Player);
+            if (Player.Controller == mapcontrol.Computer)
+            {
+                ComputerControlled = true;
+                SaveData = new KittyData();
+            }
+            else SaveData = SaveManager.GetKittyData(Player);
 
             Relics = new List<Relic>();
         }
