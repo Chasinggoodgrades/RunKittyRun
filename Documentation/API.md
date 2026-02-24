@@ -136,7 +136,8 @@ GET /tournaments
     "gamemode": "SoloTournament",
     "gametype": "Race",
     "datetime": "2024-06-01T12:34:56Z",
-    "admin_approved": 0
+    "admin_approved": 0,
+    "tournament_group_id": null
   }
 ]
 ```
@@ -144,7 +145,168 @@ GET /tournaments
 **Error Response:**
 
 - **Code:** 500 Internal Server Error
-- **Content:** `Error fetching tournaments`
+- **Content:** `{ "error": "Failed to fetch tournaments" }`
+
+---
+
+### Get All Tournaments (Full Data)
+
+Retrieves all admin-approved tournaments with complete nested data including players, games, and rounds.
+
+**Endpoint:** `GET /tournaments/full`
+
+**Example Request:**
+
+```http
+GET /tournaments/full
+```
+
+**Success Response:**
+
+- **Code:** 200 OK
+- **Content:** Array of tournament objects with nested player, game, and round data
+
+```json
+[
+  {
+    "tournament": {
+      "id": 1,
+      "tournament_id": "MTE4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+      "region": "NA",
+      "gamemode": "SoloTournament",
+      "gametype": "Race",
+      "datetime": "2024-06-01T12:34:56Z",
+      "admin_approved": 1,
+      "tournament_group_id": null
+    },
+    "players": [
+      {
+        "battletag": "Player#1234",
+        "games": [
+          {
+            "id": 1,
+            "tournament_id": 1,
+            "battletag": "Player#1234",
+            "game_number": 1,
+            "game_uid": "NDcxNjIyMDI2LTAyLTE2IDIzOjI3OjQ3MTE4NT",
+            "team": "red",
+            "team_members": "Player#1234",
+            "total_deaths": 10,
+            "total_progress": 457.05,
+            "total_saves": 52,
+            "total_time": 456.708,
+            "rounds": [
+              {
+                "id": 1,
+                "game_id": 1,
+                "round_number": 1,
+                "deaths": 3,
+                "level": 8,
+                "progress": 100,
+                "round_time": 120.5,
+                "saves": 15
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+**Error Response:**
+
+- **Code:** 500 Internal Server Error
+- **Content:** `"Error fetching full tournament data"`
+
+**Notes:**
+- Only returns tournaments where `admin_approved = 1`
+- Full nested structure eliminates need for multiple API calls
+
+---
+
+### Get Single Tournament (Full Data)
+
+Retrieves a single tournament with complete nested data including players, games, and rounds.
+
+**Endpoint:** `GET /tournaments/:tournamentId/full`
+
+**Path Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `tournamentId` | integer | Yes | Unique identifier for the tournament |
+
+**Example Request:**
+
+```http
+GET /tournaments/1/full
+```
+
+**Success Response:**
+
+- **Code:** 200 OK
+- **Content:** Tournament object with nested player, game, and round data
+
+```json
+{
+  "tournament": {
+    "id": 1,
+    "tournament_id": "MTE4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+    "region": "NA",
+    "gamemode": "SoloTournament",
+    "gametype": "Race",
+    "datetime": "2024-06-01T12:34:56Z",
+    "admin_approved": 0,
+    "tournament_group_id": null
+  },
+  "players": [
+    {
+      "battletag": "Player#1234",
+      "games": [
+        {
+          "id": 1,
+          "tournament_id": 1,
+          "battletag": "Player#1234",
+          "game_number": 1,
+          "game_uid": "NDcxNjIyMDI2LTAyLTE2IDIzOjI3OjQ3MTE4NT",
+          "team": "red",
+          "team_members": "Player#1234",
+          "total_deaths": 10,
+          "total_progress": 457.05,
+          "total_saves": 52,
+          "total_time": 456.708,
+          "rounds": [
+            {
+              "id": 1,
+              "game_id": 1,
+              "round_number": 1,
+              "deaths": 3,
+              "level": 8,
+              "progress": 100,
+              "round_time": 120.5,
+              "saves": 15
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Error Responses:**
+
+- **Code:** 404 Not Found
+- **Content:** `{ "error": "Tournament not found" }`
+
+- **Code:** 500 Internal Server Error
+- **Content:** `"Error fetching full tournament data"`
+
+**Notes:**
+- Returns tournament regardless of `admin_approved` status
+- Full nested structure for complete tournament view
 
 ---
 
@@ -185,7 +347,7 @@ GET /tournaments/1/players
 **Error Response:**
 
 - **Code:** 500 Internal Server Error
-- **Content:** `Error fetching players for tournament`
+- **Content:** `{ "error": "Failed to fetch players" }`
 
 ---
 
@@ -233,7 +395,7 @@ GET /tournaments/1/games
 **Error Response:**
 
 - **Code:** 500 Internal Server Error
-- **Content:** `Error fetching games for tournament`
+- **Content:** `{ "error": "Failed to fetch games" }`
 
 ---
 
@@ -280,7 +442,173 @@ GET /tournaments/1/rounds
 **Error Response:**
 
 - **Code:** 500 Internal Server Error
-- **Content:** `Error fetching rounds for tournament`
+- **Content:** `{ "error": "Failed to fetch rounds" }`
+
+---
+
+### Group Tournaments
+
+Groups multiple tournaments together. If none of the tournaments have a group, a new group is created. If any tournament already has a group, all tournaments are added to that existing group.
+
+**Endpoint:** `POST /tournaments/group`
+
+**Request Body:**
+
+```json
+{
+  "tournament_ids": [1, 2, 3]
+}
+```
+
+**Body Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `tournament_ids` | array of integers | Yes | Array of tournament IDs to group (minimum 2) |
+
+**Example Request:**
+
+```http
+POST /tournaments/group
+Content-Type: application/json
+
+{
+  "tournament_ids": [1, 2, 3]
+}
+```
+
+**Success Response:**
+
+- **Code:** 200 OK
+- **Content:** Confirmation with group ID and updated tournaments
+
+```json
+{
+  "message": "Tournaments grouped successfully",
+  "group_id": 1,
+  "tournaments": [
+    {
+      "id": 1,
+      "tournament_id": "MTE4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+      "region": "NA",
+      "gamemode": "SoloTournament",
+      "gametype": "Race",
+      "datetime": "2024-06-01T12:34:56Z",
+      "admin_approved": 0,
+      "tournament_group_id": 1
+    },
+    {
+      "id": 2,
+      "tournament_id": "MTI4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+      "region": "EU",
+      "gamemode": "SoloTournament",
+      "gametype": "Race",
+      "datetime": "2024-06-02T14:00:00Z",
+      "admin_approved": 0,
+      "tournament_group_id": 1
+    }
+  ]
+}
+```
+
+**Error Responses:**
+
+- **Code:** 400 Bad Request
+- **Content:** `{ "error": "Provide at least two tournament_ids" }`
+
+- **Code:** 404 Not Found
+- **Content:** `{ "error": "One or more tournaments not found" }`
+
+- **Code:** 500 Internal Server Error
+- **Content:** `{ "error": "Database error" }`
+
+**Notes:**
+- Minimum 2 tournaments required for grouping
+- Groups are automatically created with incremental IDs
+- If any tournament already belongs to a group, all tournaments are added to that existing group
+- Empty groups are automatically cleaned up
+
+---
+
+### Ungroup Tournaments
+
+Removes tournaments from their current group. If a group becomes empty after ungrouping, it is automatically deleted.
+
+**Endpoint:** `POST /tournaments/ungroup`
+
+**Request Body:**
+
+```json
+{
+  "tournament_ids": [1, 2]
+}
+```
+
+**Body Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `tournament_ids` | array of integers | Yes | Array of tournament IDs to remove from their group |
+
+**Example Request:**
+
+```http
+POST /tournaments/ungroup
+Content-Type: application/json
+
+{
+  "tournament_ids": [1, 2]
+}
+```
+
+**Success Response:**
+
+- **Code:** 200 OK
+- **Content:** Confirmation with updated tournaments
+
+```json
+{
+  "message": "Tournaments ungrouped successfully",
+  "tournaments": [
+    {
+      "id": 1,
+      "tournament_id": "MTE4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+      "region": "NA",
+      "gamemode": "SoloTournament",
+      "gametype": "Race",
+      "datetime": "2024-06-01T12:34:56Z",
+      "admin_approved": 0,
+      "tournament_group_id": null
+    },
+    {
+      "id": 2,
+      "tournament_id": "MTI4NTgyMDI2LTAyLTE2IDIzOjI3OjQ3MjE2ND",
+      "region": "EU",
+      "gamemode": "SoloTournament",
+      "gametype": "Race",
+      "datetime": "2024-06-02T14:00:00Z",
+      "admin_approved": 0,
+      "tournament_group_id": null
+    }
+  ]
+}
+```
+
+**Error Responses:**
+
+- **Code:** 400 Bad Request
+- **Content:** `{ "error": "tournament_ids is required" }`
+
+- **Code:** 404 Not Found
+- **Content:** `{ "error": "One or more tournaments not found" }`
+
+- **Code:** 500 Internal Server Error
+- **Content:** `{ "error": "Database error" }`
+
+**Notes:**
+- Empty groups are automatically deleted
+- Tournaments are set to `tournament_group_id = NULL`
+- Can ungroup any number of tournaments (minimum 1)
 
 ---
 
@@ -442,6 +770,8 @@ The API uses standard HTTP response codes:
 | Code | Description |
 |------|-------------|
 | `200` | Success - Request completed successfully |
+| `400` | Bad Request - Invalid or missing required parameters |
+| `404` | Not Found - Requested resource does not exist |
 | `500` | Internal Server Error - Database connection or query error |
 
 ---
@@ -452,6 +782,9 @@ The API uses standard HTTP response codes:
 - Timestamps are returned in ISO 8601 format
 - All numeric values (times, scores) are returned as numbers
 - Empty result sets return an empty array `[]`
+- POST endpoints require `Content-Type: application/json` header
+- Tournament grouping supports multiple tournaments being added to the same group
+- Empty tournament groups are automatically cleaned up after ungrouping
 
 ---
 
