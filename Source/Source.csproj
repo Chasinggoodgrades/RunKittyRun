@@ -13,4 +13,7 @@
 		<PackageReference Include="WCSharp.Shared" Version="3.3.8" />
 		<PackageReference Include="WCSharp.Sync" Version="3.3.8" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="UI\StatFrame\Core\" />
+	</ItemGroup>
 </Project>

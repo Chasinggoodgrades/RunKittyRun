@@ -739,6 +739,15 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "activatehalloween",
+            alias: "halloween",
+            group: "admin",
+            argDesc: "",
+            description: "Activates the Halloween terrain.",
+            action: (player, args) => SeasonalManager.ActivateHalloween()
+        );
+
+        CommandsManager.RegisterCommand(
             name: "deactivateseason",
             alias: "noseason",
             group: "admin",

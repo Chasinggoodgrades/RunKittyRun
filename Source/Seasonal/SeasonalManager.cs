@@ -83,6 +83,20 @@ public static class SeasonalManager
     }
 
     /// <summary>
+    /// Admin command to activate Halloween season. Only works in standard mode.
+    /// </summary>
+    public static void ActivateHalloween()
+    {
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
+        Season = HolidaySeasons.Halloween;
+        TerrainChanger.ActivateHalloweenTerrain();
+        DoodadChanger.HalloweenDoodads();
+        ShopChanger.SetSeasonalShop();
+        SetWeather();
+        SetMinimap();
+    }
+
+    /// <summary>
     /// Admin Command for no seasons. Works regardless of mode.
     /// </summary>
     public static void NoSeason()
@@ -118,7 +132,14 @@ public static class SeasonalManager
             SuspendTimeOfDay(true);
             CurrentWeather.Enable();
         }
-        else if (Season == HolidaySeasons.None)
+        else if (Season == HolidaySeasons.Halloween)
+        {
+            CurrentWeather?.Dispose();
+            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23);
+            SuspendTimeOfDay(true);
+            CurrentWeather = null;
+        }
+        else
         {
             CurrentWeather?.Dispose();
             SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);

@@ -18,12 +18,27 @@ public static class DoodadChanger
     private static int RedLavaCracks = FourCC("B00B");
     private static int BlueLavaCracks = FourCC("B00C");
     private static int SuperChristmasTree = FourCC("B00D");
+    private static int CauldronWithHeads = FourCC("LOca");
+    private static int SkullPile = FourCC("LOsk");
+    private static int ScorchedRemains = FourCC("AOsr");
+    private static int SittingCorpse = FourCC("LOsc");
+    private static int ImpaledCorpse = FourCC("LOic");
+    private static int Bats = FourCC("NObt");
+    private static int EmptyCage = FourCC("LOce");
+    private static int BlueFire = FourCC("YOfb");
+    private static int Fire = FourCC("YOft");
+    private static int FootprintsDemonic = FourCC("ZZdt");
+    private static int Flies = FourCC("LOfl");
+    private static int SewerVents = FourCC("DOsv");
+
     private static List<int> ChristmasDecor = InitChristmasDecor();
+    private static List<int> HalloweenDecor = InitHalloweenDecor();
     private static List<destructable> AllDestructables { get; set; } = new();
 
     public static void Initialize()
     {
         CreateInitDestructiables();
+        NoSeasonDoodads();
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         SeasonalDoodads();
     }
@@ -47,9 +62,32 @@ public static class DoodadChanger
         };
     }
 
+    private static List<int> InitHalloweenDecor()
+    {
+        return new List<int>
+        {
+            RedLavaCracks,
+            BlueLavaCracks,
+            CauldronWithHeads,
+            SkullPile,
+            ScorchedRemains,
+            SittingCorpse,
+            Lantern,
+            ImpaledCorpse,
+            Bats,
+            EmptyCage,
+            BlueFire,
+            Fire,
+            FootprintsDemonic,
+            Flies,
+            SewerVents
+        };
+    }
+
     private static void SeasonalDoodads()
     {
         ChristmasDoodads();
+        HalloweenDoodads();
     }
 
     public static void NoSeasonDoodads()
@@ -62,6 +100,13 @@ public static class DoodadChanger
     {
         if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
         ReplaceDoodad(ChristmasTree, 2.5f);
+        ShowSeasonalDoodads(true);
+    }
+
+    public static void HalloweenDoodads()
+    {
+        if (SeasonalManager.Season != HolidaySeasons.Halloween) return;
+        ReplaceDoodad(CauldronWithHeads, 1.5f);
         ShowSeasonalDoodads(true);
     }
 
@@ -116,7 +161,11 @@ public static class DoodadChanger
     private static void HideDoodads(bool show)
     {
         var des = GetEnumDestructable();
+        
         if (ChristmasDecor.Contains(des.Type))
-            des.SetVisibility(show);
+            des.SetVisibility(show && SeasonalManager.Season == HolidaySeasons.Christmas);
+        
+        if (HalloweenDecor.Contains(des.Type))
+            des.SetVisibility(show && SeasonalManager.Season == HolidaySeasons.Halloween);
     }
 }

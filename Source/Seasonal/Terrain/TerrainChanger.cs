@@ -49,6 +49,12 @@ public static class TerrainChanger
         SetTerrain();
     }
 
+    public static void ActivateHalloweenTerrain()
+    {
+        HalloweenTerrain();
+        SetTerrain();
+    }
+
     private static void NoSeasonTerrain()
     {
         Terrains[0] = FourCC("Lgrd");
@@ -80,6 +86,19 @@ public static class TerrainChanger
         for (int i = 0; i < Gamemode.NumberOfRounds; i++)
         {
             Terrains[i] = FourCC("Nrck");
+        }
+    }
+
+    private static void HalloweenTerrain()
+    {
+        if (SeasonalManager.Season != HolidaySeasons.Halloween) return;
+        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
+        {
+            SafezoneTerrain[i] = FourCC("Ibsq");
+        }
+        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
+        {
+            Terrains[i] = FourCC("Irbk");
         }
     }
 

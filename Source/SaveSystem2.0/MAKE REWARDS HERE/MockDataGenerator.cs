@@ -50,14 +50,14 @@ public static class MockDataGenerator
         "Ta","Mi","Lo","Se","Fa","Da","Ri","Na","Ke","Tor"
     };
 
-        private static readonly string[] Middle =
-        {
+    private static readonly string[] Middle =
+    {
         "ri","len","var","mir","dan","lor","ven","thal","rin","mar",
         "sol","der","ion","rel","nor","vyn","las","dor","ian","eth"
     };
 
-        private static readonly string[] End =
-        {
+    private static readonly string[] End =
+    {
         "", "a", "en", "on", "is", "ar", "or", "in", "el", "us"
     };
 
