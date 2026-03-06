@@ -87,7 +87,7 @@ public static class SoundManager
     /// </summary>
     public static void PlayKittyDeathSound(Kitty k)
     {
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament)
+        if (Gamemode.CurrentGameMode == GameMode.Team)
             TeamKittyDeathSound(k);
         else
         {

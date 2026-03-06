@@ -54,8 +54,8 @@ public static class CommandHandler
         {
 
             var command = CommandsManager.GetCommand(commandName.ToLower());
-            var playerGroup = CommandsManager.GetPlayerGroup(@event.Player);
-            if (command != null && (command.Group == playerGroup || command.Group == "all" || playerGroup == "admin"))
+            var playerTier = CommandsManager.GetPlayerTier(@event.Player);
+            if (command != null && playerTier >= command.Tier)
             {
                 command.Action?.Invoke(@event.Player, args);
             }
@@ -88,7 +88,7 @@ public static class CommandHandler
         var chatString = @event.PlayerChatString;
         var command = chatString.ToLower();
 
-        if (command.StartsWith("?") && Globals.VIPLISTUNFILTERED.Contains(player))
+        if (command.StartsWith("?") && Globals.ADMIN_LIST.Contains(player))
         {
             if (command.ToLower().StartsWith("?exec")) ExecuteLua.LuaCode(player, chatString);
         }

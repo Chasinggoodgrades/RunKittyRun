@@ -4,14 +4,14 @@ public static class TeamsUtil
 {
     public static void RoundResetAllTeams()
     {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
+        if (Gamemode.CurrentGameMode != GameMode.Team) return;
         foreach (var team in Globals.ALL_TEAMS_LIST)
             team.Finished = false;
     }
 
     public static void CheckTeamDead(Kitty k)
     {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
+        if (Gamemode.CurrentGameMode != GameMode.Team) return;
         var team = Globals.ALL_TEAMS[k.TeamID];
         for (int i = 0; i < team.Teammembers.Count; i++)
         {

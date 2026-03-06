@@ -61,7 +61,7 @@ public static class RoundTimer
 
     private static void SetEndRoundTimes()
     {
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
+        if (Gamemode.CurrentGameMode == GameMode.Team) // Team
         {
             ROUND_ENDTIMES.Add(720.0f);
             ROUND_ENDTIMES.Add(720.0f);
@@ -69,7 +69,7 @@ public static class RoundTimer
             ROUND_ENDTIMES.Add(1500.0f);
             ROUND_ENDTIMES.Add(1500.0f);
         }
-        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.Solo) // Solo
         {
             ROUND_ENDTIMES.Add(420.0f);
             ROUND_ENDTIMES.Add(420.0f);

@@ -1,8 +1,8 @@
 ﻿public enum GameMode
 {
     Standard,
-    SoloTournament,
-    TeamTournament,
+    Solo,
+    Team,
 }
 
 public enum TeamTournamentModes

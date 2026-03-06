@@ -163,12 +163,33 @@ namespace Source.Init
         {
             for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {
-                for (int j = 0; j < Globals.VIPLIST.Length; j++)
+                var p = Globals.ALL_PLAYERS[i];
+                var name = p.Name;
+
+                for (int j = 0; j < Globals.DeveloperList.Length; j++)
                 {
-                    var fromBase64Name = Base64.FromBase64(Globals.VIPLIST[j]);
-                    if (Globals.ALL_PLAYERS[i].Name == fromBase64Name)
+                    if (name == Base64.FromBase64(Globals.DeveloperList[j]))
                     {
-                        Globals.VIPLISTUNFILTERED.Add(Globals.ALL_PLAYERS[i]);
+                        Globals.DEVELOPER_LIST.Add(p);
+                        break;
+                    }
+                }
+
+                for (int j = 0; j < Globals.AdminList.Length; j++)
+                {
+                    if (name == Base64.FromBase64(Globals.AdminList[j]))
+                    {
+                        Globals.ADMIN_LIST.Add(p);
+                        break;
+                    }
+                }
+
+                for (int j = 0; j < Globals.VipList.Length; j++)
+                {
+                    if (name == Base64.FromBase64(Globals.VipList[j]))
+                    {
+                        Globals.VIP_LIST.Add(p);
+                        break;
                     }
                 }
             }

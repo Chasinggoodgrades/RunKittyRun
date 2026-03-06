@@ -52,7 +52,7 @@ public static class CollisionDetection
             if (filterUnit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
             if (filterUnit.Owner == kPlayer) return false; // Not Same Player
             if (!k.Alive) return false;
-            if (Gamemode.CurrentGameMode == GameMode.SoloTournament) return false;
+            if (Gamemode.CurrentGameMode == GameMode.Solo) return false;
 
             return Globals.ALL_KITTIES[filterUnit.Owner].TeamID == kTeamID;
         };

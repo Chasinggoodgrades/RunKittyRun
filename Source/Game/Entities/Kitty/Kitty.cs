@@ -48,6 +48,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     public bool IsChained { get; set; } = false;
     public bool IsMirror { get; set; } = false;
     public bool CanEarnAwards { get; set; } = true;
+    public CommandTier CommandTier { get; set; } = CommandTier.All;
 
     public Kitty(player player)
     {
@@ -211,6 +212,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             else SaveData = SaveManager.GetKittyData(Player);
 
             Relics = new List<Relic>();
+            CommandsManager.InitCommandTier(this);
         }
         catch (Exception e)
         {

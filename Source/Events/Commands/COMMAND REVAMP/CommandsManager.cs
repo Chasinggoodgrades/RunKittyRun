@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
+public enum CommandTier
+{
+    All = 0,
+    Red = 1,
+    VIP = 2,
+    Admin = 3,
+    Developer = 4
+}
+
 public class Commands
 {
     public string Name { get; set; }
     public string[] Alias { get; set; }
-    public string Group { get; set; } // "all", "vip", "admin", "dev" "some other shit? naw prolly good", "oh yeah, i should put red lmao"
+    public CommandTier Tier { get; set; }
     public string ArgDesc { get; set; }
     public string Description { get; set; }
     public Action<player, string[]> Action { get; set; }
@@ -20,13 +29,13 @@ public static class CommandsManager
     private static List<Commands> CommandsList = new List<Commands>();
     private static List<Kitty> KittiesList = new List<Kitty>();
 
-    public static void RegisterCommand(string name, string alias, string group, string argDesc, string description, Action<player, string[]> action)
+    public static void RegisterCommand(string name, string alias, CommandTier tier, string argDesc, string description, Action<player, string[]> action)
     {
         var command = new Commands
         {
             Name = name,
             Alias = alias.Split(','),
-            Group = group,
+            Tier = tier,
             ArgDesc = argDesc,
             Description = description,
             Action = action
@@ -135,13 +144,13 @@ public static class CommandsManager
     {
         var filter = string.IsNullOrEmpty(arg) ? "" : arg.ToLower();
         CommandsList.Clear(); // instead of creating a new list each time, just use 1 and clear it
-        var playerGroup = GetPlayerGroup(player);
+        var playerTier = GetPlayerTier(player);
 
         foreach (var command in AllCommands)
         {
             var cmd = command.Value;
             if (CommandsList.Contains(cmd)) continue; // already got cmd / alias
-            if (cmd.Group == playerGroup || cmd.Group == "all" || playerGroup == "admin") // admins get ALL DUH
+            if (playerTier >= cmd.Tier)
             {
                 if (string.IsNullOrEmpty(arg) || arg.Length == 0)
                 {
@@ -171,8 +180,41 @@ public static class CommandsManager
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_TURQUOISE}Available Commands:|r\n{commandList}", 0, 0);
     }
 
-    public static string GetPlayerGroup(player player)
+    public static CommandTier GetPlayerTier(player player)
     {
-        return Globals.VIPLISTUNFILTERED.Contains(player) ? "admin" : player.Id == 0 ? "red" : "all";
+        if (Globals.ALL_KITTIES.TryGetValue(player, out var kitty))
+        {
+            return kitty.CommandTier;
+        }
+
+        if (Globals.DEVELOPER_LIST.Contains(player)) return CommandTier.Developer;
+        if (Globals.ADMIN_LIST.Contains(player)) return CommandTier.Admin;
+        if (Globals.VIP_LIST.Contains(player)) return CommandTier.VIP;
+        return player.Id == 0 ? CommandTier.Red : CommandTier.All;
+    }
+
+    public static CommandTier InitCommandTier(Kitty k)
+    {
+        if (Globals.DEVELOPER_LIST.Contains(k.Player))
+        {
+            k.CommandTier = CommandTier.Developer;
+        }
+        else if (Globals.ADMIN_LIST.Contains(k.Player))
+        {
+            k.CommandTier = CommandTier.Admin;
+        }
+        else if (Globals.VIP_LIST.Contains(k.Player))
+        {
+            k.CommandTier = CommandTier.VIP;
+        }
+        else if (k.Player.Id == 0)
+        {
+            k.CommandTier = CommandTier.Red;
+        }
+        else
+        {
+            k.CommandTier = CommandTier.All;
+        }
+        return k.CommandTier;
     }
 }

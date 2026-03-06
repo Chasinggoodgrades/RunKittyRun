@@ -21,8 +21,8 @@
             return (int)(baseXP * 3.34f); // 7515 total xp for r1 and r2
         }
         
-        if (Gamemode.CurrentGameMode == GameMode.SoloTournament || 
-            Gamemode.CurrentGameMode == GameMode.TeamTournament)
+        if (Gamemode.CurrentGameMode == GameMode.Solo || 
+            Gamemode.CurrentGameMode == GameMode.Team)
         {
             return 0;
         }
@@ -67,8 +67,8 @@
     private static void SetResourcesForGamemode()
     {
         if (Gamemode.CurrentGameMode == GameMode.Standard) StandardResources();
-        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) SoloResources();
-        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) TeamResources();
+        else if (Gamemode.CurrentGameMode == GameMode.Solo) SoloResources();
+        else if (Gamemode.CurrentGameMode == GameMode.Team) TeamResources();
     }
 
     /// <summary>

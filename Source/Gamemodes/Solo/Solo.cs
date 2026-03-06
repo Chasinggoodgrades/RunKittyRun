@@ -8,7 +8,7 @@
 
     public static void ReviveKittySoloTournament(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament || Gamemode.CurrentGameModeType != "Race") return; // Solo Gamemode & Race GamemodeType.
+        if (Gamemode.CurrentGameMode != GameMode.Solo || Gamemode.CurrentGameModeType != "Race") return; // Solo Gamemode & Race GamemodeType.
         new SoloDeathTimer(kitty.Player);
     }
 

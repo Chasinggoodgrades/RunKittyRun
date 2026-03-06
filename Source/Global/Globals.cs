@@ -14,11 +14,15 @@ public static class Globals
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED { get; set; }
     public static group TempGroup = group.Create();
-    public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.SoloTournament, GameMode.TeamTournament };
+    public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.Solo, GameMode.Team };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
-    public static readonly string[] VIPLIST = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };
-    public static List<player> VIPLISTUNFILTERED = new List<player>();
+    public static readonly string[] DeveloperList = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };
+    public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw" };
+    public static readonly string[] VipList = { };
+    public static List<player> DEVELOPER_LIST = new List<player>();
+    public static List<player> ADMIN_LIST = new List<player>();
+    public static List<player> VIP_LIST = new List<player>();
 
     public static readonly string[] CHAMPIONS =
         { "Aches#1817", "Fieryfox#21640", "Qoz#11803", "BranFlake64#1127", "BranFlake#1127",
@@ -47,7 +51,14 @@ public static class Globals
     public static GameStatsData GAME_STATS { get; set; } = new GameStatsData();
     // public static GameTimesData SAVE_GAME_ROUND_DATA = new GameTimesData();
 
+    /// <summary>
+    /// Seeded Random GEN for things that need to be based on the game seed, such as affixes or save system reasons.
+    /// </summary>
     public static Random RANDOM_GEN { get; set; }
+    /// <summary>
+    /// Unseeded Random GEN for things that need to be more random and not based on the game seed. (Tournament saver)
+    /// </summary>
+    public static Random RANDOM_GEN_02 { get; set; }
     public static Dictionary<int, Team> ALL_TEAMS { get; set; }
     public static List<Team> ALL_TEAMS_LIST { get; set; }
     public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }

@@ -97,9 +97,9 @@ public static class Utility
     {
         try
         {
-            for (int i = 0; i < Globals.VIPLIST.Length;  i++)
+            for (int i = 0; i < Globals.DeveloperList.Length;  i++)
             {
-                if (p.Name == Base64.FromBase64(Globals.VIPLIST[i]))
+                if (p.Name == Base64.FromBase64(Globals.DeveloperList[i]))
                 {
                     return true;
                 }

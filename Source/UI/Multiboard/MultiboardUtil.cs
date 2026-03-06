@@ -22,7 +22,7 @@ public static class MultiboardUtil
 
     private static void RefreshSoloMbs()
     {
-        if (Gamemode.CurrentGameMode != GameMode.SoloTournament) return; // Solo Tournament
+        if (Gamemode.CurrentGameMode != GameMode.Solo) return; // Solo Tournament
         SoloMultiboard.UpdateOverallStatsMB();
         SoloMultiboard.UpdateBestTimesMB();
     }

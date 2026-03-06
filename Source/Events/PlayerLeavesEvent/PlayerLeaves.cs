@@ -21,7 +21,7 @@ public static class PlayerLeaves
 
     public static void TeamRemovePlayer(player player)
     {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
+        if (Gamemode.CurrentGameMode != GameMode.Team) return;
         Globals.PLAYERS_TEAMS[player].RemoveMember(player);
     }
 

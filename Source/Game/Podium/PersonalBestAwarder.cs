@@ -26,10 +26,11 @@ public static class PersonalBestAwarder
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var roundEnum = "";
         if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.Instance.GetRoundEnum();
-        if (Gamemode.CurrentGameMode == GameMode.SoloTournament) roundEnum = TimeSetter.Instance.GetSoloEnum();
+        if (Gamemode.CurrentGameMode == GameMode.Solo) roundEnum = TimeSetter.Instance.GetSoloEnum();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
         var difficulty = Gamemode.CurrentGameMode == GameMode.Standard ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
+        if (Gamemode.CurrentGameMode == GameMode.Solo || Gamemode.CurrentGameMode == GameMode.Team) return; // lets not have this going off during tournament
         Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET} for {difficulty}{Colors.COLOR_RESET}");
     }
 

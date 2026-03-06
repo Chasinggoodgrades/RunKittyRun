@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 
 public static class GamemodeCmd
 {
@@ -6,32 +7,39 @@ public static class GamemodeCmd
 
     public static void Handle(player player, string command)
     {
-        if (player != Gamemode.HostPlayer && !Globals.VIPLISTUNFILTERED.Contains(player))
+        try
         {
-            player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Only " + Colors.PlayerNameColored(Gamemode.HostPlayer) + Colors.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
-            return;
+            if (player != Gamemode.HostPlayer && !Globals.VIP_LIST.Contains(player) && !Globals.ADMIN_LIST.Contains(player) && !Globals.DEVELOPER_LIST.Contains(player))
+            {
+                player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Only " + Colors.PlayerNameColored(Gamemode.HostPlayer) + Colors.COLOR_YELLOW_ORANGE + " can choose the gamemode.");
+                return;
+            }
+            if (Gamemode.IsGameModeChosen)
+            {
+                player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Gamemode has already been chosen. Cannot change gamemode.");
+                return;
+            }
+            var parts = command.Split(' ');
+            CommandInfoCheck(parts);
+
+            switch (parts[0])
+            {
+                case "-s":
+                    HandleStandardMode(player);
+                    break;
+
+                case "-t":
+                    HandleTeamOrSoloMode(player, parts);
+                    break;
+
+                default:
+                    player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Use: -s, -t solo, -t team");
+                    break;
+            }
         }
-        if (Gamemode.IsGameModeChosen)
+        catch (Exception ex)
         {
-            player.DisplayTimedTextTo(10.0f, Colors.COLOR_YELLOW_ORANGE + "Gamemode has already been chosen. Cannot change gamemode.");
-            return;
-        }
-        var parts = command.Split(' ');
-        CommandInfoCheck(parts);
-
-        switch (parts[0])
-        {
-            case "-s":
-                HandleStandardMode(player);
-                break;
-
-            case "-t":
-                HandleTeamOrSoloMode(player, parts);
-                break;
-
-            default:
-                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Use: -s, -t solo, -t team");
-                break;
+            Logger.Warning("Error handling gamemode command: " + ex.Message);
         }
     }
 
@@ -104,11 +112,11 @@ public static class GamemodeCmd
             case "progression":
             case "progress":
             case "prog":
-                Gamemode.SetGameMode(GameMode.SoloTournament, Globals.SOLO_MODES[0]);
+                Gamemode.SetGameMode(GameMode.Solo, Globals.SOLO_MODES[0]);
                 break;
 
             case "race":
-                Gamemode.SetGameMode(GameMode.SoloTournament, Globals.SOLO_MODES[1]);
+                Gamemode.SetGameMode(GameMode.Solo, Globals.SOLO_MODES[1]);
                 break;
 
             default:
@@ -168,12 +176,12 @@ public static class GamemodeCmd
         {
             case "fp":
             case "freepick":
-                Gamemode.SetGameMode(GameMode.TeamTournament, Globals.TEAM_MODES[0], teamSize);
+                Gamemode.SetGameMode(GameMode.Team, Globals.TEAM_MODES[0], teamSize);
                 break;
 
             case "r":
             case "random":
-                Gamemode.SetGameMode(GameMode.TeamTournament, Globals.TEAM_MODES[1], teamSize);
+                Gamemode.SetGameMode(GameMode.Team, Globals.TEAM_MODES[1], teamSize);
                 break;
 
             default:

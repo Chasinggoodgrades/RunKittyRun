@@ -9,7 +9,7 @@ public class TournamentSaver
     public string GAME_ID { get; private set; }
     public string TOURNAMENT_ID { get; private set; }
     public static TournamentSaver Instance => _instance ??= new TournamentSaver();
-    public string REGION { get; private set; }
+    public string REGION { get; private set; } = "";
     public int ApprovedForUpload { get; set; } = 0;
 
     public TournamentSaver()
@@ -60,12 +60,12 @@ public class TournamentSaver
                 stats.Gamemode = Gamemode.CurrentGameMode.ToString();
                 stats.GameType = Gamemode.CurrentGameModeType;
 
-                if (Gamemode.CurrentGameMode == GameMode.TeamTournament && kitty.TeamID > 0)
+                if (Gamemode.CurrentGameMode == GameMode.Team && kitty.TeamID > 0)
                 {
                     currentGame.Team = TeamsUtil.GetTeamColor(kitty);
                     currentGame.TeamMembers = TeamsUtil.GetTeamMembers(kitty);
                 }
-                else if (Gamemode.CurrentGameMode == GameMode.SoloTournament)
+                else if (Gamemode.CurrentGameMode == GameMode.Solo)
                     currentGame.Team = "Solo";
 
                 SaveRoundTime(kitty, currentGame);
@@ -92,7 +92,7 @@ public class TournamentSaver
         var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament
+        if (Gamemode.CurrentGameMode == GameMode.Team
             && Globals.PLAYERS_TEAMS.TryGetValue(kitty.Player, out var team)
             && team.TeamTimes.TryGetValue(Globals.ROUND, out var teamTime))
         {
@@ -111,7 +111,7 @@ public class TournamentSaver
         var roundData = GetCurrentRoundData(currentGame);
         if (roundData == null) return;
 
-        if (Gamemode.CurrentGameMode == GameMode.TeamTournament
+        if (Gamemode.CurrentGameMode == GameMode.Team
             && Globals.PLAYERS_TEAMS.TryGetValue(kitty.Player, out var team)
             && team.RoundProgress.TryGetValue(Globals.ROUND, out var teamProgress)
             && float.TryParse(teamProgress, NumberStyles.Float, CultureInfo.InvariantCulture, out var progress))
@@ -380,7 +380,8 @@ public class TournamentSaver
     private string GenerateUniqueGameID()
     {
         var currentTime = DateTimeManager.DateTime;
-        var stringToConvert = $"{currentTime.Second}{currentTime.Day}{currentTime.Month}{currentTime.ToString()}{Globals.GAME_SEED}";
+        var guid = GenerateGUID();
+        var stringToConvert = $"{guid}{currentTime.ToString()}";
         var base64String = WCSharp.Shared.Base64.ToBase64(stringToConvert);
         return base64String.Substring(0, base64String.Length - 2);
     }
@@ -388,9 +389,35 @@ public class TournamentSaver
     private string GenerateUniqueTournamentID()
     {
         var currentTime = DateTimeManager.DateTime;
-        var stringToConvert = $"{Globals.GAME_SEED}{currentTime.ToString()}{currentTime.Month}{currentTime.Day}{currentTime.Second}";
+        var guid = GenerateGUID();
+        var stringToConvert = $"{guid}{currentTime.ToString()}";
         var base64String = WCSharp.Shared.Base64.ToBase64(stringToConvert);
         return base64String.Substring(0, base64String.Length - 2);
     }
+
+    private static string GenerateGUID()
+    {
+        byte[] b = new byte[16];
+        Globals.RANDOM_GEN_02.NextBytes(b);
+
+        // UUIDv4
+        b[6] = (byte)((b[6] & 0x0F) | 0x40);
+        b[8] = (byte)((b[8] & 0x3F) | 0x80);
+
+        // formats into hex string with dashes
+        return string.Format(
+            "{0:x2}{1:x2}{2:x2}{3:x2}-" +
+            "{4:x2}{5:x2}-" +
+            "{6:x2}{7:x2}-" +
+            "{8:x2}{9:x2}-" +
+            "{10:x2}{11:x2}{12:x2}{13:x2}{14:x2}{15:x2}",
+            b[0], b[1], b[2], b[3],
+            b[4], b[5],
+            b[6], b[7],
+            b[8], b[9],
+            b[10], b[11], b[12], b[13], b[14], b[15]
+        );
+    }
+
 
 }
