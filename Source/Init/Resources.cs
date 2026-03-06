@@ -6,8 +6,29 @@
     public static float SaveStreakMultiplier { get; set; } = 0.10f;
     public static int SafezoneExperience { get; set; } = 100;
     public static int SafezoneGold { get; set; } = 20;
-    private static int EndRoundBonusGold { get; set; } = 150 + (50 * Globals.ROUND);
-    private static int EndRoundBonusXP { get; set; } = 550 * Globals.ROUND;
+
+    private static int CalculateEndRoundBonusGold()
+    {
+        return 150 + (50 * Globals.ROUND);
+    }
+
+    private static int CalculateEndRoundBonusXP()
+    {
+        var baseXP = 750 * Globals.ROUND; // 7500 total xp for r1,r2,r3,r4
+        
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Progressive)
+        {
+            return (int)(baseXP * 3.34f); // 7515 total xp for r1 and r2
+        }
+        
+        if (Gamemode.CurrentGameMode == GameMode.Solo || 
+            Gamemode.CurrentGameMode == GameMode.Team)
+        {
+            return 0;
+        }
+        
+        return baseXP;
+    }
 
     public static void Initialize()
     {
@@ -18,12 +39,13 @@
 
     public static void BonusResources()
     {
-        EndRoundBonusXP = 750 * Globals.ROUND;
-        EndRoundBonusGold = 150 + (50 * Globals.ROUND);
+        var bonusGold = CalculateEndRoundBonusGold();
+        var bonusXP = CalculateEndRoundBonusXP();
+        
         foreach (var player in Globals.ALL_PLAYERS)
-            player.Gold += EndRoundBonusGold;
+            player.Gold += bonusGold;
         foreach (var kitty in Globals.ALL_KITTIES_LIST)
-            kitty.Unit.Experience += EndRoundBonusXP;
+            kitty.Unit.Experience += bonusXP;
     }
 
     public static void StartingItems(Kitty kitty)
@@ -45,8 +67,8 @@
     private static void SetResourcesForGamemode()
     {
         if (Gamemode.CurrentGameMode == GameMode.Standard) StandardResources();
-        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) SoloResources();
-        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) TeamResources();
+        else if (Gamemode.CurrentGameMode == GameMode.Solo) SoloResources();
+        else if (Gamemode.CurrentGameMode == GameMode.Team) TeamResources();
     }
 
     /// <summary>
@@ -66,14 +88,14 @@
                 StartingGold = 350;
                 SaveExperience = 95;
                 SaveGold = 40;
-                SafezoneExperience = 160;
+                SafezoneExperience = 167; // 7014 total xp for 3 rounds
             }
             else
             {
                 StartingGold = 200;
                 SaveExperience = 80;
                 SaveGold = 25;
-                SafezoneExperience = 100;
+                SafezoneExperience = 100; // 7000 total xp for 5 rounds
             }
             AdjustStartingGold();
 
@@ -86,7 +108,6 @@
     {
         SaveExperience = 0;
         SaveGold = 0;
-        EndRoundBonusXP = 0;
         SafezoneExperience = 100;
     }
 
@@ -94,7 +115,6 @@
     {
         SaveExperience = 15;
         SaveGold = 5;
-        EndRoundBonusXP = 0;
         SafezoneExperience = 100;
     }
 }

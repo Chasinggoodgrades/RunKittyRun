@@ -17,11 +17,11 @@ public static class PodiumManager
                 StandardPodium.BeginPodiumActions();
                 break;
 
-            case GameMode.SoloTournament:
+            case GameMode.Solo:
                 SoloPodium.BeginPodiumActions();
                 break;
 
-            case GameMode.TeamTournament:
+            case GameMode.Team:
                 TeamPodium.BeginPodiumActions();
                 break;
         }

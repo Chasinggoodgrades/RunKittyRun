@@ -20,7 +20,7 @@ public sealed class Progress : IProgressService
     private Progress()
     {
         CalculateTotalDistance();
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return;
+        if (Gamemode.CurrentGameMode != GameMode.Team) return;
         TeamProgTimer.Start(0.2f, true, TeamProgressTracker);
     }
 

@@ -120,7 +120,7 @@ public static class AffixFactory
     {
         var affixes = string.Join(", ", AffixTypes); // Start with all affixes in a single string
         var fixationCount = WolfArea.WolfAreas[laneNumber].FixationCount;
-        if (laneNumber > 6 || DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE || Gamemode.CurrentGameMode == GameMode.SoloTournament)
+        if (laneNumber > 6 || DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard || fixationCount >= MAX_FIXIATION_PER_LANE || Gamemode.CurrentGameMode == GameMode.Solo)
             affixes = affixes.Replace("Fixation, ", "").Replace(", Fixation", "").Replace("Fixation", "");
         if (DifficultyConfig.GetEffectiveDifficultyValue() == (int)DifficultyLevel.Hard)
         {
@@ -239,10 +239,10 @@ public static class AffixFactory
             case GameMode.Standard:
                 baseCount = DifficultyConfig.GetEffectiveDifficultyValue() * 3;
                 break;
-            case GameMode.TeamTournament:
+            case GameMode.Team:
                 baseCount = 26;
                 break;
-            case GameMode.SoloTournament:
+            case GameMode.Solo:
                  baseCount = 8;
                 break;
             default:

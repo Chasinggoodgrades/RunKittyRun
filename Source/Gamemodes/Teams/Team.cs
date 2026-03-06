@@ -54,7 +54,7 @@ public class Team
 
     public void RemoveMember(player player)
     {
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return; // Must be Team Tournament Mode
+        if (Gamemode.CurrentGameMode != GameMode.Team) return; // Must be Team Tournament Mode
         if (!Globals.PLAYERS_TEAMS.ContainsKey(player)) return;
         AssignTeamMember(player, false);
         if (Teammembers.Count == 0)

@@ -1,12 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CommandExtractor
+public class TestingArea
 {
-    class TestingArea
+    public static void Main()
     {
-        public static void Main()
-        {
-            CircularDependencyDetector.DetectCircularDependencies();
-        }
+        CommandExtractor.CommandExtractor.CommandFinder();
     }
 }

@@ -37,13 +37,13 @@ public static class Gamemode
 
         // Solo Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_YELLOW_ORANGE + GameMode.SoloTournament + // Solo
+            Colors.COLOR_YELLOW_ORANGE + GameMode.Solo + // Solo
             Colors.COLOR_GOLD + " (-t solo <prog | race> <NA | EU>)" +
             Colors.COLOR_RESET);
 
         // Team Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_YELLOW_ORANGE + GameMode.TeamTournament + // Team
+            Colors.COLOR_YELLOW_ORANGE + GameMode.Team + // Team
             Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize> <NA | EU>)" +
             Colors.COLOR_RESET);
 
@@ -97,10 +97,10 @@ public static class Gamemode
             case GameMode.Standard:
                 Standard.Initialize();
                 break;
-            case GameMode.SoloTournament:
+            case GameMode.Solo:
                 Solo.Initialize();
                 break;
-            case GameMode.TeamTournament:
+            case GameMode.Team:
                 Team.Initialize();
                 break;
             default:

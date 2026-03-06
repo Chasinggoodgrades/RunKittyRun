@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CommandExtractor
 {
-    class Program
+    public class CommandExtractor
     {
         public static void CommandFinder()
         {
@@ -25,57 +26,86 @@ namespace CommandExtractor
             string fileContent = File.ReadAllText(inputFilePath);
 
             var regex = new Regex(
-                @"CommandsManager\.RegisterCommand\(\s*.*?name\s*:\s*""(?<name>[^""]+)""\s*,.*?group\s*:\s*""(?<group>[^""]+)""\s*,.*?argDesc\s*:\s*""(?<args>[^""]*)""\s*,.*?description\s*:\s*""(?<desc>[^""]+)""",
+                @"CommandsManager\.RegisterCommand\(\s*.*?name\s*:\s*""(?<name>[^""]+)""\s*,.*?tier\s*:\s*CommandTier\.(?<tier>\w+)\s*,.*?argDesc\s*:\s*""(?<args>[^""]*)""\s*,.*?description\s*:\s*""(?<desc>[^""]+)""",
                 RegexOptions.Singleline);
 
             MatchCollection matches = regex.Matches(fileContent);
-            var commandDictionary = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (Match match in matches)
+            var commands = new (string Name, string Tier, string Args, string Desc)[matches.Count];
+            for (int i = 0; i < matches.Count; i++)
             {
-                string commandName = match.Groups["name"].Value;
-                string groupName = match.Groups["group"].Value;
-                string arguments = match.Groups["args"].Value;
-                string description = match.Groups["desc"].Value;
+                commands[i] = (
+                    matches[i].Groups["name"].Value,
+                    matches[i].Groups["tier"].Value,
+                    matches[i].Groups["args"].Value,
+                    matches[i].Groups["desc"].Value
+                );
+            }
 
-                string formattedCommand = $"{commandName} [{arguments}] - {description}";
+            string[] tierOrder = { "All", "VIP", "Red", "Admin", "Developer" };
+            Array.Sort(commands, (a, b) =>
+            {
+                int ia = Array.IndexOf(tierOrder, a.Tier);
+                int ib = Array.IndexOf(tierOrder, b.Tier);
+                if (ia < 0) ia = tierOrder.Length;
+                if (ib < 0) ib = tierOrder.Length;
+                int cmp = ia.CompareTo(ib);
+                return cmp != 0 ? cmp : string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase);
+            });
 
-                if (!commandDictionary.ContainsKey(groupName))
+            string outputDir = Path.GetDirectoryName(inputFilePath);
+            WriteTxt(commands, Path.Combine(outputDir, "ExtractedCommands.txt"));
+            WriteCsv(commands, Path.Combine(outputDir, "ExtractedCommands.csv"));
+        }
+
+        private static void WriteTxt((string Name, string Tier, string Args, string Desc)[] commands, string filePath)
+        {
+            var sb = new StringBuilder();
+            string currentTier = null;
+            foreach (var cmd in commands)
+            {
+                if (cmd.Tier != currentTier)
                 {
-                    commandDictionary[groupName] = new List<string>();
+                    if (currentTier != null) sb.AppendLine();
+                    sb.AppendLine($"**{cmd.Tier} Commands**");
+                    currentTier = cmd.Tier;
                 }
-                commandDictionary[groupName].Add(formattedCommand);
+                sb.AppendLine($"- {cmd.Name} [{cmd.Args}] - {cmd.Desc}");
             }
-
-            foreach (var key in commandDictionary.Keys.ToList())
-            {
-                commandDictionary[key].Sort(StringComparer.OrdinalIgnoreCase);
-            }
-
-            var sortedGroups = commandDictionary.Keys.OrderBy(g => g, StringComparer.OrdinalIgnoreCase).ToList();
-
-            List<string> outputLines = new List<string>();
-            foreach (var group in sortedGroups)
-            {
-                outputLines.Add($"**{group} Commands**");
-                foreach (var command in commandDictionary[group])
-                {
-                    outputLines.Add($"- {command}");
-                }
-                outputLines.Add("");
-            }
-
-            string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "ExtractedCommands.txt");
 
             try
             {
-                File.WriteAllLines(outputFilePath, outputLines);
-                Console.WriteLine($"Output successfully saved to: {outputFilePath}");
+                File.WriteAllText(filePath, sb.ToString());
+                Console.WriteLine($"TXT saved to: {filePath}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error writing output: {ex.Message}");
+                Console.WriteLine($"Error writing TXT: {ex.Message}");
             }
+        }
+
+        private static void WriteCsv((string Name, string Tier, string Args, string Desc)[] commands, string filePath)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Tier,Command,Arguments,Description");
+            foreach (var cmd in commands)
+                sb.AppendLine($"{cmd.Tier},{EscapeCsv(cmd.Name)},{EscapeCsv(cmd.Args)},{EscapeCsv(cmd.Desc)}");
+
+            try
+            {
+                File.WriteAllText(filePath, sb.ToString());
+                Console.WriteLine($"CSV saved to: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing CSV: {ex.Message}");
+            }
+        }
+
+        private static string EscapeCsv(string value)
+        {
+            if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            return value;
         }
 
         private static string FindRepositoryRoot()

@@ -35,7 +35,7 @@ public static class VictoryZone
             if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
             RoundManager.RoundEnd();
         }
-        else if (Gamemode.CurrentGameMode == GameMode.SoloTournament) // Solo
+        else if (Gamemode.CurrentGameMode == GameMode.Solo) // Solo
         {
             // Move player to start, save their time. Wait for everyone to finish.
             kitty.Finished = true;
@@ -43,7 +43,7 @@ public static class VictoryZone
             BarrierSetup.ActivateBarrier();
             RoundManager.RoundEndCheck();
         }
-        else if (Gamemode.CurrentGameMode == GameMode.TeamTournament) // Team
+        else if (Gamemode.CurrentGameMode == GameMode.Team) // Team
         {
             kitty.Finished = true;
 
@@ -74,13 +74,13 @@ public static class VictoryZone
 
     private static bool VictoryAreaConditionsSolo(unit u)
     {
-        return Gamemode.CurrentGameMode == GameMode.SoloTournament;
+        return Gamemode.CurrentGameMode == GameMode.Solo;
     }
 
     private static bool VictoryAreaConditionsTeam(unit u)
     {
         // If a team enters the area, check if all the members of the team are in the area.
-        if (Gamemode.CurrentGameMode != GameMode.TeamTournament) return false;
+        if (Gamemode.CurrentGameMode != GameMode.Team) return false;
         var team = Globals.ALL_KITTIES[u.Owner].TeamID;
         foreach (var player in Globals.ALL_TEAMS[team].Teammembers)
         {

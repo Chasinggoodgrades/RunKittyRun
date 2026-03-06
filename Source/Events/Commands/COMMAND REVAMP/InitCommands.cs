@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -15,9 +15,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "help",
             alias: "commands,?",
-            group: "all",
-            argDesc: "",
-            description: "Displays all available commands.",
+            tier: CommandTier.All,
+            argDesc: "[topic]",
+            description: "Displays all available commands for the passed parameter topic.",
             action: (player, args) =>
             {
                 CommandsManager.HelpCommands(player, args?.FirstOrDefault());
@@ -26,8 +26,8 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "memtest",
-            alias: "",
-            group: "admin",
+            alias: "[none]",
+            tier: CommandTier.Developer,
             argDesc: "[on][off]",
             description: "Memory Handler Periodic Message",
             action: (player, args) =>
@@ -39,8 +39,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "save",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Save your current game stats.",
             action: (player, args) =>
             {
@@ -51,8 +51,8 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "saveall",
-            alias: "",
-            group: "admin",
+            alias: "[none]",
+            tier: CommandTier.Developer,
             argDesc: "Saves to alldata file, mock data purposes only",
             description: "Saves to alldata file, mock data purposes only",
             action: (player, args) =>
@@ -64,7 +64,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "wolfeffects",
             alias: "we,wolfe",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[true][false]",
             description: "Disables the wolves overhead ! effects",
             action: (player, args) => Wolf.DisableEffects = CommandsManager.GetBool(args[0])
@@ -73,8 +73,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "clear",
             alias: "clear,clr,c",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Clears your screen.",
             action: (player, args) => Utility.ClearScreen(player)
         );
@@ -82,9 +82,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "gold",
             alias: "g",
-            group: "admin",
-            argDesc: "amount",
-            description: "Gives the resolvePlayerID gold",
+            tier: CommandTier.Admin,
+            argDesc: "[amount][resolvePlayerId]",
+            description: "Gives an [amount] of gold to the [resolvePlayerId]s",
             action: (player, args) =>
             {
                 if (args[0] == "")
@@ -112,8 +112,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "colors",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Display all available colors.",
             action: (player, args) => Colors.ListColorCommands(player)
         );
@@ -121,26 +121,26 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "color",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[color]",
-            description: "Set your player color.",
+            description: "Sets the color of your kitty to the passed color parameter.",
             action: (player, args) => Colors.SetPlayerColor(player, args?[0])
         );
 
         CommandsManager.RegisterCommand(
             name: "kick",
             alias: "k",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[playerNumber]",
             description: "Initiate a votekick against a player.",
             action: (player, args) =>
             {
 
-                if (Globals.VIPLISTUNFILTERED.Contains(player))
+                if (Globals.ADMIN_LIST.Contains(player))
                 {
                     CommandsManager.ResolvePlayerId(args[0], kitty =>
                     {
-                        if (Globals.VIPLISTUNFILTERED.Contains(kitty.Player)) return;
+                        if (Globals.ALL_KITTIES[player].CommandTier <= kitty.CommandTier) return;
                         PlayerLeaves.PlayerLeavesActions(kitty.Player);
                         Blizzard.CustomDefeatBJ(kitty.Player, $"{Colors.COLOR_RED}You have been kicked from the game!{Colors.COLOR_RESET}");
                     });
@@ -153,8 +153,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "voteend",
             alias: "ve",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Initiate a vote to end the round (Solo Tournament Only).",
             action: (player, args) => VoteEndRound.InitiateVote(player)
         );
@@ -162,8 +162,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "yes",
             alias: "y",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Vote yes for the current vote.",
             action: (player, args) =>
             {
@@ -175,9 +175,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "affixinfo",
             alias: "ainfo",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[lane #] (1-17)",
-            description: "Displays current round affixes.",
+            description: "Displays current round affixes or affixes for a specific lane.",
             action: (player, args) =>
             {
                 string[] affixes;
@@ -199,9 +199,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "wolfinfo",
             alias: "lnbm",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[lane #] (1-17)",
-            description: "Displays the current wolf count.",
+            description: "Displays the total wolf count or the wolf count for a specific lane.",
             action: (player, args) =>
             {
                 int laneIndex;
@@ -222,45 +222,45 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "setcolor",
             alias: "sc,vc",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[rgb]",
-            description: "Set your player vertex color.",
+            description: "Set your kitty vertex color to the passed red-green-blue values. (-sc 112, 52, 92)",
             action: (player, args) => Colors.SetPlayerVertexColor(player, args)
         );
 
         CommandsManager.RegisterCommand(
             name: "wild",
             alias: "",
-            group: "all",
-            argDesc: "",
-            description: "Set a random vertex color.",
+            tier: CommandTier.All,
+            argDesc: "[none]",
+            description: "Set your kitty to a random vertex color.",
             action: (player, args) => Colors.SetPlayerRandomVertexColor(player)
         );
 
         CommandsManager.RegisterCommand(
             name: "names",
             alias: "n",
-            group: "all",
-            argDesc: "",
-            description: "Hide all floating name tags.",
+            tier: CommandTier.All,
+            argDesc: "[none]",
+            description: "Hides all floating name tags.",
             action: (player, args) => FloatingNameTag.ShowAllNameTags(player, CommandsManager.GetBool(args[0]))
         );
 
         CommandsManager.RegisterCommand(
             name: "zoom",
             alias: "cam",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[xxxx]",
-            description: "Adjust the camera zoom level.",
+            description: "Adjust the camera zoom level to the passed parameter.",
             action: (player, args) => CameraUtil.HandleZoomCommand(player, args)
         );
 
         CommandsManager.RegisterCommand(
             name: "lockcamera",
             alias: "lc,spectate",
-            group: "all",
-            argDesc: "",
-            description: "Locks your camera to a unit.",
+            tier: CommandTier.All,
+            argDesc: "[none]",
+            description: "Locks your camera to your unit. Can also do ctrl + C.",
             action: (player, args) =>
             {
                 if (args[0] == "")
@@ -274,8 +274,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "firstperson",
             alias: "fpc,firstpersoncamera",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Toggle first person camera.",
             action: (player, args) => FirstPersonCameraManager.ToggleFirstPerson(player)
         );
@@ -283,9 +283,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "reset",
             alias: "",
-            group: "all",
-            argDesc: "",
-            description: "Resets your camera to default.",
+            tier: CommandTier.All,
+            argDesc: "[none]",
+            description: "Resets your camera to their default settings.",
             action: (player, args) =>
             {
                 CameraUtil.UnlockCamera(player);
@@ -296,8 +296,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "kc",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Kicks yourself from the game.",
             action: (player, args) =>
             {
@@ -309,17 +309,17 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "oldcode",
             alias: "",
-            group: "all",
-            argDesc: "",
-            description: "Loads a previous save from RKR 4.2.0+.",
+            tier: CommandTier.All,
+            argDesc: "[none]",
+            description: "Loads a previous save from RKR 4.2.0+.. May not be functional anymore.",
             action: (player, args) => Savecode.LoadString()
         );
 
         CommandsManager.RegisterCommand(
             name: "apm",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Displays your APM for ACTIVE game time. (not counting intermissions)",
             action: (player, args) => player.DisplayTimedTextTo(10.0f, APMTracker.CalculateAllAPM())
         );
@@ -327,8 +327,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "kibble",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Displays the kibble collected by each player.",
             action: (player, args) =>
             {
@@ -346,8 +346,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "watcher",
             alias: "watching",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Removes all units from game and you become an observer/spectator.",
             action: (player, args) => Utility.MakePlayerSpectator(player)
         );
@@ -355,8 +355,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "overheadcam",
             alias: "overhead,topdown,ohc",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Gives an overhead view.",
             action: (player, args) => CameraUtil.OverheadCamera(player, 280f)
         );
@@ -364,8 +364,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "komotocam",
             alias: "",
-            group: "all",
-            argDesc: "",
+            tier: CommandTier.All,
+            argDesc: "[none]",
             description: "Toggle KomotoCam.",
             action: (player, args) => CameraUtil.ToggleKomotoCam(player)
         );
@@ -373,7 +373,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "glow",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[true/false]",
             description: "Toggle unit glow.",
             action: (player, args) =>
@@ -385,7 +385,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "mirror",
             alias: "reverse",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Toggle mirror mode.",
             action: (player, args) =>
@@ -403,7 +403,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "disco",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[on][off]",
             description: "Toggle disco mode.",
             action: (player, args) =>
@@ -416,7 +416,7 @@ public static class InitCommands
                 }
 
                 var status = CommandsManager.GetBool(args[0]);
-                if (CommandsManager.GetPlayerGroup(player) == "admin" && args.Length > 1)
+                if (CommandsManager.GetPlayerTier(player) >= CommandTier.Admin && args.Length > 1)
                 {
                     if (args[1] == "wolves" || args[1] == "wolf")
                     {
@@ -453,7 +453,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "animate",
             alias: "animation,an",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[index]",
             description: "Set unit animation by index.",
             action: (player, args) => SetUnitAnimationByIndex(Globals.ALL_KITTIES[player].Unit, int.Parse(args[0]))
@@ -462,7 +462,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "spincam",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[speed]",
             description: "Toggle SpinCam.",
             action: (player, args) =>
@@ -476,7 +476,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "activatebarrier",
             alias: "ab",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "",
             description: "Activates the barrier.",
             action: (player, args) => BarrierSetup.ActivateBarrier()
@@ -485,7 +485,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "rtr",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[on/off] [player]",
             description: "Set RTR mode on/off.",
             action: (player, args) =>
@@ -541,7 +541,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "deactivatebarrier",
             alias: "db",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "",
             description: "Deactivates the barrier.",
             action: (player, args) => BarrierSetup.DeactivateBarrier()
@@ -550,7 +550,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "endround",
             alias: "er",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "",
             description: "Ends the current round.",
             action: (player, args) => RoundManager.RoundEnd()
@@ -559,9 +559,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "level",
             alias: "lvl",
-            group: "admin",
-            argDesc: "[level][player/selected]",
-            description: "Sets the level of the selected unit.",
+            tier: CommandTier.Admin,
+            argDesc: "[level][resolvePlayerId]",
+            description: "Sets the passed player paramter",
             action: (player, args) =>
             {
                 if (args.Length < 2)
@@ -579,8 +579,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "blink",
             alias: "tele",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Adds a blink item to the kitty.",
             action: (player, args) =>
             {
@@ -592,7 +592,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "difficulty",
             alias: "diff",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[difficulty]",
             description: "Changes the game difficulty.",
             action: (player, args) =>
@@ -608,8 +608,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "revive",
             alias: "rpos",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Revives yourself.",
             action: (player, args) =>
             {
@@ -628,9 +628,9 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "reviveto",
             alias: "rto,rposto",
-            group: "admin",
-            argDesc: "",
-            description: "Revives your hero to an other hero, with the same facing angle.",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId]",
+            description: "Revives your hero to another hero, with the same facing angle.",
             action: (player, args) =>
             {
                 if (args.Length == 1)
@@ -660,8 +660,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "summon",
             alias: "smn",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId]",
             description: "Revives another hero to yours, with the same facing angle.",
             action: (player, args) =>
             {
@@ -677,7 +677,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "sharecontrol",
             alias: "share",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[resolvePlayerId] [on/off]",
             description: "Sets whether or not to force the player to share control [default: off]",
             action: (player, args) =>
@@ -698,7 +698,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "wolfshare",
             alias: "wshare",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[on][off]",
             description: "Gives you control of all the wolves.",
             action: (player, args) =>
@@ -723,17 +723,23 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "resetcooldowns",
             alias: "cooldown,cd",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId]",
             description: "Resets the cooldowns of the selected unit.",
-            action: (player, args) => CustomStatFrame.SelectedUnit[player].ResetCooldowns()
+            action: (player, args) =>
+            {                
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    kitty.Unit.ResetCooldowns();
+                });
+            }
         );
 
         CommandsManager.RegisterCommand(
             name: "activatechristmas",
             alias: "christmas",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.VIP,
+            argDesc: "[none]",
             description: "Activates the Christmas terrain.",
             action: (player, args) => SeasonalManager.ActivateChristmas()
         );
@@ -741,8 +747,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "deactivateseason",
             alias: "noseason",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.VIP,
+            argDesc: "[none]",
             description: "Deactivates any current seasons.",
             action: (player, args) => SeasonalManager.NoSeason()
         );
@@ -750,7 +756,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "award",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[name]",
             description: "Award currently selected player using award [name].",
             action: (player, args) => AwardingCmds.Awarding(player, args)
@@ -759,7 +765,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "stat",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[stat] [value]",
             description: "Sets the specified game stat for the selected player.",
             action: (player, args) => AwardingCmds.SettingGameStats(player, args)
@@ -768,7 +774,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "time",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[time]",
             description: "Sets the specified game time for the selected player.",
             action: (player, args) => AwardingCmds.SettingGameTimes(player, args)
@@ -777,8 +783,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "invulnerability",
             alias: "invul,godmode,god",
-            group: "admin",
-            argDesc: "[player][on/off]",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId][on/off]",
             description: "Gives invulnerability.",
             action: (player, args) =>
             {
@@ -803,7 +809,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "pausewolves",
             alias: "pw,pause",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[on][off]",
             description: "Pauses all wolves. Defaults to [on]",
             action: (player, args) =>
@@ -816,7 +822,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "wolfpause",
             alias: "wp",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[on][off]",
             description: "Pauses selected wolf. Defaults to [on]",
             action: (player, args) =>
@@ -829,7 +835,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "wolfwalk",
             alias: "ww",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "[on][off]",
             description: "Sets the selected wolf to walking or not. Defaults to [on]",
             action: (player, args) =>
@@ -846,8 +852,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "spawnlocation",
             alias: "spawnloc",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Moves all kitties to the spawn location.",
             action: (player, args) =>
             {
@@ -863,8 +869,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "pauseround",
             alias: "roundpause,rp",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Pauses the round timer.",
             action: (player, args) => RoundTimer.StartRoundTimer.Pause()
         );
@@ -872,8 +878,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "unpauseround",
             alias: "roundunpause,rup",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Unpauses the round timer.",
             action: (player, args) => RoundTimer.StartRoundTimer.Resume()
         );
@@ -881,8 +887,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "en",
             alias: "hidelanes",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Hides the lanes.",
             action: (player, args) => WolfLaneHider.LanesHider()
         );
@@ -890,7 +896,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "applyaffixall",
             alias: "affixall,aa",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[affix]",
             description: "Applies the specified affix to all wolves.",
             action: (player, args) =>
@@ -909,7 +915,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "applyaffix",
             alias: "affix,a",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[affix]",
             description: "Applies the specified affix to the currently selected wolf.",
             action: (player, args) =>
@@ -926,7 +932,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "removeaffix",
             alias: "ra",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[affix]",
             description: "Removes the specified affix from the currently selected wolf.",
             action: (player, args) =>
@@ -943,8 +949,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "clearaffixes",
             alias: "ca",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Clears all affixes from all wolves.",
             action: (player, args) =>
             {
@@ -958,8 +964,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "observer",
             alias: "obs",
-            group: "admin",
-            argDesc: "[playerNameMatch]",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId]",
             description: "Forces a player into observer mode.",
             action: (player, args) =>
             {
@@ -975,7 +981,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "camfield",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[value]",
             description: "Adjusts the camera field.",
             action: (player, args) =>
@@ -989,7 +995,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "roundset",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[round]",
             description: "Sets the current round.",
             action: (player, args) =>
@@ -1004,7 +1010,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "noend",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[on/off]",
             description: "Game won't end if turned on and all kitties die.",
             action: (player, args) =>
@@ -1018,7 +1024,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "ability",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[abilityId]",
             description: "Adds or removes an ability from the kitty.",
             action: (player, args) =>
@@ -1043,8 +1049,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "scale",
             alias: "",
-            group: "admin",
-            argDesc: "[scale], [player]",
+            tier: CommandTier.VIP,
+            argDesc: "[scale], [resolvePlayerId]",
             description: "Sets the scale of the passed player's kitty parameter.",
             action: (player, args) =>
             {
@@ -1067,8 +1073,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "day",
             alias: "",
-            group: "red",
-            argDesc: "",
+            tier: CommandTier.Red,
+            argDesc: "[none]",
             description: "Sets the time of day to day.",
             action: (player, args) =>
             {
@@ -1080,8 +1086,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "night",
             alias: "",
-            group: "red",
-            argDesc: "",
+            tier: CommandTier.Red,
+            argDesc: "[none]",
             description: "Sets the time of day to night.",
             action: (player, args) =>
             {
@@ -1093,8 +1099,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "mem",
             alias: "",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Prints debug names.",
             action: (player, args) =>
             {
@@ -1106,8 +1112,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "aishare",
             alias: "",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Shares control with all AI players.",
             action: (player, args) =>
             {
@@ -1124,8 +1130,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "exec",
             alias: "",
-            group: "admin",
-            argDesc: "",
+            tier: CommandTier.Admin,
+            argDesc: "[none]",
             description: "Executes lua script",
             action: (player, args) =>
             {
@@ -1138,7 +1144,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "createhero",
             alias: "crh",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[playerNumber]",
             description: "Creates a hero for the specified player.",
             action: (player, args) =>
@@ -1170,7 +1176,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "deletehero",
             alias: "delh",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[playerNumber]",
             description: "Deletes the hero of the specified player.",
             action: (player, args) =>
@@ -1205,7 +1211,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "skin",
             alias: "",
-            group: "admin",
+            tier: CommandTier.VIP,
             argDesc: "[skinId], [player]",
             description: "Sets the skin of the passed player parameter. Use \"none\" for default skin.",
             action: (player, args) =>
@@ -1230,7 +1236,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "ai",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[playerNumber]",
             description: "Toggles AI for the specified player.",
             action: (player, args) =>
@@ -1262,7 +1268,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "aisetup",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[dodgeRadius] [timerInterval] [laser]",
             description: "Sets up AI parameters.",
             action: (player, args) =>
@@ -1294,7 +1300,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "ailaser",
             alias: "lasercolor",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[free/blocked] [string ID]",
             description: "Changes the color of the laser on all the AI, blocked or free",
             action: (player, args) =>
@@ -1321,7 +1327,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "aitest",
             alias: "test33",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "",
             description: "Changes the color of the laser on all the AI, blocked or free",
             action: (player, args) =>
@@ -1342,7 +1348,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "killunit",
             alias: "kill,kl",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "resolve playerID",
             description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
             action: (player, args) =>
@@ -1359,7 +1365,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "kibblecurrency",
             alias: "kibbleinfo,kbinfo",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "player name, #, selected, or self",
             description: "Gets the Kibble Currency information on the given player.",
             action: (player, args) =>
@@ -1371,7 +1377,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "error",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[on][off]",
             description: "Turns the error prompts off or on",
             action: (player, args) =>
@@ -1385,7 +1391,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "times",
             alias: "gettimes",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[player] [difficulty]",
             description: "Gets fastest overall times of the passed parm player and difficulty, if no parm then yourself and current difficulty.",
             action: (player, args) =>
@@ -1403,7 +1409,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "personalbests",
             alias: "pbs,bests",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[resolvePlayerId]",
             description: "Gets personal best stats of the passed parm player, if no parm then yourself.",
             action: (player, args) =>
@@ -1420,7 +1426,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "stats",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[resolvePlayerId]",
             description: "Gets the game stats of the passed parm player, if no parm then yourself.",
             action: (player, args) =>
@@ -1437,7 +1443,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "shop",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Opens the shop frame.",
             action: (player, args) =>
@@ -1449,7 +1455,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "rewards",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Opens the rewards frame.",
             action: (player, args) =>
@@ -1461,7 +1467,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "music",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Opens the music frame.",
             action: (player, args) =>
@@ -1473,7 +1479,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "benchmarktest",
             alias: "bmt",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "Testing performance in collision detection",
             description: "Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.",
             action: (player, args) =>
@@ -1515,7 +1521,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "revivetest",
             alias: "yoshi",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "[on][off]",
             description: "Activates the revive invul for 0.6 seconds. Served as a test run.",
             action: (player, args) =>
@@ -1529,7 +1535,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "col",
             alias: "collision",
-            group: "admin",
+            tier: CommandTier.VIP,
             argDesc: "[player]",
             description: "Gets collision of passed player, or yourself if no args.",
             action: (player, args) =>
@@ -1549,7 +1555,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "fortest",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "[on][off]",
             description: "Foreach memory test, executes 20k iterations of foreach loop.",
             action: (player, args) =>
@@ -1569,7 +1575,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "moretime",
             alias: "mt",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Adds 20 secondsd to the round timer. Can only happen once per round.",
             action: (player, args) =>
@@ -1582,7 +1588,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "automt",
             alias: "amt, automoretime",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[seconds] (20.00 default)",
             description: "Automatically applies this extra time at the start of each round. Limit is 60 seconds.",
             action: (player, args) =>
@@ -1602,7 +1608,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "spawnkibble",
             alias: "skb",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[# of kibble]",
             description: "Spawns {int #} of kibbles ",
             action: (player, args) =>
@@ -1617,7 +1623,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "jackpot",
             alias: "jp",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Tells the number of jackpots all players have recieved this game.",
             action: (player, args) =>
@@ -1635,7 +1641,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "savedvc",
             alias: "svc, ssc",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Sets you to your previously last saved vortex color if you have one.",
             action: (player, args) =>
@@ -1651,7 +1657,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "sendtostart",
             alias: "sts",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[resolvePlayerId]",
             description: "Sends the passed player to the start",
             action: (player, args) =>
@@ -1668,7 +1674,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "team",
             alias: "t",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[team #]",
             description: "Assigns you to the provided team arg #, (TEAM MODE ONLY)",
             action: (player, args) =>
@@ -1685,7 +1691,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "test5",
             alias: "t5",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Creates TeamDeathless Effect",
             action: (player, args) =>
@@ -1697,7 +1703,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "deathless",
             alias: "dl",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[player]",
             description: "Teleports the ResolvePlayerId to each safezone all the way to the end",
             action: (player, args) =>
@@ -1722,7 +1728,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "restart",
             alias: "rst",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "",
             description: "Restarts the current round and time to 0:00",
             action: (player, args) =>
@@ -1739,7 +1745,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "disablekibble",
             alias: "dkb",
-            group: "red",
+            tier: CommandTier.Red,
             argDesc: "",
             description: "Disables Kibble",
             action: (player, args) =>
@@ -1752,7 +1758,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "weather",
             alias: "",
-            group: "red",
+            tier: CommandTier.Red,
             argDesc: "[weather]",
             description: "Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none",
             action: (player, args) =>
@@ -1769,7 +1775,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "test9",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "[weather]",
             description: "Sand Test",
             action: (player, args) =>
@@ -1782,7 +1788,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "test8",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Puts an effect test on for some nitro thingy",
             action: (player, args) =>
@@ -1795,7 +1801,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "kittylist",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Puts an effect test on for some nitro thingy",
             action: (player, args) =>
@@ -1812,7 +1818,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "chainedtest",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Starts chained together test",
             action: (player, args) =>
@@ -1825,7 +1831,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "savetesting",
             alias: "ast",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Save Testing for Lane Times",
             action: (player, args) =>
@@ -1836,7 +1842,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "chaineffect",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Testing the chain effect model",
             action: (player, args) =>
@@ -1849,7 +1855,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "mockdata",
             alias: "mock,mockstats",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "[resolvePlayerId] or [all]",
             description: "Generates mock save data for testing. Use 'all' for all players or specify a player.",
             action: (player, args) =>
@@ -1866,7 +1872,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "teammove",
             alias: "tm",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[ResolvePlayerId] [Team #]",
             description: "Swaps the passed ResolvePlayerId to the provided Team #, no restrictions",
             action: (player, args) =>
@@ -1886,7 +1892,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "playersperteam",
             alias: "ppt",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[# Allowed Per Team]",
             description: "Sets the maximum # of people allowed per team to passed parm.",
             action: (player, args) =>
@@ -1909,7 +1915,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "test10",
             alias: "",
-            group: "admin",
+            tier: CommandTier.Developer,
             argDesc: "",
             description: "Getting wolf timer address Information",
             action: (player, args) =>
@@ -1925,7 +1931,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "getdate",
             alias: "",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "",
             description: "Gets the current date, time, day, month, etc.",
             action: (player, args) =>
@@ -1937,7 +1943,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "approved",
             alias: "appt",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[true][false]",
             description: "Approves the current TOURNAMENT_ID, this only needs to get approved once per tournament series.",
             action: (player, args) =>
@@ -1954,7 +1960,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "resettournamentdata",
             alias: "rtd",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[resolvePlayerId]",
             description: "Resets the resolvePlayerId Tournament Data",
             action: (player, args) =>
@@ -1976,7 +1982,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "resetmytournamentdata",
             alias: "rmtd",
-            group: "all",
+            tier: CommandTier.All,
             argDesc: "[]",
             description: "Resets your Tournament Data",
             action: (player, args) =>
@@ -1988,9 +1994,45 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "setcommandtier",
+            alias: "sct",
+            tier: CommandTier.Admin,
+            argDesc: "[resolvePlayerId] [CommandTier]",
+            description: "Sets the CommandTier level of the passed ResolvePlayerId",
+            action: (player, args) =>
+            {
+                var cmdPlayerKitty = Globals.ALL_KITTIES[player];
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (!Enum.TryParse(args[1], true, out CommandTier newTier))
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid CommandTier. Valid options are: {string.Join(", ", Enum.GetNames(typeof(CommandTier)))}{Colors.COLOR_RESET}");
+                        return;
+                    }
+
+                    if (newTier >= cmdPlayerKitty.CommandTier)
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You cannot set a CommandTier higher than your own ({cmdPlayerKitty.CommandTier}).{Colors.COLOR_RESET}");
+                        return;
+                    }
+
+                    if (cmdPlayerKitty.CommandTier <= kitty.CommandTier)
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You cannot set a CommandTier for someone with an equal or higher CommandTier than yourself ({cmdPlayerKitty.CommandTier}).{Colors.COLOR_RESET}");
+                        return;
+                    }
+
+                    kitty.CommandTier = newTier;
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set CommandTier for {Colors.PlayerNameColored(kitty.Player)} to {newTier}{Colors.COLOR_RESET}");
+                });
+            }
+        );
+
+
+        CommandsManager.RegisterCommand(
             name: "slidespeed",
             alias: "ss",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[speed] [player]",
             description: "Sets the absolute slide speed of the passed player, or yourself if no player is provided.",
             action: (player, args) =>
@@ -2028,7 +2070,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
            name: "movespeed",
            alias: "ms",
-           group: "admin",
+           tier: CommandTier.Admin,
            argDesc: "[speed] [player]",
            description: "Sets the absolute move speed of the passed player, or yourself if no player is provided.",
            action: (player, args) =>
@@ -2066,7 +2108,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "speededit",
             alias: "se",
-            group: "admin",
+            tier: CommandTier.Admin,
             argDesc: "[on/off] [player]",
             description: "Turns on RTR and sets move speed to 800 for the specified player.",
             action: (player, args) =>
@@ -2123,3 +2165,4 @@ public static class InitCommands
         );
     }
 }
+

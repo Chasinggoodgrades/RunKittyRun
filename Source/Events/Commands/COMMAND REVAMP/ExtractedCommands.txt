@@ -1,75 +1,4 @@
-**admin Commands**
-- ability [[abilityId]] - Adds or removes an ability from the kitty.
-- activatebarrier [] - Activates the barrier.
-- activatechristmas [] - Activates the Christmas terrain.
-- ai [[playerNumber]] - Toggles AI for the specified player.
-- ailaser [[free/blocked] [string ID]] - Changes the color of the laser on all the AI, blocked or free
-- aisetup [[dodgeRadius] [timerInterval] [laser]] - Sets up AI parameters.
-- aishare [] - Shares control with all AI players.
-- aitest [] - Changes the color of the laser on all the AI, blocked or free
-- applyaffix [[affix]] - Applies the specified affix to the currently selected wolf.
-- applyaffixall [[affix]] - Applies the specified affix to all wolves.
-- award [[name]] - Award currently selected player using award [name].
-- blink [] - Adds a blink item to the kitty.
-- camfield [[value]] - Adjusts the camera field.
-- chainedtest [] - Starts chained together test
-- chaineffect [] - Testing the chain effect model
-- clearaffixes [] - Clears all affixes from all wolves.
-- col [[player]] - Gets collision of passed player, or yourself if no args.
-- createhero [[playerNumber]] - Creates a hero for the specified player.
-- deactivatebarrier [] - Deactivates the barrier.
-- deactivateseason [] - Deactivates any current seasons.
-- deathless [[player]] - Teleports the ResolvePlayerId to each safezone all the way to the end
-- deletehero [[playerNumber]] - Deletes the hero of the specified player.
-- difficulty [[difficulty]] - Changes the game difficulty.
-- en [] - Hides the lanes.
-- endround [] - Ends the current round.
-- exec [] - Executes lua script
-- fortest [[on][off]] - Foreach memory test, executes 20k iterations of foreach loop.
-- gold [amount] - Gives the resolvePlayerID gold
-- invulnerability [[player][on/off]] - Gives invulnerability.
-- killunit [resolve playerID] - Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES
-- kittylist [] - Puts an effect test on for some nitro thingy
-- level [[level][player/selected]] - Sets the level of the selected unit.
-- mem [] - Prints debug names.
-- memtest [[on][off]] - Memory Handler Periodic Message
-- movespeed [[speed] [player]] - Sets the absolute move speed of the passed player, or yourself if no player is provided.
-- noend [[on/off]] - Game won't end if turned on and all kitties die.
-- observer [[playerNameMatch]] - Forces a player into observer mode.
-- pauseround [] - Pauses the round timer.
-- pausewolves [[on][off]] - Pauses all wolves. Defaults to [on]
-- playersperteam [[# Allowed Per Team]] - Sets the maximum # of people allowed per team to passed parm.
-- removeaffix [[affix]] - Removes the specified affix from the currently selected wolf.
-- resetcooldowns [] - Resets the cooldowns of the selected unit.
-- restart [] - Restarts the current round and time to 0:00
-- revive [] - Revives yourself.
-- revivetest [[on][off]] - Activates the revive invul for 0.6 seconds. Served as a test run.
-- reviveto [] - Revives your hero to an other hero, with the same facing angle.
-- roundset [[round]] - Sets the current round.
-- scale [[scale], [player]] - Sets the scale of the passed player's kitty parameter.
-- sendtostart [[resolvePlayerId]] - Sends the passed player to the start
-- sharecontrol [[resolvePlayerId] [on/off]] - Sets whether or not to force the player to share control [default: off]
-- skin [[skinId], [player]] - Sets the skin of the passed player parameter. Use \
-- slidespeed [[speed] [player]] - Sets the absolute slide speed of the passed player, or yourself if no player is provided.
-- spawnkibble [[# of kibble]] - Spawns {int #} of kibbles 
-- spawnlocation [] - Moves all kitties to the spawn location.
-- speededit [[on/off] [player]] - Turns on RTR and sets move speed to 800 for the specified player.
-- stat [[stat] [value]] - Sets the specified game stat for the selected player.
-- summon [] - Revives another hero to yours, with the same facing angle.
-- summonall [] - Summons all players to your location.
-- teammove [[ResolvePlayerId] [Team #]] - Swaps the passed ResolvePlayerId to the provided Team #, no restrictions
-- test10 [] - Getting wolf timer address Information
-- test5 [] - Creates TeamDeathless Effect
-- test8 [] - Puts an effect test on for some nitro thingy
-- test9 [[weather]] - Sand Test
-- time [[time]] - Sets the specified game time for the selected player.
-- unpauseround [] - Unpauses the round timer.
-- wolfeffects [[true][false]] - Disables the wolves overhead ! effects
-- wolfpause [[on][off]] - Pauses selected wolf. Defaults to [on]
-- wolfshare [[on][off]] - Gives you control of all the wolves.
-- wolfwalk [[on][off]] - Sets the selected wolf to walking or not. Defaults to [on]
-
-**all Commands**
+**All Commands**
 - affixinfo [[lane #] (1-17)] - Displays current round affixes.
 - animate [[index]] - Set unit animation by index.
 - apm [] - Displays your APM for ACTIVE game time. (not counting intermissions)
@@ -80,6 +9,7 @@
 - disco [[on][off]] - Toggle disco mode.
 - error [[on][off]] - Turns the error prompts off or on
 - firstperson [] - Toggle first person camera.
+- getdate [] - Gets the current date, time, day, month, etc.
 - glow [[true/false]] - Toggle unit glow.
 - help [] - Displays all available commands.
 - jackpot [] - Tells the number of jackpots all players have recieved this game.
@@ -97,6 +27,7 @@
 - overheadcam [] - Gives an overhead view.
 - personalbests [[resolvePlayerId]] - Gets personal best stats of the passed parm player, if no parm then yourself.
 - reset [] - Resets your camera to default.
+- resetmytournamentdata [[]] - Resets your Tournament Data
 - rewards [] - Opens the rewards frame.
 - rtr [[on/off] [player]] - Set RTR mode on/off.
 - save [] - Save your current game stats.
@@ -114,9 +45,89 @@
 - yes [] - Vote yes for the current vote.
 - zoom [[xxxx]] - Adjust the camera zoom level.
 
-**red Commands**
+**VIP Commands**
+- activatechristmas [] - Activates the Christmas terrain.
+- col [[player]] - Gets collision of passed player, or yourself if no args.
+- deactivateseason [] - Deactivates any current seasons.
+- scale [[scale], [player]] - Sets the scale of the passed player's kitty parameter.
+- skin [[skinId], [player]] - Sets the skin of the passed player parameter. Use \
+
+**Red Commands**
 - day [] - Sets the time of day to day.
 - disablekibble [] - Disables Kibble
 - night [] - Sets the time of day to night.
 - weather [[weather]] - Options: snow, hsnow, blizzard, rain, hrain, rays, moonlight, none
 
+**Admin Commands**
+- ability [[abilityId]] - Adds or removes an ability from the kitty.
+- activatebarrier [] - Activates the barrier.
+- ai [[playerNumber]] - Toggles AI for the specified player.
+- ailaser [[free/blocked] [string ID]] - Changes the color of the laser on all the AI, blocked or free
+- aisetup [[dodgeRadius] [timerInterval] [laser]] - Sets up AI parameters.
+- aishare [] - Shares control with all AI players.
+- aitest [] - Changes the color of the laser on all the AI, blocked or free
+- applyaffix [[affix]] - Applies the specified affix to the currently selected wolf.
+- applyaffixall [[affix]] - Applies the specified affix to all wolves.
+- approved [[true][false]] - Approves the current TOURNAMENT_ID, this only needs to get approved once per tournament series.
+- award [[name]] - Award currently selected player using award [name].
+- blink [] - Adds a blink item to the kitty.
+- camfield [[value]] - Adjusts the camera field.
+- clearaffixes [] - Clears all affixes from all wolves.
+- createhero [[playerNumber]] - Creates a hero for the specified player.
+- deactivatebarrier [] - Deactivates the barrier.
+- deathless [[player]] - Teleports the ResolvePlayerId to each safezone all the way to the end
+- deletehero [[playerNumber]] - Deletes the hero of the specified player.
+- difficulty [[difficulty]] - Changes the game difficulty.
+- en [] - Hides the lanes.
+- endround [] - Ends the current round.
+- exec [] - Executes lua script
+- gold [amount] - Gives the resolvePlayerID gold
+- invulnerability [[player][on/off]] - Gives invulnerability.
+- killunit [resolve playerID] - Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES
+- level [[level][resolvePlayerId]] - Sets the passed player paramter
+- mem [] - Prints debug names.
+- memtest [[on][off]] - Memory Handler Periodic Message
+- movespeed [[speed] [player]] - Sets the absolute move speed of the passed player, or yourself if no player is provided.
+- noend [[on/off]] - Game won't end if turned on and all kitties die.
+- observer [[playerNameMatch]] - Forces a player into observer mode.
+- pauseround [] - Pauses the round timer.
+- pausewolves [[on][off]] - Pauses all wolves. Defaults to [on]
+- playersperteam [[# Allowed Per Team]] - Sets the maximum # of people allowed per team to passed parm.
+- removeaffix [[affix]] - Removes the specified affix from the currently selected wolf.
+- resetcooldowns [] - Resets the cooldowns of the selected unit.
+- resettournamentdata [[resolvePlayerId]] - Resets the resolvePlayerId Tournament Data
+- restart [] - Restarts the current round and time to 0:00
+- revive [] - Revives yourself.
+- reviveto [] - Revives your hero to an other hero, with the same facing angle.
+- roundset [[round]] - Sets the current round.
+- sendtostart [[resolvePlayerId]] - Sends the passed player to the start
+- setcommandtier [[resolvePlayerId] [CommandTier]] - Sets the CommandTier level of the passed ResolvePlayerId
+- sharecontrol [[resolvePlayerId] [on/off]] - Sets whether or not to force the player to share control [default: off]
+- slidespeed [[speed] [player]] - Sets the absolute slide speed of the passed player, or yourself if no player is provided.
+- spawnkibble [[# of kibble]] - Spawns {int #} of kibbles 
+- spawnlocation [] - Moves all kitties to the spawn location.
+- speededit [[on/off] [player]] - Turns on RTR and sets move speed to 800 for the specified player.
+- stat [[stat] [value]] - Sets the specified game stat for the selected player.
+- summon [] - Revives another hero to yours, with the same facing angle.
+- teammove [[ResolvePlayerId] [Team #]] - Swaps the passed ResolvePlayerId to the provided Team #, no restrictions
+- time [[time]] - Sets the specified game time for the selected player.
+- unpauseround [] - Unpauses the round timer.
+- wolfeffects [[true][false]] - Disables the wolves overhead ! effects
+- wolfpause [[on][off]] - Pauses selected wolf. Defaults to [on]
+- wolfshare [[on][off]] - Gives you control of all the wolves.
+
+**Developer Commands**
+- benchmarktest [Testing performance in collision detection] - Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.
+- chainedtest [] - Starts chained together test
+- chaineffect [] - Testing the chain effect model
+- fortest [[on][off]] - Foreach memory test, executes 20k iterations of foreach loop.
+- kittylist [] - Puts an effect test on for some nitro thingy
+- mockdata [[resolvePlayerId] or [all]] - Generates mock save data for testing. Use 'all' for all players or specify a player.
+- revivetest [[on][off]] - Activates the revive invul for 0.6 seconds. Served as a test run.
+- saveall [Saves to alldata file, mock data purposes only] - Saves to alldata file, mock data purposes only
+- savetesting [] - Save Testing for Lane Times
+- test10 [] - Getting wolf timer address Information
+- test5 [] - Creates TeamDeathless Effect
+- test8 [] - Puts an effect test on for some nitro thingy
+- test9 [[weather]] - Sand Test
+- wolfwalk [[on][off]] - Sets the selected wolf to walking or not. Defaults to [on]

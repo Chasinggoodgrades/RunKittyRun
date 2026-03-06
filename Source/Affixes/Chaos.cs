@@ -84,7 +84,7 @@ public class Chaos : Affix
     private string GenRandomAffixName()
     {
         string randomAffixName = AffixFactory.AffixTypes.Count > 0 ? AffixFactory.AffixTypes[GetRandomInt(0, AffixFactory.AffixTypes.Count - 1)] : "Speedster";
-        if (randomAffixName == "Chaos" || (Gamemode.CurrentGameMode == GameMode.SoloTournament && randomAffixName == "Fixation")) {
+        if (randomAffixName == "Chaos" || (Gamemode.CurrentGameMode == GameMode.Solo && randomAffixName == "Fixation")) {
             randomAffixName = "Speedster";
         }
         return randomAffixName;

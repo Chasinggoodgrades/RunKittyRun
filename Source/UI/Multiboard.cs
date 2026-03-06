@@ -15,11 +15,11 @@ public static class Multiboard
                 StandardMultiboard.Initialize();
                 break;
 
-            case GameMode.SoloTournament:
+            case GameMode.Solo:
                 SoloMultiboard.Initialize();
                 break;
 
-            case GameMode.TeamTournament:
+            case GameMode.Team:
                 TeamsMultiboard.Initialize();
                 break;
         }

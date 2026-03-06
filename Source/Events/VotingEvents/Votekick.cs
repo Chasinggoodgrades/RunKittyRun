@@ -39,7 +39,8 @@ public static class Votekick
 
     private static void StartVotekick(player target)
     {
-        if (Globals.VIPLISTUNFILTERED.Contains(target))
+        var kitty = Globals.ALL_KITTIES[target];
+        if (kitty.CommandTier >= CommandTier.VIP)
         {
             Console.WriteLine($"{Colors.COLOR_YELLOW}You cannot votekick {Colors.PlayerNameColored(target)}{Colors.COLOR_YELLOW}. They are a VIP.{Colors.COLOR_RESET}");
             return;

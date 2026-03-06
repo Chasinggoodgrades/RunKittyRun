@@ -20,7 +20,7 @@ public class TimeSetter
         try
         {
             var standard = Gamemode.CurrentGameMode == GameMode.Standard;
-            var solo = Gamemode.CurrentGameMode == GameMode.SoloTournament; // Solo
+            var solo = Gamemode.CurrentGameMode == GameMode.Solo; // Solo
             string roundString = "";
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
 
