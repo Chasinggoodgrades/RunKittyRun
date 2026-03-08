@@ -6,16 +6,16 @@ public class SoloDeathTimer
     private const float TIME_TO_REVIVE = 6.0f;
     private const float TextTagHeight = 0.018f;
     private const float Y_OFFSET = 5.0f;
-    public AchesTimers ReviveTimer;
-    public AchesTimers UpdateTextTimer;
+    public timer ReviveTimer;
+    public timer UpdateTextTimer;
     public player Player;
     public texttag FloatingTimer;
 
     public SoloDeathTimer(player player)
     {
         Player = player;
-        ReviveTimer = ObjectPool<AchesTimers>.GetEmptyObject();
-        UpdateTextTimer = ObjectPool<AchesTimers>.GetEmptyObject();
+        ReviveTimer = timer.Create();
+        UpdateTextTimer = timer.Create();
         FloatingTimer = CreateFloatingTimer();
         StartTimers();
     }
@@ -31,13 +31,13 @@ public class SoloDeathTimer
 
     private void StartTimers()
     {
-        ReviveTimer.Timer.Start(TIME_TO_REVIVE, false, Revive);
-        UpdateTextTimer.Timer.Start(0.03f, true, UpdateFloatingText);
+        ReviveTimer.Start(TIME_TO_REVIVE, false, Revive);
+        UpdateTextTimer.Start(0.03f, true, UpdateFloatingText);
     }
 
     private void UpdateFloatingText()
     {
-        FloatingTimer.SetText($"{Colors.GetStringColorOfPlayer(Player.Id + 1)}{ReviveTimer.Timer.Remaining.ToString("F2")}|r", TextTagHeight);
+        FloatingTimer.SetText($"{Colors.GetStringColorOfPlayer(Player.Id + 1)}{ReviveTimer.Remaining.ToString("F2")}|r", TextTagHeight);
     }
 
     private void Revive()

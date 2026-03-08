@@ -241,7 +241,8 @@ public class Kitty : IFloatingTags, ICircleOwner
         Globals.ALL_KITTIES.Add(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
-        Unit.Name = $"{Colors.PlayerNameColored(Player)}";
+        Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
+
         TrueSightGhostWolves();
         CollisionDetection.KittyRegisterCollisions(this);
 
