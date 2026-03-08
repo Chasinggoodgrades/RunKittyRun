@@ -287,6 +287,18 @@ public class Colors
         }
     }
 
+    public static string GetColoredCommandTier(CommandTier tier)
+    {
+        return tier switch
+        {
+            CommandTier.Red => COLOR_RED + tier.ToString() + COLOR_RESET,
+            CommandTier.VIP => COLOR_GOLD + tier.ToString() + COLOR_RESET,
+            CommandTier.Admin => COLOR_PURPLE + tier.ToString() + COLOR_RESET,
+            CommandTier.Developer => COLOR_TURQUOISE + tier.ToString() + COLOR_RESET,
+            _ => tier.ToString()
+        };
+    }
+
     /// <summary>
     /// Returns the string of the most played color and also updates the PlayerColorData.MostPlayedColor to that color.
     /// </summary>

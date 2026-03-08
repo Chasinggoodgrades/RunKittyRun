@@ -41,7 +41,7 @@ namespace Launcher
         private static void Main()
         {
             Console.WriteLine("The following actions are available:");
-            Console.WriteLine("1. Generate constants");
+            Console.WriteLine("1. Generate constants and UnitData.cs");
             Console.WriteLine("2. Compile map");
             Console.WriteLine("3. Compile and run map");
             Console.WriteLine("4. Compile and run map and track memory usage");
@@ -59,6 +59,7 @@ namespace Launcher
                     {
                         IncludeCode = false
                     });
+                    UnitDataCompiler.CompileUnitData();
                     break;
 
                 case ConsoleKey.D2:

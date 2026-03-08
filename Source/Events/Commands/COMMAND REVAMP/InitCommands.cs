@@ -51,9 +51,9 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "saveall",
-            alias: "[none]",
+            alias: "",
             tier: CommandTier.Developer,
-            argDesc: "Saves to alldata file, mock data purposes only",
+            argDesc: "[none]",
             description: "Saves to alldata file, mock data purposes only",
             action: (player, args) =>
             {
@@ -602,6 +602,30 @@ public static class InitCommands
                 AffixFactory.DistAffixes();
                 MultiboardUtil.RefreshMultiboards();
                 NitroChallenges.SetNitroRoundTimes();
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "monsterdb",
+            alias: "mdb",
+            tier: CommandTier.VIP,
+            argDesc: "[monster name]",
+            description: "Finds any monsters ingame that are simliar to the passed name, giving unitID.",
+            action: (player, args) =>
+            {
+                var search = args[0].ToLower();
+                var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList();
+                if (foundMonsters.Count == 0)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No monsters found with name containing '{search}'|r");
+                    return;
+                }
+                var message = $"{Colors.COLOR_GOLD}Monsters found with name containing '{search}':\n";
+                foreach (var monster in foundMonsters)
+                {
+                    message += $"{Colors.COLOR_LAVENDER}{monster.Name} - UnitID: {monster.Id}\n";
+                }
+                player.DisplayTimedTextTo(10.0f, message);
             }
         );
 
@@ -1236,8 +1260,8 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "ai",
             alias: "",
-            tier: CommandTier.Admin,
-            argDesc: "[playerNumber]",
+            tier: CommandTier.VIP,
+            argDesc: "[resolvePlayerId]",
             description: "Toggles AI for the specified player.",
             action: (player, args) =>
             {
@@ -1650,6 +1674,7 @@ public static class InitCommands
                 string vortexColor = kitty.SaveData.PlayerColorData.VortexColor;
                 if (vortexColor == "") return;
                 string[] rgb = vortexColor.Split(',');
+                player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}Your vortex color has been set to the following: {Colors.COLOR_RED}R: {rgb[0]} {Colors.COLOR_GREEN}G: {rgb[1]} {Colors.COLOR_BLUE}B: {rgb[2]} {Colors.COLOR_RESET}");
                 Colors.SetPlayerVertexColor(kitty.Player, rgb);
             }
         );
@@ -1746,8 +1771,8 @@ public static class InitCommands
             name: "disablekibble",
             alias: "dkb",
             tier: CommandTier.Red,
-            argDesc: "",
-            description: "Disables Kibble",
+            argDesc: "[none]",
+            description: "Disables/Reenables Kibble Spawning, flipping the current status.",
             action: (player, args) =>
             {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble;
@@ -2006,7 +2031,8 @@ public static class InitCommands
                 {
                     if (!Enum.TryParse(args[1], true, out CommandTier newTier))
                     {
-                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid CommandTier. Valid options are: {string.Join(", ", Enum.GetNames(typeof(CommandTier)))}{Colors.COLOR_RESET}");
+                        var tierList = $"{Colors.COLOR_WHITE}All{Colors.COLOR_RESET}, {Colors.COLOR_RED}Red{Colors.COLOR_RESET}, {Colors.COLOR_GOLD}VIP{Colors.COLOR_RESET}, {Colors.COLOR_PURPLE}Admin{Colors.COLOR_RESET}, {Colors.COLOR_TURQUOISE}Developer{Colors.COLOR_RESET}";
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid CommandTier. Valid options are: {tierList}");
                         return;
                     }
 
@@ -2023,6 +2049,7 @@ public static class InitCommands
                     }
 
                     kitty.CommandTier = newTier;
+                    kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(newTier)})";
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Set CommandTier for {Colors.PlayerNameColored(kitty.Player)} to {newTier}{Colors.COLOR_RESET}");
                 });
             }

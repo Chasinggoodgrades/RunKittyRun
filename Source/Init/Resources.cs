@@ -24,7 +24,7 @@
         if (Gamemode.CurrentGameMode == GameMode.Solo || 
             Gamemode.CurrentGameMode == GameMode.Team)
         {
-            return 0;
+            return baseXP;
         }
         
         return baseXP;
