@@ -13,13 +13,15 @@ public static class Globals
     public static float GAME_SECONDS = 0.0f;
     public static rect WORLD_BOUNDS = rect.CreateWorldBounds();
     public static int GAME_SEED { get; set; }
-    public static group TempGroup = group.Create();
+    public static List<Kitty> TempKittyList { get; } = new List<Kitty>();
     public static readonly GameMode[] GAME_MODES = { GameMode.Standard, GameMode.Solo, GameMode.Team };
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] DeveloperList = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };
-    public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw" };
-    public static readonly string[] VipList = { };
+    public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "Rmllcnlmb3gjMjE2NDA=" };
+    public static readonly string[] VipList = { "Q2FydG1hbiMyMzMxNQ==", "S3ltcCMyNDUw", "TXJHaGVlZCMxODMx",
+        "aG9mZiMxMTQwNA==", "SmFtZXNGcmFuY28jMTE3MTk=", "TmF0aGFuc2VycG8jMjQ2MQ==",
+        "QmFsbXlkcm9wIzE3Mzc=", "QnJhbkZsYWtlNjQjMTEyNw==" };
     public static List<player> DEVELOPER_LIST = new List<player>();
     public static List<player> ADMIN_LIST = new List<player>();
     public static List<player> VIP_LIST = new List<player>();
@@ -27,7 +29,7 @@ public static class Globals
     public static readonly string[] CHAMPIONS =
         { "Aches#1817", "Fieryfox#21640", "Qoz#11803", "BranFlake64#1127", "BranFlake#1127",
         "Balmydrop#1737", "udo#11673", "MrGheed#1831", "Local Player", "Stan#22399",
-        "Omniology#11850", "Danger#24279"};
+        "Omniology#11850", "Danger#24279", "nomordarkwar#2525"};
 
     public static timer GAME_TIMER = timer.Create();
     public static timerdialog GAME_TIMER_DIALOG = CreateTimerDialog(GAME_TIMER);

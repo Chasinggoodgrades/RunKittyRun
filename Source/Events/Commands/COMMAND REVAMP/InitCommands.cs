@@ -614,7 +614,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var search = args[0].ToLower();
-                var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList();
+                var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList(); // IEnumberable + ToList memory usage. 
                 if (foundMonsters.Count == 0)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No monsters found with name containing '{search}'|r");
