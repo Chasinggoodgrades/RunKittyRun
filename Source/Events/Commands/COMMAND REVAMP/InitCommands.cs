@@ -1761,7 +1761,9 @@ public static class InitCommands
                 if (Globals.ROUND <= 0) return;
                 Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND];
                 GameTimer.RoundTime[Globals.ROUND] = 0.0f; // reset the round end time
+                GameTimer.FinishedTimes[Globals.ROUND] = 0.0f; // reset the finished time
                 Globals.ROUND = Globals.ROUND - 1;
+                // TODO: reset levels and gold.
                 RoundManager.RoundEnd();
 
             }

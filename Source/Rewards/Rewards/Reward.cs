@@ -192,7 +192,8 @@ public class Reward
         {
             kitty.Unit.Skin = SkinID;
             kitty.KittyMorphosis.ScaleUnit();
-            kitty.Unit.Name = $"{Colors.PlayerNameColored(player)}";
+            kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(kitty.CommandTier)})";
+
         }
         else
             Logger.Critical($"Skins ID invalid for {Name}");
