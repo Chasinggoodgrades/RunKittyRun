@@ -189,7 +189,7 @@ public static class CustomStatFrame
         else if (selectedUnit == SpawnChampions.Nomordarkwars2026)
         {
             Stats[0].Text.Text = "|cffffff00Time:|r 15:33";
-            Stats[1].Text.Text = "|cffff00003Nomordarkwars|r";
+            Stats[1].Text.Text = "|cffff0000Nomordarkwars|r";
             Stats[2].Text.Text = "|cffffff00Region:|r EU";
             Stats[3].Text.Text = "|cffffff00Time:|r 16:27";
             Stats[4].Text.Text = "|cffff0000Fieryfox|r";
