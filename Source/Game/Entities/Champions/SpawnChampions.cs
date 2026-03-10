@@ -6,6 +6,7 @@ public static class SpawnChampions
     public static unit Fieryfox2024;
     public static unit FandF2023;
     public static unit Stan2025;
+    public static unit Nomordarkwars2026;
 
     public static void Initialize()
     {
@@ -39,6 +40,11 @@ public static class SpawnChampions
         y = rect.CenterY;
         Stan2025 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2025, x, y, 230.0f);
         Stan2025.IsInvulnerable = true;
+
+        rect = Regions.UrnSoulRegion2.Rect;
+        x = rect.CenterX;
+        y = rect.CenterY;
+        Nomordarkwars2026 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2026, x, y, 315.0f);
     }
 
     private static void ApplyCosmetics()
@@ -54,5 +60,8 @@ public static class SpawnChampions
 
         Stan2025.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
         Stan2025.AddSpecialEffect("war3mapImported\\NitroTurquoise.mdx", "origin");
+
+        Nomordarkwars2026.AddSpecialEffect("war3mapImported\\GlaciarAuraPurple.mdx", "origin");
+        Nomordarkwars2026.AddSpecialEffect("war3mapImported\\VoidTendrilsWings.mdx", "chest");
     }
 }

@@ -186,6 +186,15 @@ public static class CustomStatFrame
             Stats[4].Text.Text = "|cff964bc8Balmydrop|r";
             Stats[5].Text.Text = "|cffffff00Region:|r US";
         }
+        else if (selectedUnit == SpawnChampions.Nomordarkwars2026)
+        {
+            Stats[0].Text.Text = "|cffffff00Time:|r 15:33";
+            Stats[1].Text.Text = "|cffff00003Nomordarkwars|r";
+            Stats[2].Text.Text = "|cffffff00Region:|r EU";
+            Stats[3].Text.Text = "|cffffff00Time:|r 16:27";
+            Stats[4].Text.Text = "|cffff0000Fieryfox|r";
+            Stats[5].Text.Text = "|cffffff00Region:|r US";
+        }
         else return false;
         return true;
     }

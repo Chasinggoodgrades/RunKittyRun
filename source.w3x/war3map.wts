@@ -13,7 +13,7 @@ STRING 3
 |cff00ffffRun Kitty Run|r v1.5.0 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
 |n|n- Next Tournament: 03/07/2026
-|n|n|n|cff00ffffLast updated:|r |c00FF000003/09/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000003/10/2026|r
 }
 
 STRING 4
@@ -5045,5 +5045,41 @@ STRING 3915
 // Abilities: A01Y (Antiblock Spell), Hotkey (Hotkey - Normal)
 {
 T
+}
+
+STRING 3916
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Name (Name)
+{
+|cffffff00Solo Tournament 2026|r
+}
+
+STRING 3917
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Propernames (Proper Names)
+{
+|cffff0000Nomordarkwars|r
+}
+
+STRING 3918
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Tip (Tooltip - Basic)
+{
+|cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
+}
+
+STRING 3919
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Ubertip (Tooltip - Extended)
+{
+|cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
+}
+
+STRING 3920
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Revivetip (Tooltip - Revive)
+{
+|cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
+}
+
+STRING 3921
+// Units: E00F (|cffffff00Solo Tournament 2026|r), Awakentip (Tooltip - Awaken)
+{
+|cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
 }
 
