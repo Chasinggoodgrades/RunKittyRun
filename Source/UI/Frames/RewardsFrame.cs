@@ -249,8 +249,8 @@ public static class RewardsFrame
         tooltipText.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);
         tooltipText.Enabled = false;
 
-        var name = BlzGetAbilityTooltip(reward.AbilityID, 0);
-        var desc = BlzGetAbilityExtendedTooltip(reward.AbilityID, 0);
+        var name = reward.DisplayName ?? reward.GetRewardName() ?? "Unknown Reward";
+        var desc = reward.Description ?? "No description available.";
 
         tooltipText.Text = $"{name}\n{desc}";
     }

@@ -31,6 +31,18 @@ public class Reward
     public string TypeSorted { get; set; }
     public string GameStat { get; }
     public int GameStatValue { get; set; }
+    public string DisplayName { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Sets the color-coded display name and description sourced from the WTS string table.
+    /// </summary>
+    public Reward WithDisplay(string displayName, string description)
+    {
+        DisplayName = displayName;
+        Description = description;
+        return this;
+    }
 
     public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type)
     {
