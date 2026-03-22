@@ -38,6 +38,17 @@ public static class AwardManager
 
         EnableAbility(player, award);
 
+        // if a save streak award like red lightning or patriotic lightning, then we'll play a sound according if its that save streak.
+        if (award == nameof(saveData.GameAwardsSorted.Trails.RedLightning))
+        {
+            SoundManager.PlayGodlikeSound();
+        }
+        else if(award == nameof(saveData.GameAwardsSorted.Wings.PatrioticTendrils))
+        {
+            SoundManager.PlayHolyShitSound();
+        }
+
+
         // ex: PurpleFire should be Purple Fire
         var awardFormatted = Utility.FormatAwardName(award);
         if (earnedPrompt)
@@ -61,12 +72,42 @@ public static class AwardManager
             Utility.TimedTextToAllPlayers(5.0f, $"{color}Congratulations! Everyone has earned|r {rewardColor}{Utility.FormatAwardName(award)}.|r");
     }
 
+    /// <summary>
+    /// Removes a previously granted award from the player, zeroing its save data, disabling the ability, and removing it from ObtainedAwards.
+    /// </summary>
+    /// <param name="player">The Player</param>
+    /// <param name="award">The exact award name to remove.</param>
+    public static void RemoveReward(player player, string award)
+    {
+        var kitty = Globals.ALL_KITTIES[player];
+        var saveData = kitty.SaveData;
+        var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award);
+
+        if (reward == null)
+        {
+            Console.WriteLine($"RemoveReward: Reward '{award}' not found.");
+            return;
+        }
+
+        RewardHelper.UpdateNestedProperty(saveData.GameAwardsSorted, reward.TypeSorted, award, 0);
+        DisableAbility(player, award);
+        kitty.CurrentStats.ObtainedAwards.Remove(award);
+    }
+
     private static void EnableAbility(player player, string award)
     {
         var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award.ToString());
         var kitty = Globals.ALL_KITTIES[player].Unit;
         if (reward is null) return;
         kitty.DisableAbility(reward.GetAbilityID(), false, false);
+    }
+
+    private static void DisableAbility(player player, string award)
+    {
+        var reward = RewardsManager.Rewards.Find(x => x.SystemRewardName() == award);
+        var kitty = Globals.ALL_KITTIES[player].Unit;
+        if (reward is null) return;
+        kitty.DisableAbility(reward.GetAbilityID(), true, false);
     }
 
     public static bool ReceivedAwardAlready(player player, string award)

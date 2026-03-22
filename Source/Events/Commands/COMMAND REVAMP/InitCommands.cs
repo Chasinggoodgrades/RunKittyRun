@@ -62,6 +62,26 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "victoryarea",
+            alias: "va",
+            tier: CommandTier.Admin,
+            argDesc: "bool",
+            description: "Disables or enables victory area according to passed parm or flips it.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    VictoryZone.VictoryAreaActive = !VictoryZone.VictoryAreaActive;
+                    return;
+                }
+
+                var status = CommandsManager.GetBool(args[0]);
+                VictoryZone.VictoryAreaActive = status;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Victory Area: {(status ? "On" : "Off")}{Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "wolfeffects",
             alias: "we,wolfe",
             tier: CommandTier.Admin,
@@ -566,12 +586,13 @@ public static class InitCommands
             {
                 if (args.Length < 2)
                 {
-                    var kitty = Globals.ALL_KITTIES[player].Unit.HeroLevel = int.Parse(args[0]);
+                    var kitty = Globals.ALL_KITTIES[player];
+                    Blizzard.SetHeroLevelBJ(kitty.Unit, int.Parse(args[0]), true);
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
-                    kitty.Unit.HeroLevel = int.Parse(args[0]);
+                    Blizzard.SetHeroLevelBJ(kitty.Unit, int.Parse(args[0]), true);
                 });
             }
         );
@@ -614,7 +635,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var search = args[0].ToLower();
-                var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList();
+                var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList(); // IEnumberable + ToList memory usage. 
                 if (foundMonsters.Count == 0)
                 {
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No monsters found with name containing '{search}'|r");
@@ -635,18 +656,7 @@ public static class InitCommands
             tier: CommandTier.Admin,
             argDesc: "[none]",
             description: "Revives yourself.",
-            action: (player, args) =>
-            {
-                // if args is null or empty, revive self
-                // else resolve playerid
-                if (args[0] == "")
-                {
-                    Globals.ALL_KITTIES[player].ReviveKitty();
-                    return;
-                }
-
-                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty());
-            }
+            action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty())
         );
 
         CommandsManager.RegisterCommand(
@@ -781,8 +791,8 @@ public static class InitCommands
             name: "award",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[name]",
-            description: "Award currently selected player using award [name].",
+            argDesc: "[name] [player?]",
+            description: "Awards the resolved player (or yourself) with the given award. Use award help to see valid awards.",
             action: (player, args) => AwardingCmds.Awarding(player, args)
         );
 
@@ -790,8 +800,8 @@ public static class InitCommands
             name: "stat",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[stat] [value]",
-            description: "Sets the specified game stat for the selected player.",
+            argDesc: "[stat] [value] [player?]",
+            description: "Sets the specified game stat for the resolved player.",
             action: (player, args) => AwardingCmds.SettingGameStats(player, args)
         );
 
@@ -799,8 +809,8 @@ public static class InitCommands
             name: "time",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[time]",
-            description: "Sets the specified game time for the selected player.",
+            argDesc: "[time] [value] [player?]",
+            description: "Sets the specified game time for the resolved player.",
             action: (player, args) => AwardingCmds.SettingGameTimes(player, args)
         );
 
@@ -934,6 +944,15 @@ public static class InitCommands
                     wolf.AddAffix(affix);
                 }
             }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "removeaward",
+            alias: "reaw",
+            tier: CommandTier.Admin,
+            argDesc: "[award name] [player?]",
+            description: "Removes the specified award from the resolved player.",
+            action: (player, args) => AwardingCmds.RemovingAward(player, args)
         );
 
         CommandsManager.RegisterCommand(
@@ -1375,15 +1394,7 @@ public static class InitCommands
             tier: CommandTier.Admin,
             argDesc: "resolve playerID",
             description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    Globals.ALL_KITTIES[player].KillKitty();
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty());
-            }
+            action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty())
         );
 
         CommandsManager.RegisterCommand(
@@ -1421,11 +1432,6 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var difficulty = args.Length > 1 && args[1] != "" ? args[1] : Difficulty.DifficultyOption.Name;
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllGameTimes(player, Globals.ALL_KITTIES[player], difficulty);
-                    return;
-                }
                 CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameTimes(player, kitty, difficulty));
             }
         );
@@ -1436,15 +1442,7 @@ public static class InitCommands
             tier: CommandTier.All,
             argDesc: "[resolvePlayerId]",
             description: "Gets personal best stats of the passed parm player, if no parm then yourself.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllPersonalBests(player, Globals.ALL_KITTIES[player]);
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty));
-            }
+            action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllPersonalBests(player, kitty))
         );
 
         CommandsManager.RegisterCommand(
@@ -1453,15 +1451,7 @@ public static class InitCommands
             tier: CommandTier.All,
             argDesc: "[resolvePlayerId]",
             description: "Gets the game stats of the passed parm player, if no parm then yourself.",
-            action: (player, args) =>
-            {
-                if (args[0] == "")
-                {
-                    AwardingCmds.GetAllGameStats(player, Globals.ALL_KITTIES[player]);
-                    return;
-                }
-                CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty));
-            }
+            action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => AwardingCmds.GetAllGameStats(player, kitty))
         );
 
         CommandsManager.RegisterCommand(
@@ -1761,7 +1751,10 @@ public static class InitCommands
                 if (Globals.ROUND <= 0) return;
                 Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND];
                 GameTimer.RoundTime[Globals.ROUND] = 0.0f; // reset the round end time
-                Globals.ROUND = Globals.ROUND - 1;
+                GameTimer.FinishedTimes[Globals.ROUND] = 0.0f; // reset the finished time
+                Globals.ROUND = 0;
+                Utility.ResetAllKittiesLevelsGold(); // level 1 , resource gold.
+                // TODO: reset levels and gold.
                 RoundManager.RoundEnd();
 
             }
@@ -1776,7 +1769,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble;
-                Console.WriteLine($"Kibble spawning is now: {Kibble.SpawningKibble}");
+                Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Kibble spawning is now: {Kibble.SpawningKibble}{Colors.COLOR_RESET}");
             }
         );
 

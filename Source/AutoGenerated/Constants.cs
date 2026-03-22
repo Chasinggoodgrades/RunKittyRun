@@ -204,6 +204,7 @@ public static class Constants
 	public const int UNIT_SOLO_TOURNAMENT_2025 = 1160785987;
 	public const int UNIT_PENGUIN = 1160785988;
 	public const int UNIT_HUNTRESS_KITTY = 1160785989;
+	public const int UNIT_SOLO_TOURNAMENT_2026 = 1160785990;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

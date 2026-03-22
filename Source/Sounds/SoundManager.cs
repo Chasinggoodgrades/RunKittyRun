@@ -15,6 +15,10 @@ public static class SoundManager
     private const string KIBBLE_TOME_PATH = "war3mapImported\\Tomes.flac";
     private const string LAST_MAN_STANDING_PATH = "war3mapImported\\last_man_standing.mp3";
     private const string FIRST_BLOOD_PATH = "war3mapImported\\first_blood.mp3";
+    private const string GODLIKE_PATH = "war3mapImported\\godlike.mp3";
+    private const string HOLYSHIT_PATH = "war3mapImported\\holyshit.mp3";
+    private const string UNSTOPPABLE_PATH = "war3mapImported\\unstoppable.mp3";
+    private const string WICKEDSICK_PATH = "war3mapImported\\wickedsick.mp3";
 
     private static sound KITTY_DEATH_SOUND;
     private static sound ROUND_1_SOUND;
@@ -27,6 +31,10 @@ public static class SoundManager
     private static sound KIBBLE_TOME_SOUND;
     private static sound LAST_MAN_STANDING_SOUND;
     private static sound FIRST_BLOOD_SOUND;
+    private static sound GODLIKE_SOUND;
+    private static sound HOLYSHIT_SOUND;
+    private static sound UNSTOPPABLE_SOUND;
+    private static sound WICKEDSICK_SOUND;
 
     private static bool FirstBloodSoundPlayed = false;
     private static timer LastManStanding = timer.Create();
@@ -46,7 +54,11 @@ public static class SoundManager
             { "InvulnerableSound", CreateSound(INVULNERABLE_PATH, false, false, false, 10, 10, "") },
             { "KibbleTomeSound", CreateSound(KIBBLE_TOME_PATH, false, true, false, 10, 10, "") },
             { "LastManStandingSound", CreateSound(LAST_MAN_STANDING_PATH, false, false, false, 10, 10, "") },
-            { "FirstBloodSound", CreateSound(FIRST_BLOOD_PATH, false, false, false, 10, 10, "") }
+            { "FirstBloodSound", CreateSound(FIRST_BLOOD_PATH, false, false, false, 10, 10, "") },
+            { "GodlikeSound", CreateSound(GODLIKE_PATH, false, false, false, 10, 10, "") },
+            { "HolyShitSound", CreateSound(HOLYSHIT_PATH, false, false, false, 10, 10, "") },
+            { "UnstoppableSound", CreateSound(UNSTOPPABLE_PATH, false, false, false, 10, 10, "") },
+            { "WickedSickSound", CreateSound(WICKEDSICK_PATH, false, false, false, 10, 10, "") }
         };
         SetSoundAttributes();
         AssignSounds();
@@ -65,6 +77,11 @@ public static class SoundManager
         KIBBLE_TOME_SOUND = sounds["KibbleTomeSound"];
         LAST_MAN_STANDING_SOUND = sounds["LastManStandingSound"];
         FIRST_BLOOD_SOUND = sounds["FirstBloodSound"];
+        GODLIKE_SOUND = sounds["GodlikeSound"];
+        HOLYSHIT_SOUND = sounds["HolyShitSound"];
+        UNSTOPPABLE_SOUND = sounds["UnstoppableSound"];
+        WICKEDSICK_SOUND = sounds["WickedSickSound"];
+
     }
 
     private static void SetSoundAttributes()
@@ -114,6 +131,11 @@ public static class SoundManager
         s.AttachToUnit(Kitty);
         s.Start();
     }
+
+    public static void PlayGodlikeSound() => GODLIKE_SOUND.Start();
+    public static void PlayHolyShitSound() => HOLYSHIT_SOUND.Start();
+    public static void PlayUnstoppableSound() => UNSTOPPABLE_SOUND.Start();
+    public static void PlayWickedSickSound() => WICKEDSICK_SOUND.Start();
 
     private static void TeamKittyDeathSound(Kitty k)
     {

@@ -1,6 +1,6 @@
 ﻿public static class Resources
 {
-    private static int StartingGold { get; set; } = 100;
+    public static int StartingGold { get; set; } = 100;
     public static int SaveExperience { get; set; } = 80;
     public static int SaveGold { get; set; } = 30;
     public static float SaveStreakMultiplier { get; set; } = 0.10f;

@@ -12,6 +12,7 @@ public class Blitzer : Affix
     private const float BLITZER_OVERHEAD_DELAY = 1.50f;
     private const float BLITZER_LOWEND = 6.0f;
     private const float BLITZER_HIGHEND = 11.0f;
+    private int Type;
     private float TargetX;
     private float TargetY;
     private AchesTimers MoveTimer;
@@ -23,6 +24,7 @@ public class Blitzer : Affix
     public Blitzer(Wolf unit) : base(unit)
     {
         Name = $"{Colors.COLOR_YELLOW}Blitzer|r";
+        Type = GetRandomInt(0, 1);
     }
 
     public override void Apply()
@@ -91,8 +93,25 @@ public class Blitzer : Affix
         try
         {
             var randomTime = GetRandomReal(BLITZER_LOWEND, BLITZER_HIGHEND); // blitz randomly between this time interval
-            TargetX = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
-            TargetY = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
+
+            if (Type == 1) {
+                var kitty = GetKittyInZone();
+                if (kitty != null)
+                {
+                    TargetX = kitty.Unit.X;
+                    TargetY = kitty.Unit.Y;
+                }
+                else
+                {
+                    TargetX = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
+                    TargetY = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
+                }
+            }
+            else
+            {
+                TargetX = GetRandomReal(Unit.WolfArea.Rect.MinX, Unit.WolfArea.Rect.MaxX);
+                TargetY = GetRandomReal(Unit.WolfArea.Rect.MinY, Unit.WolfArea.Rect.MaxY);
+            }
             WanderEffect?.PlayAnimation(ANIM_TYPE_DEATH);
             BlitzerMove();
             Unit.Unit.RemoveAbility(GHOST_VISIBLE); // ghost visible
@@ -106,6 +125,24 @@ public class Blitzer : Affix
             Logger.Warning($"Error in BeginBlitz: {e.Message}");
             throw;
         }
+    }
+
+    private Kitty GetKittyInZone()
+    {
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            if (!kitty.Alive) continue;
+            if (Unit.WolfArea.Region.Contains(kitty.Unit.X, kitty.Unit.Y))
+            {
+                Globals.TempKittyList.Add(kitty);
+            }
+        }
+        if (Globals.TempKittyList.Count == 0) return null;
+        var randomIndex = GetRandomInt(0, Globals.TempKittyList.Count - 1);
+        var selectedKitty = Globals.TempKittyList[randomIndex];
+        Globals.TempKittyList.Clear();
+        return selectedKitty;
     }
 
     private void BlitzerMove()

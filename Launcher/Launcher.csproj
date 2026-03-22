@@ -2,12 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="DotNetZip" Version="1.16.0" />
+	  <PackageReference Include="Npgsql" Version="10.0.2" />
 	  <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.8" />
 	  <PackageReference Include="System.Security.Permissions" Version="9.0.8" />
 	  <PackageReference Include="War3Net.Build" Version="6.0.1" />

@@ -4,6 +4,7 @@ using static WCSharp.Api.Common;
 public static class VictoryZone
 {
     private static trigger InVictoryArea;
+    public static bool VictoryAreaActive = true;
 
     public static void Initialize()
     {
@@ -27,6 +28,12 @@ public static class VictoryZone
     {
         var u = @event.Unit;
         var player = u.Owner;
+        if (!VictoryAreaActive)
+        {
+            player.DisplayTimedTextTo(1.5f, $"{Colors.COLOR_TURQUOISE}Victory Area is currently deactivated!{Colors.COLOR_RESET}");
+            return;
+        }
+
         if (u.UnitType != Constants.UNIT_KITTY) return;
         var kitty = Globals.ALL_KITTIES[player];
         if (!Globals.GAME_ACTIVE) return;

@@ -53,6 +53,7 @@ public static class Challenges
     public static void PatrioticLight(Kitty kitty)
     {
         if (!DifficultyConfig.IsVirtualRound(5, 5)) return;
+        if (Difficulty.DifficultyValue == (int)DifficultyLevel.Progressive) return;
         if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         if (Globals.GAME_TIMER.Remaining > 995) return; // Formally 20 mins, now 16:35 and awards to all players.
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Nitros.PatrioticLight));

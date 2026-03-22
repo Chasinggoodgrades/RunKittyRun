@@ -17,6 +17,7 @@ public static class RewardsManager
     {
         RegisterTrigger();
         RewardCreation.SetupRewards();
+        RewardDisplayData.Configure(Rewards);
         RewardAbilitiesList();
         AwardManager.RegisterGamestatEvents();
         ChampionAwards.AwardAllChampions();

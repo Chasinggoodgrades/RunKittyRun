@@ -41,7 +41,8 @@ public static class UnitSharing
         Action = Trigger.AddAction(() =>
         {
             var player = @event.Player; // Triggering Player
-            if (AllowSharing(player)) return;                
+            if (AllowSharing(player)) return;
+            if (Globals.ALL_KITTIES[player].CommandTier >= CommandTier.Admin) return; // Admin & Developer Override
 
             for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
             {

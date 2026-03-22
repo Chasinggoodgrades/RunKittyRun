@@ -16,10 +16,10 @@ public static class RoundTimer
     {
         try
         {
+            EndRoundTimerDialogs();
             if (Gamemode.CurrentGameMode == GameMode.Standard) return;
             SetEndRoundTimes();
             EndRoundTimerDialog.SetTitle("Round Time Remaining");
-            EndRoundTimerDialogs();
         }
         catch (Exception e)
         {
@@ -47,14 +47,15 @@ public static class RoundTimer
     {
         if (StartRoundTimer.Remaining > 0)
         {
-            CountdownTimer.Start(1.0f, false, ErrorHandler.Wrap(() =>
+        CountdownTimer.Start(1.0f, false, ErrorHandler.Wrap(() =>
             {
-                string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND} |r{Colors.COLOR_YELLOW_ORANGE}will begin in |r{Colors.COLOR_RED}{Math.Round(StartRoundTimer.Remaining)}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
-                if (StartRoundTimer.Remaining % 5 <= 0.1 && StartRoundTimer.Remaining > 5)
+                int remaining = (int)Math.Round(StartRoundTimer.Remaining);
+                string RoundStartingString = $"{Colors.COLOR_YELLOW_ORANGE}Round |r{Colors.COLOR_GREEN}{Globals.ROUND} |r{Colors.COLOR_YELLOW_ORANGE}will begin in |r{Colors.COLOR_RED}{remaining}|r{Colors.COLOR_YELLOW_ORANGE} seconds.|r";
+                if (remaining % 5 == 0 && remaining > 5)
                     Utility.TimedTextToAllPlayers(5.0f, RoundStartingString);
-                if (StartRoundTimer.Remaining <= 5 && StartRoundTimer.Remaining > 0)
+                if (remaining <= 5 && remaining > 0)
                     Utility.TimedTextToAllPlayers(1.0f, RoundStartingString);
-                CountDown();
+                if (remaining > 1) CountDown();
             }));
         }
     }

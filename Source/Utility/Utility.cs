@@ -78,6 +78,19 @@ public static class Utility
         return seconds < 10 ? $"{minutes}:0{seconds}.{tenths}" : $"{minutes}:{seconds}.{tenths}";
     }
 
+    public static void ResetAllKittiesLevelsGold()
+    {
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
+            var kitty = Globals.ALL_KITTIES_LIST[i];
+            kitty.Player.Gold += (kitty.Player.Gold * -1) + Resources.StartingGold;
+            if (kitty.Unit != null)
+            {
+                Blizzard.SetHeroLevelBJ(kitty.Unit, 1, true);
+            }
+        }
+    }
+
     /// <summary>
     /// Converts the float to a time string without tenths.
     /// </summary>

@@ -69,7 +69,7 @@ public static class Regions
 	public static Rectangle ProgressPoint2 { get; set; } = new Rectangle(-800f, -1344f, -608f, -1152f);
 	public static Rectangle Urn_Soul_Region { get; set; } = new Rectangle(2208f, -2880f, 2464f, -2592f);
 	public static Rectangle UrnSoulRegion1 { get; set; } = new Rectangle(2368f, 2080f, 2400f, 2112f);
-	public static Rectangle UrnSoulRegion2 { get; set; } = new Rectangle(-2400f, 1216f, -2368f, 1248f);
+	public static Rectangle UrnSoulRegion2 { get; set; } = new Rectangle(-2368f, 1184f, -2336f, 1216f);
 	public static Rectangle UrnSoulRegion3 { get; set; } = new Rectangle(352f, -256f, 384f, -224f);
 	public static Rectangle UrnSoulRegion4 { get; set; } = new Rectangle(-2880f, 2336f, -2848f, 2368f);
 	public static Rectangle safe_Area_00 { get; set; } = new Rectangle(-3328f, 2336f, -2624f, 3072f);
