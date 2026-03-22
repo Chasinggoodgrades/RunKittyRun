@@ -18,7 +18,7 @@ public static class Globals
     public static readonly string[] TEAM_MODES = { "Free Pick", "Random" };
     public static readonly string[] SOLO_MODES = { "Progression", "Race" };
     public static readonly string[] DeveloperList = { "QWNoZXMjMTgxNw==", "TG9jYWwgUGxheWVy", "U3RhbiMyMjM5OQ==", "WW9zaGltYXJ1IzIxOTc2" };
-    public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "Rmllcnlmb3gjMjE2NDA=" };
+    public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "Rmllcnlmb3gjMjE2NDA=", "S2Fub24yODkjMTU5Mw==" };
     public static readonly string[] VipList = { "Q2FydG1hbiMyMzMxNQ==", "S3ltcCMyNDUw", "TXJHaGVlZCMxODMx",
         "aG9mZiMxMTQwNA==", "SmFtZXNGcmFuY28jMTE3MTk=", "TmF0aGFuc2VycG8jMjQ2MQ==",
         "QmFsbXlkcm9wIzE3Mzc=", "QnJhbkZsYWtlNjQjMTEyNw==" };
