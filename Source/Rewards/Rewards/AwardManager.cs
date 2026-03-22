@@ -38,6 +38,17 @@ public static class AwardManager
 
         EnableAbility(player, award);
 
+        // if a save streak award like red lightning or patriotic lightning, then we'll play a sound according if its that save streak.
+        if (award == nameof(saveData.GameAwardsSorted.Trails.RedLightning))
+        {
+            SoundManager.PlayGodlikeSound();
+        }
+        else if(award == nameof(saveData.GameAwardsSorted.Wings.PatrioticTendrils))
+        {
+            SoundManager.PlayHolyShitSound();
+        }
+
+
         // ex: PurpleFire should be Purple Fire
         var awardFormatted = Utility.FormatAwardName(award);
         if (earnedPrompt)

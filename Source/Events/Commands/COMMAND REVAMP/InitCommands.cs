@@ -62,6 +62,26 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "victoryarea",
+            alias: "va",
+            tier: CommandTier.Admin,
+            argDesc: "bool",
+            description: "Disables or enables victory area according to passed parm or flips it.",
+            action: (player, args) =>
+            {
+                if (args[0] == "")
+                {
+                    VictoryZone.VictoryAreaActive = !VictoryZone.VictoryAreaActive;
+                    return;
+                }
+
+                var status = CommandsManager.GetBool(args[0]);
+                VictoryZone.VictoryAreaActive = status;
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Victory Area: {(status ? "On" : "Off")}{Colors.COLOR_RESET}");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "wolfeffects",
             alias: "we,wolfe",
             tier: CommandTier.Admin,
