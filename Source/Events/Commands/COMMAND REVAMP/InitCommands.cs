@@ -327,15 +327,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "oldcode",
-            alias: "",
-            tier: CommandTier.All,
-            argDesc: "[none]",
-            description: "Loads a previous save from RKR 4.2.0+.. May not be functional anymore.",
-            action: (player, args) => Savecode.LoadString()
-        );
-
-        CommandsManager.RegisterCommand(
             name: "apm",
             alias: "",
             tier: CommandTier.All,

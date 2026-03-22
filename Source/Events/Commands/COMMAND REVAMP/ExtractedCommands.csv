@@ -23,7 +23,6 @@ All,mirror,,Toggle mirror mode.
 All,moretime,,Adds 20 secondsd to the round timer. Can only happen once per round.
 All,music,,Opens the music frame.
 All,names,[none],Hides all floating name tags.
-All,oldcode,[none],Loads a previous save from RKR 4.2.0+.. May not be functional anymore.
 All,overheadcam,[none],Gives an overhead view.
 All,personalbests,[resolvePlayerId],"Gets personal best stats of the passed parm player, if no parm then yourself."
 All,reset,[none],Resets your camera to their default settings.
