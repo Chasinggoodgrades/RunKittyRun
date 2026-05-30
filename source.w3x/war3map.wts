@@ -1,6 +1,6 @@
 STRING 1
 {
-|cffff0000RKR Remastered v1.5.0|r
+|cffff0000RKR Remastered v1.5.1|r
 }
 
 STRING 2
@@ -10,10 +10,9 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.5.0 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.5.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n- Next Tournament: 03/07/2026
-|n|n|n|cff00ffffLast updated:|r |c00FF000005/29/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000005/30/2026|r
 }
 
 STRING 4
@@ -793,7 +792,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.5.0
+Run Kitty Run Remastered v1.5.1
 }
 
 STRING 2035
@@ -4147,13 +4146,13 @@ Purchase the |cff9932ccFang of Shadows|r|cff8080ff [Relic] [level 10]|r
 STRING 3740
 // Items: I005 (|cff9932ccFang of Shadows|r), Ubertip (Tooltip - Extended)
 {
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 2 min, cd reduced at safezones.)|r
 }
 
 STRING 3741
 // Items: I005 (|cff9932ccFang of Shadows|r), Description (Description)
 {
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 2 min, cd reduced at safezones.)|r
 }
 
 STRING 3753
