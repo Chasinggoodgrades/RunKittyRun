@@ -154,7 +154,6 @@ public class Kitty : IFloatingTags, ICircleOwner
 
             // Hide visual indicators before revival
             Circle.HideCircle();
-            InvulnerableKitty();
             Alive = true;
 
             // Revive the unit at its respective position
@@ -184,11 +183,10 @@ public class Kitty : IFloatingTags, ICircleOwner
         }
     }
 
-    private void InvulnerableKitty()
+    public void InvulnerableKitty(float duration = InvulDuration)
     {
-        if (!InvulTest) return;
         Invulnerable = true;
-        InvulTimer.Start(InvulDuration, false, () =>
+        InvulTimer.Start(duration, false, () =>
         {
             Invulnerable = false;
             InvulTimer.Pause();

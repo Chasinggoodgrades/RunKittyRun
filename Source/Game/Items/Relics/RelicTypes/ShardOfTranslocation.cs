@@ -9,8 +9,8 @@ public class ShardOfTranslocation : Relic
     private static int RelicCost = 650;
     private static float DEFAULT_BLINK_RANGE = 450.0f;
     private static float UPGRADE_BLINK_RANGE = 650.0f;
-    private static float DEFAULT_COOLDOWN = 90.0f;
-    private static float CooldownReduction = 30.0f;
+    private static float DEFAULT_COOLDOWN = 60.0f;
+    private static float CooldownReduction = 15.0f;
     private unit Owner;
     private new static string IconPath = "ReplaceableTextures/CommandButtons/BTNShardOfTranslocation.blp";
     private float MaxBlinkRange = DEFAULT_BLINK_RANGE;
@@ -18,7 +18,7 @@ public class ShardOfTranslocation : Relic
 
     public ShardOfTranslocation() : base(
         "|c7eb66ff1Shard of Translocation|r",
-        $"Teleports the user to a targeted location within {DEFAULT_BLINK_RANGE} range, restricted to lane bounds.{Colors.COLOR_ORANGE}(Active) {Colors.COLOR_LIGHTBLUE}(1min 30 sec cooldown).|r",
+        $"Teleports the user to a targeted location within {DEFAULT_BLINK_RANGE} range, restricted to lane bounds.{Colors.COLOR_ORANGE}(Active) {Colors.COLOR_LIGHTBLUE}({DEFAULT_COOLDOWN} sec cooldown).|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
@@ -125,6 +125,7 @@ public class ShardOfTranslocation : Relic
             y = unit.Y + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
+        Utility.SimpleTimer(0.1f, () => Globals.ALL_KITTIES[unit.Owner]?.InvulnerableKitty(0.5f));
     }
 
     private static bool EligibleLocation(location targetLoc, int currentSafezone)
