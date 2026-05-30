@@ -15,6 +15,7 @@ public class FangOfShadows : Relic
     private bool Active = false;
 
     private const int RelicCost = 650;
+    private static float ABILITY_COOLDOWN = 120.0f;
     private static float SAFEZONE_REDUCTION = 0.25f; // 25%
     private static float UPGRADE_SAFEZONE_REDUCTION = 0.50f; // 50%
     private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
@@ -23,7 +24,7 @@ public class FangOfShadows : Relic
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows|r",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r",
+        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}({(int)(ABILITY_COOLDOWN / 60)}min) (Remaining cooldown reduced by 25% at safezones.)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
@@ -129,12 +130,10 @@ public class FangOfShadows : Relic
     private void SetAbilityCooldown(unit Unit)
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
-        var currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0);
         var newCooldown = upgradeLevel >= 1
-            ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION
-            : currentCooldown;
+            ? ABILITY_COOLDOWN - UPGRADE_COOLDOWN_REDUCTION
+            : ABILITY_COOLDOWN;
 
-        //var ability = Unit.GetAbility(RelicAbilityID);
         RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
 
