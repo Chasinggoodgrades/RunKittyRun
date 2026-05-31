@@ -51,6 +51,7 @@ public class ShadowKitty
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(this.Player, true);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
+        ShrinkShadowKitty();
         this.Active = true;
     }
 
@@ -104,5 +105,12 @@ public class ShadowKitty
     {
         this.wCollision = trigger.Create();
         this.cCollision = trigger.Create();
+    }
+
+    private void ShrinkShadowKitty()
+    {
+        if (this.Kitty.CurrentStats.CollisonRadius > CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) return;
+        float scale = 0.60f - (0.60f * 0.10f * 2.0f);
+        this.Kitty.Unit.SetScale(scale, scale, scale);
     }
 }
