@@ -72,6 +72,7 @@ namespace Source.Init
                 FrameManager.Initialize();
                 CustomStatFrame.Init();
                 SeasonalManager.Initialize();
+                LeagueManager.Initialize();
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();

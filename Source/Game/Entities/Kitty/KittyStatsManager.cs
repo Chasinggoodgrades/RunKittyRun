@@ -26,7 +26,6 @@
         Kitty.CurrentStats.TotalDeaths += 1;
         Kitty.CurrentStats.RoundDeaths += 1;
         Kitty.CurrentStats.SaveStreak = 0;
-        Kitty.SaveData.GameStats.SaveStreak = 0;
 
         if (Kitty.aiController.IsEnabled()) return;
 
@@ -34,7 +33,8 @@
 
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
-        Kitty.SaveData.GameStats.Deaths += 1;
+        StatManager.IncrementDeath(Kitty);
+        StatManager.ResetSaveStreak(Kitty);
     }
 
     /// <summary>
@@ -54,8 +54,7 @@
 
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
-        savior.SaveData.GameStats.Saves += 1;
-        savior.SaveData.GameStats.SaveStreak += 1;
+        StatManager.IncrementSave(savior);
         PersonalBestAwarder.BeatMostSavesInGame(savior);
         PersonalBestAwarder.BeatenSaveStreak(savior);
         Challenges.PurpleLighting(savior);

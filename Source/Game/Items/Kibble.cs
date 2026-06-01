@@ -185,7 +185,7 @@ public class Kibble : IDisposable
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
 
-        kibblePicker.SaveData.KibbleCurrency.Collected += 1;
+        StatManager.IncrementKibble(kibblePicker);
     }
 
     private static List<int> KibbleList()

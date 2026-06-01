@@ -25,8 +25,8 @@ public static class PersonalBestAwarder
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
         var roundEnum = "";
-        if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.Instance.GetRoundEnum();
-        if (Gamemode.CurrentGameMode == GameMode.Solo) roundEnum = TimeSetter.Instance.GetSoloEnum();
+        if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.Instance.GetRoundPropertyName();
+        if (Gamemode.CurrentGameMode == GameMode.Solo) roundEnum = TimeSetter.Instance.GetSoloPropertyName();
         var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
         var timeFormatted = Utility.ConvertFloatToTime(time);
         var difficulty = Gamemode.CurrentGameMode == GameMode.Standard ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";

@@ -17,4 +17,27 @@
     public int NightmareWins { get; set; }
     public int ProgressiveGames { get; set; }
     public int ProgressiveWins { get; set; }
+    public int TotalGames { get; set; }
+
+    public void ResetStatsData()
+    {
+        Saves = 0;
+        SaveStreak = 0;
+        HighestSaveStreak = 0;
+        NitrosObtained = 0;
+        Deaths = 0;
+        WinStreak = 0;
+        HighestWinStreak = 0;
+        NormalWins = 0;
+        HardWins = 0;
+        ImpossibleWins = 0;
+        NormalGames = 0;
+        HardGames = 0;
+        ImpossibleGames = 0;
+        NightmareGames = 0;
+        NightmareWins = 0;
+        ProgressiveGames = 0;
+        ProgressiveWins = 0;
+        TotalGames = 0;
+    }
 }
