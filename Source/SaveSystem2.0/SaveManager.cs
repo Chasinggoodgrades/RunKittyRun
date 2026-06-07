@@ -100,7 +100,6 @@ public class SaveManager
                 if (player.SlotState != playerslotstate.Playing) continue;
                 Load(player);
             }
-
         }
         catch (Exception ex)
         {

@@ -200,6 +200,8 @@ public class Slider
 
     public bool IsOnSlideTerrain()
     {
+        //return !RegionList.SafeZones[kitty.CurrentSafeZone].Contains(kitty.Unit.X, kitty.Unit.Y); // technically can be an issue if summoned in middle of lane -- however in practice, this never happens.
+        // want to avoid ienumerable calls, especially for fast and frequent checks like this.
         return !TerrainChanger.SafezoneTerrain.Contains(GetTerrainType(kitty.Unit.X, kitty.Unit.Y));
     }
 
