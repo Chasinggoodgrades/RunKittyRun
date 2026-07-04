@@ -15,6 +15,15 @@
         NightmareGameTime = new NightmareGameTimeData();
         ProgressiveGameTime = new ProgressiveGameTimeData();
     }
+
+    public void ResetGameTimesData()
+    {
+        NormalGameTime = new NormalGameTimeData();
+        HardGameTime = new HardGameTimeData();
+        ImpossibleGameTime = new ImpossibleGameTimeData();
+        NightmareGameTime = new NightmareGameTimeData();
+        ProgressiveGameTime = new ProgressiveGameTimeData();
+    }
 }
 
 /// <summary>

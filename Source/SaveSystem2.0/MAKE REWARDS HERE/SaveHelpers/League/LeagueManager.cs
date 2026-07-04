@@ -1,10 +1,10 @@
 ﻿using System;
 using WCSharp.Api;
-
+using static WCSharp.Api.Common;
 public class LeagueManager
 {
     public static LeagueManager Instance { get; private set; }
-    public readonly string CompiledSeasonID = "PreSeason0"; // Set during compile time in Launcher/Program.cs
+    public static readonly string CompiledSeasonID = "DoNotTouch"; // Set during compile time in Launcher/Program.cs
     public bool IsSeasonActive { get; set; } = false;
 
     private LeagueManager()
@@ -19,25 +19,33 @@ public class LeagueManager
         Instance = new LeagueManager();
     }
 
+    // In the event this causes desyncs.. We can use a CHEAT function and then evaluate resources. Cheats don't work in LAN or multiplayer. 
     private void CheckForOnlineOrLanGame()
     {
-        var count = Globals.ALL_PLAYERS.Count;
-        if (count < 2)
+        if (!ReloadGameCachesFromDisk() || Source.Program.Debug)
         {
-            Console.WriteLine($"{Colors.COLOR_YELLOW}Not enough players to start a League game. League features disabled.{Colors.COLOR_RESET}");
-            IsSeasonActive = false;
-            return;
+            Console.WriteLine("Online Game Detected, League Mode Enabled.");
+            Utility.SimpleTimer(3.5f, () => AssignSeasonID());
+            IsSeasonActive = true;
+
         }
-        for (int i = 0; i < count; i++)
+        else
         {
-            var player = Globals.ALL_PLAYERS[i];
-            if (player == null) continue;
-            if (player.Controller == mapcontrol.Computer)
+            Console.WriteLine("League Stats Disabled in Single Player.");
+            IsSeasonActive = false;
+        }
+    }
+
+    private void AssignSeasonID()
+    {
+        foreach(var kitty in Globals.ALL_KITTIES_LIST)
+        {
+            var league = kitty.SaveData.LeagueSeasonData.SeasonID;
+            if (league != CompiledSeasonID)
             {
-                Console.WriteLine($"{Colors.COLOR_YELLOW}Computer player detected. League features disabled.{Colors.COLOR_RESET}");
-                IsSeasonActive = false;
-                return;
+                kitty.SaveData.LeagueSeasonData.ResetLeagueSeasonData();
             }
+            kitty.SaveData.LeagueSeasonData.SeasonID = CompiledSeasonID;
         }
     }
 }

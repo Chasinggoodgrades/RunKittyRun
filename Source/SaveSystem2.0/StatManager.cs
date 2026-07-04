@@ -64,13 +64,30 @@ public static class StatManager
     // -------------------------------------------------------------------------
     // Kibble
     // -------------------------------------------------------------------------
-
     public static void IncrementKibble(Kitty kitty)
     {
-        // Kibble personal best is managed by PersonalBestAwarder — StatManager only handles league.
+        kitty.CurrentStats.CollectedKibble += 1;
+
         if (!LeagueManager.Instance.IsSeasonActive) return;
-        kitty.SaveData.LeagueSeasonData.KibbleCollected += 1;
+        kitty.SaveData.LeagueSeasonData.Currency.Kibble.Collected += 1;
     }
+
+    /// <summary>
+    /// Increments the number of jackpots collected by the kitty.
+    /// </summary>
+    /// <param name="kitty"></param>
+    /// <param name="super"></param>
+    public static void IncrementSuperJackpot(Kitty kitty, bool super = false)
+    {
+        kitty.CurrentStats.CollectedJackpots += 1;
+        if (super) kitty.CurrentStats.CollectedSuperJackpots += 1;
+
+        if (!LeagueManager.Instance.IsSeasonActive) return;
+
+        kitty.SaveData.LeagueSeasonData.Currency.Kibble.Jackpots += 1;
+        if (super) kitty.SaveData.LeagueSeasonData.Currency.Kibble.SuperJackpots += 1;
+    }
+
 
     // -------------------------------------------------------------------------
     // Wins / Losses / Games Played

@@ -1745,9 +1745,7 @@ public static class InitCommands
                 GameTimer.FinishedTimes[Globals.ROUND] = 0.0f; // reset the finished time
                 Globals.ROUND = 0;
                 Utility.ResetAllKittiesLevelsGold(); // level 1 , resource gold.
-                // TODO: reset levels and gold.
                 RoundManager.RoundEnd();
-
             }
         );
 

@@ -45,6 +45,7 @@ public static class SpawnChampions
         x = rect.CenterX;
         y = rect.CenterY;
         Nomordarkwars2026 = unit.Create(player.NeutralPassive, Constants.UNIT_SOLO_TOURNAMENT_2026, x, y, 315.0f);
+        Nomordarkwars2026.IsInvulnerable = true;
     }
 
     private static void ApplyCosmetics()

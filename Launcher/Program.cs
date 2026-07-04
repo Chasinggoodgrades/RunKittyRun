@@ -208,7 +208,16 @@ public static class LuaScriptProcessor
         $"CompiledVERSION = \"{Launcher.MapDesc.VERSION}\"",
         RegexOptions.Multiline);
 
+        script = Regex.Replace(
+        script,
+        @"CompiledSeasonID\s*=\s*""DoNotTouch""",
+        $"CompiledSeasonID = \"{Launcher.MapDesc.SEASON_ID}\"",
+        RegexOptions.Multiline);
+
+
         return script;
+
+        
     }
 
     /*
