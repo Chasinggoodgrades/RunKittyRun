@@ -54,6 +54,7 @@ public static class DeathlessChallenges
     private static void AwardDeathless(Kitty kitty)
     {
         DeathlessCount += 1;
+        StatManager.IncrementDeathless(kitty);
         CrystalOfFire.AwardCrystalOfFire(kitty.Unit);
         AwardBasedOnDifficulty(kitty.Player);
         PlayInvulnerableSoundWithText(kitty);

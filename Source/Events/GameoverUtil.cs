@@ -14,7 +14,8 @@ public static class GameoverUtil
         {
             StatManager.UpdateLifetimeBestGameTime(kitty, difficulty, gameTime, teamMembers);
             StatManager.UpdateLifetimeBestRoundTimes(kitty, difficulty, gameTime);
-            StatManager.UpdateLeagueBestGameTime(kitty, difficulty, gameTime);
+            StatManager.UpdateLeagueBestGameTime(kitty, difficulty, gameTime, teamMembers);
+            StatManager.UpdateLeagueBestRoundTimes(kitty, difficulty, gameTime);
         }
     }
 
@@ -77,7 +78,7 @@ public static class GameoverUtil
 
     private static string GetTeamMembers()
     {
-        return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
+        return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer && player.Controller != mapcontrol.None).Select(player => player.Name));
     }
 
     /// <summary>

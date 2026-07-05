@@ -61,6 +61,13 @@ public static class StatManager
         kitty.SaveData.LeagueSeasonData.Stats.NitrosObtained += 1;
     }
 
+    public static void IncrementDeathless(Kitty kitty)
+    {
+        kitty.SaveData.GameStats.DeathlessObtained += 1;
+        if (!LeagueManager.Instance.IsSeasonActive) return;
+        kitty.SaveData.LeagueSeasonData.Stats.DeathlessObtained += 1;
+    }
+
     // -------------------------------------------------------------------------
     // Kibble
     // -------------------------------------------------------------------------
@@ -234,35 +241,81 @@ public static class StatManager
     /// Only updates the league season best if this game's time beats the stored season best.
     /// Does NOT copy from lifetime BestGameTimes — season times start fresh.
     /// </summary>
-    public static void UpdateLeagueBestGameTime(Kitty kitty, DifficultyLevel difficulty, float gameTime)
+    public static void UpdateLeagueBestGameTime(Kitty kitty, DifficultyLevel difficulty, float gameTime, string teamMembers)
+    {
+        if (!LeagueManager.Instance.IsSeasonActive) return;
+        if (gameTime <= 0) return;
+
+        var dst = kitty.SaveData.LeagueSeasonData.GameTimes;
+        var date = DateTimeManager.DateTime.ToString();
+
+        switch (difficulty)
+        {
+            case DifficultyLevel.Normal:
+                if (gameTime < dst.NormalGameTime.Time || dst.NormalGameTime.Time == 0)
+                { dst.NormalGameTime.Time = gameTime; dst.NormalGameTime.Date = date; dst.NormalGameTime.TeamMembers = teamMembers; }
+                break;
+            case DifficultyLevel.Hard:
+                if (gameTime < dst.HardGameTime.Time || dst.HardGameTime.Time == 0)
+                { dst.HardGameTime.Time = gameTime; dst.HardGameTime.Date = date; dst.HardGameTime.TeamMembers = teamMembers; }
+                break;
+            case DifficultyLevel.Impossible:
+                if (gameTime < dst.ImpossibleGameTime.Time || dst.ImpossibleGameTime.Time == 0)
+                { dst.ImpossibleGameTime.Time = gameTime; dst.ImpossibleGameTime.Date = date; dst.ImpossibleGameTime.TeamMembers = teamMembers; }
+                break;
+            case DifficultyLevel.Nightmare:
+                if (gameTime < dst.NightmareGameTime.Time || dst.NightmareGameTime.Time == 0)
+                { dst.NightmareGameTime.Time = gameTime; dst.NightmareGameTime.Date = date; dst.NightmareGameTime.TeamMembers = teamMembers; }
+                break;
+            case DifficultyLevel.Progressive:
+                if (gameTime < dst.ProgressiveGameTime.Time || dst.ProgressiveGameTime.Time == 0)
+                { dst.ProgressiveGameTime.Time = gameTime; dst.ProgressiveGameTime.Date = date; dst.ProgressiveGameTime.TeamMembers = teamMembers; }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Updates the per-round times on the league season best game record for the given difficulty.
+    /// Only writes if this game's total time is also the season best.
+    /// </summary>
+    public static void UpdateLeagueBestRoundTimes(Kitty kitty, DifficultyLevel difficulty, float gameTime)
     {
         if (!LeagueManager.Instance.IsSeasonActive) return;
         if (gameTime <= 0) return;
 
         var dst = kitty.SaveData.LeagueSeasonData.GameTimes;
 
-        switch (difficulty)
+        object bestGameTimeData = difficulty switch
         {
-            case DifficultyLevel.Normal:
-                if (gameTime < dst.NormalGameTime.Time || dst.NormalGameTime.Time == 0)
-                    dst.NormalGameTime.Time = gameTime;
-                break;
-            case DifficultyLevel.Hard:
-                if (gameTime < dst.HardGameTime.Time || dst.HardGameTime.Time == 0)
-                    dst.HardGameTime.Time = gameTime;
-                break;
-            case DifficultyLevel.Impossible:
-                if (gameTime < dst.ImpossibleGameTime.Time || dst.ImpossibleGameTime.Time == 0)
-                    dst.ImpossibleGameTime.Time = gameTime;
-                break;
-            case DifficultyLevel.Nightmare:
-                if (gameTime < dst.NightmareGameTime.Time || dst.NightmareGameTime.Time == 0)
-                    dst.NightmareGameTime.Time = gameTime;
-                break;
-            case DifficultyLevel.Progressive:
-                if (gameTime < dst.ProgressiveGameTime.Time || dst.ProgressiveGameTime.Time == 0)
-                    dst.ProgressiveGameTime.Time = gameTime;
-                break;
+            DifficultyLevel.Normal      => dst.NormalGameTime,
+            DifficultyLevel.Hard        => dst.HardGameTime,
+            DifficultyLevel.Impossible  => dst.ImpossibleGameTime,
+            DifficultyLevel.Nightmare   => dst.NightmareGameTime,
+            DifficultyLevel.Progressive => dst.ProgressiveGameTime,
+            _ => null
+        };
+
+        if (bestGameTimeData == null) return;
+
+        var storedTime = (float)bestGameTimeData.GetType().GetProperty("Time").GetValue(bestGameTimeData);
+        if (gameTime > storedTime && storedTime != 0) return;
+
+        for (int round = 1; round <= Gamemode.NumberOfRounds; round++)
+        {
+            string propertyName = round switch
+            {
+                1 => "RoundOneTime",
+                2 => "RoundTwoTime",
+                3 => "RoundThreeTime",
+                4 => "RoundFourTime",
+                5 => "RoundFiveTime",
+                _ => null
+            };
+
+            if (propertyName == null) continue;
+
+            var prop = bestGameTimeData.GetType().GetProperty(propertyName);
+            prop?.SetValue(bestGameTimeData, GameTimer.FinishedTimes[round]);
         }
     }
 

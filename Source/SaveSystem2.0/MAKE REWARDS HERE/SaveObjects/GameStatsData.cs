@@ -4,6 +4,7 @@
     public int SaveStreak { get; set; }
     public int HighestSaveStreak { get; set; }
     public int NitrosObtained { get; set; }
+    public int DeathlessObtained { get; set; }
     public int Deaths { get; set; }
     public int WinStreak { get; set; }
     public int HighestWinStreak { get; set; }
@@ -25,6 +26,7 @@
         SaveStreak = 0;
         HighestSaveStreak = 0;
         NitrosObtained = 0;
+        DeathlessObtained = 0;
         Deaths = 0;
         WinStreak = 0;
         HighestWinStreak = 0;

@@ -12,7 +12,7 @@ STRING 3
 {
 |cff00ffffRun Kitty Run|r v1.5.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n|n|cff00ffffLast updated:|r |c00FF000007/04/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000007/05/2026|r
 }
 
 STRING 4
@@ -4287,16 +4287,6 @@ STRING 3776
 |cffffff00Chrono Orb|r
 }
 
-STRING 3777
-{
-Kitties
-}
-
-STRING 3778
-{
-More Kitties
-}
-
 STRING 3779
 // Abilities: A01U (Trail_LightningRed), Ubertip (Tooltip - Normal - Extended)
 {
@@ -5080,5 +5070,76 @@ STRING 3921
 // Units: E00F (|cffffff00Solo Tournament 2026|r), Awakentip (Tooltip - Awaken)
 {
 |cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
+}
+
+STRING 3922
+{
+Kitties
+}
+
+STRING 3923
+{
+Extra Kitties
+}
+
+STRING 3924
+{
+|cffffff00Game Time:|r
+}
+
+STRING 3925
+{
+|cff00dcffKibble:|r
+}
+
+STRING 3926
+{
+|cffffff00Total Collected Kibble. This can be used in the shop!|r
+}
+
+STRING 3927
+{
+Built with C# to Lua transpiler. Special thanks to Orden4, Leyenda, Geek. Stan, Omniology, and any creators of assets used in this map.
+
+}
+
+STRING 3929
+{
+|cffffff00Gold:|r
+}
+
+STRING 3930
+{
+Cheating... smh. Disappointed
+}
+
+STRING 3931
+{
+Well.. still disappointed but better.
+}
+
+STRING 3932
+{
+|cffffff00Gold|r
+}
+
+STRING 3933
+{
+|cff00c8ffEarned by reaching checkpoints, new rounds, and saving other kitties.|r
+}
+
+STRING 3934
+{
+|cff00c8ffTotal collected Kibble by all kitties. Future update to allow this to be spent in the shop.|r
+}
+
+STRING 3935
+{
+|cff00c8ffTotal elapased playable gametime. |r
+}
+
+STRING 3936
+{
+|cff00c8ffBy: Aches|r
 }
 
