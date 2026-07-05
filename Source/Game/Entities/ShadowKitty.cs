@@ -51,7 +51,7 @@ public class ShadowKitty
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(this.Player, true);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
-        ShrinkShadowKitty();
+        Utility.SimpleTimer(0.2f, ShrinkShadowKitty);
         this.Active = true;
     }
 
