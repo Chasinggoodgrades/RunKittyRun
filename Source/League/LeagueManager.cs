@@ -10,7 +10,7 @@ public class LeagueManager
     private LeagueManager()
     {
         IsSeasonActive = !string.IsNullOrEmpty(CompiledSeasonID) && CompiledSeasonID != "DoNotTouch";
-        CheckForOnlineOrLanGame();
+        ActivateLeague();
     }
 
     public static void  Initialize()
@@ -20,20 +20,28 @@ public class LeagueManager
     }
 
     // In the event this causes desyncs.. We can use a CHEAT function and then evaluate resources. Cheats don't work in LAN or multiplayer. 
-    private void CheckForOnlineOrLanGame()
+    private void ActivateLeague()
     {
+        if (!IsLeagueTimeframe()) return;
         if (!ReloadGameCachesFromDisk() || Source.Program.Debug)
         {
-            Console.WriteLine("Online Game Detected, League Mode Enabled.");
+            Console.WriteLine("League Mode is Active.");
             Utility.SimpleTimer(3.5f, () => AssignSeasonID());
             IsSeasonActive = true;
 
         }
         else
         {
-            Console.WriteLine("League Stats Disabled in Single Player.");
+            Console.WriteLine("League Mode is disabled in Single Player.");
             IsSeasonActive = false;
         }
+    }
+
+    // League runs the entire month of July and August (pre season)
+    private bool IsLeagueTimeframe()
+    {
+        var currentDate = DateTimeManager.DateTime;
+        return currentDate.Month == 7 || currentDate.Month == 8;
     }
 
     private void AssignSeasonID()
