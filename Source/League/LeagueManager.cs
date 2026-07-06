@@ -25,14 +25,14 @@ public class LeagueManager
         if (!IsLeagueTimeframe()) return;
         if (!ReloadGameCachesFromDisk() || Source.Program.Debug)
         {
-            Console.WriteLine("League Mode is Active.");
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}League Mode is Active.{Colors.COLOR_RESET}");
             Utility.SimpleTimer(3.5f, () => AssignSeasonID());
             IsSeasonActive = true;
 
         }
         else
         {
-            Console.WriteLine("League Mode is disabled in Single Player.");
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}League Mode is disabled in Single Player.{Colors.COLOR_RESET}");
             IsSeasonActive = false;
         }
     }
