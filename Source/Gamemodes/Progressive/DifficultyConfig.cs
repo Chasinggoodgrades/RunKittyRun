@@ -53,6 +53,11 @@ public static class DifficultyConfig
         return GetVirtualDifficultyValue(Globals.ROUND) >= (int)difficulty;
     }
 
+    /// <summary>
+    /// Checks if the passed difficulty meets the required difficulty level, taking into account the progressive mode.
+    /// </summary>
+    /// <param name="requiredDifficulty">The required difficulty level to check against.</param>
+    /// <returns>True if the passed difficulty meets or exceeds the required difficulty level, false otherwise.</returns>
     public static bool MeetsDifficultyRequirement(DifficultyLevel requiredDifficulty)
     {
         return IsVirtualDifficulty(requiredDifficulty);

@@ -10,5 +10,6 @@
     public int ChainedNightmareAura { get; set; }
     public int ChainedHardAura { get; set; }
     public int ChainedNormalAura { get; set; }
+    public int TemperedAura { get; set; }
 
 }

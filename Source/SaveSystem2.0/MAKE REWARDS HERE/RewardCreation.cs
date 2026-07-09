@@ -90,6 +90,8 @@ public static class RewardCreation
         AddReward(nameof(awardsSorted.Auras.ButterflyAura), Constants.ABILITY_AURA_BUTTERFLY, "origin", "war3mapImported\\ButterflyAura.mdx", RewardType.Auras);
         AddReward(nameof(awardsSorted.Auras.FreezeAura), Constants.ABILITY_AURA_FREEZE, "origin", "war3mapImported\\HolyFreezeAuraD2.mdx", RewardType.Auras);
         AddReward(nameof(awardsSorted.Tournament.VioletAura), Constants.ABILITY_CHAMPION_AURAPURPLERUNIC, "origin", "war3mapImported\\GlaciarAuraPurple.mdx", RewardType.Tournament);
+        AddReward(nameof(awardsSorted.Auras.TemperedAura), Constants.ABILITY_AURA_TEMPERED, "origin", "war3mapImported\\TemperedAura.mdx", RewardType.Auras);
+
         // Chained Together Awards
         AddReward(nameof(awardsSorted.Auras.ChainedNormalAura), Constants.ABILITY_AURA_CHAINEDNORMAL, "origin", "war3mapImported\\ChainedNormalAura.mdx", RewardType.Auras);
         AddReward(nameof(awardsSorted.Auras.ChainedHardAura), Constants.ABILITY_AURA_CHAINEDHARD, "origin", "war3mapImported\\ChainedHardAura.mdx", RewardType.Auras);

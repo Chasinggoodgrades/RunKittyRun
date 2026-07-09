@@ -12,7 +12,7 @@ STRING 3
 {
 |cff00ffffRun Kitty Run|r v1.5.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n|n|cff00ffffLast updated:|r |c00FF000007/05/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000007/08/2026|r
 }
 
 STRING 4
@@ -5141,5 +5141,23 @@ STRING 3935
 STRING 3936
 {
 |cff00c8ffBy: Aches|r
+}
+
+STRING 3937
+// Abilities: A01Z (Aura_Tempered), Name (Name)
+{
+Aura_Tempered
+}
+
+STRING 3938
+// Abilities: A01Z (Aura_Tempered), Tip (Tooltip - Normal)
+{
+|cffe4e4e4Tempered Aura|r
+}
+
+STRING 3939
+// Abilities: A01Z (Aura_Tempered), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by collectively gathering 500 kibble and then winning the game on Impossible+ during the Pre-League Season.
 }
 
