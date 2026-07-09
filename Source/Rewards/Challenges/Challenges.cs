@@ -142,6 +142,7 @@ public static class Challenges
     public static void TemperedAura()
     {
         if (!Gameover.WinGame) return;
+        if (!LeagueManager.Instance.IsSeasonActive) return;
         if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
         foreach (var kitty in Globals.ALL_KITTIES_LIST)
         {
