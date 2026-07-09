@@ -6,6 +6,7 @@ public class FangOfShadows : Relic
 {
     public const int RelicItemID = Constants.ITEM_FANG_OF_SHADOWS;
     public new const int RelicAbilityID = Constants.ABILITY_SUMMON_SHADOW_KITTY;
+    public const int FixationImmunityUpgradeLevel = 2;
     private const int TeleportAbilityID = Constants.ABILITY_APPEAR_AT_SHADOWKITTY;
     private new static string IconPath = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.blp";
     private trigger SummonTrigger;
@@ -15,6 +16,7 @@ public class FangOfShadows : Relic
     private bool Active = false;
 
     private const int RelicCost = 650;
+    private static float ABILITY_COOLDOWN = 120.0f;
     private static float SAFEZONE_REDUCTION = 0.25f; // 25%
     private static float UPGRADE_SAFEZONE_REDUCTION = 0.50f; // 50%
     private static float UPGRADE_COOLDOWN_REDUCTION = 30.0f;
@@ -23,7 +25,7 @@ public class FangOfShadows : Relic
     public FangOfShadows() : base(
         $"{Colors.COLOR_PURPLE}Fang of Shadows|r",
         $"Ability to summon a shadowy image for {Colors.COLOR_CYAN}{(int)SHADOW_KITTY_SUMMON_DURATION} seconds|r or until death. Teleport to the illusion at will.|r " +
-        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}(3min) (Remaining cooldown reduced by 25% at safezones.)|r",
+        $"{Colors.COLOR_ORANGE}(Active)|r {Colors.COLOR_LIGHTBLUE}({(int)(ABILITY_COOLDOWN / 60)}min) (Remaining cooldown reduced by 25% at safezones.)|r",
         RelicAbilityID,
         RelicItemID,
         RelicCost,
@@ -31,7 +33,7 @@ public class FangOfShadows : Relic
         )
     {
         Upgrades.Add(new RelicUpgrade(0, $"Overall cooldown is reduced by {UPGRADE_COOLDOWN_REDUCTION} seconds.", 15, 800));
-        Upgrades.Add(new RelicUpgrade(1, $"Remaining cooldown reduced at new safezones is now 50% instead of 25%.", 20, 1000));
+        Upgrades.Add(new RelicUpgrade(1, $"You've learned from your shadow. Fixation wolves can no longer target you.", 20, 1000));
     }
 
     public override void ApplyEffect(unit Unit)
@@ -39,7 +41,7 @@ public class FangOfShadows : Relic
         Owner = Unit;
         RegisterTriggers(Unit);
         Unit.DisableAbility(RelicAbilityID, false, false);
-        SetAbilityCooldown(Unit);
+        Utility.SimpleTimer(0.1f, () => SetAbilityCooldown(Unit));
     }
 
     public override void RemoveEffect(unit Unit)
@@ -129,26 +131,36 @@ public class FangOfShadows : Relic
     private void SetAbilityCooldown(unit Unit)
     {
         var upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(GetType());
-        var currentCooldown = BlzGetAbilityCooldown(RelicAbilityID, 0);
         var newCooldown = upgradeLevel >= 1
-            ? currentCooldown - UPGRADE_COOLDOWN_REDUCTION
-            : currentCooldown;
+            ? ABILITY_COOLDOWN - UPGRADE_COOLDOWN_REDUCTION
+            : ABILITY_COOLDOWN;
 
-        //var ability = Unit.GetAbility(RelicAbilityID);
         RelicUtil.SetAbilityCooldown(Unit, RelicItemID, RelicAbilityID, newCooldown);
     }
 
+    /// <summary>
+    /// This is the former upgrade 2 effect. Keeping it incase we want to reintroduce it in the future, but for now the upgrade simply provides a stronger cooldown reduction at safezones.
+    /// Old cooldown reduction at safezones was 25%, with the upgrade it becomes 50%. This method applies the appropriate reduction based on the player's upgrade level.
+    /// </summary>
+    /// <param name="Unit"></param>
     public void ReduceCooldownAtSafezone(unit Unit)
     {
         // Have relic
         if (!Utility.UnitHasItem(Unit, RelicItemID)) return;
         int upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(Unit.Owner).GetUpgradeLevel(typeof(FangOfShadows));
         Unit.GetAbility(RelicAbilityID);
-        float reduction = upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
+        float reduction = SAFEZONE_REDUCTION; //upgradeLevel >= 2 ? UPGRADE_SAFEZONE_REDUCTION : SAFEZONE_REDUCTION;
         float remainingCooldown = Unit.GetAbilityCooldownRemaining(RelicAbilityID);
         if (remainingCooldown <= 0) return;
         float newCooldown = remainingCooldown * (1.00f - reduction);
-        //Unit.SetAbilityCooldownRemaining(RelicAbilityID, newCooldown);
         RelicUtil.SetRelicCooldowns(Unit, RelicItemID, RelicAbilityID, newCooldown);
+    }
+
+    public static bool GetFixationImmunityUpgradeLevel(unit u)
+    {
+        var kitty = Globals.ALL_KITTIES[u.Owner];
+        if (kitty == null) return false;
+        int upgradeLevel = PlayerUpgrades.GetPlayerUpgrades(u.Owner).GetUpgradeLevel(typeof(FangOfShadows));
+        return upgradeLevel >= FixationImmunityUpgradeLevel;
     }
 }

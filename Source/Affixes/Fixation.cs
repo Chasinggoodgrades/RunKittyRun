@@ -84,6 +84,7 @@ public class Fixation : Affix
                 var Region = RegionList.WolfRegions[Unit.RegionIndex];
                 if (!Region.Contains(target.X, target.Y)) return;
                 if (Unit.IsPaused) return;
+                if (FangOfShadows.GetFixationImmunityUpgradeLevel(target)) return;
                 if (target != Unit.Unit && !IsChasing)
                 {
                     Target = target;
@@ -140,21 +141,18 @@ public class Fixation : Affix
 
         // Determine closest unit in list
         var closestUnit = UnitsInRange.First;
-        var closestDistance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, closestUnit.X, closestUnit.Y);
-        if (closestDistance > 0)
+        var closestDistance = float.MaxValue;
+        while (true)
         {
-
-            while (true)
+            var unit = UnitsInRange.First;
+            if (unit == null) break;
+            UnitsInRange.Remove(unit);
+            if (FangOfShadows.GetFixationImmunityUpgradeLevel(closestUnit)) continue;
+            var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            if (distance < closestDistance)
             {
-                var unit = UnitsInRange.First;
-                if (unit == null) break;
-                UnitsInRange.Remove(unit);
-                var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
-                if (distance < closestDistance)
-                {
-                    closestUnit = unit;
-                    closestDistance = distance;
-                }
+                closestUnit = unit;
+                closestDistance = distance;
             }
         }
         return closestUnit;

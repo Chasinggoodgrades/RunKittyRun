@@ -36,6 +36,7 @@ public static class Gameover
         Challenges.WhiteTendrils();
         Challenges.ZandalariKitty();
         Challenges.FreezeAura();
+        Challenges.TemperedAura();
     }
 
     private static void LosingGame()
@@ -88,79 +89,13 @@ public static class Gameover
     /// <param name="win"></param>
     private static void GameStats(bool win)
     {
+        var difficulty = (DifficultyLevel)Difficulty.DifficultyValue;
         foreach (var kitty in Globals.ALL_KITTIES)
         {
-            IncrementGameStats(kitty.Value);
-            if (win) IncrementWins(kitty.Value);
-            IncrementWinStreak(kitty.Value, win);
+            if (win) StatManager.IncrementWin(kitty.Value, difficulty);
+            StatManager.IncrementWinStreak(kitty.Value, win);
         }
         AwardManager.AwardGameStatRewards();
-    }
-
-    private static void IncrementGameStats(Kitty kitty)
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        var stats = kitty.SaveData.GameStats;
-        switch (Difficulty.DifficultyValue)
-        {
-            case (int)DifficultyLevel.Normal:
-                stats.NormalGames += 1;
-                break;
-
-            case (int)DifficultyLevel.Hard:
-                stats.HardGames += 1;
-                break;
-
-            case (int)DifficultyLevel.Impossible:
-                stats.ImpossibleGames += 1;
-                break;
-            case (int)DifficultyLevel.Nightmare:
-                stats.NightmareGames += 1;
-                break;
-            case (int)DifficultyLevel.Progressive:
-                stats.ProgressiveGames += 1;
-                break;
-        }
-    }
-
-    private static void IncrementWins(Kitty kitty)
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        var stats = kitty.SaveData.GameStats;
-        switch (Difficulty.DifficultyValue)
-        {
-            case (int)DifficultyLevel.Normal:
-                stats.NormalWins += 1;
-                break;
-
-            case (int)DifficultyLevel.Hard:
-                stats.HardWins += 1;
-                break;
-
-            case (int)DifficultyLevel.Impossible:
-                stats.ImpossibleWins += 1;
-                break;
-            case (int)DifficultyLevel.Nightmare:
-                stats.NightmareWins += 1;
-                break;
-            case (int)DifficultyLevel.Progressive:
-                stats.ProgressiveWins += 1;
-                break;
-        }
-    }
-
-    private static void IncrementWinStreak(Kitty kitty, bool win)
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        var stats = kitty.SaveData.GameStats;
-
-        if (win)
-        {
-            stats.WinStreak += 1;
-            if (stats.WinStreak > stats.HighestWinStreak)
-                stats.HighestWinStreak = stats.WinStreak;
-        }
-        else stats.WinStreak = 0;
     }
 
     public static void NotifyEndingGame()

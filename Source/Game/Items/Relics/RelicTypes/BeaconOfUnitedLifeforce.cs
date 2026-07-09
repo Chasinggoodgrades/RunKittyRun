@@ -6,9 +6,9 @@ public class BeaconOfUnitedLifeforce : Relic
 {
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
     private static float INVULNERABILITY_DURATION = 1.0f;
-    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.125f; // 12.5%
-    private static float EXTRA_REVIVE_CHANCE_ALL = 0.0175f; // 1.75%
-    private static float EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE = 0.01f; // 1%
+    private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.135f; // 13.5%
+    private static float EXTRA_REVIVE_CHANCE_ALL = 0.0300f; // 3.0%
+    private static float EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE = 0.025f; // 2.5%
     private new static string IconPath = "war3mapImported\\BTNTicTac.blp";
     private const int RelicCost = 650;
     private float ReviveChance = EXTRA_REVIVE_CHANCE_SINGLE;

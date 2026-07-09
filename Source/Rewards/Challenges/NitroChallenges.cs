@@ -158,8 +158,7 @@ public static class NitroChallenges
         if (!currentStats.ObtainedNitros.Contains(round))
             currentStats.ObtainedNitros.Add(round);
 
-        currentStats.NitroCount += 1;
-        kitty.SaveData.GameStats.NitrosObtained += 1;
+        StatManager.IncrementNitro(kitty);
     }
 
     private static void AwardingDivineLight(Kitty kitty)

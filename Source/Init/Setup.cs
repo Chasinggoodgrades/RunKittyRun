@@ -27,7 +27,6 @@ namespace Source.Init
                 SetAlliedPlayers();
                 //if (!ADMINDISABLE.AdminsGame()) return;
                 Safezone.Initialize();
-                Savecode.Initialize();
                 Utility.SimpleTimer(2.0f, () => StartGameModeTimer()); // Gives some delay time for the save system to sync
                 StopMusic(false);
                 ClearMapMusic();
@@ -73,6 +72,7 @@ namespace Source.Init
                 FrameManager.Initialize();
                 CustomStatFrame.Init();
                 SeasonalManager.Initialize();
+                LeagueManager.Initialize();
                 GameTimer.Initialize();
                 Resources.Initialize();
                 Progress.Initialize();

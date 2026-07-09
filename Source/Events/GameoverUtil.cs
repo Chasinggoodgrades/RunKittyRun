@@ -7,29 +7,15 @@ public static class GameoverUtil
 {
     public static void SetBestGameStats()
     {
-        foreach (var kitty in Globals.ALL_KITTIES)
+        var difficulty = (DifficultyLevel)Difficulty.DifficultyValue;
+        var gameTime = GetOverallGameTime();
+        var teamMembers = GetTeamMembers();
+        foreach (var kitty in Globals.ALL_KITTIES.Values)
         {
-            switch (Difficulty.DifficultyValue)
-            {
-                case (int)DifficultyLevel.Normal:
-                    SetNormalGameStats(kitty.Value);
-                    break;
-
-                case (int)DifficultyLevel.Hard:
-                    SetHardGameStats(kitty.Value);
-                    break;
-
-                case (int)DifficultyLevel.Impossible:
-                    SetImpossibleGameStats(kitty.Value);
-                    break;
-                case (int)DifficultyLevel.Nightmare:
-                    SetNightmareGameStats(kitty.Value);
-                    break;
-                case (int)DifficultyLevel.Progressive:
-                    SetProgressiveGameStats(kitty.Value);
-                    break;
-            }
-            SetBestGameRoundTimes(kitty.Value);
+            StatManager.UpdateLifetimeBestGameTime(kitty, difficulty, gameTime, teamMembers);
+            StatManager.UpdateLifetimeBestRoundTimes(kitty, difficulty, gameTime);
+            StatManager.UpdateLeagueBestGameTime(kitty, difficulty, gameTime, teamMembers);
+            StatManager.UpdateLeagueBestRoundTimes(kitty, difficulty, gameTime);
         }
     }
 
@@ -90,117 +76,20 @@ public static class GameoverUtil
         }
     }
 
-    private static void SetNormalGameStats(Kitty kitty)
-    {
-        var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        stats.Time = gameTime;
-        stats.Date = DateTimeManager.DateTime.ToString();
-        stats.TeamMembers = GetTeamMembers();
-    }
-
-    private static void SetHardGameStats(Kitty kitty)
-    {
-        var stats = kitty.SaveData.BestGameTimes.HardGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        stats.Time = gameTime;
-        stats.Date = DateTimeManager.DateTime.ToString();
-        stats.TeamMembers = GetTeamMembers();
-    }
-
-    private static void SetImpossibleGameStats(Kitty kitty)
-    {
-        var stats = kitty.SaveData.BestGameTimes.ImpossibleGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        stats.Time = gameTime;
-        stats.Date = DateTimeManager.DateTime.ToString();
-        stats.TeamMembers = GetTeamMembers();
-    }
-
-    private static void SetNightmareGameStats(Kitty kitty)
-    {
-        var stats = kitty.SaveData.BestGameTimes.NightmareGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        stats.Time = gameTime;
-        stats.Date = DateTimeManager.DateTime.ToString();
-        stats.TeamMembers = GetTeamMembers();
-    }
-
-    private static void SetProgressiveGameStats(Kitty kitty)
-    {
-        var stats = kitty.SaveData.BestGameTimes.ProgressiveGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        stats.Time = gameTime;
-        stats.Date = DateTimeManager.DateTime.ToString();
-        stats.TeamMembers = GetTeamMembers();
-    }
-
     private static string GetTeamMembers()
     {
-        return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer).Select(player => player.Name));
+        return string.Join(", ", Globals.ALL_PLAYERS.Where(player => player.Controller != mapcontrol.Computer && player.Controller != mapcontrol.None).Select(player => player.Name));
     }
 
     /// <summary>
-    /// Goes based off finished game times incase players want to wait at the finish for players to catch up.
+    /// Sums finished round times for the current game. Used as the overall game time.
     /// </summary>
-    /// <returns></returns>
-    private static float GetOverallGameTime()
+    public static float GetOverallGameTime()
     {
         var total = 0.0f;
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
-        {
             total += GameTimer.FinishedTimes[i];
-        }
         return total;
-    }
-
-    private static void SetBestGameRoundTimes(Kitty kitty)
-    {
-        // Get the correct best game time data object based on difficulty
-        var stats = kitty.SaveData.BestGameTimes.NormalGameTime;
-        var gameTime = GetOverallGameTime();
-        if (gameTime > stats.Time && stats.Time != 0) return;
-        object bestGameTimeData = Difficulty.DifficultyValue switch
-        {
-            (int)DifficultyLevel.Normal => kitty.SaveData.BestGameTimes.NormalGameTime,
-            (int)DifficultyLevel.Hard => kitty.SaveData.BestGameTimes.HardGameTime,
-            (int)DifficultyLevel.Impossible => kitty.SaveData.BestGameTimes.ImpossibleGameTime,
-            (int)DifficultyLevel.Nightmare => kitty.SaveData.BestGameTimes.NightmareGameTime,
-            (int)DifficultyLevel.Progressive => kitty.SaveData.BestGameTimes.ProgressiveGameTime,
-            _ => null
-        };
-
-        if (bestGameTimeData == null)
-            return;
-
-        // For each round, set the RoundXTime property using FinishedTimes
-        for (int round = 1; round <= Gamemode.NumberOfRounds; round++)
-        {
-            string propertyName = round switch
-            {
-                1 => "RoundOneTime",
-                2 => "RoundTwoTime",
-                3 => "RoundThreeTime",
-                4 => "RoundFourTime",
-                5 => "RoundFiveTime",
-                _ => null
-            };
-
-            if (propertyName == null)
-                continue;
-
-            var prop = bestGameTimeData.GetType().GetProperty(propertyName);
-            if (prop != null)
-            {
-                float finishedTime = GameTimer.FinishedTimes[round];
-                prop.SetValue(bestGameTimeData, finishedTime);
-            }
-        }
     }
 
 

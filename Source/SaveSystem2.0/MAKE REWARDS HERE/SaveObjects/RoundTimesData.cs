@@ -33,4 +33,41 @@
     public float RoundOneProgressive { get; set; }
     public float RoundTwoProgressive { get; set; }
     public float RoundThreeProgressive { get; set; }
+
+    public void Reset()
+    {
+        RoundOneNormal = 0;
+        RoundTwoNormal = 0;
+        RoundThreeNormal = 0;
+        RoundFourNormal = 0;
+        RoundFiveNormal = 0;
+        
+        RoundOneHard = 0;
+        RoundTwoHard = 0;
+        RoundThreeHard = 0;
+        RoundFourHard = 0;
+        RoundFiveHard = 0;
+
+        RoundOneImpossible = 0;
+        RoundTwoImpossible = 0;
+        RoundThreeImpossible = 0;
+        RoundFourImpossible = 0;
+        RoundFiveImpossible = 0;
+
+        RoundOneSolo = 0;
+        RoundTwoSolo = 0;
+        RoundThreeSolo = 0;
+        RoundFourSolo = 0;
+        RoundFiveSolo = 0;
+
+        RoundOneNightmare = 0;
+        RoundTwoNightmare = 0;
+        RoundThreeNightmare = 0;
+        RoundFourNightmare = 0;
+        RoundFiveNightmare = 0;
+
+        RoundOneProgressive = 0;
+        RoundTwoProgressive = 0;
+        RoundThreeProgressive = 0;
+    }
 }

@@ -1,7 +1,6 @@
 using Source;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -54,8 +53,9 @@ public class AIController
     private List<AngleInterval> blockedIntervals = new List<AngleInterval>();
     private List<AngleInterval> freeGaps = new List<AngleInterval>();
     private List<AngleInterval> mergedIntervals = new List<AngleInterval>();
-    private static Dictionary<Kitty, Kitty> claimedKitties = new Dictionary<Kitty, Kitty>();
     private List<Point> wallPoints = new List<Point>();
+    private AIController claimedByRescuer = null;  // set on dead kitty's AI: which AI is coming to rescue me
+    private AIController rescuingTarget = null;     // set on rescuer's AI: which dead kitty's AI am I going to
 
 
     public AIController(Kitty kitty)
@@ -81,10 +81,11 @@ public class AIController
             TimerStart(moveTimer, this.timerInterval, true, ErrorHandler.Wrap(PollMovement));
         }
 
-        // If I revive release me from the claimedKitties
-        if (claimedKitties.ContainsKey(this.kitty))
+        // If I revive, clear the claim on me and release my rescuer
+        if (this.claimedByRescuer != null)
         {
-            claimedKitties.Remove(claimedKitties.FirstOrDefault(x => x.Key == this.kitty).Key);
+            this.claimedByRescuer.rescuingTarget = null;
+            this.claimedByRescuer = null;
         }
     }
 
@@ -116,10 +117,11 @@ public class AIController
         HideAllLightnings();
         HideAllFreeLightnings();
 
-        // If I die release my target from the claimedKitties
-        if (claimedKitties.ContainsValue(this.kitty))
+        // If I die, release the dead kitty I was rescuing
+        if (this.rescuingTarget != null)
         {
-            claimedKitties.Remove(claimedKitties.FirstOrDefault(x => x.Value == this.kitty).Key);
+            this.rescuingTarget.claimedByRescuer = null;
+            this.rescuingTarget = null;
         }
     }
 
@@ -200,8 +202,8 @@ public class AIController
 
             if (!deadKitty.Alive)
             {
-                if (!claimedKitties.ContainsKey(deadKitty))
-                {
+                if (deadKitty.aiController.claimedByRescuer == null)
+                    {
                     double thisDistance = Math.Sqrt(Math.Pow(this.kitty.Unit.X - deadKitty.Unit.X, 2) + Math.Pow(this.kitty.Unit.Y - deadKitty.Unit.Y, 2));
                     int thisLaneDiff = Math.Abs(currentProgressZoneId - deadKittyProgressZoneId);
 
@@ -232,11 +234,12 @@ public class AIController
 
                     if (isNearest)
                     {
-                        claimedKitties[deadKitty] = this.kitty;
+                        deadKitty.aiController.claimedByRescuer = this;
+                        this.rescuingTarget = deadKitty.aiController;
                     }
                 }
 
-                if (claimedKitties.ContainsKey(deadKitty) && claimedKitties[deadKitty] == this.kitty)
+                if (deadKitty.aiController.claimedByRescuer == this)
                 {
                     if (deadKittyProgressZoneId != currentProgressZoneId)
                     {

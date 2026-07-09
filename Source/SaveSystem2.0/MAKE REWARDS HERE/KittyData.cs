@@ -18,7 +18,7 @@ public class KittyData
     public PlayerColorData PlayerColorData { get; set; }
     public GameFriendsData FriendsData { get; set; }
     public TournamentStats TournamentStats { get; set; }
-
+    public LeagueSeasonData LeagueSeasonData { get; set; }
     public KittyData()
     {
         GameStats = new GameStatsData();
@@ -31,6 +31,7 @@ public class KittyData
         PlayerColorData = new PlayerColorData();
         FriendsData = new GameFriendsData();
         TournamentStats = new TournamentStats();
+        LeagueSeasonData = new LeagueSeasonData();
     }
 
     /// <summary>

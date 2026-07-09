@@ -159,16 +159,7 @@ public class Kibble : IDisposable
             Utility.TimedTextToAllPlayers(3.0f, msg); // was too long previously.
             Utility.CreateSimpleTextTag($"+{goldAmount} Gold", 2.0f, kitty.Unit, TextTagHeight, 255, 215, 0);
             kitty.CurrentStats.GoldCollectedFromJackpots += goldAmount;
-            if (isSuperJackpot)
-            {
-                kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
-                kitty.CurrentStats.CollectedSuperJackpots += 1;
-            }
-            else
-            {
-                kitty.SaveData.KibbleCurrency.Jackpots += 1;
-                kitty.CurrentStats.CollectedJackpots += 1;
-            }
+            StatManager.IncrementSuperJackpot(kitty, isSuperJackpot);
         }
         else
             Utility.SimpleTimer(0.15f, () => JackpotEffect(kitty, kibble));
@@ -180,12 +171,11 @@ public class Kibble : IDisposable
 
     private static void IncrementKibble(Kitty kibblePicker)
     {
-        kibblePicker.CurrentStats.CollectedKibble += 1;
 
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
 
-        kibblePicker.SaveData.KibbleCurrency.Collected += 1;
+        StatManager.IncrementKibble(kibblePicker);
     }
 
     private static List<int> KibbleList()

@@ -1,6 +1,6 @@
 STRING 1
 {
-|cffff0000RKR Remastered v1.5.0|r
+|cffff0000RKR Remastered v1.5.1|r
 }
 
 STRING 2
@@ -10,10 +10,9 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.5.0 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.5.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n- Next Tournament: 03/07/2026
-|n|n|n|cff00ffffLast updated:|r |c00FF000003/21/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000007/08/2026|r
 }
 
 STRING 4
@@ -793,7 +792,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.5.0
+Run Kitty Run Remastered v1.5.1
 }
 
 STRING 2035
@@ -4147,13 +4146,13 @@ Purchase the |cff9932ccFang of Shadows|r|cff8080ff [Relic] [level 10]|r
 STRING 3740
 // Items: I005 (|cff9932ccFang of Shadows|r), Ubertip (Tooltip - Extended)
 {
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 2 min, cd reduced at safezones.)|r
 }
 
 STRING 3741
 // Items: I005 (|cff9932ccFang of Shadows|r), Description (Description)
 {
-|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 3 min, cd reduced at safezones.)|r
+|cffffcc00An emblem of the vanguard, embodying unparalleled skill, grace, and selflessness.|n|cffff8c00Activate to summon a shadow illusion that is immune to affixed wolves for |cffff8c0075 seconds|r |cffff8c00or until death.|r |cffffcc00Teleport to the illusion at will.|r |cffff8c00(Active)|r |cffadd8e6(Recharges every 2 min, cd reduced at safezones.)|r
 }
 
 STRING 3753
@@ -4286,16 +4285,6 @@ STRING 3776
 // Items: I00N (|cffffff00Chrono Orb|r), Name (Name)
 {
 |cffffff00Chrono Orb|r
-}
-
-STRING 3777
-{
-Kitties
-}
-
-STRING 3778
-{
-More Kitties
 }
 
 STRING 3779
@@ -5081,5 +5070,94 @@ STRING 3921
 // Units: E00F (|cffffff00Solo Tournament 2026|r), Awakentip (Tooltip - Awaken)
 {
 |cffd45e19Solo Tournament Champion:|r |cffff0000Nomordarkwars|r
+}
+
+STRING 3922
+{
+Kitties
+}
+
+STRING 3923
+{
+Extra Kitties
+}
+
+STRING 3924
+{
+|cffffff00Game Time:|r
+}
+
+STRING 3925
+{
+|cff00dcffKibble:|r
+}
+
+STRING 3926
+{
+|cffffff00Total Collected Kibble. This can be used in the shop!|r
+}
+
+STRING 3927
+{
+Built with C# to Lua transpiler. Special thanks to Orden4, Leyenda, Geek. Stan, Omniology, and any creators of assets used in this map.
+
+}
+
+STRING 3929
+{
+|cffffff00Gold:|r
+}
+
+STRING 3930
+{
+Cheating... smh. Disappointed
+}
+
+STRING 3931
+{
+Well.. still disappointed but better.
+}
+
+STRING 3932
+{
+|cffffff00Gold|r
+}
+
+STRING 3933
+{
+|cff00c8ffEarned by reaching checkpoints, new rounds, and saving other kitties.|r
+}
+
+STRING 3934
+{
+|cff00c8ffTotal collected Kibble by all kitties. Future update to allow this to be spent in the shop.|r
+}
+
+STRING 3935
+{
+|cff00c8ffTotal elapased playable gametime. |r
+}
+
+STRING 3936
+{
+|cff00c8ffBy: Aches|r
+}
+
+STRING 3937
+// Abilities: A01Z (Aura_Tempered), Name (Name)
+{
+Aura_Tempered
+}
+
+STRING 3938
+// Abilities: A01Z (Aura_Tempered), Tip (Tooltip - Normal)
+{
+|cffe4e4e4Tempered Aura|r
+}
+
+STRING 3939
+// Abilities: A01Z (Aura_Tempered), Ubertip (Tooltip - Normal - Extended)
+{
+Obtained by collectively gathering 500 kibble and then winning the game on Impossible+ during the Pre-League Season.
 }
 

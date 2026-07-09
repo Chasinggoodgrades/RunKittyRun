@@ -433,11 +433,13 @@ public static class ShopFrame
                         return;
                     }
 
+                    /*
                     if (!CanSellRelic(kitty.Unit))
                     {
                         player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You cannot sell relics until level {Relic.RelicSellLevel}.{Colors.COLOR_RESET}");
                         return;
                     }
+                    */
 
                     // Find the shopItem type associated with the selected item that the player owns.
                     var relic = kitty.Relics.Find(x => x.GetType() == selectedItem.Relic.GetType());

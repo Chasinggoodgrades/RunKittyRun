@@ -5,46 +5,45 @@ public class TimeSetter
 {
     private static readonly TimeSetter _instance = new TimeSetter();
     public static TimeSetter Instance => _instance;
+
     public bool RoundTimeSet { get; private set; }
 
-    private TimeSetter()
-    {
-    }
+    private TimeSetter() { }
 
     /// <summary>
     /// Sets the round time for standard and solo modes if the given player has a slower time than the current round time.
     /// </summary>
-    /// <param name="player"></param>
     public bool SetRoundTime(Kitty kitty)
     {
         try
         {
-            var standard = Gamemode.CurrentGameMode == GameMode.Standard;
-            var solo = Gamemode.CurrentGameMode == GameMode.Solo; // Solo
-            string roundString = "";
+            if (!IsValidForTimeUpdate(kitty))
+                return false;
+
             var currentTime = GameTimer.RoundTime[Globals.ROUND];
+            var isStandard = Gamemode.CurrentGameMode == GameMode.Standard;
+            var isSolo = Gamemode.CurrentGameMode == GameMode.Solo;
 
-            if (kitty.CurrentStats.RoundFinished) return false;
-            if (!kitty.CanEarnAwards) return false;
+            if (!isStandard && !isSolo)
+                return false;
 
-            if (currentTime <= 90 && !Source.Program.Debug) return false; // Below 90 seconds is impossible and not valid.. Don't save, particularly with debug / dev testing
+            if (currentTime >= 3599.00f)
+                return false;
 
-            if (!standard && !solo) return false;
-
-            if (standard) roundString = GetRoundEnum();
-            if (solo) roundString = GetSoloEnum();
-            if (currentTime >= 3599.00f) return false; // 59min 59 second cap
-
-            var property = kitty.SaveData.RoundTimes.GetType().GetProperty(roundString);
-            var value = (float)property.GetValue(kitty.SaveData.RoundTimes);
-
-            Logger.Debug($"Current Time: {currentTime}, Saved Time: {value} for player {kitty.Player.Name} on round {Globals.ROUND} with difficulty {Difficulty.DifficultyValue}");
+            string roundPropertyName = isStandard
+                ? GetRoundPropertyName()
+                : GetSoloPropertyName();
 
             CreateTimeTextTag(kitty, currentTime);
 
-            if (currentTime >= value && value != 0) return false;
+            // Always update league season best
+            StatManager.UpdateLeagueBestRoundTime(kitty, roundPropertyName, currentTime);
 
-            SetSavedTime(kitty.Player, roundString);
+            // Check and update personal best if improved
+            if (!IsNewPersonalBest(kitty, roundPropertyName, currentTime))
+                return false;
+
+            SetSavedTime(kitty, roundPropertyName, currentTime);
             PersonalBestAwarder.BeatRecordTime(kitty.Player);
 
             return true;
@@ -56,222 +55,155 @@ public class TimeSetter
         }
     }
 
-    private void CreateTimeTextTag(Kitty k, float currentTime)
+    private bool IsValidForTimeUpdate(Kitty kitty)
     {
-        texttag timeText = texttag.Create();
-        timeText.SetPosition(k.Unit.X, k.Unit.Y, -120.0f);
-        timeText.SetText($"{Colors.GetStringColorOfPlayer(k.Player.Id + 1)}{Utility.ConvertFloatToTime(currentTime, k.Player.Id + 1)}", 0.025f);
+        if (kitty.CurrentStats.RoundFinished)
+            return false;
+
+        if (!kitty.CanEarnAwards)
+            return false;
+
+        var currentTime = GameTimer.RoundTime[Globals.ROUND];
+
+        if (currentTime <= 90 && !Source.Program.Debug)
+            return false; // Below 90 seconds is impossible
+
+        return true;
+    }
+
+    private bool IsNewPersonalBest(Kitty kitty, string roundPropertyName, float currentTime)
+    {
+        var savedTime = GetSavedTime(kitty.SaveData.RoundTimes, roundPropertyName);
+
+        Logger.Debug($"Current Time: {currentTime:F2}, Saved Time: {savedTime:F2} | " +
+                     $"Player: {kitty.Player.Name} | Round: {Globals.ROUND} | " +
+                     $"Difficulty: {Difficulty.DifficultyValue}");
+
+        return currentTime < savedTime || savedTime == 0;
+    }
+
+    private float GetSavedTime(object roundTimes, string propertyName)
+    {
+        var property = roundTimes.GetType().GetProperty(propertyName);
+        return property != null ? (float)property.GetValue(roundTimes) : 0f;
+    }
+
+    private void SetSavedTime(Kitty kitty, string roundPropertyName, float time)
+    {
+        var roundedTime = (float)Math.Round(Math.Max(time, 0.01f), 2);
+
+        var property = kitty.SaveData.RoundTimes.GetType().GetProperty(roundPropertyName);
+        if (property == null)
+            return;
+
+        property.SetValue(kitty.SaveData.RoundTimes, roundedTime);
+
+        StatManager.UpdateLeagueBestRoundTime(kitty, roundPropertyName, roundedTime);
+
+        Logger.Debug($"New personal best set for {kitty.Player.Name} on round {Globals.ROUND} " +
+                     $"(Diff: {Difficulty.DifficultyValue}): {roundedTime:F2}");
+    }
+
+    public string GetRoundPropertyName()
+    {
+        return Difficulty.DifficultyValue switch
+        {
+            (int)DifficultyLevel.Normal => GetNormalRoundProperty(),
+            (int)DifficultyLevel.Hard => GetHardRoundProperty(),
+            (int)DifficultyLevel.Impossible => GetImpossibleRoundProperty(),
+            (int)DifficultyLevel.Nightmare => GetNightmareRoundProperty(),
+            (int)DifficultyLevel.Progressive => GetProgressiveRoundProperty(),
+            _ => LogAndReturnEmpty("Invalid difficulty level")
+        };
+    }
+
+    public string GetSoloPropertyName() => GetSoloRoundProperty();
+
+    // === Property Name Helpers ===
+
+    private string GetNormalRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneNormal),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoNormal),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeNormal),
+        4 => nameof(Globals.GAME_TIMES.RoundFourNormal),
+        5 => nameof(Globals.GAME_TIMES.RoundFiveNormal),
+        _ => LogAndReturnEmpty("Invalid round for Normal difficulty")
+    };
+
+    private string GetHardRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneHard),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoHard),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeHard),
+        4 => nameof(Globals.GAME_TIMES.RoundFourHard),
+        5 => nameof(Globals.GAME_TIMES.RoundFiveHard),
+        _ => LogAndReturnEmpty("Invalid round for Hard difficulty")
+    };
+
+    private string GetProgressiveRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneProgressive),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoProgressive),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeProgressive),
+        _ => LogAndReturnEmpty("Invalid round for Progressive difficulty")
+    };
+
+    private string GetImpossibleRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneImpossible),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoImpossible),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeImpossible),
+        4 => nameof(Globals.GAME_TIMES.RoundFourImpossible),
+        5 => nameof(Globals.GAME_TIMES.RoundFiveImpossible),
+        _ => LogAndReturnEmpty("Invalid round for Impossible difficulty")
+    };
+
+    private string GetNightmareRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneNightmare),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoNightmare),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeNightmare),
+        4 => nameof(Globals.GAME_TIMES.RoundFourNightmare),
+        5 => nameof(Globals.GAME_TIMES.RoundFiveNightmare),
+        _ => LogAndReturnEmpty("Invalid round for Nightmare difficulty")
+    };
+
+    private string GetSoloRoundProperty() => Globals.ROUND switch
+    {
+        1 => nameof(Globals.GAME_TIMES.RoundOneSolo),
+        2 => nameof(Globals.GAME_TIMES.RoundTwoSolo),
+        3 => nameof(Globals.GAME_TIMES.RoundThreeSolo),
+        4 => nameof(Globals.GAME_TIMES.RoundFourSolo),
+        5 => nameof(Globals.GAME_TIMES.RoundFiveSolo),
+        _ => LogAndReturnEmpty("Invalid round for Solo mode")
+    };
+
+    private string LogAndReturnEmpty(string message)
+    {
+        Logger.Critical(message);
+        return string.Empty;
+    }
+
+    private void CreateTimeTextTag(Kitty kitty, float currentTime)
+    {
+        var timeText = texttag.Create();
+        timeText.SetPosition(kitty.Unit.X, kitty.Unit.Y, -120.0f);
+        timeText.SetText($"{Colors.GetStringColorOfPlayer(kitty.Player.Id + 1)}{Utility.ConvertFloatToTime(currentTime, kitty.Player.Id + 1)}", 0.025f);
         timeText.SetVelocity(0, 0.02f);
         timeText.SetVisibility(true);
+
         Utility.SimpleTimer(3.0f, () => timeText.Dispose());
-    }
-
-    public string GetRoundEnum()
-    {
-        var currentDiff = Difficulty.DifficultyValue;
-        string roundEnum;
-        switch (currentDiff)
-        {
-            case (int)DifficultyLevel.Normal:
-                roundEnum = GetNormalRoundEnum();
-                break;
-
-            case (int)DifficultyLevel.Hard:
-                roundEnum = GetHardRoundEnum();
-                break;
-
-            case (int)DifficultyLevel.Impossible:
-                roundEnum = GetImpossibleRoundEnum();
-                break;
-            case (int)DifficultyLevel.Nightmare:
-                roundEnum = GetNightmareRoundEnum();
-                break;
-            case (int)DifficultyLevel.Progressive:
-                roundEnum = GetProgressiveRoundEnum();
-                break;
-            default:
-                Logger.Critical("Invalid difficulty level for GetRoundEnum");
-                return "";
-        }
-        return roundEnum;
-    }
-
-    public string GetSoloEnum()
-    {
-        var roundEnum = GetSoloRoundEnum();
-        return roundEnum;
-    }
-
-    private void SetSavedTime(player player, string roundString)
-    {
-        var kittyStats = Globals.ALL_KITTIES[player].SaveData;
-        var property = kittyStats.RoundTimes.GetType().GetProperty(roundString);
-        property.SetValue(kittyStats.RoundTimes, Math.Round(Math.Max(GameTimer.RoundTime[Globals.ROUND], 0.01f), 2));
-        Logger.Debug($"Set new time for player {player.Name} on round {Globals.ROUND} with difficulty {Difficulty.DifficultyValue}: {GameTimer.RoundTime[Globals.ROUND]}");
-    }
-
-    private string GetNormalRoundEnum()
-    {
-        var gameTimeData = Globals.GAME_TIMES;
-        var round = Globals.ROUND;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneNormal);
-
-            case 2:
-                return nameof(gameTimeData.RoundTwoNormal);
-
-            case 3:
-                return nameof(gameTimeData.RoundThreeNormal);
-
-            case 4:
-                return nameof(gameTimeData.RoundFourNormal);
-
-            case 5:
-                return nameof(gameTimeData.RoundFiveNormal);
-
-            default:
-                Logger.Critical("Invalid round number for GetNormalRoundEnum");
-                return "";
-        }
-    }
-
-    private string GetHardRoundEnum()
-    {
-        var round = Globals.ROUND;
-        var gameTimeData = Globals.GAME_TIMES;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneHard);
-
-            case 2:
-                return nameof(gameTimeData.RoundTwoHard);
-
-            case 3:
-                return nameof(gameTimeData.RoundThreeHard);
-
-            case 4:
-                return nameof(gameTimeData.RoundFourHard);
-
-            case 5:
-                return nameof(gameTimeData.RoundFiveHard);
-
-            default:
-                Logger.Critical("Invalid round number for GetHardRoundEnum");
-                return "";
-        }
-    }
-
-    private string GetProgressiveRoundEnum()
-    {
-        var round = Globals.ROUND;
-        var gameTimeData = Globals.GAME_TIMES;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneProgressive);
-            case 2:
-                return nameof(gameTimeData.RoundTwoProgressive);
-            case 3:
-                return nameof(gameTimeData.RoundThreeProgressive);
-            default:
-                Logger.Critical("Invalid round number for GetProgressiveRoundEnum");
-                return "";
-        }
-    }
-
-    private string GetImpossibleRoundEnum()
-    {
-        var round = Globals.ROUND;
-        var gameTimeData = Globals.GAME_TIMES;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneImpossible);
-
-            case 2:
-                return nameof(gameTimeData.RoundTwoImpossible);
-
-            case 3:
-                return nameof(gameTimeData.RoundThreeImpossible);
-
-            case 4:
-                return nameof(gameTimeData.RoundFourImpossible);
-
-            case 5:
-                return nameof(gameTimeData.RoundFiveImpossible);
-
-            default:
-                Logger.Critical("Invalid round number for GetImpossibleRoundEnum");
-                return "";
-        }
-    }
-
-    private string GetNightmareRoundEnum()
-    {
-        var round = Globals.ROUND;
-        var gameTimeData = Globals.GAME_TIMES;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneNightmare);
-
-            case 2:
-                return nameof(gameTimeData.RoundTwoNightmare);
-
-            case 3:
-                return nameof(gameTimeData.RoundThreeNightmare);
-
-            case 4:
-                return nameof(gameTimeData.RoundFourNightmare);
-
-            case 5:
-                return nameof(gameTimeData.RoundFiveNightmare);
-
-            default:
-                Logger.Critical("Invalid round number for GetNightmareRoundEnum");
-                return "";
-        }
-    }
-
-    private string GetSoloRoundEnum()
-    {
-        var round = Globals.ROUND;
-        var gameTimeData = Globals.GAME_TIMES;
-        switch (round)
-        {
-            case 1:
-                return nameof(gameTimeData.RoundOneSolo);
-
-            case 2:
-                return nameof(gameTimeData.RoundTwoSolo);
-
-            case 3:
-                return nameof(gameTimeData.RoundThreeSolo);
-
-            case 4:
-                return nameof(gameTimeData.RoundFourSolo);
-
-            case 5:
-                return nameof(gameTimeData.RoundFiveSolo);
-
-            default:
-                Console.WriteLine("Invalid round number for GetSoloRoundEnum");
-                return "";
-        }
     }
 
     public void SetRoundFinishedTime()
     {
         try
         {
-            var currentTime = GameTimer.RoundTime[Globals.ROUND];
+            if (RoundTimeSet)
+                return;
 
-            if (RoundTimeSet) return;
-
-            GameTimer.FinishedTimes[Globals.ROUND] = (float)Math.Round(currentTime, 2);
+            GameTimer.FinishedTimes[Globals.ROUND] = (float)Math.Round(GameTimer.RoundTime[Globals.ROUND], 2);
             RoundTimeSet = true;
         }
         catch (Exception e)
@@ -281,9 +213,5 @@ public class TimeSetter
         }
     }
 
-    public void ResetFinishedTimeCapture()
-    {
-        RoundTimeSet = false;
-    }
-
+    public void ResetFinishedTimeCapture() => RoundTimeSet = false;
 }

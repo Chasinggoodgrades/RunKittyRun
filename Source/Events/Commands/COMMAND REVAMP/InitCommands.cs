@@ -327,15 +327,6 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "oldcode",
-            alias: "",
-            tier: CommandTier.All,
-            argDesc: "[none]",
-            description: "Loads a previous save from RKR 4.2.0+.. May not be functional anymore.",
-            action: (player, args) => Savecode.LoadString()
-        );
-
-        CommandsManager.RegisterCommand(
             name: "apm",
             alias: "",
             tier: CommandTier.All,
@@ -1754,9 +1745,7 @@ public static class InitCommands
                 GameTimer.FinishedTimes[Globals.ROUND] = 0.0f; // reset the finished time
                 Globals.ROUND = 0;
                 Utility.ResetAllKittiesLevelsGold(); // level 1 , resource gold.
-                // TODO: reset levels and gold.
                 RoundManager.RoundEnd();
-
             }
         );
 
@@ -1812,7 +1801,24 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("TestThing.mdx", unitKitty, "origin");
+                effect.Create("war3mapImported\\TemperedAura.mdx", unitKitty, "origin");
+            }
+        );
+
+        CommandsManager.RegisterCommand(
+            name: "resetleaguestats",
+            alias: "rls",
+            tier: CommandTier.Developer,
+            argDesc: "",
+            description: "Resets all league stats for the specified player.",
+            action: (player, args) =>
+            {
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    if (kitty == null) return;
+                    kitty.SaveData.LeagueSeasonData.ResetLeagueSeasonData();
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}League stats reset for {Colors.PlayerNameColored(kitty.Player)}!{Colors.COLOR_RESET}");
+                });
             }
         );
 

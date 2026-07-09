@@ -24,8 +24,9 @@ public class SaveManager
     public static void SaveAll()
     {
         var date = DateTimeManager.DateTime.ToString();
-        foreach (var player in Globals.ALL_PLAYERS)
+        for (int i = 0; i <  Globals.ALL_PLAYERS.Count; i++)
         {
+            var player = Globals.ALL_PLAYERS[i];
             if (player.Controller == mapcontrol.Computer) continue;
             if (player.SlotState != playerslotstate.Playing) continue;
             SaveData[player].Date = date;
@@ -92,8 +93,9 @@ public class SaveManager
     {
         try
         {
-            foreach (var player in Globals.ALL_PLAYERS)
+            for(int i = 0; i <  Globals.ALL_PLAYERS.Count; i++)
             {
+                var player = Globals.ALL_PLAYERS[i];
                 if (player.Controller == mapcontrol.Computer) continue;
                 if (player.SlotState != playerslotstate.Playing) continue;
                 Load(player);
