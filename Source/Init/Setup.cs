@@ -17,6 +17,7 @@ namespace Source.Init
         {
             try
             {
+                Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Initializing Game Setup...{Colors.COLOR_RESET}");
                 SetGameSpeed(gamespeed.Fastest);
                 Blizzard.LockGameSpeedBJ();
                 Colors.Initialize();

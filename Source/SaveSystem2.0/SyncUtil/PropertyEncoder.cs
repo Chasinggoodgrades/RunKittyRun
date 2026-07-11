@@ -40,7 +40,8 @@ public static class PropertyEncoder
             jsonString.Append("{");
             foreach (var player in Globals.ALL_PLAYERS)
             {
-                if (!SaveManager.SaveData.TryGetValue(player, out var playerData)) continue;
+                var playerData = SaveManager.SaveData[player.Id];
+                if (playerData == null) continue;
                 if (!Source.Program.Debug && Globals.ALL_KITTIES[player].ComputerControlled) continue;
                 jsonString.Append($"\"{player.Name}\":{GetJsonData(playerData)},");
             }

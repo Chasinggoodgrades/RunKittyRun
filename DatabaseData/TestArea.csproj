@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
-    <PackageReference Include="WCSharp.Api" Version="3.3.8" />
+    <PackageReference Include="WCSharp.Api" Version="3.3.9" />
   </ItemGroup>
 
   <ItemGroup>

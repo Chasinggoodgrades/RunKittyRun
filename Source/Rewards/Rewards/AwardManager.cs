@@ -143,7 +143,8 @@ public static class AwardManager
 
                 if (!Globals.ALL_KITTIES.TryGetValue(player, out var kittyProfile))
                 {
-                    if (!SaveManager.SaveData.TryGetValue(player, out var saveData))
+                    var saveData = SaveManager.SaveData[player.Id];
+                    if (saveData == null)
                     {
                         Logger.Critical($"Save data wasn't finished loading / found. Defaulting SaveData for {player}.");
                         Globals.ALL_KITTIES[player].SaveData = new KittyData();

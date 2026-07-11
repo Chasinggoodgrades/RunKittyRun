@@ -35,38 +35,79 @@ namespace Source
             // Delay.EnableDebug();
 #endif
             Setup.GetActivePlayers();
-            DateTimeManager.Initialize();
-            MusicManager.Initialize();
-            CommandHandler.Initialize();
-            GamemodeManager.InitializeCommands();
-            SaveManager.Initialize();
-            BarrierSetup.Initialize();
-            Quests.Initialize();
+            FinishStarting();
+        }
 
+        private static void FinishStarting()
+        {
+            Console.WriteLine($"{Colors.COLOR_RED}Loading . . . Initializing systems...{Colors.COLOR_RESET}");
+
+            int index = 0;
+            var initTimer = CreateTimer();
+
+            // Run each initializer 0.1 seconds apart
+            TimerStart(initTimer, 0.15f, true, () =>
+            {
+                InitSteps[index]();
+                index++;
+
+                if (index >= InitSteps.Length)
+                {
+                    // Done with initialization steps
+                    PauseTimer(initTimer);
+                    DestroyTimer(initTimer);
+
+                    // Now start your SaveManager sync loop EXACTLY as you had it
+                    StartSyncLoop();
+                }
+            });
+        }
+
+        private static void StartSyncLoop()
+        {
             var t = CreateTimer();
             int count = 0;
+
             Console.WriteLine($"{Colors.COLOR_RED}Loading . . . Please wait while everyone synchronizes.{Colors.COLOR_RESET}");
+
             t.Start(1.0f, true, () =>
             {
                 count++;
                 if (!Globals.DATE_TIME_LOADED) return;
+
                 if (count < 10)
                 {
-                    for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+
+                    if (SaveManager.PlayersLoadedCount < Globals.ALL_PLAYERS.Count)
                     {
-                        if (Globals.ALL_PLAYERS[i].Controller == mapcontrol.Computer) continue;
-                        if (!SaveManager.PlayersLoaded.Contains(Globals.ALL_PLAYERS[i]))
-                        {
-                            Console.WriteLine($"Waiting on {Colors.PlayerNameColored(Globals.ALL_PLAYERS[i])} to synchronize.");
-                            return;
-                        }
+                        Console.WriteLine($"{Colors.COLOR_RED}Giving time for players to synchronize... ({SaveManager.PlayersLoadedCount}/{Globals.ALL_PLAYERS.Count}){Colors.COLOR_RESET}");
+                        return;
                     }
+                    //for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+                    //{
+                    //    if (!SaveManager.PlayersLoaded.Contains(Globals.ALL_PLAYERS[i]))
+                    //    {
+                    //        Console.WriteLine($"Waiting on {Colors.PlayerNameColored(Globals.ALL_PLAYERS[i])} to synchronize.");
+                    //        return;
+                    //    }
+                    //}
                 }
-                Setup.Initialize();
                 t.Pause();
                 t.Dispose();
-                t = null;
+
+                Setup.Initialize();
             });
         }
+
+        private static readonly Action[] InitSteps =
+{
+            () => DateTimeManager.Initialize(),
+            () => MusicManager.Initialize(),
+            () => CommandHandler.Initialize(),
+            () => GamemodeManager.InitializeCommands(),
+            () => SaveManager.Initialize(),
+            () => BarrierSetup.Initialize(),
+            () => Quests.Initialize()
+        };
     }
 }
