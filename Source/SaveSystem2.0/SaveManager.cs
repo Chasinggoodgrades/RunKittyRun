@@ -7,12 +7,26 @@ public class SaveManager
     private SyncSaveLoad syncSaveLoad;
     private static string SavePath { get; } = "Run-Kitty-Run";
     private static string CompiledVERSION = "DoNotTouch"; // Set during compile time Launcher/Program.cs
-    public static Dictionary<player, KittyData> SaveData { get; set; } = new Dictionary<player, KittyData>();
-    public static List<player> PlayersLoaded { get; } = new List<player>();
+    public static KittyData[] SaveData { get; set; } = new KittyData[24];
+    private static bool[] playersLoaded = new bool[24];
+    private static int playersLoadedCount = 0;
+    public static int PlayersLoadedCount => playersLoadedCount;
+    private Queue<player> loadQueue = new Queue<player>();
+    private timer loadTimer;
+    private const float LOAD_INTERVAL = 0.3f;
+    public static bool IsPlayerLoaded(player player) => player != null && playersLoaded[player.Id];
+    public static void SetPlayerLoaded(player player)
+    {
+        if (player != null && !playersLoaded[player.Id])
+        {
+            playersLoaded[player.Id] = true;
+            playersLoadedCount++;
+        }
+    }
     public SaveManager()
     {
         syncSaveLoad = SyncSaveLoad.Instance;
-        foreach (var player in Globals.ALL_PLAYERS) SaveData.Add(player, null);
+        Console.WriteLine($"{Colors.COLOR_TURQUOISE}SaveManager Initialized.{Colors.COLOR_RESET}");
         LoadAll();
     }
 
@@ -29,7 +43,7 @@ public class SaveManager
             var player = Globals.ALL_PLAYERS[i];
             if (player.Controller == mapcontrol.Computer) continue;
             if (player.SlotState != playerslotstate.Playing) continue;
-            SaveData[player].Date = date;
+            SaveData[player.Id].Date = date;
             Globals.SaveSystem.Save(player);
         }
     }
@@ -39,7 +53,7 @@ public class SaveManager
         try
         {
             var date = DateTimeManager.DateTime.ToString();
-            var playerData = SaveData[player];
+            var playerData = SaveData[player.Id];
             playerData.Date = date;
             if (!player.IsLocal) return;
             syncSaveLoad.WriteFileObjects($"{SavePath}/{player.Name}.txt", playerData);
@@ -47,7 +61,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.Save: {ex.Message}{Colors.COLOR_RESET}");
+            Logger.Critical($"Error in SaveManager.Save: {ex.Message}");
             throw;
         }
     }
@@ -65,7 +79,7 @@ public class SaveManager
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.SaveAll: {ex.Message}{Colors.COLOR_RESET}");
+            Logger.Critical($"Error in SaveManager.SaveAll:  {ex.Message}");
             throw;
         }
     }
@@ -77,9 +91,9 @@ public class SaveManager
         {
             if (player.Controller == mapcontrol.Computer) continue;
             if (player.SlotState != playerslotstate.Playing) continue;
-            if (!SaveData.ContainsKey(player) || SaveData[player] == null)
+            if (SaveData[player.Id] == null)
                 Globals.SaveSystem.NewSave(player); // Ensure save data exists for this player before saving.
-            SaveData[player].Date = date;
+            SaveData[player.Id].Date = date;
             Globals.SaveSystem.SaveAllDataToFile(player);
         }
     }
@@ -93,34 +107,71 @@ public class SaveManager
     {
         try
         {
-            for(int i = 0; i <  Globals.ALL_PLAYERS.Count; i++)
+            loadQueue.Clear();
+            playersLoadedCount = 0;
+
+
+            for (int i = 0; i <  Globals.ALL_PLAYERS.Count; i++)
             {
                 var player = Globals.ALL_PLAYERS[i];
                 if (player.Controller == mapcontrol.Computer) continue;
                 if (player.SlotState != playerslotstate.Playing) continue;
-                Load(player);
+                loadQueue.Enqueue(player);
             }
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Queued {loadQueue.Count} players for loading.{Colors.COLOR_RESET}");
+
+            if (loadQueue.Count > 0)
+            {
+                ProcessLoadQueue();
+            }
+            else
+            {
+                Console.WriteLine($"{Colors.COLOR_TURQUOISE}No players to load.{Colors.COLOR_RESET}");
+            }
+
+
+
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.LoadAll: {ex.Message}{Colors.COLOR_RESET}");
+            Logger.Critical($"Error in SaveManager.LoadAll: {ex.Message}");
             throw;
         }
+    }
+
+    private void ProcessLoadQueue()
+    {
+        if (loadQueue.Count == 0)
+        {
+            Console.WriteLine($"{Colors.COLOR_GREEN}All player loads have been called.{Colors.COLOR_RESET}");
+            return;
+        }
+
+        var player = loadQueue.Dequeue();
+        Console.WriteLine($"{Colors.COLOR_TURQUOISE}Loading save for player: {Colors.PlayerNameColored(player)} ({Globals.ALL_PLAYERS.Count - loadQueue.Count} of {Globals.ALL_PLAYERS.Count}){Colors.COLOR_RESET}");
+        Load(player);
+
+        loadTimer ??= timer.Create();
+        loadTimer.Start(LOAD_INTERVAL, false, () =>
+        {
+            ProcessLoadQueue();
+        });
     }
 
     private void NewSave(player player)
     {
         try
         {
-            SaveData[player] = new KittyData();
-            SaveData[player].PlayerName = player.Name;
-            SaveData[player].Version = CompiledVERSION;
-            if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
+            SaveData[player.Id] = new KittyData();
+            SaveData[player.Id].PlayerName = player.Name;
+            SaveData[player.Id].Version = CompiledVERSION;
+            SetPlayerLoaded(player);
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}New save created for player: {player.Name}{Colors.COLOR_RESET}");
             if (!Gamemode.IsGameModeChosen) return;
         }
         catch (Exception ex)
         {
-            Logger.Critical($"{Colors.COLOR_DARK_RED}Error in SaveManager.NewSave: {ex.Message} {Colors.COLOR_RESET}");
+            Logger.Critical($"Error in SaveManager.NewSave: {ex.Message}");
             throw;
         }
     }
@@ -129,47 +180,59 @@ public class SaveManager
     {
         return (promise) =>
          {
-             var data = promise.DecodedString;
-             var player = promise.SyncOwner;
-             if (data.Length < 1)
+             try
              {
-                 Globals.SaveSystem.NewSave(player);
-                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.{Colors.COLOR_RESET}");
-                 return;
+                 var data = promise?.DecodedString;
+                 var player = promise?.SyncOwner;
+                 if (data == null || data.Length < 1)
+                 {
+                     Globals.SaveSystem.NewSave(player);
+                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW}No save found. Creating new save.{Colors.COLOR_RESET}");
+                     return;
+                 }
+                 ConvertJsonToSaveData(data, player);
+                 Console.WriteLine($"{Colors.COLOR_GREEN}{Colors.PlayerNameColored(player)} has fully finished loading.{Colors.COLOR_RESET}");
              }
-             ConvertJsonToSaveData(data, player);
+             catch (Exception ex)
+             {
+                 Logger.Critical($"Error in SaveManager.FinishLoading: {ex.Message}");
+                 throw;
+             }
          };
     }
 
     private static void ConvertJsonToSaveData(string data, player player)
     {
-        if (!WCSharp.Json.JsonConvert.TryDeserialize(data, out KittyData kittyData))
+        try
         {
-            player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}Failed to deserialize data. Creating new save.{Colors.COLOR_RESET}");
-            Globals.SaveSystem.NewSave(player);
-            return;
+            if (!WCSharp.Json.JsonConvert.TryDeserialize(data, out KittyData kittyData))
+            {
+                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}Failed to deserialize data. Creating new save.{Colors.COLOR_RESET}");
+                Globals.SaveSystem.NewSave(player);
+                return;
+            }
+            kittyData.SetRewardsFromUnavailableToAvailable();
+            kittyData.Version = CompiledVERSION;
+            SaveData[player.Id] = kittyData;
+            SetPlayerLoaded(player);
         }
-        kittyData.SetRewardsFromUnavailableToAvailable();
-        kittyData.Version = CompiledVERSION;
-        SaveData[player] = kittyData;
-        if (!PlayersLoaded.Contains(player)) PlayersLoaded.Add(player);
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in SaveManager.ConvertJsonToSaveData: {ex.Message}");
+            Globals.SaveSystem.NewSave(player);
+        }
     }
 
     public static KittyData GetKittyData(player player)
     {
-        // this is more of less for comps than anything else
-        if (!SaveData.ContainsKey(player))
-        {
-            SaveData.Add(player, null);
-        }
-        
-        if (SaveData.TryGetValue(player, out KittyData kittyData) && kittyData != null)
+        var kittyData = SaveData[player.Id];
+        if (kittyData != null)
         {
             return kittyData;
         }
         else
         {
-            if (!PlayersLoaded.Contains(player))
+            if (!playersLoaded[player.Id])
             {
                 Globals.SaveSystem.Load(player);
             }
@@ -178,6 +241,6 @@ public class SaveManager
                 Globals.SaveSystem.NewSave(player);
             }
         }
-        return SaveData[player];
+        return SaveData[player.Id];
     }
 }

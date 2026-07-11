@@ -1198,7 +1198,7 @@ public static class InitCommands
                         }
 
                         Globals.ALL_PLAYERS.Add(compPlayer);
-                        SaveManager.PlayersLoaded.Add(compPlayer);
+                        SaveManager.SetPlayerLoaded(compPlayer);
                         var newKitty = new Kitty(compPlayer);
                         newKitty.ComputerControlled = true;
                         newKitty.Unit.AddItem(FourCC("bspd"));

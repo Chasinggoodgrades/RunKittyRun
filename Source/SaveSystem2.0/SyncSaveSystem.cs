@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -23,10 +22,11 @@ public class SyncSaveLoad
     public string SyncPrefix { get; } = "S_TIO";
     public string SyncPrefixFinish { get; } = "S_TIOF";
     public trigger SyncEvent { get; } = trigger.Create();
-    private Dictionary<int, FilePromise> allPromises = new Dictionary<int, FilePromise>();
+    private FilePromise[] allPromises;
 
     private SyncSaveLoad()
     {
+        allPromises = new FilePromise[GetBJMaxPlayers()];
         for (int i = 0; i < GetBJMaxPlayers(); i++)
         {
             SyncEvent.RegisterPlayerSyncEvent(Player(i), SyncPrefix, false);
@@ -74,7 +74,7 @@ public class SyncSaveLoad
         }
         catch (Exception ex)
         {
-            Logger.Critical($"Error in SyncSaveSystem.WriteFileObjects");
+            Logger.Critical($"Error in SyncSaveSystem.WriteFileObjects: {ex.Message}");
         }
         PreloadGenEnd(filename);
     }
@@ -99,8 +99,14 @@ public class SyncSaveLoad
     public FilePromise Read(string filename, player reader, Action<FilePromise> onFinish = null)
     {
         int playerId = reader.Id;
-        if (!allPromises.ContainsKey(playerId))
+        if (playerId < 0 || playerId >= allPromises.Length)
         {
+            Logger.Warning($"Read called with out-of-range player id: {playerId}");
+            return null;
+        }
+        if (allPromises[playerId] == null)
+        {
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Starting file read for player: {Colors.PlayerNameColored(reader)}{Colors.COLOR_RESET}");
             allPromises[playerId] = new FilePromise(reader, onFinish);
             if (GetLocalPlayer() == reader)
             {
@@ -124,25 +130,30 @@ public class SyncSaveLoad
         int totalChunkSize = readData.Length >= 8 ? EncodingHex.ToNumber(readData.Substring(0, 8)) : 0;
         int currentChunk = readData.Length >= 16 ? EncodingHex.ToNumber(readData.Substring(8, 8)) : 0;
         string theRest = readData.Length > 16 ? readData.Substring(16) : readData.Substring(Math.Min(readData.Length, 8));
-        var promise = allPromises[@event.Player.Id];
+        int playerId = @event.Player.Id;
+        if (playerId < 0 || playerId >= allPromises.Length) return;
+        var promise = allPromises[playerId];
         //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
         if (promise != null)
         {
             if (prefix == SyncPrefix)
             {
+                if (promise.ExpectedChunkCount < 0)
+                    promise.ExpectedChunkCount = totalChunkSize;
                 promise.Buffer[currentChunk - 1] = theRest;
             }
             else if (prefix == SyncPrefixFinish)
             {
+                Console.WriteLine($"{Colors.COLOR_TURQUOISE}Sync finished for player: {Colors.PlayerNameColored(promise.SyncOwner)}{Colors.COLOR_RESET}");
                 promise.Finish();
-                allPromises.Remove(GetPlayerId(promise.SyncOwner));
-                //Console.WriteLine("Promise killed: ", allPromises[GetPlayerId(promise.SyncOwner)]);
+                allPromises[GetPlayerId(promise.SyncOwner)] = null;
+                //Console.WriteLine("Promise killed");
             }
         }
         else
         {
-            Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {GetPlayerName(GetTriggerPlayer())}");
+            Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {Colors.PlayerNameColored(GetTriggerPlayer())}");
         }
     }
 }
@@ -151,7 +162,18 @@ public class FilePromise
 {
     public player SyncOwner { get; }
     public bool HasLoaded { get; private set; } = false;
-    public Dictionary<int, string> Buffer { get; } = new Dictionary<int, string>();
+    public string[] Buffer { get; private set; }
+    private int expectedChunkCount = -1;
+    public int ExpectedChunkCount
+    {
+        get => expectedChunkCount;
+        set
+        {
+            expectedChunkCount = value;
+            if (value > 0)
+                Buffer = new string[value];
+        }
+    }
     public string DecodedString { get; private set; }
     private Action<FilePromise> onFinish;
 
@@ -165,14 +187,26 @@ public class FilePromise
     {
         try
         {
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Beginning finishing callback for player: {Colors.PlayerNameColored(SyncOwner)}{Colors.COLOR_RESET}");
             HasLoaded = true;
-            StringBuilder loadString = new StringBuilder();
-            for (int i = 0; i < Buffer.Count; i++)
+
+
+            if (ExpectedChunkCount > 0 && (Buffer == null || Buffer.Length != ExpectedChunkCount))
             {
-                if (Buffer.ContainsKey(i))
+                Logger.Critical($"FilePromise incomplete for {GetPlayerName(SyncOwner)}: " +
+                    $"expected {ExpectedChunkCount} chunks, got {(Buffer == null ? 0 : Buffer.Length)}.");
+
+                onFinish?.Invoke(this);
+                return;
+            }
+
+            StringBuilder loadString = new StringBuilder();
+            if (Buffer != null)
+            {
+                for (int i = 0; i < Buffer.Length; i++)
                 {
-                    loadString.Append(Buffer[i]);
-                    //if(Source.Program.Debug) Console.WriteLine($"{Buffer[i]}");
+                    if (Buffer[i] != null)
+                        loadString.Append(Buffer[i]);
                 }
             }
 
@@ -183,7 +217,7 @@ public class FilePromise
                         Logger.Verbose("Finished: ");
                         Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
             //Logger.Verbose("FinalString: ", FinalString);
-
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Finished finishing callback for player: {Colors.PlayerNameColored(SyncOwner)}{Colors.COLOR_RESET}");
             onFinish?.Invoke(this);
         }
         catch (Exception ex)
