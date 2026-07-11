@@ -74,7 +74,7 @@ public class SyncSaveLoad
         }
         catch (Exception ex)
         {
-            Logger.Critical($"Error in SyncSaveSystem.WriteFileObjects");
+            Logger.Critical($"Error in SyncSaveSystem.WriteFileObjects: {ex.Message}");
         }
         PreloadGenEnd(filename);
     }
@@ -106,6 +106,7 @@ public class SyncSaveLoad
         }
         if (allPromises[playerId] == null)
         {
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Starting file read for player: {Colors.PlayerNameColored(reader)}{Colors.COLOR_RESET}");
             allPromises[playerId] = new FilePromise(reader, onFinish);
             if (GetLocalPlayer() == reader)
             {
@@ -144,6 +145,7 @@ public class SyncSaveLoad
             }
             else if (prefix == SyncPrefixFinish)
             {
+                Console.WriteLine($"{Colors.COLOR_TURQUOISE}Sync finished for player: {Colors.PlayerNameColored(promise.SyncOwner)}{Colors.COLOR_RESET}");
                 promise.Finish();
                 allPromises[GetPlayerId(promise.SyncOwner)] = null;
                 //Console.WriteLine("Promise killed");
@@ -151,7 +153,7 @@ public class SyncSaveLoad
         }
         else
         {
-            Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {GetPlayerName(GetTriggerPlayer())}");
+            Console.WriteLine($"Synchronized data in {nameof(SyncSaveLoad)} when there is no promise present for player: {Colors.PlayerNameColored(GetTriggerPlayer())}");
         }
     }
 }
@@ -185,6 +187,7 @@ public class FilePromise
     {
         try
         {
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Beginning finishing callback for player: {Colors.PlayerNameColored(SyncOwner)}{Colors.COLOR_RESET}");
             HasLoaded = true;
 
 
@@ -214,7 +217,7 @@ public class FilePromise
                         Logger.Verbose("Finished: ");
                         Logger.Verbose("DecodedString.Length: ", DecodedString.Length);*/
             //Logger.Verbose("FinalString: ", FinalString);
-
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}Finished finishing callback for player: {Colors.PlayerNameColored(SyncOwner)}{Colors.COLOR_RESET}");
             onFinish?.Invoke(this);
         }
         catch (Exception ex)

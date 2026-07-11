@@ -18,9 +18,10 @@ namespace Source.Init
             try
             {
                 Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Initializing Game Setup...{Colors.COLOR_RESET}");
+                BarrierSetup.Initialize();
+                Quests.Initialize();
                 SetGameSpeed(gamespeed.Fastest);
                 Blizzard.LockGameSpeedBJ();
-                Colors.Initialize();
                 GameSeed.Initialize();
                 DoodadChanger.ShowSeasonalDoodads(false);
                 Gamemode.Initialize();
