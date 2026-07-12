@@ -133,7 +133,11 @@ public class SyncSaveLoad
         int playerId = @event.Player.Id;
         if (playerId < 0 || playerId >= allPromises.Length) return;
         var promise = allPromises[playerId];
-        //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize);
+        //Logger.Verbose("Loading ", currentChunk, " out of ", totalChunkSize); // If this gets called more than 344 times in a single frame (0.015 seconds), it has 100% chance of desync
+        if (currentChunk > 300)
+        {
+            Logger.Warning($"SyncSaveLoad: Current chunk is {currentChunk} / {totalChunkSize}, which is nearing 344 limit. This may cause desyncs.");
+        }
 
         if (promise != null)
         {
