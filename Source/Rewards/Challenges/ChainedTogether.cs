@@ -182,14 +182,15 @@ public static class ChainedTogether
     {
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!{Colors.COLOR_RESET}", 2.0f, kitty.Unit);
         DifficultyLevel lvl = (DifficultyLevel)Difficulty.DifficultyValue;
-        int award = lvl >= DifficultyLevel.Nightmare
-            ? Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura
-            : lvl >= DifficultyLevel.Impossible
-                ? Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura
-                : lvl >= DifficultyLevel.Hard
-                    ? Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura
-                    : Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
-        AwardManager.GiveReward(kitty.Player, nameof(award));
+
+        string awardName = lvl switch
+        {
+            DifficultyLevel.Nightmare => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura),
+            DifficultyLevel.Impossible => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura),
+            DifficultyLevel.Hard => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura),
+            _ => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura)
+        };
+        AwardManager.GiveReward(kitty.Player, awardName);
     }
 
     private static bool IsInLastSafezone(Kitty k) =>
