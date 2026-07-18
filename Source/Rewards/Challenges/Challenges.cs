@@ -143,7 +143,7 @@ public static class Challenges
     {
         if (!LeagueManager.Instance.IsSeasonActive) return;
         if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
-        if (Kibble.TotalCollected < 500) return;
+        if (Kibble.TotalCollected < 350) return;
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Auras.TemperedAura));
     }
 
