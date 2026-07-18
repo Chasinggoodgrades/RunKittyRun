@@ -721,6 +721,30 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "shareforcecontrol",
+            alias: "shareforce, sf",
+            tier: CommandTier.Admin,
+            argDesc: "[sharingPlayer] [sharedWithPlayer] [on/off]",
+            description: "Sets whether or not to force the player to share control [default: off]",
+            action: (player, args) =>
+            {
+                if (args.Length < 3)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: shareforce [player] [player] [on/off]{Colors.COLOR_RESET}");
+                    return;
+                }
+                var status = CommandsManager.GetBool(args[2]);
+                CommandsManager.ResolvePlayerId(args[0], kitty =>
+                {
+                    CommandsManager.ResolvePlayerId(args[1], kitty2 =>
+                    {
+                        kitty.Player.SetAlliance(kitty2.Player, ALLIANCE_SHARED_CONTROL, status);
+                    });
+                });
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "wolfshare",
             alias: "wshare",
             tier: CommandTier.Admin,
