@@ -59,12 +59,16 @@ public static class ChainedTogether
             return;
         }
 
+        if (EventStarted) return; // no reason to begin this again.
+
         EventStarted = true;
         try
         {
             SetGroups();
             MoveChainTimer ??= CreateTimer();
             TimerStart(MoveChainTimer, timerInterval, true, MoveChain);
+            Utility.SimpleTimer(3.5f, () => Utility.TimedTextToAllPlayers(10.0f,
+                $"{Colors.COLOR_YELLOW}You may opt out of the chained together event by typing {Colors.COLOR_CYAN}-nochain{Colors.COLOR_RESET} {Colors.COLOR_RED} (must be before round starts).{Colors.COLOR_RESET}"));
         }
         catch (Exception e)
         {

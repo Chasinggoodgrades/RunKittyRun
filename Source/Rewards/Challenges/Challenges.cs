@@ -4,6 +4,7 @@ public static class Challenges
 {
     public const int DIVINITY_TENDRILS_COUNT = 4;
     public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
+    public const int TEMPERED_AURA_KIBBLE_REQUIREMENT = 350;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
     private const int PURPLE_FIRE_DEATH_REQUIREMENT = 0;
@@ -143,7 +144,7 @@ public static class Challenges
     {
         if (!LeagueManager.Instance.IsSeasonActive) return;
         if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
-        if (Kibble.TotalCollected < 350) return;
+        if (Kibble.TotalCollected < TEMPERED_AURA_KIBBLE_REQUIREMENT) return;
         AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Auras.TemperedAura));
     }
 
