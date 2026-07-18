@@ -95,6 +95,7 @@ public static class RoundManager
             Wolf.RemoveAllWolves();
             BarrierSetup.ActivateBarrier();
             TournamentSaver.Instance.SaveTournamentData();
+            ChainedTogether.UnchainAllKitties();
 
             RoundUtilities.MovedTimedCameraToStart();
             RoundUtilities.RoundResetAll();

@@ -260,6 +260,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     public void Dispose()
     {
         Alive = false;
+        ChainedTogether.OptOutOfChain(this);
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();

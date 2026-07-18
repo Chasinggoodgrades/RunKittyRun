@@ -1415,6 +1415,24 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "nochain",
+            alias: "",
+            tier: CommandTier.All,
+            argDesc: "",
+            description: "Lets you opt out of the chained together event.",
+            action: (player, args) =>
+            {
+                if (RoundManager.GAME_STARTED)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You cannot opt out of the chain after the round has started.");
+                    return;
+                }
+
+                ChainedTogether.OptOutOfChain(Globals.ALL_KITTIES[player]);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "times",
             alias: "gettimes",
             tier: CommandTier.All,

@@ -84,7 +84,11 @@ public class FangOfShadows : Relic
             ShadowKitty shadowKitty = ShadowKitty.ALL_SHADOWKITTIES[@event.Unit.Owner];
 
             // Summon and configure Shadow Kitty
-            shadowKitty.SummonShadowKitty();
+            if (!shadowKitty.SummonShadowKitty())
+            {
+                shadowKitty.Player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Cannot summon shadow kitty while chained.{Colors.COLOR_RESET}");
+                return;
+            }
             RegisterTeleportAbility(shadowKitty.Unit);
             shadowKitty.Unit.ApplyTimedLife(FourCC("BTLF"), SHADOW_KITTY_SUMMON_DURATION);
 

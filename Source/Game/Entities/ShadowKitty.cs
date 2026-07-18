@@ -36,8 +36,9 @@ public class ShadowKitty
     /// <summary>
     /// Summons shadow kitty to the position of this player's kitty object.
     /// </summary>
-    public void SummonShadowKitty()
+    public bool SummonShadowKitty()
     {
+        if (this.Kitty.IsChained) return false;
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         this.Unit = unit.Create(Player, Constants.UNIT_SHADOWKITTY_RELIC_SUMMON, kitty.X, kitty.Y);
         this.Unit.SetVertexColor(0, 0, 0, 255);
@@ -53,6 +54,7 @@ public class ShadowKitty
         Utility.SelectUnitForPlayer(this.Player, this.Unit);
         Utility.SimpleTimer(0.2f, ShrinkShadowKitty);
         this.Active = true;
+        return true;
     }
 
     /// <summary>
