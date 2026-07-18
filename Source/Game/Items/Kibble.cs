@@ -7,6 +7,7 @@ public class Kibble : IDisposable
 {
     public static trigger PickupTrigger;
     public static bool SpawningKibble = true;
+    public static int TotalCollected = 0;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
@@ -171,7 +172,7 @@ public class Kibble : IDisposable
 
     private static void IncrementKibble(Kitty kibblePicker)
     {
-
+        TotalCollected += 1;
         foreach (var player in Globals.ALL_PLAYERS)
             player.Lumber += 1;
 
