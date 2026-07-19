@@ -1,6 +1,7 @@
 ﻿using System;
 using WCSharp.Api;
 using WCSharp.Api.Enums;
+using WCSharp.Shared.Data;
 using static WCSharp.Api.Common;
 
 public class Fixation : Affix
@@ -15,6 +16,7 @@ public class Fixation : Affix
     private trigger PeriodicSpeed;
     private AchesTimers ChaseTimer;
     private group UnitsInRange;
+    private Rectangle Region;
     private unit Target;
     private int Type;
     private bool IsChasing = false;
@@ -26,6 +28,7 @@ public class Fixation : Affix
         PeriodicSpeed ??= trigger.Create();
         ChaseTimer = ObjectPool<AchesTimers>.GetEmptyObject();
         Name = $"{Colors.COLOR_RED}Fixation|r";
+        Region = RegionList.WolfRegions[Unit.RegionIndex];
     }
 
     public override void Apply()
@@ -100,24 +103,45 @@ public class Fixation : Affix
 
     private void ChasingEvent()
     {
-        var Region = RegionList.WolfRegions[Unit.RegionIndex];
         IsChasing = true;
         Unit.WanderTimer?.Pause();
         TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
         ChaseTimer.Timer.Start(0.1f, true, () =>
         {
-            if (!Target.Alive || !Region.Contains(Target.X, Target.Y))
+            if (!ValidChasingTarget(Target))
             {
-                IsChasing = false;
-                Unit.WolfMove();
-                GC.RemoveEffect(ref TargetEffect);
-                Unit.WanderTimer.Resume();
-                ChaseTimer.Pause();
+                CleanupChase();
                 return;
             }
+
             if (Type == 1) GetClosestTarget();
+
+            if (!ValidChasingTarget(Target))
+            {
+                CleanupChase();
+                return;
+            }
+
             Unit.Unit.IssueOrder("move", Target.X, Target.Y);
         });
+    }
+
+    private bool ValidChasingTarget(unit target)
+    {
+        if (target == null) return false;
+        if (!target.Alive) return false;
+        if (FangOfShadows.GetFixationImmunityUpgradeLevel(target)) return false;
+        if (!Region.Contains(target.X, target.Y)) return false;
+        return true;
+    }
+
+    private void CleanupChase()
+    {
+        IsChasing = false;
+        Unit.WolfMove();
+        GC.RemoveEffect(ref TargetEffect);
+        Unit.WanderTimer?.Resume();
+        ChaseTimer?.Pause();
     }
 
     private void GetClosestTarget()
@@ -125,13 +149,14 @@ public class Fixation : Affix
         UnitsInRange.Clear();
         UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, FilterList.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
+
         var newTarget = GetClosestUnitInRange();
-        if (newTarget != Target)
-        {
-            Target = newTarget;
-            GC.RemoveEffect(ref TargetEffect);
-            TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
-        }
+        if (FangOfShadows.GetFixationImmunityUpgradeLevel(newTarget)) return;
+        if (newTarget == null || newTarget == Target) return;
+
+        Target = newTarget;
+        GC.RemoveEffect(ref TargetEffect);
+        TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
     }
 
     private unit GetClosestUnitInRange()
@@ -140,14 +165,14 @@ public class Fixation : Affix
         var unitY = Unit.Unit.Y;
 
         // Determine closest unit in list
-        var closestUnit = UnitsInRange.First;
+        unit closestUnit = null;
         var closestDistance = float.MaxValue;
         while (true)
         {
             var unit = UnitsInRange.First;
             if (unit == null) break;
             UnitsInRange.Remove(unit);
-            if (FangOfShadows.GetFixationImmunityUpgradeLevel(closestUnit)) continue;
+            if (FangOfShadows.GetFixationImmunityUpgradeLevel(unit)) continue;
             var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
             if (distance < closestDistance)
             {

@@ -4,6 +4,7 @@ public static class Challenges
 {
     public const int DIVINITY_TENDRILS_COUNT = 4;
     public const int FREEZE_AURA_WOLF_REQUIREMENT = 50;
+    public const int TEMPERED_AURA_KIBBLE_REQUIREMENT = 350;
     private const int TURQUOISE_FIRE_DEATH_REQUIREMENT = 10;
     private const int BLUE_FIRE_DEATH_REQUIREMENT = 25;
     private const int PURPLE_FIRE_DEATH_REQUIREMENT = 0;
@@ -141,15 +142,10 @@ public static class Challenges
 
     public static void TemperedAura()
     {
-        if (!Gameover.WinGame) return;
         if (!LeagueManager.Instance.IsSeasonActive) return;
         if (!DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible)) return;
-        foreach (var kitty in Globals.ALL_KITTIES_LIST)
-        {
-            if (kitty.Player.Lumber < 500) continue; // looks weird.. tho lumber is whats the total collected without me adding a variable
-            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Auras.TemperedAura));
-            break;
-        }
+        if (Kibble.TotalCollected < TEMPERED_AURA_KIBBLE_REQUIREMENT) return;
+        AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Auras.TemperedAura));
     }
 
     public static void ZandalariKitty()

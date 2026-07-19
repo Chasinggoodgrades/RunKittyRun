@@ -59,12 +59,16 @@ public static class ChainedTogether
             return;
         }
 
+        if (EventStarted) return; // no reason to begin this again.
+
         EventStarted = true;
         try
         {
             SetGroups();
             MoveChainTimer ??= CreateTimer();
             TimerStart(MoveChainTimer, timerInterval, true, MoveChain);
+            Utility.SimpleTimer(3.5f, () => Utility.TimedTextToAllPlayers(10.0f,
+                $"{Colors.COLOR_YELLOW}You may opt out of the chained together event by typing {Colors.COLOR_CYAN}-nochain{Colors.COLOR_RESET} {Colors.COLOR_RED} (must be before round starts).{Colors.COLOR_RESET}"));
         }
         catch (Exception e)
         {
@@ -86,6 +90,98 @@ public static class ChainedTogether
         if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
         group.RemoveAll(k => k.Name == kittyName);
         RechainGroup(group);
+    }
+
+    /// <summary>
+    /// This function will unchain all kitties and dispose of the chain objects. Should be called on <see cref="RoundManager.RoundEnd"/>
+    /// </summary>
+    public static void UnchainAllKitties()
+    {
+        foreach(var kitty in Globals.ALL_KITTIES_LIST)
+        {
+            kitty.IsChained = false;
+            if (KittyLightnings.TryGetValue(kitty.Name, out var chain))
+            {
+                chain.Dispose();
+                KittyLightnings.Remove(kitty.Name);
+            }
+        }
+
+    }
+
+    public static void OptOutOfChain(Kitty kitty)
+    {
+        try
+        {
+            if (!kitty.IsChained) return;
+            if (!kittyGroups.TryGetValue(kitty.Name, out var group)) return;
+
+            // Dispose every chain link in this group first so we never
+            // overwrite a KittyLightnings entry without freeing the old Chain.
+            DisposeGroupChains(group);
+
+            group.Remove(kitty);
+            kittyGroups.Remove(kitty.Name);
+            kitty.IsChained = false;
+
+            if (group.Count == 1)
+            {
+                var solo = group[0];
+                kittyGroups.Remove(solo.Name);
+                RegroupSoloKitty(solo);
+            }
+            else if (group.Count >= 2)
+            {
+                RechainGroup(group);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in ChainedTogether.OptOutOfChain {e.Message}");
+            throw;
+        }
+    }
+
+    private static void DisposeGroupChains(List<Kitty> group)
+    {
+        for (int i = 0; i < group.Count - 1; i++)
+        {
+            var key = group[i].Name;
+            if (KittyLightnings.TryGetValue(key, out var chain))
+            {
+                chain.Dispose();
+                KittyLightnings.Remove(key);
+            }
+        }
+    }
+
+    private static void RegroupSoloKitty(Kitty solo)
+    {
+        List<Kitty> targetGroup = null;
+        foreach (var g in kittyGroups.Values)
+        {
+            if (g.Count == 0 || g.Contains(solo)) continue;
+            targetGroup = g;
+            break; 
+        }
+
+        if (targetGroup == null)
+        {
+            // No other group exist — solo kitty just travels unchained
+            return;
+        }
+
+        targetGroup.Add(solo);
+        kittyGroups[solo.Name] = targetGroup;
+
+        // Only chain the new link (previous last member -> solo).
+        // Existing chains in targetGroup are untouched.
+        var previousLast = targetGroup[targetGroup.Count - 2];
+        var newChain = ObjectPool<Chain>.GetEmptyObject();
+        newChain.SetKitties(previousLast, solo);
+        previousLast.IsChained = true;
+        solo.IsChained = true;
+        KittyLightnings[previousLast.Name] = newChain;
     }
 
     private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
@@ -182,15 +278,17 @@ public static class ChainedTogether
     {
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!{Colors.COLOR_RESET}", 2.0f, kitty.Unit);
         DifficultyLevel lvl = (DifficultyLevel)Difficulty.DifficultyValue;
-        int award = lvl >= DifficultyLevel.Nightmare
-            ? Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura
-            : lvl >= DifficultyLevel.Impossible
-                ? Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura
-                : lvl >= DifficultyLevel.Hard
-                    ? Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura
-                    : Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura;
-        AwardManager.GiveReward(kitty.Player, nameof(award));
+        string awardName = GetChainedAwardName(lvl);
+        AwardManager.GiveReward(kitty.Player, awardName);
     }
+
+    internal static string GetChainedAwardName(DifficultyLevel lvl) => lvl switch
+    {
+        DifficultyLevel.Nightmare  => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedNightmareAura),
+        DifficultyLevel.Impossible => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedImpossibleAura),
+        DifficultyLevel.Hard       => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedHardAura),
+        _                          => nameof(Globals.GAME_AWARDS_SORTED.Auras.ChainedNormalAura)
+    };
 
     private static bool IsInLastSafezone(Kitty k) =>
         k.CurrentSafeZone == RegionList.SafeZones.Length - 1;

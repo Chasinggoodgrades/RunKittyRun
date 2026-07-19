@@ -69,7 +69,7 @@ public static class RewardDisplayData
                 reward.WithDisplay("|cffff00ffChained Aura Nightmare|r", "Obtained by beating the Chained Together Event on |cffff00ffNightmare|r.");
                 break;
             case nameof(Auras.TemperedAura):
-                reward.WithDisplay("|cffe4e4e4Tempered Aura|r", "Obtained by collectively gathering 500 kibble and then winning the game on |cff960000Impossible+|r during the Pre-League Season.");
+                reward.WithDisplay("|cffe4e4e4Tempered Aura|r", $"Obtained by collectively gathering {Challenges.TEMPERED_AURA_KIBBLE_REQUIREMENT} kibble and then winning the game on |cff960000Impossible+|r during the Pre-League Season.");
                 break;
 
             // ## Wings ##########################################################
