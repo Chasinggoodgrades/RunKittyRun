@@ -47,6 +47,11 @@ public class APMTracker
             LastX = @event.OrderPointX;
             LastY = @event.OrderPointY;
         }
+        else
+        {
+            LastX = Kitty.Unit.X;
+            LastY = Kitty.Unit.Y;
+        }
     }
 
     private void CheckKittyPositions()
@@ -55,6 +60,13 @@ public class APMTracker
         {
             if (IsInSafeZone(Kitty)) return;
             Kitty.APMTracker.TimeOutsideSafeZones += CAPTURE_INTERVAL;
+            if (!Kitty.Unit.Alive)
+            {
+                LastX = Kitty.Unit.X;
+                LastY= Kitty.Unit.Y;
+                return;
+            }
+            Windwalk.ReactivateWindwalk(Kitty, true);
         }
         catch (Exception e)
         {

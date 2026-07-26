@@ -156,7 +156,7 @@ public static class InitCommands
             action: (player, args) =>
             {
 
-                if (Globals.ADMIN_LIST.Contains(player))
+                if (Globals.ADMIN_LIST.Contains(player) || Globals.DEVELOPER_LIST.Contains(player))
                 {
                     CommandsManager.ResolvePlayerId(args[0], kitty =>
                     {
@@ -722,7 +722,7 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "shareforcecontrol",
-            alias: "shareforce, sf",
+            alias: "shareforce,sf",
             tier: CommandTier.Admin,
             argDesc: "[sharingPlayer] [sharedWithPlayer] [on/off]",
             description: "Sets whether or not to force the player to share control [default: off]",

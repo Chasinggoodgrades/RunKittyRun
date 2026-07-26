@@ -159,6 +159,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             // Revive the unit at its respective position
             Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
             Unit.Mana = Circle.Unit.Mana;
+            Windwalk.ReactivateWindwalk(this);
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
