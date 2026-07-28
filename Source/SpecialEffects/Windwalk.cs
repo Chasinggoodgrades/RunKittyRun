@@ -6,7 +6,7 @@ using static WCSharp.Api.Common;
 
 public static class Windwalk
 {
-    private const int AUTO_WW_LEVEL = 10;
+    private const int AUTO_WW_LEVEL = 8;
     private static trigger Trigger;
     private static trigger FreeWW;
     private static List<Kitty> FreeWWObtained = new List<Kitty>();
@@ -17,7 +17,7 @@ public static class Windwalk
     {
         RegisterHotKey();
         RegisterWWCast();
-        Utility.SimpleTimer(4.0f, () => RegisterFreeWW());
+        RegisterFreeWW();
         AutoWW = timer.Create();
         AutoWW.Start(0.5f, true, AutoReactivateWW);
     }

@@ -6,7 +6,6 @@
     {
         ShadowKitty.Initialize();
         Difficulty.Initialize();
-        Windwalk.Initialize();
         ProtectionOfAncients.Initialize();
         SpawnChampions.Initialize();
         RollerSkates.Initialize();
