@@ -11,7 +11,7 @@ public static class AffixFactory
     private static int NUMBER_OF_AFFIXED_WOLVES { get; set; } // (Difficulty.DifficultyValue * 2) + Globals.ROUND;
     private static int MAX_NUMBER_OF_AFFIXES = 1;
     private static int MAX_AFFIXED_PER_LANE = 6;
-    private static int MAX_FIXIATION_PER_LANE = 3;
+    private static int MAX_FIXIATION_PER_LANE = 2;
     private static Random Random = Globals.RANDOM_GEN; // Seeded for consistency
 
     public static void Initialize()
