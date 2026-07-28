@@ -1800,6 +1800,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble;
+                foreach(var i in ItemSpawner.TrackKibbles)
+                {
+                    i.Dispose();
+                }
                 Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Kibble spawning is now: {Kibble.SpawningKibble}{Colors.COLOR_RESET}");
             }
         );

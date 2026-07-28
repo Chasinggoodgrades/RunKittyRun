@@ -91,6 +91,7 @@ namespace Source.Init
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
                 PodiumManager.Initialize();
+                Windwalk.Initialize();
                 FrameManager.InitAllFrames();
                 Challenges.Initialize();
                 SoundManager.Initialize();
