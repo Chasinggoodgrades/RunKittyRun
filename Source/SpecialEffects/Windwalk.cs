@@ -70,6 +70,7 @@ public static class Windwalk
             {
                 BlzSetAbilityIntegerLevelField(ability, ABILITY_ILF_MANA_COST, i, 0);
                 BlzSetAbilityRealLevelField(ability, ABILITY_RLF_DURATION_HERO, i, 99999);
+                BlzSetAbilityRealLevelField(ability, ABILITY_RLF_TRANSITION_TIME, i, 99999);
             }
             triggeredUnit.Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_TURQUOISE}Your windwalk is now free and will auto cast!{Colors.COLOR_RESET}");
         }
