@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using WCSharp.Api;
 
 public class ShadowKitty
@@ -49,6 +50,7 @@ public class ShadowKitty
         Utility.MakeUnitLocust(this.Unit);
         CollisionDetection.ShadowKittyRegisterCollision(this);
         this.Unit.MovementSpeed = 522;
+        this.Unit.IsInvulnerable = true;
         RelicUtil.CloseRelicBook(kitty);
         PauseKitty(this.Player, true);
         Utility.SelectUnitForPlayer(this.Player, this.Unit);

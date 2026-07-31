@@ -99,7 +99,8 @@ public class Wolf
     {
         if (IsPaused || IsReviving) return;
         if (HasAffix("Blitzer")) return;
-        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, GetRandomReal(WolfArea.Rect.MinX, WolfArea.Rect.MaxX), GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY));
+        var rect = WolfArea.Rect;
+        WolfPoint.DiagonalRegionCreate(Unit.X, Unit.Y, GetRandomReal(rect.MinX, rect.MaxX), GetRandomReal(rect.MinY, rect.MaxY));
     }
 
     public void Dispose()
@@ -272,7 +273,7 @@ public class Wolf
     {
         for (int i = 0; i < Affixes.Count; i++)
         {
-            if (Affixes[i].GetType().Name == affixName)
+            if (Affixes[i].TypeName == affixName)
             {
                 RemoveAffix(Affixes[i]);
                 break;
@@ -284,7 +285,7 @@ public class Wolf
     {
         if (Affixes.Count == 0) return false;
         for (int i = 0; i < Affixes.Count; i++)
-            if (Affixes[i].GetType().Name == affixName) return true;
+            if (Affixes[i].TypeName == affixName) return true;
 
         return false;
     }

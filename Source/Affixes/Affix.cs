@@ -2,10 +2,12 @@
 {
     public Wolf Unit { get; set; }
     public string Name { get; set; }
+    public string TypeName { get; set; }
 
     public Affix(Wolf unit)
     {
         Unit = unit;
+        TypeName = this.GetType().Name;
     }
 
     public virtual void Apply()

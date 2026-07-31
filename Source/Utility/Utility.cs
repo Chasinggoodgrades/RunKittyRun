@@ -291,7 +291,7 @@ public static class Utility
     /// <param name="attachPoint"></param>
     public static void CreateEffectAndDispose(string path, unit u, string attachPoint)
     {
-        effect e = effect.Create(path, u, attachPoint);
+        var e = effect.Create(path, u, attachPoint);
         e.Dispose();
     }
 

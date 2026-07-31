@@ -79,6 +79,7 @@ public class Blitzer : Affix
             WanderEffect.PlayAnimation(ANIM_TYPE_STAND);
             Unit.Unit.SetVertexColor(255, 255, 0);
             Unit.Unit.SetColor(playercolor.Yellow);
+            Unit.Unit.SetPathing(false);
             PreBlitzerTimer?.Timer.Start(BLITZER_OVERHEAD_DELAY, false, BeginBlitz);
         }
         catch (Exception e)
@@ -171,9 +172,8 @@ public class Blitzer : Affix
         float nextY = currentY + (directionY * stepDistance);
 
         // Move the unit one step
-        Unit.Unit.SetPathing(false);
         Unit.Unit.SetPosition(nextX, nextY);
-        Unit.Unit.SetPathing(true);
+        //Unit.Unit.SetPathing(true);
 
         Unit.Unit.SetFacing((float)(Math.Atan2(directionY, directionX) * 180.0 / Math.PI));
         Unit.Unit.SetAnimation(2); // running animation
@@ -191,6 +191,7 @@ public class Blitzer : Affix
         Unit.Unit.SetAnimation(0);
         Unit.Unit.SetVertexColor(224, 224, 120);
         Unit.Unit.SetColor(playercolor.Brown);
+        Unit.Unit.SetPathing(true);
         Unit.IsWalking = false;
         Unit.Unit.AddAbility(GHOST_VISIBLE);
     }

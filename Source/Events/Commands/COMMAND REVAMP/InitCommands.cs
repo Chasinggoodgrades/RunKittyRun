@@ -2043,7 +2043,7 @@ public static class InitCommands
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
                     if (kitty == null) return;
-                    TournamentSaver.Instance.ResetAllGamesData(kitty);
+                    TournamentSaver.Instance.ResetTournamentDataForPlayer(kitty);
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
                 });
             }
@@ -2058,7 +2058,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kitty = Globals.ALL_KITTIES[player];
-                TournamentSaver.Instance.ResetAllGamesData(kitty);
+                TournamentSaver.Instance.ResetTournamentDataForPlayer(kitty);
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
             }
         );

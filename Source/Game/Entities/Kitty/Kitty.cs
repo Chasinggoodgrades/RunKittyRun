@@ -212,6 +212,7 @@ public class Kitty : IFloatingTags, ICircleOwner
 
             Relics = new List<Relic>();
             CommandsManager.InitCommandTier(this);
+            TournamentSaver.Instance.ResetTournamentDataForPlayer(this);
         }
         catch (Exception e)
         {

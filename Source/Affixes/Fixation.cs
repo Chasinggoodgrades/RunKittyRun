@@ -173,7 +173,8 @@ public class Fixation : Affix
             if (unit == null) break;
             UnitsInRange.Remove(unit);
             if (FangOfShadows.GetFixationImmunityUpgradeLevel(unit)) continue;
-            var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            //var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            var distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
             if (distance < closestDistance)
             {
                 closestUnit = unit;

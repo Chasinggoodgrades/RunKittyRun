@@ -192,6 +192,29 @@ public class TournamentSaver
         }
     }
 
+    public void ResetTournamentDataForPlayer(Kitty kitty)
+    {
+        if (kitty == null) return;
+        var stats = kitty.SaveData?.TournamentStats;
+        if (stats == null) return;
+
+        // only if > 12 hours since last game, reset all games
+
+        var currentTime = DateTimeManager.DateTime;
+        if (!TryGetLastGameTime(stats.DateTime, currentTime, out var lastGameTime))
+        {
+            Logger.Debug($"Failed to parse last game time for player {kitty.Player.Name}. Defaulting to current time.");
+            stats.DateTime = currentTime.ToString();
+        }
+
+        var elapsedSeconds = currentTime.TotalSeconds - lastGameTime.TotalSeconds;
+        if (elapsedSeconds > 12 * 3600) // 12 hrs
+        {
+            ResetAllGamesData(stats, currentTime, true);
+        }
+    }
+
+
     /// <summary>
     /// Determines which tournament game slot should receive data based on last played time.
     /// </summary>
@@ -245,23 +268,11 @@ public class TournamentSaver
     /// <summary>
     /// Resets all tournament game slots and stamps the new game timestamp.
     /// </summary>
-    private bool ResetAllGamesData(TournamentStats stats, WcDateTime currentTime)
+    private bool ResetAllGamesData(TournamentStats stats, WcDateTime currentTime, bool fullReset = false)
     {
         stats.Reset();
+        if (fullReset) return true;
         stats.DateTime = currentTime.ToString();
-        stats.Game_1.Game_ID = GAME_ID;
-        return true;
-    }
-
-    /// <summary>
-    /// Resets all tournament game slots and stamps the new game timestamp.
-    /// </summary>
-    public bool ResetAllGamesData(Kitty kitty)
-    {
-        var stats = kitty?.SaveData?.TournamentStats;
-        if (stats == null) return false;
-        stats.Reset();
-        stats.DateTime = DateTimeManager.DateTime.ToString();
         stats.Game_1.Game_ID = GAME_ID;
         return true;
     }
