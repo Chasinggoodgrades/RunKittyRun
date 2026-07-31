@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 
@@ -33,7 +34,7 @@ public static class ItemSpatialGrid
 
     public static void UnregisterKibble(Kibble kibble)
     {
-        int index = GetCellIndex(kibble.Item.X, kibble.Item.Y);
+        int index = GetCellIndex(kibble.X, kibble.Y);
         if (index == INVALID_CELL) return;
         kibbleCells[index]?.Remove(kibble);
     }
