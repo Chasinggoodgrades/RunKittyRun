@@ -9,10 +9,11 @@ public static class Windwalk
     private const int AUTO_WW_LEVEL = 8;
     private static trigger Trigger;
     private static trigger FreeWW;
-    private static List<Kitty> FreeWWObtained = new List<Kitty>();
     private static trigger HotkeyTrigger;
     private static timer AutoWW;
     private static int WindwalkID = FourCC("BOwk"); // Windwalk buff ID
+    private static List<Kitty> FreeWWObtained = new List<Kitty>();
+
     public static void Initialize()
     {
         RegisterHotKey();
@@ -20,6 +21,13 @@ public static class Windwalk
         RegisterFreeWW();
         AutoWW = timer.Create();
         AutoWW.Start(0.5f, true, AutoReactivateWW);
+    }
+
+    public static void RemoveAutoWW(Kitty k)
+    {
+        if (FreeWWObtained.Contains(k))
+            FreeWWObtained.Remove(k);
+        k.CurrentStats.FreeWWObtained = false;
     }
 
     private static void RegisterWWCast()

@@ -47,6 +47,8 @@ public static class AntiblockWand
     private static void SpellActions()
     {
         if (@event.SpellAbilityId != AbilityID && @event.SpellAbilityId != AbilitySpellID) return;
+        var unit =  @event.Unit;
+        Console.WriteLine(Colors.PlayerNameColored(unit.Owner) + Colors.COLOR_YELLOW_ORANGE + " has casted Antiblock Wand.");
         var location = @event.SpellTargetLoc;
         var wolvesInArea = group.Create();
         wolvesInArea.EnumUnitsInRange(location.X, location.Y, Radius, null);
@@ -62,5 +64,6 @@ public static class AntiblockWand
         GC.RemoveGroup(ref wolvesInArea);
         GC.RemoveList(ref list);
         location.Dispose();
+        Utility.SimpleTimer(0.10f, () => unit.IssueOrder(WolfPoint.StopOrderID));
     }
 }

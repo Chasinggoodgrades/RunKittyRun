@@ -61,6 +61,13 @@ public static class ProtectionOfAncients
         });
     }
 
+    public static void ResetProtectionOfAncients(player player)
+    {
+        HitLevel6.Remove(player);
+        UpgradeLevel2.Remove(player);
+        UpgradeLevel3.Remove(player);
+    }
+
     /// <summary>
     /// Applies the Protection of the Ancients ability to the unit based on the hero level.
     /// </summary>

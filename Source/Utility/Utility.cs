@@ -134,6 +134,16 @@ public static class Utility
     public static void SimpleTimer(float duration, Action action)
     {
         var handle = ObjectPool<AchesTimers>.GetEmptyObject();
+        if (handle == null || handle.Timer == null)
+        {
+            var timer = WCSharp.Api.Common.CreateTimer();
+            timer.Start(duration, false, () =>
+            {
+                action();
+                timer.Dispose();
+                timer = null;
+            });
+        }
         handle.Timer.Start(duration, false, () =>
         {
             action();
@@ -362,9 +372,11 @@ public static class Utility
     public static void MakePlayerSpectator(player player)
     {
         PlayerLeaves.TeamRemovePlayer(player);
+        Windwalk.RemoveAutoWW(Globals.ALL_KITTIES[player]);
         Globals.ALL_KITTIES[player].Dispose(); // removes from all kitties in dispose
         // Globals.ALL_CIRCLES[player].Dispose(); --gets done in kitty dispose
         Globals.ALL_PLAYERS.Remove(player);
+        ProtectionOfAncients.ResetProtectionOfAncients(player);
         // Globals.ALL_KITTIES[player].NameTag?.Dispose(); // handled in kitty dispose
         RoundManager.RoundEndCheck();
         MultiboardUtil.RefreshMultiboards();
