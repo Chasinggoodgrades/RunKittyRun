@@ -46,6 +46,19 @@ public static class Utility
         }
     }
 
+    public static void InvulnerableAndPauseKitty(Kitty k, float duration = 2.0f)
+    {
+        k.Invulnerable = true;
+        k.Unit.IsPaused = true;
+        var t = timer.Create();
+        t.Start(duration, false, () =>
+        {
+            k.Invulnerable = false;
+            k.Unit.IsPaused = false;
+            t?.Dispose();
+        });
+    }
+
     /// <summary>
     /// Converts a float to time string tenths.
     /// Used for colorizing the time string in Teams mode.
@@ -87,7 +100,24 @@ public static class Utility
             if (kitty.Unit != null)
             {
                 Blizzard.SetHeroLevelBJ(kitty.Unit, 1, true);
+
+                var relicsKitty = kitty.Relics;
+                foreach(var relic in relicsKitty)
+                {
+                        relic?.RemoveEffect(kitty.Unit);
+                }
+                PlayerUpgrades.ResetPlayerUpgrades(kitty.Player);
+                RemoveAllItemsFromUnit(kitty.Unit);
             }
+        }
+    }
+
+    public static void RemoveAllItemsFromUnit(unit u)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            var item = UnitItemInSlot(u, i);
+            item?.Dispose();
         }
     }
 

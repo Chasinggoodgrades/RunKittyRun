@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public class BeaconOfUnitedLifeforce : Relic
 {
     public const int RelicItemID = Constants.ITEM_BEACON_OF_UNITED_LIFEFORCE;
-    private static float INVULNERABILITY_DURATION = 1.0f;
+    private static float INVULNERABILITY_DURATION = 2.0f;
     private static float EXTRA_REVIVE_CHANCE_SINGLE = 0.135f; // 13.5%
     private static float EXTRA_REVIVE_CHANCE_ALL = 0.0300f; // 3.0%
     private static float EXTRA_REVIVE_CHANCE_SINGLE_UPGRADE = 0.025f; // 2.5%
@@ -63,6 +63,7 @@ public class BeaconOfUnitedLifeforce : Relic
             if (k.Value.Alive) continue;
 
             k.Value.ReviveKitty(kitty);
+            CameraUtil.SetCameraOnKitty(k.Value);
             Invulnerability(kitty, k.Value);
 
             if (!reviveAll) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(k.Value.Player)}{color} has been extra revived by {Colors.PlayerNameColored(kitty.Player)}!|r");
@@ -79,8 +80,7 @@ public class BeaconOfUnitedLifeforce : Relic
     /// <param name="extraRevivedKitty"></param>
     private void Invulnerability(Kitty beaconHolder, Kitty extraRevivedKitty)
     {
-        extraRevivedKitty.Invulnerable = true;
-        Utility.SimpleTimer(INVULNERABILITY_DURATION, () => extraRevivedKitty.Invulnerable = false);
+        Utility.InvulnerableAndPauseKitty(extraRevivedKitty, INVULNERABILITY_DURATION);
     }
 
     /// <summary>

@@ -34,6 +34,12 @@ public static class CameraUtil
         SetCameraTargetController(kitty.Unit, 0, 0, false);
     }
 
+    public static void SetCameraOnKitty(Kitty k)
+    {
+        if (!k.Player.IsLocal) return;
+        PanCameraToTimed(k.Unit.X, k.Unit.Y, 0.0f);
+    }
+
     public static void OverheadCamera(player player, float value)
     {
         if (!player.IsLocal) return;

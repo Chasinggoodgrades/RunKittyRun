@@ -28,6 +28,7 @@ public class APMTracker
     private void Init()
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER);
+        //ClicksTrigger.AddCondition(Condition(() => GetIssuedOrderId() == WolfPoint.MoveOrderID));
         ClicksAction = ClicksTrigger.AddAction(CaptureActions);
         PeriodicTimer = PeriodicCheck();
     }

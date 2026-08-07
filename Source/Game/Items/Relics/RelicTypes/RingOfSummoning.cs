@@ -110,6 +110,8 @@ public class RingOfSummoning : Relic
             kitty.ProgressZone = summoningKitty.ProgressZone;
             kitty.Circle.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
+            Utility.InvulnerableAndPauseKitty(kitty);
+            CameraUtil.SetCameraOnKitty(kitty);
 
             // Notify players
             Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)} has summoned {Colors.PlayerNameColored(kitty.Player)}'s kitty!");

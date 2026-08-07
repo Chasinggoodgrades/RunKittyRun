@@ -98,8 +98,10 @@ namespace Source.Init
                 ShopFrame.FinishInitialization();
                 UnitSharing.Initialize();
                 NitroPacer.Initialize();
+                ClearScreen.Initialize();
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
+                PreventGameSave.Initialize();
                 Utility.SimpleTimer(6.0f, MusicManager.PlayNumb);
 
                 for (int i = 0; i < GetBJMaxPlayers(); i++)

@@ -8,7 +8,7 @@ public static class BurntMeat
     private static trigger StanTurnIn = trigger.Create();
     private static triggeraction StanDeathActions;
     private static triggeraction StanTurnInActions;
-    private const int ITEM_CLOAK_FLAMES = Constants.ITEM_CLOAK_OF_FLAMES;
+    private const int ITEM_CLOAK_FLAMES = Constants.ITEM_CLOAK_OF_FLAMES; // FourCC("I00P")
     private const int ITEM_BURNT_MEAT = Constants.ITEM_WOLF_MEAT;
     private static List<unit> Completed = new List<unit>();
 

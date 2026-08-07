@@ -43,18 +43,20 @@ public static class CollisionDetection
 
     private static Func<bool> CircleCollisionFilter(Kitty k)
     {
-        var kTeamID = k.TeamID;
-        var kPlayer = k.Player;
 
         return () =>
         {
+            var kTeamID = k.TeamID;
+            var kPlayer = k.Player;
             if (Gamemode.CurrentGameMode == GameMode.Solo) return false;
             if (!k.Alive) return false;
             var filterUnit = GetFilterUnit();
             if (filterUnit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
+
             if (filterUnit.Owner == kPlayer) return false; // Not Same Player
 
-            return Globals.ALL_KITTIES[filterUnit.Owner].TeamID == kTeamID;
+            var filterTeamId = Globals.ALL_KITTIES[filterUnit.Owner].TeamID;
+            return filterTeamId == kTeamID;
         };
     }
 
@@ -110,8 +112,11 @@ public static class CollisionDetection
         {
             try
             {
+                Console.WriteLine("AA");
                 var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
                 circle.ReviveKitty(k);
+                Console.WriteLine("BB");
+                if (Gamemode.CurrentGameMode != GameMode.Standard) return;
                 (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
             }
             catch (Exception e)
