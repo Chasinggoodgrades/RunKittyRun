@@ -8,6 +8,8 @@ public class Kibble : IDisposable
     public static trigger PickupTrigger;
     public static bool SpawningKibble = true;
     public static int TotalCollected = 0;
+    public float X;
+    public float Y;
     private static List<int> KibblesColors = KibbleList();
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
@@ -21,6 +23,7 @@ public class Kibble : IDisposable
     private int JackPotIndex;
     private effect StarFallEffect;
 
+
     public Kibble()
     {
         PickupTrigger ??= KibblePickupEvents();
@@ -29,23 +32,25 @@ public class Kibble : IDisposable
 
     public void Dispose()
     {
+        ItemSpatialGrid.UnregisterKibble(this);
         Item?.Dispose();
         Item = null;
+        StarFallEffect?.Dispose();
+        StarFallEffect = null;
         ObjectPool<Kibble>.ReturnObject(this);
     }
 
     public void SpawnKibble()
     {
-
         var regionNumber = GetRandomInt(0, RegionList.WolfRegions.Length - 1);
         var region = RegionList.WolfRegions[regionNumber];
-        var x = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
-        var y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
-        StarFallEffect ??= AddSpecialEffect(StarfallEffect, x, y);
-        StarFallEffect.SetPosition(x, y, 0);
+        X = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
+        Y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
+        StarFallEffect ??= AddSpecialEffect(StarfallEffect, X, Y);
+        StarFallEffect.SetPosition(X, Y, 0);
         StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
         JackPotIndex = 1;
-        Item = CreateItem(Type, x, y);
+        Item = CreateItem(Type, X, Y);
         ItemSpatialGrid.RegisterKibble(this);
     }
 

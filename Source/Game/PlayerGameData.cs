@@ -25,6 +25,7 @@ public class PlayerGameData
     public int CollectedJackpots { get; set; } = 0;
     public int CollectedSuperJackpots { get; set; } = 0;
     public int GoldCollectedFromJackpots { get; set; } = 0;
+    public bool FreeWWObtained { get; set; } = false;
 
     public PlayerGameData()
     {

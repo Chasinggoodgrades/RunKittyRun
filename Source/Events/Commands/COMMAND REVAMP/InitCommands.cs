@@ -156,7 +156,7 @@ public static class InitCommands
             action: (player, args) =>
             {
 
-                if (Globals.ADMIN_LIST.Contains(player))
+                if (Globals.ADMIN_LIST.Contains(player) || Globals.DEVELOPER_LIST.Contains(player))
                 {
                     CommandsManager.ResolvePlayerId(args[0], kitty =>
                     {
@@ -722,7 +722,7 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "shareforcecontrol",
-            alias: "shareforce, sf",
+            alias: "shareforce,sf",
             tier: CommandTier.Admin,
             argDesc: "[sharingPlayer] [sharedWithPlayer] [on/off]",
             description: "Sets whether or not to force the player to share control [default: off]",
@@ -1800,6 +1800,10 @@ public static class InitCommands
             action: (player, args) =>
             {
                 Kibble.SpawningKibble = !Kibble.SpawningKibble;
+                foreach(var i in ItemSpawner.TrackKibbles)
+                {
+                    i.Dispose();
+                }
                 Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}Kibble spawning is now: {Kibble.SpawningKibble}{Colors.COLOR_RESET}");
             }
         );
@@ -2039,7 +2043,7 @@ public static class InitCommands
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
                     if (kitty == null) return;
-                    TournamentSaver.Instance.ResetAllGamesData(kitty);
+                    TournamentSaver.Instance.ResetTournamentDataForPlayer(kitty);
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
                 });
             }
@@ -2054,7 +2058,7 @@ public static class InitCommands
             action: (player, args) =>
             {
                 var kitty = Globals.ALL_KITTIES[player];
-                TournamentSaver.Instance.ResetAllGamesData(kitty);
+                TournamentSaver.Instance.ResetTournamentDataForPlayer(kitty);
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Tournament data reset for {Colors.PlayerNameColored(kitty.Player)}{Colors.COLOR_RESET}");
             }
         );

@@ -4,7 +4,7 @@ using static WCSharp.Api.Common;
 
 public static class CollisionDetection
 {
-    public const float DEFAULT_WOLF_COLLISION_RADIUS = 74.0f;
+    public const float DEFAULT_WOLF_COLLISION_RADIUS = 73.5f;
     private const float CIRCLE_COLLISION_RADIUS = 78.0f;
 
     private static Predicate<Relic> IsBeaconOfUnitedLifeforce = r => r is BeaconOfUnitedLifeforce;
@@ -13,9 +13,9 @@ public static class CollisionDetection
     {
         return () =>
         {
+            if (!k.Alive) return false;
             var filterUnit = GetFilterUnit();
-            return filterUnit.UnitType == Constants.UNIT_CUSTOM_DOG
-                    && k.Alive && filterUnit.Alive;
+            return filterUnit.UnitType == Constants.UNIT_CUSTOM_DOG && filterUnit.Alive;
         };
     }
 
@@ -48,11 +48,11 @@ public static class CollisionDetection
 
         return () =>
         {
+            if (Gamemode.CurrentGameMode == GameMode.Solo) return false;
+            if (!k.Alive) return false;
             var filterUnit = GetFilterUnit();
             if (filterUnit.UnitType != Constants.UNIT_KITTY_CIRCLE) return false;
             if (filterUnit.Owner == kPlayer) return false; // Not Same Player
-            if (!k.Alive) return false;
-            if (Gamemode.CurrentGameMode == GameMode.Solo) return false;
 
             return Globals.ALL_KITTIES[filterUnit.Owner].TeamID == kTeamID;
         };
@@ -84,9 +84,10 @@ public static class CollisionDetection
         {
             try
             {
-                var filterUnit = GetFilterUnit();
                 if (!k.Unit.Alive) return;
                 if (k.Invulnerable) return; // proc before rewind and logic wise
+
+                var filterUnit = GetFilterUnit();
                 if (Globals.ALL_WOLVES[filterUnit].IsReviving) return; // bomber wolf
                 if (NamedWolves.ExplodingWolfCollision(filterUnit, k)) return;
                 if (ChronoSphere.RewindDeath(k)) return;

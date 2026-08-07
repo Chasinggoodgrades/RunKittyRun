@@ -56,7 +56,7 @@ public class FrostbiteRing : Relic
         {
             FreezeGroup ??= group.Create();
             FreezeGroup.EnumUnitsInRange(GetLocationX(freezeLocation), GetLocationY(freezeLocation), FROSTBITE_RING_RADIUS, FilterList.DogFilter);
-
+            var kitty = Globals.ALL_KITTIES[Owner];
             while (true)
             {
                 var unit = FreezeGroup.First;
@@ -70,10 +70,11 @@ public class FrostbiteRing : Relic
             RelicUtil.CloseRelicBook(Owner);
 
             Utility.SimpleTimer(1.0f, () => Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_LAVENDER}{Globals.ALL_KITTIES[Owner].CurrentStats.WolfFreezeCount}/{Challenges.FREEZE_AURA_WOLF_REQUIREMENT}|r"));
-            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Globals.ALL_KITTIES[Owner].Unit, RelicItemID, RelicAbilityID));
+            Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(kitty.Unit, RelicItemID, RelicAbilityID));
 
             freezeLocation.Dispose();
             FreezeGroup.Clear();
+            Utility.SimpleTimer(0.10f, () => @event.Unit.IssueOrder(WolfPoint.StopOrderID));
         }
         catch (Exception e)
         {

@@ -7,8 +7,8 @@ using static WCSharp.Api.Common;
 public class Fixation : Affix
 {
     private const float FIXATION_RADIUS = 500.0f;
-    private const float FIXATION_MS = 325.0f;
-    private const float FIXATION_MAX_MS = 410.0f;
+    private const float FIXATION_MS = 250.0f;
+    private const float FIXATION_MAX_MS = 370.0f;
     private const string FIXATION_TARGET_EFFECT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl";
     private static readonly Predicate<Affix> IsFixation = x => x is Fixation;
     private const int AFFIX_ABILITY = Constants.ABILITY_FIXATION;
@@ -173,7 +173,8 @@ public class Fixation : Affix
             if (unit == null) break;
             UnitsInRange.Remove(unit);
             if (FangOfShadows.GetFixationImmunityUpgradeLevel(unit)) continue;
-            var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            //var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            var distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
             if (distance < closestDistance)
             {
                 closestUnit = unit;

@@ -97,6 +97,7 @@ public class FangOfShadows : Relic
 
             // Apply relic cooldowns with a slight delay
             Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner, RelicItemID, RelicAbilityID));
+            Utility.SimpleTimer(0.1f, () => summoner.Unit.IssueOrder(WolfPoint.StopOrderID));
         }
         catch (Exception e)
         {

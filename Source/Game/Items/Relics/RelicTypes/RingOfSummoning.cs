@@ -118,6 +118,7 @@ public class RingOfSummoning : Relic
         }
 
         // Cleanup
+        Utility.SimpleTimer(0.10f, () => @event.Unit.IssueOrder(WolfPoint.StopOrderID));
         targetedPoint.Dispose();
         GC.RemoveFilterFunc(ref filter);
     }
