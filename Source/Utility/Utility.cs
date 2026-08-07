@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using WCSharp.Api;
 using WCSharp.Shared;
@@ -108,6 +109,9 @@ public static class Utility
                 }
                 PlayerUpgrades.ResetPlayerUpgrades(kitty.Player);
                 RemoveAllItemsFromUnit(kitty.Unit);
+                kitty.Relics = new List<Relic>();
+                Windwalk.RemoveAutoWW(kitty);
+                ProtectionOfAncients.ResetProtectionOfAncients(kitty.Player);
             }
         }
     }
