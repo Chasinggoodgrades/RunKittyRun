@@ -148,9 +148,10 @@ public class Team
         for (int i = 0; i < Teammembers.Count; i++)
         {
             var member = Teammembers[i];
-            string name = member.Name.Split('#')[0];
-            if (name.Length > 7)
-                name = Colors.ColorString(member.Name.Substring(0, 7), member.Id + 1);
+            string rawName = member.Name.Split('#')[0];
+            if (rawName.Length > 7)
+                rawName = rawName.Substring(0, 7);
+            string name = Colors.ColorString(rawName, member.Id + 1);
 
             if (TeamMembersString.Length > 0)
                 TeamMembersString += ", ";
