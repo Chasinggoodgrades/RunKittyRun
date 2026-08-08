@@ -94,9 +94,9 @@ public class TournamentSaver
 
         if (Gamemode.CurrentGameMode == GameMode.Team
             && Globals.PLAYERS_TEAMS.TryGetValue(kitty.Player, out var team)
-            && team.TeamTimes.TryGetValue(Globals.ROUND, out var teamTime))
+            && Globals.ROUND >= 0 && Globals.ROUND < team.TeamTimes.Length)
         {
-            roundData.RoundTime = teamTime;
+            roundData.RoundTime = team.TeamTimes[Globals.ROUND];
             return;
         }
 

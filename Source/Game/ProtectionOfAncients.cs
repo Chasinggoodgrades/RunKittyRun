@@ -209,6 +209,7 @@ public static class ProtectionOfAncients
             tempGroup.Remove(unit);
 
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
+            if (kitty.TeamID != playerToRevive.TeamID) continue; // don't revive other team members.
             // SELF.. Shouldn't get save points for reviving yourself.
             if (kitty.Unit == playerToRevive.Unit)
             {

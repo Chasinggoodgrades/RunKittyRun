@@ -1089,18 +1089,42 @@ public static class InitCommands
             {
                 var abilityId = args[0] != "" ? args[0] : "";
                 var kitty = Globals.ALL_KITTIES[player];
-                if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
+
+                if (args.Length == 1)
                 {
-                    UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
-                    var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
-                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
+                    if (GetUnitAbilityLevel(kitty.Unit, FourCC(abilityId)) > 0)
+                    {
+                        UnitRemoveAbility(kitty.Unit, FourCC(abilityId));
+                        var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName}.");
+                    }
+                    else
+                    {
+                        UnitAddAbility(kitty.Unit, FourCC(abilityId));
+                        var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
+                        player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
+                    }
                 }
                 else
                 {
-                    UnitAddAbility(kitty.Unit, FourCC(abilityId));
-                    var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
-                    player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName}.");
+                    CommandsManager.ResolvePlayerId(args[1], targetKitty =>
+                    {
+                        if (targetKitty == null) return;
+                        if (GetUnitAbilityLevel(targetKitty.Unit, FourCC(abilityId)) > 0)
+                        {
+                            UnitRemoveAbility(targetKitty.Unit, FourCC(abilityId));
+                            var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
+                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Removed {abilityName} from {Colors.PlayerNameColored(targetKitty.Player)}.");
+                        }
+                        else
+                        {
+                            UnitAddAbility(targetKitty.Unit, FourCC(abilityId));
+                            var abilityName = GetObjectName(FourCC(abilityId)); // GetObjectName is async
+                            player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_YELLOW_ORANGE}Added {abilityName} to {Colors.PlayerNameColored(targetKitty.Player)}.");
+                        }
+                    });
                 }
+
             }
         );
 

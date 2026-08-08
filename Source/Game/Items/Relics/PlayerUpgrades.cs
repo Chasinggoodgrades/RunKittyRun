@@ -26,6 +26,13 @@ public class PlayerUpgrades
         else
             return new PlayerUpgrades(player);
     }
+
+    public static void ResetPlayerUpgrades(player player)
+    {
+        if (Globals.PLAYER_UPGRADES.ContainsKey(player))
+            Globals.PLAYER_UPGRADES[player] = new PlayerUpgrades(player);
+    }
+
     public void SetUpgradeLevel(Type relicType, int level) => UpgradeLevels[relicType] = level;
 
     public static void IncreaseUpgradeLevel(Type relicType, unit Unit)

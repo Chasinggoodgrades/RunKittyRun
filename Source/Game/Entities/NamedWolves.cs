@@ -54,7 +54,8 @@ public static class NamedWolves
         StanWolf.IsPaused = true;
         StanWolf.Unit.IsInvulnerable = false;
 
-        Utility.SimpleTimer(0.5f, () => StanWolf.Unit.IsInvulnerable = false);
+        var t = timer.Create();
+        t.Start(1.0f, false, () => { StanWolf.Unit.IsInvulnerable = false; t.Dispose(); });
         BurntMeat.RegisterDeathTrigger();
 
         Utility.SimpleTimer(0.5f, () => StanWolf.Texttag.SetPosition(StanWolf.Unit.X, StanWolf.Unit.Y, 0.015f));

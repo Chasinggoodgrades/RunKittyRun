@@ -93,9 +93,10 @@ public static class GameTimer
     public static float TeamTotalTime(Team team)
     {
         var totalTime = 0.0f;
-        foreach (var time in team.TeamTimes)
+        var times = team.TeamTimes;
+        for (int i = 0; i < times.Length; i++)
         {
-            totalTime += time.Value;
+            totalTime += times[i];
         }
         return totalTime;
     }

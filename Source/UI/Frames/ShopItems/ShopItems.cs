@@ -47,7 +47,7 @@ public class ShopItem
 
     public static List<ShopItem> ShopItemsRelic()
     {
-        if (Gamemode.CurrentGameMode == GameMode.Standard)
+        if (Gamemode.CurrentGameMode != GameMode.Solo)
         {
             AddRelicToShopItems(new OneOfNine());
             AddRelicToShopItems(new RingOfSummoning());

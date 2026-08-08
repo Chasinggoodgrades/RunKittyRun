@@ -200,7 +200,7 @@ public class Wolf
         Unit ??= unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
-        Unit.IsInvulnerable = true;
+        if (NamedWolves.StanWolf != this) Unit.IsInvulnerable = true;
         Unit.SetColor(ConvertPlayerColor(24));
 
         if (Source.Program.Debug) selectedPlayer.SetAlliance(Player(0), alliancetype.SharedControl, true);

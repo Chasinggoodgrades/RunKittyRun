@@ -15,7 +15,7 @@ public static class GamemodeManager
         AddCommand(
             "-t team",
             "Tournament Team",
-            "Usage: -t team <fp | freepick | r | random> <teamsize>"
+            "Usage: -t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>"
         );
         AddCommand(
             "-team",
