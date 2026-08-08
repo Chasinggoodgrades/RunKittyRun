@@ -10,6 +10,15 @@ public static class Gamemode
     public static bool IsGameModeChosen { get; private set; } = false;
     public static int PlayersPerTeam { get; set; } = 0;
     public static int NumberOfRounds { get; set; } = 5;
+    /// <summary>
+    /// Whether teams should be automatically revived (at the team's lowest reached checkpoint) after all members die, instead of being eliminated.
+    /// </summary>
+    public static bool AutoReviveEnabled { get; private set; } = true;
+
+    public static void SetAutoRevive(bool enabled)
+    {
+        AutoReviveEnabled = enabled;
+    }
 
     public static void Initialize()
     {
@@ -44,7 +53,7 @@ public static class Gamemode
         // Team Modes
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
             Colors.COLOR_YELLOW_ORANGE + GameMode.Team + // Team
-            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize> <NA | EU>)" +
+            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>)" +
             Colors.COLOR_RESET);
 
         HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);

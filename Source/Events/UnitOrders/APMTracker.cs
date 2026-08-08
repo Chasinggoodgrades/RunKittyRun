@@ -28,7 +28,6 @@ public class APMTracker
     private void Init()
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER);
-        //ClicksTrigger.AddCondition(Condition(() => GetIssuedOrderId() == WolfPoint.MoveOrderID));
         ClicksAction = ClicksTrigger.AddAction(CaptureActions);
         PeriodicTimer = PeriodicCheck();
     }
@@ -42,17 +41,19 @@ public class APMTracker
 
     private void CaptureActions()
     {
-        if (!IsInSafeZone(Kitty))
-        {
-            TotalActions += 1;
-            LastX = @event.OrderPointX;
-            LastY = @event.OrderPointY;
-        }
-        else
-        {
-            LastX = Kitty.Unit.X;
-            LastY = Kitty.Unit.Y;
-        }
+            var issuedOrder = @event.IssuedOrderId;
+            if (@event.IssuedOrderId != WolfPoint.SmartOrderID) return;
+            if (!IsInSafeZone(Kitty))
+            {
+                TotalActions += 1;
+                LastX = @event.OrderPointX;
+                LastY = @event.OrderPointY;
+            }
+            else
+            {
+                LastX = Kitty.Unit.X;
+                LastY = Kitty.Unit.Y;
+            }
     }
 
     private void CheckKittyPositions()

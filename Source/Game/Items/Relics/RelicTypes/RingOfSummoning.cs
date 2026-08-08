@@ -103,6 +103,7 @@ public class RingOfSummoning : Relic
             SummonGroup.Remove(unit);
 
             Kitty kitty = Globals.ALL_KITTIES[unit.Owner];
+            if (kitty.TeamID != summoningKitty.TeamID) continue; // Ensure same team
             if (!SummonDeadKitty(summoningKitty, kitty) || !DeathlessKitty(summoningKitty, kitty) || !ChainedKitty(summoningKitty, kitty)) continue;
 
             // Position adjustments and revival
@@ -141,7 +142,7 @@ public class RingOfSummoning : Relic
 
         if (summoersProgress > deadProg && !summoned.Alive)
         {
-            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that are ahead of you!{Colors.COLOR_RESET}");
+            summoner.Player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_RED}You can only summon dead kitties that behind you!{Colors.COLOR_RESET}");
             return false;
         }
         return true;

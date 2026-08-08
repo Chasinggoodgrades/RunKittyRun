@@ -8,7 +8,10 @@ public class Team
     private static timer TeamTimer { get; set; }
     public int TeamID { get; private set; }
     public string TeamColor { get; private set; }
-    public Dictionary<int, float> TeamTimes { get; set; }
+    /// <summary>
+    /// Array of team times in seconds for each round. Index 0 is unused.
+    /// </summary>
+    public float[] TeamTimes { get; set; }
     public List<player> Teammembers { get; private set; }
     public string TeamMembersString { get; private set; } = "";
     public Dictionary<int, string> RoundProgress { get; private set; }
@@ -19,7 +22,7 @@ public class Team
         TeamID = id;
         Teammembers = new List<player>();
         RoundProgress = new Dictionary<int, string>();
-        TeamTimes = new Dictionary<int, float>();
+        TeamTimes = new float[Gamemode.NumberOfRounds + 1];
         TeamColor = Colors.GetStringColorOfPlayer(TeamID) + "Team " + TeamID;
         InitRoundStats();
         Globals.ALL_TEAMS.Add(TeamID, this);
@@ -66,6 +69,12 @@ public class Team
 
     public void TeamIsDeadActions()
     {
+        if (Gamemode.AutoReviveEnabled)
+        {
+            new TeamDeathTimer(this);
+            return;
+        }
+
         for (int i = 0; i < Teammembers.Count; i++)
         {
             var kitty = Globals.ALL_KITTIES[Teammembers[i]];
@@ -85,7 +94,6 @@ public class Team
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
         {
             RoundProgress.Add(i, "0.0");
-            TeamTimes.Add(i, 0.0f);
         }
     }
 

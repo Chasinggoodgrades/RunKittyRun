@@ -68,7 +68,7 @@ public static class GamemodeCmd
     {
         if (parts.Length < 3)
         {
-            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> <NA | EU> OR -t team <fp | freepick | r | random> <teamsize> <NA | EU>");
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> <NA | EU> OR -t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>");
             return;
         }
 
@@ -83,7 +83,7 @@ public static class GamemodeCmd
                 break;
 
             default:
-                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> <NA | EU> or -t team <fp | freepick | r | random> <teamsize> <NA | EU>");
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t solo <prog | race> <NA | EU> or -t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>");
                 break;
         }
     }
@@ -127,28 +127,22 @@ public static class GamemodeCmd
 
     private static void HandleTeamMode(player player, string[] parts)
     {
+        const string usage = "-t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>";
+
         if (parts.Length < 4)
         {
-            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t team <fp | freepick | r | random> <teamsize> <NA | EU>");
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + usage);
             return;
         }
 
         var mode = parts[2];
         int teamSize = Globals.DEFAULT_TEAM_SIZE;
-        string region;
+        bool autoRevive = false;
+        int index = 3;
 
-        if (parts.Length == 4)
+        // Optional <teamsize>
+        if (index < parts.Length - 1 && int.TryParse(parts[index], out int parsedTeamSize))
         {
-            region = parts[3].ToUpper();
-        }
-        else if (parts.Length == 5)
-        {
-            if (!int.TryParse(parts[3], out int parsedTeamSize))
-            {
-                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Team size must be a number between 1 and " + Globals.MAX_TEAM_SIZE);
-                return;
-            }
-
             if (parsedTeamSize > Globals.MAX_TEAM_SIZE || parsedTeamSize == 0)
             {
                 player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "Team size must be between 1 and " + Globals.MAX_TEAM_SIZE);
@@ -156,13 +150,30 @@ public static class GamemodeCmd
             }
 
             teamSize = parsedTeamSize;
-            region = parts[4].ToUpper();
+            index++;
         }
-        else
+
+        // Optional {av <on | off>}
+        if (index < parts.Length - 1 && parts[index].ToLower() == "av")
         {
-            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "-t team <fp | freepick | r | random> <teamsize> <NA | EU>");
+            index++;
+            if (index >= parts.Length - 1 || (parts[index].ToLower() != "on" && parts[index].ToLower() != "off"))
+            {
+                player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + "av must be followed by on or off.");
+                return;
+            }
+
+            autoRevive = parts[index].ToLower() == "on";
+            index++;
+        }
+
+        if (index != parts.Length - 1)
+        {
+            player.DisplayTimedTextTo(10.0f, CmdInfo.Error + Colors.COLOR_GOLD + usage);
             return;
         }
+
+        var region = parts[index].ToUpper();
 
         if (region != "NA" && region != "EU")
         {
@@ -170,6 +181,7 @@ public static class GamemodeCmd
             return;
         }
 
+        Gamemode.SetAutoRevive(autoRevive);
         TournamentSaver.Instance.SetRegion(region);
 
         switch (mode)

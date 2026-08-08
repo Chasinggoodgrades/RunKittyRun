@@ -112,11 +112,8 @@ public static class CollisionDetection
         {
             try
             {
-                Console.WriteLine("AA");
                 var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
                 circle.ReviveKitty(k);
-                Console.WriteLine("BB");
-                if (Gamemode.CurrentGameMode != GameMode.Standard) return;
                 (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
             }
             catch (Exception e)

@@ -9,6 +9,7 @@ public class WolfPoint
     public static readonly int MoveOrderID = OrderId("move");
     public static readonly int StopOrderID = OrderId("stop");
     public static readonly int AttackOrderID = OrderId("attack");
+    public static readonly int SmartOrderID = OrderId("smart");
     public static readonly int HoldPositionOrderID = OrderId("holdposition");
     public static trigger IsPausedTrigger;
 

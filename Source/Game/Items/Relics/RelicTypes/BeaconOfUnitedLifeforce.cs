@@ -61,7 +61,7 @@ public class BeaconOfUnitedLifeforce : Relic
         foreach (var k in Globals.ALL_KITTIES)
         {
             if (k.Value.Alive) continue;
-
+            if (kitty.TeamID != k.Value.TeamID) continue;
             k.Value.ReviveKitty(kitty);
             CameraUtil.SetCameraOnKitty(k.Value);
             Invulnerability(kitty, k.Value);
