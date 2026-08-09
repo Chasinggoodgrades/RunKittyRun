@@ -5,7 +5,21 @@ using static WCSharp.Api.Common;
 public static class Gamemode
 {
     public static player HostPlayer { get; private set; }
-    public static GameMode CurrentGameMode { get; private set; }
+
+    /// <summary>
+    /// The active gamemode instance. Prefer calling members on this
+    /// (e.g. Gamemode.Current.OnVictoryZoneEntered(kitty)) over branching on
+    /// CurrentGameMode wherever you're touching the code anyway.
+    /// </summary>
+    public static IGameMode Current { get; private set; }
+
+    /// <summary>
+    /// Proxies to Current.Id. Kept so the existing ~140 call sites that branch on
+    /// this enum directly keep compiling and stay in sync during the migration
+    /// to IGameMode; new code should prefer Gamemode.Current.
+    /// </summary>
+    public static GameMode CurrentGameMode => Current?.Id ?? GameMode.Standard;
+
     public static string CurrentGameModeType { get; private set; } = "";
     public static bool IsGameModeChosen { get; private set; } = false;
     public static int PlayersPerTeam { get; set; } = 0;
@@ -63,18 +77,34 @@ public static class Gamemode
     {
         try
         {
-            CurrentGameMode = mode;
             CurrentGameModeType = modeType;
             IsGameModeChosen = true;
             PlayersPerTeam = teamSize;
+            Current = CreateGameMode(mode, modeType);
 
             ClearTextMessages();
             NotifyGamemodeChosen();
-            SetupChosenGamemode();
+            Current.Initialize();
         }
         catch (Exception e)
         {
             Logger.Critical($"Gamemode: SetGameMode: {e.Message}");
+        }
+    }
+
+    private static IGameMode CreateGameMode(GameMode mode, string modeType)
+    {
+        switch (mode)
+        {
+            case GameMode.Standard:
+                return new StandardGameMode();
+            case GameMode.Solo:
+                return new SoloGameMode();
+            case GameMode.Team:
+                return new TeamGameMode(modeType);
+            default:
+                Logger.Warning("Unknown gamemode selected, defaulting to Standard.");
+                return new StandardGameMode();
         }
     }
 
@@ -96,27 +126,6 @@ public static class Gamemode
         foreach (var player in Globals.ALL_PLAYERS)
         {
             player.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE / 3.0f, Colors.COLOR_YELLOW_ORANGE + "Gamemode chosen: " + Colors.COLOR_GOLD + CurrentGameMode.ToString() + " " + CurrentGameModeType);
-        }
-    }
-
-    private static void SetupChosenGamemode()
-    {
-        switch (CurrentGameMode)
-        {
-            case GameMode.Standard:
-                Standard.Initialize();
-                break;
-            case GameMode.Solo:
-                Solo.Initialize();
-                break;
-            case GameMode.Team:
-                Team.Initialize();
-                break;
-            default:
-                Logger.Warning("Unknown gamemode selected, defaulting to Standard.");
-                CurrentGameMode = GameMode.Standard;
-                Standard.Initialize();
-                break;
         }
     }
 }

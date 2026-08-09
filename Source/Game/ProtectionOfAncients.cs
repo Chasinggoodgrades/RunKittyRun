@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using WCSharp.Api;
 using WCSharp.Api.Enums;
 using static WCSharp.Api.Common;
 
-public static class ProtectionOfAncients
+public class ProtectionOfAncients
 {
     private const string ACTIVATION_EFFECT = "war3mapImported\\Radiance Silver.mdx";
     private const string APPLY_EFFECT = "war3mapImported\\Divine Edict.mdx";
@@ -14,58 +13,56 @@ public static class ProtectionOfAncients
     private const int POTA_WITH_RELIC = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
     public const float EFFECT_DELAY = 3.0f;
 
-    private static trigger Trigger;
+    private const int UPGRADE_LEVEL_2_REQUIREMENT = 9;
+    private const int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    private const float INVULNERABLE_DURATION = 1.0f;
+
+    private static trigger CastTrigger;
     private static trigger LevelUpTrigger;
     private static trigger HotkeyTrigger;
+    private static trigger LevelSixTrigger;
 
-    private static readonly int UPGRADE_LEVEL_2_REQUIREMENT = 9;
-    private static readonly int UPGRADE_LEVEL_3_REQUIREMENT = 12;
+    public Kitty Kitty { get; }
+    public bool HitLevel6 { get; private set; } = false;
+    public bool UpgradeLevel2Obtained { get; private set; } = false;
+    public bool UpgradeLevel3Obtained { get; private set; } = false;
 
-    private static trigger KittyReachedLevelSix;
-    private static readonly float INVULNERABLE_DURATION = 1.0f;
-
-    private static List<player> HitLevel6;
-    private static List<player> UpgradeLevel2 = new List<player>();
-    private static List<player> UpgradeLevel3 = new List<player>();
-
-    public static void Initialize()
+    public ProtectionOfAncients(Kitty kitty)
     {
-        RegisterEvents();
-        RegisterUltimateGain();
-        RegisterUpgradeLevelEvents();
+        Kitty = kitty;
+        RegisterKittyEvents();
     }
 
     /// <summary>
-    /// Gives the unit the ProtectionOfAncients Ability.
+    /// Creates the shared triggers used by every ProtectionOfAncients instance. Must be called
+    /// before any Kitty (and therefore ProtectionOfAncients) instances are created.
     /// </summary>
-    /// <param name="unit"></param>
-    private static void AddProtectionOfAncients(unit unit)
+    public static void Initialize()
     {
-        var player = unit.Owner;
-        unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!{Colors.COLOR_RESET}");
+        RegisterCastTrigger();
+        RegisterHotKeyTrigger();
+        RegisterLevelSixTrigger();
+        RegisterUpgradeLevelTrigger();
     }
 
-    private static void RegisterUltimateGain()
+    private void RegisterKittyEvents()
     {
-        // Ultimate, Protection of the Ancients
-        KittyReachedLevelSix ??= trigger.Create();
-        HitLevel6 ??= new List<player>();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(KittyReachedLevelSix, playerunitevent.HeroLevel);
-        KittyReachedLevelSix.AddAction(() =>
-        {
-            if (HitLevel6.Contains(@event.Unit.Owner)) return;
-            if (@event.Unit.HeroLevel < 6) return;
-            HitLevel6.Add(@event.Unit.Owner);
-            AddProtectionOfAncients(@event.Unit);
-        });
+        HotkeyTrigger.RegisterPlayerKeyEvent(Kitty.Player, OSKEY_RCONTROL, MetaKey.Control, true);
+    }
+
+    public void Reset()
+    {
+        HitLevel6 = false;
+        UpgradeLevel2Obtained = false;
+        UpgradeLevel3Obtained = false;
+        Kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        Kitty.Unit.RemoveAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
     }
 
     public static void ResetProtectionOfAncients(player player)
     {
-        HitLevel6.Remove(player);
-        UpgradeLevel2.Remove(player);
-        UpgradeLevel3.Remove(player);
+        var kitty = Globals.ALL_KITTIES[player];
+        kitty?.ProtectionOfAncients?.Reset();
     }
 
     /// <summary>
@@ -75,7 +72,12 @@ public static class ProtectionOfAncients
     /// <returns>Returns the integer level the ability was set to.</returns>
     public static int SetProtectionOfAncientsLevel(unit unit)
     {
-        var player = unit.Owner;
+        var kitty = Globals.ALL_KITTIES[unit.Owner];
+        return kitty?.ProtectionOfAncients?.SetLevel(unit) ?? 0;
+    }
+
+    private int SetLevel(unit unit)
+    {
         var heroLevel = unit.HeroLevel;
 
         if (unit.UnitType != Constants.UNIT_KITTY) return 0;
@@ -93,69 +95,102 @@ public static class ProtectionOfAncients
             unit.SetAbilityLevel(POTA_WITH_RELIC, abilityLevel);
 
             // Display the message only if the player is achieving this level for the first time
-            if ((abilityLevel == 2 && !UpgradeLevel2.Contains(player)) ||
-                (abilityLevel == 3 && !UpgradeLevel3.Contains(player)))
+            if ((abilityLevel == 2 && !UpgradeLevel2Obtained) ||
+                (abilityLevel == 3 && !UpgradeLevel3Obtained))
             {
-                player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level {heroLevel}! You've upgraded your ultimate to level {abilityLevel}!|r");
+                Kitty.Player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level {heroLevel}! You've upgraded your ultimate to level {abilityLevel}!|r");
             }
 
             if (abilityLevel == 2)
             {
-                UpgradeLevel2.Add(player);
+                UpgradeLevel2Obtained = true;
             }
             else if (abilityLevel == 3)
             {
-                UpgradeLevel3.Add(player);
-                UpgradeLevel2.Remove(player);  // Ensure the player is only in one list
+                UpgradeLevel3Obtained = true;
+                UpgradeLevel2Obtained = false;  // Ensure the player is only tracked in one state
             }
         }
         return abilityLevel;
     }
 
-    private static void RegisterUpgradeLevelEvents()
+    private static void RegisterUpgradeLevelTrigger()
     {
         LevelUpTrigger = trigger.Create();
         Blizzard.TriggerRegisterAnyUnitEventBJ(LevelUpTrigger, playerunitevent.HeroLevel);
         LevelUpTrigger.AddCondition(Condition(() => @event.Unit.HeroLevel >= UPGRADE_LEVEL_2_REQUIREMENT));
-        LevelUpTrigger.AddAction(() => SetProtectionOfAncientsLevel(@event.Unit));
+        LevelUpTrigger.AddAction(UpgradeLevelDispatch);
     }
 
-    private static void RegisterEvents()
+    private static void UpgradeLevelDispatch()
     {
-        Trigger = trigger.Create();
-        Blizzard.TriggerRegisterAnyUnitEventBJ(Trigger, playerunitevent.SpellCast);
-        Trigger.AddCondition(Condition(() => @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
-        Trigger.AddAction(ActivationEvent);
+        SetProtectionOfAncientsLevel(@event.Unit);
+    }
 
+    private static void RegisterLevelSixTrigger()
+    {
+        LevelSixTrigger ??= trigger.Create();
+        Blizzard.TriggerRegisterAnyUnitEventBJ(LevelSixTrigger, playerunitevent.HeroLevel);
+        LevelSixTrigger.AddAction(LevelSixDispatch);
+    }
+
+    private static void LevelSixDispatch()
+    {
+        var unit = @event.Unit;
+        var kitty = Globals.ALL_KITTIES[unit.Owner];
+        kitty?.ProtectionOfAncients?.OnHeroLevelForUltimate(unit);
+    }
+
+    private void OnHeroLevelForUltimate(unit unit)
+    {
+        if (HitLevel6) return;
+        if (unit.HeroLevel < 6) return;
+        HitLevel6 = true;
+        unit.AddAbility(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        Kitty.Player.DisplayTimedTextTo(7.0f, $"{Colors.COLOR_YELLOW_ORANGE}Congratulations on level 6! You've gained a new ability!{Colors.COLOR_RESET}");
+    }
+
+    private static void RegisterCastTrigger()
+    {
+        CastTrigger = trigger.Create();
+        Blizzard.TriggerRegisterAnyUnitEventBJ(CastTrigger, playerunitevent.SpellCast);
+        CastTrigger.AddCondition(Condition(() => @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS || @event.SpellAbilityId == Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC));
+        CastTrigger.AddAction(ActivationEventDispatch);
+    }
+
+    private static void RegisterHotKeyTrigger()
+    {
         HotkeyTrigger = CreateTrigger();
-        foreach(var p in Globals.ALL_PLAYERS)
-        {
-            HotkeyTrigger.RegisterPlayerKeyEvent(p, OSKEY_RCONTROL, MetaKey.Control, true);
-        }
-        HotkeyTrigger.AddAction(RegisterHotKeyEvents);
+        HotkeyTrigger.AddAction(HotKeyEventsDispatch);
     }
 
-    private static void RegisterHotKeyEvents()
+    private static void HotKeyEventsDispatch()
     {
-        player p = @event.Player;
-        Kitty k = Globals.ALL_KITTIES[p];
-
-        if (!k.Alive) return; // cannot cast if dead obviously.
-        k.Unit.IssueOrder("divineshield");
-        k.Unit.IssueOrder(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY);
+        var kitty = Globals.ALL_KITTIES[@event.Player];
+        kitty?.ProtectionOfAncients?.OnHotkeyPressed();
     }
 
-    private static void ActivationEvent()
+    private void OnHotkeyPressed()
     {
-        var Unit = @event.Unit;
-        var player = @event.Player;
-        var kitty = Globals.ALL_KITTIES[player];
+        if (!Kitty.Alive) return; // cannot cast if dead obviously.
+        Kitty.Unit.IssueOrder("divineshield");
+        Kitty.Unit.IssueOrder(WolfPoint.MoveOrderID, Kitty.APMTracker.LastX, Kitty.APMTracker.LastY);
+    }
+
+    private static void ActivationEventDispatch()
+    {
+        var kitty = Globals.ALL_KITTIES[@event.Player];
+        kitty?.ProtectionOfAncients?.ActivationEvent(@event.Unit);
+    }
+
+    private void ActivationEvent(unit Unit)
+    {
         var relic = Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC;
 
-        Globals.ALL_KITTIES[player].ProtectionActive = true;
+        Kitty.ProtectionActive = true;
 
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
-        Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(player)));
+        Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(Kitty.Player)));
 
         var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
 
@@ -166,14 +201,12 @@ public static class ProtectionOfAncients
         });
     }
 
-    private static void ApplyEffect(unit Unit)
+    private void ApplyEffect(unit Unit)
     {
-        var owningPlayer = Unit.Owner;
-        var kitty = Globals.ALL_KITTIES[owningPlayer];
         var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
-        if (!kitty.Unit.Alive) kitty.Invulnerable = true; // unit genuinely dead
+        if (!Kitty.Unit.Alive) Kitty.Invulnerable = true; // unit genuinely dead
         GC.RemoveEffect(ref actiEffect);
-        EndEffectActions(owningPlayer);
+        EndEffectActions();
     }
 
     private static bool AoEEffectFilter()
@@ -187,20 +220,19 @@ public static class ProtectionOfAncients
         return !kitty.Alive;
     }
 
-    private static void EndEffectActions(player Player)
+    private void EndEffectActions()
     {
         // Get all units within range of the player unit (kitty) and revive them
         var tempGroup = group.Create(); // consider changing this to a static group
-        var kitty = Globals.ALL_KITTIES[Player];
-        var levelOfAbility = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
-        var levelOfRelic = kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
+        var levelOfAbility = Kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS);
+        var levelOfRelic = Kitty.Unit.GetAbilityLevel(Constants.ABILITY_PROTECTION_OF_THE_ANCIENTS_WITH_RELIC);
         if (levelOfRelic > 0) levelOfAbility = levelOfRelic;
         var effectRadius = EFFECT_RADIUS + (levelOfAbility * EFFECT_RADIUS_INCREASE);
         var reviveCount = 0;
         var filter = Utility.CreateFilterFunc(AoEEffectFilter);
 
-        kitty.ProtectionActive = false;
-        tempGroup.EnumUnitsInRange(kitty.Unit.X, kitty.Unit.Y, effectRadius, filter);
+        Kitty.ProtectionActive = false;
+        tempGroup.EnumUnitsInRange(Kitty.Unit.X, Kitty.Unit.Y, effectRadius, filter);
 
         while (true)
         {
@@ -209,24 +241,24 @@ public static class ProtectionOfAncients
             tempGroup.Remove(unit);
 
             var playerToRevive = Globals.ALL_KITTIES[unit.Owner];
-            if (kitty.TeamID != playerToRevive.TeamID) continue; // don't revive other team members.
+            if (Kitty.TeamID != playerToRevive.TeamID) continue; // don't revive other team members.
             // SELF.. Shouldn't get save points for reviving yourself.
-            if (kitty.Unit == playerToRevive.Unit)
+            if (Kitty.Unit == playerToRevive.Unit)
             {
-                kitty.ReviveKitty();
+                Kitty.ReviveKitty();
             }
             else // Other players get revived and then kitty (person casting ult, gets the save points)
             {
                 playerToRevive.Invulnerable = true; // players that are dead nearby that get revived will have invul for 1 sec as well.
                 Utility.SimpleTimer(INVULNERABLE_DURATION, () => playerToRevive.Invulnerable = false);
-                playerToRevive.ReviveKitty(kitty);
+                playerToRevive.ReviveKitty(Kitty);
             }
             reviveCount++;
             // Give Divinity Tendrils if meets challenge requiremnet.
-            if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Player);
+            if (reviveCount >= Challenges.DIVINITY_TENDRILS_COUNT) Challenges.DivinityTendrils(Kitty.Player);
         }
 
-        Utility.SimpleTimer(INVULNERABLE_DURATION, () => kitty.Invulnerable = false);
+        Utility.SimpleTimer(INVULNERABLE_DURATION, () => Kitty.Invulnerable = false);
 
         GC.RemoveGroup(ref tempGroup);
         GC.RemoveFilterFunc(ref filter);

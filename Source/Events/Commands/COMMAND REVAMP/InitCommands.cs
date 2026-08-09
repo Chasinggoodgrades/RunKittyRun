@@ -1470,12 +1470,6 @@ public static class InitCommands
             description: "Lets you opt out of the chained together event.",
             action: (player, args) =>
             {
-                if (RoundManager.GAME_STARTED)
-                {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}You cannot opt out of the chain after the round has started.");
-                    return;
-                }
-
                 ChainedTogether.OptOutOfChain(Globals.ALL_KITTIES[player]);
             }
         );
@@ -1671,7 +1665,7 @@ public static class InitCommands
                     return;
                 }
                 RoundManager.AddMoreRoundTime(timeValue); // Account for current round intermission.
-                RoundManager.ROUND_INTERMISSION = timeValue + Standard.ROUND_INTERMISSION;
+                RoundManager.ROUND_INTERMISSION = timeValue + StandardGameMode.ROUND_INTERMISSION;
                 Console.WriteLine($"{Colors.PlayerNameColored(player)}{Colors.COLOR_TURQUOISE} has added more time to start the round and all future rounds.{Colors.COLOR_RESET}{Colors.COLOR_RED}({RoundTimer.StartRoundTimer.Remaining.ToString("F2")} seconds remaining){Colors.COLOR_RESET}");
             }
         );

@@ -4,125 +4,156 @@ using WCSharp.Api;
 using WCSharp.Api.Enums;
 using static WCSharp.Api.Common;
 
-public static class Windwalk
+public class Windwalk
 {
     private const int AUTO_WW_LEVEL = 8;
-    private static trigger Trigger;
-    private static trigger FreeWW;
-    private static trigger HotkeyTrigger;
-    private static timer AutoWW;
-    private static int WindwalkID = FourCC("BOwk"); // Windwalk buff ID
-    private static List<Kitty> FreeWWObtained = new List<Kitty>();
+    private static readonly int WindwalkID = FourCC("BOwk"); // Windwalk buff ID
+    private static readonly List<Windwalk> Instances = new List<Windwalk>();
 
+    private static trigger CastTrigger;
+    private static trigger FreeWWTrigger;
+    private static trigger HotkeyTrigger;
+    private static timer AutoWWTimer;
+
+    public Kitty Kitty { get; }
+    public bool FreeWWObtained { get; private set; } = false;
+
+    public Windwalk(Kitty kitty)
+    {
+        Kitty = kitty;
+        Instances.Add(this);
+        RegisterKittyEvents();
+    }
+
+    /// <summary>
+    /// Creates the shared triggers/timer used by every Windwalk instance. Must be called
+    /// before any Kitty (and therefore Windwalk) instances are created.
+    /// </summary>
     public static void Initialize()
     {
-        RegisterHotKey();
-        RegisterWWCast();
-        RegisterFreeWW();
-        AutoWW = timer.Create();
-        AutoWW.Start(0.5f, true, AutoReactivateWW);
+        RegisterHotKeyTrigger();
+        RegisterWWCastTrigger();
+        RegisterFreeWWTrigger();
+        AutoWWTimer = timer.Create();
+        AutoWWTimer.Start(0.5f, true, AutoReactivateAll);
     }
 
-    public static void RemoveAutoWW(Kitty k)
+    public void RemoveAutoWW()
     {
-        if (FreeWWObtained.Contains(k))
-            FreeWWObtained.Remove(k);
-        k.CurrentStats.FreeWWObtained = false;
+        FreeWWObtained = false;
+        Kitty.Unit.RemoveAbility(Constants.ABILITY_WIND_WALK);
     }
 
-    private static void RegisterWWCast()
+    public void ReactivateWindwalk(bool lastPoint = false)
+    {
+        var unit = Kitty.Unit;
+        if (!unit.Alive) return;
+        if (!FreeWWObtained) return;
+        if (Blizzard.UnitHasBuffBJ(unit, WindwalkID)) return;
+        Blizzard.IssueImmediateOrderBJ(unit, "windwalk");
+        if (lastPoint) unit.IssueOrder(WolfPoint.MoveOrderID, Kitty.APMTracker.LastX, Kitty.APMTracker.LastY);
+    }
+
+    public void Dispose()
+    {
+        Instances.Remove(this);
+    }
+
+    private static void RegisterWWCastTrigger()
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        Trigger = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            Trigger.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
-        Trigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
-        Trigger.AddAction(ApplyWindwalkEffect);
+        CastTrigger = trigger.Create();
+        CastTrigger.AddCondition(Condition(() => GetSpellAbilityId() == Constants.ABILITY_WIND_WALK));
+        CastTrigger.AddAction(ApplyWindwalkEffectDispatch);
     }
 
-    private static void RegisterHotKey()
+    private static void RegisterHotKeyTrigger()
     {
         HotkeyTrigger = CreateTrigger();
-        foreach (var p in Globals.ALL_PLAYERS)
-        {
-            HotkeyTrigger.RegisterPlayerKeyEvent(p, oskeytype.NumPad0, 0, true);
-        }
-        HotkeyTrigger.AddAction(RegisterHotKeyEvents);
+        HotkeyTrigger.AddAction(HotKeyEventsDispatch);
     }
 
-    private static void RegisterFreeWW()
+    private static void RegisterFreeWWTrigger()
     {
-        FreeWW = trigger.Create();
-        foreach (var player in Globals.ALL_PLAYERS)
-            FreeWW.RegisterUnitEvent(Globals.ALL_KITTIES[player].Unit, unitevent.HeroLevel);
-        FreeWW.AddAction(FreeWWActions);
+        FreeWWTrigger = trigger.Create();
+        FreeWWTrigger.AddAction(FreeWWActionsDispatch);
     }
 
-    private static void FreeWWActions()
+    private void RegisterKittyEvents()
+    {
+        var player = Kitty.Player;
+        CastTrigger?.RegisterPlayerUnitEvent(player, EVENT_PLAYER_UNIT_SPELL_CAST, null);
+        HotkeyTrigger.RegisterPlayerKeyEvent(player, oskeytype.NumPad0, 0, true);
+        FreeWWTrigger.RegisterUnitEvent(Kitty.Unit, unitevent.HeroLevel);
+    }
+
+    private static void AutoReactivateAll()
+    {
+        for (int i = 0; i < Instances.Count; i++)
+        {
+            var instance = Instances[i];
+            if (!instance.FreeWWObtained) continue;
+            if (!instance.Kitty.Alive) continue;
+            instance.ReactivateWindwalk();
+        }
+    }
+
+    private static void HotKeyEventsDispatch()
+    {
+        var p = @event.Player;
+        var kitty = Globals.ALL_KITTIES[p];
+        kitty.Windwalk.OnHotkeyPressed();
+    }
+
+    private void OnHotkeyPressed()
+    {
+        if (!Kitty.Alive) return; // cannot cast if dead obviously.
+        if (Blizzard.UnitHasBuffBJ(Kitty.Unit, WindwalkID)) return;
+        Blizzard.IssueImmediateOrderBJ(Kitty.Unit, "windwalk");
+        Kitty.Unit.IssueOrder(WolfPoint.MoveOrderID, Kitty.APMTracker.LastX, Kitty.APMTracker.LastY);
+    }
+
+    private static void FreeWWActionsDispatch()
     {
         var triggeredUnit = @event.Unit;
         var kitty = Globals.ALL_KITTIES[triggeredUnit.Owner];
-        if (triggeredUnit.Level >= AUTO_WW_LEVEL && !kitty.CurrentStats.FreeWWObtained)
+        kitty.Windwalk.OnHeroLevelChanged(triggeredUnit);
+    }
+
+    private void OnHeroLevelChanged(unit triggeredUnit)
+    {
+        if (triggeredUnit.Level < AUTO_WW_LEVEL || FreeWWObtained) return;
+
+        FreeWWObtained = true;
+        var ability = triggeredUnit.GetAbility(Constants.ABILITY_WIND_WALK);
+        if (triggeredUnit.UnitType == Constants.UNIT_KITTY && ability == null)
         {
-            FreeWWObtained.Add(kitty);
-            kitty.CurrentStats.FreeWWObtained = true;
-            var ability = triggeredUnit.GetAbility(Constants.ABILITY_WIND_WALK);
-            if (triggeredUnit.UnitType == Constants.UNIT_KITTY && ability == null)
-            {
-                triggeredUnit.RemoveAbility(Constants.ABILITY_WIND_WALK);
-                triggeredUnit.AddAbility(Constants.ABILITY_WIND_WALK);
-                ability = triggeredUnit.GetAbility(Constants.ABILITY_WIND_WALK);
-            }
-            var maxLevel = ability.Levels;
-            for (int i = 0; i < maxLevel; i++)
-            {
-                BlzSetAbilityIntegerLevelField(ability, ABILITY_ILF_MANA_COST, i, 0);
-                BlzSetAbilityRealLevelField(ability, ABILITY_RLF_DURATION_HERO, i, 99999);
-                BlzSetAbilityRealLevelField(ability, ABILITY_RLF_TRANSITION_TIME, i, 99999);
-            }
-            triggeredUnit.Owner.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_TURQUOISE}Your windwalk is now free and will auto cast!{Colors.COLOR_RESET}");
+            triggeredUnit.RemoveAbility(Constants.ABILITY_WIND_WALK);
+            triggeredUnit.AddAbility(Constants.ABILITY_WIND_WALK);
+            ability = triggeredUnit.GetAbility(Constants.ABILITY_WIND_WALK);
         }
-    }
-
-    public static void ReactivateWindwalk(Kitty k, bool lastPoint = false)
-    {
-        var unit = k.Unit;
-        if (!unit.Alive) return;
-        if (!k.CurrentStats.FreeWWObtained) return;
-        if (Blizzard.UnitHasBuffBJ(k.Unit, WindwalkID)) return;
-        Blizzard.IssueImmediateOrderBJ(k.Unit, "windwalk");
-        if (lastPoint) k.Unit.IssueOrder(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY);
-    }
-
-    private static void AutoReactivateWW()
-    {
-        for (int i = 0; i < FreeWWObtained.Count; i++)
+        var maxLevel = ability.Levels;
+        for (int i = 0; i < maxLevel; i++)
         {
-            var k = FreeWWObtained[i];
-            if (!k.Alive) continue;
-            ReactivateWindwalk(k);
+            BlzSetAbilityIntegerLevelField(ability, ABILITY_ILF_MANA_COST, i, 0);
+            BlzSetAbilityRealLevelField(ability, ABILITY_RLF_DURATION_HERO, i, 99999);
+            BlzSetAbilityRealLevelField(ability, ABILITY_RLF_TRANSITION_TIME, i, 99999);
         }
+        Kitty.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_TURQUOISE}Your windwalk is now free and will auto cast!{Colors.COLOR_RESET}");
     }
 
-    private static void RegisterHotKeyEvents()
-    {
-        player p = @event.Player;
-        Kitty k = Globals.ALL_KITTIES[p];
-
-        if (!k.Alive) return; // cannot cast if dead obviously.
-        if (Blizzard.UnitHasBuffBJ(k.Unit, WindwalkID)) return;
-        Blizzard.IssueImmediateOrderBJ(k.Unit, "windwalk");
-        k.Unit.IssueOrder(WolfPoint.MoveOrderID, k.APMTracker.LastX, k.APMTracker.LastY);
-    }
-
-    private static void ApplyWindwalkEffect()
+    private static void ApplyWindwalkEffectDispatch()
     {
         var caster = @event.Unit;
-        var player = caster.Owner;
-        var kitty = Globals.ALL_KITTIES[player];
+        var kitty = Globals.ALL_KITTIES[caster.Owner];
+        kitty.Windwalk.ApplyWindwalkEffect(caster);
+    }
+
+    private void ApplyWindwalkEffect(unit caster)
+    {
         var abilityLevel = caster.GetAbilityLevel(Constants.ABILITY_WIND_WALK);
         var duration = 3.0f + (2.0f * abilityLevel);
-        var wwID = kitty.ActiveAwards.WindwalkID;
+        var wwID = Kitty.ActiveAwards.WindwalkID;
         try
         {
             // AmuletOfEvasiveness.AmuletWindwalkEffect(caster);

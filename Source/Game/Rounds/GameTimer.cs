@@ -33,6 +33,12 @@ public static class GameTimer
         t.Start(RoundSpeedIncrement, true, _cachedGameTimer);
     }
 
+    public static void ResetGameTimes()
+    {
+        RoundTime = new float[Gamemode.NumberOfRounds + 1];
+        FinishedTimes = new float[Gamemode.NumberOfRounds + 1];
+    }
+
     /// <summary>
     /// Ticks up the game timer every second while the game is active.
     /// </summary>

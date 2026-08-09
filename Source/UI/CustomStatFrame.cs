@@ -256,7 +256,7 @@ public static class CustomStatFrame
 
     private static string GetPlayerTeamName(unit u)
     {
-        return Globals.PLAYERS_TEAMS.TryGetValue(u.Owner, out Team team) ? team.TeamColor : $"{Colors.COLOR_YELLOW_ORANGE}Team Aches{Colors.COLOR_RESET}";
+        return TeamRegistry.TryGetTeamForPlayer(u.Owner, out Team team) ? team.TeamColor : $"{Colors.COLOR_YELLOW_ORANGE}Team Aches{Colors.COLOR_RESET}";
     }
 
     private static int GetPlayerGold(unit u) => u.Owner.Gold;

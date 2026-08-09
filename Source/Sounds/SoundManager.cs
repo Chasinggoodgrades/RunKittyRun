@@ -142,7 +142,8 @@ public static class SoundManager
         var s = KITTY_DEATH_SOUND;
         s.AttachToUnit(k.Unit);
         int teamID = k.TeamID;
-        Team team = Globals.ALL_TEAMS[teamID];
+        TeamRegistry.TryGetTeam(teamID, out var team);
+        if (team == null) return;
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
             var player = team.Teammembers[i];

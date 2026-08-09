@@ -51,7 +51,7 @@ public class TeamDeathTimer
         for (int i = 0; i < Team.Teammembers.Count; i++)
         {
             var player = Team.Teammembers[i];
-            FloatingTimers[i].SetText($"{Colors.GetColorNameByTeamID(Team.TeamID)}{timeText}|r", TextTagHeight);
+            FloatingTimers[i].SetText($"{Colors.GetStringColorOfPlayer(Team.TeamID)}{timeText}|r", TextTagHeight);
         }
     }
 

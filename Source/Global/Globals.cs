@@ -61,10 +61,7 @@ public static class Globals
     /// Unseeded Random GEN for things that need to be more random and not based on the game seed. (Tournament saver)
     /// </summary>
     public static Random RANDOM_GEN_02 { get; set; }
-    public static Dictionary<int, Team> ALL_TEAMS { get; set; }
     public static List<Team> ALL_TEAMS_LIST { get; set; }
-    public static Dictionary<player, Team> PLAYERS_TEAMS { get; set; }
-    public static Dictionary<Team, string> TEAM_PROGRESS;
 
     public static bool DATE_TIME_LOADED { get; set; }
     public static bool GAME_INITIALIZED { get; set; }

@@ -82,6 +82,7 @@ namespace Source.Init
                 UniqueItems.Initialize();
                 WolfArea.Initialize();
                 ItemStacker.Initialize();
+                Windwalk.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();
@@ -91,7 +92,6 @@ namespace Source.Init
                 AffixFactory.Initialize();
                 RewardsManager.Initialize();
                 PodiumManager.Initialize();
-                Windwalk.Initialize();
                 FrameManager.InitAllFrames();
                 Challenges.Initialize();
                 SoundManager.Initialize();

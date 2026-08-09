@@ -110,8 +110,9 @@ public static class Utility
                 PlayerUpgrades.ResetPlayerUpgrades(kitty.Player);
                 RemoveAllItemsFromUnit(kitty.Unit);
                 kitty.Relics = new List<Relic>();
-                Windwalk.RemoveAutoWW(kitty);
+                kitty.Windwalk.RemoveAutoWW();
                 ProtectionOfAncients.ResetProtectionOfAncients(kitty.Player);
+                GameTimer.ResetGameTimes();
             }
         }
     }
@@ -405,8 +406,9 @@ public static class Utility
     /// <param name="player">The player to be made a spectator.</param>
     public static void MakePlayerSpectator(player player)
     {
-        PlayerLeaves.TeamRemovePlayer(player);
-        Windwalk.RemoveAutoWW(Globals.ALL_KITTIES[player]);
+        TeamRegistry.TryGetTeamForPlayer(player, out var team);
+        team?.RemoveMember(player);
+        Globals.ALL_KITTIES[player].Windwalk.RemoveAutoWW();
         Globals.ALL_KITTIES[player].Dispose(); // removes from all kitties in dispose
         // Globals.ALL_CIRCLES[player].Dispose(); --gets done in kitty dispose
         Globals.ALL_PLAYERS.Remove(player);

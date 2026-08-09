@@ -44,7 +44,7 @@ public static class TeamsMultiboard
         CurrentTeamsMB ??= multiboard.Create();
         CurrentTeamsMB.Title = $"Current Teams {Colors.COLOR_YELLOW_ORANGE}[{Gamemode.CurrentGameModeType}]|r {Colors.COLOR_RED}[Press ESC]|r";
         CurrentTeamsMB.IsDisplayed = true;
-        CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count + 1;
+        CurrentTeamsMB.Rows = TeamRegistry.All.Count + 1;
         CurrentTeamsMB.Columns = Gamemode.PlayersPerTeam;
         CurrentTeamsMB.GetItem(0, 0).SetText("Team 1");
         CurrentTeamsMB.GetItem(0, 0).SetVisibility(true, false);
@@ -56,7 +56,7 @@ public static class TeamsMultiboard
     {
         // Top Portion Setup
         if (Gamemode.CurrentGameMode != GameMode.Team) return;
-        TeamsStatsMB.Rows = Globals.ALL_TEAMS_LIST.Count + 1;
+        TeamsStatsMB.Rows = TeamRegistry.All.Count + 1;
         TeamsStatsMB.Columns = 3 + Gamemode.NumberOfRounds;
         TeamsStatsMB.GetItem(0, 0).SetText("Team");
         TeamsStatsMB.GetItem(0, 0).SetVisibility(true, false);
@@ -80,9 +80,10 @@ public static class TeamsMultiboard
         // Actual Stats
         int rowIndex = 1;
         float overallProgress;
-        for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++) {
+        var allTeams = TeamRegistry.All;
+        for (int i = 0; i < allTeams.Count; i++) {
 
-            var team = Globals.ALL_TEAMS_LIST[i];
+            var team = allTeams[i];
             overallProgress = 0.0f;
             TeamsStatsMB.GetItem(rowIndex, 0).SetText(team.TeamColor);
             TeamsStatsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
@@ -114,14 +115,15 @@ public static class TeamsMultiboard
 
     public static void UpdateCurrentTeamsMB()
     {
-        CurrentTeamsMB.Rows = Globals.ALL_TEAMS.Count;
+        var allTeams = TeamRegistry.All;
+        CurrentTeamsMB.Rows = allTeams.Count;
         CurrentTeamsMB.Columns = 2;
 
         var widthSize = 0.05f * Gamemode.PlayersPerTeam;
         int rowIndex = 0;
-        for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
+        for (int i = 0; i < allTeams.Count; i++)
         {
-            var team = Globals.ALL_TEAMS_LIST[i];
+            var team = allTeams[i];
             string teamMembers = team.TeamMembersString;
             CurrentTeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
             CurrentTeamsMB.GetItem(rowIndex, 0).SetText($"{team.TeamColor}:");
