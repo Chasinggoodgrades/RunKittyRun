@@ -84,11 +84,11 @@ public static class Difficulty
     {
         if (DifficultyValue == (int)DifficultyLevel.Progressive)
         {
-            Standard.SetupProgressive();
+            Gamemode.NumberOfRounds = 3;
         }
         else
         {
-            Standard.SetupStandard();
+            Gamemode.NumberOfRounds = 5;
         }
     }
 

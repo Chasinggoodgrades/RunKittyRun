@@ -8,13 +8,13 @@
 
     public static void ReviveKittySoloTournament(Kitty kitty)
     {
-        if (Gamemode.CurrentGameMode != GameMode.Solo || Gamemode.CurrentGameModeType != "Race") return; // Solo Gamemode & Race GamemodeType.
+        if (Gamemode.CurrentGameModeType != "Race") return; // Race GamemodeType.
         new SoloDeathTimer(kitty.Player);
     }
 
     public static void RoundEndCheck()
     {
-        if (Gamemode.CurrentGameModeType != Globals.SOLO_MODES[0]) return; // Progression mode
+        if (Gamemode.CurrentGameModeType != "Progression") return; // Progression mode
 
         for(int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
         {

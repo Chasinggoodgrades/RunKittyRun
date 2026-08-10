@@ -7,32 +7,32 @@ public static class TeamHandler
 {
     public static bool FreepickEnabled = false;
 
-    public static void Handler(player Player, int TeamNumber, bool adminForced = false)
+    public static void Handler(player player, int teamNumber, bool adminForced = false)
     {
         if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && (adminForced || !RoundManager.GAME_STARTED && FreepickEnabled))
         {
-            FreepickHandler(Player, TeamNumber, adminForced);
+            FreepickHandler(player, teamNumber);
         }
         else
         {
-            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.{Colors.COLOR_RESET}");
+            player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.{Colors.COLOR_RESET}");
         }
     }
 
-    private static void FreepickHandler(player Player, int TeamNumber, bool adminForced)
+    private static void FreepickHandler(player player, int teamNumber)
     {
-        if (CanPlayerJoinTeam(Player, TeamNumber))
+        if (CanPlayerJoinTeam(player, teamNumber))
         {
-            ApplyPlayerToTeam(Player, TeamNumber);
+            ApplyPlayerToTeam(player, teamNumber);
         }
     }
 
-    private static void ApplyPlayerToTeam(player Player, int TeamNumber)
+    private static void ApplyPlayerToTeam(player player, int teamNumber)
     {
-        if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
+        if (TeamRegistry.TryGetTeam(teamNumber, out var team))
         {
-            team.AddMember(Player);
-            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You have joined team {team.TeamColor}{Colors.COLOR_RESET}");
+            team.AddMember(player);
+            player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You have joined team {team.TeamColor}{Colors.COLOR_RESET}");
         }
     }
 
@@ -43,28 +43,18 @@ public static class TeamHandler
     {
         FreepickEnabled = false;
         var random = Globals.RANDOM_GEN;
-        List<player> shuffled = new List<player>(Globals.ALL_PLAYERS);
-
-        shuffled = shuffled.OrderBy(x => random.Next()).ToList(); // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
+        var shuffled = new List<player>(Globals.ALL_PLAYERS).OrderBy(x => random.Next()).ToList(); // seeded random shuffle, no desyncs -- this is only ever called once so its ok.
         var teamNumber = 1;
 
         try
         {
-            for (int i = 0; i < shuffled.Count; i++)
+            foreach (var player in shuffled)
             {
-                var player = shuffled[i];
+                if (TeamRegistry.TryGetTeamForPlayer(player, out _)) continue;
 
-                if (Globals.PLAYERS_TEAMS.TryGetValue(player, out Team currentTeam))
+                var addedToExistingTeam = false;
+                foreach (var team in TeamRegistry.All)
                 {
-                    continue;
-                }
-
-                bool addedToExistingTeam = false;
-
-                // Attempt to add player to an existing team
-                for (int j = 0; j < Globals.ALL_TEAMS_LIST.Count; j++)
-                {
-                    var team = Globals.ALL_TEAMS_LIST[j];
                     if (team.Teammembers.Count < Gamemode.PlayersPerTeam)
                     {
                         team.AddMember(player);
@@ -73,26 +63,20 @@ public static class TeamHandler
                     }
                 }
 
+                if (addedToExistingTeam) continue;
 
-                if (!addedToExistingTeam)
+                // Create new teams as needed
+                while (TeamRegistry.TryGetTeam(teamNumber, out var full) && full.Teammembers.Count >= Gamemode.PlayersPerTeam)
                 {
-                    // Create new teams as needed
-                    while (Globals.ALL_TEAMS.ContainsKey(teamNumber) && Globals.ALL_TEAMS[teamNumber].Teammembers.Count >= Gamemode.PlayersPerTeam)
-                    {
-                        teamNumber++;
-                    }
-
-
-                    // Check if the team exists, if not create it
-                    if (!Globals.ALL_TEAMS.TryGetValue(teamNumber, out Team team))
-                    {
-                        team = new Team(teamNumber);
-                    }
-
-
-                    // Add the player to the new team
-                    team.AddMember(player);
+                    teamNumber++;
                 }
+
+                if (!TeamRegistry.TryGetTeam(teamNumber, out var team2))
+                {
+                    team2 = new Team(teamNumber);
+                }
+
+                team2.AddMember(player);
             }
         }
         catch (Exception e)
@@ -101,50 +85,48 @@ public static class TeamHandler
         }
     }
 
-    private static bool CanPlayerJoinTeam(player Player, int TeamNumber)
+    private static bool CanPlayerJoinTeam(player player, int teamNumber)
     {
-        if (TeamNumber > 24)
+        if (teamNumber > Globals.MAX_TEAM_SIZE)
         {
-            Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}Usage: -team 1-24{Colors.COLOR_RESET}");
+            player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}Usage: -team 1-{Globals.MAX_TEAM_SIZE}{Colors.COLOR_RESET}");
             return false;
         }
 
-        // If the team exists, we're going to check if full or if that player is already on the team
-        if (Globals.ALL_TEAMS.TryGetValue(TeamNumber, out Team team))
+        // If the team exists, check if it's full or if the player is already on it.
+        if (TeamRegistry.TryGetTeam(teamNumber, out var team))
         {
-            // If Team is full, return.
             if (team.Teammembers.Count >= Gamemode.PlayersPerTeam)
             {
-                Player.DisplayTextTo($"{team.TeamColor}{Colors.COLOR_YELLOW_ORANGE} is full.{Colors.COLOR_RESET}");
+                player.DisplayTextTo($"{team.TeamColor}{Colors.COLOR_YELLOW_ORANGE} is full.{Colors.COLOR_RESET}");
                 return false;
             }
-            // If player is on the team they're trying to join.. Return.
-            if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team currentTeam))
+
+            if (TeamRegistry.TryGetTeamForPlayer(player, out var currentTeam))
             {
-                if (currentTeam.TeamID == TeamNumber)
+                if (currentTeam.TeamID == teamNumber)
                 {
-                    Player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You are already on {team.TeamColor}{Colors.COLOR_RESET}");
+                    player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}You are already on {team.TeamColor}{Colors.COLOR_RESET}");
                     return false;
                 }
 
-                // If not the same team.. Remove them so they're ready to join another.
-                RemoveFromCurrentTeam(Player);
+                RemoveFromCurrentTeam(player);
             }
         }
-        // If team doesnt exist, we're going to remove the player from current team and create that new team.
         else
         {
-            RemoveFromCurrentTeam(Player);
-            new Team(TeamNumber);
+            // Team doesn't exist yet — remove the player from their current team and create it.
+            RemoveFromCurrentTeam(player);
+            new Team(teamNumber);
         }
         return true;
     }
 
-    private static void RemoveFromCurrentTeam(player Player)
+    private static void RemoveFromCurrentTeam(player player)
     {
-        if (Globals.PLAYERS_TEAMS.TryGetValue(Player, out Team team))
+        if (TeamRegistry.TryGetTeamForPlayer(player, out var team))
         {
-            team.RemoveMember(Player);
+            team.RemoveMember(player);
         }
     }
 }

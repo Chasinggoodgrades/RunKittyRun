@@ -7,24 +7,7 @@ public static class MultiboardUtil
     /// </summary>
     public static void RefreshMultiboards()
     {
-        RefreshStandardMbs();
-        RefreshSoloMbs();
-    }
-
-    private static void RefreshStandardMbs()
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        if (!Difficulty.IsDifficultyChosen) return; // Init first.
-        StandardMultiboard.UpdateStandardCurrentStatsMB();
-        StandardMultiboard.UpdateOverallStatsMB();
-        StandardMultiboard.UpdateBestTimesMB();
-    }
-
-    private static void RefreshSoloMbs()
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Solo) return; // Solo Tournament
-        SoloMultiboard.UpdateOverallStatsMB();
-        SoloMultiboard.UpdateBestTimesMB();
+        Gamemode.Current.RefreshMultiboard();
     }
 
     /// <summary>

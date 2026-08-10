@@ -34,10 +34,10 @@ public sealed class Progress : IProgressService
         if (!Globals.GAME_ACTIVE) return;
         try
         {
-
-            for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
+            var allTeams = TeamRegistry.All;
+            for (int i = 0; i < allTeams.Count; i++)
             {
-                var team = Globals.ALL_TEAMS_LIST[i];
+                var team = allTeams[i];
                 team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(team));
             }
             TeamsMultiboard.UpdateTeamStatsMB();

@@ -80,7 +80,7 @@ public class TournamentSaver
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error saving tournament data: {ex.Message} " + ex.StackTrace);
+            Logger.Critical($"Error saving tournament data: {ex.Message} " + ex.StackTrace);
         }
     }
 
@@ -93,7 +93,7 @@ public class TournamentSaver
         if (roundData == null) return;
 
         if (Gamemode.CurrentGameMode == GameMode.Team
-            && Globals.PLAYERS_TEAMS.TryGetValue(kitty.Player, out var team)
+            && TeamRegistry.TryGetTeamForPlayer(kitty.Player, out var team)
             && Globals.ROUND >= 0 && Globals.ROUND < team.TeamTimes.Length)
         {
             roundData.RoundTime = team.TeamTimes[Globals.ROUND];
@@ -112,7 +112,7 @@ public class TournamentSaver
         if (roundData == null) return;
 
         if (Gamemode.CurrentGameMode == GameMode.Team
-            && Globals.PLAYERS_TEAMS.TryGetValue(kitty.Player, out var team)
+            && TeamRegistry.TryGetTeamForPlayer(kitty.Player, out var team)
             && team.RoundProgress.TryGetValue(Globals.ROUND, out var teamProgress)
             && float.TryParse(teamProgress, NumberStyles.Float, CultureInfo.InvariantCulture, out var progress))
         {

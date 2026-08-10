@@ -95,7 +95,6 @@ public static class CollisionDetection
                 if (ChronoSphere.RewindDeath(k)) return;
                 OneOfNine.OneOfNineEffect(k);
                 k.KillKitty();
-                TeamsUtil.CheckTeamDead(k);
             }
             catch (Exception e)
             {

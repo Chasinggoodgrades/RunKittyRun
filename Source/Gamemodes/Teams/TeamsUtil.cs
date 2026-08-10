@@ -5,24 +5,13 @@ public static class TeamsUtil
     public static void RoundResetAllTeams()
     {
         if (Gamemode.CurrentGameMode != GameMode.Team) return;
-        foreach (var team in Globals.ALL_TEAMS_LIST)
+        foreach (var team in TeamRegistry.All)
             team.Finished = false;
-    }
-
-    public static void CheckTeamDead(Kitty k)
-    {
-        if (Gamemode.CurrentGameMode != GameMode.Team) return;
-        var team = Globals.ALL_TEAMS[k.TeamID];
-        for (int i = 0; i < team.Teammembers.Count; i++)
-        {
-            if (Globals.ALL_KITTIES[team.Teammembers[i]].Alive) return;
-        }
-        team.TeamIsDeadActions();
     }
 
     public static string GetTeamMembers(Kitty k)
     {
-        var team = Globals.ALL_TEAMS[k.TeamID];
+        TeamRegistry.TryGetTeam(k.TeamID, out var team);
         string members = "";
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
@@ -34,18 +23,7 @@ public static class TeamsUtil
 
     public static string GetTeamColor(Kitty k)
     {
-        var team = Globals.ALL_TEAMS[k.TeamID];
+        TeamRegistry.TryGetTeam(k.TeamID, out var team);
         return Colors.GetColorNameByTeamID(team.TeamID);
-    }
-
-    public static void UpdateTeamsMB()
-    {
-        var t = timer.Create();
-        t.Start(0.1f, false, ErrorHandler.Wrap(() =>
-        {
-            TeamsMultiboard.UpdateCurrentTeamsMB();
-            TeamsMultiboard.UpdateTeamStatsMB();
-            t.Dispose();
-        }));
     }
 }

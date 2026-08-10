@@ -68,7 +68,7 @@ public class APMTracker
                 LastY= Kitty.Unit.Y;
                 return;
             }
-            Windwalk.ReactivateWindwalk(Kitty, true);
+            Kitty.Windwalk.ReactivateWindwalk(true);
         }
         catch (Exception e)
         {

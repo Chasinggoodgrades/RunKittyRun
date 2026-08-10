@@ -28,6 +28,8 @@ public class Kitty : IFloatingTags, ICircleOwner
     public SpinCam SpinCam { get; set; }
     public APMTracker APMTracker { get; set; }
     public KittyMorphosis KittyMorphosis { get; set; }
+    public Windwalk Windwalk { get; private set; }
+    public ProtectionOfAncients ProtectionOfAncients { get; private set; }
     public Slider Slider { get; private set; }
     public RTR RTR { get; private set; }
     public MirrorMovementHandler MirrorHandler { get; private set; }
@@ -70,6 +72,8 @@ public class Kitty : IFloatingTags, ICircleOwner
         NameTag = new FloatingNameTag(this);
         KittyMorphosis = new KittyMorphosis(this);
         ShadowKitty = new ShadowKitty(this);
+        Windwalk = new Windwalk(this);
+        ProtectionOfAncients = new ProtectionOfAncients(this);
         Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
         StartAIController();
@@ -110,15 +114,12 @@ public class Kitty : IFloatingTags, ICircleOwner
             Unit.Kill();
 
             // Update status flags
-            if (!ProtectionActive)
-                Alive = false;
+            if (!ProtectionActive) Alive = false;
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
             Circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             Circle.KittyDied(this);
-            Solo.ReviveKittySoloTournament(this);
-            Solo.RoundEndCheck();
 
             // Death Sounds
             SoundManager.PlayKittyDeathSound(this);
@@ -127,15 +128,8 @@ public class Kitty : IFloatingTags, ICircleOwner
             // Update stats
             StatsManager.DeathStatUpdate();
 
-            // Handle game mode specific logic
-            if (Gamemode.CurrentGameMode == GameMode.Standard)
-            {
-                TeamDeathless.DiedWithOrb(this);
-                //ChainedTogether.LoseEvent(this.Name);
-                SoundManager.PlayLastManStandingSound();
-                Gameover.GameOver();
-                MultiboardUtil.RefreshMultiboards();
-            }
+            // Gamemode specific logic like solo revive circles.. and w/e else.
+            Gamemode.Current.OnKittyDied(this);
         }
         catch (Exception e)
         {
@@ -159,7 +153,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             // Revive the unit at its respective position
             Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
             Unit.Mana = Circle.Unit.Mana;
-            Windwalk.ReactivateWindwalk(this);
+            Windwalk.ReactivateWindwalk();
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
@@ -277,6 +271,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         RTR?.Dispose();
         Slider?.Dispose();
         SpinCam?.Dispose();
+        Windwalk?.Dispose();
         NameTag?.Dispose();
         Unit?.Dispose();
         //ChainedTogether.RegenerateGroup(this.Name);
