@@ -17,9 +17,9 @@ public static class RoundUtilities
     {
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
-            var player = team.Teammembers[i];
-            Globals.ALL_KITTIES[player].Finished = true;
-            MovePlayerToStart(player);
+            var kitty = team.Teammembers[i];
+            kitty.Finished = true;
+            MovePlayerToStart(kitty.Player);
         }
         team.Finished = true;
     }

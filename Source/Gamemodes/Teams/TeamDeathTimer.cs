@@ -30,7 +30,7 @@ public class TeamDeathTimer
         var tags = new List<texttag>();
         for (int i = 0; i < Team.Teammembers.Count; i++)
         {
-            var circle = Globals.ALL_CIRCLES[Team.Teammembers[i]];
+            var circle = Team.Teammembers[i].Circle;
             var floatText = texttag.Create();
             floatText.SetPosition(circle.Unit.X, circle.Unit.Y - Y_OFFSET, 0);
             floatText.SetVisibility(true);
@@ -50,7 +50,6 @@ public class TeamDeathTimer
         var timeText = ReviveTimer.Remaining.ToString("F2");
         for (int i = 0; i < Team.Teammembers.Count; i++)
         {
-            var player = Team.Teammembers[i];
             FloatingTimers[i].SetText($"{Colors.GetStringColorOfPlayer(Team.TeamID)}{timeText}|r", TextTagHeight);
         }
     }
@@ -60,7 +59,7 @@ public class TeamDeathTimer
         var minSafeZone = int.MaxValue;
         for (int i = 0; i < Team.Teammembers.Count; i++)
         {
-            if (!Globals.ALL_KITTIES.TryGetValue(Team.Teammembers[i], out var kitty)) continue;
+            var kitty = Team.Teammembers[i];
             if (kitty.CurrentSafeZone < minSafeZone) minSafeZone = kitty.CurrentSafeZone;
         }
         return minSafeZone == int.MaxValue ? 0 : minSafeZone;
@@ -77,8 +76,8 @@ public class TeamDeathTimer
 
             for (int i = 0; i < Team.Teammembers.Count; i++)
             {
-                var player = Team.Teammembers[i];
-                if (!Globals.ALL_KITTIES.TryGetValue(player, out var kitty)) continue;
+                var kitty = Team.Teammembers[i];
+                var player = kitty.Player;
 
                 kitty.CurrentSafeZone = minSafeZone;
                 kitty.ReviveKitty();

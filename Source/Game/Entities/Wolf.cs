@@ -215,7 +215,8 @@ public class Wolf
 
     private bool TournamentChance()
     {
-        float baseChance = Gamemode.CurrentGameMode == GameMode.Team ? 12.5f + (0.15f * Gamemode.PlayersPerTeam) : 8.0f;
+        var playersPerTeam = Math.Min(Gamemode.PlayersPerTeam, 6);
+        float baseChance = Gamemode.CurrentGameMode == GameMode.Team ? 8.0f + (1.25f * playersPerTeam) : 8.0f;
         float increasePerRound = 2.0f;
         float maxProbability = 22.5f;
 

@@ -113,8 +113,9 @@
 
     private static void TeamResources()
     {
-        SaveExperience = 15;
-        SaveGold = 5;
+        StartingGold = 200;
+        SaveExperience = 55;
+        SaveGold = 15;
         SafezoneExperience = 100;
     }
 }

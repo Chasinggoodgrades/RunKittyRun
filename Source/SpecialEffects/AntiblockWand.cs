@@ -23,7 +23,7 @@ public static class AntiblockWand
 
     public static void CreateAntiblockSpell()
     {
-        if (Gamemode.CurrentGameMode != GameMode.Solo) return;
+        //if (Gamemode.CurrentGameMode == GameMode.Solo) return;
         AddAntiblockAbility();
     }
 

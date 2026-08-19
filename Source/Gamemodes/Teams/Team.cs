@@ -18,7 +18,7 @@ public class Team
     /// Array of team times in seconds for each round. Index 0 is unused.
     /// </summary>
     public float[] TeamTimes { get; set; }
-    public List<player> Teammembers { get; } = new List<player>();
+    public List<Kitty> Teammembers { get; } = new List<Kitty>();
     public string TeamMembersString { get; private set; } = "";
     public Dictionary<int, string> RoundProgress { get; } = new Dictionary<int, string>();
     public bool Finished { get; set; }
@@ -54,7 +54,7 @@ public class Team
 
         foreach (var member in Teammembers)
         {
-            Globals.ALL_KITTIES[member].Finished = true;
+            member.Finished = true;
         }
         Finished = true;
         RoundManager.RoundEndCheck();
@@ -78,18 +78,19 @@ public class Team
     /// </summary>
     private void SetMembership(player player, bool adding)
     {
+        var kitty = Globals.ALL_KITTIES[player];
         if (adding)
         {
-            Teammembers.Add(player);
-            Globals.ALL_KITTIES[player].TeamID = TeamID;
-            Globals.ALL_KITTIES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
+            Teammembers.Add(kitty);
+            kitty.TeamID = TeamID;
+            kitty.Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
             Globals.ALL_CIRCLES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
             TeamRegistry.MapPlayer(player, this);
         }
         else
         {
-            Teammembers.Remove(player);
-            Globals.ALL_KITTIES[player].TeamID = 0;
+            Teammembers.Remove(kitty);
+            kitty.TeamID = 0;
             TeamRegistry.UnmapPlayer(player);
         }
 
@@ -104,7 +105,7 @@ public class Team
         {
             var rawName = member.Name.Split('#')[0];
             if (rawName.Length > 7) rawName = rawName.Substring(0, 7);
-            names.Add(Colors.ColorString(rawName, member.Id + 1));
+            names.Add(Colors.ColorString(rawName, member.Player.Id + 1));
         }
         TeamMembersString = string.Join(", ", names);
     }
