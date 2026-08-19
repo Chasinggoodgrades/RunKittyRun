@@ -84,9 +84,10 @@ public static class GameTimer
     private static void UpdateTeamTimes()
     {
         if (Gamemode.CurrentGameMode != GameMode.Team) return;
-        for (int i = 0; i < Globals.ALL_TEAMS_LIST.Count; i++)
+        var teams = TeamRegistry.All;
+        for (int i = 0; i < teams.Count; i++)
         {
-            var team = Globals.ALL_TEAMS_LIST[i];
+            var team = teams[i];
             if (!team.Finished) team.TeamTimes[Globals.ROUND] += RoundSpeedIncrement;
         }
     }

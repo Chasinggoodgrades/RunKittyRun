@@ -881,5 +881,8 @@ public static class UnitData
         new Monster("Hssa", "heropaladin", "HeroPaladin"),
         new Monster("Hddt", "thaloriendawnseeker", "ThalorienDawnseeker"),
         new Monster("owad", "wolfrider", "WolfRider"),
+
+        // CUSTOM MODELS
+        new Monster("E00G", "garfield", "Garfield"),
     };
 }

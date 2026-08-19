@@ -1944,14 +1944,27 @@ public static class InitCommands
             name: "mockdata",
             alias: "mock,mockstats",
             tier: CommandTier.Developer,
-            argDesc: "[resolvePlayerId] or [all]",
-            description: "Generates mock save data for testing. Use 'all' for all players or specify a player.",
+            argDesc: "[resolvePlayerId] or [all] [gamemode]",
+            description: "Generates mock save data for testing. Use 'all' for all players or specify a player. Optionally pass a gamemode (e.g. Solo, Team, Standard) - defaults to whatever gamemode is currently running.",
             action: (player, args) =>
             {
+                GameMode? gamemode = null;
+                if (args.Length > 1 && !string.IsNullOrWhiteSpace(args[1]))
+                {
+                    if (Enum.TryParse(args[1], true, out GameMode parsedGamemode))
+                    {
+                        gamemode = parsedGamemode;
+                    }
+                    else
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown gamemode '{args[1]}', defaulting to the current gamemode.{Colors.COLOR_RESET}");
+                    }
+                }
+
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
                 {
                     if (kitty == null) return;
-                    MockDataGenerator.GenerateMockSaveData(kitty);
+                    MockDataGenerator.GenerateMockSaveData(kitty, gamemode);
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Mock data generated for {Colors.PlayerNameColored(kitty.Player)}!{Colors.COLOR_RESET}");
                 });
             }

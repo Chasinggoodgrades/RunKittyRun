@@ -56,8 +56,10 @@ public sealed class Progress : IProgressService
 
         for (int i = 0; i < Team.Teammembers.Count; i++)
         {
-            var player = Team.Teammembers[i];
-            totalProgress += Globals.ALL_KITTIES[player].TimeProg.GetRoundProgress(Globals.ROUND);
+            var kitty = Team.Teammembers[i];
+            if (kitty.Finished) totalProgress += 100.00f;
+            else totalProgress += kitty.TimeProg.GetRoundProgress(Globals.ROUND);
+
         }
 
         return (totalProgress / Team.Teammembers.Count).ToString("F2");
@@ -67,11 +69,11 @@ public sealed class Progress : IProgressService
     {
         try
         {
+            // Once a kitty has finished (entered the final safezone or the victory area), always report 100 progress.
+            if (request.Finished || HasReachedFinalSafezone(request)) return 100.0f;
+
             var currentSafezone = request.ProgressZone;
-            if (Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(request.UnitX, request.UnitY)) return 100.0f; // if at end.. 100 progress
-            if (Regions.Victory_Area.Contains(request.UnitX, request.UnitY)) return 100.0f; // if in victory area, 100 progress
-            if (Globals.SAFE_ZONES[0].Rectangle.Contains(request.UnitX, request.UnitY) && !request.Finished) return 0.0f; // if at start, 0 progress
-            if (request.Alive && request.Finished) return 100.0f;
+            if (Globals.SAFE_ZONES[0].Rectangle.Contains(request.UnitX, request.UnitY)) return 0.0f; // if at start, 0 progress
             var currentProgress = DistanceBetweenPoints(request.UnitX, request.UnitY,
                 ProgressPointHelper.Points[request.CurrentPoint].X, ProgressPointHelper.Points[request.CurrentPoint].Y);
             var totalProgress = DistancesFromStart[currentSafezone] + currentProgress;
@@ -86,6 +88,12 @@ public sealed class Progress : IProgressService
             Logger.Warning($"Error in CalculatePlayerProgress. {e.Message}");
             return 0.0f;
         }
+    }
+
+    private static bool HasReachedFinalSafezone(ProgressRequest request)
+    {
+        return Globals.SAFE_ZONES[Globals.SAFE_ZONES.Count - 1].Rectangle.Contains(request.UnitX, request.UnitY)
+            || Regions.Victory_Area.Contains(request.UnitX, request.UnitY);
     }
 
     public float CalculateNitroPacerProgress()

@@ -39,6 +39,10 @@ public class TournamentSaver
                 var stats = kitty.SaveData?.TournamentStats;
                 if (stats == null) return;
 
+                // ignore mock data
+                if (!string.IsNullOrEmpty(stats.Tournament_ID) && stats.Tournament_ID.StartsWith("MOCK_TOURNAMENT_"))
+                    continue;
+
                 var currentGame = GetCurrentGameData(kitty);
                 if (currentGame == null) return;
 

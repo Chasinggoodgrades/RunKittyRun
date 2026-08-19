@@ -67,7 +67,7 @@ public sealed class TeamGameMode : IGameMode
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
             var teamMember = team.Teammembers[i];
-            if (!VictoryZone.IsUnitInVictoryContainer(Globals.ALL_KITTIES[teamMember].Unit)) return false;
+            if (!VictoryZone.IsUnitInVictoryContainer(teamMember.Unit)) return false;
         }
         return true;
     }
@@ -112,7 +112,7 @@ public sealed class TeamGameMode : IGameMode
         if (team == null) return;
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
-            if (Globals.ALL_KITTIES[team.Teammembers[i]].Alive) return;
+            if (team.Teammembers[i].Alive) return;
         }
         team.TeamIsDeadActions();
     }

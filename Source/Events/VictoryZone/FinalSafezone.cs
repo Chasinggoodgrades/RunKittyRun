@@ -19,6 +19,8 @@ public static class FinalSafezone
             var player = unit.Owner;
             var kitty = Globals.ALL_KITTIES[player];
             if (TimeSetter.Instance.SetRoundTime(kitty)) MultiboardUtil.RefreshMultiboards();
+            kitty.Finished = true;
+
             if (Gamemode.CurrentGameMode != GameMode.Standard) return;
 
             TimeSetter.Instance.SetRoundFinishedTime(); // Sets the finished time for the round (when someone hits the final safezone)

@@ -146,8 +146,8 @@ public static class SoundManager
         if (team == null) return;
         for (int i = 0; i < team.Teammembers.Count; i++)
         {
-            var player = team.Teammembers[i];
-            if (player.IsLocal)
+            var member = team.Teammembers[i];
+            if (member.Player.IsLocal)
             {
                 s.Stop(false, false);
                 s.Start();

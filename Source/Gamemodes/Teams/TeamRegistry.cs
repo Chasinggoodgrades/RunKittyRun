@@ -67,7 +67,7 @@ public static class TeamRegistry
 
         foreach (var member in team.Teammembers)
         {
-            if (Globals.ALL_KITTIES[member].Alive) return;
+            if (member.Alive) return;
         }
         team.TeamIsDeadActions();
     }
@@ -81,7 +81,7 @@ public static class TeamRegistry
 
         foreach (var member in team.Teammembers)
         {
-            if (!Globals.ALL_KITTIES[member].Finished) return false;
+            if (!member.Finished) return false;
         }
         return true;
     }

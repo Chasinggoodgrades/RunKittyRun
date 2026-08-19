@@ -1,6 +1,6 @@
 STRING 1
 {
-|cffff0000RKR Remastered v1.6.1|r
+|cffff0000RKR Remastered v1.6.2|r
 }
 
 STRING 2
@@ -10,9 +10,9 @@ STRING 2
 
 STRING 3
 {
-|cff00ffffRun Kitty Run|r v1.6.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v1.6.2 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n|n|cff00ffffLast updated:|r |c00FF000008/15/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000008/18/2026|r
 }
 
 STRING 4
@@ -792,7 +792,7 @@ Purchase the Meditation |cffffff00C|rloak |cff8080ff   [Unique]|r
 
 STRING 2018
 {
-Run Kitty Run Remastered v1.6.1
+Run Kitty Run Remastered v1.6.2
 }
 
 STRING 2035
@@ -5159,5 +5159,17 @@ STRING 3950
 // Units: E00E (Huntress Kitty), Propernames (Proper Names)
 {
 Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches,Orbit,NaZe,hoff,Komoto1995
+}
+
+STRING 3952
+// Units: E00G (Garfield), Propernames (Proper Names)
+{
+Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches,Orbit,NaZe,hoff,Komoto1995
+}
+
+STRING 3953
+// Units: E00G (Garfield), Name (Name)
+{
+Garfield
 }
 
