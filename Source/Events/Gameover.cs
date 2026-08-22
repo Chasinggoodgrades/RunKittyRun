@@ -4,7 +4,7 @@ using WCSharp.Api;
 public static class Gameover
 {
     public static bool WinGame { get; set; } = false;
-    private static float EndingTimer { get; set; } = 90.0f;
+    private static float EndingTimer { get; set; } = 600.0f;
     public static bool NoEnd { get; set; } = false;
 
     public static bool GameOver()

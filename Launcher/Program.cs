@@ -1,6 +1,7 @@
 ﻿using CSharpLua;
 using Microsoft.CodeAnalysis;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +36,7 @@ namespace Launcher
 #if DEBUG
         private const bool DEBUG = true;
 #else
-		private const bool DEBUG = false;
+        private const bool DEBUG = false;
 #endif
 
         private static void Main()
@@ -259,132 +260,272 @@ public static class LuaScriptProcessor
 
     public static string ProcessLuaScript(string script)
     {
-//        int counter = 0;
-//        string objPrefix = "info.GetStackTrace() .. ' > ' .. "; // "info.GetStackTrace() .. ' > ' .. "
+        script = HookNativeHandleConstructors(script);
+        script = HookCoreSystemAllocator(script);
 
-//        // Replace MemoryHandler.getEmptyObject()
-//        script = Regex.Replace(
-//            script,
-//            "MemoryHandler\\.getEmptyObject\\(\\)",
-//            m => $"MemoryHandler.getEmptyObject({objPrefix}'obj.{counter++}')",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        return LeakTrackerStackTraceLib + "\n\n" + LeakTrackerLib + "\n\n" + script;
+    }
 
-//        // Replace MemoryHandler.getEmptyArray()
-//        script = Regex.Replace(
-//            script,
-//            "MemoryHandler\\.getEmptyArray\\(\\)",
-//            m => $"MemoryHandler.getEmptyArray({objPrefix}'arr.{counter++}')",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+    // Hooks CoreSystem's single allocation choke point (Core.lua's
+    // `new(cls, ...)`) so every compiled C# class instance gets tracked by
+    // LeakTracker automatically - no per-class edits needed. Every `new X()`
+    // in C# funnels through this one function via each compiled class's
+    // __call metamethod (classes, structs, static-ctor classes, and generic
+    // instantiations all end up here), so this catches everything without
+    // needing to know class names ahead of time. Only patches the return
+    // line itself, so the original (this, ctor-return-values) return
+    // signature is untouched.
+    private static string HookCoreSystemAllocator(string script)
+    {
+        var matchCount = Regex.Matches(script, @"return this, cls\.__ctor__\(this, \.\.\.\)").Count;
+        if (matchCount == 0)
+        {
+            Console.WriteLine("[LeakTracker] WARNING: could not find CoreSystem's new() allocator to hook - " +
+                "C# class instances will NOT be auto-tracked this build. Native handle tracking still works.");
+            return script;
+        }
 
-//        // Replace occurrences of an object literal initialization to insert a print statement.
-//        script = Regex.Replace(
-//            script,
-//            "(=|return|,)\\s+\\{",
-//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Object #{counter++}') or {{",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        script = Regex.Replace(
+            script,
+            @"([ \t]*)return this, cls\.__ctor__\(this, \.\.\.\)",
+            m => $"{m.Groups[1].Value}if LeakTracker then LeakTracker.Track(this, cls.__name__) end\n{m.Groups[1].Value}return this, cls.__ctor__(this, ...)",
+            RegexOptions.Multiline);
 
-//        // Replace occurrences where an object literal is immediately wrapped in parentheses.
-//        script = Regex.Replace(
-//            script,
-//            "\\(\\{",
-//            m => $"(__fakePrint({objPrefix}'Object #{counter++}') or {{",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        Console.WriteLine($"[LeakTracker] Hooked CoreSystem's new() allocator ({matchCount} occurrence(s)).");
+        return script;
+    }
 
-//        // Replace occurrences of function expressions to insert a print statement.
-//        script = Regex.Replace(
-//            script,
-//            "(=|return|,)\\s+function\\(",
-//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or function(",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+    // Native JASS/BJ functions that allocate a fresh Warcraft III object
+    // handle (location, rect, group, effect, unit, ...) rather than merely
+    // returning a reference to one that already exists. Unlike C# class
+    // instances, the engine never frees these on its own - if the matching
+    // Remove*/Destroy* native is never called, the handle leaks for the
+    // rest of the game, invisibly, since Lua's GC has no say in it.
+    // Wrapping each of these in LeakTracker.Track lets the existing
+    // alive/created report surface exactly which BJ constructors a build
+    // is calling the most, through the same reporting pipeline as the C#
+    // side above.
+    //
+    // Starting point: a sweep of common.j + Blizzard.j for natives/functions
+    // declared "returns (location|rect|group|event|weathereffect|
+    // terraindeformation|lightning|fogmodifier|image|ubersplat|
+    // minimapicon|sound|effect|commandbuttoneffect|item|unit|destructable|
+    // player|force|button|dialog|quest|questitem|defeatcondition|timer|
+    // timerdialog|leaderboard|multiboard|multiboarditem|texttag|gamecache|
+    // hashtable|widget|ability|trigger|boolexpr|conditionfunc|filterfunc|
+    // triggercondition|triggeraction|trackable|region|fogstate|
+    // camerasetup|framehandle)". That sweep alone isn't enough, though:
+    // matching on return type alone also pulls in plenty of functions that
+    // just hand back a reference to something that already exists
+    // (GetTriggerUnit, GetEnumItem, the whole Load*Handle family,
+    // GetLastCreatedX, GetExpiredTimer, BlzFrameGetChild/GetParent, ...)
+    // or return a non-handle constant/conversion (the Convert* family,
+    // Player()). Tracking those would flood the report with "leaks" that
+    // aren't allocations at all, so this list has been pruned down to the
+    // functions that genuinely construct something new - including the
+    // base Location()/Rect() natives, the And/Or/Not/Condition/Filter
+    // boolexpr/conditionfunc/filterfunc combinators, TriggerAddAction/
+    // TriggerAddCondition (paired with TriggerRemoveAction/Condition),
+    // MultiboardGetItem (explicitly documented as allocating a fresh
+    // handle every call), the BlzCreateFrame family, and the full
+    // TriggerRegisterXEvent/BJ family - registering the same event twice
+    // on a trigger is a well-known, officially-acknowledged source of
+    // leaked `event` handles in WC3 scripts. It's a best-effort pass, not
+    // a guarantee - if a report shows a tag at a suspiciously high or low
+    // count, or you know of a BJ constructor missing here, add or remove
+    // it.
+    private static readonly string[] NativeHandleConstructors =
+    {
+        "AddLightning", "AddLightningEx", "AddLightningLoc", "AddSpecialEffect", "AddSpecialEffectLoc",
+        "AddSpecialEffectLocBJ", "AddSpecialEffectTarget", "AddSpecialEffectTargetDestructableBJ", "AddSpecialEffectTargetItemBJ", "AddSpecialEffectTargetUnitBJ",
+        "AddSpellEffect", "AddSpellEffectById", "AddSpellEffectByIdLoc", "AddSpellEffectLoc", "AddSpellEffectTarget",
+        "AddSpellEffectTargetById", "AddWeatherEffect", "AddWeatherEffectSaveLast", "And", "BlightGoldMineForPlayer",
+        "BlightGoldMineForPlayerBJ", "BlzCreateDeadDestructableWithSkin", "BlzCreateDeadDestructableZWithSkin", "BlzCreateDestructableWithSkin", "BlzCreateDestructableZWithSkin",
+        "BlzCreateFrame", "BlzCreateFrameByType", "BlzCreateItemWithSkin", "BlzCreateSimpleFrame", "BlzCreateUnitWithSkin",
+        "BlzGetTriggerPlayerMousePosition", "BlzTriggerRegisterFrameEvent", "BlzTriggerRegisterPlayerKeyEvent", "BlzTriggerRegisterPlayerSyncEvent", "CameraSetupGetDestPositionLoc",
+        "Condition", "CreateBlightedGoldmine", "CreateBuildCommandButtonEffectBJ", "CreateCameraSetup", "CreateCommandButtonEffect",
+        "CreateCommandButtonEffectBJ", "CreateCommonCommandButtonEffectBJ", "CreateCorpse", "CreateCorpseLocBJ", "CreateDeadDestructable",
+        "CreateDeadDestructableLocBJ", "CreateDeadDestructableZ", "CreateDefeatCondition", "CreateDefeatConditionBJ", "CreateDestructable",
+        "CreateDestructableLoc", "CreateDestructableZ", "CreateFogModifierRadius", "CreateFogModifierRadiusLoc", "CreateFogModifierRadiusLocBJ",
+        "CreateFogModifierRadiusLocSimple", "CreateFogModifierRect", "CreateFogModifierRectBJ", "CreateFogModifierRectSimple", "CreateForce",
+        "CreateGroup", "CreateImage", "CreateImageBJ", "CreateItem", "CreateItemLoc",
+        "CreateItemPool", "CreateLeaderboard", "CreateLeaderboardBJ", "CreateLearnCommandButtonEffect", "CreateLearnCommandButtonEffectBJ",
+        "CreateMIDISound", "CreateMinimapIcon", "CreateMinimapIconAtLoc", "CreateMinimapIconAtLocBJ", "CreateMinimapIconBJ",
+        "CreateMinimapIconOnUnit", "CreateMinimapIconOnUnitBJ", "CreateMultiboard", "CreateMultiboardBJ", "CreateNUnitsAtLoc",
+        "CreateNUnitsAtLocFacingLocBJ", "CreatePermanentCorpseLocBJ", "CreateQuest", "CreateQuestBJ", "CreateQuestItemBJ",
+        "CreateRegion", "CreateSound", "CreateSoundFilenameWithLabel", "CreateSoundFromLabel", "CreateTextTag",
+        "CreateTextTagLocBJ", "CreateTextTagUnitBJ", "CreateTimer", "CreateTimerBJ", "CreateTimerDialog",
+        "CreateTimerDialogBJ", "CreateTrackable", "CreateTrainCommandButtonEffectBJ", "CreateTrigger", "CreateUbersplat",
+        "CreateUbersplatBJ", "CreateUnit", "CreateUnitAtLoc", "CreateUnitAtLocByName", "CreateUnitAtLocSaveLast",
+        "CreateUnitByName", "CreateUnitPool", "CreateUpgradeCommandButtonEffect", "CreateUpgradeCommandButtonEffectBJ", "DialogAddButton",
+        "DialogAddButtonBJ", "DialogAddButtonWithHotkeyBJ", "DialogAddQuitButton", "DialogCreate", "Filter",
+        "GetCameraBoundsMapRect", "GetCameraEyePositionLoc", "GetCameraTargetPositionLoc", "GetCurrentCameraBoundsMapRectBJ", "GetCurrentCameraSetup",
+        "GetDestructableLoc", "GetEntireMapRect", "GetForceOfPlayer", "GetItemLoc", "GetOrderPointLoc",
+        "GetPlayableMapRect", "GetPlayerStartLocationLoc", "GetPlayersAll", "GetPlayersAllies", "GetPlayersByMapControl",
+        "GetPlayersEnemies", "GetPlayersMatching", "GetRandomLocInRect", "GetRandomSubGroup", "GetRectCenter",
+        "GetRectFromCircleBJ", "GetSpellTargetLoc", "GetStartLocationLoc", "GetUnitLoc", "GetUnitRallyPoint",
+        "GetUnitsInRangeOfLocAll", "GetUnitsInRangeOfLocMatching", "GetUnitsInRectAll", "GetUnitsInRectMatching", "GetUnitsInRectOfPlayer",
+        "GetUnitsOfPlayerAll", "GetUnitsOfPlayerAndTypeId", "GetUnitsOfPlayerMatching", "GetUnitsOfTypeIdAll", "GetUnitsSelectedAll",
+        "GetWorldBounds", "InitGameCache", "InitGameCacheBJ", "InitHashtable", "InitHashtableBJ",
+        "Location", "MeleeCheckForVictors", "MeleeGetLocWithinRect", "MeleeGetProjectedLoc", "MeleeRandomHeroLoc",
+        "MultiboardGetItem", "Not", "OffsetLocation", "OffsetRectBJ", "Or",
+        "PlaceRandomItem", "PlaceRandomUnit", "PolarProjectionBJ", "QuestCreateItem", "Rect",
+        "RectFromCenterSizeBJ", "RectFromLoc", "ReplaceUnitBJ", "RestoreUnit", "RestoreUnitLocFacingAngleBJ",
+        "RestoreUnitLocFacingPointBJ", "StartTimerBJ", "TerrainDeformCrater", "TerrainDeformRandom", "TerrainDeformRipple",
+        "TerrainDeformWave", "TerrainDeformationCraterBJ", "TerrainDeformationRandomBJ", "TerrainDeformationRippleBJ", "TerrainDeformationWaveBJ",
+        "TriggerAddAction", "TriggerAddCondition", "TriggerRegisterBuildCommandEventBJ", "TriggerRegisterBuildSubmenuEventBJ", "TriggerRegisterCommandEvent",
+        "TriggerRegisterCommonCommandEventBJ", "TriggerRegisterDeathEvent", "TriggerRegisterDialogButtonEvent", "TriggerRegisterDialogEvent", "TriggerRegisterDialogEventBJ",
+        "TriggerRegisterDistanceBetweenUnits", "TriggerRegisterEnterRectSimple", "TriggerRegisterEnterRegion", "TriggerRegisterEnterRegionSimple", "TriggerRegisterFilterUnitEvent",
+        "TriggerRegisterGameEvent", "TriggerRegisterGameLoadedEventBJ", "TriggerRegisterGameSavedEventBJ", "TriggerRegisterGameStateEvent", "TriggerRegisterGameStateEventTimeOfDay",
+        "TriggerRegisterLeaveRectSimple", "TriggerRegisterLeaveRegion", "TriggerRegisterLeaveRegionSimple", "TriggerRegisterPlayerAllianceChange", "TriggerRegisterPlayerChatEvent",
+        "TriggerRegisterPlayerEvent", "TriggerRegisterPlayerEventAllianceChanged", "TriggerRegisterPlayerEventDefeat", "TriggerRegisterPlayerEventEndCinematic", "TriggerRegisterPlayerEventLeave",
+        "TriggerRegisterPlayerEventVictory", "TriggerRegisterPlayerKeyEventBJ", "TriggerRegisterPlayerMouseEventBJ", "TriggerRegisterPlayerSelectionEventBJ", "TriggerRegisterPlayerStateEvent",
+        "TriggerRegisterPlayerUnitEvent", "TriggerRegisterPlayerUnitEventSimple", "TriggerRegisterShowSkillEventBJ", "TriggerRegisterTimerEvent", "TriggerRegisterTimerEventPeriodic",
+        "TriggerRegisterTimerEventSingle", "TriggerRegisterTimerExpireEvent", "TriggerRegisterTimerExpireEventBJ", "TriggerRegisterTrackableHitEvent", "TriggerRegisterTrackableTrackEvent",
+        "TriggerRegisterTrainCommandEventBJ", "TriggerRegisterUnitEvent", "TriggerRegisterUnitInRange", "TriggerRegisterUnitInRangeSimple", "TriggerRegisterUnitLifeEvent",
+        "TriggerRegisterUnitManaEvent", "TriggerRegisterUnitStateEvent", "TriggerRegisterUpgradeCommandEvent", "TriggerRegisterUpgradeCommandEventBJ", "TriggerRegisterVariableEvent",
+        "UnitAddItemById", "UnitAddItemByIdSwapped", "WaygateGetDestinationLocBJ"
+    };
 
-//        // Insert a print for local function declarations. -- Doesn't work??
-//        script = Regex.Replace(
-//            script,
-//            "^(\\s+)?local function",
-//            m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+    // Wraps every call site of a tracked constructor - e.g. `CreateGroup()`
+    // becomes `LeakTracker.Track(CreateGroup(), "CreateGroup")` - so the
+    // return value flows into LeakTracker exactly like a `new X()` does on
+    // the C# side. A plain regex can find where each call *starts*, but
+    // can't reliably find where its argument list *ends* once arguments
+    // contain nested calls (e.g. CreateUnitAtLoc(p, id, GetRectCenter(r),
+    // 0)), so this does a small paren-matching scan per call site instead
+    // of trying to capture the arguments with the regex itself.
+    private static string HookNativeHandleConstructors(string script)
+    {
+        var pattern = @"\b(" + string.Join("|", NativeHandleConstructors.Select(Regex.Escape)) + @")\s*\(";
+        var callSites = new List<(int Start, int OpenParen, string Name)>();
 
-//        // Things I think might leak:
-//        // - First combine common.j and blizzard.j in 1 file in notepad++
-//        // - Then regex search for: `returns (location|rect|group|event|weathereffect|terraindeformation|lightning|fogmodifier|image|ubersplat|minimapicon|sound|effect|commandbuttoneffect|item|unit|destructable|player|force|button|dialog|quest|defeatcondition|timer|leaderboard|multiboard|texttag|gamecache|hashtable|widget|ability|trigger|boolexpr|trackable|region|fogstate|camerasetup)`
-//        // - Hit find all in current document
-//        // - Put matches in new file
-//        // - Record basic script that extracts all function names
+        foreach (Match match in Regex.Matches(script, pattern))
+        {
+            callSites.Add((match.Index, match.Index + match.Length - 1, match.Groups[1].Value));
+        }
 
-//        script = Regex.Replace(
-//            script,
-//            "(=|return|,)\\s+(PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|ConvertPlayerState|ConvertPlayerScore|ConvertPlayerGameResult|ConvertUnitState|ConvertPlayerEvent|ConvertPlayerUnitEvent|ConvertWidgetEvent|ConvertDialogEvent|ConvertUnitEvent|ConvertUnitType|ConvertPlayerColor|ConvertPlayerSlotState|ConvertFogState|ConvertEffectType|ConvertItemType|ConvertSoundType|ConvertAbilityIntegerField|ConvertAbilityRealField|ConvertAbilityBooleanField|ConvertAbilityStringField|ConvertAbilityIntegerLevelField|ConvertAbilityRealLevelField|ConvertAbilityBooleanLevelField|ConvertAbilityStringLevelField|ConvertAbilityIntegerLevelArrayField|ConvertAbilityRealLevelArrayField|ConvertAbilityBooleanLevelArrayField|ConvertAbilityStringLevelArrayField|ConvertUnitIntegerField|ConvertUnitRealField|ConvertUnitBooleanField|ConvertUnitStringField|ConvertUnitWeaponIntegerField|ConvertUnitWeaponRealField|ConvertUnitWeaponBooleanField|ConvertUnitWeaponStringField|ConvertItemIntegerField|ConvertItemRealField|ConvertItemBooleanField|ConvertItemStringField|ConvertUnitCategory|GetStartLocationLoc|GetPlayerColor|GetPlayerSlotState|CreateTimer|GetExpiredTimer|CreateGroup|BlzGroupUnitAt|FirstOfGroup|CreateForce|RectFromLoc|CreateRegion|GetWorldBounds|CreateTrigger|GetFilterUnit|GetEnumUnit|GetFilterDestructable|GetEnumDestructable|GetFilterItem|GetEnumItem|GetFilterPlayer|GetEnumPlayer|GetTriggeringTrigger|GetTriggerEventId|TriggerRegisterVariableEvent|TriggerRegisterTimerEvent|TriggerRegisterTimerExpireEvent|TriggerRegisterGameStateEvent|TriggerRegisterDialogEvent|TriggerRegisterDialogButtonEvent|TriggerRegisterGameEvent|GetWinningPlayer|TriggerRegisterEnterRegion|GetTriggeringRegion|GetEnteringUnit|TriggerRegisterLeaveRegion|GetLeavingUnit|TriggerRegisterTrackableHitEvent|TriggerRegisterTrackableTrackEvent|TriggerRegisterCommandEvent|TriggerRegisterUpgradeCommandEvent|GetTriggeringTrackable|GetClickedButton|GetClickedDialog|GetTournamentFinishNowPlayer|TriggerRegisterPlayerEvent|GetTriggerPlayer|TriggerRegisterPlayerUnitEvent|GetLevelingUnit|GetLearningUnit|GetRevivableUnit|GetRevivingUnit|GetAttacker|GetRescuer|GetDyingUnit|GetKillingUnit|GetDecayingUnit|GetSelectedUnit|GetConstructingStructure|GetCancelledStructure|GetConstructedStructure|GetResearchingUnit|GetTrainedUnit|GetDetectedUnit|GetSummoningUnit|GetSummonedUnit|GetTransportUnit|GetLoadedUnit|GetSellingUnit|GetSoldUnit|GetBuyingUnit|GetSoldItem|GetChangingUnit|GetChangingUnitPrevOwner|GetManipulatingUnit|GetManipulatedItem|BlzGetAbsorbingItem|BlzGetStackingItemSource|BlzGetStackingItemTarget|GetOrderedUnit|GetOrderPointLoc|GetOrderTarget|GetOrderTargetDestructable|GetOrderTargetItem|GetOrderTargetUnit|GetSpellAbilityUnit|GetSpellAbility|GetSpellTargetLoc|GetSpellTargetDestructable|GetSpellTargetItem|GetSpellTargetUnit|TriggerRegisterPlayerAllianceChange|TriggerRegisterPlayerStateEvent|GetEventPlayerState|TriggerRegisterPlayerChatEvent|TriggerRegisterDeathEvent|GetTriggerUnit|TriggerRegisterUnitStateEvent|GetEventUnitState|TriggerRegisterUnitEvent|GetEventDamageSource|GetEventDetectingPlayer|TriggerRegisterFilterUnitEvent|GetEventTargetUnit|TriggerRegisterUnitInRange|TriggerAddCondition|TriggerAddAction|GetTriggerWidget|CreateDestructable|CreateDestructableZ|CreateDeadDestructable|CreateDeadDestructableZ|GetTriggerDestructable|CreateItem|GetItemPlayer|GetItemType|CreateUnit|CreateUnitByName|CreateUnitAtLoc|CreateUnitAtLocByName|CreateCorpse|UnitAddItemById|UnitRemoveItemFromSlot|UnitItemInSlot|GetUnitLoc|GetOwningPlayer|GetUnitRallyPoint|GetUnitRallyUnit|GetUnitRallyDestructable|GetLocalPlayer|CreateFogModifierRect|CreateFogModifierRadius|CreateFogModifierRadiusLoc|DialogCreate|DialogAddButton|DialogAddQuitButton|InitGameCache|RestoreUnit|InitHashtable|LoadPlayerHandle|LoadWidgetHandle|LoadDestructableHandle|LoadItemHandle|LoadUnitHandle|LoadAbilityHandle|LoadTimerHandle|LoadTriggerHandle|LoadTriggerConditionHandle|LoadTriggerActionHandle|LoadTriggerEventHandle|LoadForceHandle|LoadGroupHandle|LoadLocationHandle|LoadRectHandle|LoadBooleanExprHandle|LoadSoundHandle|LoadEffectHandle|LoadUnitPoolHandle|LoadItemPoolHandle|LoadQuestHandle|LoadQuestItemHandle|LoadDefeatConditionHandle|LoadTimerDialogHandle|LoadLeaderboardHandle|LoadMultiboardHandle|LoadMultiboardItemHandle|LoadTrackableHandle|LoadDialogHandle|LoadButtonHandle|LoadTextTagHandle|LoadLightningHandle|LoadImageHandle|LoadUbersplatHandle|LoadRegionHandle|LoadFogStateHandle|LoadFogModifierHandle|LoadHashtableHandle|CreateUnitPool|PlaceRandomUnit|CreateItemPool|PlaceRandomItem|CreateMinimapIconOnUnit|CreateMinimapIconAtLoc|CreateMinimapIcon|CreateTextTag|CreateTrackable|CreateQuest|QuestCreateItem|CreateDefeatCondition|CreateTimerDialog|CreateLeaderboard|PlayerGetLeaderboard|CreateMultiboard|MultiboardGetItem|CreateCameraSetup|CameraSetupGetDestPositionLoc|GetCameraTargetPositionLoc|GetCameraEyePositionLoc|CreateSound|CreateSoundFilenameWithLabel|CreateSoundFromLabel|CreateMIDISound|AddWeatherEffect|TerrainDeformCrater|TerrainDeformRipple|TerrainDeformWave|TerrainDeformRandom|AddSpecialEffect|AddSpecialEffectLoc|AddSpecialEffectTarget|AddSpellEffect|AddSpellEffectLoc|AddSpellEffectById|AddSpellEffectByIdLoc|AddSpellEffectTarget|AddSpellEffectTargetById|AddLightning|AddLightningEx|CreateImage|CreateUbersplat|CreateBlightedGoldmine|BlzGetTriggerPlayerMousePosition|BlzGetEventDamageTarget|BlzTriggerRegisterFrameEvent|BlzTriggerRegisterPlayerSyncEvent|BlzTriggerRegisterPlayerKeyEvent|BlzGetMouseFocusUnit|BlzGetUnitAbility|BlzGetUnitAbilityByIndex|CreateCommandButtonEffect|CreateUpgradeCommandButtonEffect|CreateLearnCommandButtonEffect|BlzGetItemAbilityByIndex|BlzGetItemAbility|BlzCreateItemWithSkin|BlzCreateUnitWithSkin|BlzCreateDestructableWithSkin|BlzCreateDestructableZWithSkin|BlzCreateDeadDestructableWithSkin|BlzCreateDeadDestructableZWithSkin|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem)",
-//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or {m.Groups[2].Value}",
-//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        if (callSites.Count == 0)
+        {
+            Console.WriteLine("[LeakTracker] WARNING: none of the tracked native handle constructors were found in the compiled script - native handle leaks will NOT be tracked this build.");
+            return script;
+        }
 
-//        // Define the fakePrint Lua code block to prepend.
-//        string fakePrint = @"_G['__fakePrintMap'] = {}
+        // Record every insertion point against the *original* text first,
+        // then apply them back-to-front by position. That way nested calls
+        // are both found and both wrapped correctly, and inserting text for
+        // a later call site never shifts the offsets already recorded for
+        // an earlier one.
+        var insertions = new List<(int Position, string Text)>();
+        var hookedCounts = new Dictionary<string, int>();
+        var skipped = 0;
 
-//function __fakePrint(s)
-//    if _G['trackPrintMap'] then
-//        if (not _G['__fakePrintMap'][s]) then
-//            _G['__fakePrintMap'][s] = 0
-//        end
+        foreach (var callSite in callSites)
+        {
+            var closeParenIndex = FindMatchingLuaParen(script, callSite.OpenParen);
+            if (closeParenIndex < 0)
+            {
+                skipped++;
+                continue;
+            }
 
-//        _G['__fakePrintMap'][s] = _G['__fakePrintMap'][s] + 1
-//    end
+            insertions.Add((callSite.Start, "LeakTracker.Track("));
+            insertions.Add((closeParenIndex + 1, $", \"{callSite.Name}\")"));
 
-//    if _G['printCreation'] then
-//	    print(s)
-//    end
-//end";
+            hookedCounts.TryGetValue(callSite.Name, out var count);
+            hookedCounts[callSite.Name] = count + 1;
+        }
 
-//        script = script.Replace("class._G:set(\"trackPrintMap\", true)", "_G['trackPrintMap'] = true");
-//        script = script.Replace("class._G:get(\"__fakePrintMap\")", "_G['__fakePrintMap']");
+        var sb = new StringBuilder(script);
+        foreach (var insertion in insertions.OrderByDescending(i => i.Position))
+        {
+            sb.Insert(insertion.Position, insertion.Text);
+        }
 
-//        script = script.Replace("-- {{ LUA_REPLACE }}", @"-- Create an empty array to store targets
-//    local sortedTargets = {}
+        var totalHooked = hookedCounts.Values.Sum();
+        Console.WriteLine($"[LeakTracker] Hooked {hookedCounts.Count} distinct native handle constructors ({totalHooked} call site(s) total).");
+        if (skipped > 0)
+        {
+            Console.WriteLine($"[LeakTracker] WARNING: skipped {skipped} call site(s) - could not find a matching ')'.");
+        }
 
-//    -- Convert each key/value pair from the targets table into a target object
-//    for debugName, count in pairs(_G['__fakePrintMap']) do
-//        table.insert(sortedTargets, { debugName = debugName, count = count })
-//    end
+        return sb.ToString();
+    }
 
-//    -- If there is at least one target, proceed
-//    if #sortedTargets > 0 then
-//        -- Sort the targets in descending order by count
-//        table.sort(sortedTargets, function(a, b)
-//            return a.count > b.count
-//        end)
+    // Finds the index of the ')' that closes the '(' at openParenIndex,
+    // tolerating nested parens and skipping over string-literal contents so
+    // a stray '(' or ')' inside a string argument doesn't throw the count
+    // off. Returns -1 if no match is found.
+    private static int FindMatchingLuaParen(string text, int openParenIndex)
+    {
+        var depth = 0;
+        for (var i = openParenIndex; i < text.Length; i++)
+        {
+            var c = text[i];
+            if (c == '"' || c == '\'')
+            {
+                i = SkipLuaStringLiteral(text, i);
+                continue;
+            }
 
-//        -- Build the string for the top 10 targets
-//        local d = ''
-//        for i = 1, math.min(10, #sortedTargets) do
-//            local target = sortedTargets[i]
-//            if #d > 0 then
-//                d = d .. ', '
-//            end
-//            d = d .. tostring(target.debugName) .. ': ' .. tostring(target.count)
-//        end
+            if (c == '(')
+            {
+                depth++;
+            }
+            else if (c == ')')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    return i;
+                }
+            }
+        }
 
-//        -- Print the output
-//        print('Most used ' .. title .. ': ' .. d)
-//    end");
+        return -1;
+    }
 
-//        string lualib_info = @"info = {}
+    private static int SkipLuaStringLiteral(string text, int quoteIndex)
+    {
+        var quoteChar = text[quoteIndex];
+        var i = quoteIndex + 1;
+        while (i < text.Length)
+        {
+            if (text[i] == '\\')
+            {
+                i += 2;
+                continue;
+            }
+            if (text[i] == quoteChar)
+            {
+                return i;
+            }
+            i++;
+        }
+        return text.Length - 1;
+    }
 
-//info.GetStackTrace = function()
-//    local trace, lastMsg, i, separator = '', '', 5, ' > '
-//    local store = function(msg) lastMsg = msg:sub(1,-3) end
-//    xpcall(error, store, '', 4)
-//    while lastMsg:sub(1,11) == 'war3map.lua' or lastMsg:sub(1,14) == 'blizzard.j.lua' do
-//        if lastMsg:sub(1,11) == 'war3map.lua' then
-//            trace = separator .. lastMsg:sub(13) .. trace
-//        else
-//            trace = separator .. lastMsg .. trace
-//        end
-//        xpcall(error, store, '', i)
-//        i = i+1
-//    end
-//    return 'T' .. trace
-//end";
+    // Defines the global `info.GetStackTrace()` helper LeakTracker.Track
+    // uses to record where each tracked instance was created from, so a
+    // report can be traced back to a call site instead of just a tag name.
+    private const string LeakTrackerStackTraceLib = @"info = {}
+info.GetStackTrace = function()
+    local frames, lastMsg, i = {}, '', 5
+    local store = function(msg) lastMsg = msg:sub(1, -3) end
+    xpcall(error, store, '', 4)
 
-        string leakTracker = @"LeakTracker = {}
+    while (#frames < 3) and (lastMsg:sub(1, 11) == 'war3map.lua' or lastMsg:sub(1, 14) == 'blizzard.j.lua') do
+        if lastMsg:sub(1, 11) == 'war3map.lua' then
+            frames[#frames + 1] = lastMsg:sub(13)   -- just the line number
+        end
+        xpcall(error, store, '', i)
+        i = i + 1
+    end
+
+    return table.concat(frames, "" > "")
+end";
+
+    private const string LeakTrackerLib = @"LeakTracker = {}
 
 do
     local live = setmetatable({}, { __mode = ""k"" })
@@ -392,8 +533,28 @@ do
     local lastAlive = {}
     local nextId = 0
 
+    -- NOTE on ""alive"" counts: C# class instances funnel through a single
+    -- allocator (HookCoreSystemAllocator on the C# side) and are ordinary
+    -- Lua tables, so once nothing references one anymore Lua's own garbage
+    -- collector reclaims it and this weak-keyed `live` table drops the
+    -- entry automatically - ""alive"" naturally trends back down for those.
+    --
+    -- Native Warcraft III handles (locations, groups, effects, timers, ...)
+    -- do NOT work that way: the engine keeps the underlying handle alive
+    -- until something explicitly calls the matching Remove*/Destroy*
+    -- native, regardless of whether Lua still references the wrapper. So
+    -- for native-handle tags, treat ""alive"" as ""created and not yet
+    -- explicitly released"" rather than a GC-verified live count - it will
+    -- only trend down if you call LeakTracker.Untrack at the point you
+    -- destroy/remove the handle. The ""created"" count and its growth over
+    -- time are the reliable signal for those tags in the meantime.
     function LeakTracker.Track(instance, tag)
-        if type(instance) ~= ""table"" then
+        local instanceType = type(instance)
+        if instanceType ~= ""table"" and instanceType ~= ""userdata"" then
+            -- Not something with its own identity (nil, number, boolean,
+            -- string) - some native constructors can legitimately return
+            -- nil (e.g. a failed CreateUnit), so there's nothing to key a
+            -- weak table entry on.
             return instance
         end
 
@@ -408,54 +569,83 @@ do
         return instance
     end
 
-    function LeakTracker.Report()
-        local aliveByTag = {}
-        for _, meta in pairs(live) do
-            aliveByTag[meta.tag] = (aliveByTag[meta.tag] or 0) + 1
+    -- Optional: call this wherever you explicitly release a native handle
+    -- (RemoveLocation, DestroyGroup, DestroyTrigger, DestroyEffect, ...) to
+    -- get an accurate ""alive"" count for tags that don't get cleaned up by
+    -- Lua's GC. Safe to call on anything, tracked or not.
+    function LeakTracker.Untrack(instance)
+        if instance ~= nil then
+            live[instance] = nil
         end
-
-        local rows = {}
-        for tag, created in pairs(totalCreated) do
-            local alive = aliveByTag[tag] or 0
-            rows[#rows + 1] = {
-                tag = tag,
-                alive = alive,
-                created = created,
-                delta = alive - (lastAlive[tag] or 0)
-            }
-            lastAlive[tag] = alive
-        end
-
-        table.sort(rows, function(a, b) return a.alive > b.alive end)
-
-        -- Build CSV-style output
-        local output = {}
-        output[#output + 1] = ""tag,alive,created""
-
-        for _, row in ipairs(rows) do
-            output[#output + 1] = string.format(
-                ""%s,%d,%d"",
-                row.tag, row.alive, row.created
-            )
-        end
-
-        local data = table.concat(output, ""\n"")
-
-        PreloadGenClear()
-        PreloadGenStart()
-
-        local chunkSize = 200
-        local len = string.len(data)
-        local i = 1
-
-        while i <= len do
-            local chunk = string.sub(data, i, i + chunkSize - 1)
-            Preload(chunk)
-            i = i + chunkSize
-        end
-
-        PreloadGenEnd(""Run-Kitty-Run\\LeakData.txt"")
+        return instance
     end
+
+function LeakTracker.Report()
+    local aliveByTag = {}
+    local stackCount = {}   -- tag → { [stack] = count }
+
+    for _, meta in pairs(live) do
+        local tag = meta.tag
+        aliveByTag[tag] = (aliveByTag[tag] or 0) + 1
+
+        if meta.stack then
+            stackCount[tag] = stackCount[tag] or {}
+            stackCount[tag][meta.stack] = (stackCount[tag][meta.stack] or 0) + 1
+        end
+    end
+
+    local rows = {}
+    for tag, created in pairs(totalCreated) do
+        local alive = aliveByTag[tag] or 0
+
+        -- pick the single most common stack for this tag
+        local bestStack, bestCount = nil, 0
+        if stackCount[tag] then
+            for stack, count in pairs(stackCount[tag]) do
+                if count > bestCount then
+                    bestStack, bestCount = stack, count
+                end
+            end
+        end
+
+        rows[#rows + 1] = {
+            tag     = tag,
+            alive   = alive,
+            created = created,
+            delta   = alive - (lastAlive[tag] or 0),
+            stack   = bestStack
+        }
+        lastAlive[tag] = alive
+    end
+
+    table.sort(rows, function(a, b) return a.alive > b.alive end)
+
+    local output = {}
+    output[#output + 1] = ""tag,alive,created,delta,stack""
+    for _, row in ipairs(rows) do
+        output[#output + 1] = string.format(
+            ""%s,%d,%d,%d,%s"",
+            row.tag,
+            row.alive,
+            row.created,
+            row.delta,
+            row.stack or """"
+        )
+    end
+
+    local data = table.concat(output, ""\n"")
+
+    PreloadGenClear()
+    PreloadGenStart()
+    local chunkSize = 200
+    local len = string.len(data)
+    local i = 1
+    while i <= len do
+        Preload(string.sub(data, i, i + chunkSize - 1))
+        i = i + chunkSize
+    end
+    PreloadGenEnd(""Run-Kitty-Run\\LeakData.txt"")
+end
 
 
 
@@ -490,35 +680,5 @@ do
         end
     end
 end";
-
-        // Hook CoreSystem's single allocation choke point (Core.lua's
-        // `new(cls, ...)`) so every compiled C# class instance gets tracked
-        // by LeakTracker automatically - no per-class edits needed. Every
-        // `new X()` in C# funnels through this one function via each
-        // compiled class's __call metamethod (classes, structs, static-ctor
-        // classes, and generic instantiations all end up here), so this
-        // catches everything without needing to know class names ahead of
-        // time. Only patches the return line itself, so the original
-        // (this, ctor-return-values) return signature is untouched.
-        var newAllocatorHookMatches = Regex.Matches(script, @"return this, cls\.__ctor__\(this, \.\.\.\)").Count;
-        if (newAllocatorHookMatches == 0)
-        {
-            Console.WriteLine("[LeakTracker] WARNING: could not find CoreSystem's new() allocator to hook - " +
-                "C# class instances will NOT be auto-tracked this build. Manually-tracked Lua classes still work.");
-        }
-        else
-        {
-            script = Regex.Replace(
-                script,
-                @"([ \t]*)return this, cls\.__ctor__\(this, \.\.\.\)",
-                m => $"{m.Groups[1].Value}if LeakTracker then LeakTracker.Track(this, cls.__name__) end\n{m.Groups[1].Value}return this, cls.__ctor__(this, ...)",
-                RegexOptions.Multiline);
-            Console.WriteLine($"[LeakTracker] Hooked CoreSystem's new() allocator ({newAllocatorHookMatches} occurrence(s)).");
-        }
-
-        // Prepend the fakePrint code to the modified script.
-        //return lualib_info + "\n\n" + fakePrint + "\n\n" + leakTracker + "\n\n" + script;
-        return leakTracker + "\n\n" + script;
-    }
 
 }
