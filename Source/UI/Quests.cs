@@ -28,7 +28,8 @@ public static class Quests
         CommandsQuest.IsRequired = false;
 
         string description = "Commands can be retrieved with -help, and they have a filter so you can type -help <command> to get more information about a specific command.\n\n";
-        CommandsQuest.SetDescription($"{Colors.COLOR_YELLOW}{description}|r");
+        CommandsQuest.SetDescription($"{Colors.COLOR_YELLOW}{description}|r" +
+            $"\n{Colors.COLOR_YELLOW}When getting too many items on your screen, you can press the ` key on your keyboard to clear the text on your screen.{Colors.COLOR_RESET}");
     }
 
     private static void CreateContributorsQuest()
