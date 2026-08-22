@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using WCSharp.Api;
+using WCSharp.Shared;
 using static WCSharp.Api.Common;
 
 public static class InitCommands
@@ -25,14 +26,15 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
-            name: "memtest",
-            alias: "[none]",
+            name: "leaks",
+            alias: "",
             tier: CommandTier.Developer,
-            argDesc: "[on][off]",
-            description: "Memory Handler Periodic Message",
+            argDesc: "",
+            description: "Outputs all the object creations, that are alive/created into csv format in Run-Kitty-Run\\LeakData.txt",
             action: (player, args) =>
             {
-                MemoryHandlerTest.PeriodicTest(CommandsManager.GetBool(args[0]));
+                ExecuteLua.LuaCode(player, "LeakTracker.Report()");
+                player.DisplayTextTo($"{Colors.COLOR_GOLD}Leak report generated. Check Run-Kitty-Run\\LeakData.txt for details.{Colors.COLOR_RESET}");
             }
         );
 

@@ -241,6 +241,7 @@ public static class CustomStatFrame
         else if (Gamemode.CurrentGameMode == GameMode.Team) // Team
         {
             BlzFrameSetText(Stats[0].Text, $"{GetPlayerTeamName(selectedUnit)}");
+            BlzFrameSetText(Stats[3].Text, $"{GetTeamTime(selectedUnit)}");
             BlzFrameSetText(Stats[4].Text, $"{GetPlayerProgress(selectedUnit)}%");
             BlzFrameSetText(Stats[1].Text, $"{Saves} {GetGameTotalSaves(selectedUnit)}");
             BlzFrameSetText(Stats[2].Text, $"{Deaths} {GetGameTotalDeaths(selectedUnit)}");
@@ -270,6 +271,8 @@ public static class CustomStatFrame
     private static int GetPlayerSaveStreak(unit u) => (int)Globals.ALL_KITTIES[u.Owner].SaveData.GameStats.SaveStreak;
 
     private static string GetPlayerTime(unit u) => Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundTime(Globals.ROUND));
+
+    private static string GetTeamTime(unit u) => Utility.ConvertFloatToTime(TeamRegistry.TryGetTeamForPlayer(u.Owner, out Team team) ? team.TeamTimes[Globals.ROUND] : 0f);
 
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
 

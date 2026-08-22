@@ -40,7 +40,7 @@ public sealed class Progress : IProgressService
                 var team = allTeams[i];
                 team.UpdateRoundProgress(Globals.ROUND, CalculateTeamProgress(team));
             }
-            TeamsMultiboard.UpdateTeamStatsMB();
+            //TeamsMultiboard.UpdateTeamStatsMB();
         }
         catch (Exception e)
         {

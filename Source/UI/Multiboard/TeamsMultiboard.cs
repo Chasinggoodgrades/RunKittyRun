@@ -46,69 +46,66 @@ public static class TeamsMultiboard
         CurrentTeamsMB.IsDisplayed = true;
         CurrentTeamsMB.Rows = TeamRegistry.All.Count + 1;
         CurrentTeamsMB.Columns = Gamemode.PlayersPerTeam;
-        CurrentTeamsMB.GetItem(0, 0).SetText("Team 1");
-        CurrentTeamsMB.GetItem(0, 0).SetVisibility(true, false);
-        CurrentTeamsMB.GetItem(0, 1).SetText("Player 1");
-        CurrentTeamsMB.GetItem(0, 1).SetVisibility(true, false);
+
+        // Header row – properly dispose every item
+        var item = CurrentTeamsMB.GetItem(0, 0);
+        item.SetText("Team 1");
+        item.SetVisibility(true, false);
+        item.Dispose();
+        item = null;
+
+        item = CurrentTeamsMB.GetItem(0, 1);
+        item.SetText("Player 1");
+        item.SetVisibility(true, false);
+        item.Dispose();
+        item = null;
     }
 
     public static void UpdateTeamStatsMB()
     {
-        // Top Portion Setup
         if (Gamemode.CurrentGameMode != GameMode.Team) return;
+
         TeamsStatsMB.Rows = TeamRegistry.All.Count + 1;
         TeamsStatsMB.Columns = 3 + Gamemode.NumberOfRounds;
-        TeamsStatsMB.GetItem(0, 0).SetText("Team");
-        TeamsStatsMB.GetItem(0, 0).SetVisibility(true, false);
-        TeamsStatsMB.GetItem(0, 0).SetWidth(0.05f);
+
+        // Header row
+        SetItem(TeamsStatsMB, 0, 0, "Team", 0.05f);
+
         for (int i = 1; i <= Gamemode.NumberOfRounds; i++)
         {
-            if (Globals.ROUND == i)
-                TeamsStatsMB.GetItem(0, i).SetText($"|c0000FF00Round {i}|r");
-            else
-                TeamsStatsMB.GetItem(0, i).SetText($"Round {i}");
-            TeamsStatsMB.GetItem(0, i).SetVisibility(true, false);
-            TeamsStatsMB.GetItem(0, i).SetWidth(0.05f);
+            string text = Globals.ROUND == i
+                ? $"|c0000FF00Round {i}|r"
+                : $"Round {i}";
+            SetItem(TeamsStatsMB, 0, i, text, 0.05f);
         }
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetText(Colors.COLOR_GOLD + "Overall");
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 1).SetWidth(0.05f);
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetText(Colors.COLOR_GOLD + "Time");
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetVisibility(true, false);
-        TeamsStatsMB.GetItem(0, Gamemode.NumberOfRounds + 2).SetWidth(0.05f);
 
-        // Actual Stats
+        SetItem(TeamsStatsMB, 0, Gamemode.NumberOfRounds + 1, Colors.COLOR_GOLD + "Overall", 0.05f);
+        SetItem(TeamsStatsMB, 0, Gamemode.NumberOfRounds + 2, Colors.COLOR_GOLD + "Time", 0.05f);
+
+        // Team rows
         int rowIndex = 1;
-        float overallProgress;
         var allTeams = TeamRegistry.All;
-        for (int i = 0; i < allTeams.Count; i++) {
 
+        for (int i = 0; i < allTeams.Count; i++)
+        {
             var team = allTeams[i];
-            overallProgress = 0.0f;
-            TeamsStatsMB.GetItem(rowIndex, 0).SetText(team.TeamColor);
-            TeamsStatsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
-            TeamsStatsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
-            // Each Round Progress
-            for (int j = 1; j <= Gamemode.NumberOfRounds; j++)
-            {
-                TeamsStatsMB.GetItem(rowIndex, j).SetText("_");
-                TeamsStatsMB.GetItem(rowIndex, j).SetText($"{team.RoundProgress[j]}%");
-                TeamsStatsMB.GetItem(rowIndex, j).SetVisibility(true, false);
-                TeamsStatsMB.GetItem(rowIndex, j).SetWidth(0.05f);
-            }
-            // Overall Progress
-            for (int j = 1; j <= Gamemode.NumberOfRounds; j++)
-            {
-                overallProgress = overallProgress + float.Parse(team.RoundProgress[j]);
-            }
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetText((overallProgress / Gamemode.NumberOfRounds).ToString("F2") + "%");
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetWidth(0.05f);
+            float overallProgress = 0f;
 
-            // Overall Time
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).SetText(Utility.ConvertFloatToTime(GameTimer.TeamTotalTime(team), team.TeamID));
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).SetVisibility(true, false);
-            TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 2).SetWidth(0.05f);
+            SetItem(TeamsStatsMB, rowIndex, 0, team.TeamColor, 0.05f);
+
+            for (int j = 1; j <= Gamemode.NumberOfRounds; j++)
+            {
+                // Only one GetItem + one SetText now
+                SetItem(TeamsStatsMB, rowIndex, j, $"{team.RoundProgress[j]}%", 0.05f);
+                overallProgress += float.Parse(team.RoundProgress[j], CultureInfo.InvariantCulture);
+            }
+
+            string overallText = (overallProgress / Gamemode.NumberOfRounds).ToString("F2", CultureInfo.InvariantCulture) + "%";
+            SetItem(TeamsStatsMB, rowIndex, Gamemode.NumberOfRounds + 1, overallText, 0.05f);
+
+            string timeText = Utility.ConvertFloatToTime(GameTimer.TeamTotalTime(team), team.TeamID);
+            SetItem(TeamsStatsMB, rowIndex, Gamemode.NumberOfRounds + 2, timeText, 0.05f);
+
             rowIndex++;
         }
     }
@@ -119,21 +116,32 @@ public static class TeamsMultiboard
         CurrentTeamsMB.Rows = allTeams.Count;
         CurrentTeamsMB.Columns = 2;
 
-        var widthSize = 0.05f * Gamemode.PlayersPerTeam;
+        float widthSize = 0.05f * Gamemode.PlayersPerTeam;
         int rowIndex = 0;
+
         for (int i = 0; i < allTeams.Count; i++)
         {
             var team = allTeams[i];
             string teamMembers = team.TeamMembersString;
-            CurrentTeamsMB.GetItem(rowIndex, 0).SetWidth(0.05f);
-            CurrentTeamsMB.GetItem(rowIndex, 0).SetText($"{team.TeamColor}:");
-            CurrentTeamsMB.GetItem(rowIndex, 0).SetVisibility(true, false);
-            CurrentTeamsMB.GetItem(rowIndex, 1).SetWidth(widthSize);
-            CurrentTeamsMB.GetItem(rowIndex, 1).SetText($"{teamMembers}");
-            CurrentTeamsMB.GetItem(rowIndex, 1).SetVisibility(true, false);
+
+            SetItem(CurrentTeamsMB, rowIndex, 0, $"{team.TeamColor}:", 0.05f);
+            SetItem(CurrentTeamsMB, rowIndex, 1, teamMembers, widthSize);
 
             rowIndex++;
         }
+    }
+
+    /// <summary>
+    /// Helper that gets an item, configures it, then immediately disposes the handle.
+    /// </summary>
+    private static void SetItem(multiboard board, int row, int column, string text, float width)
+    {
+        var item = board.GetItem(row, column);
+        item.SetText(text);
+        item.SetVisibility(true, false);
+        item.SetWidth(width);
+        item.Dispose();
+        item = null;
     }
 
     #endregion Teams Multiboards
@@ -154,7 +162,7 @@ public static class TeamsMultiboard
         var player = @event.Player;
         var localPlayer = player.LocalPlayer;
         if (localPlayer != player) return;
-        // Swap multiboards
+
         if (CurrentTeamsMB.IsDisplayed)
         {
             CurrentTeamsMB.IsDisplayed = false;
