@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 
 public class FloatingNameTag
 {
@@ -39,11 +40,18 @@ public class FloatingNameTag
 
     private void NamePosTimer()
     {
-        NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
+        try
         {
-            UpdateNameTag();
-            Blizzard.SetCameraQuickPositionForPlayer(Owner.Player, Owner.Unit.X, Owner.Unit.Y);
-        });
+            NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
+            {
+                UpdateNameTag();
+                Blizzard.SetCameraQuickPositionForPlayer(Owner.Player, Owner.Unit.X, Owner.Unit.Y);
+            });
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in FloatingNameTag.NamePosTimer: {e.Message}");
+        }
     }
 
     private void UpdateNameTag() => NameTag.SetPosition(Owner.Unit, NAME_TAG_HEIGHT);

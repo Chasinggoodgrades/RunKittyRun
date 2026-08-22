@@ -9,13 +9,20 @@ public static class TeamHandler
 
     public static void Handler(player player, int teamNumber, bool adminForced = false)
     {
-        if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && (adminForced || !RoundManager.GAME_STARTED && FreepickEnabled))
+        try
         {
-            FreepickHandler(player, teamNumber);
+            if (Gamemode.CurrentGameModeType == Globals.TEAM_MODES[0] && (adminForced || !RoundManager.GAME_STARTED && FreepickEnabled))
+            {
+                FreepickHandler(player, teamNumber);
+            }
+            else
+            {
+                player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.{Colors.COLOR_RESET}");
+            }
         }
-        else
+        catch (Exception e)
         {
-            player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}The -team command is not available for this gamemode or the time to pick has expired.{Colors.COLOR_RESET}");
+            Logger.Warning($"Error in TeamHandler.Handler: {e.Message}");
         }
     }
 
@@ -124,9 +131,16 @@ public static class TeamHandler
 
     private static void RemoveFromCurrentTeam(player player)
     {
-        if (TeamRegistry.TryGetTeamForPlayer(player, out var team))
+        try
         {
-            team.RemoveMember(player);
+            if (TeamRegistry.TryGetTeamForPlayer(player, out var team))
+            {
+                team.RemoveMember(player);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in TeamHandler.RemoveFromCurrentTeam: {e.Message}");
         }
     }
 }

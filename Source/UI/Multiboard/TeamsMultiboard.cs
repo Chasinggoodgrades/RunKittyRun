@@ -99,7 +99,7 @@ public static class TeamsMultiboard
             // Overall Progress
             for (int j = 1; j <= Gamemode.NumberOfRounds; j++)
             {
-                overallProgress = overallProgress + float.Parse(team.RoundProgress[j], CultureInfo.InvariantCulture);  // possibly bad?
+                overallProgress = overallProgress + float.Parse(team.RoundProgress[j]);
             }
             TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetText((overallProgress / Gamemode.NumberOfRounds).ToString("F2") + "%");
             TeamsStatsMB.GetItem(rowIndex, Gamemode.NumberOfRounds + 1).SetVisibility(true, false);

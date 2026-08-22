@@ -22,6 +22,12 @@ public class LeagueManager
     // In the event this causes desyncs.. We can use a CHEAT function and then evaluate resources. Cheats don't work in LAN or multiplayer. 
     private void ActivateLeague()
     {
+        if (Gamemode.CurrentGameMode != GameMode.Standard)
+        {
+            Console.WriteLine($"{Colors.COLOR_TURQUOISE}League Mode is disabled in this gamemode.{Colors.COLOR_RESET}");
+            return;
+        }
+
         if (!IsLeagueTimeframe())
         {
             Console.WriteLine($"{Colors.COLOR_TURQUOISE}The league season is not currently active at this time.{Colors.COLOR_RESET}");

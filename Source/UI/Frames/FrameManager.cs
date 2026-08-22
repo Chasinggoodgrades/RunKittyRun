@@ -46,10 +46,17 @@ public static class FrameManager
 
     public static void InitAllFrames()
     {
-        ShopFrame.Initialize();
-        RewardsFrame.Initialize();
-        InitalizeButtons();
-        InitFramesList();
+        try {
+            ShopFrame.Initialize();
+            RewardsFrame.Initialize();
+            InitalizeButtons();
+            InitFramesList();
+        }
+        catch (Exception ex)
+        {
+            Logger.Critical($"Error in FrameManager.InitAllFrames: {ex.Message}");
+            throw;
+        }
     }
 
     public static void InitalizeButtons()

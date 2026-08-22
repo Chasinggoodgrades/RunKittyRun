@@ -21,7 +21,7 @@ public static class Globals
     public static readonly string[] AdminList = { "Q2FpdCMxMjgwNQ==", "T21uaW9sb2d5IzExODUw", "Rmllcnlmb3gjMjE2NDA=", "S2Fub24yODkjMTU5Mw==" };
     public static readonly string[] VipList = { "Q2FydG1hbiMyMzMxNQ==", "S3ltcCMyNDUw", "TXJHaGVlZCMxODMx",
         "aG9mZiMxMTQwNA==", "SmFtZXNGcmFuY28jMTE3MTk=", "TmF0aGFuc2VycG8jMjQ2MQ==",
-        "QmFsbXlkcm9wIzE3Mzc=", "QnJhbkZsYWtlNjQjMTEyNw==", "Tm9vYmVybWFuIzExNTc5", "TmF6ZSMxMTI2OQ==" };
+        "QmFsbXlkcm9wIzE3Mzc=", "QnJhbkZsYWtlNjQjMTEyNw==", "Tm9vYmVybWFuIzExNTc5", "TmF6ZSMxMTI2OQ==", "T3JiaXQjMTc1MQ==" };
     public static List<player> DEVELOPER_LIST = new List<player>();
     public static List<player> ADMIN_LIST = new List<player>();
     public static List<player> VIP_LIST = new List<player>();

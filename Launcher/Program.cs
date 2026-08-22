@@ -217,7 +217,7 @@ public static class LuaScriptProcessor
 
         return script;
 
-        
+
     }
 
     /*
@@ -259,132 +259,266 @@ public static class LuaScriptProcessor
 
     public static string ProcessLuaScript(string script)
     {
-        int counter = 0;
-        string objPrefix = "info.GetStackTrace() .. ' > ' .. "; // "info.GetStackTrace() .. ' > ' .. "
+//        int counter = 0;
+//        string objPrefix = "info.GetStackTrace() .. ' > ' .. "; // "info.GetStackTrace() .. ' > ' .. "
 
-        // Replace MemoryHandler.getEmptyObject()
-        script = Regex.Replace(
-            script,
-            "MemoryHandler\\.getEmptyObject\\(\\)",
-            m => $"MemoryHandler.getEmptyObject({objPrefix}'obj.{counter++}')",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Replace MemoryHandler.getEmptyObject()
+//        script = Regex.Replace(
+//            script,
+//            "MemoryHandler\\.getEmptyObject\\(\\)",
+//            m => $"MemoryHandler.getEmptyObject({objPrefix}'obj.{counter++}')",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Replace MemoryHandler.getEmptyArray()
-        script = Regex.Replace(
-            script,
-            "MemoryHandler\\.getEmptyArray\\(\\)",
-            m => $"MemoryHandler.getEmptyArray({objPrefix}'arr.{counter++}')",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Replace MemoryHandler.getEmptyArray()
+//        script = Regex.Replace(
+//            script,
+//            "MemoryHandler\\.getEmptyArray\\(\\)",
+//            m => $"MemoryHandler.getEmptyArray({objPrefix}'arr.{counter++}')",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Replace occurrences of an object literal initialization to insert a print statement.
-        script = Regex.Replace(
-            script,
-            "(=|return|,)\\s+\\{",
-            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Object #{counter++}') or {{",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Replace occurrences of an object literal initialization to insert a print statement.
+//        script = Regex.Replace(
+//            script,
+//            "(=|return|,)\\s+\\{",
+//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Object #{counter++}') or {{",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Replace occurrences where an object literal is immediately wrapped in parentheses.
-        script = Regex.Replace(
-            script,
-            "\\(\\{",
-            m => $"(__fakePrint({objPrefix}'Object #{counter++}') or {{",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Replace occurrences where an object literal is immediately wrapped in parentheses.
+//        script = Regex.Replace(
+//            script,
+//            "\\(\\{",
+//            m => $"(__fakePrint({objPrefix}'Object #{counter++}') or {{",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Replace occurrences of function expressions to insert a print statement.
-        script = Regex.Replace(
-            script,
-            "(=|return|,)\\s+function\\(",
-            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or function(",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Replace occurrences of function expressions to insert a print statement.
+//        script = Regex.Replace(
+//            script,
+//            "(=|return|,)\\s+function\\(",
+//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or function(",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Insert a print for local function declarations. -- Doesn't work??
-        script = Regex.Replace(
-            script,
-            "^(\\s+)?local function",
-            m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        // Insert a print for local function declarations. -- Doesn't work??
+//        script = Regex.Replace(
+//            script,
+//            "^(\\s+)?local function",
+//            m => $"__fakePrint({objPrefix}'Function #{counter++}')\nlocal function",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Things I think might leak:
-        // - First combine common.j and blizzard.j in 1 file in notepad++
-        // - Then regex search for: `returns (location|rect|group|event|weathereffect|terraindeformation|lightning|fogmodifier|image|ubersplat|minimapicon|sound|effect|commandbuttoneffect|item|unit|destructable|player|force|button|dialog|quest|defeatcondition|timer|leaderboard|multiboard|texttag|gamecache|hashtable|widget|ability|trigger|boolexpr|trackable|region|fogstate|camerasetup)`
-        // - Hit find all in current document
-        // - Put matches in new file
-        // - Record basic script that extracts all function names
+//        // Things I think might leak:
+//        // - First combine common.j and blizzard.j in 1 file in notepad++
+//        // - Then regex search for: `returns (location|rect|group|event|weathereffect|terraindeformation|lightning|fogmodifier|image|ubersplat|minimapicon|sound|effect|commandbuttoneffect|item|unit|destructable|player|force|button|dialog|quest|defeatcondition|timer|leaderboard|multiboard|texttag|gamecache|hashtable|widget|ability|trigger|boolexpr|trackable|region|fogstate|camerasetup)`
+//        // - Hit find all in current document
+//        // - Put matches in new file
+//        // - Record basic script that extracts all function names
 
-        script = Regex.Replace(
-            script,
-            "(=|return|,)\\s+(PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|ConvertPlayerState|ConvertPlayerScore|ConvertPlayerGameResult|ConvertUnitState|ConvertPlayerEvent|ConvertPlayerUnitEvent|ConvertWidgetEvent|ConvertDialogEvent|ConvertUnitEvent|ConvertUnitType|ConvertPlayerColor|ConvertPlayerSlotState|ConvertFogState|ConvertEffectType|ConvertItemType|ConvertSoundType|ConvertAbilityIntegerField|ConvertAbilityRealField|ConvertAbilityBooleanField|ConvertAbilityStringField|ConvertAbilityIntegerLevelField|ConvertAbilityRealLevelField|ConvertAbilityBooleanLevelField|ConvertAbilityStringLevelField|ConvertAbilityIntegerLevelArrayField|ConvertAbilityRealLevelArrayField|ConvertAbilityBooleanLevelArrayField|ConvertAbilityStringLevelArrayField|ConvertUnitIntegerField|ConvertUnitRealField|ConvertUnitBooleanField|ConvertUnitStringField|ConvertUnitWeaponIntegerField|ConvertUnitWeaponRealField|ConvertUnitWeaponBooleanField|ConvertUnitWeaponStringField|ConvertItemIntegerField|ConvertItemRealField|ConvertItemBooleanField|ConvertItemStringField|ConvertUnitCategory|GetStartLocationLoc|GetPlayerColor|GetPlayerSlotState|CreateTimer|GetExpiredTimer|CreateGroup|BlzGroupUnitAt|FirstOfGroup|CreateForce|RectFromLoc|CreateRegion|GetWorldBounds|CreateTrigger|GetFilterUnit|GetEnumUnit|GetFilterDestructable|GetEnumDestructable|GetFilterItem|GetEnumItem|GetFilterPlayer|GetEnumPlayer|GetTriggeringTrigger|GetTriggerEventId|TriggerRegisterVariableEvent|TriggerRegisterTimerEvent|TriggerRegisterTimerExpireEvent|TriggerRegisterGameStateEvent|TriggerRegisterDialogEvent|TriggerRegisterDialogButtonEvent|TriggerRegisterGameEvent|GetWinningPlayer|TriggerRegisterEnterRegion|GetTriggeringRegion|GetEnteringUnit|TriggerRegisterLeaveRegion|GetLeavingUnit|TriggerRegisterTrackableHitEvent|TriggerRegisterTrackableTrackEvent|TriggerRegisterCommandEvent|TriggerRegisterUpgradeCommandEvent|GetTriggeringTrackable|GetClickedButton|GetClickedDialog|GetTournamentFinishNowPlayer|TriggerRegisterPlayerEvent|GetTriggerPlayer|TriggerRegisterPlayerUnitEvent|GetLevelingUnit|GetLearningUnit|GetRevivableUnit|GetRevivingUnit|GetAttacker|GetRescuer|GetDyingUnit|GetKillingUnit|GetDecayingUnit|GetSelectedUnit|GetConstructingStructure|GetCancelledStructure|GetConstructedStructure|GetResearchingUnit|GetTrainedUnit|GetDetectedUnit|GetSummoningUnit|GetSummonedUnit|GetTransportUnit|GetLoadedUnit|GetSellingUnit|GetSoldUnit|GetBuyingUnit|GetSoldItem|GetChangingUnit|GetChangingUnitPrevOwner|GetManipulatingUnit|GetManipulatedItem|BlzGetAbsorbingItem|BlzGetStackingItemSource|BlzGetStackingItemTarget|GetOrderedUnit|GetOrderPointLoc|GetOrderTarget|GetOrderTargetDestructable|GetOrderTargetItem|GetOrderTargetUnit|GetSpellAbilityUnit|GetSpellAbility|GetSpellTargetLoc|GetSpellTargetDestructable|GetSpellTargetItem|GetSpellTargetUnit|TriggerRegisterPlayerAllianceChange|TriggerRegisterPlayerStateEvent|GetEventPlayerState|TriggerRegisterPlayerChatEvent|TriggerRegisterDeathEvent|GetTriggerUnit|TriggerRegisterUnitStateEvent|GetEventUnitState|TriggerRegisterUnitEvent|GetEventDamageSource|GetEventDetectingPlayer|TriggerRegisterFilterUnitEvent|GetEventTargetUnit|TriggerRegisterUnitInRange|TriggerAddCondition|TriggerAddAction|GetTriggerWidget|CreateDestructable|CreateDestructableZ|CreateDeadDestructable|CreateDeadDestructableZ|GetTriggerDestructable|CreateItem|GetItemPlayer|GetItemType|CreateUnit|CreateUnitByName|CreateUnitAtLoc|CreateUnitAtLocByName|CreateCorpse|UnitAddItemById|UnitRemoveItemFromSlot|UnitItemInSlot|GetUnitLoc|GetOwningPlayer|GetUnitRallyPoint|GetUnitRallyUnit|GetUnitRallyDestructable|GetLocalPlayer|CreateFogModifierRect|CreateFogModifierRadius|CreateFogModifierRadiusLoc|DialogCreate|DialogAddButton|DialogAddQuitButton|InitGameCache|RestoreUnit|InitHashtable|LoadPlayerHandle|LoadWidgetHandle|LoadDestructableHandle|LoadItemHandle|LoadUnitHandle|LoadAbilityHandle|LoadTimerHandle|LoadTriggerHandle|LoadTriggerConditionHandle|LoadTriggerActionHandle|LoadTriggerEventHandle|LoadForceHandle|LoadGroupHandle|LoadLocationHandle|LoadRectHandle|LoadBooleanExprHandle|LoadSoundHandle|LoadEffectHandle|LoadUnitPoolHandle|LoadItemPoolHandle|LoadQuestHandle|LoadQuestItemHandle|LoadDefeatConditionHandle|LoadTimerDialogHandle|LoadLeaderboardHandle|LoadMultiboardHandle|LoadMultiboardItemHandle|LoadTrackableHandle|LoadDialogHandle|LoadButtonHandle|LoadTextTagHandle|LoadLightningHandle|LoadImageHandle|LoadUbersplatHandle|LoadRegionHandle|LoadFogStateHandle|LoadFogModifierHandle|LoadHashtableHandle|CreateUnitPool|PlaceRandomUnit|CreateItemPool|PlaceRandomItem|CreateMinimapIconOnUnit|CreateMinimapIconAtLoc|CreateMinimapIcon|CreateTextTag|CreateTrackable|CreateQuest|QuestCreateItem|CreateDefeatCondition|CreateTimerDialog|CreateLeaderboard|PlayerGetLeaderboard|CreateMultiboard|MultiboardGetItem|CreateCameraSetup|CameraSetupGetDestPositionLoc|GetCameraTargetPositionLoc|GetCameraEyePositionLoc|CreateSound|CreateSoundFilenameWithLabel|CreateSoundFromLabel|CreateMIDISound|AddWeatherEffect|TerrainDeformCrater|TerrainDeformRipple|TerrainDeformWave|TerrainDeformRandom|AddSpecialEffect|AddSpecialEffectLoc|AddSpecialEffectTarget|AddSpellEffect|AddSpellEffectLoc|AddSpellEffectById|AddSpellEffectByIdLoc|AddSpellEffectTarget|AddSpellEffectTargetById|AddLightning|AddLightningEx|CreateImage|CreateUbersplat|CreateBlightedGoldmine|BlzGetTriggerPlayerMousePosition|BlzGetEventDamageTarget|BlzTriggerRegisterFrameEvent|BlzTriggerRegisterPlayerSyncEvent|BlzTriggerRegisterPlayerKeyEvent|BlzGetMouseFocusUnit|BlzGetUnitAbility|BlzGetUnitAbilityByIndex|CreateCommandButtonEffect|CreateUpgradeCommandButtonEffect|CreateLearnCommandButtonEffect|BlzGetItemAbilityByIndex|BlzGetItemAbility|BlzCreateItemWithSkin|BlzCreateUnitWithSkin|BlzCreateDestructableWithSkin|BlzCreateDestructableZWithSkin|BlzCreateDeadDestructableWithSkin|BlzCreateDeadDestructableZWithSkin|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem)",
-            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or {m.Groups[2].Value}",
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+//        script = Regex.Replace(
+//            script,
+//            "(=|return|,)\\s+(PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|ConvertPlayerState|ConvertPlayerScore|ConvertPlayerGameResult|ConvertUnitState|ConvertPlayerEvent|ConvertPlayerUnitEvent|ConvertWidgetEvent|ConvertDialogEvent|ConvertUnitEvent|ConvertUnitType|ConvertPlayerColor|ConvertPlayerSlotState|ConvertFogState|ConvertEffectType|ConvertItemType|ConvertSoundType|ConvertAbilityIntegerField|ConvertAbilityRealField|ConvertAbilityBooleanField|ConvertAbilityStringField|ConvertAbilityIntegerLevelField|ConvertAbilityRealLevelField|ConvertAbilityBooleanLevelField|ConvertAbilityStringLevelField|ConvertAbilityIntegerLevelArrayField|ConvertAbilityRealLevelArrayField|ConvertAbilityBooleanLevelArrayField|ConvertAbilityStringLevelArrayField|ConvertUnitIntegerField|ConvertUnitRealField|ConvertUnitBooleanField|ConvertUnitStringField|ConvertUnitWeaponIntegerField|ConvertUnitWeaponRealField|ConvertUnitWeaponBooleanField|ConvertUnitWeaponStringField|ConvertItemIntegerField|ConvertItemRealField|ConvertItemBooleanField|ConvertItemStringField|ConvertUnitCategory|GetStartLocationLoc|GetPlayerColor|GetPlayerSlotState|CreateTimer|GetExpiredTimer|CreateGroup|BlzGroupUnitAt|FirstOfGroup|CreateForce|RectFromLoc|CreateRegion|GetWorldBounds|CreateTrigger|GetFilterUnit|GetEnumUnit|GetFilterDestructable|GetEnumDestructable|GetFilterItem|GetEnumItem|GetFilterPlayer|GetEnumPlayer|GetTriggeringTrigger|GetTriggerEventId|TriggerRegisterVariableEvent|TriggerRegisterTimerEvent|TriggerRegisterTimerExpireEvent|TriggerRegisterGameStateEvent|TriggerRegisterDialogEvent|TriggerRegisterDialogButtonEvent|TriggerRegisterGameEvent|GetWinningPlayer|TriggerRegisterEnterRegion|GetTriggeringRegion|GetEnteringUnit|TriggerRegisterLeaveRegion|GetLeavingUnit|TriggerRegisterTrackableHitEvent|TriggerRegisterTrackableTrackEvent|TriggerRegisterCommandEvent|TriggerRegisterUpgradeCommandEvent|GetTriggeringTrackable|GetClickedButton|GetClickedDialog|GetTournamentFinishNowPlayer|TriggerRegisterPlayerEvent|GetTriggerPlayer|TriggerRegisterPlayerUnitEvent|GetLevelingUnit|GetLearningUnit|GetRevivableUnit|GetRevivingUnit|GetAttacker|GetRescuer|GetDyingUnit|GetKillingUnit|GetDecayingUnit|GetSelectedUnit|GetConstructingStructure|GetCancelledStructure|GetConstructedStructure|GetResearchingUnit|GetTrainedUnit|GetDetectedUnit|GetSummoningUnit|GetSummonedUnit|GetTransportUnit|GetLoadedUnit|GetSellingUnit|GetSoldUnit|GetBuyingUnit|GetSoldItem|GetChangingUnit|GetChangingUnitPrevOwner|GetManipulatingUnit|GetManipulatedItem|BlzGetAbsorbingItem|BlzGetStackingItemSource|BlzGetStackingItemTarget|GetOrderedUnit|GetOrderPointLoc|GetOrderTarget|GetOrderTargetDestructable|GetOrderTargetItem|GetOrderTargetUnit|GetSpellAbilityUnit|GetSpellAbility|GetSpellTargetLoc|GetSpellTargetDestructable|GetSpellTargetItem|GetSpellTargetUnit|TriggerRegisterPlayerAllianceChange|TriggerRegisterPlayerStateEvent|GetEventPlayerState|TriggerRegisterPlayerChatEvent|TriggerRegisterDeathEvent|GetTriggerUnit|TriggerRegisterUnitStateEvent|GetEventUnitState|TriggerRegisterUnitEvent|GetEventDamageSource|GetEventDetectingPlayer|TriggerRegisterFilterUnitEvent|GetEventTargetUnit|TriggerRegisterUnitInRange|TriggerAddCondition|TriggerAddAction|GetTriggerWidget|CreateDestructable|CreateDestructableZ|CreateDeadDestructable|CreateDeadDestructableZ|GetTriggerDestructable|CreateItem|GetItemPlayer|GetItemType|CreateUnit|CreateUnitByName|CreateUnitAtLoc|CreateUnitAtLocByName|CreateCorpse|UnitAddItemById|UnitRemoveItemFromSlot|UnitItemInSlot|GetUnitLoc|GetOwningPlayer|GetUnitRallyPoint|GetUnitRallyUnit|GetUnitRallyDestructable|GetLocalPlayer|CreateFogModifierRect|CreateFogModifierRadius|CreateFogModifierRadiusLoc|DialogCreate|DialogAddButton|DialogAddQuitButton|InitGameCache|RestoreUnit|InitHashtable|LoadPlayerHandle|LoadWidgetHandle|LoadDestructableHandle|LoadItemHandle|LoadUnitHandle|LoadAbilityHandle|LoadTimerHandle|LoadTriggerHandle|LoadTriggerConditionHandle|LoadTriggerActionHandle|LoadTriggerEventHandle|LoadForceHandle|LoadGroupHandle|LoadLocationHandle|LoadRectHandle|LoadBooleanExprHandle|LoadSoundHandle|LoadEffectHandle|LoadUnitPoolHandle|LoadItemPoolHandle|LoadQuestHandle|LoadQuestItemHandle|LoadDefeatConditionHandle|LoadTimerDialogHandle|LoadLeaderboardHandle|LoadMultiboardHandle|LoadMultiboardItemHandle|LoadTrackableHandle|LoadDialogHandle|LoadButtonHandle|LoadTextTagHandle|LoadLightningHandle|LoadImageHandle|LoadUbersplatHandle|LoadRegionHandle|LoadFogStateHandle|LoadFogModifierHandle|LoadHashtableHandle|CreateUnitPool|PlaceRandomUnit|CreateItemPool|PlaceRandomItem|CreateMinimapIconOnUnit|CreateMinimapIconAtLoc|CreateMinimapIcon|CreateTextTag|CreateTrackable|CreateQuest|QuestCreateItem|CreateDefeatCondition|CreateTimerDialog|CreateLeaderboard|PlayerGetLeaderboard|CreateMultiboard|MultiboardGetItem|CreateCameraSetup|CameraSetupGetDestPositionLoc|GetCameraTargetPositionLoc|GetCameraEyePositionLoc|CreateSound|CreateSoundFilenameWithLabel|CreateSoundFromLabel|CreateMIDISound|AddWeatherEffect|TerrainDeformCrater|TerrainDeformRipple|TerrainDeformWave|TerrainDeformRandom|AddSpecialEffect|AddSpecialEffectLoc|AddSpecialEffectTarget|AddSpellEffect|AddSpellEffectLoc|AddSpellEffectById|AddSpellEffectByIdLoc|AddSpellEffectTarget|AddSpellEffectTargetById|AddLightning|AddLightningEx|CreateImage|CreateUbersplat|CreateBlightedGoldmine|BlzGetTriggerPlayerMousePosition|BlzGetEventDamageTarget|BlzTriggerRegisterFrameEvent|BlzTriggerRegisterPlayerSyncEvent|BlzTriggerRegisterPlayerKeyEvent|BlzGetMouseFocusUnit|BlzGetUnitAbility|BlzGetUnitAbilityByIndex|CreateCommandButtonEffect|CreateUpgradeCommandButtonEffect|CreateLearnCommandButtonEffect|BlzGetItemAbilityByIndex|BlzGetItemAbility|BlzCreateItemWithSkin|BlzCreateUnitWithSkin|BlzCreateDestructableWithSkin|BlzCreateDestructableZWithSkin|BlzCreateDeadDestructableWithSkin|BlzCreateDeadDestructableZWithSkin|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem|PolarProjectionBJ|GetRandomLocInRect|OffsetLocation|OffsetRectBJ|RectFromCenterSizeBJ|GetRectFromCircleBJ|GetCurrentCameraSetup|GetCurrentCameraBoundsMapRectBJ|GetCameraBoundsMapRect|GetPlayableMapRect|GetEntireMapRect|TriggerRegisterTimerEventPeriodic|TriggerRegisterTimerEventSingle|TriggerRegisterTimerExpireEventBJ|TriggerRegisterPlayerUnitEventSimple|TriggerRegisterPlayerSelectionEventBJ|TriggerRegisterPlayerKeyEventBJ|TriggerRegisterPlayerMouseEventBJ|TriggerRegisterPlayerEventVictory|TriggerRegisterPlayerEventDefeat|TriggerRegisterPlayerEventLeave|TriggerRegisterPlayerEventAllianceChanged|TriggerRegisterPlayerEventEndCinematic|TriggerRegisterGameStateEventTimeOfDay|TriggerRegisterEnterRegionSimple|TriggerRegisterLeaveRegionSimple|TriggerRegisterEnterRectSimple|TriggerRegisterLeaveRectSimple|TriggerRegisterDistanceBetweenUnits|TriggerRegisterUnitInRangeSimple|TriggerRegisterUnitLifeEvent|TriggerRegisterUnitManaEvent|TriggerRegisterDialogEventBJ|TriggerRegisterShowSkillEventBJ|TriggerRegisterBuildSubmenuEventBJ|TriggerRegisterBuildCommandEventBJ|TriggerRegisterTrainCommandEventBJ|TriggerRegisterUpgradeCommandEventBJ|TriggerRegisterCommonCommandEventBJ|TriggerRegisterGameLoadedEventBJ|TriggerRegisterGameSavedEventBJ|AddWeatherEffectSaveLast|GetLastCreatedWeatherEffect|TerrainDeformationCraterBJ|TerrainDeformationRippleBJ|TerrainDeformationWaveBJ|TerrainDeformationRandomBJ|GetLastCreatedTerrainDeformation|AddLightningLoc|GetLastCreatedLightningBJ|CreateFogModifierRectSimple|CreateFogModifierRadiusLocSimple|CreateFogModifierRectBJ|CreateFogModifierRadiusLocBJ|GetLastCreatedFogModifier|CreateImageBJ|GetLastCreatedImage|CreateUbersplatBJ|GetLastCreatedUbersplat|GetLastCreatedMinimapIcon|CreateMinimapIconOnUnitBJ|CreateMinimapIconAtLocBJ|CreateMinimapIconBJ|GetLastPlayedSound|AddSpecialEffectLocBJ|AddSpecialEffectTargetUnitBJ|AddSpecialEffectTargetDestructableBJ|AddSpecialEffectTargetItemBJ|GetLastCreatedEffectBJ|CreateCommandButtonEffectBJ|CreateTrainCommandButtonEffectBJ|CreateUpgradeCommandButtonEffectBJ|CreateCommonCommandButtonEffectBJ|CreateLearnCommandButtonEffectBJ|CreateBuildCommandButtonEffectBJ|GetLastCreatedCommandButtonEffectBJ|GetItemLoc|UnitAddItemByIdSwapped|UnitRemoveItemFromSlotSwapped|CreateItemLoc|GetLastCreatedItem|GetLastRemovedItem|UnitItemInSlotBJ|GetItemOfTypeFromUnitBJ|RandomItemInRectBJ|RandomItemInRectSimpleBJ|GetKillingUnitBJ|CreateUnitAtLocSaveLast|GetLastCreatedUnit|CreateNUnitsAtLoc|CreateNUnitsAtLocFacingLocBJ|GetLastCreatedGroup|CreateCorpseLocBJ|CreatePermanentCorpseLocBJ|GetAttackedUnitBJ|GetTransportUnitBJ|GetLoadedUnitBJ|ReplaceUnitBJ|GetLastReplacedUnitBJ|CreateDestructableLoc|CreateDeadDestructableLocBJ|GetLastCreatedDestructable|GetDestructableLoc|RandomDestructableInRectBJ|RandomDestructableInRectSimpleBJ|WaygateGetDestinationLocBJ|GroupPickRandomUnit|ForcePickRandomPlayer|GetUnitsInRectMatching|GetUnitsInRectAll|GetUnitsInRectOfPlayer|GetUnitsInRangeOfLocMatching|GetUnitsInRangeOfLocAll|GetUnitsOfTypeIdAll|GetUnitsOfPlayerMatching|GetUnitsOfPlayerAll|GetUnitsOfPlayerAndTypeId|GetUnitsSelectedAll|GetForceOfPlayer|GetPlayersAll|GetPlayersByMapControl|GetPlayersAllies|GetPlayersEnemies|GetPlayersMatching|GetRandomSubGroup|DialogAddButtonBJ|DialogAddButtonWithHotkeyBJ|GetLastCreatedButtonBJ|GetClickedButtonBJ|GetClickedDialogBJ|CreateQuestBJ|GetLastCreatedQuestBJ|CreateQuestItemBJ|GetLastCreatedQuestItemBJ|CreateDefeatConditionBJ|GetLastCreatedDefeatConditionBJ|StartTimerBJ|CreateTimerBJ|GetLastCreatedTimerBJ|CreateTimerDialogBJ|GetLastCreatedTimerDialogBJ|CreateLeaderboardBJ|LeaderboardGetIndexedPlayerBJ|PlayerGetLeaderboardBJ|GetLastCreatedLeaderboard|CreateMultiboardBJ|GetLastCreatedMultiboard|CreateTextTagLocBJ|CreateTextTagUnitBJ|GetLastCreatedTextTag|InitGameCacheBJ|GetLastCreatedGameCacheBJ|InitHashtableBJ|GetLastCreatedHashtableBJ|LoadPlayerHandleBJ|LoadWidgetHandleBJ|LoadDestructableHandleBJ|LoadItemHandleBJ|LoadUnitHandleBJ|LoadAbilityHandleBJ|LoadTimerHandleBJ|LoadTriggerHandleBJ|LoadTriggerConditionHandleBJ|LoadTriggerActionHandleBJ|LoadTriggerEventHandleBJ|LoadForceHandleBJ|LoadGroupHandleBJ|LoadLocationHandleBJ|LoadRectHandleBJ|LoadBooleanExprHandleBJ|LoadSoundHandleBJ|LoadEffectHandleBJ|LoadUnitPoolHandleBJ|LoadItemPoolHandleBJ|LoadQuestHandleBJ|LoadQuestItemHandleBJ|LoadDefeatConditionHandleBJ|LoadTimerDialogHandleBJ|LoadLeaderboardHandleBJ|LoadMultiboardHandleBJ|LoadMultiboardItemHandleBJ|LoadTrackableHandleBJ|LoadDialogHandleBJ|LoadButtonHandleBJ|LoadTextTagHandleBJ|LoadLightningHandleBJ|LoadImageHandleBJ|LoadUbersplatHandleBJ|LoadRegionHandleBJ|LoadFogStateHandleBJ|LoadFogModifierHandleBJ|LoadHashtableHandleBJ|RestoreUnitLocFacingAngleBJ|RestoreUnitLocFacingPointBJ|GetLastRestoredUnitBJ|GetPlayerStartLocationLoc|GetRectCenter|ConvertedPlayer|BlightGoldMineForPlayerBJ|BlightGoldMineForPlayer|GetLastHauntedGoldMine|GetDyingDestructable|MeleeFindNearestMine|MeleeRandomHeroLoc|MeleeGetProjectedLoc|MeleeGetLocWithinRect|MeleeCheckForVictors|UnitDropItem|WidgetDropItem)",
+//            m => $"{m.Groups[1].Value} __fakePrint({objPrefix}'Function #{counter++}') or {m.Groups[2].Value}",
+//            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
-        // Define the fakePrint Lua code block to prepend.
-        string fakePrint = @"_G['__fakePrintMap'] = {}
+//        // Define the fakePrint Lua code block to prepend.
+//        string fakePrint = @"_G['__fakePrintMap'] = {}
 
-function __fakePrint(s)
-    if _G['trackPrintMap'] then
-        if (not _G['__fakePrintMap'][s]) then
-            _G['__fakePrintMap'][s] = 0
+//function __fakePrint(s)
+//    if _G['trackPrintMap'] then
+//        if (not _G['__fakePrintMap'][s]) then
+//            _G['__fakePrintMap'][s] = 0
+//        end
+
+//        _G['__fakePrintMap'][s] = _G['__fakePrintMap'][s] + 1
+//    end
+
+//    if _G['printCreation'] then
+//	    print(s)
+//    end
+//end";
+
+//        script = script.Replace("class._G:set(\"trackPrintMap\", true)", "_G['trackPrintMap'] = true");
+//        script = script.Replace("class._G:get(\"__fakePrintMap\")", "_G['__fakePrintMap']");
+
+//        script = script.Replace("-- {{ LUA_REPLACE }}", @"-- Create an empty array to store targets
+//    local sortedTargets = {}
+
+//    -- Convert each key/value pair from the targets table into a target object
+//    for debugName, count in pairs(_G['__fakePrintMap']) do
+//        table.insert(sortedTargets, { debugName = debugName, count = count })
+//    end
+
+//    -- If there is at least one target, proceed
+//    if #sortedTargets > 0 then
+//        -- Sort the targets in descending order by count
+//        table.sort(sortedTargets, function(a, b)
+//            return a.count > b.count
+//        end)
+
+//        -- Build the string for the top 10 targets
+//        local d = ''
+//        for i = 1, math.min(10, #sortedTargets) do
+//            local target = sortedTargets[i]
+//            if #d > 0 then
+//                d = d .. ', '
+//            end
+//            d = d .. tostring(target.debugName) .. ': ' .. tostring(target.count)
+//        end
+
+//        -- Print the output
+//        print('Most used ' .. title .. ': ' .. d)
+//    end");
+
+//        string lualib_info = @"info = {}
+
+//info.GetStackTrace = function()
+//    local trace, lastMsg, i, separator = '', '', 5, ' > '
+//    local store = function(msg) lastMsg = msg:sub(1,-3) end
+//    xpcall(error, store, '', 4)
+//    while lastMsg:sub(1,11) == 'war3map.lua' or lastMsg:sub(1,14) == 'blizzard.j.lua' do
+//        if lastMsg:sub(1,11) == 'war3map.lua' then
+//            trace = separator .. lastMsg:sub(13) .. trace
+//        else
+//            trace = separator .. lastMsg .. trace
+//        end
+//        xpcall(error, store, '', i)
+//        i = i+1
+//    end
+//    return 'T' .. trace
+//end";
+
+        string leakTracker = @"LeakTracker = {}
+
+do
+    local live = setmetatable({}, { __mode = ""k"" })
+    local totalCreated = {}
+    local lastAlive = {}
+    local nextId = 0
+
+    function LeakTracker.Track(instance, tag)
+        if type(instance) ~= ""table"" then
+            return instance
         end
 
-        _G['__fakePrintMap'][s] = _G['__fakePrintMap'][s] + 1
+        nextId = nextId + 1
+        live[instance] = {
+            tag = tag,
+            id = nextId,
+            stack = (info and info.GetStackTrace) and info.GetStackTrace() or nil,
+        }
+        totalCreated[tag] = (totalCreated[tag] or 0) + 1
+
+        return instance
     end
 
-    if _G['printCreation'] then
-	    print(s)
+    function LeakTracker.Report()
+        local aliveByTag = {}
+        for _, meta in pairs(live) do
+            aliveByTag[meta.tag] = (aliveByTag[meta.tag] or 0) + 1
+        end
+
+        local rows = {}
+        for tag, created in pairs(totalCreated) do
+            local alive = aliveByTag[tag] or 0
+            rows[#rows + 1] = {
+                tag = tag,
+                alive = alive,
+                created = created,
+                delta = alive - (lastAlive[tag] or 0)
+            }
+            lastAlive[tag] = alive
+        end
+
+        table.sort(rows, function(a, b) return a.alive > b.alive end)
+
+        -- Build CSV-style output
+        local output = {}
+        output[#output + 1] = ""tag,alive,created""
+
+        for _, row in ipairs(rows) do
+            output[#output + 1] = string.format(
+                ""%s,%d,%d"",
+                row.tag, row.alive, row.created
+            )
+        end
+
+        local data = table.concat(output, ""\n"")
+
+        PreloadGenClear()
+        PreloadGenStart()
+
+        local chunkSize = 200
+        local len = string.len(data)
+        local i = 1
+
+        while i <= len do
+            local chunk = string.sub(data, i, i + chunkSize - 1)
+            Preload(chunk)
+            i = i + chunkSize
+        end
+
+        PreloadGenEnd(""Run-Kitty-Run\\LeakData.txt"")
     end
-end";
 
-        script = script.Replace("class._G:set(\"trackPrintMap\", true)", "_G['trackPrintMap'] = true");
-        script = script.Replace("class._G:get(\"__fakePrintMap\")", "_G['__fakePrintMap']");
 
-        script = script.Replace("-- {{ LUA_REPLACE }}", @"-- Create an empty array to store targets
-    local sortedTargets = {}
 
-    -- Convert each key/value pair from the targets table into a target object
-    for debugName, count in pairs(_G['__fakePrintMap']) do
-        table.insert(sortedTargets, { debugName = debugName, count = count })
-    end
+    function LeakTracker.ReportGrowthOnly()
+        --collectgarbage(""collect"")
 
-    -- If there is at least one target, proceed
-    if #sortedTargets > 0 then
-        -- Sort the targets in descending order by count
-        table.sort(sortedTargets, function(a, b)
-            return a.count > b.count
-        end)
+        local aliveByTag = {}
+        for _, meta in pairs(live) do
+            aliveByTag[meta.tag] = (aliveByTag[meta.tag] or 0) + 1
+        end
 
-        -- Build the string for the top 10 targets
-        local d = ''
-        for i = 1, math.min(10, #sortedTargets) do
-            local target = sortedTargets[i]
-            if #d > 0 then
-                d = d .. ', '
+        local rows = {}
+        for tag, created in pairs(totalCreated) do
+            local alive = aliveByTag[tag] or 0
+            local delta = alive - (lastAlive[tag] or 0)
+            if delta > 0 then
+                rows[#rows + 1] = { tag = tag, alive = alive, created = created, delta = delta }
             end
-            d = d .. tostring(target.debugName) .. ': ' .. tostring(target.count)
+            lastAlive[tag] = alive
         end
 
-        -- Print the output
-        print('Most used ' .. title .. ': ' .. d)
-    end");
-
-        string lualib_info = @"info = {}
-
-info.GetStackTrace = function()
-    local trace, lastMsg, i, separator = '', '', 5, ' > '
-    local store = function(msg) lastMsg = msg:sub(1,-3) end
-    xpcall(error, store, '', 4)
-    while lastMsg:sub(1,11) == 'war3map.lua' or lastMsg:sub(1,14) == 'blizzard.j.lua' do
-        if lastMsg:sub(1,11) == 'war3map.lua' then
-            trace = separator .. lastMsg:sub(13) .. trace
-        else
-            trace = separator .. lastMsg .. trace
+        if #rows == 0 then
+            print(""=== LeakTracker: nothing growing since last check ==="")
+            return
         end
-        xpcall(error, store, '', i)
-        i = i+1
+
+        table.sort(rows, function(a, b) return a.delta > b.delta end)
+
+        print(""=== LeakTracker: growing since last check ==="")
+        for _, row in ipairs(rows) do
+            print(string.format(""%s: +%d (now %d alive / %d created total)"", row.tag, row.delta, row.alive, row.created))
+        end
     end
-    return 'T' .. trace
 end";
+
+        // Hook CoreSystem's single allocation choke point (Core.lua's
+        // `new(cls, ...)`) so every compiled C# class instance gets tracked
+        // by LeakTracker automatically - no per-class edits needed. Every
+        // `new X()` in C# funnels through this one function via each
+        // compiled class's __call metamethod (classes, structs, static-ctor
+        // classes, and generic instantiations all end up here), so this
+        // catches everything without needing to know class names ahead of
+        // time. Only patches the return line itself, so the original
+        // (this, ctor-return-values) return signature is untouched.
+        var newAllocatorHookMatches = Regex.Matches(script, @"return this, cls\.__ctor__\(this, \.\.\.\)").Count;
+        if (newAllocatorHookMatches == 0)
+        {
+            Console.WriteLine("[LeakTracker] WARNING: could not find CoreSystem's new() allocator to hook - " +
+                "C# class instances will NOT be auto-tracked this build. Manually-tracked Lua classes still work.");
+        }
+        else
+        {
+            script = Regex.Replace(
+                script,
+                @"([ \t]*)return this, cls\.__ctor__\(this, \.\.\.\)",
+                m => $"{m.Groups[1].Value}if LeakTracker then LeakTracker.Track(this, cls.__name__) end\n{m.Groups[1].Value}return this, cls.__ctor__(this, ...)",
+                RegexOptions.Multiline);
+            Console.WriteLine($"[LeakTracker] Hooked CoreSystem's new() allocator ({newAllocatorHookMatches} occurrence(s)).");
+        }
 
         // Prepend the fakePrint code to the modified script.
-        return lualib_info + "\n\n" + fakePrint + "\n\n" + script;
+        //return lualib_info + "\n\n" + fakePrint + "\n\n" + leakTracker + "\n\n" + script;
+        return leakTracker + "\n\n" + script;
     }
+
 }

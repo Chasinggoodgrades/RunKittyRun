@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -104,6 +105,7 @@ public static class SoundManager
     /// </summary>
     public static void PlayKittyDeathSound(Kitty k)
     {
+        try {
         if (Gamemode.CurrentGameMode == GameMode.Team)
             TeamKittyDeathSound(k);
         else
@@ -112,6 +114,11 @@ public static class SoundManager
             s.Stop(false, false);
             s.AttachToUnit(k.Unit);
             s.Start();
+        }
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in SoundManager.PlayKittyDeathSound: {e.Message}");
         }
     }
 
