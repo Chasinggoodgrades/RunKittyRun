@@ -102,10 +102,7 @@ public class Kibble : IDisposable
             IncrementKibble(kitty);
             PersonalBestAwarder.BeatKibbleCollection(kitty);
 
-            if (kib != null && kib.Item != null)
-            {
-                kib.Dispose();
-            }
+            kib?.Dispose();
         }
         catch (Exception e)
         {

@@ -1,4 +1,5 @@
-﻿using WCSharp.Api;
+﻿using System;
+using WCSharp.Api;
 
 public static class MultiboardUtil
 {
@@ -7,7 +8,13 @@ public static class MultiboardUtil
     /// </summary>
     public static void RefreshMultiboards()
     {
+        try {
         Gamemode.Current.RefreshMultiboard();
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"Error in MultiboardUtil.RefreshMultiboards: {e.Message}");
+        }
     }
 
     /// <summary>

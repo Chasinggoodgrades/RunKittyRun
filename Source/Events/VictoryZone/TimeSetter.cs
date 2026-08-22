@@ -38,13 +38,14 @@ public class TimeSetter
 
             // Always update league season best
             StatManager.UpdateLeagueBestRoundTime(kitty, roundPropertyName, currentTime);
+            var savedTime = GetSavedTime(kitty.SaveData.RoundTimes, roundPropertyName);
 
             // Check and update personal best if improved
-            if (!IsNewPersonalBest(kitty, roundPropertyName, currentTime))
+            if (!IsNewPersonalBest(kitty, roundPropertyName, currentTime, savedTime))
                 return false;
 
             SetSavedTime(kitty, roundPropertyName, currentTime);
-            PersonalBestAwarder.BeatRecordTime(kitty.Player);
+            PersonalBestAwarder.BeatRecordTime(kitty.Player, savedTime);
 
             return true;
         }
@@ -71,10 +72,8 @@ public class TimeSetter
         return true;
     }
 
-    private bool IsNewPersonalBest(Kitty kitty, string roundPropertyName, float currentTime)
+    private bool IsNewPersonalBest(Kitty kitty, string roundPropertyName, float currentTime, float savedTime)
     {
-        var savedTime = GetSavedTime(kitty.SaveData.RoundTimes, roundPropertyName);
-
         Logger.Debug($"Current Time: {currentTime:F2}, Saved Time: {savedTime:F2} | " +
                      $"Player: {kitty.Player.Name} | Round: {Globals.ROUND} | " +
                      $"Difficulty: {Difficulty.DifficultyValue}");

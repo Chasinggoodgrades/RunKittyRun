@@ -7,7 +7,7 @@ namespace Launcher
 {
     public static class MapDesc
     {
-        public static readonly string VERSION = "1.6.2";
+        public static readonly string VERSION = "1.6.3";
         public static readonly string SEASON_ID = "Season 1";
 
         private static readonly string DISCORD = "discord.gg/GSu6zkNvx5";

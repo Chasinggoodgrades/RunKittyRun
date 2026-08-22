@@ -15,6 +15,7 @@ public static class ObjectPool<T> where T : class, new()
             if (_pool.Count > 0)
             {
                 var obj = _pool.Dequeue();
+                if (obj == null) return new T();
                 return obj;
             }
 
@@ -59,6 +60,7 @@ public static class ObjectPool<T> where T : class, new()
             if (_listPool.Count > 0)
             {
                 var list = _listPool.Dequeue();
+                if (list == null) return new List<T>();
                 return list;
             }
 
