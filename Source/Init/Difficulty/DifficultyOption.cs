@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
-using WCSharp.Api;
 
+/// <summary>
+/// A single difficulty tier that can be voted on. Pure data - the dialog and
+/// button wiring live in <see cref="Difficulty"/>, which owns a
+/// SelectionDialog and maps each of its buttons back to one of these.
+/// </summary>
 public class DifficultyOption
 {
-    public static List<DifficultyOption> Options { get; } = new();
-    public static dialog DifficultyChoosing = dialog.Create();
-    private static int _OptionCount = -1;
+    public static List<DifficultyOption> Options { get; } = new List<DifficultyOption>();
+
     public string Name { get; }
     public int Value { get; }
     public string Color { get; }
-    public button Button { get; set; }
     public int TallyCount { get; set; }
 
     public DifficultyOption(string name, int value, string color)
@@ -17,13 +19,7 @@ public class DifficultyOption
         Name = name;
         Value = value;
         Color = color;
-        Button = AddButton();
         Options.Add(this);
-    }
-
-    public button AddButton()
-    {
-        return DifficultyChoosing.AddButton($"{Color}{Name}|r", ++_OptionCount);
     }
 
     public override string ToString()

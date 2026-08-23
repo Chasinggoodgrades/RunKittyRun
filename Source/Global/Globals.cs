@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 
 public static class Globals
 {
-    public const int MAX_TEAM_SIZE = 24;
+    public const int MAX_TEAM_SIZE = 12;
     public const float TIME_TO_PICK_GAMEMODE = 20.0f;
     public const int DEFAULT_TEAM_SIZE = 3;
     public static int ROUND = 0;

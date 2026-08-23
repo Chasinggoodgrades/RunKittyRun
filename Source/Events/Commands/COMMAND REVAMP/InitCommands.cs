@@ -631,13 +631,13 @@ public static class InitCommands
                 var foundMonsters = UnitData.Monsters.Where(m => m.Name.ToLower().Contains(search)).ToList(); // IEnumberable + ToList memory usage. 
                 if (foundMonsters.Count == 0)
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No monsters found with name containing '{search}'|r");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No monsters found with name containing '{search}'{Colors.COLOR_RESET}");
                     return;
                 }
                 var message = $"{Colors.COLOR_GOLD}Monsters found with name containing '{search}':\n";
                 foreach (var monster in foundMonsters)
                 {
-                    message += $"{Colors.COLOR_LAVENDER}{monster.Name} - UnitID: {monster.Id}\n";
+                    message += $"{Colors.COLOR_LAVENDER}{monster.Name} - UnitID:{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}{monster.Id}{Colors.COLOR_RESET}\n";
                 }
                 player.DisplayTimedTextTo(10.0f, message);
             }
