@@ -127,7 +127,7 @@ public static class SeasonalManager
         }
     }
 
-    public static void SetWeather(string weather)
+    public static bool SetWeather(string weather)
     {
         if (CurrentWeather != null)
         {
@@ -165,8 +165,10 @@ public static class SeasonalManager
                 CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, DalaranShield);
                 break;
             default:
-                return;
+                return false;
         }
+
         CurrentWeather.Enable();
+        return true;
     }
 }

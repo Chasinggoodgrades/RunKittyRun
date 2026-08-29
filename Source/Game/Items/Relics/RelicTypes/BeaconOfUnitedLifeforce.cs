@@ -58,15 +58,15 @@ public class BeaconOfUnitedLifeforce : Relic
 
         var color = Colors.COLOR_YELLOW_ORANGE;
         var msgSent = false;
-        foreach (var k in Globals.ALL_KITTIES)
+        foreach (var k in Globals.ALL_KITTIES_LIST)
         {
-            if (k.Value.Alive) continue;
-            if (kitty.TeamID != k.Value.TeamID) continue;
-            k.Value.ReviveKitty(kitty);
-            CameraUtil.SetCameraOnKitty(k.Value);
-            Invulnerability(kitty, k.Value);
+            if (k.Alive) continue;
+            if (kitty.TeamID != k.TeamID) continue;
+            k?.ReviveKitty(kitty);
+            CameraUtil.SetCameraOnKitty(k);
+            Invulnerability(kitty, k);
 
-            if (!reviveAll) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(k.Value.Player)}{color} has been extra revived by {Colors.PlayerNameColored(kitty.Player)}!|r");
+            if (!reviveAll) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(k.Player)}{color} has been extra revived by {Colors.PlayerNameColored(kitty.Player)}!|r");
             if (!reviveAll) break;
             if (!msgSent) Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(kitty.Player)}{color} has extra revived all dead players!|r");
             msgSent = true;

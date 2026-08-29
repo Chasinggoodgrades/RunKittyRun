@@ -786,6 +786,23 @@ public static class InitCommands
             }
         );
 
+
+        CommandsManager.RegisterCommand(
+            name: "killwolf",
+            alias: "kw",
+            tier: CommandTier.Admin,
+            argDesc: "[selectedWolf]",
+            description: "Kills the selected wolf.",
+            action: (player, args) =>
+            {
+                var selected = CustomStatFrame.SelectedUnit[player];
+                if (Globals.ALL_WOLVES.TryGetValue(selected, out var wolf))
+                {
+                    wolf.Dispose();
+                }
+            }
+        );
+
         CommandsManager.RegisterCommand(
             name: "activatechristmas",
             alias: "christmas",
@@ -1841,7 +1858,10 @@ public static class InitCommands
                     player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: weather [weather type]{Colors.COLOR_RESET}");
                     return;
                 }
-                SeasonalManager.SetWeather(args[0]);
+                if (!SeasonalManager.SetWeather(args[0])) return;
+                player.DisplayTextTo($"{Colors.COLOR_YELLOW_ORANGE}Weather set to: {args[0]}");
+
+
             }
         );
 

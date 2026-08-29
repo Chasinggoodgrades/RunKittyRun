@@ -1,6 +1,7 @@
 ﻿using Source;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -272,7 +273,8 @@ public static class CustomStatFrame
 
     private static string GetPlayerTime(unit u) => Utility.ConvertFloatToTime(Globals.ALL_KITTIES[u.Owner].TimeProg.GetRoundTime(Globals.ROUND));
 
-    private static string GetTeamTime(unit u) => Utility.ConvertFloatToTime(TeamRegistry.TryGetTeamForPlayer(u.Owner, out Team team) ? team.TeamTimes[Globals.ROUND] : 0f);
+    // Mapping by the unit is direct and won't cause desync when iterating thru an IEnumerable dictionary.
+    private static string GetTeamTime(unit u) => Utility.ConvertFloatToTime(TeamRegistry.TryGetTeamForUnit(u).TeamTimes[Globals.ROUND]);
 
     private static int GetCurrentRoundSaves(unit u) => Globals.ALL_KITTIES[u.Owner].CurrentStats.RoundSaves;
 
