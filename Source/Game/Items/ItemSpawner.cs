@@ -12,6 +12,7 @@ public static class ItemSpawner
     private static timer SpawnTimer = timer.Create();
     private static float ITEM_SPAWN_INTERVAL = 45.0f;
     public static int NUMBER_OF_ITEMS { get; set; } = 15;
+    private static int NUMBER_OF_KIBBLES { get; set; } = 20;
 
     public static void Initialize()
     {
@@ -37,7 +38,7 @@ public static class ItemSpawner
             {
                 SpawnRegularItems();
             }
-            SpawnKibble(NUMBER_OF_ITEMS);
+            SpawnKibble(NUMBER_OF_KIBBLES);
 
         }
         catch (Exception e)

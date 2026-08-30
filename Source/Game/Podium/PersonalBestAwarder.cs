@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 
 /*
@@ -25,25 +26,41 @@ public static class PersonalBestAwarder
     public static void BeatRecordTime(player player, float oldBestTime)
     {
         var kittyStats = Globals.ALL_KITTIES[player].SaveData;
+
         var roundEnum = "";
-        if (Gamemode.CurrentGameMode == GameMode.Standard) roundEnum = TimeSetter.Instance.GetRoundPropertyName();
-        if (Gamemode.CurrentGameMode == GameMode.Solo) roundEnum = TimeSetter.Instance.GetSoloPropertyName();
+        if (Gamemode.CurrentGameMode == GameMode.Standard)
+            roundEnum = TimeSetter.Instance.GetRoundPropertyName();
+        if (Gamemode.CurrentGameMode == GameMode.Solo)
+            roundEnum = TimeSetter.Instance.GetSoloPropertyName();
 
-        var time = (float)kittyStats.RoundTimes.GetType().GetProperty(roundEnum).GetValue(kittyStats.RoundTimes);
-
-        string diffString = "";
-        if (time < oldBestTime)
-        {
-            float difference = oldBestTime - time;
-            diffString = $" ({Colors.COLOR_GREEN}-{difference:F2}s{Colors.COLOR_RESET})";
-        }
+        var time = (float)kittyStats.RoundTimes.GetType()
+            .GetProperty(roundEnum)
+            .GetValue(kittyStats.RoundTimes);
 
         var timeFormatted = Utility.ConvertFloatToTime(time);
-        var difficulty = Gamemode.CurrentGameMode == GameMode.Standard ? Difficulty.DifficultyOption.ToString() : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
-        if (Gamemode.CurrentGameMode == GameMode.Solo || Gamemode.CurrentGameMode == GameMode.Team) return; // lets not have this going off during tournament
 
-        Utility.TimedTextToAllPlayers(MessageTime, $"{Colors.PlayerNameColored(player)} has set a new personal best time of {Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET}{diffString} for {difficulty}{Colors.COLOR_RESET}");
+        // NEW: formatted difference
+        var difference = oldBestTime - time;
+        var differenceFormatted = Utility.ConvertFloatToTime(Math.Abs(difference));
+
+        string diffString = "";
+        if (difference > 0)
+            diffString = $" ({Colors.COLOR_GREEN}-{differenceFormatted}{Colors.COLOR_RESET})";
+
+        var difficulty = Gamemode.CurrentGameMode == GameMode.Standard
+            ? Difficulty.DifficultyOption.ToString()
+            : $"{Colors.COLOR_TURQUOISE}Solo{Colors.COLOR_RESET}";
+
+        if (Gamemode.CurrentGameMode == GameMode.Solo || Gamemode.CurrentGameMode == GameMode.Team)
+            return;
+
+        Utility.TimedTextToAllPlayers(
+            MessageTime,
+            $"{Colors.PlayerNameColored(player)} has set a new personal best time of " +
+            $"{Colors.COLOR_YELLOW}{timeFormatted}{Colors.COLOR_RESET}{diffString} for {difficulty}{Colors.COLOR_RESET}"
+        );
     }
+
 
     /// <summary>
     /// Checks if your kibble collection is higher than your personal best and updates it if so. Also notifies all players.
