@@ -42,7 +42,7 @@ public static class InitCommands
             name: "save",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Save your current game stats.",
             action: (player, args) =>
             {
@@ -55,7 +55,7 @@ public static class InitCommands
             name: "saveall",
             alias: "",
             tier: CommandTier.Developer,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Saves to alldata file, mock data purposes only",
             action: (player, args) =>
             {
@@ -67,7 +67,7 @@ public static class InitCommands
             name: "victoryarea",
             alias: "va",
             tier: CommandTier.Admin,
-            argDesc: "bool",
+            argDesc: "[true][false]",
             description: "Disables or enables victory area according to passed parm or flips it.",
             action: (player, args) =>
             {
@@ -96,7 +96,7 @@ public static class InitCommands
             name: "clear",
             alias: "clear,clr,c",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Clears your screen.",
             action: (player, args) => Utility.ClearScreen(player)
         );
@@ -135,7 +135,7 @@ public static class InitCommands
             name: "colors",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Display all available colors.",
             action: (player, args) => Colors.ListColorCommands(player)
         );
@@ -176,7 +176,7 @@ public static class InitCommands
             name: "voteend",
             alias: "ve",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Initiate a vote to end the round (Solo Tournament Only).",
             action: (player, args) => VoteEndRound.InitiateVote(player)
         );
@@ -185,7 +185,7 @@ public static class InitCommands
             name: "yes",
             alias: "y",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Vote yes for the current vote.",
             action: (player, args) =>
             {
@@ -254,7 +254,7 @@ public static class InitCommands
             name: "wild",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Set your kitty to a random vertex color.",
             action: (player, args) => Colors.SetPlayerRandomVertexColor(player)
         );
@@ -263,7 +263,7 @@ public static class InitCommands
             name: "names",
             alias: "n",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Hides all floating name tags.",
             action: (player, args) => FloatingNameTag.ShowAllNameTags(player, CommandsManager.GetBool(args[0]))
         );
@@ -281,7 +281,7 @@ public static class InitCommands
             name: "lockcamera",
             alias: "lc,spectate",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Locks your camera to your unit. Can also do ctrl + C.",
             action: (player, args) =>
             {
@@ -297,7 +297,7 @@ public static class InitCommands
             name: "firstperson",
             alias: "fpc,firstpersoncamera",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Toggle first person camera.",
             action: (player, args) => FirstPersonCameraManager.ToggleFirstPerson(player)
         );
@@ -306,7 +306,7 @@ public static class InitCommands
             name: "reset",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Resets your camera to their default settings.",
             action: (player, args) =>
             {
@@ -319,7 +319,7 @@ public static class InitCommands
             name: "kc",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Kicks yourself from the game.",
             action: (player, args) =>
             {
@@ -332,7 +332,7 @@ public static class InitCommands
             name: "apm",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Displays your APM for ACTIVE game time. (not counting intermissions)",
             action: (player, args) => player.DisplayTimedTextTo(10.0f, APMTracker.CalculateAllAPM())
         );
@@ -341,7 +341,7 @@ public static class InitCommands
             name: "kibble",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Displays the kibble collected by each player.",
             action: (player, args) =>
             {
@@ -360,7 +360,7 @@ public static class InitCommands
             name: "watcher",
             alias: "watching",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Removes all units from game and you become an observer/spectator.",
             action: (player, args) => Utility.MakePlayerSpectator(player)
         );
@@ -369,7 +369,7 @@ public static class InitCommands
             name: "overheadcam",
             alias: "overhead,topdown,ohc",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Gives an overhead view.",
             action: (player, args) => CameraUtil.OverheadCamera(player, 280f)
         );
@@ -378,7 +378,7 @@ public static class InitCommands
             name: "komotocam",
             alias: "",
             tier: CommandTier.All,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Toggle KomotoCam.",
             action: (player, args) => CameraUtil.ToggleKomotoCam(player)
         );
@@ -594,7 +594,7 @@ public static class InitCommands
             name: "blink",
             alias: "tele",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Adds a blink item to the kitty.",
             action: (player, args) =>
             {
@@ -647,7 +647,7 @@ public static class InitCommands
             name: "revive",
             alias: "rpos",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Revives yourself.",
             action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => kitty.ReviveKitty())
         );
@@ -807,7 +807,7 @@ public static class InitCommands
             name: "activatechristmas",
             alias: "christmas",
             tier: CommandTier.VIP,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Activates the Christmas terrain.",
             action: (player, args) => SeasonalManager.ActivateChristmas()
         );
@@ -816,7 +816,7 @@ public static class InitCommands
             name: "deactivateseason",
             alias: "noseason",
             tier: CommandTier.VIP,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Deactivates any current seasons.",
             action: (player, args) => SeasonalManager.NoSeason()
         );
@@ -921,7 +921,7 @@ public static class InitCommands
             name: "spawnlocation",
             alias: "spawnloc",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Moves all kitties to the spawn location.",
             action: (player, args) =>
             {
@@ -938,7 +938,7 @@ public static class InitCommands
             name: "pauseround",
             alias: "roundpause,rp",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Pauses the round timer.",
             action: (player, args) => RoundTimer.StartRoundTimer.Pause()
         );
@@ -947,7 +947,7 @@ public static class InitCommands
             name: "unpauseround",
             alias: "roundunpause,rup",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Unpauses the round timer.",
             action: (player, args) => RoundTimer.StartRoundTimer.Resume()
         );
@@ -956,7 +956,7 @@ public static class InitCommands
             name: "en",
             alias: "hidelanes",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Hides the lanes.",
             action: (player, args) => WolfLaneHider.LanesHider()
         );
@@ -1027,7 +1027,7 @@ public static class InitCommands
             name: "clearaffixes",
             alias: "ca",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Clears all affixes from all wolves.",
             action: (player, args) =>
             {
@@ -1151,7 +1151,7 @@ public static class InitCommands
             name: "scale",
             alias: "",
             tier: CommandTier.VIP,
-            argDesc: "[scale], [resolvePlayerId]",
+            argDesc: "[size][resolvePlayerId]",
             description: "Sets the scale of the passed player's kitty parameter.",
             action: (player, args) =>
             {
@@ -1175,7 +1175,7 @@ public static class InitCommands
             name: "day",
             alias: "",
             tier: CommandTier.Red,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Sets the time of day to day.",
             action: (player, args) =>
             {
@@ -1188,7 +1188,7 @@ public static class InitCommands
             name: "night",
             alias: "",
             tier: CommandTier.Red,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Sets the time of day to night.",
             action: (player, args) =>
             {
@@ -1201,7 +1201,7 @@ public static class InitCommands
             name: "mem",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Prints debug names.",
             action: (player, args) =>
             {
@@ -1214,7 +1214,7 @@ public static class InitCommands
             name: "aishare",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Shares control with all AI players.",
             action: (player, args) =>
             {
@@ -1232,7 +1232,7 @@ public static class InitCommands
             name: "exec",
             alias: "",
             tier: CommandTier.Admin,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Executes lua script",
             action: (player, args) =>
             {
@@ -1313,7 +1313,7 @@ public static class InitCommands
             name: "skin",
             alias: "",
             tier: CommandTier.VIP,
-            argDesc: "[skinId], [player]",
+            argDesc: "[skinId][resolvePlayerId]",
             description: "Sets the skin of the passed player parameter. Use \"none\" for default skin.",
             action: (player, args) =>
             {
@@ -1450,7 +1450,7 @@ public static class InitCommands
             name: "killunit",
             alias: "kill,kl",
             tier: CommandTier.Admin,
-            argDesc: "resolve playerID",
+            argDesc: "[resolvePlayerId]",
             description: "Kills urself by default, or enter name/number/selected, parm. ONLY KITTIES",
             action: (player, args) => CommandsManager.ResolvePlayerId(args[0], kitty => kitty.KillKitty())
         );
@@ -1459,7 +1459,7 @@ public static class InitCommands
             name: "kibblecurrency",
             alias: "kibbleinfo,kbinfo",
             tier: CommandTier.All,
-            argDesc: "player name, #, selected, or self",
+            argDesc: "[resolvePlayerId]",
             description: "Gets the Kibble Currency information on the given player.",
             action: (player, args) =>
             {
@@ -1564,7 +1564,7 @@ public static class InitCommands
             name: "benchmarktest",
             alias: "bmt",
             tier: CommandTier.Developer,
-            argDesc: "Testing performance in collision detection",
+            argDesc: "",
             description: "Runs a benchmark test for collision detection. Results are printed. Beware of lag -- will cause performance issues while running.",
             action: (player, args) =>
             {
@@ -1693,7 +1693,7 @@ public static class InitCommands
             name: "spawnkibble",
             alias: "skb",
             tier: CommandTier.Admin,
-            argDesc: "[# of kibble]",
+            argDesc: "[numberOfKibble]",
             description: "Spawns {int #} of kibbles ",
             action: (player, args) =>
             {
@@ -1789,13 +1789,13 @@ public static class InitCommands
             name: "deathless",
             alias: "dl",
             tier: CommandTier.Admin,
-            argDesc: "[player]",
+            argDesc: "[resolvePlayerId]",
             description: "Teleports the ResolvePlayerId to each safezone all the way to the end",
             action: (player, args) =>
             {
                 if (args[0] == "")
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [ResolvePlayerId]|r");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: -deathless [resolvePlayerId]|r");
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
@@ -1832,7 +1832,7 @@ public static class InitCommands
             name: "disablekibble",
             alias: "dkb",
             tier: CommandTier.Red,
-            argDesc: "[none]",
+            argDesc: "",
             description: "Disables/Reenables Kibble Spawning, flipping the current status.",
             action: (player, args) =>
             {
@@ -1966,7 +1966,7 @@ public static class InitCommands
             name: "mockdata",
             alias: "mock,mockstats",
             tier: CommandTier.Developer,
-            argDesc: "[resolvePlayerId] or [all] [gamemode]",
+            argDesc: "[resolvePlayerId] [gamemode]",
             description: "Generates mock save data for testing. Use 'all' for all players or specify a player. Optionally pass a gamemode (e.g. Solo, Team, Standard) - defaults to whatever gamemode is currently running.",
             action: (player, args) =>
             {
@@ -1996,13 +1996,13 @@ public static class InitCommands
             name: "teammove",
             alias: "tm",
             tier: CommandTier.Admin,
-            argDesc: "[ResolvePlayerId] [Team #]",
-            description: "Swaps the passed ResolvePlayerId to the provided Team #, no restrictions",
+            argDesc: "[resolvePlayerId] [Team #]",
+            description: "Swaps the passed resolvePlayerId to the provided Team #, no restrictions",
             action: (player, args) =>
             {
                 if (args.Length < 2 || args[0] == "" || args[1] == "")
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [ResolvePlayerId] [Team #]{Colors.COLOR_RESET}");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: teammove [resolvePlayerId] [Team #]{Colors.COLOR_RESET}");
                     return;
                 }
                 CommandsManager.ResolvePlayerId(args[0], kitty =>
@@ -2106,7 +2106,7 @@ public static class InitCommands
             name: "resetmytournamentdata",
             alias: "rmtd",
             tier: CommandTier.All,
-            argDesc: "[]",
+            argDesc: "",
             description: "Resets your Tournament Data",
             action: (player, args) =>
             {
@@ -2196,13 +2196,13 @@ public static class InitCommands
            name: "movespeed",
            alias: "ms",
            tier: CommandTier.Admin,
-           argDesc: "[speed] [player]",
+           argDesc: "[speed] [resolvePlayerId]",
            description: "Sets the absolute move speed of the passed player, or yourself if no player is provided.",
            action: (player, args) =>
            {
                if (args[0] == "")
                {
-                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [player]|r");
+                   player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: movespeed [speed] [resolvePlayerId]|r");
                    return;
                }
 
@@ -2234,13 +2234,13 @@ public static class InitCommands
             name: "speededit",
             alias: "se",
             tier: CommandTier.Admin,
-            argDesc: "[on/off] [player]",
+            argDesc: "[on/off] [resolvePlayerId]",
             description: "Turns on RTR and sets move speed to 800 for the specified player.",
             action: (player, args) =>
             {
                 if (args[0] == "")
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [player]|r");
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Usage: speededit [on/off] [resolvePlayerId]|r");
                     return;
                 }
 
