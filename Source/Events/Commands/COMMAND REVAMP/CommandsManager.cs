@@ -174,7 +174,7 @@ public static class CommandsManager
         var commandList = "";
         foreach (var cmd in CommandsList)
         {
-            commandList += $"{Colors.GetColoredCommandTier(cmd.Tier)} - {Colors.COLOR_YELLOW}( {cmd.Name} | {string.Join(", ", cmd.Alias)} )|r{Colors.COLOR_RED}[{cmd.ArgDesc}]{Colors.COLOR_RESET} - {Colors.COLOR_GOLD}{cmd.Description}|r\n";
+            commandList += $"[{Colors.GetColoredCommandTier(cmd.Tier)}] {Colors.COLOR_YELLOW}( {cmd.Name} | {string.Join(", ", cmd.Alias)} )|r{Colors.COLOR_RED}[{cmd.ArgDesc}]{Colors.COLOR_RESET} - {Colors.COLOR_GOLD}{cmd.Description}|r\n";
         }
 
         player.DisplayTimedTextTo(15.0f, $"{Colors.COLOR_TURQUOISE}Available Commands:|r\n{commandList}", 0, 0);

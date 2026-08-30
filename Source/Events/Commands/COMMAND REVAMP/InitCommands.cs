@@ -792,7 +792,7 @@ public static class InitCommands
             alias: "kw",
             tier: CommandTier.Admin,
             argDesc: "[selectedWolf]",
-            description: "Kills the selected wolf.",
+            description: "We're just disposing of the entire wolf, screw it.",
             action: (player, args) =>
             {
                 var selected = CustomStatFrame.SelectedUnit[player];

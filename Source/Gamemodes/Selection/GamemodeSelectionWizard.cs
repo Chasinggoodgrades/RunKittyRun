@@ -38,17 +38,17 @@ public static class GamemodeSelectionWizard
     private static void ShowMainMenu(player host, GamemodeSelectionContext context)
     {
         var dialog = new SelectionDialog(Colors.COLOR_GOLD + "Please choose a gamemode." + Colors.COLOR_RESET)
-            .AddOption("Standard", () =>
+            .AddOption($"{Colors.COLOR_YELLOW_ORANGE}Standard{Colors.COLOR_RESET}", () =>
             {
                 context.Mode = GameMode.Standard;
                 Finish(context);
             })
-            .AddOption("Solo Tournament", () =>
+            .AddOption($"{Colors.COLOR_YELLOW_ORANGE}Solo Tournament{Colors.COLOR_RESET}", () =>
             {
                 context.Mode = GameMode.Solo;
                 ShowSoloTypeMenu(host, context);
             })
-            .AddOption("Team Tournament", () =>
+            .AddOption($"{Colors.COLOR_YELLOW_ORANGE}Team Tournament{Colors.COLOR_RESET}", () =>
             {
                 context.Mode = GameMode.Team;
                 ShowTeamTypeMenu(host, context);
@@ -60,12 +60,12 @@ public static class GamemodeSelectionWizard
     private static void ShowSoloTypeMenu(player host, GamemodeSelectionContext context)
     {
         var dialog = new SelectionDialog(Colors.COLOR_GOLD + "Solo Tournament - choose a mode." + Colors.COLOR_RESET)
-            .AddOption("Progression", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}Progression{Colors.COLOR_RESET}", () =>
             {
                 context.ModeType = Globals.SOLO_MODES[0];
                 ShowRegionMenu(host, context);
             })
-            .AddOption("Race", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}Race{Colors.COLOR_RESET}", () =>
             {
                 context.ModeType = Globals.SOLO_MODES[1];
                 ShowRegionMenu(host, context);
@@ -77,12 +77,12 @@ public static class GamemodeSelectionWizard
     private static void ShowTeamTypeMenu(player host, GamemodeSelectionContext context)
     {
         var dialog = new SelectionDialog(Colors.COLOR_GOLD + "Team Tournament - choose a mode." + Colors.COLOR_RESET)
-            .AddOption("Free Pick", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}Free Pick{Colors.COLOR_RESET}", () =>
             {
                 context.ModeType = Globals.TEAM_MODES[0];
                 ShowTeamSizeMenu(host, context);
             })
-            .AddOption("Random", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}Random{Colors.COLOR_RESET}", () =>
             {
                 context.ModeType = Globals.TEAM_MODES[1];
                 ShowTeamSizeMenu(host, context);
@@ -111,12 +111,12 @@ public static class GamemodeSelectionWizard
     private static void ShowAutoReviveMenu(player host, GamemodeSelectionContext context)
     {
         var dialog = new SelectionDialog(Colors.COLOR_GOLD + "Enable auto-revive?" + Colors.COLOR_RESET)
-            .AddOption("On", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}On{Colors.COLOR_RESET}", () =>
             {
                 context.AutoRevive = true;
                 ShowRegionMenu(host, context);
             })
-            .AddOption("Off", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}Off{Colors.COLOR_RESET}", () =>
             {
                 context.AutoRevive = false;
                 ShowRegionMenu(host, context);
@@ -128,12 +128,12 @@ public static class GamemodeSelectionWizard
     private static void ShowRegionMenu(player host, GamemodeSelectionContext context)
     {
         var dialog = new SelectionDialog(Colors.COLOR_GOLD + "Choose a region." + Colors.COLOR_RESET)
-            .AddOption("NA", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}NA{Colors.COLOR_RESET}", () =>
             {
                 context.Region = "NA";
                 Finish(context);
             })
-            .AddOption("EU", () =>
+            .AddOption($"{Colors.COLOR_YELLOW}EU{Colors.COLOR_RESET}", () =>
             {
                 context.Region = "EU";
                 Finish(context);
