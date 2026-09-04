@@ -11,10 +11,10 @@ public static class KibbleEvent
     private static timerdialog EventTimerDialog;
     private const float EventLength = 300.0f; // 5 minutes to collect 200 kibble xd
 
-    public static void StartKibbleEvent(float chance)
+    public static void StartKibbleEvent(float chance, bool force = false)
     {
         var adjustedChance = Source.Program.Debug ? 5 : 1;
-        if (chance > adjustedChance || EventPlayed) return;
+        if ((EventPlayed && !force) || chance > adjustedChance) return;
 
         EventActive = true;
         EventPlayed = true; // only once per game.
@@ -47,8 +47,7 @@ public static class KibbleEvent
         for (int i = 0; i < ItemSpawner.TrackKibbles.Count; i++)
         {
             var kibble = ItemSpawner.TrackKibbles[i];
-            if (kibble.Item == null) continue;
-            kibble.Dispose();
+            kibble?.Dispose();
         }
 
         ItemSpawner.TrackKibbles.Clear();
@@ -73,6 +72,16 @@ public static class KibbleEvent
             Challenges.HuntressKitty();
             EndKibbleEvent();
         }
+    }
+
+    public static void PauseEventTimer(bool pause)
+    {
+        if (EventTimer == null) return;
+        if (pause) EventTimer.Pause();
+        else EventTimer.Resume();
+
+        //EventTimerDialog.IsDisplayed = false;
+        //EventTimerDialog.IsDisplayed = true;
     }
 
     /// <summary>

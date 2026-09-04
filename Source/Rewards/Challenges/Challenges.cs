@@ -140,6 +140,14 @@ public static class Challenges
         }
     }
 
+    public static void VioletLight(player player)
+    {
+        if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible) && !DifficultyConfig.IsProgressive)
+            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
+        else if (DifficultyConfig.IsProgressive && DifficultyConfig.GetVirtualRound(Difficulty.DifficultyValue) >= 5)
+            AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
+    }
+
     public static void TemperedAura()
     {
         if (!LeagueManager.Instance.IsSeasonActive) return;

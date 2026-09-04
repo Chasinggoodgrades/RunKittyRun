@@ -110,9 +110,13 @@ public static class Difficulty
     /// <param name="difficulty">"normal", "hard", "impossible", ...</param>
     public static bool ChangeDifficulty(string difficulty = "normal")
     {
+        difficulty = difficulty.ToLower();
+
         foreach (var option in DifficultyOption.Options)
         {
-            if (string.Equals(option.Name, difficulty, StringComparison.OrdinalIgnoreCase))
+            var name = option.Name.ToLower();
+
+            if (name.Contains(difficulty) || name.StartsWith(difficulty))
             {
                 SetDifficulty(option);
                 return true;

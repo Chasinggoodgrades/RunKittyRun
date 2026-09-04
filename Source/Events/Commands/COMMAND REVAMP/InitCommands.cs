@@ -52,6 +52,18 @@ public static class InitCommands
         );
 
         CommandsManager.RegisterCommand(
+            name: "kibbleevent",
+            alias: "ke",
+            tier: CommandTier.Admin,
+            argDesc: "",
+            description: "Starts the kibble event.",
+            action: (player, args) =>
+            {
+                KibbleEvent.StartKibbleEvent(0.0f, true);
+            }
+        );
+
+        CommandsManager.RegisterCommand(
             name: "saveall",
             alias: "",
             tier: CommandTier.Developer,

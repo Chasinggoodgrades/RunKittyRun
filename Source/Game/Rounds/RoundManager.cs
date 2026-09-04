@@ -66,6 +66,7 @@ public static class RoundManager
         NitroChallenges.StartNitroTimer();
         NitroPacer.StartNitroPacer();
         SoundManager.PlayRoundSound();
+        KibbleEvent.PauseEventTimer(false);
         Utility.SimpleTimer(20, () => StatManager.IncrementGame()); // +1 game after 20 seconds to prevent farming games by leaving early.
         if (Globals.ROUND == 1) Utility.SimpleTimer(25.0f, () => SaveManager.SaveAll()); // Save after 25 seconds to ensure the game is saved after the initial rush of the round starting.
         Utility.TimedTextToAllPlayers(2.0f, $"{Colors.COLOR_CYAN}Run Kitty Run!!{Colors.COLOR_RESET}");
@@ -79,7 +80,7 @@ public static class RoundManager
             if (Difficulty.IsDifficultyChosen && Globals.ROUND == 0)
             {
                 RoundSetup();
-                Timer.Dispose();
+                Timer?.Dispose();
             }
         });
     }
@@ -105,6 +106,7 @@ public static class RoundManager
             DeathlessChallenges.ResetDeathless();
             WolfLaneHider.ResetLanes();
             TimeSetter.Instance.ResetFinishedTimeCapture();
+            KibbleEvent.PauseEventTimer(true);
 
             SaveManager.SaveAll();
             Resources.BonusResources();

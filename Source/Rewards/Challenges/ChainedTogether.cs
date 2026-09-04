@@ -277,7 +277,8 @@ public static class ChainedTogether
     private static void AwardChainedTogether(Kitty kitty)
     {
         Utility.CreateSimpleTextTag($"{Colors.COLOR_RED}Chained Together!{Colors.COLOR_RESET}", 2.0f, kitty.Unit);
-        DifficultyLevel lvl = (DifficultyLevel)Difficulty.DifficultyValue;
+        DifficultyLevel lvl = DifficultyConfig.GetVirtualDifficulty(Globals.ROUND);
+
         string awardName = GetChainedAwardName(lvl);
         AwardManager.GiveReward(kitty.Player, awardName);
     }

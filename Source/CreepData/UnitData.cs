@@ -884,5 +884,8 @@ public static class UnitData
 
         // CUSTOM MODELS
         new Monster("E00G", "garfield", "Garfield"),
+        new Monster("E00H", "WhiteTiger", "A white tiger"),
+        new Monster("E00I", "Druid Catform", "WoW model druid form"),
+        new Monster("E00J", "Orange Tiger", "WoW STV Tiger")
     };
 }
