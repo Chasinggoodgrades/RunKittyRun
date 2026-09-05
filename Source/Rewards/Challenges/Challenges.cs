@@ -144,7 +144,7 @@ public static class Challenges
     {
         if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible) && !DifficultyConfig.IsProgressive)
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
-        else if (DifficultyConfig.IsProgressive && DifficultyConfig.GetVirtualRound(Difficulty.DifficultyValue) >= 5)
+        else if (DifficultyConfig.IsProgressive && DifficultyConfig.GetVirtualRound(Globals.ROUND) >= 5)
             AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
     }
 
