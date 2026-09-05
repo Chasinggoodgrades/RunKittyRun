@@ -54,7 +54,7 @@ public static class AntiblockWand
         var list = wolvesInArea.ToList();
         foreach (var wolf in list)
         {
-            if (wolf.UnitType != Wolf.WOLF_MODEL) continue;
+            if (wolf.UnitType != Wolf.WolfModel) continue;
             if (NamedWolves.DNTNamedWolves.Contains(Globals.ALL_WOLVES[wolf])) continue;
             var wolfUnit = Globals.ALL_WOLVES[wolf];
             wolfUnit.StartWandering(true);

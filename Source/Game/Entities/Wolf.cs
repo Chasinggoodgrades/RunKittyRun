@@ -6,49 +6,74 @@ using static WCSharp.Api.Common;
 
 public class Wolf
 {
-    public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
-    public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
-    public static int CurrentSkin { get; private set; } = Constants.UNIT_CUSTOM_DOG;
+    #region Constants
 
-    public static bool DisableEffects { get; set; } = false;
-    private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
-    private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
-    private const float NEXT_WANDER_DELAY = 1.9f; // time before wolf can move again
+    public const string DefaultOverheadEffect = "TalkToMe.mdx";
+
+    private const float WanderReactionMin = 0.70f;
+    private const float WanderReactionMax = 0.83f;
+    private const float NextWanderDelay = 1.9f;
+    private const float InitialWanderMin = 2.0f;
+    private const float InitialWanderMax = 4.5f;
+    private const float WanderIntervalMin = 1.00f;
+    private const float WanderIntervalMax = 1.12f;
+
+    // Tournament probability tuning
+    private const float TournamentBaseChance = 8.0f;
+    private const float TournamentTeamBonusPerPlayer = 1.25f;
+    private const float TournamentIncreasePerRound = 2.0f;
+    private const float TournamentMaxProbability = 22.5f;
+    private const float TournamentRandomAdjustmentMax = 4.0f;
+
+    #endregion
+
+    #region Static Members
+
+    public static int WolfModel { get; set; } = Constants.UNIT_CUSTOM_DOG;
+    public static int CurrentSkin { get; set; } = Constants.UNIT_CUSTOM_DOG;
+    public static bool DisableEffects { get; set; }
+
+    #endregion
+
+    #region Instance Fields & Properties
 
     private readonly Action _cachedWander;
     private readonly Action _cachedEffect;
 
-    public int RegionIndex { get; set; }
-    public string OVERHEAD_EFFECT_PATH { get; set; }
-    public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
+    public int RegionIndex { get; }
+    public string OverheadEffectPath { get; set; } = DefaultOverheadEffect;
 
+    public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
     public AchesTimers EffectTimer { get; set; }
 
     public texttag Texttag { get; set; }
     public Disco Disco { get; set; }
-    public WolfArea WolfArea { get; private set; }
+    public WolfArea WolfArea { get; }
     public unit Unit { get; set; }
-    public List<Affix> Affixes { get; private set; }
-    private effect OverheadEffect { get; set; }
-    // private effect RandomEffect { get; set; } // some random cool event - can do later on (roar, stomps, whatever)
+    public List<Affix> Affixes { get; } = new();
     public WolfPoint WolfPoint { get; set; }
-    public bool IsPaused { get; set; } = false;
-    public bool IsReviving { get; set; } = false;
-    public bool IsWalking { get; set; } = false;
+
+    public bool IsPaused { get; set; }
+    public bool IsReviving { get; set; }
+    public bool IsWalking { get; set; }
+
+    private effect _overheadEffect;
+
+    #endregion
 
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
         WolfArea = WolfArea.WolfAreas[regionIndex];
         Affixes = new List<Affix>(); // Consider creating a new object that contains List<Affix> so we're not making a new one each wolf.
-        OVERHEAD_EFFECT_PATH = DEFAULT_OVERHEAD_EFFECT;
+        OverheadEffectPath = DefaultOverheadEffect;
         WolfPoint = new WolfPoint(this); // Consider changing this to be a part of the memory handler. Remove the parameter
 
         _cachedWander = () => StartWandering();
         _cachedEffect = () => WolfMoveCancelEffect();
 
         InitializeWolf();
-        WanderTimer.Timer.Start(GetRandomReal(2.0f, 4.5f), false, _cachedWander);
+        WanderTimer.Timer.Start(GetRandomReal(InitialWanderMin, InitialWanderMax), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
         Globals.ALL_WOLVES_LIST.Add(this);
 
@@ -56,18 +81,20 @@ public class Wolf
     }
 
     /// <summary>
-    /// Spawns wolves based on round and lane according to the Globals.WolvesPerRound dictionary.
+    /// Spawns wolves based on round and lane according to <see cref="WolfWaveConfig"/>.
+    /// Progressive mode uses its own accelerating 3-round curve; every other
+    /// difficulty uses the standard 5-round table.
     /// </summary>
     public static void SpawnWolves()
     {
         try
         {
-            if (Globals.WolvesPerRound.TryGetValue(DifficultyConfig.GetVirtualRound(Globals.ROUND), out var wolvesInRound))
+            var wave = WolfWaveConfig.GetWaveForRound(Globals.ROUND);
+            if (wave != null)
             {
-                foreach (var laneEntry in wolvesInRound)
+                for (int lane = 0; lane < wave.Length; lane++)
                 {
-                    int lane = laneEntry.Key;
-                    int numberOfWolves = laneEntry.Value;
+                    int numberOfWolves = wave[lane];
 
                     for (int i = 0; i < numberOfWolves; i++)
                         new Wolf(lane);
@@ -94,11 +121,11 @@ public class Wolf
 
     public void StartWandering(bool forced = false)
     {
-        var realTime = GetRandomReal(1.00f, 1.12f);
+        var realTime = GetRandomReal(WanderIntervalMin, WanderIntervalMax);
         if ((ShouldStartEffect() || forced) && (!IsPaused && !IsReviving) && (this != NamedWolves.StanWolf))
         {
             ApplyEffect();
-            realTime = NEXT_WANDER_DELAY; // Gives a brief delay before the wolf has a chance to move again.
+            realTime = NextWanderDelay; // Gives a brief delay before the wolf has a chance to move again.
         }
         WanderTimer?.Timer?.Start(realTime, false, _cachedWander);
     }
@@ -119,8 +146,8 @@ public class Wolf
         RemoveAllWolfAffixes();
         EffectTimer?.Dispose();
         EffectTimer = null;
-        OverheadEffect?.Dispose();
-        OverheadEffect = null;
+        _overheadEffect?.Dispose();
+        _overheadEffect = null;
         WanderTimer?.Dispose();
         WanderTimer = null;
         Texttag?.Dispose();
@@ -208,7 +235,7 @@ public class Wolf
         var randomY = GetRandomReal(WolfArea.Rect.MinY, WolfArea.Rect.MaxY);
         var facing = GetRandomReal(0, 360);
 
-        Unit ??= unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
+        Unit ??= unit.Create(selectedPlayer, WolfModel, randomX, randomY, facing);
         Unit.Skin = CurrentSkin;
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
@@ -229,14 +256,14 @@ public class Wolf
     private bool TournamentChance()
     {
         var playersPerTeam = Math.Min(Gamemode.PlayersPerTeam, 6);
-        float baseChance = Gamemode.CurrentGameMode == GameMode.Team ? 8.0f + (1.25f * playersPerTeam) : 8.0f;
-        float increasePerRound = 2.0f;
-        float maxProbability = 22.5f;
+        float baseChance = Gamemode.CurrentGameMode == GameMode.Team ? TournamentBaseChance + (TournamentTeamBonusPerPlayer * playersPerTeam) : TournamentBaseChance;
+        float increasePerRound = TournamentIncreasePerRound;
+        float maxProbability = TournamentMaxProbability;
 
         int currentRound = Globals.ROUND;
 
         float linearProbability = baseChance + (increasePerRound * (currentRound - 1));
-        float randomAdjustment = GetRandomReal(0, 4); // Random adjustment between 0 and 4%
+        float randomAdjustment = GetRandomReal(0, TournamentRandomAdjustmentMax); // Random adjustment between 0 and 4%
         float totalProbability = linearProbability + randomAdjustment;
 
         // Cap the probability to the maximum limit
@@ -246,10 +273,10 @@ public class Wolf
 
     private void ApplyEffect()
     {
-        var effectDuration = GetRandomReal(WANDER_LOWER_BOUND, WANDER_UPPER_BOUND);
+        var effectDuration = GetRandomReal(WanderReactionMin, WanderReactionMax);
 
-        OverheadEffect ??= effect.Create(OVERHEAD_EFFECT_PATH, Unit, "overhead");
-        BlzPlaySpecialEffect(OverheadEffect, animtype.Stand);
+        _overheadEffect ??= effect.Create(OverheadEffectPath, Unit, "overhead");
+        BlzPlaySpecialEffect(_overheadEffect, animtype.Stand);
 
         EffectTimer ??= ObjectPool<AchesTimers>.GetEmptyObject();
         EffectTimer?.Timer?.Start(effectDuration, false, _cachedEffect);
@@ -258,11 +285,11 @@ public class Wolf
     private void WolfMoveCancelEffect()
     {
         WolfMove();
-        BlzPlaySpecialEffect(OverheadEffect, animtype.Death);
+        BlzPlaySpecialEffect(_overheadEffect, animtype.Death);
         if (IsAffixed())
         {
-            OverheadEffect.Dispose();
-            OverheadEffect = null;
+            _overheadEffect.Dispose();
+            _overheadEffect = null;
         }
     }
 

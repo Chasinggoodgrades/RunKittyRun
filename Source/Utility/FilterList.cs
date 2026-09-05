@@ -10,5 +10,5 @@ public static class FilterList
     public static boolexpr IssuedOrderStopOrder = Condition(() => GetIssuedOrderId() == WolfPoint.StopOrderID);
     public static boolexpr IssuedOrderMoveOrder = Condition(() => GetIssuedOrderId() == WolfPoint.MoveOrderID);
     public static boolexpr IssuedOrderHoldPosiiton = Condition(() => GetIssuedOrderId() == WolfPoint.HoldPositionOrderID);
-    public static boolexpr UnitTypeWolf = Condition(() => GetTriggerUnit().UnitType == Wolf.WOLF_MODEL);
+    public static boolexpr UnitTypeWolf = Condition(() => GetTriggerUnit().UnitType == Wolf.WolfModel);
 }

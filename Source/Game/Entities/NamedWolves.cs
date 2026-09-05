@@ -46,7 +46,7 @@ public static class NamedWolves
         StanWolf.PauseSelf(true);
         StanWolf.Unit.SetVertexColor(235, 115, 255);
         StanWolf.Unit.Name = STAN_NAME;
-        StanWolf.OVERHEAD_EFFECT_PATH = "";
+        StanWolf.OverheadEffectPath = "";
 
         StanWolf.Texttag ??= texttag.Create();
         StanWolf.Texttag.SetText(StanWolf.Unit.Name, 0.015f);
@@ -69,7 +69,7 @@ public static class NamedWolves
             if (ExplodingWolf.IsReviving) return;
             ExplodingWolf.Unit.Kill();
             ExplodingWolf.IsReviving = true;
-            ExplodingWolf.OVERHEAD_EFFECT_PATH = "";
+            ExplodingWolf.OverheadEffectPath = "";
             ExplodingWolf.Texttag.SetText("", 0.015f);
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, ExplodingWolf.Unit, "origin");
             ExplodingWolfRevive.Start(25.0f, false, ErrorHandler.Wrap(() =>
@@ -84,7 +84,7 @@ public static class NamedWolves
                 
                 ExplodingWolf.Unit?.Dispose();
                 Globals.ALL_WOLVES.Remove(ExplodingWolf.Unit);
-                ExplodingWolf.Unit = unit.Create(oldOwner, Wolf.WOLF_MODEL, oldX, oldY, 360);
+                ExplodingWolf.Unit = unit.Create(oldOwner, Wolf.WolfModel, oldX, oldY, 360);
                 Globals.ALL_WOLVES.Add(ExplodingWolf.Unit, ExplodingWolf);
                 ExplodingWolfDesc();
             }));
@@ -110,7 +110,7 @@ public static class NamedWolves
             SetRandomVertexColor(ExplodingWolf.Unit, randomPlayer.Id);
             ExplodingWolf.Unit.Name = Utility.FormattedColorPlayerName(randomPlayer);
             ExplodingTexttag();
-            ExplodingWolf.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
+            ExplodingWolf.OverheadEffectPath = Wolf.DefaultOverheadEffect;
             DNTNamedWolves.Add(ExplodingWolf);
         }
         catch (Exception e)
