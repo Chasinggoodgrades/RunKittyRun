@@ -61,7 +61,7 @@ public class Safezone
             ChainedTogether.ReachedSafezone(kitty);
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;
-            kitty.ReplenishMana(0.15f);
+            kitty.ReplenishMana(0.10f);
             AwardedPlayers.Add(player);
             DeathlessChallenges.DeathlessCheck(kitty);
         }
