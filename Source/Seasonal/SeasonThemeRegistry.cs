@@ -9,6 +9,7 @@ public static class SeasonThemeRegistry
 {
     public static readonly SeasonTheme None = BuildNone();
     public static readonly SeasonTheme Christmas = BuildChristmas();
+    public static readonly SeasonTheme Halloween = BuildHalloween();
 
     /// <summary>
     /// Every calendar-driven season, checked in this order. Add a new theme here
@@ -17,7 +18,7 @@ public static class SeasonThemeRegistry
     public static readonly SeasonTheme[] Seasonal =
     {
         Christmas,
-        // Halloween,
+        Halloween,
         // Easter,
         // Valentines,
     };
@@ -108,6 +109,38 @@ public static class SeasonThemeRegistry
                 nameof(Globals.GAME_AWARDS_SORTED.Trails.SnowTrail2023),
                 nameof(Globals.GAME_AWARDS_SORTED.Wings.SnowWings2023),
             },
+        };
+    }
+
+    private static SeasonTheme BuildHalloween()
+    {
+        return new SeasonTheme
+        {
+            Season = HolidaySeasons.Halloween,
+            ActiveMonths = new[] { 10 },
+            TerrainByRound = new[] { FourCC("Ngho") }, // uniform across every round
+            SafezoneTerrain = FourCC("Ibsq"), // Icecrown Glacier (black squares)
+            SafezoneDecorType = FourCC("B00E"), // Pumpkin
+            SafezoneDecorScale = 2.5f,
+            DecorTypes = new[]
+            {
+                FourCC("LOca"), // Cauldron with heads
+                FourCC("LOsk"), // Skull pile
+                FourCC("AOsr"), // Scorched remains
+                FourCC("LOsc"), // Sitting corpse
+                FourCC("LOic"), // Impaled corpse
+                FourCC("NObt"), // Bats
+                FourCC("LOce"), // Empty cage
+                FourCC("YOfb"), // Blue fire
+                FourCC("YOft"), // Fire
+                FourCC("ZZdt"), // Demonic footprints
+                FourCC("LOfl"), // Flies
+                FourCC("DOsv"), // Sewer vents
+            },
+            VendorSkin = Constants.UNIT_KITTY_VENDOR,
+            WeatherEffect = null,
+            TimeOfDay = 18f,
+            MinimapTexture = "war3mapMap.blp",
         };
     }
 }
