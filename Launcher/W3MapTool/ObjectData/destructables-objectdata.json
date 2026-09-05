@@ -1,0 +1,3103 @@
+{
+  "original": [
+    {
+      "objectId": "ITag",
+      "modifications": [
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ITig",
+      "modifications": [
+        {
+          "id": "bgse",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    }
+  ],
+  "custom": [
+    {
+      "objectId": "B000:XOkt",
+      "modifications": [
+        {
+          "id": "bgse",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.8,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Ashenvale\\Props\\SentinelStatue\\SentinelStatue",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_896",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B001:XOkt",
+      "modifications": [
+        {
+          "id": "bgse",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 2,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\trrreeeeee.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3095",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.4,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B002:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Red Crystals.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3096",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B003:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Blue Crystals.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3097",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B004:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Green Crystals_Portrait.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3098",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B005:XOkt",
+      "modifications": [
+        {
+          "id": "bgse",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 2,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cityscape\\Structures\\City_LowWall_TallEndCapWithLantern\\City_LowWall_TallEndCapWithLantern.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3623",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.4,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B006:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.6,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\ChristmasSnowglobe.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3657",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.6,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B007:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\LanternPost.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3051",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B008:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Fireplace.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3101",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B009:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Icecrown\\Props\\SnowMan\\SnowMan.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3099",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00A:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Northrend\\Props\\FirePit\\FirePit.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3660",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00B:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Dungeon\\Props\\LavaCracks\\LavaCracks1.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3661",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00C:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Underground\\Props\\GCracks\\GCracks2.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3662",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00D:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 2,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Christmas Tree.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3664",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.4,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00E:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cinematic\\DemonFootPrint\\DemonFootPrint.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3961",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00F:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\LordaeronSummer\\Props\\SkullPile\\SkullPile.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3962",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00G:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Outland\\Props\\Skull\\Skull.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3963",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00H:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cityscape\\Props\\MagicRunes\\MagicRunes.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3964",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00I:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cinematic\\GlowingRunes\\GlowingRunes.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3965",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00J:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\LordaeronSummer\\Props\\SittingCorpse\\SittingCorpse.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3966",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00K:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\LordaeronSummer\\Props\\ImpaledBody\\ImpaledBody1.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3967",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00L:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\LordaeronSummer\\Props\\CauldronWithHeads\\CauldronWithHeads.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3968",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00M:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cinematic\\TownBurningFireEmitterBlue\\TownBurningFireEmitterBlue.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3969",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00N:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Cinematic\\TownBurningFireEmitter\\TownBurningFireEmitter.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_2511",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00O:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Northrend\\Props\\Bats\\Bats.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3970",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00P:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Felwood\\Props\\Fish_Dead\\Fish_Dead.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3971",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "B00Q:XOkt",
+      "modifications": [
+        {
+          "id": "bwal",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "decoration,invulnerable",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "btil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,*",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\LordaeronSummer\\Props\\Flies\\Flies.mdl",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bshd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3972",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "bsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2243 @@
+{
+  "original": [
+    {
+      "objectId": "tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIe2",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iprn",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Purchasable",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "bspd",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 175,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIsm,AIms",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "pspd",
+      "modifications": [
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isst",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Artifact",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iprn",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ista",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "gobm",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 75,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 5,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A02B",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 30,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "pman",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 75,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isst",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iprn",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Artifact",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "penr",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 375,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "mnst",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIrn",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 200,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iuse",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Permanent",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iper",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "rwiz",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "pgma",
+      "modifications": [
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 150,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Artifact",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "tret",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isst",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 125,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ratf",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ckng",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "desc",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Miscellaneous",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "modt",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ofro",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "rde4",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "rag1",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A033",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Miscellaneous",
+          "level": null,
+          "column": null
+        }
+      ]
+    }
+  ],
+  "custom": [
+    {
+      "objectId": "I000:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A024",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I001:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I002:brag",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isel",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I003:rag1",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A033",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Miscellaneous",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I004:rag1",
+      "modifications": [
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Miscellaneous",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isel",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I005:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A03B",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I006:bzbe",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I007:bzbf",
+      "modifications": [
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I008:ktrm",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIda",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I009:anfg",
+      "modifications": [
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 2,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00A:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00B:ofir",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00C:rspd",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 8000,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00D:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIem",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iprn",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00E:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00F:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00G:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00H:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00I:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00J:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00K:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A042",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00L:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A000",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00M:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00N:rhth",
+      "modifications": [
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "S000",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 650,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00O:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00P:ktrm",
+      "modifications": [
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AIcf",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00Q:shrs",
+      "modifications": [
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isel",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Campaign",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iuse",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iper",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00R:tkno",
+      "modifications": [
+        {
+          "id": "ilev",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 500,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "isto",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipri",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ipaw",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "icla",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PowerUp",
+          "level": null,
+          "column": null
+        }
+      ]
+    }
+  ]
+}
