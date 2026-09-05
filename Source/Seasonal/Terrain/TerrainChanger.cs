@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using static WCSharp.Api.Common;
 
 public static class TerrainChanger
 {
-    public static int[] Terrains { get; set; }
-    public static int[] SafezoneTerrain { get; set; }
+    public static int[] Terrains { get; private set; }
+    public static int[] SafezoneTerrain { get; private set; }
     public static string NormalCliff = "cXc1";
     public static string DirtCliff = "cXc2";
     public static int LastWolfTerrain = 0;
@@ -16,10 +16,9 @@ public static class TerrainChanger
         {
             Terrains = new int[Gamemode.NumberOfRounds];
             SafezoneTerrain = new int[Gamemode.NumberOfRounds];
-            NoSeason();
+            Apply(SeasonThemeRegistry.None);
             if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-            ChristmasTerrain();
-            SetTerrain();
+            Apply(SeasonalManager.CurrentTheme);
         }
         catch (Exception e)
         {
@@ -29,59 +28,31 @@ public static class TerrainChanger
     }
 
     /// <summary>
-    /// Sets the terrain based on current round. Includes seasonal terrains.
+    /// Fills the per-round terrain arrays from a theme and repaints the map.
+    /// Replaces the old NoSeasonTerrain()/ChristmasTerrain()/ActivateChristmasTerrain()
+    /// trio - works for any theme, including future seasons.
     /// </summary>
+    public static void Apply(SeasonTheme theme)
+    {
+        for (var i = 0; i < Gamemode.NumberOfRounds; i++)
+        {
+            Terrains[i] = theme.GetTerrainForRound(i);
+            SafezoneTerrain[i] = theme.SafezoneTerrain;
+        }
+        SetTerrain();
+    }
+
+    /// <summary>Repaints the terrain for the current round. Call again after a round change.</summary>
     public static void SetTerrain()
     {
         SetWolfRegionTerrain();
         SetSafezoneTerrain();
     }
 
-    public static void NoSeason()
-    {
-        NoSeasonTerrain();
-        SetTerrain();
-    }
-
-    public static void ActivateChristmasTerrain()
-    {
-        ChristmasTerrain();
-        SetTerrain();
-    }
-
-    private static void NoSeasonTerrain()
-    {
-        Terrains[0] = FourCC("Lgrd");
-        Terrains[1] = FourCC("Ygsb");
-        Terrains[2] = FourCC("Vgrs");
-        Terrains[3] = FourCC("Xhdg");
-        Terrains[4] = FourCC("Ywmb");
-
-        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
-        {
-            SafezoneTerrain[i] = FourCC("Xblm");
-        }
-        SetTerrain();
-    }
-
-    private static void ChristmasTerrain()
-    {
-        if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
-        /*        SafezoneTerrain[0] = FourCC("Xblm");
-                SafezoneTerrain[1] = FourCC("Ksmb");
-                SafezoneTerrain[2] = FourCC("Drds");
-                SafezoneTerrain[3] = FourCC("Kdkt");
-                SafezoneTerrain[4] = FourCC("Oaby");*/
-
-        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
-        {
-            SafezoneTerrain[i] = FourCC("Ibsq"); // Icecrown Glaicer (Black Squares)
-        }
-        for (int i = 0; i < Gamemode.NumberOfRounds; i++)
-        {
-            Terrains[i] = FourCC("Nrck");
-        }
-    }
+    // Compatibility wrappers - remove once you've confirmed nothing outside
+    // these files calls them directly.
+    public static void NoSeason() => Apply(SeasonThemeRegistry.None);
+    public static void ActivateChristmasTerrain() => Apply(SeasonThemeRegistry.Christmas);
 
     private static void SetWolfRegionTerrain()
     {
