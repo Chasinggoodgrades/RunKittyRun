@@ -30,7 +30,9 @@ public static class MapToolMenu
             Console.WriteLine("5. Import Units");
             Console.WriteLine("6. Export Object Data (units/items/destructables/doodads/abilities/buffs/upgrades)");
             Console.WriteLine("7. Import Object Data");
-            Console.WriteLine("8. Exit");
+            Console.WriteLine("8. Export Map Info");
+            Console.WriteLine("9. Import Map Info");
+            Console.WriteLine("10. Exit");
             Console.Write("Select option: ");
 
             string? input = Console.ReadLine()?.Trim();
@@ -72,13 +74,23 @@ public static class MapToolMenu
                 ObjectDataImporter.Import(mapDir, outputDir);
                 Console.WriteLine("Import complete.");
             }
-            else if (input == "8" || input?.ToLower() == "exit" || input?.ToLower() == "q")
+            else if (input == "8")
+            {
+                InfoDataExporter.Export(mapDir, outputDir);
+                Console.WriteLine("Export complete.");
+            }
+            else if (input == "9")
+            {
+                InfoDataImporter.Import(mapDir, outputDir);
+                Console.WriteLine("Import complete.");
+            }
+            else if (input == "10" || input?.ToLower() == "exit" || input?.ToLower() == "q")
             {
                 break;
             }
             else
             {
-                Console.WriteLine("Invalid option. Please enter 1-8.");
+                Console.WriteLine("Invalid option. Please enter 1-10.");
             }
         }
     }

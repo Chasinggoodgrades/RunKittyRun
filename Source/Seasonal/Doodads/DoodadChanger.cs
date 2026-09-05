@@ -28,8 +28,8 @@ public static class DoodadChanger
         ShowSeasonalDoodads(theme.Season != HolidaySeasons.None);
     }
 
-    // Compatibility wrappers - remove once you've confirmed nothing outside
-    // these files calls them directly.
+    // These can be removed tbh.. Presently i have them tied to -christmas and -noseaeson
+    // -setseason christmas does same thing. 
     public static void NoSeasonDoodads() => Apply(SeasonThemeRegistry.None);
     public static void ChristmasDoodads() => Apply(SeasonThemeRegistry.Christmas);
 
@@ -86,15 +86,8 @@ public static class DoodadChanger
     {
         var des = GetEnumDestructable();
 
-        // Only touch destructables that are seasonal decor for SOME theme - leave
-        // unrelated map doodads alone. Checking the full registry (not just the
-        // active theme) is what makes this correct when switching AWAY from a
-        // season: the active theme's own list is empty at that point, so checking
-        // only against it would never find anything to hide.
         if (!SeasonThemeRegistry.IsSeasonalDecor(des.Type)) return;
 
-        Console.WriteLine("seasonal decor: " + des.Type + " belongs to active theme: " + ContainsType(_theme.DecorTypes, des.Type));
-        Console.WriteLine(show ? "showing" : "hiding");
         var belongsToActiveTheme = ContainsType(_theme.DecorTypes, des.Type);
         des.SetVisibility(show && belongsToActiveTheme);
     }

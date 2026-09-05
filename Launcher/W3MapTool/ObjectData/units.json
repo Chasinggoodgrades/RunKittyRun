@@ -1,0 +1,842 @@
+[
+  {
+    "type": "ngme",
+    "variation": null,
+    "skinId": null,
+    "position": [
+      320,
+      -64,
+      384
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 1,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 27,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": null,
+    "color": null,
+    "id": 36,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "ngme",
+    "variation": null,
+    "skinId": null,
+    "position": [
+      -3200,
+      2368,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 1,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 27,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": null,
+    "color": null,
+    "id": 34,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "ngme",
+    "variation": null,
+    "skinId": null,
+    "position": [
+      -2368,
+      -2752,
+      384
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 1,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 27,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": null,
+    "color": null,
+    "id": 37,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "ngme",
+    "variation": null,
+    "skinId": null,
+    "position": [
+      1600,
+      1216,
+      384
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 1,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 27,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": null,
+    "color": null,
+    "id": 35,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 13,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 13,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 13,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 18,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 18,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 18,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 16,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 16,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 16,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 15,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 15,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 15,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": null,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 0,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 0,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 1,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 1,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 1,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 2,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 2,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 2,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 3,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 3,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 3,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 4,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 4,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 4,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 5,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 5,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 5,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 6,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 6,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 6,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 7,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 7,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 7,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 8,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 8,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 8,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 9,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 9,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 9,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 10,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 10,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 10,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 11,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 11,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 12,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 17,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 17,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 17,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 12,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 12,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 11,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 19,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 19,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 19,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 22,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 22,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 22,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 23,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 23,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 23,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 20,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 20,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 20,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 14,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 14,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 14,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  },
+  {
+    "type": "sloc",
+    "variation": 21,
+    "skinId": null,
+    "position": [
+      -2944,
+      2752,
+      512
+    ],
+    "rotation": 270,
+    "hero": {
+      "level": 0,
+      "str": 0,
+      "agi": 0,
+      "int": 0
+    },
+    "inventory": null,
+    "abilities": null,
+    "player": 21,
+    "hitpoints": null,
+    "mana": null,
+    "gold": null,
+    "targetAcquisition": 0,
+    "color": null,
+    "id": 21,
+    "randomItemSetId": null,
+    "customItemSets": null,
+    "waygateRegionId": null,
+    "randomEntity": null
+  }
+]

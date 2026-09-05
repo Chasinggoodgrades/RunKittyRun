@@ -1156,7 +1156,7 @@ STRING 2509
 }
 
 STRING 2511
-// Abilities: A021 (Trail_Fire), Tip (Tooltip - Normal)
+// Destructibles: B00N (Fire), Name (Name)
 {
 Fire
 }
@@ -4755,11 +4755,6 @@ STRING 3875
 Wind Walk - [|cffffcc00Level 3|r]
 }
 
-STRING 3876
-{
-A.I
-}
-
 STRING 3877
 // Abilities: A017 (Trail_PatrioticLight), Name (Name)
 {
@@ -4965,7 +4960,7 @@ Use on wolves to force them to move out of the way. |cffff8f19250 AoE, 650 Range
 }
 
 STRING 3915
-// Abilities: A01Y (Antiblock Spell), Hotkey (Hotkey - Normal)
+// Items: I00R (|cffe85e19Candy|r), Hotkey (Hotkey)
 {
 T
 }
@@ -5213,5 +5208,119 @@ STRING 3960
 // Units: n003 (CUSTOM DOG (GHOST WOLF)), Name (Name)
 {
 CUSTOM DOG (GHOST WOLF)
+}
+
+STRING 3961
+// Destructibles: B00E (Demonic Footprints), Name (Name)
+{
+Demonic Footprints
+}
+
+STRING 3962
+// Destructibles: B00F (Skull Pile), Name (Name)
+{
+Skull Pile
+}
+
+STRING 3963
+// Destructibles: B00G (Skull), Name (Name)
+{
+Skull
+}
+
+STRING 3964
+// Destructibles: B00H (Magical Runes), Name (Name)
+{
+Magical Runes
+}
+
+STRING 3965
+// Destructibles: B00I (Glowing Runes), Name (Name)
+{
+Glowing Runes
+}
+
+STRING 3966
+// Destructibles: B00J (Corpse Sitting), Name (Name)
+{
+Corpse Sitting
+}
+
+STRING 3967
+// Destructibles: B00K (Corpse Impaled), Name (Name)
+{
+Corpse Impaled
+}
+
+STRING 3968
+// Destructibles: B00L (Cauldron with Heads), Name (Name)
+{
+Cauldron with Heads
+}
+
+STRING 3969
+// Destructibles: B00M (Fire Blue), Name (Name)
+{
+Fire Blue
+}
+
+STRING 3970
+// Destructibles: B00O (Bats), Name (Name)
+{
+Bats
+}
+
+STRING 3971
+// Destructibles: B00P (Fish Dead), Name (Name)
+{
+Fish Dead
+}
+
+STRING 3972
+// Destructibles: B00Q (Flies), Name (Name)
+{
+Flies
+}
+
+STRING 3973
+// Abilities: A021 (Trail_Fire), Tip (Tooltip - Normal)
+{
+Fire
+}
+
+STRING 3974
+// Items: I00R (|cffe85e19Candy|r), Name (Name)
+{
+|cffe85e19Candy|r
+}
+
+STRING 3975
+// Items: I00R (|cffe85e19Candy|r), Description (Description)
+{
+Who knows what you may get!
+}
+
+STRING 3976
+// Items: I00R (|cffe85e19Candy|r), Tip (Tooltip - Basic)
+{
+|cffe85e19Candy|r
+}
+
+STRING 3977
+// Items: I00R (|cffe85e19Candy|r), Ubertip (Tooltip - Extended)
+{
+Happy Halloween!
+}
+
+STRING 3978
+// Abilities: A01Y (Antiblock Spell), Hotkey (Hotkey - Normal)
+{
+T
+}
+
+STRING 3983
+// Units: n004 (HalloweenSpider), Name (Name)
+{
+HalloweenSpider
 }
 

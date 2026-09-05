@@ -68,6 +68,15 @@ public static class SeasonThemeRegistry
             SafezoneDecorType = FourCC("B005"), // Lanterns
             SafezoneDecorScale = 1.0f,
             VendorSkin = Constants.UNIT_KITTY_VENDOR,
+            KibbleTypes = new[]
+            {
+                Constants.ITEM_KIBBLE,
+                Constants.ITEM_KIBBLE_TEAL,
+                Constants.ITEM_KIBBLE_GREEN,
+                Constants.ITEM_KIBBLE_PURPLE,
+                Constants.ITEM_KIBBLE_RED,
+                Constants.ITEM_KIBBLE_YELLOW,
+            },
             WeatherEffect = null,
             TimeOfDay = 12f,
             MinimapTexture = "war3mapMap.blp",
@@ -100,6 +109,7 @@ public static class SeasonThemeRegistry
                 FourCC("B00D"), // Super Christmas tree
             },
             VendorSkin = Constants.UNIT_SANTA,
+            KibbleTypes = new[] { Constants.ITEM_PRESENT },
             WeatherEffect = WeatherEffects.Snow,
             TimeOfDay = 23f,
             MinimapTexture = "snowMap.blp",
@@ -119,30 +129,31 @@ public static class SeasonThemeRegistry
             Season = HolidaySeasons.Halloween,
             ActiveMonths = new[] { 10 },
             TerrainByRound = new[] { FourCC("Irbk") }, // uniform across every round
-            SafezoneTerrain = FourCC("Irbk"),
-            SafezoneDecorType = FourCC("B00E"),
+            SafezoneTerrain = FourCC("Oaby"),
+            SafezoneDecorType = FourCC("B007"),
             SafezoneDecorScale = 2.5f,
             DecorTypes = new[]
             {
                 FourCC("B007"), // Lantern
-                FourCC("LOca"), // Cauldron with heads
-                FourCC("LOsk"), // Skull pile
-                FourCC("AOsr"), // Scorched remains
-                FourCC("LOsc"), // Sitting corpse
-                FourCC("LOic"), // Impaled corpse
-                FourCC("NObt"), // Bats
-                FourCC("LOce"), // Empty cage
+                FourCC("B00L"), // Cauldron with heads
+                FourCC("B00F"), // Skull pile
+                FourCC("B00J"), // Sitting corpse
+                FourCC("B00K"), // Impaled corpse
                 FourCC("B008"), // Fireplace
-                FourCC("YOfb"), // Blue fire
-                FourCC("YOft"), // Fire
+                FourCC("B00M"), // Blue fire
+                FourCC("B00N"), // Fire
                 FourCC("B00B"), // Red lava cracks
                 FourCC("B00C"), // Blue lava cracks
-                FourCC("ZZdt"), // Demonic footprints
-                FourCC("LOfl"), // Flies
+                FourCC("B00E"), // Demonic footprints
+                FourCC("B00O"), // Bats
+                FourCC("B00P"), // Fish Dead
+                FourCC("B00Q"), // Flies
+                FourCC("AOsr"), // Scorched remains
+                FourCC("LOce"), // Empty cage
                 FourCC("DOsv"), // Sewer vents
-                FourCC("COdf"), // Fish Dead
             },
-            VendorSkin = Constants.UNIT_KITTY_VENDOR,
+            VendorSkin = Constants.UNIT_HALLOWEENSPIDER,
+            KibbleTypes = new[] { Constants.ITEM_CANDY },
             WeatherEffect = null,
             TimeOfDay = 0f,
             MinimapTexture = "war3mapMap.blp",

@@ -17,6 +17,7 @@ public static class SeasonalManager
         TerrainChanger.Initialize();
         DoodadChanger.Initialize();
         ShopChanger.Initialize();
+        Kibble.Apply(CurrentTheme);
         ApplyThemeSideEffects();
     }
 
@@ -51,6 +52,7 @@ public static class SeasonalManager
         TerrainChanger.Apply(CurrentTheme);
         DoodadChanger.Apply(CurrentTheme);
         ShopChanger.Apply(CurrentTheme);
+        Kibble.Apply(CurrentTheme);
         ApplyThemeSideEffects();
     }
 

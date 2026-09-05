@@ -1910,14 +1910,46 @@ public static class InitCommands
             name: "test9",
             alias: "",
             tier: CommandTier.Developer,
-            argDesc: "[weather]",
-            description: "Sand Test",
+            argDesc: "",
+            description: "",
             action: (player, args) =>
             {
-                TerrainChanger.ChangeMapTerrain(TerrainChanger.LastWolfTerrain, FourCC("Zdrg"));
-                Console.WriteLine("Changed Terrain");
+                var typeCounts = new System.Collections.Generic.Dictionary<int, int>();
+                var typeNames = new System.Collections.Generic.Dictionary<int, string>();
+                var total = 0;
+
+                EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () =>
+                {
+                    var dest = GetEnumDestructable();
+                    var typeId = GetDestructableTypeId(dest);
+                    var name = GetDestructableName(dest);
+
+                    total++;
+
+                    if (!typeCounts.ContainsKey(typeId))
+                    {
+                        typeCounts[typeId] = 0;
+                        typeNames[typeId] = name;
+                    }
+
+                    typeCounts[typeId]++;
+                });
+
+                Console.WriteLine(
+                    $"{Colors.COLOR_YELLOW_ORANGE}Destructables in world bounds: {total}{Colors.COLOR_RESET}");
+
+                foreach (var kv in typeCounts)
+                {
+                    var typeId = kv.Key;
+                    var count = kv.Value;
+                    var name = typeNames[typeId];
+
+                    Console.WriteLine(
+                        $"{Colors.COLOR_YELLOW_ORANGE}{name} (Type {typeId}): {count}{Colors.COLOR_RESET}");
+                }
             }
         );
+
 
         CommandsManager.RegisterCommand(
             name: "test8",
@@ -1927,8 +1959,7 @@ public static class InitCommands
             description: "Puts an effect test on for some nitro thingy",
             action: (player, args) =>
             {
-                var unitKitty = Globals.ALL_KITTIES[player].Unit;
-                effect.Create("war3mapImported\\TemperedAura.mdx", unitKitty, "origin");
+
             }
         );
 

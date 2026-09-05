@@ -26,6 +26,9 @@ public sealed class SeasonTheme
     // Shop
     public int VendorSkin { get; set; }
 
+    // Kibble item type that spawns
+    public int[] KibbleTypes { get; set; } = new int[0];
+
     // Weather / minimap
     public int? WeatherEffect { get; set; }
     public float TimeOfDay { get; set; } = 12f;

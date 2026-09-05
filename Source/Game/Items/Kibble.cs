@@ -10,7 +10,7 @@ public class Kibble : IDisposable
     public static int TotalCollected = 0;
     public float X;
     public float Y;
-    private static List<int> KibblesColors = KibbleList();
+    private static List<int> KibblesColors = new(SeasonThemeRegistry.None.KibbleTypes);
     private static string StarfallEffect = "Abilities\\Spells\\NightElf\\Starfall\\StarfallTarget.mdl";
     private static float TextTagHeight = 0.018f;
     private static int XPMax = 350;
@@ -46,12 +46,28 @@ public class Kibble : IDisposable
         var region = RegionList.WolfRegions[regionNumber];
         X = GetRandomReal(region.Rect.MinX, region.Rect.MaxX);
         Y = GetRandomReal(region.Rect.MinY, region.Rect.MaxY);
+        Type = RandomKibbleType();
         StarFallEffect ??= AddSpecialEffect(StarfallEffect, X, Y);
         StarFallEffect.SetPosition(X, Y, 0);
         StarFallEffect.PlayAnimation(ANIM_TYPE_BIRTH);
         JackPotIndex = 1;
         Item = CreateItem(Type, X, Y);
         ItemSpatialGrid.RegisterKibble(this);
+    }
+
+    /// <summary>
+    /// Called by SeasonalManager whenever the active season changes, so the pool of
+    /// item types kibble can spawn as stays in sync with the current theme. Replaces
+    /// the old KibbleList() switch statement - Kibble no longer needs to know which
+    /// seasons exist, just what SeasonTheme.KibbleTypes says.
+    /// Falls back to the default (None) set if a theme doesn't specify its own, so a
+    /// theme that forgets to set KibbleTypes can't leave RandomKibbleType() indexing
+    /// into an empty list.
+    /// </summary>
+    public static void Apply(SeasonTheme theme)
+    {
+        var types = theme.KibbleTypes.Length > 0 ? theme.KibbleTypes : SeasonThemeRegistry.None.KibbleTypes;
+        KibblesColors = new List<int>(types);
     }
 
     #region Kibble Initialization
@@ -179,25 +195,6 @@ public class Kibble : IDisposable
             player.Lumber += 1;
 
         StatManager.IncrementKibble(kibblePicker);
-    }
-
-    private static List<int> KibbleList()
-    {
-        return SeasonalManager.Season switch
-        {
-            HolidaySeasons.Christmas => new List<int> { Constants.ITEM_PRESENT },
-            // HolidaySeasons.Easter => new List<int> { Constants.ITEM_EASTER_EGG },
-            HolidaySeasons.Valentines => new List<int> { Constants.ITEM_HEART },
-            _ => new List<int> // Default case
-            {
-                Constants.ITEM_KIBBLE,
-                Constants.ITEM_KIBBLE_TEAL,
-                Constants.ITEM_KIBBLE_GREEN,
-                Constants.ITEM_KIBBLE_PURPLE,
-                Constants.ITEM_KIBBLE_RED,
-                Constants.ITEM_KIBBLE_YELLOW
-            }
-        };
     }
 
     #endregion Utility Methods
