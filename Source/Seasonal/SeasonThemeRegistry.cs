@@ -118,7 +118,7 @@ public static class SeasonThemeRegistry
         {
             Season = HolidaySeasons.Halloween,
             ActiveMonths = new[] { 10 },
-            TerrainByRound = new[] { FourCC("Ngho") }, // uniform across every round
+            TerrainByRound = new[] { FourCC("Irbk") }, // uniform across every round
             SafezoneTerrain = FourCC("Ibsq"), // Icecrown Glacier (black squares)
             SafezoneDecorType = FourCC("B00E"), // Pumpkin
             SafezoneDecorScale = 2.5f,
