@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -92,6 +93,8 @@ public static class DoodadChanger
         // only against it would never find anything to hide.
         if (!SeasonThemeRegistry.IsSeasonalDecor(des.Type)) return;
 
+        Console.WriteLine("seasonal decor: " + des.Type + " belongs to active theme: " + ContainsType(_theme.DecorTypes, des.Type));
+        Console.WriteLine(show ? "showing" : "hiding");
         var belongsToActiveTheme = ContainsType(_theme.DecorTypes, des.Type);
         des.SetVisibility(show && belongsToActiveTheme);
     }

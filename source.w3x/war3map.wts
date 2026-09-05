@@ -1,4 +1,4 @@
-﻿STRING 1
+STRING 1
 {
 |cffff0000RKR Remastered v1.6.7|r
 }
@@ -12,7 +12,7 @@ STRING 3
 {
 |cff00ffffRun Kitty Run|r v1.6.7 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n|n|cff00ffffLast updated:|r |c00FF000009/04/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000009/05/2026|r
 }
 
 STRING 4
@@ -5207,5 +5207,11 @@ STRING 3959
 // Units: E00J (Tiger), Propernames (Proper Names)
 {
 Leyenda,Matskate27,Danger,Yoshimaru,Zyzz,Jamesfranco,Totony,Balmydrop,Udo,Andy,Rika,Stan,Fieryfox,Homie199,Kanon289,BranFlake,Purple,Omniology,Undead,Marco93f,Farm-noob,killua54,Lysta,Maasth,MrGheed,Subsonic,Qoz,Adamer,Cait,AlexTranquiloup,ArthasEsp,BEATRIX2001,BloodyN00b,AFGUNIT,Ratio,Fins,Itela,itsTrixyB11TCH,kaliyuga,kurushii,MiloKitty,NinjaBerry,Cramdon,inmybrain,Clannna,girthquake,Keyz,Ork,p0cah0ntas,Paarrrp,Geek.,PartyTrain,Pudding,The-GOOD_PlaYer,Qbinze_13,Aches,Orbit,NaZe,hoff,Komoto1995
+}
+
+STRING 3960
+// Units: n003 (CUSTOM DOG (GHOST WOLF)), Name (Name)
+{
+CUSTOM DOG (GHOST WOLF)
 }
 

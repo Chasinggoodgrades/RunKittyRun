@@ -1,3 +1,5 @@
+using System;
+
 /// <summary>
 /// All the data that makes one holiday season look and feel different from another.
 /// To add a new season: write one SeasonTheme in SeasonThemeRegistry and add it to the
@@ -32,6 +34,25 @@ public sealed class SeasonTheme
     // Awards - leave FreebieRewardNames empty for seasons with no giveaway.
     public string FreebieAnnouncement { get; set; }
     public string[] FreebieRewardNames { get; set; } = new string[0];
+
+    // Wolves - applied automatically via Wolf.SetSkin(), see
+    // SeasonalManager.ApplyThemeSideEffects. Leave at the default for seasons that
+    // don't reskin wolves.
+    public int WolfSkin { get; set; } = Constants.UNIT_CUSTOM_DOG;
+
+    /// <summary>Runs once when this theme becomes the active one. Use it to set up
+    /// anything the plain data fields above can't express.</summary>
+    public Action OnActivate { get; set; }
+
+    /// <summary>Runs once when this theme stops being active (a different theme is
+    /// taking over). Use it to tear down whatever OnActivate/OnRoundChange created,
+    /// so effects don't leak from one theme into the next.</summary>
+    public Action OnDeactivate { get; set; }
+
+    /// <summary>Runs every time TerrainChanger.SetTerrain() repaints - including the
+    /// initial activation and every later round change. Only needed for themes with
+    /// per-round behavior beyond the TerrainByRound tile swap.</summary>
+    public Action OnRoundChange { get; set; }
 
     public int GetTerrainForRound(int round)
     {

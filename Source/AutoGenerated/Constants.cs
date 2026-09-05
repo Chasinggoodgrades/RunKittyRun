@@ -206,6 +206,11 @@ public static class Constants
 	public const int UNIT_PENGUIN = 1160785988;
 	public const int UNIT_HUNTRESS_KITTY = 1160785989;
 	public const int UNIT_SOLO_TOURNAMENT_2026 = 1160785990;
+	public const int UNIT_GARFIELD = 1160785991;
+	public const int UNIT_WHITETIGER = 1160785992;
+	public const int UNIT_NIGHTELFTIGER = 1160785993;
+	public const int UNIT_TIGER = 1160785994;
+	public const int UNIT_CUSTOM_DOG_GHOST_WOLF = 1848651827;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;

@@ -80,7 +80,7 @@ public static class SeasonThemeRegistry
         {
             Season = HolidaySeasons.Christmas,
             ActiveMonths = new[] { 12 },
-            TerrainByRound = new[] { FourCC("Nrck") }, // uniform across every round
+            TerrainByRound = new[] { FourCC("Nrck") },
             SafezoneTerrain = FourCC("Ibsq"), // Icecrown Glacier (black squares)
             SafezoneDecorType = FourCC("B001"), // Christmas tree
             SafezoneDecorScale = 2.5f,
@@ -119,11 +119,12 @@ public static class SeasonThemeRegistry
             Season = HolidaySeasons.Halloween,
             ActiveMonths = new[] { 10 },
             TerrainByRound = new[] { FourCC("Irbk") }, // uniform across every round
-            SafezoneTerrain = FourCC("Ibsq"), // Icecrown Glacier (black squares)
-            SafezoneDecorType = FourCC("B00E"), // Pumpkin
+            SafezoneTerrain = FourCC("Irbk"),
+            SafezoneDecorType = FourCC("B00E"),
             SafezoneDecorScale = 2.5f,
             DecorTypes = new[]
             {
+                FourCC("B007"), // Lantern
                 FourCC("LOca"), // Cauldron with heads
                 FourCC("LOsk"), // Skull pile
                 FourCC("AOsr"), // Scorched remains
@@ -131,16 +132,23 @@ public static class SeasonThemeRegistry
                 FourCC("LOic"), // Impaled corpse
                 FourCC("NObt"), // Bats
                 FourCC("LOce"), // Empty cage
+                FourCC("B008"), // Fireplace
                 FourCC("YOfb"), // Blue fire
                 FourCC("YOft"), // Fire
+                FourCC("B00B"), // Red lava cracks
+                FourCC("B00C"), // Blue lava cracks
                 FourCC("ZZdt"), // Demonic footprints
                 FourCC("LOfl"), // Flies
                 FourCC("DOsv"), // Sewer vents
+                FourCC("COdf"), // Fish Dead
             },
             VendorSkin = Constants.UNIT_KITTY_VENDOR,
             WeatherEffect = null,
-            TimeOfDay = 18f,
+            TimeOfDay = 0f,
             MinimapTexture = "war3mapMap.blp",
+            WolfSkin = Constants.UNIT_CUSTOM_DOG_GHOST_WOLF,
+            OnActivate = SafezoneLightningEffect.Activate,
+            OnDeactivate = SafezoneLightningEffect.Deactivate,
         };
     }
 }

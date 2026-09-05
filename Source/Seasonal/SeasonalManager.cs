@@ -68,6 +68,7 @@ public static class SeasonalManager
     {
         BlzChangeMinimapTerrainTex(CurrentTheme.MinimapTexture);
         ApplyWeather(CurrentTheme.WeatherEffect, CurrentTheme.TimeOfDay);
+        Wolf.SetSkin(CurrentTheme.WolfSkin);
         SeasonalAwards.Initialize(CurrentTheme);
     }
 

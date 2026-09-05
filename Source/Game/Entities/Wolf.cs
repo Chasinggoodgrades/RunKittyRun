@@ -8,6 +8,8 @@ public class Wolf
 {
     public const string DEFAULT_OVERHEAD_EFFECT = "TalkToMe.mdx";
     public static int WOLF_MODEL { get; set; } = Constants.UNIT_CUSTOM_DOG;
+    public static int CurrentSkin { get; private set; } = Constants.UNIT_CUSTOM_DOG;
+
     public static bool DisableEffects { get; set; } = false;
     private const float WANDER_LOWER_BOUND = 0.70f; // reaction time lower bound
     private const float WANDER_UPPER_BOUND = 0.83f; // reaction time upper bound
@@ -78,6 +80,15 @@ public class Wolf
         {
             Logger.Critical($"Error in Wolf.SpawnWolves: {e.Message}");
             throw;
+        }
+    }
+
+    public static void SetSkin(int skinType)
+    {
+        CurrentSkin = skinType != 0 ? skinType : Constants.UNIT_CUSTOM_DOG;
+        foreach (var wolf in Globals.ALL_WOLVES_LIST)
+        {
+            wolf.Unit.Skin = CurrentSkin;
         }
     }
 
@@ -198,6 +209,7 @@ public class Wolf
         var facing = GetRandomReal(0, 360);
 
         Unit ??= unit.Create(selectedPlayer, WOLF_MODEL, randomX, randomY, facing);
+        Unit.Skin = CurrentSkin;
         Utility.MakeUnitLocust(Unit);
         Unit.Name = $"Lane: {RegionIndex + 1}";
         if (NamedWolves.StanWolf != this) Unit.IsInvulnerable = true;

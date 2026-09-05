@@ -10,6 +10,10 @@ public static class TerrainChanger
     public static int LastWolfTerrain = 0;
     public static int LastSafezoneTerrain = 0;
 
+    /// <summary>The theme currently applied. Tracked so Apply() knows whose
+    /// OnDeactivate hook to run before switching to a new theme.</summary>
+    public static SeasonTheme CurrentTheme { get; private set; }
+
     public static void Initialize()
     {
         try
@@ -28,25 +32,37 @@ public static class TerrainChanger
     }
 
     /// <summary>
-    /// Fills the per-round terrain arrays from a theme and repaints the map.
-    /// Replaces the old NoSeasonTerrain()/ChristmasTerrain()/ActivateChristmasTerrain()
-    /// trio - works for any theme, including future seasons.
+    /// Fills the per-round terrain arrays from a theme, repaints the map, and runs the
+    /// theme's override hooks. Replaces the old NoSeasonTerrain()/ChristmasTerrain()/
+    /// ActivateChristmasTerrain() trio - works for any theme, including future seasons,
+    /// and for themes that override behavior instead of (or alongside) plain terrain,
+    /// like Halloween's lightning-ringed safezones.
     /// </summary>
     public static void Apply(SeasonTheme theme)
     {
+        if (CurrentTheme != null && CurrentTheme != theme)
+        {
+            CurrentTheme.OnDeactivate?.Invoke();
+        }
+
         for (var i = 0; i < Gamemode.NumberOfRounds; i++)
         {
             Terrains[i] = theme.GetTerrainForRound(i);
             SafezoneTerrain[i] = theme.SafezoneTerrain;
         }
+
+        CurrentTheme = theme;
+        theme.OnActivate?.Invoke();
         SetTerrain();
     }
 
-    /// <summary>Repaints the terrain for the current round. Call again after a round change.</summary>
+    /// <summary>Repaints the terrain for the current round and runs the active theme's
+    /// OnRoundChange hook, if any. Call again after a round change.</summary>
     public static void SetTerrain()
     {
         SetWolfRegionTerrain();
         SetSafezoneTerrain();
+        CurrentTheme?.OnRoundChange?.Invoke();
     }
 
     // Compatibility wrappers - remove once you've confirmed nothing outside

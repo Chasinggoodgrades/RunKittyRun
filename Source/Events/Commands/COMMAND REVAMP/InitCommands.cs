@@ -51,6 +51,35 @@ public static class InitCommands
             } 
         );
 
+
+        // Set Seasons COmmand
+        CommandsManager.RegisterCommand(
+            name: "setseason",
+            alias: "",
+            tier: CommandTier.Admin,
+            argDesc: "[season]",
+            description: "Sets the current season.",
+            action: (player, args) =>
+            {
+                if (args.Length == 0)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: setseason [season]|r");
+                    return;
+                }
+
+                if (Enum.TryParse<HolidaySeasons>(args[0], true, out var season))
+                {
+                    SeasonalManager.ActivateSeason(season);
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Season set to {season}{Colors.COLOR_RESET}");
+                }
+                else
+                {
+                    var listOfSeasons = string.Join(", ", Enum.GetNames(typeof(HolidaySeasons)));
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid season: {args[0]}. Valid seasons are: {listOfSeasons}{Colors.COLOR_RESET}");
+                }
+            }
+        );
+
         CommandsManager.RegisterCommand(
             name: "kibbleevent",
             alias: "ke",
