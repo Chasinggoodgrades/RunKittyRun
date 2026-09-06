@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Wc3MapTools;
 using War3Net.Build;
 using War3Net.Build.Extensions;
 using War3Net.IO.Mpq;
@@ -47,6 +48,7 @@ namespace Launcher
             Console.WriteLine("3. Compile and run map");
             Console.WriteLine("4. Compile and run map and track memory usage");
             Console.WriteLine("5. Run map without compiling");
+            Console.WriteLine("6. Wc3 Map Tools (regions/terrain import/export)");
             MakeDecision();
         }
 
@@ -77,6 +79,10 @@ namespace Launcher
 
                 case ConsoleKey.D5:
                     Build(true, true, true); // Run map without compiling
+                    break;
+
+                case ConsoleKey.D6:
+                    MapToolMenu.Run(Array.Empty<string>());
                     break;
 
                 default:

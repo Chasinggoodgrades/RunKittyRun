@@ -61,6 +61,7 @@ public class Safezone
             ChainedTogether.ReachedSafezone(kitty);
             Utility.GiveGoldFloatingText(Resources.SafezoneGold, unit);
             unit.Experience += Resources.SafezoneExperience;
+            kitty.ReplenishMana(0.10f);
             AwardedPlayers.Add(player);
             DeathlessChallenges.DeathlessCheck(kitty);
         }
@@ -135,7 +136,7 @@ public class Safezone
     /// <returns>bool [true/false] if unit type is infact a wolf</returns>
     public static bool WolfEntersSafezoneActions(unit unit)
     {
-        if (unit.UnitType != Wolf.WOLF_MODEL) return false;
+        if (unit.UnitType != Wolf.WolfModel) return false;
         var wolf = Globals.ALL_WOLVES[unit];
         wolf.WolfMove(true); // forced move
         return true;

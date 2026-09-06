@@ -1,0 +1,4168 @@
+{
+  "original": [
+    {
+      "objectId": "ngme",
+      "modifications": [
+        {
+          "id": "usei",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "pspd,pgma,tkno,pman,bspd,mnst,penr,rwiz",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aneu,Avul,Apit,Asid",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usma",
+          "type": 0,
+          "valueInt": 10,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usrg",
+          "type": 0,
+          "valueInt": 30,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "nwwg",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Awan",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 20,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utco",
+          "type": 0,
+          "valueInt": 11,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utyp",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "ward",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ewsp",
+      "modifications": []
+    },
+    {
+      "objectId": "npn5",
+      "modifications": [
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "nvl2",
+      "modifications": [
+        {
+          "id": "urun",
+          "type": 1,
+          "valueInt": null,
+          "valueFloat": 350,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uwal",
+          "type": 1,
+          "valueInt": null,
+          "valueFloat": 350,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Awan",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua2t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvt",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "fly",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "nmrk",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A02A,Avul,Apit,Asid",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PathTextures\\4x4unbuildable.tga",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utco",
+          "type": 0,
+          "valueInt": -1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usma",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usrg",
+          "type": 0,
+          "valueInt": 30,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "nowl",
+      "modifications": [
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 400,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "Etyr",
+      "modifications": [
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1g",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua2t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uarm",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Ethereal",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua2g",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udty",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "divine",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 380,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "ushd",
+      "modifications": []
+    }
+  ],
+  "custom": [
+    {
+      "objectId": "E000:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004,Avul",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "n001:nwwd",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth,ARal",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utyp",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "neutral,standon,ward",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utco",
+          "type": 0,
+          "valueInt": 11,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 365,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1g",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "debris,ground,item,ward",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua2t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utc1",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udaa",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "enemies,ground,neutral",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "n000:ncop",
+      "modifications": [
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umpm",
+          "type": 0,
+          "valueInt": 368,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umpi",
+          "type": 0,
+          "valueInt": 100,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umpr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.01,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E001:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01B,A004,AInv,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "N00C:Npbm",
+      "modifications": [
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A019,A00B,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upgr",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Reuv",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A017,Ault",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E003:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01B,A004,AInv,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E004:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "h000:hfoo",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aloc",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "air",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvt",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "fly",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvh",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvf",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "h001:hfoo",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aloc",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "air",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvt",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "fly",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvh",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvf",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "h002:hfoo",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aloc",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "air",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvt",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "fly",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvh",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvf",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E002:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01B,A004,AInv,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udaa",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "h003:hfoo",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aloc",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "air",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvt",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "fly",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvh",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvf",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E005:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01B,A004,AInv,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E006:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01B,A004,AInv,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E007:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A00U,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "urac",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "other",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhm",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E008:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A00U,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "urac",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "other",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhm",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E009:Emoo",
+      "modifications": [
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Atru,AInv,Ault,A00Q",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00A:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A00U,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "urac",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "other",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhm",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "n002:ngme",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aneu,Avul,Apit,Asid",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usei",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00B:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth,AInv,A00T,A00V,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.7,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00C:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A00U,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "urac",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "other",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhm",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00D:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth,AInv,A00T,A00V,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.7,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00E:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00F:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019,A00A",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,A00U,Ault",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "urac",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "other",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhm",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00G:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004,Avul",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00H:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004,Avul",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00I:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004,Avul",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "E00J:Emoo",
+      "modifications": [
+        {
+          "id": "uhab",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A01A,A00B,A019",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usin",
+          "type": 0,
+          "valueInt": 1800,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 350,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "AInv,Ault,A01B,A004,Avul",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhhd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 3,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uinp",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.5,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ubs1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udp1",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.05,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucbs",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucpt",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufoo",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "n003:nwwd",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth,ARal",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1w",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uaen",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ucol",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": -10,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utyp",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "neutral,standon,ward",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utco",
+          "type": 0,
+          "valueInt": 11,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "umvs",
+          "type": 0,
+          "valueInt": 365,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua1g",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "debris,ground,item,ward",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ua2t",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "unknown",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utc1",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ufle",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uhom",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "udaa",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aeth",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utar",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "enemies,ground,neutral",
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "n004:ngme",
+      "modifications": [
+        {
+          "id": "uabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Aneu,Avul,Apit,Asid",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "upat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "usei",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": null,
+          "column": null
+        }
+      ]
+    }
+  ]
+}

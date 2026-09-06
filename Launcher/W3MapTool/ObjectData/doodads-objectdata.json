@@ -1,0 +1,1132 @@
+{
+  "original": [
+    {
+      "objectId": "LOca",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "NOfp",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "NOfg",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "YOfr",
+      "modifications": [
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "JOgr",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "DOlc",
+      "modifications": [
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "D,G,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "GOlc",
+      "modifications": [
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "G,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "XOmr",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "YSll",
+      "modifications": [
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3156",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "LOsk",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "OOsk",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "DOsv",
+      "modifications": [
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "*",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "DOsw",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "ZZdt",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "LOsc",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "LOic",
+      "modifications": [
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    }
+  ],
+  "custom": [
+    {
+      "objectId": "D000:AOgs",
+      "modifications": [
+        {
+          "id": "dmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.8,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_1220",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D001:AOgs",
+      "modifications": [
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_897",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Moon Disc Floor.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsel",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dvis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 25,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D002:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Christmas Tree.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3116",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D003:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\ChristmasBells.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3091",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D004:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\ChristmasWreath.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3092",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D005:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\ChristmasHolly.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3093",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D006:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\ChristmasSnowglobe.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3094",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "ddes",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 0.75,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D007:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Icecrown\\Props\\SnowMan\\SnowMan.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3663",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "ddes",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.5,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D008:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\trrreeeeee.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3100",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "ddes",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1.5,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D009:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\Fireplace.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3658",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D00A:YSll",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\LanternPost.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3659",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcpr",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dcat",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "O",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsmm",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dtil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Y,X,J,*",
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D00B:LOth",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Terrain\\LOSBlocker\\LOSBlocker.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsnd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3408",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PathTextures\\2x2Default.tga",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "duch",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dfxr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 270,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    },
+    {
+      "objectId": "D00C:LOth",
+      "modifications": [
+        {
+          "id": "dfil",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Doodads\\Terrain\\LOSBlocker\\LOSBlocker.mdl",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dsnd",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dnam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "TRIGSTR_3417",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmas",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dmis",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 1,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dptx",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "PathTextures\\2x2Cyan.tga",
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "duch",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        },
+        {
+          "id": "dfxr",
+          "type": 2,
+          "valueInt": null,
+          "valueFloat": 270,
+          "valueString": null,
+          "level": 0,
+          "column": 0
+        }
+      ]
+    }
+  ]
+}

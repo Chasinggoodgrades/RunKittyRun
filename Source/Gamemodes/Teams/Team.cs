@@ -86,12 +86,14 @@ public class Team
             kitty.Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
             Globals.ALL_CIRCLES[player].Unit.SetColor(GetPlayerColor(Player(TeamID - 1)));
             TeamRegistry.MapPlayer(player, this);
+            TeamRegistry.MapUnit(kitty.Unit, this);
         }
         else
         {
             Teammembers.Remove(kitty);
             kitty.TeamID = 0;
             TeamRegistry.UnmapPlayer(player);
+            TeamRegistry.UnmapUnit(kitty.Unit);
         }
 
         RebuildMembersString();

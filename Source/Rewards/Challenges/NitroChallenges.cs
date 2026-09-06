@@ -46,7 +46,7 @@ public static class NitroChallenges
     private static void SetProgressiveNitroRoundTimes()
     {
         // Progressive Round 1 = Normal difficulty (R1)
-        NitroRoundTimes.Add(1, 125); // 2:05
+        NitroRoundTimes.Add(1, 140); // 2:20
         // Progressive Round 2 = Hard difficulty (R3)
         NitroRoundTimes.Add(2, 170); // 2:50
         // Progressive Round 3 = Impossible difficulty (R5)
@@ -77,7 +77,7 @@ public static class NitroChallenges
         NitroRoundTimes.Add(2, 150); // 2:30
         NitroRoundTimes.Add(3, 175); // 2:55
         NitroRoundTimes.Add(4, 215); // 3:35
-        NitroRoundTimes.Add(5, 330); // 5:30
+        NitroRoundTimes.Add(5, 345); // 5:45
     }
 
     public static void StartNitroTimer()
@@ -133,6 +133,7 @@ public static class NitroChallenges
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroRed));
                 if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
                     AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.CrimsonLight));
+                Challenges.VioletLight(player);
                 break;
 
             case 4:
@@ -144,8 +145,7 @@ public static class NitroChallenges
 
             case 5:
                 AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.NitroPurple));
-                if (DifficultyConfig.MeetsDifficultyRequirement(DifficultyLevel.Impossible))
-                    AwardManager.GiveReward(player, nameof(Globals.GAME_AWARDS_SORTED.Nitros.VioletLight));
+                Challenges.VioletLight(player);
                 break;
 
             default:

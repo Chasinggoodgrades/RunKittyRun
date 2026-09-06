@@ -6,8 +6,11 @@ public static class Difficulty
     public static int DifficultyValue { get; private set; }
     public static DifficultyOption DifficultyOption { get; private set; }
     public static bool IsDifficultyChosen { get; set; } = false;
-    private static float TIME_TO_CHOOSE_DIFFICULTY = 10.0f;
-    private static trigger Trigger;
+
+    private const float TimeBeforeShowingVote = 2.0f;
+    private const float TimeToChooseDifficulty = 10.0f;
+
+    private static SelectionDialog voteDialog;
 
     public static void Initialize()
     {
@@ -17,10 +20,9 @@ public static class Difficulty
             if (IsDifficultyChosen) return;
 
             DifficultyOption.Initialize();
-            DifficultyOption.DifficultyChoosing.SetMessage($"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}");
-            RegisterSelectionEvent();
+            voteDialog = BuildVoteDialog();
 
-            Utility.SimpleTimer(2.0f, ChooseDifficulty);
+            Utility.SimpleTimer(TimeBeforeShowingVote, ChooseDifficulty);
         }
         catch (Exception e)
         {
@@ -29,34 +31,41 @@ public static class Difficulty
         }
     }
 
-    private static void RegisterSelectionEvent()
+    private static SelectionDialog BuildVoteDialog()
     {
-        Trigger ??= trigger.Create();
-        Trigger.RegisterDialogEvent(DifficultyOption.DifficultyChoosing);
-        Trigger.AddAction(() =>
+        var dialog = new SelectionDialog(
+            $"{Colors.COLOR_GOLD}Please choose a difficulty{Colors.COLOR_RESET}",
+            closeOnSelect: false);
+
+        foreach (var option in DifficultyOption.Options)
         {
-            var player = @event.Player;
-            var button = @event.ClickedButton;
+            dialog.AddOption(option.ToString(), votingPlayer => RecordVote(option, votingPlayer));
+        }
 
-            var option = DifficultyOption.Options.Find(o => o.Button == button);
-            if (option != null) option.TallyCount++;
+        return dialog;
+    }
 
-            DifficultyOption.DifficultyChoosing.SetVisibility(player, false);
-            Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(player)}|r has chosen {option.ToString()} difficulty.{Colors.COLOR_RESET}");
-        });
+    private static void RecordVote(DifficultyOption option, player votingPlayer)
+    {
+        option.TallyCount++;
+        Utility.TimedTextToAllPlayers(3.0f, $"{Colors.PlayerNameColored(votingPlayer)}|r has chosen {option} difficulty.{Colors.COLOR_RESET}");
     }
 
     private static void ChooseDifficulty()
     {
-        foreach (var player in Globals.ALL_PLAYERS)
-            DifficultyOption.DifficultyChoosing.SetVisibility(player, true);
-        Utility.SimpleTimer(TIME_TO_CHOOSE_DIFFICULTY, TallyingVotes);
+        voteDialog.ShowTo(Globals.ALL_PLAYERS);
+        Utility.SimpleTimer(TimeToChooseDifficulty, TallyingVotes);
     }
 
     private static void TallyingVotes()
     {
-        int highestTallyCount = 0;
+        // Guards against the (already-scheduled) timer firing after the
+        // difficulty was already forced through some other path, e.g.
+        // ChangeDifficulty being called by an admin mid-vote.
+        if (IsDifficultyChosen) return;
+
         DifficultyOption pickedOption = null;
+        var highestTallyCount = 0;
 
         foreach (var option in DifficultyOption.Options)
         {
@@ -67,47 +76,47 @@ public static class Difficulty
             }
         }
 
-        RemoveDifficultyDialog();
-        SetDifficulty(pickedOption);
+        // Nobody voted: fall back to Normal rather than leaving pickedOption
+        // null (the previous version would null-ref here).
+        SetDifficulty(pickedOption ?? FindOption(DifficultyLevel.Normal));
     }
 
     private static void SetDifficulty(DifficultyOption difficulty)
     {
+        voteDialog?.Cancel();
+
         DifficultyOption = difficulty;
         DifficultyValue = difficulty.Value;
         IsDifficultyChosen = true;
         SetupGamemodeBasedOnDifficulty();
-        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty.ToString()}{Colors.COLOR_RESET}");
+        Console.WriteLine($"{Colors.COLOR_YELLOW_ORANGE}The difficulty has been set to |r{difficulty}{Colors.COLOR_RESET}");
     }
 
     private static void SetupGamemodeBasedOnDifficulty()
     {
-        if (DifficultyValue == (int)DifficultyLevel.Progressive)
-        {
-            Gamemode.NumberOfRounds = 3;
-        }
-        else
-        {
-            Gamemode.NumberOfRounds = 5;
-        }
+        Gamemode.NumberOfRounds = DifficultyValue == (int)DifficultyLevel.Progressive ? 3 : 5;
     }
 
-    private static void RemoveDifficultyDialog()
+    private static DifficultyOption FindOption(DifficultyLevel level)
     {
-        foreach (var player in Globals.ALL_PLAYERS)
-            DifficultyOption.DifficultyChoosing.SetVisibility(player, false);
+        return DifficultyOption.Options.Find(o => o.Value == (int)level);
     }
 
     /// <summary>
-    /// Changes the difficulty of the game to the specified difficulty.
+    /// Changes the difficulty of the game to the specified difficulty,
+    /// bypassing the vote. Cancels any vote still in progress so players
+    /// aren't left looking at a dialog whose result will never matter.
     /// </summary>
-    /// <param name="difficulty">"normal", "hard", "impossible"</param>
+    /// <param name="difficulty">"normal", "hard", "impossible", ...</param>
     public static bool ChangeDifficulty(string difficulty = "normal")
     {
-        for (int i = 0; i < DifficultyOption.Options.Count; i++)
+        difficulty = difficulty.ToLower();
+
+        foreach (var option in DifficultyOption.Options)
         {
-            var option = DifficultyOption.Options[i];
-            if (option.Name.ToLower() == difficulty.ToLower())
+            var name = option.Name.ToLower();
+
+            if (name.Contains(difficulty) || name.StartsWith(difficulty))
             {
                 SetDifficulty(option);
                 return true;
@@ -116,6 +125,3 @@ public static class Difficulty
         return false;
     }
 }
-
-
-

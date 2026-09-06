@@ -14,7 +14,7 @@ public class Unpredictable : Affix
     {
         Unit.Unit.AddAbility(WANDER_ABILITY); // Wander
         Unit.Unit.AddAbility(AFFIX_ABILITY);
-        Unit.OVERHEAD_EFFECT_PATH = "";
+        Unit.OverheadEffectPath = "";
         base.Apply();
     }
 
@@ -22,7 +22,7 @@ public class Unpredictable : Affix
     {
         Unit.Unit.RemoveAbility(WANDER_ABILITY); // Wander
         Unit.Unit.RemoveAbility(AFFIX_ABILITY);
-        Unit.OVERHEAD_EFFECT_PATH = Wolf.DEFAULT_OVERHEAD_EFFECT;
+        Unit.OverheadEffectPath = Wolf.DefaultOverheadEffect;
         base.Remove();
     }
 

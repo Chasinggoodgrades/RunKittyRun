@@ -42,41 +42,17 @@ public static class Gamemode
     private static void ChoosingGameMode()
     {
         HostPlayer = Globals.ALL_PLAYERS[0];
-        HostOptions();
         HostPickingGamemode();
-    }
 
-    private static void HostOptions()
-    {
-        if (!ADMINDISABLE.AdminsGame()) return;
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "Please choose a gamemode." + Colors.COLOR_RESET);
-
-        // Standard Mode
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_YELLOW_ORANGE + GameMode.Standard + // Standard
-            Colors.COLOR_GOLD + " (-s)" +
-            Colors.COLOR_RESET);
-
-        // Solo Modes
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_YELLOW_ORANGE + GameMode.Solo + // Solo
-            Colors.COLOR_GOLD + " (-t solo <prog | race> <NA | EU>)" +
-            Colors.COLOR_RESET);
-
-        // Team Modes
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE,
-            Colors.COLOR_YELLOW_ORANGE + GameMode.Team + // Team
-            Colors.COLOR_GOLD + " (-t team <fp | freepick | r | random> <teamsize> {av <on | off>} <NA | EU>)" +
-            Colors.COLOR_RESET);
-
-        HostPlayer.DisplayTimedTextTo(Globals.TIME_TO_PICK_GAMEMODE, Colors.COLOR_GOLD + "=====================================" + Colors.COLOR_RESET);
+        GamemodeSelectionWizard.Begin(HostPlayer);
     }
 
     public static void SetGameMode(GameMode mode, string modeType = "", int teamSize = Globals.DEFAULT_TEAM_SIZE)
     {
         try
         {
+            GamemodeSelectionWizard.CancelActive();
+
             CurrentGameModeType = modeType;
             IsGameModeChosen = true;
             PlayersPerTeam = teamSize;

@@ -178,6 +178,17 @@ public class Kitty : IFloatingTags, ICircleOwner
         }
     }
 
+    /// <summary>
+    /// The amount in percentage of what we'll give back. For example.. 0.2 being 20%
+    /// </summary>
+    /// <param name="amount"></param>
+    public void ReplenishMana(float amount)
+    {
+        var maxMana = this.Unit.MaxMana;
+        var manaBack = (int)(maxMana * amount);
+        Utility.UnitAddMana(this.Unit, manaBack);
+    }
+
     public void InvulnerableKitty(float duration = InvulDuration)
     {
         Invulnerable = true;

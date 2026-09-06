@@ -13,6 +13,7 @@ public static class TeamRegistry
     private static readonly Dictionary<int, Team> _teamsById = new();
     private static readonly List<Team> _teams = new();
     private static readonly Dictionary<player, Team> _teamByPlayer = new();
+    private static readonly Dictionary<unit, Team> _teamByUnit = new();
 
     public static IReadOnlyList<Team> All => _teams;
 
@@ -30,6 +31,8 @@ public static class TeamRegistry
 
     public static bool TryGetTeamForPlayer(player player, out Team team) => _teamByPlayer.TryGetValue(player, out team);
 
+    public static Team TryGetTeamForUnit(unit unit) => _teamByUnit[unit];
+
     internal static void Register(Team team)
     {
         _teamsById[team.TeamID] = team;
@@ -45,6 +48,10 @@ public static class TeamRegistry
     internal static void MapPlayer(player player, Team team) => _teamByPlayer[player] = team;
 
     internal static void UnmapPlayer(player player) => _teamByPlayer.Remove(player);
+
+    internal static void MapUnit(unit unit, Team team) => _teamByUnit[unit] = team;
+
+    internal static void UnmapUnit(unit unit) => _teamByUnit.Remove(unit);
 
     /// <summary>
     /// Clears the "finished this round" flag on every team. Safe to call in any

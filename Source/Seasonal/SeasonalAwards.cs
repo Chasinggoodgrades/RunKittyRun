@@ -1,29 +1,34 @@
-﻿using WCSharp.Api;
+using WCSharp.Api;
 
 public static class SeasonalAwards
 {
-    private static HolidaySeasons Season { get; set; }
+    private static SeasonTheme _theme = SeasonThemeRegistry.None;
 
-    public static void Initialize()
+    /// <summary>
+    /// Arms the freebie timer for whatever theme is currently active. Safe to call
+    /// again whenever the season changes - themes with no rewards simply do nothing.
+    /// </summary>
+    public static void Initialize(SeasonTheme theme)
     {
-        Season = SeasonalManager.Season;
-        if (Season == HolidaySeasons.None) return;
-        Utility.SimpleTimer(180.0f, FreebeSeasonalAwards);
+        _theme = theme;
+        if (_theme.FreebieRewardNames.Length == 0) return;
+        Utility.SimpleTimer(180.0f, GiveFreebies);
     }
 
-    public static void FreebeSeasonalAwards()
+    private static void GiveFreebies()
     {
-        if (Season == HolidaySeasons.Christmas) ChristmasFreebies();
-    }
+        if (!string.IsNullOrEmpty(_theme.FreebieAnnouncement))
+        {
+            Utility.TimedTextToAllPlayers(8.0f, _theme.FreebieAnnouncement);
+        }
 
-    private static void ChristmasFreebies()
-    {
-        Utility.TimedTextToAllPlayers(8.0f, $"{Colors.COLOR_YELLOW}Special thanks to every for playing this holiday season! All players have been awarded the snow trail and snow wings from 2023 :){Colors.COLOR_RESET}");
         var t = ObjectPool<AchesTimers>.GetEmptyObject();
         t.Timer.Start(1.0f, false, ErrorHandler.Wrap(() =>
         {
-            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Trails.SnowTrail2023), false);
-            AwardManager.GiveRewardAll(nameof(Globals.GAME_AWARDS_SORTED.Wings.SnowWings2023), false);
+            for (var i = 0; i < _theme.FreebieRewardNames.Length; i++)
+            {
+                AwardManager.GiveRewardAll(_theme.FreebieRewardNames[i], false);
+            }
             t.Dispose();
         }));
     }

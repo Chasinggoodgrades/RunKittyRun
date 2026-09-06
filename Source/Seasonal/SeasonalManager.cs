@@ -1,172 +1,138 @@
-﻿using WCSharp.Api;
+using WCSharp.Api;
 using static WCSharp.Api.Common;
-
-public enum HolidaySeasons
-{
-    Christmas,
-    Halloween,
-    Easter,
-    Valentines,
-    None
-}
 
 public static class SeasonalManager
 {
-    public static HolidaySeasons Season { get; set; }
-    private static int CurrentMonth { get; set; }
-    private static int SnowEffect { get; set; } = FourCC("SNls"); // light snow
-    private static int BlizzardEffect { get; set; } = FourCC("SNbs"); // blizzard
-    private static int HeavySnowEffect { get; set; } = FourCC("SNhs"); // heavy snow
-    private static int HeavyRain { get; set; } = FourCC("RLhr"); // heavy rain
-    private static int LightRain { get; set; } = FourCC("RLlr"); // light rain
-    private static int RaysOfLight { get; set; } = FourCC("LRaa"); // rays of light
-    private static int RaysOfMoonlight { get; set; } = FourCC("LRma"); // rays of moonlight
-    private static int DalaranShield { get; set; } = FourCC("MEds"); // Dalaran shield
-    private static weathereffect CurrentWeather;
+    public static HolidaySeasons Season { get; private set; } = HolidaySeasons.None;
+    public static SeasonTheme CurrentTheme { get; private set; } = SeasonThemeRegistry.None;
+
+    private static weathereffect _currentWeather;
 
     /// <summary>
     /// Must be standard mode for seasonal changes to occur.
     /// </summary>
     public static void Initialize()
     {
-        CurrentMonth = DateTimeManager.DateTime.Month;
         DetermineSeason();
-        SetMinimap();
-        SetWeather();
-        DoodadChanger.Initialize();
         TerrainChanger.Initialize();
-        SeasonalAwards.Initialize();
+        DoodadChanger.Initialize();
         ShopChanger.Initialize();
+        Kibble.Apply(CurrentTheme);
+        ApplyThemeSideEffects();
     }
 
     public static void DetermineSeason()
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard)
         {
-            Season = HolidaySeasons.None;
+            SetSeason(HolidaySeasons.None);
             return;
         }
-        switch (CurrentMonth)
+
+        var month = DateTimeManager.CurrentMonth;
+        foreach (var theme in SeasonThemeRegistry.Seasonal)
         {
-            case 12:
-                Season = HolidaySeasons.Christmas;
-                break;
-            /*            case 10:
-                            Season = HolidaySeasons.Halloween;
-                            break;
-
-                        case 4:
-                            Season = HolidaySeasons.Easter;
-                            break;
-
-                        case 2:
-                            Season = HolidaySeasons.Valentines;
-                            break;*/
-            default:
-                Season = HolidaySeasons.None;
-                break;
+            if (theme.IsActiveInMonth(month))
+            {
+                SetSeason(theme.Season);
+                return;
+            }
         }
+        SetSeason(HolidaySeasons.None);
     }
 
     /// <summary>
-    /// Admin command to activate Christmas season. Only works in standard mode.
+    /// Admin command to force a specific season on. "None" always works; anything
+    /// else requires standard mode, the same rule the calendar-driven path follows.
     /// </summary>
-    public static void ActivateChristmas()
+    public static void ActivateSeason(HolidaySeasons season)
     {
-        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        Season = HolidaySeasons.Christmas;
-        TerrainChanger.ActivateChristmasTerrain();
-        DoodadChanger.ChristmasDoodads();
-        ShopChanger.SetSeasonalShop();
-        SetWeather();
-        SetMinimap();
+        if (season != HolidaySeasons.None && Gamemode.CurrentGameMode != GameMode.Standard) return;
+        SetSeason(season);
+        TerrainChanger.Apply(CurrentTheme);
+        DoodadChanger.Apply(CurrentTheme);
+        ShopChanger.Apply(CurrentTheme);
+        Kibble.Apply(CurrentTheme);
+        ApplyThemeSideEffects();
     }
 
-    /// <summary>
-    /// Admin Command for no seasons. Works regardless of mode.
-    /// </summary>
-    public static void NoSeason()
+    // Compatibility wrappers so existing admin commands keep working unchanged.
+    public static void ActivateChristmas() => ActivateSeason(HolidaySeasons.Christmas);
+    public static void NoSeason() => ActivateSeason(HolidaySeasons.None);
+
+    private static void SetSeason(HolidaySeasons season)
     {
-        Season = HolidaySeasons.None;
-        TerrainChanger.NoSeason();
-        DoodadChanger.NoSeasonDoodads();
-        ShopChanger.SetSeasonalShop();
-        SetMinimap();
-        SetWeather();
+        Season = season;
+        CurrentTheme = SeasonThemeRegistry.Get(season);
     }
 
-    private static void SetMinimap()
+    private static void ApplyThemeSideEffects()
     {
-        switch (Season)
-        {
-            case HolidaySeasons.Christmas:
-                BlzChangeMinimapTerrainTex("snowMap.blp");
-                break;
-
-            default:
-                BlzChangeMinimapTerrainTex("war3mapMap.blp");
-                break;
-        }
+        BlzChangeMinimapTerrainTex(CurrentTheme.MinimapTexture);
+        ApplyWeather(CurrentTheme.WeatherEffect, CurrentTheme.TimeOfDay);
+        Wolf.SetSkin(CurrentTheme.WolfSkin);
+        SeasonalAwards.Initialize(CurrentTheme);
     }
 
-    private static void SetWeather()
+    private static void ApplyWeather(int? effect, float timeOfDay)
     {
-        if (Season == HolidaySeasons.Christmas)
+        if (_currentWeather != null)
         {
-            CurrentWeather ??= weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect);
-            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 23);
-            SuspendTimeOfDay(true);
-            CurrentWeather.Enable();
+            _currentWeather.Dispose();
+            _currentWeather = null;
         }
-        else if (Season == HolidaySeasons.None)
+
+        if (effect.HasValue)
         {
-            CurrentWeather?.Dispose();
-            SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
-            SuspendTimeOfDay(true);
-            CurrentWeather = null;
+            _currentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, effect.Value);
         }
+
+        SetFloatGameState(GAME_STATE_TIME_OF_DAY, timeOfDay);
+        SuspendTimeOfDay(true);
+        _currentWeather?.Enable();
     }
 
-    public static void SetWeather(string weather)
+    /// <summary>Manual weather override for admins - independent of the active season.</summary>
+    public static bool SetWeather(string weather)
     {
-        if (CurrentWeather != null)
-        {
-            CurrentWeather.Dispose();
-            CurrentWeather = null;
-        }
+        int? effect;
+        var timeOfDay = CurrentTheme.TimeOfDay;
+
         switch (weather.ToLower())
         {
             case "none":
-                SetFloatGameState(GAME_STATE_TIME_OF_DAY, 12);
-                SuspendTimeOfDay(true);
+                effect = null;
+                timeOfDay = 12f;
                 break;
             case "snow":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, SnowEffect);
-                break;
-            case "hrain":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, HeavyRain);
-                break;
-            case "rain":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, LightRain);
-                break;
-            case "blizzard":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, BlizzardEffect);
+                effect = WeatherEffects.Snow;
                 break;
             case "hsnow":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, HeavySnowEffect);
+                effect = WeatherEffects.HeavySnow;
+                break;
+            case "blizzard":
+                effect = WeatherEffects.Blizzard;
+                break;
+            case "hrain":
+                effect = WeatherEffects.HeavyRain;
+                break;
+            case "rain":
+                effect = WeatherEffects.LightRain;
                 break;
             case "rays":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, RaysOfLight);
+                effect = WeatherEffects.RaysOfLight;
                 break;
             case "moonlight":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, RaysOfMoonlight);
+                effect = WeatherEffects.RaysOfMoonlight;
                 break;
             case "dalaran":
-                CurrentWeather = weathereffect.Create(Globals.WORLD_BOUNDS, DalaranShield);
+                effect = WeatherEffects.DalaranShield;
                 break;
             default:
-                return;
+                return false;
         }
-        CurrentWeather.Enable();
+
+        ApplyWeather(effect, timeOfDay);
+        return true;
     }
 }

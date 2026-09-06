@@ -63,6 +63,7 @@ namespace Source
 
         private static void StartSyncLoop()
         {
+            try {
             var t = CreateTimer();
             int count = 0;
 
@@ -87,6 +88,10 @@ namespace Source
 
                 Setup.Initialize();
             });
+
+            } catch (Exception ex) {
+                Logger.Critical($"Error in StartSyncLoop: {ex.Message}");
+            }
         }
 
         private static readonly Action[] InitSteps =

@@ -32,13 +32,14 @@ public static class Quests
             $"\n{Colors.COLOR_YELLOW}When getting too many items on your screen, you can press the ` key on your keyboard to clear the text on your screen.{Colors.COLOR_RESET}");
     }
 
-    private static void CreateContributorsQuest()
+    private static void CreateContributorsQuest() 
     {
         ContributorsQuest.SetTitle("Contributors");
         ContributorsQuest.SetIcon("ReplaceableTextures\\CommandButtons\\BTNHeartOff.blp");
         ContributorsQuest.SetDescription($"{Colors.COLOR_YELLOW}Special thank you to each of the previous developers and clans such as F0LK, WaR, RD, and many more for their inspiration for this map.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Also a huge thank you to all of the previous developers of those versions, you've made a great difference.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Contributors: |r{Colors.COLOR_GREEN}Aches, Leyenda, Geek. Stan, Yoshimaru|r\n\n" +
+            $"{Colors.COLOR_YELLOW}Special thanks to Nooberman for the Garfield model.|r\n\n" +
             $"{Colors.COLOR_YELLOW}Several assets within the map are from Hiveworkshop, if your asset is within this map ; Thank you! If you'd like to be specially named, please let me know!|r\n\n" +
             $"{Colors.COLOR_YELLOW}Huge thank you to both Stan & Maxiglider for use of their magical slide code!|r");
     }

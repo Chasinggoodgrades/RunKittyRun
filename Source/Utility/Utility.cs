@@ -365,7 +365,7 @@ public static class Utility
     }
 
     /// <summary>
-    /// Adds mana to a unit, without exceeding the unit's maximum mana.
+    /// Adds mana to a unit, without exceeding the unit's maximum mana. Also applies a special effect.
     /// </summary>
     /// <param name="unit">The unit to which mana is to be added.</param>
     /// <param name="amount">The amount of mana to add.</param>
@@ -376,6 +376,7 @@ public static class Utility
         var newMana = currentMana + amount;
 
         unit.Mana = newMana >= maxMana ? maxMana - 1 : newMana;
+        DestroyEffect(effect.Create("abilities\\spells\\items\\aima\\aimatarget.mdx", unit, "origin"));
     }
 
     /// <summary>

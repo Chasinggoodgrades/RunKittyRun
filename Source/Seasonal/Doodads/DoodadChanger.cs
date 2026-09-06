@@ -1,71 +1,39 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 public static class DoodadChanger
 {
-    private static int SafezoneLanterns = FourCC("B005");
-    private static int ChristmasTree = FourCC("B001");
-    private static int CrystalRed = FourCC("B002");
-    private static int CrystalBlue = FourCC("B003");
-    private static int CrystalGreen = FourCC("B004");
-    private static int Snowglobe = FourCC("B006");
-    private static int Lantern = FourCC("B007");
-    private static int Fireplace = FourCC("B008");
-    private static int Snowman = FourCC("B009");
-    private static int Firepit = FourCC("B00A");
-    private static int Igloo = FourCC("ITig");
-    private static int RedLavaCracks = FourCC("B00B");
-    private static int BlueLavaCracks = FourCC("B00C");
-    private static int SuperChristmasTree = FourCC("B00D");
-    private static List<int> ChristmasDecor = InitChristmasDecor();
-    private static List<destructable> AllDestructables { get; set; } = new();
+    private static readonly int SafezoneLanterns = FourCC("B005");
+    private static readonly List<destructable> AllDestructables = new();
+    private static SeasonTheme _theme = SeasonThemeRegistry.None;
 
     public static void Initialize()
     {
-        CreateInitDestructiables();
+        CreateInitDestructables();
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        SeasonalDoodads();
+        Apply(SeasonalManager.CurrentTheme);
     }
 
-    private static List<int> InitChristmasDecor()
+    /// <summary>
+    /// Swaps the safezone decoration for the theme's version and shows/hides its
+    /// ambient decor. Replaces the old ChristmasDoodads()/NoSeasonDoodads() pair -
+    /// works for any theme, including future seasons.
+    /// </summary>
+    public static void Apply(SeasonTheme theme)
     {
-        return new List<int>
-        {
-            CrystalRed,
-            CrystalBlue,
-            CrystalGreen,
-            Snowglobe,
-            Lantern,
-            Fireplace,
-            Snowman,
-            Firepit,
-            Igloo,
-            RedLavaCracks,
-            BlueLavaCracks,
-            SuperChristmasTree,
-        };
+        _theme = theme;
+        ReplaceSafezoneDecor(theme.SafezoneDecorType, theme.SafezoneDecorScale);
+        ShowSeasonalDoodads(theme.Season != HolidaySeasons.None);
     }
 
-    private static void SeasonalDoodads()
-    {
-        ChristmasDoodads();
-    }
+    // These can be removed tbh.. Presently i have them tied to -christmas and -noseaeson
+    // -setseason christmas does same thing. 
+    public static void NoSeasonDoodads() => Apply(SeasonThemeRegistry.None);
+    public static void ChristmasDoodads() => Apply(SeasonThemeRegistry.Christmas);
 
-    public static void NoSeasonDoodads()
-    {
-        ReplaceDoodad(SafezoneLanterns, 1.0f);
-        ShowSeasonalDoodads(false);
-    }
-
-    public static void ChristmasDoodads()
-    {
-        if (SeasonalManager.Season != HolidaySeasons.Christmas) return;
-        ReplaceDoodad(ChristmasTree, 2.5f);
-        ShowSeasonalDoodads(true);
-    }
-
-    private static void ReplaceDoodad(int newType, float scale)
+    private static void ReplaceSafezoneDecor(int newType, float scale)
     {
         List<(float x, float y)> positions = new();
 
@@ -85,9 +53,9 @@ public static class DoodadChanger
         GC.RemoveList(ref positions);
     }
 
-    private static void CreateInitDestructiables()
+    private static void CreateInitDestructables()
     {
-        int counter = 0;
+        var counter = 0;
 
         foreach (var safeZone in Globals.SAFE_ZONES)
         {
@@ -111,12 +79,25 @@ public static class DoodadChanger
         }
     }
 
-    public static void ShowSeasonalDoodads(bool show = false) => EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => HideDoodads(show));
+    public static void ShowSeasonalDoodads(bool show = false) =>
+        EnumDestructablesInRect(Globals.WORLD_BOUNDS, null, () => HideDoodads(show));
 
     private static void HideDoodads(bool show)
     {
         var des = GetEnumDestructable();
-        if (ChristmasDecor.Contains(des.Type))
-            des.SetVisibility(show);
+
+        if (!SeasonThemeRegistry.IsSeasonalDecor(des.Type)) return;
+
+        var belongsToActiveTheme = ContainsType(_theme.DecorTypes, des.Type);
+        des.SetVisibility(show && belongsToActiveTheme);
+    }
+
+    private static bool ContainsType(int[] types, int type)
+    {
+        for (var i = 0; i < types.Length; i++)
+        {
+            if (types[i] == type) return true;
+        }
+        return false;
     }
 }

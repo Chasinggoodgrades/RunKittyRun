@@ -43,6 +43,7 @@ public static class RoundUtilities
             kitty.Finished = false;
             kitty.Unit.Mana = kitty.Unit.MaxMana;
             kitty.CurrentStats.ResetRoundData();
+            kitty.aiController.ResumeAi();
         }
     }
 

@@ -177,6 +177,7 @@ public static class Constants
 	public const int ITEM_HEART = 1227894863;
 	public const int ITEM_CLOAK_OF_FLAMES = 1227894864;
 	public const int ITEM_WOLF_MEAT = 1227894865;
+	public const int ITEM_CANDY = 1227894866;
 	public const int UNIT_KITTY = 1160785968;
 	public const int UNIT_KITTY_VENDOR = 1852271973;
 	public const int UNIT_DOG = 1853323111;
@@ -206,6 +207,12 @@ public static class Constants
 	public const int UNIT_PENGUIN = 1160785988;
 	public const int UNIT_HUNTRESS_KITTY = 1160785989;
 	public const int UNIT_SOLO_TOURNAMENT_2026 = 1160785990;
+	public const int UNIT_GARFIELD = 1160785991;
+	public const int UNIT_WHITETIGER = 1160785992;
+	public const int UNIT_NIGHTELFTIGER = 1160785993;
+	public const int UNIT_TIGER = 1160785994;
+	public const int UNIT_CUSTOM_DOG_GHOST_WOLF = 1848651827;
+	public const int UNIT_HALLOWEENSPIDER = 1848651828;
 	public const int ORDER_OFFSET = 851970;
 	public const int ORDER_WAND_ILLUSION = 852274;
 	public const int ORDER_ABSORB = 852529;
