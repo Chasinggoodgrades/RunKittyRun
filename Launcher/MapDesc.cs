@@ -7,7 +7,7 @@ namespace Launcher
 {
     public static class MapDesc
     {
-        public static readonly string VERSION = "1.6.7";
+        public static readonly string VERSION = "1.6.8";
         public static readonly string SEASON_ID = "Season 1";
 
         private static readonly string DISCORD = "discord.gg/GSu6zkNvx5";
@@ -22,9 +22,9 @@ namespace Launcher
 
         private static readonly Dictionary<string, string> replacements = new()
         {
-            { "STRING 1", TITLE },
-            { "STRING 3", DESCRIPTION },
-            { "STRING 2018", $"Run Kitty Run Remastered v{VERSION}" }
+            { "STRING 3984", TITLE },
+            { "STRING 3986", DESCRIPTION },
+            { "STRING 3988", $"Run Kitty Run Remastered v{VERSION}" }
         };
 
         private static readonly string FilePath =
