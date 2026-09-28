@@ -51,6 +51,91 @@ public static class InitCommands
             } 
         );
 
+        CommandsManager.RegisterCommand(
+            name: "effect",
+            alias: "se",
+            tier: CommandTier.Admin,
+            argDesc: "[effectPath]",
+            description: "Creates an effect at your kitties location",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                AddSpecialEffect(args[0], kitty.Unit.X, kitty.Unit.Y);
+            }
+        );
+
+        //         AsyncEffect.Create();
+        CommandsManager.RegisterCommand(
+            name: "async",
+            alias: "",
+            tier: CommandTier.Admin,
+            argDesc: "",
+            description: "Enables async test, on/off",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+                kitty.AsyncEffect = kitty.AsyncEffect ?? new KittyAsyncEffect(kitty);
+
+                if (args[0] == "")
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: async [on/off]|r");
+                    return;
+                }
+
+                var status = CommandsManager.GetBool(args[0]);
+
+                if (status)
+                    kitty.AsyncEffect.Create();
+                else
+                    kitty.AsyncEffect.Dispose();
+
+            }
+        );
+
+
+        CommandsManager.RegisterCommand(
+            name: "test34",
+            alias: "",
+            tier: CommandTier.Developer,
+            argDesc: "",
+            description: "MouseTypeEventTriggerThing",
+            action: (player, args) =>
+            {
+                player.DisplayTextTo("Starting right-click mouse position tracker...");
+                var func = Lua.Load(
+                    @"return function()
+                local t = CreateTimer()
+                TimerStart(t, 0.00, true, function()
+                    if BlzIsMouseButtonPressed(MOUSE_BUTTON_TYPE_RIGHT) then
+                        print(BlzGetMouseScreenPosX())
+                        print(BlzGetMouseScreenPosY())
+                    end
+                end)
+                return t
+            end");
+
+                if (func != null)
+                {
+                    try
+                    {
+                        var result = Lua.Call(func);
+                        var resultFunc = (Func<object>)result;
+                        result = resultFunc();
+                        if (result != null)
+                            player.DisplayTextTo($"Timer started: {result}");
+                    }
+                    catch (Exception ex)
+                    {
+                        player.DisplayTextTo($"Error: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    player.DisplayTextTo("Syntax Error");
+                }
+            }
+        );
+
 
         // Set Seasons COmmand
         CommandsManager.RegisterCommand(
@@ -1468,7 +1553,7 @@ public static class InitCommands
 
         CommandsManager.RegisterCommand(
             name: "aitest",
-            alias: "test33",
+            alias: "",
             tier: CommandTier.Admin,
             argDesc: "",
             description: "Changes the color of the laser on all the AI, blocked or free",

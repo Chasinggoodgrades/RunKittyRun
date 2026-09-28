@@ -83,6 +83,7 @@ namespace Source.Init
                 WolfArea.Initialize();
                 ItemStacker.Initialize();
                 Windwalk.Initialize();
+                AsyncKittySync.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();

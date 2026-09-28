@@ -51,6 +51,7 @@ public class Kitty : IFloatingTags, ICircleOwner
     public bool IsMirror { get; set; } = false;
     public bool CanEarnAwards { get; set; } = true;
     public CommandTier CommandTier { get; set; } = CommandTier.All;
+    public KittyAsyncEffect AsyncEffect { get; set; }
 
     public Kitty(player player)
     {
@@ -76,6 +77,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         ProtectionOfAncients = new ProtectionOfAncients(this);
         Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
+        AsyncEffect = new KittyAsyncEffect(this);
         StartAIController();
     }
 
@@ -116,6 +118,13 @@ public class Kitty : IFloatingTags, ICircleOwner
             // Update status flags
             if (!ProtectionActive) Alive = false;
 
+            if (AsyncEffect != null && AsyncEffect.IsActive)
+            {
+                var deathState = AsyncEffect.GetLocalMovementState();
+                AsyncEffect.ApplyDeath(0, deathState);
+                AsyncKittySync.SendDeath(AsyncEffect.KittyId, deathState);
+            }
+
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
             Circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
@@ -154,6 +163,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
             Unit.Mana = Circle.Unit.Mana;
             Windwalk.ReactivateWindwalk();
+            AsyncEffect?.Show();
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
@@ -284,6 +294,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         SpinCam?.Dispose();
         Windwalk?.Dispose();
         NameTag?.Dispose();
+        AsyncEffect?.Dispose();
         Unit?.Dispose();
         //ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
