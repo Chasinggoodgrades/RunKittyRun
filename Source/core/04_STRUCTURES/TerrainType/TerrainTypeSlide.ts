@@ -1,12 +1,14 @@
 import { Constants } from 'core/01_libraries/Constants'
 import { COLOR_TERRAIN_SLIDE } from '../../01_libraries/Init_colorCodes'
 import { Text } from '../../01_libraries/Text'
-import { HERO_ROTATION_SPEED } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
+import { HERO_ROTATION_SPEED, SLIDE_INERTIA_FACTOR } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
 import { DISPLAY_SPACE, TerrainType } from './TerrainType'
 
 export class TerrainTypeSlide extends TerrainType {
     private slideSpeed: number
     private rotationSpeed: number
+    /** How much inertia a hero turns with on this terrain, as a factor of the normal one (see SLIDE_INERTIA_FACTOR) */
+    private slideInertia: number
     private canTurn: boolean
 
     constructor(
@@ -14,13 +16,15 @@ export class TerrainTypeSlide extends TerrainType {
         terrainTypeId: number,
         slideSpeed: number,
         canTurn: boolean,
-        rotationSpeed: number | null
+        rotationSpeed: number | null,
+        slideInertia: number | null = null
     ) {
         super(label, terrainTypeId, null, 'slide', 0, 1)
 
         this.slideSpeed = slideSpeed
         this.canTurn = canTurn
         this.rotationSpeed = !canTurn ? 0 : rotationSpeed === null ? HERO_ROTATION_SPEED : rotationSpeed
+        this.slideInertia = slideInertia === null || slideInertia <= 0 ? SLIDE_INERTIA_FACTOR : slideInertia
     }
 
     getSlideSpeed = (): number => {
@@ -37,6 +41,14 @@ export class TerrainTypeSlide extends TerrainType {
 
     setRotationSpeed = (rotationSpeed: number) => {
         this.rotationSpeed = rotationSpeed
+    }
+
+    getSlideInertia = (): number => {
+        return this.slideInertia
+    }
+
+    setSlideInertia = (slideInertia: number) => {
+        this.slideInertia = slideInertia
     }
 
     getCanTurn = (): boolean => {
@@ -70,7 +82,7 @@ export class TerrainTypeSlide extends TerrainType {
             I2S(R2I(this.getSlideSpeed())) +
             DISPLAY_SPACE +
             displayCanTurn +
-            (this.getCanTurn() ? ':' + this.rotationSpeed : '')
+            (this.getCanTurn() ? ':' + this.rotationSpeed + DISPLAY_SPACE + 'inertia:' + this.slideInertia : '')
 
         //display cliff class
         display += DISPLAY_SPACE + 'cliff' + I2S(this.cliffClassId)
@@ -87,6 +99,7 @@ export class TerrainTypeSlide extends TerrainType {
         output['slideSpeed'] = this.getSlideSpeed()
         output['canTurn'] = this.getCanTurn()
         output['rotationSpeed'] = this.rotationSpeed
+        output['slideInertia'] = this.slideInertia
 
         return output
     }

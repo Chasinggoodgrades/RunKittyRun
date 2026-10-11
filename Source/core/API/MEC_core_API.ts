@@ -220,5 +220,6 @@ export const MEC_core_API = {
 }
 
 export const initMEC_core_API = () => {
+    MEC_core = MEC_core_API
     return MEC_core_API
 }

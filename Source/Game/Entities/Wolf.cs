@@ -41,6 +41,17 @@ public class Wolf
     private readonly Action _cachedEffect;
 
     public int RegionIndex { get; }
+
+    private static int nextId;
+    private static readonly Dictionary<int, Wolf> wolvesById = new Dictionary<int, Wolf>();
+
+    /// <summary>
+    /// Stable identifier, the same on every machine as wolves are created from synced code in the
+    /// same order. Lets a sync packet name a wolf (see AsyncContact), which a unit handle cannot do.
+    /// </summary>
+    public int Id { get; }
+
+    public static Wolf GetById(int id) => wolvesById.TryGetValue(id, out var wolf) ? wolf : null;
     public string OverheadEffectPath { get; set; } = DefaultOverheadEffect;
 
     public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
@@ -64,6 +75,8 @@ public class Wolf
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
+        Id = nextId++;
+        wolvesById[Id] = this;
         WolfArea = WolfArea.WolfAreas[regionIndex];
         Affixes = new List<Affix>(); // Consider creating a new object that contains List<Affix> so we're not making a new one each wolf.
         OverheadEffectPath = DefaultOverheadEffect;
@@ -143,6 +156,7 @@ public class Wolf
 
     public void Dispose()
     {
+        wolvesById.Remove(Id);
         RemoveAllWolfAffixes();
         EffectTimer?.Dispose();
         EffectTimer = null;
@@ -171,6 +185,7 @@ public class Wolf
         }
         Globals.ALL_WOLVES.Clear();
         Globals.ALL_WOLVES_LIST.Clear();
+        wolvesById.Clear();
     }
 
     /// <summary>

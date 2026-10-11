@@ -23,6 +23,11 @@ export const checkPointReviveHeroes = (
                     continue
                 }
 
+                // Out of the effect mode first, on every machine alike: what follows then moves, turns
+                // and stops the unit itself. Moved while its effect still stood in, a hero took back the
+                // facing each machine saw that effect with, and its player was kicked.
+                escaper.setHeroAsEffect(false)
+
                 if (!escaper.reviveAtStart()) {
                     escaper.moveHero(levelForRevining.getStartRandomX(), levelForRevining.getStartRandomY())
                     escaper.moveCameraToHeroIfNecessary()

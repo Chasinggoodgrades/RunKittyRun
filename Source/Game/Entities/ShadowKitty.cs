@@ -114,7 +114,7 @@ public class ShadowKitty
     private void ShrinkShadowKitty()
     {
         if (this.Kitty.CurrentStats.CollisonRadius > CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) return;
-        float scale = 0.60f - (0.60f * 0.10f * 2.0f);
-        this.Kitty.Unit.SetScale(scale, scale, scale);
+        float scale = Kitty.DefaultModelScale - (Kitty.DefaultModelScale * 0.10f * 2.0f);
+        this.Kitty.SetModelScale(scale);
     }
 }

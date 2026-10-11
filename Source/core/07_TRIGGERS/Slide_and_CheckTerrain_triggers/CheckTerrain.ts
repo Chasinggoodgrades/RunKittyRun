@@ -42,6 +42,10 @@ const initCheckTerrainTrigger = () => {
             escaper.setRotationSpeed(terrainType.getRotationSpeed())
         }
 
+        if (!escaper.isAbsoluteSlideInertia()) {
+            escaper.setSlideInertia(terrainType.getSlideInertia())
+        }
+
         // the slide turning the hero half a turn: from a normal slide to a reverse one or back, or
         // straight into a reverse one from walkable ground
         let hasTurnedHeroHalfATurn = false

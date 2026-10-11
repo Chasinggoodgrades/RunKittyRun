@@ -113,7 +113,7 @@ export const InitTrig_A_hero_dies_check_if_all_dead_and_sounds = () => {
                 }
 
                 if (AfkMode.AreAllAliveHeroesAfk()) {
-                    AfkMode.KillAllHeroesAfkInFourSeconds()
+                    AfkMode.KillAllAfkHeroesInAShortTime()
                 }
 
                 if (last) {

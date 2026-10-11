@@ -42,24 +42,30 @@ const InitTrig_InvisUnit_is_getting_damage = () => {
 
         if (GetUnitTypeId(touchedUnit) === Constants.DUMMY_POWER_CIRCLE) {
             const targetPlayer = GetUnitUserData(touchedUnit)
+            const targetEscaper = getUdgEscapers().get(targetPlayer)
+
+            // Two rescuers sliding as effects may each tell their contact with the circle before either
+            // reaches anybody: the second comes back once the hero is up again, and must neither count a
+            // save nor revive it twice. Its life is the same on every machine when a packet is applied.
+            if (!targetEscaper || targetEscaper.isAlive()) {
+                return
+            }
 
             if (escaper.alliedState[targetPlayer]) {
-                const targetEscaper = getUdgEscapers().get(targetPlayer)
-
                 if (!escaper.isEscaperSecondary()) {
                     ServiceManager.getService('Multiboard').increasePlayerScore(
                         GetPlayerId(escaper.getPlayer()),
                         'saves'
                     )
 
-                    if (targetEscaper && hooks.hooks_onCoopHeroRevive) {
+                    if (hooks.hooks_onCoopHeroRevive) {
                         for (const hook of hooks.hooks_onCoopHeroRevive.getHooks()) {
                             hook.execute2(escaper, targetEscaper)
                         }
                     }
                 }
 
-                targetEscaper?.coopReviveHero()
+                targetEscaper.coopReviveHero()
             }
 
             return
@@ -247,7 +253,7 @@ const touchMonster = (escaper: Escaper, killingUnit: unit, damage: number): bool
     }
 
     if (!escaper.isCoopInvul()) {
-        // todo find a solution for mortars with async slide control
+        // a mortar hurts rather than kills: the damage its shell does (see MortarSplash), and a contact 0
         if (monster?.hasAttackGroundPos()) {
             SetWidgetLife(hero, GetWidgetLife(hero) - damage)
         }
@@ -262,7 +268,8 @@ const touchMonster = (escaper: Escaper, killingUnit: unit, damage: number): bool
         const isExplodedAtDeath =
             !!effectStr && escaper.isHeroAsEffect() && getKillingEffectIndex(escaper.getId(), effectStr) !== -1
 
-        if (!monster?.hasAttackGroundPos() || (monster.hasAttackGroundPos() && GetWidgetLife(hero) - damage <= 0.405)) {
+        // the damage is already taken from the life above: what is left is what decides
+        if (!monster?.hasAttackGroundPos() || GetWidgetLife(hero) <= 0.405) {
             if (effectStr && escaper.isHeroAsEffect()) {
                 rememberKillingEffectOfDeath(escaper.getId(), effectStr)
             }

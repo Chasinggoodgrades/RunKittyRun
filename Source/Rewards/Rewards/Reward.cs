@@ -204,6 +204,7 @@ public class Reward
         {
             kitty.Unit.Skin = SkinID;
             kitty.KittyMorphosis.ScaleUnit();
+            kitty.AsyncEffect?.ReapplyUnitHidden();
             kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(kitty.CommandTier)})";
 
         }

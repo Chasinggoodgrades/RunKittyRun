@@ -6,10 +6,10 @@ import { EscaperEffectFunctions } from '../04_STRUCTURES/Escaper/EscaperEffect_f
 import { Natives } from '../wc3_natives_unsecured/Natives'
 
 /**
- * The effect the left click test moves, so that the ways of catching a click can be compared on
+ * The effect the async click test moves, so that the ways of catching a click can be compared on
  * the same object: whichever one just moved it is the one that reacted.
  *
- * It is created on demand, by the "-testLeftClicks" command, and on every machine: a handle
+ * It is created on demand, by the "-testAsyncClicks" command, and on every machine: a handle
  * creation may never be local only. Only its position is allowed to diverge afterwards.
  */
 const heroEffect = {
@@ -17,9 +17,9 @@ const heroEffect = {
 }
 
 /** Per player, as each one turns the test on for themselves */
-const testLeftClicks: { [escaperId: number]: boolean } = {}
+const testAsyncClicks: { [escaperId: number]: boolean } = {}
 
-export const isTestingLeftClicks = (escaperId: number) => testLeftClicks[escaperId] === true
+export const isTestingAsyncClicks = (escaperId: number) => testAsyncClicks[escaperId] === true
 
 /**
  * Made on every machine, as a handle has to be, but only seen by the players testing: the others
@@ -28,7 +28,7 @@ export const isTestingLeftClicks = (escaperId: number) => testLeftClicks[escaper
  */
 const refreshHeroEffectVisibility = () => {
     heroEffect.effect &&
-        BlzSetSpecialEffectAlpha(heroEffect.effect, isTestingLeftClicks(GetPlayerId(GetLocalPlayer()!)) ? 255 : 0)
+        BlzSetSpecialEffectAlpha(heroEffect.effect, isTestingAsyncClicks(GetPlayerId(GetLocalPlayer()!)) ? 255 : 0)
 }
 
 /**
@@ -36,12 +36,12 @@ const refreshHeroEffectVisibility = () => {
  * when the test is turned off. Called from a chat command, hence from a synchronized event,
  * hence on every machine at the same moment: the handle comes and goes for everybody at once.
  */
-export const setTestLeftClicks = (escaperId: number, isTesting: boolean) => {
-    testLeftClicks[escaperId] = isTesting
+export const setTestAsyncClicks = (escaperId: number, isTesting: boolean) => {
+    testAsyncClicks[escaperId] = isTesting
 
     if (!isTesting) {
         // as long as somebody else is still testing, the effect has to stay
-        for (const [_id, isSomeoneTesting] of pairs(testLeftClicks)) {
+        for (const [_id, isSomeoneTesting] of pairs(testAsyncClicks)) {
             if (isSomeoneTesting) {
                 refreshHeroEffectVisibility()
 
@@ -84,7 +84,7 @@ export const setHeroEffectPosition = (x: number, y: number) => {
  * key event carries coordinates.
  *
  * The mouse move event is synchronized, so every machine knows where every player points: these
- * positions are the same everywhere and can feed synced logic, unlike the asynchronous lattice.
+ * positions are the same everywhere and can feed synced logic, unlike AsyncMouse.
  * They are just as late as the network is.
  *
  * That is also what makes it costly: the mouse of every player travels to every machine, through
@@ -151,19 +151,28 @@ export const getMousePosition = (escaperId: number) => mousePositions[escaperId]
 export const getLocalMousePosition = () => getMousePosition(GetPlayerId(GetLocalPlayer()!))
 
 /**
- * os.clock() of the last click caught by the asynchronous path, so that the synchronized one can
- * tell how late it arrives for that same click. Local only, like everything it is compared to.
+ * os.clock() of the last click of each button caught by the asynchronous path, so that the synchronized
+ * one can tell how late it arrives for that same click. Local only, like everything it is compared to.
  */
-const lastLocalClick = { time: undefined as number | undefined }
+const lastLocalClick = { left: undefined as number | undefined, right: undefined as number | undefined }
 
-export const setLastLocalClickTime = (time: number) => {
-    lastLocalClick.time = time
+export const setLastLocalClickTime = (isRightClick: boolean, time: number) => {
+    if (isRightClick) {
+        lastLocalClick.right = time
+    } else {
+        lastLocalClick.left = time
+    }
 }
 
-/** Reading it consumes it: one synchronized click can only be the twin of one local click */
-export const takeLastLocalClickTime = () => {
-    const time = lastLocalClick.time
-    lastLocalClick.time = undefined
+/** Reading it consumes it: one synchronized click can only be the twin of one local click of that button */
+export const takeLastLocalClickTime = (isRightClick: boolean) => {
+    const time = isRightClick ? lastLocalClick.right : lastLocalClick.left
+
+    if (isRightClick) {
+        lastLocalClick.right = undefined
+    } else {
+        lastLocalClick.left = undefined
+    }
 
     return time
 }

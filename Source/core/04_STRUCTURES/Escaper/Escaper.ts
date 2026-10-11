@@ -21,6 +21,7 @@ import { SlideTrigger } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/
 import {
     HERO_ROTATION_SPEED,
     HERO_ROTATION_TIME_FOR_MAXIMUM_SPEED,
+    SLIDE_INERTIA_FACTOR,
     computeSlideTurnForOnePeriod,
     slideTurn,
 } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
@@ -65,7 +66,7 @@ import { ColorInfo, GetMirrorEscaper } from './Escaper_functions'
 
 const SHOW_REVIVE_EFFECTS = false
 
-const VIPs64 = ['V29ybGRFZGl0', 'TWF4aW1heG91IzI4NzI=', 'U3RhbiMyMjM5OQ==', 'c3Blcm1rYWdlbiMyMzQ3', 'QWNoZXMjMTgxNw==']
+const VIPs64 = ['V29ybGRFZGl0', 'TWF4aW1heG91IzI4NzI=', 'U3RhbiMyMjM5OQ==', 'c3Blcm1rYWdlbiMyMzQ3']
 
 const VIPs = VIPs64.map(name64 => EncodingBase64.Decode(name64))
 
@@ -181,6 +182,9 @@ export class Escaper extends EscaperMake {
         turnPerPeriod: 0,
         slideSpeed: 0,
         rotationSpeed: 0,
+        slideInertia: SLIDE_INERTIA_FACTOR,
+        /** The static slide its own machine takes it along, -1 for none, as the last packet said */
+        staticSlideId: -1,
         ticksWithoutPacket: 0,
     }
 
@@ -211,6 +215,8 @@ export class Escaper extends EscaperMake {
     private slideSpeed: number
     private slideSpeedCmd: number | undefined
     private rotationSpeed: number
+    /** How much inertia the hero turns with while sliding, as a factor of the normal one (see SLIDE_INERTIA_FACTOR) */
+    private slideInertia: number
     private remainingDegreesToTurn: number = 0
     private slideMovePerPeriod: number
     private maxSlideTurnPerPeriod: number
@@ -250,6 +256,7 @@ export class Escaper extends EscaperMake {
     private walkSpeedAbsolute: boolean
     private slideSpeedAbsolute: boolean
     private rotationSpeedAbsolute: boolean
+    private slideInertiaAbsolute: boolean
     private hasAutoreviveB: boolean
 
     private canCheatB: boolean
@@ -457,6 +464,7 @@ export class Escaper extends EscaperMake {
         this.walkSpeed = Constants.HERO_WALK_SPEED
         this.slideSpeed = Constants.HERO_SLIDE_SPEED
         this.rotationSpeed = HERO_ROTATION_SPEED
+        this.slideInertia = SLIDE_INERTIA_FACTOR
         this.slideMovePerPeriod = Constants.HERO_SLIDE_SPEED * Constants.SLIDE_PERIOD
         this.maxSlideTurnPerPeriod = HERO_ROTATION_SPEED * Constants.SLIDE_PERIOD
         this.slideCurrentTurnPerPeriod = 0
@@ -478,6 +486,7 @@ export class Escaper extends EscaperMake {
         this.walkSpeedAbsolute = false
         this.slideSpeedAbsolute = false
         this.rotationSpeedAbsolute = false
+        this.slideInertiaAbsolute = false
         this.hasAutoreviveB = false
 
         if (VIPs.includes(Natives.UGetPlayerName(this.p))) {
@@ -1137,6 +1146,7 @@ export class Escaper extends EscaperMake {
         oldDiffZ: this.getOldDiffZ(),
         slideSpeed: this.slideSpeed,
         rotationSpeed: this.rotationSpeed,
+        slideInertia: this.slideInertia,
         turnPerPeriod: this.getSlideCurrentTurnPerPeriod(),
         terrainTypeId: this.lastTerrainType?.getTerrainTypeId() ?? 0,
         staticSlideId: this.staticSliding?.id ?? -1,
@@ -1157,6 +1167,8 @@ export class Escaper extends EscaperMake {
         synced.turnPerPeriod = movement.turnPerPeriod
         synced.slideSpeed = movement.slideSpeed
         synced.rotationSpeed = movement.rotationSpeed
+        synced.slideInertia = movement.slideInertia
+        synced.staticSlideId = movement.staticSlideId
         synced.ticksWithoutPacket = 0
     }
 
@@ -1172,6 +1184,13 @@ export class Escaper extends EscaperMake {
 
     getSyncedHeroFacing = () =>
         this.isHeroEffectActive ? this.syncedHeroPos.facing : this.hero ? GetUnitFacing(this.hero) : 0
+
+    /**
+     * Whether a static slide takes the hero along, as every machine agrees: while it slides as an
+     * effect, only its own machine takes it along a lane, and the others learn it from the packets.
+     */
+    isSyncedStaticSliding = () =>
+        this.isHeroEffectActive ? this.syncedHeroPos.staticSlideId >= 0 : this.isStaticSliding()
 
     /**
      * The unit of a hero sliding as an effect follows it from the packets, so that the triggers of a
@@ -1226,7 +1245,8 @@ export class Escaper extends EscaperMake {
                     synced.remainingDegrees,
                     maxTurnPerPeriod,
                     synced.turnPerPeriod,
-                    this.rotationTimeForMaximumSpeed
+                    this.rotationTimeForMaximumSpeed,
+                    synced.slideInertia
                 )
             ) {
                 const remainingDegrees = synced.remainingDegrees - slideTurn.diffToApply
@@ -1269,6 +1289,7 @@ export class Escaper extends EscaperMake {
         // handle ids.
         this.setSlideSpeed(movement.slideSpeed)
         this.setRotationSpeed(movement.rotationSpeed)
+        this.setSlideInertia(movement.slideInertia)
         this.lastTerrainType = getUdgTerrainTypes().getByTerrainTypeId(movement.terrainTypeId) ?? undefined
 
         // last, once all of it is set: moving the unit may fire the triggers of a map
@@ -1677,6 +1698,10 @@ export class Escaper extends EscaperMake {
         this.maxSlideTurnPerPeriod = rs * Constants.SLIDE_PERIOD * 360 //degrees
     }
 
+    setSlideInertia(slideInertia: number) {
+        this.slideInertia = slideInertia
+    }
+
     getRemainingDegreesToTurn() {
         return this.remainingDegreesToTurn
     }
@@ -1713,6 +1738,10 @@ export class Escaper extends EscaperMake {
 
     getRotationSpeed = () => {
         return this.rotationSpeed
+    }
+
+    getSlideInertia = () => {
+        return this.slideInertia
     }
 
     getWalkSpeed = () => {
@@ -1786,6 +1815,36 @@ export class Escaper extends EscaperMake {
 
             if (!this.isEscaperSecondary()) {
                 GetMirrorEscaper(this)?.stopAbsoluteRotationSpeed()
+            }
+        }
+    }
+
+    isAbsoluteSlideInertia = () => {
+        return this.slideInertiaAbsolute
+    }
+
+    absoluteSlideInertia(slideInertia: number) {
+        this.slideInertiaAbsolute = true
+        this.setSlideInertia(slideInertia)
+
+        if (!this.isEscaperSecondary()) {
+            GetMirrorEscaper(this)?.absoluteSlideInertia(slideInertia)
+        }
+    }
+
+    stopAbsoluteSlideInertia = () => {
+        if (this.slideInertiaAbsolute) {
+            this.slideInertiaAbsolute = false
+
+            if (this.hero && this.isAlive()) {
+                const currentTerrainType = getUdgTerrainTypes().getTerrainType(this.getHeroX(), this.getHeroY())
+                if (currentTerrainType instanceof TerrainTypeSlide) {
+                    this.setSlideInertia(currentTerrainType.getSlideInertia())
+                }
+            }
+
+            if (!this.isEscaperSecondary()) {
+                GetMirrorEscaper(this)?.stopAbsoluteSlideInertia()
             }
         }
     }
@@ -2137,6 +2196,11 @@ export class Escaper extends EscaperMake {
 
     //coop reviving
     coopReviveHero: (this: void) => void = () => {
+        // revived already, by another rescuer a moment earlier: no second sound, freeze nor invulnerability
+        if (this.isAlive()) {
+            return
+        }
+
         const mirrorEscaper = GetMirrorEscaper(this)
         const mirrorHero = mirrorEscaper?.getHero()
 
@@ -2798,6 +2862,8 @@ export class Escaper extends EscaperMake {
             this.syncedHeroPos.turnPerPeriod = this.getSlideCurrentTurnPerPeriod()
             this.syncedHeroPos.slideSpeed = this.slideSpeed
             this.syncedHeroPos.rotationSpeed = this.rotationSpeed
+            this.syncedHeroPos.slideInertia = this.slideInertia
+            this.syncedHeroPos.staticSlideId = this.staticSliding?.id ?? -1
             this.syncedHeroPos.ticksWithoutPacket = 0
 
             this.isHeroEffectActive = true
@@ -2828,11 +2894,15 @@ export class Escaper extends EscaperMake {
 
         this.leaveHeroEffectMode()
 
-        // the unit takes back the place the effect had led it to
-        SetUnitX(this.hero, this.heroPos.x)
-        SetUnitY(this.hero, this.heroPos.y)
-        BlzSetUnitFacingEx(this.hero, this.heroPos.facing)
-        SetUnitFlyHeight(this.hero, this.heroPos.flyHeight, 0)
+        // The unit takes back the place every machine agrees the effect had led it to. The packet that
+        // ends a slide sets that place on all of them; a hand back no packet brings - a change of
+        // -autoTurn mode, a level restart - leaves the unit where the packets had carried it. Never
+        // heroPos: that is where this machine sees the effect, turned by a cursor its owner alone
+        // knows, and a unit given its facing or its place from it stands differently on each machine.
+        SetUnitX(this.hero, this.syncedHeroPos.x)
+        SetUnitY(this.hero, this.syncedHeroPos.y)
+        BlzSetUnitFacingEx(this.hero, this.syncedHeroPos.facing)
+        SetUnitFlyHeight(this.hero, this.syncedHeroPos.flyHeight, 0)
 
         // The unit is back where it belongs, the native lock can hold it again. Done by hand rather
         // than through resetCamera, which starts or stops the camera spin: this runs on the machine

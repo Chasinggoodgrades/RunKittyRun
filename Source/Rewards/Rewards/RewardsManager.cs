@@ -74,6 +74,7 @@ public static class RewardsManager
 
         kitty.Unit.Skin = Constants.UNIT_KITTY;
         kitty.Unit.SetVertexColor(255, 255, 255);
+        kitty.AsyncEffect?.ReapplyUnitHidden(); // the line above made the unit opaque again
 
         foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
             property.SetValue(kitty.SaveData.SelectedData, "");

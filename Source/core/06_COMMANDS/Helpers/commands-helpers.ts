@@ -3,9 +3,13 @@ import { getUdgEscapers, getUdgMonsterTypes, getUdgTerrainTypes } from '../../..
 import { createPoint } from '../../../Utils/Point'
 import { Escaper } from '../../04_STRUCTURES/Escaper/Escaper'
 import { MonsterType } from '../../04_STRUCTURES/Monster/MonsterType'
-import { setAsyncMouseActive } from '../../Async_slide/AsyncMouse'
-import { DEFAULT_AUTO_TURN_MODE, getAutoTurnMode, setAutoTurnMode } from '../../Async_slide/AutoTurn'
-import { isTestingLeftClicks, setMouseTrackingEnabled } from '../../Async_slide/HeroEffect'
+import {
+    DEFAULT_AUTO_TURN_MODE,
+    getAutoTurnMode,
+    isCursorFollowingAutoTurnMode,
+    setAutoTurnMode,
+} from '../../Async_slide/AutoTurn'
+import { isTestingAsyncClicks, setMouseTrackingEnabled } from '../../Async_slide/HeroEffect'
 import { setNetworkClickListeningEnabled } from '../../Async_slide/NetworkClick'
 
 export const snapPatrolsToSlideOffsetMap: { [mt: string]: { angle: number; offset: number } | null } = {}
@@ -119,28 +123,26 @@ export const cameraFieldMap: { [x: string]: camerafield } = {
     LOCAL_ROLL: CAMERA_FIELD_LOCAL_ROLL,
 }
 
-// For -autoTurn and -testLeftClicks commands
+// For -autoTurn and -testAsyncClicks commands
 
 /**
  * What the asynchronous slide costs, switched on and off with the modes that ask for it.
  *
  * What crosses the network is kept to what is read, and that is decided on every machine alike.
- * Whether the lattice runs, on the other hand, only concerns the machine reading its own cursor.
  */
 export const updateAsyncNeeds = (escaper: Escaper) => {
     const mode = getAutoTurnMode(escaper.getId())
-    const isTesting = isTestingLeftClicks(escaper.getId())
+    const isTesting = isTestingAsyncClicks(escaper.getId())
 
     // Where the mouse of a player points only has to cross the network for the sync mode, which
     // aims with it. The async mode reads its own cursor on its own machine and tells the others
     // where its hero looks, so nobody needs the mouse itself.
     setMouseTrackingEnabled(escaper.getId(), mode === 'sync' || isTesting)
 
-    // The clicks are another matter: both modes hand the hero over to the mouse and take it back
-    // with them.
-    setNetworkClickListeningEnabled(escaper.getId(), mode !== 'off' || isTesting)
-
-    updateAsyncMouseNeed(escaper)
+    // The clicks are another matter: the modes following the cursor hand the hero over to the mouse and
+    // take it back with them. asyncClicks reads its clicks on its own machine, and the game turns the
+    // hero from the orders they give as it always did.
+    setNetworkClickListeningEnabled(escaper.getId(), isCursorFollowingAutoTurnMode(mode) || isTesting)
 }
 
 /**
@@ -162,17 +164,4 @@ export const applyDefaultAutoTurnMode = () => {
         setAutoTurnMode(escaper.getId(), DEFAULT_AUTO_TURN_MODE)
         updateAsyncNeeds(escaper)
     })
-}
-
-/**
- * The asynchronous mouse lattice covers the cursor with frames, which swallow the clicks they
- * cover, so it only runs while this machine actually reads it: for the left click test, or for the
- * asynchronous mode of the auto turn.
- */
-const updateAsyncMouseNeed = (escaper: Escaper) => {
-    if (GetLocalPlayer() !== escaper.getPlayer()) {
-        return
-    }
-
-    setAsyncMouseActive(isTestingLeftClicks(escaper.getId()) || getAutoTurnMode(escaper.getId()) === 'async')
 }

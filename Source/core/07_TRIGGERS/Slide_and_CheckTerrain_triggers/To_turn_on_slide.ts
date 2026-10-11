@@ -222,16 +222,20 @@ const initTurnOnSlide = () => {
             }
         }
 
-        //save click
         if (triggerIsToLocation !== null) {
-            AutoContinueAfterSliding.lastClickedX[n] = orderX
-            AutoContinueAfterSliding.lastClickedY[n] = orderY
-            AutoContinueAfterSliding.isLastTargetALocation[n] = triggerIsToLocation
-            // what was clicked, for the hero to go and take it once the slide ends: a meteor, say
-            AutoContinueAfterSliding.lastClickedWidgets[n] = triggerIsToLocation ? null : orderWidget
-
-            Apm.nbClicsOnSlide[n] = Apm.nbClicsOnSlide[n] + 1
+            saveClick(n, triggerIsToLocation)
         }
+    }
+
+    /** The click of an order, for the hero to go on to it once the slide ends, and for the clicks counted */
+    const saveClick = (n: number, triggerIsToLocation: boolean) => {
+        AutoContinueAfterSliding.lastClickedX[n] = orderX
+        AutoContinueAfterSliding.lastClickedY[n] = orderY
+        AutoContinueAfterSliding.isLastTargetALocation[n] = triggerIsToLocation
+        // what was clicked, for the hero to go and take it once the slide ends: a meteor, say
+        AutoContinueAfterSliding.lastClickedWidgets[n] = triggerIsToLocation ? null : orderWidget
+
+        Apm.nbClicsOnSlide[n] = Apm.nbClicsOnSlide[n] + 1
     }
 
     const HandleTurn = (triggerIsToLocation: boolean) => {
@@ -260,6 +264,16 @@ const initTurnOnSlide = () => {
         StopUnit(slider)
 
         if (escaper.getFirstPersonHandle().isFirstPerson()) {
+            return
+        }
+
+        // A hero sliding as an effect ("-autoTurn async" or "asyncClicks") is turned by the machine of its
+        // player alone, from the cursor or at the press of the click, a latency before this order reaches
+        // every machine: turning it again from here would aim it from where it is by then. Whether the hero
+        // slides as an effect is known alike on every machine, so all of them leave it alone; the click is
+        // still kept for when the slide ends.
+        if (escaper.isHeroAsEffect()) {
+            saveClick(escaper.getId(), triggerIsToLocation)
             return
         }
 

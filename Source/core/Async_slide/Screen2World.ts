@@ -120,29 +120,3 @@ export const screen2World = (screenX: number, screenY: number) => {
 
     return i < 50 ? { x: xGuess, y: yGuess, z: zWorld } : undefined
 }
-
-/**
- * The other way around: where a world point is drawn on the screen of the local player.
- * Same frame coordinates, so comparing it against the mouse lattice tells which of the two
- * is wrong when the effect does not land under the cursor.
- */
-export const world2Screen = (x: number, y: number, z: number) => {
-    if (!camera.isUpToDate) {
-        updateCamera()
-    }
-
-    const dx = x - camera.eyeX
-    const dy = y - camera.eyeY
-    const dz = z - camera.eyeZ
-
-    const xPrime =
-        camera.scaleFactor * (-camera.cosAttackCosRot * dx - camera.cosAttackSinRot * dy - camera.sinAttack * dz)
-
-    return {
-        x: 0.4 + (camera.cosRot * dy - camera.sinRot * dx) / xPrime,
-        y:
-            0.42625 -
-            camera.yCenterScreenShift +
-            (camera.sinAttackCosRot * dx + camera.sinAttackSinRot * dy - camera.cosAttack * dz) / xPrime,
-    }
-}

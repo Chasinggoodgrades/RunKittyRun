@@ -2,7 +2,6 @@ import { ServiceManager } from 'Services'
 import { createEvent, createTimer } from 'Utils/mapUtils'
 import { getUdgEscapers, udg_monsters, udg_spawned_monster_units } from '../../../../globals'
 import { Constants } from '../../01_libraries/Constants'
-import { Logger } from '../../../Utils/SaveLoad/TreeLib/Logger'
 import { Natives } from '../../wc3_natives_unsecured/Natives'
 
 /**
@@ -25,13 +24,19 @@ import { Natives } from '../../wc3_natives_unsecured/Natives'
  *  - CONTACT, whenever the hero touches something. Its consequences change the game itself, from
  *    a score to a revived ally, so they cannot be drawn by the machine that noticed alone,
  *  - EVENT, what the others should see or hear about without it deciding anything: the hooks of a
- *    terrain change, an effect of the god mode.
+ *    terrain change, an effect of the god mode,
+ *  - CASTER AIM, what a caster that picked the hero does about it: only the machine of the hero knows
+ *    whether it is in range and where to aim at the effect, and the shot makes a unit,
+ *  - MORTAR HIT, the damage the shell of a mortar does to the hero: only the machine of the hero knows
+ *    how far from the impact it stands (see MortarSplash).
  */
 const POSITION_PREFIX = 'MEC_AHP'
 const DEATH_PREFIX = 'MEC_AHD'
 const TERRAIN_PREFIX = 'MEC_AHT'
 const CONTACT_PREFIX = 'MEC_AHC'
 const EVENT_PREFIX = 'MEC_AHE'
+const CASTER_AIM_PREFIX = 'MEC_AHA'
+const MORTAR_HIT_PREFIX = 'MEC_AHM'
 const FIELD_SEPARATOR = '|'
 
 /** Ten a second: the packets travel at network speed whatever the rate, so a higher one would only
@@ -47,8 +52,8 @@ const POSITION_PERIOD = 0.1
  *  - turnPerPeriod, the current angular speed. The slide accelerates its turns, so without it a
  *    receiver would restart that acceleration from its own value and draw another curve,
  *  - the vertical state, as for a death,
- *  - slideSpeed and rotationSpeed, which the terrain and the static slides under the hero change
- *    on its own machine only,
+ *  - slideSpeed, rotationSpeed and slideInertia, which the terrain and the static slides under the
+ *    hero change on its own machine only,
  *  - terrainTypeId, the terrain the hero was last seen on (0 for none): its gravity and whether it
  *    lets the hero turn, and the state a replayed check starts from,
  *  - staticSlideId (-1 for none) and staticSlidePreviousSpeed, the static slide its own machine has
@@ -66,6 +71,7 @@ export type HeroMovementState = {
     oldDiffZ: number
     slideSpeed: number
     rotationSpeed: number
+    slideInertia: number
     turnPerPeriod: number
     terrainTypeId: number
     staticSlideId: number
@@ -80,7 +86,7 @@ const encode = (escaperId: number, sequence: number, movement: HeroMovementState
         `%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.2f` +
             `${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.4f${FIELD_SEPARATOR}%.2f` +
             `${FIELD_SEPARATOR}%.4f${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.4f${FIELD_SEPARATOR}%.4f` +
-            `${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%.2f`,
+            `${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%.2f${FIELD_SEPARATOR}%.4f`,
         escaperId,
         sequence,
         movement.x,
@@ -96,7 +102,8 @@ const encode = (escaperId: number, sequence: number, movement: HeroMovementState
         movement.turnPerPeriod,
         movement.terrainTypeId,
         movement.staticSlideId,
-        movement.staticSlidePreviousSpeed
+        movement.staticSlidePreviousSpeed,
+        movement.slideInertia
     )
 
 const decodeNumbers = (data: string) => {
@@ -113,7 +120,7 @@ const decodeNumbers = (data: string) => {
 const decode = (data: string) => {
     const fields = decodeNumbers(data)
 
-    if (fields.length < 16) {
+    if (fields.length < 17) {
         return undefined
     }
 
@@ -135,6 +142,7 @@ const decode = (data: string) => {
             terrainTypeId: fields[13],
             staticSlideId: fields[14],
             staticSlidePreviousSpeed: fields[15],
+            slideInertia: fields[16],
         },
     }
 }
@@ -145,7 +153,8 @@ const decode = (data: string) => {
  * identifier in their user data, the temporary monsters are held by their handle id, which every
  * machine agrees on as long as they create their handles in step.
  */
-export const CONTACT_KIND = { levelMonster: 0, spawnedMonster: 1, powerCircle: 2 }
+/** mortar: the shell of a mortar, by monster id, only ever awaited (see MortarSplash), never touched */
+export const CONTACT_KIND = { levelMonster: 0, spawnedMonster: 1, powerCircle: 2, mortar: 3 }
 
 /** What a hero sliding as an effect lets the others see or hear about */
 export const ASYNC_HERO_EVENT = {
@@ -167,17 +176,7 @@ export const findContactUnit = (kind: number, id: number) => {
     return getUdgEscapers().get(id)?.getDummyPowerCircle()
 }
 
-/**
- * How many packets of each channel came in since the last time logSyncStats printed and reset it.
- * A sync event fires identically on every machine, sender included, so counting receives here
- * (rather than at each send call site) gives the combined total across every player in the game
- * for free, from any single client.
- */
-const syncReceiveCounts: { [prefix: string]: number } = {}
-
 const registerSyncEvent = (prefix: string, onPacket: (data: string) => void) => {
-    syncReceiveCounts[prefix] = 0
-
     createEvent({
         events: [
             t => {
@@ -186,27 +185,8 @@ const registerSyncEvent = (prefix: string, onPacket: (data: string) => void) => 
                 }
             },
         ],
-        actions: [
-            () => {
-                syncReceiveCounts[prefix] = (syncReceiveCounts[prefix] ?? 0) + 1
-                onPacket(Natives.UBlzGetTriggerSyncData())
-            },
-        ],
+        actions: [() => onPacket(Natives.UBlzGetTriggerSyncData())],
     })
-}
-
-/** Prints how many sync packets of each async-hero channel came in over the last second, combined
- * across every player, then resets the counters for the next second. */
-const logSyncStats = () => {
-    let total = 0
-
-    for (const [prefix, count] of pairs(syncReceiveCounts)) {
-        total += count
-        print(`[SyncStats] ${prefix}: ${count}/s`)
-        syncReceiveCounts[prefix as string] = 0
-    }
-
-    print(`[SyncStats] AsyncHeroSync total: ${total}/s`)
 }
 
 /** Sends the state of the local hero, while it is an effect and only from its own machine */
@@ -264,12 +244,35 @@ export const initAsyncHeroSync = () => {
         getUdgEscapers().get(fields[0])?.applyAsyncHeroEvent(fields[1], fields[2], fields[3], fields[4], fields[5])
     })
 
+    registerSyncEvent(CASTER_AIM_PREFIX, data => {
+        const fields = decodeNumbers(data)
+
+        if (fields.length < 5) {
+            return
+        }
+
+        casterAimHandler?.(fields[0], fields[1], fields[2], fields[3], fields[4])
+    })
+
+    registerSyncEvent(MORTAR_HIT_PREFIX, data => {
+        const fields = decodeNumbers(data)
+
+        if (fields.length < 3) {
+            return
+        }
+
+        mortarHitHandler?.(fields[0], fields[1], fields[2])
+
+        // after it: a shell that killed the hero has frozen its effect for its death by now
+        settleAwaitedContact(fields[0], CONTACT_KIND.mortar, fields[1])
+    })
+
     registerSyncEvent(DEATH_PREFIX, data => {
         const packet = decode(data)
 
         // the killing effect the machine of that hero showed, for every machine to destroy (-1 for none)
         const fields = decodeNumbers(data)
-        const killingEffectIndex = fields.length > 16 ? fields[16] : -1
+        const killingEffectIndex = fields.length > 17 ? fields[17] : -1
 
         packet &&
             getUdgEscapers()
@@ -278,7 +281,6 @@ export const initAsyncHeroSync = () => {
     })
 
     createTimer(POSITION_PERIOD, true, sendLocalHeroPosition)
-    createTimer(1, true, logSyncStats)
 }
 
 /**
@@ -396,6 +398,57 @@ export const sendAsyncHeroEvent = (
             y,
             terrainTypeId,
             lastTerrainTypeId
+        )
+    )
+}
+
+type MortarHitHandler = (escaperId: number, monsterId: number, damage: number) => void
+
+/** Set by MortarSplash, which this module cannot import without a cycle */
+let mortarHitHandler: MortarHitHandler | undefined
+
+export const setAsyncMortarHitHandler = (handler: MortarHitHandler) => {
+    mortarHitHandler = handler
+}
+
+/** Tells every machine, this one included, the damage the shell of that mortar does to the hero of this machine */
+export const sendAsyncMortarHit = (escaperId: number, monsterId: number, damage: number) => {
+    BlzSendSyncData(
+        MORTAR_HIT_PREFIX,
+        string.format(`%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%.3f`, escaperId, monsterId, damage)
+    )
+}
+
+type CasterAimHandler = (casterId: number, request: number, escaperId: number, result: number, angle: number) => void
+
+/** Set by the casters (see Caster.ts), which this module cannot import without a cycle */
+let casterAimHandler: CasterAimHandler | undefined
+
+export const setAsyncCasterAimHandler = (handler: CasterAimHandler) => {
+    casterAimHandler = handler
+}
+
+/**
+ * Tells every machine, this one included, what a caster does about the hero of this machine, which only
+ * this machine sees where it is: out of range, no shot, or a shot at that angle. The same numbers, read
+ * from the same text, on every machine.
+ */
+export const sendAsyncCasterAim = (
+    casterId: number,
+    request: number,
+    escaperId: number,
+    result: number,
+    angle: number
+) => {
+    BlzSendSyncData(
+        CASTER_AIM_PREFIX,
+        string.format(
+            `%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%d${FIELD_SEPARATOR}%.4f`,
+            casterId,
+            request,
+            escaperId,
+            result,
+            angle
         )
     )
 }

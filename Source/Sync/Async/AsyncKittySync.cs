@@ -1,89 +1,129 @@
+using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 /// <summary>
-/// C# port of AsyncHeroSync.ts. While a Kitty's stand-in effect is active (see KittyAsyncEffect),
-/// this is what carries its state from the machine that owns it to every other machine, using
-/// BlzSendSyncData the way the TS version does: no channel here waits for a round trip except
-/// where the game itself must agree on something (death, contact).
+/// C# port of AsyncHeroSync.ts for running Kitties. While a Kitty's stand-in effect is active
+/// (see KittyAsyncEffect), the machine that owns it tells every other machine where it is and
+/// where it is heading, using BlzSendSyncData the way the TS version does: the event it raises
+/// fires on every machine in the same game turn, which is what turns a local truth into a state
+/// the others can replay.
 ///
 /// Channels:
-///  - Position, ten times a second: everything a receiver needs to place the stand-in effect
-///    where the owning machine currently sees the unit,
-///  - Death: the moment the owning machine sees the Kitty die, so every machine kills it at the
-///    same spot,
-///  - Terrain: reserved for a future terrain-driven state change, kept for wire parity with the
-///    TS version even though Kitty movement is not slide based today,
-///  - Contact: reserved the same way, for a collision only the owning machine noticed first,
-///  - Event: reserved for anything that should be shown or called on every machine without
-///    deciding anything (god mode effects, etc).
+///  - POSITION, ten times a second while the Kitty runs (and once more when it stops): where it is,
+///    where it looks, the point it heads to and at what speed, enough for a receiver to carry the
+///    run on by itself between two packets,
+///  - CONTACT, whenever the owning machine sees its effect touch a wolf or a revive circle (see
+///    AsyncContact). What a contact does changes the game itself, a death or a revive, so it
+///    cannot be drawn by the machine that noticed alone: every machine, the sender included, runs
+///    the game's own contact handler when the packet arrives, on the same turn.
+///
+/// A death needs no packet of its own: it follows the contact, and KillKitty stands the effect
+/// down on every machine. The TS channels for terrain hand-back, event, caster aim and mortar hits
+/// belong to sliding and are not ported yet.
+///
+/// Also owns the one global tick that moves every stand-in effect and reads the local click.
 /// </summary>
 public static class AsyncKittySync
 {
     private const string POSITION_PREFIX = "Aches_POS";
-    private const string DEATH_PREFIX = "Aches_DEATH";
-    private const string TERRAIN_PREFIX = "Aches_Terrain";
     private const string CONTACT_PREFIX = "Aches_Contact";
-    private const string EVENT_PREFIX = "Aches_Event";
     private const char FIELD_SEPARATOR = '|';
 
-    /// <summary>Ten a second: matches AsyncHeroSync.ts POSITION_PERIOD, fine enough for a receiver to interpolate between packets.</summary>
+    /// <summary>Movement and input rate: fine enough to look smooth, as the effect is only ever drawn.</summary>
+    private const float TICK_PERIOD = 0.01f;
+
+    /// <summary>Ten a second: matches AsyncHeroSync.ts POSITION_PERIOD.</summary>
     private const float POSITION_PERIOD = 0.1f;
 
-    private static bool isInitialized = false;
-    private static int sequence = 0;
-    private static readonly timer PositionTimer = timer.Create();
+    private static bool isInitialized;
+    private static timer tickTimer;
+    private static timer positionTimer;
 
-    private static string Encode(int kittyId, int seq, KittyMovementState movement)
-    {
-        return string.Join(
-            FIELD_SEPARATOR,
-            kittyId,
-            seq,
-            movement.X.ToString("F2"),
-            movement.Y.ToString("F2"),
-            movement.Facing.ToString("F2"),
-            movement.FlyHeight.ToString("F2"),
-            movement.TerrainTypeId);
-    }
+    /// <summary>Seconds since the tick started, on THIS machine. Only for local timeouts, never for synced logic.</summary>
+    public static float Now { get; private set; }
 
-    private static bool TryDecode(string data, out int kittyId, out int seq, out KittyMovementState movement)
-    {
-        var fields = data.Split(FIELD_SEPARATOR);
-
-        kittyId = 0;
-        seq = 0;
-        movement = default;
-
-        if (fields.Length < 6) return false;
-
-        kittyId = int.Parse(fields[0]);
-        seq = int.Parse(fields[1]);
-        movement = new KittyMovementState(
-            float.Parse(fields[2]),
-            float.Parse(fields[3]),
-            float.Parse(fields[4]),
-            float.Parse(fields[5]),
-            fields.Length > 6 ? int.Parse(fields[6]) : 0);
-
-        return true;
-    }
-
-    /// <summary>Registers the sync events and starts the periodic broadcast. Safe to call once at game start.</summary>
+    /// <summary>
+    /// Registers the sync event and starts the timers. Called once at game start, on every
+    /// machine alike, before any Kitty exists: timers and triggers are handles.
+    /// </summary>
     public static void Initialize()
     {
         if (isInitialized) return;
         isInitialized = true;
 
-        RegisterPositionEvent();
-        RegisterDeathEvent();
+        AsyncMouse.Initialize();
+        Screen2World.Initialize();
+        AsyncContact.Initialize();
 
-        PositionTimer.Start(POSITION_PERIOD, true, ErrorHandler.Wrap(BroadcastLocalPosition));
+        RegisterPositionEvent();
+        RegisterContactEvent();
+
+        tickTimer = timer.Create();
+        tickTimer.Start(TICK_PERIOD, true, ErrorHandler.Wrap(Tick));
+
+        positionTimer = timer.Create();
+        positionTimer.Start(POSITION_PERIOD, true, ErrorHandler.Wrap(BroadcastLocalPosition));
     }
+
+    private static void Tick()
+    {
+        Now += TICK_PERIOD;
+
+        AsyncClickInput.Poll();
+
+        var kitties = Globals.ALL_KITTIES_LIST;
+
+        for (int i = 0; i < kitties.Count; i++)
+        {
+            kitties[i].AsyncEffect?.Advance(TICK_PERIOD);
+        }
+    }
+
+    // ------------------------------------------------------------------ wire format
+
+    // Whole numbers only: positions in game units are precise enough to the unit, and an integer
+    // text reads back the same on every machine.
+    private static int Whole(float value)
+    {
+        return (int)Math.Round(value);
+    }
+
+    private static string Encode(int kittyId, int sequence, KittyMovementState movement)
+    {
+        return $"{kittyId}{FIELD_SEPARATOR}{sequence}{FIELD_SEPARATOR}{Whole(movement.X)}{FIELD_SEPARATOR}{Whole(movement.Y)}{FIELD_SEPARATOR}{Whole(movement.Facing)}{FIELD_SEPARATOR}{Whole(movement.TargetX)}{FIELD_SEPARATOR}{Whole(movement.TargetY)}{FIELD_SEPARATOR}{(movement.IsMoving ? 1 : 0)}{FIELD_SEPARATOR}{Whole(movement.Speed)}";
+    }
+
+    private static bool TryDecode(string data, out int kittyId, out int sequence, out KittyMovementState movement)
+    {
+        var fields = data.Split(FIELD_SEPARATOR);
+
+        kittyId = 0;
+        sequence = 0;
+        movement = default;
+
+        if (fields.Length < 9) return false;
+
+        kittyId = int.Parse(fields[0]);
+        sequence = int.Parse(fields[1]);
+        movement = new KittyMovementState(
+            int.Parse(fields[2]),
+            int.Parse(fields[3]),
+            int.Parse(fields[4]),
+            int.Parse(fields[5]),
+            int.Parse(fields[6]),
+            int.Parse(fields[7]) == 1,
+            int.Parse(fields[8]));
+
+        return true;
+    }
+
+    // ------------------------------------------------------------------ receiving
 
     private static void RegisterPositionEvent()
     {
         var trig = trigger.Create();
+
         foreach (var player in Globals.ALL_PLAYERS)
         {
             trig.RegisterPlayerSyncEvent(player, POSITION_PREFIX, false);
@@ -91,99 +131,102 @@ public static class AsyncKittySync
 
         trig.AddAction(() =>
         {
-            var data = BlzGetTriggerSyncData();
+            var sender = GetTriggerPlayer();
 
-            if (!TryDecode(data, out var kittyId, out var seq, out var movement)) return;
+            if (!TryDecode(BlzGetTriggerSyncData(), out var kittyId, out var sequence, out var movement)) return;
 
-            FindKittyById(kittyId)?.AsyncEffect?.ApplyPosition(seq, movement);
+            // a player only ever speaks for their own Kitty
+            if (sender == null || sender.Id != kittyId) return;
+
+            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+
+            kitty.AsyncEffect?.ApplyPosition(sequence, movement);
         });
     }
 
-    private static void RegisterDeathEvent()
+    private static void RegisterContactEvent()
     {
         var trig = trigger.Create();
+
         foreach (var player in Globals.ALL_PLAYERS)
         {
-            trig.RegisterPlayerSyncEvent(player, DEATH_PREFIX, false);
+            trig.RegisterPlayerSyncEvent(player, CONTACT_PREFIX, false);
         }
 
         trig.AddAction(() =>
         {
-            var data = BlzGetTriggerSyncData();
+            var sender = GetTriggerPlayer();
+            if (sender == null) return;
 
-            if (!TryDecode(data, out var kittyId, out var seq, out var movement)) return;
+            var fields = BlzGetTriggerSyncData().Split(FIELD_SEPARATOR);
+            if (fields.Length < 5) return;
 
-            FindKittyById(kittyId)?.AsyncEffect?.ApplyDeath(seq, movement);
+            int kittyId = int.Parse(fields[0]);
+            int kind = int.Parse(fields[1]);
+            int id = int.Parse(fields[2]);
+
+            // a player only ever speaks for their own Kitty
+            if (sender.Id != kittyId) return;
+            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+
+            var fx = kitty.AsyncEffect;
+            if (fx == null) return;
+
+            // read before anything else, on every machine alike: a Kitty that stopped standing in meanwhile is left to its unit
+            if (!fx.IsActive)
+            {
+                fx.ReleaseContactHold();
+                return;
+            }
+
+            fx.SetContactPoint(int.Parse(fields[3]), int.Parse(fields[4]));
+
+            if (kind == AsyncContact.KIND_WOLF)
+            {
+                var wolf = Wolf.GetById(id);
+
+                if (wolf != null && wolf.Unit != null)
+                {
+                    CollisionDetection.HandleWolfContact(kitty, wolf.Unit);
+                }
+            }
+            else if (kind == AsyncContact.KIND_CIRCLE)
+            {
+                if (Globals.ALL_KITTIES.TryGetValue(Player(id), out var circleKitty) && circleKitty.Circle != null && circleKitty.Circle.Unit != null)
+                {
+                    CollisionDetection.HandleCircleContact(kitty, circleKitty.Circle.Unit);
+                }
+            }
+
+            fx.ClearContactPoint();
+            fx.ReleaseContactHold();
         });
     }
 
-    /// <summary>Kitty ids are stable player ids, unlike list positions which shift as Kitties are disposed.</summary>
-    private static Kitty FindKittyById(int kittyId)
-    {
-        foreach (var kitty in Globals.ALL_KITTIES_LIST)
-        {
-            if (kitty.AsyncEffect?.KittyId == kittyId) return kitty;
-        }
+    // ------------------------------------------------------------------ sending
 
-        return null;
+    /// <summary>
+    /// Tells every machine, this one included, what the effect of the Kitty this machine owns just
+    /// touched, and where it stood. Only its owner calls this: it is the only one knowing.
+    /// </summary>
+    public static void SendContact(int kittyId, int kind, int id, float x, float y)
+    {
+        BlzSendSyncData(CONTACT_PREFIX, $"{kittyId}{FIELD_SEPARATOR}{kind}{FIELD_SEPARATOR}{id}{FIELD_SEPARATOR}{Whole(x)}{FIELD_SEPARATOR}{Whole(y)}");
     }
 
-    /// <summary>Sends the state of every locally-owned Kitty currently standing in as an effect.</summary>
+    /// <summary>Sends the state of the Kitty this machine owns, while its effect stands in for it and it moves.</summary>
     private static void BroadcastLocalPosition()
     {
         var localPlayer = GetLocalPlayer();
+        if (localPlayer == null) return;
 
-        foreach (var kitty in Globals.ALL_KITTIES_LIST)
-        {
-            if (kitty.Player != localPlayer) continue;
-            if (kitty.AsyncEffect == null || !kitty.AsyncEffect.IsActive) continue;
+        if (!Globals.ALL_KITTIES.TryGetValue(localPlayer, out var kitty)) return;
 
-            sequence++;
+        var fx = kitty.AsyncEffect;
+        if (fx == null) return;
 
-            BlzSendSyncData(POSITION_PREFIX, Encode(kitty.AsyncEffect.KittyId, sequence, kitty.AsyncEffect.GetLocalMovementState()));
-        }
-    }
+        if (!fx.TryTakeBroadcast(out var sequence, out var movement)) return;
 
-    /// <summary>Only the owning machine calls this: it is the only one knowing where its Kitty really stopped.</summary>
-    public static void SendDeath(int kittyId, KittyMovementState movement)
-    {
-        sequence++;
-
-        BlzSendSyncData(DEATH_PREFIX, Encode(kittyId, sequence, movement));
-    }
-
-    /// <summary>
-    /// Reserved for a future terrain-driven hand-back, mirroring sendAsyncTerrainChange in
-    /// AsyncHeroSync.ts. Not yet called by any gameplay system: Kitty movement is order driven,
-    /// not slide driven, so there is no terrain hand-off moment today. Kept for wire parity.
-    /// </summary>
-    public static void SendTerrainChange(int kittyId, KittyMovementState movement)
-    {
-        sequence++;
-
-        BlzSendSyncData(TERRAIN_PREFIX, Encode(kittyId, sequence, movement));
-    }
-
-    /// <summary>
-    /// Reserved for a future contact channel, mirroring sendAsyncContact in AsyncHeroSync.ts.
-    /// Not yet called by CollisionDetection: kept for wire parity until collision is ported to
-    /// read from the stand-in effect instead of the unit.
-    /// </summary>
-    public static void SendContact(int kittyId, int contactKindId, int contactTargetId)
-    {
-        BlzSendSyncData(
-            CONTACT_PREFIX,
-            string.Join(FIELD_SEPARATOR, kittyId, contactKindId, contactTargetId));
-    }
-
-    /// <summary>
-    /// Reserved for anything that should be shown or called on every machine without deciding
-    /// anything, mirroring sendAsyncHeroEvent in AsyncHeroSync.ts. Not yet consumed.
-    /// </summary>
-    public static void SendEvent(int kittyId, int eventId, float x, float y)
-    {
-        BlzSendSyncData(
-            EVENT_PREFIX,
-            string.Join(FIELD_SEPARATOR, kittyId, eventId, x.ToString("F2"), y.ToString("F2")));
+        BlzSendSyncData(POSITION_PREFIX, Encode(fx.KittyId, sequence, movement));
     }
 }

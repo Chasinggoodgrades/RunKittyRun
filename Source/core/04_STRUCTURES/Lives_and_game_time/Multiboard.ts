@@ -9,12 +9,12 @@ import { udg_colorCode } from 'core/01_libraries/Init_colorCodes'
 import { AfkMode } from 'core/08_GAME/Afk_mode/Afk_mode'
 import { getUdgEscapers, getUdgLevels, globals } from '../../../../globals'
 import { playerId2colorId, rawPlayerNames } from '../../06_COMMANDS/Helpers/Command_functions'
+import { Natives } from '../../wc3_natives_unsecured/Natives'
 import { Escaper } from '../Escaper/Escaper'
 import { sameLevelProgression } from '../Level/LevelProgression'
 import { TerrainTypeSlide } from '../TerrainType/TerrainTypeSlide'
 import { LIVES_PLAYER } from './Lives_and_game_time'
 import { GameTime } from './Time_of_game_trigger'
-import { Natives } from '../../wc3_natives_unsecured/Natives'
 
 // Column and row start at index 1
 
@@ -541,7 +541,10 @@ export const initMultiboard = () => {
             if (
                 AfkMode.isAfk[escaper.getId()] ||
                 escaper.hasAutorevive() ||
-                (escaper.getLastTerrainType() !== null &&
+                // a hero sliding as an effect does slide: the terrain it was last on is read by its own
+                // machine alone, and would keep it in or out of the ditch effect there only
+                (!escaper.isHeroAsEffect() &&
+                    escaper.getLastTerrainType() !== null &&
                     !(escaper.getLastTerrainType() instanceof TerrainTypeSlide)) ||
                 !escaper.getHero()
             ) {

@@ -1,23 +1,23 @@
 import { createEvent } from 'Utils/mapUtils'
 import { getUdgEscapers } from '../../../globals'
 import { Natives } from '../wc3_natives_unsecured/Natives'
-import { getAutoTurnMode, setAutoTurnSteering } from './AutoTurn'
-import { isTestingLeftClicks, takeLastLocalClickTime } from './HeroEffect'
+import { getAutoTurnMode, isCursorFollowingAutoTurnMode, setAutoTurnSteering } from './AutoTurn'
+import { isTestingAsyncClicks, takeLastLocalClickTime } from './HeroEffect'
 
 /**
  * Right click moves the shared effect for everybody: EVENT_PLAYER_MOUSE_DOWN is a synchronized
  * event, so the click travels through the game turn queue exactly like a unit order, and the
  * effect only moves once the click has been delivered to every machine (= latency).
  *
- * The left click is logged too, without moving anything: that very click is what
- * "hero-effect-locally-async" reacts to asynchronously, so comparing the two timestamps tells
- * how much the local path really saves.
+ * While "-testAsyncClicks" runs, both buttons are logged, without moving anything: that very click is
+ * what AsyncSlideInput reacted to on this machine first, so comparing the two timestamps tells how much
+ * the local path saves. Logged on the machine of the player clicking only.
  */
 /** The same teal as the local click line, so both halves of a click read as one pair */
 const CYAN = '|cff1ce6b9'
 
 /**
- * Listened to for a player who chose a steering mode or is testing left clicks, and for nobody
+ * Listened to for a player who chose a steering mode or is testing async clicks, and for nobody
  * else. Created and destroyed rather than turned on and off, as the game carries the mouse of a
  * player over the network because the event is registered, not because a trigger acts on it.
  */
@@ -61,20 +61,19 @@ export const setNetworkClickListeningEnabled = (escaperId: number, isEnabled: bo
                     // Shown to the player clicking only: this event runs on every machine, and the
                     // local click it is compared to belongs to the machine of that player alone.
                     if (
-                        !isRightClick &&
                         Natives.UGetTriggerPlayer() === GetLocalPlayer() &&
-                        isTestingLeftClicks(GetPlayerId(Natives.UGetTriggerPlayer()))
+                        isTestingAsyncClicks(GetPlayerId(Natives.UGetTriggerPlayer()))
                     ) {
                         // that same click was caught by the asynchronous path first: the gap between
                         // the two is the latency the local path saves
-                        const localClickTime = takeLastLocalClickTime()
+                        const localClickTime = takeLastLocalClickTime(isRightClick)
                         const delay =
                             localClickTime === undefined
                                 ? `${CYAN}(no local click to compare to)|r`
                                 : `${CYAN}${math.floor((os.clock() - localClickTime) * 1000)} ms after the local one|r`
 
                         print(
-                            `NETWORK left click at ${math.floor(x)}, ${math.floor(y)} ` +
+                            `NETWORK ${isRightClick ? 'right' : 'left'} click at ${math.floor(x)}, ${math.floor(y)} ` +
                                 `(t = ${math.floor(os.clock() * 1000)} ms), ` +
                                 delay
                         )
@@ -94,7 +93,7 @@ export const setNetworkClickListeningEnabled = (escaperId: number, isEnabled: bo
 
                     // while a steering mode is chosen, the buttons hand the hero over to the mouse
                     // and take it back, rather than each click being an order of its own
-                    if (getAutoTurnMode(escaperId) !== 'off') {
+                    if (isCursorFollowingAutoTurnMode(getAutoTurnMode(escaperId))) {
                         setAutoTurnSteering(escaperId, isRightClick)
                     }
 

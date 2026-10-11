@@ -13,6 +13,12 @@ import { GetMirrorEscaper } from '../../04_STRUCTURES/Escaper/Escaper_functions'
 import { METEOR_CHEAT } from '../../04_STRUCTURES/Meteor/Meteor'
 import { MeteorFunctions } from '../../04_STRUCTURES/Meteor/Meteor_functions'
 import { Gravity } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/Gravity'
+import {
+    PHYSICAL_ACCELERATION_DEGREES,
+    PHYSICAL_BRAKING_DEGREES,
+    physicalTurnSettings,
+    slideTurnSettings,
+} from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
 import { DeplacementHeroHorsDeathPath } from '../../08_GAME/Mode_coop/deplacement_heros_hors_death_path'
 import {
     abilityCb,
@@ -187,6 +193,158 @@ export const initExecuteCommandCheat = () => {
                     Text.P(escaper.getPlayer(), 'rotation speed for player ' + param1 + ' depends now on terrains')
                 }
             }
+            return true
+        },
+    })
+
+    //-slideInertia(si) <factor>   --> changes how much inertia your hero turns with while sliding, ignoring terrains
+    registerCommand({
+        name: 'slideInertia',
+        alias: ['si'],
+        group,
+        argDescription: '<factor>',
+        description:
+            'Changes how much inertia your hero turns with while sliding, ignoring terrains: 1 is normal, 2 takes twice as long to speed its turns up and to brake them, 0.5 half as long',
+        cb: ({ nbParam, param1, param2 }, escaper) => {
+            if (S2R(param1) <= 0) {
+                Text.erP(escaper.getPlayer(), 'The slide inertia has to be positive')
+                return true
+            }
+            const inertia = S2R(param1)
+            if (nbParam === 1) {
+                escaper.absoluteSlideInertia(inertia)
+                Text.P(escaper.getPlayer(), 'your slide inertia is set to ' + param1)
+                return true
+            }
+            if (!(nbParam == 2 && escaper.isMaximaxou())) {
+                return true
+            }
+            if (param2 === 'all' || param2 === 'a') {
+                let i = 0
+                while (true) {
+                    if (i >= Constants.NB_ESCAPERS) break
+                    if (getUdgEscapers().get(i) != null) {
+                        getUdgEscapers().get(i)?.absoluteSlideInertia(inertia)
+                    }
+                    i = i + 1
+                }
+                Text.P(escaper.getPlayer(), 'slide inertia for all is set to ' + param1)
+                return true
+            }
+            if (isPlayerId(param2)) {
+                if (getUdgEscapers().get(resolvePlayerId(param2)) != null) {
+                    getUdgEscapers().get(resolvePlayerId(param2))?.absoluteSlideInertia(inertia)
+                    Text.P(escaper.getPlayer(), 'slide inertia for player ' + param2 + ' is set to ' + param1)
+                }
+            }
+            return true
+        },
+    })
+
+    //-normalSlideInertia(nsi)   --> puts the slide inertia back to normal (respecting terrains)
+    registerCommand({
+        name: 'normalSlideInertia',
+        alias: ['nsi'],
+        group,
+        argDescription: '',
+        description: 'Puts the slide inertia back to normal (respecting terrains)',
+        cb: ({ noParam, nbParam, param1 }, escaper) => {
+            if (noParam) {
+                escaper.stopAbsoluteSlideInertia()
+                Text.P(escaper.getPlayer(), 'your slide inertia depends now on terrains')
+                return true
+            }
+            if (!(nbParam == 1 && escaper.isMaximaxou())) {
+                return true
+            }
+            if (param1 === 'all' || param1 === 'a') {
+                let i = 0
+                while (true) {
+                    if (i >= Constants.NB_ESCAPERS) break
+                    if (getUdgEscapers().get(i) != null) {
+                        getUdgEscapers().get(i)?.stopAbsoluteSlideInertia()
+                    }
+                    i = i + 1
+                }
+                Text.P(escaper.getPlayer(), 'slide inertia for all depends now on terrains')
+                return true
+            }
+            if (isPlayerId(param1)) {
+                if (getUdgEscapers().get(resolvePlayerId(param1)) != null) {
+                    getUdgEscapers().get(resolvePlayerId(param1))?.stopAbsoluteSlideInertia()
+                    Text.P(escaper.getPlayer(), 'slide inertia for player ' + param1 + ' depends now on terrains')
+                }
+            }
+            return true
+        },
+    })
+
+    //-legacySlideInertia(lsi) <on|off>   --> slides turn the way they did before the physical braking
+    registerCommand({
+        name: 'legacySlideInertia',
+        alias: ['lsi'],
+        group,
+        argDescription: '<on|off>',
+        description:
+            'On: slides turn the way they did before, slowing down along a table below 51 degrees from the angle asked for, stretched by the slide inertia. Off (default): heroes turn at their maximum rotation speed until they have to brake to stop on that angle',
+        cb: ({ nbParam, param1 }, escaper) => {
+            if (!(nbParam === 1)) {
+                Text.erP(escaper.getPlayer(), 'one param for this command')
+                return true
+            }
+
+            if (!IsBoolString(param1)) {
+                Text.erP(escaper.getPlayer(), 'invalid boolean')
+                return true
+            }
+
+            slideTurnSettings.isLegacyInertia = S2B(param1)
+            Text.A((S2B(param1) ? 'Enabled' : 'Disabled') + ' legacySlideInertia')
+            return true
+        },
+    })
+
+    //-physicalTurn(pt) [<accelerationDegrees> <brakingDegrees> | default]   --> tries other values for the physical turn of slides
+    registerCommand({
+        name: 'physicalTurn',
+        alias: ['pt'],
+        group,
+        argDescription: '[<accelerationDegrees> <brakingDegrees> | default]',
+        description:
+            'Tries other values for the physical turn of slides, for every hero: the degrees turned while speeding up to the maximum rotation speed, ' +
+            'and the degrees braking takes from that maximum down to none. Without parameter, shows the current ones; "default" puts back 25 and 80. ' +
+            'Not used while -legacySlideInertia is on.',
+        cb: ({ noParam, nbParam, param1, param2 }, escaper) => {
+            if (noParam) {
+                Text.P(
+                    escaper.getPlayer(),
+                    string.format(
+                        'Physical turn: acceleration over %.1f degrees, braking over %.1f degrees',
+                        physicalTurnSettings.accelerationDegrees,
+                        physicalTurnSettings.brakingDegrees
+                    )
+                )
+                return true
+            }
+
+            if (nbParam === 1 && (param1 === 'default' || param1 === 'd')) {
+                physicalTurnSettings.accelerationDegrees = PHYSICAL_ACCELERATION_DEGREES
+                physicalTurnSettings.brakingDegrees = PHYSICAL_BRAKING_DEGREES
+            } else if (nbParam === 2 && S2R(param1) > 0 && S2R(param2) > 0) {
+                physicalTurnSettings.accelerationDegrees = S2R(param1)
+                physicalTurnSettings.brakingDegrees = S2R(param2)
+            } else {
+                Text.erP(escaper.getPlayer(), 'two positive numbers of degrees, or "default"')
+                return true
+            }
+
+            Text.A(
+                string.format(
+                    'Physical turn: acceleration over %.1f degrees, braking over %.1f degrees',
+                    physicalTurnSettings.accelerationDegrees,
+                    physicalTurnSettings.brakingDegrees
+                )
+            )
             return true
         },
     })

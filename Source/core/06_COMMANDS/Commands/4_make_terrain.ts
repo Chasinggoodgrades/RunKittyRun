@@ -9,7 +9,7 @@ import { DEATH_TERRAIN_MAX_TOLERANCE, TerrainTypeDeath } from '../../04_STRUCTUR
 import { TerrainTypeSlide } from '../../04_STRUCTURES/TerrainType/TerrainTypeSlide'
 import { TerrainTypeWalk } from '../../04_STRUCTURES/TerrainType/TerrainTypeWalk'
 import { TerrainTypeFromString } from '../../07_TRIGGERS/Modify_terrain_Functions/Terrain_type_from_string'
-import { HERO_ROTATION_SPEED } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
+import { HERO_ROTATION_SPEED, SLIDE_INERTIA_FACTOR } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/SlidingMax'
 import { ChangeAllTerrains } from '../../07_TRIGGERS/Triggers_to_modify_terrains/Change_all_terrains'
 import { ChangeOneTerrain } from '../../07_TRIGGERS/Triggers_to_modify_terrains/Change_one_terrain'
 import { ExchangeTerrains } from '../../07_TRIGGERS/Triggers_to_modify_terrains/Exchange_terrains'
@@ -374,6 +374,44 @@ export const initExecuteCommandMake_terrain = () => {
 
             terrainType.setRotationSpeed(speed)
             Text.mkP(escaper.getPlayer(), 'terrain rotation speed changed')
+            return true
+        },
+    })
+
+    //-setTerrainSlideInertia(settsi) <slideTerrainLabel> <inertia>
+    registerCommand({
+        name: 'setTerrainSlideInertia',
+        alias: ['settsi'],
+        group,
+        argDescription: '<slideTerrainLabel> <inertia>',
+        description:
+            'How much inertia the heroes turn with on this slide terrain, as a factor: 1 is normal, 2 takes twice as long to speed their turns up and to brake them, 0.5 half as long. You can specify "default" | "d".',
+        cb: ({ nbParam, param1, param2 }, escaper) => {
+            if (!(nbParam === 2)) {
+                return true
+            }
+            const terrainType = getUdgTerrainTypes().getByLabel(param1)
+            if (!terrainType) {
+                Text.erP(escaper.getPlayer(), 'unknown terrain')
+                return true
+            }
+            if (!(terrainType instanceof TerrainTypeSlide)) {
+                Text.erP(escaper.getPlayer(), 'the terrain must be of slide type')
+                return true
+            }
+
+            let inertia: number
+            if (param2 == 'd' || param2 == 'default') {
+                inertia = SLIDE_INERTIA_FACTOR
+            } else if (S2R(param2) <= 0) {
+                Text.erP(escaper.getPlayer(), 'the slide inertia must be positive')
+                return true
+            } else {
+                inertia = S2R(param2)
+            }
+
+            terrainType.setSlideInertia(inertia)
+            Text.mkP(escaper.getPlayer(), 'terrain slide inertia changed')
             return true
         },
     })

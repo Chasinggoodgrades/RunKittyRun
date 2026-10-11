@@ -7,6 +7,7 @@ import { GetUnitZEx } from '../../../Utils/LocationUtils'
 import { createTimer } from '../../../Utils/mapUtils'
 import { ColorString2Id } from '../../01_libraries/Init_colorCodes'
 import { IsColorString } from '../../06_COMMANDS/Helpers/Command_functions'
+import { refreshMortarSensor, removeMortarSensor } from '../../08_GAME/Death/MortarSplash'
 import { hooks } from '../../API/GeneralHooks'
 import { CombineHooks } from '../../API/MecHookArray'
 import { Natives } from '../../wc3_natives_unsecured/Natives'
@@ -185,6 +186,7 @@ export abstract class Monster {
 
     removeUnit() {
         if (this.u) {
+            removeMortarSensor(this)
             unregisterMonsterFromChunks(this)
             GroupRemoveUnit(monstersClickable, this.u)
             RemoveUnit(this.u)
@@ -308,6 +310,7 @@ export abstract class Monster {
         MemoryHandler.destroyArray(hookArray2)
 
         this.doAttackGroundPos()
+        refreshMortarSensor(this)
         this.isDisabledB = false
         this.lifeBonusLivesEarned = false
 
@@ -546,6 +549,10 @@ export abstract class Monster {
     hasAttackGroundPos = () => {
         return this.attackGroundX !== undefined && this.attackGroundY !== undefined
     }
+
+    getAttackGroundX = () => this.attackGroundX
+
+    getAttackGroundY = () => this.attackGroundY
 
     setAttackGroundPos = (x: number | undefined, y: number | undefined, delay: number = 0) => {
         this.attackGroundX = x

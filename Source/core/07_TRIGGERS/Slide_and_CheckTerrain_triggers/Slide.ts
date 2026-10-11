@@ -28,7 +28,8 @@ const escaperTurnForOnePeriod = (escaper: Escaper | null) => {
             remainingDegrees,
             escaper.getMaxSlideTurnPerPeriod(),
             escaper.getSlideCurrentTurnPerPeriod(),
-            escaper.rotationTimeForMaximumSpeed
+            escaper.rotationTimeForMaximumSpeed,
+            escaper.getSlideInertia()
         )
     ) {
         return

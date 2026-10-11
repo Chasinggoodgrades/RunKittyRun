@@ -21,6 +21,7 @@ import { init_Apm } from '../08_GAME/Apm_clics_par_minute/Apm'
 import { init_cameraPositionAtStart } from '../08_GAME/Camera_reset/Camera_position_at_start'
 import { initAsyncHeroSync } from '../08_GAME/Contact/AsyncHeroSync'
 import { initContactCheck } from '../08_GAME/Contact/ContactCheck'
+import { initMortarSplash } from '../08_GAME/Death/MortarSplash'
 import { init_Trig_Allways_day } from '../08_GAME/Init_game/Allways_day'
 import { init_Heroes } from '../08_GAME/Init_game/Heroes'
 import { initNoSelectionCircle } from '../08_GAME/Init_game/No_selection_circle'
@@ -29,6 +30,7 @@ import { initAsyncSlideInput } from '../Async_slide/AsyncSlideInput'
 import { init_customUI } from '../DisablingInterface/EnableDisableInterface'
 import { init_doubleKill } from '../Double_heroes/double_kill'
 import { init_shortcurt_cancelRedo } from '../Keyboard_shortcuts/Cancel_redo'
+import { startDesyncProbeAtGameStart } from '../Log/DesyncProbe'
 import { init_E2ETests } from '../Test/e2e-tests/base/e2e-tests-registering'
 import { init_Test } from '../Test/test'
 import { initArrays } from './initArrays'
@@ -37,11 +39,13 @@ import { initOldTriggers } from './init_old_triggers'
 
 export const initializers = () => {
     init_globals()
+    startDesyncProbeAtGameStart() // first: a desync at the start of a game comes before any command
     init_dataFromWorleditor()
     init_terrain_limit_variables()
     initArrays()
     initContactChunks() // before any monster unit exists: each of them registers itself as it appears
     initAsyncHeroSync() // the channel a contact is told through, ready before any hero can touch one
+    initMortarSplash() // what a mortar shell does to a hero sliding as an effect, told through that channel
     initContactCheck() // what finds the contacts of every hero, the immolation being gone
     initAsyncSlideInput() // the local cursor and click an async slide is steered with
     init_StartAndEnd()

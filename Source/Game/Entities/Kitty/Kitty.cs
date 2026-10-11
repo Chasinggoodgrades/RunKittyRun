@@ -53,6 +53,33 @@ public class Kitty : IFloatingTags, ICircleOwner
     public CommandTier CommandTier { get; set; } = CommandTier.All;
     public KittyAsyncEffect AsyncEffect { get; set; }
 
+    /// <summary>Scale a Kitty unit has by default (and again after a reset).</summary>
+    public const float DefaultModelScale = 0.60f;
+
+    /// <summary>
+    /// The scale the Kitty unit is drawn at. Warcraft has no getter for it, so everything that
+    /// changes it goes through SetModelScale and the stand-in effect (KittyAsyncEffect) follows.
+    /// </summary>
+    public float ModelScale { get; private set; } = DefaultModelScale;
+
+    /// <summary>Scales the unit and the async stand-in effect alike.</summary>
+    public void SetModelScale(float scale)
+    {
+        ModelScale = scale;
+        Unit.SetScale(scale, scale, scale);
+        AsyncEffect?.RefreshScale(); // re-hides the unit when the effect stands in
+    }
+
+    /// <summary>
+    /// The unit was given a scale by something other than SetModelScale (a new skin starts from the
+    /// default one): only tell the effect, the unit is already right.
+    /// </summary>
+    public void NotifyModelScale(float scale)
+    {
+        ModelScale = scale;
+        AsyncEffect?.RefreshScale();
+    }
+
     public Kitty(player player)
     {
         Player = player;
@@ -113,17 +140,15 @@ public class Kitty : IFloatingTags, ICircleOwner
             Slider.PauseSlider();
             RTR.PauseRTR();
             aiController.PauseAi();
+            AsyncEffect?.ApplyDeathPointToUnit(); // dies where the player saw it touch the wolf
             Unit.Kill();
 
             // Update status flags
             if (!ProtectionActive) Alive = false;
 
-            if (AsyncEffect != null && AsyncEffect.IsActive)
-            {
-                var deathState = AsyncEffect.GetLocalMovementState();
-                AsyncEffect.ApplyDeath(0, deathState);
-                AsyncKittySync.SendDeath(AsyncEffect.KittyId, deathState);
-            }
+            // The collision that killed this Kitty is a synced unit event, so every machine
+            // stands the stand-in effect down on the same turn: no death packet is needed.
+            AsyncEffect?.Hide();
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);

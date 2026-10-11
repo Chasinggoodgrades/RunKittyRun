@@ -1,5 +1,7 @@
 import { animUtils } from 'Utils/AnimUtils'
+import { getUdgEscapers, udg_monsters } from '../../../../globals'
 import { errorHandler } from '../../../Utils/mapUtils'
+import { sendAsyncCasterAim, setAsyncCasterAimHandler } from '../../08_GAME/Contact/AsyncHeroSync'
 import { Natives } from '../../wc3_natives_unsecured/Natives'
 import { Escaper } from '../Escaper/Escaper'
 import { Hero2Escaper } from '../Escaper/Escaper_functions'
@@ -14,6 +16,18 @@ let caster: Caster | undefined
 const PRECISION_TIR = 40
 const PRECISION_DIFF_POS_HERO = 20
 const ECART_CHECK = 0.05
+
+/**
+ * How long a caster waits for the machine of a hero sliding as an effect to tell what to do about it
+ * (see requestAsyncAim). Past that, its player is most likely gone, and the caster looks for a target again.
+ */
+const ASYNC_AIM_TIMEOUT = 2
+
+/** What a caster does about a hero: the same numbers travel in the answer of the machine of an async hero */
+const AIM = { outOfRange: 0, noShot: 1, shoot: 2, noIntersection: 3 }
+
+/** What computeAim found, reused rather than made at every attempt */
+const aim = { result: AIM.outOfRange, angle: 0 }
 
 let x1: number
 let y1: number
@@ -102,21 +116,163 @@ const TrouverTempsIdeal = (tempsMax: number): number => {
     return tempsIdeal
 }
 
-const CasterTryToShoot = () => {
-    let xHero: number = 0
-    let yHero: number = 0
+/**
+ * What `caster` does about the hero of `escaper`, from where this machine sees that hero: out of its
+ * range (or dead), no shot that can reach it, or a shot at aim.angle. Changes nothing of the game:
+ * for a hero sliding as an effect, only the machine of that hero runs it, and tells the others.
+ */
+const computeAim = () => {
+    let xHero: number
+    let yHero: number
     let tempsMax: number
     let tempsIdeal: number
-    let angleDeTir: number
     let sensPoint1positif: boolean
     let sensPoint2positif: boolean
     let tempsPoint1: number
     let tempsPoint2: number
+
+    aim.result = AIM.outOfRange
+    aim.angle = 0
+
+    const hero = escaper.getHero()
+
+    //vérification que l'escaper est shootable (vivant et à portée de tir)
+    if (!caster || !hero || !escaper.isAlive()) {
+        return
+    }
+
+    x1 = escaper.getHeroX()
+    y1 = escaper.getHeroY()
+    x3 = caster.getX()
+    y3 = caster.getY()
+
+    //vérification que le héros est à portée de tir
+    if (SquareRoot((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3)) > caster.getRange()) {
+        return
+    }
+
+    if (escaper.isSliding()) {
+        sliderSpeed = escaper.getSlideSpeed()
+    } else if (GetUnitCurrentOrder(hero) != 0) {
+        sliderSpeed = escaper.getWalkSpeed()
+    } else {
+        sliderSpeed = 0
+    }
+
+    if (sliderSpeed === 0) {
+        xHero = x1
+        yHero = y1
+    } else {
+        CalculerPointsIntersections()
+        if (sliderSpeed < 0) {
+            sliderSpeed = -sliderSpeed
+        }
+        if (k1 === 0 && k2 === 0) {
+            aim.result = AIM.noIntersection
+            return
+        }
+
+        //sens points
+        if (CosBJ(angleSlider) !== 0) {
+            sensPoint1positif = (Xk1 - x1) * CosBJ(angleSlider) > 0
+            sensPoint2positif = (Xk2 - x1) * CosBJ(angleSlider) > 0
+        } else {
+            sensPoint1positif = (Yk1 - y1) * SinBJ(angleSlider) > 0
+            sensPoint2positif = (Yk2 - y1) * SinBJ(angleSlider) > 0
+        }
+
+        //déterminer lequel des deux points d'intersection est devant le héros
+        if (sensPoint1positif === sensPoint2positif) {
+            //calcul du temps pour chaque point pour trouver le plus éloigné qui est le bon
+            tempsPoint1 = SquareRoot((x1 - Xk1) * (x1 - Xk1) + (y1 - Yk1) * (y1 - Yk1)) / sliderSpeed
+            tempsPoint2 = SquareRoot((x1 - Xk2) * (x1 - Xk2) + (y1 - Yk2) * (y1 - Yk2)) / sliderSpeed
+            if (tempsPoint1 > tempsPoint2) {
+                XintersectionDevantHeros = Xk1
+                YintersectionDevantHeros = Yk1
+                tempsMax = tempsPoint1
+            } else {
+                XintersectionDevantHeros = Xk2
+                YintersectionDevantHeros = Yk2
+                tempsMax = tempsPoint2
+            }
+        } else {
+            if (sensPoint1positif) {
+                XintersectionDevantHeros = Xk1
+                YintersectionDevantHeros = Yk1
+                tempsMax = SquareRoot((x1 - Xk1) * (x1 - Xk1) + (y1 - Yk1) * (y1 - Yk1)) / sliderSpeed
+            } else {
+                XintersectionDevantHeros = Xk2
+                YintersectionDevantHeros = Yk2
+                tempsMax = SquareRoot((x1 - Xk2) * (x1 - Xk2) + (y1 - Yk2) * (y1 - Yk2)) / sliderSpeed
+            }
+        }
+
+        //trouver temps idéal
+        if (escaper.isHeroOnGround()) {
+            tempsIdeal = TrouverTempsIdeal(tempsMax)
+        } else {
+            tempsIdeal = -1
+        }
+        if (tempsIdeal === -1) {
+            aim.result = AIM.noShot
+            return
+        }
+
+        xHero = x1 + sliderSpeed * CosBJ(angleSlider) * tempsIdeal
+        yHero = y1 + sliderSpeed * SinBJ(angleSlider) * tempsIdeal
+    }
+
+    aim.result = AIM.shoot
+    aim.angle = Atan2BJ(yHero - y3, xHero - x3)
+}
+
+/** The shot itself, made by every machine on the same turn */
+const shoot = (shooter: Caster, angle: number) => {
+    if (!shooter.isEnabled() || !shooter.u) {
+        return
+    }
+
+    SetUnitFacing(shooter.u, angle)
+    animUtils.setAnimation(shooter.u, shooter.getAnimation())
+    new CasterShot(
+        shooter.getProjectileMonsterType(),
+        shooter.getX(),
+        shooter.getY(),
+        angle,
+        shooter.getProjectileSpeed(),
+        shooter.getRange()
+    )
+}
+
+/**
+ * A hero sliding as an effect is only seen where it really is by its own machine, and the caster aims
+ * at that effect: so that machine alone works the shot out, and tells every machine, which all shoot
+ * or not on the same turn (see applyAsyncCasterAim). Worked out by each machine from where it sees the
+ * effect, the shot was made on some of them only, and the reload differed. The caster waits meanwhile.
+ */
+const requestAsyncAim = (shooter: Caster, target: Escaper) => {
+    shooter.asyncAimRequest++
+    shooter.isAsyncAimPending = true
+    // busy: a hero coming in range does not start it again while it waits
+    shooter.canShoot = false
+
+    // looked for a target again if no answer comes
+    shooter.t && TimerStart(shooter.t, ASYNC_AIM_TIMEOUT, false, errorHandlerCasterTryToShoot)
+
+    if (GetLocalPlayer() === target.getPlayer()) {
+        caster = shooter
+        escaper = target
+        computeAim()
+
+        sendAsyncCasterAim(shooter.getId(), shooter.asyncAimRequest, target.getId(), aim.result, aim.angle)
+    }
+}
+
+const CasterTryToShoot = () => {
     let escapersToShoot: Escaper[] = []
     let nbRemainingEscapersToShoot: number
     let i: number
     let tirOk = false
-    let estShootable: boolean
     let numEscaper: number
 
     //récupération du caster et vérification qu'il existe toujours
@@ -124,6 +280,9 @@ const CasterTryToShoot = () => {
     if (!caster || !caster.u) {
         return
     }
+
+    // an answer that did not come in time is given up, and ignored if it comes late
+    caster.isAsyncAimPending = false
 
     //détermination des escapers à viser
     i = 0
@@ -140,120 +299,33 @@ const CasterTryToShoot = () => {
         const hero = escaper.getHero()
 
         if (hero) {
-            //vérification que l'escaper est shootable (vivant et à portée de tir)
-            estShootable = false
-            if (escaper.isAlive()) {
-                x1 = escaper.getHeroX()
-                y1 = escaper.getHeroY()
-                x3 = caster.getX()
-                y3 = caster.getY()
-
-                //vérification que le héros est à portée de tir
-                estShootable = SquareRoot((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3)) <= caster.getRange()
+            // where it really is, only its own machine knows: that machine decides, and tells the others
+            if (escaper.isHeroAsEffect() && escaper.isAlive()) {
+                requestAsyncAim(caster, escaper)
+                return
             }
 
-            if (!estShootable) {
-                caster.escaperOutOfRangeOrDead(escaper)
+            computeAim()
+
+            if (aim.result === AIM.noIntersection) {
+                return
+            }
+
+            if (aim.result === AIM.shoot) {
+                tirOk = true
+                shoot(caster, aim.angle)
+            } else {
+                if (aim.result === AIM.outOfRange) {
+                    caster.escaperOutOfRangeOrDead(escaper)
+                }
+
+                //on retire l'escaper du pick aléatoire
                 i = numEscaper
                 while (i !== nbRemainingEscapersToShoot - 1) {
                     escapersToShoot[i] = escapersToShoot[i + 1]
                     i = i + 1
                 }
                 nbRemainingEscapersToShoot = nbRemainingEscapersToShoot - 1
-            } else {
-                //tir si possible
-                if (escaper.isSliding()) {
-                    sliderSpeed = escaper.getSlideSpeed()
-                } else if (GetUnitCurrentOrder(hero) != 0) {
-                    sliderSpeed = escaper.getWalkSpeed()
-                } else {
-                    sliderSpeed = 0
-                }
-                if (sliderSpeed === 0) {
-                    xHero = x1
-                    yHero = y1
-                    tirOk = true
-                } else {
-                    CalculerPointsIntersections()
-                    if (sliderSpeed < 0) {
-                        sliderSpeed = -sliderSpeed
-                    }
-                    if (k1 === 0 && k2 === 0) {
-                        return
-                    }
-
-                    //sens points
-                    if (CosBJ(angleSlider) !== 0) {
-                        sensPoint1positif = (Xk1 - x1) * CosBJ(angleSlider) > 0
-                        sensPoint2positif = (Xk2 - x1) * CosBJ(angleSlider) > 0
-                    } else {
-                        sensPoint1positif = (Yk1 - y1) * SinBJ(angleSlider) > 0
-                        sensPoint2positif = (Yk2 - y1) * SinBJ(angleSlider) > 0
-                    }
-
-                    //déterminer lequel des deux points d'intersection est devant le héros
-                    if (sensPoint1positif === sensPoint2positif) {
-                        //calcul du temps pour chaque point pour trouver le plus éloigné qui est le bon
-                        tempsPoint1 = SquareRoot((x1 - Xk1) * (x1 - Xk1) + (y1 - Yk1) * (y1 - Yk1)) / sliderSpeed
-                        tempsPoint2 = SquareRoot((x1 - Xk2) * (x1 - Xk2) + (y1 - Yk2) * (y1 - Yk2)) / sliderSpeed
-                        if (tempsPoint1 > tempsPoint2) {
-                            XintersectionDevantHeros = Xk1
-                            YintersectionDevantHeros = Yk1
-                            tempsMax = tempsPoint1
-                        } else {
-                            XintersectionDevantHeros = Xk2
-                            YintersectionDevantHeros = Yk2
-                            tempsMax = tempsPoint2
-                        }
-                    } else {
-                        if (sensPoint1positif) {
-                            XintersectionDevantHeros = Xk1
-                            YintersectionDevantHeros = Yk1
-                            tempsMax = SquareRoot((x1 - Xk1) * (x1 - Xk1) + (y1 - Yk1) * (y1 - Yk1)) / sliderSpeed
-                        } else {
-                            XintersectionDevantHeros = Xk2
-                            YintersectionDevantHeros = Yk2
-                            tempsMax = SquareRoot((x1 - Xk2) * (x1 - Xk2) + (y1 - Yk2) * (y1 - Yk2)) / sliderSpeed
-                        }
-                    }
-
-                    //trouver temps idéal
-                    if (escaper.isHeroOnGround()) {
-                        tempsIdeal = TrouverTempsIdeal(tempsMax)
-                    } else {
-                        tempsIdeal = -1
-                    }
-                    if (tempsIdeal !== -1) {
-                        xHero = x1 + sliderSpeed * CosBJ(angleSlider) * tempsIdeal
-                        yHero = y1 + sliderSpeed * SinBJ(angleSlider) * tempsIdeal
-                        tirOk = true
-                    }
-                }
-
-                if (tirOk) {
-                    if (caster.isEnabled()) {
-                        angleDeTir = Atan2BJ(yHero - y3, xHero - x3)
-                        SetUnitFacing(caster.u, angleDeTir)
-                        animUtils.setAnimation(caster.u, caster.getAnimation())
-                        new CasterShot(
-                            caster.getProjectileMonsterType(),
-                            x3,
-                            y3,
-                            angleDeTir,
-                            caster.getProjectileSpeed(),
-                            caster.getRange()
-                        )
-                    }
-                } else {
-                    //on retire l'escaper du pick aléatoire
-                    i = numEscaper
-                    while (i !== nbRemainingEscapersToShoot - 1) {
-                        escapersToShoot[i] = escapersToShoot[i + 1]
-                        i = i + 1
-                    }
-                    nbRemainingEscapersToShoot = nbRemainingEscapersToShoot - 1
-                    tirOk = false
-                }
             }
         }
         //pas de n = n + 1
@@ -304,6 +376,10 @@ export class Caster extends Monster {
     public canShoot: boolean
     public t?: timer
     private enabled: boolean
+
+    /** The attempt waiting for the machine of a hero sliding as an effect to answer (see requestAsyncAim) */
+    public asyncAimRequest = 0
+    public isAsyncAimPending = false
 
     static anyTriggerWithinRangeId2Caster = new Map<number, Caster>()
     static anyTimerId2Caster = new Map<number, Caster>()
@@ -373,6 +449,7 @@ export class Caster extends Monster {
     createUnit = () => {
         this.nbEscapersInRange = 0
         this.canShoot = true
+        this.isAsyncAimPending = false
 
         super.createUnit(() => NewImmobileMonster(this.casterType.getCasterMonsterType(), this.x, this.y, this.angle))
 
@@ -449,3 +526,45 @@ export class Caster extends Monster {
         return output
     }
 }
+
+/**
+ * What the machine of a hero sliding as an effect told about a shot of that caster at it, applied by
+ * every machine on the same turn, the sender included.
+ */
+const applyAsyncCasterAim = (casterId: number, request: number, escaperId: number, result: number, angle: number) => {
+    const shooter = udg_monsters[casterId]
+
+    // an answer to an attempt given up since, or for a caster gone meanwhile
+    if (
+        !(shooter instanceof Caster) ||
+        !shooter.isAsyncAimPending ||
+        request !== shooter.asyncAimRequest ||
+        !shooter.u ||
+        !shooter.t
+    ) {
+        return
+    }
+
+    shooter.isAsyncAimPending = false
+
+    if (result === AIM.shoot) {
+        shoot(shooter, angle)
+        TimerStart(shooter.t, shooter.getLoadTime(), false, errorHandlerCasterTryToShoot)
+        shooter.canShoot = false
+        return
+    }
+
+    if (result === AIM.outOfRange) {
+        const target = getUdgEscapers().get(escaperId)
+        target && shooter.escaperOutOfRangeOrDead(target)
+    }
+
+    if (shooter.nbEscapersInRange === 0) {
+        PauseTimer(shooter.t)
+        shooter.canShoot = true
+    } else {
+        TimerStart(shooter.t, result === AIM.outOfRange ? 0 : ECART_CHECK, false, errorHandlerCasterTryToShoot)
+    }
+}
+
+setAsyncCasterAimHandler(applyAsyncCasterAim)

@@ -36,6 +36,7 @@ import { MEC_core_API } from '../../API/MEC_core_API'
 import { udg_doubleHeroesEnabled } from '../../Double_heroes/double_heroes_config'
 import { setDesyncProbeEnabled } from '../../Log/DesyncProbe'
 import { flushLogs } from '../../Log/log'
+import { startTurnMeasure } from '../../Log/TurnMeasure'
 import { e2e } from '../../Test/e2e-tests/base/e2e-tests-base'
 import { Natives } from '../../wc3_natives_unsecured/Natives'
 import { isPlayerId, resolvePlayerId, USAGE } from '../Helpers/Command_functions'
@@ -989,16 +990,18 @@ export const initExecuteCommandMax = () => {
         },
     })
 
-    //-desyncProbe <boolean>   --> prints, once a second on every machine, what must be the same on all of them
+    //-desyncProbe <boolean>   --> writes, on every machine, what must be the same on all of them
     registerCommand({
         name: 'desyncProbe',
         alias: [],
         group,
         argDescription: '<boolean>',
         description:
-            'Writes, once a second and on every machine, values that must be the same on all of them, to ' +
-            'CustomMapData/MEC/desync_probe_p<player number>.txt. After a desync, every player sends their file: ' +
-            'the first value that differs at the same probe tick shows what diverged.',
+            'Writes, five times a second and on every machine, values that must be the same on all of them, to ' +
+            'CustomMapData/MEC/desync_probe_p<player number>.txt (the last minute, written once a second) and ' +
+            'desync_probe_p<player number>_last.txt (the last 5 seconds, written at every probe, which the machine ' +
+            'a desync drops still has). After a desync, every player sends both files: the first value that ' +
+            'differs at the same probe tick shows what diverged.',
         cb: ({ nbParam, param1 }, escaper) => {
             if (nbParam !== 1 || !IsBoolString(param1)) {
                 return USAGE
@@ -1008,9 +1011,36 @@ export const initExecuteCommandMax = () => {
             Text.mkP(
                 escaper.getPlayer(),
                 S2B(param1)
-                    ? 'Desync probe on: every machine writes its last minute to CustomMapData/MEC/desync_probe_p<player number>.txt'
+                    ? 'Desync probe on: every machine writes its last minute to CustomMapData/MEC/desync_probe_p<player number>.txt and its last 5 seconds to desync_probe_p<player number>_last.txt'
                     : 'Desync probe off'
             )
+
+            return true
+        },
+    })
+
+    //-measureTurn   --> measures how the native SetUnitFacing turns your hero, into CustomMapData/MEC/turn_measure.txt
+    registerCommand({
+        name: 'measureTurn',
+        alias: [],
+        group,
+        argDescription: '',
+        description:
+            'Measures how the native SetUnitFacing turns your hero, for about 40 seconds, into CustomMapData/MEC/turn_measure.txt. ' +
+            'Stand on walkable ground and give your hero no order until it is done.',
+        cb: ({ noParam }, escaper) => {
+            if (!noParam) {
+                return true
+            }
+
+            const error = startTurnMeasure(escaper)
+
+            if (error) {
+                Text.erP(escaper.getPlayer(), 'Turn measure not started: ' + error)
+                return true
+            }
+
+            Text.mkP(escaper.getPlayer(), 'Turn measure started: give your hero no order until it is done')
 
             return true
         },

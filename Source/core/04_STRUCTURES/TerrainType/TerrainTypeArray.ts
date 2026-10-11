@@ -136,13 +136,14 @@ export class TerrainTypeArray extends BaseArray<TerrainType> {
         terrainTypeId: number,
         slideSpeed: number,
         canTurn: boolean,
-        rotationSpeed: number | null = null
+        rotationSpeed: number | null = null,
+        slideInertia: number | null = null
     ) => {
         if (this.isLabelAlreadyUsed(label)) throw `TerrainType label already used: "${label}"`
         if (this.isTerrainTypeIdAlreadyUsed(terrainTypeId)) throw 'Terrain type already used'
         if (terrainTypeId === 0) throw 'Wrong terrain type'
 
-        const tt = new TerrainTypeSlide(label, terrainTypeId, slideSpeed, canTurn, rotationSpeed)
+        const tt = new TerrainTypeSlide(label, terrainTypeId, slideSpeed, canTurn, rotationSpeed, slideInertia)
         this._new(tt)
         ServiceManager.getService('React').forceUpdate()
         return tt
@@ -269,7 +270,9 @@ export class TerrainTypeArray extends BaseArray<TerrainType> {
                         terrainTypeId,
                         terrainTypeJson.slideSpeed,
                         terrainTypeJson.canTurn,
-                        terrainTypeJson.rotationSpeed
+                        terrainTypeJson.rotationSpeed,
+                        // absent from the data saved before it existed: the normal inertia then
+                        terrainTypeJson.slideInertia ?? null
                     )
 
                     break

@@ -28,9 +28,9 @@ import { TurnOnSlide } from '../../07_TRIGGERS/Slide_and_CheckTerrain_triggers/T
 import { Apm } from '../../08_GAME/Apm_clics_par_minute/Apm'
 import { Cpm } from '../../08_GAME/Apm_clics_par_minute/Cpm'
 import { Globals } from '../../09_From_old_Worldedit_triggers/globals_variables_and_triggers'
-import { setClickCatcherEnabled } from '../../Async_slide/AsyncSlideInput'
 import { AUTO_TURN_MODES, AutoTurnMode, getAutoTurnMode, setAutoTurnMode } from '../../Async_slide/AutoTurn'
-import { isTestingLeftClicks, setTestLeftClicks } from '../../Async_slide/HeroEffect'
+import { isTestingAsyncClicks, setTestAsyncClicks } from '../../Async_slide/HeroEffect'
+import { setSlideTurnDebugEnabled } from '../../Async_slide/SlideTurnDebug'
 import { PRESS_TIME_TO_ENABLE_FOLLOW_MOUSE } from '../../Follow_mouse/Follow_mouse'
 import { GetStringAssignedFromCommand, KeyboardShortcut } from '../../Keyboard_shortcuts/KeyboardShortcut'
 import { Natives } from '../../wc3_natives_unsecured/Natives'
@@ -1922,13 +1922,14 @@ export const initCommandAll = () => {
         },
     })
 
-    //-autoTurn(at) async|sync|off   --> steers the hero towards the mouse while sliding
+    //-autoTurn(at) async|asyncClicks|sync|off   --> steers the hero towards the mouse while sliding
     registerCommand({
         name: 'autoTurn',
         alias: ['at'],
         group,
-        argDescription: 'async | sync | off',
-        description: 'Turns the hero towards the mouse while sliding: async is instant, sync goes through the network',
+        argDescription: 'async | asyncClicks | sync | off',
+        description:
+            'Turns the hero towards the mouse while sliding: async is instant, sync goes through the network. asyncClicks does not follow the mouse: the hero turns towards your right clicks, at once',
         cb: ({ param1 }, escaper) => {
             if (param1.length === 0) {
                 Text.mkP(escaper.getPlayer(), `Auto turn is ${getAutoTurnMode(escaper.getId())}`)
@@ -1936,7 +1937,7 @@ export const initCommandAll = () => {
             }
 
             if (AUTO_TURN_MODES.indexOf(param1 as AutoTurnMode) < 0) {
-                Text.erP(escaper.getPlayer(), USAGE + '-autoTurn async|sync|off')
+                Text.erP(escaper.getPlayer(), USAGE + '-autoTurn async|asyncClicks|sync|off')
                 return true
             }
 
@@ -1948,33 +1949,28 @@ export const initCommandAll = () => {
         },
     })
 
-    //-testLeftClicks(tlc) <boolean>   --> compares the local and the network left click
+    //-testAsyncClicks(tac) <boolean>   --> compares the local and the network clicks, left and right
     registerCommand({
-        name: 'testLeftClicks',
-        alias: ['tlc'],
+        name: 'testAsyncClicks',
+        alias: ['tac'],
         group,
         argDescription: '<boolean>',
-        description: 'Left click moves an effect locally and logs how much earlier it is than the network click',
+        description:
+            'Left and right clicks move an effect at once on your screen, and log how much earlier they are read than the network click. Only you see the effect and the logs',
         cb: ({ param1 }, escaper) => {
             if (param1.length === 0) {
-                param1 = B2S(!isTestingLeftClicks(escaper.getId()))
+                param1 = B2S(!isTestingAsyncClicks(escaper.getId()))
             }
 
             if (!IsBoolString(param1)) {
-                Text.erP(escaper.getPlayer(), USAGE + '-testLeftClicks <boolean>')
+                Text.erP(escaper.getPlayer(), USAGE + '-testAsyncClicks <boolean>')
                 return true
             }
 
-            setTestLeftClicks(escaper.getId(), S2B(param1))
+            setTestAsyncClicks(escaper.getId(), S2B(param1))
             updateAsyncNeeds(escaper)
 
-            // the catcher is what reads the local click, and it only listens on the machine of
-            // the player testing: enabling it for everybody would steal their left clicks
-            if (GetLocalPlayer() === escaper.getPlayer()) {
-                setClickCatcherEnabled(S2B(param1))
-            }
-
-            Text.mkP(escaper.getPlayer(), `Left click test ${S2B(param1) ? 'on' : 'off'}`)
+            Text.mkP(escaper.getPlayer(), `Async clicks test ${S2B(param1) ? 'on' : 'off'}`)
 
             return true
         },
@@ -2244,6 +2240,28 @@ export const initCommandAll = () => {
 
             escaper.setDisplayCollisionLandmarks(S2B(param1))
             Text.mkP(escaper.getPlayer(), `Debug collisions ${S2B(param1) ? 'enabled' : 'disabled'}`)
+
+            return true
+        },
+    })
+
+    // -debugSlideInertia
+    registerCommand({
+        name: 'debugSlideInertia',
+        alias: ['debsi'],
+        group,
+        argDescription: '<boolean>',
+        description:
+            'Shows two rays from your sliding hero, 700 long, the acceleration degrees of -physicalTurn times the inertia on each side of where it heads: ' +
+            'how far your hero turns from no rotation before reaching its maximum rotation speed. Red while your cursor is between them, green otherwise, none while your cursor is not known. ' +
+            'Only you see them. Nothing is shown while -legacySlideInertia is on.',
+        cb: ({ param1, nbParam }, escaper) => {
+            if (nbParam !== 1 || !IsBoolString(param1)) {
+                return USAGE
+            }
+
+            setSlideTurnDebugEnabled(escaper.getId(), S2B(param1))
+            Text.mkP(escaper.getPlayer(), `Debug slide inertia ${S2B(param1) ? 'enabled' : 'disabled'}`)
 
             return true
         },

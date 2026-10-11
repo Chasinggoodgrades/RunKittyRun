@@ -64,34 +64,68 @@ public static class InitCommands
             }
         );
 
-        //         AsyncEffect.Create();
+        // -async [on|off]: the Kitty is drawn as a stand-in effect that runs at the right click as
+        // soon as THIS machine reads it, a network latency before the move order lands.
         CommandsManager.RegisterCommand(
             name: "async",
-            alias: "",
+            alias: "asyncclicks",
             tier: CommandTier.Admin,
-            argDesc: "",
-            description: "Enables async test, on/off",
+            argDesc: "[on/off]",
+            description: "Draws your Kitty as an effect that reacts to your right click at once (async clicks). Flips it when no argument is given.",
             action: (player, args) =>
             {
                 var kitty = Globals.ALL_KITTIES[player];
+
+                if (kitty.ComputerControlled) return;
+
                 kitty.AsyncEffect = kitty.AsyncEffect ?? new KittyAsyncEffect(kitty);
 
-                if (args[0] == "")
+                // no argument flips the current state
+                var turnOn = args.Length == 0 || args[0] == "" ? !kitty.AsyncEffect.Enabled : CommandsManager.GetBool(args[0]);
+
+                if (turnOn)
                 {
-                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Invalid arguments. Usage: async [on/off]|r");
-                    return;
+                    if (!AsyncMouse.IsAvailable)
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Async clicks are unavailable: the mouse natives could not be reached.|r");
+                        return;
+                    }
+
+                    if (!kitty.AsyncEffect.Enable()) return;
+                }
+                else
+                {
+                    kitty.AsyncEffect.Disable();
                 }
 
-                var status = CommandsManager.GetBool(args[0]);
-
-                if (status)
-                    kitty.AsyncEffect.Create();
-                else
-                    kitty.AsyncEffect.Dispose();
-
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Async clicks: {(turnOn ? "On" : "Off")}{Colors.COLOR_RESET}");
             }
         );
 
+
+        // -asyncghost [percent|off]: shows the real (otherwise invisible) unit as a see-through ghost.
+        CommandsManager.RegisterCommand(
+            name: "asyncghost",
+            alias: "ghost",
+            tier: CommandTier.Admin,
+            argDesc: "[percent transparent|off]",
+            description: "Shows your real unit as a transparent ghost next to the async effect (default 80% transparent). 'off' hides it again.",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+
+                if (kitty.AsyncEffect == null) return;
+
+                int percent = KittyAsyncEffect.DefaultGhostPercent;
+                var arg = args.Length > 0 ? args[0] : "";
+
+                if (arg == "off" || arg == "0" || (arg == "" && kitty.AsyncEffect.GhostPercent > 0)) percent = 0;
+                else if (arg != "" && !int.TryParse(arg, out percent)) percent = KittyAsyncEffect.DefaultGhostPercent;
+
+                kitty.AsyncEffect.SetGhost(percent);
+                player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Async ghost: {(kitty.AsyncEffect.GhostPercent > 0 ? kitty.AsyncEffect.GhostPercent + "% transparent" : "Off")}{Colors.COLOR_RESET}");
+            }
+        );
 
         CommandsManager.RegisterCommand(
             name: "test34",
@@ -1285,14 +1319,14 @@ public static class InitCommands
 
                 if (args.Length < 2 || args[1] == "")
                 {
-                    Globals.ALL_KITTIES[player].Unit.SetScale(scale, scale, scale);
+                    Globals.ALL_KITTIES[player].SetModelScale(scale);
                     return;
                 }
 
                 CommandsManager.ResolvePlayerId(args[1], kitty =>
                 {
                     if (kitty == null) return;
-                    kitty.Unit.SetScale(scale, scale, scale);
+                    kitty.SetModelScale(scale);
                 });
             }
         );
@@ -1448,6 +1482,7 @@ public static class InitCommands
                 if (args.Length < 2 || args[1] == "")
                 {
                     BlzSetUnitSkin(Globals.ALL_KITTIES[player].Unit, skin);
+                    Globals.ALL_KITTIES[player].AsyncEffect?.ReapplyUnitHidden(true);
                     return;
                 }
 
@@ -1455,6 +1490,7 @@ public static class InitCommands
                 {
                     if (kitty == null) return;
                     BlzSetUnitSkin(kitty.Unit, skin);
+                    kitty.AsyncEffect?.ReapplyUnitHidden(true);
                 });
                 return;
             }
