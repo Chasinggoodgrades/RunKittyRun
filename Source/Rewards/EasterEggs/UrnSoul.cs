@@ -32,6 +32,7 @@ public static class UrnSoul
         u.AddAbility(FourCC("Agho")); // Ghost
         u.AddAbility(FourCC("Augh")); // Shade
         u.IsInvulnerable = true;
+        Utility.MakeUnitLocust(u);
         return u;
     }
 
