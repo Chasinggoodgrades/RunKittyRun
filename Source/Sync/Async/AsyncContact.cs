@@ -119,6 +119,9 @@ public static class AsyncContact
             if (distanceSquared > circleRadius * circleRadius) continue;
             if (candidate.Owner == k.Player) continue;
             if (!Globals.ALL_KITTIES.TryGetValue(candidate.Owner, out var circleKitty)) continue;
+
+            // every Kitty has a circle unit; it only means something while its Kitty is dead
+            if (circleKitty.Unit.Alive) continue;
             if (circleKitty.TeamID != k.TeamID) continue;
 
             int circleKey = candidate.Owner.Id * 2 + 1;

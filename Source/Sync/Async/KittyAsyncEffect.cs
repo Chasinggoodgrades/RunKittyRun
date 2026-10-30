@@ -110,6 +110,9 @@ public class KittyAsyncEffect
     // how far from the unit a stopped effect may stay without being moved at all
     private static float SETTLE_TOLERANCE => AsyncTuning.Get(29);
 
+    // a unit that moves further than a run of a few ticks plus this did not run: it was teleported
+    private const float TELEPORT_MARGIN = 25f;
+
     // seconds the unit has stood still before the effect starts easing the last few units onto it
     private static float SETTLE_DELAY => AsyncTuning.Get(28);
 
@@ -160,6 +163,14 @@ public class KittyAsyncEffect
     private float issuedOrderY;
     private float lastSteerTime = -10f;
     private float lastLocalTargetTime = -10f;
+    private bool hasPrevUnit;
+    private float prevUnitX;
+    private float prevUnitY;
+
+    // the course the effect was on when a contact stopped it, to take up again if the contact did not end it
+    private bool heldHadTarget;
+    private float heldTargetX;
+    private float heldTargetY;
     private float blockedTime;
     private bool stepWasBlocked;
     private int slideSide = 1;
@@ -302,6 +313,7 @@ public class KittyAsyncEffect
         correctionX = 0f;
         correctionY = 0f;
         notMovedTime = 0f;
+        hasPrevUnit = false;
 
         SetUnitHidden(true);
         Place();
@@ -683,9 +695,26 @@ public class KittyAsyncEffect
 
         if (IsFollowingUnit)
         {
+            hasPrevUnit = false;
             FollowUnit(unitX, unitY);
             return;
         }
+
+        // The unit jumped (Shard of Translocation, Fang of Shadows, a rewind, a summon, a command, a
+        // round reset): the effect goes with it at once rather than running after it. More than a run
+        // could cover in a few ticks counts as a jump; callers that know can say so with TeleportToUnit,
+        // which also catches the short ones. The unit's order, if any, carries on from the new place.
+        if (hasPrevUnit && Distance(prevUnitX, prevUnitY, unitX, unitY) > GetUnitMoveSpeed(kitty.Unit) * dt * 3f + TELEPORT_MARGIN)
+        {
+            prevUnitX = unitX;
+            prevUnitY = unitY;
+            JumpToUnit(unitX, unitY);
+            return;
+        }
+
+        prevUnitX = unitX;
+        prevUnitY = unitY;
+        hasPrevUnit = true;
 
         if (Distance(x, y, unitX, unitY) > SNAP_DISTANCE)
         {
@@ -705,6 +734,40 @@ public class KittyAsyncEffect
         }
 
         ShowAnimation(moved);
+        Place();
+        DetectContact();
+    }
+
+    /// <summary>
+    /// For anything that moves the unit in one go: the effect is put where the unit now is. Detected
+    /// by itself within a tick; this is for callers that want it that very moment.
+    /// </summary>
+    public void TeleportToUnit()
+    {
+        if (!IsActive || kitty.Unit == null) return;
+
+        prevUnitX = kitty.Unit.X;
+        prevUnitY = kitty.Unit.Y;
+        hasPrevUnit = true;
+        JumpToUnit(kitty.Unit.X, kitty.Unit.Y);
+    }
+
+    private void JumpToUnit(float unitX, float unitY)
+    {
+        x = unitX;
+        y = unitY;
+        correctionX = 0f;
+        correctionY = 0f;
+        lastUnitX = unitX;
+        lastUnitY = unitY;
+        stillTime = 0f;
+        blockedTime = 0f;
+        orderGraceUntil = AsyncKittySync.Now + ORDER_START_GRACE;
+
+        facing = GetUnitFacing(kitty.Unit);
+
+        // what it was running to is kept: the unit carries on to it from its new place.
+        // (What it touches there is judged as ever: a wolf at the new place is a new touch.)
         Place();
         DetectContact();
     }
@@ -1094,9 +1157,17 @@ public class KittyAsyncEffect
 
         if (!AsyncContact.TryDetect(kitty, x, y, touching, out var kind, out var id)) return;
 
-        contactHoldUntil = AsyncKittySync.Now + CONTACT_HOLD_TIMEOUT;
-        hasTarget = false;
-        pendingLocal = false;
+        // A revive circle is no danger: the effect runs on while the network revives the teammate.
+        // A wolf stops it where it was seen to touch, since the Kitty most likely dies there.
+        if (kind != AsyncContact.KIND_CIRCLE)
+        {
+            contactHoldUntil = AsyncKittySync.Now + CONTACT_HOLD_TIMEOUT;
+            heldHadTarget = hasTarget;
+            heldTargetX = targetX;
+            heldTargetY = targetY;
+            hasTarget = false;
+            pendingLocal = false;
+        }
 
         AsyncKittySync.SendContact(KittyId, kind, id, x, y);
     }
@@ -1105,6 +1176,16 @@ public class KittyAsyncEffect
     public void ReleaseContactHold()
     {
         contactHoldUntil = 0;
+
+        // it survived the touch (an invulnerable Kitty, a wolf that was reviving): back on its way
+        if (heldHadTarget && IsActive && !hasTarget)
+        {
+            hasTarget = true;
+            targetX = heldTargetX;
+            targetY = heldTargetY;
+        }
+
+        heldHadTarget = false;
     }
 
     /// <summary>Every machine learns where the effect was at the touch, from the packet: the same numbers everywhere.</summary>

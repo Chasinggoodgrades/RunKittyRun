@@ -66,6 +66,7 @@ public class ShadowKitty
     {
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         kitty.SetPosition(Unit.X, Unit.Y);
+        Globals.ALL_KITTIES[Player].AsyncEffect?.TeleportToUnit(); // the async effect goes with it, however short the hop
     }
 
     /// <summary>
