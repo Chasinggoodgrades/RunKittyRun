@@ -26,7 +26,7 @@ namespace Launcher
 
         // Output
         //private const string OUTPUT_FOLDER_PATH = @"..\..\..\..\artifacts";
-        private const string OUTPUT_FOLDER_PATH = @"C:\Users\chase\OneDrive\Documents\Warcraft III\Maps\RKRTest";
+        private static readonly string OUTPUT_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III", "Maps", "RKRTEST");
 
 
         private static string OUTPUT_SCRIPT_NAME = @$"war3map_{MapDesc.VERSION}.lua";
@@ -121,16 +121,13 @@ namespace Launcher
                         IsCommentsDisabled = !DEBUG,
                     };
 
+                    Console.WriteLine($"\n\nCompiling...\n\n");
+
                     // Collect required paths and compile
-                    Console.WriteLine("X");
                     var coreSystemFiles = CSharpLua.CoreSystem.CoreSystemProvider.GetCoreSystemFiles(CSharpLua.CoreSystem.Wc3Api.WCSharp, GetCoreSystemDirectory());
-                    Console.WriteLine("Y");
                     var blizzardJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/Blizzard.j");
-                    Console.WriteLine("Z");
                     var commonJ = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III/JassHelper/common.j");
-                    Console.WriteLine("Compiling C# to Lua...");
                     var compileResult = map.CompileScript(compiler, coreSystemFiles, blizzardJ, commonJ);
-                    Console.WriteLine("Compilation finished.");
 
                     // If compilation failed, output an error
                     if (!compileResult.Success)
@@ -150,6 +147,8 @@ namespace Launcher
 
                     // Update war3map.lua so you can inspect the generated Lua code easily
                     File.WriteAllText(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_SCRIPT_NAME), map.Script);
+
+                    Console.WriteLine($"\n\nCompilation finished, map output in {OUTPUT_FOLDER_PATH}\n\n");
                 }
                 else
                 {

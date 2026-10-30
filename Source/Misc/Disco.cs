@@ -40,8 +40,20 @@ public class Disco : IDisposable
 
     private void DiscoActions()
     {
-        SetUnitColor(this.Unit, ConvertPlayerColor(GetRandomInt(0, 24)));
-        Blizzard.SetUnitVertexColorBJ(this.Unit, Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), Blizzard.GetRandomPercentageBJ(), GetRandomReal(0, 25));
+        int colorIndex = GetRandomInt(0, 24);
+        SetUnitColor(this.Unit, ConvertPlayerColor(colorIndex));
+
+        float r = Blizzard.GetRandomPercentageBJ();
+        float g = Blizzard.GetRandomPercentageBJ();
+        float b = Blizzard.GetRandomPercentageBJ();
+        Blizzard.SetUnitVertexColorBJ(this.Unit, r, g, b, GetRandomReal(0, 25));
+
+        // a Kitty's async effect dances with it
+        if (Globals.ALL_KITTIES.TryGetValue(this.Unit.Owner, out var kitty) && kitty.Unit == this.Unit)
+        {
+            kitty.NotifyTeamColor(colorIndex);
+            kitty.NotifyVertexColor((int)(r * 2.55f), (int)(g * 2.55f), (int)(b * 2.55f));
+        }
     }
 
 }

@@ -28,13 +28,15 @@ public static class AsyncKittySync
 {
     private const string POSITION_PREFIX = "Aches_POS";
     private const string CONTACT_PREFIX = "Aches_Contact";
+    private const string STEER_PREFIX = "Aches_Steer";
+    private static readonly int ORDER_MOVE_ID = OrderId("move");
     private const char FIELD_SEPARATOR = '|';
 
     /// <summary>Movement and input rate: fine enough to look smooth, as the effect is only ever drawn.</summary>
-    private const float TICK_PERIOD = 0.01f;
+    private static float TICK_PERIOD => AsyncTuning.Get(22);
 
-    /// <summary>Ten a second: matches AsyncHeroSync.ts POSITION_PERIOD.</summary>
-    private const float POSITION_PERIOD = 0.1f;
+    /// <summary>Twenty a second by default (the TS version sent ten); tunable with -asynctune positionperiod.</summary>
+    private static float POSITION_PERIOD => AsyncTuning.Get(20);
 
     private static bool isInitialized;
     private static timer tickTimer;
@@ -55,15 +57,24 @@ public static class AsyncKittySync
         AsyncMouse.Initialize();
         Screen2World.Initialize();
         AsyncContact.Initialize();
+        AsyncSkinModels.Initialize();
 
         RegisterPositionEvent();
         RegisterContactEvent();
+        RegisterSteerEvent();
 
         tickTimer = timer.Create();
         tickTimer.Start(TICK_PERIOD, true, ErrorHandler.Wrap(Tick));
 
         positionTimer = timer.Create();
         positionTimer.Start(POSITION_PERIOD, true, ErrorHandler.Wrap(BroadcastLocalPosition));
+    }
+
+    /// <summary>Applies a changed position period (-asynctune positionperiod) to the running timer.</summary>
+    public static void ApplyTuning()
+    {
+        positionTimer?.Start(POSITION_PERIOD, true, ErrorHandler.Wrap(BroadcastLocalPosition));
+        tickTimer?.Start(TICK_PERIOD, true, ErrorHandler.Wrap(Tick));
     }
 
     private static void Tick()
@@ -209,6 +220,46 @@ public static class AsyncKittySync
     /// Tells every machine, this one included, what the effect of the Kitty this machine owns just
     /// touched, and where it stood. Only its owner calls this: it is the only one knowing.
     /// </summary>
+    /// <summary>
+    /// Owner only: asks every machine to give the Kitty's unit a move order to this point. Used while
+    /// the right button is held, when the game does not keep issuing orders itself, and throttled by
+    /// the effect (an order only now and then, and only when the target moved far enough).
+    /// </summary>
+    public static void SendSteer(int kittyId, float x, float y)
+    {
+        BlzSendSyncData(STEER_PREFIX, $"{kittyId}{FIELD_SEPARATOR}{Whole(x)}{FIELD_SEPARATOR}{Whole(y)}");
+    }
+
+    private static void RegisterSteerEvent()
+    {
+        var trig = trigger.Create();
+
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            trig.RegisterPlayerSyncEvent(player, STEER_PREFIX, false);
+        }
+
+        trig.AddAction(() =>
+        {
+            var sender = GetTriggerPlayer();
+            if (sender == null) return;
+
+            var fields = BlzGetTriggerSyncData().Split(FIELD_SEPARATOR);
+            if (fields.Length < 3) return;
+
+            // a player only ever speaks for their own Kitty
+            if (sender.Id != int.Parse(fields[0])) return;
+            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+
+            var fx = kitty.AsyncEffect;
+            if (fx == null || !fx.IsActive) return;
+            if (!kitty.Unit.Alive || kitty.Unit.IsPaused) return;
+
+            // the same order on every machine, on the same turn
+            IssuePointOrderById(kitty.Unit, ORDER_MOVE_ID, int.Parse(fields[1]), int.Parse(fields[2]));
+        });
+    }
+
     public static void SendContact(int kittyId, int kind, int id, float x, float y)
     {
         BlzSendSyncData(CONTACT_PREFIX, $"{kittyId}{FIELD_SEPARATOR}{kind}{FIELD_SEPARATOR}{id}{FIELD_SEPARATOR}{Whole(x)}{FIELD_SEPARATOR}{Whole(y)}");

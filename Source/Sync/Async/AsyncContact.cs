@@ -43,22 +43,49 @@ public static class AsyncContact
         });
     }
 
+    private static readonly List<int> scanKeys = new List<int>();
+
     /// <summary>
-    /// What the Kitty touches at that point, if anything. Same filters as the unit triggers in
-    /// CollisionDetection, so the effect is held to exactly the rules the unit was.
+    /// What the Kitty has just started touching at that point, if anything. Like the unit triggers
+    /// in CollisionDetection (an "enters range" event), only a NEW touch counts: what the Kitty
+    /// already overlapped stays harmless until it has left and come back. <paramref name="touching"/>
+    /// is that memory, one per Kitty.
     /// </summary>
-    public static bool TryDetect(Kitty k, float x, float y, out int kind, out int id)
+    public static bool TryDetect(Kitty k, float x, float y, HashSet<int> touching, out int kind, out int id)
     {
         kind = 0;
         id = 0;
 
         if (scratch == null || !k.Alive || !k.Unit.Alive) return false;
 
+        return Scan(k, x, y, touching, false, out kind, out id);
+    }
+
+    /// <summary>
+    /// Remembers what the Kitty overlaps right now without reacting to it: called when the effect
+    /// appears (a revive), which gives the grace the unit had of surviving a wolf it was revived on.
+    /// </summary>
+    public static void Seed(Kitty k, float x, float y, HashSet<int> touching)
+    {
+        touching.Clear();
+
+        if (scratch == null) return;
+
+        Scan(k, x, y, touching, true, out _, out _);
+    }
+
+    private static bool Scan(Kitty k, float x, float y, HashSet<int> touching, bool seedOnly, out int kind, out int id)
+    {
+        kind = 0;
+        id = 0;
+
+        bool hit = false;
         float wolfRadius = k.CurrentStats.CollisonRadius;
         float circleRadius = CollisionDetection.CIRCLE_COLLISION_RADIUS;
         float range = wolfRadius > circleRadius ? wolfRadius : circleRadius;
 
         found.Clear();
+        scanKeys.Clear();
         GroupEnumUnitsInRange(scratch, x, y, range, collector);
 
         for (int i = 0; i < found.Count; i++)
@@ -70,15 +97,21 @@ public static class AsyncContact
 
             if (GetUnitTypeId(candidate) == Constants.UNIT_CUSTOM_DOG)
             {
-                if (k.Invulnerable) continue;
                 if (distanceSquared > wolfRadius * wolfRadius) continue;
                 if (!candidate.Alive) continue;
                 if (!Globals.ALL_WOLVES.TryGetValue(candidate, out var wolf)) continue;
-                if (wolf.IsReviving) continue;
+
+                // overlapping counts as "touching" even when it cannot hurt right now (invulnerable,
+                // wolf reviving): it must not become a surprise touch the moment that ends
+                int key = wolf.Id * 2;
+                scanKeys.Add(key);
+
+                if (hit || seedOnly || k.Invulnerable || wolf.IsReviving || touching.Contains(key)) continue;
 
                 kind = KIND_WOLF;
                 id = wolf.Id;
-                return true;
+                hit = true;
+                continue;
             }
 
             // a revive circle
@@ -88,11 +121,19 @@ public static class AsyncContact
             if (!Globals.ALL_KITTIES.TryGetValue(candidate.Owner, out var circleKitty)) continue;
             if (circleKitty.TeamID != k.TeamID) continue;
 
+            int circleKey = candidate.Owner.Id * 2 + 1;
+            scanKeys.Add(circleKey);
+
+            if (hit || seedOnly || touching.Contains(circleKey)) continue;
+
             kind = KIND_CIRCLE;
             id = candidate.Owner.Id;
-            return true;
+            hit = true;
         }
 
-        return false;
+        touching.Clear();
+        for (int i = 0; i < scanKeys.Count; i++) touching.Add(scanKeys[i]);
+
+        return hit;
     }
 }

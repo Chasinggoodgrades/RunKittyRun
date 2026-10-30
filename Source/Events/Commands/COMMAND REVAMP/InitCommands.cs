@@ -127,6 +127,122 @@ public static class InitCommands
             }
         );
 
+        // -asyncinfo: what the async effect is doing right now (positions, gap, target, blocked time).
+        CommandsManager.RegisterCommand(
+            name: "asyncinfo",
+            alias: "asyncstate",
+            tier: CommandTier.Admin,
+            argDesc: "",
+            description: "Prints the state of your async effect: its position against the unit's, the gap, the target and how long it has been blocked.",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+
+                if (kitty.AsyncEffect == null)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No async effect yet: use -async first.|r");
+                    return;
+                }
+
+                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_GOLD}Async:|r {kitty.AsyncEffect.Describe()}");
+            }
+        );
+
+        // -asynctune [name] [value|reset]: lists, shows or changes the numbers the async effect runs on.
+        CommandsManager.RegisterCommand(
+            name: "asynctune",
+            alias: "atune",
+            tier: CommandTier.Admin,
+            argDesc: "[name] [value] | reset",
+            description: "Tunes the async effect live. No argument lists every value, 'reset' restores the defaults, a name shows it, a name and a number sets it.",
+            action: (player, args) =>
+            {
+                var first = args.Length > 0 ? args[0] : "";
+
+                if (first == "reset")
+                {
+                    AsyncTuning.ResetAll();
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_GOLD}Async tuning reset to the defaults.{Colors.COLOR_RESET}");
+                    return;
+                }
+
+                if (first == "")
+                {
+                    var line = "";
+
+                    for (int i = 0; i < AsyncTuning.Count; i++)
+                    {
+                        var changed = AsyncTuning.Get(i) != AsyncTuning.DefaultAt(i);
+                        line += $"{(changed ? Colors.COLOR_YELLOW_ORANGE : Colors.COLOR_GOLD)}{AsyncTuning.NameAt(i)}|r={AsyncTuning.Get(i)}  ";
+
+                        if (i % 4 == 3 || i == AsyncTuning.Count - 1)
+                        {
+                            player.DisplayTimedTextTo(15.0f, line);
+                            line = "";
+                        }
+                    }
+
+                    return;
+                }
+
+                int index = AsyncTuning.IndexOf(first);
+
+                if (index < 0)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Unknown value '{first}'. -asynctune lists them.|r");
+                    return;
+                }
+
+                if (args.Length > 1 && args[1] != "")
+                {
+                    float value;
+
+                    try
+                    {
+                        value = float.Parse(args[1]);
+                    }
+                    catch (System.Exception)
+                    {
+                        player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}'{args[1]}' is not a number.|r");
+                        return;
+                    }
+
+                    AsyncTuning.Set(index, value);
+                    AsyncKittySync.ApplyTuning();
+                }
+
+                player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_GOLD}{first}|r = {AsyncTuning.Get(index)} (default {AsyncTuning.DefaultAt(index)})");
+            }
+        );
+
+        // -asyncmodel [path|reset]: tries a model for the skin you wear, or shows which skin that is.
+        CommandsManager.RegisterCommand(
+            name: "asyncmodel",
+            alias: "amodel",
+            tier: CommandTier.Admin,
+            argDesc: "[model path|reset]",
+            description: "Sets the model your async effect uses for the skin you wear (until the game ends). No argument shows the skin and its current model. Put the final paths in AsyncSkinModels.",
+            action: (player, args) =>
+            {
+                var kitty = Globals.ALL_KITTIES[player];
+
+                if (kitty.AsyncEffect == null)
+                {
+                    player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}No async effect yet: use -async first.|r");
+                    return;
+                }
+
+                int skin = BlzGetUnitSkin(kitty.Unit);
+                var arg = args.Length > 0 ? args[0] : "";
+
+                if (arg == "reset") AsyncSkinModels.Register(skin, "");
+                else if (arg != "") AsyncSkinModels.Register(skin, arg.Replace("/", "\\"));
+
+                kitty.AsyncEffect.RefreshModel();
+                player.DisplayTimedTextTo(10.0f, $"{Colors.COLOR_GOLD}Skin|r {UnitId2String(skin)} ({skin}): {AsyncSkinModels.For(skin)}");
+            }
+        );
+
         CommandsManager.RegisterCommand(
             name: "test34",
             alias: "",

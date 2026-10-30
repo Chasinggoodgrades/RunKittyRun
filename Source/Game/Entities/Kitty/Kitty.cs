@@ -80,6 +80,55 @@ public class Kitty : IFloatingTags, ICircleOwner
         AsyncEffect?.RefreshScale();
     }
 
+    // The colours the Kitty has been given (-sc, -vc, -color, a reset, disco). Kept here as well, so
+    // the async effect draws the same ones whenever it is turned on, since a unit's colour cannot be read back.
+    public int VertexRed { get; private set; } = 255;
+    public int VertexGreen { get; private set; } = 255;
+    public int VertexBlue { get; private set; } = 255;
+
+    /// <summary>Player colour index (0-23) given by -color, or -1 for the colour of the player's slot.</summary>
+    public int TeamColorIndex { get; private set; } = -1;
+
+    /// <summary>Records a vertex colour for the effect to draw; the caller sets it on the unit.</summary>
+    public void NotifyVertexColor(int r, int g, int b)
+    {
+        VertexRed = r;
+        VertexGreen = g;
+        VertexBlue = b;
+        AsyncEffect?.RefreshTint();
+    }
+
+    public void NotifyTeamColor(int colorIndex)
+    {
+        TeamColorIndex = colorIndex;
+        AsyncEffect?.RefreshTint();
+    }
+
+    /// <summary>
+    /// A visual on the Kitty. With the async effect standing in it follows the effect, since the
+    /// unit is invisible and a latency behind; otherwise it is attached to the unit as usual.
+    /// </summary>
+    public effect AddKittyEffect(string model, string attachPoint = "origin")
+    {
+        if (AsyncEffect != null && AsyncEffect.IsActive) return AsyncEffect.AddFollower(model, attachPoint);
+
+        return AddSpecialEffectTarget(model, Unit, attachPoint);
+    }
+
+    public void RemoveKittyEffect(ref effect e)
+    {
+        RemoveKittyEffect(e);
+        e = null;
+    }
+
+    public void RemoveKittyEffect(effect e)
+    {
+        if (e == null) return;
+
+        if (AsyncEffect != null) AsyncEffect.DestroyFollower(e); // a plain dispose when it is not one of its own
+        else e.Dispose();
+    }
+
     public Kitty(player player)
     {
         Player = player;
