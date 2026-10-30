@@ -13,53 +13,60 @@ public static class ChainedTogether
     private static timer MoveChainTimer;
     private static bool EventTriggered { get; set; } = false;
     private static bool EventStarted { get; set; } = false;
-    private static bool IsStartingConditionValid = true;
 
-    private static void TriggerEventOnLastSafeZone()
+    public static void OnRoundWon()
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
         if (EventStarted || EventTriggered) return;
-        if (!IsStartingConditionValid) return;
+        if (Globals.ROUND >= Gamemode.NumberOfRounds) return; // no next round to chain
+
+        if (CountPlayers() < REQUIRED_PLAYERS) return;
 
         var all = Globals.ALL_KITTIES_LIST;
-        if (all.Count < REQUIRED_PLAYERS) return;
 
-        foreach (var k in all)
-            if (!IsInLastSafezone(k))
-                return;
+        for (int i = 0; i < all.Count; i++)
+        {
+            var k = all[i];
+            if (k.ComputerControlled) continue;
+            if (!k.Alive) return; // somebody died: not a clean win
+        }
 
         TriggerEvent();
+    }
+
+    /// <summary>Human players in the game.</summary>
+    private static int CountPlayers()
+    {
+        int count = 0;
+        var all = Globals.ALL_KITTIES_LIST;
+
+        for (int i = 0; i < all.Count; i++)
+        {
+            if (!all[i].ComputerControlled) count++;
+        }
+
+        return count;
     }
 
     public static void TriggerEvent()
     {
         Utility.TimedTextToAllPlayers(4.0f,
-            $"{Colors.COLOR_TURQUOISE}Chained Together Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
+            $"{Colors.COLOR_TURQUOISE}Clean win! Chained Together Event Requirements Complete!{Colors.COLOR_RESET} {Colors.COLOR_YELLOW}Activating next round!{Colors.COLOR_RESET}");
         EventTriggered = true;
-    }
-
-    private static void UpdateStartingCondition(Kitty kitty)
-    {
-        int zone = kitty.CurrentSafeZone;
-        foreach (var k in Globals.ALL_KITTIES_LIST)
-        {
-            if (k.CurrentSafeZone != zone - 1 && k.CurrentSafeZone != zone)
-            {
-                IsStartingConditionValid = false;
-                return;
-            }
-        }
     }
 
     public static void StartEvent()
     {
-        if (!EventTriggered)
+        if (!EventTriggered) return;
+        if (EventStarted) return; // no reason to begin this again.
+
+        // players may have left between the win and now
+        if (CountPlayers() < REQUIRED_PLAYERS)
         {
-            IsStartingConditionValid = true;
+            EventTriggered = false;
+            Utility.TimedTextToAllPlayers(4.0f, $"{Colors.COLOR_YELLOW}Chained Together cancelled: it needs at least {REQUIRED_PLAYERS} players.{Colors.COLOR_RESET}");
             return;
         }
-
-        if (EventStarted) return; // no reason to begin this again.
 
         EventStarted = true;
         try
@@ -97,6 +104,15 @@ public static class ChainedTogether
     /// </summary>
     public static void UnchainAllKitties()
     {
+        // A chained round just ended (won, lost or timed out): the event is over and a new clean win can arm it again.
+        // (A round that was only armed, not yet chained, keeps its arming for the round to come.)
+        if (EventStarted)
+        {
+            EventStarted = false;
+            EventTriggered = false;
+            kittyGroups.Clear();
+        }
+
         foreach(var kitty in Globals.ALL_KITTIES_LIST)
         {
             kitty.IsChained = false;
@@ -257,13 +273,7 @@ public static class ChainedTogether
     {
         try
         {
-            if (!EventStarted)
-            {
-                UpdateStartingCondition(kitty);
-                if (IsInLastSafezone(kitty))
-                    TriggerEventOnLastSafeZone();
-                return;
-            }
+            if (!EventStarted) return;
             if (!IsInLastSafezone(kitty)) return;
             FreeKittiesFromGroup(kitty.Name, true);
         }
