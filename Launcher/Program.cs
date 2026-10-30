@@ -25,7 +25,8 @@ namespace Launcher
         private const string BASE_MAP_PATH = @"..\..\..\..\source.w3x";
 
         // Output
-        private const string OUTPUT_FOLDER_PATH = @"..\..\..\..\artifacts";
+        //private const string OUTPUT_FOLDER_PATH = @"..\..\..\..\artifacts";
+        private const string OUTPUT_FOLDER_PATH = @"C:\Users\chase\OneDrive\Documents\Warcraft III\Maps\RKRTest";
 
         private static string OUTPUT_SCRIPT_NAME = @$"war3map_{MapDesc.VERSION}.lua";
         private static string OUTPUT_MAP_NAME = @$"RKR_Remastered_{MapDesc.VERSION}.w3x";

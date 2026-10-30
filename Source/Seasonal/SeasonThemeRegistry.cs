@@ -107,6 +107,12 @@ public static class SeasonThemeRegistry
                 FourCC("B00B"), // Red lava cracks
                 FourCC("B00C"), // Blue lava cracks
                 FourCC("B00D"), // Super Christmas tree
+
+
+                //// These will remain visible in all seasons..
+                //FourCC("YZef"),
+                //FourCC("LOsm"),
+                //FourCC("YOr2")
             },
             VendorSkin = Constants.UNIT_SANTA,
             KibbleTypes = new[] { Constants.ITEM_PRESENT },
@@ -151,6 +157,11 @@ public static class SeasonThemeRegistry
                 FourCC("AOsr"), // Scorched remains
                 FourCC("LOce"), // Empty cage
                 FourCC("DOsv"), // Sewer vents
+
+                //// These will remain visible in all seasons..
+                //FourCC("YZef"),
+                //FourCC("LOsm"),
+                //FourCC("YOr2")
             },
             VendorSkin = Constants.UNIT_HALLOWEENSPIDER,
             KibbleTypes = new[] { Constants.ITEM_CANDY },
