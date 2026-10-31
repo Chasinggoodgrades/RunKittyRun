@@ -21,6 +21,7 @@ public class Fixation : Affix
     private int Type;
     private bool IsChasing = false;
     private effect TargetEffect;
+    private Kitty TargetKitty;
 
     public Fixation(Wolf unit) : base(unit)
     {
@@ -56,7 +57,7 @@ public class Fixation : Affix
         ChaseTimer?.Dispose();
         ChaseTimer = null;
         GC.RemoveGroup(ref UnitsInRange);
-        GC.RemoveEffect(ref TargetEffect);
+        RemoveTargetEffect();
         if (Unit.WolfArea.FixationCount > 0) Unit.WolfArea.FixationCount -= 1;
         Unit.WanderTimer?.Resume();
         base.Remove();
@@ -83,16 +84,7 @@ public class Fixation : Affix
         {
             try
             {
-                var target = @event.Unit;
-                var Region = RegionList.WolfRegions[Unit.RegionIndex];
-                if (!Region.Contains(target.X, target.Y)) return;
-                if (Unit.IsPaused) return;
-                if (FangOfShadows.GetFixationImmunityUpgradeLevel(target)) return;
-                if (target != Unit.Unit && !IsChasing)
-                {
-                    Target = target;
-                    ChasingEvent();
-                }
+                TryAcquire(@event.Unit);
             }
             catch (Exception e)
             {
@@ -101,11 +93,64 @@ public class Fixation : Affix
         });
     }
 
+    /// <summary>
+    /// Takes a Kitty as the target if it is within reach, judged where it is for game logic (its async
+    /// effect, not its hidden unit): the engine's range event fires on the unit, which may be elsewhere.
+    /// </summary>
+    private void TryAcquire(unit target)
+    {
+        if (IsChasing || target == null || target == Unit.Unit) return;
+        if (Unit.IsPaused || !target.Alive) return;
+        if (FangOfShadows.GetFixationImmunityUpgradeLevel(target)) return;
+
+        AsyncZones.LogicPosition(target, out var tx, out var ty);
+        if (!Region.Contains(tx, ty)) return;
+        if (WCSharp.Shared.FastUtil.DistanceBetweenPoints(Unit.Unit.X, Unit.Unit.Y, tx, ty) > FIXATION_RADIUS) return;
+
+        Target = target;
+        ChasingEvent();
+    }
+
+    /// <summary>The range event only sees units, so a Kitty whose effect is in reach but whose unit is not is looked for here.</summary>
+    private void ScanAsyncKitties()
+    {
+        var kitties = Globals.ALL_KITTIES_LIST;
+
+        for (int i = 0; i < kitties.Count; i++)
+        {
+            var fx = kitties[i].AsyncEffect;
+            if (fx == null || !fx.IsActive) continue;
+
+            TryAcquire(kitties[i].Unit);
+            if (IsChasing) return;
+        }
+    }
+
+    private void AttachTargetEffect()
+    {
+        RemoveTargetEffect();
+        TargetKitty = Target == null ? null : Globals.GetKitty(Target.Owner);
+
+        TargetEffect = TargetKitty != null
+            ? TargetKitty.AddKittyEffect(FIXATION_TARGET_EFFECT, "overhead")
+            : effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
+    }
+
+    private void RemoveTargetEffect()
+    {
+        if (TargetEffect == null) return;
+
+        if (TargetKitty != null) TargetKitty.RemoveKittyEffect(ref TargetEffect);
+        else GC.RemoveEffect(ref TargetEffect);
+
+        TargetKitty = null;
+    }
+
     private void ChasingEvent()
     {
         IsChasing = true;
         Unit.WanderTimer?.Pause();
-        TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
+        AttachTargetEffect();
         ChaseTimer.Timer.Start(0.1f, true, () =>
         {
             if (!ValidChasingTarget(Target))
@@ -141,7 +186,7 @@ public class Fixation : Affix
     {
         IsChasing = false;
         Unit.WolfMove();
-        GC.RemoveEffect(ref TargetEffect);
+        RemoveTargetEffect();
         Unit.WanderTimer?.Resume();
         ChaseTimer?.Pause();
     }
@@ -158,8 +203,7 @@ public class Fixation : Affix
         if (newTarget == null || newTarget == Target) return;
 
         Target = newTarget;
-        GC.RemoveEffect(ref TargetEffect);
-        TargetEffect = effect.Create(FIXATION_TARGET_EFFECT, Target, "overhead");
+        AttachTargetEffect();
     }
 
     private unit GetClosestUnitInRange()
@@ -191,6 +235,8 @@ public class Fixation : Affix
 
     private void UpdateChaseSpeed()
     {
+        if (!IsChasing) ScanAsyncKitties();
+
         var currentMS = Unit.Unit.MovementSpeed;
         var speedIncrementer = 0.40f; // 4 movespeed every second
 
@@ -227,7 +273,7 @@ public class Fixation : Affix
             ChaseTimer.Pause();
             InRangeTrigger.Disable();
             IsChasing = false;
-            GC.RemoveEffect(ref TargetEffect);
+            RemoveTargetEffect();
         }
         else
         {

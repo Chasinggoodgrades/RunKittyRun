@@ -192,18 +192,20 @@ public class ProtectionOfAncients
         // Short delay to let the ability actually hit cooldown first. Then call.. Give a .03 delay.
         Utility.SimpleTimer(0.03f, () => Unit.SetAbilityCooldownRemaining(relic, OneOfNine.GetOneOfNineCooldown(Kitty.Player)));
 
-        var actiEffect = effect.Create(ACTIVATION_EFFECT, Unit, "chest");
+        // on the Kitty's async effect when it has one: the unit is hidden and a latency behind
+        var actiEffect = Kitty.AddKittyEffect(ACTIVATION_EFFECT, "chest");
 
         Utility.SimpleTimer(EFFECT_DELAY, () =>
         {
             ApplyEffect(Unit);
-            GC.RemoveEffect(ref actiEffect);
+            Kitty.RemoveKittyEffect(ref actiEffect);
         });
     }
 
     private void ApplyEffect(unit Unit)
     {
-        var actiEffect = effect.Create(APPLY_EFFECT, Unit.X, Unit.Y);
+        AsyncZones.WhereToDraw(Unit, out var drawX, out var drawY);
+        var actiEffect = effect.Create(APPLY_EFFECT, drawX, drawY);
         if (!Kitty.Unit.Alive) Kitty.Invulnerable = true; // unit genuinely dead
         GC.RemoveEffect(ref actiEffect);
         EndEffectActions();
@@ -232,7 +234,9 @@ public class ProtectionOfAncients
         var filter = Utility.CreateFilterFunc(AoEEffectFilter);
 
         Kitty.ProtectionActive = false;
-        tempGroup.EnumUnitsInRange(Kitty.Unit.X, Kitty.Unit.Y, effectRadius, filter);
+        // the revive reaches from where the Kitty is for game logic: its effect when async, the same on every machine
+        AsyncZones.LogicPosition(Kitty.Unit, out var centerX, out var centerY);
+        tempGroup.EnumUnitsInRange(centerX, centerY, effectRadius, filter);
 
         while (true)
         {
