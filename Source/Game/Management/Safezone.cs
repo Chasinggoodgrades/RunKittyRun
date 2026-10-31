@@ -51,8 +51,24 @@ public class Safezone
                 WolfLaneHider.ShadowKittyLaneAdd(ID);
                 return;
             }
-            var player = unit.Owner;
-            var kitty = Globals.ALL_KITTIES[player];
+            var kitty = Globals.ALL_KITTIES[unit.Owner];
+            if (AsyncZones.Drives(kitty)) return; // the effect announces its own entries
+            HandleKittyEntered(kitty);
+        }
+        catch (System.Exception e)
+        {
+            Logger.Warning($"Error in EnterSafezoneActions: {e.Message}");
+        }
+    }
+
+    /// <summary>A Kitty reached this safezone: by its unit, or by its async effect.</summary>
+    public void HandleKittyEntered(Kitty kitty)
+    {
+        try
+        {
+            var unit = kitty.Unit;
+            var player = kitty.Player;
+            if (unit == null || !unit.Alive) return;
             SafezoneAdditions(kitty);
             kitty.CurrentSafeZone = ID;
             if (Globals.GAME_ACTIVE) WolfLaneHider.LanesHider();
@@ -67,7 +83,7 @@ public class Safezone
         }
         catch (System.Exception e)
         {
-            Logger.Warning($"Error in EnterSafezoneActions: {e.Message}");
+            Logger.Warning($"Error in Safezone.HandleKittyEntered: {e.Message}");
         }
     }
 

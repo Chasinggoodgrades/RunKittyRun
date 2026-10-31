@@ -66,6 +66,7 @@ public class ShadowKitty
     {
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         kitty.SetPosition(Unit.X, Unit.Y);
+        Globals.ALL_KITTIES[Player].AsyncEffect?.TeleportToUnit(); // the async effect goes with it, however short the hop
     }
 
     /// <summary>
@@ -114,7 +115,7 @@ public class ShadowKitty
     private void ShrinkShadowKitty()
     {
         if (this.Kitty.CurrentStats.CollisonRadius > CollisionDetection.DEFAULT_WOLF_COLLISION_RADIUS) return;
-        float scale = 0.60f - (0.60f * 0.10f * 2.0f);
-        this.Kitty.Unit.SetScale(scale, scale, scale);
+        float scale = Kitty.DefaultModelScale - (Kitty.DefaultModelScale * 0.10f * 2.0f);
+        this.Kitty.SetModelScale(scale);
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 
@@ -67,6 +67,95 @@ public static class ItemSpatialGrid
         int index = GetCellIndex(x, y);
         if (index == INVALID_CELL) return null;
         return itemCells[index];
+    }
+
+    /// <summary>True when a kibble or a free item lies within the radius of the point (the cell and its neighbours are read).</summary>
+    public static bool AnythingNear(float x, float y, float radius)
+    {
+        float r2 = radius * radius;
+
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                float cx = x + dx * CELL_SIZE;
+                float cy = y + dy * CELL_SIZE;
+
+                var kibbles = GetNearbyKibbles(cx, cy);
+                if (kibbles != null)
+                {
+                    for (int i = 0; i < kibbles.Count; i++)
+                    {
+                        var k = kibbles[i];
+                        if (k?.Item == null) continue;
+                        float ddx = k.Item.X - x, ddy = k.Item.Y - y;
+                        if (ddx * ddx + ddy * ddy <= r2) return true;
+                    }
+                }
+
+                var items = GetNearbyItems(cx, cy);
+                if (items != null)
+                {
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        var it = items[i];
+                        if (it == null || it.IsOwned) continue;
+                        float ddx = it.X - x, ddy = it.Y - y;
+                        if (ddx * ddx + ddy * ddy <= r2) return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// The unit takes every kibble and the first free item within the radius of a point: how an async
+    /// effect picks things up for its hidden unit. Same state on every machine, so same result.
+    /// </summary>
+    public static void KittyItemPickupAt(Kitty kitty, float x, float y, float radius)
+    {
+        float r2 = radius * radius;
+        var take = new List<item>();
+        item firstItem = null;
+
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                float cx = x + dx * CELL_SIZE;
+                float cy = y + dy * CELL_SIZE;
+
+                var kibbles = GetNearbyKibbles(cx, cy);
+                if (kibbles != null)
+                {
+                    for (int i = 0; i < kibbles.Count; i++)
+                    {
+                        var k = kibbles[i];
+                        if (k?.Item == null) continue;
+                        float ddx = k.Item.X - x, ddy = k.Item.Y - y;
+                        if (ddx * ddx + ddy * ddy <= r2) take.Add(k.Item);
+                    }
+                }
+
+                var items = GetNearbyItems(cx, cy);
+                if (items != null && firstItem == null)
+                {
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        var it = items[i];
+                        if (it == null || it.IsOwned) continue;
+                        float ddx = it.X - x, ddy = it.Y - y;
+                        if (ddx * ddx + ddy * ddy <= r2) { firstItem = it; break; }
+                    }
+                }
+            }
+        }
+
+        // collected first: picking one up changes the lists being read
+        for (int i = 0; i < take.Count; i++) kitty.Unit.AddItem(take[i]);
+        if (firstItem != null && !firstItem.IsOwned) kitty.Unit.AddItem(firstItem);
     }
 
     public static void KittyItemPickup(Kitty kitty)

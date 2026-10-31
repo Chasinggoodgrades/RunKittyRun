@@ -1,5 +1,6 @@
 ﻿using System;
 using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public class FloatingNameTag
 {
@@ -8,6 +9,9 @@ public class FloatingNameTag
     private AchesTimers NamePosUpdater;
     private readonly IFloatingTags Owner;
     public texttag NameTag;
+
+    /// <summary>True while something else (the async stand-in effect) places the tag and drives the owner's camera.</summary>
+    private bool isFollowingPoint;
 
     public FloatingNameTag(IFloatingTags owner)
     {
@@ -44,6 +48,8 @@ public class FloatingNameTag
         {
             NamePosUpdater.Timer.Start(NAME_TAG_UPDATE_INTERVAL, true, () =>
             {
+                if (isFollowingPoint) return;
+
                 UpdateNameTag();
                 Blizzard.SetCameraQuickPositionForPlayer(Owner.Player, Owner.Unit.X, Owner.Unit.Y);
             });
@@ -55,6 +61,25 @@ public class FloatingNameTag
     }
 
     private void UpdateNameTag() => NameTag.SetPosition(Owner.Unit, NAME_TAG_HEIGHT);
+
+    /// <summary>
+    /// Places the tag at a world point instead of on the unit, and keeps the owner's camera on it.
+    /// Called every tick by KittyAsyncEffect so the tag and the camera move with the effect.
+    /// Local only: the position differs from one machine to another and nothing synced reads it.
+    /// </summary>
+    public void FollowPoint(float x, float y)
+    {
+        isFollowingPoint = true;
+        SetTextTagPos(NameTag, x, y, NAME_TAG_HEIGHT);
+
+        if (Owner.Player.IsLocal)
+        {
+            Blizzard.SetCameraQuickPositionForPlayer(Owner.Player, x, y);
+        }
+    }
+
+    /// <summary>Back to the unit: the regular timer places the tag and the camera again.</summary>
+    public void FollowUnit() => isFollowingPoint = false;
 
     public static void ShowAllNameTags(player Player, bool shown)
     {

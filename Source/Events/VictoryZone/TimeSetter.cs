@@ -187,7 +187,8 @@ public class TimeSetter
     private void CreateTimeTextTag(Kitty kitty, float currentTime)
     {
         var timeText = texttag.Create();
-        timeText.SetPosition(kitty.Unit.X, kitty.Unit.Y, -120.0f);
+        AsyncZones.WhereToDraw(kitty.Unit, out var tx, out var ty);
+        timeText.SetPosition(tx, ty, -120.0f);
         timeText.SetText($"{Colors.GetStringColorOfPlayer(kitty.Player.Id + 1)}{Utility.ConvertFloatToTime(currentTime, kitty.Player.Id + 1)}", 0.025f);
         timeText.SetVelocity(0, 0.02f);
         timeText.SetVisibility(true);

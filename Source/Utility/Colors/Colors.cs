@@ -117,6 +117,7 @@ public class Colors
             if (ColorContainsCommand(c, color))
             {
                 kitty.Unit.SetColor(playercolor.Convert(c.colorID - 1));
+                kitty.NotifyTeamColor(c.colorID - 1);
                 kitty.SaveData.PlayerColorData.LastPlayedColor = c.colorname.Split(',')[0];
             }
         }
@@ -139,6 +140,7 @@ public class Colors
         if (RGB.Length > 2) b = int.Parse(RGB[2]);
 
         kitty.Unit.SetVertexColor(r, g, b, 255);
+        kitty.NotifyVertexColor(r, g, b);
         Globals.ALL_KITTIES[p].SaveData.PlayerColorData.VortexColor = $"{r},{g},{b}";
     }
 
@@ -153,6 +155,7 @@ public class Colors
         int g = GetRandomInt(0, 255);
         int b = GetRandomInt(0, 255);
         kitty.Unit.SetVertexColor(r, g, b, 255);
+        kitty.NotifyVertexColor(r, g, b);
         p.DisplayTimedTextTo(5.0f, $"{COLOR_RED}Red: {COLOR_RESET}{r}, {COLOR_GREEN}Green: {COLOR_RESET}{g}, {COLOR_BLUE}Blue: {COLOR_RESET}{b}");
     }
 
@@ -185,6 +188,7 @@ public class Colors
         Colors color = ColorManager[playerID];
         unit.SetVertexColor(color.red, color.green, color.blue, 255);
         if (unit.UnitType == Constants.UNIT_CUSTOM_DOG) return;
+        Globals.ALL_KITTIES[unit.Owner].NotifyVertexColor(color.red, color.green, color.blue);
         Globals.ALL_KITTIES[unit.Owner].SaveData.PlayerColorData.VortexColor = $"{color.red},{color.green},{color.blue}";
     }
 

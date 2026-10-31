@@ -41,6 +41,22 @@ public static class Globals
 
 
     public static Dictionary<player, Kitty> ALL_KITTIES { get; set; } = new Dictionary<player, Kitty>();
+
+    /// <summary>The same Kitties by player id: for hot paths (sync packets, ticks) that cannot afford a hash lookup. Kept by Kitty.</summary>
+    private static readonly Kitty[] KittiesByPlayerId = new Kitty[28];
+
+    public static Kitty GetKitty(player p)
+    {
+        if (p == null) return null;
+        int id = p.Id;
+        return id >= 0 && id < KittiesByPlayerId.Length ? KittiesByPlayerId[id] : null;
+    }
+
+    public static void SetKittySlot(player p, Kitty kitty)
+    {
+        int id = p.Id;
+        if (id >= 0 && id < KittiesByPlayerId.Length) KittiesByPlayerId[id] = kitty;
+    }
     public static Dictionary<player, Circle> ALL_CIRCLES { get; set; } = new Dictionary<player, Circle>();
     public static Dictionary<unit, Wolf> ALL_WOLVES { get; set; } = new Dictionary<unit, Wolf>();
     public static List<Wolf> ALL_WOLVES_LIST { get; set; } = new List<Wolf>();

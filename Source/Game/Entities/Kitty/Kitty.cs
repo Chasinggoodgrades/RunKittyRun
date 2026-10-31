@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -51,6 +51,83 @@ public class Kitty : IFloatingTags, ICircleOwner
     public bool IsMirror { get; set; } = false;
     public bool CanEarnAwards { get; set; } = true;
     public CommandTier CommandTier { get; set; } = CommandTier.All;
+    public KittyAsyncEffect AsyncEffect { get; set; }
+
+    /// <summary>Scale a Kitty unit has by default (and again after a reset).</summary>
+    public const float DefaultModelScale = 0.60f;
+
+    /// <summary>
+    /// The scale the Kitty unit is drawn at. Warcraft has no getter for it, so everything that
+    /// changes it goes through SetModelScale and the stand-in effect (KittyAsyncEffect) follows.
+    /// </summary>
+    public float ModelScale { get; private set; } = DefaultModelScale;
+
+    /// <summary>Scales the unit and the async stand-in effect alike.</summary>
+    public void SetModelScale(float scale)
+    {
+        ModelScale = scale;
+        Unit.SetScale(scale, scale, scale);
+        AsyncEffect?.RefreshScale(); // re-hides the unit when the effect stands in
+    }
+
+    /// <summary>
+    /// The unit was given a scale by something other than SetModelScale (a new skin starts from the
+    /// default one): only tell the effect, the unit is already right.
+    /// </summary>
+    public void NotifyModelScale(float scale)
+    {
+        ModelScale = scale;
+        AsyncEffect?.RefreshScale();
+    }
+
+    // The colours the Kitty has been given (-sc, -vc, -color, a reset, disco). Kept here as well, so
+    // the async effect draws the same ones whenever it is turned on, since a unit's colour cannot be read back.
+    public int VertexRed { get; private set; } = 255;
+    public int VertexGreen { get; private set; } = 255;
+    public int VertexBlue { get; private set; } = 255;
+
+    /// <summary>Player colour index (0-23) given by -color, or -1 for the colour of the player's slot.</summary>
+    public int TeamColorIndex { get; private set; } = -1;
+
+    /// <summary>Records a vertex colour for the effect to draw; the caller sets it on the unit.</summary>
+    public void NotifyVertexColor(int r, int g, int b)
+    {
+        VertexRed = r;
+        VertexGreen = g;
+        VertexBlue = b;
+        AsyncEffect?.RefreshTint();
+    }
+
+    public void NotifyTeamColor(int colorIndex)
+    {
+        TeamColorIndex = colorIndex;
+        AsyncEffect?.RefreshTint();
+    }
+
+    /// <summary>
+    /// A visual on the Kitty. With the async effect standing in it follows the effect, since the
+    /// unit is invisible and a latency behind; otherwise it is attached to the unit as usual.
+    /// </summary>
+    public effect AddKittyEffect(string model, string attachPoint = "origin")
+    {
+        if (AsyncEffect != null && AsyncEffect.IsActive) return AsyncEffect.AddFollower(model, attachPoint);
+
+        return AddSpecialEffectTarget(model, Unit, attachPoint);
+    }
+
+    public void RemoveKittyEffect(ref effect e)
+    {
+        RemoveKittyEffect(e);
+        e = null;
+    }
+
+    public void RemoveKittyEffect(effect e)
+    {
+        if (e == null) return;
+
+        if (AsyncEffect != null) AsyncEffect.DestroyFollower(e); // a plain dispose when it is not one of its own
+        else e.Dispose();
+    }
 
     public Kitty(player player)
     {
@@ -76,6 +153,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         ProtectionOfAncients = new ProtectionOfAncients(this);
         Globals.ALL_KITTIES_LIST.Add(this);
         Disco = new Disco { Unit = this.Unit };
+        AsyncEffect = new KittyAsyncEffect(this);
         StartAIController();
     }
 
@@ -111,10 +189,15 @@ public class Kitty : IFloatingTags, ICircleOwner
             Slider.PauseSlider();
             RTR.PauseRTR();
             aiController.PauseAi();
+            AsyncEffect?.ApplyDeathPointToUnit(); // dies where the player saw it touch the wolf
             Unit.Kill();
 
             // Update status flags
             if (!ProtectionActive) Alive = false;
+
+            // The collision that killed this Kitty is a synced unit event, so every machine
+            // stands the stand-in effect down on the same turn: no death packet is needed.
+            AsyncEffect?.Hide();
 
             // Apply death effects and stat updates
             CrystalOfFire.CrystalOfFireDeath(this);
@@ -154,6 +237,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
             Unit.Mana = Circle.Unit.Mana;
             Windwalk.ReactivateWindwalk();
+            AsyncEffect?.Show();
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
@@ -244,6 +328,7 @@ public class Kitty : IFloatingTags, ICircleOwner
 
         // Initialize Kitty
         Globals.ALL_KITTIES.Add(Player, this);
+        Globals.SetKittySlot(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
         Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
@@ -284,11 +369,13 @@ public class Kitty : IFloatingTags, ICircleOwner
         SpinCam?.Dispose();
         Windwalk?.Dispose();
         NameTag?.Dispose();
+        AsyncEffect?.Dispose();
         Unit?.Dispose();
         //ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);
+        Globals.SetKittySlot(Player, null);
     }
 
     private void TrueSightGhostWolves()

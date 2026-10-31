@@ -30,6 +30,7 @@ namespace Source.Init
                 //if (!ADMINDISABLE.AdminsGame()) return;
                 Safezone.Initialize();
                 Utility.SimpleTimer(2.0f, () => StartGameModeTimer()); // Gives some delay time for the save system to sync
+                EnableSelect(true, false); // no selection circles, as in the CORE map
                 StopMusic(false);
                 ClearMapMusic();
                 Globals.GAME_INITIALIZED = true;
@@ -83,6 +84,7 @@ namespace Source.Init
                 WolfArea.Initialize();
                 ItemStacker.Initialize();
                 Windwalk.Initialize();
+                AsyncKittySync.Initialize();
                 Kitty.Initialize();
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();

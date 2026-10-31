@@ -125,6 +125,7 @@ public class ShardOfTranslocation : Relic
             y = unit.Y + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
+        Globals.ALL_KITTIES[unit.Owner]?.AsyncEffect?.TeleportToUnit(); // the async effect goes with it
         Utility.SimpleTimer(0.1f, () => Globals.ALL_KITTIES[unit.Owner]?.InvulnerableKitty(0.5f));
     }
 

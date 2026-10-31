@@ -109,8 +109,8 @@ public static class Quests
         ChainedTogetherQuest.SetDescription(
             $"{Colors.COLOR_YELLOW}Proximity-based challenge requiring constant coordination.{Colors.COLOR_RESET}\n\n" +
             $"{Colors.COLOR_YELLOW_ORANGE}Activation:{Colors.COLOR_RESET}\n" +
-            $"• All players reach final safezone together\n" +
-            $"• No safezone skipping allowed\n" +
+            $"• Every player must reach the last safezone in a round\n" +
+            $"• At least 2 players in the game\n" +
             $"• Begins next round after activation\n\n" +
             $"{Colors.COLOR_YELLOW_ORANGE}Objective:{Colors.COLOR_RESET}\n" +
             $"• Maintain proximity to at least one other player\n" +

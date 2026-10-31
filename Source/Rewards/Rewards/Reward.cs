@@ -106,8 +106,7 @@ public class Reward
             if (SetSkin(player)) return;
             if (SetWindwalk(player)) return;
 
-            var kitty = Globals.ALL_KITTIES[player].Unit;
-            var effectInstance = effect.Create(ModelPath, kitty, OriginPoint);
+            var effectInstance = Globals.ALL_KITTIES[player].AddKittyEffect(ModelPath, OriginPoint);
 
             DestroyCurrentEffect(player);
             ApplyEffect(player, effectInstance);
@@ -157,24 +156,24 @@ public class Reward
         {
             case RewardType.Wings:
                 var x = activeRewards.ActiveWings;
-                GC.RemoveEffect(ref x);
+                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref x);
                 break;
 
             case RewardType.Hats:
                 var y = activeRewards.ActiveHats;
-                GC.RemoveEffect(ref y);
+                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref y);
                 break;
 
             case RewardType.Auras:
                 var z = activeRewards.ActiveAura;
-                GC.RemoveEffect(ref z);
+                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref z);
                 break;
 
             case RewardType.Trails:
             case RewardType.Nitros:
             case RewardType.Deathless:
                 var t = activeRewards.ActiveTrail;
-                GC.RemoveEffect(ref t);
+                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref t);
                 break;
 
             case RewardType.Tournament:
@@ -204,6 +203,7 @@ public class Reward
         {
             kitty.Unit.Skin = SkinID;
             kitty.KittyMorphosis.ScaleUnit();
+            kitty.AsyncEffect?.ReapplyUnitHidden(true);
             kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(kitty.CommandTier)})";
 
         }

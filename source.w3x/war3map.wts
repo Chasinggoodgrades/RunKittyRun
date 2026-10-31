@@ -5284,7 +5284,7 @@ HalloweenSpider
 
 STRING 3984
 {
-|cffff0000RKR Remastered v1.6.9|r
+|cffff0000RKR Remastered v2.0.1|r
 }
 
 STRING 3985
@@ -5294,9 +5294,9 @@ STRING 3985
 
 STRING 3986
 {
-|cff00ffffRun Kitty Run|r v1.6.9 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
+|cff00ffffRun Kitty Run|r v2.0.1 - |cff00ffffdiscord.gg/GSu6zkNvx5|r
 |n|n- Save System, Challenges, Website
-|n|n|n|cff00ffffLast updated:|r |c00FF000009/27/2026|r
+|n|n|n|cff00ffffLast updated:|r |c00FF000010/31/2026|r
 }
 
 STRING 3987
@@ -5306,6 +5306,6 @@ Aches
 
 STRING 3988
 {
-Run Kitty Run Remastered v1.6.9
+Run Kitty Run Remastered v2.0.1
 }
 

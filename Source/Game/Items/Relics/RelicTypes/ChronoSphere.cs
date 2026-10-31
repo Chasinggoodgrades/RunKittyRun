@@ -173,6 +173,7 @@ public class ChronoSphere : Relic
             }
             Kitty.Unit.SetPosition(x, y);
             Kitty.Unit.SetFacing(CapturedLocation.Facing);
+            Kitty.AsyncEffect?.TeleportToUnit(); // back to the captured spot, even when it is only a few units away
             Kitty.Unit.IsPaused = true;
             Utility.SelectUnitForPlayer(Kitty.Player, Kitty.Unit);
 

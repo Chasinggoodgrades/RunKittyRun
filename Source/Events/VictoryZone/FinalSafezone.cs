@@ -15,9 +15,17 @@ public static class FinalSafezone
         Trigger.RegisterEnterRegion(Region, FilterList.KittyFilter);
         Trigger.AddAction(ErrorHandler.Wrap(() =>
         {
-            var unit = @event.Unit;
-            var player = unit.Owner;
-            var kitty = Globals.ALL_KITTIES[player];
+            var kitty = Globals.ALL_KITTIES[@event.Unit.Owner];
+            if (AsyncZones.Drives(kitty)) return; // the effect announces its own entries
+            HandleKittyEntered(kitty);
+        }));
+    }
+
+    /// <summary>A Kitty reached the final safezone: by its unit, or by its async effect.</summary>
+    public static void HandleKittyEntered(Kitty kitty)
+    {
+        var player = kitty.Player;
+        {
             if (TimeSetter.Instance.SetRoundTime(kitty)) MultiboardUtil.RefreshMultiboards();
             kitty.Finished = true;
 
@@ -33,6 +41,6 @@ public static class FinalSafezone
             TeamDeathless.PrestartingEvent();
             NoKittyLeftBehind.CheckChallenge();
             kitty.CurrentStats.RoundFinished = true;
-        }));
+        }
     }
 }

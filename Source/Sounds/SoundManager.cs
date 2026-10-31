@@ -207,13 +207,13 @@ public static class SoundManager
             if (count == 0) return;
             if (k.ProtectionActive) return; // no reason to play if pota is active.
             var s = LAST_MAN_STANDING_SOUND;
-            var e = k.Unit.AddSpecialEffect("TalkToMe.mdx", "head");
+            var e = k.AddKittyEffect("TalkToMe.mdx", "head"); // follows the async effect when that stands in
             Utility.TimedTextToAllPlayers(1.0f, $"{Colors.COLOR_RED}Last man standing!{Colors.COLOR_RESET}");
             s.Stop(false, false);
             s.Start();
             Utility.SimpleTimer(2.0f, () =>
             {
-                GC.RemoveEffect(ref e);
+                k.RemoveKittyEffect(ref e);
             });
         }
         catch (System.Exception e)
