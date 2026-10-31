@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -8,6 +9,10 @@ namespace Launcher
     {
         private const string CSV_PATH = @"..\..\..\..\Source\CreepData\unitdata.csv";
         private const string OUTPUT_PATH = @"..\..\..\..\Source\CreepData\UnitData.cs";
+
+        // The game's unit skin data ([rawcode] sections with a file= model path). Export it again and replace
+        // the file when the map's units change; units without a file= entry simply get no model path.
+        private const string SKIN_PATH = @"..\..\..\..\Source\CreepData\unitskin.txt";
 
         public static void CompileUnitData()
         {
@@ -19,11 +24,15 @@ namespace Launcher
             sb.AppendLine("    public string Name { get; }");
             sb.AppendLine("    public string Comment { get; }");
             sb.AppendLine();
-            sb.AppendLine("    public Monster(string id, string name, string comment)");
+            sb.AppendLine("    /// <summary>Model file of the unit (from unitskin.txt), usable with AddSpecialEffect. Empty when unknown.</summary>");
+            sb.AppendLine("    public string Path { get; }");
+            sb.AppendLine();
+            sb.AppendLine("    public Monster(string id, string name, string comment, string path = \"\")");
             sb.AppendLine("    {");
             sb.AppendLine("        Id = id;");
             sb.AppendLine("        Name = name;");
             sb.AppendLine("        Comment = comment;");
+            sb.AppendLine("        Path = path;");
             sb.AppendLine("    }");
             sb.AppendLine("}");
             sb.AppendLine();
@@ -31,6 +40,9 @@ namespace Launcher
             sb.AppendLine("{");
             sb.AppendLine("    public static readonly Monster[] Monsters =");
             sb.AppendLine("    {");
+
+            var modelPaths = LoadModelPaths();
+            int withPath = 0;
 
             bool firstLine = true;
             foreach (var line in File.ReadLines(CSV_PATH))
@@ -48,14 +60,70 @@ namespace Launcher
                     comment = comment.Substring(1, comment.Length - 2);
 
                 var name = comment.ToLower().Replace(" ", "");
-                sb.AppendLine($"        new Monster(\"{Escape(id)}\", \"{Escape(name)}\", \"{Escape(comment)}\"),");
+                if (modelPaths.TryGetValue(id, out var path))
+                {
+                    withPath++;
+                    sb.AppendLine($"        new Monster(\"{Escape(id)}\", \"{Escape(name)}\", \"{Escape(comment)}\", \"{Escape(path)}\"),");
+                }
+                else
+                {
+                    sb.AppendLine($"        new Monster(\"{Escape(id)}\", \"{Escape(name)}\", \"{Escape(comment)}\"),");
+                }
             }
 
             sb.AppendLine("    };");
             sb.AppendLine("}");
 
             File.WriteAllText(OUTPUT_PATH, sb.ToString());
-            Console.WriteLine("UnitData.cs written successfully.");
+            Console.WriteLine($"UnitData.cs written successfully ({withPath} units with a model path).");
+        }
+
+        /// <summary>
+        /// Reads unitskin.txt: the first file= of each [rawcode] section is that unit's model. The game's
+        /// data leaves off the extension (and a few entries use .mdl), so every path is given as .mdl,
+        /// which the game loads whether the file is .mdl or .mdx.
+        /// </summary>
+        private static Dictionary<string, string> LoadModelPaths()
+        {
+            var paths = new Dictionary<string, string>(StringComparer.Ordinal);
+
+            if (!File.Exists(SKIN_PATH))
+            {
+                Console.WriteLine($"{SKIN_PATH} not found: no model paths added.");
+                return paths;
+            }
+
+            string current = null;
+
+            foreach (var raw in File.ReadLines(SKIN_PATH))
+            {
+                var line = raw.Trim();
+                if (line.Length == 0) continue;
+
+                if (line[0] == '[' && line[line.Length - 1] == ']')
+                {
+                    current = line.Substring(1, line.Length - 2).Trim();
+                    continue;
+                }
+
+                if (current == null || paths.ContainsKey(current)) continue;
+                if (!line.StartsWith("file=", StringComparison.Ordinal)) continue;
+
+                var value = line.Substring("file=".Length).Trim();
+                if (value.Length == 0) continue;
+
+                paths[current] = NormalizeModelPath(value);
+            }
+
+            return paths;
+        }
+
+        private static string NormalizeModelPath(string path)
+        {
+            if (path.EndsWith(".mdl", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".mdx", StringComparison.OrdinalIgnoreCase))
+                path = path.Substring(0, path.Length - 4);
+
+            return path + ".mdl";
         }
 
         private static string Escape(string s) => s.Replace("\\", "\\\\").Replace("\"", "\\\"");

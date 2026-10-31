@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -217,6 +217,9 @@ public class KittyAsyncEffect
     /// <summary>Enabled and alive: the effect is shown and standing in for the unit right now.</summary>
     public bool IsActive { get; private set; }
 
+    /// <summary>Which safezones / wolf areas the effect stands in (see AsyncZones); owner side only reads it.</summary>
+    private readonly bool[] zonesInside = new bool[AsyncZones.Count];
+
     public KittyAsyncEffect(Kitty kitty)
     {
         this.kitty = kitty;
@@ -320,6 +323,7 @@ public class KittyAsyncEffect
 
         // revived on top of a wolf: it takes leaving and coming back to touch it, as with the unit
         AsyncContact.Seed(kitty, x, y, touching);
+        AsyncZones.Seed(zonesInside, x, y);
 
         RebuildRewardEffects();
     }
@@ -674,6 +678,35 @@ public class KittyAsyncEffect
 
     /// <summary>Called by the global tick on every machine, for every Kitty.</summary>
     public void Advance(float dt)
+    {
+        AdvanceCore(dt);
+
+        // every way out of the step above counts (a slide, a jump, a snap): where the effect ended up decides the zones
+        if (IsActive && IsOwnerHere && kitty.Unit != null)
+        {
+            AsyncZones.Scan(KittyId, zonesInside, x, y);
+            TryPickup();
+        }
+    }
+
+    private float nextPickupTime;
+
+    /// <summary>
+    /// Owner only: the unit is hidden and behind, so it would never walk over what the effect runs over.
+    /// When something lies under the effect, the unit is told to take it (a few times a second at most).
+    /// While sliding the Slider does this itself from the unit.
+    /// </summary>
+    private void TryPickup()
+    {
+        if (IsFollowingUnit) return;
+        if (AsyncKittySync.Now < nextPickupTime) return;
+        if (!ItemSpatialGrid.AnythingNear(x, y, AsyncKittySync.PICKUP_RADIUS)) return;
+
+        nextPickupTime = AsyncKittySync.Now + 0.3f;
+        AsyncKittySync.SendPickup(KittyId, x, y);
+    }
+
+    private void AdvanceCore(float dt)
     {
         if (!Enabled || standIn == null || kitty.Unit == null) return;
 

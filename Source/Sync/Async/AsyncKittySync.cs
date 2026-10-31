@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -29,6 +29,11 @@ public static class AsyncKittySync
     private const string POSITION_PREFIX = "Aches_POS";
     private const string CONTACT_PREFIX = "Aches_Contact";
     private const string STEER_PREFIX = "Aches_Steer";
+    private const string ZONE_PREFIX = "Aches_Zone";
+    private const string PICK_PREFIX = "Aches_Pick";
+
+    /// <summary>How close the effect has to run over an item for its unit to take it.</summary>
+    public const float PICKUP_RADIUS = 90f;
     private static readonly int ORDER_MOVE_ID = OrderId("move");
     private const char FIELD_SEPARATOR = '|';
 
@@ -62,6 +67,8 @@ public static class AsyncKittySync
         RegisterPositionEvent();
         RegisterContactEvent();
         RegisterSteerEvent();
+        RegisterZoneEvent();
+        RegisterPickEvent();
 
         tickTimer = timer.Create();
         tickTimer.Start(TICK_PERIOD, true, ErrorHandler.Wrap(Tick));
@@ -257,6 +264,83 @@ public static class AsyncKittySync
 
             // the same order on every machine, on the same turn
             IssuePointOrderById(kitty.Unit, ORDER_MOVE_ID, int.Parse(fields[1]), int.Parse(fields[2]));
+        });
+    }
+
+    /// <summary>Owner only: the effect of this Kitty just entered a safezone / wolf area (see AsyncZones).</summary>
+    public static void SendZone(int kittyId, int kind, int index)
+    {
+        BlzSendSyncData(ZONE_PREFIX, $"{kittyId}{FIELD_SEPARATOR}{kind}{FIELD_SEPARATOR}{index}");
+    }
+
+    private static void RegisterZoneEvent()
+    {
+        var trig = trigger.Create();
+
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            trig.RegisterPlayerSyncEvent(player, ZONE_PREFIX, false);
+        }
+
+        trig.AddAction(() =>
+        {
+            var sender = GetTriggerPlayer();
+            if (sender == null) return;
+
+            var fields = BlzGetTriggerSyncData().Split(FIELD_SEPARATOR);
+            if (fields.Length < 3) return;
+
+            // a player only ever speaks for their own Kitty
+            if (sender.Id != int.Parse(fields[0])) return;
+            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+
+            var fx = kitty.AsyncEffect;
+            if (fx == null || !fx.IsActive) return;
+            if (kitty.Unit == null || !kitty.Unit.Alive) return;
+
+            AsyncZones.Apply(kitty, int.Parse(fields[1]), int.Parse(fields[2]));
+        });
+    }
+
+    /// <summary>Owner only: the effect runs over something to pick up here; the unit takes it, on every machine alike.</summary>
+    public static void SendPickup(int kittyId, float x, float y)
+    {
+        BlzSendSyncData(PICK_PREFIX, $"{kittyId}{FIELD_SEPARATOR}{Whole(x)}{FIELD_SEPARATOR}{Whole(y)}");
+    }
+
+    private static void RegisterPickEvent()
+    {
+        var trig = trigger.Create();
+
+        foreach (var player in Globals.ALL_PLAYERS)
+        {
+            trig.RegisterPlayerSyncEvent(player, PICK_PREFIX, false);
+        }
+
+        trig.AddAction(() =>
+        {
+            var sender = GetTriggerPlayer();
+            if (sender == null) return;
+
+            var fields = BlzGetTriggerSyncData().Split(FIELD_SEPARATOR);
+            if (fields.Length < 3) return;
+
+            // a player only ever speaks for their own Kitty
+            if (sender.Id != int.Parse(fields[0])) return;
+            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+
+            var fx = kitty.AsyncEffect;
+            if (fx == null || !fx.IsActive) return;
+            if (kitty.Unit == null || !kitty.Unit.Alive) return;
+
+            float x = int.Parse(fields[1]);
+            float y = int.Parse(fields[2]);
+
+            // the effect is never far from its unit; a point far off is not an honest one
+            float dx = x - kitty.Unit.X, dy = y - kitty.Unit.Y;
+            if (dx * dx + dy * dy > 700f * 700f) return;
+
+            ItemSpatialGrid.KittyItemPickupAt(kitty, x, y, PICKUP_RADIUS);
         });
     }
 

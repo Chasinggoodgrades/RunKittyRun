@@ -109,7 +109,11 @@ public class Kibble : IDisposable
             else if (randomChance <= 60) KibbleXP(kitty);
             else KibbleNothing(kitty);
 
-            if (randomChance <= 30) effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", kitty.Unit.X, kitty.Unit.Y);
+            if (randomChance <= 30)
+            {
+                AsyncZones.WhereToDraw(kitty.Unit, out var fxX, out var fxY);
+                effect = AddSpecialEffect("Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl", fxX, fxY);
+            }
             GC.RemoveEffect(ref effect);
 
             KibbleEvent.StartKibbleEvent(randomChance);

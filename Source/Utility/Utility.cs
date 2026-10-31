@@ -298,7 +298,8 @@ public static class Utility
         var tt = texttag.Create();
         tt.SetText(text, height);
         tt.SetColor(red, green, blue, 255);
-        tt.SetPosition(u.X, u.Y, 0);
+        AsyncZones.WhereToDraw(u, out var tx, out var ty);
+        tt.SetPosition(tx, ty, 0);
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
         SimpleTimer(duration, () => tt?.Dispose());
