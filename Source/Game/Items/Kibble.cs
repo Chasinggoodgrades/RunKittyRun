@@ -8,6 +8,8 @@ public class Kibble : IDisposable
     public static trigger PickupTrigger;
     public static bool SpawningKibble = true;
     public static int TotalCollected = 0;
+    public static string KibbleName { get; private set; } = "Kibble"; // changes with the season (see Apply)
+    public static string KibbleNamePlural { get; private set; } = "Kibbles";
     public float X;
     public float Y;
     private static List<int> KibblesColors = new(SeasonThemeRegistry.None.KibbleTypes);
@@ -68,6 +70,8 @@ public class Kibble : IDisposable
     {
         var types = theme.KibbleTypes.Length > 0 ? theme.KibbleTypes : SeasonThemeRegistry.None.KibbleTypes;
         KibblesColors = new List<int>(types);
+        KibbleName = string.IsNullOrEmpty(theme.KibbleName) ? "Kibble" : theme.KibbleName;
+        KibbleNamePlural = string.IsNullOrEmpty(theme.KibbleNamePlural) ? "Kibbles" : theme.KibbleNamePlural;
     }
 
     #region Kibble Initialization

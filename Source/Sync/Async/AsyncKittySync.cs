@@ -37,6 +37,9 @@ public static class AsyncKittySync
     private static readonly int ORDER_MOVE_ID = OrderId("move");
     private const char FIELD_SEPARATOR = '|';
 
+    /// <summary>Added to a coordinate on the wire so it is never negative (see Encode).</summary>
+    private const int COORD_OFFSET = 32768;
+
     /// <summary>Movement and input rate: fine enough to look smooth, as the effect is only ever drawn.</summary>
     private static float TICK_PERIOD => AsyncTuning.Get(22);
 
@@ -118,8 +121,6 @@ public static class AsyncKittySync
     //   c = targetX / 2 * 32768 + targetY / 2
     // x, y and the targets are offset by 32768 so they are never negative. Facing is kept to 2 degrees,
     // speed to 2 and the target to 2 units: it is only a heading for the others to carry on along.
-    private const int COORD_OFFSET = 32768;
-
     private static int Pack16(float value)
     {
         int packed = Whole(value) + COORD_OFFSET;

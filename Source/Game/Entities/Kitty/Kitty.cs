@@ -334,6 +334,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
 
         TrueSightGhostWolves();
+
         CollisionDetection.KittyRegisterCollisions(this);
 
         // Set Selected Rewards On Spawn but with a small delay for save data to get set.
@@ -381,8 +382,11 @@ public class Kitty : IFloatingTags, ICircleOwner
     private void TrueSightGhostWolves()
     {
         int trueSight = FourCC("Atru");
+        int ghostVisible = FourCC("Aeth"); // i added this so we get rid of the footprints basically for async
         Unit.AddAbility(trueSight);
+        Unit.AddAbility(ghostVisible);
         Unit.HideAbility(trueSight, true);
+        Unit.HideAbility(ghostVisible, true);
     }
 
 

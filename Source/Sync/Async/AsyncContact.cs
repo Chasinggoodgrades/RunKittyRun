@@ -21,6 +21,7 @@ public static class AsyncContact
     private static group scratch;
     private static boolexpr collector;
     private static readonly List<unit> found = new List<unit>();
+    private static readonly List<int> scanKeys = new List<int>();
 
     /// <summary>Creates the group and the filter. Call once at game start, on every machine alike: they are handles.</summary>
     public static void Initialize()
@@ -42,8 +43,6 @@ public static class AsyncContact
             return false;
         });
     }
-
-    private static readonly List<int> scanKeys = new List<int>();
 
     /// <summary>
     /// What the Kitty has just started touching at that point, if anything. Like the unit triggers

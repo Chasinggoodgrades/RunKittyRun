@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 /// <summary>
 /// All the data that makes one holiday season look and feel different from another.
@@ -28,6 +28,10 @@ public sealed class SeasonTheme
 
     // Kibble item type that spawns
     public int[] KibbleTypes { get; set; } = new int[0];
+
+    /// <summary>What kibble is called this season ("Present", "Candy"): shown in the kibble event.</summary>
+    public string KibbleName { get; set; } = "Kibble";
+    public string KibbleNamePlural { get; set; } = "Kibbles";
 
     // Weather / minimap
     public int? WeatherEffect { get; set; }

@@ -1,4 +1,4 @@
-using static WCSharp.Api.Common;
+﻿using static WCSharp.Api.Common;
 
 /// <summary>
 /// The single place that defines what each season looks like. Adding or tweaking a
@@ -116,6 +116,8 @@ public static class SeasonThemeRegistry
             },
             VendorSkin = Constants.UNIT_SANTA,
             KibbleTypes = new[] { Constants.ITEM_PRESENT },
+            KibbleName = "Present",
+            KibbleNamePlural = "Presents",
             WeatherEffect = WeatherEffects.Snow,
             TimeOfDay = 23f,
             MinimapTexture = "snowMap.blp",
@@ -165,6 +167,8 @@ public static class SeasonThemeRegistry
             },
             VendorSkin = Constants.UNIT_HALLOWEENSPIDER,
             KibbleTypes = new[] { Constants.ITEM_CANDY },
+            KibbleName = "Candy",
+            KibbleNamePlural = "Candies",
             WeatherEffect = null,
             TimeOfDay = 0f,
             MinimapTexture = "war3mapMap.blp",

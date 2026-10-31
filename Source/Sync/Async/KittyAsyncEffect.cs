@@ -202,6 +202,15 @@ public class KittyAsyncEffect
     private int ghostPercent;
     private bool animationIsWalk;
     private bool lastBroadcastMoving;
+    private float nextPickupTime;
+
+    // The effect itself is drawn from local state and differs a little between machines, so nothing that
+    // changes the game may read it. This is the other one: where the last position packet put the effect.
+    // Packets are read on the same turn on every machine, the sender's included, so every machine holds
+    // the same value and game logic (a chasing wolf, an explosion) can use it (see GetLogicPosition).
+    private float syncedX;
+    private float syncedY;
+    private bool hasSynced;
 
     /// <summary>Where this machine draws the effect. Differs from one machine to another: never feed it to synced logic.</summary>
     public float X => x;
@@ -707,16 +716,6 @@ public class KittyAsyncEffect
             syncedY += dy;
         }
     }
-
-    private float nextPickupTime;
-
-    // The effect itself is drawn from local state and differs a little between machines, so nothing that
-    // changes the game may read it. This is the other one: where the last position packet put the effect.
-    // Packets are read on the same turn on every machine, the sender's included, so every machine holds
-    // the same value and game logic (a chasing wolf, an explosion) can use it.
-    private float syncedX;
-    private float syncedY;
-    private bool hasSynced;
 
     /// <summary>
     /// Where the effect is for game logic, the same on every machine: the last position packet while the

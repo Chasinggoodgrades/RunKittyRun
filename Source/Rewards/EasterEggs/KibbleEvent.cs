@@ -1,4 +1,4 @@
-using WCSharp.Api;
+﻿using WCSharp.Api;
 
 public static class KibbleEvent
 {
@@ -22,10 +22,10 @@ public static class KibbleEvent
 
         EventTimer = timer.Create();
         EventTimerDialog = timerdialog.Create(EventTimer);
-        EventTimerDialog.SetTitle("Kibble Event");
+        EventTimerDialog.SetTitle($"{Kibble.KibbleName} Event");
         EventTimerDialog.IsDisplayed = true;
         EventTimer.Start(EventLength, false, ErrorHandler.Wrap(EndKibbleEvent));
-        Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}A Kibble event has started! Collect {TotalEventKibbles} kibbles to earn an award!{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}A {Kibble.KibbleName} event has started! Collect {TotalEventKibbles} {Kibble.KibbleNamePlural.ToLower()} to earn an award!{Colors.COLOR_RESET}");
 
         // Spawn event kibbles
         for (int i = 0; i < TotalEventKibbles + EventExtraKibbles; i++)
@@ -52,12 +52,12 @@ public static class KibbleEvent
 
         ItemSpawner.TrackKibbles.Clear();
 
-        Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}The kibble collecting event has ended! {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r were collected.{Colors.COLOR_RESET}");
+        Utility.TimedTextToAllPlayers(10.0f, $"{Colors.COLOR_YELLOW}The {Kibble.KibbleName.ToLower()} collecting event has ended! {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r were collected.{Colors.COLOR_RESET}");
     }
 
     private static void UpdateEventProgress()
     {
-        EventTimerDialog.SetTitle($"Kibble Collected: {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r");
+        EventTimerDialog.SetTitle($"{Kibble.KibbleName} Collected: {Colors.COLOR_TURQUOISE}{EventKibblesCollected}|r/{Colors.COLOR_LAVENDER}{TotalEventKibbles}|r");
     }
 
     public static void CollectEventKibble()
