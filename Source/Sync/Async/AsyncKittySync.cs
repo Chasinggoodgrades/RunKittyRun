@@ -43,6 +43,9 @@ public static class AsyncKittySync
     /// <summary>Twenty a second by default (the TS version sent ten); tunable with -asynctune positionperiod.</summary>
     private static float POSITION_PERIOD => AsyncTuning.Get(20);
 
+    /// <summary>The player of THIS machine, read once: it never changes, and GetLocalPlayer is a native call.</summary>
+    public static player LocalPlayer { get; private set; }
+
     private static bool isInitialized;
     private static timer tickTimer;
     private static timer positionTimer;
@@ -58,6 +61,7 @@ public static class AsyncKittySync
     {
         if (isInitialized) return;
         isInitialized = true;
+        LocalPlayer = GetLocalPlayer();
 
         AsyncMouse.Initialize();
         Screen2World.Initialize();
@@ -107,33 +111,42 @@ public static class AsyncKittySync
         return (int)Math.Round(value);
     }
 
-    private static string Encode(int kittyId, int sequence, KittyMovementState movement)
+    // Position packet: three whole numbers, "a|b|c", each below 2^31 so they print and read back exactly.
+    // The sender is the Kitty (checked against the player the packet comes from), so no id travels.
+    //   a = ((sequence mod 64) * 2 + moving) * 256 + facing / 2, then * 65536 + x
+    //   b = speed / 2 * 65536 + y
+    //   c = targetX / 2 * 32768 + targetY / 2
+    // x, y and the targets are offset by 32768 so they are never negative. Facing is kept to 2 degrees,
+    // speed to 2 and the target to 2 units: it is only a heading for the others to carry on along.
+    private const int COORD_OFFSET = 32768;
+
+    private static int Pack16(float value)
     {
-        return $"{kittyId}{FIELD_SEPARATOR}{sequence}{FIELD_SEPARATOR}{Whole(movement.X)}{FIELD_SEPARATOR}{Whole(movement.Y)}{FIELD_SEPARATOR}{Whole(movement.Facing)}{FIELD_SEPARATOR}{Whole(movement.TargetX)}{FIELD_SEPARATOR}{Whole(movement.TargetY)}{FIELD_SEPARATOR}{(movement.IsMoving ? 1 : 0)}{FIELD_SEPARATOR}{Whole(movement.Speed)}";
+        int packed = Whole(value) + COORD_OFFSET;
+        return packed < 0 ? 0 : (packed > 65535 ? 65535 : packed);
     }
 
-    private static bool TryDecode(string data, out int kittyId, out int sequence, out KittyMovementState movement)
+    private static int Pack15Half(float value)
     {
-        var fields = data.Split(FIELD_SEPARATOR);
+        int packed = (Whole(value) + COORD_OFFSET) / 2;
+        return packed < 0 ? 0 : (packed > 32767 ? 32767 : packed);
+    }
 
-        kittyId = 0;
-        sequence = 0;
-        movement = default;
+    private static string Encode(int sequence, float x, float y, float facing, float targetX, float targetY, bool moving, float speed)
+    {
+        float heading = facing % 360f;
+        if (heading < 0f) heading += 360f;
 
-        if (fields.Length < 9) return false;
+        int facingHalf = Whole(heading / 2f) % 180;
+        int speedHalf = Whole(speed / 2f);
+        if (speedHalf < 0) speedHalf = 0;
+        if (speedHalf > 255) speedHalf = 255;
 
-        kittyId = int.Parse(fields[0]);
-        sequence = int.Parse(fields[1]);
-        movement = new KittyMovementState(
-            int.Parse(fields[2]),
-            int.Parse(fields[3]),
-            int.Parse(fields[4]),
-            int.Parse(fields[5]),
-            int.Parse(fields[6]),
-            int.Parse(fields[7]) == 1,
-            int.Parse(fields[8]));
+        int a = (((sequence % 64) * 2 + (moving ? 1 : 0)) * 256 + facingHalf) * 65536 + Pack16(x);
+        int b = speedHalf * 65536 + Pack16(y);
+        int c = Pack15Half(targetX) * 32768 + Pack15Half(targetY);
 
-        return true;
+        return $"{a}{FIELD_SEPARATOR}{b}{FIELD_SEPARATOR}{c}";
     }
 
     // ------------------------------------------------------------------ receiving
@@ -149,16 +162,31 @@ public static class AsyncKittySync
 
         trig.AddAction(() =>
         {
-            var sender = GetTriggerPlayer();
+            // a player only ever speaks for their own Kitty: the packet is theirs by who sent it
+            var kitty = Globals.GetKitty(GetTriggerPlayer());
+            if (kitty == null) return;
 
-            if (!TryDecode(BlzGetTriggerSyncData(), out var kittyId, out var sequence, out var movement)) return;
+            var fields = BlzGetTriggerSyncData().Split(FIELD_SEPARATOR);
+            if (fields.Length < 3) return;
 
-            // a player only ever speaks for their own Kitty
-            if (sender == null || sender.Id != kittyId) return;
+            int a = int.Parse(fields[0]);
+            int b = int.Parse(fields[1]);
+            int c = int.Parse(fields[2]);
 
-            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+            float x = a % 65536 - COORD_OFFSET;
+            int rest = a / 65536;
+            float facing = (rest % 256) * 2f;
+            rest /= 256;
+            bool moving = rest % 2 == 1;
+            int sequence = rest / 2;
 
-            kitty.AsyncEffect?.ApplyPosition(sequence, movement);
+            float speed = (b / 65536) * 2f;
+            float y = b % 65536 - COORD_OFFSET;
+
+            float targetX = (c / 32768) * 2f - COORD_OFFSET;
+            float targetY = (c % 32768) * 2f - COORD_OFFSET;
+
+            kitty.AsyncEffect?.ApplyPosition(sequence, x, y, facing, targetX, targetY, moving, speed);
         });
     }
 
@@ -185,7 +213,8 @@ public static class AsyncKittySync
 
             // a player only ever speaks for their own Kitty
             if (sender.Id != kittyId) return;
-            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+            var kitty = Globals.GetKitty(sender);
+            if (kitty == null) return;
 
             var fx = kitty.AsyncEffect;
             if (fx == null) return;
@@ -210,7 +239,9 @@ public static class AsyncKittySync
             }
             else if (kind == AsyncContact.KIND_CIRCLE)
             {
-                if (Globals.ALL_KITTIES.TryGetValue(Player(id), out var circleKitty) && circleKitty.Circle != null && circleKitty.Circle.Unit != null)
+                var circleKitty = Globals.GetKitty(Player(id));
+
+                if (circleKitty != null && circleKitty.Circle != null && circleKitty.Circle.Unit != null)
                 {
                     CollisionDetection.HandleCircleContact(kitty, circleKitty.Circle.Unit);
                 }
@@ -256,7 +287,8 @@ public static class AsyncKittySync
 
             // a player only ever speaks for their own Kitty
             if (sender.Id != int.Parse(fields[0])) return;
-            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+            var kitty = Globals.GetKitty(sender);
+            if (kitty == null) return;
 
             var fx = kitty.AsyncEffect;
             if (fx == null || !fx.IsActive) return;
@@ -292,7 +324,8 @@ public static class AsyncKittySync
 
             // a player only ever speaks for their own Kitty
             if (sender.Id != int.Parse(fields[0])) return;
-            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+            var kitty = Globals.GetKitty(sender);
+            if (kitty == null) return;
 
             var fx = kitty.AsyncEffect;
             if (fx == null || !fx.IsActive) return;
@@ -327,7 +360,8 @@ public static class AsyncKittySync
 
             // a player only ever speaks for their own Kitty
             if (sender.Id != int.Parse(fields[0])) return;
-            if (!Globals.ALL_KITTIES.TryGetValue(sender, out var kitty)) return;
+            var kitty = Globals.GetKitty(sender);
+            if (kitty == null) return;
 
             var fx = kitty.AsyncEffect;
             if (fx == null || !fx.IsActive) return;
@@ -352,16 +386,14 @@ public static class AsyncKittySync
     /// <summary>Sends the state of the Kitty this machine owns, while its effect stands in for it and it moves.</summary>
     private static void BroadcastLocalPosition()
     {
-        var localPlayer = GetLocalPlayer();
-        if (localPlayer == null) return;
-
-        if (!Globals.ALL_KITTIES.TryGetValue(localPlayer, out var kitty)) return;
+        var kitty = Globals.GetKitty(LocalPlayer);
+        if (kitty == null) return;
 
         var fx = kitty.AsyncEffect;
         if (fx == null) return;
 
-        if (!fx.TryTakeBroadcast(out var sequence, out var movement)) return;
+        if (!fx.TryTakeBroadcast(out var sequence, out var x, out var y, out var facing, out var targetX, out var targetY, out var moving, out var speed)) return;
 
-        BlzSendSyncData(POSITION_PREFIX, Encode(fx.KittyId, sequence, movement));
+        BlzSendSyncData(POSITION_PREFIX, Encode(sequence, x, y, facing, targetX, targetY, moving, speed));
     }
 }

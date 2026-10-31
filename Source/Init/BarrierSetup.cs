@@ -14,8 +14,8 @@ public static class BarrierSetup
     /// <summary>How close to the line of blockers the centre of a unit can get: half their thickness plus the unit's own collision.</summary>
     private const float WALL_HALF_WIDTH = 48f;
 
-    /// <summary>How far past the first and the last blocker the wall still holds a unit back.</summary>
-    private const float WALL_END_MARGIN = 48f;
+    /// <summary>How far past the barrier region's top and bottom edge the wall still holds the effect back.</summary>
+    private const float WALL_END_MARGIN = 128f;
 
     private static float wallX;
     private static float wallMinY;
@@ -57,8 +57,10 @@ public static class BarrierSetup
         float intervalY = distanceY / 13;
 
         wallX = centerX;
-        wallMinY = minY + intervalY - WALL_END_MARGIN;
-        wallMaxY = minY + (12 * intervalY) + WALL_END_MARGIN;
+        // the whole height of the barrier region, not just between the first and last blocker: the units
+        // are held at the ends by the blockers' own footprint and the cliffs, the hand-moved effect is not
+        wallMinY = minY - WALL_END_MARGIN;
+        wallMaxY = maxY + WALL_END_MARGIN;
         for (int i = 1; i < 13; i++)
         {
             float currentY = minY + (i * intervalY);

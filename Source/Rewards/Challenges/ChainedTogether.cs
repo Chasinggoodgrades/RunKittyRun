@@ -23,12 +23,13 @@ public static class ChainedTogether
         if (CountPlayers() < REQUIRED_PLAYERS) return;
 
         var all = Globals.ALL_KITTIES_LIST;
+        int lastSafezone = RegionList.SafeZones.Length - 1;
 
         for (int i = 0; i < all.Count; i++)
         {
             var k = all[i];
             if (k.ComputerControlled) continue;
-            if (!k.Alive) return; // somebody died: not a clean win
+            if (k.CurrentSafeZone < lastSafezone) return; // somebody never reached the last safezone: not a clean win
         }
 
         TriggerEvent();
@@ -86,9 +87,12 @@ public static class ChainedTogether
 
     private static void MoveChain()
     {
-        foreach (var chain in KittyLightnings.Values)
+        // a plain list and an index loop: this runs a hundred times a second
+        var active = Chain.Active;
+
+        for (int i = 0; i < active.Count; i++)
         {
-            chain.Constrain();
+            active[i].Constrain();
         }
     }
 
@@ -311,6 +315,10 @@ public class Chain
     public Kitty SecondKitty { get; private set; }
     public lightning Lightning { get; private set; }
 
+    /// <summary>Every chain that exists right now, for the constraint timer to walk without a dictionary.</summary>
+    public static readonly List<Chain> Active = new List<Chain>();
+    private bool registered;
+
     private static readonly Dictionary<DifficultyLevel, (int good, int far, int max)> Ranges = new()
     {
         { DifficultyLevel.Normal,     (600, 700, 800) },
@@ -324,16 +332,28 @@ public class Chain
         FirstKitty = a;
         SecondKitty = b;
         Lightning?.Dispose();
-        Lightning = AddLightning("WHCH", true,
-            a.Unit.X, a.Unit.Y, b.Unit.X, b.Unit.Y);
+
+        // drawn between where the players see their Kitties: the effects in async, the units otherwise
+        AsyncZones.WhereToDraw(a.Unit, out var ax, out var ay);
+        AsyncZones.WhereToDraw(b.Unit, out var bx, out var by);
+        Lightning = AddLightning("WHCH", true, ax, ay, bx, by);
+
+        if (!registered)
+        {
+            registered = true;
+            Active.Add(this);
+        }
     }
 
     public void Constrain()
     {
-        float x1 = FirstKitty.Unit.X, y1 = FirstKitty.Unit.Y;
-        float x2 = SecondKitty.Unit.X, y2 = SecondKitty.Unit.Y;
+        // The leash is judged on where the Kitties are for game logic: the same on every machine. In
+        // async that is their effect (see AsyncZones.LogicPosition), so the chain holds what the
+        // players see, not the unit trailing behind it.
+        AsyncZones.LogicPosition(FirstKitty.Unit, out var x1, out var y1);
+        AsyncZones.LogicPosition(SecondKitty.Unit, out var x2, out var y2);
         float dx = x2 - x1, dy = y2 - y1;
-        float dist = (float)Math.Sqrt(dx * dx + dy * dy);
+        float dist = SquareRoot(dx * dx + dy * dy);
         int max = GetRange("max");
 
         if (dist > max && dist > 0f)
@@ -345,28 +365,34 @@ public class Chain
             float w1 = firstKittyCanMove ? (secondKittyCanMove ? 0.5f : 1f) : 0f;
             float w2 = secondKittyCanMove ? (firstKittyCanMove ? 0.5f : 1f) : 0f;
 
-            var firstKittyNewX = FirstKitty.Unit.X + nx * excess * w1;
-            var firstKittyNewY = FirstKitty.Unit.Y + ny * excess * w1;
-            if (!IsTerrainPathable(firstKittyNewX, firstKittyNewY, pathingtype.Walkability))
-            {
-                FirstKitty.Unit.X = firstKittyNewX;
-                FirstKitty.Unit.Y = firstKittyNewY;
-            }
-
-            var secondKittyNewX = SecondKitty.Unit.X - nx * excess * w2;
-            var secondKittyNewY = SecondKitty.Unit.Y - ny * excess * w2;
-            if (!IsTerrainPathable(secondKittyNewX, secondKittyNewY, pathingtype.Walkability))
-            {
-                SecondKitty.Unit.X = secondKittyNewX;
-                SecondKitty.Unit.Y = secondKittyNewY;
-            }
+            Pull(FirstKitty, x1, y1, nx * excess * w1, ny * excess * w1);
+            Pull(SecondKitty, x2, y2, -nx * excess * w2, -ny * excess * w2);
         }
 
-        // update lightning and color
-        MoveLightning(Lightning, true,
-            FirstKitty.Unit.X, FirstKitty.Unit.Y,
-            SecondKitty.Unit.X, SecondKitty.Unit.Y);
+        // lightning and colour: drawn on what each player sees, a local picture only
+        AsyncZones.WhereToDraw(FirstKitty.Unit, out var drawX1, out var drawY1);
+        AsyncZones.WhereToDraw(SecondKitty.Unit, out var drawX2, out var drawY2);
+        MoveLightning(Lightning, true, drawX1, drawY1, drawX2, drawY2);
         UpdateColor(dist);
+    }
+
+    /// <summary>
+    /// Moves a Kitty by the pull: its unit, and its effect with it when one stands in, by the same
+    /// amount, so the gap between the two is kept and nothing snaps. Only when the new place is open ground.
+    /// </summary>
+    private static void Pull(Kitty kitty, float logicX, float logicY, float pullX, float pullY)
+    {
+        if (pullX == 0f && pullY == 0f) return;
+
+        if (IsTerrainPathable(logicX + pullX, logicY + pullY, pathingtype.Walkability)) return;
+
+        float unitX = kitty.Unit.X + pullX;
+        float unitY = kitty.Unit.Y + pullY;
+        if (IsTerrainPathable(unitX, unitY, pathingtype.Walkability)) return;
+
+        kitty.Unit.X = unitX;
+        kitty.Unit.Y = unitY;
+        kitty.AsyncEffect?.Nudge(pullX, pullY);
     }
 
     private void UpdateColor(float dist)
@@ -400,6 +426,12 @@ public class Chain
 
     public void Dispose()
     {
+        if (registered)
+        {
+            registered = false;
+            Active.Remove(this);
+        }
+
         Lightning?.Dispose();
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
@@ -328,6 +328,7 @@ public class Kitty : IFloatingTags, ICircleOwner
 
         // Initialize Kitty
         Globals.ALL_KITTIES.Add(Player, this);
+        Globals.SetKittySlot(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
         Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
@@ -374,6 +375,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);
+        Globals.SetKittySlot(Player, null);
     }
 
     private void TrueSightGhostWolves()

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WCSharp.Api;
 using static WCSharp.Api.Common;
 
@@ -99,7 +99,8 @@ public static class AsyncContact
             {
                 if (distanceSquared > wolfRadius * wolfRadius) continue;
                 if (!candidate.Alive) continue;
-                if (!Globals.ALL_WOLVES.TryGetValue(candidate, out var wolf)) continue;
+                var wolf = Wolf.FromUnit(candidate);
+                if (wolf == null) continue;
 
                 // overlapping counts as "touching" even when it cannot hurt right now (invulnerable,
                 // wolf reviving): it must not become a surprise touch the moment that ends
@@ -118,7 +119,8 @@ public static class AsyncContact
             if (Gamemode.CurrentGameMode == GameMode.Solo) continue;
             if (distanceSquared > circleRadius * circleRadius) continue;
             if (candidate.Owner == k.Player) continue;
-            if (!Globals.ALL_KITTIES.TryGetValue(candidate.Owner, out var circleKitty)) continue;
+            var circleKitty = Globals.GetKitty(candidate.Owner);
+            if (circleKitty == null) continue;
 
             // every Kitty has a circle unit; it only means something while its Kitty is dead
             if (circleKitty.Unit.Alive) continue;

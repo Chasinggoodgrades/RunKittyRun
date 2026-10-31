@@ -108,7 +108,10 @@ public class Bomber : Affix
             if (RangeIndicator == null) return;
             RangeIndicator.DestroyIndicator();
             Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, Unit.Unit, "origin");
-            ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE, FilterList.KittyFilter);
+            // a little wider: the effect runs ahead of its unit, and the real distance is taken below
+            ExplodeGroup.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, EXPLOSION_RANGE + 300f, FilterList.KittyFilter);
+            float bombX = Unit.Unit.X;
+            float bombY = Unit.Unit.Y;
 
             while (true)
             {
@@ -116,7 +119,10 @@ public class Bomber : Affix
                 if (u == null) break;
                 ExplodeGroup.Remove(u);
 
-                if (!Unit.WolfArea.Rectangle.Contains(u.X, u.Y)) continue; // has to be in wolf lane.
+                AsyncZones.LogicPosition(u, out var kx, out var ky); // where the effect is, in async
+                float ddx = kx - bombX, ddy = ky - bombY;
+                if (ddx * ddx + ddy * ddy > EXPLOSION_RANGE * EXPLOSION_RANGE) continue;
+                if (!Unit.WolfArea.Rectangle.Contains(kx, ky)) continue; // has to be in wolf lane.
                 if (!Globals.ALL_KITTIES[u.Owner].Alive) continue; // ignore if they're dead lol
                 Utility.CreateEffectAndDispose(BLOOD_EFFECT_PATH, u, "origin");
                 Globals.ALL_KITTIES[u.Owner].KillKitty();

@@ -140,10 +140,9 @@ namespace Launcher
                     // Inject custom Lua libraries
                     // map.Script = LuaScriptProcessor.InjectCustomLuaLibraries(map.Script);
 
-                    if (mem)
-                    {
+                    #if DEBUG
                         map.Script = LuaScriptProcessor.ProcessLuaScript(map.Script);
-                    }
+                    #endif
 
                     // Update war3map.lua so you can inspect the generated Lua code easily
                     File.WriteAllText(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_SCRIPT_NAME), map.Script);

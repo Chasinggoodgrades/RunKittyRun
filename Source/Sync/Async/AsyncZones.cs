@@ -33,7 +33,8 @@ public static class AsyncZones
         y = u.Y;
 
         if (u.UnitType != Constants.UNIT_KITTY) return;
-        if (!Globals.ALL_KITTIES.TryGetValue(u.Owner, out var kitty)) return;
+        var kitty = Globals.GetKitty(u.Owner);
+        if (kitty == null) return;
         if (kitty.Unit != u) return;
 
         var fx = kitty.AsyncEffect;
@@ -41,6 +42,23 @@ public static class AsyncZones
 
         x = fx.X;
         y = fx.Y;
+    }
+
+    /// <summary>
+    /// Where this unit is for game logic (a chasing wolf, an explosion): the same on every machine.
+    /// A Kitty's unit with an active effect counts as where the effect is; anything else as where it is.
+    /// </summary>
+    public static void LogicPosition(unit u, out float x, out float y)
+    {
+        x = u.X;
+        y = u.Y;
+
+        if (u.UnitType != Constants.UNIT_KITTY) return;
+        var kitty = Globals.GetKitty(u.Owner);
+        if (kitty == null) return;
+        if (kitty.Unit != u) return;
+
+        kitty.AsyncEffect?.GetLogicPosition(out x, out y);
     }
 
     private static bool Inside(WCSharp.Shared.Data.Rectangle r, float x, float y)

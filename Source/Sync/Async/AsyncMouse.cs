@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using WCSharp.Api;
 using WCSharp.Shared;
 using static WCSharp.Api.Common;
@@ -16,8 +16,11 @@ using static WCSharp.Api.Common;
 /// </summary>
 public static class AsyncMouse
 {
-    private static Func<object> isRightPressedFn;
-    private static Func<object> getPositionFn;
+    // Typed readers: the Lua functions hand back a boolean and plain numbers, so reading the mouse
+    // builds no string and no array (it is read every tick).
+    private static Func<bool> isRightPressedFn;
+    private static Func<float> mouseXFn;
+    private static Func<float> mouseYFn;
     private static bool initialized;
 
     /// <summary>False when the Lua natives could not be reached: every async feature then stays off.</summary>
@@ -31,18 +34,22 @@ public static class AsyncMouse
 
         try
         {
-            isRightPressedFn = Compile(
+            isRightPressedFn = CompileBool(
                 @"return function()
-                    if BlzIsMouseButtonPressed(MOUSE_BUTTON_TYPE_RIGHT) then return '1' end
-                    return '0'
+                    return BlzIsMouseButtonPressed(MOUSE_BUTTON_TYPE_RIGHT) and true or false
                 end");
 
-            getPositionFn = Compile(
+            mouseXFn = CompileFloat(
                 @"return function()
-                    return string.format('%.5f|%.5f', BlzPixelToFrameX(BlzGetMouseScreenPosX()), BlzPixelToFrameY(BlzGetMouseScreenPosY()))
+                    return BlzPixelToFrameX(BlzGetMouseScreenPosX())
                 end");
 
-            IsAvailable = isRightPressedFn != null && getPositionFn != null;
+            mouseYFn = CompileFloat(
+                @"return function()
+                    return BlzPixelToFrameY(BlzGetMouseScreenPosY())
+                end");
+
+            IsAvailable = isRightPressedFn != null && mouseXFn != null && mouseYFn != null;
         }
         catch (Exception e)
         {
@@ -51,12 +58,20 @@ public static class AsyncMouse
         }
     }
 
-    private static Func<object> Compile(string luaChunk)
+    private static Func<bool> CompileBool(string luaChunk)
     {
         var chunk = Lua.Load(luaChunk);
         if (chunk == null) return null;
 
-        return (Func<object>)Lua.Call(chunk);
+        return (Func<bool>)Lua.Call(chunk);
+    }
+
+    private static Func<float> CompileFloat(string luaChunk)
+    {
+        var chunk = Lua.Load(luaChunk);
+        if (chunk == null) return null;
+
+        return (Func<float>)Lua.Call(chunk);
     }
 
     /// <summary>Whether the right button of this machine is down right now.</summary>
@@ -64,8 +79,7 @@ public static class AsyncMouse
     {
         if (!IsAvailable) return false;
 
-        var result = isRightPressedFn();
-        return result != null && result.ToString() == "1";
+        return isRightPressedFn();
     }
 
     /// <summary>Cursor of this machine in frame coordinates. False when it could not be read.</summary>
@@ -76,14 +90,8 @@ public static class AsyncMouse
 
         if (!IsAvailable) return false;
 
-        var result = getPositionFn();
-        if (result == null) return false;
-
-        var parts = result.ToString().Split('|');
-        if (parts.Length < 2) return false;
-
-        x = float.Parse(parts[0]);
-        y = float.Parse(parts[1]);
+        x = mouseXFn();
+        y = mouseYFn();
         return true;
     }
 }

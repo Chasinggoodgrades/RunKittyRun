@@ -122,7 +122,8 @@ public class Fixation : Affix
                 return;
             }
 
-            Unit.Unit.IssueOrder("move", Target.X, Target.Y);
+            AsyncZones.LogicPosition(Target, out var chaseX, out var chaseY);
+            Unit.Unit.IssueOrder("move", chaseX, chaseY);
         });
     }
 
@@ -131,7 +132,8 @@ public class Fixation : Affix
         if (target == null) return false;
         if (!target.Alive) return false;
         if (FangOfShadows.GetFixationImmunityUpgradeLevel(target)) return false;
-        if (!Region.Contains(target.X, target.Y)) return false;
+        AsyncZones.LogicPosition(target, out var tx, out var ty);
+        if (!Region.Contains(tx, ty)) return false;
         return true;
     }
 
@@ -147,7 +149,8 @@ public class Fixation : Affix
     private void GetClosestTarget()
     {
         UnitsInRange.Clear();
-        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS, FilterList.KittyFilter);
+        // a little wider: the effect runs ahead of its unit, and the real distance is taken below
+        UnitsInRange.EnumUnitsInRange(Unit.Unit.X, Unit.Unit.Y, FIXATION_RADIUS + 300f, FilterList.KittyFilter);
         if (UnitsInRange.Count <= 0) return;
 
         var newTarget = GetClosestUnitInRange();
@@ -174,7 +177,9 @@ public class Fixation : Affix
             UnitsInRange.Remove(unit);
             if (FangOfShadows.GetFixationImmunityUpgradeLevel(unit)) continue;
             //var distance = WCSharp.Shared.Util.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
-            var distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(unitX, unitY, unit.X, unit.Y);
+            AsyncZones.LogicPosition(unit, out var ux, out var uy);
+            var distance = WCSharp.Shared.FastUtil.DistanceBetweenPoints(unitX, unitY, ux, uy);
+            if (distance > FIXATION_RADIUS) continue;
             if (distance < closestDistance)
             {
                 closestUnit = unit;

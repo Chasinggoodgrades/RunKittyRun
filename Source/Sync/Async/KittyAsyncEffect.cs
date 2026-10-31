@@ -227,7 +227,7 @@ public class KittyAsyncEffect
     }
 
     /// <summary>This machine is the one of the player owning the Kitty: the only one that knows where it really is going.</summary>
-    public bool IsOwnerHere => GetLocalPlayer() == kitty.Player;
+    public bool IsOwnerHere => AsyncKittySync.LocalPlayer == kitty.Player;
 
     /// <summary>On slide terrain the Slider moves the unit itself: the effect follows it instead of leading.</summary>
     private bool IsFollowingUnit => kitty.Slider != null && kitty.Slider.IsEnabled() && kitty.Slider.IsOnSlideTerrain();
@@ -317,6 +317,7 @@ public class KittyAsyncEffect
         correctionY = 0f;
         notMovedTime = 0f;
         hasPrevUnit = false;
+        hasSynced = false;
 
         SetUnitHidden(true);
         Place();
@@ -689,7 +690,50 @@ public class KittyAsyncEffect
         }
     }
 
+    /// <summary>
+    /// Moves the effect by a pull from outside (the Chained Together leash), on every machine alike.
+    /// The logic position moves with it, so the next pull sees the gap already closed.
+    /// </summary>
+    public void Nudge(float dx, float dy)
+    {
+        if (!IsActive) return;
+
+        x += dx;
+        y += dy;
+
+        if (hasSynced)
+        {
+            syncedX += dx;
+            syncedY += dy;
+        }
+    }
+
     private float nextPickupTime;
+
+    // The effect itself is drawn from local state and differs a little between machines, so nothing that
+    // changes the game may read it. This is the other one: where the last position packet put the effect.
+    // Packets are read on the same turn on every machine, the sender's included, so every machine holds
+    // the same value and game logic (a chasing wolf, an explosion) can use it.
+    private float syncedX;
+    private float syncedY;
+    private bool hasSynced;
+
+    /// <summary>
+    /// Where the effect is for game logic, the same on every machine: the last position packet while the
+    /// effect stands in for the unit, the unit's place otherwise (dead, sliding, not heard yet).
+    /// </summary>
+    public void GetLogicPosition(out float lx, out float ly)
+    {
+        if (IsActive && hasSynced && kitty.Unit != null && !IsFollowingUnit)
+        {
+            lx = syncedX;
+            ly = syncedY;
+            return;
+        }
+
+        lx = kitty.Unit.X;
+        ly = kitty.Unit.Y;
+    }
 
     /// <summary>
     /// Owner only: the unit is hidden and behind, so it would never walk over what the effect runs over.
@@ -787,6 +831,7 @@ public class KittyAsyncEffect
 
     private void JumpToUnit(float unitX, float unitY)
     {
+        hasSynced = false;
         x = unitX;
         y = unitY;
         correctionX = 0f;
@@ -799,14 +844,21 @@ public class KittyAsyncEffect
 
         facing = GetUnitFacing(kitty.Unit);
 
-        // what it was running to is kept: the unit carries on to it from its new place.
-        // (What it touches there is judged as ever: a wolf at the new place is a new touch.)
+        // Where it was running to belongs to the place it left: kept, the effect would set off from the
+        // new spot back towards the old click (a blink looked like the effect being dragged back) while
+        // the unit stood still. It stays where the unit is and follows it from here; the next click or
+        // the held button gives it a new heading. (What it touches there is judged as ever: a wolf at
+        // the new place is a new touch.)
+        hasTarget = false;
+        pendingLocal = false;
+        heldHadTarget = false;
         Place();
         DetectContact();
     }
 
     private void FollowUnit(float unitX, float unitY)
     {
+        hasSynced = false;
         x = unitX;
         y = unitY;
         facing = GetUnitFacing(kitty.Unit);
@@ -1252,20 +1304,21 @@ public class KittyAsyncEffect
 
     // ------------------------------------------------------------------ packets
 
-    /// <summary>Read on the owning machine, ten times a second, to broadcast where the Kitty is and where it heads.</summary>
-    public KittyMovementState GetLocalMovementState()
-    {
-        return new KittyMovementState(x, y, facing, targetX, targetY, hasTarget, speed);
-    }
-
     /// <summary>
     /// Whether the owner has something to tell: it is moving, or it just stopped (one last packet
-    /// so the others stop too). A resting Kitty costs no traffic.
+    /// so the others stop too). A resting Kitty costs no traffic. Plain values rather than a struct:
+    /// a struct is a table in Lua, and this runs twenty times a second.
     /// </summary>
-    public bool TryTakeBroadcast(out int sequence, out KittyMovementState state)
+    public bool TryTakeBroadcast(out int sequence, out float px, out float py, out float pFacing, out float pTargetX, out float pTargetY, out bool moving, out float pSpeed)
     {
         sequence = 0;
-        state = default;
+        px = 0f;
+        py = 0f;
+        pFacing = 0f;
+        pTargetX = 0f;
+        pTargetY = 0f;
+        moving = false;
+        pSpeed = 0f;
 
         if (!IsActive || IsFollowingUnit) return false;
         if (!hasTarget && !lastBroadcastMoving) return false;
@@ -1274,31 +1327,49 @@ public class KittyAsyncEffect
         outSequence++;
 
         sequence = outSequence;
-        state = GetLocalMovementState();
+        px = x;
+        py = y;
+        pFacing = facing;
+        pTargetX = targetX;
+        pTargetY = targetY;
+        moving = hasTarget;
+        pSpeed = speed;
         return true;
     }
 
     /// <summary>Applied from a Position packet on every machine. The sender is already ahead of it and learns nothing.</summary>
-    public void ApplyPosition(int sequence, KittyMovementState movement)
+    public void ApplyPosition(int sequence, float packetX, float packetY, float packetFacing, float packetTargetX, float packetTargetY, bool packetMoving, float packetSpeed)
     {
-        if (!IsActive || sequence <= lastSequence) return;
+        if (!IsActive) return;
+
+        // sequences count 0..63 and start over: newer means a short step ahead, older or equal a step behind
+        if (lastSequence >= 0)
+        {
+            int step = (sequence - lastSequence + 64) % 64;
+            if (step == 0 || step >= 32) return;
+        }
 
         lastSequence = sequence;
+
+        // an old packet landing after a teleport must not drag the logic position back
+        if (kitty.Unit != null && Distance(packetX, packetY, kitty.Unit.X, kitty.Unit.Y) <= SNAP_DISTANCE)
+        {
+            syncedX = packetX;
+            syncedY = packetY;
+            hasSynced = true;
+        }
 
         if (IsOwnerHere) return;
 
         lastPacketTime = AsyncKittySync.Now;
 
         // the packet is a little old: where it says the effect was, moved on along its way
-        float packetX = movement.X;
-        float packetY = movement.Y;
-
-        if (movement.IsMoving && movement.Speed > 0 && REPLICA_LAG > 0f)
+        if (packetMoving && packetSpeed > 0 && REPLICA_LAG > 0f)
         {
-            float toX = movement.TargetX - packetX;
-            float toY = movement.TargetY - packetY;
+            float toX = packetTargetX - packetX;
+            float toY = packetTargetY - packetY;
             float toDistance = SquareRoot(toX * toX + toY * toY);
-            float advance = movement.Speed * REPLICA_LAG;
+            float advance = packetSpeed * REPLICA_LAG;
 
             if (advance > toDistance) advance = toDistance;
 
@@ -1323,10 +1394,10 @@ public class KittyAsyncEffect
             correctionY = packetY - y;
         }
 
-        hasTarget = movement.IsMoving;
-        targetX = movement.TargetX;
-        targetY = movement.TargetY;
-        speed = movement.Speed;
+        hasTarget = packetMoving;
+        targetX = packetTargetX;
+        targetY = packetTargetY;
+        speed = packetSpeed;
     }
 
     // ------------------------------------------------------------------ cleanup

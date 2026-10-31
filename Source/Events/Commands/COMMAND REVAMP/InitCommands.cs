@@ -69,7 +69,7 @@ public static class InitCommands
         CommandsManager.RegisterCommand(
             name: "async",
             alias: "asyncclicks",
-            tier: CommandTier.Admin,
+            tier: CommandTier.All,
             argDesc: "[on/off]",
             description: "Draws your Kitty as an effect that reacts to your right click at once (async clicks). Flips it when no argument is given.",
             action: (player, args) =>

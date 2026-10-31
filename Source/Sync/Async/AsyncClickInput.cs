@@ -1,4 +1,4 @@
-using WCSharp.Api;
+﻿using WCSharp.Api;
 using static WCSharp.Api.Common;
 
 /// <summary>
@@ -31,10 +31,8 @@ public static class AsyncClickInput
     {
         if (!AsyncMouse.IsAvailable) return;
 
-        var localPlayer = GetLocalPlayer();
-        if (localPlayer == null) return;
-
-        if (!Globals.ALL_KITTIES.TryGetValue(localPlayer, out var kitty)) return;
+        var kitty = Globals.GetKitty(AsyncKittySync.LocalPlayer);
+        if (kitty == null) return;
 
         var fx = kitty.AsyncEffect;
 
