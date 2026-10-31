@@ -63,6 +63,25 @@ namespace Source.Init
             }
         }
 
+        /// <summary>
+        /// Async is on from the start for every human Kitty (-async off turns it off). Runs on every
+        /// machine at the same moment, as the effect handles have to be made everywhere.
+        /// </summary>
+        private static void EnableAsyncByDefault()
+        {
+            if (!AsyncMouse.IsAvailable) return;
+
+            var kitties = Globals.ALL_KITTIES_LIST;
+
+            for (int i = 0; i < kitties.Count; i++)
+            {
+                var kitty = kitties[i];
+                if (kitty.ComputerControlled) continue;
+
+                kitty.AsyncEffect?.Enable();
+            }
+        }
+
         private static void StartGame()
         {
             try
@@ -86,6 +105,7 @@ namespace Source.Init
                 Windwalk.Initialize();
                 AsyncKittySync.Initialize();
                 Kitty.Initialize();
+                EnableAsyncByDefault();
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();
