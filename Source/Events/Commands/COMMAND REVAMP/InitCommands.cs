@@ -2096,13 +2096,13 @@ public static class InitCommands
             description: "Restarts the current round and time to 0:00",
             action: (player, args) =>
             {
+                Gameover.CancelEndingGame(); // first thing: the end countdown and the discord banner go whatever else happens
                 if (Globals.ROUND <= 0) return;
                 Globals.GAME_SECONDS = Globals.GAME_SECONDS - GameTimer.RoundTime[Globals.ROUND];
                 GameTimer.RoundTime[Globals.ROUND] = 0.0f; // reset the round end time
                 GameTimer.FinishedTimes[Globals.ROUND] = 0.0f; // reset the finished time
                 Globals.ROUND = 0;
                 Utility.ResetAllKittiesLevelsGold(); // level 1 , resource gold.
-                Gameover.CancelEndingGame(); // a restart after the game was lost: it is not ending any more
                 RoundManager.RoundEnd();
             }
         );

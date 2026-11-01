@@ -125,7 +125,13 @@ public class ShardOfTranslocation : Relic
             y = unit.Y + (MaxBlinkRange * Sin(angle));
         }
         unit.SetPosition(x, y);
-        Globals.ALL_KITTIES[unit.Owner]?.AsyncEffect?.TeleportToUnit(); // the async effect goes with it
+
+        // The windwalk re-activation sends the unit back to the last point it was clicked to; after a blink
+        // that is behind it. The new spot is the last point now (the effect follows the unit there).
+        var kitty = Globals.ALL_KITTIES[unit.Owner];
+        kitty?.APMTracker.SetLastPoint(x, y);
+
+        kitty?.AsyncEffect?.TeleportToUnit(); // the async effect goes with it
         Utility.SimpleTimer(0.1f, () => Globals.ALL_KITTIES[unit.Owner]?.InvulnerableKitty(0.5f));
     }
 

@@ -41,10 +41,10 @@ public static class AsyncKittySync
     private const int COORD_OFFSET = 32768;
 
     /// <summary>Movement and input rate: fine enough to look smooth, as the effect is only ever drawn.</summary>
-    private static float TICK_PERIOD => AsyncTuning.Get(22);
+    private static float TICK_PERIOD => AsyncTuning.Get(AsyncTuning.TICK_PERIOD);
 
     /// <summary>Twenty a second by default (the TS version sent ten); tunable with -asynctune positionperiod.</summary>
-    private static float POSITION_PERIOD => AsyncTuning.Get(20);
+    private static float POSITION_PERIOD => AsyncTuning.Get(AsyncTuning.POSITION_PERIOD);
 
     /// <summary>The player of THIS machine, read once: it never changes, and GetLocalPlayer is a native call.</summary>
     public static player LocalPlayer { get; private set; }

@@ -66,6 +66,7 @@ public class ShadowKitty
     {
         var kitty = Globals.ALL_KITTIES[Player].Unit;
         kitty.SetPosition(Unit.X, Unit.Y);
+        Globals.ALL_KITTIES[Player].APMTracker.SetLastPoint(Unit.X, Unit.Y); // windwalk must not send it back to the old click
         Globals.ALL_KITTIES[Player].AsyncEffect?.TeleportToUnit(); // the async effect goes with it, however short the hop
     }
 

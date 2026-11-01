@@ -6,18 +6,21 @@ using static WCSharp.Api.Common;
 public static class ChainedTogether
 {
     private const int REQUIRED_PLAYERS = 2;
-    private static Dictionary<string, Chain> KittyLightnings = new Dictionary<string, Chain>();
-    private static Dictionary<string, List<Kitty>> kittyGroups = new Dictionary<string, List<Kitty>>();
+    private static Dictionary<int, Chain> KittyLightnings = new Dictionary<int, Chain>();
+    private static Dictionary<int, List<Kitty>> kittyGroups = new Dictionary<int, List<Kitty>>();
     private static float timerInterval = 0.01f;
     private static Random rng = Globals.RANDOM_GEN;
     private static timer MoveChainTimer;
     private static bool EventTriggered { get; set; } = false;
     private static bool EventStarted { get; set; } = false;
 
+    /// <summary>The event has begun once this game: a clean win does not arm it again (the admin command still can).</summary>
+    private static bool EventHasRun { get; set; } = false;
+
     public static void OnRoundWon()
     {
         if (Gamemode.CurrentGameMode != GameMode.Standard) return;
-        if (EventStarted || EventTriggered) return;
+        if (EventHasRun || EventStarted || EventTriggered) return;
         if (Globals.ROUND >= Gamemode.NumberOfRounds) return; // no next round to chain
 
         if (CountPlayers() < REQUIRED_PLAYERS) return;
@@ -70,6 +73,7 @@ public static class ChainedTogether
         }
 
         EventStarted = true;
+        EventHasRun = true;
         try
         {
             SetGroups();
@@ -98,9 +102,18 @@ public static class ChainedTogether
 
     private static void RegenerateGroup(string kittyName)
     {
-        if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
-        group.RemoveAll(k => k.Name == kittyName);
-        RechainGroup(group);
+        // unused for now (see Kitty.cs): names are not unique, ids are
+        for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++)
+        {
+            var left = Globals.ALL_KITTIES_LIST[i];
+            if (left.Name != kittyName || !kittyGroups.TryGetValue(left.Player.Id, out var group)) continue;
+
+            DisposeGroupChains(group);
+            group.Remove(left);
+            kittyGroups.Remove(left.Player.Id);
+            if (group.Count >= 2) RechainGroup(group);
+            return;
+        }
     }
 
     /// <summary>
@@ -120,10 +133,10 @@ public static class ChainedTogether
         foreach(var kitty in Globals.ALL_KITTIES_LIST)
         {
             kitty.IsChained = false;
-            if (KittyLightnings.TryGetValue(kitty.Name, out var chain))
+            if (KittyLightnings.TryGetValue(kitty.Player.Id, out var chain))
             {
                 chain.Dispose();
-                KittyLightnings.Remove(kitty.Name);
+                KittyLightnings.Remove(kitty.Player.Id);
             }
         }
 
@@ -134,20 +147,20 @@ public static class ChainedTogether
         try
         {
             if (!kitty.IsChained) return;
-            if (!kittyGroups.TryGetValue(kitty.Name, out var group)) return;
+            if (!kittyGroups.TryGetValue(kitty.Player.Id, out var group)) return;
 
             // Dispose every chain link in this group first so we never
             // overwrite a KittyLightnings entry without freeing the old Chain.
             DisposeGroupChains(group);
 
             group.Remove(kitty);
-            kittyGroups.Remove(kitty.Name);
+            kittyGroups.Remove(kitty.Player.Id);
             kitty.IsChained = false;
 
             if (group.Count == 1)
             {
                 var solo = group[0];
-                kittyGroups.Remove(solo.Name);
+                kittyGroups.Remove(solo.Player.Id);
                 RegroupSoloKitty(solo);
             }
             else if (group.Count >= 2)
@@ -166,7 +179,7 @@ public static class ChainedTogether
     {
         for (int i = 0; i < group.Count - 1; i++)
         {
-            var key = group[i].Name;
+            var key = group[i].Player.Id;
             if (KittyLightnings.TryGetValue(key, out var chain))
             {
                 chain.Dispose();
@@ -192,7 +205,7 @@ public static class ChainedTogether
         }
 
         targetGroup.Add(solo);
-        kittyGroups[solo.Name] = targetGroup;
+        kittyGroups[solo.Player.Id] = targetGroup;
 
         // Only chain the new link (previous last member -> solo).
         // Existing chains in targetGroup are untouched.
@@ -201,23 +214,23 @@ public static class ChainedTogether
         newChain.SetKitties(previousLast, solo);
         previousLast.IsChained = true;
         solo.IsChained = true;
-        KittyLightnings[previousLast.Name] = newChain;
+        KittyLightnings[previousLast.Player.Id] = newChain;
     }
 
-    private static void FreeKittiesFromGroup(string kittyName, bool isVictory = false)
+    private static void FreeKittiesFromGroup(int kittyId, bool isVictory = false)
     {
-        if (!kittyGroups.TryGetValue(kittyName, out var group)) return;
+        if (!kittyGroups.TryGetValue(kittyId, out var group)) return;
         foreach (var k in group)
         {
             k.IsChained = false;
-            if (KittyLightnings.TryGetValue(k.Name, out var c))
+            if (KittyLightnings.TryGetValue(k.Player.Id, out var c))
             {
                 c.Dispose();
-                KittyLightnings.Remove(k.Name);
+                KittyLightnings.Remove(k.Player.Id);
             }
             if (isVictory) AwardChainedTogether(k);
         }
-        foreach (var k in group) kittyGroups.Remove(k.Name);
+        foreach (var k in group) kittyGroups.Remove(k.Player.Id);
     }
 
     private static void SetGroups()
@@ -265,11 +278,15 @@ public static class ChainedTogether
             var a = group[i];
             var b = group[i + 1];
             a.IsChained = b.IsChained = true;
+
+            // never overwrite a chain that is still standing: it would go on pulling and drawing, unseen
+            if (KittyLightnings.TryGetValue(a.Player.Id, out var old)) old.Dispose();
+
             var chain = ObjectPool<Chain>.GetEmptyObject();
             chain.SetKitties(a, b);
-            KittyLightnings[a.Name] = chain;
-            kittyGroups[a.Name] = group;
-            kittyGroups[b.Name] = group;
+            KittyLightnings[a.Player.Id] = chain;
+            kittyGroups[a.Player.Id] = group;
+            kittyGroups[b.Player.Id] = group;
         }
     }
 
@@ -279,7 +296,7 @@ public static class ChainedTogether
         {
             if (!EventStarted) return;
             if (!IsInLastSafezone(kitty)) return;
-            FreeKittiesFromGroup(kitty.Name, true);
+            FreeKittiesFromGroup(kitty.Player.Id, true);
         }
         catch (Exception e)
         {
@@ -318,6 +335,7 @@ public class Chain
     /// <summary>Every chain that exists right now, for the constraint timer to walk without a dictionary.</summary>
     public static readonly List<Chain> Active = new List<Chain>();
     private bool registered;
+    private bool inUse;
 
     private static readonly Dictionary<DifficultyLevel, (int good, int far, int max)> Ranges = new()
     {
@@ -331,7 +349,9 @@ public class Chain
     {
         FirstKitty = a;
         SecondKitty = b;
+        inUse = true;
         Lightning?.Dispose();
+        Lightning = null;
 
         // drawn between where the players see their Kitties: the effects in async, the units otherwise
         AsyncZones.WhereToDraw(a.Unit, out var ax, out var ay);
@@ -426,13 +446,19 @@ public class Chain
 
     public void Dispose()
     {
+        // twice would put the object in the pool twice: two links sharing one, and one of them not drawn
+        if (!inUse) return;
+        inUse = false;
+
         if (registered)
         {
             registered = false;
             Active.Remove(this);
         }
 
+        // the handle is let go of: a recycled one could be another link's lightning if disposed again
         Lightning?.Dispose();
+        Lightning = null;
         FirstKitty.IsChained = false;
         SecondKitty.IsChained = false;
         ObjectPool<Chain>.ReturnObject(this);

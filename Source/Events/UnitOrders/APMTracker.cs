@@ -25,6 +25,16 @@ public class APMTracker
         Init();
     }
 
+    /// <summary>
+    /// After the unit is moved by hand (a blink, a rewind, a summon) the last clicked point lies behind it,
+    /// and the windwalk re-activation would send it back there. The new spot becomes the last point.
+    /// </summary>
+    public void SetLastPoint(float x, float y)
+    {
+        LastX = x;
+        LastY = y;
+    }
+
     private void Init()
     {
         ClicksTrigger.RegisterUnitEvent(Kitty.Unit, EVENT_UNIT_ISSUED_POINT_ORDER);

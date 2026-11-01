@@ -39,86 +39,89 @@ public class KittyAsyncEffect
     private const int DEFAULT_GHOST_PERCENT = 80;
 
     /// <summary>Farthest the effect may run ahead of the unit: about move speed times network latency, with room to spare.</summary>
-    private static float MAX_LEAD => AsyncTuning.Get(0);
+    private static float MAX_LEAD => AsyncTuning.Get(AsyncTuning.MAX_LEAD);
 
     /// <summary>Farther than this from the unit, something moved the unit (teleport, revive): the effect snaps back to it.</summary>
-    private static float SNAP_DISTANCE => AsyncTuning.Get(1);
+    private static float SNAP_DISTANCE => AsyncTuning.Get(AsyncTuning.SNAP_DISTANCE);
 
     /// <summary>How much faster than the move speed the effect catches up with the unit.</summary>
-    private static float CATCH_UP_FACTOR => AsyncTuning.Get(2);
+    private static float CATCH_UP_FACTOR => AsyncTuning.Get(AsyncTuning.CATCH_UP_FACTOR);
 
-    private static float ARRIVE_EPSILON => AsyncTuning.Get(3);
+    private static float ARRIVE_EPSILON => AsyncTuning.Get(AsyncTuning.ARRIVE_EPSILON);
 
     /// <summary>Degrees a second per point of the unit's turn rate: 0.6 turns half a circle in about half a second.</summary>
-    private static float TURN_RATE_TO_DEGREES_PER_SECOND => AsyncTuning.Get(4);
+    private static float TURN_RATE_TO_DEGREES_PER_SECOND => AsyncTuning.Get(AsyncTuning.TURN_RATE);
 
     /// <summary>Used when the turn rate of the unit cannot be read.</summary>
-    private static float FALLBACK_TURN_DEGREES_PER_SECOND => AsyncTuning.Get(5);
+    private static float FALLBACK_TURN_DEGREES_PER_SECOND => AsyncTuning.Get(AsyncTuning.FALLBACK_TURN);
 
     /// <summary>
     /// Like a unit, the effect turns on the spot while it is facing this far (or more) from where
     /// it has to go, and only starts to move once it is within it.
     /// </summary>
-    private static float PROPULSION_WINDOW => AsyncTuning.Get(6);
+    private static float PROPULSION_WINDOW => AsyncTuning.Get(AsyncTuning.PROPULSION);
 
     /// <summary>Settling on the unit over less than this does not turn the effect: a tiny correction must not make it twitch.</summary>
-    private static float SETTLE_TURN_DISTANCE => AsyncTuning.Get(7);
+    private static float SETTLE_TURN_DISTANCE => AsyncTuning.Get(AsyncTuning.SETTLE_TURN_DISTANCE);
 
     /// <summary>A confirmed run whose unit has not moved for this long is over (it reached a wall, or was stopped by something else).</summary>
-    private static float UNIT_STILL_TIMEOUT => AsyncTuning.Get(8);
+    private static float UNIT_STILL_TIMEOUT => AsyncTuning.Get(AsyncTuning.STILL_TIME);
 
     /// <summary>A click guessed locally that no move order confirmed within this long (a click on the UI, say) is dropped.</summary>
-    private static float LOCAL_TARGET_TIMEOUT => AsyncTuning.Get(9);
+    private static float LOCAL_TARGET_TIMEOUT => AsyncTuning.Get(AsyncTuning.LOCAL_TIMEOUT);
 
     /// <summary>A move order this close to the local guess is taken as the confirmation of that very click.</summary>
-    private static float ORDER_AGREE_DISTANCE => AsyncTuning.Get(10);
+    private static float ORDER_AGREE_DISTANCE => AsyncTuning.Get(AsyncTuning.ORDER_AGREE);
 
     /// <summary>
     /// Where the effect stands still after a touch it told the others about, until that touch comes
     /// back from the network (and the Kitty dies or not). Given up after this long whatever happens.
     /// </summary>
-    private static float CONTACT_HOLD_TIMEOUT => AsyncTuning.Get(11);
+    private static float CONTACT_HOLD_TIMEOUT => AsyncTuning.Get(AsyncTuning.CONTACT_HOLD);
 
     /// <summary>The owner sends ten packets a second: half a second of silence means it stopped talking.</summary>
-    private static float PACKET_SILENCE_TIMEOUT => AsyncTuning.Get(12);
+    private static float PACKET_SILENCE_TIMEOUT => AsyncTuning.Get(AsyncTuning.PACKET_SILENCE);
 
     /// <summary>A packet this far from the displayed effect replaces its position, closer ones only pull it halfway.</summary>
-    private static float PACKET_SNAP_DISTANCE => AsyncTuning.Get(13);
+    private static float PACKET_SNAP_DISTANCE => AsyncTuning.Get(AsyncTuning.PACKET_SNAP);
 
     /// <summary>The effect wants to move, cannot, and the unit does: after this long it goes where the unit went.</summary>
-    private static float BLOCKED_TIMEOUT => AsyncTuning.Get(14);
+    private static float BLOCKED_TIMEOUT => AsyncTuning.Get(AsyncTuning.BLOCKED);
 
     /// <summary>How fast (per second, of the remaining gap) the effect glides back to a unit that got ahead of it.</summary>
-    private static float GLIDE_RATE => AsyncTuning.Get(15);
+    private static float GLIDE_RATE => AsyncTuning.Get(AsyncTuning.GLIDE);
 
     // heights (before the Kitty's scale) the attachments of rewards are drawn at, standing in for the unit's attachment points
-    private static float ATTACH_HEIGHT_OVERHEAD => AsyncTuning.Get(16);
-    private static float ATTACH_HEIGHT_HEAD => AsyncTuning.Get(17);
-    private static float ATTACH_HEIGHT_CHEST => AsyncTuning.Get(18);
-    private static float ATTACH_HEIGHT_HAND => AsyncTuning.Get(19);
+    private static float ATTACH_HEIGHT_OVERHEAD => AsyncTuning.Get(AsyncTuning.OVERHEAD);
+    private static float ATTACH_HEIGHT_HEAD => AsyncTuning.Get(AsyncTuning.HEAD);
+    private static float ATTACH_HEIGHT_CHEST => AsyncTuning.Get(AsyncTuning.CHEST);
+    private static float ATTACH_HEIGHT_HAND => AsyncTuning.Get(AsyncTuning.HAND);
 
     // seconds of lead (the effect ahead of the unit) allowed before the effect eases off
-    private static float LEAD_TIME => AsyncTuning.Get(23);
+    private static float LEAD_TIME => AsyncTuning.Get(AsyncTuning.LEAD_TIME);
     // seconds an observer's packet is already old when it arrives
-    private static float REPLICA_LAG => AsyncTuning.Get(24);
+    private static float REPLICA_LAG => AsyncTuning.Get(AsyncTuning.REPLICA_LAG);
     // per second: how fast an observer's effect takes up the error a packet shows
-    private static float CORRECTION_RATE => AsyncTuning.Get(25);
+    private static float CORRECTION_RATE => AsyncTuning.Get(AsyncTuning.CORRECTION);
     // after a click: the longest an order may take to land, and how long the unit then has to start moving
     private const float ORDER_GRACE = 1.2f;
     private const float ORDER_START_GRACE = 0.5f;
 
     // how far from the unit a stopped effect may stay without being moved at all
-    private static float SETTLE_TOLERANCE => AsyncTuning.Get(29);
+    private static float SETTLE_TOLERANCE => AsyncTuning.Get(AsyncTuning.SETTLE_TOLERANCE);
 
     // a unit that moves further than a run of a few ticks plus this did not run: it was teleported
     private const float TELEPORT_MARGIN = 25f;
 
     // seconds the unit has stood still before the effect starts easing the last few units onto it
-    private static float SETTLE_DELAY => AsyncTuning.Get(28);
+    private static float SETTLE_DELAY => AsyncTuning.Get(AsyncTuning.SETTLE_DELAY);
 
     // while the button is held: seconds between orders to the unit (0 = never) and how far the cursor must have moved
-    private static float HOLD_INTERVAL => AsyncTuning.Get(26);
-    private static float HOLD_DISTANCE => AsyncTuning.Get(27);
+    private static float HOLD_INTERVAL => AsyncTuning.Get(AsyncTuning.HOLD_INTERVAL);
+    private static float HOLD_DISTANCE => AsyncTuning.Get(AsyncTuning.HOLD_DISTANCE);
+
+    // the move speed at which the walk animation plays at its normal pace
+    private static float WALK_ANIM_SPEED => AsyncTuning.Get(AsyncTuning.WALK_ANIM);
 
     // the walk animation only gives way to standing after this long without moving: no flicker
     private const float STAND_DELAY = 0.12f;
@@ -204,6 +207,20 @@ public class KittyAsyncEffect
     private bool lastBroadcastMoving;
     private float nextPickupTime;
 
+    // the last place the effect stood that was not blocked: what it may step back towards when it is inside a wall's edge
+    private float lastFreeX;
+    private float lastFreeY;
+    private bool hasLastFree;
+
+    // the animation speed the effect is playing at now (1 = the model's own)
+    private float animationScale = 1f;
+
+    // The heading the effect is turning to. A unit finishes its turn even when it arrives first (a short
+    // run, a click behind it); so does the effect: this carries on after the move has ended.
+    private float turnGoal;
+    private bool hasTurnGoal;
+    private bool turnedThisTick;
+
     // The effect itself is drawn from local state and differs a little between machines, so nothing that
     // changes the game may read it. This is the other one: where the last position packet put the effect.
     // Packets are read on the same turn on every machine, the sender's included, so every machine holds
@@ -277,6 +294,7 @@ public class KittyAsyncEffect
     {
         currentModel = AsyncSkinModels.For(BlzGetUnitSkin(kitty.Unit));
         animationIsWalk = false;
+        animationScale = 1f; // a new handle plays at the model's own pace
         standIn = AddSpecialEffect(currentModel, kitty.Unit.X, kitty.Unit.Y);
 
         if (standIn == null) return;
@@ -551,14 +569,33 @@ public class KittyAsyncEffect
         // walking starts at once, standing only after a short while: a stall of a tick or two
         // (a turn, a wall) must not restart the animation each time
         if (isWalking) notMovedTime = 0f;
-        else notMovedTime += AsyncTuning.Get(22);
+        else notMovedTime += AsyncTuning.Get(AsyncTuning.TICK_PERIOD);
 
         if (!isWalking && notMovedTime < STAND_DELAY) isWalking = animationIsWalk;
 
-        if (isWalking == animationIsWalk) return;
+        if (isWalking != animationIsWalk)
+        {
+            animationIsWalk = isWalking;
+            BlzPlaySpecialEffect(standIn, isWalking ? ANIM_TYPE_WALK : ANIM_TYPE_STAND);
+        }
 
-        animationIsWalk = isWalking;
-        BlzPlaySpecialEffect(standIn, isWalking ? ANIM_TYPE_WALK : ANIM_TYPE_STAND);
+        // A unit's walk animation plays faster the faster it runs; the effect would otherwise glide at
+        // full speed with the model's own pace. Only changed when it differs enough to see.
+        float wanted = 1f;
+        float walkBase = WALK_ANIM_SPEED;
+
+        if (animationIsWalk && walkBase > 0f && speed > 0f)
+        {
+            wanted = speed / walkBase;
+            if (wanted < 0.5f) wanted = 0.5f;
+            if (wanted > 3f) wanted = 3f;
+        }
+
+        if (wanted - animationScale > 0.03f || animationScale - wanted > 0.03f)
+        {
+            animationScale = wanted;
+            BlzSetSpecialEffectTimeScale(standIn, wanted);
+        }
     }
 
     // ------------------------------------------------------------------ steering (owning machine)
@@ -570,6 +607,16 @@ public class KittyAsyncEffect
     public void SetLocalTarget(float worldX, float worldY)
     {
         if (!CanBeSteeredLocally) return;
+
+        // the turn to the click starts at once, even if the click is too close to run to
+        float clickDx = worldX - x;
+        float clickDy = worldY - y;
+
+        if (clickDx * clickDx + clickDy * clickDy > 1f)
+        {
+            turnGoal = Atan2(clickDy, clickDx) * RAD_TO_DEG;
+            hasTurnGoal = true;
+        }
 
         targetX = worldX;
         targetY = worldY;
@@ -800,6 +847,8 @@ public class KittyAsyncEffect
 
         bool moved;
 
+        turnedThisTick = false;
+
         if (IsOwnerHere)
         {
             moved = AdvanceOwner(dt, unitX, unitY);
@@ -808,6 +857,9 @@ public class KittyAsyncEffect
         {
             moved = AdvanceReplica(dt, unitX, unitY);
         }
+
+        // arrived before the turn was done: it finishes turning on the spot, at the same rate
+        if (hasTurnGoal && !turnedThisTick && TurnToward(turnGoal, dt) <= 0f) hasTurnGoal = false;
 
         ShowAnimation(moved);
         Place();
@@ -831,6 +883,8 @@ public class KittyAsyncEffect
     private void JumpToUnit(float unitX, float unitY)
     {
         hasSynced = false;
+        hasLastFree = false;
+        hasTurnGoal = false;
         x = unitX;
         y = unitY;
         correctionX = 0f;
@@ -858,6 +912,8 @@ public class KittyAsyncEffect
     private void FollowUnit(float unitX, float unitY)
     {
         hasSynced = false;
+        hasLastFree = false;
+        hasTurnGoal = false;
         x = unitX;
         y = unitY;
         facing = GetUnitFacing(kitty.Unit);
@@ -1064,6 +1120,8 @@ public class KittyAsyncEffect
 
         if (gap <= ARRIVE_EPSILON) return false;
 
+        hasTurnGoal = false; // facing the unit's way takes over
+        turnedThisTick = true;
         TurnToward(GetUnitFacing(kitty.Unit), dt);
 
         float step = gap * GLIDE_RATE * (urgent ? 4f : 1f) * dt;
@@ -1104,7 +1162,14 @@ public class KittyAsyncEffect
         {
             float heading = Atan2(dy, dx) * RAD_TO_DEG;
 
-            if (TurnToward(heading, dt) > PROPULSION_WINDOW) return false;
+            turnGoal = heading;
+            hasTurnGoal = true;
+            turnedThisTick = true;
+
+            float stillToTurn = TurnToward(heading, dt);
+            if (stillToTurn <= 0f) hasTurnGoal = false;
+
+            if (stillToTurn > PROPULSION_WINDOW) return false;
         }
 
         float step = moveSpeed * dt;
@@ -1129,6 +1194,21 @@ public class KittyAsyncEffect
             }
         }
 
+        // Inside the edge of something blocked (a cliff's margin, the wall) a step may not take it deeper
+        // in or through to the other side: it can leave only back the way it came, or along the edge.
+        // "Back" is the last free place it stood, or the unit (which the engine keeps on the right side).
+        if (checkPathing && IsBlockedAt(x, y) && IsBlockedAt(newX, newY))
+        {
+            float refX = hasLastFree ? lastFreeX : kitty.Unit.X;
+            float refY = hasLastFree ? lastFreeY : kitty.Unit.Y;
+
+            if (Distance(newX, newY, refX, refY) > Distance(x, y, refX, refY) + step * 0.5f)
+            {
+                newX = x;
+                newY = y;
+            }
+        }
+
         float movedX = newX - x;
         float movedY = newY - y;
 
@@ -1140,6 +1220,14 @@ public class KittyAsyncEffect
 
         x = newX;
         y = newY;
+
+        if (checkPathing && !IsBlockedAt(x, y))
+        {
+            lastFreeX = x;
+            lastFreeY = y;
+            hasLastFree = true;
+        }
+
         return true;
     }
 

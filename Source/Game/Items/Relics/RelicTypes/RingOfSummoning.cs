@@ -111,6 +111,7 @@ public class RingOfSummoning : Relic
             kitty.ProgressZone = summoningKitty.ProgressZone;
             kitty.Circle.Unit.SetPosition(summoningKittyUnit.X, summoningKittyUnit.Y);
             kitty.ReviveKitty(summoningKitty);
+            kitty.APMTracker.SetLastPoint(summoningKittyUnit.X, summoningKittyUnit.Y); // windwalk must not send it back to where it fell
             kitty.AsyncEffect?.TeleportToUnit(); // the effect is where the summoner is, not where the Kitty fell
             Utility.InvulnerableAndPauseKitty(kitty);
             CameraUtil.SetCameraOnKitty(kitty);

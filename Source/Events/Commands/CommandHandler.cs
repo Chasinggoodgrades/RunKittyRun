@@ -20,6 +20,11 @@ public static class CommandHandler
         TriggerAddAction(NewCmdHandler, HandleCommands);
     }
 
+    /// <summary>
+    /// One chat line may hold several commands separated by commas: "-rpos all, rto power, atune turnrate 215".
+    /// A comma only separates when a command name follows it, so a comma inside an argument (a message,
+    /// a list) stays where it is. The leading '-' of the later commands is optional.
+    /// </summary>
     private static void HandleCommands()
     {
         if (!Globals.GAME_INITIALIZED) return;
@@ -27,7 +32,38 @@ public static class CommandHandler
         if (chatString.Length < 2 || chatString[0] != '-')
             return;
 
-        var cmd = chatString.Substring(1);
+        int start = 1;
+
+        for (int i = 1; i <= chatString.Length; i++)
+        {
+            if (i < chatString.Length && !(chatString[i] == ',' && StartsCommand(chatString, i + 1))) continue;
+
+            RunCommand(chatString.Substring(start, i - start).Trim());
+            start = i + 1;
+        }
+    }
+
+    /// <summary>Whether a registered command name starts at this position (after spaces and an optional '-').</summary>
+    private static bool StartsCommand(string text, int from)
+    {
+        int i = from;
+
+        while (i < text.Length && text[i] == ' ') i++;
+        if (i < text.Length && text[i] == '-') i++;
+
+        int wordStart = i;
+
+        while (i < text.Length && text[i] != ' ' && text[i] != ',') i++;
+
+        if (i == wordStart) return false;
+
+        return CommandsManager.GetCommand(text.Substring(wordStart, i - wordStart).ToLower()) != null;
+    }
+
+    private static void RunCommand(string cmd)
+    {
+        if (cmd.Length == 0) return;
+
         var spaceIndex = cmd.IndexOf(' ');
 
         string commandName;
@@ -46,12 +82,11 @@ public static class CommandHandler
             args = split.Length > 0 ? split : EmptyStringArray;
         }
 
-        if (GamemodeSetting(@event.PlayerChatString))
+        if (GamemodeSetting("-" + cmd))
             return;
 
         try
         {
-
             var command = CommandsManager.GetCommand(commandName.ToLower());
             var playerTier = CommandsManager.GetPlayerTier(@event.Player);
             if (command != null && playerTier >= command.Tier)
@@ -60,13 +95,12 @@ public static class CommandHandler
             }
             else
             {
-                @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found.|r");
+                @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Command not found: {commandName}|r");
             }
         }
         catch (Exception ex)
         {
             @event.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error executing command:{Colors.COLOR_RESET} {Colors.COLOR_RED}{ex.Message} {ex.StackTrace}{Colors.COLOR_RESET}");
-            return;
         }
     }
 

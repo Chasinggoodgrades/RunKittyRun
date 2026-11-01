@@ -119,6 +119,8 @@ public static class Gameover
     /// <summary>Calls off the countdown started by <see cref="NotifyEndingGame"/>, if one is running (the -restart command).</summary>
     public static void CancelEndingGame()
     {
+        DiscordFrame.Hide(); // the join-our-discord banner that came with the ending goes too
+
         if (EndGameTimer == null) return;
 
         EndGameTimer.Dispose();

@@ -18,7 +18,7 @@ public static class AsyncClickInput
     private const float CONSOLE_TOP_Y = 0.13f;
 
     /// <summary>How often the cursor is re-read while the button stays down.</summary>
-    private static float REFRESH_PERIOD => AsyncTuning.Get(21);
+    private static float REFRESH_PERIOD => AsyncTuning.Get(AsyncTuning.CLICK_REFRESH);
 
     private static bool wasRightPressed;
     private static float lastRefresh = -1f;
