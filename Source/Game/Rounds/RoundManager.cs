@@ -126,7 +126,11 @@ public static class RoundManager
 
     public static bool RoundEndCheck()
     {
-        // Always returns for standard mode, and solo progression mode.
+        // Standard rounds end by crossing the finish line (StandardGameMode.OnVictoryZoneEntered) or on the
+        // timer, never because everyone is "Finished": that flag is set on reaching the final safezone. A player
+        // leaving must not turn "the rest are at the end" into the round being over.
+        if (Gamemode.CurrentGameMode == GameMode.Standard) return false;
+
         for (int i = 0; i < Globals.ALL_KITTIES_LIST.Count; i++) {
             var kitty = Globals.ALL_KITTIES_LIST[i];
             if (!kitty.Finished) return false;

@@ -52,12 +52,9 @@ public class WolfArea
         {
             try
             {
-                var unit = @event.Unit;
-                var player = unit.Owner;
-
-                var kitty = Globals.ALL_KITTIES[player];
-                kitty.ProgressHelper.CurrentPoint = ID;
-                kitty.ProgressZone = ID;
+                var kitty = Globals.ALL_KITTIES[@event.Unit.Owner];
+                if (AsyncZones.Drives(kitty)) return; // the effect announces its own entries
+                HandleKittyEntered(kitty);
             }
             catch (System.Exception e)
             {
@@ -65,6 +62,13 @@ public class WolfArea
                 throw;
             }
         });
+    }
+
+    /// <summary>A Kitty entered this area: by its unit, or by its async effect.</summary>
+    public void HandleKittyEntered(Kitty kitty)
+    {
+        kitty.ProgressHelper.CurrentPoint = ID;
+        kitty.ProgressZone = ID;
     }
 
     /// <summary>

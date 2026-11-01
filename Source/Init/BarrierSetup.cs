@@ -11,6 +11,28 @@ public static class BarrierSetup
     private static unit DummyUnitThree;
     public static List<destructable> destructables = new();
 
+    /// <summary>How close to the line of blockers the centre of a unit can get: half their thickness plus the unit's own collision.</summary>
+    private const float WALL_HALF_WIDTH = 48f;
+
+    /// <summary>How far past the barrier region's top and bottom edge the wall still holds the effect back.</summary>
+    private const float WALL_END_MARGIN = 128f;
+
+    private static float wallX;
+    private static float wallMinY;
+    private static float wallMaxY;
+
+    /// <summary>
+    /// Whether the barrier stops something standing at that point. The blockers are destructables,
+    /// which IsTerrainPathable knows nothing about, so anything moved by hand rather than by the
+    /// engine (the async stand-in effect) asks here to be held to the same wall as the unit.
+    /// </summary>
+    public static bool IsBlocked(float x, float y)
+    {
+        return BarrierActive
+            && x > wallX - WALL_HALF_WIDTH && x < wallX + WALL_HALF_WIDTH
+            && y > wallMinY && y < wallMaxY;
+    }
+
     public static void Initialize()
     {
         ActivateBarrier();
@@ -33,6 +55,12 @@ public static class BarrierSetup
 
         float distanceY = maxY - minY;
         float intervalY = distanceY / 13;
+
+        wallX = centerX;
+        // the whole height of the barrier region, not just between the first and last blocker: the units
+        // are held at the ends by the blockers' own footprint and the cliffs, the hand-moved effect is not
+        wallMinY = minY - WALL_END_MARGIN;
+        wallMaxY = maxY + WALL_END_MARGIN;
         for (int i = 1; i < 13; i++)
         {
             float currentY = minY + (i * intervalY);

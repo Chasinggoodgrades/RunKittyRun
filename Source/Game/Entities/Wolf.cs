@@ -41,6 +41,38 @@ public class Wolf
     private readonly Action _cachedEffect;
 
     public int RegionIndex { get; }
+
+    private static int nextId;
+    private static int idBase; // the Id of slot 0: ids keep counting across rounds, the list does not
+    private static readonly List<Wolf> wolvesBySlot = new List<Wolf>();
+
+    /// <summary>
+    /// Stable identifier, the same on every machine as wolves are created from synced code in the
+    /// same order. Lets a sync packet name a wolf (see AsyncContact), which a unit handle cannot do.
+    /// </summary>
+    public int Id { get; }
+
+    public static Wolf GetById(int id)
+    {
+        int slot = id - idBase;
+        return slot >= 0 && slot < wolvesBySlot.Count ? wolvesBySlot[slot] : null;
+    }
+
+    /// <summary>
+    /// The wolf behind a unit, without a hash lookup: its id is kept in the unit's user data (id + 1,
+    /// 0 meaning none). Falls back to the dictionary when the unit was never tagged (a replaced unit).
+    /// </summary>
+    public static Wolf FromUnit(unit u)
+    {
+        int tag = GetUnitUserData(u);
+        if (tag > 0)
+        {
+            var wolf = GetById(tag - 1);
+            if (wolf != null && wolf.Unit == u) return wolf;
+        }
+
+        return Globals.ALL_WOLVES.TryGetValue(u, out var found) ? found : null;
+    }
     public string OverheadEffectPath { get; set; } = DefaultOverheadEffect;
 
     public AchesTimers WanderTimer { get; set; } = ObjectPool<AchesTimers>.GetEmptyObject();
@@ -64,6 +96,8 @@ public class Wolf
     public Wolf(int regionIndex)
     {
         RegionIndex = regionIndex;
+        Id = nextId++;
+        wolvesBySlot.Add(this); // ids are handed out one by one, so the slot is Id - idBase
         WolfArea = WolfArea.WolfAreas[regionIndex];
         Affixes = new List<Affix>(); // Consider creating a new object that contains List<Affix> so we're not making a new one each wolf.
         OverheadEffectPath = DefaultOverheadEffect;
@@ -76,6 +110,7 @@ public class Wolf
         WanderTimer.Timer.Start(GetRandomReal(InitialWanderMin, InitialWanderMax), false, _cachedWander);
         Globals.ALL_WOLVES.Add(Unit, this);
         Globals.ALL_WOLVES_LIST.Add(this);
+        SetUnitUserData(Unit, Id + 1);
 
         WolfArea.Wolves.Add(this);
     }
@@ -143,6 +178,8 @@ public class Wolf
 
     public void Dispose()
     {
+        int slot = Id - idBase;
+        if (slot >= 0 && slot < wolvesBySlot.Count && wolvesBySlot[slot] == this) wolvesBySlot[slot] = null;
         RemoveAllWolfAffixes();
         EffectTimer?.Dispose();
         EffectTimer = null;
@@ -171,6 +208,8 @@ public class Wolf
         }
         Globals.ALL_WOLVES.Clear();
         Globals.ALL_WOLVES_LIST.Clear();
+        wolvesBySlot.Clear();
+        idBase = nextId;
     }
 
     /// <summary>

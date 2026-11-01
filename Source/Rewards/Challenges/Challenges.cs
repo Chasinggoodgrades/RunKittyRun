@@ -182,9 +182,19 @@ public static class Challenges
             if (!Globals.GAME_ACTIVE) return;
             if (unit.UnitType != Constants.UNIT_KITTY) return;
             if (!Globals.ALL_PLAYERS.Contains(player)) return;
+            if (AsyncZones.Drives(Globals.ALL_KITTIES[player])) return; // the effect announces its own entries
             if (!Globals.ALL_KITTIES[player].CurrentStats.RoundFinished) return;
             DivineWindwalk(player);
         }));
+    }
+
+    /// <summary>The async effect of a Kitty reached the first safezone (DoubleBackingTrigger, effect-driven).</summary>
+    public static void DoubleBackingEntered(Kitty kitty)
+    {
+        if (Gamemode.CurrentGameMode != GameMode.Standard) return;
+        if (!Globals.GAME_ACTIVE) return;
+        if (!kitty.CurrentStats.RoundFinished) return;
+        DivineWindwalk(kitty.Player);
     }
 }
 

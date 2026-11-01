@@ -69,8 +69,14 @@ public class KittyMorphosis
     /// <param name="Unit"></param>
     public void ScaleUnit()
     {
-        if (!Active) return;
-        float scale = 0.60f - (0.60f * COLLISION_REDUCTION * 2.0f);
-        Kitty.Unit.SetScale(scale, scale, scale);
+        if (!Active)
+        {
+            // not morphed: the unit keeps the scale its skin gives it, the default one
+            Kitty.NotifyModelScale(Kitty.DefaultModelScale);
+            return;
+        }
+
+        float scale = Kitty.DefaultModelScale - (Kitty.DefaultModelScale * COLLISION_REDUCTION * 2.0f);
+        Kitty.SetModelScale(scale);
     }
 }

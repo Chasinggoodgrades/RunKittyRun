@@ -161,12 +161,12 @@ public class Windwalk
             {
                 var reward = RewardsManager.Rewards.Find(r => r.GetAbilityID() == wwID);
                 var visual = reward.ModelPath;
-                var e = caster.AddSpecialEffect(visual, "origin");
+                var e = Kitty.AddKittyEffect(visual, "origin");
                 if (e != null)
                 {
                     Utility.SimpleTimer(duration, () =>
                     {
-                        if (e != null) DestroyEffect(e);
+                        if (e != null) Kitty.RemoveKittyEffect(e);
                     });
                 }
             }

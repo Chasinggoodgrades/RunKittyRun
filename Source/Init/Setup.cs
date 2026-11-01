@@ -30,6 +30,7 @@ namespace Source.Init
                 //if (!ADMINDISABLE.AdminsGame()) return;
                 Safezone.Initialize();
                 Utility.SimpleTimer(2.0f, () => StartGameModeTimer()); // Gives some delay time for the save system to sync
+                EnableSelect(true, false); // no selection circles, as in the CORE map
                 StopMusic(false);
                 ClearMapMusic();
                 Globals.GAME_INITIALIZED = true;
@@ -62,6 +63,25 @@ namespace Source.Init
             }
         }
 
+        /// <summary>
+        /// Async is on from the start for every human Kitty (-async off turns it off). Runs on every
+        /// machine at the same moment, as the effect handles have to be made everywhere.
+        /// </summary>
+        private static void EnableAsyncByDefault()
+        {
+            if (!AsyncMouse.IsAvailable) return;
+
+            var kitties = Globals.ALL_KITTIES_LIST;
+
+            for (int i = 0; i < kitties.Count; i++)
+            {
+                var kitty = kitties[i];
+                if (kitty.ComputerControlled) continue;
+
+                kitty.AsyncEffect?.Enable();
+            }
+        }
+
         private static void StartGame()
         {
             try
@@ -83,7 +103,9 @@ namespace Source.Init
                 WolfArea.Initialize();
                 ItemStacker.Initialize();
                 Windwalk.Initialize();
+                AsyncKittySync.Initialize();
                 Kitty.Initialize();
+                EnableAsyncByDefault();
                 ItemSpawner.Initialize();
                 Multiboard.Initialize();
                 PlayerLeaves.Initialize();

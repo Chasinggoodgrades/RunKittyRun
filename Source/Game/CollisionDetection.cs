@@ -5,7 +5,7 @@ using static WCSharp.Api.Common;
 public static class CollisionDetection
 {
     public const float DEFAULT_WOLF_COLLISION_RADIUS = 73.5f;
-    private const float CIRCLE_COLLISION_RADIUS = 79.0f;
+    public const float CIRCLE_COLLISION_RADIUS = 79.0f;
 
     private static Predicate<Relic> IsBeaconOfUnitedLifeforce = r => r is BeaconOfUnitedLifeforce;
 
@@ -84,44 +84,65 @@ public static class CollisionDetection
     {
         TriggerAddAction(k.w_Collision, () =>
         {
-            try
-            {
-                if (!k.Unit.Alive) return;
-                if (k.Invulnerable) return; // proc before rewind and logic wise
+            // While the stand-in effect stands in, contact is decided from the effect (see AsyncContact), not from the unit.
+            if (k.AsyncEffect != null && k.AsyncEffect.IsActive) return;
 
-                var filterUnit = GetFilterUnit();
-                if (Globals.ALL_WOLVES[filterUnit].IsReviving) return; // bomber wolf
-                if (NamedWolves.ExplodingWolfCollision(filterUnit, k)) return;
-                if (ChronoSphere.RewindDeath(k)) return;
-                OneOfNine.OneOfNineEffect(k);
-                k.KillKitty();
-            }
-            catch (Exception e)
-            {
-                Logger.Warning($"WolfCollisionTrigger Error: {e.Message}");
-                throw;
-            }
+            HandleWolfContact(k, GetFilterUnit());
         });
         return k.w_Collision;
+    }
+
+    /// <summary>
+    /// A Kitty touched a wolf. Shared by the unit's range trigger and by the async contact packet
+    /// (see AsyncContact), so a Kitty dies by the very same rules whichever of them caught it.
+    /// Always runs on every machine at once.
+    /// </summary>
+    public static void HandleWolfContact(Kitty k, unit filterUnit)
+    {
+        try
+        {
+            if (!k.Unit.Alive) return;
+            if (k.Invulnerable) return; // proc before rewind and logic wise
+
+            if (!Globals.ALL_WOLVES.TryGetValue(filterUnit, out var wolf)) return;
+            if (wolf.IsReviving) return; // bomber wolf
+            if (NamedWolves.ExplodingWolfCollision(filterUnit, k)) return;
+            if (ChronoSphere.RewindDeath(k)) return;
+            OneOfNine.OneOfNineEffect(k);
+            k.KillKitty();
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"WolfCollisionTrigger Error: {e.Message}");
+            throw;
+        }
     }
 
     private static trigger CircleCollisionTrigger(Kitty k)
     {
         TriggerAddAction(k.c_Collision, () =>
         {
-            try
-            {
-                var circle = Globals.ALL_KITTIES[GetFilterUnit().Owner];
-                circle.ReviveKitty(k);
-                (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
-            }
-            catch (Exception e)
-            {
-                Logger.Warning($"CircleCollisionTrigger Error: {e.Message}");
-                throw;
-            }
+            if (k.AsyncEffect != null && k.AsyncEffect.IsActive) return;
+
+            HandleCircleContact(k, GetFilterUnit());
         });
         return k.c_Collision;
+    }
+
+    /// <summary>A Kitty touched the revive circle of a teammate. Shared with the async contact packet, like HandleWolfContact.</summary>
+    public static void HandleCircleContact(Kitty k, unit circleUnit)
+    {
+        try
+        {
+            var circle = Globals.ALL_KITTIES[circleUnit.Owner];
+            circle.ReviveKitty(k);
+            (k.Relics.Find(IsBeaconOfUnitedLifeforce) as BeaconOfUnitedLifeforce)?.BeaconOfUnitedLifeforceEffect(k.Player);
+        }
+        catch (Exception e)
+        {
+            Logger.Warning($"CircleCollisionTrigger Error: {e.Message}");
+            throw;
+        }
     }
 
     private static trigger WolfCollisionShadowTrigger(ShadowKitty sk)

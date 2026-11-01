@@ -10,10 +10,21 @@ public static class DiscordFrame
     private static trigger Trigger;
     private static trigger ESCTrigger;
     private static string Link = "https://discord.gg/GSu6zkNvx5";
+    private static bool created;
+    private static bool shown;
     private static string JoinDiscord = "|cffFF2020Join our discord! Highlight then Ctrl + C to copy, Ctrl + V to paste!|r";
 
     public static void Initialize()
     {
+        // shown again (a second game over after a restart) rather than made twice
+        if (created)
+        {
+            SetVisible(true);
+            return;
+        }
+
+        created = true;
+        shown = true;
         //BlzLoadTOCFile("war3mapImported\\templates.toc");
         SetupBackdrop();
         CreateFrame();
@@ -21,6 +32,24 @@ public static class DiscordFrame
         SetupDiscordIcon();
         ApplyTextFrame();
         RegisterESCTrigger();
+    }
+
+    /// <summary>Takes the banner off the screen (a restart); Initialize brings it back.</summary>
+    public static void Hide()
+    {
+        if (!created) return;
+
+        SetVisible(false);
+    }
+
+    private static void SetVisible(bool visible)
+    {
+        shown = visible;
+        Backdrop.Visible = visible;
+        EditBox.Visible = visible;
+        DiscordIconFront.Visible = visible;
+        DiscordIconBack.Visible = visible;
+        DiscordText.Visible = visible;
     }
 
     private static void CreateFrame()
@@ -83,11 +112,16 @@ public static class DiscordFrame
     {
         var player = @event.Player;
         if (!player.IsLocal) return;
-        Backdrop.Visible = !Backdrop.Visible;
-        EditBox.Visible = !EditBox.Visible;
-        DiscordIconFront.Visible = !DiscordIconFront.Visible;
-        DiscordIconBack.Visible = !DiscordIconBack.Visible;
-        DiscordText.Visible = !DiscordText.Visible;
+
+        // ESC hides and shows the banner for the local player, but only while the game is ending: after a restart it is gone for good
+        if (!shown) return;
+
+        bool visible = !Backdrop.Visible;
+        Backdrop.Visible = visible;
+        EditBox.Visible = visible;
+        DiscordIconFront.Visible = visible;
+        DiscordIconBack.Visible = visible;
+        DiscordText.Visible = visible;
     }
 
     private static void UpdateTextBox()

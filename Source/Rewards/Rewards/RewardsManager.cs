@@ -61,19 +61,21 @@ public static class RewardsManager
         var activeRewards = kitty.ActiveAwards;
 
         var wings = activeRewards.ActiveWings;
-        GC.RemoveEffect(ref wings);
+        kitty.RemoveKittyEffect(ref wings);
 
         var auras = activeRewards.ActiveAura;
-        GC.RemoveEffect(ref auras);
+        kitty.RemoveKittyEffect(ref auras);
 
         var hats = activeRewards.ActiveHats;
-        GC.RemoveEffect(ref hats);
+        kitty.RemoveKittyEffect(ref hats);
 
         var trails = activeRewards.ActiveTrail;
-        GC.RemoveEffect(ref trails);
+        kitty.RemoveKittyEffect(ref trails);
 
         kitty.Unit.Skin = Constants.UNIT_KITTY;
         kitty.Unit.SetVertexColor(255, 255, 255);
+        kitty.NotifyVertexColor(255, 255, 255);
+        kitty.AsyncEffect?.ReapplyUnitHidden(true); // the line above made the unit opaque again
 
         foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
             property.SetValue(kitty.SaveData.SelectedData, "");

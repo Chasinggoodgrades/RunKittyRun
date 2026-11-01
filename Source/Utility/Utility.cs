@@ -298,7 +298,8 @@ public static class Utility
         var tt = texttag.Create();
         tt.SetText(text, height);
         tt.SetColor(red, green, blue, 255);
-        tt.SetPosition(u.X, u.Y, 0);
+        AsyncZones.WhereToDraw(u, out var tx, out var ty);
+        tt.SetPosition(tx, ty, 0);
         tt.SetVelocity(0, 0.02f);
         tt.SetVisibility(true);
         SimpleTimer(duration, () => tt?.Dispose());
@@ -376,7 +377,19 @@ public static class Utility
         var newMana = currentMana + amount;
 
         unit.Mana = newMana >= maxMana ? maxMana - 1 : newMana;
-        DestroyEffect(effect.Create("abilities\\spells\\items\\aima\\aimatarget.mdx", unit, "origin"));
+
+        const string manaModel = "abilities\\spells\\items\\aima\\aimatarget.mdx";
+        var kitty = unit.UnitType == Constants.UNIT_KITTY ? Globals.GetKitty(unit.Owner) : null;
+
+        // With the async effect standing in, the unit is hidden and behind: the visual goes on the effect for a moment
+        if (kitty != null && kitty.Unit == unit && kitty.AsyncEffect != null && kitty.AsyncEffect.IsActive)
+        {
+            var manaEffect = kitty.AddKittyEffect(manaModel, "origin");
+            SimpleTimer(1.0f, () => kitty.RemoveKittyEffect(manaEffect));
+            return;
+        }
+
+        DestroyEffect(effect.Create(manaModel, unit, "origin"));
     }
 
     /// <summary>

@@ -6,6 +6,7 @@ public static class Gameover
     public static bool WinGame { get; set; } = false;
     private static float EndingTimer { get; set; } = 600.0f;
     public static bool NoEnd { get; set; } = false;
+    private static AchesTimers EndGameTimer; // the end-of-game countdown, kept so -restart can call it off
 
     public static bool GameOver()
     {
@@ -103,6 +104,27 @@ public static class Gameover
         DiscordFrame.Initialize();
         Utility.TimedTextToAllPlayers(EndingTimer, $"{Colors.COLOR_YELLOW}The game will end in {EndingTimer} seconds.{Colors.COLOR_RESET}");
         Globals.GAME_ACTIVE = false;
-        Utility.SimpleTimer(EndingTimer, EndGame);
+
+        // a second notice replaces the first
+        EndGameTimer?.Dispose();
+        EndGameTimer = ObjectPool<AchesTimers>.GetEmptyObject();
+        EndGameTimer.Timer.Start(EndingTimer, false, () =>
+        {
+            EndGameTimer?.Dispose();
+            EndGameTimer = null;
+            EndGame();
+        });
+    }
+
+    /// <summary>Calls off the countdown started by <see cref="NotifyEndingGame"/>, if one is running (the -restart command).</summary>
+    public static void CancelEndingGame()
+    {
+        DiscordFrame.Hide(); // the join-our-discord banner that came with the ending goes too
+
+        if (EndGameTimer == null) return;
+
+        EndGameTimer.Dispose();
+        EndGameTimer = null;
+        Utility.TimedTextToAllPlayers(5.0f, $"{Colors.COLOR_YELLOW}The game is no longer ending: the round was restarted.{Colors.COLOR_RESET}");
     }
 }
