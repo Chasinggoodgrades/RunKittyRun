@@ -362,7 +362,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         MirrorHandler.Dispose();
         InvulTimer.Pause();
         InvulTimer.Dispose();
-        Circle?.Dispose();
+        Circle?.Dispose();  
         Disco?.Dispose();
         aiController?.StopAi();
         RTR?.Dispose();
@@ -371,6 +371,24 @@ public class Kitty : IFloatingTags, ICircleOwner
         Windwalk?.Dispose();
         NameTag?.Dispose();
         AsyncEffect?.Dispose();
+
+        // relics run timers and effects of their own (the Chrono Sphere's location capture flashes an effect
+        // every few seconds, at 0,0 once the unit is gone): they are let go of with the Kitty
+        if (Relics != null)
+        {
+            for (int i = 0; i < Relics.Count; i++)
+            {
+                try
+                {
+                    Relics[i].RemoveEffect(Unit);
+                }
+                catch (Exception e)
+                {
+                    Logger.Warning($"Error removing a relic on dispose: {e.Message}");
+                }
+            }
+        }
+
         Unit?.Dispose();
         //ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;

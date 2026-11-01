@@ -1462,8 +1462,16 @@ public class KittyAsyncEffect
 
             if (toDistance > 0.001f)
             {
-                packetX += toX / toDistance * advance;
-                packetY += toY / toDistance * advance;
+                float aheadX = packetX + toX / toDistance * advance;
+                float aheadY = packetY + toY / toDistance * advance;
+
+                // Carrying it on along its way must not carry it into a wall or over one: against a wall
+                // its target is on the far side, and the owner is held back there. Left where it was sent.
+                if (!(IsBlockedAt(aheadX, aheadY) && !IsBlockedAt(packetX, packetY)))
+                {
+                    packetX = aheadX;
+                    packetY = aheadY;
+                }
             }
         }
 
