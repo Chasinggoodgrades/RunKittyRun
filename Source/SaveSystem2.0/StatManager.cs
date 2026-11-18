@@ -74,7 +74,7 @@ public static class StatManager
     public static void IncrementKibble(Kitty kitty)
     {
         kitty.CurrentStats.CollectedKibble += 1;
-
+        kitty.SaveData.KibbleCurrency.Collected += 1;
         if (!LeagueManager.Instance.IsSeasonActive) return;
         kitty.SaveData.LeagueSeasonData.Currency.Kibble.Collected += 1;
     }
@@ -87,8 +87,12 @@ public static class StatManager
     public static void IncrementSuperJackpot(Kitty kitty, bool super = false)
     {
         kitty.CurrentStats.CollectedJackpots += 1;
-        if (super) kitty.CurrentStats.CollectedSuperJackpots += 1;
-
+        kitty.SaveData.KibbleCurrency.Jackpots += 1;
+        if (super)
+        {
+            kitty.CurrentStats.CollectedSuperJackpots += 1;
+            kitty.SaveData.KibbleCurrency.SuperJackpots += 1;
+        }
         if (!LeagueManager.Instance.IsSeasonActive) return;
 
         kitty.SaveData.LeagueSeasonData.Currency.Kibble.Jackpots += 1;

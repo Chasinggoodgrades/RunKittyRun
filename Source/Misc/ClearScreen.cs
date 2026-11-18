@@ -7,7 +7,7 @@ public static class ClearScreen
     public static void Initialize()
     {
         foreach (var player in Globals.ALL_PLAYERS)
-            Trigger.RegisterPlayerKeyEvent(player, oskeytype.Oem3, 0, true); // `  backtick key
+            Trigger.RegisterPlayerKeyEvent(player, oskeytype.Tab, 0, true);
         Trigger.AddAction(ESCPressed);
     }
 

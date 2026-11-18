@@ -373,7 +373,7 @@ public static class InitCommands
             alias: "clear,clr,c",
             tier: CommandTier.All,
             argDesc: "",
-            description: "Clears your screen.",
+            description: "Clears your screen. Can also use the TAB key.",
             action: (player, args) => Utility.ClearScreen(player)
         );
 
