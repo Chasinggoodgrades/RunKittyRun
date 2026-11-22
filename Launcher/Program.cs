@@ -26,11 +26,15 @@ namespace Launcher
 
         // Output
         //private const string OUTPUT_FOLDER_PATH = @"..\..\..\..\artifacts";
-        private static readonly string OUTPUT_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III", "Maps", "RKRTEST");
+        private static readonly string OUTPUT_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III", "Maps", "RKRTest");
 
 
         private static string OUTPUT_SCRIPT_NAME = @$"war3map_{MapDesc.VERSION}.lua";
         private static string OUTPUT_MAP_NAME = @$"RKR_Remastered_{MapDesc.VERSION}.w3x";
+
+        // Deploy target for hosting through Battle.net (local mode requires login)
+        private static readonly string DEPLOY_FOLDER_PATH = Environment.GetEnvironmentVariable("RKR_DEPLOY_FOLDER")
+            ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Warcraft III", "Maps", "vscode");
 
         // Warcraft III
         private const string GRAPHICS_API = "Direct3D9";
@@ -42,8 +46,10 @@ namespace Launcher
         private const bool DEBUG = false;
 #endif
 
-        private static void Main()
+        private static void Main(string[] args)
         {
+            if (args.Length > 0 && RunNonInteractive(args[0])) return;
+
             Console.WriteLine("The following actions are available:");
             Console.WriteLine("1. Generate constants and UnitData.cs");
             Console.WriteLine("2. Compile map");
@@ -51,7 +57,35 @@ namespace Launcher
             Console.WriteLine("4. Compile and run map and track memory usage");
             Console.WriteLine("5. Run map without compiling");
             Console.WriteLine("6. Wc3 Map Tools (regions/terrain import/export)");
+            Console.WriteLine("7. Compile and deploy map to Warcraft III Maps\\vscode folder");
             MakeDecision();
+        }
+
+        private static bool RunNonInteractive(string command)
+        {
+            switch (command)
+            {
+                case "import-objects":
+                    MapToolMenu.ImportObjectData();
+                    return true;
+
+                // Overwrites the JSON with the map's current data, so pending JSON edits are lost.
+                case "export-objects":
+                    MapToolMenu.ExportObjectData();
+                    return true;
+
+                case "compile":
+                    Build();
+                    return true;
+
+                case "deploy":
+                    Build(deploy: true);
+                    return true;
+
+                default:
+                    Console.WriteLine($"Unknown command '{command}'. Use import-objects, export-objects, compile or deploy.");
+                    return true;
+            }
         }
 
         private static void MakeDecision()
@@ -87,6 +121,10 @@ namespace Launcher
                     MapToolMenu.Run(Array.Empty<string>());
                     break;
 
+                case ConsoleKey.D7:
+                    Build(deploy: true);
+                    break;
+
                 default:
                     Console.WriteLine($"{Environment.NewLine}Invalid input. Please choose again.");
                     MakeDecision();
@@ -94,7 +132,7 @@ namespace Launcher
             }
         }
 
-        public static void Build(bool launch = false, bool mem = false, bool skipCompile = false)
+        public static void Build(bool launch = false, bool mem = false, bool skipCompile = false, bool deploy = false)
         {
             try
             {
@@ -164,6 +202,14 @@ namespace Launcher
             };
 
             builder.Build(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_MAP_NAME), archiveCreateOptions);
+
+            if (deploy)
+            {
+                Directory.CreateDirectory(DEPLOY_FOLDER_PATH);
+                var deployedPath = Path.Combine(DEPLOY_FOLDER_PATH, OUTPUT_MAP_NAME);
+                File.Copy(Path.Combine(OUTPUT_FOLDER_PATH, OUTPUT_MAP_NAME), deployedPath, true);
+                Console.WriteLine($"{Environment.NewLine}Deployed to {deployedPath}");
+            }
 
             // Launch if that option was selected
             if (launch)

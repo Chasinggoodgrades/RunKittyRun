@@ -2238,6 +2238,232 @@
           "column": null
         }
       ]
+    },
+    {
+      "objectId": "I00S:rhth",
+      "modifications": [
+        {
+          "id": "unam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffcc00ffRing of Linked Fates|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utip",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Purchase the |cffcc00ffRing of Linked Fates|r|cff8080ff [Relic]|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utub",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffffcc00Toggle on to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others in range of those kitties. |r|cffff8c00(Toggle)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ides",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffffcc00Toggle on to chain yourself to every kitty with an enabled ring within |cffff8c00600 range|r|cffffcc00, and through them to others in range of those kitties. |r|cffff8c00(Toggle)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uico",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\BTNChainedRing.blp",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iico",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\BTNChainedRing.blp",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A046",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 50,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
+    },
+    {
+      "objectId": "I00T:rhth",
+      "modifications": [
+        {
+          "id": "unam",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffffc0cbEngagement Ring|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utip",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "Purchase the |cffffc0cbEngagement Ring|r|cff8080ff [Relic]|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "utub",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts, and again whenever they are close. |r|cffff8c00(Active)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "ides",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "|cffffcc00Press at the same time as another kitty with an Engagement Ring (within |cffff8c005 seconds|r|cffffcc00) to marry the nearest one. Married kitties shower each other in hearts, and again whenever they are close. |r|cffff8c00(Active)|r |cffadd8e6(Does not count towards the relic limit)|r",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "uico",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\BTNEngagementRing.blp",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iico",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "war3mapImported\\BTNEngagementRing.blp",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "istr",
+          "type": 0,
+          "valueInt": 60,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iabi",
+          "type": 3,
+          "valueInt": null,
+          "valueFloat": null,
+          "valueString": "A047",
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "igol",
+          "type": 0,
+          "valueInt": 50,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "idro",
+          "type": 0,
+          "valueInt": 0,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iusa",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        },
+        {
+          "id": "iicd",
+          "type": 0,
+          "valueInt": 1,
+          "valueFloat": null,
+          "valueString": null,
+          "level": null,
+          "column": null
+        }
+      ]
     }
   ]
 }

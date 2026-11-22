@@ -25,9 +25,12 @@ public static class RelicFunctions
                 return;
             }
 
-            if (!CanGetAnotherRelic(kitty.Unit)) return;
+            if (selectedItem.Relic.CountsTowardLimit)
+            {
+                if (!CanGetAnotherRelic(kitty.Unit)) return;
 
-            if (RelicMaxedOut(player)) return;
+                if (RelicMaxedOut(player)) return;
+            }
 
             ReduceGold(player, selectedItem.Cost);
             var newRelic = Activator.CreateInstance(selectedItem.Relic.GetType()) as Relic;
@@ -118,14 +121,14 @@ public static class RelicFunctions
     private static bool RelicMaxedOut(player player)
     {
         var relics = Globals.ALL_KITTIES[player].Relics;
-        if (relics.Count < Relic.MaxRelics) return false;
+        if (Relic.CountLimitedRelics(relics) < Relic.MaxRelics) return false;
         player.DisplayTimedTextTo(8.0f, $"{Colors.COLOR_RED}You already have the maximum number of relics!!{Colors.COLOR_RESET}");
         return true;
     }
 
     private static bool CanGetAnotherRelic(unit unit)
     {
-        var relicCount = Globals.ALL_KITTIES[unit.Owner].Relics.Count;
+        var relicCount = Relic.CountLimitedRelics(Globals.ALL_KITTIES[unit.Owner].Relics);
         if (relicCount < 1) return true; // can get a first relic ofc.
         if (Relic.GetRelicCountForLevel(unit.HeroLevel) < relicCount)
         {

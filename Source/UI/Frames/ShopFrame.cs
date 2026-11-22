@@ -290,7 +290,7 @@ public static class ShopFrame
         if (item == null) return;
         if (item.Type != ShopItemType.Relic) return;
         var kitty = Globals.ALL_KITTIES[player].Unit;
-        upgradeButton.Visible = true;
+        upgradeButton.Visible = item.Relic.Upgrades.Count > 0;
         sellButton.Visible = true;
         buyButton.Visible = true;
         if (!Utility.UnitHasItem(kitty, item.ItemID))

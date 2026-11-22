@@ -14,6 +14,8 @@ public static class RelicUtil
         Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, true);
         Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, true);
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, true);
+        Unit.DisableAbility(Constants.ABILITY_CHAIN_RING_TOGGLE, false, true);
+        Unit.DisableAbility(Constants.ABILITY_ENGAGEMENT_RING_PROPOSE, false, true);
     }
 
     public static void EnableRelicAbilities(unit Unit)
@@ -22,6 +24,8 @@ public static class RelicUtil
         Unit.DisableAbility(Constants.ABILITY_RING_OF_FROSTBITE_RING_ULTIMATE, false, false);
         Unit.DisableAbility(Constants.ABILITY_SUMMON_SHADOW_KITTY, false, false);
         Unit.DisableAbility(Constants.ABILITY_TRANSLOCATE, false, false);
+        Unit.DisableAbility(Constants.ABILITY_CHAIN_RING_TOGGLE, false, false);
+        Unit.DisableAbility(Constants.ABILITY_ENGAGEMENT_RING_PROPOSE, false, false);
     }
 
     /// <summary>
