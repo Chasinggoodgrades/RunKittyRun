@@ -124,6 +124,7 @@ namespace Source.Init
                 RoundManager.Initialize();
                 FirstPersonCameraManager.Initialize();
                 PreventGameSave.Initialize();
+                ErrorHandler.EvaluatePlayers();
                 Utility.SimpleTimer(6.0f, MusicManager.PlayNumb);
 
                 for (int i = 0; i < GetBJMaxPlayers(); i++)

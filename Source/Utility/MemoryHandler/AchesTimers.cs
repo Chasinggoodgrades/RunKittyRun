@@ -27,6 +27,13 @@ public class AchesTimers : IDisposable
     public void Dispose()
     {
         Pause();
+        if (!PoolConfig.Enabled)
+        {
+            // not being recycled, so the native timer has to be destroyed here or it leaks
+            Timer?.Dispose();
+            Timer = null;
+            return;
+        }
         ObjectPool<AchesTimers>.ReturnObject(this);
     }
 }

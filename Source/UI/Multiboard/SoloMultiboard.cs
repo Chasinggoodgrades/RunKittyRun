@@ -277,7 +277,7 @@ public static class SoloMultiboard
                 break;
 
             default:
-                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
+                Logger.Warning($"Error multiboard getting gamestat data.");
                 return RoundTimes;
         }
         return RoundTimes;

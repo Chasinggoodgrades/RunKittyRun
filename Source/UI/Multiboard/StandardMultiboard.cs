@@ -196,7 +196,7 @@ public static class StandardMultiboard
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{Colors.COLOR_DARK_RED}Error in CurrentGameStats multiboard: {ex.Message}");
+            Logger.Warning($"Error in CurrentGameStats multiboard: {ex.Message}");
         }
     }
 
@@ -324,7 +324,7 @@ public static class StandardMultiboard
             case DifficultyLevel.Progressive:
                 return gameData.ProgressiveGames;
             default:
-                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting game count.");
+                Logger.Warning($"Error getting game count.");
                 return 0;
         }
     }
@@ -345,7 +345,7 @@ public static class StandardMultiboard
             case DifficultyLevel.Progressive:
                 return gameData.ProgressiveWins;
             default:
-                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error getting win count.");
+                Logger.Warning($"Error getting win count.");
                 return 0;
         }
     }
@@ -395,7 +395,7 @@ public static class StandardMultiboard
                 RoundTimes[2] = gameData.RoundThreeProgressive;
                 break;
             default:
-                Console.WriteLine($"{Colors.COLOR_DARK_RED}Error multiboard getting gamestat data.");
+                Logger.Warning($"Error multiboard getting gamestat data.");
                 return RoundTimes;
         }
         return RoundTimes;

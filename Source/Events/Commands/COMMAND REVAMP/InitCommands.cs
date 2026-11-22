@@ -1750,11 +1750,11 @@ public static class InitCommands
             alias: "",
             tier: CommandTier.All,
             argDesc: "[on][off]",
-            description: "Turns the error prompts off or on",
+            description: "Turns the error prompts off or on for yourself (new players default to off)",
             action: (player, args) =>
             {
                 var status = args[0] != "" && CommandsManager.GetBool(args[0]);
-                ErrorHandler.ErrorMessagesOn = status;
+                ErrorHandler.SetPlayerOverride(player, status);
                 player.DisplayTimedTextTo(5.0f, $"{Colors.COLOR_YELLOW_ORANGE}Error messages: {status}");
             }
         );

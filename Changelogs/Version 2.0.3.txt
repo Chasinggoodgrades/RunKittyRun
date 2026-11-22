@@ -1,0 +1,28 @@
+**__Run Kitty Run - Remastered v2.0.3 ASYNC__**
+Async added. Your Kitty is drawn as an effect that reacts to your right click on your own screen right away, and the real unit follows behind. It is on by default, and `-async off` turns it off.
+- Safezones and wolf areas, floating gold/xp text, kibble and item pickups, and wolf contact all follow the effect while async is on.
+- Barrier, walls and corners hold the effect back like the unit.
+- Rewards, wings, hats, auras, trails and skin colours, the Disco colours, the name tag follow the effect.
+- Protection of the Ancients, replenish mana and other Kitty effects now show on the effect.
+
+**__Chained Together__**
+- Works with async: the chain is drawn between the effects, and the pull acts on them.
+- It now activated when every player has reached the last safezone in a round, with at least 2 players in the game. (1 time per game)
+
+**__Wolf Affixes__**
+- Fixation and Bomber wolves now target the effect if async is on.
+
+**__Kibble Event__**
+- The event name changes with the season: Present Event at Christmas, Candy Event at Halloween.
+
+**__Bug Fixes__**
+- `-restart` now cancels the end-game countdown.
+- Wolf ids and wolf lookups are faster.
+- Kittymorphosis scaling is fixed with the new model-scale handling.
+- In Standard, a round no longer ends just because players who left made everyone "Finished". It ends by crossing the finish line or on the timer.
+- Updated Tyrande stand-in model.
+
+**__Admin / Dev__**
+- New commands: `-async`, `-asyncghost`, `-asyncinfo`, `-asynctune`
+
+**This isn't FINISHED, report bugs and improvements you wanna see.**
