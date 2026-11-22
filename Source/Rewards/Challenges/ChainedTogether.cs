@@ -379,7 +379,7 @@ public static class ChainedTogether
         }
         foreach (var k in group)
         {
-            kittyGroups.Remove(k.Name);
+            kittyGroups.Remove(k.Player.Id);
             EligibleKitties.Remove(k);
         }
     }
