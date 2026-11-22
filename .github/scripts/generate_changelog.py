@@ -1,5 +1,5 @@
 """
-Drafts Changelogs/Version <VERSION>.txt for a merged pull request using the Anthropic API.
+Drafts Changelogs/Version <VERSION>.md for a merged pull request using the Anthropic API.
 VERSION is read from Launcher/MapDesc.cs. If the file already exists it is passed back in
 as the current draft, so manual edits are kept and new changes get merged in.
 """
@@ -42,7 +42,7 @@ def main():
     base = os.environ["BASE_SHA"]
     head = os.environ["HEAD_SHA"]
     version = read_version()
-    out_path = f"Changelogs/Version {version}.txt"
+    out_path = f"Changelogs/Version {version}.md"
 
     commits = run("git", "log", "--no-merges", "--format=- %s%n%b", f"{base}..{head}").strip()
     # Source code only: skip the map binaries, build output, generated artifacts and changelogs themselves.
@@ -56,7 +56,7 @@ def main():
         print("No source changes; nothing to write.")
         return
 
-    examples = sorted(glob.glob("Changelogs/Version *.txt"), key=version_key)
+    examples = sorted(glob.glob("Changelogs/Version *.md"), key=version_key)
     examples = [p for p in examples if p != out_path][-STYLE_EXAMPLES:]
     example_text = "\n\n".join(
         f"=== {os.path.basename(p)} ===\n{open(p, encoding='utf-8-sig').read().strip()}" for p in examples
@@ -110,9 +110,8 @@ def main():
         sys.exit("Empty response from API.")
 
     os.makedirs("Changelogs", exist_ok=True)
-    # Existing changelogs use CRLF line endings.
     with open(out_path, "w", encoding="utf-8", newline="") as f:
-        f.write(text.replace("\r\n", "\n").replace("\n", "\r\n") + "\r\n")
+        f.write(text.replace("\r\n", "\n") + "\n")
     print(f"Wrote {out_path}")
 
 
