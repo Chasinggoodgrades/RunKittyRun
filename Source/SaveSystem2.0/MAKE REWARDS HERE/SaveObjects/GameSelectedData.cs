@@ -6,4 +6,14 @@
     public string SelectedWindwalk { get; set; } = "";
     public string SelectedHat { get; set; } = "";
     public string SelectedTrail { get; set; } = "";
+
+    public void Clear()
+    {
+        SelectedSkin = "";
+        SelectedWings = "";
+        SelectedAura = "";
+        SelectedWindwalk = "";
+        SelectedHat = "";
+        SelectedTrail = "";
+    }
 }

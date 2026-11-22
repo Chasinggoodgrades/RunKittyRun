@@ -28,6 +28,7 @@ public class Reward
     public string ModelPath { get; } = "";
     public int SkinID { get; }
     public RewardType Type { get; }
+    public IReward Handler { get; }
     public string TypeSorted { get; set; }
     public string GameStat { get; }
     public int GameStatValue { get; set; }
@@ -51,6 +52,7 @@ public class Reward
         OriginPoint = originPoint;
         ModelPath = modelPath;
         Type = type;
+        Handler = RewardHandlers.Resolve(type, name);
     }
 
     public Reward(string name, int abilityID, int skinID, RewardType type)
@@ -59,26 +61,20 @@ public class Reward
         AbilityID = abilityID;
         SkinID = skinID;
         Type = type;
+        Handler = RewardHandlers.Resolve(type, name);
     }
 
     public Reward(string name, int abilityID, int skinID, RewardType type, string gameStat, int gameStatValue)
+        : this(name, abilityID, skinID, type)
     {
-        Name = name;
-        AbilityID = abilityID;
-        SkinID = skinID;
-        Type = type;
         GameStat = gameStat;
         GameStatValue = gameStatValue;
         RewardsManager.GameStatRewards.Add(this);
     }
 
     public Reward(string name, int abilityID, string originPoint, string modelPath, RewardType type, string gameStat, int gameStatValue)
+        : this(name, abilityID, originPoint, modelPath, type)
     {
-        Name = name;
-        AbilityID = abilityID;
-        OriginPoint = originPoint;
-        ModelPath = modelPath;
-        Type = type;
         GameStat = gameStat;
         GameStatValue = gameStatValue;
         RewardsManager.GameStatRewards.Add(this);
@@ -92,240 +88,35 @@ public class Reward
     /// <param name="setData">Indicates whether to alter the saved data while setting the player's rewards. Default is true.</param>
     public void ApplyReward(player player, bool setData = true)
     {
-        if (setData) SetSelectedData(player);
-        SetEffect(player);
-        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.ToString()}]");
-    }
+        if (!Globals.ALL_KITTIES.TryGetValue(player, out var kitty)) return;
 
-    private void SetEffect(player player)
-    {
+        if (setData) Handler.SetSelected(kitty.SaveData.SelectedData, Name);
+
         try
         {
-            if (!Globals.ALL_KITTIES.ContainsKey(player)) return;
-
-            if (SetSkin(player)) return;
-            if (SetWindwalk(player)) return;
-
-            var effectInstance = Globals.ALL_KITTIES[player].AddKittyEffect(ModelPath, OriginPoint);
-
-            DestroyCurrentEffect(player);
-            ApplyEffect(player, effectInstance);
+            Handler.Apply(kitty, this);
         }
         catch (Exception e)
         {
             Logger.Warning(e.Message);
         }
-    }
 
-    private void ApplyEffect(player player, effect effectInstance = null)
-    {
-        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
-        switch (Type)
-        {
-            case RewardType.Wings:
-                activeRewards.ActiveWings = effectInstance;
-                break;
-
-            case RewardType.Hats:
-                activeRewards.ActiveHats = effectInstance;
-                break;
-
-            case RewardType.Auras:
-                activeRewards.ActiveAura = effectInstance;
-                break;
-
-            case RewardType.Trails:
-            case RewardType.Nitros:
-            case RewardType.Deathless:
-                activeRewards.ActiveTrail = effectInstance;
-                break;
-
-            case RewardType.Tournament:
-                SetTournamentReward(player, effectInstance, true);
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
-        }
-    }
-
-    private void DestroyCurrentEffect(player player)
-    {
-        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
-        switch (Type)
-        {
-            case RewardType.Wings:
-                var x = activeRewards.ActiveWings;
-                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref x);
-                break;
-
-            case RewardType.Hats:
-                var y = activeRewards.ActiveHats;
-                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref y);
-                break;
-
-            case RewardType.Auras:
-                var z = activeRewards.ActiveAura;
-                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref z);
-                break;
-
-            case RewardType.Trails:
-            case RewardType.Nitros:
-            case RewardType.Deathless:
-                var t = activeRewards.ActiveTrail;
-                Globals.ALL_KITTIES[player].RemoveKittyEffect(ref t);
-                break;
-
-            case RewardType.Tournament:
-                SetTournamentReward(player, null, false);
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
-        }
-    }
-
-    private bool SetWindwalk(player player)
-    {
-        if (Type != RewardType.Windwalks) return false;
-        var kitty = Globals.ALL_KITTIES[player];
-        kitty.ActiveAwards.WindwalkID = AbilityID;
-        return true;
-    }
-
-    private bool SetSkin(player player, bool tournament = false)
-    {
-        if (Type != RewardType.Skins && tournament == false) return false;
-
-        var kitty = Globals.ALL_KITTIES[player];
-
-        if (SkinID != 0)
-        {
-            kitty.Unit.Skin = SkinID;
-            kitty.KittyMorphosis.ScaleUnit();
-            kitty.AsyncEffect?.ReapplyUnitHidden(true);
-            kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(kitty.CommandTier)})";
-
-        }
-        else
-            Logger.Critical($"Skins ID invalid for {Name}");
-
-        return true;
-    }
-
-    private void SetSelectedData(player player)
-    {
-        if (!Globals.ALL_KITTIES.ContainsKey(player)) return;
-
-        var saveData = Globals.ALL_KITTIES[player].SaveData;
-
-        switch (Type)
-        {
-            case RewardType.Skins:
-                saveData.SelectedData.SelectedSkin = Name;
-                break;
-
-            case RewardType.Windwalks:
-                saveData.SelectedData.SelectedWindwalk = Name;
-                break;
-
-            case RewardType.Auras:
-                saveData.SelectedData.SelectedAura = Name;
-                break;
-
-            case RewardType.Hats:
-                saveData.SelectedData.SelectedHat = Name;
-                break;
-
-            case RewardType.Wings:
-                saveData.SelectedData.SelectedWings = Name;
-                break;
-
-            case RewardType.Trails:
-            case RewardType.Nitros:
-            case RewardType.Deathless:
-                saveData.SelectedData.SelectedTrail = Name;
-                break;
-
-            case RewardType.Tournament:
-                break;
-
-            default:
-                Logger.Critical("Error with selected data");
-                throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
-        }
-    }
-
-    private bool SetTournamentReward(player player, effect e, bool activate)
-    {
-        if (Type != RewardType.Tournament)
-            return false;
-
-        var activeRewards = Globals.ALL_KITTIES[player].ActiveAwards;
-        if (activate)
-        {
-            if (Name.Contains("Nitro"))
-                activeRewards.ActiveTrail = e;
-            else if (Name.Contains("Aura"))
-                activeRewards.ActiveAura = e;
-            else if (Name.Contains("Wings"))
-                activeRewards.ActiveWings = e;
-            else if (Name.Contains("Skin"))
-            {
-                SetSkin(player, true);
-                Globals.ALL_KITTIES[player].SaveData.SelectedData.SelectedSkin = Name;
-            }
-            else
-            {
-                Logger.Warning($"Error: Tournament reward {Name} is not a valid type.");
-                return false;
-            }
-        }
-        else
-        {
-            if (Name.Contains("Nitro"))
-                activeRewards.ActiveTrail?.Dispose();
-            else if (Name.Contains("Aura"))
-                activeRewards.ActiveAura?.Dispose();
-            else if (Name.Contains("Wings"))
-                activeRewards.ActiveWings?.Dispose();
-            else
-                return false;
-        }
-
-        return true;
+        if (setData) player.DisplayTimedTextTo(3.0f, $"{Colors.COLOR_RED}Applied:|r {GetRewardName()} {Colors.COLOR_ORANGE}[{Type.ToString()}]");
     }
 
     public string SetRewardTypeSorted()
     {
         switch (Type)
         {
-            case RewardType.Auras:
-                return new Auras().GetType().Name;
-
-            case RewardType.Windwalks:
-                return new Windwalks().GetType().Name;
-
-            case RewardType.Skins:
-                return new Skins().GetType().Name;
-
-            case RewardType.Trails:
-                return new Trails().GetType().Name;
-
-            case RewardType.Deathless:
-                return new Deathless().GetType().Name;
-
-            case RewardType.Nitros:
-                return new Nitros().GetType().Name;
-
-            case RewardType.Hats:
-                return new Hats().GetType().Name;
-
-            case RewardType.Wings:
-                return new Wings().GetType().Name;
-
-            default:
-                return new Tournament().GetType().Name;
+            case RewardType.Auras: return nameof(Auras);
+            case RewardType.Windwalks: return nameof(Windwalks);
+            case RewardType.Skins: return nameof(Skins);
+            case RewardType.Trails: return nameof(Trails);
+            case RewardType.Deathless: return nameof(Deathless);
+            case RewardType.Nitros: return nameof(Nitros);
+            case RewardType.Hats: return nameof(Hats);
+            case RewardType.Wings: return nameof(Wings);
+            default: return nameof(Tournament);
         }
     }
 

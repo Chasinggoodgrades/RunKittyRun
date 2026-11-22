@@ -1,0 +1,23 @@
+**__Run Kitty Run - Remastered v1.6.7__**
+QoL Changes, Refactoring
+
+**__Kibble Event __**
+- Kibble event timer will now pause in between transitioning rounds.
+
+**__Replenish Mana__**
+- Nerfed from 15% per safezone to 10% .. prolly nerf again but will see.
+
+**__Challenges__**
+- Some challenges will now properly be awarded based on difficulty of the mode.. Such as progressive round 3 matching the impossible difficulty. So getting nitro in this mode would provide Violet Light
+  - This applies to chained together as well
+- Patriotic Light will now based off of round times total game time instead of the overall game time.
+- Cloak of Flames damage now increased A LOT. (Violet WW Challenge)
+
+**__Cosmetics__**
+- new vip skins for some tiger/druid transformation.. -mdb triger , -mdb druid        -- will make these a challenge at a later point.
+
+**__Seasons__**
+- Seasonal code was refactored, and Halloween is setup to go live 1st of October until end of October. 
+
+**__Bug Fixes__**
+- Dead AI will now resume properly on round transitions.

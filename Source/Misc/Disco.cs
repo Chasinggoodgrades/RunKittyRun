@@ -14,8 +14,15 @@ public class Disco : IDisposable
 
     public void Dispose()
     {
-        DiscoTimer.Pause();
+        DiscoTimer?.Pause();
         Enabled = false;
+        if (!PoolConfig.Enabled)
+        {
+            // not being recycled, so the native timer has to be destroyed here or it leaks
+            DiscoTimer?.Dispose();
+            DiscoTimer = null;
+            return;
+        }
         ObjectPool<Disco>.ReturnObject(this);
     }
 
@@ -27,11 +34,12 @@ public class Disco : IDisposable
         {
             if (Enabled) return;
             Enabled = true;
+            DiscoTimer ??= timer.Create();
             DiscoTimer.Start(0.4f, true, () => DiscoActions());
         }
         else
         {
-            DiscoTimer.Pause();
+            DiscoTimer?.Pause();
             Enabled = false;
             if (Unit.UnitType == Constants.UNIT_KITTY) return;
             Dispose();

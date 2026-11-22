@@ -1,0 +1,63 @@
+name: Link Issues To PR
+
+# When a PR is opened or pushed to, find "Fix #123" style references in its commit messages and
+# add them to the PR description as closing keywords so GitHub links them in the Development
+# section (and closes them when the PR is merged into master).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  issues: read
+  contents: read
+
+concurrency:
+  group: link-issues-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Link issues referenced in commits
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          # Commit messages (headline + body) of every commit in the PR.
+          messages=$(gh pr view "$PR" --repo "$REPO" --json commits \
+            --jq '.commits[] | .messageHeadline + "\n" + .messageBody')
+
+          # Closing keywords GitHub recognizes, followed by #number. Case-insensitive.
+          numbers=$(echo "$messages" \
+            | grep -oiE '\b(close[sd]?|fix(e[sd])?|resolve[sd]?)[: ]+#[0-9]+' \
+            | grep -oE '[0-9]+' | sort -un || true)
+
+          links=""
+          for n in $numbers; do
+            [ "$n" = "$PR" ] && continue
+            # Only link real issues (the issues API also returns PRs, which have a pull_request key).
+            if gh api "repos/$REPO/issues/$n" --jq 'select(.pull_request == null) | .number' 2>/dev/null | grep -q .; then
+              links+="Closes #$n"$'\n'
+            fi
+          done
+
+          body=$(gh pr view "$PR" --repo "$REPO" --json body --jq .body)
+          # Drop any block this workflow wrote previously, then re-add the current one.
+          cleaned=$(printf '%s' "$body" | sed '/<!-- linked-issues:start -->/,/<!-- linked-issues:end -->/d')
+          if [ -n "$links" ]; then
+            newbody=$(printf '%s\n\n<!-- linked-issues:start -->\n%s<!-- linked-issues:end -->' "$cleaned" "$links")
+          else
+            newbody="$cleaned"
+          fi
+
+          if [ "$newbody" = "$body" ]; then
+            echo "PR description already up to date."
+            exit 0
+          fi
+          gh pr edit "$PR" --repo "$REPO" --body "$newbody"
+          echo "Linked: $(echo "$links" | tr '\n' ' ')"

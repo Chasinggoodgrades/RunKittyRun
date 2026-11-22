@@ -450,11 +450,13 @@ public static class ShopFrame
                     player.Gold += selectedItem.Cost;
                     relic?.RemoveEffect(kitty.Unit);
                     kitty.Relics.Remove(relic);
+                    UpdateButtonStatus(player);
                     return;
                 }
 
                 Utility.RemoveItemFromUnit(kitty.Unit, itemID);
                 player.Gold += selectedItem.Cost;
+                UpdateButtonStatus(player);
             }
         }
         catch (Exception ex)

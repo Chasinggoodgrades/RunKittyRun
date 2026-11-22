@@ -1,4 +1,6 @@
 ﻿using System;
+using static WCSharp.Api.Common;
+using WCSharp.Api;
 
 public static class Logger
 {
@@ -24,8 +26,13 @@ public static class Logger
     }
     private static void Log(string level, string color, params object[] messages)
     {
-        if (!ErrorHandler.ErrorMessagesOn) return;
         var formattedMessage = string.Join(" ", messages);
-        Console.WriteLine($"{Colors.COLOR_TURQUOISE}(Use '-error off' to disable these messages'){Colors.COLOR_RESET}{color}[{level}] {formattedMessage}|r");
+        var text = $"{Colors.COLOR_TURQUOISE}(Use '-error off' to disable these messages'){Colors.COLOR_RESET}{color}[{level}] {formattedMessage}|r";
+        for (int i = 0; i < Globals.ALL_PLAYERS.Count; i++)
+        {
+            var player = Globals.ALL_PLAYERS[i];
+            if (!ErrorHandler.ShouldShowErrors(player)) continue; // new players are skipped by default; -error on/off overrides per player
+            player.DisplayTimedTextTo(10.0f, text);
+        }
     }
 }

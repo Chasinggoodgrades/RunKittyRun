@@ -37,7 +37,7 @@ public static class PlayerLeaves
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error in PlayerLeavesActions: " + e.Message);
+            Logger.Warning("Error in PlayerLeavesActions: " + e.Message);
         }
     }
 }

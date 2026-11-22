@@ -58,29 +58,13 @@ public static class RewardsManager
     {
         var player = Unit.Owner;
         var kitty = Globals.ALL_KITTIES[player];
-        var activeRewards = kitty.ActiveAwards;
-
-        var wings = activeRewards.ActiveWings;
-        kitty.RemoveKittyEffect(ref wings);
-
-        var auras = activeRewards.ActiveAura;
-        kitty.RemoveKittyEffect(ref auras);
-
-        var hats = activeRewards.ActiveHats;
-        kitty.RemoveKittyEffect(ref hats);
-
-        var trails = activeRewards.ActiveTrail;
-        kitty.RemoveKittyEffect(ref trails);
+        RewardHandlers.RemoveAll(kitty);
 
         kitty.Unit.Skin = Constants.UNIT_KITTY;
         kitty.Unit.SetVertexColor(255, 255, 255);
         kitty.NotifyVertexColor(255, 255, 255);
         kitty.AsyncEffect?.ReapplyUnitHidden(true); // the line above made the unit opaque again
 
-        foreach (var property in kitty.SaveData.SelectedData.GetType().GetProperties())
-            property.SetValue(kitty.SaveData.SelectedData, "");
-
-        if (kitty.SaveData.SelectedData.SelectedWindwalk == "")
-            kitty.ActiveAwards.WindwalkID = 0;
+        kitty.SaveData.SelectedData.Clear();
     }
 }

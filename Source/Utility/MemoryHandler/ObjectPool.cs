@@ -1,6 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Global switch for the object pool. When false, <see cref="ObjectPool{T}"/> hands out brand new objects/lists
+/// and ignores anything returned to it (the GC cleans up). Flip this to compare pooled vs. non-pooled behaviour.
+/// </summary>
+public static class PoolConfig
+{
+    public static bool Enabled = true;
+}
+
 public static class ObjectPool<T> where T : class, new()
 {
     private static readonly Queue<T> _pool = new Queue<T>();
@@ -10,6 +19,8 @@ public static class ObjectPool<T> where T : class, new()
     /// </summary>
     public static T GetEmptyObject()
     {
+        if (!PoolConfig.Enabled) return new T();
+
         try
         {
             if (_pool.Count > 0)
@@ -33,6 +44,8 @@ public static class ObjectPool<T> where T : class, new()
     /// </summary>
     public static void ReturnObject(T obj)
     {
+        if (!PoolConfig.Enabled) return;
+
         try
         {
             if (obj == null)
@@ -55,6 +68,8 @@ public static class ObjectPool<T> where T : class, new()
     /// </summary>
     public static List<T> GetEmptyList()
     {
+        if (!PoolConfig.Enabled) return new List<T>();
+
         try
         {
             if (_listPool.Count > 0)
@@ -78,6 +93,8 @@ public static class ObjectPool<T> where T : class, new()
     /// </summary>
     public static void ReturnList(List<T> list)
     {
+        if (!PoolConfig.Enabled) return;
+
         try
         {
             if (list == null)

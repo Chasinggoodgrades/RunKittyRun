@@ -256,15 +256,12 @@ public static class AwardManager
         var selectedData = kitty.SaveData.SelectedData; // GameSelectData class object
         Colors.SetColorJoinedAs(kitty.Player);
 
-        var skinProperty = selectedData.GetType().GetProperty(nameof(selectedData.SelectedSkin));
-        var skinValue = (string)skinProperty.GetValue(selectedData);
-        ProcessAward(kitty, skinValue);
-
-        foreach (var property in selectedData.GetType().GetProperties())
-        {
-            var selectedName = (string)property.GetValue(selectedData);
-            ProcessAward(kitty, selectedName);
-        }
+        ProcessAward(kitty, selectedData.SelectedSkin); // skin first, as before
+        ProcessAward(kitty, selectedData.SelectedWings);
+        ProcessAward(kitty, selectedData.SelectedAura);
+        ProcessAward(kitty, selectedData.SelectedWindwalk);
+        ProcessAward(kitty, selectedData.SelectedHat);
+        ProcessAward(kitty, selectedData.SelectedTrail);
     }
 
     private static void ProcessAward(Kitty kitty, string selectedAwardName)
