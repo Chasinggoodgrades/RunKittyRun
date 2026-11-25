@@ -29,6 +29,7 @@ public static class FrameManager
         try
         {
             BlzLoadTOCFile("war3mapImported\\templates.toc");
+            BlzLoadTOCFile("war3mapImported\\ShopTheme.toc");
             RemoveUnwantedFrames();
             ButtonsBackdrop();
             CreateRewardsButton();
@@ -67,24 +68,54 @@ public static class FrameManager
         ShopButton.Visible = true;
     }
 
-    public static framehandle CreateHeaderFrame(framehandle parent)
+    /// <summary>A themed tooltip: a backdrop wrapping a text frame (the text is the backdrop's child, so it shows and hides with it).</summary>
+    public static framehandle CreateThemedTooltip(float width, float pad, out framehandle background)
+    {
+        background = BlzCreateFrame("ShopTooltipBackdrop", GameUI, 0, 0);
+        var text = BlzCreateFrame("ShopTooltipText", background, 0, 0);
+        text.SetSize(width, 0);
+        background.SetPoint(framepointtype.BottomLeft, -pad, -pad, text, framepointtype.BottomLeft);
+        background.SetPoint(framepointtype.TopRight, pad, pad, text, framepointtype.TopRight);
+        return text;
+    }
+
+    private static int slotContext;
+    /// <summary>An item slot (themed frame; the hover glow is the template's own highlight). The icon backdrop comes with the template; set its texture.</summary>
+    public static framehandle CreateSlotButton(framehandle parent, out framehandle icon)
+    {
+        slotContext++;
+        var button = BlzCreateFrame("ShopSlotButton", parent, 0, slotContext);
+        icon = BlzGetFrameByName("ShopSlotIcon", slotContext);
+        if (icon == null)
+        {
+            // the named child was not found: build the icon by hand so a slot never breaks the whole frame
+            icon = BlzCreateFrameByType("BACKDROP", "ShopSlotIconFallback", button, "", slotContext);
+            icon.SetPoint(framepointtype.TopLeft, 0.0025f, -0.0025f, button, framepointtype.TopLeft);
+            icon.SetPoint(framepointtype.BottomRight, -0.0025f, 0.0025f, button, framepointtype.BottomRight);
+        }
+
+        return button;
+    }
+
+    public static framehandle CreateHeaderFrame(framehandle parent, string titleText = null)
     {
         var header = framehandle.Create("BACKDROP", $"{parent.Name}Header", parent, "QuestButtonDisabledBackdropTemplate", 0);
         var width = parent.Width;
         var height = 0.0225f;
         header.SetPoint(framepointtype.TopLeft, 0, 0.0125f, parent, framepointtype.TopLeft);
         header.SetSize(width, height);
+        header.SetTexture("war3mapImported\\Shop_Header.tga", 0, true);
 
         var title = framehandle.Create("TEXT", $"{parent.Name}Title", header, "ScriptDialogText", 0);
         title.SetPoint(framepointtype.Center, 0, 0, header, framepointtype.Center);
         title.SetSize(width, height);
-        title.Text = $"{Colors.COLOR_YELLOW}{parent.Name}{Colors.COLOR_RESET}";
+        title.Text = $"{Colors.COLOR_YELLOW}{titleText ?? parent.Name}{Colors.COLOR_RESET}";
         title.SetTextAlignment(textaligntype.Center, textaligntype.Center);
 
         var closeButton = framehandle.Create("GLUETEXTBUTTON", $"{parent.Name}CloseButton", header, "ScriptDialogButton", 0);
         closeButton.SetPoint(framepointtype.TopRight, -0.0025f, -0.0025f, header, framepointtype.TopRight);
         closeButton.SetSize(height - 0.005f, height - 0.005f);
-        closeButton.Text = "X";
+        closeButton.Text = $"{Colors.COLOR_RED}X{Colors.COLOR_RESET}";
 
         // Close Actions
         var closeTrigger = trigger.Create();

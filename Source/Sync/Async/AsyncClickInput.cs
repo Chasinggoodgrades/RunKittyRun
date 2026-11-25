@@ -43,7 +43,8 @@ public static class AsyncClickInput
             return;
         }
 
-        bool isPressed = AsyncMouse.IsRightPressed();
+        // a click made while the game window is not focused (tabbed to another app) is not a move
+        bool isPressed = AsyncMouse.IsWindowActive() && AsyncMouse.IsRightPressed();
 
         if (isPressed && (!wasRightPressed || AsyncKittySync.Now - lastRefresh >= REFRESH_PERIOD))
         {

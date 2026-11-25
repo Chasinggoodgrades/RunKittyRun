@@ -61,6 +61,7 @@ public static class RewardsManager
         RewardHandlers.RemoveAll(kitty);
 
         kitty.Unit.Skin = Constants.UNIT_KITTY;
+        kitty.RefreshUnitName();
         kitty.Unit.SetVertexColor(255, 255, 255);
         kitty.NotifyVertexColor(255, 255, 255);
         kitty.AsyncEffect?.ReapplyUnitHidden(true); // the line above made the unit opaque again

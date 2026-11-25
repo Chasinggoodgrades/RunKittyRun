@@ -147,7 +147,7 @@ public static class RewardHandlers
             kitty.Unit.Skin = reward.SkinID;
             kitty.KittyMorphosis.ScaleUnit();
             kitty.AsyncEffect?.ReapplyUnitHidden(true);
-            kitty.Unit.Name = $"{Colors.PlayerNameColored(kitty.Player)} ({Colors.GetColoredCommandTier(kitty.CommandTier)})";
+            kitty.RefreshUnitName();
         }
 
         public void Remove(Kitty kitty)

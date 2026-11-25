@@ -14,11 +14,13 @@ public static class RewardsFrame
     private static RewardHelper RewardHelp = new RewardHelper();
     private static int RewardsPerRow = 6;
     private static float FrameX = 0.4f;
-    private static float FrameY = 0.35f;
-    private static float FrameWidth = 0.30f;
-    private static float FrameHeight = 0.295f;
+    private static float FrameY = 0.34f;
+    private static float FrameWidth = 0.35f;
+    private static float FrameHeight = 0.395f;
     private static float Padding = 0.01f;
-    private static float IconSize = 0.02f;
+    private static float IconSize = 0.0225f;
+    private static float IconPitch = 0.0245f;
+    private static float PanelGap = 0.015f; // room for the panel title between two panels
     private static int FrameCount = 0;
 
     public static void Initialize()
@@ -31,7 +33,7 @@ public static class RewardsFrame
             CountRewardFrames();
             AppendRewardsToFrames();
             CreateRandomRewardButton();
-            FrameManager.CreateHeaderFrame(RewardFrame);
+            FrameManager.CreateHeaderFrame(RewardFrame, "Rewards");
         }
         catch (Exception ex)
         {
@@ -42,7 +44,7 @@ public static class RewardsFrame
 
     private static framehandle CreateRewardFrame()
     {
-        RewardFrame = framehandle.Create("BACKDROP", "Reward Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
+        RewardFrame = BlzCreateFrame("ShopWindowSquareBackdrop", GameUI, 0, 0);
         RewardFrame.SetAbsPoint(framepointtype.Center, FrameX, FrameY);
         RewardFrame.SetSize(FrameWidth, FrameHeight);
 
@@ -85,9 +87,9 @@ public static class RewardsFrame
 
     private static void InitializePanels(string name, float colCount)
     {
-        var y = -Padding;
+        var y = -PanelGap;
         var width = (FrameWidth - (Padding * 2)) / 2;
-        var height = (colCount == 1) ? 0.03f : 0.03f + ((colCount - 1) * 0.02f);
+        var height = 0.014f + (colCount * IconPitch);
         CreatePanel(TempHandle, 0, y, width, height, name);
     }
 
@@ -97,23 +99,25 @@ public static class RewardsFrame
         var framePoint2 = framepointtype.BottomLeft;
         if (parent == RewardFrame) framePoint2 = framepointtype.TopLeft;
         if (parent == RewardFrame) x = Padding;
-        if (parent == RewardFrame) y = -Padding * 2;
+        if (parent == RewardFrame) y = -PanelGap - Padding;
         if (FrameCount == 5)
         {
             parent = RewardFrame;
             framePoint1 = framepointtype.TopRight;
             framePoint2 = framepointtype.TopRight;
             x = -Padding;
-            y = -Padding * 2;
+            y = -PanelGap - Padding;
         }
 
-        var panel = framehandle.Create("BACKDROP", $"{title}", parent, "QuestButtonDisabledBackdropTemplate", 0);
+        var panel = BlzCreateFrame("ShopPanelBackdrop", parent, 0, 0);
         panel.SetPoint(framePoint1, x, y, parent, framePoint2);
         panel.SetSize(width, height);
 
         // title above each panel
-        var panelTitle = framehandle.Create("TEXT", "RewardPanelTitle", panel, "", 0);
-        panelTitle.SetPoint(framepointtype.TopLeft, 0, Padding, panel, framepointtype.TopLeft);
+        var panelTitle = BlzCreateFrame("ShopPanelTitleText", panel, 0, 0);
+        panelTitle.SetSize(width, 0.014f);
+        panelTitle.SetPoint(framepointtype.BottomLeft, 0.003f, 0.002f, panel, framepointtype.TopLeft);
+        panelTitle.SetTextAlignment(textaligntype.Left, textaligntype.Center);
         panelTitle.Text = title;
 
         TempHandle = panel;
@@ -126,24 +130,18 @@ public static class RewardsFrame
     private static void CreateRandomRewardButton()
     {
         // Create the random rewards button at the bottom right of the rewards frame.
-        const float ButtonSize = 0.025f;
+        const float ButtonSize = 0.028f;
         const float TooltipWidth = 0.25f;
         const float BackgroundPadding = 0.01f;
         const float TooltipYOffset = 0.01f;
         var dice = "ReplaceableTextures\\CommandButtons\\BTNDice.blp";
 
-        var button = framehandle.Create("Button", "RandomRewardButton", RewardFrame, "ScoreScreenTabButtonTemplate", 0);
+        var button = FrameManager.CreateSlotButton(RewardFrame, out var icon);
         button.SetPoint(framepointtype.BottomRight, -Padding, Padding, RewardFrame, framepointtype.BottomRight);
         button.SetSize(ButtonSize, ButtonSize);
 
-        var icon = framehandle.Create("BACKDROP", "RandomRewardButtonIcon", button, "", 0);
-        icon.SetPoints(button);
 
-        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-        var tooltipText = framehandle.Create("TEXT", "RandomRewardTooltip", background, "", 0);
-        tooltipText.SetSize(TooltipWidth, 0);
-        background.SetPoint(framepointtype.BottomLeft, -BackgroundPadding, -BackgroundPadding, tooltipText, framepointtype.BottomLeft);
-        background.SetPoint(framepointtype.TopRight, BackgroundPadding, BackgroundPadding, tooltipText, framepointtype.TopRight);
+        var tooltipText = FrameManager.CreateThemedTooltip(TooltipWidth, BackgroundPadding, out var background);
 
         button.SetTooltip(background);
         tooltipText.SetPoint(framepointtype.Bottom, 0, TooltipYOffset, button, framepointtype.Top);
@@ -215,15 +213,13 @@ public static class RewardsFrame
             {
                 continue;
             }
-            var rewardButton = framehandle.Create("Button", reward.Name.ToString(), panel, "ScoreScreenTabButtonTemplate", 0);
+            var rewardButton = FrameManager.CreateSlotButton(panel, out var icon);
             if (col == 0)
-                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);
+                rewardButton.SetPoint(framepointtype.TopLeft, Padding, (-row * IconPitch) - 0.006f, panel, framepointtype.TopLeft);
             else
-                rewardButton.SetPoint(framepointtype.TopLeft, (col * IconSize) + Padding, (-row * IconSize) - (Padding / 2), panel, framepointtype.TopLeft);
+                rewardButton.SetPoint(framepointtype.TopLeft, (col * IconPitch) + Padding, (-row * IconPitch) - 0.006f, panel, framepointtype.TopLeft);
             rewardButton.SetSize(IconSize, IconSize);
 
-            var icon = framehandle.Create("BACKDROP", reward.Name.ToString() + "icon", rewardButton, "", 0);
-            icon.SetPoints(rewardButton);
             RewardTooltip(rewardButton, reward);
 
             RewardIcons.Add(icon, reward);
@@ -238,12 +234,7 @@ public static class RewardsFrame
 
     private static void RewardTooltip(framehandle parent, Reward reward)
     {
-        var background = framehandle.Create("QuestButtonBaseTemplate", GameUI, 0, 0);
-        var tooltipText = framehandle.Create("TEXT", $"{reward.Name}Tooltip", background, "", 0);
-
-        tooltipText.SetSize(0.25f, 0);
-        background.SetPoint(framepointtype.BottomLeft, -0.01f, -0.01f, tooltipText, framepointtype.BottomLeft);
-        background.SetPoint(framepointtype.TopRight, 0.01f, 0.01f, tooltipText, framepointtype.TopRight);
+        var tooltipText = FrameManager.CreateThemedTooltip(0.25f, 0.01f, out var background);
 
         parent.SetTooltip(background);
         tooltipText.SetPoint(framepointtype.Bottom, 0, 0.01f, parent, framepointtype.Top);

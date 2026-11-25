@@ -12,18 +12,19 @@ public static class MusicFrame
     private static Dictionary<int, framehandle> MusicButtons = new Dictionary<int, framehandle>();
     private static string[] Headers;
     private static float MusicFrameX = 0.40f;
-    private static float MusicFrameY = 0.36f;
-    private const float ButtonWidth = 0.17f;
+    private static float MusicFrameY = 0.368f;
+    private const int VisibleButtons = 9;
+    private const float ButtonWidth = 0.19f;
     private const float ButtonHeight = 0.023f;
     private const float ButtonSpacing = 0.025f; // Space between buttons
-    private const float ButtonStartX = 0.40f;  // X coordinate for button positions
+    private const float ButtonStartX = 0.387f;  // X coordinate for button positions
     private const float ButtonStartY = 0.465f;  // Starting Y coordinate for the first button
 
     public static void Initialize()
     {
         try
         {
-            MusicFramehandle = BlzCreateFrameByType("BACKDROP", "Music Frame", GameUI, "QuestButtonPushedBackdropTemplate", 0);
+            MusicFramehandle = BlzCreateFrame("ShopWindowTallBackdrop", GameUI, 0, 0);
             MusicFramehandle.SetAbsPoint(framepointtype.Center, MusicFrameX, MusicFrameY);
             CreateMusicFrames();
             SetMusicFrameHotkeyEvent();
@@ -37,10 +38,15 @@ public static class MusicFrame
 
     private static void CreateMusicFrames()
     {
-        var ySize = MusicManager.MusicList.Count * 0.03f;
-        MusicFramehandle.SetSize(0.20f, ySize);
+        // sized for the nine visible buttons, not for the whole list (the slider scrolls it)
+        MusicFramehandle.SetSize(0.25f, 0.257f);
 
-        FrameManager.CreateHeaderFrame(MusicFramehandle);
+        FrameManager.CreateHeaderFrame(MusicFramehandle, "Music");
+
+        // an inset panel behind the list and the slider
+        var listPanel = BlzCreateFrame("ShopPanelBackdrop", MusicFramehandle, 0, 0);
+        listPanel.SetPoint(framepointtype.TopLeft, 0.01f, -0.012f, MusicFramehandle, framepointtype.TopLeft);
+        listPanel.SetPoint(framepointtype.BottomRight, -0.01f, 0.01f, MusicFramehandle, framepointtype.BottomRight);
 
         // Slider
         RegisterMusicSlider();
@@ -52,16 +58,21 @@ public static class MusicFrame
     private static void RegisterMusicSlider()
     {
         MusicSlider = BlzCreateFrameByType("SLIDER", "SliderFrame", MusicFramehandle, "QuestMainListScrollBar", 0);
-        var numberOfSongs = MusicManager.MusicList.Count;
         MusicSlider.ClearPoints();
-        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.485f, 0.455f);
-        MusicSlider.SetSize(0.01f, 0.125f);
-        MusicSlider.SetMinMaxValue(0, numberOfSongs);
+        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.492f, 0.4765f);
+        MusicSlider.SetSize(0.011f, 0.223f);
+
+        // A vertical slider has its minimum at the BOTTOM, the list starts at the top: the slider value counts
+        // up from the bottom, so the list offset is (MaxOffset - value). The thumb starts at the top = first songs.
+        var maxOffset = MaxScrollOffset;
+        MusicSlider.SetMinMaxValue(0, maxOffset);
         MusicSlider.SetStepSize(1);
+        MusicSlider.Value = maxOffset;
+        MusicSlider.Visible = maxOffset > 0; // nothing to scroll when everything fits
 
         foreach (var player in Globals.ALL_PLAYERS)
             if (!MusicSliderValues.ContainsKey(player))
-                MusicSliderValues.Add(player, 0);
+                MusicSliderValues.Add(player, maxOffset);
 
         var Trigger = trigger.Create();
         var mousewheel = trigger.Create();
@@ -78,11 +89,13 @@ public static class MusicFrame
         {
             var frame = @event.Frame;
             var player = @event.Player;
-            var frameValue = @event.FrameValue;
             if (!player.IsLocal) return;
-            MusicSlider.Value = frameValue > 0 ? frameValue + 1.0f : frameValue - 1.0f;
-            var value = MusicSliderValues[player];
-            if (player.IsLocal) PopulateMusicFrame(player);
+
+            // wheel up = towards the first songs = a higher slider value (the change event does the rest)
+            var next = MusicSlider.Value + (@event.FrameValue > 0 ? 1.0f : -1.0f);
+            if (next < 0) next = 0;
+            if (next > MaxScrollOffset) next = MaxScrollOffset;
+            MusicSlider.Value = next;
         });
     }
 
@@ -127,36 +140,34 @@ public static class MusicFrame
         // Ensure this code runs only for the local player
         if (!player.IsLocal) return;
 
-        // Retrieve the scroll value for the player
-        var value = MusicSliderValues[player];
         int maxSongs = MusicManager.MusicList.Count;
-        int visibleButtons = 9;
+        var maxOffset = MaxScrollOffset;
 
-        // Ensure the value stays within valid bounds
-        if (value < 0) value = 0;
-        if (value > maxSongs - 1) value = maxSongs - 1;
+        // slider value -> how many songs are scrolled past the top
+        int offset = maxOffset - MusicSliderValues[player];
+        if (offset < 0) offset = 0;
+        if (offset > maxOffset) offset = maxOffset;
 
-        // Calculates the start and end indexes for the visible buttons
-        int start = value - (visibleButtons / 2);
-        if (start < 0) start = 0;
-        int end = Math.Min(start + visibleButtons, maxSongs);
-
-        // Adjust start in case end is too small
-        if (end - start < visibleButtons) start = Math.Max(0, end - visibleButtons);
-
-        // Display the buttons in the visible range and hide others
         for (int i = 0; i < maxSongs; i++)
         {
-            if (i >= start && i < end)
+            if (i >= offset && i < offset + VisibleButtons)
             {
-                float positionY = i == end - 1 ? ButtonStartY - ((visibleButtons - 1) * ButtonSpacing) : ButtonStartY - ((i - start) * ButtonSpacing);
-                MusicButtons[i].SetAbsPoint(framepointtype.Center, ButtonStartX, positionY);
+                MusicButtons[i].SetAbsPoint(framepointtype.Center, ButtonStartX, ButtonStartY - ((i - offset) * ButtonSpacing));
                 MusicButtons[i].Visible = true;
             }
             else
             {
                 MusicButtons[i].Visible = false;
             }
+        }
+    }
+
+    private static int MaxScrollOffset
+    {
+        get
+        {
+            var extra = MusicManager.MusicList.Count - VisibleButtons;
+            return extra > 0 ? extra : 0;
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using WCSharp.Api;
+using static WCSharp.Api.Common;
 
 public class Circle
 {
@@ -8,6 +9,7 @@ public class Circle
     public player Player { get; set; }
     public unit Unit { get; set; }
     public trigger Collision { get; set; }
+    private effect protectionEffect; // shown while the dead Kitty is protected and about to be revived
 
     public Circle(player player)
     {
@@ -27,6 +29,7 @@ public class Circle
 
     public void Dispose()
     {
+        GC.RemoveEffect(ref protectionEffect);
         Unit.Dispose();
         Collision.Dispose();
         Globals.ALL_CIRCLES.Remove(Player);
@@ -45,7 +48,21 @@ public class Circle
         Unit.ManaRegeneration = regenRate;
     }
 
-    public void HideCircle() => Unit.IsVisible = false;
+    /// <summary>Puts an effect on the circle (call after KittyDied, when it is shown). Gone when the circle hides.</summary>
+    public void ShowProtection(string model)
+    {
+        if (protectionEffect != null) return;
+
+        protectionEffect = AddSpecialEffectTarget(model, Unit, "origin");
+    }
+
+    public void ClearProtection() => GC.RemoveEffect(ref protectionEffect);
+
+    public void HideCircle()
+    {
+        ClearProtection();
+        Unit.IsVisible = false;
+    }
 
     private void ShowCircle() => Unit.IsVisible = true;
 }

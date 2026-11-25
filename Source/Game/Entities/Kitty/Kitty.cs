@@ -204,6 +204,9 @@ public class Kitty : IFloatingTags, ICircleOwner
             Circle.SetMana(Unit.Mana - MANA_DEATH_PENALTY, Unit.MaxMana, (Unit.Intelligence * 0.08f) + 0.01f);
             Circle.KittyDied(this);
 
+            // protected: the glow followed the effect that just stood down, so it goes on the revive circle until the revive
+            if (ProtectionActive) ProtectionOfAncients?.ShowProtectedDeathEffect();
+
             // Death Sounds
             SoundManager.PlayKittyDeathSound(this);
             SoundManager.PlayFirstBloodSound();
@@ -237,7 +240,7 @@ public class Kitty : IFloatingTags, ICircleOwner
             Unit.Revive(Circle.Unit.X, Circle.Unit.Y, false);
             Unit.Mana = Circle.Unit.Mana;
             Windwalk.ReactivateWindwalk();
-            AsyncEffect?.Show();
+            if (!FirstPersonCameraManager.IsFirstPerson(Player)) AsyncEffect?.Show(); // first person drives the unit itself
 
             // Adjust player controls and UI
             Utility.SelectUnitForPlayer(Player, Unit);
@@ -316,6 +319,16 @@ public class Kitty : IFloatingTags, ICircleOwner
         Utility.CreateEffectAndDispose(SPAWN_IN_EFFECT, spawnCenter.X, spawnCenter.Y);
     }
 
+    /// <summary>
+    /// Sets the hero name to "PlayerName (Tier)". Changing a unit's skin resets its name to the unit-type name,
+    /// so this has to run again after every skin change.
+    /// </summary>
+    public void RefreshUnitName()
+    {
+        if (Unit == null) return;
+        Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
+    }
+
     private void CreateKitty()
     {
         // Spawn Location
@@ -331,7 +344,7 @@ public class Kitty : IFloatingTags, ICircleOwner
         Globals.SetKittySlot(Player, this);
         Resources.StartingItems(this);
         RelicUtil.DisableRelicBook(Unit);
-        Unit.Name = $"{Colors.PlayerNameColored(Player)} ({Colors.GetColoredCommandTier(CommandTier)})";
+        RefreshUnitName();
 
         TrueSightGhostWolves();
 
@@ -353,7 +366,6 @@ public class Kitty : IFloatingTags, ICircleOwner
     public void Dispose()
     {
         Alive = false;
-        ChainedTogether.OptOutOfChain(this);
         w_Collision.Dispose();
         c_Collision.Dispose();
         YellowLightning.Dispose();
@@ -390,7 +402,6 @@ public class Kitty : IFloatingTags, ICircleOwner
         }
 
         Unit?.Dispose();
-        //ChainedTogether.RegenerateGroup(this.Name);
         if (Gameover.WinGame) return;
         Globals.ALL_KITTIES_LIST.Remove(this);
         Globals.ALL_KITTIES.Remove(Player);

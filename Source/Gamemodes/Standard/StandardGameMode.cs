@@ -27,7 +27,6 @@ public sealed class StandardGameMode : IGameMode
     public void OnVictoryZoneEntered(Kitty kitty)
     {
         if (Globals.ROUND == Gamemode.NumberOfRounds) Gameover.WinGame = true;
-        ChainedTogether.OnRoundWon(); // before the round is torn down: who is still alive decides it
         RoundManager.RoundEnd();
     }
 
@@ -47,7 +46,6 @@ public sealed class StandardGameMode : IGameMode
     public void OnKittyDied(Kitty kitty)
     {
         TeamDeathless.DiedWithOrb(kitty);
-        //ChainedTogether.LoseEvent(kitty.Name);
         SoundManager.PlayLastManStandingSound();
         Gameover.GameOver();
         MultiboardUtil.RefreshMultiboards();
