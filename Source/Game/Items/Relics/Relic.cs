@@ -19,6 +19,7 @@ public abstract class Relic
     public int UpgradeLevel { get; private set; } = 0;
     public int MaxUpgradeLevel => Upgrades.Count;
     public int RelicAbilityID { get; protected set; }
+    public bool CountsTowardLimit { get; protected set; } = true;
     public List<RelicUpgrade> Upgrades { get; } = new List<RelicUpgrade>();
 
     public Relic(string name, string desc, int relicAbilityID, int itemID, int cost, string iconPath)
@@ -53,6 +54,14 @@ public abstract class Relic
         RemoveEffect(Unit);
         ApplyEffect(Unit);
         return true;
+    }
+
+    public static int CountLimitedRelics(List<Relic> relics)
+    {
+        var count = 0;
+        for (int i = 0; i < relics.Count; i++)
+            if (relics[i].CountsTowardLimit) count++;
+        return count;
     }
 
     public static int GetRelicCountForLevel(int currentLevel)

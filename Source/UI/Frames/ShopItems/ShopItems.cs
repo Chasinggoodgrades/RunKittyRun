@@ -54,6 +54,8 @@ public class ShopItem
             AddRelicToShopItems(new BeaconOfUnitedLifeforce());
             AddRelicToShopItems(new ShardOfTranslocation());
             AddRelicToShopItems(new ChronoSphere());
+            AddRelicToShopItems(new ChainRing());
+            AddRelicToShopItems(new EngagementRing());
         }
         AddRelicToShopItems(new FangOfShadows());
         AddRelicToShopItems(new FrostbiteRing());
