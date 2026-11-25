@@ -6,9 +6,10 @@ using static WCSharp.Api.Common;
 public static class MusicFrame
 {
     public static framehandle MusicFramehandle;
-    private static framehandle MusicSlider;
+    private static framehandle scrollUpButton;
+    private static framehandle scrollDownButton;
     private static framehandle GameUI = originframetype.GameUI.GetOriginFrame(0);
-    private static Dictionary<player, int> MusicSliderValues = new Dictionary<player, int>();
+    private static Dictionary<player, int> MusicOffsets = new Dictionary<player, int>(); // songs scrolled past the top, per player
     private static Dictionary<int, framehandle> MusicButtons = new Dictionary<int, framehandle>();
     private static string[] Headers;
     private static float MusicFrameX = 0.40f;
@@ -38,65 +39,72 @@ public static class MusicFrame
 
     private static void CreateMusicFrames()
     {
-        // sized for the nine visible buttons, not for the whole list (the slider scrolls it)
+        // sized for the nine visible buttons, not for the whole list (the arrow buttons and the wheel scroll it)
         MusicFramehandle.SetSize(0.25f, 0.257f);
 
         FrameManager.CreateHeaderFrame(MusicFramehandle, "Music");
 
-        // an inset panel behind the list and the slider
+        // an inset panel behind the list and the arrows
         var listPanel = BlzCreateFrame("ShopPanelBackdrop", MusicFramehandle, 0, 0);
         listPanel.SetPoint(framepointtype.TopLeft, 0.01f, -0.012f, MusicFramehandle, framepointtype.TopLeft);
         listPanel.SetPoint(framepointtype.BottomRight, -0.01f, 0.01f, MusicFramehandle, framepointtype.BottomRight);
 
-        // Slider
-        RegisterMusicSlider();
-
         InitializeMusicButtons();
+        CreateScrollControls();
         MusicFramehandle.Visible = false;
     }
 
-    private static void RegisterMusicSlider()
+    /// <summary>
+    /// Up / down buttons and the mouse wheel scroll the list. The offset is kept per player and changed from synced
+    /// click events, so it is the same on every machine; only the local player redraws.
+    /// </summary>
+    private static void CreateScrollControls()
     {
-        MusicSlider = BlzCreateFrameByType("SLIDER", "SliderFrame", MusicFramehandle, "QuestMainListScrollBar", 0);
-        MusicSlider.ClearPoints();
-        MusicSlider.SetAbsPoint(framepointtype.TopLeft, 0.492f, 0.4765f);
-        MusicSlider.SetSize(0.011f, 0.223f);
-
-        // A vertical slider has its minimum at the BOTTOM, the list starts at the top: the slider value counts
-        // up from the bottom, so the list offset is (MaxOffset - value). The thumb starts at the top = first songs.
-        var maxOffset = MaxScrollOffset;
-        MusicSlider.SetMinMaxValue(0, maxOffset);
-        MusicSlider.SetStepSize(1);
-        MusicSlider.Value = maxOffset;
-        MusicSlider.Visible = maxOffset > 0; // nothing to scroll when everything fits
-
         foreach (var player in Globals.ALL_PLAYERS)
-            if (!MusicSliderValues.ContainsKey(player))
-                MusicSliderValues.Add(player, maxOffset);
+            if (!MusicOffsets.ContainsKey(player))
+                MusicOffsets.Add(player, 0);
 
-        var Trigger = trigger.Create();
-        var mousewheel = trigger.Create();
-        Trigger.RegisterFrameEvent(MusicSlider, frameeventtype.SliderValueChanged);
-        mousewheel.RegisterFrameEvent(MusicSlider, frameeventtype.MouseWheel);
-        Trigger.AddAction(() =>
-        {
-            var frame = @event.Frame;
-            var player = @event.Player;
-            MusicSliderValues[player] = (int)@event.FrameValue;
-            if (player.IsLocal) PopulateMusicFrame(player);
-        });
-        mousewheel.AddAction(() =>
-        {
-            var frame = @event.Frame;
-            var player = @event.Player;
-            if (!player.IsLocal) return;
+        scrollUpButton = BlzCreateFrame("ScriptDialogButton", MusicFramehandle, 0, 0);
+        scrollUpButton.SetSize(0.02f, 0.03f);
+        scrollUpButton.SetAbsPoint(framepointtype.TopLeft, 0.4845f, 0.4765f);
+        scrollUpButton.Text = "^";
 
-            // wheel up = towards the first songs = a higher slider value (the change event does the rest)
-            var next = MusicSlider.Value + (@event.FrameValue > 0 ? 1.0f : -1.0f);
-            if (next < 0) next = 0;
-            if (next > MaxScrollOffset) next = MaxScrollOffset;
-            MusicSlider.Value = next;
-        });
+        scrollDownButton = BlzCreateFrame("ScriptDialogButton", MusicFramehandle, 0, 0);
+        scrollDownButton.SetSize(0.02f, 0.03f);
+        scrollDownButton.SetAbsPoint(framepointtype.BottomLeft, 0.4845f, 0.2535f);
+        scrollDownButton.Text = "v";
+
+        scrollUpButton.Visible = MaxScrollOffset > 0; // nothing to scroll when everything fits
+        scrollDownButton.Visible = MaxScrollOffset > 0;
+
+        var upTrigger = trigger.Create();
+        upTrigger.RegisterFrameEvent(scrollUpButton, frameeventtype.Click);
+        upTrigger.AddAction(ErrorHandler.Wrap(() => ScrollBy(@event.Player, -1)));
+
+        var downTrigger = trigger.Create();
+        downTrigger.RegisterFrameEvent(scrollDownButton, frameeventtype.Click);
+        downTrigger.AddAction(ErrorHandler.Wrap(() => ScrollBy(@event.Player, 1)));
+
+        // wheel over any song button
+        var wheelTrigger = trigger.Create();
+        for (int i = 0; i < MusicButtons.Count; i++)
+            wheelTrigger.RegisterFrameEvent(MusicButtons[i], frameeventtype.MouseWheel);
+        wheelTrigger.AddAction(ErrorHandler.Wrap(() => ScrollBy(@event.Player, @event.FrameValue > 0 ? -1 : 1)));
+    }
+
+    private static void ScrollBy(player player, int songs)
+    {
+        if (!MusicOffsets.ContainsKey(player)) return;
+
+        var offset = MusicOffsets[player] + songs;
+        if (offset < 0) offset = 0;
+        if (offset > MaxScrollOffset) offset = MaxScrollOffset;
+        MusicOffsets[player] = offset;
+
+        if (!player.IsLocal) return;
+        PopulateMusicFrame(player);
+        FrameManager.RefreshFrame(scrollUpButton);   // drop the button's focus so hotkeys keep working
+        FrameManager.RefreshFrame(scrollDownButton);
     }
 
     private static void InitializeMusicButtons()
@@ -143,10 +151,13 @@ public static class MusicFrame
         int maxSongs = MusicManager.MusicList.Count;
         var maxOffset = MaxScrollOffset;
 
-        // slider value -> how many songs are scrolled past the top
-        int offset = maxOffset - MusicSliderValues[player];
+        int offset = MusicOffsets[player];
         if (offset < 0) offset = 0;
         if (offset > maxOffset) offset = maxOffset;
+
+        // greyed at either end of the list
+        scrollUpButton.Alpha = offset > 0 ? 255 : 110;
+        scrollDownButton.Alpha = offset < maxOffset ? 255 : 110;
 
         for (int i = 0; i < maxSongs; i++)
         {
