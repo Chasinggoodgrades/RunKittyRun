@@ -71,6 +71,8 @@ public static class RewardHandlers
 
         public abstract void SetSelected(GameSelectedData data, string rewardName);
 
+        public abstract string GetSelected(GameSelectedData data);
+
         public void Apply(Kitty kitty, Reward reward)
         {
             var newEffect = kitty.AddKittyEffect(reward.ModelPath, reward.OriginPoint);
@@ -96,6 +98,8 @@ public static class RewardHandlers
         protected override void SetActive(ActiveAwards awards, effect value) => awards.ActiveWings = value;
 
         public override void SetSelected(GameSelectedData data, string rewardName) => data.SelectedWings = rewardName;
+
+        public override string GetSelected(GameSelectedData data) => data.SelectedWings;
     }
 
     private sealed class HatsReward : EffectReward
@@ -105,6 +109,8 @@ public static class RewardHandlers
         protected override void SetActive(ActiveAwards awards, effect value) => awards.ActiveHats = value;
 
         public override void SetSelected(GameSelectedData data, string rewardName) => data.SelectedHat = rewardName;
+
+        public override string GetSelected(GameSelectedData data) => data.SelectedHat;
     }
 
     private sealed class AurasReward : EffectReward
@@ -114,6 +120,8 @@ public static class RewardHandlers
         protected override void SetActive(ActiveAwards awards, effect value) => awards.ActiveAura = value;
 
         public override void SetSelected(GameSelectedData data, string rewardName) => data.SelectedAura = rewardName;
+
+        public override string GetSelected(GameSelectedData data) => data.SelectedAura;
     }
 
     private sealed class TrailsReward : EffectReward
@@ -123,6 +131,8 @@ public static class RewardHandlers
         protected override void SetActive(ActiveAwards awards, effect value) => awards.ActiveTrail = value;
 
         public override void SetSelected(GameSelectedData data, string rewardName) => data.SelectedTrail = rewardName;
+
+        public override string GetSelected(GameSelectedData data) => data.SelectedTrail;
     }
 
     private sealed class WindwalkReward : IReward
@@ -132,6 +142,8 @@ public static class RewardHandlers
         public void Remove(Kitty kitty) => kitty.ActiveAwards.WindwalkID = 0;
 
         public void SetSelected(GameSelectedData data, string rewardName) => data.SelectedWindwalk = rewardName;
+
+        public string GetSelected(GameSelectedData data) => data.SelectedWindwalk;
     }
 
     private sealed class SkinReward : IReward
@@ -154,6 +166,8 @@ public static class RewardHandlers
         { } // the skin is reset to the default by the reset command, there is nothing attached to remove
 
         public void SetSelected(GameSelectedData data, string rewardName) => data.SelectedSkin = rewardName;
+
+        public string GetSelected(GameSelectedData data) => data.SelectedSkin;
     }
 
     /// <summary>Wraps a handler so the reward is applied normally but not stored as the player's selection.</summary>
@@ -169,6 +183,8 @@ public static class RewardHandlers
 
         public void SetSelected(GameSelectedData data, string rewardName)
         { }
+
+        public string GetSelected(GameSelectedData data) => ""; // never saved, so never shown as selected
     }
 
     private sealed class UnknownReward : IReward
@@ -181,5 +197,7 @@ public static class RewardHandlers
 
         public void SetSelected(GameSelectedData data, string rewardName)
         { }
+
+        public string GetSelected(GameSelectedData data) => "";
     }
 }

@@ -11,6 +11,7 @@ public static class RewardsFrame
     private static framehandle TempHandle;
     private static Dictionary<string, framehandle> FrameByName = new Dictionary<string, framehandle>();
     private static Dictionary<framehandle, Reward> RewardIcons = new Dictionary<framehandle, Reward>();
+    private static Dictionary<Reward, framehandle> SelectedMarkers = new Dictionary<Reward, framehandle>(); // the yellow box on what is worn
     private static RewardHelper RewardHelp = new RewardHelper();
     private static int RewardsPerRow = 6;
     private static float FrameX = 0.4f;
@@ -224,6 +225,13 @@ public static class RewardsFrame
 
             RewardIcons.Add(icon, reward);
 
+            // the same yellow box the shop uses, shown for the reward the player is wearing.
+            var marker = BlzCreateFrame("ShopSelectorBackdrop", rewardButton, 0, 0);
+            marker.SetPoint(framepointtype.TopLeft, -0.001f, 0.001f, rewardButton, framepointtype.TopLeft);
+            marker.SetPoint(framepointtype.BottomRight, 0.001f, -0.001f, rewardButton, framepointtype.BottomRight);
+            marker.Visible = false;
+            SelectedMarkers.Add(reward, marker);
+
             var Trigger = trigger.Create();
             Trigger.RegisterFrameEvent(rewardButton, frameeventtype.Click);
             Trigger.AddAction(() => RewardButtonActions(reward));
@@ -256,6 +264,18 @@ public static class RewardsFrame
         reward.ApplyReward(player);
         if (!player.IsLocal) return;
         FrameManager.RefreshFrame(frame);
+        RefreshSelectedMarkers(player);
+    }
+
+    /// <summary>Lights the yellow box on every reward the player has selected (their saved choice per category).</summary>
+    private static void RefreshSelectedMarkers(player player)
+    {
+        if (!player.IsLocal) return;
+        if (!Globals.ALL_KITTIES.TryGetValue(player, out var kitty)) return;
+
+        var selected = kitty.SaveData.SelectedData;
+        foreach (var pair in SelectedMarkers)
+            pair.Value.Visible = pair.Key.IsSelectedIn(selected);
     }
 
     private static void UnavilableRewardIcons(player player)
@@ -309,6 +329,7 @@ public static class RewardsFrame
         if (RewardFrame.Visible)
         {
             UnavilableRewardIcons(player);
+            RefreshSelectedMarkers(player);
             MultiboardUtil.MinMultiboards(player, true);
         }
     }

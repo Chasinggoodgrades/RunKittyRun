@@ -15,4 +15,7 @@ public interface IReward
 
     /// <summary>Records the reward as the player's selected one for this category in their save data.</summary>
     void SetSelected(GameSelectedData data, string rewardName);
+
+    /// <summary>The name of the reward the player has selected for this category, or an empty string. Rewards that are never saved give "".</summary>
+    string GetSelected(GameSelectedData data);
 }
