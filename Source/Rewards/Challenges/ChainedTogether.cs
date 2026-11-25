@@ -292,6 +292,7 @@ public static class ChainedTogether
     {
         try
         {
+            ChainRing.DisableFor(kitty); // unregisters their ring too, or the next toggle would chain them again
             LeaveRingChain(kitty);
             EligibleKitties.Remove(kitty);
             if (!kitty.IsChained) return;

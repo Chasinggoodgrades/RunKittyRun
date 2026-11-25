@@ -59,6 +59,18 @@ public class ChainRing : Relic
         ActiveRings.Clear();
     }
 
+    /// <summary>
+    /// Turns the kitty's ring off and unregisters it (links included), e.g. when they opt out of chains with -nochain,
+    /// so other players' rings no longer pick them up.
+    /// </summary>
+    public static void DisableFor(Kitty kitty)
+    {
+        for (int i = ActiveRings.Count - 1; i >= 0; i--)
+        {
+            if (ActiveRings[i].Owner == kitty) ActiveRings[i].Disable();
+        }
+    }
+
     private void Toggle()
     {
         RelicUtil.CloseRelicBook(Owner.Player);
