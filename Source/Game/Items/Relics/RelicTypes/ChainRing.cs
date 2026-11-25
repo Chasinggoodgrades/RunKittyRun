@@ -62,7 +62,8 @@ public class ChainRing : Relic
     private void Toggle()
     {
         RelicUtil.CloseRelicBook(Owner.Player);
-        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner.Unit, RelicItemID, RelicAbilityID, TOGGLE_COOLDOWN));
+        var unit = Owner.Unit;
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(unit, RelicItemID, RelicAbilityID, TOGGLE_COOLDOWN));
         if (Enabled)
         {
             Disable();
@@ -95,7 +96,6 @@ public class ChainRing : Relic
             ? $"{Colors.COLOR_GREEN}Chain ring enabled. Chained together with {linked} other kitt{(linked == 1 ? "y" : "ies")}.{Colors.COLOR_RESET}"
             : $"{Colors.COLOR_YELLOW}Chain ring enabled. No enabled rings in range.{Colors.COLOR_RESET}");
     }
-
     private void Disable()
     {
         if (!Enabled) return;

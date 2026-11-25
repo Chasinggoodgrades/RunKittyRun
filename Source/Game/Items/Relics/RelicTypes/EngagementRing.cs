@@ -70,7 +70,8 @@ public class EngagementRing : Relic
     private void Propose()
     {
         RelicUtil.CloseRelicBook(Owner.Player);
-        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(Owner.Unit, RelicItemID, RelicAbilityID, PRESS_COOLDOWN));
+        var unit = Owner.Unit;
+        Utility.SimpleTimer(0.1f, () => RelicUtil.SetRelicCooldowns(unit, RelicItemID, RelicAbilityID, PRESS_COOLDOWN));
         if (!Owner.Alive) return;
 
         if (Spouse != null)
@@ -95,7 +96,6 @@ public class EngagementRing : Relic
             Proposing = false;
         });
     }
-
     private EngagementRing FindNearestProposer()
     {
         EngagementRing nearest = null;
