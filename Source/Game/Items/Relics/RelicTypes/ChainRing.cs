@@ -72,6 +72,12 @@ public class ChainRing : Relic
 
         if (!Owner.Alive) return;
 
+        if (ChainedTogether.IsEventChained(Owner))
+        {
+            Owner.Player.DisplayTimedTextTo(4.0f, $"{Colors.COLOR_YELLOW}You are already chained.{Colors.COLOR_RESET}");
+            return;
+        }
+
         Enabled = true;
         ActiveRings.Add(this);
 
