@@ -112,7 +112,6 @@ public static class ChainedTogether
         {
             active[i].Constrain();
         }
-        for (int i = 0; i < RingChains.Count; i++) RingChains[i].Constrain();
     }
 
     private static void RegenerateGroup(string kittyName)
@@ -170,7 +169,7 @@ public static class ChainedTogether
     {
         try
         {
-            if (toggler.IsChained && !IsRingChained(toggler)) return 0; // event-chained
+            if (IsEventChained(toggler)) return 0;
 
             float rangeSq = range * range;
             RingReach.Clear();
@@ -233,6 +232,9 @@ public static class ChainedTogether
             return 0;
         }
     }
+
+    /// <summary>True when the kitty is chained by the Chained Together event (not by a ring).</summary>
+    public static bool IsEventChained(Kitty kitty) => kitty.IsChained && !IsRingChained(kitty);
 
     /// <summary>
     /// Removes every ring link of the kitty. Other links in its network stay.
